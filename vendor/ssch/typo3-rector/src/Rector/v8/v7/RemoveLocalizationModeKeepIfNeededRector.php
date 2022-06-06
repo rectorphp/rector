@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v7;
+namespace Ssch\TYPO3Rector\Rector\v8\v7;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Rector\AbstractRector;
+use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-79770-DeprecateInlineLocalizationMode.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\RemoveLocalizationModeKeepIfNeededRector\RemoveLocalizationModeKeepIfNeededRectorTest
  */
-final class RemoveLocalizationModeKeepIfNeededRector extends AbstractRector
+final class RemoveLocalizationModeKeepIfNeededRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -27,27 +27,27 @@ final class RemoveLocalizationModeKeepIfNeededRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof ArrayItem) {
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof Array_) {
+        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($columnItems->items as $columnItem) {
-            if (!$columnItem instanceof ArrayItem) {
+            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
@@ -57,21 +57,21 @@ final class RemoveLocalizationModeKeepIfNeededRector extends AbstractRector
             if (null === $fieldName) {
                 continue;
             }
-            if (!$columnItem->value instanceof Array_) {
+            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             foreach ($columnItem->value->items as $columnItemConfiguration) {
                 if (null === $columnItemConfiguration) {
                     continue;
                 }
-                if (!$columnItemConfiguration->value instanceof Array_) {
+                if (!$columnItemConfiguration->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 if (!$this->isInlineType($columnItemConfiguration->value)) {
                     continue;
                 }
                 foreach ($columnItemConfiguration->value->items as $configItemValue) {
-                    if (!$configItemValue instanceof ArrayItem) {
+                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
@@ -80,14 +80,14 @@ final class RemoveLocalizationModeKeepIfNeededRector extends AbstractRector
                     if (!$this->valueResolver->isValue($configItemValue->key, 'behaviour')) {
                         continue;
                     }
-                    if (!$configItemValue->value instanceof Array_) {
+                    if (!$configItemValue->value instanceof \PhpParser\Node\Expr\Array_) {
                         continue;
                     }
                     if (!$this->isLocalizationModeKeepAndAllowLanguageSynchronization($configItemValue->value)) {
                         continue;
                     }
                     foreach ($configItemValue->value->items as $behaviourConfigurationItem) {
-                        if (!$behaviourConfigurationItem instanceof ArrayItem) {
+                        if (!$behaviourConfigurationItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                             continue;
                         }
                         if (null === $behaviourConfigurationItem->key) {
@@ -107,9 +107,9 @@ final class RemoveLocalizationModeKeepIfNeededRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove localizationMode keep if allowLanguageSynchronization is enabled', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove localizationMode keep if allowLanguageSynchronization is enabled', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'columns' => [
         'foo' => [
@@ -146,12 +146,12 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function isLocalizationModeKeepAndAllowLanguageSynchronization(Array_ $behaviourConfigurationArray) : bool
+    private function isLocalizationModeKeepAndAllowLanguageSynchronization(\PhpParser\Node\Expr\Array_ $behaviourConfigurationArray) : bool
     {
         $localizationMode = null;
         $allowLanguageSynchronization = null;
         foreach ($behaviourConfigurationArray->items as $behaviourConfigurationItem) {
-            if (!$behaviourConfigurationItem instanceof ArrayItem) {
+            if (!$behaviourConfigurationItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $behaviourConfigurationItem->key) {

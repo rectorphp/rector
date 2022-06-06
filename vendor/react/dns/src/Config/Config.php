@@ -34,7 +34,7 @@ final class Config
         // otherwise (try to) load from resolv.conf
         try {
             return self::loadResolvConfBlocking();
-        } catch (RuntimeException $ignored) {
+        } catch (\RuntimeException $ignored) {
             // return empty config if parsing fails (file not found)
             return new self();
         }
@@ -75,7 +75,7 @@ final class Config
         }
         $contents = @\file_get_contents($path);
         if ($contents === \false) {
-            throw new RuntimeException('Unable to load resolv.conf file "' . $path . '"');
+            throw new \RuntimeException('Unable to load resolv.conf file "' . $path . '"');
         }
         $matches = array();
         \preg_match_all('/^nameserver\\s+(\\S+)\\s*$/m', $contents, $matches);

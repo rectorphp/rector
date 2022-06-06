@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\ValueObject\ServiceMap;
+namespace Rector\Symfony\ValueObject\ServiceMap;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Symfony\ValueObject\ServiceDefinition;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\Symfony\ValueObject\ServiceDefinition;
 final class ServiceMap
 {
     /**
@@ -24,17 +24,17 @@ final class ServiceMap
     {
         return isset($this->services[$id]);
     }
-    public function getServiceType(string $id) : ?Type
+    public function getServiceType(string $id) : ?\PHPStan\Type\Type
     {
         $serviceDefinition = $this->getService($id);
-        if (!$serviceDefinition instanceof ServiceDefinition) {
+        if (!$serviceDefinition instanceof \Rector\Symfony\ValueObject\ServiceDefinition) {
             return null;
         }
         $class = $serviceDefinition->getClass();
         if ($class === null) {
             return null;
         }
-        return new ObjectType($class);
+        return new \PHPStan\Type\ObjectType($class);
     }
     /**
      * @return ServiceDefinition[]
@@ -53,7 +53,7 @@ final class ServiceMap
         }
         return $servicesWithTag;
     }
-    private function getService(string $id) : ?ServiceDefinition
+    private function getService(string $id) : ?\Rector\Symfony\ValueObject\ServiceDefinition
     {
         return $this->services[$id] ?? null;
     }

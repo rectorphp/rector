@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+namespace Rector\NodeNameResolver\NodeNameResolver;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
+use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeNameResolverInterface<ClassLike>
  */
-final class ClassNameResolver implements NodeNameResolverInterface
+final class ClassNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
 {
     /**
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -21,20 +21,20 @@ final class ClassNameResolver implements NodeNameResolverInterface
     /**
      * @required
      */
-    public function autowire(NodeNameResolver $nodeNameResolver) : void
+    public function autowire(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     public function getNode() : string
     {
-        return ClassLike::class;
+        return \PhpParser\Node\Stmt\ClassLike::class;
     }
     /**
      * @param ClassLike $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
-        if ($node->namespacedName instanceof Name) {
+        if ($node->namespacedName instanceof \PhpParser\Node\Name) {
             return $node->namespacedName->toString();
         }
         if ($node->name === null) {

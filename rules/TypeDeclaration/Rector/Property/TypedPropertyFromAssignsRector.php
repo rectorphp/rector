@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\Rector\Property;
+namespace Rector\TypeDeclaration\Rector\Property;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeCombinator;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
-use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
-use RectorPrefix20220606\Rector\Php74\Guard\MakePropertyTypedGuard;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220606\Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
-use RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
+use Rector\Php74\Guard\MakePropertyTypedGuard;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\TypedPropertyFromAssignsRectorTest
  */
-final class TypedPropertyFromAssignsRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface
+final class TypedPropertyFromAssignsRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface
 {
     /**
      * @var string
@@ -71,7 +71,7 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements All
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, PropertyTypeDecorator $propertyTypeDecorator, PhpDocTypeChanger $phpDocTypeChanger, VarTagRemover $varTagRemover, MakePropertyTypedGuard $makePropertyTypedGuard, PhpVersionProvider $phpVersionProvider)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, \Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator $propertyTypeDecorator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Php74\Guard\MakePropertyTypedGuard $makePropertyTypedGuard, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
@@ -84,9 +84,9 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements All
     {
         $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? (bool) \current($configuration);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add typed property from assigned types', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add typed property from assigned types', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $name;
@@ -115,31 +115,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->makePropertyTypedGuard->isLegal($node, $this->inlinePublic)) {
             return null;
         }
         $inferredType = $this->allAssignNodePropertyTypeInferer->inferProperty($node);
-        if (!$inferredType instanceof Type) {
+        if (!$inferredType instanceof \PHPStan\Type\Type) {
             return null;
         }
-        if ($inferredType instanceof MixedType) {
+        if ($inferredType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
         $inferredType = $this->decorateTypeWithNullableIfDefaultPropertyNull($node, $inferredType);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, TypeKind::PROPERTY);
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
         if ($typeNode === null) {
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $inferredType);
             return $node;
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $inferredType);
             return $node;
         }
@@ -148,7 +148,7 @@ CODE_SAMPLE
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $inferredType);
             return $node;
         }
-        if ($inferredType instanceof UnionType) {
+        if ($inferredType instanceof \PHPStan\Type\UnionType) {
             $this->propertyTypeDecorator->decoratePropertyUnionType($inferredType, $typeNode, $node, $phpDocInfo);
         } else {
             $node->type = $typeNode;
@@ -156,18 +156,18 @@ CODE_SAMPLE
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
         return $node;
     }
-    private function decorateTypeWithNullableIfDefaultPropertyNull(Property $property, Type $inferredType) : Type
+    private function decorateTypeWithNullableIfDefaultPropertyNull(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $inferredType) : \PHPStan\Type\Type
     {
         $defaultExpr = $property->props[0]->default;
-        if (!$defaultExpr instanceof Expr) {
+        if (!$defaultExpr instanceof \PhpParser\Node\Expr) {
             return $inferredType;
         }
         if (!$this->valueResolver->isNull($defaultExpr)) {
             return $inferredType;
         }
-        if (TypeCombinator::containsNull($inferredType)) {
+        if (\PHPStan\Type\TypeCombinator::containsNull($inferredType)) {
             return $inferredType;
         }
-        return TypeCombinator::addNull($inferredType);
+        return \PHPStan\Type\TypeCombinator::addNull($inferredType);
     }
 }

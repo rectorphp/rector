@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp56\NodeManipulator;
+namespace Rector\DowngradePhp56\NodeManipulator;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 final class UnpackedArgList
 {
     /**
@@ -32,9 +32,9 @@ final class UnpackedArgList
     {
         return $this->args;
     }
-    public function addArg(Arg $arg) : void
+    public function addArg(\PhpParser\Node\Arg $arg) : void
     {
-        $this->args[$this->pointer] = $this->args[$this->pointer] ?? new Arg(new Array_());
+        $this->args[$this->pointer] = $this->args[$this->pointer] ?? new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Array_());
         if ($arg->unpack) {
             $arg->unpack = \false;
             $this->unpack($arg);
@@ -42,9 +42,9 @@ final class UnpackedArgList
         }
         $this->addAsItem($arg);
     }
-    private function unpack(Arg $arg) : void
+    private function unpack(\PhpParser\Node\Arg $arg) : void
     {
-        if ($arg->value instanceof Array_) {
+        if ($arg->value instanceof \PhpParser\Node\Expr\Array_) {
             foreach ($arg->value->items as $arrayItem) {
                 if ($arrayItem === null) {
                     continue;
@@ -55,17 +55,17 @@ final class UnpackedArgList
         }
         $this->addNextArg($arg);
     }
-    private function addAsItem(Arg $arg) : void
+    private function addAsItem(\PhpParser\Node\Arg $arg) : void
     {
-        $this->addArrayItem(new ArrayItem($arg->value));
+        $this->addArrayItem(new \PhpParser\Node\Expr\ArrayItem($arg->value));
     }
-    private function addArrayItem(ArrayItem $arrayItem) : void
+    private function addArrayItem(\PhpParser\Node\Expr\ArrayItem $arrayItem) : void
     {
         /** @var Array_ $array */
         $array = $this->args[$this->pointer]->value;
         $array->items[] = $arrayItem;
     }
-    private function addNextArg(Arg $arg) : void
+    private function addNextArg(\PhpParser\Node\Arg $arg) : void
     {
         $this->next();
         $this->args[$this->pointer] = $arg;

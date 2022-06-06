@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer;
+namespace Rector\PHPUnit\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\ClassMethod;
+use Rector\NodeNameResolver\NodeNameResolver;
 /**
  * This class renames node identifier, e.g. ClassMethod rename:
  *
@@ -24,7 +24,7 @@ final class IdentifierManipulator
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -38,7 +38,7 @@ final class IdentifierManipulator
         if (!\is_string($oldNodeMethodName)) {
             return \false;
         }
-        $node->name = new Identifier($renameMethodMap[$oldNodeMethodName]);
+        $node->name = new \PhpParser\Node\Identifier($renameMethodMap[$oldNodeMethodName]);
         return \true;
     }
     /**
@@ -46,7 +46,7 @@ final class IdentifierManipulator
      */
     private function resolveOldMethodName($node) : ?string
     {
-        if ($node instanceof StaticCall || $node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->nodeNameResolver->getName($node->name);
         }
         return $this->nodeNameResolver->getName($node);

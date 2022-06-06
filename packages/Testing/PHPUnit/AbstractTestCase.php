@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Testing\PHPUnit;
+namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
 use RectorPrefix20220606\Psr\Container\ContainerInterface;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\Kernel\RectorKernel;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Kernel\RectorKernel;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
-abstract class AbstractTestCase extends TestCase
+abstract class AbstractTestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var array<string, RectorKernel>
@@ -32,7 +32,7 @@ abstract class AbstractTestCase extends TestCase
             $rectorKernel = self::$kernelsByHash[$configsHash];
             self::$currentContainer = $rectorKernel->getContainer();
         } else {
-            $rectorKernel = new RectorKernel();
+            $rectorKernel = new \Rector\Core\Kernel\RectorKernel();
             $container = $rectorKernel->createFromConfigs($configFiles);
             self::$kernelsByHash[$configsHash] = $rectorKernel;
             self::$currentContainer = $container;
@@ -48,12 +48,12 @@ abstract class AbstractTestCase extends TestCase
     protected function getService(string $type) : object
     {
         if (self::$currentContainer === null) {
-            throw new ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');
+            throw new \Rector\Core\Exception\ShouldNotHappenException('First, create container with "bootWithConfigFileInfos([...])"');
         }
         $object = self::$currentContainer->get($type);
         if ($object === null) {
             $message = \sprintf('Service "%s" was not found', $type);
-            throw new ShouldNotHappenException($message);
+            throw new \Rector\Core\Exception\ShouldNotHappenException($message);
         }
         return $object;
     }
@@ -62,8 +62,8 @@ abstract class AbstractTestCase extends TestCase
      */
     private function createConfigsHash(array $configFiles) : string
     {
-        Assert::allFile($configFiles);
-        Assert::allString($configFiles);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allFile($configFiles);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allString($configFiles);
         $configHash = '';
         foreach ($configFiles as $configFile) {
             $configHash .= \md5_file($configFile);

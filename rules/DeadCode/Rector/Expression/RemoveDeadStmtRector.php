@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DeadCode\Rector\Expression;
+namespace Rector\DeadCode\Rector\Expression;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticPropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Nop;
-use RectorPrefix20220606\PHPStan\Reflection\Php\PhpPropertyReflection;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
-use RectorPrefix20220606\Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Nop;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\DeadCode\NodeManipulator\LivingCodeManipulator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Expression\RemoveDeadStmtRector\RemoveDeadStmtRectorTest
  */
-final class RemoveDeadStmtRector extends AbstractRector
+final class RemoveDeadStmtRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -36,15 +36,15 @@ final class RemoveDeadStmtRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(LivingCodeManipulator $livingCodeManipulator, PropertyFetchAnalyzer $propertyFetchAnalyzer, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\DeadCode\NodeManipulator\LivingCodeManipulator $livingCodeManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->livingCodeManipulator = $livingCodeManipulator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Removes dead code statements', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Removes dead code statements', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $value = 5;
 $value;
 CODE_SAMPLE
@@ -58,13 +58,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
      * @param Expression $node
      * @return Node[]|Node|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
         if ($this->hasGetMagic($node)) {
             return null;
@@ -80,12 +80,12 @@ CODE_SAMPLE
         $node->expr = $firstExpr;
         $newNodes = [];
         foreach ($livingCode as $singleLivingCode) {
-            $newNodes[] = new Expression($singleLivingCode);
+            $newNodes[] = new \PhpParser\Node\Stmt\Expression($singleLivingCode);
         }
         $newNodes[] = $node;
         return $newNodes;
     }
-    private function hasGetMagic(Expression $expression) : bool
+    private function hasGetMagic(\PhpParser\Node\Stmt\Expression $expression) : bool
     {
         if (!$this->propertyFetchAnalyzer->isPropertyFetch($expression->expr)) {
             return \false;
@@ -97,14 +97,14 @@ CODE_SAMPLE
          *  property not found assume has class has __get method
          *  that can call non-defined property, that can have some special handling, eg: throw on special case
          */
-        return !$phpPropertyReflection instanceof PhpPropertyReflection;
+        return !$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection;
     }
-    private function removeNodeAndKeepComments(Expression $expression) : ?Node
+    private function removeNodeAndKeepComments(\PhpParser\Node\Stmt\Expression $expression) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($expression);
         if ($expression->getComments() !== []) {
-            $nop = new Nop();
-            $nop->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
+            $nop = new \PhpParser\Node\Stmt\Nop();
+            $nop->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $phpDocInfo);
             $this->phpDocInfoFactory->createFromNode($nop);
             return $nop;
         }

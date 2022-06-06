@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node\Stmt;
+namespace PhpParser\Node\Stmt;
 
-use RectorPrefix20220606\PhpParser\Node;
-class Declare_ extends Node\Stmt
+use PhpParser\Node;
+class Declare_ extends \PhpParser\Node\Stmt
 {
     /** @var DeclareDeclare[] List of declares */
     public $declares;

@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\NodeManipulator;
+namespace Rector\Core\NodeManipulator;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\Rector\ChangesReporting\Collector\RectorChangeCollector;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
+use Rector\ChangesReporting\Collector\RectorChangeCollector;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 final class ArrayManipulator
 {
@@ -22,21 +22,21 @@ final class ArrayManipulator
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
-    public function __construct(RectorChangeCollector $rectorChangeCollector)
+    public function __construct(\Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector)
     {
         $this->rectorChangeCollector = $rectorChangeCollector;
     }
     /**
      * @required
      */
-    public function autowire(ExprAnalyzer $exprAnalyzer) : void
+    public function autowire(\Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer) : void
     {
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function isDynamicArray(Array_ $array) : bool
+    public function isDynamicArray(\PhpParser\Node\Expr\Array_ $array) : bool
     {
         foreach ($array->items as $item) {
-            if (!$item instanceof ArrayItem) {
+            if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (!$this->isAllowedArrayKey($item->key)) {
@@ -48,23 +48,23 @@ final class ArrayManipulator
         }
         return \false;
     }
-    public function addItemToArrayUnderKey(Array_ $array, ArrayItem $newArrayItem, string $key) : void
+    public function addItemToArrayUnderKey(\PhpParser\Node\Expr\Array_ $array, \PhpParser\Node\Expr\ArrayItem $newArrayItem, string $key) : void
     {
         foreach ($array->items as $item) {
             if ($item === null) {
                 continue;
             }
             if ($this->hasKeyName($item, $key)) {
-                if (!$item->value instanceof Array_) {
+                if (!$item->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 $item->value->items[] = $newArrayItem;
                 return;
             }
         }
-        $array->items[] = new ArrayItem(new Array_([$newArrayItem]), new String_($key));
+        $array->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Array_([$newArrayItem]), new \PhpParser\Node\Scalar\String_($key));
     }
-    public function findItemInInArrayByKeyAndUnset(Array_ $array, string $keyName) : ?ArrayItem
+    public function findItemInInArrayByKeyAndUnset(\PhpParser\Node\Expr\Array_ $array, string $keyName) : ?\PhpParser\Node\Expr\ArrayItem
     {
         foreach ($array->items as $i => $item) {
             if ($item === null) {
@@ -74,7 +74,7 @@ final class ArrayManipulator
                 continue;
             }
             $removedArrayItem = $array->items[$i];
-            if (!$removedArrayItem instanceof ArrayItem) {
+            if (!$removedArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             // remove + recount for the printer
@@ -84,23 +84,23 @@ final class ArrayManipulator
         }
         return null;
     }
-    public function hasKeyName(ArrayItem $arrayItem, string $name) : bool
+    public function hasKeyName(\PhpParser\Node\Expr\ArrayItem $arrayItem, string $name) : bool
     {
-        if (!$arrayItem->key instanceof String_) {
+        if (!$arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
             return \false;
         }
         return $arrayItem->key->value === $name;
     }
-    private function isAllowedArrayKey(?Expr $expr) : bool
+    private function isAllowedArrayKey(?\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof Expr) {
+        if (!$expr instanceof \PhpParser\Node\Expr) {
             return \true;
         }
-        return \in_array(\get_class($expr), [String_::class, LNumber::class], \true);
+        return \in_array(\get_class($expr), [\PhpParser\Node\Scalar\String_::class, \PhpParser\Node\Scalar\LNumber::class], \true);
     }
-    private function isAllowedArrayValue(Expr $expr) : bool
+    private function isAllowedArrayValue(\PhpParser\Node\Expr $expr) : bool
     {
-        if ($expr instanceof Array_) {
+        if ($expr instanceof \PhpParser\Node\Expr\Array_) {
             return !$this->isDynamicArray($expr);
         }
         return !$this->exprAnalyzer->isDynamicExpr($expr);

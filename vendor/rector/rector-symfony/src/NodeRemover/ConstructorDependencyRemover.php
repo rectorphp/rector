@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeRemover;
+namespace Rector\Symfony\NodeRemover;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class ConstructorDependencyRemover
 {
     /**
@@ -16,14 +16,14 @@ final class ConstructorDependencyRemover
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @param string[] $paramNames
      */
-    public function removeParamsByName(ClassMethod $classMethod, array $paramNames) : ClassMethod
+    public function removeParamsByName(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $paramNames) : \PhpParser\Node\Stmt\ClassMethod
     {
         $this->removeParams($classMethod, $paramNames);
         return $this->removeAssigns($classMethod, $paramNames);
@@ -31,7 +31,7 @@ final class ConstructorDependencyRemover
     /**
      * @param string[] $paramNames
      */
-    private function removeParams(ClassMethod $classMethod, array $paramNames) : void
+    private function removeParams(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $paramNames) : void
     {
         foreach ($classMethod->params as $key => $param) {
             if (!$this->nodeNameResolver->isNames($param, $paramNames)) {
@@ -43,21 +43,21 @@ final class ConstructorDependencyRemover
     /**
      * @param string[] $paramNames
      */
-    private function removeAssigns(ClassMethod $classMethod, array $paramNames) : ClassMethod
+    private function removeAssigns(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $paramNames) : \PhpParser\Node\Stmt\ClassMethod
     {
         // remove assign
         foreach ((array) $classMethod->stmts as $stmtKey => $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if (!$stmt->expr instanceof Assign) {
+            if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
             $assign = $stmt->expr;
-            if (!$assign->expr instanceof Variable) {
+            if (!$assign->expr instanceof \PhpParser\Node\Expr\Variable) {
                 continue;
             }
-            if (!$assign->var instanceof PropertyFetch) {
+            if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 continue;
             }
             if (!$this->nodeNameResolver->isNames($assign->expr, $paramNames)) {

@@ -16,7 +16,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\ServiceLocator as
  *
  * @internal
  */
-class ServiceLocator extends BaseServiceLocator
+class ServiceLocator extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\ServiceLocator
 {
     /**
      * @var \Closure

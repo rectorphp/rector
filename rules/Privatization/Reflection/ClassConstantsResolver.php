@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Privatization\Reflection;
+namespace Rector\Privatization\Reflection;
 
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Reflection\ReflectionProvider;
 final class ClassConstantsResolver
 {
     /**
@@ -15,7 +15,7 @@ final class ClassConstantsResolver
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use RectorPrefix20220606\Rector\Config\RectorConfig;
-use RectorPrefix20220606\Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(UpgradeRectorConfigRector::class);
+use Rector\Config\RectorConfig;
+use Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector::class);
 };

@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\Composer\Rector;
+namespace Ssch\TYPO3Rector\FileProcessor\Composer\Rector;
 
-use RectorPrefix20220606\Rector\Composer\Contract\Rector\ComposerRectorInterface;
+use Rector\Composer\Contract\Rector\ComposerRectorInterface;
 use RectorPrefix20220606\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/m/typo3/guide-installation/master/en-us/MigrateToComposer/MigrationSteps.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Composer\Rector\RemoveCmsPackageDirFromExtraComposerRector\RemoveCmsPackageDirFromExtraComposerRectorTest
  */
-final class RemoveCmsPackageDirFromExtraComposerRector implements ComposerRectorInterface
+final class RemoveCmsPackageDirFromExtraComposerRector implements \Rector\Composer\Contract\Rector\ComposerRectorInterface
 {
     /**
      * @var string
      */
     private const TYPO3_CMS = 'typo3/cms';
-    public function refactor(ComposerJson $composerJson) : void
+    public function refactor(\RectorPrefix20220606\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void
     {
         $extra = $composerJson->getExtra();
         if (!isset($extra[self::TYPO3_CMS])) {
@@ -33,9 +33,9 @@ final class RemoveCmsPackageDirFromExtraComposerRector implements ComposerRector
     {
         // The class is not configurable, but as rector expects every class implementing ComposerRectorInterface to be configurable we have to add this method
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change package name in `composer.json`', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change package name in `composer.json`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 {
     "extra": {
         "typo3/cms": {

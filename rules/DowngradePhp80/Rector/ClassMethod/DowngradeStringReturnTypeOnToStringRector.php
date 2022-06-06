@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp80\Rector\ClassMethod;
+namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
-use RectorPrefix20220606\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\MixedType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\ClassMethod\DowngradeStringReturnTypeOnToStringRector\DowngradeStringReturnTypeOnToStringRectorTest
  */
-final class DowngradeStringReturnTypeOnToStringRector extends AbstractRector
+final class DowngradeStringReturnTypeOnToStringRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -28,7 +28,7 @@ final class DowngradeStringReturnTypeOnToStringRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(ClassChildAnalyzer $classChildAnalyzer, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->classChildAnalyzer = $classChildAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
@@ -38,11 +38,11 @@ final class DowngradeStringReturnTypeOnToStringRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add "string" return on current __toString() method when parent method has string return on __toString() method', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add "string" return on current __toString() method when parent method has string return on __toString() method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 abstract class ParentClass
 {
     public function __toString(): string
@@ -81,27 +81,27 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $node->returnType = new Name('string');
+        $node->returnType = new \PhpParser\Node\Name('string');
         return $node;
     }
-    private function shouldSkip(ClassMethod $classMethod) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if (!$this->nodeNameResolver->isName($classMethod, '__toString')) {
             return \true;
         }
-        if ($classMethod->returnType instanceof Node) {
+        if ($classMethod->returnType instanceof \PhpParser\Node) {
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \true;
         }
         $type = $this->classChildAnalyzer->resolveParentClassMethodReturnType($classReflection, '__toString');
-        return $type instanceof MixedType;
+        return $type instanceof \PHPStan\Type\MixedType;
     }
 }

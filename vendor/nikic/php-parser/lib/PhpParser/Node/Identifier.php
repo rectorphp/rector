@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node;
+namespace PhpParser\Node;
 
-use RectorPrefix20220606\PhpParser\NodeAbstract;
+use PhpParser\NodeAbstract;
 /**
  * Represents a non-namespaced name. Namespaced names are represented using Name nodes.
  */
-class Identifier extends NodeAbstract
+class Identifier extends \PhpParser\NodeAbstract
 {
     /** @var string Identifier as string */
     public $name;

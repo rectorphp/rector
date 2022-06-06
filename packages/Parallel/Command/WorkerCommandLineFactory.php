@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Parallel\Command;
+namespace Rector\Parallel\Command;
 
-use RectorPrefix20220606\Rector\ChangesReporting\Output\JsonOutputFormatter;
-use RectorPrefix20220606\Rector\Core\Configuration\Option;
+use Rector\ChangesReporting\Output\JsonOutputFormatter;
+use Rector\Core\Configuration\Option;
 use RectorPrefix20220606\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220606\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
@@ -26,12 +26,12 @@ final class WorkerCommandLineFactory
     private $commandFromReflectionFactory;
     public function __construct()
     {
-        $this->commandFromReflectionFactory = new CommandFromReflectionFactory();
+        $this->commandFromReflectionFactory = new \RectorPrefix20220606\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory();
     }
     /**
      * @param class-string<Command> $mainCommandClass
      */
-    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, InputInterface $input, string $identifier, int $port) : string
+    public function create(string $mainScript, string $mainCommandClass, string $workerCommandName, \RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
     {
         $commandArguments = \array_slice($_SERVER['argv'], 1);
         $args = \array_merge([\PHP_BINARY, $mainScript], $commandArguments);
@@ -39,7 +39,7 @@ final class WorkerCommandLineFactory
         $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
         if ($mainCommand->getName() === null) {
             $errorMessage = \sprintf('The command name for "%s" is missing', \get_class($mainCommand));
-            throw new ParallelShouldNotHappenException($errorMessage);
+            throw new \RectorPrefix20220606\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException($errorMessage);
         }
         $mainCommandName = $mainCommand->getName();
         $mainCommandNames = [$mainCommandName, $mainCommandName[0]];
@@ -60,17 +60,17 @@ final class WorkerCommandLineFactory
         $workerCommandArray[] = '--identifier';
         $workerCommandArray[] = \escapeshellarg($identifier);
         /** @var string[] $paths */
-        $paths = $input->getArgument(Option::SOURCE);
+        $paths = $input->getArgument(\Rector\Core\Configuration\Option::SOURCE);
         foreach ($paths as $path) {
             $workerCommandArray[] = \escapeshellarg($path);
         }
         // set json output
-        $workerCommandArray[] = self::OPTION_DASHES . Option::OUTPUT_FORMAT;
-        $workerCommandArray[] = \escapeshellarg(JsonOutputFormatter::NAME);
+        $workerCommandArray[] = self::OPTION_DASHES . \Rector\Core\Configuration\Option::OUTPUT_FORMAT;
+        $workerCommandArray[] = \escapeshellarg(\Rector\ChangesReporting\Output\JsonOutputFormatter::NAME);
         // disable colors, breaks json_decode() otherwise
         // @see https://github.com/symfony/symfony/issues/1238
         $workerCommandArray[] = '--no-ansi';
-        if ($input->hasOption(Option::CONFIG)) {
+        if ($input->hasOption(\Rector\Core\Configuration\Option::CONFIG)) {
             $workerCommandArray[] = '--config';
             /**
              * On parallel, the command is generated with `--config` addition
@@ -89,22 +89,22 @@ final class WorkerCommandLineFactory
              *
              * tested in macOS and Ubuntu (github action)
              */
-            $workerCommandArray[] = \escapeshellarg($input->getOption(Option::CONFIG));
+            $workerCommandArray[] = \escapeshellarg($input->getOption(\Rector\Core\Configuration\Option::CONFIG));
         }
         return \implode(' ', $workerCommandArray);
     }
-    private function shouldSkipOption(InputInterface $input, string $optionName) : bool
+    private function shouldSkipOption(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
     {
         if (!$input->hasOption($optionName)) {
             return \true;
         }
         // skip output format, not relevant in parallel worker command
-        return $optionName === Option::OUTPUT_FORMAT;
+        return $optionName === \Rector\Core\Configuration\Option::OUTPUT_FORMAT;
     }
     /**
      * @return string[]
      */
-    private function getCommandOptionNames(Command $command) : array
+    private function getCommandOptionNames(\RectorPrefix20220606\Symfony\Component\Console\Command\Command $command) : array
     {
         $inputDefinition = $command->getDefinition();
         $optionNames = [];
@@ -119,7 +119,7 @@ final class WorkerCommandLineFactory
      * @param string[] $mainCommandOptionNames
      * @return string[]
      */
-    private function mirrorCommandOptions(InputInterface $input, array $mainCommandOptionNames) : array
+    private function mirrorCommandOptions(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, array $mainCommandOptionNames) : array
     {
         $workerCommandOptions = [];
         foreach ($mainCommandOptionNames as $mainCommandOptionName) {

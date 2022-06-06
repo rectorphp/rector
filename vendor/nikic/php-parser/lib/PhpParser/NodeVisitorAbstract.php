@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser;
+namespace PhpParser;
 
 /**
  * @codeCoverageIgnore
  */
-class NodeVisitorAbstract implements NodeVisitor
+class NodeVisitorAbstract implements \PhpParser\NodeVisitor
 {
     public function beforeTraverse(array $nodes)
     {
         return null;
     }
-    public function enterNode(Node $node)
+    public function enterNode(\PhpParser\Node $node)
     {
         return null;
     }
-    public function leaveNode(Node $node)
+    public function leaveNode(\PhpParser\Node $node)
     {
         return null;
     }

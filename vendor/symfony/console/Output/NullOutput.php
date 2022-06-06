@@ -20,7 +20,7 @@ use RectorPrefix20220606\Symfony\Component\Console\Formatter\OutputFormatterInte
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Tobias Schultze <http://tobion.de>
  */
-class NullOutput implements OutputInterface
+class NullOutput implements \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface
 {
     /**
      * @var \Symfony\Component\Console\Formatter\NullOutputFormatter
@@ -29,17 +29,17 @@ class NullOutput implements OutputInterface
     /**
      * {@inheritdoc}
      */
-    public function setFormatter(OutputFormatterInterface $formatter)
+    public function setFormatter(\RectorPrefix20220606\Symfony\Component\Console\Formatter\OutputFormatterInterface $formatter)
     {
         // do nothing
     }
     /**
      * {@inheritdoc}
      */
-    public function getFormatter() : OutputFormatterInterface
+    public function getFormatter() : \RectorPrefix20220606\Symfony\Component\Console\Formatter\OutputFormatterInterface
     {
         // to comply with the interface we must return a OutputFormatterInterface
-        return $this->formatter = $this->formatter ?? new NullOutputFormatter();
+        return $this->formatter = $this->formatter ?? new \RectorPrefix20220606\Symfony\Component\Console\Formatter\NullOutputFormatter();
     }
     /**
      * {@inheritdoc}

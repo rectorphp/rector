@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\PhpParser\NodeFinder;
+namespace Rector\Core\PhpParser\NodeFinder;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class LocalMethodCallFinder
 {
     /**
@@ -27,7 +27,7 @@ final class LocalMethodCallFinder
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -36,10 +36,10 @@ final class LocalMethodCallFinder
     /**
      * @return MethodCall[]
      */
-    public function match(ClassMethod $classMethod) : array
+    public function match(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return [];
         }
         $className = $this->nodeNameResolver->getName($class);
@@ -47,12 +47,12 @@ final class LocalMethodCallFinder
             return [];
         }
         /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstanceOf($class, MethodCall::class);
+        $methodCalls = $this->betterNodeFinder->findInstanceOf($class, \PhpParser\Node\Expr\MethodCall::class);
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
         $matchingMethodCalls = [];
         foreach ($methodCalls as $methodCall) {
             $callerType = $this->nodeTypeResolver->getType($methodCall->var);
-            if (!$callerType instanceof TypeWithClassName) {
+            if (!$callerType instanceof \PHPStan\Type\TypeWithClassName) {
                 continue;
             }
             if ($callerType->getClassName() !== $className) {

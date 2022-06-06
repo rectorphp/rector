@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\StaticTypeMapper\PhpParser;
+namespace Rector\StaticTypeMapper\PhpParser;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\UnionType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use RectorPrefix20220606\Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-use RectorPrefix20220606\Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
+use PhpParser\Node;
+use PhpParser\Node\UnionType;
+use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements PhpParserNodeMapperInterface<UnionType>
  */
-final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
+final class UnionTypeNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
 {
     /**
      * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
@@ -24,25 +24,25 @@ final class UnionTypeNodeMapper implements PhpParserNodeMapperInterface
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(TypeFactory $typeFactory)
+    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
     }
     /**
      * @required
      */
-    public function autowire(PhpParserNodeMapper $phpParserNodeMapper) : void
+    public function autowire(\Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper $phpParserNodeMapper) : void
     {
         $this->phpParserNodeMapper = $phpParserNodeMapper;
     }
     public function getNodeType() : string
     {
-        return UnionType::class;
+        return \PhpParser\Node\UnionType::class;
     }
     /**
      * @param UnionType $node
      */
-    public function mapToPHPStan(Node $node) : Type
+    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $types = [];
         foreach ($node->types as $unionedType) {

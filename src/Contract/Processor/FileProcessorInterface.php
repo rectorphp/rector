@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Contract\Processor;
+namespace Rector\Core\Contract\Processor;
 
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\Core\ValueObject\Configuration;
-use RectorPrefix20220606\Rector\Core\ValueObject\Error\SystemError;
-use RectorPrefix20220606\Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\Reporting\FileDiff;
 interface FileProcessorInterface
 {
-    public function supports(File $file, Configuration $configuration) : bool;
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool;
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration) : array;
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array;
     /**
      * @return string[]
      */

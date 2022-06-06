@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer;
+namespace Rector\Symfony\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\Value\ValueResolver;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class FormCollectionAnalyzer
 {
     /**
@@ -19,15 +19,15 @@ final class FormCollectionAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->valueResolver = $valueResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function isCollectionType(MethodCall $methodCall) : bool
+    public function isCollectionType(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         $typeValue = $methodCall->getArgs()[1]->value;
-        if (!$typeValue instanceof ClassConstFetch) {
+        if (!$typeValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return $this->valueResolver->isValue($typeValue, 'collection');
         }
         if (!$this->nodeNameResolver->isName($typeValue->class, 'Symfony\\Component\\Form\\Extension\\Core\\Type\\CollectionType')) {

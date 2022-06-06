@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Rector\MethodCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
  * @changelog https://github.com/symfony/symfony/pull/30813
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertResponseCodeRector\WebTestCaseAssertResponseCodeRectorTest
  */
-final class WebTestCaseAssertResponseCodeRector extends AbstractRector
+final class WebTestCaseAssertResponseCodeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -29,14 +29,14 @@ final class WebTestCaseAssertResponseCodeRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(\Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->symfonyTestCaseAnalyzer = $symfonyTestCaseAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Simplify use of assertions in WebTestCase', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify use of assertions in WebTestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 final class SomeClass extends WebTestCase
@@ -69,12 +69,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->symfonyTestCaseAnalyzer->isInWebTestCase($node)) {
             return null;
@@ -89,9 +89,9 @@ CODE_SAMPLE
     /**
      * We look for: "$client->getResponse()->headers->get('Location')"
      */
-    public function isGetLocationMethodCall(Expr $expr) : bool
+    public function isGetLocationMethodCall(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof MethodCall) {
+        if (!$expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
         if (!$this->isName($expr->name, 'get')) {
@@ -104,14 +104,14 @@ CODE_SAMPLE
         $firstArg = $args[0];
         return $this->valueResolver->isValue($firstArg->value, 'Location');
     }
-    private function processAssertResponseStatusCodeSame(MethodCall $methodCall) : ?MethodCall
+    private function processAssertResponseStatusCodeSame(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->isName($methodCall->name, 'assertSame')) {
             return null;
         }
         $args = $methodCall->getArgs();
         $secondArg = $args[1];
-        if (!$secondArg->value instanceof MethodCall) {
+        if (!$secondArg->value instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         $nestedMethodCall = $secondArg->value;
@@ -128,7 +128,7 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createLocalMethodCall('assertResponseStatusCodeSame', [$methodCall->args[0]]);
     }
-    private function processAssertResponseRedirects(MethodCall $methodCall) : ?MethodCall
+    private function processAssertResponseRedirects(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($methodCall, ['assertSame'])) {
             return null;

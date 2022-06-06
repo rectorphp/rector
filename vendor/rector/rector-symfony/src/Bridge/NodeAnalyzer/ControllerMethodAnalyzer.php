@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Bridge\NodeAnalyzer;
+namespace Rector\Symfony\Bridge\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 final class ControllerMethodAnalyzer
 {
     /**
@@ -13,16 +13,16 @@ final class ControllerMethodAnalyzer
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer)
+    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
     }
     /**
      * Detect if is <some>Action() in Controller
      */
-    public function isAction(Node $node) : bool
+    public function isAction(\PhpParser\Node $node) : bool
     {
-        if (!$node instanceof ClassMethod) {
+        if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }
         if (!$this->controllerAnalyzer->isInsideController($node)) {

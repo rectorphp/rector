@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Transform\ValueObject;
+namespace Rector\Transform\ValueObject;
 
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use Rector\Core\Validation\RectorAssert;
 final class StaticCallToNew
 {
     /**
@@ -20,7 +20,7 @@ final class StaticCallToNew
     {
         $this->class = $class;
         $this->method = $method;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getClass() : string
     {

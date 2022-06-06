@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\Reflection;
+namespace Rector\CodingStyle\Reflection;
 
-use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\MethodReflection;
 use RectorPrefix20220606\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class VendorLocationDetector
 {
@@ -12,11 +12,11 @@ final class VendorLocationDetector
      * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
-    public function __construct(PathNormalizer $pathNormalizer)
+    public function __construct(\RectorPrefix20220606\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer)
     {
         $this->pathNormalizer = $pathNormalizer;
     }
-    public function detectMethodReflection(MethodReflection $methodReflection) : bool
+    public function detectMethodReflection(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {
         $declaringClassReflection = $methodReflection->getDeclaringClass();
         $fileName = $declaringClassReflection->getFileName();

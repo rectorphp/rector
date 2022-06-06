@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp70\Rector\Instanceof_;
+namespace Rector\DowngradePhp70\Rector\Instanceof_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Instanceof_;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NamedVariableFactory;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeCollector\BinaryOpConditionsCollector;
-use RectorPrefix20220606\Rector\NodeCollector\BinaryOpTreeRootLocator;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeCollector\BinaryOpConditionsCollector;
+use Rector\NodeCollector\BinaryOpTreeRootLocator;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Throwable was introduced in PHP 7.0 so to support older versions we need to also check for Exception.
  * @changelog https://www.php.net/manual/en/class.throwable.php
  * @see \Rector\Tests\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector\DowngradeInstanceofThrowableRectorTest
  */
-final class DowngradeInstanceofThrowableRector extends AbstractRector
+final class DowngradeInstanceofThrowableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -39,15 +39,15 @@ final class DowngradeInstanceofThrowableRector extends AbstractRector
      * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
     private $namedVariableFactory;
-    public function __construct(BinaryOpConditionsCollector $binaryOpConditionsCollector, BinaryOpTreeRootLocator $binaryOpTreeRootLocator, NamedVariableFactory $namedVariableFactory)
+    public function __construct(\Rector\NodeCollector\BinaryOpConditionsCollector $binaryOpConditionsCollector, \Rector\NodeCollector\BinaryOpTreeRootLocator $binaryOpTreeRootLocator, \Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
     {
         $this->binaryOpConditionsCollector = $binaryOpConditionsCollector;
         $this->binaryOpTreeRootLocator = $binaryOpTreeRootLocator;
         $this->namedVariableFactory = $namedVariableFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add `instanceof Exception` check as a fallback to `instanceof Throwable` to support exception hierarchies in PHP 5', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add `instanceof Exception` check as a fallback to `instanceof Throwable` to support exception hierarchies in PHP 5', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return $e instanceof \Throwable;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -60,14 +60,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Instanceof_::class];
+        return [\PhpParser\Node\Expr\Instanceof_::class];
     }
     /**
      * @param Instanceof_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!($node->class instanceof Name && $this->nodeNameResolver->isName($node->class, 'Throwable'))) {
+        if (!($node->class instanceof \PhpParser\Node\Name && $this->nodeNameResolver->isName($node->class, 'Throwable'))) {
             return null;
         }
         // Ensure the refactoring is idempotent.
@@ -77,29 +77,29 @@ CODE_SAMPLE
         // Store the value into a temporary variable to prevent running possible side-effects twice
         // when the expression is e.g. function.
         $variable = $this->namedVariableFactory->createVariable($node, 'throwable');
-        $instanceof = new Instanceof_(new Assign($variable, $node->expr), $node->class);
+        $instanceof = new \PhpParser\Node\Expr\Instanceof_(new \PhpParser\Node\Expr\Assign($variable, $node->expr), $node->class);
         $exceptionFallbackCheck = $this->createFallbackCheck($variable);
-        return new BooleanOr($instanceof, $exceptionFallbackCheck);
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($instanceof, $exceptionFallbackCheck);
     }
     /**
      * Also checks similar manual transformations.
      */
-    private function isAlreadyTransformed(Instanceof_ $instanceof) : bool
+    private function isAlreadyTransformed(\PhpParser\Node\Expr\Instanceof_ $instanceof) : bool
     {
         /** @var Node $parentNode */
-        $parentNode = $instanceof->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof BooleanOr) {
+        $parentNode = $instanceof->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return \false;
         }
-        $hasVariableToFindInDisjunction = ($var = $instanceof->expr) instanceof Variable || $instanceof->expr instanceof Assign && ($var = $instanceof->expr->var) instanceof Variable;
+        $hasVariableToFindInDisjunction = ($var = $instanceof->expr) instanceof \PhpParser\Node\Expr\Variable || $instanceof->expr instanceof \PhpParser\Node\Expr\Assign && ($var = $instanceof->expr->var) instanceof \PhpParser\Node\Expr\Variable;
         if (!$hasVariableToFindInDisjunction) {
             return \false;
         }
-        $disjunctionTree = $this->binaryOpTreeRootLocator->findOperationRoot($instanceof, BooleanOr::class);
-        $disjuncts = $this->binaryOpConditionsCollector->findConditions($disjunctionTree, BooleanOr::class);
+        $disjunctionTree = $this->binaryOpTreeRootLocator->findOperationRoot($instanceof, \PhpParser\Node\Expr\BinaryOp\BooleanOr::class);
+        $disjuncts = $this->binaryOpConditionsCollector->findConditions($disjunctionTree, \PhpParser\Node\Expr\BinaryOp\BooleanOr::class);
         // If we transformed it ourselves, the second check can only be to the right
         // since it uses the assigned variable.
-        if ($instanceof->expr instanceof Assign) {
+        if ($instanceof->expr instanceof \PhpParser\Node\Expr\Assign) {
             $index = \array_search($instanceof, $disjuncts, \true);
             if ($index !== \false) {
                 $disjuncts = \array_slice($disjuncts, $index);
@@ -108,8 +108,8 @@ CODE_SAMPLE
         $expectedDisjunct = $this->createFallbackCheck($var);
         return $this->nodeComparator->isNodeEqual($expectedDisjunct, $disjuncts);
     }
-    private function createFallbackCheck(Variable $variable) : Instanceof_
+    private function createFallbackCheck(\PhpParser\Node\Expr\Variable $variable) : \PhpParser\Node\Expr\Instanceof_
     {
-        return new Instanceof_($variable, new FullyQualified('Exception'));
+        return new \PhpParser\Node\Expr\Instanceof_($variable, new \PhpParser\Node\Name\FullyQualified('Exception'));
     }
 }

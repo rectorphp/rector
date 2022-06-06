@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast;
+namespace PHPStan\PhpDocParser\Ast;
 
 use function array_key_exists;
 trait NodeAttributes
@@ -17,7 +17,7 @@ trait NodeAttributes
     }
     public function hasAttribute(string $key) : bool
     {
-        return array_key_exists($key, $this->attributes);
+        return \array_key_exists($key, $this->attributes);
     }
     /**
      * @return mixed

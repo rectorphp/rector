@@ -17,15 +17,15 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Wouter J <wouter@wouterj.nl>
  */
-class ExtensionCompilerPass implements CompilerPassInterface
+class ExtensionCompilerPass implements \RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         foreach ($container->getExtensions() as $extension) {
-            if (!$extension instanceof CompilerPassInterface) {
+            if (!$extension instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface) {
                 continue;
             }
             $extension->process($container);

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Contract\Tag;
+namespace Rector\Symfony\Contract\Tag;
 
 interface TagInterface
 {

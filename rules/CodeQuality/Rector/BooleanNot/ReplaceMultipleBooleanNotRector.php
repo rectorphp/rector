@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\BooleanNot;
+namespace Rector\CodeQuality\Rector\BooleanNot;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Expr\Cast\Bool_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Cast\Bool_;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector\ReplaceMultipleBooleanNotRectorTest
  */
-final class ReplaceMultipleBooleanNotRector extends AbstractRector
+final class ReplaceMultipleBooleanNotRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace the Double not operator (!!) by type-casting to boolean', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace the Double not operator (!!) by type-casting to boolean', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $bool = !!$var;
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -29,16 +29,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [BooleanNot::class];
+        return [\PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
      * @param BooleanNot $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $depth = 0;
         $expr = $node->expr;
-        while ($expr instanceof BooleanNot) {
+        while ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
             ++$depth;
             $expr = $expr->expr;
         }
@@ -49,6 +49,6 @@ CODE_SAMPLE
             $node->expr = $expr;
             return $node;
         }
-        return new Bool_($expr);
+        return new \PhpParser\Node\Expr\Cast\Bool_($expr);
     }
 }

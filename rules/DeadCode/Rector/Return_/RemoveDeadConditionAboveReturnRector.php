@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DeadCode\Rector\Return_;
+namespace Rector\DeadCode\Rector\Return_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Else_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector\RemoveDeadConditionAboveReturnRectorTest
  */
-final class RemoveDeadConditionAboveReturnRector extends AbstractRector
+final class RemoveDeadConditionAboveReturnRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove dead condition above return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove dead condition above return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function go()
@@ -47,21 +47,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (!$previousNode instanceof If_) {
+        $previousNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        if (!$previousNode instanceof \PhpParser\Node\Stmt\If_) {
             return null;
         }
         if ($previousNode->elseifs !== []) {
             return null;
         }
-        if ($previousNode->else instanceof Else_) {
+        if ($previousNode->else instanceof \PhpParser\Node\Stmt\Else_) {
             return null;
         }
         $countStmt = \count($previousNode->stmts);
@@ -73,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
         $stmt = $previousNode->stmts[0];
-        if (!$stmt instanceof Return_) {
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($stmt, $node)) {

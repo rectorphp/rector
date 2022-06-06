@@ -24,12 +24,12 @@ class Traverser
     public function __construct(array $statements)
     {
         $this->statements = $statements;
-        $this->visitors = new AggregatingVisitor();
+        $this->visitors = new \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\Traverser\AggregatingVisitor();
     }
     /**
      * @param Visitor $visitor
      */
-    public function addVisitor(Visitor $visitor) : void
+    public function addVisitor(\RectorPrefix20220606\Helmich\TypoScriptParser\Parser\Traverser\Visitor $visitor) : void
     {
         $this->visitors->addVisitor($visitor);
     }
@@ -50,9 +50,9 @@ class Traverser
     {
         foreach ($statements as $statement) {
             $this->visitors->enterNode($statement);
-            if ($statement instanceof NestedAssignment) {
+            if ($statement instanceof \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\NestedAssignment) {
                 $statement->statements = $this->walkRecursive($statement->statements);
-            } elseif ($statement instanceof ConditionalStatement) {
+            } elseif ($statement instanceof \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
                 $statement->ifStatements = $this->walkRecursive($statement->ifStatements);
                 $statement->elseStatements = $this->walkRecursive($statement->elseStatements);
             }
@@ -61,3 +61,10 @@ class Traverser
         return $statements;
     }
 }
+/**
+ * Class Traverser
+ *
+ * @package    Helmich\TypoScriptParser
+ * @subpackage Parser\Traverser
+ */
+\class_alias('RectorPrefix20220606\\Helmich\\TypoScriptParser\\Parser\\Traverser\\Traverser', 'Helmich\\TypoScriptParser\\Parser\\Traverser\\Traverser', \false);

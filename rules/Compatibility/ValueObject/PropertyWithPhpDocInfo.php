@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Compatibility\ValueObject;
+namespace Rector\Compatibility\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Exception\ShouldNotHappenException;
 final class PropertyWithPhpDocInfo
 {
     /**
@@ -25,17 +25,17 @@ final class PropertyWithPhpDocInfo
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
      */
     private $phpDocInfo;
-    public function __construct(string $propertyName, Property $property, PhpDocInfo $phpDocInfo)
+    public function __construct(string $propertyName, \PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo)
     {
         $this->propertyName = $propertyName;
         $this->property = $property;
         $this->phpDocInfo = $phpDocInfo;
     }
-    public function getProperty() : Property
+    public function getProperty() : \PhpParser\Node\Stmt\Property
     {
         return $this->property;
     }
-    public function getPhpDocInfo() : PhpDocInfo
+    public function getPhpDocInfo() : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
         return $this->phpDocInfo;
     }
@@ -43,12 +43,12 @@ final class PropertyWithPhpDocInfo
     {
         return $this->propertyName;
     }
-    public function getParamTagValueNode() : ParamTagValueNode
+    public function getParamTagValueNode() : \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode
     {
         $varTagValueNode = $this->phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof VarTagValueNode) {
-            throw new ShouldNotHappenException();
+        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        return new ParamTagValueNode($varTagValueNode->type, \false, '$' . $this->propertyName, '');
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode($varTagValueNode->type, \false, '$' . $this->propertyName, '');
     }
 }

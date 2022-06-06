@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Privatization\Rector\Class_;
+namespace Rector\Privatization\Rector\Class_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassManipulator;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Privatization\NodeAnalyzer\PropertyFetchByMethodAnalyzer;
-use RectorPrefix20220606\Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\NodeManipulator\ClassManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Privatization\NodeAnalyzer\PropertyFetchByMethodAnalyzer;
+use Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector\ChangeLocalPropertyToVariableRectorTest
  */
-final class ChangeLocalPropertyToVariableRector extends AbstractRector
+final class ChangeLocalPropertyToVariableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -37,16 +37,16 @@ final class ChangeLocalPropertyToVariableRector extends AbstractRector
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(ClassManipulator $classManipulator, PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer, PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer, ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\Core\NodeManipulator\ClassManipulator $classManipulator, \Rector\Privatization\NodeReplacer\PropertyFetchWithVariableReplacer $propertyFetchWithVariableReplacer, \Rector\Privatization\NodeAnalyzer\PropertyFetchByMethodAnalyzer $propertyFetchByMethodAnalyzer, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->classManipulator = $classManipulator;
         $this->propertyFetchWithVariableReplacer = $propertyFetchWithVariableReplacer;
         $this->propertyFetchByMethodAnalyzer = $propertyFetchByMethodAnalyzer;
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change local property used in single method to local variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change local property used in single method to local variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $count;
@@ -74,12 +74,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;

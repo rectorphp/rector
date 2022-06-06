@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\ValueObject;
+namespace Rector\NodeTypeResolver\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\Type;
+use PHPStan\Type\Type;
 final class OldToNewType
 {
     /**
@@ -16,16 +16,16 @@ final class OldToNewType
      * @var \PHPStan\Type\Type
      */
     private $newType;
-    public function __construct(Type $oldType, Type $newType)
+    public function __construct(\PHPStan\Type\Type $oldType, \PHPStan\Type\Type $newType)
     {
         $this->oldType = $oldType;
         $this->newType = $newType;
     }
-    public function getOldType() : Type
+    public function getOldType() : \PHPStan\Type\Type
     {
         return $this->oldType;
     }
-    public function getNewType() : Type
+    public function getNewType() : \PHPStan\Type\Type
     {
         return $this->newType;
     }

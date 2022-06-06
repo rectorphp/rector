@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp70\Rector\TryCatch;
+namespace Rector\DowngradePhp70\Rector\TryCatch;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Catch_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\TryCatch;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Throwable was introduced in PHP 7.0 so to support older versions we need to also check for Exception.
  * @changelog https://www.php.net/manual/en/class.throwable.php
  * @see \Rector\Tests\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector\DowngradeCatchThrowableRectorTest
  */
-final class DowngradeCatchThrowableRector extends AbstractRector
+final class DowngradeCatchThrowableRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
      */
     private const EXCEPTION = 'Exception';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Make catch clauses catching `Throwable` also catch `Exception` to support exception hierarchies in PHP 5.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Make catch clauses catching `Throwable` also catch `Exception` to support exception hierarchies in PHP 5.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 try {
     // Some code...
 } catch (\Throwable $exception) {
@@ -48,12 +48,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [TryCatch::class];
+        return [\PhpParser\Node\Stmt\TryCatch::class];
     }
     /**
      * @param TryCatch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $originalCatches = $node->catches;
         $hasChanged = \false;
@@ -61,8 +61,8 @@ CODE_SAMPLE
             if (!$this->shouldAddExceptionFallback($catch, $node)) {
                 continue;
             }
-            $catchType = new FullyQualified(self::EXCEPTION);
-            $exceptionCatch = new Catch_([$catchType], $catch->var, $catch->stmts);
+            $catchType = new \PhpParser\Node\Name\FullyQualified(self::EXCEPTION);
+            $exceptionCatch = new \PhpParser\Node\Stmt\Catch_([$catchType], $catch->var, $catch->stmts);
             $originalCatches[] = $exceptionCatch;
             $hasChanged = \true;
         }
@@ -98,7 +98,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldAddExceptionFallback(Catch_ $catch, TryCatch $tryCatch) : bool
+    private function shouldAddExceptionFallback(\PhpParser\Node\Stmt\Catch_ $catch, \PhpParser\Node\Stmt\TryCatch $tryCatch) : bool
     {
         if (!$this->isCatchingType($catch->types, 'Throwable')) {
             return \false;

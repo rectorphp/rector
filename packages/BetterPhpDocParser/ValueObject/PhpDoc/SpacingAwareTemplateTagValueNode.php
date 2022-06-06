@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\PhpDoc;
+namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use Stringable;
-final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
+final class SpacingAwareTemplateTagValueNode extends \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode
 {
     /**
      * @readonly
      * @var string
      */
     private $preposition;
-    public function __construct(string $name, ?TypeNode $typeNode, string $description, string $preposition)
+    public function __construct(string $name, ?\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, string $description, string $preposition)
     {
         $this->preposition = $preposition;
         parent::__construct($name, $typeNode, $description);

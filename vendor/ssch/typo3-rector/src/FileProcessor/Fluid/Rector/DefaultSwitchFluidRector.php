@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\Fluid\Rector;
+namespace Ssch\TYPO3Rector\FileProcessor\Fluid\Rector;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector\FluidRectorInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Core\ValueObject\Application\File;
+use Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector\FluidRectorInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://forge.typo3.org/issues/73068
  */
-final class DefaultSwitchFluidRector implements FluidRectorInterface
+final class DefaultSwitchFluidRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Fluid\Rector\FluidRectorInterface
 {
     /**
      * @var string
@@ -21,15 +21,15 @@ final class DefaultSwitchFluidRector implements FluidRectorInterface
      * @var string
      */
     private const REPLACEMENT = '<f:defaultCase>$2</f:defaultCase>';
-    public function transform(File $file) : void
+    public function transform(\Rector\Core\ValueObject\Application\File $file) : void
     {
         $content = $file->getFileContent();
-        $content = Strings::replace($content, self::PATTERN, self::REPLACEMENT);
+        $content = \RectorPrefix20220606\Nette\Utils\Strings::replace($content, self::PATTERN, self::REPLACEMENT);
         $file->changeFileContent($content);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use <f:defaultCase> instead of <f:case default="1">', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use <f:defaultCase> instead of <f:case default="1">', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 <f:switch expression="{someVariable}">
     <f:case value="...">...</f:case>
     <f:case value="...">...</f:case>

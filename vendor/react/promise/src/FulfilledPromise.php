@@ -5,12 +5,12 @@ namespace RectorPrefix20220606\React\Promise;
 /**
  * @deprecated 2.8.0 External usage of FulfilledPromise is deprecated, use `resolve()` instead.
  */
-class FulfilledPromise implements ExtendedPromiseInterface, CancellablePromiseInterface
+class FulfilledPromise implements \RectorPrefix20220606\React\Promise\ExtendedPromiseInterface, \RectorPrefix20220606\React\Promise\CancellablePromiseInterface
 {
     private $value;
     public function __construct($value = null)
     {
-        if ($value instanceof PromiseInterface) {
+        if ($value instanceof \RectorPrefix20220606\React\Promise\PromiseInterface) {
             throw new \InvalidArgumentException('You cannot create React\\Promise\\FulfilledPromise with a promise. Use React\\Promise\\resolve($promiseOrValue) instead.');
         }
         $this->value = $value;
@@ -23,9 +23,9 @@ class FulfilledPromise implements ExtendedPromiseInterface, CancellablePromiseIn
         try {
             return resolve($onFulfilled($this->value));
         } catch (\Throwable $exception) {
-            return new RejectedPromise($exception);
+            return new \RectorPrefix20220606\React\Promise\RejectedPromise($exception);
         } catch (\Exception $exception) {
-            return new RejectedPromise($exception);
+            return new \RectorPrefix20220606\React\Promise\RejectedPromise($exception);
         }
     }
     public function done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null)
@@ -34,7 +34,7 @@ class FulfilledPromise implements ExtendedPromiseInterface, CancellablePromiseIn
             return;
         }
         $result = $onFulfilled($this->value);
-        if ($result instanceof ExtendedPromiseInterface) {
+        if ($result instanceof \RectorPrefix20220606\React\Promise\ExtendedPromiseInterface) {
             $result->done();
         }
     }

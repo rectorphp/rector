@@ -17,7 +17,7 @@ use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class AutowireRequiredMethodsPass extends AbstractRecursivePass
+class AutowireRequiredMethodsPass extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * {@inheritdoc}
@@ -27,7 +27,7 @@ class AutowireRequiredMethodsPass extends AbstractRecursivePass
     protected function processValue($value, bool $isRoot = \false)
     {
         $value = parent::processValue($value, $isRoot);
-        if (!$value instanceof Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
+        if (!$value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition || !$value->isAutowired() || $value->isAbstract() || !$value->getClass()) {
             return $value;
         }
         if (!($reflectionClass = $this->container->getReflectionClass($value->getClass(), \false))) {
@@ -44,7 +44,7 @@ class AutowireRequiredMethodsPass extends AbstractRecursivePass
                 continue;
             }
             while (\true) {
-                if (\method_exists($r, 'getAttributes') ? $r->getAttributes(Required::class) : []) {
+                if (\method_exists($r, 'getAttributes') ? $r->getAttributes(\RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required::class) : []) {
                     if ($this->isWither($r, $r->getDocComment() ?: '')) {
                         $withers[] = [$r->name, [], \true];
                     } else {

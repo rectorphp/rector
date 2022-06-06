@@ -11,7 +11,7 @@ use Helmich\TypoScriptParser\Parser\AST\Statement;
  * @package    Helmich\TypoScriptParser
  * @subpcakage Parser\AST\Operator
  */
-abstract class BinaryOperator extends Statement
+abstract class BinaryOperator extends \Helmich\TypoScriptParser\Parser\AST\Statement
 {
     /**
      * The object on the left-hand side of the statement.

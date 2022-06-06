@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type;
+namespace PHPStan\PhpDocParser\Ast\Type;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use function implode;
-class CallableTypeNode implements TypeNode
+class CallableTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     use NodeAttributes;
     /** @var IdentifierTypeNode */
@@ -14,7 +14,7 @@ class CallableTypeNode implements TypeNode
     public $parameters;
     /** @var TypeNode */
     public $returnType;
-    public function __construct(IdentifierTypeNode $identifier, array $parameters, TypeNode $returnType)
+    public function __construct(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifier, array $parameters, \PHPStan\PhpDocParser\Ast\Type\TypeNode $returnType)
     {
         $this->identifier = $identifier;
         $this->parameters = $parameters;
@@ -22,7 +22,7 @@ class CallableTypeNode implements TypeNode
     }
     public function __toString() : string
     {
-        $parameters = implode(', ', $this->parameters);
+        $parameters = \implode(', ', $this->parameters);
         return "{$this->identifier}({$parameters}): {$this->returnType}";
     }
 }

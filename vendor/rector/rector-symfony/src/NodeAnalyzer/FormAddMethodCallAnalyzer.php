@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer;
+namespace Rector\Symfony\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class FormAddMethodCallAnalyzer
 {
     /**
@@ -23,13 +23,13 @@ final class FormAddMethodCallAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->formObjectTypes = [new ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'), new ObjectType('Symfony\\Component\\Form\\FormInterface')];
+        $this->formObjectTypes = [new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'), new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\FormInterface')];
     }
-    public function isMatching(MethodCall $methodCall) : bool
+    public function isMatching(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!$this->nodeTypeResolver->isObjectTypes($methodCall->var, $this->formObjectTypes)) {
             return \false;

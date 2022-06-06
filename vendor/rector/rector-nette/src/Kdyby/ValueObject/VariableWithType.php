@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\Kdyby\ValueObject;
+namespace Rector\Nette\Kdyby\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\ComplexType;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\UnionType;
-use RectorPrefix20220606\PHPStan\Type\Type;
+use PhpParser\Node;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\UnionType;
+use PHPStan\Type\Type;
 final class VariableWithType
 {
     /**
@@ -29,7 +29,7 @@ final class VariableWithType
     /**
      * @param ComplexType|Identifier|Name|NullableType|UnionType|null $phpParserTypeNode
      */
-    public function __construct(string $name, Type $type, $phpParserTypeNode)
+    public function __construct(string $name, \PHPStan\Type\Type $type, $phpParserTypeNode)
     {
         $this->name = $name;
         $this->type = $type;
@@ -39,14 +39,14 @@ final class VariableWithType
     {
         return $this->name;
     }
-    public function getType() : Type
+    public function getType() : \PHPStan\Type\Type
     {
         return $this->type;
     }
     /**
      * @return ComplexType|Identifier|Name|NullableType|UnionType|null
      */
-    public function getPhpParserTypeNode() : ?Node
+    public function getPhpParserTypeNode() : ?\PhpParser\Node
     {
         return $this->phpParserTypeNode;
     }

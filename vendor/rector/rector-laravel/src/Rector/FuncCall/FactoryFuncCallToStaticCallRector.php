@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Laravel\Rector\FuncCall;
+namespace Rector\Laravel\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\StaticCall;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://laravel.com/docs/7.x/database-testing#creating-models
  * @see https://laravel.com/docs/8.x/database-testing#instantiating-models
  *
  * @see \Rector\Laravel\Tests\Rector\FuncCall\FactoryFuncCallToStaticCallRector\FactoryFuncCallToStaticCallRectorTest
  */
-final class FactoryFuncCallToStaticCallRector extends AbstractRector
+final class FactoryFuncCallToStaticCallRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
      */
     private const FACTORY = 'factory';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use the static factory method instead of global factory function.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use the static factory method instead of global factory function.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 factory(User::class);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -38,12 +38,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param Node\Expr\FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node->name, self::FACTORY)) {
             return null;
@@ -51,19 +51,19 @@ CODE_SAMPLE
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $firstArgValue = $node->args[0]->value;
-        if (!$firstArgValue instanceof ClassConstFetch) {
+        if (!$firstArgValue instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return null;
         }
         $model = $firstArgValue->class;
         // create model
         if (!isset($node->args[1])) {
-            return new StaticCall($model, self::FACTORY);
+            return new \PhpParser\Node\Expr\StaticCall($model, self::FACTORY);
         }
         // create models of a given type
-        return new StaticCall($model, self::FACTORY, [$node->args[1]]);
+        return new \PhpParser\Node\Expr\StaticCall($model, self::FACTORY, [$node->args[1]]);
     }
 }

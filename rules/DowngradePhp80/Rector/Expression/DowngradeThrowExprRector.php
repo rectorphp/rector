@@ -1,34 +1,34 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp80\Rector\Expression;
+namespace Rector\DowngradePhp80\Rector\Expression;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Coalesce;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Expr\Isset_;
-use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
-use RectorPrefix20220606\PhpParser\Node\Expr\Throw_;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\BinaryOpManipulator;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\IfManipulator;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
+use Rector\Core\NodeManipulator\BinaryOpManipulator;
+use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/throw_expression
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector\DowngradeThrowExprRectorTest
  */
-final class DowngradeThrowExprRector extends AbstractRector
+final class DowngradeThrowExprRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -45,15 +45,15 @@ final class DowngradeThrowExprRector extends AbstractRector
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
-    public function __construct(IfManipulator $ifManipulator, CoalesceAnalyzer $coalesceAnalyzer, BinaryOpManipulator $binaryOpManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\CoalesceAnalyzer $coalesceAnalyzer, \Rector\Core\NodeManipulator\BinaryOpManipulator $binaryOpManipulator)
     {
         $this->ifManipulator = $ifManipulator;
         $this->coalesceAnalyzer = $coalesceAnalyzer;
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade throw expression', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade throw expression', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 echo $variable ?? throw new RuntimeException();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -70,27 +70,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class, Return_::class];
+        return [\PhpParser\Node\Stmt\Expression::class, \PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Expression|Return_ $node
      * @return Node|Node[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
-        if ($node instanceof Return_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Return_) {
             return $this->refactorReturn($node);
         }
-        if ($node->expr instanceof Throw_) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\Throw_) {
             return null;
         }
-        if ($node->expr instanceof Assign) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\Assign) {
             return $this->refactorAssign($node, $node->expr);
         }
-        if ($node->expr instanceof Coalesce) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
             return $this->refactorCoalesce($node->expr, null);
         }
-        if ($node->expr instanceof Ternary) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\Ternary) {
             return $this->refactorTernary($node->expr, null);
         }
         return null;
@@ -98,18 +98,18 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Expression|null|mixed[]
      */
-    private function refactorAssign(Expression $expression, Assign $assign)
+    private function refactorAssign(\PhpParser\Node\Stmt\Expression $expression, \PhpParser\Node\Expr\Assign $assign)
     {
         if (!$this->hasThrowInAssignExpr($assign)) {
             return null;
         }
-        if ($assign->expr instanceof Coalesce) {
+        if ($assign->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
             return $this->refactorCoalesce($assign->expr, $assign);
         }
-        if ($assign->expr instanceof Throw_) {
-            return new Expression($assign->expr);
+        if ($assign->expr instanceof \PhpParser\Node\Expr\Throw_) {
+            return new \PhpParser\Node\Stmt\Expression($assign->expr);
         }
-        if ($assign->expr instanceof Ternary) {
+        if ($assign->expr instanceof \PhpParser\Node\Expr\Ternary) {
             return $this->refactorTernary($assign->expr, $assign);
         }
         return $expression;
@@ -117,76 +117,76 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Stmt\If_|null|mixed[]
      */
-    private function refactorTernary(Ternary $ternary, ?Assign $assign)
+    private function refactorTernary(\PhpParser\Node\Expr\Ternary $ternary, ?\PhpParser\Node\Expr\Assign $assign)
     {
-        if (!$ternary->else instanceof Throw_) {
+        if (!$ternary->else instanceof \PhpParser\Node\Expr\Throw_) {
             return null;
         }
         $inversedTernaryCond = $this->binaryOpManipulator->inverseNode($ternary->cond);
-        $if = $this->ifManipulator->createIfStmt($inversedTernaryCond, new Expression($ternary->else));
-        if (!$assign instanceof Assign) {
+        $if = $this->ifManipulator->createIfStmt($inversedTernaryCond, new \PhpParser\Node\Stmt\Expression($ternary->else));
+        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
             return $if;
         }
         $assign->expr = $ternary->if ?? $ternary->cond;
-        return [$if, new Expression($assign)];
+        return [$if, new \PhpParser\Node\Stmt\Expression($assign)];
     }
     /**
      * @return \PhpParser\Node\Stmt\If_|null|mixed[]
      */
-    private function refactorCoalesce(Coalesce $coalesce, ?Assign $assign)
+    private function refactorCoalesce(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce, ?\PhpParser\Node\Expr\Assign $assign)
     {
-        if (!$coalesce->right instanceof Throw_) {
+        if (!$coalesce->right instanceof \PhpParser\Node\Expr\Throw_) {
             return null;
         }
         if (!$this->coalesceAnalyzer->hasIssetableLeft($coalesce)) {
             return null;
         }
         $condExpr = $this->createCondExpr($coalesce);
-        $if = $this->ifManipulator->createIfStmt($condExpr, new Expression($coalesce->right));
-        if (!$assign instanceof Assign) {
+        $if = $this->ifManipulator->createIfStmt($condExpr, new \PhpParser\Node\Stmt\Expression($coalesce->right));
+        if (!$assign instanceof \PhpParser\Node\Expr\Assign) {
             return $if;
         }
         $assign->expr = $coalesce->left;
-        return [$if, new Expression($assign)];
+        return [$if, new \PhpParser\Node\Stmt\Expression($assign)];
     }
-    private function hasThrowInAssignExpr(Assign $assign) : bool
+    private function hasThrowInAssignExpr(\PhpParser\Node\Expr\Assign $assign) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $node) : bool {
-            return $node instanceof Throw_;
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (\PhpParser\Node $node) : bool {
+            return $node instanceof \PhpParser\Node\Expr\Throw_;
         });
     }
     /**
      * @return Node[]|null
      */
-    private function refactorReturn(Return_ $return) : ?array
+    private function refactorReturn(\PhpParser\Node\Stmt\Return_ $return) : ?array
     {
-        $throwExpr = $this->betterNodeFinder->findFirstInstanceOf($return, Throw_::class);
-        if (!$throwExpr instanceof Throw_) {
+        $throwExpr = $this->betterNodeFinder->findFirstInstanceOf($return, \PhpParser\Node\Expr\Throw_::class);
+        if (!$throwExpr instanceof \PhpParser\Node\Expr\Throw_) {
             return null;
         }
-        if ($return->expr instanceof Coalesce) {
+        if ($return->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce) {
             $coalesce = $return->expr;
-            if (!$coalesce->right instanceof Throw_) {
+            if (!$coalesce->right instanceof \PhpParser\Node\Expr\Throw_) {
                 return null;
             }
             $if = $this->createIf($coalesce, $coalesce->right);
-            return [$if, new Return_($coalesce->left)];
+            return [$if, new \PhpParser\Node\Stmt\Return_($coalesce->left)];
         }
         return null;
     }
-    private function createIf(Coalesce $coalesce, Throw_ $throw) : If_
+    private function createIf(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce, \PhpParser\Node\Expr\Throw_ $throw) : \PhpParser\Node\Stmt\If_
     {
-        $booleanNot = new BooleanNot(new Isset_([$coalesce->left]));
-        return new If_($booleanNot, ['stmts' => [new Expression($throw)]]);
+        $booleanNot = new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Isset_([$coalesce->left]));
+        return new \PhpParser\Node\Stmt\If_($booleanNot, ['stmts' => [new \PhpParser\Node\Stmt\Expression($throw)]]);
     }
     /**
      * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\BinaryOp\Identical
      */
-    private function createCondExpr(Coalesce $coalesce)
+    private function createCondExpr(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce)
     {
-        if ($coalesce->left instanceof Variable || $coalesce->left instanceof ArrayDimFetch) {
-            return new BooleanNot(new Isset_([$coalesce->left]));
+        if ($coalesce->left instanceof \PhpParser\Node\Expr\Variable || $coalesce->left instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            return new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Isset_([$coalesce->left]));
         }
-        return new Identical($coalesce->left, $this->nodeFactory->createNull());
+        return new \PhpParser\Node\Expr\BinaryOp\Identical($coalesce->left, $this->nodeFactory->createNull());
     }
 }

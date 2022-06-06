@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CakePHP\ValueObject;
+namespace Rector\CakePHP\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayItem;
 final class ArrayItemsAndFluentClass
 {
     /**

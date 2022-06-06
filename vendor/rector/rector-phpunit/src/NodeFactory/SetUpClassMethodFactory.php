@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPUnit\NodeFactory;
+namespace Rector\PHPUnit\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\Rector\Core\Enum\ObjectReference;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
-use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
-use RectorPrefix20220606\Rector\PHPUnit\NodeManipulator\StmtManipulator;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Enum\ObjectReference;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\ValueObject\MethodName;
+use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
+use Rector\PHPUnit\NodeManipulator\StmtManipulator;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class SetUpClassMethodFactory
 {
@@ -30,7 +30,7 @@ final class SetUpClassMethodFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(SetUpMethodDecorator $setUpMethodDecorator, StmtManipulator $stmtManipulator, NodeFactory $nodeFactory)
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator $setUpMethodDecorator, \Rector\PHPUnit\NodeManipulator\StmtManipulator $stmtManipulator, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->setUpMethodDecorator = $setUpMethodDecorator;
         $this->stmtManipulator = $stmtManipulator;
@@ -39,10 +39,10 @@ final class SetUpClassMethodFactory
     /**
      * @param Stmt[]|Expr[] $stmts
      */
-    public function createSetUpMethod(array $stmts) : ClassMethod
+    public function createSetUpMethod(array $stmts) : \PhpParser\Node\Stmt\ClassMethod
     {
         $stmts = $this->stmtManipulator->normalizeStmts($stmts);
-        $classMethodBuilder = new MethodBuilder(MethodName::SET_UP);
+        $classMethodBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(\Rector\Core\ValueObject\MethodName::SET_UP);
         $classMethodBuilder->makeProtected();
         $classMethodBuilder->addStmt($this->createParentStaticCall());
         $classMethodBuilder->addStmts($stmts);
@@ -50,9 +50,9 @@ final class SetUpClassMethodFactory
         $this->setUpMethodDecorator->decorate($classMethod);
         return $classMethod;
     }
-    public function createParentStaticCall() : Expression
+    public function createParentStaticCall() : \PhpParser\Node\Stmt\Expression
     {
-        $parentSetupStaticCall = $this->nodeFactory->createStaticCall(ObjectReference::PARENT, MethodName::SET_UP);
-        return new Expression($parentSetupStaticCall);
+        $parentSetupStaticCall = $this->nodeFactory->createStaticCall(\Rector\Core\Enum\ObjectReference::PARENT, \Rector\Core\ValueObject\MethodName::SET_UP);
+        return new \PhpParser\Node\Stmt\Expression($parentSetupStaticCall);
     }
 }

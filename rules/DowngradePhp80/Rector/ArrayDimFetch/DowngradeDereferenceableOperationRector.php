@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp80\Rector\ArrayDimFetch;
+namespace Rector\DowngradePhp80\Rector\ArrayDimFetch;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Scalar\Encapsed;
-use RectorPrefix20220606\PhpParser\Node\Scalar\MagicConst;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Scalar\MagicConst;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/variable_syntax_tweaks
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector\DowngradeDereferenceableOperationRectorTest
  */
-final class DowngradeDereferenceableOperationRector extends AbstractRector
+final class DowngradeDereferenceableOperationRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add parentheses around non-dereferenceable expressions.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add parentheses around non-dereferenceable expressions.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function getFirstChar(string $str, string $suffix = '')
 {
     return "$str$suffix"[0];
@@ -39,35 +39,35 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ArrayDimFetch::class];
+        return [\PhpParser\Node\Expr\ArrayDimFetch::class];
     }
     /**
      * @param ArrayDimFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $node->var->setAttribute(AttributeKey::WRAPPED_IN_PARENTHESES, \true);
+        $node->var->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::WRAPPED_IN_PARENTHESES, \true);
         return $node;
     }
-    private function shouldSkip(ArrayDimFetch $arrayDimFetch) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
         if ($arrayDimFetch->dim === null) {
             return \true;
         }
-        if ($arrayDimFetch->var instanceof Encapsed) {
+        if ($arrayDimFetch->var instanceof \PhpParser\Node\Scalar\Encapsed) {
             return $this->hasParentheses($arrayDimFetch);
         }
-        if ($arrayDimFetch->var instanceof MagicConst) {
+        if ($arrayDimFetch->var instanceof \PhpParser\Node\Scalar\MagicConst) {
             return $this->hasParentheses($arrayDimFetch);
         }
         return \true;
     }
-    private function hasParentheses(ArrayDimFetch $arrayDimFetch) : bool
+    private function hasParentheses(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
-        $wrappedInParentheses = $arrayDimFetch->var->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES);
+        $wrappedInParentheses = $arrayDimFetch->var->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::WRAPPED_IN_PARENTHESES);
         if ($wrappedInParentheses === \true) {
             return \true;
         }

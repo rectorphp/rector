@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node\Expr;
+namespace PhpParser\Node\Expr;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\VariadicPlaceholder;
-abstract class CallLike extends Expr
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\VariadicPlaceholder;
+abstract class CallLike extends \PhpParser\Node\Expr
 {
     /**
      * Return raw arguments, which may be actual Args, or VariadicPlaceholders for first-class
@@ -21,7 +21,7 @@ abstract class CallLike extends Expr
     public function isFirstClassCallable() : bool
     {
         foreach ($this->getRawArgs() as $arg) {
-            if ($arg instanceof VariadicPlaceholder) {
+            if ($arg instanceof \PhpParser\Node\VariadicPlaceholder) {
                 return \true;
             }
         }

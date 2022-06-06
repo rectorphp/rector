@@ -11,7 +11,7 @@ use RectorPrefix20220606\Symplify\Skipper\Skipper\OnlySkipper;
 use RectorPrefix20220606\Symplify\Skipper\Skipper\SkipSkipper;
 use RectorPrefix20220606\Symplify\Skipper\ValueObject\Option;
 use Symplify\SmartFileSystem\SmartFileInfo;
-final class ClassSkipVoter implements SkipVoterInterface
+final class ClassSkipVoter implements \RectorPrefix20220606\Symplify\Skipper\Contract\SkipVoterInterface
 {
     /**
      * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
@@ -33,7 +33,7 @@ final class ClassSkipVoter implements SkipVoterInterface
      * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
     private $skippedClassResolver;
-    public function __construct(ClassLikeExistenceChecker $classLikeExistenceChecker, ParameterProvider $parameterProvider, SkipSkipper $skipSkipper, OnlySkipper $onlySkipper, SkippedClassResolver $skippedClassResolver)
+    public function __construct(\RectorPrefix20220606\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker $classLikeExistenceChecker, \RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \RectorPrefix20220606\Symplify\Skipper\Skipper\SkipSkipper $skipSkipper, \RectorPrefix20220606\Symplify\Skipper\Skipper\OnlySkipper $onlySkipper, \RectorPrefix20220606\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver $skippedClassResolver)
     {
         $this->classLikeExistenceChecker = $classLikeExistenceChecker;
         $this->parameterProvider = $parameterProvider;
@@ -54,9 +54,9 @@ final class ClassSkipVoter implements SkipVoterInterface
     /**
      * @param string|object $element
      */
-    public function shouldSkip($element, SmartFileInfo $smartFileInfo) : bool
+    public function shouldSkip($element, \Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo) : bool
     {
-        $only = $this->parameterProvider->provideArrayParameter(Option::ONLY);
+        $only = $this->parameterProvider->provideArrayParameter(\RectorPrefix20220606\Symplify\Skipper\ValueObject\Option::ONLY);
         $doesMatchOnly = $this->onlySkipper->doesMatchOnly($element, $smartFileInfo, $only);
         if (\is_bool($doesMatchOnly)) {
             return $doesMatchOnly;

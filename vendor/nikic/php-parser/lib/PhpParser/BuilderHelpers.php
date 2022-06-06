@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser;
+namespace PhpParser;
 
-use RectorPrefix20220606\PhpParser\Node\ComplexType;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\Scalar;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Scalar;
+use PhpParser\Node\Stmt;
 /**
  * This class defines helpers used in the implementation of builders. Don't use it directly.
  *
@@ -24,12 +24,12 @@ final class BuilderHelpers
      *
      * @return Node The normalized node
      */
-    public static function normalizeNode($node) : Node
+    public static function normalizeNode($node) : \PhpParser\Node
     {
-        if ($node instanceof Builder) {
+        if ($node instanceof \PhpParser\Builder) {
             return $node->getNode();
         }
-        if ($node instanceof Node) {
+        if ($node instanceof \PhpParser\Node) {
             return $node;
         }
         throw new \LogicException('Expected node or builder object');
@@ -43,14 +43,14 @@ final class BuilderHelpers
      *
      * @return Stmt The normalized statement node
      */
-    public static function normalizeStmt($node) : Stmt
+    public static function normalizeStmt($node) : \PhpParser\Node\Stmt
     {
         $node = self::normalizeNode($node);
-        if ($node instanceof Stmt) {
+        if ($node instanceof \PhpParser\Node\Stmt) {
             return $node;
         }
-        if ($node instanceof Expr) {
-            return new Stmt\Expression($node);
+        if ($node instanceof \PhpParser\Node\Expr) {
+            return new \PhpParser\Node\Stmt\Expression($node);
         }
         throw new \LogicException('Expected statement or expression node');
     }
@@ -61,13 +61,13 @@ final class BuilderHelpers
      *
      * @return Identifier The normalized identifier
      */
-    public static function normalizeIdentifier($name) : Identifier
+    public static function normalizeIdentifier($name) : \PhpParser\Node\Identifier
     {
-        if ($name instanceof Identifier) {
+        if ($name instanceof \PhpParser\Node\Identifier) {
             return $name;
         }
         if (\is_string($name)) {
-            return new Identifier($name);
+            return new \PhpParser\Node\Identifier($name);
         }
         throw new \LogicException('RectorPrefix20220606\\Expected string or instance of Node\\Identifier');
     }
@@ -80,11 +80,11 @@ final class BuilderHelpers
      */
     public static function normalizeIdentifierOrExpr($name)
     {
-        if ($name instanceof Identifier || $name instanceof Expr) {
+        if ($name instanceof \PhpParser\Node\Identifier || $name instanceof \PhpParser\Node\Expr) {
             return $name;
         }
         if (\is_string($name)) {
-            return new Identifier($name);
+            return new \PhpParser\Node\Identifier($name);
         }
         throw new \LogicException('RectorPrefix20220606\\Expected string or instance of Node\\Identifier or Node\\Expr');
     }
@@ -95,9 +95,9 @@ final class BuilderHelpers
      *
      * @return Name The normalized name
      */
-    public static function normalizeName($name) : Name
+    public static function normalizeName($name) : \PhpParser\Node\Name
     {
-        if ($name instanceof Name) {
+        if ($name instanceof \PhpParser\Node\Name) {
             return $name;
         }
         if (\is_string($name)) {
@@ -105,12 +105,12 @@ final class BuilderHelpers
                 throw new \LogicException('Name cannot be empty');
             }
             if ($name[0] === '\\') {
-                return new Name\FullyQualified(\substr($name, 1));
+                return new \PhpParser\Node\Name\FullyQualified(\substr($name, 1));
             }
             if (0 === \strpos($name, 'namespace\\')) {
-                return new Name\Relative(\substr($name, \strlen('namespace\\')));
+                return new \PhpParser\Node\Name\Relative(\substr($name, \strlen('namespace\\')));
             }
-            return new Name($name);
+            return new \PhpParser\Node\Name($name);
         }
         throw new \LogicException('RectorPrefix20220606\\Name must be a string or an instance of Node\\Name');
     }
@@ -123,10 +123,10 @@ final class BuilderHelpers
      */
     public static function normalizeNameOrExpr($name)
     {
-        if ($name instanceof Expr) {
+        if ($name instanceof \PhpParser\Node\Expr) {
             return $name;
         }
-        if (!\is_string($name) && !$name instanceof Name) {
+        if (!\is_string($name) && !$name instanceof \PhpParser\Node\Name) {
             throw new \LogicException('RectorPrefix20220606\\Name must be a string or an instance of Node\\Name or Node\\Expr');
         }
         return self::normalizeName($name);
@@ -144,7 +144,7 @@ final class BuilderHelpers
     public static function normalizeType($type)
     {
         if (!\is_string($type)) {
-            if (!$type instanceof Name && !$type instanceof Identifier && !$type instanceof ComplexType) {
+            if (!$type instanceof \PhpParser\Node\Name && !$type instanceof \PhpParser\Node\Identifier && !$type instanceof \PhpParser\Node\ComplexType) {
                 throw new \LogicException('Type must be a string, or an instance of Name, Identifier or ComplexType');
             }
             return $type;
@@ -157,7 +157,7 @@ final class BuilderHelpers
         $builtinTypes = ['array', 'callable', 'string', 'int', 'float', 'bool', 'iterable', 'void', 'object', 'mixed', 'never'];
         $lowerType = \strtolower($type);
         if (\in_array($lowerType, $builtinTypes)) {
-            $type = new Identifier($lowerType);
+            $type = new \PhpParser\Node\Identifier($lowerType);
         } else {
             $type = self::normalizeName($type);
         }
@@ -165,7 +165,7 @@ final class BuilderHelpers
         if ($nullable && \in_array((string) $type, $notNullableTypes)) {
             throw new \LogicException(\sprintf('%s type cannot be nullable', $type));
         }
-        return $nullable ? new NullableType($type) : $type;
+        return $nullable ? new \PhpParser\Node\NullableType($type) : $type;
     }
     /**
      * Normalizes a value: Converts nulls, booleans, integers,
@@ -175,25 +175,25 @@ final class BuilderHelpers
      *
      * @return Expr The normalized value
      */
-    public static function normalizeValue($value) : Expr
+    public static function normalizeValue($value) : \PhpParser\Node\Expr
     {
-        if ($value instanceof Node\Expr) {
+        if ($value instanceof \PhpParser\Node\Expr) {
             return $value;
         }
         if (\is_null($value)) {
-            return new Expr\ConstFetch(new Name('null'));
+            return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null'));
         }
         if (\is_bool($value)) {
-            return new Expr\ConstFetch(new Name($value ? 'true' : 'false'));
+            return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($value ? 'true' : 'false'));
         }
         if (\is_int($value)) {
-            return new Scalar\LNumber($value);
+            return new \PhpParser\Node\Scalar\LNumber($value);
         }
         if (\is_float($value)) {
-            return new Scalar\DNumber($value);
+            return new \PhpParser\Node\Scalar\DNumber($value);
         }
         if (\is_string($value)) {
-            return new Scalar\String_($value);
+            return new \PhpParser\Node\Scalar\String_($value);
         }
         if (\is_array($value)) {
             $items = [];
@@ -201,13 +201,13 @@ final class BuilderHelpers
             foreach ($value as $itemKey => $itemValue) {
                 // for consecutive, numeric keys don't generate keys
                 if (null !== $lastKey && ++$lastKey === $itemKey) {
-                    $items[] = new Expr\ArrayItem(self::normalizeValue($itemValue));
+                    $items[] = new \PhpParser\Node\Expr\ArrayItem(self::normalizeValue($itemValue));
                 } else {
                     $lastKey = null;
-                    $items[] = new Expr\ArrayItem(self::normalizeValue($itemValue), self::normalizeValue($itemKey));
+                    $items[] = new \PhpParser\Node\Expr\ArrayItem(self::normalizeValue($itemValue), self::normalizeValue($itemKey));
                 }
             }
-            return new Expr\Array_($items);
+            return new \PhpParser\Node\Expr\Array_($items);
         }
         throw new \LogicException('Invalid value');
     }
@@ -218,13 +218,13 @@ final class BuilderHelpers
      *
      * @return Comment\Doc The normalized doc comment
      */
-    public static function normalizeDocComment($docComment) : Comment\Doc
+    public static function normalizeDocComment($docComment) : \PhpParser\Comment\Doc
     {
-        if ($docComment instanceof Comment\Doc) {
+        if ($docComment instanceof \PhpParser\Comment\Doc) {
             return $docComment;
         }
         if (\is_string($docComment)) {
-            return new Comment\Doc($docComment);
+            return new \PhpParser\Comment\Doc($docComment);
         }
         throw new \LogicException('RectorPrefix20220606\\Doc comment must be a string or an instance of PhpParser\\Comment\\Doc');
     }
@@ -235,15 +235,15 @@ final class BuilderHelpers
      *
      * @return Node\AttributeGroup The Attribute Group
      */
-    public static function normalizeAttribute($attribute) : Node\AttributeGroup
+    public static function normalizeAttribute($attribute) : \PhpParser\Node\AttributeGroup
     {
-        if ($attribute instanceof Node\AttributeGroup) {
+        if ($attribute instanceof \PhpParser\Node\AttributeGroup) {
             return $attribute;
         }
-        if (!$attribute instanceof Node\Attribute) {
+        if (!$attribute instanceof \PhpParser\Node\Attribute) {
             throw new \LogicException('RectorPrefix20220606\\Attribute must be an instance of PhpParser\\Node\\Attribute or PhpParser\\Node\\AttributeGroup');
         }
-        return new Node\AttributeGroup([$attribute]);
+        return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
     /**
      * Adds a modifier and returns new modifier bitmask.
@@ -255,7 +255,7 @@ final class BuilderHelpers
      */
     public static function addModifier(int $modifiers, int $modifier) : int
     {
-        Stmt\Class_::verifyModifier($modifiers, $modifier);
+        \PhpParser\Node\Stmt\Class_::verifyModifier($modifiers, $modifier);
         return $modifiers | $modifier;
     }
     /**
@@ -264,7 +264,7 @@ final class BuilderHelpers
      */
     public static function addClassModifier(int $existingModifiers, int $modifierToSet) : int
     {
-        Stmt\Class_::verifyClassModifier($existingModifiers, $modifierToSet);
+        \PhpParser\Node\Stmt\Class_::verifyClassModifier($existingModifiers, $modifierToSet);
         return $existingModifiers | $modifierToSet;
     }
 }

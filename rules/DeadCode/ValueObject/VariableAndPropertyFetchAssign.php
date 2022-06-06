@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DeadCode\ValueObject;
+namespace Rector\DeadCode\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
 final class VariableAndPropertyFetchAssign
 {
     /**
@@ -17,16 +17,16 @@ final class VariableAndPropertyFetchAssign
      * @var \PhpParser\Node\Expr\PropertyFetch
      */
     private $propertyFetch;
-    public function __construct(Variable $variable, PropertyFetch $propertyFetch)
+    public function __construct(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr\PropertyFetch $propertyFetch)
     {
         $this->variable = $variable;
         $this->propertyFetch = $propertyFetch;
     }
-    public function getVariable() : Variable
+    public function getVariable() : \PhpParser\Node\Expr\Variable
     {
         return $this->variable;
     }
-    public function getPropertyFetch() : PropertyFetch
+    public function getPropertyFetch() : \PhpParser\Node\Expr\PropertyFetch
     {
         return $this->propertyFetch;
     }

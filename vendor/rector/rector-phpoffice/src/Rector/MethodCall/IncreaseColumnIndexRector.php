@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPOffice\Rector\MethodCall;
+namespace Rector\PHPOffice\Rector\MethodCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Plus;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Plus;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\LNumber;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#column-index-based-on-1
  *
  * @see \Rector\PHPOffice\Tests\Rector\MethodCall\IncreaseColumnIndexRector\IncreaseColumnIndexRectorTest
  */
-final class IncreaseColumnIndexRector extends AbstractRector
+final class IncreaseColumnIndexRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -30,11 +30,11 @@ final class IncreaseColumnIndexRector extends AbstractRector
     private $worksheetObjectTypes = [];
     public function __construct()
     {
-        $this->worksheetObjectTypes = [new ObjectType('PHPExcel_Worksheet'), new ObjectType('PHPExcel_Worksheet_PageSetup')];
+        $this->worksheetObjectTypes = [new \PHPStan\Type\ObjectType('PHPExcel_Worksheet'), new \PHPStan\Type\ObjectType('PHPExcel_Worksheet_PageSetup')];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Column index changed from 0 to 1 - run only ONCE! changes current value without memory', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Column index changed from 0 to 1 - run only ONCE! changes current value without memory', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -61,12 +61,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->nodeTypeResolver->isObjectTypes($node->var, $this->worksheetObjectTypes)) {
             return null;
@@ -82,24 +82,24 @@ CODE_SAMPLE
         // increase column value
         $firstArg = $node->getArgs()[0];
         $firstArgumentValue = $firstArg->value;
-        if ($firstArgumentValue instanceof LNumber) {
+        if ($firstArgumentValue instanceof \PhpParser\Node\Scalar\LNumber) {
             ++$firstArgumentValue->value;
         }
-        if ($firstArgumentValue instanceof BinaryOp) {
+        if ($firstArgumentValue instanceof \PhpParser\Node\Expr\BinaryOp) {
             $this->refactorBinaryOp($firstArgumentValue);
         }
-        if ($firstArgumentValue instanceof Variable) {
-            $firstArg->value = new Plus($firstArgumentValue, new LNumber(1));
+        if ($firstArgumentValue instanceof \PhpParser\Node\Expr\Variable) {
+            $firstArg->value = new \PhpParser\Node\Expr\BinaryOp\Plus($firstArgumentValue, new \PhpParser\Node\Scalar\LNumber(1));
         }
         return $node;
     }
-    private function refactorBinaryOp(BinaryOp $binaryOp) : void
+    private function refactorBinaryOp(\PhpParser\Node\Expr\BinaryOp $binaryOp) : void
     {
-        if ($binaryOp->left instanceof LNumber) {
+        if ($binaryOp->left instanceof \PhpParser\Node\Scalar\LNumber) {
             ++$binaryOp->left->value;
             return;
         }
-        if ($binaryOp->right instanceof LNumber) {
+        if ($binaryOp->right instanceof \PhpParser\Node\Scalar\LNumber) {
             ++$binaryOp->right->value;
         }
     }

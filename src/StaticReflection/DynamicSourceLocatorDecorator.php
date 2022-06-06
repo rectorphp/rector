@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\StaticReflection;
+namespace Rector\Core\StaticReflection;
 
-use RectorPrefix20220606\Rector\Core\FileSystem\PhpFilesFinder;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
+use Rector\Core\FileSystem\PhpFilesFinder;
+use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use RectorPrefix20220606\Symplify\SmartFileSystem\FileSystemFilter;
 /**
  * @see https://phpstan.org/blog/zero-config-analysis-with-static-reflection
@@ -27,7 +27,7 @@ final class DynamicSourceLocatorDecorator
      * @var \Rector\Core\FileSystem\PhpFilesFinder
      */
     private $phpFilesFinder;
-    public function __construct(FileSystemFilter $fileSystemFilter, DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, PhpFilesFinder $phpFilesFinder)
+    public function __construct(\RectorPrefix20220606\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider $dynamicSourceLocatorProvider, \Rector\Core\FileSystem\PhpFilesFinder $phpFilesFinder)
     {
         $this->fileSystemFilter = $fileSystemFilter;
         $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;

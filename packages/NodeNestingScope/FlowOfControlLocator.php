@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeNestingScope;
+namespace Rector\NodeNestingScope;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
-use RectorPrefix20220606\PhpParser\Node\FunctionLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Expression;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FlowOfControlLocator
 {
-    public function resolveNestingHashFromFunctionLike(FunctionLike $functionLike, Node $checkedNode) : string
+    public function resolveNestingHashFromFunctionLike(\PhpParser\Node\FunctionLike $functionLike, \PhpParser\Node $checkedNode) : string
     {
         $nestingHash = \spl_object_hash($functionLike) . '__';
         $currentNode = $checkedNode;
         $previous = $currentNode;
-        while ($currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE)) {
-            if ($currentNode instanceof Expression) {
+        while ($currentNode = $currentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE)) {
+            if ($currentNode instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
-            if (!$currentNode instanceof Node) {
+            if (!$currentNode instanceof \PhpParser\Node) {
                 break;
             }
             if ($functionLike === $currentNode) {
@@ -32,9 +32,9 @@ final class FlowOfControlLocator
         }
         return $nestingHash;
     }
-    private function resolveBinaryOpNestingHash(Node $currentNode, Node $previous) : string
+    private function resolveBinaryOpNestingHash(\PhpParser\Node $currentNode, \PhpParser\Node $previous) : string
     {
-        if (!$currentNode instanceof BinaryOp) {
+        if (!$currentNode instanceof \PhpParser\Node\Expr\BinaryOp) {
             return '';
         }
         // left && right have differnt nesting

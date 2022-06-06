@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer;
+namespace Rector\Symfony\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
+use PhpParser\Node;
+use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Reflection\ReflectionResolver;
 final class SymfonyTestCaseAnalyzer
 {
     /**
@@ -13,14 +13,14 @@ final class SymfonyTestCaseAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isInWebTestCase(Node $node) : bool
+    public function isInWebTestCase(\PhpParser\Node $node) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         return $classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase');

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample;
+namespace Symplify\RuleDocGenerator\ValueObject\CodeSample;
 
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
-final class ExtraFileCodeSample extends AbstractCodeSample
+use Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
+final class ExtraFileCodeSample extends \Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample
 {
     /**
      * @var string

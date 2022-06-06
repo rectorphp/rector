@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp54\Rector\Closure;
+namespace Rector\DowngradePhp54\Rector\Closure;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClosureUse;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\FunctionLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
-use RectorPrefix20220606\PHPStan\Reflection\Php\PhpPropertyReflection;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NamedVariableFactory;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/closures/object-extension
  *
  * @see \Rector\Tests\DowngradePhp54\Rector\Closure\DowngradeThisInClosureRector\DowngradeThisInClosureRectorTest
  */
-final class DowngradeThisInClosureRector extends AbstractRector
+final class DowngradeThisInClosureRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -36,14 +36,14 @@ final class DowngradeThisInClosureRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NamedVariableFactory $namedVariableFactory, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->namedVariableFactory = $namedVariableFactory;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade $this-> inside Closure to use assigned $self = $this before Closure', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade $this-> inside Closure to use assigned $self = $this before Closure', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public $property = 'test';
@@ -81,27 +81,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Closure::class];
+        return [\PhpParser\Node\Expr\Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $closureParentFunctionLike = $this->betterNodeFinder->findParentByTypes($node, [ClassMethod::class, Function_::class]);
+        $closureParentFunctionLike = $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
         /** @var PropertyFetch[] $propertyFetches */
         $propertyFetches = $this->resolvePropertyFetches($node, $closureParentFunctionLike);
         if ($propertyFetches === []) {
             return null;
         }
         $selfVariable = $this->namedVariableFactory->createVariable($node, 'self');
-        $expression = new Expression(new Assign($selfVariable, new Variable('this')));
+        $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($selfVariable, new \PhpParser\Node\Expr\Variable('this')));
         $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
-        $this->traverseNodesWithCallable($node, function (Node $subNode) use($selfVariable) : ?Closure {
-            if (!$subNode instanceof Closure) {
+        $this->traverseNodesWithCallable($node, function (\PhpParser\Node $subNode) use($selfVariable) : ?Closure {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Closure) {
                 return null;
             }
-            $subNode->uses = \array_merge($subNode->uses, [new ClosureUse($selfVariable)]);
+            $subNode->uses = \array_merge($subNode->uses, [new \PhpParser\Node\Expr\ClosureUse($selfVariable)]);
             return $subNode;
         });
         foreach ($propertyFetches as $propertyFetch) {
@@ -112,26 +112,26 @@ CODE_SAMPLE
     /**
      * @return PropertyFetch[]
      */
-    private function resolvePropertyFetches(Closure $node, ?FunctionLike $closureParentFunctionLike) : array
+    private function resolvePropertyFetches(\PhpParser\Node\Expr\Closure $node, ?\PhpParser\Node\FunctionLike $closureParentFunctionLike) : array
     {
         /** @var PropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->find($node->stmts, function (Node $subNode) use($closureParentFunctionLike) : bool {
+        $propertyFetches = $this->betterNodeFinder->find($node->stmts, function (\PhpParser\Node $subNode) use($closureParentFunctionLike) : bool {
             // multiple deep Closure may access $this, unless its parent is not Closure
-            $parent = $this->betterNodeFinder->findParentByTypes($subNode, [ClassMethod::class, Function_::class]);
-            if ($parent instanceof FunctionLike && $parent !== $closureParentFunctionLike) {
+            $parent = $this->betterNodeFinder->findParentByTypes($subNode, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
+            if ($parent instanceof \PhpParser\Node\FunctionLike && $parent !== $closureParentFunctionLike) {
                 return \false;
             }
-            if (!$subNode instanceof PropertyFetch) {
+            if (!$subNode instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 return \false;
             }
-            if (!$subNode->var instanceof Variable) {
+            if (!$subNode->var instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }
             if (!$this->nodeNameResolver->isName($subNode->var, 'this')) {
                 return \false;
             }
             $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($subNode);
-            if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
+            if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
                 return \false;
             }
             return $phpPropertyReflection->isPublic();

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Laravel\Set;
+namespace Rector\Laravel\Set;
 
-use RectorPrefix20220606\Rector\Set\Contract\SetListInterface;
-final class LaravelLevelSetList implements SetListInterface
+use Rector\Set\Contract\SetListInterface;
+final class LaravelLevelSetList implements \Rector\Set\Contract\SetListInterface
 {
     /**
      * @var string

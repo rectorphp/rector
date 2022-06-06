@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\Guard\PropertyConflictingNameGuard;
+namespace Rector\Naming\Guard\PropertyConflictingNameGuard;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\Rector\Naming\Contract\RenameValueObjectInterface;
-use RectorPrefix20220606\Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
-use RectorPrefix20220606\Rector\Naming\PhpArray\ArrayFilter;
-use RectorPrefix20220606\Rector\Naming\ValueObject\PropertyRename;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Stmt\ClassLike;
+use Rector\Naming\Contract\RenameValueObjectInterface;
+use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
+use Rector\Naming\PhpArray\ArrayFilter;
+use Rector\Naming\ValueObject\PropertyRename;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class MatchPropertyTypeConflictingNameGuard
 {
     /**
@@ -26,7 +26,7 @@ final class MatchPropertyTypeConflictingNameGuard
      * @var \Rector\Naming\PhpArray\ArrayFilter
      */
     private $arrayFilter;
-    public function __construct(MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, NodeNameResolver $nodeNameResolver, ArrayFilter $arrayFilter)
+    public function __construct(\Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Naming\PhpArray\ArrayFilter $arrayFilter)
     {
         $this->matchPropertyTypeExpectedNameResolver = $matchPropertyTypeExpectedNameResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -35,7 +35,7 @@ final class MatchPropertyTypeConflictingNameGuard
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
     {
         $conflictingPropertyNames = $this->resolve($renameValueObject->getClassLike());
         return \in_array($renameValueObject->getExpectedName(), $conflictingPropertyNames, \true);
@@ -43,7 +43,7 @@ final class MatchPropertyTypeConflictingNameGuard
     /**
      * @return string[]
      */
-    public function resolve(ClassLike $classLike) : array
+    public function resolve(\PhpParser\Node\Stmt\ClassLike $classLike) : array
     {
         $expectedNames = [];
         foreach ($classLike->getProperties() as $property) {

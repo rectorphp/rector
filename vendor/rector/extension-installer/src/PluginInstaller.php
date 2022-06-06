@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\RectorInstaller;
+namespace Rector\RectorInstaller;
 
 use RectorPrefix20220606\Composer\Installer\InstallationManager;
 use RectorPrefix20220606\Composer\IO\IOInterface;
@@ -69,7 +69,7 @@ CODE_SAMPLE;
      * @var string
      */
     private $configurationFile;
-    public function __construct(Filesystem $filesystem, InstalledRepositoryInterface $localRepository, IOInterface $io, InstallationManager $installationManager, ComposerFilesystem $composerFilesystem, string $configurationFile)
+    public function __construct(\Rector\RectorInstaller\Filesystem $filesystem, \RectorPrefix20220606\Composer\Repository\InstalledRepositoryInterface $localRepository, \RectorPrefix20220606\Composer\IO\IOInterface $io, \RectorPrefix20220606\Composer\Installer\InstallationManager $installationManager, \RectorPrefix20220606\Composer\Util\Filesystem $composerFilesystem, string $configurationFile)
     {
         $this->filesystem = $filesystem;
         $this->localRepository = $localRepository;
@@ -106,7 +106,7 @@ CODE_SAMPLE;
             $this->io->write(\sprintf('> <info>%s:</info> installed', $name));
         }
     }
-    private function shouldSkip(PackageInterface $package) : bool
+    private function shouldSkip(\RectorPrefix20220606\Composer\Package\PackageInterface $package) : bool
     {
         if ($package->getType() === self::RECTOR_EXTENSION_TYPE) {
             return \false;

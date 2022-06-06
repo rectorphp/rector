@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\StaticTypeMapper\Naming;
+namespace Rector\StaticTypeMapper\Naming;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\GroupUse;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\UseUse;
-use RectorPrefix20220606\PHPStan\Analyser\NameScope;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\PHPStan\Type\Generic\TemplateTypeMap;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\Naming\Naming\UseImportsResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Analyser\NameScope;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\Generic\TemplateTypeMap;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Naming\Naming\UseImportsResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see https://github.com/phpstan/phpstan-src/blob/8376548f76e2c845ae047e3010e873015b796818/src/Analyser/NameScope.php#L32
@@ -44,32 +44,32 @@ final class NameScopeFactory
     /**
      * @required
      */
-    public function autowire(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, BetterNodeFinder $betterNodeFinder, UseImportsResolver $useImportsResolver) : void
+    public function autowire(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver) : void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsResolver = $useImportsResolver;
     }
-    public function createNameScopeFromNodeWithoutTemplateTypes(Node $node) : NameScope
+    public function createNameScopeFromNodeWithoutTemplateTypes(\PhpParser\Node $node) : \PHPStan\Analyser\NameScope
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        $namespace = $scope instanceof Scope ? $scope->getNamespace() : null;
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $namespace = $scope instanceof \PHPStan\Analyser\Scope ? $scope->getNamespace() : null;
         $uses = $this->useImportsResolver->resolveForNode($node);
         $usesAliasesToNames = $this->resolveUseNamesByAlias($uses);
-        if ($scope instanceof Scope && $scope->getClassReflection() instanceof ClassReflection) {
+        if ($scope instanceof \PHPStan\Analyser\Scope && $scope->getClassReflection() instanceof \PHPStan\Reflection\ClassReflection) {
             $classReflection = $scope->getClassReflection();
             $className = $classReflection->getName();
         } else {
             $className = null;
         }
-        return new NameScope($namespace, $usesAliasesToNames, $className);
+        return new \PHPStan\Analyser\NameScope($namespace, $usesAliasesToNames, $className);
     }
-    public function createNameScopeFromNode(Node $node) : NameScope
+    public function createNameScopeFromNode(\PhpParser\Node $node) : \PHPStan\Analyser\NameScope
     {
         $nameScope = $this->createNameScopeFromNodeWithoutTemplateTypes($node);
         $templateTypeMap = $this->templateTemplateTypeMap($node);
-        return new NameScope($nameScope->getNamespace(), $nameScope->getUses(), $nameScope->getClassName(), null, $templateTypeMap);
+        return new \PHPStan\Analyser\NameScope($nameScope->getNamespace(), $nameScope->getUses(), $nameScope->getClassName(), null, $templateTypeMap);
     }
     /**
      * @param Use_[]|GroupUse[] $useNodes
@@ -79,7 +79,7 @@ final class NameScopeFactory
     {
         $useNamesByAlias = [];
         foreach ($useNodes as $useNode) {
-            $prefix = $useNode instanceof GroupUse ? $useNode->prefix . '\\' : '';
+            $prefix = $useNode instanceof \PhpParser\Node\Stmt\GroupUse ? $useNode->prefix . '\\' : '';
             foreach ($useNode->uses as $useUse) {
                 /** @var UseUse $useUse */
                 $aliasName = $useUse->getAlias()->name;
@@ -90,21 +90,21 @@ final class NameScopeFactory
         }
         return $useNamesByAlias;
     }
-    private function templateTemplateTypeMap(Node $node) : TemplateTypeMap
+    private function templateTemplateTypeMap(\PhpParser\Node $node) : \PHPStan\Type\Generic\TemplateTypeMap
     {
         $nodeTemplateTypes = $this->resolveTemplateTypesFromNode($node);
-        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
         $classTemplateTypes = [];
-        if ($classLike instanceof ClassLike) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             $classTemplateTypes = $this->resolveTemplateTypesFromNode($classLike);
         }
         $templateTypes = \array_merge($nodeTemplateTypes, $classTemplateTypes);
-        return new TemplateTypeMap($templateTypes);
+        return new \PHPStan\Type\Generic\TemplateTypeMap($templateTypes);
     }
     /**
      * @return Type[]
      */
-    private function resolveTemplateTypesFromNode(Node $node) : array
+    private function resolveTemplateTypesFromNode(\PhpParser\Node $node) : array
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $templateTypes = [];

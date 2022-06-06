@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node;
+namespace PhpParser\Node;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\NodeAbstract;
-class MatchArm extends NodeAbstract
+use PhpParser\Node;
+use PhpParser\NodeAbstract;
+class MatchArm extends \PhpParser\NodeAbstract
 {
     /** @var null|Node\Expr[] */
     public $conds;
@@ -14,7 +14,7 @@ class MatchArm extends NodeAbstract
     /**
      * @param null|Node\Expr[] $conds
      */
-    public function __construct($conds, Node\Expr $body, array $attributes = [])
+    public function __construct($conds, \PhpParser\Node\Expr $body, array $attributes = [])
     {
         $this->conds = $conds;
         $this->body = $body;

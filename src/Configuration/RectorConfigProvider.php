@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Configuration;
+namespace Rector\Core\Configuration;
 
 use RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
@@ -15,28 +15,28 @@ final class RectorConfigProvider
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
     }
     public function shouldImportNames() : bool
     {
-        return $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
+        return $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
     }
     public function getSymfonyContainerPhp() : string
     {
-        return $this->parameterProvider->provideStringParameter(Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER);
+        return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER);
     }
     public function getSymfonyContainerXml() : string
     {
-        return $this->parameterProvider->provideStringParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
+        return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
     }
     public function getIndentChar() : string
     {
-        return $this->parameterProvider->provideStringParameter(Option::INDENT_CHAR);
+        return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::INDENT_CHAR);
     }
     public function getIndentSize() : int
     {
-        return $this->parameterProvider->provideIntParameter(Option::INDENT_SIZE);
+        return $this->parameterProvider->provideIntParameter(\Rector\Core\Configuration\Option::INDENT_SIZE);
     }
 }

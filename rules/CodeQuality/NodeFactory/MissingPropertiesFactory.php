@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\NodeFactory;
+namespace Rector\CodeQuality\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\NodeFactory;
 final class MissingPropertiesFactory
 {
     /**
@@ -18,7 +18,7 @@ final class MissingPropertiesFactory
      * @var \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
-    public function __construct(NodeFactory $nodeFactory, PropertyTypeDecorator $propertyTypeDecorator)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->nodeFactory = $nodeFactory;
         $this->propertyTypeDecorator = $propertyTypeDecorator;

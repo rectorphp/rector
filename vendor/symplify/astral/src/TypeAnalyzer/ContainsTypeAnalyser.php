@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\TypeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Type\ArrayType;
-use RectorPrefix20220606\PHPStan\Type\IntersectionType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
+use PhpParser\Node\Expr;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntersectionType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
 final class ContainsTypeAnalyser
 {
     /**
      * @param class-string[] $types
      */
-    public function containsExprTypes(Expr $expr, Scope $scope, array $types) : bool
+    public function containsExprTypes(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope, array $types) : bool
     {
         foreach ($types as $type) {
             if (!$this->containsExprType($expr, $scope, $type)) {
@@ -28,7 +28,7 @@ final class ContainsTypeAnalyser
     /**
      * @param class-string[] $types
      */
-    public function containsTypeExprTypes(Type $exprType, array $types) : bool
+    public function containsTypeExprTypes(\PHPStan\Type\Type $exprType, array $types) : bool
     {
         foreach ($types as $type) {
             if ($this->containsTypeExprType($exprType, $type)) {
@@ -40,9 +40,9 @@ final class ContainsTypeAnalyser
     /**
      * @param class-string $type
      */
-    public function containsTypeExprType(Type $exprType, string $type) : bool
+    public function containsTypeExprType(\PHPStan\Type\Type $exprType, string $type) : bool
     {
-        if ($exprType instanceof IntersectionType) {
+        if ($exprType instanceof \PHPStan\Type\IntersectionType) {
             $intersectionedTypes = $exprType->getTypes();
             foreach ($intersectionedTypes as $intersectionedType) {
                 if ($this->isExprTypeOfType($intersectionedType, $type)) {
@@ -55,7 +55,7 @@ final class ContainsTypeAnalyser
     /**
      * @param class-string $type
      */
-    public function containsExprType(Expr $expr, Scope $scope, string $type) : bool
+    public function containsExprType(\PhpParser\Node\Expr $expr, \PHPStan\Analyser\Scope $scope, string $type) : bool
     {
         $exprType = $scope->getType($expr);
         return $this->containsTypeExprType($exprType, $type);
@@ -63,14 +63,14 @@ final class ContainsTypeAnalyser
     /**
      * @param class-string $class
      */
-    private function isUnionTypeWithClass(Type $type, string $class) : bool
+    private function isUnionTypeWithClass(\PHPStan\Type\Type $type, string $class) : bool
     {
-        if (!$type instanceof UnionType) {
+        if (!$type instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
         $unionedTypes = $type->getTypes();
         foreach ($unionedTypes as $unionedType) {
-            if (!$unionedType instanceof TypeWithClassName) {
+            if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
                 continue;
             }
             if (\is_a($unionedType->getClassName(), $class, \true)) {
@@ -82,13 +82,13 @@ final class ContainsTypeAnalyser
     /**
      * @param class-string $type
      */
-    private function isArrayWithItemType(Type $propertyType, string $type) : bool
+    private function isArrayWithItemType(\PHPStan\Type\Type $propertyType, string $type) : bool
     {
-        if (!$propertyType instanceof ArrayType) {
+        if (!$propertyType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
         $arrayItemType = $propertyType->getItemType();
-        if (!$arrayItemType instanceof TypeWithClassName) {
+        if (!$arrayItemType instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
         return \is_a($arrayItemType->getClassName(), $type, \true);
@@ -96,9 +96,9 @@ final class ContainsTypeAnalyser
     /**
      * @param class-string $type
      */
-    private function isExprTypeOfType(Type $exprType, string $type) : bool
+    private function isExprTypeOfType(\PHPStan\Type\Type $exprType, string $type) : bool
     {
-        if ($exprType instanceof TypeWithClassName) {
+        if ($exprType instanceof \PHPStan\Type\TypeWithClassName) {
             return \is_a($exprType->getClassName(), $type, \true);
         }
         if ($this->isUnionTypeWithClass($exprType, $type)) {

@@ -1,47 +1,47 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php56\Rector\FuncCall;
+namespace Rector\Php56\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Pow;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\BinaryOp\Pow;
+use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php56\Rector\FuncCall\PowToExpRector\PowToExpRectorTest
  */
-final class PowToExpRector extends AbstractRector implements MinPhpVersionInterface
+final class PowToExpRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes pow(val, val2) to ** (exp) parameter', [new CodeSample('pow(1, 2);', '1**2;')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes pow(val, val2) to ** (exp) parameter', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('pow(1, 2);', '1**2;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'pow')) {
             return null;
@@ -56,10 +56,10 @@ final class PowToExpRector extends AbstractRector implements MinPhpVersionInterf
         $firstArgument = $node->args[0];
         /** @var Arg $secondArgument */
         $secondArgument = $node->args[1];
-        return new Pow($firstArgument->value, $secondArgument->value);
+        return new \PhpParser\Node\Expr\BinaryOp\Pow($firstArgument->value, $secondArgument->value);
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::EXP_OPERATOR;
+        return \Rector\Core\ValueObject\PhpVersionFeature::EXP_OPERATOR;
     }
 }

@@ -1,35 +1,35 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\Rector\ClassMethod;
+namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\ComplexType;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\PhpParser\Node\UnionType;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractScopeAwareRector;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
-use RectorPrefix20220606\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
-use RectorPrefix20220606\Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
+use PhpParser\Node;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\UnionType;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector\ParamTypeByMethodCallTypeRectorTest
  */
-final class ParamTypeByMethodCallTypeRector extends AbstractScopeAwareRector
+final class ParamTypeByMethodCallTypeRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -51,16 +51,16 @@ final class ParamTypeByMethodCallTypeRector extends AbstractScopeAwareRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(CallerParamMatcher $callerParamMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher $callerParamMatcher, \RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->callerParamMatcher = $callerParamMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change param type based on passed method call type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change param type based on passed method call type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeTypedService
 {
     public function run(string $name)
@@ -109,18 +109,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         if ($this->shouldSkipClassMethod($node)) {
             return null;
         }
         /** @var array<StaticCall|MethodCall|FuncCall> $callers */
-        $callers = $this->betterNodeFinder->findInstancesOf((array) $node->stmts, [StaticCall::class, MethodCall::class, FuncCall::class]);
+        $callers = $this->betterNodeFinder->findInstancesOf((array) $node->stmts, [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\FuncCall::class]);
         $hasChanged = \false;
         foreach ($node->params as $param) {
             if ($this->shouldSkipParam($param, $node)) {
@@ -140,7 +140,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if ($classMethod->params === []) {
             return \true;
@@ -149,7 +149,7 @@ CODE_SAMPLE
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \true;
         }
         return !$classReflection->isClass();
@@ -157,11 +157,11 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType $paramType
      */
-    private function mirrorParamType(Param $decoratedParam, $paramType) : void
+    private function mirrorParamType(\PhpParser\Node\Param $decoratedParam, $paramType) : void
     {
         // mimic type
         $newParamType = $paramType;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($newParamType, function (Node $node) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($newParamType, function (\PhpParser\Node $node) {
             // original attributes have to removed to avoid tokens crashing from origin positions
             $node->setAttributes([]);
             return null;
@@ -171,30 +171,30 @@ CODE_SAMPLE
     /**
      * Should skip param because one of them is conditional types?
      */
-    private function isParamConditioned(Param $param, ClassMethod $classMethod) : bool
+    private function isParamConditioned(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         $paramName = $this->nodeNameResolver->getName($param->var);
         if ($paramName === null) {
             return \false;
         }
         /** @var Variable[] $variables */
-        $variables = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Variable::class);
+        $variables = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, \PhpParser\Node\Expr\Variable::class);
         foreach ($variables as $variable) {
             if (!$this->isName($variable, $paramName)) {
                 continue;
             }
-            $conditional = $this->betterNodeFinder->findParentType($variable, If_::class);
-            if ($conditional instanceof If_) {
+            $conditional = $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Stmt\If_::class);
+            if ($conditional instanceof \PhpParser\Node\Stmt\If_) {
                 return \true;
             }
-            $conditional = $this->betterNodeFinder->findParentType($variable, Ternary::class);
-            if ($conditional instanceof Ternary) {
+            $conditional = $this->betterNodeFinder->findParentType($variable, \PhpParser\Node\Expr\Ternary::class);
+            if ($conditional instanceof \PhpParser\Node\Expr\Ternary) {
                 return \true;
             }
         }
         return \false;
     }
-    private function shouldSkipParam(Param $param, ClassMethod $classMethod) : bool
+    private function shouldSkipParam(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if ($this->isParamConditioned($param, $classMethod)) {
             return \true;

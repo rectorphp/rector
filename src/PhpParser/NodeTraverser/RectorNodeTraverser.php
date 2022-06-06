@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\PhpParser\NodeTraverser;
+namespace Rector\Core\PhpParser\NodeTraverser;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\NodeTraverser;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\PhpRectorInterface;
-use RectorPrefix20220606\Rector\VersionBonding\PhpVersionedFilter;
-final class RectorNodeTraverser extends NodeTraverser
+use PhpParser\Node;
+use PhpParser\NodeTraverser;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\VersionBonding\PhpVersionedFilter;
+final class RectorNodeTraverser extends \PhpParser\NodeTraverser
 {
     /**
      * @var bool
@@ -26,7 +26,7 @@ final class RectorNodeTraverser extends NodeTraverser
     /**
      * @param PhpRectorInterface[] $phpRectors
      */
-    public function __construct(array $phpRectors, PhpVersionedFilter $phpVersionedFilter)
+    public function __construct(array $phpRectors, \Rector\VersionBonding\PhpVersionedFilter $phpVersionedFilter)
     {
         $this->phpRectors = $phpRectors;
         $this->phpVersionedFilter = $phpVersionedFilter;

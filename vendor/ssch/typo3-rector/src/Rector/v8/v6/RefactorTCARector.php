@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v6;
+namespace Ssch\TYPO3Rector\Rector\v8\v6;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\ArrayUtility;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Rector\AbstractRector;
+use Ssch\TYPO3Rector\Helper\ArrayUtility;
+use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.6/Deprecation-79440-TcaChanges.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v6\RefactorTCARector\RefactorTCARectorTest
  */
-final class RefactorTCARector extends AbstractRector
+final class RefactorTCARector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -39,22 +39,22 @@ final class RefactorTCARector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columns = $this->extractColumns($node);
-        if (!$columns instanceof ArrayItem) {
+        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $items = $columns->value;
-        if (!$items instanceof Array_) {
+        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $this->addFieldControlInsteadOfWizardsAddListEdit($items);
@@ -63,9 +63,9 @@ final class RefactorTCARector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('A lot of different TCA changes', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('A lot of different TCA changes', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],
@@ -114,10 +114,10 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function addFieldControlInsteadOfWizardsAddListEdit(Array_ $itemsArray) : void
+    private function addFieldControlInsteadOfWizardsAddListEdit(\PhpParser\Node\Expr\Array_ $itemsArray) : void
     {
         foreach ($itemsArray->items as $fieldValue) {
-            if (!$fieldValue instanceof ArrayItem) {
+            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -127,15 +127,15 @@ CODE_SAMPLE
             if (null === $fieldName) {
                 continue;
             }
-            if (!$fieldValue->value instanceof Array_) {
+            if (!$fieldValue->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             $fieldValueArray = $fieldValue->value;
             foreach ($fieldValueArray->items as $configValue) {
-                if (!$configValue instanceof ArrayItem) {
+                if (!$configValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                     continue;
                 }
-                if (!$configValue->value instanceof Array_) {
+                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 /** @var Array_ $configValueArray */
@@ -145,7 +145,7 @@ CODE_SAMPLE
                     $this->refactorRenderTypeInputDateTime($configValue);
                 }
                 foreach ($configValueArray->items as $configItemValue) {
-                    if (!$configItemValue instanceof ArrayItem) {
+                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
@@ -154,30 +154,30 @@ CODE_SAMPLE
                     if (!$this->valueResolver->isValues($configItemValue->key, ['wizards'])) {
                         continue;
                     }
-                    if (!$configItemValue->value instanceof Array_) {
+                    if (!$configItemValue->value instanceof \PhpParser\Node\Expr\Array_) {
                         continue;
                     }
                     $fieldControl = [];
                     $customTypeOptions = [];
                     $remainingWizards = \count($configItemValue->value->items);
                     foreach ($configItemValue->value->items as $wizardItemValue) {
-                        if (!$wizardItemValue instanceof ArrayItem) {
+                        if (!$wizardItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                             continue;
                         }
-                        if (!$wizardItemValue->key instanceof Expr) {
+                        if (!$wizardItemValue->key instanceof \PhpParser\Node\Expr) {
                             continue;
                         }
                         /** @var Expr $wizardItemValueKey */
                         $wizardItemValueKey = $wizardItemValue->key;
                         $validWizard = $this->isValidWizard($wizardItemValue);
-                        if ($validWizard || Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
+                        if ($validWizard || \RectorPrefix20220606\Nette\Utils\Strings::startsWith($this->valueResolver->getValue($wizardItemValueKey), '_')) {
                             --$remainingWizards;
                         }
                         if (!$validWizard) {
                             continue;
                         }
                         $this->removeNode($wizardItemValue);
-                        if (!$wizardItemValue->value instanceof Array_) {
+                        if (!$wizardItemValue->value instanceof \PhpParser\Node\Expr\Array_) {
                             continue;
                         }
                         $wizardItemValueKey = $this->valueResolver->getValue($wizardItemValueKey);
@@ -192,11 +192,11 @@ CODE_SAMPLE
                             }
                         }
                         if (\array_key_exists($wizardItemValueKey, self::MAP_WIZARD_TO_RENDER_TYPE) && null === $this->extractArrayItemByKey($configValueArray, 'renderType')) {
-                            $configValueArray->items[] = new ArrayItem(new String_(self::MAP_WIZARD_TO_RENDER_TYPE[$wizardItemValueKey]), new String_('renderType'));
+                            $configValueArray->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_(self::MAP_WIZARD_TO_RENDER_TYPE[$wizardItemValueKey]), new \PhpParser\Node\Scalar\String_('renderType'));
                         }
                         $selectOptions = [];
                         foreach ($wizardItemValue->value->items as $wizardItemSubValue) {
-                            if (!$wizardItemSubValue instanceof ArrayItem) {
+                            if (!$wizardItemSubValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                                 continue;
                             }
                             if (null === $wizardItemSubValue->key) {
@@ -211,9 +211,9 @@ CODE_SAMPLE
                             } elseif ('select' === $wizardItemValueKey && $this->valueResolver->isValue($wizardItemSubValue->key, 'items')) {
                                 $selectOptions[$this->getValue($wizardItemSubValue->key)] = $this->getValue($wizardItemSubValue->value);
                             }
-                            if ($wizardItemSubValue->value instanceof Array_ && $this->valueResolver->isValue($wizardItemSubValue->key, 'params')) {
+                            if ($wizardItemSubValue->value instanceof \PhpParser\Node\Expr\Array_ && $this->valueResolver->isValue($wizardItemSubValue->key, 'params')) {
                                 foreach ($wizardItemSubValue->value->items as $paramsValue) {
-                                    if (!$paramsValue instanceof ArrayItem) {
+                                    if (!$paramsValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                                         continue;
                                     }
                                     if (null === $paramsValue->key) {
@@ -242,24 +242,24 @@ CODE_SAMPLE
                             }
                         }
                         if ([] !== $selectOptions && null === $this->extractArrayItemByKey($configValueArray, self::MAP_WIZARD_TO_CUSTOM_TYPE['select'])) {
-                            $configValueArray->items[] = new ArrayItem($this->nodeFactory->createArray($selectOptions), new String_(self::MAP_WIZARD_TO_CUSTOM_TYPE['select']));
+                            $configValueArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray($selectOptions), new \PhpParser\Node\Scalar\String_(self::MAP_WIZARD_TO_CUSTOM_TYPE['select']));
                         }
                         if ([] !== $customTypeOptions && \array_key_exists($wizardItemValueKey, self::MAP_WIZARD_TO_CUSTOM_TYPE) && null === $this->extractArrayItemByKey($configValueArray, self::MAP_WIZARD_TO_CUSTOM_TYPE[$wizardItemValueKey])) {
-                            $configValueArray->items[] = new ArrayItem($this->nodeFactory->createArray($customTypeOptions), new String_(self::MAP_WIZARD_TO_CUSTOM_TYPE[$wizardItemValueKey]));
+                            $configValueArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray($customTypeOptions), new \PhpParser\Node\Scalar\String_(self::MAP_WIZARD_TO_CUSTOM_TYPE[$wizardItemValueKey]));
                         }
                     }
                     $existingFieldControl = $this->extractArrayItemByKey($configValueArray, 'fieldControl');
                     if (null === $existingFieldControl && [] !== $fieldControl) {
-                        $configValueArray->items[] = new ArrayItem($this->nodeFactory->createArray($fieldControl), new String_('fieldControl'));
-                    } elseif ([] !== $fieldControl && $existingFieldControl instanceof ArrayItem) {
+                        $configValueArray->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray($fieldControl), new \PhpParser\Node\Scalar\String_('fieldControl'));
+                    } elseif ([] !== $fieldControl && $existingFieldControl instanceof \PhpParser\Node\Expr\ArrayItem) {
                         foreach ($fieldControl as $fieldControlKey => $fieldControlValue) {
                             if (null !== $this->extractArrayItemByKey($existingFieldControl->value, $fieldControlKey)) {
                                 continue;
                             }
-                            if (!$existingFieldControl->value instanceof Array_) {
+                            if (!$existingFieldControl->value instanceof \PhpParser\Node\Expr\Array_) {
                                 continue;
                             }
-                            $existingFieldControl->value->items[] = new ArrayItem($this->nodeFactory->createArray($fieldControlValue), new String_($fieldControlKey));
+                            $existingFieldControl->value->items[] = new \PhpParser\Node\Expr\ArrayItem($this->nodeFactory->createArray($fieldControlValue), new \PhpParser\Node\Scalar\String_($fieldControlKey));
                         }
                     }
                     if (0 === $remainingWizards) {
@@ -269,13 +269,13 @@ CODE_SAMPLE
             }
         }
     }
-    private function refactorRenderTypeInputDateTime(ArrayItem $configValueArrayItem) : void
+    private function refactorRenderTypeInputDateTime(\PhpParser\Node\Expr\ArrayItem $configValueArrayItem) : void
     {
-        if (!$configValueArrayItem->value instanceof Array_) {
+        if (!$configValueArrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
         foreach ($configValueArrayItem->value->items as $configItemValue) {
-            if (!$configItemValue instanceof ArrayItem) {
+            if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $configItemValue->key) {
@@ -288,9 +288,9 @@ CODE_SAMPLE
             if (null === $eval) {
                 continue;
             }
-            $eval = ArrayUtility::trimExplode(',', $eval, \true);
+            $eval = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $eval, \true);
             if (\in_array('date', $eval, \true) || \in_array('datetime', $eval, \true) || \in_array('time', $eval, \true) || \in_array('timesec', $eval, \true)) {
-                $configValueArrayItem->value->items[] = new ArrayItem(new String_('inputDateTime'), new String_('renderType'));
+                $configValueArrayItem->value->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('inputDateTime'), new \PhpParser\Node\Scalar\String_('renderType'));
             }
         }
     }

@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeAlreadyAddedChecker;
+namespace Rector\TypeDeclaration\TypeAlreadyAddedChecker;
 
 use Iterator;
-use RectorPrefix20220606\PhpParser\Node\ComplexType;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
-use RectorPrefix20220606\PhpParser\Node\UnionType as PhpParserUnionType;
-use RectorPrefix20220606\PHPStan\Type\ArrayType;
-use RectorPrefix20220606\PHPStan\Type\Generic\GenericObjectType;
-use RectorPrefix20220606\PHPStan\Type\IntersectionType;
-use RectorPrefix20220606\PHPStan\Type\IterableType;
-use RectorPrefix20220606\PHPStan\Type\NullType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\ThisType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\UnionType as PhpParserUnionType;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\IntersectionType;
+use PHPStan\Type\IterableType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Traversable;
 final class ReturnTypeAlreadyAddedChecker
 {
@@ -53,7 +53,7 @@ final class ReturnTypeAlreadyAddedChecker
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodeNameResolver $nodeNameResolver, StaticTypeMapper $staticTypeMapper, NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -63,14 +63,14 @@ final class ReturnTypeAlreadyAddedChecker
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function isSameOrBetterReturnTypeAlreadyAdded($functionLike, Type $returnType) : bool
+    public function isSameOrBetterReturnTypeAlreadyAdded($functionLike, \PHPStan\Type\Type $returnType) : bool
     {
         $nodeReturnType = $functionLike->returnType;
         /** @param Identifier|Name|NullableType|PhpParserUnionType|null $returnTypeNode */
         if ($nodeReturnType === null) {
             return \false;
         }
-        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
+        $returnNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if ($this->nodeComparator->areNodesEqual($nodeReturnType, $returnNode)) {
             return \true;
         }
@@ -82,22 +82,22 @@ final class ReturnTypeAlreadyAddedChecker
             return \true;
         }
         // is class-string<T> type? → skip
-        if ($returnType instanceof GenericObjectType && $returnType->getClassName() === 'class-string') {
+        if ($returnType instanceof \PHPStan\Type\Generic\GenericObjectType && $returnType->getClassName() === 'class-string') {
             return \true;
         }
         // prevent overriding self with itself
-        if (!$functionLike->returnType instanceof Name) {
+        if (!$functionLike->returnType instanceof \PhpParser\Node\Name) {
             return \false;
         }
         if ($functionLike->returnType->toLowerString() !== 'self') {
             return \false;
         }
         // skip "self" by "static" override
-        if ($returnType instanceof ThisType) {
+        if ($returnType instanceof \PHPStan\Type\ThisType) {
             return \true;
         }
-        $classLike = $this->betterNodeFinder->findParentType($functionLike, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return \false;
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
@@ -108,7 +108,7 @@ final class ReturnTypeAlreadyAddedChecker
     /**
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $returnTypeNode
      */
-    private function isArrayIterableIteratorCoType($returnTypeNode, Type $returnType) : bool
+    private function isArrayIterableIteratorCoType($returnTypeNode, \PHPStan\Type\Type $returnType) : bool
     {
         if (!$this->nodeNameResolver->isNames($returnTypeNode, self::FOREACHABLE_TYPES)) {
             return \false;
@@ -118,24 +118,24 @@ final class ReturnTypeAlreadyAddedChecker
     /**
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $returnTypeNode
      */
-    private function isUnionCoType($returnTypeNode, Type $type) : bool
+    private function isUnionCoType($returnTypeNode, \PHPStan\Type\Type $type) : bool
     {
-        if (!$type instanceof UnionType) {
+        if (!$type instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
         // skip nullable type
-        if ($type->isSuperTypeOf(new NullType())->yes()) {
+        if ($type->isSuperTypeOf(new \PHPStan\Type\NullType())->yes()) {
             return \false;
         }
         $classMethodReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnTypeNode);
         return $classMethodReturnType->isSuperTypeOf($type)->yes();
     }
-    private function isStaticTypeIterable(Type $type) : bool
+    private function isStaticTypeIterable(\PHPStan\Type\Type $type) : bool
     {
         if ($this->isArrayIterableOrIteratorType($type)) {
             return \true;
         }
-        if ($type instanceof UnionType || $type instanceof IntersectionType) {
+        if ($type instanceof \PHPStan\Type\UnionType || $type instanceof \PHPStan\Type\IntersectionType) {
             foreach ($type->getTypes() as $joinedType) {
                 if (!$this->isStaticTypeIterable($joinedType)) {
                     return \false;
@@ -145,17 +145,17 @@ final class ReturnTypeAlreadyAddedChecker
         }
         return \false;
     }
-    private function isArrayIterableOrIteratorType(Type $type) : bool
+    private function isArrayIterableOrIteratorType(\PHPStan\Type\Type $type) : bool
     {
-        if ($type instanceof ArrayType) {
+        if ($type instanceof \PHPStan\Type\ArrayType) {
             return \true;
         }
-        if ($type instanceof IterableType) {
+        if ($type instanceof \PHPStan\Type\IterableType) {
             return \true;
         }
-        if (!$type instanceof ObjectType) {
+        if (!$type instanceof \PHPStan\Type\ObjectType) {
             return \false;
         }
-        return $type->getClassName() === Iterator::class;
+        return $type->getClassName() === \Iterator::class;
     }
 }

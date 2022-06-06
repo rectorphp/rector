@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Helper\Database\Refactorings;
+namespace Ssch\TYPO3Rector\Helper\Database\Refactorings;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
+use Rector\Core\PhpParser\Node\NodeFactory;
 final class ConnectionCallFactory
 {
     /**
@@ -14,13 +14,13 @@ final class ConnectionCallFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
-    public function createConnectionCall(Arg $firstArgument) : Assign
+    public function createConnectionCall(\PhpParser\Node\Arg $firstArgument) : \PhpParser\Node\Expr\Assign
     {
         $connection = $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\Database\\ConnectionPool')]), 'getConnectionForTable', [$this->nodeFactory->createArg($firstArgument->value)]);
-        return new Assign(new Variable('connection'), $connection);
+        return new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable('connection'), $connection);
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 /**
  * Special case of type inferer - it is always added in the end of the resolved types
  */
@@ -17,15 +17,15 @@ final class DefaultValuePropertyTypeInferer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function inferProperty(Property $property) : ?Type
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
     {
         $propertyProperty = $property->props[0];
         if ($propertyProperty->default === null) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         return $this->nodeTypeResolver->getType($propertyProperty->default);
     }

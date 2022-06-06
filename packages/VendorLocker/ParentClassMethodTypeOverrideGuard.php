@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\VendorLocker;
+namespace Rector\VendorLocker;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\PHPStan\Reflection\FunctionVariantWithPhpDocs;
-use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
-use RectorPrefix20220606\PHPStan\Reflection\ParametersAcceptorSelector;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Core\PhpParser\AstResolver;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
-use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\FunctionVariantWithPhpDocs;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use RectorPrefix20220606\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
@@ -43,7 +43,7 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, PathNormalizer $pathNormalizer, AstResolver $astResolver, ParamTypeInferer $paramTypeInferer, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220606\Symplify\SmartFileSystem\Normalizer\PathNormalizer $pathNormalizer, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
@@ -51,21 +51,21 @@ final class ParentClassMethodTypeOverrideGuard
         $this->paramTypeInferer = $paramTypeInferer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isReturnTypeChangeAllowed(ClassMethod $classMethod) : bool
+    public function isReturnTypeChangeAllowed(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         // __construct cannot declare a return type
         // so the return type change is not allowed
-        if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
+        if ($this->nodeNameResolver->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return \false;
         }
         // make sure return type is not protected by parent contract
         $parentClassMethodReflection = $this->getParentClassMethod($classMethod);
         // nothing to check
-        if (!$parentClassMethodReflection instanceof MethodReflection) {
+        if (!$parentClassMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return \true;
         }
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($parentClassMethodReflection->getVariants());
-        if ($parametersAcceptor instanceof FunctionVariantWithPhpDocs && !$parametersAcceptor->getNativeReturnType() instanceof MixedType) {
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($parentClassMethodReflection->getVariants());
+        if ($parametersAcceptor instanceof \PHPStan\Reflection\FunctionVariantWithPhpDocs && !$parametersAcceptor->getNativeReturnType() instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
         $classReflection = $parentClassMethodReflection->getDeclaringClass();
@@ -96,21 +96,21 @@ final class ParentClassMethodTypeOverrideGuard
         $isParentInVendor = \strpos($normalizedFileName, '/vendor/') !== \false;
         return $isCurrentInVendor && $isParentInVendor || !$isCurrentInVendor && !$isParentInVendor;
     }
-    public function hasParentClassMethod(ClassMethod $classMethod) : bool
+    public function hasParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        return $this->getParentClassMethod($classMethod) instanceof MethodReflection;
+        return $this->getParentClassMethod($classMethod) instanceof \PHPStan\Reflection\MethodReflection;
     }
-    public function hasParentClassMethodDifferentType(ClassMethod $classMethod, int $position, Type $currentType) : bool
+    public function hasParentClassMethodDifferentType(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $position, \PHPStan\Type\Type $currentType) : bool
     {
         if ($classMethod->isPrivate()) {
             return \false;
         }
         $methodReflection = $this->getParentClassMethod($classMethod);
-        if (!$methodReflection instanceof MethodReflection) {
+        if (!$methodReflection instanceof \PHPStan\Reflection\MethodReflection) {
             return \false;
         }
         $classMethod = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
-        if (!$classMethod instanceof ClassMethod) {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return \false;
         }
         if ($classMethod->isPrivate()) {
@@ -122,10 +122,10 @@ final class ParentClassMethodTypeOverrideGuard
         $inferedType = $this->paramTypeInferer->inferParam($classMethod->params[$position]);
         return \get_class($inferedType) !== \get_class($currentType);
     }
-    public function getParentClassMethod(ClassMethod $classMethod) : ?MethodReflection
+    public function getParentClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PHPStan\Reflection\MethodReflection
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return null;
         }
         /** @var string $methodName */

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PHPStan;
+namespace PHPStan;
 
 use RectorPrefix20220606\Composer\Autoload\ClassLoader;
 final class PharAutoloader
@@ -10,7 +10,7 @@ final class PharAutoloader
     private static $composerAutoloader;
     public static final function loadClass(string $class) : void
     {
-        if (!\extension_loaded('phar') || \defined('RectorPrefix20220606\\__PHPSTAN_RUNNING__')) {
+        if (!\extension_loaded('phar') || \defined('__PHPSTAN_RUNNING__')) {
             return;
         }
         if (\strpos($class, '_PHPStan_') === 0) {
@@ -49,4 +49,4 @@ final class PharAutoloader
         require $filepath;
     }
 }
-\spl_autoload_register([PharAutoloader::class, 'loadClass']);
+\spl_autoload_register([\PHPStan\PharAutoloader::class, 'loadClass']);

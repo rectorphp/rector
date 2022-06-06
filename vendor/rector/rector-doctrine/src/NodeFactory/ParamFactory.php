@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\NodeFactory;
+namespace Rector\Doctrine\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\ComplexType;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
-use RectorPrefix20220606\Rector\Doctrine\ValueObject\AssignToPropertyFetch;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Doctrine\ValueObject\AssignToPropertyFetch;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ParamFactory
 {
     /**
@@ -37,7 +37,7 @@ final class ParamFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, StaticTypeMapper $staticTypeMapper, NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -61,20 +61,20 @@ final class ParamFactory
     /**
      * @param string[] $optionalParamNames
      */
-    public function createFromPropertyFetch(PropertyFetch $propertyFetch, array $optionalParamNames) : Param
+    public function createFromPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch, array $optionalParamNames) : \PhpParser\Node\Param
     {
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if ($propertyName === null) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
-        $variable = new Variable($propertyName);
-        $param = new Param($variable);
+        $variable = new \PhpParser\Node\Expr\Variable($propertyName);
+        $param = new \PhpParser\Node\Param($variable);
         $paramType = $this->nodeTypeResolver->getType($propertyFetch);
-        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
+        $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         // the param is optional - make it nullable
         if (\in_array($propertyName, $optionalParamNames, \true)) {
-            if (!$paramTypeNode instanceof ComplexType && $paramTypeNode !== null) {
-                $paramTypeNode = new NullableType($paramTypeNode);
+            if (!$paramTypeNode instanceof \PhpParser\Node\ComplexType && $paramTypeNode !== null) {
+                $paramTypeNode = new \PhpParser\Node\NullableType($paramTypeNode);
             }
             $param->default = $this->nodeFactory->createNull();
         }

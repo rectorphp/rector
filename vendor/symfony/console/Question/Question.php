@@ -117,7 +117,7 @@ class Question
     public function setHidden(bool $hidden)
     {
         if ($this->autocompleterCallback) {
-            throw new LogicException('A hidden question cannot use the autocompleter.');
+            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
         }
         $this->hidden = $hidden;
         return $this;
@@ -188,7 +188,7 @@ class Question
     public function setAutocompleterCallback(callable $callback = null)
     {
         if ($this->hidden && null !== $callback) {
-            throw new LogicException('A hidden question cannot use the autocompleter.');
+            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException('A hidden question cannot use the autocompleter.');
         }
         $this->autocompleterCallback = null === $callback ? null : \Closure::fromCallable($callback);
         return $this;
@@ -222,7 +222,7 @@ class Question
     public function setMaxAttempts(?int $attempts)
     {
         if (null !== $attempts && $attempts < 1) {
-            throw new InvalidArgumentException('Maximum number of attempts must be a positive value.');
+            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\InvalidArgumentException('Maximum number of attempts must be a positive value.');
         }
         $this->attempts = $attempts;
         return $this;

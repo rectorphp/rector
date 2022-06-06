@@ -1,41 +1,41 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp73\Rector\FuncCall;
+namespace Rector\DowngradePhp73\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Cast\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Naming\Naming\VariableNaming;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast\Array_;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Naming\Naming\VariableNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/array_key_first_last
  *
  * @see \Rector\Tests\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector\DowngradeArrayKeyFirstLastRectorTest
  */
-final class DowngradeArrayKeyFirstLastRector extends AbstractRector
+final class DowngradeArrayKeyFirstLastRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(VariableNaming $variableNaming)
+    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
     {
         $this->variableNaming = $variableNaming;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade array_key_first() and array_key_last() functions', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade array_key_first() and array_key_last() functions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($items)
@@ -61,12 +61,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->isName($node, 'array_key_first')) {
             return $this->refactorArrayKeyFirst($node);
@@ -76,12 +76,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorArrayKeyFirst(FuncCall $funcCall) : ?FuncCall
+    private function refactorArrayKeyFirst(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         if (!isset($funcCall->args[0])) {
             return null;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $originalArray = $funcCall->args[0]->value;
@@ -91,18 +91,18 @@ CODE_SAMPLE
         }
         $resetFuncCall = $this->nodeFactory->createFuncCall('reset', [$array]);
         $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall, $this->file->getSmartFileInfo());
-        $funcCall->name = new Name('key');
+        $funcCall->name = new \PhpParser\Node\Name('key');
         if ($originalArray !== $array) {
             $funcCall->args[0]->value = $array;
         }
         return $funcCall;
     }
-    private function refactorArrayKeyLast(FuncCall $funcCall) : ?FuncCall
+    private function refactorArrayKeyLast(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         if (!isset($funcCall->args[0])) {
             return null;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $originalArray = $funcCall->args[0]->value;
@@ -112,7 +112,7 @@ CODE_SAMPLE
         }
         $resetFuncCall = $this->nodeFactory->createFuncCall('end', [$array]);
         $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall, $this->file->getSmartFileInfo());
-        $funcCall->name = new Name('key');
+        $funcCall->name = new \PhpParser\Node\Name('key');
         if ($originalArray !== $array) {
             $funcCall->args[0]->value = $array;
         }
@@ -121,23 +121,23 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable $variable
      */
-    private function addAssignNewVariable(FuncCall $funcCall, Expr $expr, $variable) : void
+    private function addAssignNewVariable(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr, $variable) : void
     {
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression(new Assign($variable, $expr)), $funcCall, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $expr)), $funcCall, $this->file->getSmartFileInfo());
     }
     /**
      * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable
      */
-    private function resolveCastedArray(Expr $expr)
+    private function resolveCastedArray(\PhpParser\Node\Expr $expr)
     {
-        if (!$expr instanceof Array_) {
+        if (!$expr instanceof \PhpParser\Node\Expr\Cast\Array_) {
             return $expr;
         }
-        if ($expr->expr instanceof Array_) {
+        if ($expr->expr instanceof \PhpParser\Node\Expr\Cast\Array_) {
             return $this->resolveCastedArray($expr->expr);
         }
-        $scope = $expr->getAttribute(AttributeKey::SCOPE);
+        $scope = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
         $variableName = $this->variableNaming->createCountedValueName((string) $this->nodeNameResolver->getName($expr->expr), $scope);
-        return new Variable($variableName);
+        return new \PhpParser\Node\Expr\Variable($variableName);
     }
 }

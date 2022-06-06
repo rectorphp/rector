@@ -19,7 +19,7 @@ use RectorPrefix20220606\Symfony\Contracts\Service\ServiceProviderInterface;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ResolveServiceSubscribersPass extends AbstractRecursivePass
+class ResolveServiceSubscribersPass extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * @var string|null
@@ -31,10 +31,10 @@ class ResolveServiceSubscribersPass extends AbstractRecursivePass
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if ($value instanceof Reference && $this->serviceLocator && \in_array((string) $value, [ContainerInterface::class, ServiceProviderInterface::class], \true)) {
-            return new Reference($this->serviceLocator);
+        if ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference && $this->serviceLocator && \in_array((string) $value, [\RectorPrefix20220606\Psr\Container\ContainerInterface::class, \RectorPrefix20220606\Symfony\Contracts\Service\ServiceProviderInterface::class], \true)) {
+            return new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference($this->serviceLocator);
         }
-        if (!$value instanceof Definition) {
+        if (!$value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition) {
             return parent::processValue($value, $isRoot);
         }
         $serviceLocator = $this->serviceLocator;

@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp70\Rector\Expression;
+namespace Rector\DowngradePhp70\Rector\Expression;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Const_;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Const_;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector\DowngradeDefineArrayConstantRectorTest
  */
-final class DowngradeDefineArrayConstantRector extends AbstractRector
+final class DowngradeDefineArrayConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
@@ -35,11 +35,11 @@ final class DowngradeDefineArrayConstantRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change array contant definition via define to const', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array contant definition via define to const', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 define('ANIMALS', [
     'dog',
     'cat',
@@ -58,9 +58,9 @@ CODE_SAMPLE
     /**
      * @param Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->expr instanceof FuncCall) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         $funcCall = $node->expr;
@@ -74,9 +74,9 @@ CODE_SAMPLE
         $arg0Value = $arg0->value;
         /** @var Array_ $arg1Value */
         $arg1Value = $args[1]->value;
-        return new Node\Stmt\Const_([new Const_($arg0Value, $arg1Value)]);
+        return new \PhpParser\Node\Stmt\Const_([new \PhpParser\Node\Const_($arg0Value, $arg1Value)]);
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         if (!$this->isName($funcCall, 'define')) {
             return \true;
@@ -86,12 +86,12 @@ CODE_SAMPLE
             return \true;
         }
         /** @var Arg[] $args */
-        if (!$args[0]->value instanceof String_) {
+        if (!$args[0]->value instanceof \PhpParser\Node\Scalar\String_) {
             return \true;
         }
-        if (!$args[1]->value instanceof Array_) {
+        if (!$args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findParentByTypes($funcCall, [ClassMethod::class, Function_::class]);
+        return (bool) $this->betterNodeFinder->findParentByTypes($funcCall, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Arguments\ValueObject;
+namespace Rector\Arguments\ValueObject;
 
-use RectorPrefix20220606\Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
-final class ReplaceFuncCallArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
+use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
+final class ReplaceFuncCallArgumentDefaultValue implements \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface
 {
     /**
      * @readonly

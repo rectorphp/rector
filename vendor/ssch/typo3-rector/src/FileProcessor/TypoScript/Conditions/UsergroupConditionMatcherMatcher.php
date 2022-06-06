@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
+namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\ArrayUtility;
-final class UsergroupConditionMatcherMatcher implements TyposcriptConditionMatcher
+use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
+use Ssch\TYPO3Rector\Helper\ArrayUtility;
+final class UsergroupConditionMatcherMatcher implements \Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher
 {
     /**
      * @var string
@@ -20,7 +20,7 @@ final class UsergroupConditionMatcherMatcher implements TyposcriptConditionMatch
         if (!isset($matches[1]) || '' === $matches[1]) {
             return "usergroup('*') == false";
         }
-        $values = ArrayUtility::trimExplode(',', $matches[1], \true);
+        $values = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $matches[1], \true);
         return \sprintf('usergroup("%s")', \implode(',', $values));
     }
     public function shouldApply(string $condition) : bool

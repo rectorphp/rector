@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\TypeMapper;
+namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use RectorPrefix20220606\PHPStan\Type\Generic\TemplateObjectWithoutClassType;
-use RectorPrefix20220606\PHPStan\Type\ObjectWithoutClassType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode;
-use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Generic\TemplateObjectWithoutClassType;
+use PHPStan\Type\ObjectWithoutClassType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 /**
  * @implements TypeMapperInterface<ObjectWithoutClassType>
  */
-final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
+final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(PhpVersionProvider $phpVersionProvider)
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
@@ -34,30 +34,30 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
      */
     public function getNodeClass() : string
     {
-        return ObjectWithoutClassType::class;
+        return \PHPStan\Type\ObjectWithoutClassType::class;
     }
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        if ($type instanceof ParentObjectWithoutClassType) {
-            return new IdentifierTypeNode('parent');
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType) {
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('parent');
         }
-        if ($type instanceof TemplateObjectWithoutClassType) {
-            $attributeAwareIdentifierTypeNode = new IdentifierTypeNode($type->getName());
-            return new EmptyGenericTypeNode($attributeAwareIdentifierTypeNode);
+        if ($type instanceof \PHPStan\Type\Generic\TemplateObjectWithoutClassType) {
+            $attributeAwareIdentifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getName());
+            return new \Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode($attributeAwareIdentifierTypeNode);
         }
-        return new IdentifierTypeNode('object');
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('object');
     }
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::OBJECT_TYPE)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::OBJECT_TYPE)) {
             return null;
         }
-        return new Name('object');
+        return new \PhpParser\Node\Name('object');
     }
 }

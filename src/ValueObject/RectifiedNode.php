@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\ValueObject;
+namespace Rector\Core\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
+use PhpParser\Node;
+use Rector\Core\Contract\Rector\RectorInterface;
 final class RectifiedNode
 {
     /**
@@ -20,7 +20,7 @@ final class RectifiedNode
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    public function __construct(string $rectorClass, Node $node)
+    public function __construct(string $rectorClass, \PhpParser\Node $node)
     {
         $this->rectorClass = $rectorClass;
         $this->node = $node;
@@ -32,7 +32,7 @@ final class RectifiedNode
     {
         return $this->rectorClass;
     }
-    public function getNode() : Node
+    public function getNode() : \PhpParser\Node
     {
         return $this->node;
     }

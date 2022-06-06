@@ -1,34 +1,34 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocNodeVisitor;
+namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
+use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
+use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
+use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class CallableTypePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
+final class CallableTypePhpDocNodeVisitor extends \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor implements \Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;
-    public function __construct(AttributeMirrorer $attributeMirrorer)
+    public function __construct(\Rector\BetterPhpDocParser\Attributes\AttributeMirrorer $attributeMirrorer)
     {
         $this->attributeMirrorer = $attributeMirrorer;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
-        if (!$node instanceof CallableTypeNode) {
+        if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode) {
             return null;
         }
-        if ($node instanceof SpacingAwareCallableTypeNode) {
+        if ($node instanceof \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode) {
             return null;
         }
-        $spacingAwareCallableTypeNode = new SpacingAwareCallableTypeNode($node->identifier, $node->parameters, $node->returnType);
+        $spacingAwareCallableTypeNode = new \Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode($node->identifier, $node->parameters, $node->returnType);
         $this->attributeMirrorer->mirror($node, $spacingAwareCallableTypeNode);
         return $spacingAwareCallableTypeNode;
     }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\ValueObject;
+namespace Rector\Doctrine\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
 final class AssignToPropertyFetch
 {
     /**
@@ -22,17 +22,17 @@ final class AssignToPropertyFetch
      * @var string
      */
     private $propertyName;
-    public function __construct(Assign $assign, PropertyFetch $propertyFetch, string $propertyName)
+    public function __construct(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\PropertyFetch $propertyFetch, string $propertyName)
     {
         $this->assign = $assign;
         $this->propertyFetch = $propertyFetch;
         $this->propertyName = $propertyName;
     }
-    public function getAssign() : Assign
+    public function getAssign() : \PhpParser\Node\Expr\Assign
     {
         return $this->assign;
     }
-    public function getPropertyFetch() : PropertyFetch
+    public function getPropertyFetch() : \PhpParser\Node\Expr\PropertyFetch
     {
         return $this->propertyFetch;
     }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp56\NodeManipulator;
+namespace Rector\DowngradePhp56\NodeManipulator;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
 final class ArgManipulator
 {
     /**
@@ -25,7 +25,7 @@ final class ArgManipulator
      */
     public function unpack(array $args) : array
     {
-        $unpackedArgList = new UnpackedArgList($args);
+        $unpackedArgList = new \Rector\DowngradePhp56\NodeManipulator\UnpackedArgList($args);
         return $unpackedArgList->toArray();
     }
     /**
@@ -37,7 +37,7 @@ final class ArgManipulator
             if (!$arg->unpack) {
                 continue;
             }
-            if ($arg->value instanceof Array_) {
+            if ($arg->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             return \false;

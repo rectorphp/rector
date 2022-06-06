@@ -8,7 +8,7 @@ namespace RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Preprocessing;
  *
  * @package Helmich\TypoScriptParser\Tokenizer\Preprocessing
  */
-class NoOpPreprocessor implements Preprocessor
+class NoOpPreprocessor implements \RectorPrefix20220606\Helmich\TypoScriptParser\Tokenizer\Preprocessing\Preprocessor
 {
     /**
      * @param string $contents Un-processed Typoscript contents

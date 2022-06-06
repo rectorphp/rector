@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver;
+namespace Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver;
 
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Reflection\FunctionReflection;
-use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
-use RectorPrefix20220606\PHPStan\Type\Type;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\Type;
 /**
  * @template TType as Type
  */
 interface TypeToCallReflectionResolverInterface
 {
-    public function supports(Type $type) : bool;
+    public function supports(\PHPStan\Type\Type $type) : bool;
     /**
      * @param TType $type
      * @return FunctionReflection|MethodReflection|null
      */
-    public function resolve(Type $type, Scope $scope);
+    public function resolve(\PHPStan\Type\Type $type, \PHPStan\Analyser\Scope $scope);
 }

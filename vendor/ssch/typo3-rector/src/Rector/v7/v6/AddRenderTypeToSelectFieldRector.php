@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v7\v6;
+namespace Ssch\TYPO3Rector\Rector\v7\v6;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Scalar\String_;
+use Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.6/Deprecation-69822-DeprecateSelectFieldTca.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v6\AddRenderTypeToSelectFieldRector\AddRenderTypeToSelectFieldRectorTest
  */
-final class AddRenderTypeToSelectFieldRector extends AbstractTcaRector
+final class AddRenderTypeToSelectFieldRector extends \Ssch\TYPO3Rector\Rector\Tca\AbstractTcaRector
 {
     /**
      * @var string
@@ -23,9 +23,9 @@ final class AddRenderTypeToSelectFieldRector extends AbstractTcaRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add renderType for select fields', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add renderType for select fields', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],
@@ -56,10 +56,10 @@ return [
 CODE_SAMPLE
 )]);
     }
-    protected function refactorColumn(Expr $columnName, Expr $columnTca) : void
+    protected function refactorColumn(\PhpParser\Node\Expr $columnName, \PhpParser\Node\Expr $columnTca) : void
     {
         $configArray = $this->extractSubArrayByKey($columnTca, self::CONFIG);
-        if (!$configArray instanceof Array_) {
+        if (!$configArray instanceof \PhpParser\Node\Expr\Array_) {
             return;
         }
         if (!$this->hasKeyValuePair($configArray, self::TYPE, 'select')) {
@@ -86,7 +86,7 @@ CODE_SAMPLE
             $maxItems = null !== $maxItemsExpr ? $this->valueResolver->getValue($maxItemsExpr) : null;
             $renderType = $maxItems <= 1 ? 'selectSingle' : 'selectMultipleSideBySide';
         }
-        $renderTypeItem = new ArrayItem(new String_($renderType), new String_(self::RENDER_TYPE));
+        $renderTypeItem = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_($renderType), new \PhpParser\Node\Scalar\String_(self::RENDER_TYPE));
         $this->insertItemAfterKey($configArray, $renderTypeItem, self::TYPE);
         $this->hasAstBeenChanged = \true;
     }

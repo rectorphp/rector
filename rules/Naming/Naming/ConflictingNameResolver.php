@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\Naming;
+namespace Rector\Naming\Naming;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\FunctionLikeManipulator;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
-use RectorPrefix20220606\Rector\Naming\PhpArray\ArrayFilter;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use Rector\Core\NodeManipulator\FunctionLikeManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
+use Rector\Naming\PhpArray\ArrayFilter;
 final class ConflictingNameResolver
 {
     /**
@@ -42,7 +42,7 @@ final class ConflictingNameResolver
      * @var \Rector\Core\NodeManipulator\FunctionLikeManipulator
      */
     private $functionLikeManipulator;
-    public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, FunctionLikeManipulator $functionLikeManipulator)
+    public function __construct(\Rector\Naming\PhpArray\ArrayFilter $arrayFilter, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, \Rector\Core\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator)
     {
         $this->arrayFilter = $arrayFilter;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -101,7 +101,7 @@ final class ConflictingNameResolver
     {
         $names = [];
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, \PhpParser\Node\Expr\Assign::class);
         foreach ($assigns as $assign) {
             $name = $this->expectedNameResolver->resolveForAssignNew($assign);
             if ($name === null) {
@@ -119,7 +119,7 @@ final class ConflictingNameResolver
     {
         $names = [];
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, \PhpParser\Node\Expr\Assign::class);
         foreach ($assigns as $assign) {
             $name = $this->expectedNameResolver->resolveForAssignNonNew($assign);
             if ($name === null) {

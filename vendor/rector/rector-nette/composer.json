@@ -31,7 +31,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220606\\Rector\\Nette\\": [
+            "Rector\\Nette\\": [
                 "src",
                 "packages"
             ]
@@ -39,7 +39,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220606\\Rector\\Nette\\Tests\\": "tests"
+            "Rector\\Nette\\Tests\\": "tests"
         },
         "classmap": [
             "stubs"

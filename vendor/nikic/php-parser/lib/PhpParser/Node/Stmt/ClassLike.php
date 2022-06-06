@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node\Stmt;
+namespace PhpParser\Node\Stmt;
 
-use RectorPrefix20220606\PhpParser\Node;
-abstract class ClassLike extends Node\Stmt
+use PhpParser\Node;
+abstract class ClassLike extends \PhpParser\Node\Stmt
 {
     /** @var Node\Identifier|null Name */
     public $name;
@@ -21,7 +21,7 @@ abstract class ClassLike extends Node\Stmt
     {
         $traitUses = [];
         foreach ($this->stmts as $stmt) {
-            if ($stmt instanceof TraitUse) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\TraitUse) {
                 $traitUses[] = $stmt;
             }
         }
@@ -34,7 +34,7 @@ abstract class ClassLike extends Node\Stmt
     {
         $constants = [];
         foreach ($this->stmts as $stmt) {
-            if ($stmt instanceof ClassConst) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\ClassConst) {
                 $constants[] = $stmt;
             }
         }
@@ -47,7 +47,7 @@ abstract class ClassLike extends Node\Stmt
     {
         $properties = [];
         foreach ($this->stmts as $stmt) {
-            if ($stmt instanceof Property) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\Property) {
                 $properties[] = $stmt;
             }
         }
@@ -63,9 +63,9 @@ abstract class ClassLike extends Node\Stmt
     public function getProperty(string $name)
     {
         foreach ($this->stmts as $stmt) {
-            if ($stmt instanceof Property) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\Property) {
                 foreach ($stmt->props as $prop) {
-                    if ($prop instanceof PropertyProperty && $name === $prop->name->toString()) {
+                    if ($prop instanceof \PhpParser\Node\Stmt\PropertyProperty && $name === $prop->name->toString()) {
                         return $stmt;
                     }
                 }
@@ -82,7 +82,7 @@ abstract class ClassLike extends Node\Stmt
     {
         $methods = [];
         foreach ($this->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 $methods[] = $stmt;
             }
         }
@@ -99,7 +99,7 @@ abstract class ClassLike extends Node\Stmt
     {
         $lowerName = \strtolower($name);
         foreach ($this->stmts as $stmt) {
-            if ($stmt instanceof ClassMethod && $lowerName === $stmt->name->toLowerString()) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\ClassMethod && $lowerName === $stmt->name->toLowerString()) {
                 return $stmt;
             }
         }

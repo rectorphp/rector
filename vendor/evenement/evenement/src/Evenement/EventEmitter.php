@@ -11,7 +11,7 @@ declare (strict_types=1);
  */
 namespace RectorPrefix20220606\Evenement;
 
-class EventEmitter implements EventEmitterInterface
+class EventEmitter implements \RectorPrefix20220606\Evenement\EventEmitterInterface
 {
     use EventEmitterTrait;
 }

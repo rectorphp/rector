@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\NodeTypeAnalyzer;
+namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
 
-use RectorPrefix20220606\PHPStan\Type\Constant\ConstantArrayType;
-use RectorPrefix20220606\PHPStan\Type\Generic\GenericObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 final class DetailedTypeAnalyzer
 {
     /**
@@ -14,20 +14,20 @@ final class DetailedTypeAnalyzer
      * @var int
      */
     private const MAX_NUMBER_OF_TYPES = 3;
-    public function isTooDetailed(Type $type) : bool
+    public function isTooDetailed(\PHPStan\Type\Type $type) : bool
     {
-        if ($type instanceof UnionType) {
+        if ($type instanceof \PHPStan\Type\UnionType) {
             return \count($type->getTypes()) > self::MAX_NUMBER_OF_TYPES;
         }
-        if ($type instanceof ConstantArrayType) {
+        if ($type instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return \count($type->getValueTypes()) > self::MAX_NUMBER_OF_TYPES;
         }
-        if ($type instanceof GenericObjectType) {
+        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             return $this->isTooDetailedGenericObjectType($type);
         }
         return \false;
     }
-    private function isTooDetailedGenericObjectType(GenericObjectType $genericObjectType) : bool
+    private function isTooDetailedGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType) : bool
     {
         if (\count($genericObjectType->getTypes()) !== 1) {
             return \false;

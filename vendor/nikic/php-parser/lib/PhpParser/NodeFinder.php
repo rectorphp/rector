@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser;
+namespace PhpParser;
 
-use RectorPrefix20220606\PhpParser\NodeVisitor\FindingVisitor;
-use RectorPrefix20220606\PhpParser\NodeVisitor\FirstFindingVisitor;
+use PhpParser\NodeVisitor\FindingVisitor;
+use PhpParser\NodeVisitor\FirstFindingVisitor;
 class NodeFinder
 {
     /**
@@ -20,8 +20,8 @@ class NodeFinder
         if (!\is_array($nodes)) {
             $nodes = [$nodes];
         }
-        $visitor = new FindingVisitor($filter);
-        $traverser = new NodeTraverser();
+        $visitor = new \PhpParser\NodeVisitor\FindingVisitor($filter);
+        $traverser = new \PhpParser\NodeTraverser();
         $traverser->addVisitor($visitor);
         $traverser->traverse($nodes);
         return $visitor->getFoundNodes();
@@ -53,8 +53,8 @@ class NodeFinder
         if (!\is_array($nodes)) {
             $nodes = [$nodes];
         }
-        $visitor = new FirstFindingVisitor($filter);
-        $traverser = new NodeTraverser();
+        $visitor = new \PhpParser\NodeVisitor\FirstFindingVisitor($filter);
+        $traverser = new \PhpParser\NodeTraverser();
         $traverser->addVisitor($visitor);
         $traverser->traverse($nodes);
         return $visitor->getFoundNode();

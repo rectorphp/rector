@@ -8,6 +8,6 @@ namespace RectorPrefix20220606\Psr\Cache;
  * Any time an invalid argument is passed into a method it must throw an
  * exception class which implements Psr\Cache\InvalidArgumentException.
  */
-interface InvalidArgumentException extends CacheException
+interface InvalidArgumentException extends \RectorPrefix20220606\Psr\Cache\CacheException
 {
 }

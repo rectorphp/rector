@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Contract\Rector;
+namespace Rector\Core\Contract\Rector;
 
-use RectorPrefix20220606\Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-interface ConfigurableRectorInterface extends ConfigurableRuleInterface
+use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
+interface ConfigurableRectorInterface extends \Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface
 {
     /**
      * @param mixed[] $configuration

@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration;
+namespace Rector\TypeDeclaration;
 
-use RectorPrefix20220606\PhpParser\Node\ComplexType;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\IntersectionType;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\UnionType;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\IntersectionType;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\UnionType;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpParserTypeAnalyzer
 {
     /**
@@ -17,7 +17,7 @@ final class PhpParserTypeAnalyzer
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(StaticTypeMapper $staticTypeMapper)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
@@ -32,11 +32,11 @@ final class PhpParserTypeAnalyzer
             return \false;
         }
         // possible - https://3v4l.org/ZuJCh
-        if ($possibleSubtype instanceof NullableType && !$possibleParentType instanceof NullableType) {
+        if ($possibleSubtype instanceof \PhpParser\Node\NullableType && !$possibleParentType instanceof \PhpParser\Node\NullableType) {
             return $this->isCovariantSubtypeOf($possibleSubtype->type, $possibleParentType);
         }
         // not possible - https://3v4l.org/iNDTc
-        if (!$possibleSubtype instanceof NullableType && $possibleParentType instanceof NullableType) {
+        if (!$possibleSubtype instanceof \PhpParser\Node\NullableType && $possibleParentType instanceof \PhpParser\Node\NullableType) {
             return \false;
         }
         $subtypeType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($possibleParentType);
@@ -49,9 +49,9 @@ final class PhpParserTypeAnalyzer
      */
     private function isUnionType($possibleSubtype, $possibleParentType) : bool
     {
-        if ($possibleSubtype instanceof UnionType) {
+        if ($possibleSubtype instanceof \PhpParser\Node\UnionType) {
             return \true;
         }
-        return $possibleParentType instanceof UnionType;
+        return $possibleParentType instanceof \PhpParser\Node\UnionType;
     }
 }

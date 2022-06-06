@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Transform\ValueObject;
+namespace Rector\Transform\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 final class MethodCallToPropertyFetch
 {
     /**
@@ -27,11 +27,11 @@ final class MethodCallToPropertyFetch
         $this->oldType = $oldType;
         $this->oldMethod = $oldMethod;
         $this->newProperty = $newProperty;
-        RectorAssert::className($oldType);
+        \Rector\Core\Validation\RectorAssert::className($oldType);
     }
-    public function getOldObjectType() : ObjectType
+    public function getOldObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->oldType);
+        return new \PHPStan\Type\ObjectType($this->oldType);
     }
     public function getNewProperty() : string
     {

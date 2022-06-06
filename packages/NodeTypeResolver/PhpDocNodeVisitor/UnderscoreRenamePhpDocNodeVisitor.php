@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\PhpDocNodeVisitor;
+namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\Type\ObjectType;
+use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var bool
@@ -31,19 +31,19 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var \PhpParser\Node
      */
     private $phpNode;
-    public function __construct(StaticTypeMapper $staticTypeMapper, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace, \RectorPrefix20220606\PhpParser\Node $phpNode)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace, \PhpParser\Node $phpNode)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->pseudoNamespaceToNamespace = $pseudoNamespaceToNamespace;
         $this->phpNode = $phpNode;
     }
-    public function beforeTraverse(Node $node) : void
+    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
         $this->hasChanged = \false;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
     {
-        if (!$node instanceof IdentifierTypeNode) {
+        if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
             return null;
         }
         if ($this->shouldSkip($node, $this->phpNode, $this->pseudoNamespaceToNamespace)) {
@@ -51,22 +51,22 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
         /** @var IdentifierTypeNode $node */
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $this->phpNode);
-        if (!$staticType instanceof ObjectType) {
+        if (!$staticType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
         $this->hasChanged = \true;
         // change underscore to \\
-        $slashedName = '\\' . Strings::replace($staticType->getClassName(), '#_#', '\\');
-        return new IdentifierTypeNode($slashedName);
+        $slashedName = '\\' . \RectorPrefix20220606\Nette\Utils\Strings::replace($staticType->getClassName(), '#_#', '\\');
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($slashedName);
     }
     public function hasChanged() : bool
     {
         return $this->hasChanged;
     }
-    private function shouldSkip(IdentifierTypeNode $identifierTypeNode, \RectorPrefix20220606\PhpParser\Node $phpParserNode, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
+    private function shouldSkip(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, \PhpParser\Node $phpParserNode, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
     {
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $phpParserNode);
-        if (!$staticType instanceof ObjectType) {
+        if (!$staticType instanceof \PHPStan\Type\ObjectType) {
             return \true;
         }
         if (\strncmp($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix(), \strlen($pseudoNamespaceToNamespace->getNamespacePrefix())) !== 0) {

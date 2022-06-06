@@ -1,42 +1,42 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php72\Rector\FuncCall;
+namespace Rector\Php72\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\Rector\Core\PhpParser\Parser\SimplePhpParser;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Core\PhpParser\Parser\SimplePhpParser;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/simplesamlphp/simplesamlphp/pull/708/files
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\StringsAssertNakedRector\StringsAssertNakedRectorTest
  */
-final class StringsAssertNakedRector extends AbstractRector implements MinPhpVersionInterface
+final class StringsAssertNakedRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
     private $simplePhpParser;
-    public function __construct(SimplePhpParser $simplePhpParser)
+    public function __construct(\Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser)
     {
         $this->simplePhpParser = $simplePhpParser;
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::STRING_IN_ASSERT_ARG;
+        return \Rector\Core\ValueObject\PhpVersionFeature::STRING_IN_ASSERT_ARG;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('String asserts must be passed directly to assert()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('String asserts must be passed directly to assert()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 function nakedAssert()
 {
     assert('true === true');
@@ -57,21 +57,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'assert')) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $firstArgValue = $node->args[0]->value;
-        if (!$firstArgValue instanceof String_) {
+        if (!$firstArgValue instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         $phpCode = '<?php ' . $firstArgValue->value . ';';
@@ -79,10 +79,10 @@ CODE_SAMPLE
         if (!isset($contentStmts[0])) {
             return null;
         }
-        if (!$contentStmts[0] instanceof Expression) {
+        if (!$contentStmts[0] instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
-        $node->args[0] = new Arg($contentStmts[0]->expr);
+        $node->args[0] = new \PhpParser\Node\Arg($contentStmts[0]->expr);
         return $node;
     }
 }

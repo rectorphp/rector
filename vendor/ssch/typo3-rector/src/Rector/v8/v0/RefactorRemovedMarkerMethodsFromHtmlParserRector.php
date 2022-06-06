@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v0;
+namespace Ssch\TYPO3Rector\Rector\v8\v0;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Breaking-72384-RemovedDeprecatedCodeFromHtmlParser.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\CoreRector\Html\RefactorRemovedMarkerMethodsFromHtmlParserRectorTest
  */
-final class RefactorRemovedMarkerMethodsFromHtmlParserRector extends AbstractRector
+final class RefactorRemovedMarkerMethodsFromHtmlParserRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string[]
@@ -36,14 +36,14 @@ final class RefactorRemovedMarkerMethodsFromHtmlParserRector extends AbstractRec
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall|MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Html\\HtmlParser'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Html\\HtmlParser'))) {
             return null;
         }
         if ($this->shouldSkip($node)) {
@@ -60,9 +60,9 @@ final class RefactorRemovedMarkerMethodsFromHtmlParserRector extends AbstractRec
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor removed Marker-related methods from HtmlParser.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor removed Marker-related methods from HtmlParser.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Html\HtmlParser;
 
 final class HtmlParserMarkerRendererMethods
@@ -121,8 +121,8 @@ CODE_SAMPLE
             if (null !== $methodName) {
                 try {
                     $this->removeNode($call);
-                } catch (ShouldNotHappenException $exception) {
-                    $parentNode = $call->getAttribute(AttributeKey::PARENT_NODE);
+                } catch (\Rector\Core\Exception\ShouldNotHappenException $exception) {
+                    $parentNode = $call->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
                     $this->removeNode($parentNode);
                 }
             }
@@ -136,14 +136,14 @@ CODE_SAMPLE
         if ($this->isName($call->name, self::RENAMED_METHOD)) {
             $methodName = $this->getName($call->name);
             if (null !== $methodName) {
-                $call->name = new Identifier('HTMLcleaner');
+                $call->name = new \PhpParser\Node\Identifier('HTMLcleaner');
             }
         }
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    private function migrateMethodsToMarkerBasedTemplateService($call) : ?Node
+    private function migrateMethodsToMarkerBasedTemplateService($call) : ?\PhpParser\Node
     {
         if ($this->isNames($call->name, self::MOVED_METHODS_TO_MARKER_BASED_TEMPLATES)) {
             $methodName = $this->getName($call->name);

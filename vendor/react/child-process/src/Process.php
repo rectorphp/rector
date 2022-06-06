@@ -55,7 +55,7 @@ use RectorPrefix20220606\React\Stream\DuplexStreamInterface;
  *     Accordingly, if either of these pipes is in a paused state (`pause()` method
  *     or internally due to a `pipe()` call), this detection may not trigger.
  */
-class Process extends EventEmitter
+class Process extends \RectorPrefix20220606\Evenement\EventEmitter
 {
     /**
      * @var WritableStreamInterface|null|DuplexStreamInterface|ReadableStreamInterface
@@ -151,12 +151,12 @@ class Process extends EventEmitter
      * @param float          $interval    Interval to periodically monitor process state (seconds)
      * @throws \RuntimeException If the process is already running or fails to start
      */
-    public function start(LoopInterface $loop = null, $interval = 0.1)
+    public function start(\RectorPrefix20220606\React\EventLoop\LoopInterface $loop = null, $interval = 0.1)
     {
         if ($this->isRunning()) {
             throw new \RuntimeException('Process is already running');
         }
-        $loop = $loop ?: Loop::get();
+        $loop = $loop ?: \RectorPrefix20220606\React\EventLoop\Loop::get();
         $cmd = $this->cmd;
         $fdSpec = $this->fds;
         $sigchild = null;
@@ -217,13 +217,13 @@ class Process extends EventEmitter
             $meta = \stream_get_meta_data($fd);
             $mode = $meta['mode'] === '' ? $this->fds[$n][1] === 'r' ? 'w' : 'r' : $meta['mode'];
             if ($mode === 'r+') {
-                $stream = new DuplexResourceStream($fd, $loop);
+                $stream = new \RectorPrefix20220606\React\Stream\DuplexResourceStream($fd, $loop);
                 $stream->on('close', $streamCloseHandler);
                 $closeCount++;
             } elseif ($mode === 'w') {
-                $stream = new WritableResourceStream($fd, $loop);
+                $stream = new \RectorPrefix20220606\React\Stream\WritableResourceStream($fd, $loop);
             } else {
-                $stream = new ReadableResourceStream($fd, $loop);
+                $stream = new \RectorPrefix20220606\React\Stream\ReadableResourceStream($fd, $loop);
                 $stream->on('close', $streamCloseHandler);
                 $closeCount++;
             }

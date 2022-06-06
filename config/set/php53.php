@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use RectorPrefix20220606\Rector\Config\RectorConfig;
-use RectorPrefix20220606\Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
-use RectorPrefix20220606\Rector\Php53\Rector\Ternary\TernaryToElvisRector;
-use RectorPrefix20220606\Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(TernaryToElvisRector::class);
-    $rectorConfig->rule(DirNameFileConstantToDirConstantRector::class);
-    $rectorConfig->rule(ReplaceHttpServerVarsByServerRector::class);
+use Rector\Config\RectorConfig;
+use Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector;
+use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
+use Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\Php53\Rector\Ternary\TernaryToElvisRector::class);
+    $rectorConfig->rule(\Rector\Php53\Rector\FuncCall\DirNameFileConstantToDirConstantRector::class);
+    $rectorConfig->rule(\Rector\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector::class);
 };

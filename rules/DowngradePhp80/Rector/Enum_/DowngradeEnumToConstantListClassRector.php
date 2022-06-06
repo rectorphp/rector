@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp80\Rector\Enum_;
+namespace Rector\DowngradePhp80\Rector\Enum_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Enum_;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer;
-use RectorPrefix20220606\Rector\Php81\NodeFactory\ClassFromEnumFactory;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Enum_;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer;
+use Rector\Php81\NodeFactory\ClassFromEnumFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\Enum_\DowngradeEnumToConstantListClassRector\DowngradeEnumToConstantListClassRectorTest
  */
-final class DowngradeEnumToConstantListClassRector extends AbstractRector
+final class DowngradeEnumToConstantListClassRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -41,15 +41,15 @@ final class DowngradeEnumToConstantListClassRector extends AbstractRector
      * @var \Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer
      */
     private $enumAnalyzer;
-    public function __construct(ClassFromEnumFactory $classFromEnumFactory, ReflectionProvider $reflectionProvider, EnumAnalyzer $enumAnalyzer)
+    public function __construct(\Rector\Php81\NodeFactory\ClassFromEnumFactory $classFromEnumFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer $enumAnalyzer)
     {
         $this->classFromEnumFactory = $classFromEnumFactory;
         $this->reflectionProvider = $reflectionProvider;
         $this->enumAnalyzer = $enumAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade enum to constant list class', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade enum to constant list class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 enum Direction
 {
     case LEFT;
@@ -72,21 +72,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Enum_::class, ClassMethod::class];
+        return [\PhpParser\Node\Stmt\Enum_::class, \PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param Enum_|ClassMethod $node
      * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
-        if ($node instanceof Enum_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Enum_) {
             return $this->classFromEnumFactory->createFromEnum($node);
         }
         $hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($node->params as $param) {
-            if (!$param->type instanceof Name) {
+            if (!$param->type instanceof \PhpParser\Node\Name) {
                 continue;
             }
             // is enum type?
@@ -107,16 +107,16 @@ CODE_SAMPLE
         }
         return null;
     }
-    public function resolveParamType(ClassReflection $classReflection) : ?Identifier
+    public function resolveParamType(\PHPStan\Reflection\ClassReflection $classReflection) : ?\PhpParser\Node\Identifier
     {
         return $this->enumAnalyzer->resolveType($classReflection);
     }
-    private function decorateParamDocType(ClassReflection $classReflection, Param $param, PhpDocInfo $phpDocInfo) : void
+    private function decorateParamDocType(\PHPStan\Reflection\ClassReflection $classReflection, \PhpParser\Node\Param $param, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
     {
-        $constFetchNode = new ConstFetchNode('\\' . $classReflection->getName(), '*');
-        $constTypeNode = new ConstTypeNode($constFetchNode);
+        $constFetchNode = new \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode('\\' . $classReflection->getName(), '*');
+        $constTypeNode = new \PHPStan\PhpDocParser\Ast\Type\ConstTypeNode($constFetchNode);
         $paramName = '$' . $this->getName($param);
-        $paramTagValueNode = new ParamTagValueNode($constTypeNode, \false, $paramName, '');
+        $paramTagValueNode = new \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode($constTypeNode, \false, $paramName, '');
         $phpDocInfo->addTagValueNode($paramTagValueNode);
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
+namespace Rector\CodingStyle\ClassNameImport\ClassNameImportSkipVoter;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use RectorPrefix20220606\Rector\Core\Configuration\RenamedClassesDataCollector;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\PostRector\Collector\UseNodesToAddCollector;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use PhpParser\Node;
+use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
+use Rector\Core\ValueObject\Application\File;
+use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 /**
  * This prevents importing:
  * - App\Some\Product
@@ -16,7 +16,7 @@ use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualified
  * if there is already:
  * - use App\Another\Product
  */
-final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInterface
+final class UsesClassNameImportSkipVoter implements \Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface
 {
     /**
      * @readonly
@@ -28,12 +28,12 @@ final class UsesClassNameImportSkipVoter implements ClassNameImportSkipVoterInte
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
-    public function __construct(UseNodesToAddCollector $useNodesToAddCollector, RenamedClassesDataCollector $renamedClassesDataCollector)
+    public function __construct(\Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
+    public function shouldSkip(\Rector\Core\ValueObject\Application\File $file, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, \PhpParser\Node $node) : bool
     {
         $useImportTypes = $this->useNodesToAddCollector->getUseImportTypesByNode($file, $node);
         foreach ($useImportTypes as $useImportType) {

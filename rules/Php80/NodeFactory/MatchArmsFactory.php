@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\NodeFactory;
+namespace Rector\Php80\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\MatchArm;
-use RectorPrefix20220606\Rector\Php80\ValueObject\CondAndExpr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\MatchArm;
+use Rector\Php80\ValueObject\CondAndExpr;
 final class MatchArmsFactory
 {
     /**
@@ -17,12 +17,12 @@ final class MatchArmsFactory
         $matchArms = [];
         foreach ($condAndExprs as $condAndExpr) {
             $expr = $condAndExpr->getExpr();
-            if ($expr instanceof Assign) {
+            if ($expr instanceof \PhpParser\Node\Expr\Assign) {
                 // $this->assignExpr = $expr->var;
                 $expr = $expr->expr;
             }
             $condExprs = $condAndExpr->getCondExprs();
-            $matchArms[] = new MatchArm($condExprs, $expr);
+            $matchArms[] = new \PhpParser\Node\MatchArm($condExprs, $expr);
         }
         return $matchArms;
     }

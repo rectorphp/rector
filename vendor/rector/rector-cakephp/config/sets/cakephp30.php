@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use RectorPrefix20220606\Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector;
-use RectorPrefix20220606\Rector\Config\RectorConfig;
-use RectorPrefix20220606\Rector\Renaming\Rector\Name\RenameClassRector;
-return static function (RectorConfig $rectorConfig) : void {
+use Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector;
+use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\Name\RenameClassRector;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     # @see https://github.com/cakephp/upgrade/tree/master/src/Shell/Task
-    $rectorConfig->rule(AppUsesStaticCallToUseStatementRector::class);
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+    $rectorConfig->rule(\Rector\CakePHP\Rector\Namespace_\AppUsesStaticCallToUseStatementRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
         # see https://github.com/cakephp/upgrade/blob/756410c8b7d5aff9daec3fa1fe750a3858d422ac/src/Shell/Task/RenameClassesTask.php#L37
         'Cake\\Network\\Http\\HttpSocket' => 'Cake\\Network\\Http\\Client',
         'Cake\\Model\\ConnectionManager' => 'Cake\\Database\\ConnectionManager',

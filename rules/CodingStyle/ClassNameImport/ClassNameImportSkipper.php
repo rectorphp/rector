@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\ClassNameImport;
+namespace Rector\CodingStyle\ClassNameImport;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\UseUse;
-use RectorPrefix20220606\Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
-use RectorPrefix20220606\Rector\Core\Configuration\RenamedClassesDataCollector;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
+use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
+use Rector\Core\ValueObject\Application\File;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ClassNameImportSkipper
 {
     /**
@@ -26,12 +26,12 @@ final class ClassNameImportSkipper
     /**
      * @param ClassNameImportSkipVoterInterface[] $classNameImportSkipVoters
      */
-    public function __construct(array $classNameImportSkipVoters, RenamedClassesDataCollector $renamedClassesDataCollector)
+    public function __construct(array $classNameImportSkipVoters, \Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->classNameImportSkipVoters = $classNameImportSkipVoters;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    public function shouldSkipNameForFullyQualifiedObjectType(File $file, Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
+    public function shouldSkipNameForFullyQualifiedObjectType(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node $node, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
     {
         foreach ($this->classNameImportSkipVoters as $classNameImportSkipVoter) {
             if ($classNameImportSkipVoter->shouldSkip($file, $fullyQualifiedObjectType, $node)) {
@@ -43,7 +43,7 @@ final class ClassNameImportSkipper
     /**
      * @param Use_[] $existingUses
      */
-    public function isShortNameInUseStatement(Name $name, array $existingUses) : bool
+    public function isShortNameInUseStatement(\PhpParser\Node\Name $name, array $existingUses) : bool
     {
         $longName = $name->toString();
         if (\strpos($longName, '\\') !== \false) {
@@ -54,7 +54,7 @@ final class ClassNameImportSkipper
     /**
      * @param Use_[] $uses
      */
-    public function isAlreadyImported(Name $name, array $uses) : bool
+    public function isAlreadyImported(\PhpParser\Node\Name $name, array $uses) : bool
     {
         $stringName = $name->toString();
         foreach ($uses as $use) {
@@ -69,7 +69,7 @@ final class ClassNameImportSkipper
     /**
      * @param Use_[] $uses
      */
-    public function isFoundInUse(Name $name, array $uses) : bool
+    public function isFoundInUse(\PhpParser\Node\Name $name, array $uses) : bool
     {
         $stringName = $name->toString();
         $nameLastName = \strtolower($name->getLast());
@@ -87,7 +87,7 @@ final class ClassNameImportSkipper
         }
         return \false;
     }
-    private function isJustRenamedClass(string $stringName, UseUse $useUse) : bool
+    private function isJustRenamedClass(string $stringName, \PhpParser\Node\Stmt\UseUse $useUse) : bool
     {
         $useUseNameString = $useUse->name->toString();
         // is in renamed classes? skip it

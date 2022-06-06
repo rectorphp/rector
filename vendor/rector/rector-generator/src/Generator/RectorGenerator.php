@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\RectorGenerator\Generator;
+namespace Rector\RectorGenerator\Generator;
 
-use RectorPrefix20220606\Rector\RectorGenerator\Finder\TemplateFinder;
-use RectorPrefix20220606\Rector\RectorGenerator\Guard\OverrideGuard;
-use RectorPrefix20220606\Rector\RectorGenerator\TemplateVariablesFactory;
-use RectorPrefix20220606\Rector\RectorGenerator\ValueObject\RectorRecipe;
+use Rector\RectorGenerator\Finder\TemplateFinder;
+use Rector\RectorGenerator\Guard\OverrideGuard;
+use Rector\RectorGenerator\TemplateVariablesFactory;
+use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use RectorPrefix20220606\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\RectorGenerator\Tests\RectorGenerator\RectorGeneratorTest
@@ -38,7 +38,7 @@ final class RectorGenerator
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(TemplateFinder $templateFinder, TemplateVariablesFactory $templateVariablesFactory, FileGenerator $fileGenerator, OverrideGuard $overrideGuard, SymfonyStyle $symfonyStyle)
+    public function __construct(\Rector\RectorGenerator\Finder\TemplateFinder $templateFinder, \Rector\RectorGenerator\TemplateVariablesFactory $templateVariablesFactory, \Rector\RectorGenerator\Generator\FileGenerator $fileGenerator, \Rector\RectorGenerator\Guard\OverrideGuard $overrideGuard, \RectorPrefix20220606\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->templateFinder = $templateFinder;
         $this->templateVariablesFactory = $templateVariablesFactory;
@@ -49,7 +49,7 @@ final class RectorGenerator
     /**
      * @return string[]
      */
-    public function generate(RectorRecipe $rectorRecipe, string $destinationDirectory) : array
+    public function generate(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, string $destinationDirectory) : array
     {
         // generate and compare
         $templateFileInfos = $this->templateFinder->find($rectorRecipe);

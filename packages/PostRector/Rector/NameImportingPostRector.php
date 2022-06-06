@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PostRector\Rector;
+namespace Rector\PostRector\Rector;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
-use RectorPrefix20220606\Rector\CodingStyle\Node\NameImporter;
-use RectorPrefix20220606\Rector\Core\Configuration\Option;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\Core\Provider\CurrentFileProvider;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Use_;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
+use Rector\CodingStyle\Node\NameImporter;
+use Rector\Core\Configuration\Option;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
+use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-final class NameImportingPostRector extends AbstractPostRector
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
      * @readonly
@@ -60,7 +60,7 @@ final class NameImportingPostRector extends AbstractPostRector
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(ParameterProvider $parameterProvider, NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter, ClassNameImportSkipper $classNameImportSkipper, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\Node\NameImporter $nameImporter, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter $docBlockNameImporter, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
@@ -71,19 +71,19 @@ final class NameImportingPostRector extends AbstractPostRector
         $this->currentFileProvider = $currentFileProvider;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
+        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
             return null;
         }
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof File) {
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
             return null;
         }
         if (!$this->shouldApply($file)) {
             return null;
         }
-        if ($node instanceof Name) {
+        if ($node instanceof \PhpParser\Node\Name) {
             return $this->processNodeName($node, $file);
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
@@ -95,9 +95,9 @@ final class NameImportingPostRector extends AbstractPostRector
         // this must run after NodeRemovingPostRector, sine renamed use imports can block next import
         return 600;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Imports fully qualified names', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Imports fully qualified names', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(App\AnotherClass $anotherClass)
@@ -117,14 +117,14 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    private function processNodeName(Name $name, File $file) : ?Node
+    private function processNodeName(\PhpParser\Node\Name $name, \Rector\Core\ValueObject\Application\File $file) : ?\PhpParser\Node
     {
         if ($name->isSpecialClassName()) {
             return $name;
         }
         // @todo test if old stmts or new stmts! or both? :)
         /** @var Use_[] $currentUses */
-        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), Use_::class);
+        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), \PhpParser\Node\Stmt\Use_::class);
         if ($this->shouldImportName($name, $currentUses)) {
             return $this->nameImporter->importName($name, $file, $currentUses);
         }
@@ -133,7 +133,7 @@ CODE_SAMPLE
     /**
      * @param Use_[] $currentUses
      */
-    private function shouldImportName(Name $name, array $currentUses) : bool
+    private function shouldImportName(\PhpParser\Node\Name $name, array $currentUses) : bool
     {
         if (\substr_count($name->toCodeString(), '\\') <= 1) {
             return \true;
@@ -144,11 +144,11 @@ CODE_SAMPLE
         if ($this->classNameImportSkipper->isAlreadyImported($name, $currentUses)) {
             return \true;
         }
-        return $this->reflectionProvider->hasFunction(new Name($name->getLast()), null);
+        return $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($name->getLast()), null);
     }
-    private function shouldApply(File $file) : bool
+    private function shouldApply(\Rector\Core\ValueObject\Application\File $file) : bool
     {
-        if (!$this->parameterProvider->provideBoolParameter(Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY)) {
+        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY)) {
             return \true;
         }
         return $file->hasContentChanged();

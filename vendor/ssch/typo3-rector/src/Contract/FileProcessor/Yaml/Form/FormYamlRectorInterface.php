@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form;
+namespace Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form;
 
-use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
-interface FormYamlRectorInterface extends RectorInterface
+use Rector\Core\Contract\Rector\RectorInterface;
+interface FormYamlRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
 {
     /**
      * @param mixed[] $yaml

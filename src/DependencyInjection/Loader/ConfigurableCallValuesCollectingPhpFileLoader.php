@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\DependencyInjection\Loader;
+namespace Rector\Core\DependencyInjection\Loader;
 
-use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use RectorPrefix20220606\Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use RectorPrefix20220606\Symfony\Component\Config\FileLocatorInterface;
 use RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 /**
  * @property-read ContainerBuilder $container
  */
-final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
+final class ConfigurableCallValuesCollectingPhpFileLoader extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
 {
     /**
      * @readonly
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;
-    public function __construct(ContainerBuilder $containerBuilder, FileLocatorInterface $fileLocator, ConfigureCallValuesCollector $configureCallValuesCollector)
+    public function __construct(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, \RectorPrefix20220606\Symfony\Component\Config\FileLocatorInterface $fileLocator, \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector $configureCallValuesCollector)
     {
         $this->configureCallValuesCollector = $configureCallValuesCollector;
         parent::__construct($containerBuilder, $fileLocator);
@@ -51,7 +51,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
     private function collectConfigureCallsFromJustImportedConfigurableRectorDefinitions() : void
     {
         foreach ($this->container->getDefinitions() as $class => $definition) {
-            if (!\is_a($class, ConfigurableRectorInterface::class, \true)) {
+            if (!\is_a($class, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class, \true)) {
                 continue;
             }
             $this->configureCallValuesCollector->collectFromServiceAndClassName($class, $definition);

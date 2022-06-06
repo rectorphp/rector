@@ -1,38 +1,38 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v4;
+namespace Ssch\TYPO3Rector\Rector\v9\v4;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Cast\String_;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_ as ScalarString_;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Catch_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\TryCatch;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast\String_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_ as ScalarString_;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85445-TemplateService-getFileName.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\TemplateGetFileNameToFilePathSanitizerRector\TemplateGetFileNameToFilePathSanitizerRectorTest
  */
-final class TemplateGetFileNameToFilePathSanitizerRector extends AbstractRector
+final class TemplateGetFileNameToFilePathSanitizerRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -41,14 +41,14 @@ final class TemplateGetFileNameToFilePathSanitizerRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($node, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'tmpl')) {
+        if (!$this->typo3NodeResolver->isMethodCallOnPropertyOfGlobals($node, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER, 'tmpl')) {
             return null;
         }
         if (!$this->isName($node->name, 'getFileName')) {
@@ -57,26 +57,26 @@ final class TemplateGetFileNameToFilePathSanitizerRector extends AbstractRector
         if (!isset($node->args[0])) {
             return null;
         }
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Assign) {
+        $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
-        $filePath = new String_($node->args[0]->value);
+        $filePath = new \PhpParser\Node\Expr\Cast\String_($node->args[0]->value);
         // First of all remove the node
         $this->removeNode($parentNode);
         $assignmentNode = $this->createSanitizeMethod($parentNode, $filePath);
         $assignmentNodeNull = $this->createNullAssignment($parentNode);
         $catches = [$this->createCatchBlockToIgnore($assignmentNodeNull), $this->createCatchBlockToLog([$assignmentNodeNull, $this->createIfLog()])];
-        $tryCatch = new TryCatch([$assignmentNode], $catches);
+        $tryCatch = new \PhpParser\Node\Stmt\TryCatch([$assignmentNode], $catches);
         $this->nodesToAddCollector->addNodeBeforeNode($tryCatch, $node);
         return $node;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use FilePathSanitizer->sanitize() instead of TemplateService->getFileName()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use FilePathSanitizer->sanitize() instead of TemplateService->getFileName()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $fileName = $GLOBALS['TSFE']->tmpl->getFileName('foo.text');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -100,33 +100,33 @@ try {
 CODE_SAMPLE
 )]);
     }
-    private function createSanitizeMethod(Assign $parentNode, String_ $filePath) : Expression
+    private function createSanitizeMethod(\PhpParser\Node\Expr\Assign $parentNode, \PhpParser\Node\Expr\Cast\String_ $filePath) : \PhpParser\Node\Stmt\Expression
     {
-        return new Expression(new Assign($parentNode->var, $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Resource\\FilePathSanitizer')]), 'sanitize', [$filePath])));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($parentNode->var, $this->nodeFactory->createMethodCall($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Frontend\\Resource\\FilePathSanitizer')]), 'sanitize', [$filePath])));
     }
-    private function createNullAssignment(Assign $parentNode) : Expression
+    private function createNullAssignment(\PhpParser\Node\Expr\Assign $parentNode) : \PhpParser\Node\Stmt\Expression
     {
-        return new Expression(new Assign($parentNode->var, $this->nodeFactory->createNull()));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($parentNode->var, $this->nodeFactory->createNull()));
     }
-    private function createTimeTrackerLogMessage() : Expression
+    private function createTimeTrackerLogMessage() : \PhpParser\Node\Stmt\Expression
     {
         $makeInstanceOfTimeTracker = $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'makeInstance', [$this->nodeFactory->createClassConstReference('TYPO3\\CMS\\Core\\TimeTracker\\TimeTracker')]);
-        return new Expression($this->nodeFactory->createMethodCall($makeInstanceOfTimeTracker, 'setTSlogMessage', [$this->nodeFactory->createMethodCall(new Variable('e'), 'getMessage'), $this->nodeFactory->createArg(3)]));
+        return new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall($makeInstanceOfTimeTracker, 'setTSlogMessage', [$this->nodeFactory->createMethodCall(new \PhpParser\Node\Expr\Variable('e'), 'getMessage'), $this->nodeFactory->createArg(3)]));
     }
     /**
      * @param Stmt[] $stmts
      */
-    private function createCatchBlockToLog(array $stmts) : Catch_
+    private function createCatchBlockToLog(array $stmts) : \PhpParser\Node\Stmt\Catch_
     {
-        return new Catch_([new Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidPathException'), new Name('TYPO3\\CMS\\Core\\Resource\\Exception\\FileDoesNotExistException'), new Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileException')], new Variable('e'), $stmts);
+        return new \PhpParser\Node\Stmt\Catch_([new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidPathException'), new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Resource\\Exception\\FileDoesNotExistException'), new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileException')], new \PhpParser\Node\Expr\Variable('e'), $stmts);
     }
-    private function createCatchBlockToIgnore(Expression $assignmentNodeNull) : Catch_
+    private function createCatchBlockToIgnore(\PhpParser\Node\Stmt\Expression $assignmentNodeNull) : \PhpParser\Node\Stmt\Catch_
     {
-        return new Catch_([new Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileNameException')], new Variable('e'), [$assignmentNodeNull]);
+        return new \PhpParser\Node\Stmt\Catch_([new \PhpParser\Node\Name('TYPO3\\CMS\\Core\\Resource\\Exception\\InvalidFileNameException')], new \PhpParser\Node\Expr\Variable('e'), [$assignmentNodeNull]);
     }
-    private function createIfLog() : If_
+    private function createIfLog() : \PhpParser\Node\Stmt\If_
     {
-        $if = new If_($this->nodeFactory->createPropertyFetch($this->nodeFactory->createPropertyFetch(new ArrayDimFetch(new Variable('GLOBALS'), new ScalarString_(Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)), 'tmpl'), 'tt_track'));
+        $if = new \PhpParser\Node\Stmt\If_($this->nodeFactory->createPropertyFetch($this->nodeFactory->createPropertyFetch(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('GLOBALS'), new \PhpParser\Node\Scalar\String_(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER)), 'tmpl'), 'tt_track'));
         $if->stmts[] = $this->createTimeTrackerLogMessage();
         return $if;
     }

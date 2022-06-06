@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Utils\ValueObject;
+namespace Rector\Symfony\Utils\ValueObject;
 
 final class ReturnTypeChange
 {

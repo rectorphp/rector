@@ -63,7 +63,7 @@ class ProgressIndicator
      * @param int        $indicatorChangeInterval Change interval in milliseconds
      * @param array|null $indicatorValues         Animated indicator characters
      */
-    public function __construct(OutputInterface $output, string $format = null, int $indicatorChangeInterval = 100, array $indicatorValues = null)
+    public function __construct(\RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output, string $format = null, int $indicatorChangeInterval = 100, array $indicatorValues = null)
     {
         $this->output = $output;
         if (null === $format) {
@@ -74,7 +74,7 @@ class ProgressIndicator
         }
         $indicatorValues = \array_values($indicatorValues);
         if (2 > \count($indicatorValues)) {
-            throw new InvalidArgumentException('Must have at least 2 indicator value characters.');
+            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\InvalidArgumentException('Must have at least 2 indicator value characters.');
         }
         $this->format = self::getFormatDefinition($format);
         $this->indicatorChangeInterval = $indicatorChangeInterval;
@@ -95,7 +95,7 @@ class ProgressIndicator
     public function start(string $message)
     {
         if ($this->started) {
-            throw new LogicException('Progress indicator already started.');
+            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException('Progress indicator already started.');
         }
         $this->message = $message;
         $this->started = \true;
@@ -110,7 +110,7 @@ class ProgressIndicator
     public function advance()
     {
         if (!$this->started) {
-            throw new LogicException('Progress indicator has not yet been started.');
+            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException('Progress indicator has not yet been started.');
         }
         if (!$this->output->isDecorated()) {
             return;
@@ -131,7 +131,7 @@ class ProgressIndicator
     public function finish(string $message)
     {
         if (!$this->started) {
-            throw new LogicException('Progress indicator has not yet been started.');
+            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException('Progress indicator has not yet been started.');
         }
         $this->message = $message;
         $this->display();
@@ -165,7 +165,7 @@ class ProgressIndicator
     }
     private function display()
     {
-        if (OutputInterface::VERBOSITY_QUIET === $this->output->getVerbosity()) {
+        if (\RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_QUIET === $this->output->getVerbosity()) {
             return;
         }
         $this->overwrite(\preg_replace_callback("{%([a-z\\-_]+)(?:\\:([^%]+))?%}i", function ($matches) {
@@ -178,10 +178,10 @@ class ProgressIndicator
     private function determineBestFormat() : string
     {
         switch ($this->output->getVerbosity()) {
-            case OutputInterface::VERBOSITY_VERBOSE:
+            case \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERBOSE:
                 return $this->output->isDecorated() ? 'verbose' : 'verbose_no_ansi';
-            case OutputInterface::VERBOSITY_VERY_VERBOSE:
-            case OutputInterface::VERBOSITY_DEBUG:
+            case \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_VERY_VERBOSE:
+            case \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface::VERBOSITY_DEBUG:
                 return $this->output->isDecorated() ? 'very_verbose' : 'very_verbose_no_ansi';
             default:
                 return $this->output->isDecorated() ? 'normal' : 'normal_no_ansi';
@@ -193,7 +193,7 @@ class ProgressIndicator
     private function overwrite(string $message)
     {
         if ($this->output->isDecorated()) {
-            $this->output->write("\r\x1b[2K");
+            $this->output->write("\r\33[2K");
             $this->output->write($message);
         } else {
             $this->output->writeln($message);
@@ -213,9 +213,9 @@ class ProgressIndicator
         }, 'message' => function (self $indicator) {
             return $indicator->message;
         }, 'elapsed' => function (self $indicator) {
-            return Helper::formatTime(\time() - $indicator->startTime);
+            return \RectorPrefix20220606\Symfony\Component\Console\Helper\Helper::formatTime(\time() - $indicator->startTime);
         }, 'memory' => function () {
-            return Helper::formatMemory(\memory_get_usage(\true));
+            return \RectorPrefix20220606\Symfony\Component\Console\Helper\Helper::formatMemory(\memory_get_usage(\true));
         }];
     }
 }

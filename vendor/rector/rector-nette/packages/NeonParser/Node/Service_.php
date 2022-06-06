@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\NeonParser\Node;
+namespace Rector\Nette\NeonParser\Node;
 
 use RectorPrefix20220606\Nette\Neon\Node;
 use RectorPrefix20220606\Nette\Neon\Node\LiteralNode;
-use RectorPrefix20220606\Rector\Nette\NeonParser\Node\Service_\SetupMethodCall;
+use Rector\Nette\NeonParser\Node\Service_\SetupMethodCall;
 /**
  * Metanode for easier subscribing
  */
-final class Service_ extends AbstractVirtualNode
+final class Service_ extends \Rector\Nette\NeonParser\Node\AbstractVirtualNode
 {
     /**
      * @var string
@@ -62,10 +62,10 @@ final class Service_ extends AbstractVirtualNode
      */
     public function &getIterator() : \Generator
     {
-        if ($this->classLiteralNode instanceof LiteralNode) {
+        if ($this->classLiteralNode instanceof \RectorPrefix20220606\Nette\Neon\Node\LiteralNode) {
             (yield $this->classLiteralNode);
         }
-        if ($this->factoryLiteralNode instanceof LiteralNode) {
+        if ($this->factoryLiteralNode instanceof \RectorPrefix20220606\Nette\Neon\Node\LiteralNode) {
             (yield $this->factoryLiteralNode);
         }
         foreach ($this->setupMethodCalls as $setupMethodCall) {

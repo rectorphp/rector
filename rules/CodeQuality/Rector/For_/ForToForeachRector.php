@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\For_;
+namespace Rector\CodeQuality\Rector\For_;
 
 use RectorPrefix20220606\Doctrine\Inflector\Inflector;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Stmt\For_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Foreach_;
-use RectorPrefix20220606\Rector\CodeQuality\NodeAnalyzer\ForAnalyzer;
-use RectorPrefix20220606\Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
-use RectorPrefix20220606\Rector\CodeQuality\NodeFactory\ForeachFactory;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt\For_;
+use PhpParser\Node\Stmt\Foreach_;
+use Rector\CodeQuality\NodeAnalyzer\ForAnalyzer;
+use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
+use Rector\CodeQuality\NodeFactory\ForeachFactory;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\For_\ForToForeachRector\ForToForeachRectorTest
  */
-final class ForToForeachRector extends AbstractRector
+final class ForToForeachRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -64,16 +64,16 @@ final class ForToForeachRector extends AbstractRector
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(Inflector $inflector, ForAnalyzer $forAnalyzer, ForeachFactory $foreachFactory, ForeachAnalyzer $foreachAnalyzer)
+    public function __construct(\RectorPrefix20220606\Doctrine\Inflector\Inflector $inflector, \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer $forAnalyzer, \Rector\CodeQuality\NodeFactory\ForeachFactory $foreachFactory, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer)
     {
         $this->inflector = $inflector;
         $this->forAnalyzer = $forAnalyzer;
         $this->foreachFactory = $foreachFactory;
         $this->foreachAnalyzer = $foreachAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change for() to foreach() where useful', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change for() to foreach() where useful', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($tokens)
@@ -106,12 +106,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [For_::class];
+        return [\PhpParser\Node\Stmt\For_::class];
     }
     /**
      * @param For_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $this->reset();
         $this->matchInit($node->init);
@@ -146,7 +146,7 @@ CODE_SAMPLE
         }
         return $this->processForToForeach($node, $iteratedVariable);
     }
-    private function processForToForeach(For_ $for, string $iteratedVariable) : ?Foreach_
+    private function processForToForeach(\PhpParser\Node\Stmt\For_ $for, string $iteratedVariable) : ?\PhpParser\Node\Stmt\Foreach_
     {
         $originalVariableSingle = $this->inflector->singularize($iteratedVariable);
         $iteratedVariableSingle = $originalVariableSingle;
@@ -164,12 +164,12 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function createForeachFromForWithIteratedVariableSingle(For_ $for, string $iteratedVariableSingle) : Foreach_
+    private function createForeachFromForWithIteratedVariableSingle(\PhpParser\Node\Stmt\For_ $for, string $iteratedVariableSingle) : \PhpParser\Node\Stmt\Foreach_
     {
         $foreach = $this->foreachFactory->createFromFor($for, $iteratedVariableSingle, $this->iteratedExpr, $this->keyValueName);
         $this->mirrorComments($foreach, $for);
         if ($this->keyValueName === null) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $this->foreachAnalyzer->useForeachVariableInStmts($foreach->expr, $foreach->valueVar, $foreach->stmts, $this->keyValueName);
         return $foreach;
@@ -187,17 +187,17 @@ CODE_SAMPLE
     private function matchInit(array $initExprs) : void
     {
         foreach ($initExprs as $initExpr) {
-            if (!$initExpr instanceof Assign) {
+            if (!$initExpr instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
             if ($this->valueResolver->isValue($initExpr->expr, 0)) {
                 $this->keyValueName = $this->getName($initExpr->var);
             }
-            if (!$initExpr->expr instanceof FuncCall) {
+            if (!$initExpr->expr instanceof \PhpParser\Node\Expr\FuncCall) {
                 continue;
             }
             $funcCall = $initExpr->expr;
-            if ($this->nodeNameResolver->isName($funcCall, self::COUNT) && $funcCall->args[0] instanceof Arg) {
+            if ($this->nodeNameResolver->isName($funcCall, self::COUNT) && $funcCall->args[0] instanceof \PhpParser\Node\Arg) {
                 $this->countValueVariableExpr = $initExpr->var;
                 $this->countValueName = $this->getName($initExpr->var);
                 $this->iteratedExpr = $funcCall->args[0]->value;
@@ -217,14 +217,14 @@ CODE_SAMPLE
         if ($this->countValueName !== null) {
             return $this->forAnalyzer->isCondExprSmallerOrGreater($condExprs, $keyValueName, $this->countValueName);
         }
-        if (!$condExprs[0] instanceof BinaryOp) {
+        if (!$condExprs[0] instanceof \PhpParser\Node\Expr\BinaryOp) {
             return \false;
         }
         $funcCall = $condExprs[0]->right;
-        if (!$funcCall instanceof FuncCall) {
+        if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;
         }
-        if ($this->nodeNameResolver->isName($funcCall, self::COUNT) && $funcCall->args[0] instanceof Arg) {
+        if ($this->nodeNameResolver->isName($funcCall, self::COUNT) && $funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             $this->iteratedExpr = $funcCall->args[0]->value;
             return \true;
         }

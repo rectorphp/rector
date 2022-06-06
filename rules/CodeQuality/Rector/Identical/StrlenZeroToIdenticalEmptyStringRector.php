@@ -1,36 +1,36 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\Identical;
+namespace Rector\CodeQuality\Rector\Identical;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Type\StringType;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\StringType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Identical\StrlenZeroToIdenticalEmptyStringRector\StrlenZeroToIdenticalEmptyStringRectorTest
  */
-final class StrlenZeroToIdenticalEmptyStringRector extends AbstractRector
+final class StrlenZeroToIdenticalEmptyStringRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes strlen comparison to 0 to direct empty string compare', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes strlen comparison to 0 to direct empty string compare', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(string $value)
@@ -55,22 +55,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Identical::class];
+        return [\PhpParser\Node\Expr\BinaryOp\Identical::class];
     }
     /**
      * @param Identical $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->left instanceof FuncCall) {
+        if ($node->left instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->processIdentical($node->right, $node->left);
         }
-        if ($node->right instanceof FuncCall) {
+        if ($node->right instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->processIdentical($node->left, $node->right);
         }
         return null;
     }
-    private function processIdentical(Expr $expr, FuncCall $funcCall) : ?Identical
+    private function processIdentical(\PhpParser\Node\Expr $expr, \PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\BinaryOp\Identical
     {
         if (!$this->isName($funcCall, 'strlen')) {
             return null;
@@ -87,10 +87,10 @@ CODE_SAMPLE
         $variable = $firstArg->value;
         // Needs string cast if variable type is not string
         // see https://github.com/rectorphp/rector/issues/6700
-        $isStringType = $this->nodeTypeResolver->getNativeType($variable) instanceof StringType;
+        $isStringType = $this->nodeTypeResolver->getNativeType($variable) instanceof \PHPStan\Type\StringType;
         if (!$isStringType) {
-            return new Identical(new Expr\Cast\String_($variable), new String_(''));
+            return new \PhpParser\Node\Expr\BinaryOp\Identical(new \PhpParser\Node\Expr\Cast\String_($variable), new \PhpParser\Node\Scalar\String_(''));
         }
-        return new Identical($variable, new String_(''));
+        return new \PhpParser\Node\Expr\BinaryOp\Identical($variable, new \PhpParser\Node\Scalar\String_(''));
     }
 }

@@ -13,7 +13,7 @@ namespace RectorPrefix20220606\Symfony\Component\Console\Formatter;
 /**
  * @author Tien Xuan Vo <tien.xuan.vo@gmail.com>
  */
-final class NullOutputFormatterStyle implements OutputFormatterStyleInterface
+final class NullOutputFormatterStyle implements \RectorPrefix20220606\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
 {
     /**
      * {@inheritdoc}

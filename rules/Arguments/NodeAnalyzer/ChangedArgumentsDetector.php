@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Arguments\NodeAnalyzer;
+namespace Rector\Arguments\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\Value\ValueResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\TypeComparator\TypeComparator;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PhpParser\Node\Param;
+use PHPStan\Type\Type;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ChangedArgumentsDetector
 {
     /**
@@ -25,7 +25,7 @@ final class ChangedArgumentsDetector
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
-    public function __construct(ValueResolver $valueResolver, StaticTypeMapper $staticTypeMapper, TypeComparator $typeComparator)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
     {
         $this->valueResolver = $valueResolver;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -34,14 +34,14 @@ final class ChangedArgumentsDetector
     /**
      * @param mixed $value
      */
-    public function isDefaultValueChanged(Param $param, $value) : bool
+    public function isDefaultValueChanged(\PhpParser\Node\Param $param, $value) : bool
     {
         if ($param->default === null) {
             return \false;
         }
         return !$this->valueResolver->isValue($param->default, $value);
     }
-    public function isTypeChanged(Param $param, ?Type $newType) : bool
+    public function isTypeChanged(\PhpParser\Node\Param $param, ?\PHPStan\Type\Type $newType) : bool
     {
         if ($param->type === null) {
             return \false;

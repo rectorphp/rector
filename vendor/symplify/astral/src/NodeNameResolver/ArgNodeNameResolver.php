@@ -3,19 +3,19 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\NodeNameResolver;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
 use RectorPrefix20220606\Symplify\Astral\Contract\NodeNameResolverInterface;
-final class ArgNodeNameResolver implements NodeNameResolverInterface
+final class ArgNodeNameResolver implements \RectorPrefix20220606\Symplify\Astral\Contract\NodeNameResolverInterface
 {
-    public function match(Node $node) : bool
+    public function match(\PhpParser\Node $node) : bool
     {
-        return $node instanceof Arg;
+        return $node instanceof \PhpParser\Node\Arg;
     }
     /**
      * @param Arg $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(\PhpParser\Node $node) : ?string
     {
         if ($node->name === null) {
             return null;

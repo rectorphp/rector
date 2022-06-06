@@ -14,7 +14,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class InlineServiceConfigurator extends AbstractConfigurator
+class InlineServiceConfigurator extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractConfigurator
 {
     use Traits\ArgumentTrait;
     use Traits\AutowireTrait;
@@ -40,7 +40,7 @@ class InlineServiceConfigurator extends AbstractConfigurator
      * @var string|null
      */
     private $path;
-    public function __construct(Definition $definition)
+    public function __construct(\RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition $definition)
     {
         $this->definition = $definition;
     }

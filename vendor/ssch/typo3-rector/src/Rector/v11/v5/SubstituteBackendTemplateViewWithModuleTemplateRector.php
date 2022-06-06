@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v11\v5;
+namespace Ssch\TYPO3Rector\Rector\v11\v5;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassDependencyManipulator;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\PostRector\ValueObject\PropertyMetadata;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
+use Rector\Core\NodeManipulator\ClassDependencyManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PostRector\ValueObject\PropertyMetadata;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/11.5/Deprecation-95164-ExtbackendBackendTemplateView.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v5\SubstituteBackendTemplateViewWithModuleTemplateRector\SubstituteBackendTemplateViewWithModuleTemplateRectorTest
  */
-final class SubstituteBackendTemplateViewWithModuleTemplateRector extends AbstractRector
+final class SubstituteBackendTemplateViewWithModuleTemplateRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -44,7 +44,7 @@ final class SubstituteBackendTemplateViewWithModuleTemplateRector extends Abstra
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
-    public function __construct(ClassDependencyManipulator $classDependencyManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
     }
@@ -53,12 +53,12 @@ final class SubstituteBackendTemplateViewWithModuleTemplateRector extends Abstra
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -76,9 +76,9 @@ final class SubstituteBackendTemplateViewWithModuleTemplateRector extends Abstra
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use an instance of ModuleTemplate instead of BackendTemplateView', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use an instance of ModuleTemplate instead of BackendTemplateView', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class MyController extends ActionController
 {
     protected $defaultViewObjectName = BackendTemplateView::class;
@@ -115,77 +115,77 @@ class MyController extends ActionController
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(Class_ $class) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
     {
         $defaultViewObjectNameProperty = $class->getProperty('defaultViewObjectName');
-        if (!$defaultViewObjectNameProperty instanceof Property) {
+        if (!$defaultViewObjectNameProperty instanceof \PhpParser\Node\Stmt\Property) {
             return \true;
         }
         $defaultViewObjectName = $defaultViewObjectNameProperty->props[0]->default;
-        if (!$defaultViewObjectName instanceof Expr) {
+        if (!$defaultViewObjectName instanceof \PhpParser\Node\Expr) {
             return \true;
         }
         return !$this->valueResolver->isValue($defaultViewObjectName, 'TYPO3\\CMS\\Backend\\View\\BackendTemplateView');
     }
-    private function addModuleTemplateFactoryToConstructor(Class_ $class) : void
+    private function addModuleTemplateFactoryToConstructor(\PhpParser\Node\Stmt\Class_ $class) : void
     {
-        $this->classDependencyManipulator->addConstructorDependency($class, new PropertyMetadata(self::MODULE_TEMPLATE_FACTORY, new ObjectType('TYPO3\\CMS\\Backend\\Template\\ModuleTemplateFactory'), Class_::MODIFIER_PRIVATE));
+        $this->classDependencyManipulator->addConstructorDependency($class, new \Rector\PostRector\ValueObject\PropertyMetadata(self::MODULE_TEMPLATE_FACTORY, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\ModuleTemplateFactory'), \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE));
     }
-    private function removePropertyDefaultViewObjectName(Class_ $class) : void
+    private function removePropertyDefaultViewObjectName(\PhpParser\Node\Stmt\Class_ $class) : void
     {
         $defaultViewObjectNameProperty = $class->getProperty('defaultViewObjectName');
-        if (!$defaultViewObjectNameProperty instanceof Property) {
+        if (!$defaultViewObjectNameProperty instanceof \PhpParser\Node\Stmt\Property) {
             return;
         }
         $this->nodeRemover->removeNode($defaultViewObjectNameProperty);
     }
-    private function removePropertyViewIfNeeded(Class_ $class) : void
+    private function removePropertyViewIfNeeded(\PhpParser\Node\Stmt\Class_ $class) : void
     {
         $viewProperty = $class->getProperty('view');
-        if (!$viewProperty instanceof Property) {
+        if (!$viewProperty instanceof \PhpParser\Node\Stmt\Property) {
             return;
         }
         $this->nodeRemover->removeNode($viewProperty);
     }
-    private function createModuleTemplateAssignment() : Expression
+    private function createModuleTemplateAssignment() : \PhpParser\Node\Stmt\Expression
     {
         $moduleTemplateFactoryCall = $this->nodeFactory->createMethodCall($this->nodeFactory->createPropertyFetch(self::THIS, self::MODULE_TEMPLATE_FACTORY), 'create', [$this->nodeFactory->createPropertyFetch(self::THIS, 'request')]);
-        return new Expression(new Assign(new Variable(self::MODULE_TEMPLATE), $moduleTemplateFactoryCall));
+        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::MODULE_TEMPLATE), $moduleTemplateFactoryCall));
     }
-    private function substituteModuleTemplateMethodCalls(ClassMethod $classMethod) : void
+    private function substituteModuleTemplateMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         if (null === $classMethod->stmts) {
             return;
         }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use(&$hasChanged) {
-            if (!$node instanceof MethodCall) {
+        $this->traverseNodesWithCallable($classMethod->stmts, function (\PhpParser\Node $node) use(&$hasChanged) {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
             if (!$this->isName($node->name, 'getModuleTemplate')) {
                 return null;
             }
             $hasChanged = \true;
-            return new Variable(self::MODULE_TEMPLATE);
+            return new \PhpParser\Node\Expr\Variable(self::MODULE_TEMPLATE);
         });
         if (!$hasChanged) {
             return;
         }
         $this->callModuleTemplateFactoryCreateIfNeeded($classMethod);
     }
-    private function callSetContentAndGetContent(ClassMethod $classMethod) : void
+    private function callSetContentAndGetContent(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         $classMethodName = (string) $this->getName($classMethod->name);
         if (\substr_compare($classMethodName, 'Action', -\strlen('Action')) !== 0) {
             return;
         }
-        $classMethod->returnType = new FullyQualified('Psr\\Http\\Message\\ResponseInterface');
+        $classMethod->returnType = new \PhpParser\Node\Name\FullyQualified('Psr\\Http\\Message\\ResponseInterface');
         $viewPropertyFetch = $this->nodeFactory->createPropertyFetch(self::THIS, 'view');
         $viewRenderMethodCall = $this->nodeFactory->createMethodCall($viewPropertyFetch, 'render');
-        $callSetContentOnModuleTemplateVariable = new Expression($this->nodeFactory->createMethodCall(self::MODULE_TEMPLATE, 'setContent', [$viewRenderMethodCall]));
+        $callSetContentOnModuleTemplateVariable = new \PhpParser\Node\Stmt\Expression($this->nodeFactory->createMethodCall(self::MODULE_TEMPLATE, 'setContent', [$viewRenderMethodCall]));
         $moduleTemplateRenderContentMethodCall = $this->nodeFactory->createMethodCall(self::MODULE_TEMPLATE, 'renderContent');
         $htmlResponseMethodCall = $this->nodeFactory->createMethodCall(self::THIS, 'htmlResponse', [$moduleTemplateRenderContentMethodCall]);
-        $htmlResponseMethodCallReturn = new Return_($htmlResponseMethodCall);
+        $htmlResponseMethodCallReturn = new \PhpParser\Node\Stmt\Return_($htmlResponseMethodCall);
         if (null === $classMethod->stmts) {
             $classMethod->stmts[] = $this->createModuleTemplateAssignment();
             $classMethod->stmts[] = $callSetContentOnModuleTemplateVariable;
@@ -194,8 +194,8 @@ CODE_SAMPLE
         }
         $this->callModuleTemplateFactoryCreateIfNeeded($classMethod);
         /** @var MethodCall[] $existingHtmlResponseMethodCallNodes */
-        $existingHtmlResponseMethodCallNodes = $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) {
-            if (!$node instanceof MethodCall) {
+        $existingHtmlResponseMethodCallNodes = $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return \false;
             }
             if (!$this->isName($node->name, 'htmlResponse')) {
@@ -213,17 +213,17 @@ CODE_SAMPLE
             $existingHtmlResponseMethodCallNode->args = $this->nodeFactory->createArgs([$moduleTemplateRenderContentMethodCall]);
         }
     }
-    private function callModuleTemplateFactoryCreateIfNeeded(ClassMethod $classMethod) : void
+    private function callModuleTemplateFactoryCreateIfNeeded(\PhpParser\Node\Stmt\ClassMethod $classMethod) : void
     {
         if (null === $classMethod->stmts) {
             $classMethod->stmts[] = $this->createModuleTemplateAssignment();
             return;
         }
-        $existingModuleTemplateFactoryCreateMethodCall = $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) {
-            if (!$node instanceof MethodCall) {
+        $existingModuleTemplateFactoryCreateMethodCall = $this->betterNodeFinder->find((array) $classMethod->stmts, function (\PhpParser\Node $node) {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return \false;
             }
-            if (!$node->var instanceof PropertyFetch) {
+            if (!$node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 return \false;
             }
             if (!$this->isName($node->var->name, self::MODULE_TEMPLATE_FACTORY)) {

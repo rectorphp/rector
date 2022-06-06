@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\Ternary;
+namespace Rector\CodeQuality\Rector\Ternary;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Ternary;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector\SwitchNegatedTernaryRectorTest
  */
-final class SwitchNegatedTernaryRector extends AbstractRector
+final class SwitchNegatedTernaryRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Switch negated ternary condition rector', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Switch negated ternary condition rector', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(bool $upper, string $name)
@@ -46,14 +46,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Ternary::class];
+        return [\PhpParser\Node\Expr\Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->cond instanceof BooleanNot) {
+        if (!$node->cond instanceof \PhpParser\Node\Expr\BooleanNot) {
             return null;
         }
         if ($node->if === null) {
@@ -61,10 +61,10 @@ CODE_SAMPLE
         }
         $node->cond = $node->cond->expr;
         [$node->if, $node->else] = [$node->else, $node->if];
-        if ($node->if instanceof Ternary) {
+        if ($node->if instanceof \PhpParser\Node\Expr\Ternary) {
             $ternary = $node->if;
-            $ternary->setAttribute(AttributeKey::KIND, 'wrapped_with_brackets');
-            $ternary->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $ternary->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, 'wrapped_with_brackets');
+            $ternary->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         }
         return $node;
     }

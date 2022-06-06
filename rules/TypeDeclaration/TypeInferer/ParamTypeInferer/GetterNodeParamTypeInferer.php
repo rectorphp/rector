@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\PhpParser\NodeTraverser;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
+use PhpParser\Node;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
+final class GetterNodeParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
 {
     /**
      * @readonly
@@ -51,7 +51,7 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(PropertyFetchAssignManipulator $propertyFetchAssignManipulator, PropertyFetchAnalyzer $propertyFetchAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\Core\NodeManipulator\PropertyFetchAssignManipulator $propertyFetchAssignManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
@@ -60,24 +60,24 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function inferParam(Param $param) : Type
+    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
-        $class = $this->betterNodeFinder->findParentType($param, Class_::class);
-        if (!$class instanceof Class_) {
-            return new MixedType();
+        $class = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return new \PHPStan\Type\MixedType();
         }
         /** @var ClassMethod $classMethod */
-        $classMethod = $param->getAttribute(AttributeKey::PARENT_NODE);
+        $classMethod = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         /** @var string $paramName */
         $paramName = $this->nodeNameResolver->getName($param);
         $propertyNames = $this->propertyFetchAssignManipulator->getPropertyNamesOfAssignOfVariable($classMethod, $paramName);
         if ($propertyNames === []) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
-        $returnType = new MixedType();
+        $returnType = new \PHPStan\Type\MixedType();
         // resolve property assigns
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (Node $node) use($propertyNames, &$returnType) : ?int {
-            if (!$node instanceof Return_) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class, function (\PhpParser\Node $node) use($propertyNames, &$returnType) : ?int {
+            if (!$node instanceof \PhpParser\Node\Stmt\Return_) {
                 return null;
             }
             if ($node->expr === null) {
@@ -88,17 +88,17 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
                 return null;
             }
             // what is return type?
-            $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
-            if (!$classMethod instanceof ClassMethod) {
+            $classMethod = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassMethod::class);
+            if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
                 return null;
             }
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
             $methodReturnType = $phpDocInfo->getReturnType();
-            if ($methodReturnType instanceof MixedType) {
+            if ($methodReturnType instanceof \PHPStan\Type\MixedType) {
                 return null;
             }
             $returnType = $methodReturnType;
-            return NodeTraverser::STOP_TRAVERSAL;
+            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $returnType;
     }

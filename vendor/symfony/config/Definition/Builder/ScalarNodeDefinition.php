@@ -16,13 +16,13 @@ use RectorPrefix20220606\Symfony\Component\Config\Definition\ScalarNode;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ScalarNodeDefinition extends VariableNodeDefinition
+class ScalarNodeDefinition extends \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition
 {
     /**
      * Instantiate a Node.
      */
     protected function instantiateNode() : \RectorPrefix20220606\Symfony\Component\Config\Definition\VariableNode
     {
-        return new ScalarNode($this->name, $this->parent, $this->pathSeparator);
+        return new \RectorPrefix20220606\Symfony\Component\Config\Definition\ScalarNode($this->name, $this->parent, $this->pathSeparator);
     }
 }

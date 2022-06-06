@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\ValueObject\Tag;
+namespace Rector\Symfony\ValueObject\Tag;
 
-use RectorPrefix20220606\Rector\Symfony\Contract\Tag\TagInterface;
-final class EventListenerTag implements TagInterface
+use Rector\Symfony\Contract\Tag\TagInterface;
+final class EventListenerTag implements \Rector\Symfony\Contract\Tag\TagInterface
 {
     /**
      * @readonly

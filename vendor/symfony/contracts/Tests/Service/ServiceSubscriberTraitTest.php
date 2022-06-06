@@ -18,28 +18,28 @@ use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\SubscribedService;
 use RectorPrefix20220606\Symfony\Contracts\Service\ServiceLocatorTrait;
 use RectorPrefix20220606\Symfony\Contracts\Service\ServiceSubscriberInterface;
 use RectorPrefix20220606\Symfony\Contracts\Service\ServiceSubscriberTrait;
-class ServiceSubscriberTraitTest extends TestCase
+class ServiceSubscriberTraitTest extends \RectorPrefix20220606\PHPUnit\Framework\TestCase
 {
     public function testMethodsOnParentsAndChildrenAreIgnoredInGetSubscribedServices()
     {
-        $expected = [TestService::class . '::aService' => Service2::class, TestService::class . '::nullableService' => '?' . Service2::class];
-        $this->assertEquals($expected, ChildTestService::getSubscribedServices());
+        $expected = [\RectorPrefix20220606\Symfony\Contracts\Tests\Service\TestService::class . '::aService' => \RectorPrefix20220606\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir2\Service2::class, \RectorPrefix20220606\Symfony\Contracts\Tests\Service\TestService::class . '::nullableService' => '?' . \RectorPrefix20220606\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir2\Service2::class];
+        $this->assertEquals($expected, \RectorPrefix20220606\Symfony\Contracts\Tests\Service\ChildTestService::getSubscribedServices());
     }
     public function testSetContainerIsCalledOnParent()
     {
-        $container = new class([]) implements ContainerInterface
+        $container = new class([]) implements \RectorPrefix20220606\Psr\Container\ContainerInterface
         {
             use ServiceLocatorTrait;
         };
-        $this->assertSame($container, (new TestService())->setContainer($container));
+        $this->assertSame($container, (new \RectorPrefix20220606\Symfony\Contracts\Tests\Service\TestService())->setContainer($container));
     }
     public function testParentNotCalledIfHasMagicCall()
     {
-        $container = new class([]) implements ContainerInterface
+        $container = new class([]) implements \RectorPrefix20220606\Psr\Container\ContainerInterface
         {
             use ServiceLocatorTrait;
         };
-        $service = new class extends ParentWithMagicCall
+        $service = new class extends \RectorPrefix20220606\Symfony\Contracts\Tests\Service\ParentWithMagicCall
         {
             use ServiceSubscriberTrait;
         };
@@ -48,7 +48,7 @@ class ServiceSubscriberTraitTest extends TestCase
     }
     public function testParentNotCalledIfNoParent()
     {
-        $container = new class([]) implements ContainerInterface
+        $container = new class([]) implements \RectorPrefix20220606\Psr\Container\ContainerInterface
         {
             use ServiceLocatorTrait;
         };
@@ -62,30 +62,30 @@ class ServiceSubscriberTraitTest extends TestCase
 }
 class ParentTestService
 {
-    public function aParentService() : Service1
+    public function aParentService() : \RectorPrefix20220606\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir1\Service1
     {
     }
-    public function setContainer(ContainerInterface $container)
+    public function setContainer(\RectorPrefix20220606\Psr\Container\ContainerInterface $container)
     {
         return $container;
     }
 }
-class TestService extends ParentTestService implements ServiceSubscriberInterface
+class TestService extends \RectorPrefix20220606\Symfony\Contracts\Tests\Service\ParentTestService implements \RectorPrefix20220606\Symfony\Contracts\Service\ServiceSubscriberInterface
 {
     use ServiceSubscriberTrait;
-    #[\Symfony\Contracts\Service\Attribute\SubscribedService]
-    public function aService() : Service2
+    #[SubscribedService]
+    public function aService() : \RectorPrefix20220606\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir2\Service2
     {
     }
-    #[\Symfony\Contracts\Service\Attribute\SubscribedService]
-    public function nullableService() : ?Service2
+    #[SubscribedService]
+    public function nullableService() : ?\RectorPrefix20220606\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir2\Service2
     {
     }
 }
-class ChildTestService extends TestService
+class ChildTestService extends \RectorPrefix20220606\Symfony\Contracts\Tests\Service\TestService
 {
-    #[\Symfony\Contracts\Service\Attribute\SubscribedService]
-    public function aChildService() : Service3
+    #[SubscribedService]
+    public function aChildService() : \RectorPrefix20220606\Symfony\Contracts\Tests\Service\Service3
     {
     }
 }

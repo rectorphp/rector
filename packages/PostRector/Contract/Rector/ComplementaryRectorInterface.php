@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PostRector\Contract\Rector;
+namespace Rector\PostRector\Contract\Rector;
 
 /**
  * Marker interface for rules, that with dual along another rule.

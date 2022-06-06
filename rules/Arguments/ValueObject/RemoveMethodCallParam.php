@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Arguments\ValueObject;
+namespace Rector\Arguments\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectType;
 final class RemoveMethodCallParam
 {
     /**
@@ -27,9 +27,9 @@ final class RemoveMethodCallParam
         $this->methodName = $methodName;
         $this->paramPosition = $paramPosition;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getMethodName() : string
     {

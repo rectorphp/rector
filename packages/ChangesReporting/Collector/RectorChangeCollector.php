@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\ChangesReporting\Collector;
+namespace Rector\ChangesReporting\Collector;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20220606\Rector\Core\Logging\CurrentRectorProvider;
-use RectorPrefix20220606\Rector\Core\Provider\CurrentFileProvider;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+use PhpParser\Node;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Logging\CurrentRectorProvider;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
 final class RectorChangeCollector
 {
     /**
@@ -21,7 +21,7 @@ final class RectorChangeCollector
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(CurrentRectorProvider $currentRectorProvider, CurrentFileProvider $currentFileProvider)
+    public function __construct(\Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider)
     {
         $this->currentRectorProvider = $currentRectorProvider;
         $this->currentFileProvider = $currentFileProvider;
@@ -29,19 +29,19 @@ final class RectorChangeCollector
     /**
      * @deprecated Use file-> method instead
      */
-    public function notifyNodeFileInfo(Node $node) : void
+    public function notifyNodeFileInfo(\PhpParser\Node $node) : void
     {
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof File) {
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
             // this file was changed before and this is a sub-new node
             // array Traverse to all new nodes would have to be used, but it's not worth the performance
             return;
         }
         $currentRector = $this->currentRectorProvider->getCurrentRector();
-        if (!$currentRector instanceof RectorInterface) {
+        if (!$currentRector instanceof \Rector\Core\Contract\Rector\RectorInterface) {
             return;
         }
-        $rectorWithLineChange = new RectorWithLineChange(\get_class($currentRector), $node->getLine());
+        $rectorWithLineChange = new \Rector\ChangesReporting\ValueObject\RectorWithLineChange(\get_class($currentRector), $node->getLine());
         $file->addRectorClassWithLine($rectorWithLineChange);
     }
 }

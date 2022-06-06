@@ -1,48 +1,48 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php70\Rector\Ternary;
+namespace Rector\Php70\Rector\Ternary;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Coalesce;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use RectorPrefix20220606\PhpParser\Node\Expr\Isset_;
-use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Ternary;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php70\Rector\Ternary\TernaryToNullCoalescingRector\TernaryToNullCoalescingRectorTest
  */
-final class TernaryToNullCoalescingRector extends AbstractRector implements MinPhpVersionInterface
+final class TernaryToNullCoalescingRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes unneeded null check to ?? operator', [new CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'), new CodeSample('isset($value) ? $value : 10;', '$value ?? 10;')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes unneeded null check to ?? operator', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$value === null ? 10 : $value;', '$value ?? 10;'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('isset($value) ? $value : 10;', '$value ?? 10;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Ternary::class];
+        return [\PhpParser\Node\Expr\Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->cond instanceof Isset_) {
+        if ($node->cond instanceof \PhpParser\Node\Expr\Isset_) {
             return $this->processTernaryWithIsset($node, $node->cond);
         }
-        if ($node->cond instanceof Identical) {
+        if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
             $checkedNode = $node->else;
             $fallbackNode = $node->if;
-        } elseif ($node->cond instanceof NotIdentical) {
+        } elseif ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
             $checkedNode = $node->if;
             $fallbackNode = $node->else;
         } else {
@@ -52,24 +52,24 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         if ($checkedNode === null) {
             return null;
         }
-        if (!$fallbackNode instanceof Expr) {
+        if (!$fallbackNode instanceof \PhpParser\Node\Expr) {
             return null;
         }
         /** @var Identical|NotIdentical $ternaryCompareNode */
         $ternaryCompareNode = $node->cond;
         if ($this->isNullMatch($ternaryCompareNode->left, $ternaryCompareNode->right, $checkedNode)) {
-            return new Coalesce($checkedNode, $fallbackNode);
+            return new \PhpParser\Node\Expr\BinaryOp\Coalesce($checkedNode, $fallbackNode);
         }
         if ($this->isNullMatch($ternaryCompareNode->right, $ternaryCompareNode->left, $checkedNode)) {
-            return new Coalesce($checkedNode, $fallbackNode);
+            return new \PhpParser\Node\Expr\BinaryOp\Coalesce($checkedNode, $fallbackNode);
         }
         return null;
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::NULL_COALESCE;
+        return \Rector\Core\ValueObject\PhpVersionFeature::NULL_COALESCE;
     }
-    private function processTernaryWithIsset(Ternary $ternary, Isset_ $isset) : ?Coalesce
+    private function processTernaryWithIsset(\PhpParser\Node\Expr\Ternary $ternary, \PhpParser\Node\Expr\Isset_ $isset) : ?\PhpParser\Node\Expr\BinaryOp\Coalesce
     {
         if ($ternary->if === null) {
             return null;
@@ -84,9 +84,9 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
         if (!$this->nodeComparator->areNodesEqual($ternary->if, $isset->vars[0])) {
             return null;
         }
-        return new Coalesce($ternary->if, $ternary->else);
+        return new \PhpParser\Node\Expr\BinaryOp\Coalesce($ternary->if, $ternary->else);
     }
-    private function isNullMatch(Expr $possibleNullExpr, Expr $firstNode, Expr $secondNode) : bool
+    private function isNullMatch(\PhpParser\Node\Expr $possibleNullExpr, \PhpParser\Node\Expr $firstNode, \PhpParser\Node\Expr $secondNode) : bool
     {
         if (!$this->valueResolver->isNull($possibleNullExpr)) {
             return \false;

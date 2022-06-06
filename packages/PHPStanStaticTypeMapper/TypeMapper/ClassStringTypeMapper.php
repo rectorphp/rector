@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\TypeMapper;
+namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use RectorPrefix20220606\PHPStan\Type\ClassStringType;
-use RectorPrefix20220606\PHPStan\Type\Generic\GenericClassStringType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Name;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\ClassStringType;
+use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ClassStringType>
  */
-final class ClassStringTypeMapper implements TypeMapperInterface
+final class ClassStringTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
@@ -30,47 +30,47 @@ final class ClassStringTypeMapper implements TypeMapperInterface
      */
     public function getNodeClass() : string
     {
-        return ClassStringType::class;
+        return \PHPStan\Type\ClassStringType::class;
     }
     /**
      * @param ClassStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        $attributeAwareIdentifierTypeNode = new IdentifierTypeNode('class-string');
-        if ($type instanceof GenericClassStringType) {
+        $attributeAwareIdentifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('class-string');
+        if ($type instanceof \PHPStan\Type\Generic\GenericClassStringType) {
             $genericType = $type->getGenericType();
-            if ($genericType instanceof ObjectType) {
+            if ($genericType instanceof \PHPStan\Type\ObjectType) {
                 $className = $genericType->getClassName();
                 $className = $this->normalizeType($className);
-                $genericType = new ObjectType($className);
+                $genericType = new \PHPStan\Type\ObjectType($className);
             }
             $genericTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType, $typeKind);
-            return new GenericTypeNode($attributeAwareIdentifierTypeNode, [$genericTypeNode]);
+            return new \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode($attributeAwareIdentifierTypeNode, [$genericTypeNode]);
         }
         return $attributeAwareIdentifierTypeNode;
     }
     /**
      * @param ClassStringType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
-        return new Name('string');
+        return new \PhpParser\Node\Name('string');
     }
     /**
      * @required
      */
-    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowire(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
     private function normalizeType(string $classType) : string
     {
-        if (\is_a($classType, Expr::class, \true)) {
-            return Expr::class;
+        if (\is_a($classType, \PhpParser\Node\Expr::class, \true)) {
+            return \PhpParser\Node\Expr::class;
         }
-        if (\is_a($classType, Node::class, \true)) {
-            return Node::class;
+        if (\is_a($classType, \PhpParser\Node::class, \true)) {
+            return \PhpParser\Node::class;
         }
         return $classType;
     }

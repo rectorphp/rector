@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Exception;
+namespace Rector\Core\Exception;
 
 use Exception;
 use Throwable;
-final class ShouldNotHappenException extends Exception
+final class ShouldNotHappenException extends \Exception
 {
     /**
      * @param string $message
      * @param int $code
      */
-    public function __construct($message = '', $code = 0, ?Throwable $throwable = null)
+    public function __construct($message = '', $code = 0, ?\Throwable $throwable = null)
     {
         if ($message === '') {
             $message = $this->createDefaultMessageWithLocation();

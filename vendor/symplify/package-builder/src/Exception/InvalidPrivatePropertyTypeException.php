@@ -4,6 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\PackageBuilder\Exception;
 
 use Exception;
-final class InvalidPrivatePropertyTypeException extends Exception
+final class InvalidPrivatePropertyTypeException extends \Exception
 {
 }

@@ -14,7 +14,7 @@ use RectorPrefix20220606\Psr\Cache\CacheItemPoolInterface;
 use RectorPrefix20220606\Psr\Cache\InvalidArgumentException;
 use RectorPrefix20220606\Psr\Log\LoggerInterface;
 // Help opcache.preload discover always-needed symbols
-\class_exists(InvalidArgumentException::class);
+\class_exists(\RectorPrefix20220606\Psr\Cache\InvalidArgumentException::class);
 /**
  * An implementation of CacheInterface for PSR-6 CacheItemPoolInterface classes.
  *
@@ -36,19 +36,19 @@ trait CacheTrait
     {
         return $this->deleteItem($key);
     }
-    private function doGet(CacheItemPoolInterface $pool, string $key, callable $callback, ?float $beta, array &$metadata = null, LoggerInterface $logger = null) : mixed
+    private function doGet(\RectorPrefix20220606\Psr\Cache\CacheItemPoolInterface $pool, string $key, callable $callback, ?float $beta, array &$metadata = null, \RectorPrefix20220606\Psr\Log\LoggerInterface $logger = null) : mixed
     {
         if (0 > ($beta ??= 1.0)) {
-            throw new class(\sprintf('Argument "$beta" provided to "%s::get()" must be a positive number, %f given.', static::class, $beta)) extends \InvalidArgumentException implements InvalidArgumentException
+            throw new class(\sprintf('Argument "$beta" provided to "%s::get()" must be a positive number, %f given.', static::class, $beta)) extends \InvalidArgumentException implements \RectorPrefix20220606\Psr\Cache\InvalidArgumentException
             {
             };
         }
         $item = $pool->getItem($key);
         $recompute = !$item->isHit() || \INF === $beta;
-        $metadata = $item instanceof ItemInterface ? $item->getMetadata() : [];
+        $metadata = $item instanceof \RectorPrefix20220606\Symfony\Contracts\Cache\ItemInterface ? $item->getMetadata() : [];
         if (!$recompute && $metadata) {
-            $expiry = $metadata[ItemInterface::METADATA_EXPIRY] ?? \false;
-            $ctime = $metadata[ItemInterface::METADATA_CTIME] ?? \false;
+            $expiry = $metadata[\RectorPrefix20220606\Symfony\Contracts\Cache\ItemInterface::METADATA_EXPIRY] ?? \false;
+            $ctime = $metadata[\RectorPrefix20220606\Symfony\Contracts\Cache\ItemInterface::METADATA_CTIME] ?? \false;
             if ($recompute = $ctime && $expiry && $expiry <= ($now = \microtime(\true)) - $ctime / 1000 * $beta * \log(\random_int(1, \PHP_INT_MAX) / \PHP_INT_MAX)) {
                 // force applying defaultLifetime to expiry
                 $item->expiresAt(null);

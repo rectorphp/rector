@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp81\Rector\Instanceof_;
+namespace Rector\DowngradePhp81\Rector\Instanceof_;
 
 use finfo;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Instanceof_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Instanceof_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/migration81.incompatible.php#migration81.incompatible.resource2object
  *
  * @see \Rector\Tests\DowngradePhp81\Rector\Instanceof_\DowngradePhp81ResourceReturnToObjectRector\DowngradePhp81ResourceReturnToObjectRectorTest
  */
-final class DowngradePhp81ResourceReturnToObjectRector extends AbstractRector
+final class DowngradePhp81ResourceReturnToObjectRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string[]|class-string<finfo>[]
@@ -44,13 +44,13 @@ final class DowngradePhp81ResourceReturnToObjectRector extends AbstractRector
      * @var \Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn
      */
     private $objectToResourceReturn;
-    public function __construct(ObjectToResourceReturn $objectToResourceReturn)
+    public function __construct(\Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn $objectToResourceReturn)
     {
         $this->objectToResourceReturn = $objectToResourceReturn;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('change instanceof Object to is_resource', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('change instanceof Object to is_resource', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($obj)
@@ -75,12 +75,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Instanceof_::class];
+        return [\PhpParser\Node\Expr\Instanceof_::class];
     }
     /**
      * @param Instanceof_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         return $this->objectToResourceReturn->refactor($node, self::COLLECTION_OBJECT_TO_RESOURCE);
     }

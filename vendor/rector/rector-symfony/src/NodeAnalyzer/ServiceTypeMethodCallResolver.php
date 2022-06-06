@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer;
+namespace Rector\Symfony\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\Symfony\DataProvider\ServiceMapProvider;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class ServiceTypeMethodCallResolver
 {
     /**
@@ -24,25 +24,25 @@ final class ServiceTypeMethodCallResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(ServiceMapProvider $serviceMapProvider, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->serviceMapProvider = $serviceMapProvider;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolve(MethodCall $methodCall) : ?Type
+    public function resolve(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PHPStan\Type\Type
     {
         if (!isset($methodCall->args[0])) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         $argument = $methodCall->getArgs()[0]->value;
         $serviceMap = $this->serviceMapProvider->provide();
-        if ($argument instanceof String_) {
+        if ($argument instanceof \PhpParser\Node\Scalar\String_) {
             return $serviceMap->getServiceType($argument->value);
         }
-        if ($argument instanceof ClassConstFetch && $argument->class instanceof Name) {
+        if ($argument instanceof \PhpParser\Node\Expr\ClassConstFetch && $argument->class instanceof \PhpParser\Node\Name) {
             $className = $this->nodeNameResolver->getName($argument->class);
-            return new ObjectType($className);
+            return new \PHPStan\Type\ObjectType($className);
         }
-        return new MixedType();
+        return new \PHPStan\Type\MixedType();
     }
 }

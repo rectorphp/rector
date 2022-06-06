@@ -56,7 +56,7 @@ final class ParallelProcess
      * @var int
      */
     private $timetoutInSeconds;
-    public function __construct(string $command, LoopInterface $loop, int $timetoutInSeconds)
+    public function __construct(string $command, \RectorPrefix20220606\React\EventLoop\LoopInterface $loop, int $timetoutInSeconds)
     {
         $this->command = $command;
         $this->loop = $loop;
@@ -71,16 +71,16 @@ final class ParallelProcess
     {
         $tmp = \tmpfile();
         if ($tmp === \false) {
-            throw new ParallelShouldNotHappenException('Failed creating temp file.');
+            throw new \RectorPrefix20220606\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException('Failed creating temp file.');
         }
         $this->stdErr = $tmp;
-        $this->process = new Process($this->command, null, null, [2 => $this->stdErr]);
+        $this->process = new \RectorPrefix20220606\React\ChildProcess\Process($this->command, null, null, [2 => $this->stdErr]);
         $this->process->start($this->loop);
         $this->onData = $onData;
         $this->onError = $onError;
-        $this->process->on(ReactEvent::EXIT, function ($exitCode) use($onExit) : void {
+        $this->process->on(\RectorPrefix20220606\Symplify\EasyParallel\Enum\ReactEvent::EXIT, function ($exitCode) use($onExit) : void {
             if ($this->stdErr === null) {
-                throw new ParallelShouldNotHappenException();
+                throw new \RectorPrefix20220606\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException();
             }
             $this->cancelTimer();
             \rewind($this->stdErr);
@@ -100,7 +100,7 @@ final class ParallelProcess
         $this->timer = $this->loop->addTimer($this->timetoutInSeconds, function () : void {
             $onError = $this->onError;
             $errorMessage = \sprintf('Child process timed out after %d seconds', $this->timetoutInSeconds);
-            $onError(new Exception($errorMessage));
+            $onError(new \Exception($errorMessage));
         });
     }
     public function quit() : void
@@ -115,22 +115,22 @@ final class ParallelProcess
         $this->encoder->end();
         $this->process->terminate();
     }
-    public function bindConnection(Decoder $decoder, Encoder $encoder) : void
+    public function bindConnection(\RectorPrefix20220606\Clue\React\NDJson\Decoder $decoder, \RectorPrefix20220606\Clue\React\NDJson\Encoder $encoder) : void
     {
-        $decoder->on(ReactEvent::DATA, function (array $json) : void {
+        $decoder->on(\RectorPrefix20220606\Symplify\EasyParallel\Enum\ReactEvent::DATA, function (array $json) : void {
             $this->cancelTimer();
-            if ($json[ReactCommand::ACTION] !== Action::RESULT) {
+            if ($json[\RectorPrefix20220606\Symplify\EasyParallel\Enum\ReactCommand::ACTION] !== \RectorPrefix20220606\Symplify\EasyParallel\Enum\Action::RESULT) {
                 return;
             }
             $onData = $this->onData;
-            $onData($json[Content::RESULT]);
+            $onData($json[\RectorPrefix20220606\Symplify\EasyParallel\Enum\Content::RESULT]);
         });
         $this->encoder = $encoder;
-        $decoder->on(ReactEvent::ERROR, function (Throwable $throwable) : void {
+        $decoder->on(\RectorPrefix20220606\Symplify\EasyParallel\Enum\ReactEvent::ERROR, function (\Throwable $throwable) : void {
             $onError = $this->onError;
             $onError($throwable);
         });
-        $encoder->on(ReactEvent::ERROR, function (Throwable $throwable) : void {
+        $encoder->on(\RectorPrefix20220606\Symplify\EasyParallel\Enum\ReactEvent::ERROR, function (\Throwable $throwable) : void {
             $onError = $this->onError;
             $onError($throwable);
         });

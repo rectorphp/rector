@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Rector\New_;
+namespace Rector\Symfony\Rector\New_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\New_;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/pull/27476
  * @see \Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
  */
-final class RootNodeTreeBuilderRector extends AbstractRector
+final class RootNodeTreeBuilderRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes  Process string argument to an array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes  Process string argument to an array', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 $treeBuilder = new TreeBuilder();
@@ -44,50 +44,50 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [New_::class];
+        return [\PhpParser\Node\Expr\New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->isObjectType($node->class, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+        if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
             return null;
         }
         if (isset($node->args[1])) {
             return null;
         }
         $rootMethodCallNode = $this->getRootMethodCallNode($node);
-        if (!$rootMethodCallNode instanceof MethodCall) {
+        if (!$rootMethodCallNode instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         $firstArg = $rootMethodCallNode->args[0];
-        if (!$firstArg instanceof Arg) {
+        if (!$firstArg instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $rootNameNode = $firstArg->value;
-        if (!$rootNameNode instanceof String_) {
+        if (!$rootNameNode instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         [$node->args, $rootMethodCallNode->args] = [$rootMethodCallNode->args, $node->args];
-        $rootMethodCallNode->name = new Identifier('getRootNode');
+        $rootMethodCallNode->name = new \PhpParser\Node\Identifier('getRootNode');
         return $node;
     }
-    private function getRootMethodCallNode(New_ $new) : ?Node
+    private function getRootMethodCallNode(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node
     {
         $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($new);
-        if (!$currentStmt instanceof Stmt) {
+        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
             return null;
         }
-        $nextExpression = $currentStmt->getAttribute(AttributeKey::NEXT_NODE);
+        $nextExpression = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         if ($nextExpression === null) {
             return null;
         }
-        return $this->betterNodeFinder->findFirst([$nextExpression], function (Node $node) : bool {
-            if (!$node instanceof MethodCall) {
+        return $this->betterNodeFinder->findFirst([$nextExpression], function (\PhpParser\Node $node) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return \false;
             }
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+            if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
                 return \false;
             }
             if (!$this->isName($node->name, 'root')) {

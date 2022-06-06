@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\NodeAnalyzer;
+namespace Rector\CodingStyle\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PHPStan\Reflection\FunctionReflection;
-use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
-use RectorPrefix20220606\PHPStan\Reflection\ParameterReflection;
-use RectorPrefix20220606\PHPStan\Reflection\ParametersAcceptorSelector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class SpreadVariablesCollector
 {
     /**
@@ -19,7 +19,7 @@ final class SpreadVariablesCollector
     public function resolveFromMethodReflection($functionLikeReflection) : array
     {
         $spreadParameterReflections = [];
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
         foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             if (!$parameterReflection->isVariadic()) {
                 continue;
@@ -31,14 +31,14 @@ final class SpreadVariablesCollector
     /**
      * @return array<int, Param>
      */
-    public function resolveFromClassMethod(ClassMethod $classMethod) : array
+    public function resolveFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         /** @var array<int, Param> $spreadParams */
         $spreadParams = [];
         foreach ($classMethod->params as $key => $param) {
             // prevent race-condition removal on class method
-            $originalParam = $param->getAttribute(AttributeKey::ORIGINAL_NODE);
-            if (!$originalParam instanceof Param) {
+            $originalParam = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+            if (!$originalParam instanceof \PhpParser\Node\Param) {
                 continue;
             }
             if (!$originalParam->variadic) {

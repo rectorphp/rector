@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\VersionBonding;
+namespace Rector\VersionBonding;
 
-use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 final class PhpVersionedFilter
 {
     /**
@@ -13,7 +13,7 @@ final class PhpVersionedFilter
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(PhpVersionProvider $phpVersionProvider)
+    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
@@ -27,7 +27,7 @@ final class PhpVersionedFilter
         $minProjectPhpVersion = $this->phpVersionProvider->provide();
         $activeRectors = [];
         foreach ($rectors as $rector) {
-            if (!$rector instanceof MinPhpVersionInterface) {
+            if (!$rector instanceof \Rector\VersionBonding\Contract\MinPhpVersionInterface) {
                 $activeRectors[] = $rector;
                 continue;
             }

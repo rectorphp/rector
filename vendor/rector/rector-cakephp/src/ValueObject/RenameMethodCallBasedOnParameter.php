@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CakePHP\ValueObject;
+namespace Rector\CakePHP\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectType;
 final class RenameMethodCallBasedOnParameter
 {
     /**
@@ -45,8 +45,8 @@ final class RenameMethodCallBasedOnParameter
     {
         return $this->newMethod;
     }
-    public function getOldObjectType() : ObjectType
+    public function getOldObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->oldClass);
+        return new \PHPStan\Type\ObjectType($this->oldClass);
     }
 }

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Type;
+namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Stringable;
-final class EmptyGenericTypeNode extends GenericTypeNode
+final class EmptyGenericTypeNode extends \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
 {
-    public function __construct(IdentifierTypeNode $identifierTypeNode)
+    public function __construct(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode)
     {
         parent::__construct($identifierTypeNode, []);
     }

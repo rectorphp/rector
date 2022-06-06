@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
+namespace Ssch\TYPO3Rector\Rector\v9\v0;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Deprecation-82438-DeprecationMethods.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\RefactorDeprecationLogRector\RefactorDeprecationLogRectorTest
  */
-final class RefactorDeprecationLogRector extends AbstractRector
+final class RefactorDeprecationLogRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * List of nodes this class checks, classes that implements \PhpParser\Node See beautiful map of all nodes
@@ -28,20 +28,20 @@ final class RefactorDeprecationLogRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $className = $this->getName($node->class);
         if ('TYPO3\\CMS\\Core\\Utility\\GeneralUtility' !== $className) {
             return null;
         }
-        $constFetch = new ConstFetch(new Name('E_USER_DEPRECATED'));
-        $usefulMessage = new String_('A useful message');
-        $emptyFallbackString = new String_('');
+        $constFetch = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('E_USER_DEPRECATED'));
+        $usefulMessage = new \PhpParser\Node\Scalar\String_('A useful message');
+        $emptyFallbackString = new \PhpParser\Node\Scalar\String_('');
         $arguments = $node->args;
         if ($this->isNames($node->name, ['logDeprecatedFunction', 'logDeprecatedViewHelperAttribute'])) {
             return $this->nodeFactory->createFuncCall('trigger_error', [$usefulMessage, $constFetch]);
@@ -57,9 +57,9 @@ final class RefactorDeprecationLogRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor GeneralUtility deprecationLog methods', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor GeneralUtility deprecationLog methods', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 GeneralUtility::logDeprecatedFunction();
 GeneralUtility::logDeprecatedViewHelperAttribute();
 GeneralUtility::deprecationLog('Message');

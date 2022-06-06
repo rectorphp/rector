@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPUnit\PhpDoc;
+namespace Rector\PHPUnit\PhpDoc;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\PhpParser\Node\NodeFactory;
 final class PhpDocValueToNodeMapper
 {
     /**
@@ -20,12 +20,12 @@ final class PhpDocValueToNodeMapper
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(NodeFactory $nodeFactory, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeFactory = $nodeFactory;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function mapGenericTagValueNode(GenericTagValueNode $genericTagValueNode) : Expr
+    public function mapGenericTagValueNode(\PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode $genericTagValueNode) : \PhpParser\Node\Expr
     {
         if (\strpos($genericTagValueNode->value, '::') !== \false) {
             [$class, $constant] = \explode('::', $genericTagValueNode->value);
@@ -35,6 +35,6 @@ final class PhpDocValueToNodeMapper
         if ($this->reflectionProvider->hasClass($reference)) {
             return $this->nodeFactory->createClassConstReference($reference);
         }
-        return new String_($reference);
+        return new \PhpParser\Node\Scalar\String_($reference);
     }
 }

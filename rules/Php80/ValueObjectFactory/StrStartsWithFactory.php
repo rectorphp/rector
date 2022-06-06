@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\ValueObjectFactory;
+namespace Rector\Php80\ValueObjectFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use RectorPrefix20220606\Rector\Php80\ValueObject\StrStartsWith;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Php80\ValueObject\StrStartsWith;
 final class StrStartsWithFactory
 {
     /**
@@ -14,11 +14,11 @@ final class StrStartsWithFactory
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function createFromFuncCall(FuncCall $funcCall, bool $isPositive) : ?StrStartsWith
+    public function createFromFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall, bool $isPositive) : ?\Rector\Php80\ValueObject\StrStartsWith
     {
         if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($funcCall->args, [0, 1])) {
             return null;
@@ -29,6 +29,6 @@ final class StrStartsWithFactory
         /** @var Arg $secondArg */
         $secondArg = $funcCall->args[1];
         $needle = $secondArg->value;
-        return new StrStartsWith($funcCall, $haystack, $needle, $isPositive);
+        return new \Rector\Php80\ValueObject\StrStartsWith($funcCall, $haystack, $needle, $isPositive);
     }
 }

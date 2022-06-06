@@ -1,34 +1,34 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Transform\NodeFactory;
+namespace Rector\Transform\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Exception\ShouldNotHappenException;
 final class UnwrapClosureFactory
 {
     /**
      * @return Node[]
      */
-    public function createAssign(Variable $resultVariable, Arg $arg) : array
+    public function createAssign(\PhpParser\Node\Expr\Variable $resultVariable, \PhpParser\Node\Arg $arg) : array
     {
         $argValue = $arg->value;
-        if ($argValue instanceof Closure) {
+        if ($argValue instanceof \PhpParser\Node\Expr\Closure) {
             $unwrappedNodes = $argValue->getStmts();
             \end($argValue->stmts);
             $lastStmtKey = \key($argValue->stmts);
             $lastStmt = $argValue->stmts[$lastStmtKey];
-            if ($lastStmt instanceof Return_ && $lastStmt->expr !== null) {
+            if ($lastStmt instanceof \PhpParser\Node\Stmt\Return_ && $lastStmt->expr !== null) {
                 unset($unwrappedNodes[$lastStmtKey]);
-                $unwrappedNodes[] = new Assign($resultVariable, $lastStmt->expr);
+                $unwrappedNodes[] = new \PhpParser\Node\Expr\Assign($resultVariable, $lastStmt->expr);
             }
             return $unwrappedNodes;
         }
-        throw new ShouldNotHappenException();
+        throw new \Rector\Core\Exception\ShouldNotHappenException();
     }
 }

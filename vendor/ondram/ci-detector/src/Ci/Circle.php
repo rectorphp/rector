@@ -6,19 +6,19 @@ namespace RectorPrefix20220606\OndraM\CiDetector\Ci;
 use RectorPrefix20220606\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220606\OndraM\CiDetector\Env;
 use RectorPrefix20220606\OndraM\CiDetector\TrinaryLogic;
-class Circle extends AbstractCi
+class Circle extends \RectorPrefix20220606\OndraM\CiDetector\Ci\AbstractCi
 {
-    public static function isDetected(Env $env) : bool
+    public static function isDetected(\RectorPrefix20220606\OndraM\CiDetector\Env $env) : bool
     {
         return $env->get('CIRCLECI') !== \false;
     }
     public function getCiName() : string
     {
-        return CiDetector::CI_CIRCLE;
+        return \RectorPrefix20220606\OndraM\CiDetector\CiDetector::CI_CIRCLE;
     }
-    public function isPullRequest() : TrinaryLogic
+    public function isPullRequest() : \RectorPrefix20220606\OndraM\CiDetector\TrinaryLogic
     {
-        return TrinaryLogic::createFromBoolean($this->env->getString('CI_PULL_REQUEST') !== '');
+        return \RectorPrefix20220606\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->getString('CI_PULL_REQUEST') !== '');
     }
     public function getBuildNumber() : string
     {

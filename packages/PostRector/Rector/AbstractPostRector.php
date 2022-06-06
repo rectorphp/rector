@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PostRector\Rector;
+namespace Rector\PostRector\Rector;
 
-use RectorPrefix20220606\PhpParser\NodeVisitorAbstract;
-use RectorPrefix20220606\Rector\PostRector\Contract\Rector\PostRectorInterface;
-abstract class AbstractPostRector extends NodeVisitorAbstract implements PostRectorInterface
+use PhpParser\NodeVisitorAbstract;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
+abstract class AbstractPostRector extends \PhpParser\NodeVisitorAbstract implements \Rector\PostRector\Contract\Rector\PostRectorInterface
 {
 }

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPOffice\Set;
+namespace Rector\PHPOffice\Set;
 
-use RectorPrefix20220606\Rector\Set\Contract\SetListInterface;
-final class PHPOfficeSetList implements SetListInterface
+use Rector\Set\Contract\SetListInterface;
+final class PHPOfficeSetList implements \Rector\Set\Contract\SetListInterface
 {
     /**
      * @var string

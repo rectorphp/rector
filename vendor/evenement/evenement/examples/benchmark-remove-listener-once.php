@@ -15,9 +15,9 @@ namespace RectorPrefix20220606;
 const ITERATIONS = 100000;
 use RectorPrefix20220606\Evenement\EventEmitter;
 require __DIR__ . '/../vendor/autoload.php';
-$emitter = new EventEmitter();
+$emitter = new \RectorPrefix20220606\Evenement\EventEmitter();
 $listeners = [];
-for ($i = 0; $i < \RectorPrefix20220606\ITERATIONS; $i++) {
+for ($i = 0; $i < \ITERATIONS; $i++) {
     $listeners[] = function ($a, $b, $c) {
     };
 }
@@ -26,10 +26,10 @@ foreach ($listeners as $listener) {
     $emitter->once('event', $listener);
 }
 $time = \microtime(\true) - $start;
-echo 'Adding ', \number_format(\RectorPrefix20220606\ITERATIONS), ' once listeners took: ', \number_format($time, 2), 's', \PHP_EOL;
+echo 'Adding ', \number_format(\ITERATIONS), ' once listeners took: ', \number_format($time, 2), 's', \PHP_EOL;
 $start = \microtime(\true);
 foreach ($listeners as $listener) {
     $emitter->removeListener('event', $listener);
 }
 $time = \microtime(\true) - $start;
-echo 'Removing ', \number_format(\RectorPrefix20220606\ITERATIONS), ' once listeners took: ', \number_format($time, 2), 's', \PHP_EOL;
+echo 'Removing ', \number_format(\ITERATIONS), ' once listeners took: ', \number_format($time, 2), 's', \PHP_EOL;

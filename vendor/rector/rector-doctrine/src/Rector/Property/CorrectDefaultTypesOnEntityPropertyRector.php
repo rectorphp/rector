@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\Rector\Property;
+namespace Rector\Doctrine\Rector\Property;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PhpParser\Node\Stmt\PropertyProperty;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20220606\Rector\Core\Exception\NotImplementedYetException;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector\CorrectDefaultTypesOnEntityPropertyRectorTest
  */
-final class CorrectDefaultTypesOnEntityPropertyRector extends AbstractRector
+final class CorrectDefaultTypesOnEntityPropertyRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change default value types to match Doctrine annotation type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change default value types to match Doctrine annotation type', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -58,21 +58,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\Column');
-        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return null;
         }
         $onlyProperty = $node->props[0];
         $defaultValue = $onlyProperty->default;
-        if (!$defaultValue instanceof Expr) {
+        if (!$defaultValue instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
@@ -84,33 +84,33 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorToBoolType(PropertyProperty $propertyProperty, Property $property) : ?Property
+    private function refactorToBoolType(\PhpParser\Node\Stmt\PropertyProperty $propertyProperty, \PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
     {
         if ($propertyProperty->default === null) {
             return null;
         }
         $defaultExpr = $propertyProperty->default;
-        if ($defaultExpr instanceof String_) {
+        if ($defaultExpr instanceof \PhpParser\Node\Scalar\String_) {
             $propertyProperty->default = \boolval($defaultExpr->value) ? $this->nodeFactory->createTrue() : $this->nodeFactory->createFalse();
             return $property;
         }
-        if ($defaultExpr instanceof ConstFetch || $defaultExpr instanceof ClassConstFetch) {
+        if ($defaultExpr instanceof \PhpParser\Node\Expr\ConstFetch || $defaultExpr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             // already ok
             return null;
         }
-        throw new NotImplementedYetException();
+        throw new \Rector\Core\Exception\NotImplementedYetException();
     }
-    private function refactorToIntType(PropertyProperty $propertyProperty, Property $property) : ?Property
+    private function refactorToIntType(\PhpParser\Node\Stmt\PropertyProperty $propertyProperty, \PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
     {
         if ($propertyProperty->default === null) {
             return null;
         }
         $defaultExpr = $propertyProperty->default;
-        if ($defaultExpr instanceof String_) {
-            $propertyProperty->default = new LNumber((int) $defaultExpr->value);
+        if ($defaultExpr instanceof \PhpParser\Node\Scalar\String_) {
+            $propertyProperty->default = new \PhpParser\Node\Scalar\LNumber((int) $defaultExpr->value);
             return $property;
         }
-        if ($defaultExpr instanceof LNumber) {
+        if ($defaultExpr instanceof \PhpParser\Node\Scalar\LNumber) {
             // already correct
             return null;
         }
@@ -118,6 +118,6 @@ CODE_SAMPLE
         if ($this->valueResolver->isNull($defaultExpr)) {
             return null;
         }
-        throw new NotImplementedYetException();
+        throw new \Rector\Core\Exception\NotImplementedYetException();
     }
 }

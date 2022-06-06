@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\Rector\Latte;
+namespace Rector\Nette\Rector\Latte;
 
-use RectorPrefix20220606\Rector\Nette\Contract\Rector\LatteRectorInterface;
-use RectorPrefix20220606\Rector\Nette\Latte\Parser\TemplateTypeParser;
-use RectorPrefix20220606\Rector\Nette\Latte\Parser\VarTypeParser;
-use RectorPrefix20220606\Rector\Renaming\Collector\MethodCallRenameCollector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Nette\Contract\Rector\LatteRectorInterface;
+use Rector\Nette\Latte\Parser\TemplateTypeParser;
+use Rector\Nette\Latte\Parser\VarTypeParser;
+use Rector\Renaming\Collector\MethodCallRenameCollector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\Latte\RenameMethodLatteRector\RenameMethodLatteRectorTest
  */
-final class RenameMethodLatteRector implements LatteRectorInterface
+final class RenameMethodLatteRector implements \Rector\Nette\Contract\Rector\LatteRectorInterface
 {
     /**
      * @readonly
@@ -29,15 +29,15 @@ final class RenameMethodLatteRector implements LatteRectorInterface
      * @var \Rector\Nette\Latte\Parser\VarTypeParser
      */
     private $varTypeParser;
-    public function __construct(MethodCallRenameCollector $methodCallRenameCollector, TemplateTypeParser $templateTypeParser, VarTypeParser $varTypeParser)
+    public function __construct(\Rector\Renaming\Collector\MethodCallRenameCollector $methodCallRenameCollector, \Rector\Nette\Latte\Parser\TemplateTypeParser $templateTypeParser, \Rector\Nette\Latte\Parser\VarTypeParser $varTypeParser)
     {
         $this->methodCallRenameCollector = $methodCallRenameCollector;
         $this->templateTypeParser = $templateTypeParser;
         $this->varTypeParser = $varTypeParser;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Renames method calls in LATTE templates', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Renames method calls in LATTE templates', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 {varType SomeClass $someClass}
 
 <div n:foreach="$someClass->oldCall() as $item"></div>

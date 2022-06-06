@@ -1,33 +1,33 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\TypeMapper;
+namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use RectorPrefix20220606\PHPStan\Type\Generic\GenericObjectType;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<ObjectType>
  */
-final class ObjectTypeMapper implements TypeMapperInterface
+final class ObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
 {
     /**
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
@@ -38,85 +38,85 @@ final class ObjectTypeMapper implements TypeMapperInterface
      */
     public function getNodeClass() : string
     {
-        return ObjectType::class;
+        return \PHPStan\Type\ObjectType::class;
     }
     /**
      * @param ObjectType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
-        if ($type instanceof ShortenedObjectType) {
-            return new IdentifierTypeNode($type->getClassName());
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
         }
-        if ($type instanceof AliasedObjectType) {
-            return new IdentifierTypeNode($type->getClassName());
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
         }
-        if ($type instanceof GenericObjectType) {
+        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             return $this->mapGenericObjectType($type, $typeKind);
         }
-        if ($type instanceof NonExistingObjectType) {
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType) {
             // possibly generic type
-            return new IdentifierTypeNode($type->getClassName());
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
         }
-        if ($type instanceof FullyQualifiedObjectType && \strncmp($type->getClassName(), '\\', \strlen('\\')) === 0) {
-            return new IdentifierTypeNode($type->getClassName());
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType && \strncmp($type->getClassName(), '\\', \strlen('\\')) === 0) {
+            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getClassName());
         }
-        return new IdentifierTypeNode('\\' . $type->getClassName());
+        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('\\' . $type->getClassName());
     }
     /**
      * @param ObjectType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
+    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
     {
-        if ($type instanceof SelfObjectType) {
-            return new Name('self');
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType) {
+            return new \PhpParser\Node\Name('self');
         }
-        if ($type instanceof ShortenedObjectType) {
-            return new FullyQualified($type->getFullyQualifiedName());
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
+            return new \PhpParser\Node\Name\FullyQualified($type->getFullyQualifiedName());
         }
-        if ($type instanceof AliasedObjectType) {
-            return new Name($type->getClassName());
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+            return new \PhpParser\Node\Name($type->getClassName());
         }
-        if ($type instanceof FullyQualifiedObjectType) {
+        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
             $className = $type->getClassName();
             if (\strncmp($className, '\\', \strlen('\\')) === 0) {
                 // skip leading \
-                return new FullyQualified(Strings::substring($className, 1));
+                return new \PhpParser\Node\Name\FullyQualified(\RectorPrefix20220606\Nette\Utils\Strings::substring($className, 1));
             }
-            return new FullyQualified($className);
+            return new \PhpParser\Node\Name\FullyQualified($className);
         }
-        if (!$type instanceof GenericObjectType) {
+        if (!$type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             // fallback
-            return new FullyQualified($type->getClassName());
+            return new \PhpParser\Node\Name\FullyQualified($type->getClassName());
         }
         if ($type->getClassName() === 'iterable') {
             // fallback
-            return new Name('iterable');
+            return new \PhpParser\Node\Name('iterable');
         }
         if ($type->getClassName() !== 'object') {
             // fallback
-            return new FullyQualified($type->getClassName());
+            return new \PhpParser\Node\Name\FullyQualified($type->getClassName());
         }
-        return new Name('object');
+        return new \PhpParser\Node\Name('object');
     }
     /**
      * @required
      */
-    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
+    public function autowire(\Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper $phpStanStaticTypeMapper) : void
     {
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
     /**
      * @param TypeKind::* $typeKind
      */
-    private function mapGenericObjectType(GenericObjectType $genericObjectType, string $typeKind) : TypeNode
+    private function mapGenericObjectType(\PHPStan\Type\Generic\GenericObjectType $genericObjectType, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
     {
         $name = $this->resolveGenericObjectTypeName($genericObjectType);
-        $identifierTypeNode = new IdentifierTypeNode($name);
+        $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($name);
         $genericTypeNodes = [];
         foreach ($genericObjectType->getTypes() as $key => $genericType) {
             // mixed type on 1st item in iterator has no value
-            if ($name === 'Iterator' && $genericType instanceof MixedType && $key === 0) {
+            if ($name === 'Iterator' && $genericType instanceof \PHPStan\Type\MixedType && $key === 0) {
                 continue;
             }
             $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType, $typeKind);
@@ -125,11 +125,11 @@ final class ObjectTypeMapper implements TypeMapperInterface
         if ($genericTypeNodes === []) {
             return $identifierTypeNode;
         }
-        return new GenericTypeNode($identifierTypeNode, $genericTypeNodes);
+        return new \PHPStan\PhpDocParser\Ast\Type\GenericTypeNode($identifierTypeNode, $genericTypeNodes);
     }
-    private function resolveGenericObjectTypeName(GenericObjectType $genericObjectType) : string
+    private function resolveGenericObjectTypeName(\PHPStan\Type\Generic\GenericObjectType $genericObjectType) : string
     {
-        if ($genericObjectType instanceof FullyQualifiedGenericObjectType) {
+        if ($genericObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType) {
             return '\\' . $genericObjectType->getClassName();
         }
         if (\strpos($genericObjectType->getClassName(), '\\') !== \false) {

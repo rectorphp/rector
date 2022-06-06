@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\Rector\Property;
+namespace Rector\Doctrine\Rector\Property;
 
 use RectorPrefix20220606\Doctrine\ORM\Mapping\Embedded;
 use RectorPrefix20220606\Doctrine\ORM\Mapping\ManyToMany;
 use RectorPrefix20220606\Doctrine\ORM\Mapping\ManyToOne;
 use RectorPrefix20220606\Doctrine\ORM\Mapping\OneToMany;
 use RectorPrefix20220606\Doctrine\ORM\Mapping\OneToOne;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Attribute;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer\AttributeFinder;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Doctrine\Tests\Rector\Property\DoctrineTargetEntityStringToClassConstantRector\DoctrineTargetEntityStringToClassConstantRectorTest
  */
-final class DoctrineTargetEntityStringToClassConstantRector extends AbstractRector
+final class DoctrineTargetEntityStringToClassConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     private const ATTRIBUTE_NAME__TARGET_ENTITY = 'targetEntity';
     private const ATTRIBUTE_NAME__CLASS = 'class';
@@ -40,14 +40,14 @@ final class DoctrineTargetEntityStringToClassConstantRector extends AbstractRect
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;
-    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher, AttributeFinder $attributeFinder)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder)
     {
         $this->classAnnotationMatcher = $classAnnotationMatcher;
         $this->attributeFinder = $attributeFinder;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert targetEntities defined as String to <class>::class Constants in Doctrine Entities.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert targetEntities defined as String to <class>::class Constants in Doctrine Entities.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -75,12 +75,12 @@ CODE_SAMPLE
     }
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
@@ -90,16 +90,16 @@ CODE_SAMPLE
         }
         return $this->changeTypeInAttributeTypes($node, $hasChanged);
     }
-    private function changeTypeInAttributeTypes(Property $property, bool $hasChanged) : ?Property
+    private function changeTypeInAttributeTypes(\PhpParser\Node\Stmt\Property $property, bool $hasChanged) : ?\PhpParser\Node\Stmt\Property
     {
         $attribute = $this->attributeFinder->findAttributeByClasses($property, $this->getAttributeClasses());
-        if (!$attribute instanceof Attribute) {
+        if (!$attribute instanceof \PhpParser\Node\Attribute) {
             return $hasChanged ? $property : null;
         }
         $attributeName = $this->getAttributeName($attribute);
         foreach ($attribute->args as $arg) {
             $argName = $arg->name;
-            if (!$argName instanceof Identifier) {
+            if (!$argName instanceof \PhpParser\Node\Identifier) {
                 continue;
             }
             if (!$this->isName($argName, $attributeName)) {
@@ -116,15 +116,15 @@ CODE_SAMPLE
         }
         return $hasChanged ? $property : null;
     }
-    private function changeTypeInAnnotationTypes(Property $property, PhpDocInfo $phpDocInfo) : ?Property
+    private function changeTypeInAnnotationTypes(\PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?\PhpParser\Node\Stmt\Property
     {
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses($this->getAttributeClasses());
-        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return null;
         }
         return $this->processDoctrineToMany($doctrineAnnotationTagValueNode, $property);
     }
-    private function processDoctrineToMany(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, Property $property) : ?Property
+    private function processDoctrineToMany(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
     {
         $key = $doctrineAnnotationTagValueNode->hasClassName('Doctrine\\ORM\\Mapping\\Embedded') ? self::ATTRIBUTE_NAME__CLASS : self::ATTRIBUTE_NAME__TARGET_ENTITY;
         /** @var ?string $targetEntity */
@@ -148,7 +148,7 @@ CODE_SAMPLE
     {
         return \array_keys(self::VALID_DOCTRINE_CLASSES);
     }
-    private function getAttributeName(Attribute $attribute) : string
+    private function getAttributeName(\PhpParser\Node\Attribute $attribute) : string
     {
         return self::VALID_DOCTRINE_CLASSES[$attribute->name->toString()];
     }

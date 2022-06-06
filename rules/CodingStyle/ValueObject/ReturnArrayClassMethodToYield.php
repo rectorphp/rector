@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\ValueObject;
+namespace Rector\CodingStyle\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 final class ReturnArrayClassMethodToYield
 {
     /**
@@ -21,11 +21,11 @@ final class ReturnArrayClassMethodToYield
     {
         $this->type = $type;
         $this->method = $method;
-        RectorAssert::className($type);
+        \Rector\Core\Validation\RectorAssert::className($type);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     public function getMethod() : string
     {

@@ -15,7 +15,7 @@ namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument;
  *
  * @author Titouan Galopin <galopintitouan@gmail.com>
  */
-class IteratorArgument implements ArgumentInterface
+class IteratorArgument implements \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
 {
     /**
      * @var mixed[]

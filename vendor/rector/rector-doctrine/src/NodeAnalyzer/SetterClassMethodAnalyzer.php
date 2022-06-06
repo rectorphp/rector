@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer;
+namespace Rector\Doctrine\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Reflection\Php\PhpPropertyReflection;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\Php\PhpPropertyReflection;
+use PHPStan\Type\ObjectType;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SetterClassMethodAnalyzer
 {
     /**
@@ -40,25 +40,25 @@ final class SetterClassMethodAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionResolver = $reflectionResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function matchNullalbeClassMethodProperty(ClassMethod $classMethod) : ?Property
+    public function matchNullalbeClassMethodProperty(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\Property
     {
         $propertyFetch = $this->matchNullalbeClassMethodPropertyFetch($classMethod);
-        if (!$propertyFetch instanceof PropertyFetch) {
+        if (!$propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return null;
         }
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
-        if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
+        if (!$phpPropertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
             return null;
         }
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
         $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch->name);
@@ -69,20 +69,20 @@ final class SetterClassMethodAnalyzer
      *
      * public function setSomething(?Type $someValue); { <$this->someProperty> = $someValue; }
      */
-    private function matchNullalbeClassMethodPropertyFetch(ClassMethod $classMethod) : ?PropertyFetch
+    private function matchNullalbeClassMethodPropertyFetch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr\PropertyFetch
     {
         $propertyFetch = $this->matchSetterOnlyPropertyFetch($classMethod);
-        if (!$propertyFetch instanceof PropertyFetch) {
+        if (!$propertyFetch instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return null;
         }
         // is nullable param
         $onlyParam = $classMethod->params[0];
-        if (!$this->nodeTypeResolver->isNullableTypeOfSpecificType($onlyParam, ObjectType::class)) {
+        if (!$this->nodeTypeResolver->isNullableTypeOfSpecificType($onlyParam, \PHPStan\Type\ObjectType::class)) {
             return null;
         }
         return $propertyFetch;
     }
-    private function matchSetterOnlyPropertyFetch(ClassMethod $classMethod) : ?PropertyFetch
+    private function matchSetterOnlyPropertyFetch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr\PropertyFetch
     {
         if (\count($classMethod->params) !== 1) {
             return null;
@@ -92,16 +92,16 @@ final class SetterClassMethodAnalyzer
             return null;
         }
         $onlyStmt = $stmts[0] ?? null;
-        if (!$onlyStmt instanceof Stmt) {
+        if (!$onlyStmt instanceof \PhpParser\Node\Stmt) {
             return null;
         }
-        if ($onlyStmt instanceof Expression) {
+        if ($onlyStmt instanceof \PhpParser\Node\Stmt\Expression) {
             $onlyStmt = $onlyStmt->expr;
         }
-        if (!$onlyStmt instanceof Assign) {
+        if (!$onlyStmt instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
-        if (!$onlyStmt->var instanceof PropertyFetch) {
+        if (!$onlyStmt->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return null;
         }
         $propertyFetch = $onlyStmt->var;
@@ -110,9 +110,9 @@ final class SetterClassMethodAnalyzer
         }
         return $propertyFetch;
     }
-    private function isVariableName(?Node $node, string $name) : bool
+    private function isVariableName(?\PhpParser\Node $node, string $name) : bool
     {
-        if (!$node instanceof Variable) {
+        if (!$node instanceof \PhpParser\Node\Expr\Variable) {
             return \false;
         }
         return $this->nodeNameResolver->isName($node, $name);

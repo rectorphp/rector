@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Transform\ValueObject;
+namespace Rector\Transform\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectType;
 final class NewToMethodCall
 {
     /**
@@ -27,13 +27,13 @@ final class NewToMethodCall
         $this->serviceType = $serviceType;
         $this->serviceMethod = $serviceMethod;
     }
-    public function getNewObjectType() : ObjectType
+    public function getNewObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->newType);
+        return new \PHPStan\Type\ObjectType($this->newType);
     }
-    public function getServiceObjectType() : ObjectType
+    public function getServiceObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->serviceType);
+        return new \PHPStan\Type\ObjectType($this->serviceType);
     }
     public function getServiceMethod() : string
     {

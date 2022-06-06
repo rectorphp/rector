@@ -9,7 +9,7 @@ namespace RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-class ConditionalStatement extends Statement
+class ConditionalStatement extends \Helmich\TypoScriptParser\Parser\AST\Statement
 {
     /**
      * The condition to evaluate.

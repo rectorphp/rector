@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DependencyInjection\Collector;
+namespace Rector\DependencyInjection\Collector;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectType;
 final class VariablesToPropertyFetchCollection
 {
     /**
      * @var array<string, ObjectType>
      */
     private $variableNameAndType = [];
-    public function addVariableNameAndType(string $name, ObjectType $objectType) : void
+    public function addVariableNameAndType(string $name, \PHPStan\Type\ObjectType $objectType) : void
     {
         $this->variableNameAndType[$name] = $objectType;
     }

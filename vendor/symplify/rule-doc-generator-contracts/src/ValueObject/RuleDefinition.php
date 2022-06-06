@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject;
+namespace Symplify\RuleDocGenerator\ValueObject;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\Contract\CodeSampleInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\Exception\PoorDocumentationException;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\Contract\CodeSampleInterface;
+use Symplify\RuleDocGenerator\Exception\PoorDocumentationException;
+use Symplify\RuleDocGenerator\Exception\ShouldNotHappenException;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 final class RuleDefinition
 {
     /**
@@ -33,7 +33,7 @@ final class RuleDefinition
     {
         $this->description = $description;
         if ($codeSamples === []) {
-            throw new PoorDocumentationException('Provide at least one code sample, so people can practically see what the rule does');
+            throw new \Symplify\RuleDocGenerator\Exception\PoorDocumentationException('Provide at least one code sample, so people can practically see what the rule does');
         }
         $this->codeSamples = $codeSamples;
     }
@@ -48,7 +48,7 @@ final class RuleDefinition
     public function getRuleClass() : string
     {
         if ($this->ruleClass === null) {
-            throw new ShouldNotHappenException();
+            throw new \Symplify\RuleDocGenerator\Exception\ShouldNotHappenException();
         }
         return $this->ruleClass;
     }
@@ -60,16 +60,16 @@ final class RuleDefinition
     public function getRuleFilePath() : string
     {
         if ($this->ruleFilePath === null) {
-            throw new ShouldNotHappenException();
+            throw new \Symplify\RuleDocGenerator\Exception\ShouldNotHappenException();
         }
         return $this->ruleFilePath;
     }
     public function getRuleShortClass() : string
     {
         if ($this->ruleClass === null) {
-            throw new ShouldNotHappenException();
+            throw new \Symplify\RuleDocGenerator\Exception\ShouldNotHappenException();
         }
-        return (string) Strings::after($this->ruleClass, '\\', -1);
+        return (string) \RectorPrefix20220606\Nette\Utils\Strings::after($this->ruleClass, '\\', -1);
     }
     /**
      * @return CodeSampleInterface[]
@@ -81,7 +81,7 @@ final class RuleDefinition
     public function isConfigurable() : bool
     {
         foreach ($this->codeSamples as $codeSample) {
-            if ($codeSample instanceof ConfiguredCodeSample) {
+            if ($codeSample instanceof \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample) {
                 return \true;
             }
         }

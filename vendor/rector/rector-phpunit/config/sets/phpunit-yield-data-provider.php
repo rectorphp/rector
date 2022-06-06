@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use RectorPrefix20220606\Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
-use RectorPrefix20220606\Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
-use RectorPrefix20220606\Rector\Config\RectorConfig;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(ReturnArrayClassMethodToYieldRector::class, [new ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'provide*'), new ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'dataProvider*')]);
+use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
+use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
+use Rector\Config\RectorConfig;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->ruleWithConfiguration(\Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector::class, [new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'provide*'), new \Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'dataProvider*')]);
 };

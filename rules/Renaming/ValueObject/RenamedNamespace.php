@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Renaming\ValueObject;
+namespace Rector\Renaming\ValueObject;
 
 final class RenamedNamespace
 {

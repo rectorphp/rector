@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Rector\ClassMethod;
+namespace Rector\Symfony\Rector\ClassMethod;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
 use RectorPrefix20220606\Symfony\Component\String\UnicodeString;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md#form
  *
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector\RemoveDefaultGetBlockPrefixRectorTest
  */
-final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
+final class RemoveDefaultGetBlockPrefixRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Form\AbstractType;
 
 class TaskType extends AbstractType
@@ -50,23 +50,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isObjectMethodNameMatch($node)) {
             return null;
         }
         $returnedExpr = $this->resolveOnlyStmtReturnExpr($node);
-        if (!$returnedExpr instanceof Expr) {
+        if (!$returnedExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $returnedValue = $this->valueResolver->getValue($returnedExpr);
-        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
         $className = $this->nodeNameResolver->getName($classLike);
@@ -75,9 +75,9 @@ CODE_SAMPLE
         }
         $shortClassName = $this->nodeNameResolver->getShortName($className);
         if (\substr_compare($shortClassName, 'Type', -\strlen('Type')) === 0) {
-            $shortClassName = (string) Strings::before($shortClassName, 'Type');
+            $shortClassName = (string) \RectorPrefix20220606\Nette\Utils\Strings::before($shortClassName, 'Type');
         }
-        $shortClassNameUnicodeString = new UnicodeString($shortClassName);
+        $shortClassNameUnicodeString = new \RectorPrefix20220606\Symfony\Component\String\UnicodeString($shortClassName);
         $underscoredClassShortName = $shortClassNameUnicodeString->snake()->toString();
         if ($underscoredClassShortName !== $returnedValue) {
             return null;
@@ -85,13 +85,13 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function isObjectMethodNameMatch(ClassMethod $classMethod) : bool
+    private function isObjectMethodNameMatch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$class instanceof Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
-        if (!$this->isObjectType($classMethod, new ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
+        if (!$this->isObjectType($classMethod, new \PHPStan\Type\ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
             return \false;
         }
         return $this->isName($classMethod->name, 'getBlockPrefix');
@@ -99,16 +99,16 @@ CODE_SAMPLE
     /**
      * return <$thisValue>;
      */
-    private function resolveOnlyStmtReturnExpr(ClassMethod $classMethod) : ?Expr
+    private function resolveOnlyStmtReturnExpr(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr
     {
         if (\count((array) $classMethod->stmts) !== 1) {
             return null;
         }
         if (!isset($classMethod->stmts[0])) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $onlyStmt = $classMethod->stmts[0];
-        if (!$onlyStmt instanceof Return_) {
+        if (!$onlyStmt instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }
         return $onlyStmt->expr;

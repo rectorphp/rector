@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v3;
+namespace Ssch\TYPO3Rector\Rector\v9\v3;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.3/Deprecation-85113-LegacyBackendModuleRoutingMethods.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v3\BackendUtilityGetModuleUrlRector\BackendUtilityGetModuleUrlRectorTest
  */
-final class BackendUtilityGetModuleUrlRector extends AbstractRector
+final class BackendUtilityGetModuleUrlRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Utility\\BackendUtility'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getModuleUrl')) {
@@ -31,7 +31,7 @@ final class BackendUtilityGetModuleUrlRector extends AbstractRector
         /** @var Arg[] $args */
         $args = $node->args;
         $firstArgument = \array_shift($args);
-        if (!$firstArgument instanceof Arg) {
+        if (!$firstArgument instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $secondArgument = \array_shift($args);
@@ -42,14 +42,14 @@ final class BackendUtilityGetModuleUrlRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrate the method BackendUtility::getModuleUrl() to use UriBuilder API', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrate the method BackendUtility::getModuleUrl() to use UriBuilder API', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $moduleName = 'record_edit';
 $params = ['pid' => 2];
 $url = BackendUtility::getModuleUrl($moduleName, $params);
@@ -61,7 +61,7 @@ $url = GeneralUtility::makeInstance(UriBuilder::class)->buildUriFromRoute($modul
 CODE_SAMPLE
 )]);
     }
-    private function createUriBuilderCall(Arg $firstArgument, ?Arg $secondArgument) : MethodCall
+    private function createUriBuilderCall(\PhpParser\Node\Arg $firstArgument, ?\PhpParser\Node\Arg $secondArgument) : \PhpParser\Node\Expr\MethodCall
     {
         $buildUriArguments = [$firstArgument->value];
         if (null !== $secondArgument) {

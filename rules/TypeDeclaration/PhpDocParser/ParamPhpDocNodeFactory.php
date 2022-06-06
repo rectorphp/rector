@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\PhpDocParser;
+namespace Rector\TypeDeclaration\PhpDocParser;
 
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Param;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class ParamPhpDocNodeFactory
 {
     /**
@@ -14,12 +14,12 @@ final class ParamPhpDocNodeFactory
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function create(TypeNode $typeNode, Param $param) : ParamTagValueNode
+    public function create(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node\Param $param) : \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode
     {
-        return new ParamTagValueNode($typeNode, $param->variadic, '$' . $this->nodeNameResolver->getName($param), '');
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode($typeNode, $param->variadic, '$' . $this->nodeNameResolver->getName($param), '');
     }
 }

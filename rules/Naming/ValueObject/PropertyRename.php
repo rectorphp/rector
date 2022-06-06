@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\ValueObject;
+namespace Rector\Naming\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PhpParser\Node\Stmt\PropertyProperty;
-use RectorPrefix20220606\Rector\Naming\Contract\RenamePropertyValueObjectInterface;
-final class PropertyRename implements RenamePropertyValueObjectInterface
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\Naming\Contract\RenamePropertyValueObjectInterface;
+final class PropertyRename implements \Rector\Naming\Contract\RenamePropertyValueObjectInterface
 {
     /**
      * @readonly
@@ -39,7 +39,7 @@ final class PropertyRename implements RenamePropertyValueObjectInterface
      * @var \PhpParser\Node\Stmt\PropertyProperty
      */
     private $propertyProperty;
-    public function __construct(Property $property, string $expectedName, string $currentName, ClassLike $classLike, string $classLikeName, PropertyProperty $propertyProperty)
+    public function __construct(\PhpParser\Node\Stmt\Property $property, string $expectedName, string $currentName, \PhpParser\Node\Stmt\ClassLike $classLike, string $classLikeName, \PhpParser\Node\Stmt\PropertyProperty $propertyProperty)
     {
         $this->property = $property;
         $this->expectedName = $expectedName;
@@ -48,7 +48,7 @@ final class PropertyRename implements RenamePropertyValueObjectInterface
         $this->classLikeName = $classLikeName;
         $this->propertyProperty = $propertyProperty;
     }
-    public function getProperty() : Property
+    public function getProperty() : \PhpParser\Node\Stmt\Property
     {
         return $this->property;
     }
@@ -68,7 +68,7 @@ final class PropertyRename implements RenamePropertyValueObjectInterface
     {
         return $this->currentName === $this->expectedName;
     }
-    public function getClassLike() : ClassLike
+    public function getClassLike() : \PhpParser\Node\Stmt\ClassLike
     {
         return $this->classLike;
     }
@@ -76,7 +76,7 @@ final class PropertyRename implements RenamePropertyValueObjectInterface
     {
         return $this->classLikeName;
     }
-    public function getPropertyProperty() : PropertyProperty
+    public function getPropertyProperty() : \PhpParser\Node\Stmt\PropertyProperty
     {
         return $this->propertyProperty;
     }

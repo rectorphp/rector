@@ -1,59 +1,59 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp80\Reflection;
+namespace Rector\DowngradePhp80\Reflection;
 
-use RectorPrefix20220606\PhpParser\BuilderHelpers;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PHPStan\Reflection\ParameterReflection;
-use RectorPrefix20220606\PHPStan\Type\Constant\ConstantArrayType;
-use RectorPrefix20220606\PHPStan\Type\Constant\ConstantBooleanType;
-use RectorPrefix20220606\PHPStan\Type\ConstantType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\VerbosityLevel;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use PhpParser\BuilderHelpers;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PHPStan\Reflection\ParameterReflection;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantBooleanType;
+use PHPStan\Type\ConstantType;
+use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
+use Rector\Core\Exception\ShouldNotHappenException;
 final class DefaultParameterValueResolver
 {
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    public function resolveFromParameterReflection(ParameterReflection $parameterReflection)
+    public function resolveFromParameterReflection(\PHPStan\Reflection\ParameterReflection $parameterReflection)
     {
         $defaultValue = $parameterReflection->getDefaultValue();
-        if (!$defaultValue instanceof Type) {
+        if (!$defaultValue instanceof \PHPStan\Type\Type) {
             return null;
         }
-        if (!$defaultValue instanceof ConstantType) {
-            throw new ShouldNotHappenException();
+        if (!$defaultValue instanceof \PHPStan\Type\ConstantType) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $this->resolveValueFromType($defaultValue);
     }
     /**
      * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr
      */
-    private function resolveValueFromType(ConstantType $constantType)
+    private function resolveValueFromType(\PHPStan\Type\ConstantType $constantType)
     {
-        if ($constantType instanceof ConstantBooleanType) {
+        if ($constantType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
             return $this->resolveConstantBooleanType($constantType);
         }
-        if ($constantType instanceof ConstantArrayType) {
+        if ($constantType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             $values = [];
             foreach ($constantType->getValueTypes() as $valueType) {
-                if (!$valueType instanceof ConstantType) {
-                    throw new ShouldNotHappenException();
+                if (!$valueType instanceof \PHPStan\Type\ConstantType) {
+                    throw new \Rector\Core\Exception\ShouldNotHappenException();
                 }
                 $values[] = $this->resolveValueFromType($valueType);
             }
-            return BuilderHelpers::normalizeValue($values);
+            return \PhpParser\BuilderHelpers::normalizeValue($values);
         }
-        return BuilderHelpers::normalizeValue($constantType->getValue());
+        return \PhpParser\BuilderHelpers::normalizeValue($constantType->getValue());
     }
-    private function resolveConstantBooleanType(ConstantBooleanType $constantBooleanType) : ConstFetch
+    private function resolveConstantBooleanType(\PHPStan\Type\Constant\ConstantBooleanType $constantBooleanType) : \PhpParser\Node\Expr\ConstFetch
     {
-        $value = $constantBooleanType->describe(VerbosityLevel::value());
-        $name = new Name($value);
-        return new ConstFetch($name);
+        $value = $constantBooleanType->describe(\PHPStan\Type\VerbosityLevel::value());
+        $name = new \PhpParser\Node\Name($value);
+        return new \PhpParser\Node\Expr\ConstFetch($name);
     }
 }

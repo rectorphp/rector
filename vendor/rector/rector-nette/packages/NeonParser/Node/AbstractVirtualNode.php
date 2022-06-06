@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\NeonParser\Node;
+namespace Rector\Nette\NeonParser\Node;
 
 use RectorPrefix20220606\Nette\Neon\Node;
-use RectorPrefix20220606\Rector\Nette\NeonParser\Exception\UnusedVirtualMethodException;
-abstract class AbstractVirtualNode extends Node
+use Rector\Nette\NeonParser\Exception\UnusedVirtualMethodException;
+abstract class AbstractVirtualNode extends \RectorPrefix20220606\Nette\Neon\Node
 {
     /**
      * @return mixed
@@ -13,11 +13,11 @@ abstract class AbstractVirtualNode extends Node
     public function toValue()
     {
         // never used, just to make parent contract happy
-        throw new UnusedVirtualMethodException();
+        throw new \Rector\Nette\NeonParser\Exception\UnusedVirtualMethodException();
     }
     public function toString() : string
     {
         // never used, just to make parent contract happy
-        throw new UnusedVirtualMethodException();
+        throw new \Rector\Nette\NeonParser\Exception\UnusedVirtualMethodException();
     }
 }

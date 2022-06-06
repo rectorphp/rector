@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\FlexForms;
+namespace Ssch\TYPO3Rector\FileProcessor\FlexForms;
 
 use DOMDocument;
 use Exception;
-use RectorPrefix20220606\Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
-use RectorPrefix20220606\Rector\Core\Contract\Processor\FileProcessorInterface;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\Core\ValueObject\Configuration;
-use RectorPrefix20220606\Rector\Core\ValueObject\Error\SystemError;
-use RectorPrefix20220606\Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix20220606\Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\FlexForms\Rector\FlexFormRectorInterface;
+use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
+use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Parallel\ValueObject\Bridge;
+use Ssch\TYPO3Rector\Contract\FileProcessor\FlexForms\Rector\FlexFormRectorInterface;
 use UnexpectedValueException;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\FlexForms\FlexFormsProcessorTest
  */
-final class FlexFormsProcessor implements FileProcessorInterface
+final class FlexFormsProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var FlexFormRectorInterface[]
@@ -32,7 +32,7 @@ final class FlexFormsProcessor implements FileProcessorInterface
     /**
      * @param FlexFormRectorInterface[] $flexFormRectors
      */
-    public function __construct(array $flexFormRectors, FileDiffFactory $fileDiffFactory)
+    public function __construct(array $flexFormRectors, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory)
     {
         $this->flexFormRectors = $flexFormRectors;
         $this->fileDiffFactory = $fileDiffFactory;
@@ -40,11 +40,11 @@ final class FlexFormsProcessor implements FileProcessorInterface
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration) : array
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
-        $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
+        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         $oldFileContents = $file->getFileContent();
-        $domDocument = new DOMDocument();
+        $domDocument = new \DOMDocument();
         $domDocument->formatOutput = \true;
         $domDocument->loadXML($oldFileContents);
         $hasChanged = \false;
@@ -56,7 +56,7 @@ final class FlexFormsProcessor implements FileProcessorInterface
         }
         $xml = $domDocument->saveXML($domDocument->documentElement, \LIBXML_NOEMPTYTAG);
         if (\false === $xml) {
-            throw new UnexpectedValueException('Could not convert to xml');
+            throw new \UnexpectedValueException('Could not convert to xml');
         }
         // add end of line
         $xml .= \PHP_EOL;
@@ -67,10 +67,10 @@ final class FlexFormsProcessor implements FileProcessorInterface
         $newFileContent = \html_entity_decode($xml);
         $file->changeFileContent($newFileContent);
         $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldFileContents, $newFileContent);
-        $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS][] = $fileDiff;
+        $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS][] = $fileDiff;
         return $systemErrorsAndFileDiffs;
     }
-    public function supports(File $file, Configuration $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         // avoid empty run
         if ([] === $this->flexFormRectors) {
@@ -83,7 +83,7 @@ final class FlexFormsProcessor implements FileProcessorInterface
         $fileContent = $file->getFileContent();
         try {
             $xml = @\simplexml_load_string($fileContent);
-        } catch (Exception $exception) {
+        } catch (\Exception $exception) {
             return \false;
         }
         if (\false === $xml) {

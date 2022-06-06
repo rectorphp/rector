@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Helper;
+namespace Rector\Symfony\Helper;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\Symfony\BundleClassResolver;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Symfony\BundleClassResolver;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */
@@ -50,24 +50,24 @@ final class TemplateGuesser
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(BundleClassResolver $bundleClassResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Symfony\BundleClassResolver $bundleClassResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->bundleClassResolver = $bundleClassResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolveFromClassMethod(ClassMethod $classMethod) : string
+    public function resolveFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : string
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            throw new ShouldNotHappenException();
+        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $namespace = $scope->getNamespace();
         if (!\is_string($namespace)) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $className = ($getClassReflection = $scope->getClassReflection()) ? $getClassReflection->getName() : null;
         if (!\is_string($className)) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
@@ -80,7 +80,7 @@ final class TemplateGuesser
     {
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
-        $action = Strings::replace($method, self::ACTION_MATCH_REGEX, '');
+        $action = \RectorPrefix20220606\Nette\Utils\Strings::replace($method, self::ACTION_MATCH_REGEX, '');
         $fullPath = '';
         if ($bundle !== '') {
             $fullPath .= $bundle . '/';
@@ -96,17 +96,17 @@ final class TemplateGuesser
         if ($shortBundleClass !== null) {
             return '@' . $shortBundleClass;
         }
-        $bundle = Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
-        $bundle = Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX, '');
+        $bundle = \RectorPrefix20220606\Nette\Utils\Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
+        $bundle = \RectorPrefix20220606\Nette\Utils\Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX, '');
         return $bundle !== '' ? '@' . $bundle : '';
     }
     private function resolveController(string $class) : string
     {
-        $match = Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
+        $match = \RectorPrefix20220606\Nette\Utils\Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
         if ($match === null) {
             return '';
         }
-        $controller = Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
+        $controller = \RectorPrefix20220606\Nette\Utils\Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
         return \str_replace('\\', '/', $controller);
     }
 }

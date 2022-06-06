@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Rector\MethodCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
  * @changelog https://github.com/symfony/symfony/pull/30813
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector\WebTestCaseAssertIsSuccessfulRectorTest
  */
-final class WebTestCaseAssertIsSuccessfulRector extends AbstractRector
+final class WebTestCaseAssertIsSuccessfulRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -30,14 +30,14 @@ final class WebTestCaseAssertIsSuccessfulRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(\Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->symfonyTestCaseAnalyzer = $symfonyTestCaseAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Simplify use of assertions in WebTestCase', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify use of assertions in WebTestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
@@ -66,12 +66,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->symfonyTestCaseAnalyzer->isInWebTestCase($node)) {
             return null;
@@ -84,13 +84,13 @@ CODE_SAMPLE
             return null;
         }
         $secondArg = $args[1]->value;
-        if (!$secondArg instanceof MethodCall) {
+        if (!$secondArg instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         if (!$this->isName($secondArg->name, 'getStatusCode')) {
             return null;
         }
-        $node->name = new Identifier('assertResponseIsSuccessful');
+        $node->name = new \PhpParser\Node\Identifier('assertResponseIsSuccessful');
         $node->args = [];
         return $node;
     }

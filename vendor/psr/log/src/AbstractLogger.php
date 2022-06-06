@@ -9,7 +9,7 @@ namespace RectorPrefix20220606\Psr\Log;
  * reduce boilerplate code that a simple Logger that does the same thing with
  * messages regardless of the error level has to implement.
  */
-abstract class AbstractLogger implements LoggerInterface
+abstract class AbstractLogger implements \RectorPrefix20220606\Psr\Log\LoggerInterface
 {
     use LoggerTrait;
 }

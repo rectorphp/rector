@@ -1,52 +1,52 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\Ternary;
+namespace Rector\CodeQuality\Rector\Ternary;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Expr\Cast\Bool_;
-use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
-use RectorPrefix20220606\PHPStan\Type\BooleanType;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\AssignAndBinaryMap;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Cast\Bool_;
+use PhpParser\Node\Expr\Ternary;
+use PHPStan\Type\BooleanType;
+use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector\UnnecessaryTernaryExpressionRectorTest
  */
-final class UnnecessaryTernaryExpressionRector extends AbstractRector
+final class UnnecessaryTernaryExpressionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
+    public function __construct(\Rector\Core\PhpParser\Node\AssignAndBinaryMap $assignAndBinaryMap)
     {
         $this->assignAndBinaryMap = $assignAndBinaryMap;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove unnecessary ternary expressions', [new CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove unnecessary ternary expressions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$foo === $bar ? true : false;', '$foo === $bar;')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Ternary::class];
+        return [\PhpParser\Node\Expr\Ternary::class];
     }
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         /** @var Ternary $ternaryExpression */
         $ternaryExpression = $node;
-        if (!$ternaryExpression->if instanceof Expr) {
+        if (!$ternaryExpression->if instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $ifExpression = $ternaryExpression->if;
@@ -58,7 +58,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
             return null;
         }
         $condition = $ternaryExpression->cond;
-        if (!$condition instanceof BinaryOp) {
+        if (!$condition instanceof \PhpParser\Node\Expr\BinaryOp) {
             return $this->processNonBinaryCondition($ifExpression, $elseExpression, $condition);
         }
         if ($this->valueResolver->isNull($ifExpression)) {
@@ -78,7 +78,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
         return new $inversedBinaryClass($binaryOperation->left, $binaryOperation->right);
     }
-    private function processNonBinaryCondition(Expr $ifExpression, Expr $elseExpression, Expr $condition) : ?Node
+    private function processNonBinaryCondition(\PhpParser\Node\Expr $ifExpression, \PhpParser\Node\Expr $elseExpression, \PhpParser\Node\Expr $condition) : ?\PhpParser\Node
     {
         if ($this->valueResolver->isTrue($ifExpression) && $this->valueResolver->isFalse($elseExpression)) {
             return $this->processTrueIfExpressionWithFalseElseExpression($condition);
@@ -91,27 +91,27 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
         }
         return $this->processFalseIfExpressionWithTrueElseExpression($condition);
     }
-    private function processTrueIfExpressionWithFalseElseExpression(Expr $expr) : Expr
+    private function processTrueIfExpressionWithFalseElseExpression(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
     {
         $exprType = $this->getType($expr);
-        if ($exprType instanceof BooleanType) {
+        if ($exprType instanceof \PHPStan\Type\BooleanType) {
             return $expr;
         }
-        return new Bool_($expr);
+        return new \PhpParser\Node\Expr\Cast\Bool_($expr);
     }
-    private function processFalseIfExpressionWithTrueElseExpression(Expr $expr) : Expr
+    private function processFalseIfExpressionWithTrueElseExpression(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
     {
-        if ($expr instanceof BooleanNot) {
+        if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
             $negatedExprType = $this->getType($expr->expr);
-            if ($negatedExprType instanceof BooleanType) {
+            if ($negatedExprType instanceof \PHPStan\Type\BooleanType) {
                 return $expr->expr;
             }
-            return new Bool_($expr->expr);
+            return new \PhpParser\Node\Expr\Cast\Bool_($expr->expr);
         }
         $exprType = $this->getType($expr);
-        if ($exprType instanceof BooleanType) {
-            return new BooleanNot($expr);
+        if ($exprType instanceof \PHPStan\Type\BooleanType) {
+            return new \PhpParser\Node\Expr\BooleanNot($expr);
         }
-        return new BooleanNot(new Bool_($expr));
+        return new \PhpParser\Node\Expr\BooleanNot(new \PhpParser\Node\Expr\Cast\Bool_($expr));
     }
 }

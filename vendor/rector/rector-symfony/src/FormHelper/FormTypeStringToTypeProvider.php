@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\FormHelper;
+namespace Rector\Symfony\FormHelper;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\Rector\Symfony\Contract\Tag\TagInterface;
-use RectorPrefix20220606\Rector\Symfony\DataProvider\ServiceMapProvider;
+use Rector\Symfony\Contract\Tag\TagInterface;
+use Rector\Symfony\DataProvider\ServiceMapProvider;
 final class FormTypeStringToTypeProvider
 {
     /**
@@ -21,7 +21,7 @@ final class FormTypeStringToTypeProvider
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;
-    public function __construct(ServiceMapProvider $serviceMapProvider)
+    public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider)
     {
         $this->serviceMapProvider = $serviceMapProvider;
     }
@@ -29,7 +29,7 @@ final class FormTypeStringToTypeProvider
     {
         $nameToTypeMap = $this->getNameToTypeMap();
         if (\strncmp($name, 'form.type.', \strlen('form.type.')) === 0) {
-            $name = Strings::substring($name, \strlen('form.type.'));
+            $name = \RectorPrefix20220606\Nette\Utils\Strings::substring($name, \strlen('form.type.'));
         }
         return $nameToTypeMap[$name] ?? null;
     }
@@ -53,7 +53,7 @@ final class FormTypeStringToTypeProvider
         $formTypeServiceDefinitions = $serviceMap->getServicesByTag('form.type');
         foreach ($formTypeServiceDefinitions as $formTypeServiceDefinition) {
             $formTypeTag = $formTypeServiceDefinition->getTag('form.type');
-            if (!$formTypeTag instanceof TagInterface) {
+            if (!$formTypeTag instanceof \Rector\Symfony\Contract\Tag\TagInterface) {
                 continue;
             }
             $alias = $formTypeTag->getData()['alias'] ?? null;

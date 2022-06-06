@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\NodeAnalyzer;
+namespace Rector\TypeDeclaration\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\NullType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\ThisType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\NodeCollector\ValueObject\ArrayCallable;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
+use Rector\NodeCollector\ValueObject\ArrayCallable;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class CallTypesResolver
 {
     /**
@@ -28,7 +28,7 @@ final class CallTypesResolver
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
@@ -41,11 +41,11 @@ final class CallTypesResolver
     {
         $staticTypesByArgumentPosition = [];
         foreach ($calls as $call) {
-            if (!$call instanceof StaticCall && !$call instanceof MethodCall) {
+            if (!$call instanceof \PhpParser\Node\Expr\StaticCall && !$call instanceof \PhpParser\Node\Expr\MethodCall) {
                 continue;
             }
             foreach ($call->args as $position => $arg) {
-                if (!$arg instanceof Arg) {
+                if (!$arg instanceof \PhpParser\Node\Arg) {
                     continue;
                 }
                 $argValueType = $this->resolveStrictArgValueType($arg);
@@ -55,16 +55,16 @@ final class CallTypesResolver
         // unite to single type
         return $this->unionToSingleType($staticTypesByArgumentPosition);
     }
-    private function resolveStrictArgValueType(Arg $arg) : Type
+    private function resolveStrictArgValueType(\PhpParser\Node\Arg $arg) : \PHPStan\Type\Type
     {
         $argValueType = $this->nodeTypeResolver->getNativeType($arg->value);
         // "self" in another object is not correct, this make it independent
         return $this->correctSelfType($argValueType);
     }
-    private function correctSelfType(Type $argValueType) : Type
+    private function correctSelfType(\PHPStan\Type\Type $argValueType) : \PHPStan\Type\Type
     {
-        if ($argValueType instanceof ThisType) {
-            return new ObjectType($argValueType->getClassName());
+        if ($argValueType instanceof \PHPStan\Type\ThisType) {
+            return new \PHPStan\Type\ObjectType($argValueType->getClassName());
         }
         return $argValueType;
     }
@@ -84,14 +84,14 @@ final class CallTypesResolver
         if (\count($staticTypeByArgumentPosition) !== 1) {
             return $staticTypeByArgumentPosition;
         }
-        if (!$staticTypeByArgumentPosition[0] instanceof NullType) {
+        if (!$staticTypeByArgumentPosition[0] instanceof \PHPStan\Type\NullType) {
             return $staticTypeByArgumentPosition;
         }
-        return [new MixedType()];
+        return [new \PHPStan\Type\MixedType()];
     }
-    private function narrowParentObjectTreeToSingleObjectChildType(Type $type) : Type
+    private function narrowParentObjectTreeToSingleObjectChildType(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
     {
-        if (!$type instanceof UnionType) {
+        if (!$type instanceof \PHPStan\Type\UnionType) {
             return $type;
         }
         if (!$this->isTypeWithClassNameOnly($type)) {
@@ -100,7 +100,7 @@ final class CallTypesResolver
         /** @var TypeWithClassName $firstUnionedType */
         $firstUnionedType = $type->getTypes()[0];
         foreach ($type->getTypes() as $unionedType) {
-            if (!$unionedType instanceof TypeWithClassName) {
+            if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
                 return $type;
             }
             if ($unionedType->isSuperTypeOf($firstUnionedType)->yes()) {
@@ -109,10 +109,10 @@ final class CallTypesResolver
         }
         return $firstUnionedType;
     }
-    private function isTypeWithClassNameOnly(UnionType $unionType) : bool
+    private function isTypeWithClassNameOnly(\PHPStan\Type\UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $unionedType) {
-            if (!$unionedType instanceof TypeWithClassName) {
+            if (!$unionedType instanceof \PHPStan\Type\TypeWithClassName) {
                 return \false;
             }
         }

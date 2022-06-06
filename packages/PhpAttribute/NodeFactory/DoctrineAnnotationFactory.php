@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PhpAttribute\NodeFactory;
+namespace Rector\PhpAttribute\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Attribute;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20220606\Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class DoctrineAnnotationFactory
 {
     /**
@@ -17,15 +17,15 @@ final class DoctrineAnnotationFactory
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(NodePrinterInterface $nodePrinter)
+    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->nodePrinter = $nodePrinter;
     }
-    public function createFromAttribute(Attribute $attribute, string $className) : DoctrineAnnotationTagValueNode
+    public function createFromAttribute(\PhpParser\Node\Attribute $attribute, string $className) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
     {
         $items = $this->createItemsFromArgs($attribute->args);
-        $identifierTypeNode = new IdentifierTypeNode($className);
-        return new DoctrineAnnotationTagValueNode($identifierTypeNode, null, $items);
+        $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($className);
+        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($identifierTypeNode, null, $items);
     }
     /**
      * @param Arg[] $args
@@ -35,9 +35,9 @@ final class DoctrineAnnotationFactory
     {
         $items = [];
         foreach ($args as $arg) {
-            if ($arg->value instanceof String_) {
+            if ($arg->value instanceof \PhpParser\Node\Scalar\String_) {
                 // standardize double quotes for annotations
-                $arg->value->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
+                $arg->value->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
             }
             $itemValue = $this->nodePrinter->print($arg->value);
             if ($arg->name !== null) {

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\ExpectedNameResolver;
+namespace Rector\Naming\ExpectedNameResolver;
 
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\Rector\Naming\Naming\PropertyNaming;
-use RectorPrefix20220606\Rector\Naming\ValueObject\ExpectedName;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PhpParser\Node\Param;
+use Rector\Naming\Naming\PropertyNaming;
+use Rector\Naming\ValueObject\ExpectedName;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 final class MatchParamTypeExpectedNameResolver
 {
     /**
@@ -19,12 +19,12 @@ final class MatchParamTypeExpectedNameResolver
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(StaticTypeMapper $staticTypeMapper, PropertyNaming $propertyNaming)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->propertyNaming = $propertyNaming;
     }
-    public function resolve(Param $param) : ?string
+    public function resolve(\PhpParser\Node\Param $param) : ?string
     {
         // nothing to verify
         if ($param->type === null) {
@@ -32,7 +32,7 @@ final class MatchParamTypeExpectedNameResolver
         }
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $expectedName = $this->propertyNaming->getExpectedNameFromType($staticType);
-        if (!$expectedName instanceof ExpectedName) {
+        if (!$expectedName instanceof \Rector\Naming\ValueObject\ExpectedName) {
             return null;
         }
         return $expectedName->getName();

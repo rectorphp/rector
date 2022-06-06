@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPUnit\Rector\ClassMethod;
+namespace Rector\PHPUnit\Rector\ClassMethod;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\TryCatch;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use RectorPrefix20220606\Rector\PHPUnit\NodeFactory\ExpectExceptionCodeFactory;
-use RectorPrefix20220606\Rector\PHPUnit\NodeFactory\ExpectExceptionFactory;
-use RectorPrefix20220606\Rector\PHPUnit\NodeFactory\ExpectExceptionMessageFactory;
-use RectorPrefix20220606\Rector\PHPUnit\NodeFactory\ExpectExceptionMessageRegExpFactory;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\PHPUnit\NodeFactory\ExpectExceptionCodeFactory;
+use Rector\PHPUnit\NodeFactory\ExpectExceptionFactory;
+use Rector\PHPUnit\NodeFactory\ExpectExceptionMessageFactory;
+use Rector\PHPUnit\NodeFactory\ExpectExceptionMessageRegExpFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\TryCatchToExpectExceptionRector\TryCatchToExpectExceptionRectorTest
  */
-final class TryCatchToExpectExceptionRector extends AbstractRector
+final class TryCatchToExpectExceptionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -47,7 +47,7 @@ final class TryCatchToExpectExceptionRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeFactory\ExpectExceptionMessageFactory
      */
     private $expectExceptionMessageFactory;
-    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ExpectExceptionCodeFactory $expectExceptionCodeFactory, ExpectExceptionMessageRegExpFactory $expectExceptionMessageRegExpFactory, ExpectExceptionFactory $expectExceptionFactory, ExpectExceptionMessageFactory $expectExceptionMessageFactory)
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\PHPUnit\NodeFactory\ExpectExceptionCodeFactory $expectExceptionCodeFactory, \Rector\PHPUnit\NodeFactory\ExpectExceptionMessageRegExpFactory $expectExceptionMessageRegExpFactory, \Rector\PHPUnit\NodeFactory\ExpectExceptionFactory $expectExceptionFactory, \Rector\PHPUnit\NodeFactory\ExpectExceptionMessageFactory $expectExceptionMessageFactory)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->expectExceptionCodeFactory = $expectExceptionCodeFactory;
@@ -55,9 +55,9 @@ final class TryCatchToExpectExceptionRector extends AbstractRector
         $this->expectExceptionFactory = $expectExceptionFactory;
         $this->expectExceptionMessageFactory = $expectExceptionMessageFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns try/catch to expectException() call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns try/catch to expectException() call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 try {
     $someService->run();
 } catch (Throwable $exception) {
@@ -77,12 +77,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -92,7 +92,7 @@ CODE_SAMPLE
         }
         $proccesed = [];
         foreach ($node->stmts as $key => $stmt) {
-            if (!$stmt instanceof TryCatch) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\TryCatch) {
                 continue;
             }
             $proccesed = $this->processTryCatch($stmt);
@@ -108,10 +108,10 @@ CODE_SAMPLE
     /**
      * @return Expression[]|null
      */
-    private function processTryCatch(TryCatch $tryCatch) : ?array
+    private function processTryCatch(\PhpParser\Node\Stmt\TryCatch $tryCatch) : ?array
     {
         $exceptionVariable = $this->matchSingleExceptionVariable($tryCatch);
-        if (!$exceptionVariable instanceof Variable) {
+        if (!$exceptionVariable instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         // we look for:
@@ -121,10 +121,10 @@ CODE_SAMPLE
         $newMethodCalls = [];
         foreach ($tryCatch->catches[0]->stmts as $catchedStmt) {
             // not a match
-            if (!$catchedStmt instanceof Expression) {
+            if (!$catchedStmt instanceof \PhpParser\Node\Stmt\Expression) {
                 return null;
             }
-            if (!$catchedStmt->expr instanceof MethodCall) {
+            if (!$catchedStmt->expr instanceof \PhpParser\Node\Expr\MethodCall) {
                 continue;
             }
             $methodCallNode = $catchedStmt->expr;
@@ -137,14 +137,14 @@ CODE_SAMPLE
         $newExpressions = $this->wrapInExpressions($newMethodCalls);
         // return all statements
         foreach ($tryCatch->stmts as $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 return null;
             }
             $newExpressions[] = $stmt;
         }
         return $newExpressions;
     }
-    private function matchSingleExceptionVariable(TryCatch $tryCatch) : ?Variable
+    private function matchSingleExceptionVariable(\PhpParser\Node\Stmt\TryCatch $tryCatch) : ?\PhpParser\Node\Expr\Variable
     {
         if (\count($tryCatch->catches) !== 1) {
             return null;
@@ -159,7 +159,7 @@ CODE_SAMPLE
     {
         $expressions = [];
         foreach ($methodCalls as $methodCall) {
-            $expressions[] = new Expression($methodCall);
+            $expressions[] = new \PhpParser\Node\Stmt\Expression($methodCall);
         }
         return $expressions;
     }

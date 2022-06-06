@@ -14,7 +14,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class InstanceofConfigurator extends AbstractServiceConfigurator
+class InstanceofConfigurator extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractServiceConfigurator
 {
     use Traits\AutowireTrait;
     use Traits\BindTrait;
@@ -30,7 +30,7 @@ class InstanceofConfigurator extends AbstractServiceConfigurator
      * @var string|null
      */
     private $path;
-    public function __construct(ServicesConfigurator $parent, Definition $definition, string $id, string $path = null)
+    public function __construct(\RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $parent, \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition $definition, string $id, string $path = null)
     {
         parent::__construct($parent, $definition, $id, []);
         $this->path = $path;

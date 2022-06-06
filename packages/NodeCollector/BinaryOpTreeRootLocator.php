@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeCollector;
+namespace Rector\NodeCollector;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Tests\NodeCollector\BinaryOpTreeRootLocatorTest
  */
@@ -20,10 +20,10 @@ final class BinaryOpTreeRootLocator
      *
      * @param class-string<BinaryOp> $binaryOpClass
      */
-    public function findOperationRoot(Expr $expr, string $binaryOpClass) : Expr
+    public function findOperationRoot(\PhpParser\Node\Expr $expr, string $binaryOpClass) : \PhpParser\Node\Expr
     {
-        $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
+        $parentNode = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node) {
             // No more parents so the Expr node must be root.
             return $expr;
         }

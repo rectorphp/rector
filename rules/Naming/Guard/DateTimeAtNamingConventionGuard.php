@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\Guard;
+namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\Rector\Core\Util\StringUtils;
-use RectorPrefix20220606\Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
-use RectorPrefix20220606\Rector\Naming\Contract\RenameValueObjectInterface;
-use RectorPrefix20220606\Rector\Naming\ValueObject\PropertyRename;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Util\StringUtils;
+use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
+use Rector\Naming\Contract\RenameValueObjectInterface;
+use Rector\Naming\ValueObject\PropertyRename;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 /**
  * @implements ConflictingNameGuardInterface<PropertyRename>
  */
-final class DateTimeAtNamingConventionGuard implements ConflictingNameGuardInterface
+final class DateTimeAtNamingConventionGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
 {
     /**
      * @var string
@@ -31,7 +31,7 @@ final class DateTimeAtNamingConventionGuard implements ConflictingNameGuardInter
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeUnwrapper $typeUnwrapper)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeUnwrapper = $typeUnwrapper;
@@ -39,20 +39,20 @@ final class DateTimeAtNamingConventionGuard implements ConflictingNameGuardInter
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
     {
         return $this->isDateTimeAtNamingConvention($renameValueObject);
     }
-    private function isDateTimeAtNamingConvention(PropertyRename $propertyRename) : bool
+    private function isDateTimeAtNamingConvention(\Rector\Naming\ValueObject\PropertyRename $propertyRename) : bool
     {
         $type = $this->nodeTypeResolver->getType($propertyRename->getProperty());
         $type = $this->typeUnwrapper->unwrapFirstObjectTypeFromUnionType($type);
-        if (!$type instanceof TypeWithClassName) {
+        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
-        if (!\is_a($type->getClassName(), DateTimeInterface::class, \true)) {
+        if (!\is_a($type->getClassName(), \DateTimeInterface::class, \true)) {
             return \false;
         }
-        return StringUtils::isMatch($propertyRename->getCurrentName(), self::AT_NAMING_REGEX . '');
+        return \Rector\Core\Util\StringUtils::isMatch($propertyRename->getCurrentName(), self::AT_NAMING_REGEX . '');
     }
 }

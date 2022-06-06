@@ -1,45 +1,45 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Laravel\Rector\Namespace_;
+namespace Rector\Laravel\Rector\Namespace_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Namespace_;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Laravel\NodeFactory\ModelFactoryNodeFactory;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Laravel\NodeFactory\ModelFactoryNodeFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://laravel.com/docs/7.x/database-testing#writing-factories
  * @see https://laravel.com/docs/8.x/database-testing#defining-model-factories
  *
  * @see \Rector\Laravel\Tests\Rector\Namespace_\FactoryDefinitionRector\FactoryDefinitionRectorTest
  */
-final class FactoryDefinitionRector extends AbstractRector
+final class FactoryDefinitionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Laravel\NodeFactory\ModelFactoryNodeFactory
      */
     private $modelFactoryNodeFactory;
-    public function __construct(ModelFactoryNodeFactory $modelFactoryNodeFactory)
+    public function __construct(\Rector\Laravel\NodeFactory\ModelFactoryNodeFactory $modelFactoryNodeFactory)
     {
         $this->modelFactoryNodeFactory = $modelFactoryNodeFactory;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Upgrade legacy factories to support classes.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Upgrade legacy factories to support classes.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Faker\Generator as Faker;
 
 $factory->define(App\User::class, function (Faker $faker) {
@@ -71,23 +71,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Namespace_::class, FileWithoutNamespace::class];
+        return [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
     }
     /**
      * @param Namespace_|FileWithoutNamespace $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $factories = [];
         foreach ($node->stmts as $key => $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
             // do not refactor if factory variable changed
             if ($this->isReAssignFactoryVariable($stmt->expr)) {
                 return null;
             }
-            if (!$stmt->expr instanceof MethodCall) {
+            if (!$stmt->expr instanceof \PhpParser\Node\Expr\MethodCall) {
                 continue;
             }
             if ($this->shouldSkipExpression($stmt->expr)) {
@@ -96,7 +96,7 @@ CODE_SAMPLE
             /** @var Arg $firstArg */
             $firstArg = $stmt->expr->args[0];
             $name = $this->getNameFromClassConstFetch($firstArg->value);
-            if (!$name instanceof Name) {
+            if (!$name instanceof \PhpParser\Node\Name) {
                 continue;
             }
             if (!isset($factories[$name->toString()])) {
@@ -111,41 +111,41 @@ CODE_SAMPLE
         $node->stmts = \array_merge($node->stmts, $factories);
         return $node;
     }
-    private function isReAssignFactoryVariable(Expr $expr) : bool
+    private function isReAssignFactoryVariable(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof Assign) {
+        if (!$expr instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
         return $this->isName($expr->var, 'factory');
     }
-    private function shouldSkipExpression(MethodCall $methodCall) : bool
+    private function shouldSkipExpression(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         if (!isset($methodCall->args[0])) {
             return \true;
         }
-        if (!$methodCall->args[0] instanceof Arg) {
+        if (!$methodCall->args[0] instanceof \PhpParser\Node\Arg) {
             return \true;
         }
-        if (!$methodCall->args[0]->value instanceof ClassConstFetch) {
+        if (!$methodCall->args[0]->value instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return \true;
         }
         return !$this->isNames($methodCall->name, ['define', 'state', 'afterMaking', 'afterCreating']);
     }
-    private function getNameFromClassConstFetch(Expr $expr) : ?Name
+    private function getNameFromClassConstFetch(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Name
     {
-        if (!$expr instanceof ClassConstFetch) {
+        if (!$expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return null;
         }
-        if ($expr->class instanceof Expr) {
+        if ($expr->class instanceof \PhpParser\Node\Expr) {
             return null;
         }
         return $expr->class;
     }
-    private function createFactory(string $name, Expr $expr) : Class_
+    private function createFactory(string $name, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Stmt\Class_
     {
         return $this->modelFactoryNodeFactory->createEmptyFactory($name, $expr);
     }
-    private function processFactoryConfiguration(Class_ $class, MethodCall $methodCall) : void
+    private function processFactoryConfiguration(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         if (!$this->isName($methodCall->var, 'factory')) {
             return;
@@ -165,42 +165,42 @@ CODE_SAMPLE
         }
         $this->appendAfterCalling($class, $methodCall, $name);
     }
-    private function addDefinition(Class_ $class, MethodCall $methodCall) : void
+    private function addDefinition(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         if (!isset($methodCall->args[1])) {
             return;
         }
-        if (!$methodCall->args[1] instanceof Arg) {
+        if (!$methodCall->args[1] instanceof \PhpParser\Node\Arg) {
             return;
         }
         $callback = $methodCall->args[1]->value;
-        if (!$callback instanceof Closure) {
+        if (!$callback instanceof \PhpParser\Node\Expr\Closure) {
             return;
         }
         $class->stmts[] = $this->modelFactoryNodeFactory->createDefinition($callback);
     }
-    private function addState(Class_ $class, MethodCall $methodCall) : void
+    private function addState(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\MethodCall $methodCall) : void
     {
         $classMethod = $this->modelFactoryNodeFactory->createStateMethod($methodCall);
-        if (!$classMethod instanceof ClassMethod) {
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         $class->stmts[] = $classMethod;
     }
-    private function appendAfterCalling(Class_ $class, MethodCall $methodCall, string $name) : void
+    private function appendAfterCalling(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\MethodCall $methodCall, string $name) : void
     {
         if (!isset($methodCall->args[1])) {
             return;
         }
-        if (!$methodCall->args[1] instanceof Arg) {
+        if (!$methodCall->args[1] instanceof \PhpParser\Node\Arg) {
             return;
         }
         $closure = $methodCall->args[1]->value;
-        if (!$closure instanceof Closure) {
+        if (!$closure instanceof \PhpParser\Node\Expr\Closure) {
             return;
         }
         $method = $class->getMethod('configure');
-        if (!$method instanceof ClassMethod) {
+        if (!$method instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $method = $this->modelFactoryNodeFactory->createEmptyConfigure();
             $class->stmts[] = $method;
         }

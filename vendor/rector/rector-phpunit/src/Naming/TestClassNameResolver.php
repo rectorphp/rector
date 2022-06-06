@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPUnit\Naming;
+namespace Rector\PHPUnit\Naming;
 
-final class TestClassNameResolver implements TestClassNameResolverInterface
+final class TestClassNameResolver implements \Rector\PHPUnit\Naming\TestClassNameResolverInterface
 {
     /**
      * @return string[]

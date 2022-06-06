@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\NodeAnalyzer;
+namespace Rector\Nette\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ArrayDimFetchAnalyzer
 {
-    public function isBeingAssignedOrInitialized(ArrayDimFetch $arrayDimFetch) : bool
+    public function isBeingAssignedOrInitialized(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : bool
     {
-        $parent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Assign) {
+        $parent = $arrayDimFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parent instanceof \PhpParser\Node\Expr\Assign) {
             return \false;
         }
         if ($parent->var === $arrayDimFetch) {

@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Autoloading;
+namespace Rector\Core\Autoloading;
 
-use RectorPrefix20220606\Rector\Core\Configuration\Option;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Exception\ShouldNotHappenException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
@@ -18,7 +18,7 @@ final class BootstrapFilesIncluder
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
-    public function __construct(ParameterProvider $parameterProvider)
+    public function __construct(\RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider)
     {
         $this->parameterProvider = $parameterProvider;
     }
@@ -28,27 +28,27 @@ final class BootstrapFilesIncluder
      */
     public function includeBootstrapFiles() : void
     {
-        $bootstrapFiles = $this->parameterProvider->provideArrayParameter(Option::BOOTSTRAP_FILES);
-        Assert::allString($bootstrapFiles);
+        $bootstrapFiles = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::BOOTSTRAP_FILES);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allString($bootstrapFiles);
         /** @var string[] $bootstrapFiles */
         foreach ($bootstrapFiles as $bootstrapFile) {
             if (!\is_file($bootstrapFile)) {
-                throw new ShouldNotHappenException(\sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
+                throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
             }
             try {
                 require_once $bootstrapFile;
-            } catch (Throwable $throwable) {
+            } catch (\Throwable $throwable) {
                 $errorMessage = \sprintf('"%s" thrown in "%s" on line %d while loading bootstrap file %s: %s', \get_class($throwable), $throwable->getFile(), $throwable->getLine(), $bootstrapFile, $throwable->getMessage());
-                throw new ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);
+                throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);
             }
         }
         $stubsRectorDirectory = \realpath(__DIR__ . '/../../stubs-rector');
         if ($stubsRectorDirectory === \false) {
             return;
         }
-        $dir = new RecursiveDirectoryIterator($stubsRectorDirectory, RecursiveDirectoryIterator::SKIP_DOTS);
+        $dir = new \RecursiveDirectoryIterator($stubsRectorDirectory, \RecursiveDirectoryIterator::SKIP_DOTS);
         /** @var SplFileInfo[] $stubs */
-        $stubs = new RecursiveIteratorIterator($dir);
+        $stubs = new \RecursiveIteratorIterator($dir);
         foreach ($stubs as $stub) {
             require_once $stub->getRealPath();
         }

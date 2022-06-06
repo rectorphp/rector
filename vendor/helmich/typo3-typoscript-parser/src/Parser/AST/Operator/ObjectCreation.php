@@ -13,6 +13,6 @@ namespace RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST\Operator
  */
-class ObjectCreation extends Assignment
+class ObjectCreation extends \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment
 {
 }

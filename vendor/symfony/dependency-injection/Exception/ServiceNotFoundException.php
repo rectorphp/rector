@@ -16,7 +16,7 @@ use RectorPrefix20220606\Psr\Container\NotFoundExceptionInterface;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ServiceNotFoundException extends InvalidArgumentException implements NotFoundExceptionInterface
+class ServiceNotFoundException extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException implements \RectorPrefix20220606\Psr\Container\NotFoundExceptionInterface
 {
     /**
      * @var string

@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocParser;
+namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use RectorPrefix20220606\PhpParser\Node\ComplexType;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrowFunction;
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Interface_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use RectorPrefix20220606\Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
-use ReturnTypeWillChange;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr\ArrowFunction;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
+use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+use Rector\StaticTypeMapper\StaticTypeMapper;
+use RectorPrefix20220606\ReturnTypeWillChange;
 /**
  * @see https://wiki.php.net/rfc/internal_method_return_types#proposal
  */
@@ -79,7 +79,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
-    public function __construct(StaticTypeMapper $staticTypeMapper, PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, TypeUnwrapper $typeUnwrapper, BetterNodeFinder $betterNodeFinder, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper $typeUnwrapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory $phpAttributeGroupFactory, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -102,11 +102,11 @@ final class PhpDocFromTypeDeclarationDecorator
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
         $functionLike->returnType = null;
-        if (!$functionLike instanceof ClassMethod) {
+        if (!$functionLike instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
-        $classLike = $this->betterNodeFinder->findParentByTypes($functionLike, [Class_::class, Interface_::class]);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentByTypes($functionLike, [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class]);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return;
         }
         if (!$this->isRequireReturnTypeWillChange(\get_class($type), $classLike, $functionLike)) {
@@ -119,7 +119,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @param array<class-string<Type>> $requiredTypes
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    public function decorateParam(Param $param, $functionLike, array $requiredTypes) : void
+    public function decorateParam(\PhpParser\Node\Param $param, $functionLike, array $requiredTypes) : void
     {
         if ($param->type === null) {
             return;
@@ -133,7 +133,7 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    public function decorateParamWithSpecificType(Param $param, $functionLike, Type $requireType) : void
+    public function decorateParamWithSpecificType(\PhpParser\Node\Param $param, $functionLike, \PHPStan\Type\Type $requireType) : void
     {
         if ($param->type === null) {
             return;
@@ -148,7 +148,7 @@ final class PhpDocFromTypeDeclarationDecorator
      * @return bool True if node was changed
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    public function decorateReturnWithSpecificType($functionLike, Type $requireType) : bool
+    public function decorateReturnWithSpecificType($functionLike, \PHPStan\Type\Type $requireType) : bool
     {
         if ($functionLike->returnType === null) {
             return \false;
@@ -159,16 +159,16 @@ final class PhpDocFromTypeDeclarationDecorator
         $this->decorate($functionLike);
         return \true;
     }
-    private function isRequireReturnTypeWillChange(string $type, ClassLike $classLike, ClassMethod $classMethod) : bool
+    private function isRequireReturnTypeWillChange(string $type, \PhpParser\Node\Stmt\ClassLike $classLike, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         if (!\array_key_exists($type, self::ADD_RETURN_TYPE_WILL_CHANGE)) {
             return \false;
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
-        $objectClass = new ObjectType($className);
+        $objectClass = new \PHPStan\Type\ObjectType($className);
         $methodName = $this->nodeNameResolver->getName($classMethod);
         foreach (self::ADD_RETURN_TYPE_WILL_CHANGE[$type] as $class => $methods) {
-            $objectClassConfig = new ObjectType($class);
+            $objectClassConfig = new \PHPStan\Type\ObjectType($class);
             if (!$objectClassConfig->isSuperTypeOf($objectClass)->yes()) {
                 continue;
             }
@@ -185,14 +185,14 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $typeNode
      */
-    private function isTypeMatch($typeNode, Type $requireType) : bool
+    private function isTypeMatch($typeNode, \PHPStan\Type\Type $requireType) : bool
     {
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
         // cover nullable union types
-        if ($returnType instanceof UnionType) {
+        if ($returnType instanceof \PHPStan\Type\UnionType) {
             $returnType = $this->typeUnwrapper->unwrapNullableType($returnType);
         }
-        if ($returnType instanceof ObjectType) {
+        if ($returnType instanceof \PHPStan\Type\ObjectType) {
             return $returnType->equals($requireType);
         }
         return \get_class($returnType) === \get_class($requireType);
@@ -200,7 +200,7 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    private function moveParamTypeToParamDoc($functionLike, Param $param, Type $type) : void
+    private function moveParamTypeToParamDoc($functionLike, \PhpParser\Node\Param $param, \PHPStan\Type\Type $type) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $paramName = $this->nodeNameResolver->getName($param);
@@ -210,7 +210,7 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param array<class-string<Type>> $requiredTypes
      */
-    private function isMatchingType(Type $type, array $requiredTypes) : bool
+    private function isMatchingType(\PHPStan\Type\Type $type, array $requiredTypes) : bool
     {
         return \in_array(\get_class($type), $requiredTypes, \true);
     }

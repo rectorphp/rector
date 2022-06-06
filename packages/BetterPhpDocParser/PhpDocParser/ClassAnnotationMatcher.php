@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocParser;
+namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Stmt\GroupUse;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
-use RectorPrefix20220606\Rector\Naming\Naming\UseImportsResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Use_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
+use Rector\Naming\Naming\UseImportsResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * Matches "@ORM\Entity" to FQN names based on use imports in the file
  */
@@ -36,21 +36,21 @@ final class ClassAnnotationMatcher
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(UseImportNameMatcher $useImportNameMatcher, UseImportsResolver $useImportsResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher $useImportNameMatcher, \Rector\Naming\Naming\UseImportsResolver $useImportsResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->useImportNameMatcher = $useImportNameMatcher;
         $this->useImportsResolver = $useImportsResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function resolveTagToKnownFullyQualifiedName(string $tag, Node $node) : ?string
+    public function resolveTagToKnownFullyQualifiedName(string $tag, \PhpParser\Node $node) : ?string
     {
         return $this->_resolveTagFullyQualifiedName($tag, $node, \true);
     }
-    public function resolveTagFullyQualifiedName(string $tag, Node $node) : ?string
+    public function resolveTagFullyQualifiedName(string $tag, \PhpParser\Node $node) : ?string
     {
         return $this->_resolveTagFullyQualifiedName($tag, $node, \false);
     }
-    private function _resolveTagFullyQualifiedName(string $tag, Node $node, bool $returnNullOnUnknownClass) : ?string
+    private function _resolveTagFullyQualifiedName(string $tag, \PhpParser\Node $node, bool $returnNullOnUnknownClass) : ?string
     {
         $uniqueHash = $tag . \spl_object_hash($node);
         if (isset($this->fullyQualifiedNameByHash[$uniqueHash])) {
@@ -71,10 +71,10 @@ final class ClassAnnotationMatcher
     /**
      * @param Use_[]|GroupUse[] $uses
      */
-    private function resolveFullyQualifiedClass(array $uses, Node $node, string $tag, bool $returnNullOnUnknownClass) : ?string
+    private function resolveFullyQualifiedClass(array $uses, \PhpParser\Node $node, string $tag, bool $returnNullOnUnknownClass) : ?string
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if ($scope instanceof \PHPStan\Analyser\Scope) {
             $namespace = $scope->getNamespace();
             if ($namespace !== null) {
                 $namespacedTag = $namespace . '\\' . $tag;
@@ -99,9 +99,9 @@ final class ClassAnnotationMatcher
     private function resolveAsAliased(array $uses, string $tag, bool $returnNullOnUnknownClass) : ?string
     {
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
+            $prefix = $use instanceof \PhpParser\Node\Stmt\GroupUse ? $use->prefix . '\\' : '';
             foreach ($use->uses as $useUse) {
-                if (!$useUse->alias instanceof Identifier) {
+                if (!$useUse->alias instanceof \PhpParser\Node\Identifier) {
                     continue;
                 }
                 if ($useUse->alias->toString() === $tag) {

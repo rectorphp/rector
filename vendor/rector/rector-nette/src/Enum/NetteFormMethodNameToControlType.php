@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\Enum;
+namespace Rector\Nette\Enum;
 
 final class NetteFormMethodNameToControlType
 {

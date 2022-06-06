@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Builder;
+namespace PhpParser\Builder;
 
 use RectorPrefix20220606\PhpParser;
-use RectorPrefix20220606\PhpParser\BuilderHelpers;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-class Interface_ extends Declaration
+use PhpParser\BuilderHelpers;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
+class Interface_ extends \PhpParser\Builder\Declaration
 {
     protected $name;
     protected $extends = [];
@@ -35,7 +35,7 @@ class Interface_ extends Declaration
     public function extend(...$interfaces)
     {
         foreach ($interfaces as $interface) {
-            $this->extends[] = BuilderHelpers::normalizeName($interface);
+            $this->extends[] = \PhpParser\BuilderHelpers::normalizeName($interface);
         }
         return $this;
     }
@@ -48,10 +48,10 @@ class Interface_ extends Declaration
      */
     public function addStmt($stmt)
     {
-        $stmt = BuilderHelpers::normalizeNode($stmt);
-        if ($stmt instanceof Stmt\ClassConst) {
+        $stmt = \PhpParser\BuilderHelpers::normalizeNode($stmt);
+        if ($stmt instanceof \PhpParser\Node\Stmt\ClassConst) {
             $this->constants[] = $stmt;
-        } elseif ($stmt instanceof Stmt\ClassMethod) {
+        } elseif ($stmt instanceof \PhpParser\Node\Stmt\ClassMethod) {
             // we erase all statements in the body of an interface method
             $stmt->stmts = null;
             $this->methods[] = $stmt;
@@ -69,7 +69,7 @@ class Interface_ extends Declaration
      */
     public function addAttribute($attribute)
     {
-        $this->attributeGroups[] = BuilderHelpers::normalizeAttribute($attribute);
+        $this->attributeGroups[] = \PhpParser\BuilderHelpers::normalizeAttribute($attribute);
         return $this;
     }
     /**
@@ -77,8 +77,8 @@ class Interface_ extends Declaration
      *
      * @return Stmt\Interface_ The built interface node
      */
-    public function getNode() : PhpParser\Node
+    public function getNode() : \PhpParser\Node
     {
-        return new Stmt\Interface_($this->name, ['extends' => $this->extends, 'stmts' => \array_merge($this->constants, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
+        return new \PhpParser\Node\Stmt\Interface_($this->name, ['extends' => $this->extends, 'stmts' => \array_merge($this->constants, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
     }
 }

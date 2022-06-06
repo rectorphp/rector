@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Transform\ValueObject;
+namespace Rector\Transform\ValueObject;
 
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
-use RectorPrefix20220606\Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface;
-final class ArgumentFuncCallToMethodCall implements ArgumentFuncCallToMethodCallInterface
+use Rector\Core\Validation\RectorAssert;
+use Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface;
+final class ArgumentFuncCallToMethodCall implements \Rector\Transform\Contract\ValueObject\ArgumentFuncCallToMethodCallInterface
 {
     /**
      * @readonly
@@ -33,7 +33,7 @@ final class ArgumentFuncCallToMethodCall implements ArgumentFuncCallToMethodCall
         $this->class = $class;
         $this->methodIfArgs = $methodIfArgs;
         $this->methodIfNoArgs = $methodIfNoArgs;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getFunction() : string
     {

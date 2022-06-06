@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\NodeAnalyzer;
+namespace Rector\CodeQuality\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Foreach_;
-use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ForeachAnalyzer
 {
@@ -42,7 +42,7 @@ final class ForeachAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodeComparator $nodeComparator, ForAnalyzer $forAnalyzer, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer $forAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeComparator = $nodeComparator;
         $this->forAnalyzer = $forAnalyzer;
@@ -56,19 +56,19 @@ final class ForeachAnalyzer
      *      <$assigns[]> = $value;
      * }
      */
-    public function matchAssignItemsOnlyForeachArrayVariable(Foreach_ $foreach) : ?Expr
+    public function matchAssignItemsOnlyForeachArrayVariable(\PhpParser\Node\Stmt\Foreach_ $foreach) : ?\PhpParser\Node\Expr
     {
         if (\count($foreach->stmts) !== 1) {
             return null;
         }
         $onlyStatement = $foreach->stmts[0];
-        if ($onlyStatement instanceof Expression) {
+        if ($onlyStatement instanceof \PhpParser\Node\Stmt\Expression) {
             $onlyStatement = $onlyStatement->expr;
         }
-        if (!$onlyStatement instanceof Assign) {
+        if (!$onlyStatement instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
-        if (!$onlyStatement->var instanceof ArrayDimFetch) {
+        if (!$onlyStatement->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
         }
         if ($onlyStatement->var->dim !== null) {
@@ -82,10 +82,10 @@ final class ForeachAnalyzer
     /**
      * @param Stmt[] $stmts
      */
-    public function useForeachVariableInStmts(Expr $foreachedValue, Expr $singleValue, array $stmts, string $keyValueName) : void
+    public function useForeachVariableInStmts(\PhpParser\Node\Expr $foreachedValue, \PhpParser\Node\Expr $singleValue, array $stmts, string $keyValueName) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($foreachedValue, $singleValue, $keyValueName) : ?Expr {
-            if (!$node instanceof ArrayDimFetch) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use($foreachedValue, $singleValue, $keyValueName) : ?Expr {
+            if (!$node instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
                 return null;
             }
             // must be the same as foreach value
@@ -96,7 +96,7 @@ final class ForeachAnalyzer
                 return null;
             }
             // is dim same as key value name, ...[$i]
-            if (!$node->dim instanceof Variable) {
+            if (!$node->dim instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node->dim, $keyValueName)) {
@@ -105,10 +105,10 @@ final class ForeachAnalyzer
             return $singleValue;
         });
     }
-    public function isValueVarUsed(Foreach_ $foreach, string $singularValueVarName) : bool
+    public function isValueVarUsed(\PhpParser\Node\Stmt\Foreach_ $foreach, string $singularValueVarName) : bool
     {
-        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (Node $node) use($singularValueVarName) : bool {
-            if (!$node instanceof Variable) {
+        $isUsedInStmts = (bool) $this->betterNodeFinder->findFirst($foreach->stmts, function (\PhpParser\Node $node) use($singularValueVarName) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($node, $singularValueVarName);
@@ -116,8 +116,8 @@ final class ForeachAnalyzer
         if ($isUsedInStmts) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstNext($foreach, function (Node $node) use($singularValueVarName) : bool {
-            if (!$node instanceof Variable) {
+        return (bool) $this->betterNodeFinder->findFirstNext($foreach, function (\PhpParser\Node $node) use($singularValueVarName) : bool {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($node, $singularValueVarName);

@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
-use RectorPrefix20220606\PhpParser\Node\FunctionLike;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use RectorPrefix20220606\Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
-final class ReturnTypeDeclarationReturnTypeInfererTypeInferer implements ReturnTypeInfererInterface
+use PhpParser\Node\FunctionLike;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
+use Rector\TypeDeclaration\FunctionLikeReturnTypeResolver;
+final class ReturnTypeDeclarationReturnTypeInfererTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
 {
     /**
      * @readonly
@@ -21,19 +21,19 @@ final class ReturnTypeDeclarationReturnTypeInfererTypeInferer implements ReturnT
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\TypeDeclaration\FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function inferFunctionLike(FunctionLike $functionLike) : Type
+    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
     {
         if ($functionLike->getReturnType() === null) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         // resolve later with more precise type, e.g. Type[]
         if ($this->nodeNameResolver->isNames($functionLike->getReturnType(), ['array', 'iterable'])) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         return $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType($functionLike);
     }

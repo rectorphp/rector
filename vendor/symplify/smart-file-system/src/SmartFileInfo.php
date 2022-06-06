@@ -12,7 +12,7 @@ use RectorPrefix20220606\Symplify\SmartFileSystem\Exception\FileNotFoundExceptio
 /**
  * @see \Symplify\SmartFileSystem\Tests\SmartFileInfo\SmartFileInfoTest
  */
-final class SmartFileInfo extends SplFileInfo
+final class SmartFileInfo extends \RectorPrefix20220606\Symfony\Component\Finder\SplFileInfo
 {
     /**
      * @var string
@@ -25,10 +25,10 @@ final class SmartFileInfo extends SplFileInfo
     private $smartFileSystem;
     public function __construct(string $filePath)
     {
-        $this->smartFileSystem = new SmartFileSystem();
+        $this->smartFileSystem = new \RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem();
         // accepts also dirs
         if (!\file_exists($filePath)) {
-            throw new FileNotFoundException(\sprintf('File path "%s" was not found while creating "%s" object.', $filePath, self::class));
+            throw new \RectorPrefix20220606\Symplify\SmartFileSystem\Exception\FileNotFoundException(\sprintf('File path "%s" was not found while creating "%s" object.', $filePath, self::class));
         }
         // real path doesn't work in PHAR: https://www.php.net/manual/en/function.realpath.php
         if (\strncmp($filePath, 'phar://', \strlen('phar://')) === 0) {
@@ -58,7 +58,7 @@ final class SmartFileInfo extends SplFileInfo
     }
     public function getRealPathWithoutSuffix() : string
     {
-        return Strings::replace($this->getRealPath(), self::LAST_SUFFIX_REGEX, '');
+        return \RectorPrefix20220606\Nette\Utils\Strings::replace($this->getRealPath(), self::LAST_SUFFIX_REGEX, '');
     }
     public function getRelativeFilePath() : string
     {
@@ -71,7 +71,7 @@ final class SmartFileInfo extends SplFileInfo
     public function getRelativeFilePathFromDirectory(string $directory) : string
     {
         if (!\file_exists($directory)) {
-            throw new DirectoryNotFoundException(\sprintf('Directory "%s" was not found in %s.', $directory, self::class));
+            throw new \RectorPrefix20220606\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException(\sprintf('Directory "%s" was not found in %s.', $directory, self::class));
         }
         $relativeFilePath = $this->smartFileSystem->makePathRelative($this->getNormalizedRealPath(), (string) \realpath($directory));
         return \rtrim($relativeFilePath, '/');
@@ -79,8 +79,8 @@ final class SmartFileInfo extends SplFileInfo
     public function getRelativeFilePathFromCwdInTests() : string
     {
         // special case for tests
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            return $this->getRelativeFilePathFromDirectory(StaticFixtureSplitter::getTemporaryPath());
+        if (\RectorPrefix20220606\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            return $this->getRelativeFilePathFromDirectory(\RectorPrefix20220606\Symplify\EasyTesting\StaticFixtureSplitter::getTemporaryPath());
         }
         return $this->getRelativeFilePathFromDirectory(\getcwd());
     }
@@ -123,3 +123,7 @@ final class SmartFileInfo extends SplFileInfo
         return \str_replace('\\', '/', $path);
     }
 }
+/**
+ * @see \Symplify\SmartFileSystem\Tests\SmartFileInfo\SmartFileInfoTest
+ */
+\class_alias('RectorPrefix20220606\\Symplify\\SmartFileSystem\\SmartFileInfo', 'Symplify\\SmartFileSystem\\SmartFileInfo', \false);

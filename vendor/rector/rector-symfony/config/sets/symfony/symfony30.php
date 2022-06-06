@@ -3,89 +3,89 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use RectorPrefix20220606\Rector\Config\RectorConfig;
-use RectorPrefix20220606\Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
-use RectorPrefix20220606\Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use RectorPrefix20220606\Rector\Renaming\Rector\Name\RenameClassRector;
-use RectorPrefix20220606\Rector\Renaming\ValueObject\MethodCallRename;
-use RectorPrefix20220606\Rector\Renaming\ValueObject\RenameClassConstFetch;
-use RectorPrefix20220606\Rector\Symfony\Rector\Class_\FormTypeWithDependencyToOptionsRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\ClassMethod\GetRequestRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\MethodCall\OptionNameRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
-use RectorPrefix20220606\Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
-return static function (RectorConfig $rectorConfig) : void {
+use Rector\Config\RectorConfig;
+use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+use Rector\Renaming\ValueObject\RenameClassConstFetch;
+use Rector\Symfony\Rector\Class_\FormTypeWithDependencyToOptionsRector;
+use Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
+use Rector\Symfony\Rector\ClassMethod\GetRequestRector;
+use Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
+use Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector;
+use Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector;
+use Rector\Symfony\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
+use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
+use Rector\Symfony\Rector\MethodCall\OptionNameRector;
+use Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector;
+use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     # resources:
     # - https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md
     $rectorConfig->rules([
         // php
-        GetRequestRector::class,
-        FormTypeGetParentRector::class,
-        OptionNameRector::class,
-        ReadOnlyOptionToAttributeRector::class,
+        \Rector\Symfony\Rector\ClassMethod\GetRequestRector::class,
+        \Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector::class,
+        \Rector\Symfony\Rector\MethodCall\OptionNameRector::class,
+        \Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector::class,
         // forms
-        FormTypeInstanceToClassConstRector::class,
-        FormTypeWithDependencyToOptionsRector::class,
-        StringFormTypeToClassRector::class,
-        CascadeValidationFormBuilderRector::class,
-        RemoveDefaultGetBlockPrefixRector::class,
+        \Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector::class,
+        \Rector\Symfony\Rector\Class_\FormTypeWithDependencyToOptionsRector::class,
+        \Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector::class,
+        \Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector::class,
+        \Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector::class,
         // forms - collection
-        ChangeStringCollectionOptionToConstantRector::class,
-        ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class,
+        \Rector\Symfony\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector::class,
+        \Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class,
     ]);
-    $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [new RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'), new RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'BIND', 'SUBMIT'), new RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'POST_BIND', 'POST_SUBMIT'), new RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFEVEN', 'ROUND_HALF_EVEN'), new RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFUP', 'ROUND_HALF_UP'), new RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFDOWN', 'ROUND_HALF_DOWN')]);
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerNamespaces', 'addPrefixes'),
-        new MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerPrefixes', 'addPrefixes'),
-        new MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerNamespace', 'addPrefix'),
-        new MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerPrefix', 'addPrefix'),
-        new MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'getNamespaces', 'getPrefixes'),
-        new MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'getNamespaceFallbacks', 'getFallbackDirs'),
-        new MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'getPrefixFallbacks', 'getFallbackDirs'),
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector::class, [new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'BIND', 'SUBMIT'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'POST_BIND', 'POST_SUBMIT'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFEVEN', 'ROUND_HALF_EVEN'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFUP', 'ROUND_HALF_UP'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFDOWN', 'ROUND_HALF_DOWN')]);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerNamespaces', 'addPrefixes'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerPrefixes', 'addPrefixes'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerNamespace', 'addPrefix'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerPrefix', 'addPrefix'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'getNamespaces', 'getPrefixes'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'getNamespaceFallbacks', 'getFallbackDirs'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'getPrefixFallbacks', 'getFallbackDirs'),
         // form
-        new MethodCallRename('Symfony\\Component\\Form\\AbstractType', 'getName', 'getBlockPrefix'),
-        new MethodCallRename('Symfony\\Component\\Form\\AbstractType', 'setDefaultOptions', 'configureOptions'),
-        new MethodCallRename('Symfony\\Component\\Form\\FormTypeInterface', 'getName', 'getBlockPrefix'),
-        new MethodCallRename('Symfony\\Component\\Form\\FormTypeInterface', 'setDefaultOptions', 'configureOptions'),
-        new MethodCallRename('Symfony\\Component\\Form\\ResolvedFormTypeInterface', 'getName', 'getBlockPrefix'),
-        new MethodCallRename('Symfony\\Component\\Form\\AbstractTypeExtension', 'setDefaultOptions', 'configureOptions'),
-        new MethodCallRename('Symfony\\Component\\Form\\Form', 'bind', 'submit'),
-        new MethodCallRename('Symfony\\Component\\Form\\Form', 'isBound', 'isSubmitted'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Form\\AbstractType', 'getName', 'getBlockPrefix'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Form\\AbstractType', 'setDefaultOptions', 'configureOptions'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Form\\FormTypeInterface', 'getName', 'getBlockPrefix'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Form\\FormTypeInterface', 'setDefaultOptions', 'configureOptions'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Form\\ResolvedFormTypeInterface', 'getName', 'getBlockPrefix'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Form\\AbstractTypeExtension', 'setDefaultOptions', 'configureOptions'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Form\\Form', 'bind', 'submit'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Form\\Form', 'isBound', 'isSubmitted'),
         // process
-        new MethodCallRename('Symfony\\Component\\Process\\Process', 'setStdin', 'setInput'),
-        new MethodCallRename('Symfony\\Component\\Process\\Process', 'getStdin', 'getInput'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Process\\Process', 'setStdin', 'setInput'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Process\\Process', 'getStdin', 'getInput'),
         // monolog
-        new MethodCallRename('Symfony\\Bridge\\Monolog\\Logger', 'emerg', 'emergency'),
-        new MethodCallRename('Symfony\\Bridge\\Monolog\\Logger', 'crit', 'critical'),
-        new MethodCallRename('Symfony\\Bridge\\Monolog\\Logger', 'err', 'error'),
-        new MethodCallRename('Symfony\\Bridge\\Monolog\\Logger', 'warn', 'warning'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Bridge\\Monolog\\Logger', 'emerg', 'emergency'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Bridge\\Monolog\\Logger', 'crit', 'critical'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Bridge\\Monolog\\Logger', 'err', 'error'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Bridge\\Monolog\\Logger', 'warn', 'warning'),
         # http kernel
-        new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\LoggerInterface', 'emerg', 'emergency'),
-        new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\LoggerInterface', 'crit', 'critical'),
-        new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\LoggerInterface', 'err', 'error'),
-        new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\LoggerInterface', 'warn', 'warning'),
-        new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'emerg', 'emergency'),
-        new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'crit', 'critical'),
-        new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'err', 'error'),
-        new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'warn', 'warning'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\LoggerInterface', 'emerg', 'emergency'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\LoggerInterface', 'crit', 'critical'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\LoggerInterface', 'err', 'error'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\LoggerInterface', 'warn', 'warning'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'emerg', 'emergency'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'crit', 'critical'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'err', 'error'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'warn', 'warning'),
         // property access
-        new MethodCallRename('getPropertyAccessor', 'Symfony\\Component\\PropertyAccess\\PropertyAccess', 'createPropertyAccessor'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('getPropertyAccessor', 'Symfony\\Component\\PropertyAccess\\PropertyAccess', 'createPropertyAccessor'),
         // translator
-        new MethodCallRename('Symfony\\Component\\Translation\\Dumper\\FileDumper', 'format', 'formatCatalogue'),
-        new MethodCallRename('Symfony\\Component\\Translation\\Translator', 'getMessages', 'getCatalogue'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Translation\\Dumper\\FileDumper', 'format', 'formatCatalogue'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Translation\\Translator', 'getMessages', 'getCatalogue'),
         // validator
-        new MethodCallRename('Symfony\\Component\\Validator\\ConstraintViolationInterface', 'getMessageParameters', 'getParameters'),
-        new MethodCallRename('Symfony\\Component\\Validator\\ConstraintViolationInterface', 'getMessagePluralization', 'getPlural'),
-        new MethodCallRename('Symfony\\Component\\Validator\\ConstraintViolation', 'getMessageParameters', 'getParameters'),
-        new MethodCallRename('Symfony\\Component\\Validator\\ConstraintViolation', 'getMessagePluralization', 'getPlural'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Validator\\ConstraintViolationInterface', 'getMessageParameters', 'getParameters'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Validator\\ConstraintViolationInterface', 'getMessagePluralization', 'getPlural'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Validator\\ConstraintViolation', 'getMessageParameters', 'getParameters'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\Validator\\ConstraintViolation', 'getMessagePluralization', 'getPlural'),
     ]);
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\Name\RenameClassRector::class, [
         # class loader
         # partial with method rename
         'Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader' => 'Symfony\\Component\\ClassLoader\\ClassLoader',

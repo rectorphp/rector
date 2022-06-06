@@ -1,35 +1,35 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\Rector\Property;
+namespace Rector\CodingStyle\Rector\Property;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Trait_;
-use RectorPrefix20220606\PHPStan\Type\BooleanType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Type\BooleanType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector\AddFalseDefaultToBoolPropertyRectorTest
  */
-final class AddFalseDefaultToBoolPropertyRector extends AbstractRector
+final class AddFalseDefaultToBoolPropertyRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
-    public function __construct(ConstructorAssignDetector $constructorAssignDetector)
+    public function __construct(\Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->constructorAssignDetector = $constructorAssignDetector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add false default to bool properties, to prevent null compare errors', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add false default to bool properties, to prevent null compare errors', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -54,12 +54,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (\count($node->props) !== 1) {
             return null;
@@ -71,8 +71,8 @@ CODE_SAMPLE
         if (!$this->isBoolDocType($node)) {
             return null;
         }
-        $classLike = $this->betterNodeFinder->findParentByTypes($node, [Class_::class, Trait_::class]);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Trait_::class]);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return null;
         }
         $propertyName = $this->nodeNameResolver->getName($onlyProperty);
@@ -82,9 +82,9 @@ CODE_SAMPLE
         $onlyProperty->default = $this->nodeFactory->createFalse();
         return $node;
     }
-    private function isBoolDocType(Property $property) : bool
+    private function isBoolDocType(\PhpParser\Node\Stmt\Property $property) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        return $phpDocInfo->getVarType() instanceof BooleanType;
+        return $phpDocInfo->getVarType() instanceof \PHPStan\Type\BooleanType;
     }
 }

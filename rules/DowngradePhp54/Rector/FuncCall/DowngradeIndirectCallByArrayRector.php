@@ -1,36 +1,36 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp54\Rector\FuncCall;
+namespace Rector\DowngradePhp54\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/indirect-method-call-by-array-var
  *
  * @see \Rector\Tests\DowngradePhp54\Rector\FuncCall\DowngradeIndirectCallByArrayRector\DowngradeIndirectCallByArrayRectorTest
  */
-final class DowngradeIndirectCallByArrayRector extends AbstractRector
+final class DowngradeIndirectCallByArrayRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
-    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade indirect method call by array variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade indirect method call by array variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class Hello {
     public static function world($x) {
         echo "Hello, $x\n";
@@ -57,20 +57,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?FuncCall
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\FuncCall
     {
-        if (!$node->name instanceof Variable) {
+        if (!$node->name instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($node->name)) {
             return null;
         }
-        $args = \array_merge([new Arg($node->name)], $node->args);
-        return new FuncCall(new Name('call_user_func'), $args);
+        $args = \array_merge([new \PhpParser\Node\Arg($node->name)], $node->args);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('call_user_func'), $args);
     }
 }

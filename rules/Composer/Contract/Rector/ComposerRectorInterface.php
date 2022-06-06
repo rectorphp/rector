@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Composer\Contract\Rector;
+namespace Rector\Composer\Contract\Rector;
 
-use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
-interface ComposerRectorInterface extends RectorInterface, ConfigurableRectorInterface
+interface ComposerRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
-    public function refactor(ComposerJson $composerJson) : void;
+    public function refactor(\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson $composerJson) : void;
 }

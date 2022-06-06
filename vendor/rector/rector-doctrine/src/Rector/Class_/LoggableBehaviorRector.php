@@ -1,39 +1,39 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\Rector\Class_;
+namespace Rector\Doctrine\Rector\Class_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassInsertManipulator;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
+use Rector\Core\NodeManipulator\ClassInsertManipulator;
+use Rector\Core\Rector\AbstractRector;
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/Atlantic18/DoctrineExtensions/blob/v2.4.x/doc/loggable.md
  * @see https://github.com/KnpLabs/DoctrineBehaviors/blob/4e0677379dd4adf84178f662d08454a9627781a8/docs/loggable.md
  *
  * @see \Rector\Doctrine\Tests\Rector\Class_\LoggableBehaviorRector\LoggableBehaviorRectorTest
  */
-final class LoggableBehaviorRector extends AbstractRector
+final class LoggableBehaviorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
-    public function __construct(ClassInsertManipulator $classInsertManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator)
     {
         $this->classInsertManipulator = $classInsertManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change Loggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change Loggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -75,14 +75,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class, Property::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Class_|Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof Class_) {
+        if ($node instanceof \PhpParser\Node\Stmt\Class_) {
             return $this->refactorClass($node);
         }
         return $this->refactorProperty($node);
@@ -90,17 +90,17 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node\Stmt\Class_|null
      */
-    private function refactorClass(Class_ $class)
+    private function refactorClass(\PhpParser\Node\Stmt\Class_ $class)
     {
         // change the node
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         $hasLoggableAnnotation = \false;
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($classPhpDocInfo->getPhpDocNode(), '', function ($node) use(&$hasLoggableAnnotation) {
-            if (!$node instanceof SpacelessPhpDocTagNode) {
+            if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
                 return null;
             }
-            if (!$node->value instanceof DoctrineAnnotationTagValueNode) {
+            if (!$node->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 return null;
             }
             $doctrineAnnotationTagValueNode = $node->value;
@@ -108,7 +108,7 @@ CODE_SAMPLE
                 return null;
             }
             $hasLoggableAnnotation = \true;
-            return PhpDocNodeTraverser::NODE_REMOVE;
+            return \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
         });
         if (!$hasLoggableAnnotation) {
             return null;
@@ -116,20 +116,20 @@ CODE_SAMPLE
         // invoke phpdoc re-print as annotation was removed
         $classPhpDocInfo->markAsChanged();
         $this->classInsertManipulator->addAsFirstTrait($class, 'Knp\\DoctrineBehaviors\\Model\\Loggable\\LoggableTrait');
-        $class->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\LoggableInterface');
+        $class->implements[] = new \PhpParser\Node\Name\FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\LoggableInterface');
         return $class;
     }
-    private function refactorProperty(Property $property) : ?Property
+    private function refactorProperty(\PhpParser\Node\Stmt\Property $property) : ?\PhpParser\Node\Stmt\Property
     {
         // remove tag from properties
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $hasChanged = \false;
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use($phpDocInfo, &$hasChanged) {
-            if (!$node instanceof SpacelessPhpDocTagNode) {
+            if (!$node instanceof \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode) {
                 return null;
             }
-            if (!$node->value instanceof DoctrineAnnotationTagValueNode) {
+            if (!$node->value instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
                 return null;
             }
             if (!$node->value->hasClassName('Gedmo\\Mapping\\Annotation\\Versioned')) {
@@ -137,7 +137,7 @@ CODE_SAMPLE
             }
             $phpDocInfo->markAsChanged();
             $hasChanged = \true;
-            return PhpDocNodeTraverser::NODE_REMOVE;
+            return \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser::NODE_REMOVE;
         });
         if (!$hasChanged) {
             return null;

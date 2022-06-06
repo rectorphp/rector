@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\ValueObject;
+namespace Rector\Php80\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ConstFetch;
 final class ArrayDimFetchAndConstFetch
 {
     /**
@@ -17,16 +17,16 @@ final class ArrayDimFetchAndConstFetch
      * @var \PhpParser\Node\Expr\ConstFetch
      */
     private $constFetch;
-    public function __construct(ArrayDimFetch $arrayDimFetch, ConstFetch $constFetch)
+    public function __construct(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, \PhpParser\Node\Expr\ConstFetch $constFetch)
     {
         $this->arrayDimFetch = $arrayDimFetch;
         $this->constFetch = $constFetch;
     }
-    public function getArrayDimFetch() : ArrayDimFetch
+    public function getArrayDimFetch() : \PhpParser\Node\Expr\ArrayDimFetch
     {
         return $this->arrayDimFetch;
     }
-    public function getConstFetch() : ConstFetch
+    public function getConstFetch() : \PhpParser\Node\Expr\ConstFetch
     {
         return $this->constFetch;
     }

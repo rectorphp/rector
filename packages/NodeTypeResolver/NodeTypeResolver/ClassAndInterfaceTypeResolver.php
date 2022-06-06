@@ -1,33 +1,33 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Interface_;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Interface_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\ClassTypeResolverTest
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\ClassAndInterfaceTypeResolver\InterfaceTypeResolverTest
  *
  * @implements NodeTypeResolverInterface<Class_|Interface_>
  */
-final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
+final class ClassAndInterfaceTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -36,22 +36,22 @@ final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
      */
     public function getNodeClasses() : array
     {
-        return [Class_::class, Interface_::class];
+        return [\PhpParser\Node\Stmt\Class_::class, \PhpParser\Node\Stmt\Interface_::class];
     }
     /**
      * @param Class_|Interface_ $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             // new node probably
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
-            return new ObjectType((string) $this->nodeNameResolver->getName($node));
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+            return new \PHPStan\Type\ObjectType((string) $this->nodeNameResolver->getName($node));
         }
-        return new ObjectType($classReflection->getName(), null, $classReflection);
+        return new \PHPStan\Type\ObjectType($classReflection->getName(), null, $classReflection);
     }
 }

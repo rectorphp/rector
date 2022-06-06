@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Configuration;
+namespace Ssch\TYPO3Rector\Configuration;
 
 final class Typo3Option
 {

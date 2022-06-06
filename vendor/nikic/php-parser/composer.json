@@ -27,12 +27,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220606\\PhpParser\\": "lib\/PhpParser"
+            "PhpParser\\": "lib\/PhpParser"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220606\\PhpParser\\": "test\/PhpParser\/"
+            "PhpParser\\": "test\/PhpParser\/"
         }
     },
     "bin": [

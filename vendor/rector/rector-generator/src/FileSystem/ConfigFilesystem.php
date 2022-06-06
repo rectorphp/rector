@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\RectorGenerator\FileSystem;
+namespace Rector\RectorGenerator\FileSystem;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\Rector\RectorGenerator\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\RectorGenerator\TemplateFactory;
+use Rector\RectorGenerator\Exception\ShouldNotHappenException;
+use Rector\RectorGenerator\TemplateFactory;
 use RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem;
 final class ConfigFilesystem
 {
@@ -27,7 +27,7 @@ final class ConfigFilesystem
      * @var \Rector\RectorGenerator\TemplateFactory
      */
     private $templateFactory;
-    public function __construct(SmartFileSystem $smartFileSystem, TemplateFactory $templateFactory)
+    public function __construct(\RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\RectorGenerator\TemplateFactory $templateFactory)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->templateFactory = $templateFactory;
@@ -45,7 +45,7 @@ final class ConfigFilesystem
             return;
         }
         $registerServiceLine = \sprintf(';' . \PHP_EOL . '    $rectorConfig->rule(\\%s::class);' . \PHP_EOL . '};', $servicesFullyQualifiedName);
-        $setFileContents = Strings::replace($setFileContents, self::LAST_ITEM_REGEX, $registerServiceLine);
+        $setFileContents = \RectorPrefix20220606\Nette\Utils\Strings::replace($setFileContents, self::LAST_ITEM_REGEX, $registerServiceLine);
         // 3. print the content back to file
         $this->smartFileSystem->dumpFile($setFilePath, $setFileContents);
     }
@@ -59,6 +59,6 @@ final class ConfigFilesystem
             return;
         }
         $message = \sprintf('Template variables for "%s" keys are missing', \implode('", "', $missingKeys));
-        throw new ShouldNotHappenException($message);
+        throw new \Rector\RectorGenerator\Exception\ShouldNotHappenException($message);
     }
 }

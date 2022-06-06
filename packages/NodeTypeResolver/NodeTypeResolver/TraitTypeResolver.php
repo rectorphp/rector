@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Trait_;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\TraitTypeResolver\TraitTypeResolverTest
  *
  * @implements NodeTypeResolverInterface<Trait_>
  */
-final class TraitTypeResolver implements NodeTypeResolverInterface
+final class TraitTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
@@ -32,26 +32,26 @@ final class TraitTypeResolver implements NodeTypeResolverInterface
      */
     public function getNodeClasses() : array
     {
-        return [Trait_::class];
+        return [\PhpParser\Node\Stmt\Trait_::class];
     }
     /**
      * @param Trait_ $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $traitName = (string) $node->namespacedName;
         if (!$this->reflectionProvider->hasClass($traitName)) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         $classReflection = $this->reflectionProvider->getClass($traitName);
         $types = [];
-        $types[] = new ObjectType($traitName);
+        $types[] = new \PHPStan\Type\ObjectType($traitName);
         foreach ($classReflection->getTraits() as $usedTraitReflection) {
-            $types[] = new ObjectType($usedTraitReflection->getName());
+            $types[] = new \PHPStan\Type\ObjectType($usedTraitReflection->getName());
         }
         if (\count($types) === 1) {
             return $types[0];
         }
-        return new UnionType($types);
+        return new \PHPStan\Type\UnionType($types);
     }
 }

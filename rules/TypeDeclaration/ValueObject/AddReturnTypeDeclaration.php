@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\ValueObject;
+namespace Rector\TypeDeclaration\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\Core\Validation\RectorAssert;
 final class AddReturnTypeDeclaration
 {
     /**
@@ -23,12 +23,12 @@ final class AddReturnTypeDeclaration
      * @var \PHPStan\Type\Type
      */
     private $returnType;
-    public function __construct(string $class, string $method, Type $returnType)
+    public function __construct(string $class, string $method, \PHPStan\Type\Type $returnType)
     {
         $this->class = $class;
         $this->method = $method;
         $this->returnType = $returnType;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
     public function getClass() : string
     {
@@ -38,12 +38,12 @@ final class AddReturnTypeDeclaration
     {
         return $this->method;
     }
-    public function getReturnType() : Type
+    public function getReturnType() : \PHPStan\Type\Type
     {
         return $this->returnType;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
 }

@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v7;
+namespace Ssch\TYPO3Rector\Rector\v8\v7;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.7/Deprecation-80000-InlineOverrideChildTca.html?highlight=foreign_types
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v7\MoveForeignTypesToOverrideChildTcaRector\MoveForeignTypesToOverrideChildTcaRectorTest
  */
-final class MoveForeignTypesToOverrideChildTcaRector extends AbstractRector
+final class MoveForeignTypesToOverrideChildTcaRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -47,29 +47,29 @@ final class MoveForeignTypesToOverrideChildTcaRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      * @return ?Return_
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columns = $this->extractColumns($node);
-        if (!$columns instanceof ArrayItem) {
+        if (!$columns instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
-        if (!$columns->value instanceof Array_) {
+        if (!$columns->value instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($this->extractColumnConfig($columns->value) as $columnConfig) {
             //handle the special case of ExtensionManagementUtility::getFileFieldTCAConfig
             $columnConfig = $this->extractConfigFromGetFileFieldTcaConfig($columnConfig);
-            if (!$columnConfig instanceof Array_) {
+            if (!$columnConfig instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             $foreignTypesArrayItem = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_TYPES);
@@ -78,33 +78,33 @@ final class MoveForeignTypesToOverrideChildTcaRector extends AbstractRector
             $overrideChildTcaArray = $this->extractSubArrayByKey($columnConfig, self::OVERRIDE_CHILD_TCA);
             $foreignSelectorOverrideArrayItem = $this->extractArrayItemByKey($columnConfig, self::FOREIGN_SELECTOR_FIELDTCAOVERRIDE);
             // don't search further if no foreign_types is configured
-            if (!$foreignSelectorOverrideArrayItem instanceof ArrayItem && !$foreignTypesArrayItem instanceof ArrayItem && !$foreignRecordDefaultsArrayItem instanceof ArrayItem) {
+            if (!$foreignSelectorOverrideArrayItem instanceof \PhpParser\Node\Expr\ArrayItem && !$foreignTypesArrayItem instanceof \PhpParser\Node\Expr\ArrayItem && !$foreignRecordDefaultsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             $foreignSelector = null !== $foreignSelectorArrayItem ? $foreignSelectorArrayItem->value : null;
-            if (!$overrideChildTcaArray instanceof Array_) {
-                $overrideChildTcaArray = new Array_();
-                $columnConfig->items[] = new ArrayItem($overrideChildTcaArray, new String_(self::OVERRIDE_CHILD_TCA));
+            if (!$overrideChildTcaArray instanceof \PhpParser\Node\Expr\Array_) {
+                $overrideChildTcaArray = new \PhpParser\Node\Expr\Array_();
+                $columnConfig->items[] = new \PhpParser\Node\Expr\ArrayItem($overrideChildTcaArray, new \PhpParser\Node\Scalar\String_(self::OVERRIDE_CHILD_TCA));
             }
-            if (null !== $foreignTypesArrayItem && $foreignTypesArrayItem->value instanceof Array_) {
+            if (null !== $foreignTypesArrayItem && $foreignTypesArrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
                 $this->injectOverrideChildTca($overrideChildTcaArray, 'types', $foreignTypesArrayItem->value);
                 $this->removeNode($foreignTypesArrayItem);
                 $hasAstBeenChanged = \true;
             }
-            if (null !== $foreignSelectorOverrideArrayItem && $foreignSelectorOverrideArrayItem->value instanceof Array_ && $foreignSelector instanceof String_) {
-                $columnItem = new Array_([new ArrayItem($foreignSelectorOverrideArrayItem->value, new String_($foreignSelector->value))]);
+            if (null !== $foreignSelectorOverrideArrayItem && $foreignSelectorOverrideArrayItem->value instanceof \PhpParser\Node\Expr\Array_ && $foreignSelector instanceof \PhpParser\Node\Scalar\String_) {
+                $columnItem = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($foreignSelectorOverrideArrayItem->value, new \PhpParser\Node\Scalar\String_($foreignSelector->value))]);
                 $this->injectOverrideChildTca($overrideChildTcaArray, 'columns', $columnItem);
                 $this->removeNode($foreignSelectorOverrideArrayItem);
                 $hasAstBeenChanged = \true;
             }
-            if (null !== $foreignRecordDefaultsArrayItem && $foreignRecordDefaultsArrayItem->value instanceof Array_) {
-                $newOverrideColumns = new Array_();
+            if (null !== $foreignRecordDefaultsArrayItem && $foreignRecordDefaultsArrayItem->value instanceof \PhpParser\Node\Expr\Array_) {
+                $newOverrideColumns = new \PhpParser\Node\Expr\Array_();
                 foreach ($foreignRecordDefaultsArrayItem->value->items as $item) {
-                    if (!$item instanceof ArrayItem) {
+                    if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                         continue;
                     }
-                    $value = new Array_([new ArrayItem(new Array_([new ArrayItem($item->value, new String_('default'))]), new String_('config'))]);
-                    $newOverrideColumns->items[] = new ArrayItem($value, $item->key);
+                    $value = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($item->value, new \PhpParser\Node\Scalar\String_('default'))]), new \PhpParser\Node\Scalar\String_('config'))]);
+                    $newOverrideColumns->items[] = new \PhpParser\Node\Expr\ArrayItem($value, $item->key);
                 }
                 $this->injectOverrideChildTca($overrideChildTcaArray, 'columns', $newOverrideColumns);
                 $this->removeNode($foreignRecordDefaultsArrayItem);
@@ -116,9 +116,9 @@ final class MoveForeignTypesToOverrideChildTcaRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('TCA InlineOverrideChildTca', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TCA InlineOverrideChildTca', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'columns' => [
         'aField' => [
@@ -154,10 +154,10 @@ return [
 CODE_SAMPLE
 )]);
     }
-    private function extractConfigFromGetFileFieldTcaConfig(Node $columnConfig) : Node
+    private function extractConfigFromGetFileFieldTcaConfig(\PhpParser\Node $columnConfig) : \PhpParser\Node
     {
-        if ($columnConfig instanceof StaticCall) {
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($columnConfig, new ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
+        if ($columnConfig instanceof \PhpParser\Node\Expr\StaticCall) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($columnConfig, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\ExtensionManagementUtility'))) {
                 return $columnConfig;
             }
             if (!$this->isName($columnConfig->name, 'getFileFieldTCAConfig')) {
@@ -166,21 +166,21 @@ CODE_SAMPLE
             if (\count($columnConfig->args) < 2) {
                 return $columnConfig;
             }
-            if (!$columnConfig->args[1]->value instanceof Array_) {
+            if (!$columnConfig->args[1]->value instanceof \PhpParser\Node\Expr\Array_) {
                 return $columnConfig;
             }
             return $columnConfig->args[1]->value;
         }
         return $columnConfig;
     }
-    private function injectOverrideChildTca(Array_ $overrideChildTcaNode, string $overrideKey, Array_ $overrideValue) : void
+    private function injectOverrideChildTca(\PhpParser\Node\Expr\Array_ $overrideChildTcaNode, string $overrideKey, \PhpParser\Node\Expr\Array_ $overrideValue) : void
     {
         $newOverrideChildTcaSetting = $this->extractArrayItemByKey($overrideChildTcaNode, $overrideKey);
-        if (!$newOverrideChildTcaSetting instanceof ArrayItem) {
-            $newOverrideChildTcaSetting = new ArrayItem($overrideValue, new String_($overrideKey));
+        if (!$newOverrideChildTcaSetting instanceof \PhpParser\Node\Expr\ArrayItem) {
+            $newOverrideChildTcaSetting = new \PhpParser\Node\Expr\ArrayItem($overrideValue, new \PhpParser\Node\Scalar\String_($overrideKey));
             $overrideChildTcaNode->items[] = $newOverrideChildTcaSetting;
         } else {
-            if (!$newOverrideChildTcaSetting->value instanceof Array_) {
+            if (!$newOverrideChildTcaSetting->value instanceof \PhpParser\Node\Expr\Array_) {
                 // do not alter overrideChildTca nodes that are not an array (which would be invalid tca, but lets be sure here)
                 return;
             }

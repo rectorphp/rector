@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\Resources\Icons;
+namespace Ssch\TYPO3Rector\FileProcessor\Resources\Icons;
 
-use RectorPrefix20220606\Rector\Core\Contract\Processor\FileProcessorInterface;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\Core\ValueObject\Configuration;
-use RectorPrefix20220606\Rector\Core\ValueObject\Error\SystemError;
-use RectorPrefix20220606\Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix20220606\Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix20220606\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\FilesFinder;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
+use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Parallel\ValueObject\Bridge;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
+use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Feature-77349-AdditionalLocationsForExtensionIcons.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Resources\Icons\IconsProcessor\IconsProcessorTest
  */
-final class IconsFileProcessor implements FileProcessorInterface
+final class IconsFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var string
@@ -36,7 +36,7 @@ final class IconsFileProcessor implements FileProcessorInterface
     /**
      * @param IconRectorInterface[] $iconsRector
      */
-    public function __construct(FilesFinder $filesFinder, array $iconsRector)
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, array $iconsRector)
     {
         $this->filesFinder = $filesFinder;
         $this->iconsRector = $iconsRector;
@@ -44,22 +44,22 @@ final class IconsFileProcessor implements FileProcessorInterface
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration) : array
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
         foreach ($this->iconsRector as $iconRector) {
             $iconRector->refactorFile($file);
         }
         // to keep parent contract with return values
-        return [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
+        return [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
     }
-    public function supports(File $file, Configuration $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         $smartFileInfo = $file->getSmartFileInfo();
         if ($this->shouldSkip($smartFileInfo->getFilenameWithoutExtension())) {
             return \false;
         }
         $extEmConfSmartFileInfo = $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($smartFileInfo);
-        if (!$extEmConfSmartFileInfo instanceof SmartFileInfo) {
+        if (!$extEmConfSmartFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             return \false;
         }
         return !\file_exists($this->createIconPath($file));
@@ -68,7 +68,7 @@ final class IconsFileProcessor implements FileProcessorInterface
     {
         return ['png', 'gif', 'svg'];
     }
-    private function createIconPath(File $file) : string
+    private function createIconPath(\Rector\Core\ValueObject\Application\File $file) : string
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $realPath = $smartFileInfo->getRealPathDirectory();
@@ -80,6 +80,6 @@ final class IconsFileProcessor implements FileProcessorInterface
         if (self::EXT_ICON_NAME === $filenameWithoutExtension) {
             return \false;
         }
-        return !(StaticPHPUnitEnvironment::isPHPUnitRun() && \strpos($filenameWithoutExtension, self::EXT_ICON_NAME) !== \false);
+        return !(\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun() && \strpos($filenameWithoutExtension, self::EXT_ICON_NAME) !== \false);
     }
 }

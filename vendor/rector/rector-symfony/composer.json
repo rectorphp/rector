@@ -28,13 +28,13 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix20220606\\Rector\\Symfony\\": "src"
+            "Rector\\Symfony\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix20220606\\Rector\\Symfony\\Tests\\": "tests",
-            "RectorPrefix20220606\\Rector\\Symfony\\Utils\\": "utils"
+            "Rector\\Symfony\\Tests\\": "tests",
+            "Rector\\Symfony\\Utils\\": "utils"
         },
         "classmap": [
             "stubs"

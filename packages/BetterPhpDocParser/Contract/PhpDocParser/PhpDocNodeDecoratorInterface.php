@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\Contract\PhpDocParser;
+namespace Rector\BetterPhpDocParser\Contract\PhpDocParser;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use PhpParser\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 interface PhpDocNodeDecoratorInterface
 {
-    public function decorate(PhpDocNode $phpDocNode, Node $phpNode) : void;
+    public function decorate(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \PhpParser\Node $phpNode) : void;
 }

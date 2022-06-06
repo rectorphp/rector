@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Renaming\NodeManipulator;
+namespace Rector\Renaming\NodeManipulator;
 
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Break_;
 final class SwitchManipulator
 {
     /**
@@ -15,14 +15,14 @@ final class SwitchManipulator
     public function removeBreakNodes(array $stmts) : array
     {
         foreach ($stmts as $key => $node) {
-            if (!$node instanceof Break_) {
+            if (!$node instanceof \PhpParser\Node\Stmt\Break_) {
                 continue;
             }
-            if (!$node->num instanceof LNumber || $node->num->value === 1) {
+            if (!$node->num instanceof \PhpParser\Node\Scalar\LNumber || $node->num->value === 1) {
                 unset($stmts[$key]);
                 continue;
             }
-            $node->num = $node->num->value === 2 ? null : new LNumber($node->num->value - 1);
+            $node->num = $node->num->value === 2 ? null : new \PhpParser\Node\Scalar\LNumber($node->num->value - 1);
         }
         return $stmts;
     }

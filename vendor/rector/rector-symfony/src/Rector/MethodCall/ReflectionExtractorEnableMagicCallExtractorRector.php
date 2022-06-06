@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Rector\MethodCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BitwiseOr;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyinfo
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector\ReflectionExtractorEnableMagicCallExtractorRectorTest
  */
-final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRector
+final class ReflectionExtractorEnableMagicCallExtractorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -32,9 +32,9 @@ final class ReflectionExtractorEnableMagicCallExtractorRector extends AbstractRe
      * @var string[]
      */
     private const METHODS_WITH_OPTION = ['getWriteInfo', 'getReadInfo'];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Migrates from deprecated enable_magic_call_extraction context option in ReflectionExtractor', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Migrates from deprecated enable_magic_call_extraction context option in ReflectionExtractor', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
 
 class SomeClass
@@ -69,12 +69,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -84,19 +84,19 @@ CODE_SAMPLE
             return null;
         }
         $thirdArg = $node->args[2];
-        if (!$thirdArg instanceof Arg) {
+        if (!$thirdArg instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $contextOptions = $thirdArg->value;
-        if (!$contextOptions instanceof Array_) {
+        if (!$contextOptions instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
-        $contextOptions->items[] = new ArrayItem($this->prepareEnableMagicMethodsExtractionFlags($contextOptionValue), new String_(self::NEW_OPTION_NAME));
+        $contextOptions->items[] = new \PhpParser\Node\Expr\ArrayItem($this->prepareEnableMagicMethodsExtractionFlags($contextOptionValue), new \PhpParser\Node\Scalar\String_(self::NEW_OPTION_NAME));
         return $node;
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        $reflectionExtractorObjectType = new ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor');
+        $reflectionExtractorObjectType = new \PHPStan\Type\ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor');
         if (!$this->isObjectType($methodCall->var, $reflectionExtractorObjectType)) {
             return \true;
         }
@@ -107,31 +107,31 @@ CODE_SAMPLE
             return \true;
         }
         $thirdArg = $methodCall->args[2];
-        if (!$thirdArg instanceof Arg) {
+        if (!$thirdArg instanceof \PhpParser\Node\Arg) {
             return \true;
         }
         $contextOptions = $thirdArg->value;
-        if (!$contextOptions instanceof Array_) {
+        if (!$contextOptions instanceof \PhpParser\Node\Expr\Array_) {
             return \true;
         }
         return $contextOptions->items === [];
     }
-    private function getContextOptionValue(MethodCall $methodCall) : ?bool
+    private function getContextOptionValue(\PhpParser\Node\Expr\MethodCall $methodCall) : ?bool
     {
         $thirdArg = $methodCall->args[2];
-        if (!$thirdArg instanceof Arg) {
+        if (!$thirdArg instanceof \PhpParser\Node\Arg) {
             return null;
         }
         $contextOptions = $thirdArg->value;
-        if (!$contextOptions instanceof Array_) {
+        if (!$contextOptions instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $contextOptionValue = null;
         foreach ($contextOptions->items as $index => $arrayItem) {
-            if (!$arrayItem instanceof ArrayItem) {
+            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            if (!$arrayItem->key instanceof String_) {
+            if (!$arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
                 continue;
             }
             if ($arrayItem->key->value !== self::OLD_OPTION_NAME) {
@@ -142,14 +142,14 @@ CODE_SAMPLE
         }
         return $contextOptionValue;
     }
-    private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue) : BitwiseOr
+    private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue) : \PhpParser\Node\Expr\BinaryOp\BitwiseOr
     {
         $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_GET');
         $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_SET');
         if (!$enableMagicCallExtractionValue) {
-            return new BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
+            return new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
         }
         $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_CALL');
-        return new BitwiseOr(new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch);
+        return new \PhpParser\Node\Expr\BinaryOp\BitwiseOr(new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch);
     }
 }

@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v1;
+namespace Ssch\TYPO3Rector\Rector\v8\v1;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Mul;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Plus;
-use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\GreaterOrEqual;
+use PhpParser\Node\Expr\BinaryOp\Mul;
+use PhpParser\Node\Expr\BinaryOp\Plus;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.1/Deprecation-75621-GeneralUtilityMethods.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v1\RefactorVariousGeneralUtilityMethodsRector\RefactorVariousGeneralUtilityMethodsRectorTest
  */
-final class RefactorVariousGeneralUtilityMethodsRector extends AbstractRector
+final class RefactorVariousGeneralUtilityMethodsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -59,14 +59,14 @@ final class RefactorVariousGeneralUtilityMethodsRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Utility\\GeneralUtility'))) {
             return null;
         }
         if (!$this->isNames($node->name, [self::COMPAT_VERSION, self::CONVERT_MICROTIME, self::RAW_URL_ENCODE_JS, self::RAW_URL_ENCODE_FP, self::LCFIRST, self::GET_MAXIMUM_PATH_LENGTH])) {
@@ -74,12 +74,12 @@ final class RefactorVariousGeneralUtilityMethodsRector extends AbstractRector
         }
         $nodeName = $this->getName($node->name);
         if (self::COMPAT_VERSION === $nodeName) {
-            return new GreaterOrEqual($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\VersionNumberUtility', 'convertVersionNumberToInteger', [new ConstFetch(new Name('TYPO3_branch'))]), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\VersionNumberUtility', 'convertVersionNumberToInteger', $node->args));
+            return new \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual($this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\VersionNumberUtility', 'convertVersionNumberToInteger', [new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('TYPO3_branch'))]), $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\VersionNumberUtility', 'convertVersionNumberToInteger', $node->args));
         }
         if (self::CONVERT_MICROTIME === $nodeName) {
-            $funcCall = $this->nodeFactory->createFuncCall('explode', [new String_(' '), $node->args[0]->value]);
-            $this->nodesToAddCollector->addNodeBeforeNode(new Expression(new Assign(new Variable(self::PARTS), $funcCall)), $node);
-            return $this->nodeFactory->createFuncCall('round', [new Mul(new Plus(new ArrayDimFetch(new Variable(self::PARTS), new LNumber(0)), new ArrayDimFetch(new Variable(self::PARTS), new LNumber(1))), new LNumber(1000))]);
+            $funcCall = $this->nodeFactory->createFuncCall('explode', [new \PhpParser\Node\Scalar\String_(' '), $node->args[0]->value]);
+            $this->nodesToAddCollector->addNodeBeforeNode(new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable(self::PARTS), $funcCall)), $node);
+            return $this->nodeFactory->createFuncCall('round', [new \PhpParser\Node\Expr\BinaryOp\Mul(new \PhpParser\Node\Expr\BinaryOp\Plus(new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::PARTS), new \PhpParser\Node\Scalar\LNumber(0)), new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable(self::PARTS), new \PhpParser\Node\Scalar\LNumber(1))), new \PhpParser\Node\Scalar\LNumber(1000))]);
         }
         if (self::RAW_URL_ENCODE_JS === $nodeName) {
             return $this->nodeFactory->createFuncCall('str_replace', ['%20', ' ', $this->nodeFactory->createFuncCall('rawurlencode', $node->args)]);
@@ -91,16 +91,16 @@ final class RefactorVariousGeneralUtilityMethodsRector extends AbstractRector
             return $this->nodeFactory->createFuncCall(self::LCFIRST, $node->args);
         }
         if (self::GET_MAXIMUM_PATH_LENGTH === $nodeName) {
-            return new ConstFetch(new Name('PHP_MAXPATHLEN'));
+            return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('PHP_MAXPATHLEN'));
         }
         return null;
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Refactor various deprecated methods of class GeneralUtility', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor various deprecated methods of class GeneralUtility', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 $url = 'https://www.domain.com/';
 $url = GeneralUtility::rawUrlEncodeFP($url);

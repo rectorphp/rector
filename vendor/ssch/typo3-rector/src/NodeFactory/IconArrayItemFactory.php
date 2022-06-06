@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory;
+namespace Ssch\TYPO3Rector\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Comment;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Comment;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class IconArrayItemFactory
 {
     /**
@@ -15,19 +15,19 @@ final class IconArrayItemFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
     /**
      * @param array<string, mixed> $iconConfiguration
      */
-    public function create(array $iconConfiguration, string $iconIdentifier) : ArrayItem
+    public function create(array $iconConfiguration, string $iconIdentifier) : \PhpParser\Node\Expr\ArrayItem
     {
         $value = $this->nodeFactory->createArray($iconConfiguration);
-        $key = new String_($iconIdentifier);
+        $key = new \PhpParser\Node\Scalar\String_($iconIdentifier);
         // hack to make array item print on a new line
-        $attributes = [AttributeKey::COMMENTS => [new Comment(\PHP_EOL)]];
-        return new ArrayItem($value, $key, \false, $attributes);
+        $attributes = [\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS => [new \PhpParser\Comment(\PHP_EOL)]];
+        return new \PhpParser\Node\Expr\ArrayItem($value, $key, \false, $attributes);
     }
 }

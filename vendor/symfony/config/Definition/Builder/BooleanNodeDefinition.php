@@ -17,12 +17,12 @@ use RectorPrefix20220606\Symfony\Component\Config\Definition\Exception\InvalidDe
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class BooleanNodeDefinition extends ScalarNodeDefinition
+class BooleanNodeDefinition extends \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\ScalarNodeDefinition
 {
     /**
      * {@inheritdoc}
      */
-    public function __construct(?string $name, NodeParentInterface $parent = null)
+    public function __construct(?string $name, \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\NodeParentInterface $parent = null)
     {
         parent::__construct($name, $parent);
         $this->nullEquivalent = \true;
@@ -32,7 +32,7 @@ class BooleanNodeDefinition extends ScalarNodeDefinition
      */
     protected function instantiateNode() : \RectorPrefix20220606\Symfony\Component\Config\Definition\ScalarNode
     {
-        return new BooleanNode($this->name, $this->parent, $this->pathSeparator);
+        return new \RectorPrefix20220606\Symfony\Component\Config\Definition\BooleanNode($this->name, $this->parent, $this->pathSeparator);
     }
     /**
      * {@inheritdoc}
@@ -42,6 +42,6 @@ class BooleanNodeDefinition extends ScalarNodeDefinition
      */
     public function cannotBeEmpty()
     {
-        throw new InvalidDefinitionException('->cannotBeEmpty() is not applicable to BooleanNodeDefinition.');
+        throw new \RectorPrefix20220606\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException('->cannotBeEmpty() is not applicable to BooleanNodeDefinition.');
     }
 }

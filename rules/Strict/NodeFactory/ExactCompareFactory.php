@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Strict\NodeFactory;
+namespace Rector\Strict\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Expr\Instanceof_;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Type\ArrayType;
-use RectorPrefix20220606\PHPStan\Type\BooleanType;
-use RectorPrefix20220606\PHPStan\Type\IntegerType;
-use RectorPrefix20220606\PHPStan\Type\NullType;
-use RectorPrefix20220606\PHPStan\Type\StringType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeCombinator;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\Node\NodeFactory;
 final class ExactCompareFactory
 {
     /**
@@ -31,31 +31,31 @@ final class ExactCompareFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
     }
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    public function createIdenticalFalsyCompare(Type $exprType, Expr $expr, bool $treatAsNonEmpty)
+    public function createIdenticalFalsyCompare(\PHPStan\Type\Type $exprType, \PhpParser\Node\Expr $expr, bool $treatAsNonEmpty)
     {
-        if ($exprType instanceof StringType) {
-            return new Identical($expr, new String_(''));
+        if ($exprType instanceof \PHPStan\Type\StringType) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, new \PhpParser\Node\Scalar\String_(''));
         }
-        if ($exprType instanceof IntegerType) {
-            return new Identical($expr, new LNumber(0));
+        if ($exprType instanceof \PHPStan\Type\IntegerType) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, new \PhpParser\Node\Scalar\LNumber(0));
         }
-        if ($exprType instanceof BooleanType) {
-            return new Identical($expr, $this->nodeFactory->createFalse());
+        if ($exprType instanceof \PHPStan\Type\BooleanType) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $this->nodeFactory->createFalse());
         }
-        if ($exprType instanceof ArrayType) {
-            return new Identical($expr, new Array_([]));
+        if ($exprType instanceof \PHPStan\Type\ArrayType) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, new \PhpParser\Node\Expr\Array_([]));
         }
-        if ($exprType instanceof NullType) {
-            return new Identical($expr, $this->nodeFactory->createNull());
+        if ($exprType instanceof \PHPStan\Type\NullType) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $this->nodeFactory->createNull());
         }
-        if (!$exprType instanceof UnionType) {
+        if (!$exprType instanceof \PHPStan\Type\UnionType) {
             return null;
         }
         return $this->createTruthyFromUnionType($exprType, $expr, $treatAsNonEmpty);
@@ -63,18 +63,18 @@ final class ExactCompareFactory
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    public function createNotIdenticalFalsyCompare(Type $exprType, Expr $expr, bool $treatAsNotEmpty)
+    public function createNotIdenticalFalsyCompare(\PHPStan\Type\Type $exprType, \PhpParser\Node\Expr $expr, bool $treatAsNotEmpty)
     {
-        if ($exprType instanceof StringType) {
-            return new NotIdentical($expr, new String_(''));
+        if ($exprType instanceof \PHPStan\Type\StringType) {
+            return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, new \PhpParser\Node\Scalar\String_(''));
         }
-        if ($exprType instanceof IntegerType) {
-            return new NotIdentical($expr, new LNumber(0));
+        if ($exprType instanceof \PHPStan\Type\IntegerType) {
+            return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, new \PhpParser\Node\Scalar\LNumber(0));
         }
-        if ($exprType instanceof ArrayType) {
-            return new NotIdentical($expr, new Array_([]));
+        if ($exprType instanceof \PHPStan\Type\ArrayType) {
+            return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, new \PhpParser\Node\Expr\Array_([]));
         }
-        if (!$exprType instanceof UnionType) {
+        if (!$exprType instanceof \PHPStan\Type\UnionType) {
             return null;
         }
         return $this->createFromUnionType($exprType, $expr, $treatAsNotEmpty);
@@ -82,27 +82,27 @@ final class ExactCompareFactory
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    private function createFromUnionType(UnionType $unionType, Expr $expr, bool $treatAsNotEmpty)
+    private function createFromUnionType(\PHPStan\Type\UnionType $unionType, \PhpParser\Node\Expr $expr, bool $treatAsNotEmpty)
     {
-        $unionType = TypeCombinator::removeNull($unionType);
-        if ($unionType instanceof BooleanType) {
-            return new Identical($expr, $this->nodeFactory->createTrue());
+        $unionType = \PHPStan\Type\TypeCombinator::removeNull($unionType);
+        if ($unionType instanceof \PHPStan\Type\BooleanType) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $this->nodeFactory->createTrue());
         }
-        if ($unionType instanceof TypeWithClassName) {
-            return new Instanceof_($expr, new FullyQualified($unionType->getClassName()));
+        if ($unionType instanceof \PHPStan\Type\TypeWithClassName) {
+            return new \PhpParser\Node\Expr\Instanceof_($expr, new \PhpParser\Node\Name\FullyQualified($unionType->getClassName()));
         }
         $nullConstFetch = $this->nodeFactory->createNull();
-        $toNullNotIdentical = new NotIdentical($expr, $nullConstFetch);
-        if ($unionType instanceof UnionType) {
+        $toNullNotIdentical = new \PhpParser\Node\Expr\BinaryOp\NotIdentical($expr, $nullConstFetch);
+        if ($unionType instanceof \PHPStan\Type\UnionType) {
             return $this->resolveFromCleanedNullUnionType($unionType, $expr, $treatAsNotEmpty);
         }
         $compareExpr = $this->createNotIdenticalFalsyCompare($unionType, $expr, $treatAsNotEmpty);
-        if (!$compareExpr instanceof Expr) {
+        if (!$compareExpr instanceof \PhpParser\Node\Expr) {
             return null;
         }
-        return new BooleanAnd($toNullNotIdentical, $compareExpr);
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($toNullNotIdentical, $compareExpr);
     }
-    private function resolveFromCleanedNullUnionType(UnionType $unionType, Expr $expr, bool $treatAsNotEmpty) : ?Expr
+    private function resolveFromCleanedNullUnionType(\PHPStan\Type\UnionType $unionType, \PhpParser\Node\Expr $expr, bool $treatAsNotEmpty) : ?\PhpParser\Node\Expr
     {
         $compareExprs = [];
         foreach ($unionType->getTypes() as $unionedType) {
@@ -113,7 +113,7 @@ final class ExactCompareFactory
     /**
      * @return array<Expr|null>
      */
-    private function collectCompareExprs(UnionType $unionType, Expr $expr, bool $treatAsNonEmpty) : array
+    private function collectCompareExprs(\PHPStan\Type\UnionType $unionType, \PhpParser\Node\Expr $expr, bool $treatAsNonEmpty) : array
     {
         $compareExprs = [];
         foreach ($unionType->getTypes() as $unionedType) {
@@ -121,53 +121,53 @@ final class ExactCompareFactory
         }
         return $compareExprs;
     }
-    private function cleanUpPossibleNullableUnionType(UnionType $unionType) : Type
+    private function cleanUpPossibleNullableUnionType(\PHPStan\Type\UnionType $unionType) : \PHPStan\Type\Type
     {
-        return \count($unionType->getTypes()) === 2 ? TypeCombinator::removeNull($unionType) : $unionType;
+        return \count($unionType->getTypes()) === 2 ? \PHPStan\Type\TypeCombinator::removeNull($unionType) : $unionType;
     }
     /**
      * @param array<Expr|null> $compareExprs
      */
-    private function resolveTruthyExpr(array $compareExprs) : ?Expr
+    private function resolveTruthyExpr(array $compareExprs) : ?\PhpParser\Node\Expr
     {
         $truthyExpr = \array_shift($compareExprs);
         foreach ($compareExprs as $compareExpr) {
-            if (!$compareExpr instanceof Expr) {
+            if (!$compareExpr instanceof \PhpParser\Node\Expr) {
                 return null;
             }
-            if (!$truthyExpr instanceof Expr) {
+            if (!$truthyExpr instanceof \PhpParser\Node\Expr) {
                 return null;
             }
-            $truthyExpr = new BooleanOr($truthyExpr, $compareExpr);
+            $truthyExpr = new \PhpParser\Node\Expr\BinaryOp\BooleanOr($truthyExpr, $compareExpr);
         }
         return $truthyExpr;
     }
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    private function createTruthyFromUnionType(UnionType $unionType, Expr $expr, bool $treatAsNonEmpty)
+    private function createTruthyFromUnionType(\PHPStan\Type\UnionType $unionType, \PhpParser\Node\Expr $expr, bool $treatAsNonEmpty)
     {
         $unionType = $this->cleanUpPossibleNullableUnionType($unionType);
-        if ($unionType instanceof UnionType) {
+        if ($unionType instanceof \PHPStan\Type\UnionType) {
             $compareExprs = $this->collectCompareExprs($unionType, $expr, $treatAsNonEmpty);
             return $this->resolveTruthyExpr($compareExprs);
         }
-        if ($unionType instanceof BooleanType) {
-            return new Identical($expr, $this->nodeFactory->createTrue());
+        if ($unionType instanceof \PHPStan\Type\BooleanType) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $this->nodeFactory->createTrue());
         }
-        if ($unionType instanceof TypeWithClassName) {
-            $instanceOf = new Instanceof_($expr, new FullyQualified($unionType->getClassName()));
-            return new BooleanNot($instanceOf);
+        if ($unionType instanceof \PHPStan\Type\TypeWithClassName) {
+            $instanceOf = new \PhpParser\Node\Expr\Instanceof_($expr, new \PhpParser\Node\Name\FullyQualified($unionType->getClassName()));
+            return new \PhpParser\Node\Expr\BooleanNot($instanceOf);
         }
-        $toNullIdentical = new Identical($expr, $this->nodeFactory->createNull());
+        $toNullIdentical = new \PhpParser\Node\Expr\BinaryOp\Identical($expr, $this->nodeFactory->createNull());
         if ($treatAsNonEmpty) {
             return $toNullIdentical;
         }
         // assume we have to check empty string, integer and bools
         $scalarFalsyIdentical = $this->createIdenticalFalsyCompare($unionType, $expr, $treatAsNonEmpty);
-        if (!$scalarFalsyIdentical instanceof Expr) {
+        if (!$scalarFalsyIdentical instanceof \PhpParser\Node\Expr) {
             return null;
         }
-        return new BooleanOr($toNullIdentical, $scalarFalsyIdentical);
+        return new \PhpParser\Node\Expr\BinaryOp\BooleanOr($toNullIdentical, $scalarFalsyIdentical);
     }
 }

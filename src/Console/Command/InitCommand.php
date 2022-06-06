@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Console\Command;
+namespace Rector\Core\Console\Command;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\Rector\Core\Configuration\Option;
-use RectorPrefix20220606\Rector\Core\Contract\Console\OutputStyleInterface;
-use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Contract\Console\OutputStyleInterface;
+use Rector\Core\Php\PhpVersionProvider;
 use RectorPrefix20220606\Symfony\Component\Console\Command\Command;
 use RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220606\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20220606\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem;
-final class InitCommand extends Command
+final class InitCommand extends \RectorPrefix20220606\Symfony\Component\Console\Command\Command
 {
     /**
      * @var string
@@ -39,7 +39,7 @@ final class InitCommand extends Command
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(SmartFileSystem $smartFileSystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, SymfonyStyle $symfonyStyle)
+    public function __construct(\RectorPrefix20220606\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20220606\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->rectorOutputStyle = $rectorOutputStyle;
@@ -52,11 +52,11 @@ final class InitCommand extends Command
         $this->setName('init');
         $this->setDescription('Generate rector.php configuration file');
         // deprecated
-        $this->addOption(Option::TEMPLATE_TYPE, null, InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.');
+        $this->addOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE, null, \RectorPrefix20220606\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.');
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
-        $templateType = (string) $input->getOption(Option::TEMPLATE_TYPE);
+        $templateType = (string) $input->getOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE);
         if ($templateType !== '') {
             // notice warning
             $this->symfonyStyle->warning('The option "--type" is deprecated. Custom config should be part of project documentation instead.');
@@ -69,12 +69,12 @@ final class InitCommand extends Command
         } else {
             $this->smartFileSystem->copy(self::TEMPLATE_PATH, $rectorRootFilePath);
             $fullPHPVersion = (string) $this->phpVersionProvider->provide();
-            $phpVersion = Strings::substring($fullPHPVersion, 0, 1) . Strings::substring($fullPHPVersion, 2, 1);
+            $phpVersion = \RectorPrefix20220606\Nette\Utils\Strings::substring($fullPHPVersion, 0, 1) . \RectorPrefix20220606\Nette\Utils\Strings::substring($fullPHPVersion, 2, 1);
             $fileContent = $this->smartFileSystem->readFile($rectorRootFilePath);
             $fileContent = \str_replace('LevelSetList::UP_TO_PHP_XY', \sprintf('LevelSetList::UP_TO_PHP_%d', $phpVersion), $fileContent);
             $this->smartFileSystem->dumpFile($rectorRootFilePath, $fileContent);
             $this->rectorOutputStyle->success('"rector.php" config file was added');
         }
-        return Command::SUCCESS;
+        return \RectorPrefix20220606\Symfony\Component\Console\Command\Command::SUCCESS;
     }
 }

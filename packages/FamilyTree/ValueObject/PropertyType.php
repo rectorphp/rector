@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\FamilyTree\ValueObject;
+namespace Rector\FamilyTree\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\ComplexType;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PHPStan\Type\Type;
+use PhpParser\Node\ComplexType;
+use PhpParser\Node\Name;
+use PHPStan\Type\Type;
 final class PropertyType
 {
     /**
@@ -21,12 +21,12 @@ final class PropertyType
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $propertyTypeNode
      */
-    public function __construct(Type $varType, $propertyTypeNode)
+    public function __construct(\PHPStan\Type\Type $varType, $propertyTypeNode)
     {
         $this->varType = $varType;
         $this->propertyTypeNode = $propertyTypeNode;
     }
-    public function getVarType() : Type
+    public function getVarType() : \PHPStan\Type\Type
     {
         return $this->varType;
     }

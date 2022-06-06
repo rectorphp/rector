@@ -1,35 +1,35 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\FuncCall;
+namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector\SimplifyStrposLowerRectorTest
  */
-final class SimplifyStrposLowerRector extends AbstractRector
+final class SimplifyStrposLowerRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Simplify strpos(strtolower(), "...") calls', [new CodeSample('strpos(strtolower($var), "...")', 'stripos($var, "...")')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Simplify strpos(strtolower(), "...") calls', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('strpos(strtolower($var), "...")', 'stripos($var, "...")')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'strpos')) {
             return null;
@@ -37,10 +37,10 @@ final class SimplifyStrposLowerRector extends AbstractRector
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
+        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        if (!$node->args[0]->value instanceof FuncCall) {
+        if (!$node->args[0]->value instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         /** @var FuncCall $innerFuncCall */
@@ -50,7 +50,7 @@ final class SimplifyStrposLowerRector extends AbstractRector
         }
         // pop 1 level up
         $node->args[0] = $innerFuncCall->args[0];
-        $node->name = new Name('stripos');
+        $node->name = new \PhpParser\Node\Name('stripos');
         return $node;
     }
 }

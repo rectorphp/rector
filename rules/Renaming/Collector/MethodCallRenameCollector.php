@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Renaming\Collector;
+namespace Rector\Renaming\Collector;
 
-use RectorPrefix20220606\Rector\Renaming\Contract\MethodCallRenameInterface;
+use Rector\Renaming\Contract\MethodCallRenameInterface;
 final class MethodCallRenameCollector
 {
     /**

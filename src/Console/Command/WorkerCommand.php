@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Console\Command;
+namespace Rector\Core\Console\Command;
 
 use RectorPrefix20220606\Clue\React\NDJson\Decoder;
 use RectorPrefix20220606\Clue\React\NDJson\Encoder;
 use RectorPrefix20220606\React\EventLoop\StreamSelectLoop;
 use RectorPrefix20220606\React\Socket\ConnectionInterface;
 use RectorPrefix20220606\React\Socket\TcpConnector;
-use RectorPrefix20220606\Rector\Core\Util\MemoryLimiter;
-use RectorPrefix20220606\Rector\Parallel\WorkerRunner;
+use Rector\Core\Util\MemoryLimiter;
+use Rector\Parallel\WorkerRunner;
 use RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20220606\Symplify\EasyParallel\Enum\Action;
@@ -21,7 +21,7 @@ use RectorPrefix20220606\Symplify\EasyParallel\Enum\ReactCommand;
  * ↓↓↓
  * https://github.com/phpstan/phpstan-src/commit/b84acd2e3eadf66189a64fdbc6dd18ff76323f67#diff-7f625777f1ce5384046df08abffd6c911cfbb1cfc8fcb2bdeaf78f337689e3e2
  */
-final class WorkerCommand extends AbstractProcessCommand
+final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
      * @readonly
@@ -33,7 +33,7 @@ final class WorkerCommand extends AbstractProcessCommand
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;
-    public function __construct(WorkerRunner $workerRunner, MemoryLimiter $memoryLimiter)
+    public function __construct(\Rector\Parallel\WorkerRunner $workerRunner, \Rector\Core\Util\MemoryLimiter $memoryLimiter)
     {
         $this->workerRunner = $workerRunner;
         $this->memoryLimiter = $memoryLimiter;
@@ -45,19 +45,19 @@ final class WorkerCommand extends AbstractProcessCommand
         $this->setDescription('(Internal) Support for parallel process');
         parent::configure();
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    protected function execute(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220606\Symfony\Component\Console\Output\OutputInterface $output) : int
     {
         $configuration = $this->configurationFactory->createFromInput($input);
         $this->memoryLimiter->adjust($configuration);
-        $streamSelectLoop = new StreamSelectLoop();
+        $streamSelectLoop = new \RectorPrefix20220606\React\EventLoop\StreamSelectLoop();
         $parallelIdentifier = $configuration->getParallelIdentifier();
-        $tcpConnector = new TcpConnector($streamSelectLoop);
+        $tcpConnector = new \RectorPrefix20220606\React\Socket\TcpConnector($streamSelectLoop);
         $promise = $tcpConnector->connect('127.0.0.1:' . $configuration->getParallelPort());
-        $promise->then(function (ConnectionInterface $connection) use($parallelIdentifier, $configuration) : void {
-            $inDecoder = new Decoder($connection, \true, 512, \JSON_INVALID_UTF8_IGNORE);
-            $outEncoder = new Encoder($connection, \JSON_INVALID_UTF8_IGNORE);
+        $promise->then(function (\RectorPrefix20220606\React\Socket\ConnectionInterface $connection) use($parallelIdentifier, $configuration) : void {
+            $inDecoder = new \RectorPrefix20220606\Clue\React\NDJson\Decoder($connection, \true, 512, \JSON_INVALID_UTF8_IGNORE);
+            $outEncoder = new \RectorPrefix20220606\Clue\React\NDJson\Encoder($connection, \JSON_INVALID_UTF8_IGNORE);
             // handshake?
-            $outEncoder->write([ReactCommand::ACTION => Action::HELLO, ReactCommand::IDENTIFIER => $parallelIdentifier]);
+            $outEncoder->write([\RectorPrefix20220606\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220606\Symplify\EasyParallel\Enum\Action::HELLO, \RectorPrefix20220606\Symplify\EasyParallel\Enum\ReactCommand::IDENTIFIER => $parallelIdentifier]);
             $this->workerRunner->run($outEncoder, $inDecoder, $configuration);
         });
         $streamSelectLoop->run();

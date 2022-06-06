@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject;
+namespace Rector\BetterPhpDocParser\ValueObject;
 
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
 final class StartAndEnd
 {
     /**
@@ -21,7 +21,7 @@ final class StartAndEnd
         $this->start = $start;
         $this->end = $end;
         if ($end < $start) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
     }
     public function getStart() : int

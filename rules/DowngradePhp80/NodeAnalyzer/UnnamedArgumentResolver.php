@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp80\NodeAnalyzer;
+namespace Rector\DowngradePhp80\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PHPStan\Reflection\FunctionReflection;
-use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
-use RectorPrefix20220606\PHPStan\Reflection\Native\NativeFunctionReflection;
-use RectorPrefix20220606\PHPStan\Reflection\ParametersAcceptorSelector;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Arg;
+use PHPStan\Reflection\FunctionReflection;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\Native\NativeFunctionReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use Rector\NodeNameResolver\NodeNameResolver;
 use ReflectionFunction;
 final class UnnamedArgumentResolver
 {
@@ -22,7 +22,7 @@ final class UnnamedArgumentResolver
      * @var \Rector\DowngradePhp80\NodeAnalyzer\NamedToUnnamedArgs
      */
     private $namedToUnnamedArgs;
-    public function __construct(NodeNameResolver $nodeNameResolver, NamedToUnnamedArgs $namedToUnnamedArgs)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\DowngradePhp80\NodeAnalyzer\NamedToUnnamedArgs $namedToUnnamedArgs)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->namedToUnnamedArgs = $namedToUnnamedArgs;
@@ -34,17 +34,17 @@ final class UnnamedArgumentResolver
      */
     public function resolveFromReflection($functionLikeReflection, array $currentArgs) : array
     {
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
         $parameters = $parametersAcceptor->getParameters();
-        if ($functionLikeReflection instanceof NativeFunctionReflection) {
-            $functionLikeReflection = new ReflectionFunction($functionLikeReflection->getName());
+        if ($functionLikeReflection instanceof \PHPStan\Reflection\Native\NativeFunctionReflection) {
+            $functionLikeReflection = new \ReflectionFunction($functionLikeReflection->getName());
         }
         /** @var Arg[] $unnamedArgs */
         $unnamedArgs = [];
         $toFillArgs = [];
         foreach ($currentArgs as $key => $arg) {
             if ($arg->name === null) {
-                $unnamedArgs[$key] = new Arg($arg->value, $arg->byRef, $arg->unpack, $arg->getAttributes(), null);
+                $unnamedArgs[$key] = new \PhpParser\Node\Arg($arg->value, $arg->byRef, $arg->unpack, $arg->getAttributes(), null);
                 continue;
             }
             /** @var string $argName */

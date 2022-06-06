@@ -17,7 +17,7 @@ namespace RectorPrefix20220606\Symfony\Component\Config\Resource;
  *
  * @final
  */
-class ComposerResource implements SelfCheckingResourceInterface
+class ComposerResource implements \RectorPrefix20220606\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
 {
     /**
      * @var mixed[]

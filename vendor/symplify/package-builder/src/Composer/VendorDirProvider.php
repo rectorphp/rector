@@ -25,7 +25,7 @@ final class VendorDirProvider
     }
     private function reflectionFallback() : string
     {
-        $reflectionClass = new ReflectionClass(ClassLoader::class);
+        $reflectionClass = new \ReflectionClass(\RectorPrefix20220606\Composer\Autoload\ClassLoader::class);
         return \dirname($reflectionClass->getFileName(), 2);
     }
 }

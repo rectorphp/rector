@@ -13,6 +13,6 @@ final class StaticPHPUnitEnvironment
      */
     public static function isPHPUnitRun() : bool
     {
-        return \defined('RectorPrefix20220606\\PHPUNIT_COMPOSER_INSTALL') || \defined('RectorPrefix20220606\\__PHPUNIT_PHAR__');
+        return \defined('PHPUNIT_COMPOSER_INSTALL') || \defined('__PHPUNIT_PHAR__');
     }
 }

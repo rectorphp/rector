@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CakePHP\ValueObject;
+namespace Rector\CakePHP\ValueObject;
 
 final class RemoveIntermediaryMethod
 {

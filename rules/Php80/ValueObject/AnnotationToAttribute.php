@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\ValueObject;
+namespace Rector\Php80\ValueObject;
 
 final class AnnotationToAttribute
 {

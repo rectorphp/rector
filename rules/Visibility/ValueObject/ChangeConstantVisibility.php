@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Visibility\ValueObject;
+namespace Rector\Visibility\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 final class ChangeConstantVisibility
 {
     /**
@@ -27,11 +27,11 @@ final class ChangeConstantVisibility
         $this->class = $class;
         $this->constant = $constant;
         $this->visibility = $visibility;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getConstant() : string
     {

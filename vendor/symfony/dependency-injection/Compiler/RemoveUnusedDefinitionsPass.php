@@ -18,7 +18,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference;
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class RemoveUnusedDefinitionsPass extends AbstractRecursivePass
+class RemoveUnusedDefinitionsPass extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * @var mixed[]
@@ -27,7 +27,7 @@ class RemoveUnusedDefinitionsPass extends AbstractRecursivePass
     /**
      * Processes the ContainerBuilder to remove unused definitions.
      */
-    public function process(ContainerBuilder $container)
+    public function process(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         try {
             $this->enableExpressionProcessing();
@@ -74,10 +74,10 @@ class RemoveUnusedDefinitionsPass extends AbstractRecursivePass
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if (!$value instanceof Reference) {
+        if (!$value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference) {
             return parent::processValue($value, $isRoot);
         }
-        if (ContainerBuilder::IGNORE_ON_UNINITIALIZED_REFERENCE !== $value->getInvalidBehavior()) {
+        if (\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder::IGNORE_ON_UNINITIALIZED_REFERENCE !== $value->getInvalidBehavior()) {
             $this->connectedIds[] = (string) $value;
         }
         return $value;

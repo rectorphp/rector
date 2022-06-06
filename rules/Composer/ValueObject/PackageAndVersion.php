@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Composer\ValueObject;
+namespace Rector\Composer\ValueObject;
 
-use RectorPrefix20220606\Rector\Composer\Contract\VersionAwareInterface;
-final class PackageAndVersion implements VersionAwareInterface
+use Rector\Composer\Contract\VersionAwareInterface;
+final class PackageAndVersion implements \Rector\Composer\Contract\VersionAwareInterface
 {
     /**
      * @readonly

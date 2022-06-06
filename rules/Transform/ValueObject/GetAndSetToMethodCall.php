@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Transform\ValueObject;
+namespace Rector\Transform\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectType;
 final class GetAndSetToMethodCall
 {
     /**
@@ -38,8 +38,8 @@ final class GetAndSetToMethodCall
     {
         return $this->setMethod;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->classType);
+        return new \PHPStan\Type\ObjectType($this->classType);
     }
 }

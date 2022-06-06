@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeFactory\InvokableController;
+namespace Rector\Symfony\NodeFactory\InvokableController;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassConst;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\Symfony\ValueObject\InvokableController\ActiveClassElements;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Symfony\ValueObject\InvokableController\ActiveClassElements;
 final class ActiveClassElementsFilter
 {
     /**
@@ -16,16 +16,16 @@ final class ActiveClassElementsFilter
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return ClassConst[]
      */
-    public function filterClassConsts(Class_ $class, ActiveClassElements $activeClassElements) : array
+    public function filterClassConsts(\PhpParser\Node\Stmt\Class_ $class, \Rector\Symfony\ValueObject\InvokableController\ActiveClassElements $activeClassElements) : array
     {
-        return \array_filter($class->getConstants(), function (ClassConst $classConst) use($activeClassElements) {
+        return \array_filter($class->getConstants(), function (\PhpParser\Node\Stmt\ClassConst $classConst) use($activeClassElements) {
             /** @var string $constantName */
             $constantName = $this->nodeNameResolver->getName($classConst);
             return $activeClassElements->hasConstantName($constantName);
@@ -34,9 +34,9 @@ final class ActiveClassElementsFilter
     /**
      * @return Property[]
      */
-    public function filterProperties(Class_ $class, ActiveClassElements $activeClassElements) : array
+    public function filterProperties(\PhpParser\Node\Stmt\Class_ $class, \Rector\Symfony\ValueObject\InvokableController\ActiveClassElements $activeClassElements) : array
     {
-        return \array_filter($class->getProperties(), function (Property $property) use($activeClassElements) {
+        return \array_filter($class->getProperties(), function (\PhpParser\Node\Stmt\Property $property) use($activeClassElements) {
             // keep only property used in current action
             $propertyName = $this->nodeNameResolver->getName($property);
             return $activeClassElements->hasPropertyName($propertyName);
@@ -45,9 +45,9 @@ final class ActiveClassElementsFilter
     /**
      * @return ClassMethod[]
      */
-    public function filterClassMethod(Class_ $class, ActiveClassElements $activeClassElements) : array
+    public function filterClassMethod(\PhpParser\Node\Stmt\Class_ $class, \Rector\Symfony\ValueObject\InvokableController\ActiveClassElements $activeClassElements) : array
     {
-        return \array_filter($class->getMethods(), function (ClassMethod $classMethod) use($activeClassElements) {
+        return \array_filter($class->getMethods(), function (\PhpParser\Node\Stmt\ClassMethod $classMethod) use($activeClassElements) {
             if ($classMethod->isPublic()) {
                 return \false;
             }

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\Parser;
+namespace Rector\BetterPhpDocParser\ValueObject\Parser;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Parser\TokenIterator;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use PHPStan\PhpDocParser\Parser\TokenIterator;
+use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix20220606\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-final class BetterTokenIterator extends TokenIterator
+final class BetterTokenIterator extends \PHPStan\PhpDocParser\Parser\TokenIterator
 {
     /**
      * @var string
@@ -26,7 +26,7 @@ final class BetterTokenIterator extends TokenIterator
      */
     public function __construct(array $tokens, int $index = 0)
     {
-        $this->privatesAccessor = new PrivatesAccessor();
+        $this->privatesAccessor = new \RectorPrefix20220606\Symplify\PackageBuilder\Reflection\PrivatesAccessor();
         if ($tokens === []) {
             $this->privatesAccessor->setPrivateProperty($this, self::TOKENS, []);
             $this->privatesAccessor->setPrivateProperty($this, self::INDEX, 0);
@@ -77,7 +77,7 @@ final class BetterTokenIterator extends TokenIterator
     public function printFromTo(int $from, int $to) : string
     {
         if ($to < $from) {
-            throw new ShouldNotHappenException('Arguments are flipped');
+            throw new \Rector\Core\Exception\ShouldNotHappenException('Arguments are flipped');
         }
         $tokens = $this->getTokens();
         $content = '';

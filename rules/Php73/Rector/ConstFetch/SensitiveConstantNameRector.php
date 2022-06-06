@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php73\Rector\ConstFetch;
+namespace Rector\Php73\Rector\ConstFetch;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/case_insensitive_constant_deprecation
  *
  * @see \Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
  */
-final class SensitiveConstantNameRector extends AbstractRector implements MinPhpVersionInterface
+final class SensitiveConstantNameRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @see http://php.net/manual/en/reserved.constants.php
@@ -31,17 +31,17 @@ final class SensitiveConstantNameRector extends AbstractRector implements MinPhp
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::DEPRECATE_INSENSITIVE_CONSTANT_NAME;
+        return \Rector\Core\ValueObject\PhpVersionFeature::DEPRECATE_INSENSITIVE_CONSTANT_NAME;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes case insensitive constants to sensitive ones.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes case insensitive constants to sensitive ones.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 define('FOO', 42, true);
 var_dump(FOO);
 var_dump(foo);
@@ -58,12 +58,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ConstFetch::class];
+        return [\PhpParser\Node\Expr\ConstFetch::class];
     }
     /**
      * @param ConstFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $constantName = $this->getName($node);
         if ($constantName === null) {
@@ -75,8 +75,8 @@ CODE_SAMPLE
             return null;
         }
         // constant is defined in current lower/upper case
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if ($this->reflectionProvider->hasConstant(new Name($constantName), $scope)) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if ($this->reflectionProvider->hasConstant(new \PhpParser\Node\Name($constantName), $scope)) {
             return null;
         }
         // is uppercase, all good
@@ -86,7 +86,7 @@ CODE_SAMPLE
         if (\strpos($uppercasedConstantName, '\\') !== \false) {
             return null;
         }
-        $node->name = new FullyQualified($uppercasedConstantName);
+        $node->name = new \PhpParser\Node\Name\FullyQualified($uppercasedConstantName);
         return $node;
     }
 }

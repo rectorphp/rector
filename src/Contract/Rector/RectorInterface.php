@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Contract\Rector;
+namespace Rector\Core\Contract\Rector;
 
-use RectorPrefix20220606\Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
-interface RectorInterface extends DocumentedRuleInterface
+use Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface;
+interface RectorInterface extends \Symplify\RuleDocGenerator\Contract\DocumentedRuleInterface
 {
 }

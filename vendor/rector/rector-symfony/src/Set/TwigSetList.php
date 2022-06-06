@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Set;
+namespace Rector\Symfony\Set;
 
-use RectorPrefix20220606\Rector\Set\Contract\SetListInterface;
-final class TwigSetList implements SetListInterface
+use Rector\Set\Contract\SetListInterface;
+final class TwigSetList implements \Rector\Set\Contract\SetListInterface
 {
     /**
      * @var string

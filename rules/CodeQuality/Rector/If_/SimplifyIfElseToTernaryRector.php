@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\If_;
+namespace Rector\CodeQuality\Rector\If_;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfElseToTernaryRector\SimplifyIfElseToTernaryRectorTest
  */
-final class SimplifyIfElseToTernaryRector extends AbstractRector
+final class SimplifyIfElseToTernaryRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var int
@@ -31,13 +31,13 @@ final class SimplifyIfElseToTernaryRector extends AbstractRector
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(NodePrinterInterface $nodePrinter)
+    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->nodePrinter = $nodePrinter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes if/else for same value as assign to ternary', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes if/else for same value as assign to ternary', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -66,12 +66,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($node->else === null) {
             return null;
@@ -80,11 +80,11 @@ CODE_SAMPLE
             return null;
         }
         $ifAssignVar = $this->resolveOnlyStmtAssignVar($node->stmts);
-        if (!$ifAssignVar instanceof Expr) {
+        if (!$ifAssignVar instanceof \PhpParser\Node\Expr) {
             return null;
         }
         $elseAssignVar = $this->resolveOnlyStmtAssignVar($node->else->stmts);
-        if (!$elseAssignVar instanceof Expr) {
+        if (!$elseAssignVar instanceof \PhpParser\Node\Expr) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($ifAssignVar, $elseAssignVar)) {
@@ -92,18 +92,18 @@ CODE_SAMPLE
         }
         $ternaryIf = $this->resolveOnlyStmtAssignExpr($node->stmts);
         $ternaryElse = $this->resolveOnlyStmtAssignExpr($node->else->stmts);
-        if (!$ternaryIf instanceof Expr) {
+        if (!$ternaryIf instanceof \PhpParser\Node\Expr) {
             return null;
         }
-        if (!$ternaryElse instanceof Expr) {
+        if (!$ternaryElse instanceof \PhpParser\Node\Expr) {
             return null;
         }
         // has nested ternary → skip, it's super hard to read
         if ($this->haveNestedTernary([$node->cond, $ternaryIf, $ternaryElse])) {
             return null;
         }
-        $ternary = new Ternary($node->cond, $ternaryIf, $ternaryElse);
-        $assign = new Assign($ifAssignVar, $ternary);
+        $ternary = new \PhpParser\Node\Expr\Ternary($node->cond, $ternaryIf, $ternaryElse);
+        $assign = new \PhpParser\Node\Expr\Assign($ifAssignVar, $ternary);
         // do not create super long lines
         if ($this->isNodeTooLong($assign)) {
             return null;
@@ -111,17 +111,17 @@ CODE_SAMPLE
         if ($this->isNextReturnRemoved($node, $ifAssignVar)) {
             return null;
         }
-        $expression = new Expression($assign);
+        $expression = new \PhpParser\Node\Stmt\Expression($assign);
         $this->mirrorComments($expression, $node);
         return $expression;
     }
-    private function isNextReturnRemoved(If_ $if, Expr $expr) : bool
+    private function isNextReturnRemoved(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr $expr) : bool
     {
         if (!$this->nodesToRemoveCollector->isActive()) {
             return \false;
         }
-        $next = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if ($next instanceof Return_ && $next->expr instanceof Expr && $this->nodeComparator->areNodesEqual($next->expr, $expr)) {
+        $next = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if ($next instanceof \PhpParser\Node\Stmt\Return_ && $next->expr instanceof \PhpParser\Node\Expr && $this->nodeComparator->areNodesEqual($next->expr, $expr)) {
             $nodesToRemove = $this->nodesToRemoveCollector->getNodesToRemove();
             foreach ($nodesToRemove as $nodeToRemove) {
                 if ($this->nodeComparator->areNodesEqual($next, $nodeToRemove)) {
@@ -134,17 +134,17 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $stmts
      */
-    private function resolveOnlyStmtAssignVar(array $stmts) : ?Expr
+    private function resolveOnlyStmtAssignVar(array $stmts) : ?\PhpParser\Node\Expr
     {
         if (\count($stmts) !== 1) {
             return null;
         }
         $stmt = $stmts[0];
-        if (!$stmt instanceof Expression) {
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
         $stmtExpr = $stmt->expr;
-        if (!$stmtExpr instanceof Assign) {
+        if (!$stmtExpr instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
         return $stmtExpr->var;
@@ -152,17 +152,17 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $stmts
      */
-    private function resolveOnlyStmtAssignExpr(array $stmts) : ?Expr
+    private function resolveOnlyStmtAssignExpr(array $stmts) : ?\PhpParser\Node\Expr
     {
         if (\count($stmts) !== 1) {
             return null;
         }
         $stmt = $stmts[0];
-        if (!$stmt instanceof Expression) {
+        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
             return null;
         }
         $stmtExpr = $stmt->expr;
-        if (!$stmtExpr instanceof Assign) {
+        if (!$stmtExpr instanceof \PhpParser\Node\Expr\Assign) {
             return null;
         }
         return $stmtExpr->expr;
@@ -173,16 +173,16 @@ CODE_SAMPLE
     private function haveNestedTernary(array $nodes) : bool
     {
         foreach ($nodes as $node) {
-            $betterNodeFinderFindInstanceOf = $this->betterNodeFinder->findInstanceOf($node, Ternary::class);
+            $betterNodeFinderFindInstanceOf = $this->betterNodeFinder->findInstanceOf($node, \PhpParser\Node\Expr\Ternary::class);
             if ($betterNodeFinderFindInstanceOf !== []) {
                 return \true;
             }
         }
         return \false;
     }
-    private function isNodeTooLong(Assign $assign) : bool
+    private function isNodeTooLong(\PhpParser\Node\Expr\Assign $assign) : bool
     {
         $assignContent = $this->nodePrinter->print($assign);
-        return Strings::length($assignContent) > self::LINE_LENGTH_LIMIT;
+        return \RectorPrefix20220606\Nette\Utils\Strings::length($assignContent) > self::LINE_LENGTH_LIMIT;
     }
 }

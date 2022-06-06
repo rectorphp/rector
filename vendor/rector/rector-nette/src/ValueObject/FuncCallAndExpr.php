@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\ValueObject;
+namespace Rector\Nette\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
 final class FuncCallAndExpr
 {
     /**
@@ -17,16 +17,16 @@ final class FuncCallAndExpr
      * @var \PhpParser\Node\Expr
      */
     private $expr;
-    public function __construct(FuncCall $funcCall, Expr $expr)
+    public function __construct(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $expr)
     {
         $this->funcCall = $funcCall;
         $this->expr = $expr;
     }
-    public function getFuncCall() : FuncCall
+    public function getFuncCall() : \PhpParser\Node\Expr\FuncCall
     {
         return $this->funcCall;
     }
-    public function getExpr() : Expr
+    public function getExpr() : \PhpParser\Node\Expr
     {
         return $this->expr;
     }

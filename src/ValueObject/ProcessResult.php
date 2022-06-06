@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\ValueObject;
+namespace Rector\Core\ValueObject;
 
-use RectorPrefix20220606\Rector\Core\ValueObject\Error\SystemError;
-use RectorPrefix20220606\Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\Reporting\FileDiff;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
@@ -48,8 +48,8 @@ final class ProcessResult
         $this->addedFilesCount = $addedFilesCount;
         $this->removedFilesCount = $removedFilesCount;
         $this->removedNodeCount = $removedNodeCount;
-        Assert::allIsAOf($fileDiffs, FileDiff::class);
-        Assert::allIsAOf($systemErrors, SystemError::class);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allIsAOf($fileDiffs, \Rector\Core\ValueObject\Reporting\FileDiff::class);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allIsAOf($systemErrors, \Rector\Core\ValueObject\Error\SystemError::class);
     }
     /**
      * @return FileDiff[]
@@ -88,7 +88,7 @@ final class ProcessResult
     {
         $fileInfos = [];
         foreach ($this->fileDiffs as $fileDiff) {
-            $fileInfos[] = new SmartFileInfo($fileDiff->getRelativeFilePath());
+            $fileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($fileDiff->getRelativeFilePath());
         }
         return \array_unique($fileInfos);
     }

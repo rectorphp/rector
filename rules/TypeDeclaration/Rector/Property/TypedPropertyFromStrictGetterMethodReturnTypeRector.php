@@ -1,28 +1,28 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\Rector\Property;
+namespace Rector\TypeDeclaration\Rector\Property;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeCombinator;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220606\Rector\Privatization\Guard\ParentPropertyLookupGuard;
-use RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\Privatization\Guard\ParentPropertyLookupGuard;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector\TypedPropertyFromStrictGetterMethodReturnTypeRectorTest
  */
-final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends AbstractRector
+final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -49,7 +49,7 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends Abstract
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger, VarTagRemover $varTagRemover, ParentPropertyLookupGuard $parentPropertyLookupGuard, PhpVersionProvider $phpVersionProvider)
+    public function __construct(\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover $varTagRemover, \Rector\Privatization\Guard\ParentPropertyLookupGuard $parentPropertyLookupGuard, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->getterTypeDeclarationPropertyTypeInferer = $getterTypeDeclarationPropertyTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
@@ -57,9 +57,9 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends Abstract
         $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
         $this->phpVersionProvider = $phpVersionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Complete property type based on getter strict types', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete property type based on getter strict types', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public $name;
@@ -88,12 +88,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [\PhpParser\Node\Stmt\Property::class];
     }
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Property
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Stmt\Property
     {
         if ($node->type !== null) {
             return null;
@@ -102,23 +102,23 @@ CODE_SAMPLE
             return null;
         }
         $getterReturnType = $this->getterTypeDeclarationPropertyTypeInferer->inferProperty($node);
-        if (!$getterReturnType instanceof Type) {
+        if (!$getterReturnType instanceof \PHPStan\Type\Type) {
             return null;
         }
-        if ($getterReturnType instanceof MixedType) {
+        if ($getterReturnType instanceof \PHPStan\Type\MixedType) {
             return null;
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES)) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $getterReturnType);
             return $node;
         }
         // if property is public, it should be nullable
-        if ($node->isPublic() && !TypeCombinator::containsNull($getterReturnType)) {
-            $getterReturnType = TypeCombinator::addNull($getterReturnType);
+        if ($node->isPublic() && !\PHPStan\Type\TypeCombinator::containsNull($getterReturnType)) {
+            $getterReturnType = \PHPStan\Type\TypeCombinator::addNull($getterReturnType);
         }
-        $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($getterReturnType, TypeKind::PROPERTY);
-        if (!$propertyType instanceof Node) {
+        $propertyType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($getterReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
+        if (!$propertyType instanceof \PhpParser\Node) {
             return null;
         }
         $node->type = $propertyType;
@@ -129,15 +129,15 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::TYPED_PROPERTIES;
+        return \Rector\Core\ValueObject\PhpVersionFeature::TYPED_PROPERTIES;
     }
-    private function decorateDefaultNull(Type $propertyType, Property $property) : void
+    private function decorateDefaultNull(\PHPStan\Type\Type $propertyType, \PhpParser\Node\Stmt\Property $property) : void
     {
-        if (!TypeCombinator::containsNull($propertyType)) {
+        if (!\PHPStan\Type\TypeCombinator::containsNull($propertyType)) {
             return;
         }
         $propertyProperty = $property->props[0];
-        if ($propertyProperty->default instanceof Expr) {
+        if ($propertyProperty->default instanceof \PhpParser\Node\Expr) {
             return;
         }
         $propertyProperty->default = $this->nodeFactory->createNull();

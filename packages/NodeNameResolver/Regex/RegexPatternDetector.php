@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeNameResolver\Regex;
+namespace Rector\NodeNameResolver\Regex;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
 final class RegexPatternDetector
@@ -14,7 +14,7 @@ final class RegexPatternDetector
     private const POSSIBLE_DELIMITERS = ['#', '~', '/'];
     public function isRegexPattern(string $name) : bool
     {
-        if (Strings::length($name) <= 2) {
+        if (\RectorPrefix20220606\Nette\Utils\Strings::length($name) <= 2) {
             return \false;
         }
         $firstChar = $name[0];

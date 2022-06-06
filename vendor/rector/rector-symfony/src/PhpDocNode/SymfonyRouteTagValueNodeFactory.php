@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\PhpDocNode;
+namespace Rector\Symfony\PhpDocNode;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20220606\Rector\Symfony\Enum\SymfonyAnnotation;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\Symfony\Enum\SymfonyAnnotation;
 final class SymfonyRouteTagValueNodeFactory
 {
     /**
      * @param array<string, mixed> $items
      */
-    public function createFromItems(array $items) : DoctrineAnnotationTagValueNode
+    public function createFromItems(array $items) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
     {
-        return new DoctrineAnnotationTagValueNode(new IdentifierTypeNode(SymfonyAnnotation::ROUTE), null, $items, 'path');
+        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(\Rector\Symfony\Enum\SymfonyAnnotation::ROUTE), null, $items, 'path');
     }
 }

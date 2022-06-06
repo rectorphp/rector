@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php71;
+namespace Rector\Php71;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Instanceof_;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\BinaryOpManipulator;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\Php71\ValueObject\TwoNodeMatch;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use Rector\Core\NodeManipulator\BinaryOpManipulator;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Php71\ValueObject\TwoNodeMatch;
 final class IsArrayAndDualCheckToAble
 {
     /**
@@ -25,15 +25,15 @@ final class IsArrayAndDualCheckToAble
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(BinaryOpManipulator $binaryOpManipulator, NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\Core\NodeManipulator\BinaryOpManipulator $binaryOpManipulator, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function processBooleanOr(BooleanOr $booleanOr, string $type, string $newMethodName) : ?FuncCall
+    public function processBooleanOr(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, string $type, string $newMethodName) : ?\PhpParser\Node\Expr\FuncCall
     {
-        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($booleanOr, Instanceof_::class, FuncCall::class);
-        if (!$twoNodeMatch instanceof TwoNodeMatch) {
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($booleanOr, \PhpParser\Node\Expr\Instanceof_::class, \PhpParser\Node\Expr\FuncCall::class);
+        if (!$twoNodeMatch instanceof \Rector\Php71\ValueObject\TwoNodeMatch) {
             return null;
         }
         /** @var Instanceof_ $instanceOf */
@@ -41,7 +41,7 @@ final class IsArrayAndDualCheckToAble
         /** @var FuncCall $funcCall */
         $funcCall = $twoNodeMatch->getSecondExpr();
         $instanceOfClass = $instanceOf->class;
-        if ($instanceOfClass instanceof Expr) {
+        if ($instanceOfClass instanceof \PhpParser\Node\Expr) {
             return null;
         }
         if ((string) $instanceOfClass !== $type) {
@@ -53,16 +53,16 @@ final class IsArrayAndDualCheckToAble
         if (!isset($funcCall->args[0])) {
             return null;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
         // both use same var
-        if (!$funcCall->args[0]->value instanceof Variable) {
+        if (!$funcCall->args[0]->value instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         /** @var Variable $firstVarNode */
         $firstVarNode = $funcCall->args[0]->value;
-        if (!$instanceOf->expr instanceof Variable) {
+        if (!$instanceOf->expr instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         /** @var Variable $secondVarNode */
@@ -71,6 +71,6 @@ final class IsArrayAndDualCheckToAble
         if ($firstVarNode->name !== $secondVarNode->name) {
             return null;
         }
-        return new FuncCall(new Name($newMethodName), [new Arg($firstVarNode)]);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name($newMethodName), [new \PhpParser\Node\Arg($firstVarNode)]);
     }
 }

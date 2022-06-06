@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\Naming;
+namespace Rector\Naming\Naming;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Cast;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\NullsafeMethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Ternary;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Type\ThisType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Core\Exception\NotImplementedYetException;
-use RectorPrefix20220606\Rector\Naming\Contract\AssignVariableNameResolverInterface;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Cast;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\ThisType;
+use PHPStan\Type\Type;
+use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Naming\Contract\AssignVariableNameResolverInterface;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20220606\Symfony\Component\String\UnicodeString;
 final class VariableNaming
 {
@@ -43,25 +43,25 @@ final class VariableNaming
     /**
      * @param AssignVariableNameResolverInterface[] $assignVariableNameResolvers
      */
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, array $assignVariableNameResolvers)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, array $assignVariableNameResolvers)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->assignVariableNameResolvers = $assignVariableNameResolvers;
     }
-    public function resolveFromNodeWithScopeCountAndFallbackName(Expr $expr, ?Scope $scope, string $fallbackName) : string
+    public function resolveFromNodeWithScopeCountAndFallbackName(\PhpParser\Node\Expr $expr, ?\PHPStan\Analyser\Scope $scope, string $fallbackName) : string
     {
         $name = $this->resolveFromNode($expr);
         if ($name === null) {
             $name = $fallbackName;
         }
         if (\strpos($name, '\\') !== \false) {
-            $name = (string) Strings::after($name, '\\', -1);
+            $name = (string) \RectorPrefix20220606\Nette\Utils\Strings::after($name, '\\', -1);
         }
         $countedValueName = $this->createCountedValueName($name, $scope);
         return \lcfirst($countedValueName);
     }
-    public function createCountedValueName(string $valueName, ?Scope $scope) : string
+    public function createCountedValueName(string $valueName, ?\PHPStan\Analyser\Scope $scope) : string
     {
         if ($scope === null) {
             return $valueName;
@@ -79,33 +79,33 @@ final class VariableNaming
         }
         return $valueName;
     }
-    public function resolveFromFuncCallFirstArgumentWithSuffix(FuncCall $funcCall, string $suffix, string $fallbackName, ?Scope $scope) : string
+    public function resolveFromFuncCallFirstArgumentWithSuffix(\PhpParser\Node\Expr\FuncCall $funcCall, string $suffix, string $fallbackName, ?\PHPStan\Analyser\Scope $scope) : string
     {
         $bareName = $this->resolveBareFuncCallArgumentName($funcCall, $fallbackName, $suffix);
         return $this->createCountedValueName($bareName, $scope);
     }
-    public function resolveFromNodeAndType(Node $node, Type $type) : ?string
+    public function resolveFromNodeAndType(\PhpParser\Node $node, \PHPStan\Type\Type $type) : ?string
     {
         $variableName = $this->resolveBareFromNode($node);
         if ($variableName === null) {
             return null;
         }
         // adjust static to specific class
-        if ($variableName === 'this' && $type instanceof ThisType) {
+        if ($variableName === 'this' && $type instanceof \PHPStan\Type\ThisType) {
             $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
             $variableName = \lcfirst($shortClassName);
         } else {
             $variableName = $this->nodeNameResolver->getShortName($variableName);
         }
-        $variableNameUnicodeString = new UnicodeString($variableName);
+        $variableNameUnicodeString = new \RectorPrefix20220606\Symfony\Component\String\UnicodeString($variableName);
         return $variableNameUnicodeString->camel()->toString();
     }
-    private function resolveFromNode(Node $node) : ?string
+    private function resolveFromNode(\PhpParser\Node $node) : ?string
     {
         $nodeType = $this->nodeTypeResolver->getType($node);
         return $this->resolveFromNodeAndType($node, $nodeType);
     }
-    private function resolveBareFromNode(Node $node) : ?string
+    private function resolveBareFromNode(\PhpParser\Node $node) : ?string
     {
         $node = $this->unwrapNode($node);
         foreach ($this->assignVariableNameResolvers as $assignVariableNameResolver) {
@@ -113,20 +113,20 @@ final class VariableNaming
                 return $assignVariableNameResolver->resolve($node);
             }
         }
-        if ($node !== null && ($node instanceof MethodCall || $node instanceof NullsafeMethodCall || $node instanceof StaticCall)) {
+        if ($node !== null && ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\NullsafeMethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall)) {
             return $this->resolveFromMethodCall($node);
         }
-        if ($node instanceof FuncCall) {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->resolveFromNode($node->name);
         }
-        if (!$node instanceof Node) {
-            throw new NotImplementedYetException();
+        if (!$node instanceof \PhpParser\Node) {
+            throw new \Rector\Core\Exception\NotImplementedYetException();
         }
         $paramName = $this->nodeNameResolver->getName($node);
         if ($paramName !== null) {
             return $paramName;
         }
-        if ($node instanceof String_) {
+        if ($node instanceof \PhpParser\Node\Scalar\String_) {
             return $node->value;
         }
         return null;
@@ -136,7 +136,7 @@ final class VariableNaming
      */
     private function resolveFromMethodCall($node) : ?string
     {
-        if ($node->name instanceof MethodCall) {
+        if ($node->name instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->resolveFromMethodCall($node->name);
         }
         $methodName = $this->nodeNameResolver->getName($node->name);
@@ -145,29 +145,29 @@ final class VariableNaming
         }
         return $methodName;
     }
-    private function unwrapNode(Node $node) : ?Node
+    private function unwrapNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof Arg) {
+        if ($node instanceof \PhpParser\Node\Arg) {
             return $node->value;
         }
-        if ($node instanceof Cast) {
+        if ($node instanceof \PhpParser\Node\Expr\Cast) {
             return $node->expr;
         }
-        if ($node instanceof Ternary) {
+        if ($node instanceof \PhpParser\Node\Expr\Ternary) {
             return $node->if;
         }
         return $node;
     }
-    private function resolveBareFuncCallArgumentName(FuncCall $funcCall, string $fallbackName, string $suffix) : string
+    private function resolveBareFuncCallArgumentName(\PhpParser\Node\Expr\FuncCall $funcCall, string $fallbackName, string $suffix) : string
     {
         if (!isset($funcCall->args[0])) {
             return '';
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return '';
         }
         $argumentValue = $funcCall->args[0]->value;
-        if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
+        if ($argumentValue instanceof \PhpParser\Node\Expr\MethodCall || $argumentValue instanceof \PhpParser\Node\Expr\StaticCall) {
             $name = $this->nodeNameResolver->getName($argumentValue->name);
         } else {
             $name = $this->nodeNameResolver->getName($argumentValue);

@@ -1,37 +1,37 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Rector\MethodCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
  * @see \Rector\Symfony\Tests\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector\AuthorizationCheckerIsGrantedExtractorRectorTest
  */
-final class AuthorizationCheckerIsGrantedExtractorRector extends AbstractRector
+final class AuthorizationCheckerIsGrantedExtractorRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Extract $this->authorizationChecker->isGranted([$a, $b]) to $this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Extract $this->authorizationChecker->isGranted([$a, $b]) to $this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 if ($this->authorizationChecker->isGranted(['ROLE_USER', 'ROLE_ADMIN'])) {
 }
 CODE_SAMPLE
@@ -46,19 +46,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|null
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
         $objectType = $this->nodeTypeResolver->getType($node->var);
-        if (!$objectType instanceof ObjectType) {
+        if (!$objectType instanceof \PHPStan\Type\ObjectType) {
             return null;
         }
-        $authorizationChecker = new ObjectType('Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface');
+        $authorizationChecker = new \PHPStan\Type\ObjectType('Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface');
         if (!$authorizationChecker->isSuperTypeOf($objectType)->yes()) {
             return null;
         }
@@ -73,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
         $value = $args[0]->value;
-        if (!$value instanceof Array_) {
+        if (!$value instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         return $this->processExtractIsGranted($node, $value, $args);
@@ -82,11 +82,11 @@ CODE_SAMPLE
      * @param Arg[] $args
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|null
      */
-    private function processExtractIsGranted(MethodCall $methodCall, Array_ $array, array $args)
+    private function processExtractIsGranted(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Array_ $array, array $args)
     {
         $exprs = [];
         foreach ($array->items as $item) {
-            if ($item instanceof ArrayItem) {
+            if ($item instanceof \PhpParser\Node\Expr\ArrayItem) {
                 $exprs[] = $item->value;
             }
         }
@@ -99,17 +99,17 @@ CODE_SAMPLE
             return $methodCall;
         }
         $rightMethodCall = clone $methodCall;
-        $rightMethodCall->args[0] = new Arg($exprs[1]);
-        $newMethodCallRight = new MethodCall($methodCall->var, $methodCall->name, $rightMethodCall->args, $methodCall->getAttributes());
-        $booleanOr = new BooleanOr($methodCall, $newMethodCallRight);
+        $rightMethodCall->args[0] = new \PhpParser\Node\Arg($exprs[1]);
+        $newMethodCallRight = new \PhpParser\Node\Expr\MethodCall($methodCall->var, $methodCall->name, $rightMethodCall->args, $methodCall->getAttributes());
+        $booleanOr = new \PhpParser\Node\Expr\BinaryOp\BooleanOr($methodCall, $newMethodCallRight);
         foreach ($exprs as $key => $expr) {
             if ($key <= 1) {
                 continue;
             }
             $rightMethodCall = clone $methodCall;
-            $rightMethodCall->args[0] = new Arg($expr);
-            $newMethodCallRight = new MethodCall($methodCall->var, $methodCall->name, $rightMethodCall->args, $methodCall->getAttributes());
-            $booleanOr = new BooleanOr($booleanOr, $newMethodCallRight);
+            $rightMethodCall->args[0] = new \PhpParser\Node\Arg($expr);
+            $newMethodCallRight = new \PhpParser\Node\Expr\MethodCall($methodCall->var, $methodCall->name, $rightMethodCall->args, $methodCall->getAttributes());
+            $booleanOr = new \PhpParser\Node\Expr\BinaryOp\BooleanOr($booleanOr, $newMethodCallRight);
         }
         return $booleanOr;
     }

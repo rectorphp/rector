@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\ValueObject;
+namespace Rector\Symfony\ValueObject;
 
-use RectorPrefix20220606\Rector\Symfony\Contract\Tag\TagInterface;
-final class Tag implements TagInterface
+use Rector\Symfony\Contract\Tag\TagInterface;
+final class Tag implements \Rector\Symfony\Contract\Tag\TagInterface
 {
     /**
      * @readonly

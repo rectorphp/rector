@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\MysqlToMysqli\Rector\FuncCall;
+namespace Rector\MysqlToMysqli\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Concat;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.phpclasses.org/blog/package/9199/post/3-Smoothly-Migrate-your-PHP-Code-using-the-Old-MySQL-extension-to-MySQLi.html
  *
  * @see \Rector\Tests\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector\MysqlFuncCallToMysqliRectorTest
  */
-final class MysqlFuncCallToMysqliRector extends AbstractRector
+final class MysqlFuncCallToMysqliRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
      */
     private const MYSQLI_QUERY = 'mysqli_query';
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Converts more complex mysql functions to mysqli', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Converts more complex mysql functions to mysqli', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 mysql_drop_db($database);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -39,12 +39,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?FuncCall
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\FuncCall
     {
         if ($this->isName($node, 'mysql_create_db')) {
             return $this->processMysqlCreateDb($node);
@@ -53,55 +53,55 @@ CODE_SAMPLE
             return $this->processMysqlDropDb($node);
         }
         if ($this->isName($node, 'mysql_list_dbs')) {
-            $node->name = new Name(self::MYSQLI_QUERY);
-            $node->args[0] = new Arg(new String_('SHOW DATABASES'));
+            $node->name = new \PhpParser\Node\Name(self::MYSQLI_QUERY);
+            $node->args[0] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_('SHOW DATABASES'));
             return $node;
         }
-        if ($this->isName($node, 'mysql_list_fields') && $node->args[0] instanceof Arg && $node->args[1] instanceof Arg) {
-            $node->name = new Name(self::MYSQLI_QUERY);
+        if ($this->isName($node, 'mysql_list_fields') && $node->args[0] instanceof \PhpParser\Node\Arg && $node->args[1] instanceof \PhpParser\Node\Arg) {
+            $node->name = new \PhpParser\Node\Name(self::MYSQLI_QUERY);
             $node->args[0]->value = $this->joinStringWithNode('SHOW COLUMNS FROM', $node->args[1]->value);
             unset($node->args[1]);
             return $node;
         }
-        if ($this->isName($node, 'mysql_list_tables') && $node->args[0] instanceof Arg) {
-            $node->name = new Name(self::MYSQLI_QUERY);
+        if ($this->isName($node, 'mysql_list_tables') && $node->args[0] instanceof \PhpParser\Node\Arg) {
+            $node->name = new \PhpParser\Node\Name(self::MYSQLI_QUERY);
             $node->args[0]->value = $this->joinStringWithNode('SHOW TABLES FROM', $node->args[0]->value);
             return $node;
         }
         return null;
     }
-    private function processMysqlCreateDb(FuncCall $funcCall) : ?FuncCall
+    private function processMysqlCreateDb(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         if (!isset($funcCall->args[0])) {
             return null;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        $funcCall->name = new Name(self::MYSQLI_QUERY);
+        $funcCall->name = new \PhpParser\Node\Name(self::MYSQLI_QUERY);
         $funcCall->args[0]->value = $this->joinStringWithNode('CREATE DATABASE', $funcCall->args[0]->value);
         return $funcCall;
     }
-    private function processMysqlDropDb(FuncCall $funcCall) : ?FuncCall
+    private function processMysqlDropDb(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Expr\FuncCall
     {
         if (!isset($funcCall->args[0])) {
             return null;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
             return null;
         }
-        $funcCall->name = new Name(self::MYSQLI_QUERY);
+        $funcCall->name = new \PhpParser\Node\Name(self::MYSQLI_QUERY);
         $funcCall->args[0]->value = $this->joinStringWithNode('DROP DATABASE', $funcCall->args[0]->value);
         return $funcCall;
     }
     /**
      * @return \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\BinaryOp\Concat
      */
-    private function joinStringWithNode(string $string, Expr $expr)
+    private function joinStringWithNode(string $string, \PhpParser\Node\Expr $expr)
     {
-        if ($expr instanceof String_) {
-            return new String_($string . ' ' . $expr->value);
+        if ($expr instanceof \PhpParser\Node\Scalar\String_) {
+            return new \PhpParser\Node\Scalar\String_($string . ' ' . $expr->value);
         }
-        return new Concat(new String_($string . ' '), $expr);
+        return new \PhpParser\Node\Expr\BinaryOp\Concat(new \PhpParser\Node\Scalar\String_($string . ' '), $expr);
     }
 }

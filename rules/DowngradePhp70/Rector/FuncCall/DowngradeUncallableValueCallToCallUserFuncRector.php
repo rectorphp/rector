@@ -1,42 +1,42 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp70\Rector\FuncCall;
+namespace Rector\DowngradePhp70\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticPropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Name;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/uniform_variable_syntax
  *
  * @see \Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeUncallableValueCallToCallUserFuncRector\DowngradeUncallableValueCallToCallUserFuncRectorTest
  */
-final class DowngradeUncallableValueCallToCallUserFuncRector extends AbstractRector
+final class DowngradeUncallableValueCallToCallUserFuncRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<class-string<Expr>>
      */
     private const INDIRECT_CALLABLE_EXPR = [
         // Interpreted as MethodCall without parentheses.
-        PropertyFetch::class,
+        \PhpParser\Node\Expr\PropertyFetch::class,
         // Interpreted as StaticCall without parentheses.
-        StaticPropertyFetch::class,
-        Closure::class,
+        \PhpParser\Node\Expr\StaticPropertyFetch::class,
+        \PhpParser\Node\Expr\Closure::class,
         // The first function call does not even need to be wrapped in parentheses
         // but PHP 5 still does not like curried functions like `f($args)($moreArgs)`.
-        FuncCall::class,
+        \PhpParser\Node\Expr\FuncCall::class,
     ];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade calling a value that is not directly callable in PHP 5 (property, static property, closure, …) to call_user_func.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade calling a value that is not directly callable in PHP 5 (property, static property, closure, …) to call_user_func.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class Foo
 {
     /** @var callable */
@@ -73,23 +73,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?FuncCall
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\FuncCall
     {
-        if ($node->name instanceof Name) {
+        if ($node->name instanceof \PhpParser\Node\Name) {
             return null;
         }
         if (!$this->isNotDirectlyCallableInPhp5($node->name)) {
             return null;
         }
-        $args = \array_merge([new Arg($node->name)], $node->args);
-        return new FuncCall(new Name('call_user_func'), $args);
+        $args = \array_merge([new \PhpParser\Node\Arg($node->name)], $node->args);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('call_user_func'), $args);
     }
-    private function isNotDirectlyCallableInPhp5(Expr $expr) : bool
+    private function isNotDirectlyCallableInPhp5(\PhpParser\Node\Expr $expr) : bool
     {
         return \in_array(\get_class($expr), self::INDIRECT_CALLABLE_EXPR, \true);
     }

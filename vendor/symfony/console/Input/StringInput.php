@@ -20,7 +20,7 @@ use RectorPrefix20220606\Symfony\Component\Console\Exception\InvalidArgumentExce
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class StringInput extends ArgvInput
+class StringInput extends \RectorPrefix20220606\Symfony\Component\Console\Input\ArgvInput
 {
     /**
      * @deprecated since Symfony 6.1
@@ -66,7 +66,7 @@ class StringInput extends ArgvInput
                 $token .= $match[1];
             } else {
                 // should never happen
-                throw new InvalidArgumentException(\sprintf('Unable to parse input near "... %s ...".', \substr($input, $cursor, 10)));
+                throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Unable to parse input near "... %s ...".', \substr($input, $cursor, 10)));
             }
             $cursor += \strlen($match[0]);
         }

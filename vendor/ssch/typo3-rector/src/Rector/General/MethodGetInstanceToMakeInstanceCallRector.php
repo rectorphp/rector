@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\General;
+namespace Ssch\TYPO3Rector\Rector\General;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\TYPO3\CMS\Core\Utility\GeneralUtility;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @see \Ssch\TYPO3Rector\Tests\Rector\General\MethodGetInstanceToMakeInstanceCallRector\MethodGetInstanceToMakeInstanceCallRectorTest
  */
-final class MethodGetInstanceToMakeInstanceCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class MethodGetInstanceToMakeInstanceCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -34,12 +34,12 @@ final class MethodGetInstanceToMakeInstanceCallRector extends AbstractRector imp
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -49,14 +49,14 @@ final class MethodGetInstanceToMakeInstanceCallRector extends AbstractRector imp
             return null;
         }
         $class = $this->nodeFactory->createClassConstReference($className);
-        return $this->nodeFactory->createStaticCall(GeneralUtility::class, 'makeInstance', [$class]);
+        return $this->nodeFactory->createStaticCall(\RectorPrefix20220606\TYPO3\CMS\Core\Utility\GeneralUtility::class, 'makeInstance', [$class]);
     }
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use GeneralUtility::makeInstance instead of getInstance call', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use GeneralUtility::makeInstance instead of getInstance call', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $instance = TYPO3\CMS\Core\Resource\Index\ExtractorRegistry::getInstance();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -72,11 +72,11 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $classes = $configuration[self::CLASSES_GET_INSTANCE_TO_MAKE_INSTANCE] ?? $configuration;
-        Assert::isArray($classes);
-        Assert::allString($classes);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::isArray($classes);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allString($classes);
         $this->classes = $classes;
     }
-    private function shouldSkip(StaticCall $staticCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
         if ([] === $this->classes) {
             return \true;
@@ -85,7 +85,7 @@ CODE_SAMPLE
             return \true;
         }
         foreach ($this->classes as $class) {
-            if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new ObjectType($class))) {
+            if ($this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($staticCall, new \PHPStan\Type\ObjectType($class))) {
                 return \false;
             }
         }

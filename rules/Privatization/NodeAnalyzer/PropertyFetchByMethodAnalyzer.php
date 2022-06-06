@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Privatization\NodeAnalyzer;
+namespace Rector\Privatization\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Do_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Else_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PhpParser\Node\Stmt\While_;
-use RectorPrefix20220606\PhpParser\NodeTraverser;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Do_;
+use PhpParser\Node\Stmt\Else_;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\While_;
+use PhpParser\NodeTraverser;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\ValueObject\MethodName;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class PropertyFetchByMethodAnalyzer
 {
     /**
      * @var array<class-string<Stmt>>
      */
-    private const SCOPE_CHANGING_NODE_TYPES = [Do_::class, While_::class, If_::class, Else_::class];
+    private const SCOPE_CHANGING_NODE_TYPES = [\PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Else_::class];
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -42,7 +42,7 @@ final class PropertyFetchByMethodAnalyzer
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
@@ -52,7 +52,7 @@ final class PropertyFetchByMethodAnalyzer
      * @param string[] $propertyNames
      * @return array<string, string[]>
      */
-    public function collectPropertyFetchByMethods(Class_ $class, array $propertyNames) : array
+    public function collectPropertyFetchByMethods(\PhpParser\Node\Stmt\Class_ $class, array $propertyNames) : array
     {
         $propertyUsageByMethods = [];
         foreach ($propertyNames as $propertyName) {
@@ -76,24 +76,24 @@ final class PropertyFetchByMethodAnalyzer
         }
         return $propertyUsageByMethods;
     }
-    private function isContainsLocalPropertyFetchNameOrPropertyChangingInMultipleMethodCalls(ClassMethod $classMethod, string $propertyName) : bool
+    private function isContainsLocalPropertyFetchNameOrPropertyChangingInMultipleMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : bool
     {
         if (!$this->propertyFetchAnalyzer->containsLocalPropertyFetchName($classMethod, $propertyName)) {
             return \true;
         }
         return $this->isPropertyChangingInMultipleMethodCalls($classMethod, $propertyName);
     }
-    private function isPropertyWithDefaultValue(Class_ $class, string $propertyName) : bool
+    private function isPropertyWithDefaultValue(\PhpParser\Node\Stmt\Class_ $class, string $propertyName) : bool
     {
         $property = $class->getProperty($propertyName);
-        if (!$property instanceof Property) {
+        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
             return \false;
         }
-        return $property->props[0]->default instanceof Expr;
+        return $property->props[0]->default instanceof \PhpParser\Node\Expr;
     }
-    private function isInConstructWithPropertyChanging(ClassMethod $classMethod, string $propertyName) : bool
+    private function isInConstructWithPropertyChanging(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : bool
     {
-        if (!$this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
+        if (!$this->nodeNameResolver->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return \false;
         }
         return $this->isPropertyChanging($classMethod, $propertyName);
@@ -101,18 +101,18 @@ final class PropertyFetchByMethodAnalyzer
     /**
      * Covers https://github.com/rectorphp/rector/pull/2558#discussion_r363036110
      */
-    private function isPropertyChangingInMultipleMethodCalls(ClassMethod $classMethod, string $propertyName) : bool
+    private function isPropertyChangingInMultipleMethodCalls(\PhpParser\Node\Stmt\ClassMethod $classMethod, string $propertyName) : bool
     {
         $isPropertyChanging = \false;
         $isPropertyReadInIf = \false;
         $isIfFollowedByAssign = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use(&$isPropertyChanging, $propertyName, &$isPropertyReadInIf, &$isIfFollowedByAssign) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (\PhpParser\Node $node) use(&$isPropertyChanging, $propertyName, &$isPropertyReadInIf, &$isIfFollowedByAssign) : ?int {
             if ($isPropertyReadInIf) {
                 if (!$this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$propertyName])) {
                     return null;
                 }
-                $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-                if ($parentNode instanceof Assign && $parentNode->var === $node) {
+                $parentNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+                if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var === $node) {
                     $isIfFollowedByAssign = \true;
                 }
             }
@@ -124,18 +124,18 @@ final class PropertyFetchByMethodAnalyzer
             if (!$isPropertyChanging) {
                 return null;
             }
-            return NodeTraverser::STOP_TRAVERSAL;
+            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $isPropertyChanging || $isIfFollowedByAssign || $isPropertyReadInIf;
     }
-    private function isPropertyReadInNode(bool $isPropertyReadInIf, Node $node, string $propertyName) : bool
+    private function isPropertyReadInNode(bool $isPropertyReadInIf, \PhpParser\Node $node, string $propertyName) : bool
     {
-        if ($node instanceof If_) {
+        if ($node instanceof \PhpParser\Node\Stmt\If_) {
             return $this->isPropertyReadInIf($node, $propertyName);
         }
         return $isPropertyReadInIf;
     }
-    private function isScopeChangingNode(Node $node) : bool
+    private function isScopeChangingNode(\PhpParser\Node $node) : bool
     {
         foreach (self::SCOPE_CHANGING_NODE_TYPES as $type) {
             if (\is_a($node, $type, \true)) {
@@ -144,34 +144,34 @@ final class PropertyFetchByMethodAnalyzer
         }
         return \false;
     }
-    private function isPropertyReadInIf(If_ $if, string $propertyName) : bool
+    private function isPropertyReadInIf(\PhpParser\Node\Stmt\If_ $if, string $propertyName) : bool
     {
         $isPropertyReadInIf = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($if->cond, function (Node $node) use($propertyName, &$isPropertyReadInIf) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($if->cond, function (\PhpParser\Node $node) use($propertyName, &$isPropertyReadInIf) : ?int {
             if (!$this->propertyFetchAnalyzer->isLocalPropertyOfNames($node, [$propertyName])) {
                 return null;
             }
             $isPropertyReadInIf = \true;
-            return NodeTraverser::STOP_TRAVERSAL;
+            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $isPropertyReadInIf;
     }
-    private function isPropertyChanging(Node $node, string $privatePropertyName) : bool
+    private function isPropertyChanging(\PhpParser\Node $node, string $privatePropertyName) : bool
     {
         $isPropertyChanging = \false;
         // here cannot be any property assign
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use(&$isPropertyChanging, $privatePropertyName) : ?int {
-            if (!$node instanceof Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (\PhpParser\Node $node) use(&$isPropertyChanging, $privatePropertyName) : ?int {
+            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
                 return null;
             }
-            if (!$node->var instanceof PropertyFetch) {
+            if (!$node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node->var->name, $privatePropertyName)) {
                 return null;
             }
             $isPropertyChanging = \true;
-            return NodeTraverser::STOP_TRAVERSAL;
+            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $isPropertyChanging;
     }

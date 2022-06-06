@@ -19,7 +19,7 @@ use RectorPrefix20220606\Symfony\Component\Finder\SplFileInfo;
  *
  * @extends MultiplePcreFilterIterator<string, SplFileInfo>
  */
-class PathFilterIterator extends MultiplePcreFilterIterator
+class PathFilterIterator extends \RectorPrefix20220606\Symfony\Component\Finder\Iterator\MultiplePcreFilterIterator
 {
     /**
      * Filters the iterator values.

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Arguments\ValueObject;
+namespace Rector\Arguments\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
-final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
+use PHPStan\Type\ObjectType;
+use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
+use Rector\Core\Validation\RectorAssert;
+final class ReplaceArgumentDefaultValue implements \Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface
 {
     /**
      * @var string
@@ -47,11 +47,11 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
         $this->position = $position;
         $this->valueBefore = $valueBefore;
         $this->valueAfter = $valueAfter;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getMethod() : string
     {

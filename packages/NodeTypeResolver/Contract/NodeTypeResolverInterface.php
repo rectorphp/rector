@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\Contract;
+namespace Rector\NodeTypeResolver\Contract;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PHPStan\Type\Type;
+use PhpParser\Node;
+use PHPStan\Type\Type;
 /**
  * @template TNode as \PhpParser\Node
  */
@@ -17,5 +17,5 @@ interface NodeTypeResolverInterface
     /**
      * @param TNode $node
      */
-    public function resolve(Node $node) : Type;
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type;
 }

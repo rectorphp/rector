@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer;
+namespace Rector\Doctrine\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Attribute;
-use RectorPrefix20220606\PhpParser\Node\AttributeGroup;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class AttributeFinder
 {
     /**
@@ -19,7 +19,7 @@ final class AttributeFinder
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -27,7 +27,7 @@ final class AttributeFinder
      * @param class-string $attributeClass
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
-    public function findAttributeByClassArgByName($node, string $attributeClass, string $argName) : ?Expr
+    public function findAttributeByClassArgByName($node, string $attributeClass, string $argName) : ?\PhpParser\Node\Expr
     {
         return $this->findAttributeByClassesArgByName($node, [$attributeClass], $argName);
     }
@@ -35,10 +35,10 @@ final class AttributeFinder
      * @param class-string[] $attributeClasses
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
-    public function findAttributeByClassesArgByName($node, array $attributeClasses, string $argName) : ?Expr
+    public function findAttributeByClassesArgByName($node, array $attributeClasses, string $argName) : ?\PhpParser\Node\Expr
     {
         $attribute = $this->findAttributeByClasses($node, $attributeClasses);
-        if (!$attribute instanceof Attribute) {
+        if (!$attribute instanceof \PhpParser\Node\Attribute) {
             return null;
         }
         return $this->findArgByName($attribute, $argName);
@@ -46,7 +46,7 @@ final class AttributeFinder
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    public function findArgByName(Attribute $attribute, string $argName)
+    public function findArgByName(\PhpParser\Node\Attribute $attribute, string $argName)
     {
         foreach ($attribute->args as $arg) {
             if ($arg->name === null) {
@@ -63,12 +63,12 @@ final class AttributeFinder
      * @param class-string $attributeClass
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
-    public function findAttributeByClass($node, string $attributeClass) : ?Attribute
+    public function findAttributeByClass($node, string $attributeClass) : ?\PhpParser\Node\Attribute
     {
         /** @var AttributeGroup $attrGroup */
         foreach ($node->attrGroups as $attrGroup) {
             foreach ($attrGroup->attrs as $attribute) {
-                if (!$attribute->name instanceof FullyQualified) {
+                if (!$attribute->name instanceof \PhpParser\Node\Name\FullyQualified) {
                     continue;
                 }
                 if ($this->nodeNameResolver->isName($attribute->name, $attributeClass)) {
@@ -82,11 +82,11 @@ final class AttributeFinder
      * @param class-string[] $attributeClasses
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
-    public function findAttributeByClasses($node, array $attributeClasses) : ?Attribute
+    public function findAttributeByClasses($node, array $attributeClasses) : ?\PhpParser\Node\Attribute
     {
         foreach ($attributeClasses as $attributeClass) {
             $attribute = $this->findAttributeByClass($node, $attributeClass);
-            if ($attribute instanceof Attribute) {
+            if ($attribute instanceof \PhpParser\Node\Attribute) {
                 return $attribute;
             }
         }

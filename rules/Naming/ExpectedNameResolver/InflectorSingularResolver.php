@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\ExpectedNameResolver;
+namespace Rector\Naming\ExpectedNameResolver;
 
 use RectorPrefix20220606\Doctrine\Inflector\Inflector;
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\Rector\Core\Util\StringUtils;
+use Rector\Core\Util\StringUtils;
 /**
  * @see \Rector\Core\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
  */
@@ -38,15 +38,15 @@ final class InflectorSingularResolver
      * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;
-    public function __construct(Inflector $inflector)
+    public function __construct(\RectorPrefix20220606\Doctrine\Inflector\Inflector $inflector)
     {
         $this->inflector = $inflector;
     }
     public function resolve(string $currentName) : string
     {
-        $matchBy = Strings::match($currentName, self::BY_MIDDLE_REGEX);
+        $matchBy = \RectorPrefix20220606\Nette\Utils\Strings::match($currentName, self::BY_MIDDLE_REGEX);
         if ($matchBy !== null) {
-            return Strings::substring($currentName, 0, -\strlen((string) $matchBy['by']));
+            return \RectorPrefix20220606\Nette\Utils\Strings::substring($currentName, 0, -\strlen((string) $matchBy['by']));
         }
         $resolvedValue = $this->resolveSingularizeMap($currentName);
         if ($resolvedValue !== null) {
@@ -78,12 +78,12 @@ final class InflectorSingularResolver
             if ($currentName === $plural) {
                 return $singular;
             }
-            if (StringUtils::isMatch($currentName, '#' . \ucfirst($plural) . '#')) {
-                $resolvedValue = Strings::replace($currentName, '#' . \ucfirst($plural) . '#', \ucfirst($singular));
+            if (\Rector\Core\Util\StringUtils::isMatch($currentName, '#' . \ucfirst($plural) . '#')) {
+                $resolvedValue = \RectorPrefix20220606\Nette\Utils\Strings::replace($currentName, '#' . \ucfirst($plural) . '#', \ucfirst($singular));
                 return $this->singularizeCamelParts($resolvedValue);
             }
-            if (StringUtils::isMatch($currentName, '#' . $plural . '#')) {
-                $resolvedValue = Strings::replace($currentName, '#' . $plural . '#', $singular);
+            if (\Rector\Core\Util\StringUtils::isMatch($currentName, '#' . $plural . '#')) {
+                $resolvedValue = \RectorPrefix20220606\Nette\Utils\Strings::replace($currentName, '#' . $plural . '#', $singular);
                 return $this->singularizeCamelParts($resolvedValue);
             }
         }
@@ -91,7 +91,7 @@ final class InflectorSingularResolver
     }
     private function singularizeCamelParts(string $currentName) : string
     {
-        $camelCases = Strings::matchAll($currentName, self::CAMELCASE_REGEX);
+        $camelCases = \RectorPrefix20220606\Nette\Utils\Strings::matchAll($currentName, self::CAMELCASE_REGEX);
         $resolvedName = '';
         foreach ($camelCases as $camelCase) {
             $value = $this->inflector->singularize($camelCase[self::CAMELCASE]);

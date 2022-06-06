@@ -20,11 +20,11 @@ interface HelperInterface
     /**
      * Sets the helper set associated with this helper.
      */
-    public function setHelperSet(HelperSet $helperSet = null);
+    public function setHelperSet(\RectorPrefix20220606\Symfony\Component\Console\Helper\HelperSet $helperSet = null);
     /**
      * Gets the helper set associated with this helper.
      */
-    public function getHelperSet() : ?HelperSet;
+    public function getHelperSet() : ?\RectorPrefix20220606\Symfony\Component\Console\Helper\HelperSet;
     /**
      * Returns the canonical name of this helper.
      *

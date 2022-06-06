@@ -1,38 +1,38 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php81\Rector\FuncCall;
+namespace Rector\Php81\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\Cast\String_ as CastString_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Trait_;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Reflection\Native\NativeFunctionReflection;
-use RectorPrefix20220606\PHPStan\Reflection\ParametersAcceptorSelector;
-use RectorPrefix20220606\PHPStan\Type\ErrorType;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Cast\String_ as CastString_;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\Native\NativeFunctionReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Type\ErrorType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector\NullToStrictStringFuncCallArgRectorTest
  */
-final class NullToStrictStringFuncCallArgRector extends AbstractRector implements MinPhpVersionInterface
+final class NullToStrictStringFuncCallArgRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var array<string, string[]>
@@ -53,15 +53,15 @@ final class NullToStrictStringFuncCallArgRector extends AbstractRector implement
      * @var \Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer
      */
     private $nodeTypeAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, NodeTypeAnalyzer $nodeTypeAnalyzer)
+    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer, \Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer $nodeTypeAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->argsAnalyzer = $argsAnalyzer;
         $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change null to strict string defined function call args', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change null to strict string defined function call args', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -86,12 +86,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -104,7 +104,7 @@ CODE_SAMPLE
         $isChanged = \false;
         foreach ($positions as $position) {
             $result = $this->processNullToStrictStringOnNodePosition($node, $args, $position);
-            if ($result instanceof Node) {
+            if ($result instanceof \PhpParser\Node) {
                 $node = $result;
                 $isChanged = \true;
             }
@@ -116,19 +116,19 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::DEPRECATE_NULL_ARG_IN_STRING_FUNCTION;
+        return \Rector\Core\ValueObject\PhpVersionFeature::DEPRECATE_NULL_ARG_IN_STRING_FUNCTION;
     }
     /**
      * @param Arg[] $args
      * @return int[]|string[]
      */
-    private function resolveNamedPositions(FuncCall $funcCall, array $args) : array
+    private function resolveNamedPositions(\PhpParser\Node\Expr\FuncCall $funcCall, array $args) : array
     {
         $functionName = $this->nodeNameResolver->getName($funcCall);
         $argNames = self::ARG_POSITION_NAME_NULL_TO_STRICT_STRING[$functionName];
         $positions = [];
         foreach ($args as $position => $arg) {
-            if (!$arg->name instanceof Identifier) {
+            if (!$arg->name instanceof \PhpParser\Node\Identifier) {
                 continue;
             }
             if (!$this->nodeNameResolver->isNames($arg->name, $argNames)) {
@@ -142,11 +142,11 @@ CODE_SAMPLE
      * @param Arg[] $args
      * @param int|string $position
      */
-    private function processNullToStrictStringOnNodePosition(FuncCall $funcCall, array $args, $position) : ?FuncCall
+    private function processNullToStrictStringOnNodePosition(\PhpParser\Node\Expr\FuncCall $funcCall, array $args, $position) : ?\PhpParser\Node\Expr\FuncCall
     {
         $argValue = $args[$position]->value;
-        if ($argValue instanceof ConstFetch && $this->valueResolver->isNull($argValue)) {
-            $args[$position]->value = new String_('');
+        if ($argValue instanceof \PhpParser\Node\Expr\ConstFetch && $this->valueResolver->isNull($argValue)) {
+            $args[$position]->value = new \PhpParser\Node\Scalar\String_('');
             $funcCall->args = $args;
             return $funcCall;
         }
@@ -157,56 +157,56 @@ CODE_SAMPLE
         if ($this->isAnErrorTypeFromParentScope($argValue, $type)) {
             return null;
         }
-        if ($args[$position]->value instanceof MethodCall) {
-            $trait = $this->betterNodeFinder->findParentType($funcCall, Trait_::class);
-            if ($trait instanceof Trait_) {
+        if ($args[$position]->value instanceof \PhpParser\Node\Expr\MethodCall) {
+            $trait = $this->betterNodeFinder->findParentType($funcCall, \PhpParser\Node\Stmt\Trait_::class);
+            if ($trait instanceof \PhpParser\Node\Stmt\Trait_) {
                 return null;
             }
         }
         if ($this->isCastedReassign($argValue)) {
             return null;
         }
-        $args[$position]->value = new CastString_($argValue);
+        $args[$position]->value = new \PhpParser\Node\Expr\Cast\String_($argValue);
         $funcCall->args = $args;
         return $funcCall;
     }
-    private function isCastedReassign(Expr $expr) : bool
+    private function isCastedReassign(\PhpParser\Node\Expr $expr) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (Node $subNode) use($expr) : bool {
-            if (!$subNode instanceof Assign) {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (\PhpParser\Node $subNode) use($expr) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Assign) {
                 return \false;
             }
             if (!$this->nodeComparator->areNodesEqual($subNode->var, $expr)) {
                 return \false;
             }
-            return $subNode->expr instanceof CastString_;
+            return $subNode->expr instanceof \PhpParser\Node\Expr\Cast\String_;
         });
     }
-    private function isAnErrorTypeFromParentScope(Expr $expr, Type $type) : bool
+    private function isAnErrorTypeFromParentScope(\PhpParser\Node\Expr $expr, \PHPStan\Type\Type $type) : bool
     {
-        if (!$type instanceof MixedType) {
+        if (!$type instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
-        $scope = $expr->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return \false;
         }
         $parentScope = $scope->getParentScope();
-        if ($parentScope instanceof Scope) {
-            return $parentScope->getType($expr) instanceof ErrorType;
+        if ($parentScope instanceof \PHPStan\Analyser\Scope) {
+            return $parentScope->getType($expr) instanceof \PHPStan\Type\ErrorType;
         }
         return \false;
     }
     /**
      * @return int[]|string[]
      */
-    private function resolveOriginalPositions(FuncCall $funcCall) : array
+    private function resolveOriginalPositions(\PhpParser\Node\Expr\FuncCall $funcCall) : array
     {
         $functionReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($funcCall);
-        if (!$functionReflection instanceof NativeFunctionReflection) {
+        if (!$functionReflection instanceof \PHPStan\Reflection\Native\NativeFunctionReflection) {
             return [];
         }
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionReflection->getVariants());
+        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($functionReflection->getVariants());
         $functionName = $this->nodeNameResolver->getName($funcCall);
         $argNames = self::ARG_POSITION_NAME_NULL_TO_STRICT_STRING[$functionName];
         $positions = [];
@@ -217,7 +217,7 @@ CODE_SAMPLE
         }
         return $positions;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         $functionNames = \array_keys(self::ARG_POSITION_NAME_NULL_TO_STRICT_STRING);
         return !$this->nodeNameResolver->isNames($funcCall, $functionNames);

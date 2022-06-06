@@ -16,7 +16,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\Invalid
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServiceClosureArgument implements ArgumentInterface
+class ServiceClosureArgument implements \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
 {
     /**
      * @var mixed[]
@@ -42,7 +42,7 @@ class ServiceClosureArgument implements ArgumentInterface
     public function setValues(array $values)
     {
         if ([0] !== \array_keys($values)) {
-            throw new InvalidArgumentException('A ServiceClosureArgument must hold one and only one value.');
+            throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('A ServiceClosureArgument must hold one and only one value.');
         }
         $this->values = $values;
     }

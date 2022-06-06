@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\RectorInstaller;
+namespace Rector\RectorInstaller;
 
 use UnexpectedValueException;
-final class LocalFilesystem implements Filesystem
+final class LocalFilesystem implements \Rector\RectorInstaller\Filesystem
 {
     public function isFile(string $pathToFile) : bool
     {
@@ -14,7 +14,7 @@ final class LocalFilesystem implements Filesystem
     {
         $fileHash = \md5_file($pathToFile);
         if ($fileHash === \false) {
-            throw new UnexpectedValueException(\sprintf('Could not hash file %s', $pathToFile));
+            throw new \UnexpectedValueException(\sprintf('Could not hash file %s', $pathToFile));
         }
         return $fileHash;
     }
@@ -22,7 +22,7 @@ final class LocalFilesystem implements Filesystem
     {
         $bytes = \file_put_contents($pathToFile, $contents);
         if ($bytes === \false) {
-            throw new UnexpectedValueException(\sprintf('Could not write contents to file %s', $pathToFile));
+            throw new \UnexpectedValueException(\sprintf('Could not write contents to file %s', $pathToFile));
         }
     }
     public function hashEquals(string $hash, string $content) : bool

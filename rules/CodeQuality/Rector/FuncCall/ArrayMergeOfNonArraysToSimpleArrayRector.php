@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\FuncCall;
+namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://3v4l.org/aLf96
  * @changelog https://3v4l.org/2r26K
@@ -18,11 +18,11 @@ use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\ArrayMergeOfNonArraysToSimpleArrayRector\ArrayMergeOfNonArraysToSimpleArrayRectorTest
  */
-final class ArrayMergeOfNonArraysToSimpleArrayRector extends AbstractRector
+final class ArrayMergeOfNonArraysToSimpleArrayRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change array_merge of non arrays to array directly', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array_merge of non arrays to array directly', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go()
@@ -53,32 +53,32 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'array_merge')) {
             return null;
         }
-        $array = new Array_();
+        $array = new \PhpParser\Node\Expr\Array_();
         $isAssigned = \false;
         foreach ($node->args as $arg) {
             // found non Arg? return early
-            if (!$arg instanceof Arg) {
+            if (!$arg instanceof \PhpParser\Node\Arg) {
                 return null;
             }
             $nestedArrayItem = $arg->value;
-            if (!$nestedArrayItem instanceof Array_) {
+            if (!$nestedArrayItem instanceof \PhpParser\Node\Expr\Array_) {
                 return null;
             }
             foreach ($nestedArrayItem->items as $nestedArrayItemItem) {
                 if ($nestedArrayItemItem === null) {
                     continue;
                 }
-                $array->items[] = new ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
+                $array->items[] = new \PhpParser\Node\Expr\ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);
                 $isAssigned = \true;
             }
         }

@@ -9,7 +9,7 @@ namespace RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST;
  * @package    Helmich\TypoScriptParser
  * @subpackage Parser\AST
  */
-class RootObjectPath extends ObjectPath
+class RootObjectPath extends \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath
 {
     /**
      * RootObjectPath constructor.
@@ -21,7 +21,7 @@ class RootObjectPath extends ObjectPath
     /**
      * @return ObjectPath
      */
-    public function parent() : ObjectPath
+    public function parent() : \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath
     {
         return $this;
     }
@@ -36,8 +36,8 @@ class RootObjectPath extends ObjectPath
      * @param string $name
      * @return ObjectPath
      */
-    public function append($name) : ObjectPath
+    public function append($name) : \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath
     {
-        return new ObjectPath(\ltrim($name, '.'), $name);
+        return new \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ObjectPath(\ltrim($name, '.'), $name);
     }
 }

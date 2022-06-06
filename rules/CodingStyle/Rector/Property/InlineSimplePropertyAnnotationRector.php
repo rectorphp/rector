@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\Rector\Property;
+namespace Rector\CodingStyle\Rector\Property;
 
-use RectorPrefix20220606\PhpParser\Comment\Doc;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassConst;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Comment\Doc;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\Property;
+use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Property\InlineSimplePropertyAnnotationRector\InlineSimplePropertyAnnotationRectorTest
@@ -22,15 +22,15 @@ use RectorPrefix20220606\Webmozart\Assert\Assert;
  *      as it will always conflict with ECS use of \PhpCsFixer\Fixer\Phpdoc\PhpdocLineSpanFixer
  *      so rectify CI will always rolled back the change
  */
-final class InlineSimplePropertyAnnotationRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface
+final class InlineSimplePropertyAnnotationRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface
 {
     /**
      * @var string[]
      */
     private $annotationsToConsiderForInlining = ['@var', '@phpstan-var', '@psalm-var'];
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Inline simple @var annotations (or other annotations) when they are the only thing in the phpdoc', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Inline simple @var annotations (or other annotations) when they are the only thing in the phpdoc', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -61,14 +61,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class, ClassConst::class];
+        return [\PhpParser\Node\Stmt\Property::class, \PhpParser\Node\Stmt\ClassConst::class];
     }
     /**
      * @param mixed[] $configuration
      */
     public function configure(array $configuration) : void
     {
-        Assert::allString($configuration);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allString($configuration);
         $this->annotationsToConsiderForInlining = \array_map(function (string $annotation) : string {
             return '@' . \ltrim($annotation, '@');
         }, $configuration);
@@ -76,12 +76,12 @@ CODE_SAMPLE
     /**
      * @param Property|ClassConst $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkipNode($node)) {
             return null;
         }
-        $comments = $node->getAttribute(AttributeKey::COMMENTS, []);
+        $comments = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, []);
         if ((\is_array($comments) || $comments instanceof \Countable ? \count($comments) : 0) !== 1) {
             return null;
         }
@@ -120,9 +120,9 @@ CODE_SAMPLE
      */
     private function shouldSkipNode($node) : bool
     {
-        if ($node instanceof Property && \count($node->props) !== 1) {
+        if ($node instanceof \PhpParser\Node\Stmt\Property && \count($node->props) !== 1) {
             return \true;
         }
-        return $node instanceof ClassConst && \count($node->consts) !== 1;
+        return $node instanceof \PhpParser\Node\Stmt\ClassConst && \count($node->consts) !== 1;
     }
 }

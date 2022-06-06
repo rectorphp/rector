@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Lexer\TokenEmulator;
+namespace PhpParser\Lexer\TokenEmulator;
 
-use RectorPrefix20220606\PhpParser\Lexer\Emulative;
-final class EnumTokenEmulator extends KeywordEmulator
+use PhpParser\Lexer\Emulative;
+final class EnumTokenEmulator extends \PhpParser\Lexer\TokenEmulator\KeywordEmulator
 {
     public function getPhpVersion() : string
     {
-        return Emulative::PHP_8_1;
+        return \PhpParser\Lexer\Emulative::PHP_8_1;
     }
     public function getKeywordString() : string
     {

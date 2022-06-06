@@ -1,33 +1,33 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\Rector\Class_;
+namespace Rector\Php80\Rector\Class_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Cast\String_ as CastString_;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\PHPStan\Type\StringType;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Cast\String_ as CastString_;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\StringType;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/stringable
  *
  * @see \Rector\Tests\Php80\Rector\Class_\StringableForToStringRector\StringableForToStringRectorTest
  */
-final class StringableForToStringRector extends AbstractRector implements MinPhpVersionInterface
+final class StringableForToStringRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -48,7 +48,7 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReturnTypeInferer $returnTypeInferer, ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->returnTypeInferer = $returnTypeInferer;
@@ -56,11 +56,11 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::STRINGABLE;
+        return \Rector\Core\ValueObject\PhpVersionFeature::STRINGABLE;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add `Stringable` interface to classes with `__toString()` method', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add `Stringable` interface to classes with `__toString()` method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __toString()
@@ -85,15 +85,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $toStringClassMethod = $node->getMethod(MethodName::TO_STRING);
-        if (!$toStringClassMethod instanceof ClassMethod) {
+        $toStringClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::TO_STRING);
+        if (!$toStringClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
         // warning, classes that implements __toString() will return Stringable interface even if they don't implemen it
@@ -106,44 +106,44 @@ CODE_SAMPLE
             return null;
         }
         $returnType = $this->returnTypeInferer->inferFunctionLike($toStringClassMethod);
-        if (!$returnType instanceof StringType) {
+        if (!$returnType instanceof \PHPStan\Type\StringType) {
             $this->processNotStringType($toStringClassMethod);
         }
         // add interface
-        $node->implements[] = new FullyQualified(self::STRINGABLE);
+        $node->implements[] = new \PhpParser\Node\Name\FullyQualified(self::STRINGABLE);
         // add return type
         if ($toStringClassMethod->returnType === null) {
-            $toStringClassMethod->returnType = new Name('string');
+            $toStringClassMethod->returnType = new \PhpParser\Node\Name('string');
         }
         return $node;
     }
-    private function processNotStringType(ClassMethod $toStringClassMethod) : void
+    private function processNotStringType(\PhpParser\Node\Stmt\ClassMethod $toStringClassMethod) : void
     {
         if ($toStringClassMethod->isAbstract()) {
             return;
         }
-        $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($toStringClassMethod, Return_::class);
+        $hasReturn = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($toStringClassMethod, \PhpParser\Node\Stmt\Return_::class);
         if (!$hasReturn) {
             $stmts = (array) $toStringClassMethod->stmts;
             \end($stmts);
             $lastKey = \key($stmts);
             $lastKey = $lastKey === null ? 0 : (int) $lastKey + 1;
-            $toStringClassMethod->stmts[$lastKey] = new Return_(new String_(''));
+            $toStringClassMethod->stmts[$lastKey] = new \PhpParser\Node\Stmt\Return_(new \PhpParser\Node\Scalar\String_(''));
             return;
         }
-        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (Node $subNode) {
-            if (!$subNode instanceof Return_) {
+        $this->traverseNodesWithCallable((array) $toStringClassMethod->stmts, function (\PhpParser\Node $subNode) {
+            if (!$subNode instanceof \PhpParser\Node\Stmt\Return_) {
                 return null;
             }
-            if (!$subNode->expr instanceof Expr) {
-                $subNode->expr = new String_('');
+            if (!$subNode->expr instanceof \PhpParser\Node\Expr) {
+                $subNode->expr = new \PhpParser\Node\Scalar\String_('');
                 return null;
             }
             $type = $this->nodeTypeResolver->getType($subNode->expr);
-            if ($type instanceof StringType) {
+            if ($type instanceof \PHPStan\Type\StringType) {
                 return null;
             }
-            $subNode->expr = new CastString_($subNode->expr);
+            $subNode->expr = new \PhpParser\Node\Expr\Cast\String_($subNode->expr);
             return null;
         });
     }

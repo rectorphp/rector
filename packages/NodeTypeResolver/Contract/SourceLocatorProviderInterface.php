@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\Contract;
+namespace Rector\NodeTypeResolver\Contract;
 
-use RectorPrefix20220606\PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
+use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 interface SourceLocatorProviderInterface
 {
-    public function provide() : SourceLocator;
+    public function provide() : \PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 }

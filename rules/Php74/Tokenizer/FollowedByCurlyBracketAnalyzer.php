@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php74\Tokenizer;
+namespace Rector\Php74\Tokenizer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
+use PhpParser\Node;
+use Rector\Core\ValueObject\Application\File;
 final class FollowedByCurlyBracketAnalyzer
 {
-    public function isFollowed(File $file, Node $node) : bool
+    public function isFollowed(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node $node) : bool
     {
         $oldTokens = $file->getOldTokens();
         $endTokenPost = $node->getEndTokenPos();

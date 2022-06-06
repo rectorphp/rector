@@ -2,7 +2,7 @@
 
 namespace RectorPrefix20220606\React\Promise;
 
-class Deferred implements PromisorInterface
+class Deferred implements \RectorPrefix20220606\React\Promise\PromisorInterface
 {
     private $promise;
     private $resolveCallback;
@@ -16,7 +16,7 @@ class Deferred implements PromisorInterface
     public function promise()
     {
         if (null === $this->promise) {
-            $this->promise = new Promise(function ($resolve, $reject, $notify) {
+            $this->promise = new \RectorPrefix20220606\React\Promise\Promise(function ($resolve, $reject, $notify) {
                 $this->resolveCallback = $resolve;
                 $this->rejectCallback = $reject;
                 $this->notifyCallback = $notify;

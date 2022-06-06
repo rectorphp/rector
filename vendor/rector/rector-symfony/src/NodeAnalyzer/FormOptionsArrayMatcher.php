@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer;
+namespace Rector\Symfony\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\MethodCall;
 final class FormOptionsArrayMatcher
 {
-    public function match(MethodCall $methodCall) : ?Array_
+    public function match(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\Array_
     {
         if (!isset($methodCall->getArgs()[2])) {
             return null;
         }
         $optionsArray = $methodCall->getArgs()[2]->value;
-        if (!$optionsArray instanceof Array_) {
+        if (!$optionsArray instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         return $optionsArray;

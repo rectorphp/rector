@@ -1,37 +1,37 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp80\Rector\FuncCall;
+namespace Rector\DowngradePhp80\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/str_contains
  *
  * @see Rector\Tests\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector\DowngradeStrContainsRectorTest
  */
-final class DowngradeStrContainsRector extends AbstractRector
+final class DowngradeStrContainsRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace str_contains() with strpos() !== false', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace str_contains() with strpos() !== false', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -56,16 +56,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, BooleanNot::class];
+        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
      * @param FuncCall|BooleanNot $node
      * @return Identical|NotIdentical|null The refactored node.
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
         $funcCall = $this->matchStrContainsOrNotStrContains($node);
-        if (!$funcCall instanceof FuncCall) {
+        if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         if (!$this->argsAnalyzer->isArgsInstanceInArgsPositions($funcCall->args, [0, 1])) {
@@ -78,18 +78,18 @@ CODE_SAMPLE
         $secondArg = $funcCall->args[1];
         $needle = $secondArg->value;
         $funcCall = $this->nodeFactory->createFuncCall('strpos', [$haystack, $needle]);
-        if ($node instanceof BooleanNot) {
-            return new Identical($funcCall, $this->nodeFactory->createFalse());
+        if ($node instanceof \PhpParser\Node\Expr\BooleanNot) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($funcCall, $this->nodeFactory->createFalse());
         }
-        return new NotIdentical($funcCall, $this->nodeFactory->createFalse());
+        return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($funcCall, $this->nodeFactory->createFalse());
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BooleanNot $expr
      */
-    private function matchStrContainsOrNotStrContains($expr) : ?FuncCall
+    private function matchStrContainsOrNotStrContains($expr) : ?\PhpParser\Node\Expr\FuncCall
     {
-        $expr = $expr instanceof BooleanNot ? $expr->expr : $expr;
-        if (!$expr instanceof FuncCall) {
+        $expr = $expr instanceof \PhpParser\Node\Expr\BooleanNot ? $expr->expr : $expr;
+        if (!$expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         if (!$this->isName($expr, 'str_contains')) {

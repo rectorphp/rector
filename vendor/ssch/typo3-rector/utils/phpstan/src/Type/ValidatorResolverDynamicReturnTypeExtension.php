@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\PHPStan\Type;
+namespace Ssch\TYPO3Rector\PHPStan\Type;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
-use RectorPrefix20220606\PHPStan\Type\DynamicMethodReturnTypeExtension;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver;
-final class ValidatorResolverDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
+use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\DynamicMethodReturnTypeExtension;
+use PHPStan\Type\Type;
+use Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver;
+final class ValidatorResolverDynamicReturnTypeExtension implements \PHPStan\Type\DynamicMethodReturnTypeExtension
 {
     /**
      * @readonly
      * @var \Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver
      */
     private $argumentTypeResolver;
-    public function __construct(ArgumentTypeResolver $argumentTypeResolver)
+    public function __construct(\Ssch\TYPO3Rector\PHPStan\TypeResolver\ArgumentTypeResolver $argumentTypeResolver)
     {
         $this->argumentTypeResolver = $argumentTypeResolver;
     }
@@ -24,11 +24,11 @@ final class ValidatorResolverDynamicReturnTypeExtension implements DynamicMethod
     {
         return 'TYPO3\\CMS\\Extbase\\Validation\\ValidatorResolver\\ValidatorResolver';
     }
-    public function isMethodSupported(MethodReflection $methodReflection) : bool
+    public function isMethodSupported(\PHPStan\Reflection\MethodReflection $methodReflection) : bool
     {
         return 'createValidator' === $methodReflection->getName();
     }
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : ?\RectorPrefix20220606\PHPStan\Type\Type
+    public function getTypeFromMethodCall(\PHPStan\Reflection\MethodReflection $methodReflection, \PhpParser\Node\Expr\MethodCall $methodCall, \PHPStan\Analyser\Scope $scope) : ?\PHPStan\Type\Type
     {
         return $this->argumentTypeResolver->resolveFromMethodCall($methodCall, $methodReflection);
     }

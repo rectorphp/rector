@@ -3,30 +3,30 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606;
 
-use RectorPrefix20220606\Rector\Config\RectorConfig;
-use RectorPrefix20220606\Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector;
-use RectorPrefix20220606\Rector\Renaming\Rector\MethodCall\RenameMethodRector;
-use RectorPrefix20220606\Rector\Renaming\ValueObject\MethodCallRename;
-return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(AddProphecyTraitRector::class);
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
+use Rector\Config\RectorConfig;
+use Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector;
+use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
+use Rector\Renaming\ValueObject\MethodCallRename;
+return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(\Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector::class);
+    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         // https://github.com/sebastianbergmann/phpunit/issues/4087
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertRegExp', 'assertMatchesRegularExpression'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertRegExp', 'assertMatchesRegularExpression'),
         // https://github.com/sebastianbergmann/phpunit/issues/4090
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotRegExp', 'assertDoesNotMatchRegularExpression'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotRegExp', 'assertDoesNotMatchRegularExpression'),
         // https://github.com/sebastianbergmann/phpunit/issues/4078
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertFileNotExists', 'assertFileDoesNotExist'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertFileNotExists', 'assertFileDoesNotExist'),
         // https://github.com/sebastianbergmann/phpunit/issues/4081
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertFileNotIsReadable', 'assertFileIsNotReadable'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertFileNotIsReadable', 'assertFileIsNotReadable'),
         // https://github.com/sebastianbergmann/phpunit/issues/4072
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertDirectoryNotIsReadable', 'assertDirectoryIsNotReadable'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertDirectoryNotIsReadable', 'assertDirectoryIsNotReadable'),
         // https://github.com/sebastianbergmann/phpunit/issues/4075
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertDirectoryNotIsWritable', 'assertDirectoryIsNotWritable'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertDirectoryNotIsWritable', 'assertDirectoryIsNotWritable'),
         // https://github.com/sebastianbergmann/phpunit/issues/4069
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertDirectoryNotExists', 'assertDirectoryDoesNotExist'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertDirectoryNotExists', 'assertDirectoryDoesNotExist'),
         // https://github.com/sebastianbergmann/phpunit/issues/4066
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotIsWritable', 'assertIsNotWritable'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotIsWritable', 'assertIsNotWritable'),
         // https://github.com/sebastianbergmann/phpunit/issues/4063
-        new MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotIsReadable', 'assertIsNotReadable'),
+        new \Rector\Renaming\ValueObject\MethodCallRename('PHPUnit\\Framework\\Assert', 'assertNotIsReadable', 'assertIsNotReadable'),
     ]);
 };

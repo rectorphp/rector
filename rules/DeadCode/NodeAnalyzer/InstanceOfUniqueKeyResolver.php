@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DeadCode\NodeAnalyzer;
+namespace Rector\DeadCode\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Instanceof_;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Variable;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class InstanceOfUniqueKeyResolver
 {
     /**
@@ -13,13 +13,13 @@ final class InstanceOfUniqueKeyResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolve(Instanceof_ $instanceof) : ?string
+    public function resolve(\PhpParser\Node\Expr\Instanceof_ $instanceof) : ?string
     {
-        if (!$instanceof->expr instanceof Variable) {
+        if (!$instanceof->expr instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         $variableName = $this->nodeNameResolver->getName($instanceof->expr);

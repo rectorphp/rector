@@ -15,12 +15,12 @@ namespace RectorPrefix20220606\Symfony\Component\Config\Definition\Builder;
  *
  * @author Victor Berchet <victor@suumit.com>
  */
-interface ParentNodeDefinitionInterface extends BuilderAwareInterface
+interface ParentNodeDefinitionInterface extends \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\BuilderAwareInterface
 {
     /**
      * Returns a builder to add children nodes.
      */
-    public function children() : NodeBuilder;
+    public function children() : \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\NodeBuilder;
     /**
      * Appends a node definition.
      *
@@ -36,7 +36,7 @@ interface ParentNodeDefinitionInterface extends BuilderAwareInterface
      *
      * @return $this
      */
-    public function append(NodeDefinition $node);
+    public function append(\RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\NodeDefinition $node);
     /**
      * Gets the child node definitions.
      *

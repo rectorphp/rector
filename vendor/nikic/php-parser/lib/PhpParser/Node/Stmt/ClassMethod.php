@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node\Stmt;
+namespace PhpParser\Node\Stmt;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\FunctionLike;
-use RectorPrefix20220606\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
+use PhpParser\Node;
+use PhpParser\Node\FunctionLike;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+class ClassMethod extends \PhpParser\Node\Stmt implements \PhpParser\Node\FunctionLike, \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
 {
     /** @var int Flags */
     public $flags;
@@ -41,10 +41,10 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
         $this->attributes = $attributes;
         $this->flags = $subNodes['flags'] ?? $subNodes['type'] ?? 0;
         $this->byRef = $subNodes['byRef'] ?? \false;
-        $this->name = \is_string($name) ? new Node\Identifier($name) : $name;
+        $this->name = \is_string($name) ? new \PhpParser\Node\Identifier($name) : $name;
         $this->params = $subNodes['params'] ?? [];
         $returnType = $subNodes['returnType'] ?? null;
-        $this->returnType = \is_string($returnType) ? new Node\Identifier($returnType) : $returnType;
+        $this->returnType = \is_string($returnType) ? new \PhpParser\Node\Identifier($returnType) : $returnType;
         $this->stmts = \array_key_exists('stmts', $subNodes) ? $subNodes['stmts'] : [];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }
@@ -79,7 +79,7 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
      */
     public function isPublic() : bool
     {
-        return ($this->flags & Class_::MODIFIER_PUBLIC) !== 0 || ($this->flags & Class_::VISIBILITY_MODIFIER_MASK) === 0;
+        return ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC) !== 0 || ($this->flags & \PhpParser\Node\Stmt\Class_::VISIBILITY_MODIFIER_MASK) === 0;
     }
     /**
      * Whether the method is protected.
@@ -88,7 +88,7 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
      */
     public function isProtected() : bool
     {
-        return (bool) ($this->flags & Class_::MODIFIER_PROTECTED);
+        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED);
     }
     /**
      * Whether the method is private.
@@ -97,7 +97,7 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
      */
     public function isPrivate() : bool
     {
-        return (bool) ($this->flags & Class_::MODIFIER_PRIVATE);
+        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
     }
     /**
      * Whether the method is abstract.
@@ -106,7 +106,7 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
      */
     public function isAbstract() : bool
     {
-        return (bool) ($this->flags & Class_::MODIFIER_ABSTRACT);
+        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT);
     }
     /**
      * Whether the method is final.
@@ -115,7 +115,7 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
      */
     public function isFinal() : bool
     {
-        return (bool) ($this->flags & Class_::MODIFIER_FINAL);
+        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL);
     }
     /**
      * Whether the method is static.
@@ -124,7 +124,7 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
      */
     public function isStatic() : bool
     {
-        return (bool) ($this->flags & Class_::MODIFIER_STATIC);
+        return (bool) ($this->flags & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC);
     }
     /**
      * Whether the method is magic.

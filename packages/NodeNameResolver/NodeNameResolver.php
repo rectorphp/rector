@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeNameResolver;
+namespace Rector\NodeNameResolver;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\Rector\CodingStyle\Naming\ClassNaming;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\CallAnalyzer;
-use RectorPrefix20220606\Rector\Core\Util\StringUtils;
-use RectorPrefix20220606\Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-use RectorPrefix20220606\Rector\NodeNameResolver\Error\InvalidNameNodeReporter;
-use RectorPrefix20220606\Rector\NodeNameResolver\Regex\RegexPatternDetector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassLike;
+use Rector\CodingStyle\Naming\ClassNaming;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\CallAnalyzer;
+use Rector\Core\Util\StringUtils;
+use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+use Rector\NodeNameResolver\Error\InvalidNameNodeReporter;
+use Rector\NodeNameResolver\Regex\RegexPatternDetector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeNameResolver
 {
     /**
@@ -48,7 +48,7 @@ final class NodeNameResolver
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
-    public function __construct(RegexPatternDetector $regexPatternDetector, ClassNaming $classNaming, InvalidNameNodeReporter $invalidNameNodeReporter, CallAnalyzer $callAnalyzer, array $nodeNameResolvers = [])
+    public function __construct(\Rector\NodeNameResolver\Regex\RegexPatternDetector $regexPatternDetector, \Rector\CodingStyle\Naming\ClassNaming $classNaming, \Rector\NodeNameResolver\Error\InvalidNameNodeReporter $invalidNameNodeReporter, \Rector\Core\NodeAnalyzer\CallAnalyzer $callAnalyzer, array $nodeNameResolvers = [])
     {
         $this->regexPatternDetector = $regexPatternDetector;
         $this->classNaming = $classNaming;
@@ -59,7 +59,7 @@ final class NodeNameResolver
     /**
      * @param string[] $names
      */
-    public function isNames(Node $node, array $names) : bool
+    public function isNames(\PhpParser\Node $node, array $names) : bool
     {
         foreach ($names as $name) {
             if ($this->isName($node, $name)) {
@@ -73,10 +73,10 @@ final class NodeNameResolver
      */
     public function isName($node, string $name) : bool
     {
-        if ($node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        if ($node instanceof StaticCall) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             return \false;
         }
         $nodes = \is_array($node) ? $node : [$node];
@@ -87,15 +87,15 @@ final class NodeNameResolver
         }
         return \false;
     }
-    public function isCaseSensitiveName(Node $node, string $name) : bool
+    public function isCaseSensitiveName(\PhpParser\Node $node, string $name) : bool
     {
         if ($name === '') {
             return \false;
         }
-        if ($node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return \false;
         }
-        if ($node instanceof StaticCall) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             return \false;
         }
         $resolvedName = $this->getName($node);
@@ -113,11 +113,11 @@ final class NodeNameResolver
             return $node;
         }
         // useful for looped imported names
-        $namespacedName = $node->getAttribute(AttributeKey::NAMESPACED_NAME);
+        $namespacedName = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME);
         if (\is_string($namespacedName)) {
             return $namespacedName;
         }
-        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall) {
             if ($this->isCallOrIdentifier($node->name)) {
                 return null;
             }
@@ -134,12 +134,12 @@ final class NodeNameResolver
             return null;
         }
         // unable to resolve
-        if ($node->name instanceof Expr) {
+        if ($node->name instanceof \PhpParser\Node\Expr) {
             return null;
         }
         return (string) $node->name;
     }
-    public function areNamesEqual(Node $firstNode, Node $secondNode) : bool
+    public function areNamesEqual(\PhpParser\Node $firstNode, \PhpParser\Node $secondNode) : bool
     {
         $secondResolvedName = $this->getName($secondNode);
         if ($secondResolvedName === null) {
@@ -157,7 +157,7 @@ final class NodeNameResolver
         foreach ($nodes as $node) {
             $name = $this->getName($node);
             if (!\is_string($name)) {
-                throw new ShouldNotHappenException();
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $names[] = $name;
         }
@@ -170,7 +170,7 @@ final class NodeNameResolver
     public function endsWith(string $currentName, string $expectedName) : bool
     {
         $suffixNamePattern = '#\\w+' . \ucfirst($expectedName) . '#';
-        return StringUtils::isMatch($currentName, $suffixNamePattern);
+        return \Rector\Core\Util\StringUtils::isMatch($currentName, $suffixNamePattern);
     }
     /**
      * @param string|\PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\Stmt\ClassLike $name
@@ -182,7 +182,7 @@ final class NodeNameResolver
     /**
      * @param array<string, string> $renameMap
      */
-    public function matchNameFromMap(Node $node, array $renameMap) : ?string
+    public function matchNameFromMap(\PhpParser\Node $node, array $renameMap) : ?string
     {
         $name = $this->getName($node);
         return $renameMap[$name] ?? null;
@@ -194,7 +194,7 @@ final class NodeNameResolver
         }
         // is probably regex pattern
         if ($this->regexPatternDetector->isRegexPattern($desiredName)) {
-            return StringUtils::isMatch($resolvedName, $desiredName);
+            return \Rector\Core\Util\StringUtils::isMatch($resolvedName, $desiredName);
         }
         // is probably fnmatch
         if (\strpos($desiredName, '*') !== \false) {
@@ -211,14 +211,14 @@ final class NodeNameResolver
      */
     private function isCallOrIdentifier($node) : bool
     {
-        if ($node instanceof Expr) {
+        if ($node instanceof \PhpParser\Node\Expr) {
             return $this->callAnalyzer->isObjectCall($node);
         }
         return \true;
     }
-    private function isSingleName(Node $node, string $desiredName) : bool
+    private function isSingleName(\PhpParser\Node $node, string $desiredName) : bool
     {
-        if ($node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             // method call cannot have a name, only the variable or method name
             return \false;
         }

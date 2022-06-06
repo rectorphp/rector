@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer;
+namespace Rector\TypeDeclaration\TypeInferer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Type\ArrayType;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\NeverType;
-use RectorPrefix20220606\PHPStan\Type\NullType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeCombinator;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\PHPStan\Type\VoidType;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\PropertyManipulator;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use RectorPrefix20220606\Rector\NodeTypeResolver\TypeComparator\TypeComparator;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
-use RectorPrefix20220606\Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use RectorPrefix20220606\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
-use RectorPrefix20220606\Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
+use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\NodeManipulator\PropertyManipulator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
+use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
+use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer;
 final class VarDocPropertyTypeInferer
 {
     /**
@@ -88,7 +88,7 @@ final class VarDocPropertyTypeInferer
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
-    public function __construct(GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, TypeFactory $typeFactory, DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, ConstructorAssignDetector $constructorAssignDetector, BetterNodeFinder $betterNodeFinder, PropertyFetchFinder $propertyFetchFinder, NodeNameResolver $nodeNameResolver, PropertyManipulator $propertyManipulator, AssignToPropertyTypeInferer $assignToPropertyTypeInferer, TypeComparator $typeComparator)
+    public function __construct(\Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\DefaultValuePropertyTypeInferer $defaultValuePropertyTypeInferer, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder $propertyFetchFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator, \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator)
     {
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->defaultValuePropertyTypeInferer = $defaultValuePropertyTypeInferer;
@@ -103,20 +103,20 @@ final class VarDocPropertyTypeInferer
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
         $this->typeComparator = $typeComparator;
     }
-    public function inferProperty(Property $property) : Type
+    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : \PHPStan\Type\Type
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $resolvedType = $phpDocInfo->getVarType();
-        if ($resolvedType instanceof VoidType) {
-            return new MixedType();
+        if ($resolvedType instanceof \PHPStan\Type\VoidType) {
+            return new \PHPStan\Type\MixedType();
         }
-        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
-        if (!$class instanceof Class_) {
-            return new MixedType();
+        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+            return new \PHPStan\Type\MixedType();
         }
         // default value type must be added to each resolved type if set
         $propertyDefaultValue = $property->props[0]->default;
-        if ($propertyDefaultValue instanceof Expr) {
+        if ($propertyDefaultValue instanceof \PhpParser\Node\Expr) {
             $resolvedType = $this->unionTypeWithDefaultExpr($property, $resolvedType);
         } else {
             $resolvedType = $this->makeNullableForAccessedBeforeInitialization($property, $resolvedType, $phpDocInfo);
@@ -125,37 +125,37 @@ final class VarDocPropertyTypeInferer
         $propertyName = $this->nodeNameResolver->getName($property);
         $assignInferredPropertyType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $propertyName, $class);
         if ($this->shouldAddNull($resolvedType, $assignInferredPropertyType)) {
-            $resolvedType = TypeCombinator::addNull($resolvedType);
+            $resolvedType = \PHPStan\Type\TypeCombinator::addNull($resolvedType);
         }
         if (!$this->typeComparator->areTypesPossiblyIncluded($resolvedType, $assignInferredPropertyType)) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         return $resolvedType;
     }
-    private function shouldAddNull(Type $resolvedType, ?Type $assignInferredPropertyType) : bool
+    private function shouldAddNull(\PHPStan\Type\Type $resolvedType, ?\PHPStan\Type\Type $assignInferredPropertyType) : bool
     {
-        if (!$assignInferredPropertyType instanceof Type) {
+        if (!$assignInferredPropertyType instanceof \PHPStan\Type\Type) {
             return \false;
         }
-        if (!$assignInferredPropertyType instanceof UnionType) {
+        if (!$assignInferredPropertyType instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
-        if (!TypeCombinator::containsNull($assignInferredPropertyType)) {
+        if (!\PHPStan\Type\TypeCombinator::containsNull($assignInferredPropertyType)) {
             return \false;
         }
-        return !TypeCombinator::containsNull($resolvedType);
+        return !\PHPStan\Type\TypeCombinator::containsNull($resolvedType);
     }
-    private function makeNullableForAccessedBeforeInitialization(Property $property, Type $resolvedType, PhpDocInfo $phpDocInfo) : Type
+    private function makeNullableForAccessedBeforeInitialization(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $resolvedType, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : \PHPStan\Type\Type
     {
-        $types = $resolvedType instanceof UnionType ? $resolvedType->getTypes() : [$resolvedType];
+        $types = $resolvedType instanceof \PHPStan\Type\UnionType ? $resolvedType->getTypes() : [$resolvedType];
         foreach ($types as $type) {
-            if ($type instanceof NullType) {
+            if ($type instanceof \PHPStan\Type\NullType) {
                 return $resolvedType;
             }
         }
-        $classLike = $this->betterNodeFinder->findParentType($property, Class_::class);
+        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
         // not has parent Class_? return early
-        if (!$classLike instanceof Class_) {
+        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return $resolvedType;
         }
         // is never accessed, return early
@@ -172,35 +172,35 @@ final class VarDocPropertyTypeInferer
         if ($this->propertyManipulator->isAllowedReadOnly($property, $phpDocInfo)) {
             return $resolvedType;
         }
-        return new UnionType(\array_merge($types, [new NullType()]));
+        return new \PHPStan\Type\UnionType(\array_merge($types, [new \PHPStan\Type\NullType()]));
     }
-    private function shouldUnionWithDefaultValue(Type $defaultValueType, Type $type) : bool
+    private function shouldUnionWithDefaultValue(\PHPStan\Type\Type $defaultValueType, \PHPStan\Type\Type $type) : bool
     {
-        if ($defaultValueType instanceof MixedType) {
+        if ($defaultValueType instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
         // skip empty array type (mixed[])
-        if ($defaultValueType instanceof ArrayType && $defaultValueType->getItemType() instanceof NeverType && !$type instanceof MixedType) {
+        if ($defaultValueType instanceof \PHPStan\Type\ArrayType && $defaultValueType->getItemType() instanceof \PHPStan\Type\NeverType && !$type instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
-        if ($type instanceof MixedType) {
+        if ($type instanceof \PHPStan\Type\MixedType) {
             return \true;
         }
         return !$this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($type);
     }
-    private function unionWithDefaultValueType(Type $defaultValueType, Type $resolvedType) : Type
+    private function unionWithDefaultValueType(\PHPStan\Type\Type $defaultValueType, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
     {
         $types = [];
         $types[] = $defaultValueType;
-        if (!$resolvedType instanceof MixedType) {
+        if (!$resolvedType instanceof \PHPStan\Type\MixedType) {
             $types[] = $resolvedType;
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
-    private function unionTypeWithDefaultExpr(Property $property, Type $resolvedType) : Type
+    private function unionTypeWithDefaultExpr(\PhpParser\Node\Stmt\Property $property, \PHPStan\Type\Type $resolvedType) : \PHPStan\Type\Type
     {
         $defaultValueType = $this->defaultValuePropertyTypeInferer->inferProperty($property);
-        if (!$defaultValueType instanceof Type) {
+        if (!$defaultValueType instanceof \PHPStan\Type\Type) {
             return $resolvedType;
         }
         if (!$this->shouldUnionWithDefaultValue($defaultValueType, $resolvedType)) {

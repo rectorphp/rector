@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
+namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions;
 
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\ArrayUtility;
-final class GlobalStringConditionMatcher extends AbstractGlobalConditionMatcher
+use Ssch\TYPO3Rector\Helper\ArrayUtility;
+final class GlobalStringConditionMatcher extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Conditions\AbstractGlobalConditionMatcher
 {
     /**
      * @var string
@@ -16,7 +16,7 @@ final class GlobalStringConditionMatcher extends AbstractGlobalConditionMatcher
         if (!\is_string($subConditions['subCondition'])) {
             return $condition;
         }
-        $subConditions = ArrayUtility::trimExplode(',', $subConditions['subCondition']);
+        $subConditions = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $subConditions['subCondition']);
         $newConditions = [];
         foreach ($subConditions as $subCondition) {
             \preg_match('#(?<type>ENV|IENV|GP|TSFE|LIT|_COOKIE)' . self::ZERO_ONE_OR_MORE_WHITESPACES . '[:|]' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<property>.*)\\s*(?<operator>' . self::ALLOWED_OPERATORS_REGEX . ')' . self::ZERO_ONE_OR_MORE_WHITESPACES . '(?<value>.*)$#Ui', $subCondition, $matches);
@@ -59,7 +59,7 @@ final class GlobalStringConditionMatcher extends AbstractGlobalConditionMatcher
     }
     private function refactorGetPost(string $property, string $operator, string $value) : string
     {
-        $parameters = ArrayUtility::trimExplode('|', $property);
+        $parameters = \Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode('|', $property);
         if (!\is_numeric($value)) {
             $value = \sprintf("'%s'", $value);
         }

@@ -28,19 +28,19 @@ final class WorkerCommandLineFactory
     private $commandFromReflectionFactory;
     public function __construct()
     {
-        $this->commandFromReflectionFactory = new CommandFromReflectionFactory();
+        $this->commandFromReflectionFactory = new \RectorPrefix20220606\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory();
     }
     /**
      * @param class-string<Command> $mainCommandClass
      */
-    public function create(string $baseScript, string $mainCommandClass, string $workerCommandName, string $pathsOptionName, ?string $projectConfigFile, InputInterface $input, string $identifier, int $port) : string
+    public function create(string $baseScript, string $mainCommandClass, string $workerCommandName, string $pathsOptionName, ?string $projectConfigFile, \RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, string $identifier, int $port) : string
     {
         $commandArguments = \array_slice($_SERVER['argv'], 1);
         $args = \array_merge([\PHP_BINARY, $baseScript], $commandArguments);
         $mainCommand = $this->commandFromReflectionFactory->create($mainCommandClass);
         if ($mainCommand->getName() === null) {
             $errorMessage = \sprintf('The command name for "%s" is missing', \get_class($mainCommand));
-            throw new ParallelShouldNotHappenException($errorMessage);
+            throw new \RectorPrefix20220606\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException($errorMessage);
         }
         $mainCommandName = $mainCommand->getName();
         $processCommandArray = [];
@@ -80,7 +80,7 @@ final class WorkerCommandLineFactory
     /**
      * @return string[]
      */
-    private function getCommandOptionNames(Command $command) : array
+    private function getCommandOptionNames(\RectorPrefix20220606\Symfony\Component\Console\Command\Command $command) : array
     {
         $inputDefinition = $command->getDefinition();
         $optionNames = [];
@@ -95,7 +95,7 @@ final class WorkerCommandLineFactory
      * @param string[] $mainCommandOptionNames
      * @return string[]
      */
-    private function mirrorCommandOptions(InputInterface $input, array $mainCommandOptionNames) : array
+    private function mirrorCommandOptions(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, array $mainCommandOptionNames) : array
     {
         $processCommandOptions = [];
         foreach ($mainCommandOptionNames as $mainCommandOptionName) {
@@ -124,7 +124,7 @@ final class WorkerCommandLineFactory
         }
         return $processCommandOptions;
     }
-    private function shouldSkipOption(InputInterface $input, string $optionName) : bool
+    private function shouldSkipOption(\RectorPrefix20220606\Symfony\Component\Console\Input\InputInterface $input, string $optionName) : bool
     {
         if (!$input->hasOption($optionName)) {
             return \true;

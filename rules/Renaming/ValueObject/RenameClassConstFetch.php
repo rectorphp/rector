@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Renaming\ValueObject;
+namespace Rector\Renaming\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Renaming\Contract\RenameClassConstFetchInterface;
-final class RenameClassConstFetch implements RenameClassConstFetchInterface
+use PHPStan\Type\ObjectType;
+use Rector\Renaming\Contract\RenameClassConstFetchInterface;
+final class RenameClassConstFetch implements \Rector\Renaming\Contract\RenameClassConstFetchInterface
 {
     /**
      * @readonly
@@ -28,9 +28,9 @@ final class RenameClassConstFetch implements RenameClassConstFetchInterface
         $this->oldConstant = $oldConstant;
         $this->newConstant = $newConstant;
     }
-    public function getOldObjectType() : ObjectType
+    public function getOldObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->oldClass);
+        return new \PHPStan\Type\ObjectType($this->oldClass);
     }
     public function getOldConstant() : string
     {

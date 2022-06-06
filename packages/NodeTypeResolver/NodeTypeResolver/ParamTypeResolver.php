@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\FunctionLike;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\NodeTraverser;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeTraverser;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 /**
@@ -28,7 +28,7 @@ use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTravers
  *
  * @implements NodeTypeResolverInterface<Param>
  */
-final class ParamTypeResolver implements NodeTypeResolverInterface
+final class ParamTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
 {
     /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -58,7 +58,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -68,7 +68,7 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
     /**
      * @required
      */
-    public function autowire(NodeTypeResolver $nodeTypeResolver, StaticTypeMapper $staticTypeMapper) : void
+    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -78,65 +78,65 @@ final class ParamTypeResolver implements NodeTypeResolverInterface
      */
     public function getNodeClasses() : array
     {
-        return [Param::class];
+        return [\PhpParser\Node\Param::class];
     }
     /**
      * @param Param $node
      */
-    public function resolve(Node $node) : Type
+    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
     {
         $paramType = $this->resolveFromParamType($node);
-        if (!$paramType instanceof MixedType) {
+        if (!$paramType instanceof \PHPStan\Type\MixedType) {
             return $paramType;
         }
         $firstVariableUseType = $this->resolveFromFirstVariableUse($node);
-        if (!$firstVariableUseType instanceof MixedType) {
+        if (!$firstVariableUseType instanceof \PHPStan\Type\MixedType) {
             return $firstVariableUseType;
         }
         return $this->resolveFromFunctionDocBlock($node);
     }
-    private function resolveFromParamType(Param $param) : Type
+    private function resolveFromParamType(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         if ($param->type === null) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
-        if ($param->type instanceof Identifier) {
-            return new MixedType();
+        if ($param->type instanceof \PhpParser\Node\Identifier) {
+            return new \PHPStan\Type\MixedType();
         }
         return $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
     }
-    private function resolveFromFirstVariableUse(Param $param) : Type
+    private function resolveFromFirstVariableUse(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
-        $classMethod = $this->betterNodeFinder->findParentType($param, ClassMethod::class);
-        if (!$classMethod instanceof ClassMethod) {
-            return new MixedType();
+        $classMethod = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\ClassMethod::class);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            return new \PHPStan\Type\MixedType();
         }
         $paramName = $this->nodeNameResolver->getName($param);
-        $paramStaticType = new MixedType();
+        $paramStaticType = new \PHPStan\Type\MixedType();
         // special case for param inside method/function
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($paramName, &$paramStaticType) : ?int {
-            if (!$node instanceof Variable) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (\PhpParser\Node $node) use($paramName, &$paramStaticType) : ?int {
+            if (!$node instanceof \PhpParser\Node\Expr\Variable) {
                 return null;
             }
             if (!$this->nodeNameResolver->isName($node, $paramName)) {
                 return null;
             }
             $paramStaticType = $this->nodeTypeResolver->getType($node);
-            return NodeTraverser::STOP_TRAVERSAL;
+            return \PhpParser\NodeTraverser::STOP_TRAVERSAL;
         });
         return $paramStaticType;
     }
-    private function resolveFromFunctionDocBlock(Param $param) : Type
+    private function resolveFromFunctionDocBlock(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
     {
         $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
         $paramName = $this->nodeNameResolver->getName($param);
         return $phpDocInfo->getParamType($paramName);
     }
-    private function getFunctionLikePhpDocInfo(Param $param) : PhpDocInfo
+    private function getFunctionLikePhpDocInfo(\PhpParser\Node\Param $param) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
-        $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof FunctionLike) {
-            throw new ShouldNotHappenException();
+        $parentNode = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node\FunctionLike) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $this->phpDocInfoFactory->createFromNodeOrEmpty($parentNode);
     }

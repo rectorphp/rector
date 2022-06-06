@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeAnalyzer;
+namespace Rector\TypeDeclaration\TypeAnalyzer;
 
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\PHPStan\Type\ArrayType;
-use RectorPrefix20220606\PHPStan\Type\Generic\GenericObjectType;
-use RectorPrefix20220606\PHPStan\Type\IterableType;
-use RectorPrefix20220606\PHPStan\Type\NullType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Generic\GenericObjectType;
+use PHPStan\Type\IterableType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 final class IterableTypeAnalyzer
 {
     /**
@@ -17,22 +17,22 @@ final class IterableTypeAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isIterableType(Type $type) : bool
+    public function isIterableType(\PHPStan\Type\Type $type) : bool
     {
         if ($this->isUnionOfIterableTypes($type)) {
             return \true;
         }
-        if ($type instanceof ArrayType) {
+        if ($type instanceof \PHPStan\Type\ArrayType) {
             return \true;
         }
-        if ($type instanceof IterableType) {
+        if ($type instanceof \PHPStan\Type\IterableType) {
             return \true;
         }
-        if ($type instanceof GenericObjectType) {
+        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
             if (!$this->reflectionProvider->hasClass($type->getClassName())) {
                 return \false;
             }
@@ -43,14 +43,14 @@ final class IterableTypeAnalyzer
         }
         return \false;
     }
-    private function isUnionOfIterableTypes(Type $type) : bool
+    private function isUnionOfIterableTypes(\PHPStan\Type\Type $type) : bool
     {
-        if (!$type instanceof UnionType) {
+        if (!$type instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
         foreach ($type->getTypes() as $unionedType) {
             // nullable union is allowed
-            if ($unionedType instanceof NullType) {
+            if ($unionedType instanceof \PHPStan\Type\NullType) {
                 continue;
             }
             if (!$this->isIterableType($unionedType)) {

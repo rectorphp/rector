@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\NodeAnalyzer;
+namespace Rector\Core\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClosureUse;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Global_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Static_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\StaticVar;
-use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Global_;
+use PhpParser\Node\Stmt\Static_;
+use PhpParser\Node\Stmt\StaticVar;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class VariableAnalyzer
 {
     /**
@@ -24,18 +24,18 @@ final class VariableAnalyzer
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
     }
-    public function isStaticOrGlobal(Variable $variable) : bool
+    public function isStaticOrGlobal(\PhpParser\Node\Expr\Variable $variable) : bool
     {
         if ($this->isParentStaticOrGlobal($variable)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $node) use($variable) : bool {
-            if (!\in_array(\get_class($node), [Static_::class, Global_::class], \true)) {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (\PhpParser\Node $node) use($variable) : bool {
+            if (!\in_array(\get_class($node), [\PhpParser\Node\Stmt\Static_::class, \PhpParser\Node\Stmt\Global_::class], \true)) {
                 return \false;
             }
             /**
@@ -44,7 +44,7 @@ final class VariableAnalyzer
              */
             $vars = $node->vars;
             foreach ($vars as $var) {
-                $staticVarVariable = $var instanceof StaticVar ? $var->var : $var;
+                $staticVarVariable = $var instanceof \PhpParser\Node\Stmt\StaticVar ? $var->var : $var;
                 if ($this->nodeComparator->areNodesEqual($staticVarVariable, $variable)) {
                     return \true;
                 }
@@ -52,35 +52,35 @@ final class VariableAnalyzer
             return \false;
         });
     }
-    public function isUsedByReference(Variable $variable) : bool
+    public function isUsedByReference(\PhpParser\Node\Expr\Variable $variable) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $subNode) use($variable) : bool {
-            if (!$subNode instanceof Variable) {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (\PhpParser\Node $subNode) use($variable) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Variable) {
                 return \false;
             }
             if (!$this->nodeComparator->areNodesEqual($subNode, $variable)) {
                 return \false;
             }
-            $parent = $subNode->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parent instanceof ClosureUse) {
+            $parent = $subNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+            if (!$parent instanceof \PhpParser\Node\Expr\ClosureUse) {
                 return \false;
             }
             return $parent->byRef;
         });
     }
-    private function isParentStaticOrGlobal(Variable $variable) : bool
+    private function isParentStaticOrGlobal(\PhpParser\Node\Expr\Variable $variable) : bool
     {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
+        $parentNode = $variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node) {
             return \false;
         }
-        if ($parentNode instanceof Global_) {
+        if ($parentNode instanceof \PhpParser\Node\Stmt\Global_) {
             return \true;
         }
-        if (!$parentNode instanceof StaticVar) {
+        if (!$parentNode instanceof \PhpParser\Node\Stmt\StaticVar) {
             return \false;
         }
-        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentParentNode instanceof Static_;
+        $parentParentNode = $parentNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        return $parentParentNode instanceof \PhpParser\Node\Stmt\Static_;
     }
 }

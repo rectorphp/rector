@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v9\v4;
+namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v9\v4;
 
 use RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use LogicException;
-use RectorPrefix20220606\Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use RectorPrefix20220606\Rector\Core\Provider\CurrentFileProvider;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
-use RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
+use Ssch\TYPO3Rector\Contract\FileProcessor\TypoScript\Conditions\TyposcriptConditionMatcher;
+use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Feature-85829-ImplementSymfonyExpressionLanguageForTypoScriptConditions.html
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\TypoScript\Rector\OldConditionToExpressionLanguageRectorTest
  */
-final class OldConditionToExpressionLanguageTypoScriptRector extends AbstractTypoScriptRector
+final class OldConditionToExpressionLanguageTypoScriptRector extends \Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector
 {
     /**
      * @readonly
@@ -32,14 +32,14 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends AbstractTyp
     /**
      * @param TyposcriptConditionMatcher[] $conditionMatchers
      */
-    public function __construct(CurrentFileProvider $currentFileProvider, array $conditionMatchers = [])
+    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider, array $conditionMatchers = [])
     {
         $this->currentFileProvider = $currentFileProvider;
         $this->conditionMatchers = $conditionMatchers;
     }
-    public function enterNode(Statement $statement) : void
+    public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof ConditionalStatement) {
+        if (!$statement instanceof \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\ConditionalStatement) {
             return;
         }
         \preg_match_all('#\\[(.*)]#imU', $statement->condition, $conditions, \PREG_SET_ORDER);
@@ -75,8 +75,8 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends AbstractTyp
         }
         $file = $this->currentFileProvider->getFile();
         $this->hasChanged = \true;
-        if ($file instanceof File) {
-            $file->addRectorClassWithLine(new RectorWithLineChange($this, $statement->sourceLine));
+        if ($file instanceof \Rector\Core\ValueObject\Application\File) {
+            $file->addRectorClassWithLine(new \Rector\ChangesReporting\ValueObject\RectorWithLineChange($this, $statement->sourceLine));
         }
         if ([] === $newConditions) {
             $statement->condition = '';
@@ -91,7 +91,7 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends AbstractTyp
             return;
         }
         if (\count($operators) !== \count($newConditions) - 1) {
-            throw new LogicException('The count of operators must be exactly one less than the count of conditions');
+            throw new \LogicException('The count of operators must be exactly one less than the count of conditions');
         }
         \array_unshift($operators, '');
         $newCondition = '';
@@ -105,9 +105,9 @@ final class OldConditionToExpressionLanguageTypoScriptRector extends AbstractTyp
         }
         $statement->condition = \sprintf('[%s]', $newCondition);
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Convert old conditions to Symfony Expression Language', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Convert old conditions to Symfony Expression Language', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 [globalVar = TSFE:id=17, TSFE:id=24]
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'

@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php74\Rector\Function_;
+namespace Rector\Php74\Rector\Function_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Function_;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/php/php-src/pull/3941/files#diff-7e3a1a5df28a1cbd8c0fb6db68f243da
  * @see \Rector\Tests\Php74\Rector\Function_\ReservedFnFunctionRector\ReservedFnFunctionRectorTest
  */
-final class ReservedFnFunctionRector extends AbstractRector implements MinPhpVersionInterface
+final class ReservedFnFunctionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @var string
@@ -29,17 +29,17 @@ final class ReservedFnFunctionRector extends AbstractRector implements MinPhpVer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::RESERVED_FN_FUNCTION_NAME;
+        return \Rector\Core\ValueObject\PhpVersionFeature::RESERVED_FN_FUNCTION_NAME;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change fn() function name to f(), since it will be reserved keyword', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change fn() function name to f(), since it will be reserved keyword', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -74,14 +74,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Function_::class, FuncCall::class];
+        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param Function_|FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof FuncCall && !$node->name instanceof Name) {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall && !$node->name instanceof \PhpParser\Node\Name) {
             return null;
         }
         if (!$this->isName($node->name, 'fn')) {
@@ -89,11 +89,11 @@ CODE_SAMPLE
         }
         $newName = self::NEW_ORIGINAL_NAME;
         $count = 1;
-        while ($this->reflectionProvider->hasFunction(new Name($newName), null)) {
+        while ($this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($newName), null)) {
             $newName = self::NEW_ORIGINAL_NAME . $count;
             ++$count;
         }
-        $node->name = $node instanceof FuncCall ? new Name($newName) : new Identifier($newName);
+        $node->name = $node instanceof \PhpParser\Node\Expr\FuncCall ? new \PhpParser\Node\Name($newName) : new \PhpParser\Node\Identifier($newName);
         return $node;
     }
 }

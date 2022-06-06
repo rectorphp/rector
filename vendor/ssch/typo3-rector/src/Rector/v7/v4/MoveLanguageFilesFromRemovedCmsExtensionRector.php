@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v7\v4;
+namespace Ssch\TYPO3Rector\Rector\v7\v4;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.4/Deprecation-67991-RemovedExtCms.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v4\MoveLanguageFilesFromRemovedCmsExtensionRector\MoveLanguageFilesFromRemovedCmsExtensionRectorTest
  */
-final class MoveLanguageFilesFromRemovedCmsExtensionRector extends AbstractRector
+final class MoveLanguageFilesFromRemovedCmsExtensionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var array<string, string>
@@ -21,9 +21,9 @@ final class MoveLanguageFilesFromRemovedCmsExtensionRector extends AbstractRecto
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Move language files of removed cms to new location', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move language files of removed cms to new location', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Localization\LanguageService;
 $languageService = new LanguageService();
 $languageService->sL('LLL:EXT:cms/web_info/locallang.xlf:pages_1');
@@ -40,12 +40,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [String_::class];
+        return [\PhpParser\Node\Scalar\String_::class];
     }
     /**
      * @param String_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $value = $this->valueResolver->getValue($node);
         if (null === $value || !\is_string($value)) {
@@ -55,7 +55,7 @@ CODE_SAMPLE
             $oldPathPrefixed = \sprintf('LLL:EXT:%s', $oldPath);
             if (\strpos($value, $oldPathPrefixed) !== \false) {
                 $newPathPrefixed = \sprintf('LLL:EXT:%s', $newPath);
-                return new String_(\str_replace($oldPathPrefixed, $newPathPrefixed, $value));
+                return new \PhpParser\Node\Scalar\String_(\str_replace($oldPathPrefixed, $newPathPrefixed, $value));
             }
         }
         return null;

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type;
+namespace PHPStan\PhpDocParser\Ast\Type;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use function implode;
-class IntersectionTypeNode implements TypeNode
+class IntersectionTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     use NodeAttributes;
     /** @var TypeNode[] */
@@ -16,6 +16,6 @@ class IntersectionTypeNode implements TypeNode
     }
     public function __toString() : string
     {
-        return '(' . implode(' & ', $this->types) . ')';
+        return '(' . \implode(' & ', $this->types) . ')';
     }
 }

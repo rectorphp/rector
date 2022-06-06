@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\NodeFactory;
+namespace Rector\Nette\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\ClassMethod;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class CheckRequirementsClassMethodFactory
@@ -23,18 +23,18 @@ final class CheckRequirementsClassMethodFactory
      * @var \Rector\Nette\NodeFactory\ParentGetterStmtsToExternalStmtsFactory
      */
     private $parentGetterStmtsToExternalStmtsFactory;
-    public function __construct(ParentGetterStmtsToExternalStmtsFactory $parentGetterStmtsToExternalStmtsFactory)
+    public function __construct(\Rector\Nette\NodeFactory\ParentGetterStmtsToExternalStmtsFactory $parentGetterStmtsToExternalStmtsFactory)
     {
         $this->parentGetterStmtsToExternalStmtsFactory = $parentGetterStmtsToExternalStmtsFactory;
     }
     /**
      * @param Node[] $getUserStmts
      */
-    public function create(array $getUserStmts) : ClassMethod
+    public function create(array $getUserStmts) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new MethodBuilder(self::CHECK_REQUIREMENTS_METHOD_NAME);
+        $methodBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder(self::CHECK_REQUIREMENTS_METHOD_NAME);
         $methodBuilder->makePublic();
-        $paramBuilder = new ParamBuilder('element');
+        $paramBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder('element');
         $methodBuilder->addParam($paramBuilder);
         $methodBuilder->setReturnType('void');
         $parentStaticCall = $this->creatParentStaticCall();
@@ -43,9 +43,9 @@ final class CheckRequirementsClassMethodFactory
         $methodBuilder->addStmt($parentStaticCall);
         return $methodBuilder->getNode();
     }
-    private function creatParentStaticCall() : StaticCall
+    private function creatParentStaticCall() : \PhpParser\Node\Expr\StaticCall
     {
-        $args = [new Arg(new Variable('element'))];
-        return new StaticCall(new Name('parent'), new Identifier(self::CHECK_REQUIREMENTS_METHOD_NAME), $args);
+        $args = [new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Variable('element'))];
+        return new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name('parent'), new \PhpParser\Node\Identifier(self::CHECK_REQUIREMENTS_METHOD_NAME), $args);
     }
 }

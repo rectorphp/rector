@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Renaming\ValueObject;
+namespace Rector\Renaming\ValueObject;
 
-use RectorPrefix20220606\Rector\Renaming\Contract\RenameAnnotationInterface;
+use Rector\Renaming\Contract\RenameAnnotationInterface;
 /**
  * @api
  */
-final class RenameAnnotation implements RenameAnnotationInterface
+final class RenameAnnotation implements \Rector\Renaming\Contract\RenameAnnotationInterface
 {
     /**
      * @readonly

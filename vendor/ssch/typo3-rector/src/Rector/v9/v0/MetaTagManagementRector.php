@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
+namespace Ssch\TYPO3Rector\Rector\v9\v0;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Deprecation-81464-AddAPIForMetaTagManagement.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\MetaTagManagementRector\MetaTagManagementRectorTest
  */
-final class MetaTagManagementRector extends AbstractRector
+final class MetaTagManagementRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -38,12 +38,12 @@ final class MetaTagManagementRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -56,9 +56,9 @@ final class MetaTagManagementRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use setMetaTag method from PageRenderer class', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use setMetaTag method from PageRenderer class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 $pageRenderer = GeneralUtility::makeInstance(PageRenderer::class);
@@ -82,28 +82,28 @@ CODE_SAMPLE
         }
         return [];
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
         return !$this->isMethodAddMetaTag($methodCall) && !$this->isMethodXUaCompatible($methodCall);
     }
-    private function isMethodAddMetaTag(MethodCall $methodCall) : bool
+    private function isMethodAddMetaTag(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Page\\PageRenderer'))) {
             return \false;
         }
         return $this->isName($methodCall->name, 'addMetaTag');
     }
-    private function isMethodXUaCompatible(MethodCall $methodCall) : bool
+    private function isMethodXUaCompatible(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate'))) {
             return \false;
         }
         return $this->isName($methodCall->name, 'xUaCompatible');
     }
-    private function createSetMetaTagMethod(MethodCall $methodCall) : ?MethodCall
+    private function createSetMetaTagMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         $arg = $methodCall->args[0];
-        if (!$arg->value instanceof String_) {
+        if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         $metaTag = $this->valueResolver->getValue($arg->value);
@@ -111,11 +111,11 @@ CODE_SAMPLE
         if (!\array_key_exists('type', $arguments) || !\array_key_exists('name', $arguments) || !\array_key_exists('content', $arguments)) {
             return null;
         }
-        $methodCall->name = new Identifier('setMetaTag');
+        $methodCall->name = new \PhpParser\Node\Identifier('setMetaTag');
         $methodCall->args = $this->nodeFactory->createArgs(\array_values($arguments));
         return $methodCall;
     }
-    private function createXUCompatibleMetaTag(MethodCall $methodCall) : MethodCall
+    private function createXUCompatibleMetaTag(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\MethodCall
     {
         $value = 'IE=8';
         if ([] !== $methodCall->args) {

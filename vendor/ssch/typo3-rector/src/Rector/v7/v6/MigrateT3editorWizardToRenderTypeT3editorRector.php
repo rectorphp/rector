@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v7\v6;
+namespace Ssch\TYPO3Rector\Rector\v7\v6;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Rector\AbstractRector;
+use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/7.3/Deprecation-67229-TcaChanges.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v7\v6\MigrateT3editorWizardToRenderTypeT3editorRector\MigrateT3editorWizardToRenderTypeT3editorRectorTest
  */
-final class MigrateT3editorWizardToRenderTypeT3editorRector extends AbstractRector
+final class MigrateT3editorWizardToRenderTypeT3editorRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('t3editor is no longer configured and enabled as wizard', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('t3editor is no longer configured and enabled as wizard', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],
@@ -76,27 +76,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof ArrayItem) {
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $items = $columnsArrayItem->value;
-        if (!$items instanceof Array_) {
+        if (!$items instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($items->items as $fieldValue) {
-            if (!$fieldValue instanceof ArrayItem) {
+            if (!$fieldValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $fieldValue->key) {
@@ -106,18 +106,18 @@ CODE_SAMPLE
             if (null === $fieldName) {
                 continue;
             }
-            if (!$fieldValue->value instanceof Array_) {
+            if (!$fieldValue->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             foreach ($fieldValue->value->items as $configValue) {
                 if (null === $configValue) {
                     continue;
                 }
-                if (!$configValue->value instanceof Array_) {
+                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 foreach ($configValue->value->items as $configItemValue) {
-                    if (!$configItemValue instanceof ArrayItem) {
+                    if (!$configItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                         continue;
                     }
                     if (null === $configItemValue->key) {
@@ -126,15 +126,15 @@ CODE_SAMPLE
                     if (!$this->valueResolver->isValue($configItemValue->key, 'wizards')) {
                         continue;
                     }
-                    if (!$configItemValue->value instanceof Array_) {
+                    if (!$configItemValue->value instanceof \PhpParser\Node\Expr\Array_) {
                         continue;
                     }
                     $remainingWizards = \count($configItemValue->value->items);
                     foreach ($configItemValue->value->items as $wizardItemValue) {
-                        if (!$wizardItemValue instanceof ArrayItem) {
+                        if (!$wizardItemValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                             continue;
                         }
-                        if (!$wizardItemValue->value instanceof Array_) {
+                        if (!$wizardItemValue->value instanceof \PhpParser\Node\Expr\Array_) {
                             continue;
                         }
                         if (null === $wizardItemValue->key) {
@@ -147,7 +147,7 @@ CODE_SAMPLE
                         $enableByTypeConfig = \false;
                         $format = null;
                         foreach ($wizardItemValue->value->items as $wizardItemSubValue) {
-                            if (!$wizardItemSubValue instanceof ArrayItem) {
+                            if (!$wizardItemSubValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                                 continue;
                             }
                             if (null === $wizardItemSubValue->key) {
@@ -157,9 +157,9 @@ CODE_SAMPLE
                                 $isUserFunc = \true;
                             } elseif ($this->valueResolver->isValue($wizardItemSubValue->key, 'enableByTypeConfig') && $this->valueResolver->isValue($wizardItemSubValue->value, 'enableByTypeConfig')) {
                                 $enableByTypeConfig = \true;
-                            } elseif ($wizardItemSubValue->value instanceof Array_ && $this->valueResolver->isValue($wizardItemSubValue->key, 'params')) {
+                            } elseif ($wizardItemSubValue->value instanceof \PhpParser\Node\Expr\Array_ && $this->valueResolver->isValue($wizardItemSubValue->key, 'params')) {
                                 foreach ($wizardItemSubValue->value->items as $paramsValue) {
-                                    if (!$paramsValue instanceof ArrayItem) {
+                                    if (!$paramsValue instanceof \PhpParser\Node\Expr\ArrayItem) {
                                         continue;
                                     }
                                     if (null === $paramsValue->key) {
@@ -174,9 +174,9 @@ CODE_SAMPLE
                         if ($isUserFunc && !$enableByTypeConfig) {
                             $this->removeNode($wizardItemValue);
                             $hasAstBeenChanged = \true;
-                            $configValue->value->items[] = new ArrayItem(new String_('t3editor'), new String_('renderType'));
+                            $configValue->value->items[] = new \PhpParser\Node\Expr\ArrayItem(new \PhpParser\Node\Scalar\String_('t3editor'), new \PhpParser\Node\Scalar\String_('renderType'));
                             if (null !== $format) {
-                                $configValue->value->items[] = new ArrayItem($format, new String_('format'));
+                                $configValue->value->items[] = new \PhpParser\Node\Expr\ArrayItem($format, new \PhpParser\Node\Scalar\String_('format'));
                             }
                             --$remainingWizards;
                         }

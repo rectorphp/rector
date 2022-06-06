@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\ValueObject;
+namespace Rector\Php80\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\Rector\Php80\Enum\MatchKind;
+use PhpParser\Node\Expr;
+use Rector\Php80\Enum\MatchKind;
 final class CondAndExpr
 {
     /**
@@ -26,13 +26,13 @@ final class CondAndExpr
      * @param Expr[]|null $condExprs
      * @param MatchKind::* $matchKind
      */
-    public function __construct($condExprs, Expr $expr, string $matchKind)
+    public function __construct($condExprs, \PhpParser\Node\Expr $expr, string $matchKind)
     {
         $this->condExprs = $condExprs;
         $this->expr = $expr;
         $this->matchKind = $matchKind;
     }
-    public function getExpr() : Expr
+    public function getExpr() : \PhpParser\Node\Expr
     {
         return $this->expr;
     }

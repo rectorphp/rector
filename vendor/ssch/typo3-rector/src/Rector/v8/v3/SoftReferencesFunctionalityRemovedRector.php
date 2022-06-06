@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v3;
+namespace Ssch\TYPO3Rector\Rector\v8\v3;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\ArrayUtility;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\TcaHelperTrait;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Rector\AbstractRector;
+use Ssch\TYPO3Rector\Helper\ArrayUtility;
+use Ssch\TYPO3Rector\Helper\TcaHelperTrait;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.3/Breaking-77156-TSconfigAndTStemplateSoftReferencesFunctionalityRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v3\SoftReferencesFunctionalityRemovedRector\SoftReferencesFunctionalityRemovedRectorTest
  */
-final class SoftReferencesFunctionalityRemovedRector extends AbstractRector
+final class SoftReferencesFunctionalityRemovedRector extends \Rector\Core\Rector\AbstractRector
 {
     use TcaHelperTrait;
     /**
@@ -25,33 +25,33 @@ final class SoftReferencesFunctionalityRemovedRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [\PhpParser\Node\Stmt\Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isFullTca($node)) {
             return null;
         }
         $columnsArrayItem = $this->extractColumns($node);
-        if (!$columnsArrayItem instanceof ArrayItem) {
+        if (!$columnsArrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
             return null;
         }
         $columnItems = $columnsArrayItem->value;
-        if (!$columnItems instanceof Array_) {
+        if (!$columnItems instanceof \PhpParser\Node\Expr\Array_) {
             return null;
         }
         $hasAstBeenChanged = \false;
         foreach ($columnItems->items as $columnItem) {
-            if (!$columnItem instanceof ArrayItem) {
+            if (!$columnItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
             if (null === $columnItem->key) {
                 continue;
             }
-            if (!$columnItem->value instanceof Array_) {
+            if (!$columnItem->value instanceof \PhpParser\Node\Expr\Array_) {
                 continue;
             }
             foreach ($columnItem->value->items as $configValue) {
@@ -61,7 +61,7 @@ final class SoftReferencesFunctionalityRemovedRector extends AbstractRector
                 if (null === $configValue->key) {
                     continue;
                 }
-                if (!$configValue->value instanceof Array_) {
+                if (!$configValue->value instanceof \PhpParser\Node\Expr\Array_) {
                     continue;
                 }
                 $configFieldName = $this->valueResolver->getValue($configValue->key);
@@ -82,7 +82,7 @@ final class SoftReferencesFunctionalityRemovedRector extends AbstractRector
                     if (null === $configItemValueValue) {
                         continue;
                     }
-                    $softReferences = \array_flip(ArrayUtility::trimExplode(',', $configItemValueValue));
+                    $softReferences = \array_flip(\Ssch\TYPO3Rector\Helper\ArrayUtility::trimExplode(',', $configItemValueValue));
                     $changed = \false;
                     if (isset($softReferences['TSconfig'])) {
                         $changed = \true;
@@ -95,7 +95,7 @@ final class SoftReferencesFunctionalityRemovedRector extends AbstractRector
                     if ($changed) {
                         if ([] !== $softReferences) {
                             $softReferences = \array_flip($softReferences);
-                            $configItemValue->value = new String_(\implode(',', $softReferences));
+                            $configItemValue->value = new \PhpParser\Node\Scalar\String_(\implode(',', $softReferences));
                         } else {
                             $this->removeNode($configItemValue);
                         }
@@ -109,9 +109,9 @@ final class SoftReferencesFunctionalityRemovedRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('TSconfig and TStemplate soft references functionality removed', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('TSconfig and TStemplate soft references functionality removed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 return [
     'ctrl' => [
     ],

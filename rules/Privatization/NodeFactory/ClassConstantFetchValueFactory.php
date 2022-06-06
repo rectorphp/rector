@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Privatization\NodeFactory;
+namespace Rector\Privatization\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\Value\ValueResolver;
-use RectorPrefix20220606\Rector\Privatization\Reflection\ClassConstantsResolver;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Privatization\Reflection\ClassConstantsResolver;
 final class ClassConstantFetchValueFactory
 {
     /**
@@ -25,7 +25,7 @@ final class ClassConstantFetchValueFactory
      * @var \Rector\Privatization\Reflection\ClassConstantsResolver
      */
     private $classConstantsResolver;
-    public function __construct(ValueResolver $valueResolver, NodeFactory $nodeFactory, ClassConstantsResolver $classConstantsResolver)
+    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Privatization\Reflection\ClassConstantsResolver $classConstantsResolver)
     {
         $this->valueResolver = $valueResolver;
         $this->nodeFactory = $nodeFactory;
@@ -34,7 +34,7 @@ final class ClassConstantFetchValueFactory
     /**
      * @param class-string $classWithConstants
      */
-    public function create(Expr $expr, string $classWithConstants, bool $caseInsensitive) : ?ClassConstFetch
+    public function create(\PhpParser\Node\Expr $expr, string $classWithConstants, bool $caseInsensitive) : ?\PhpParser\Node\Expr\ClassConstFetch
     {
         $value = $this->valueResolver->getValue($expr);
         if ($value === null) {

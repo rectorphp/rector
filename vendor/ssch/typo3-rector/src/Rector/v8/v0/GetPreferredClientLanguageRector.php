@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v0;
+namespace Ssch\TYPO3Rector\Rector\v8\v0;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Deprecation-73511-BrowserLanguageDetectionMovedToLocales.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\GetPreferredClientLanguageRector\GetPreferredClientLanguageRectorTest
  */
-final class GetPreferredClientLanguageRector extends AbstractRector
+final class GetPreferredClientLanguageRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -25,12 +25,12 @@ final class GetPreferredClientLanguageRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isCharsetConverterMethodCall($node) && !$this->isCallFromTypoScriptFrontendController($node)) {
             return null;
@@ -40,9 +40,9 @@ final class GetPreferredClientLanguageRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use Locales->getPreferredClientLanguage() instead of CharsetConverter::getPreferredClientLanguage()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use Locales->getPreferredClientLanguage() instead of CharsetConverter::getPreferredClientLanguage()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 $preferredLanguage = $GLOBALS['TSFE']->csConvObj->getPreferredClientLanguage(GeneralUtility::getIndpEnv('HTTP_ACCEPT_LANGUAGE'));
 CODE_SAMPLE
@@ -53,16 +53,16 @@ $preferredLanguage = GeneralUtility::makeInstance(Locales::class)->getPreferredC
 CODE_SAMPLE
 )]);
     }
-    private function isCharsetConverterMethodCall(MethodCall $methodCall) : bool
+    private function isCharsetConverterMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Charset\\CharsetConverter'))) {
             return \false;
         }
         return $this->isName($methodCall->name, self::GET_PREFERRED_CLIENT_LANGUAGE);
     }
-    private function isCallFromTypoScriptFrontendController(MethodCall $methodCall) : bool
+    private function isCallFromTypoScriptFrontendController(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        if (!$methodCall->var instanceof PropertyFetch) {
+        if (!$methodCall->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \false;
         }
         return $this->isName($methodCall->name, self::GET_PREFERRED_CLIENT_LANGUAGE);

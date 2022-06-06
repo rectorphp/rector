@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PhpAttribute\NodeFactory;
+namespace Rector\PhpAttribute\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Attribute;
-use RectorPrefix20220606\PhpParser\Node\AttributeGroup;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\Php80\ValueObject\AnnotationToAttribute;
-use RectorPrefix20220606\Rector\PhpAttribute\AnnotationToAttributeMapper;
-use RectorPrefix20220606\Rector\PhpAttribute\AttributeArrayNameInliner;
-use RectorPrefix20220606\Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Attribute;
+use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Use_;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\PhpAttribute\AnnotationToAttributeMapper;
+use Rector\PhpAttribute\AttributeArrayNameInliner;
+use Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
 /**
  * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
  */
@@ -52,7 +52,7 @@ final class PhpAttributeGroupFactory
      * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
     private $attributeArrayNameInliner;
-    public function __construct(AnnotationToAttributeMapper $annotationToAttributeMapper, AttributeNameFactory $attributeNameFactory, NamedArgsFactory $namedArgsFactory, ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector, AttributeArrayNameInliner $attributeArrayNameInliner, PhpVersionProvider $phpVersionProvider)
+    public function __construct(\Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper, \Rector\PhpAttribute\NodeFactory\AttributeNameFactory $attributeNameFactory, \Rector\PhpAttribute\NodeFactory\NamedArgsFactory $namedArgsFactory, \Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector $exprParameterReflectionTypeCorrector, \Rector\PhpAttribute\AttributeArrayNameInliner $attributeArrayNameInliner, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
         $this->attributeNameFactory = $attributeNameFactory;
@@ -60,42 +60,42 @@ final class PhpAttributeGroupFactory
         $this->exprParameterReflectionTypeCorrector = $exprParameterReflectionTypeCorrector;
         $this->attributeArrayNameInliner = $attributeArrayNameInliner;
         // nested indexes supported only since PHP 8.1
-        if (!$phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NEW_INITIALIZERS)) {
+        if (!$phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS)) {
             $this->unwrappedAnnotations['Doctrine\\ORM\\Mapping\\Table'] = ['indexes', 'uniqueConstraints'];
             $this->unwrappedAnnotations['Doctrine\\ORM\\Mapping\\Entity'][] = 'uniqueConstraints';
         }
     }
-    public function createFromSimpleTag(AnnotationToAttribute $annotationToAttribute) : AttributeGroup
+    public function createFromSimpleTag(\Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute) : \PhpParser\Node\AttributeGroup
     {
         return $this->createFromClass($annotationToAttribute->getAttributeClass());
     }
-    public function createFromClass(string $attributeClass) : AttributeGroup
+    public function createFromClass(string $attributeClass) : \PhpParser\Node\AttributeGroup
     {
-        $fullyQualified = new FullyQualified($attributeClass);
-        $attribute = new Attribute($fullyQualified);
-        return new AttributeGroup([$attribute]);
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($attributeClass);
+        $attribute = new \PhpParser\Node\Attribute($fullyQualified);
+        return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
     /**
      * @param mixed[] $items
      */
-    public function createFromClassWithItems(string $attributeClass, array $items) : AttributeGroup
+    public function createFromClassWithItems(string $attributeClass, array $items) : \PhpParser\Node\AttributeGroup
     {
-        $fullyQualified = new FullyQualified($attributeClass);
+        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($attributeClass);
         $args = $this->createArgsFromItems($items, $attributeClass);
-        $attribute = new Attribute($fullyQualified, $args);
-        return new AttributeGroup([$attribute]);
+        $attribute = new \PhpParser\Node\Attribute($fullyQualified, $args);
+        return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
     /**
      * @param Use_[] $uses
      */
-    public function create(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, AnnotationToAttribute $annotationToAttribute, array $uses) : AttributeGroup
+    public function create(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute, array $uses) : \PhpParser\Node\AttributeGroup
     {
         $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
         $args = $this->createArgsFromItems($values, $annotationToAttribute->getAttributeClass());
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
         $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode, $uses);
-        $attribute = new Attribute($attributeName, $args);
-        return new AttributeGroup([$attribute]);
+        $attribute = new \PhpParser\Node\Attribute($attributeName, $args);
+        return new \PhpParser\Node\AttributeGroup([$attribute]);
     }
     /**
      * @param mixed[] $items
@@ -121,10 +121,10 @@ final class PhpAttributeGroupFactory
             return $items;
         }
         foreach ($items as $key => $item) {
-            if (!$item instanceof ArrayItem) {
+            if (!$item instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            if (!$item->key instanceof String_) {
+            if (!$item->key instanceof \PhpParser\Node\Scalar\String_) {
                 continue;
             }
             $stringItemKey = $item->key;

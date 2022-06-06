@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\PhpDoc;
+namespace Rector\Doctrine\PhpDoc;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20220606\Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
+use PhpParser\Node;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
 final class ShortClassExpander
 {
     /**
@@ -28,7 +28,7 @@ final class ShortClassExpander
      * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
-    public function __construct(ReflectionProvider $reflectionProvider, ObjectTypeSpecifier $objectTypeSpecifier)
+    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier $objectTypeSpecifier)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->objectTypeSpecifier = $objectTypeSpecifier;
@@ -36,22 +36,22 @@ final class ShortClassExpander
     /**
      * @api
      */
-    public function resolveFqnTargetEntity(string $targetEntity, Node $node) : string
+    public function resolveFqnTargetEntity(string $targetEntity, \PhpParser\Node $node) : string
     {
         $targetEntity = $this->getCleanedUpTargetEntity($targetEntity);
         if ($this->reflectionProvider->hasClass($targetEntity)) {
             return $targetEntity;
         }
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if (!$scope instanceof \PHPStan\Analyser\Scope) {
             return $targetEntity;
         }
         $namespacedTargetEntity = $scope->getNamespace() . '\\' . $targetEntity;
         if ($this->reflectionProvider->hasClass($namespacedTargetEntity)) {
             return $namespacedTargetEntity;
         }
-        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, new ObjectType($targetEntity), $scope);
-        if ($resolvedType instanceof ShortenedObjectType) {
+        $resolvedType = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, new \PHPStan\Type\ObjectType($targetEntity), $scope);
+        if ($resolvedType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
             return $resolvedType->getFullyQualifiedName();
         }
         // probably tested class
@@ -59,6 +59,6 @@ final class ShortClassExpander
     }
     private function getCleanedUpTargetEntity(string $targetEntity) : string
     {
-        return Strings::replace($targetEntity, self::CLASS_CONST_REGEX, '');
+        return \RectorPrefix20220606\Nette\Utils\Strings::replace($targetEntity, self::CLASS_CONST_REGEX, '');
     }
 }

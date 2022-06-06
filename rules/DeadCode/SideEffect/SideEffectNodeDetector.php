@@ -1,37 +1,37 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DeadCode\SideEffect;
+namespace Rector\DeadCode\SideEffect;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Concat;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\New_;
-use RectorPrefix20220606\PhpParser\Node\Expr\NullsafeMethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Scalar\Encapsed;
-use RectorPrefix20220606\PHPStan\Type\ConstantType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\Encapsed;
+use PHPStan\Type\ConstantType;
+use PHPStan\Type\ObjectType;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SideEffectNodeDetector
 {
     /**
      * @var array<class-string<Expr>>
      */
-    private const SIDE_EFFECT_NODE_TYPES = [Encapsed::class, New_::class, Concat::class, PropertyFetch::class];
+    private const SIDE_EFFECT_NODE_TYPES = [\PhpParser\Node\Scalar\Encapsed::class, \PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\BinaryOp\Concat::class, \PhpParser\Node\Expr\PropertyFetch::class];
     /**
      * @var array<class-string<Expr>>
      */
-    private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [MethodCall::class, New_::class, NullsafeMethodCall::class, StaticCall::class];
+    private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\New_::class, \PhpParser\Node\Expr\NullsafeMethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -42,18 +42,18 @@ final class SideEffectNodeDetector
      * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
     private $pureFunctionDetector;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, PureFunctionDetector $pureFunctionDetector)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pureFunctionDetector = $pureFunctionDetector;
     }
-    public function detect(Expr $expr) : bool
+    public function detect(\PhpParser\Node\Expr $expr) : bool
     {
-        if ($expr instanceof Assign) {
+        if ($expr instanceof \PhpParser\Node\Expr\Assign) {
             return \true;
         }
         $exprStaticType = $this->nodeTypeResolver->getType($expr);
-        if ($exprStaticType instanceof ConstantType) {
+        if ($exprStaticType instanceof \PHPStan\Type\ConstantType) {
             return \false;
         }
         foreach (self::SIDE_EFFECT_NODE_TYPES as $sideEffectNodeType) {
@@ -61,64 +61,64 @@ final class SideEffectNodeDetector
                 return \false;
             }
         }
-        if ($expr instanceof FuncCall) {
+        if ($expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return !$this->pureFunctionDetector->detect($expr);
         }
-        if ($expr instanceof Variable || $expr instanceof ArrayDimFetch) {
+        if ($expr instanceof \PhpParser\Node\Expr\Variable || $expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             $variable = $this->resolveVariable($expr);
             // variables don't have side effects
-            return !$variable instanceof Variable;
+            return !$variable instanceof \PhpParser\Node\Expr\Variable;
         }
         return \true;
     }
-    public function detectCallExpr(Node $node) : bool
+    public function detectCallExpr(\PhpParser\Node $node) : bool
     {
-        if (!$node instanceof Expr) {
+        if (!$node instanceof \PhpParser\Node\Expr) {
             return \false;
         }
-        if ($node instanceof StaticCall && $this->isClassCallerThrowable($node)) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall && $this->isClassCallerThrowable($node)) {
             return \false;
         }
-        if ($node instanceof New_ && $this->isPhpParser($node)) {
+        if ($node instanceof \PhpParser\Node\Expr\New_ && $this->isPhpParser($node)) {
             return \false;
         }
         $exprClass = \get_class($node);
         if (\in_array($exprClass, self::CALL_EXPR_SIDE_EFFECT_NODE_TYPES, \true)) {
             return \true;
         }
-        if ($node instanceof FuncCall) {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
             return !$this->pureFunctionDetector->detect($node);
         }
         return \false;
     }
-    private function isPhpParser(New_ $new) : bool
+    private function isPhpParser(\PhpParser\Node\Expr\New_ $new) : bool
     {
-        if (!$new->class instanceof FullyQualified) {
+        if (!$new->class instanceof \PhpParser\Node\Name\FullyQualified) {
             return \false;
         }
         $className = $new->class->toString();
-        $namespace = Strings::before($className, '\\', 1);
+        $namespace = \RectorPrefix20220606\Nette\Utils\Strings::before($className, '\\', 1);
         return $namespace === 'PhpParser';
     }
-    private function isClassCallerThrowable(StaticCall $staticCall) : bool
+    private function isClassCallerThrowable(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
         $class = $staticCall->class;
-        if (!$class instanceof Name) {
+        if (!$class instanceof \PhpParser\Node\Name) {
             return \false;
         }
-        $throwableType = new ObjectType('Throwable');
-        $type = new ObjectType($class->toString());
+        $throwableType = new \PHPStan\Type\ObjectType('Throwable');
+        $type = new \PHPStan\Type\ObjectType($class->toString());
         return $throwableType->isSuperTypeOf($type)->yes();
     }
     /**
      * @param \PhpParser\Node\Expr\ArrayDimFetch|\PhpParser\Node\Expr\Variable $expr
      */
-    private function resolveVariable($expr) : ?Variable
+    private function resolveVariable($expr) : ?\PhpParser\Node\Expr\Variable
     {
-        while ($expr instanceof ArrayDimFetch) {
+        while ($expr instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             $expr = $expr->var;
         }
-        if (!$expr instanceof Variable) {
+        if (!$expr instanceof \PhpParser\Node\Expr\Variable) {
             return null;
         }
         return $expr;

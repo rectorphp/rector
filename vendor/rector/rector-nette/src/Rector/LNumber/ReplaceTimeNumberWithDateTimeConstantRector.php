@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\Rector\LNumber;
+namespace Rector\Nette\Rector\LNumber;
 
 use RectorPrefix20220606\Nette\Utils\DateTime;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Scalar\LNumber;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector\ReplaceTimeNumberWithDateTimeConstantRectorTest
  */
-final class ReplaceTimeNumberWithDateTimeConstantRector extends AbstractRector
+final class ReplaceTimeNumberWithDateTimeConstantRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @noRector
      * @var array<int, string>
      */
-    private const NUMBER_TO_CONSTANT_NAME = [DateTime::HOUR => 'HOUR', DateTime::DAY => 'DAY', DateTime::WEEK => 'WEEK', DateTime::MONTH => 'MONTH', DateTime::YEAR => 'YEAR'];
-    public function getRuleDefinition() : RuleDefinition
+    private const NUMBER_TO_CONSTANT_NAME = [\RectorPrefix20220606\Nette\Utils\DateTime::HOUR => 'HOUR', \RectorPrefix20220606\Nette\Utils\DateTime::DAY => 'DAY', \RectorPrefix20220606\Nette\Utils\DateTime::WEEK => 'WEEK', \RectorPrefix20220606\Nette\Utils\DateTime::MONTH => 'MONTH', \RectorPrefix20220606\Nette\Utils\DateTime::YEAR => 'YEAR'];
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace time numbers with Nette\\Utils\\DateTime constants', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace time numbers with Nette\\Utils\\DateTime constants', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -46,12 +46,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [LNumber::class];
+        return [\PhpParser\Node\Scalar\LNumber::class];
     }
     /**
      * @param LNumber $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $number = $node->value;
         $constantName = self::NUMBER_TO_CONSTANT_NAME[$number] ?? null;

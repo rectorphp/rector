@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject;
+namespace Rector\BetterPhpDocParser\ValueObject;
 
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey as NativePhpDocAttributeKey;
 final class PhpDocAttributeKey
@@ -18,7 +18,7 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const PARENT = NativePhpDocAttributeKey::PARENT;
+    public const PARENT = \RectorPrefix20220606\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey::PARENT;
     /**
      * @var string
      */
@@ -26,5 +26,5 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const ORIG_NODE = NativePhpDocAttributeKey::ORIG_NODE;
+    public const ORIG_NODE = \RectorPrefix20220606\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE;
 }

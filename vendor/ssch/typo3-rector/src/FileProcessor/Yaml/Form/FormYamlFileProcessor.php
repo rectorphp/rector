@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\Yaml\Form;
+namespace Ssch\TYPO3Rector\FileProcessor\Yaml\Form;
 
-use RectorPrefix20220606\Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
-use RectorPrefix20220606\Rector\Core\Contract\Processor\FileProcessorInterface;
-use RectorPrefix20220606\Rector\Core\Provider\CurrentFileProvider;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\Core\ValueObject\Configuration;
-use RectorPrefix20220606\Rector\Core\ValueObject\Error\SystemError;
-use RectorPrefix20220606\Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix20220606\Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
-use RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\Yaml\YamlIndentResolver;
+use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use Rector\Core\Contract\Processor\FileProcessorInterface;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\Reporting\FileDiff;
+use Rector\Parallel\ValueObject\Bridge;
+use Ssch\TYPO3Rector\Contract\FileProcessor\Yaml\Form\FormYamlRectorInterface;
+use Ssch\TYPO3Rector\FileProcessor\Yaml\YamlIndentResolver;
 use RectorPrefix20220606\Symfony\Component\Yaml\Yaml;
 /**
  * @see \Ssch\TYPO3Rector\Tests\FileProcessor\Yaml\Form\FormYamlProcessorTest
  */
-final class FormYamlFileProcessor implements FileProcessorInterface
+final class FormYamlFileProcessor implements \Rector\Core\Contract\Processor\FileProcessorInterface
 {
     /**
      * @var string[]
@@ -46,7 +46,7 @@ final class FormYamlFileProcessor implements FileProcessorInterface
     /**
      * @param FormYamlRectorInterface[] $transformer
      */
-    public function __construct(CurrentFileProvider $currentFileProvider, FileDiffFactory $fileDiffFactory, YamlIndentResolver $yamlIndentResolver, array $transformer)
+    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory $fileDiffFactory, \Ssch\TYPO3Rector\FileProcessor\Yaml\YamlIndentResolver $yamlIndentResolver, array $transformer)
     {
         $this->currentFileProvider = $currentFileProvider;
         $this->fileDiffFactory = $fileDiffFactory;
@@ -56,13 +56,13 @@ final class FormYamlFileProcessor implements FileProcessorInterface
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function process(File $file, Configuration $configuration) : array
+    public function process(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : array
     {
-        $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
+        $systemErrorsAndFileDiffs = [\Rector\Parallel\ValueObject\Bridge::SYSTEM_ERRORS => [], \Rector\Parallel\ValueObject\Bridge::FILE_DIFFS => []];
         $this->currentFileProvider->setFile($file);
         $smartFileInfo = $file->getSmartFileInfo();
         $oldYamlContent = $smartFileInfo->getContents();
-        $yaml = Yaml::parse($oldYamlContent);
+        $yaml = \RectorPrefix20220606\Symfony\Component\Yaml\Yaml::parse($oldYamlContent);
         if (!\is_array($yaml)) {
             return $systemErrorsAndFileDiffs;
         }
@@ -75,13 +75,13 @@ final class FormYamlFileProcessor implements FileProcessorInterface
             return $systemErrorsAndFileDiffs;
         }
         $spaceCount = $this->yamlIndentResolver->resolveIndentSpaceCount($oldYamlContent);
-        $newFileContent = Yaml::dump($newYaml, 99, $spaceCount);
+        $newFileContent = \RectorPrefix20220606\Symfony\Component\Yaml\Yaml::dump($newYaml, 99, $spaceCount);
         $file->changeFileContent($newFileContent);
         $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldYamlContent, $newFileContent);
-        $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS][] = $fileDiff;
+        $systemErrorsAndFileDiffs[\Rector\Parallel\ValueObject\Bridge::FILE_DIFFS][] = $fileDiff;
         return $systemErrorsAndFileDiffs;
     }
-    public function supports(File $file, Configuration $configuration) : bool
+    public function supports(\Rector\Core\ValueObject\Application\File $file, \Rector\Core\ValueObject\Configuration $configuration) : bool
     {
         // Prevent unnecessary processing
         if ([] === $this->transformer) {

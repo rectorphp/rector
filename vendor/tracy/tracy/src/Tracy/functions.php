@@ -14,7 +14,7 @@ if (!\function_exists('RectorPrefix20220606\\dump')) {
      */
     function dump($var)
     {
-        \array_map([Tracy\Debugger::class, 'dump'], \func_get_args());
+        \array_map([\RectorPrefix20220606\Tracy\Debugger::class, 'dump'], \func_get_args());
         return $var;
     }
 }
@@ -25,8 +25,8 @@ if (!\function_exists('RectorPrefix20220606\\dumpe')) {
      */
     function dumpe($var) : void
     {
-        \array_map([Tracy\Debugger::class, 'dump'], \func_get_args());
-        if (!Tracy\Debugger::$productionMode) {
+        \array_map([\RectorPrefix20220606\Tracy\Debugger::class, 'dump'], \func_get_args());
+        if (!\RectorPrefix20220606\Tracy\Debugger::$productionMode) {
             exit;
         }
     }
@@ -38,7 +38,7 @@ if (!\function_exists('RectorPrefix20220606\\bdump')) {
      */
     function bdump($var)
     {
-        Tracy\Debugger::barDump(...\func_get_args());
+        \RectorPrefix20220606\Tracy\Debugger::barDump(...\func_get_args());
         return $var;
     }
 }

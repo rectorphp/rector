@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PostRector\Application;
+namespace Rector\PostRector\Application;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\NodeTraverser;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\Logging\CurrentRectorProvider;
-use RectorPrefix20220606\Rector\Core\Provider\CurrentFileProvider;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\PostRector\Contract\Rector\PostRectorInterface;
+use PhpParser\Node\Stmt;
+use PhpParser\NodeTraverser;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Logging\CurrentRectorProvider;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
+use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix20220606\Symplify\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
@@ -35,7 +35,7 @@ final class PostFileProcessor
     /**
      * @param PostRectorInterface[] $postRectors
      */
-    public function __construct(Skipper $skipper, CurrentFileProvider $currentFileProvider, CurrentRectorProvider $currentRectorProvider, array $postRectors)
+    public function __construct(\RectorPrefix20220606\Symplify\Skipper\Skipper\Skipper $skipper, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Logging\CurrentRectorProvider $currentRectorProvider, array $postRectors)
     {
         $this->skipper = $skipper;
         $this->currentFileProvider = $currentFileProvider;
@@ -53,7 +53,7 @@ final class PostFileProcessor
                 continue;
             }
             $this->currentRectorProvider->changeCurrentRector($postRector);
-            $nodeTraverser = new NodeTraverser();
+            $nodeTraverser = new \PhpParser\NodeTraverser();
             $nodeTraverser->addVisitor($postRector);
             $stmts = $nodeTraverser->traverse($stmts);
         }
@@ -68,17 +68,17 @@ final class PostFileProcessor
         $postRectorsByPriority = [];
         foreach ($postRectors as $postRector) {
             if (isset($postRectorsByPriority[$postRector->getPriority()])) {
-                throw new ShouldNotHappenException();
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
             $postRectorsByPriority[$postRector->getPriority()] = $postRector;
         }
         \krsort($postRectorsByPriority);
         return $postRectorsByPriority;
     }
-    private function shouldSkipPostRector(PostRectorInterface $postRector) : bool
+    private function shouldSkipPostRector(\Rector\PostRector\Contract\Rector\PostRectorInterface $postRector) : bool
     {
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof File) {
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
             return \false;
         }
         $smartFileInfo = $file->getSmartFileInfo();

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\PhpParser\Node\CustomNode;
+namespace Rector\Core\PhpParser\Node\CustomNode;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/commit/ed81c3ad0b9877e6122c79b4afda9d10f3994092
  */
-final class FileWithoutNamespace extends Stmt
+final class FileWithoutNamespace extends \PhpParser\Node\Stmt
 {
     /**
      * @var Stmt[]

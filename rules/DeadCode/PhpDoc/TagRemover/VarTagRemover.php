@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DeadCode\PhpDoc\TagRemover;
+namespace Rector\DeadCode\PhpDoc\TagRemover;
 
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use RectorPrefix20220606\PHPStan\Type\Generic\TemplateObjectWithoutClassType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use RectorPrefix20220606\Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\Type\Generic\TemplateObjectWithoutClassType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer;
+use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 final class VarTagRemover
 {
     /**
@@ -36,17 +36,17 @@ final class VarTagRemover
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer, PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(\Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer $doctrineTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer $deadVarTagValueNodeAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->deadVarTagValueNodeAnalyzer = $deadVarTagValueNodeAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function removeVarTagIfUseless(PhpDocInfo $phpDocInfo, Property $property) : void
+    public function removeVarTagIfUseless(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property) : void
     {
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof VarTagValueNode) {
+        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
             return;
         }
         $isVarTagValueDead = $this->deadVarTagValueNodeAnalyzer->isDead($varTagValueNode, $property);
@@ -56,14 +56,14 @@ final class VarTagRemover
         if ($this->phpDocTypeChanger->isAllowed($varTagValueNode->type)) {
             return;
         }
-        $phpDocInfo->removeByType(VarTagValueNode::class);
+        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
     /**
      * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
-    public function removeVarPhpTagValueNodeIfNotComment($node, Type $type) : void
+    public function removeVarPhpTagValueNodeIfNotComment($node, \PHPStan\Type\Type $type) : void
     {
-        if ($type instanceof TemplateObjectWithoutClassType) {
+        if ($type instanceof \PHPStan\Type\Generic\TemplateObjectWithoutClassType) {
             return;
         }
         // keep doctrine collection narrow type
@@ -72,7 +72,7 @@ final class VarTagRemover
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof VarTagValueNode) {
+        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
             return;
         }
         // has description? keep it
@@ -83,6 +83,6 @@ final class VarTagRemover
         if ($this->phpDocTypeChanger->isAllowed($varTagValueNode->type)) {
             return;
         }
-        $phpDocInfo->removeByType(VarTagValueNode::class);
+        $phpDocInfo->removeByType(\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class);
     }
 }

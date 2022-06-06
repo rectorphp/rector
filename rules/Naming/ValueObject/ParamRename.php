@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\ValueObject;
+namespace Rector\Naming\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Function_;
-use RectorPrefix20220606\Rector\Naming\Contract\RenameParamValueObjectInterface;
-final class ParamRename implements RenameParamValueObjectInterface
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use Rector\Naming\Contract\RenameParamValueObjectInterface;
+final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjectInterface
 {
     /**
      * @readonly
@@ -39,7 +39,7 @@ final class ParamRename implements RenameParamValueObjectInterface
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function __construct(string $currentName, string $expectedName, Param $param, Variable $variable, $functionLike)
+    public function __construct(string $currentName, string $expectedName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Variable $variable, $functionLike)
     {
         $this->currentName = $currentName;
         $this->expectedName = $expectedName;
@@ -62,11 +62,11 @@ final class ParamRename implements RenameParamValueObjectInterface
     {
         return $this->functionLike;
     }
-    public function getParam() : Param
+    public function getParam() : \PhpParser\Node\Param
     {
         return $this->param;
     }
-    public function getVariable() : Variable
+    public function getVariable() : \PhpParser\Node\Expr\Variable
     {
         return $this->variable;
     }

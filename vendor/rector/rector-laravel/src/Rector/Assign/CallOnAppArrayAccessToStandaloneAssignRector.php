@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Laravel\Rector\Assign;
+namespace Rector\Laravel\Rector\Assign;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Laravel\NodeFactory\AppAssignFactory;
-use RectorPrefix20220606\Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Laravel\NodeFactory\AppAssignFactory;
+use Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Laravel\Tests\Rector\Assign\CallOnAppArrayAccessToStandaloneAssignRector\CallOnAppArrayAccessToStandaloneAssignRectorTest
  */
-final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
+final class CallOnAppArrayAccessToStandaloneAssignRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var ServiceNameTypeAndVariableName[]
@@ -29,36 +29,36 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
      * @var \Rector\Laravel\NodeFactory\AppAssignFactory
      */
     private $appAssignFactory;
-    public function __construct(AppAssignFactory $appAssignFactory)
+    public function __construct(\Rector\Laravel\NodeFactory\AppAssignFactory $appAssignFactory)
     {
         $this->appAssignFactory = $appAssignFactory;
-        $this->serviceNameTypeAndVariableNames[] = new ServiceNameTypeAndVariableName('validator', 'Illuminate\\Validation\\Factory', 'validationFactory');
+        $this->serviceNameTypeAndVariableNames[] = new \Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName('validator', 'Illuminate\\Validation\\Factory', 'validationFactory');
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Assign::class];
+        return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node->expr instanceof MethodCall) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return null;
         }
         $methodCall = $node->expr;
-        if (!$methodCall->var instanceof ArrayDimFetch) {
+        if (!$methodCall->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return null;
         }
         $arrayDimFetch = $methodCall->var;
-        if (!$this->isObjectType($arrayDimFetch->var, new ObjectType('Illuminate\\Contracts\\Foundation\\Application'))) {
+        if (!$this->isObjectType($arrayDimFetch->var, new \PHPStan\Type\ObjectType('Illuminate\\Contracts\\Foundation\\Application'))) {
             return null;
         }
         $arrayDimFetchDim = $methodCall->var->dim;
-        if (!$arrayDimFetchDim instanceof Expr) {
+        if (!$arrayDimFetchDim instanceof \PhpParser\Node\Expr) {
             return null;
         }
         foreach ($this->serviceNameTypeAndVariableNames as $serviceNameTypeAndVariableName) {
@@ -67,14 +67,14 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
             }
             $assignExpression = $this->appAssignFactory->createAssignExpression($serviceNameTypeAndVariableName, $methodCall->var);
             $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node);
-            $methodCall->var = new Variable($serviceNameTypeAndVariableName->getVariableName());
+            $methodCall->var = new \PhpParser\Node\Expr\Variable($serviceNameTypeAndVariableName->getVariableName());
             return $node;
         }
         return null;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace magical call on $this->app["something"] to standalone type assign variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace magical call on $this->app["something"] to standalone type assign variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     /**

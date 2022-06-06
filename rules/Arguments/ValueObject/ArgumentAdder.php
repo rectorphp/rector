@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Arguments\ValueObject;
+namespace Rector\Arguments\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\Core\Validation\RectorAssert;
 final class ArgumentAdder
 {
     /**
@@ -55,11 +55,11 @@ final class ArgumentAdder
         $this->argumentDefaultValue = $argumentDefaultValue;
         $this->argumentType = $argumentType;
         $this->scope = $scope;
-        RectorAssert::className($class);
+        \Rector\Core\Validation\RectorAssert::className($class);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->class);
+        return new \PHPStan\Type\ObjectType($this->class);
     }
     public function getMethod() : string
     {
@@ -80,7 +80,7 @@ final class ArgumentAdder
     {
         return $this->argumentDefaultValue;
     }
-    public function getArgumentType() : ?Type
+    public function getArgumentType() : ?\PHPStan\Type\Type
     {
         return $this->argumentType;
     }

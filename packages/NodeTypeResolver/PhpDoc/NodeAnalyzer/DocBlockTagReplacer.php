@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
+namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class DocBlockTagReplacer
 {
     /**
@@ -14,25 +14,25 @@ final class DocBlockTagReplacer
      * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
      */
     private $annotationNaming;
-    public function __construct(AnnotationNaming $annotationNaming)
+    public function __construct(\Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming)
     {
         $this->annotationNaming = $annotationNaming;
     }
-    public function replaceTagByAnother(PhpDocInfo $phpDocInfo, string $oldTag, string $newTag) : bool
+    public function replaceTagByAnother(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, string $oldTag, string $newTag) : bool
     {
         $hasChanged = \false;
         $oldTag = $this->annotationNaming->normalizeName($oldTag);
         $newTag = $this->annotationNaming->normalizeName($newTag);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if (!$phpDocChildNode instanceof PhpDocTagNode) {
+            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
                 continue;
             }
             if ($phpDocChildNode->name !== $oldTag) {
                 continue;
             }
             unset($phpDocNode->children[$key]);
-            $phpDocNode->children[] = new PhpDocTagNode($newTag, new GenericTagValueNode(''));
+            $phpDocNode->children[] = new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($newTag, new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode(''));
             $hasChanged = \true;
         }
         return $hasChanged;

@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPUnit\Rector\MethodCall;
+namespace Rector\PHPUnit\Rector\MethodCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Isset_;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\PHPStan\Type\ObjectWithoutClassType;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\Rector\Core\PhpParser\AstResolver;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
-use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectWithoutClassType;
+use PHPStan\Type\TypeWithClassName;
+use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertIssetToSpecificMethodRector\AssertIssetToSpecificMethodRectorTest
  */
-final class AssertIssetToSpecificMethodRector extends AbstractRector
+final class AssertIssetToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -55,64 +55,64 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer, AstResolver $astResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->astResolver = $astResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Turns isset comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertTrue(isset($anything->foo));', '$this->assertObjectHasAttribute("foo", $anything);'), new CodeSample('$this->assertFalse(isset($anything["foo"]), "message");', '$this->assertArrayNotHasKey("foo", $anything, "message");')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns isset comparisons to their method name alternatives in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertTrue(isset($anything->foo));', '$this->assertObjectHasAttribute("foo", $anything);'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertFalse(isset($anything["foo"]), "message");', '$this->assertArrayNotHasKey("foo", $anything, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, [self::ASSERT_TRUE, self::ASSERT_FALSE])) {
             return null;
         }
         $firstArgumentValue = $node->args[0]->value;
         // is property access
-        if (!$firstArgumentValue instanceof Isset_) {
+        if (!$firstArgumentValue instanceof \PhpParser\Node\Expr\Isset_) {
             return null;
         }
         $variableNodeClass = \get_class($firstArgumentValue->vars[0]);
-        if (!\in_array($variableNodeClass, [ArrayDimFetch::class, PropertyFetch::class], \true)) {
+        if (!\in_array($variableNodeClass, [\PhpParser\Node\Expr\ArrayDimFetch::class, \PhpParser\Node\Expr\PropertyFetch::class], \true)) {
             return null;
         }
         /** @var Isset_ $issetNode */
         $issetNode = $node->args[0]->value;
         $issetNodeArg = $issetNode->vars[0];
-        if ($issetNodeArg instanceof PropertyFetch) {
+        if ($issetNodeArg instanceof \PhpParser\Node\Expr\PropertyFetch) {
             if ($this->hasMagicIsset($issetNodeArg->var)) {
                 return null;
             }
             return $this->refactorPropertyFetchNode($node, $issetNodeArg);
         }
-        if ($issetNodeArg instanceof ArrayDimFetch) {
+        if ($issetNodeArg instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
             return $this->refactorArrayDimFetchNode($node, $issetNodeArg);
         }
         return $node;
     }
-    private function hasMagicIsset(Node $node) : bool
+    private function hasMagicIsset(\PhpParser\Node $node) : bool
     {
         $resolved = $this->nodeTypeResolver->getType($node);
-        if (!$resolved instanceof TypeWithClassName) {
+        if (!$resolved instanceof \PHPStan\Type\TypeWithClassName) {
             // object not found, skip
-            return $resolved instanceof ObjectWithoutClassType;
+            return $resolved instanceof \PHPStan\Type\ObjectWithoutClassType;
         }
         $classReflection = $resolved->getClassReflection();
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
             return \false;
         }
         if ($classReflection->hasMethod('__isset')) {
@@ -122,10 +122,10 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
         // extends class not found by PHPStan
         $className = $classReflection->getName();
         $class = $this->astResolver->resolveClassFromName($className);
-        if (!$class instanceof Class_) {
+        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
             return \false;
         }
-        if (!$class->extends instanceof FullyQualified) {
+        if (!$class->extends instanceof \PhpParser\Node\Name\FullyQualified) {
             return \false;
         }
         // if parent class not detected by PHPStan, assume it has __isset
@@ -134,7 +134,7 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function refactorPropertyFetchNode($node, PropertyFetch $propertyFetch) : ?Node
+    private function refactorPropertyFetchNode($node, \PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node
     {
         $name = $this->getName($propertyFetch);
         if ($name === null) {
@@ -143,14 +143,14 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
         $this->identifierManipulator->renameNodeWithMap($node, [self::ASSERT_TRUE => 'assertObjectHasAttribute', self::ASSERT_FALSE => 'assertObjectNotHasAttribute']);
         $oldArgs = $node->args;
         unset($oldArgs[0]);
-        $newArgs = $this->nodeFactory->createArgs([new String_($name), $propertyFetch->var]);
+        $newArgs = $this->nodeFactory->createArgs([new \PhpParser\Node\Scalar\String_($name), $propertyFetch->var]);
         $node->args = $this->appendArgs($newArgs, $oldArgs);
         return $node;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function refactorArrayDimFetchNode($node, ArrayDimFetch $arrayDimFetch) : Node
+    private function refactorArrayDimFetchNode($node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : \PhpParser\Node
     {
         $this->identifierManipulator->renameNodeWithMap($node, [self::ASSERT_TRUE => 'assertArrayHasKey', self::ASSERT_FALSE => 'assertArrayNotHasKey']);
         $oldArgs = $node->args;

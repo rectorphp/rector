@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPOffice\Rector\StaticCall;
+namespace Rector\PHPOffice\Rector\StaticCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\PHPOffice\ValueObject\PHPExcelMethodDefaultValues;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPOffice\ValueObject\PHPExcelMethodDefaultValues;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/PHPOffice/PhpSpreadsheet/commit/033a4bdad56340795a5bf7ec3c8a2fde005cda24 https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#removed-default-values
  *
  * @see \Rector\PHPOffice\Tests\Rector\StaticCall\AddRemovedDefaultValuesRector\AddRemovedDefaultValuesRectorTest
  */
-final class AddRemovedDefaultValuesRector extends AbstractRector
+final class AddRemovedDefaultValuesRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var bool
      */
     private $hasChanged = \false;
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Complete removed default values explicitly', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Complete removed default values explicitly', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): void
@@ -52,16 +52,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class, MethodCall::class];
+        return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param StaticCall|MethodCall $node
      * @return null|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
-    public function refactor(Node $node)
+    public function refactor(\PhpParser\Node $node)
     {
-        foreach (PHPExcelMethodDefaultValues::METHOD_NAMES_BY_TYPE_WITH_VALUE as $type => $defaultValuesByMethodName) {
-            if (!$this->isCallerObjectType($node, new ObjectType($type))) {
+        foreach (\Rector\PHPOffice\ValueObject\PHPExcelMethodDefaultValues::METHOD_NAMES_BY_TYPE_WITH_VALUE as $type => $defaultValuesByMethodName) {
+            if (!$this->isCallerObjectType($node, new \PHPStan\Type\ObjectType($type))) {
                 continue;
             }
             foreach ($defaultValuesByMethodName as $methodName => $defaultValuesByPosition) {
@@ -90,7 +90,7 @@ CODE_SAMPLE
             if (\is_string($defaultValue) && \strpos($defaultValue, '::') !== \false) {
                 [$className, $constant] = \explode('::', $defaultValue);
                 $classConstant = $this->nodeFactory->createClassConstFetch($className, $constant);
-                $arg = new Arg($classConstant);
+                $arg = new \PhpParser\Node\Arg($classConstant);
             } else {
                 $arg = $this->nodeFactory->createArg($defaultValue);
             }
@@ -101,9 +101,9 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function isCallerObjectType($node, ObjectType $objectType) : bool
+    private function isCallerObjectType($node, \PHPStan\Type\ObjectType $objectType) : bool
     {
-        $caller = $node instanceof MethodCall ? $node->var : $node->class;
+        $caller = $node instanceof \PhpParser\Node\Expr\MethodCall ? $node->var : $node->class;
         return $this->isObjectType($caller, $objectType);
     }
 }

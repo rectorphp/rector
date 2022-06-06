@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Strict\Rector;
+namespace Rector\Strict\Rector;
 
-use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Rector\AbstractRector;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\BooleanInBooleanNotRuleFixerRectorTest
  */
-abstract class AbstractFalsyScalarRuleFixerRector extends AbstractRector implements ConfigurableRectorInterface
+abstract class AbstractFalsyScalarRuleFixerRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -25,7 +25,7 @@ abstract class AbstractFalsyScalarRuleFixerRector extends AbstractRector impleme
     public function configure(array $configuration) : void
     {
         $treatAsNonEmpty = $configuration[self::TREAT_AS_NON_EMPTY] ?? (bool) \current($configuration);
-        Assert::boolean($treatAsNonEmpty);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::boolean($treatAsNonEmpty);
         $this->treatAsNonEmpty = $treatAsNonEmpty;
     }
 }

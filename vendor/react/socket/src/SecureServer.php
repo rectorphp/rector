@@ -51,7 +51,7 @@ use UnexpectedValueException;
  * @see ServerInterface
  * @see ConnectionInterface
  */
-final class SecureServer extends EventEmitter implements ServerInterface
+final class SecureServer extends \RectorPrefix20220606\Evenement\EventEmitter implements \RectorPrefix20220606\React\Socket\ServerInterface
 {
     private $tcp;
     private $encryption;
@@ -120,7 +120,7 @@ final class SecureServer extends EventEmitter implements ServerInterface
      * @see TcpServer
      * @link https://www.php.net/manual/en/context.ssl.php for TLS context options
      */
-    public function __construct(ServerInterface $tcp, LoopInterface $loop = null, array $context = array())
+    public function __construct(\RectorPrefix20220606\React\Socket\ServerInterface $tcp, \RectorPrefix20220606\React\EventLoop\LoopInterface $loop = null, array $context = array())
     {
         if (!\function_exists('stream_socket_enable_crypto')) {
             throw new \BadMethodCallException('Encryption not supported on your platform (HHVM < 3.8?)');
@@ -129,7 +129,7 @@ final class SecureServer extends EventEmitter implements ServerInterface
         // default to empty passphrase to suppress blocking passphrase prompt
         $context += array('passphrase' => '');
         $this->tcp = $tcp;
-        $this->encryption = new StreamEncryption($loop ?: Loop::get());
+        $this->encryption = new \RectorPrefix20220606\React\Socket\StreamEncryption($loop ?: \RectorPrefix20220606\React\EventLoop\Loop::get());
         $this->context = $context;
         $that = $this;
         $this->tcp->on('connection', function ($connection) use($that) {
@@ -160,9 +160,9 @@ final class SecureServer extends EventEmitter implements ServerInterface
         return $this->tcp->close();
     }
     /** @internal */
-    public function handleConnection(ConnectionInterface $connection)
+    public function handleConnection(\RectorPrefix20220606\React\Socket\ConnectionInterface $connection)
     {
-        if (!$connection instanceof Connection) {
+        if (!$connection instanceof \RectorPrefix20220606\React\Socket\Connection) {
             $this->emit('error', array(new \UnexpectedValueException('Base server does not use internal Connection class exposing stream resource')));
             $connection->close();
             return;

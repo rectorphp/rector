@@ -1,42 +1,42 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPUnit\Rector\Class_;
+namespace Rector\PHPUnit\Rector\Class_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use RectorPrefix20220606\PHPUnit\Framework\TestCase;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220606\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use RectorPrefix20220606\Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
-use RectorPrefix20220606\Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver;
-use RectorPrefix20220606\Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
-use RectorPrefix20220606\Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
-use RectorPrefix20220606\Rector\PHPUnit\ValueObject\ParamAndArg;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
+use Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver;
+use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
+use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
+use Rector\PHPUnit\ValueObject\ParamAndArg;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\Class_\ArrayArgumentToDataProviderRector\ArrayArgumentToDataProviderRectorTest
  *
  * @see why → https://blog.martinhujer.cz/how-to-use-data-providers-in-phpunit/
  */
-final class ArrayArgumentToDataProviderRector extends AbstractRector implements ConfigurableRectorInterface
+final class ArrayArgumentToDataProviderRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
     /**
      * @api
@@ -66,15 +66,15 @@ final class ArrayArgumentToDataProviderRector extends AbstractRector implements 
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(DataProviderClassMethodFactory $dataProviderClassMethodFactory, ParamAndArgFromArrayResolver $paramAndArgFromArrayResolver, TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(\Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory $dataProviderClassMethodFactory, \Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver $paramAndArgFromArrayResolver, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;
         $this->paramAndArgFromArrayResolver = $paramAndArgFromArrayResolver;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Move array argument from tests into data provider [configurable]', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move array argument from tests into data provider [configurable]', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeServiceTest extends TestCase
@@ -106,26 +106,26 @@ class SomeServiceTest extends TestCase
     }
 }
 CODE_SAMPLE
-, [self::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [new ArrayArgumentToDataProvider(TestCase::class, 'doTestMultiple', 'doTestSingle', 'number')]])]);
+, [self::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [new \Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider(\RectorPrefix20220606\PHPUnit\Framework\TestCase::class, 'doTestMultiple', 'doTestSingle', 'number')]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
         $this->dataProviderClassMethodRecipes = [];
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) {
-            if (!$node instanceof MethodCall) {
+        $this->traverseNodesWithCallable($node->stmts, function (\PhpParser\Node $node) {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
             foreach ($this->arrayArgumentsToDataProviders as $arrayArgumentToDataProvider) {
@@ -146,38 +146,38 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $arrayArgumentsToDataProviders = $configuration[self::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS] ?? $configuration;
-        Assert::isArray($arrayArgumentsToDataProviders);
-        Assert::allIsAOf($arrayArgumentsToDataProviders, ArrayArgumentToDataProvider::class);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::isArray($arrayArgumentsToDataProviders);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allIsAOf($arrayArgumentsToDataProviders, \Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider::class);
         $this->arrayArgumentsToDataProviders = $arrayArgumentsToDataProviders;
     }
-    private function refactorMethodCallWithConfiguration(MethodCall $methodCall, ArrayArgumentToDataProvider $arrayArgumentToDataProvider) : void
+    private function refactorMethodCallWithConfiguration(\PhpParser\Node\Expr\MethodCall $methodCall, \Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider $arrayArgumentToDataProvider) : void
     {
         if (!$this->isMethodCallMatch($methodCall, $arrayArgumentToDataProvider)) {
             return;
         }
         if (\count($methodCall->args) !== 1) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         // resolve value types
         $firstArgumentValue = $methodCall->args[0]->value;
-        if (!$firstArgumentValue instanceof Array_) {
+        if (!$firstArgumentValue instanceof \PhpParser\Node\Expr\Array_) {
             // nothing we can do
             return;
         }
         // rename method to new one handling non-array input
-        $methodCall->name = new Identifier($arrayArgumentToDataProvider->getNewMethod());
+        $methodCall->name = new \PhpParser\Node\Identifier($arrayArgumentToDataProvider->getNewMethod());
         $dataProviderMethodName = $this->createDataProviderMethodName($methodCall);
         if ($dataProviderMethodName === null) {
             return;
         }
-        $this->dataProviderClassMethodRecipes[] = new DataProviderClassMethodRecipe($dataProviderMethodName, $methodCall->args);
+        $this->dataProviderClassMethodRecipes[] = new \Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe($dataProviderMethodName, $methodCall->args);
         $methodCall->args = [];
         $paramAndArgs = $this->paramAndArgFromArrayResolver->resolve($firstArgumentValue, $arrayArgumentToDataProvider->getVariableName());
         foreach ($paramAndArgs as $paramAndArg) {
-            $methodCall->args[] = new Arg($paramAndArg->getVariable());
+            $methodCall->args[] = new \PhpParser\Node\Arg($paramAndArg->getVariable());
         }
-        $classMethod = $this->betterNodeFinder->findParentType($methodCall, ClassMethod::class);
-        if (!$classMethod instanceof ClassMethod) {
+        $classMethod = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\ClassMethod::class);
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return;
         }
         $this->refactorTestClassMethodParams($classMethod, $paramAndArgs);
@@ -198,17 +198,17 @@ CODE_SAMPLE
         }
         return $dataProviderClassMethods;
     }
-    private function isMethodCallMatch(MethodCall $methodCall, ArrayArgumentToDataProvider $arrayArgumentToDataProvider) : bool
+    private function isMethodCallMatch(\PhpParser\Node\Expr\MethodCall $methodCall, \Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider $arrayArgumentToDataProvider) : bool
     {
         if (!$this->isObjectType($methodCall->var, $arrayArgumentToDataProvider->getObjectType())) {
             return \false;
         }
         return $this->isName($methodCall->name, $arrayArgumentToDataProvider->getOldMethod());
     }
-    private function createDataProviderMethodName(MethodCall $methodCall) : ?string
+    private function createDataProviderMethodName(\PhpParser\Node\Expr\MethodCall $methodCall) : ?string
     {
-        $methodNode = $this->betterNodeFinder->findParentType($methodCall, ClassMethod::class);
-        if (!$methodNode instanceof ClassMethod) {
+        $methodNode = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\ClassMethod::class);
+        if (!$methodNode instanceof \PhpParser\Node\Stmt\ClassMethod) {
             return null;
         }
         $classMethodName = $this->getName($methodNode);
@@ -217,26 +217,26 @@ CODE_SAMPLE
     /**
      * @param ParamAndArg[] $paramAndArgs
      */
-    private function refactorTestClassMethodParams(ClassMethod $classMethod, array $paramAndArgs) : void
+    private function refactorTestClassMethodParams(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $paramAndArgs) : void
     {
         $classMethod->params = $this->createParams($paramAndArgs);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         foreach ($paramAndArgs as $paramAndArg) {
             $staticType = $paramAndArg->getType();
-            if (!$staticType instanceof UnionType) {
+            if (!$staticType instanceof \PHPStan\Type\UnionType) {
                 continue;
             }
             /** @var string $paramName */
             $paramName = $this->getName($paramAndArg->getVariable());
             /** @var TypeNode $staticTypeNode */
-            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType, TypeKind::PARAM);
+            $staticTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             $paramTagValueNode = $this->createParamTagNode($paramName, $staticTypeNode);
             $phpDocInfo->addTagValueNode($paramTagValueNode);
         }
     }
-    private function createDataProviderTagNode(string $dataProviderMethodName) : PhpDocTagNode
+    private function createDataProviderTagNode(string $dataProviderMethodName) : \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode
     {
-        return new PhpDocTagNode('@dataProvider', new GenericTagValueNode($dataProviderMethodName . '()'));
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@dataProvider', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode($dataProviderMethodName . '()'));
     }
     /**
      * @param ParamAndArg[] $paramAndArgs
@@ -246,26 +246,26 @@ CODE_SAMPLE
     {
         $params = [];
         foreach ($paramAndArgs as $paramAndArg) {
-            $param = new Param($paramAndArg->getVariable());
+            $param = new \PhpParser\Node\Param($paramAndArg->getVariable());
             $this->setTypeIfNotNull($paramAndArg, $param);
             $params[] = $param;
         }
         return $params;
     }
-    private function createParamTagNode(string $name, TypeNode $typeNode) : ParamTagValueNode
+    private function createParamTagNode(string $name, \PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode) : \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode
     {
-        return new ParamTagValueNode($typeNode, \false, '$' . $name, '');
+        return new \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode($typeNode, \false, '$' . $name, '');
     }
-    private function setTypeIfNotNull(ParamAndArg $paramAndArg, Param $param) : void
+    private function setTypeIfNotNull(\Rector\PHPUnit\ValueObject\ParamAndArg $paramAndArg, \PhpParser\Node\Param $param) : void
     {
         $staticType = $paramAndArg->getType();
-        if (!$staticType instanceof Type) {
+        if (!$staticType instanceof \PHPStan\Type\Type) {
             return;
         }
-        if ($staticType instanceof UnionType) {
+        if ($staticType instanceof \PHPStan\Type\UnionType) {
             return;
         }
-        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, TypeKind::PARAM);
+        $phpNodeType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($staticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         if ($phpNodeType === null) {
             return;
         }

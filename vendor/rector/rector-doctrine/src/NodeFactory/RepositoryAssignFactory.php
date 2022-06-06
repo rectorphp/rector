@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\NodeFactory;
+namespace Rector\Doctrine\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
-use RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Class_;
+use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class RepositoryAssignFactory
 {
     /**
@@ -27,7 +27,7 @@ final class RepositoryAssignFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(EntityObjectTypeResolver $entityObjectTypeResolver, NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory)
+    public function __construct(\Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver $entityObjectTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
     {
         $this->entityObjectTypeResolver = $entityObjectTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -36,16 +36,16 @@ final class RepositoryAssignFactory
     /**
      * Creates: "$this->repository = $entityManager->getRepository(SomeEntityClass::class)"
      */
-    public function create(Class_ $repositoryClass) : Assign
+    public function create(\PhpParser\Node\Stmt\Class_ $repositoryClass) : \PhpParser\Node\Expr\Assign
     {
         $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($repositoryClass);
         $className = $this->nodeNameResolver->getName($repositoryClass);
         if (!\is_string($className)) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         $repositoryClassName = $className;
-        if (!$entityObjectType instanceof TypeWithClassName) {
-            throw new ShouldNotHappenException(\sprintf('An entity was not found for "%s" repository.', $repositoryClassName));
+        if (!$entityObjectType instanceof \PHPStan\Type\TypeWithClassName) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('An entity was not found for "%s" repository.', $repositoryClassName));
         }
         $classConstFetch = $this->nodeFactory->createClassConstReference($entityObjectType->getClassName());
         $methodCall = $this->nodeFactory->createMethodCall('entityManager', 'getRepository', [$classConstFetch]);

@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type;
+namespace PHPStan\PhpDocParser\Ast\Type;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
-class ArrayTypeNode implements TypeNode
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
+class ArrayTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     use NodeAttributes;
     /** @var TypeNode */
     public $type;
-    public function __construct(TypeNode $type)
+    public function __construct(\PHPStan\PhpDocParser\Ast\Type\TypeNode $type)
     {
         $this->type = $type;
     }

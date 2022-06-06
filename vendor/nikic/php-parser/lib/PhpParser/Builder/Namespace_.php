@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Builder;
+namespace PhpParser\Builder;
 
 use RectorPrefix20220606\PhpParser;
-use RectorPrefix20220606\PhpParser\BuilderHelpers;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-class Namespace_ extends Declaration
+use PhpParser\BuilderHelpers;
+use PhpParser\Node;
+use PhpParser\Node\Stmt;
+class Namespace_ extends \PhpParser\Builder\Declaration
 {
     private $name;
     private $stmts = [];
@@ -18,7 +18,7 @@ class Namespace_ extends Declaration
      */
     public function __construct($name)
     {
-        $this->name = null !== $name ? BuilderHelpers::normalizeName($name) : null;
+        $this->name = null !== $name ? \PhpParser\BuilderHelpers::normalizeName($name) : null;
     }
     /**
      * Adds a statement.
@@ -29,7 +29,7 @@ class Namespace_ extends Declaration
      */
     public function addStmt($stmt)
     {
-        $this->stmts[] = BuilderHelpers::normalizeStmt($stmt);
+        $this->stmts[] = \PhpParser\BuilderHelpers::normalizeStmt($stmt);
         return $this;
     }
     /**
@@ -37,8 +37,8 @@ class Namespace_ extends Declaration
      *
      * @return Stmt\Namespace_ The built node
      */
-    public function getNode() : Node
+    public function getNode() : \PhpParser\Node
     {
-        return new Stmt\Namespace_($this->name, $this->stmts, $this->attributes);
+        return new \PhpParser\Node\Stmt\Namespace_($this->name, $this->stmts, $this->attributes);
     }
 }

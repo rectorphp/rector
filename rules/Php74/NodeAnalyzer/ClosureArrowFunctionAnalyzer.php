@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php74\NodeAnalyzer;
+namespace Rector\Php74\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClosureUse;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\BetterNodeFinder;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ClosureUse;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Return_;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class ClosureArrowFunctionAnalyzer
 {
     /**
@@ -23,18 +23,18 @@ final class ClosureArrowFunctionAnalyzer
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
     }
-    public function matchArrowFunctionExpr(Closure $closure) : ?Expr
+    public function matchArrowFunctionExpr(\PhpParser\Node\Expr\Closure $closure) : ?\PhpParser\Node\Expr
     {
         if (\count($closure->stmts) !== 1) {
             return null;
         }
         $onlyStmt = $closure->stmts[0];
-        if (!$onlyStmt instanceof Return_) {
+        if (!$onlyStmt instanceof \PhpParser\Node\Stmt\Return_) {
             return null;
         }
         /** @var Return_ $return */
@@ -47,13 +47,13 @@ final class ClosureArrowFunctionAnalyzer
         }
         return $return->expr;
     }
-    private function shouldSkipForUsedReferencedValue(Closure $closure) : bool
+    private function shouldSkipForUsedReferencedValue(\PhpParser\Node\Expr\Closure $closure) : bool
     {
         $referencedValues = $this->resolveReferencedUseVariablesFromClosure($closure);
         if ($referencedValues === []) {
             return \false;
         }
-        $isFoundInStmt = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, function (Node $node) use($referencedValues) : bool {
+        $isFoundInStmt = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($closure, function (\PhpParser\Node $node) use($referencedValues) : bool {
             foreach ($referencedValues as $referencedValue) {
                 if ($this->nodeComparator->areNodesEqual($node, $referencedValue)) {
                     return \true;
@@ -69,14 +69,14 @@ final class ClosureArrowFunctionAnalyzer
     /**
      * @param Variable[] $referencedValues
      */
-    private function isFoundInInnerUses(Closure $node, array $referencedValues) : bool
+    private function isFoundInInnerUses(\PhpParser\Node\Expr\Closure $node, array $referencedValues) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, function (Node $subNode) use($referencedValues) : bool {
-            if (!$subNode instanceof Closure) {
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, function (\PhpParser\Node $subNode) use($referencedValues) : bool {
+            if (!$subNode instanceof \PhpParser\Node\Expr\Closure) {
                 return \false;
             }
             foreach ($referencedValues as $referencedValue) {
-                $isFoundInInnerUses = (bool) \array_filter($subNode->uses, function (ClosureUse $closureUse) use($referencedValue) : bool {
+                $isFoundInInnerUses = (bool) \array_filter($subNode->uses, function (\PhpParser\Node\Expr\ClosureUse $closureUse) use($referencedValue) : bool {
                     return $closureUse->byRef && $this->nodeComparator->areNodesEqual($closureUse->var, $referencedValue);
                 });
                 if ($isFoundInInnerUses) {
@@ -89,7 +89,7 @@ final class ClosureArrowFunctionAnalyzer
     /**
      * @return Variable[]
      */
-    private function resolveReferencedUseVariablesFromClosure(Closure $closure) : array
+    private function resolveReferencedUseVariablesFromClosure(\PhpParser\Node\Expr\Closure $closure) : array
     {
         $referencedValues = [];
         /** @var ClosureUse $use */

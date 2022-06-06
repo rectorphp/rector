@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\NodeAnalyzer;
+namespace Rector\CodeQuality\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\Rector\CodeQuality\ValueObject\DefaultPropertyExprAssign;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ExprAnalyzer;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use Rector\CodeQuality\ValueObject\DefaultPropertyExprAssign;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\NodeNameResolver\NodeNameResolver;
 final class ConstructorPropertyDefaultExprResolver
 {
     /**
@@ -22,7 +22,7 @@ final class ConstructorPropertyDefaultExprResolver
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, ExprAnalyzer $exprAnalyzer)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->exprAnalyzer = $exprAnalyzer;
@@ -30,7 +30,7 @@ final class ConstructorPropertyDefaultExprResolver
     /**
      * @return DefaultPropertyExprAssign[]
      */
-    public function resolve(ClassMethod $classMethod) : array
+    public function resolve(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
         $stmts = $classMethod->getStmts();
         if ($stmts === null) {
@@ -38,15 +38,15 @@ final class ConstructorPropertyDefaultExprResolver
         }
         $defaultPropertyExprAssigns = [];
         foreach ($stmts as $stmt) {
-            if (!$stmt instanceof Expression) {
+            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
                 continue;
             }
             $nestedStmt = $stmt->expr;
-            if (!$nestedStmt instanceof Assign) {
+            if (!$nestedStmt instanceof \PhpParser\Node\Expr\Assign) {
                 continue;
             }
             $assign = $nestedStmt;
-            if (!$assign->var instanceof PropertyFetch) {
+            if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
                 continue;
             }
             $propertyFetch = $assign->var;
@@ -61,7 +61,7 @@ final class ConstructorPropertyDefaultExprResolver
             if ($this->exprAnalyzer->isDynamicExpr($expr)) {
                 continue;
             }
-            $defaultPropertyExprAssigns[] = new DefaultPropertyExprAssign($stmt, $propertyName, $expr);
+            $defaultPropertyExprAssigns[] = new \Rector\CodeQuality\ValueObject\DefaultPropertyExprAssign($stmt, $propertyName, $expr);
         }
         return $defaultPropertyExprAssigns;
     }

@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\Application;
+namespace Rector\CodingStyle\Application;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Declare_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Namespace_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Nop;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Use_;
+use PHPStan\Type\ObjectType;
+use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UseImportsAdder
 {
     /**
@@ -27,7 +27,7 @@ final class UseImportsAdder
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(UsedImportsResolver $usedImportsResolver, TypeFactory $typeFactory)
+    public function __construct(\Rector\CodingStyle\ClassNameImport\UsedImportsResolver $usedImportsResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
     {
         $this->usedImportsResolver = $usedImportsResolver;
         $this->typeFactory = $typeFactory;
@@ -50,12 +50,12 @@ final class UseImportsAdder
         }
         // place after declare strict_types
         foreach ($stmts as $key => $stmt) {
-            if ($stmt instanceof Declare_) {
-                if (isset($stmts[$key + 1]) && $stmts[$key + 1] instanceof Use_) {
+            if ($stmt instanceof \PhpParser\Node\Stmt\Declare_) {
+                if (isset($stmts[$key + 1]) && $stmts[$key + 1] instanceof \PhpParser\Node\Stmt\Use_) {
                     $nodesToAdd = $newUses;
                 } else {
                     // add extra space, if there are no new use imports to be added
-                    $nodesToAdd = \array_merge([new Nop()], $newUses);
+                    $nodesToAdd = \array_merge([new \PhpParser\Node\Stmt\Nop()], $newUses);
                 }
                 \array_splice($stmts, $key + 1, 0, $nodesToAdd);
                 return $stmts;
@@ -68,7 +68,7 @@ final class UseImportsAdder
      * @param FullyQualifiedObjectType[] $useImportTypes
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
      */
-    public function addImportsToNamespace(Namespace_ $namespace, array $useImportTypes, array $functionUseImportTypes) : void
+    public function addImportsToNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace, array $useImportTypes, array $functionUseImportTypes) : void
     {
         $namespaceName = $this->getNamespaceName($namespace);
         $existingUseImportTypes = $this->usedImportsResolver->resolveForNode($namespace);
@@ -77,11 +77,11 @@ final class UseImportsAdder
         $useImportTypes = $this->diffFullyQualifiedObjectTypes($useImportTypes, $existingUseImportTypes);
         $functionUseImportTypes = $this->diffFullyQualifiedObjectTypes($functionUseImportTypes, $existingFunctionUseImportTypes);
         $newUses = $this->createUses($useImportTypes, $functionUseImportTypes, $namespaceName);
-        if ($namespace->stmts[0] instanceof Use_ && $newUses !== []) {
-            $comments = (array) $namespace->stmts[0]->getAttribute(AttributeKey::COMMENTS);
+        if ($namespace->stmts[0] instanceof \PhpParser\Node\Stmt\Use_ && $newUses !== []) {
+            $comments = (array) $namespace->stmts[0]->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS);
             if ($comments !== []) {
-                $newUses[0]->setAttribute(AttributeKey::COMMENTS, $namespace->stmts[0]->getAttribute(AttributeKey::COMMENTS));
-                $namespace->stmts[0]->setAttribute(AttributeKey::COMMENTS, null);
+                $newUses[0]->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $namespace->stmts[0]->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
+                $namespace->stmts[0]->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, null);
             }
         }
         $namespace->stmts = \array_merge($newUses, $namespace->stmts);
@@ -126,16 +126,16 @@ final class UseImportsAdder
         }
         return $newUses;
     }
-    private function getNamespaceName(Namespace_ $namespace) : ?string
+    private function getNamespaceName(\PhpParser\Node\Stmt\Namespace_ $namespace) : ?string
     {
         if ($namespace->name === null) {
             return null;
         }
         return $namespace->name->toString();
     }
-    private function isCurrentNamespace(string $namespaceName, ObjectType $objectType) : bool
+    private function isCurrentNamespace(string $namespaceName, \PHPStan\Type\ObjectType $objectType) : bool
     {
-        $afterCurrentNamespace = Strings::after($objectType->getClassName(), $namespaceName . '\\');
+        $afterCurrentNamespace = \RectorPrefix20220606\Nette\Utils\Strings::after($objectType->getClassName(), $namespaceName . '\\');
         if ($afterCurrentNamespace === null) {
             return \false;
         }

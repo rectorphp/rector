@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Lexer\TokenEmulator;
+namespace PhpParser\Lexer\TokenEmulator;
 
-use RectorPrefix20220606\PhpParser\Lexer\Emulative;
-class ExplicitOctalEmulator extends TokenEmulator
+use PhpParser\Lexer\Emulative;
+class ExplicitOctalEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
 {
     public function getPhpVersion() : string
     {
-        return Emulative::PHP_8_1;
+        return \PhpParser\Lexer\Emulative::PHP_8_1;
     }
     public function isEmulationNeeded(string $code) : bool
     {

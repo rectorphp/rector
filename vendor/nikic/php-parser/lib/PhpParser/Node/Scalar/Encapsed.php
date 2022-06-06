@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node\Scalar;
+namespace PhpParser\Node\Scalar;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Scalar;
-class Encapsed extends Scalar
+use PhpParser\Node\Expr;
+use PhpParser\Node\Scalar;
+class Encapsed extends \PhpParser\Node\Scalar
 {
     /** @var Expr[] list of string parts */
     public $parts;

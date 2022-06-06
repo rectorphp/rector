@@ -1,40 +1,40 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v0;
+namespace Ssch\TYPO3Rector\Rector\v9\v0;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.0/Breaking-82629-TceDbOptionsPrErrAndUPTRemoved.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v0\RemovePropertiesFromSimpleDataHandlerControllerRector\RemovePropertiesFromSimpleDataHandlerControllerRectorTest
  */
-final class RemovePropertiesFromSimpleDataHandlerControllerRector extends AbstractRector
+final class RemovePropertiesFromSimpleDataHandlerControllerRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Assign::class];
+        return [\PhpParser\Node\Expr\Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node->var instanceof Variable) {
+        if ($node->var instanceof \PhpParser\Node\Expr\Variable) {
             $this->removeVariableNode($node);
             return null;
         }
-        if ($node->var instanceof PropertyFetch) {
+        if ($node->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             $this->removePropertyFetchNode($node);
         }
         return null;
@@ -42,9 +42,9 @@ final class RemovePropertiesFromSimpleDataHandlerControllerRector extends Abstra
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove assignments or accessing of properties prErr and uPT from class SimpleDataHandlerController', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove assignments or accessing of properties prErr and uPT from class SimpleDataHandlerController', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 final class MySimpleDataHandlerController extends SimpleDataHandlerController
 {
     public function myMethod()
@@ -65,13 +65,13 @@ final class MySimpleDataHandlerController extends SimpleDataHandlerController
 CODE_SAMPLE
 )]);
     }
-    private function removeVariableNode(Assign $assign) : void
+    private function removeVariableNode(\PhpParser\Node\Expr\Assign $assign) : void
     {
-        $classNode = $this->betterNodeFinder->findParentType($assign, ClassLike::class);
-        if (!$classNode instanceof ClassLike) {
+        $classNode = $this->betterNodeFinder->findParentType($assign, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classNode instanceof \PhpParser\Node\Stmt\ClassLike) {
             return;
         }
-        if (!$this->isObjectType($classNode, new ObjectType('TYPO3\\CMS\\Backend\\Controller\\SimpleDataHandlerController'))) {
+        if (!$this->isObjectType($classNode, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Controller\\SimpleDataHandlerController'))) {
             return;
         }
         if (!$this->isName($assign->expr, 'uPT') && !$this->isName($assign->expr, 'prErr')) {
@@ -79,13 +79,13 @@ CODE_SAMPLE
         }
         $this->removeNode($assign);
     }
-    private function removePropertyFetchNode(Assign $assign) : void
+    private function removePropertyFetchNode(\PhpParser\Node\Expr\Assign $assign) : void
     {
-        $classNode = $this->betterNodeFinder->findParentType($assign, ClassLike::class);
-        if (!$classNode instanceof ClassLike) {
+        $classNode = $this->betterNodeFinder->findParentType($assign, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classNode instanceof \PhpParser\Node\Stmt\ClassLike) {
             return;
         }
-        if (!$this->isObjectType($classNode, new ObjectType('TYPO3\\CMS\\Backend\\Controller\\SimpleDataHandlerController'))) {
+        if (!$this->isObjectType($classNode, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Backend\\Controller\\SimpleDataHandlerController'))) {
             return;
         }
         if (!$this->isName($assign->var, 'uPT') && !$this->isName($assign->var, 'prErr')) {

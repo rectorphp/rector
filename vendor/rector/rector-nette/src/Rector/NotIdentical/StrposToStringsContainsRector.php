@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\Rector\NotIdentical;
+namespace Rector\Nette\Rector\NotIdentical;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\FuncCall;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://3v4l.org/CubLi
  * @see https://github.com/nette/utils/blob/bd961f49b211997202bda1d0fbc410905be370d4/src/Utils/Strings.php#L81
  *
  * @see \Rector\Nette\Tests\Rector\NotIdentical\StrposToStringsContainsRector\StrposToStringsContainsRectorTest
  */
-final class StrposToStringsContainsRector extends AbstractRector
+final class StrposToStringsContainsRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Use Nette\\Utils\\Strings over bare string-functions', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Use Nette\\Utils\\Strings over bare string-functions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,15 +50,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [NotIdentical::class, Identical::class];
+        return [\PhpParser\Node\Expr\BinaryOp\NotIdentical::class, \PhpParser\Node\Expr\BinaryOp\Identical::class];
     }
     /**
      * @param NotIdentical|Identical $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $funcCall = $this->matchStrposInComparisonToFalse($node);
-        if (!$funcCall instanceof FuncCall) {
+        if (!$funcCall instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         if (isset($funcCall->args[2]) && !$this->valueResolver->isValue($funcCall->args[2]->value, 0)) {
@@ -67,12 +67,12 @@ CODE_SAMPLE
         $containsStaticCall = $this->nodeFactory->createStaticCall('Nette\\Utils\\Strings', 'contains');
         $containsStaticCall->args[0] = $funcCall->args[0];
         $containsStaticCall->args[1] = $funcCall->args[1];
-        if ($node instanceof Identical) {
-            return new BooleanNot($containsStaticCall);
+        if ($node instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
+            return new \PhpParser\Node\Expr\BooleanNot($containsStaticCall);
         }
         return $containsStaticCall;
     }
-    private function matchStrposInComparisonToFalse(BinaryOp $binaryOp) : ?Expr
+    private function matchStrposInComparisonToFalse(\PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node\Expr
     {
         if ($this->valueResolver->isFalse($binaryOp->left)) {
             $rightExpr = $binaryOp->right;
@@ -88,9 +88,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isStrposFuncCall(Expr $expr) : bool
+    private function isStrposFuncCall(\PhpParser\Node\Expr $expr) : bool
     {
-        if (!$expr instanceof FuncCall) {
+        if (!$expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return \false;
         }
         return $this->isName($expr, 'strpos');

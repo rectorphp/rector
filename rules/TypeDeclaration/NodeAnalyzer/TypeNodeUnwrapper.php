@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\NodeAnalyzer;
+namespace Rector\TypeDeclaration\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\UnionType;
-use RectorPrefix20220606\Rector\Core\PhpParser\Comparing\NodeComparator;
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\UnionType;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 final class TypeNodeUnwrapper
 {
     /**
@@ -16,7 +16,7 @@ final class TypeNodeUnwrapper
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(NodeComparator $nodeComparator)
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;
     }
@@ -28,11 +28,11 @@ final class TypeNodeUnwrapper
     {
         $unwrappedTypeNodes = [];
         foreach ($typeNodes as $typeNode) {
-            if ($typeNode instanceof UnionType) {
+            if ($typeNode instanceof \PhpParser\Node\UnionType) {
                 $unwrappedTypeNodes = \array_merge($unwrappedTypeNodes, $typeNode->types);
-            } elseif ($typeNode instanceof NullableType) {
+            } elseif ($typeNode instanceof \PhpParser\Node\NullableType) {
                 $unwrappedTypeNodes[] = $typeNode->type;
-                $unwrappedTypeNodes[] = new Identifier('null');
+                $unwrappedTypeNodes[] = new \PhpParser\Node\Identifier('null');
             } else {
                 $unwrappedTypeNodes[] = $typeNode;
             }

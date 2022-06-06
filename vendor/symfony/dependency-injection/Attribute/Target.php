@@ -39,7 +39,7 @@ final class Target
             } else {
                 $function = $function->name;
             }
-            throw new InvalidArgumentException(\sprintf('Invalid #[Target] name "%s" on parameter "$%s" of "%s()": the first character must be a letter.', $name, $parameter->name, $function));
+            throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid #[Target] name "%s" on parameter "$%s" of "%s()": the first character must be a letter.', $name, $parameter->name, $function));
         }
         return $name;
     }

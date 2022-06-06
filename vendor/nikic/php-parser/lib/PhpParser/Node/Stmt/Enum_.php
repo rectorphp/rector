@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node\Stmt;
+namespace PhpParser\Node\Stmt;
 
-use RectorPrefix20220606\PhpParser\Node;
-class Enum_ extends ClassLike
+use PhpParser\Node;
+class Enum_ extends \PhpParser\Node\Stmt\ClassLike
 {
     /** @var null|Node\Identifier Scalar Type */
     public $scalarType;
@@ -21,7 +21,7 @@ class Enum_ extends ClassLike
      */
     public function __construct($name, array $subNodes = [], array $attributes = [])
     {
-        $this->name = \is_string($name) ? new Node\Identifier($name) : $name;
+        $this->name = \is_string($name) ? new \PhpParser\Node\Identifier($name) : $name;
         $this->scalarType = $subNodes['scalarType'] ?? null;
         $this->implements = $subNodes['implements'] ?? [];
         $this->stmts = $subNodes['stmts'] ?? [];

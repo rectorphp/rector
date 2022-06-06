@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\Node;
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey;
 /**
  * @api
@@ -12,21 +12,21 @@ use RectorPrefix20220606\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttribut
  *
  * @see \Symplify\Astral\Tests\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitorTest
  */
-final class ParentConnectingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+final class ParentConnectingPhpDocNodeVisitor extends \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var Node[]
      */
     private $stack = [];
-    public function beforeTraverse(Node $node) : void
+    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
     {
         $this->stack = [$node];
     }
-    public function enterNode(Node $node) : Node
+    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : \PHPStan\PhpDocParser\Ast\Node
     {
         if ($this->stack !== []) {
             $parentNode = $this->stack[\count($this->stack) - 1];
-            $node->setAttribute(PhpDocAttributeKey::PARENT, $parentNode);
+            $node->setAttribute(\RectorPrefix20220606\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey::PARENT, $parentNode);
         }
         $this->stack[] = $node;
         return $node;
@@ -34,7 +34,7 @@ final class ParentConnectingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     /**
      * @return int|\PhpParser\Node|mixed[]|null Replacement node (or special return
      */
-    public function leaveNode(Node $node)
+    public function leaveNode(\PHPStan\PhpDocParser\Ast\Node $node)
     {
         \array_pop($this->stack);
         return null;

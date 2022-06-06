@@ -20,7 +20,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @final
  */
-class Configuration implements ConfigurationInterface
+class Configuration implements \RectorPrefix20220606\Symfony\Component\Config\Definition\ConfigurationInterface
 {
     /**
      * @var \Symfony\Component\Config\Definition\ConfigurableInterface
@@ -34,18 +34,18 @@ class Configuration implements ConfigurationInterface
      * @var string
      */
     private $alias;
-    public function __construct(ConfigurableInterface $subject, ?ContainerBuilder $container, string $alias)
+    public function __construct(\RectorPrefix20220606\Symfony\Component\Config\Definition\ConfigurableInterface $subject, ?\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container, string $alias)
     {
         $this->subject = $subject;
         $this->container = $container;
         $this->alias = $alias;
     }
-    public function getConfigTreeBuilder() : TreeBuilder
+    public function getConfigTreeBuilder() : \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\TreeBuilder
     {
-        $treeBuilder = new TreeBuilder($this->alias);
+        $treeBuilder = new \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\TreeBuilder($this->alias);
         $file = (new \ReflectionObject($this->subject))->getFileName();
-        $loader = new DefinitionFileLoader($treeBuilder, new FileLocator(\dirname($file)), $this->container);
-        $configurator = new DefinitionConfigurator($treeBuilder, $loader, $file, $file);
+        $loader = new \RectorPrefix20220606\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader($treeBuilder, new \RectorPrefix20220606\Symfony\Component\Config\FileLocator(\dirname($file)), $this->container);
+        $configurator = new \RectorPrefix20220606\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator($treeBuilder, $loader, $file, $file);
         $this->subject->configure($configurator);
         return $treeBuilder;
     }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser;
+namespace PhpParser;
 
 class JsonDecoder
 {
@@ -36,7 +36,7 @@ class JsonDecoder
         }
         return $decodedArray;
     }
-    private function decodeNode(array $value) : Node
+    private function decodeNode(array $value) : \PhpParser\Node
     {
         $nodeType = $value['nodeType'];
         if (!\is_string($nodeType)) {
@@ -59,9 +59,9 @@ class JsonDecoder
         }
         return $node;
     }
-    private function decodeComment(array $value) : Comment
+    private function decodeComment(array $value) : \PhpParser\Comment
     {
-        $className = $value['nodeType'] === 'Comment' ? Comment::class : Comment\Doc::class;
+        $className = $value['nodeType'] === 'Comment' ? \PhpParser\Comment::class : \PhpParser\Comment\Doc::class;
         if (!isset($value['text'])) {
             throw new \RuntimeException('Comment must have text');
         }

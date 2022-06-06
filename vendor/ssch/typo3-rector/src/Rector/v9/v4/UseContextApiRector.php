@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v9\v4;
+namespace Ssch\TYPO3Rector\Rector\v9\v4;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Ssch\TYPO3Rector\Helper\Typo3NodeResolver;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/9.4/Deprecation-85389-VariousPublicPropertiesInFavorOfContextAPI.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v9\v4\UseContextApiRector\UseContextApiRectorTest
  */
-final class UseContextApiRector extends AbstractRector
+final class UseContextApiRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string[]
@@ -28,7 +28,7 @@ final class UseContextApiRector extends AbstractRector
      * @var \Ssch\TYPO3Rector\Helper\Typo3NodeResolver
      */
     private $typo3NodeResolver;
-    public function __construct(Typo3NodeResolver $typo3NodeResolver)
+    public function __construct(\Ssch\TYPO3Rector\Helper\Typo3NodeResolver $typo3NodeResolver)
     {
         $this->typo3NodeResolver = $typo3NodeResolver;
     }
@@ -37,12 +37,12 @@ final class UseContextApiRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [PropertyFetch::class];
+        return [\PhpParser\Node\Expr\PropertyFetch::class];
     }
     /**
      * @param PropertyFetch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -56,7 +56,7 @@ final class UseContextApiRector extends AbstractRector
         }
         if ('gr_list' === $propertyName) {
             $contextCall->args = $this->nodeFactory->createArgs(['frontend.user', 'groupIds']);
-            return $this->nodeFactory->createFuncCall('implode', [new String_(','), $contextCall]);
+            return $this->nodeFactory->createFuncCall('implode', [new \PhpParser\Node\Scalar\String_(','), $contextCall]);
         }
         if ('beUserLogin' === $propertyName) {
             $contextCall->args = $this->nodeFactory->createArgs(['backend.user', 'isLoggedIn']);
@@ -75,9 +75,9 @@ final class UseContextApiRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Various public properties in favor of Context API', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Various public properties in favor of Context API', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $frontendUserIsLoggedIn = $GLOBALS['TSFE']->loginUser;
 $groupList = $GLOBALS['TSFE']->gr_list;
 $backendUserIsLoggedIn = $GLOBALS['TSFE']->beUserLogin;
@@ -93,19 +93,19 @@ $showHiddenRecords = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3
 CODE_SAMPLE
 )]);
     }
-    private function shouldSkip(PropertyFetch $propertyFetch) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : bool
     {
-        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $propertyFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
         // Check if we have an assigment to the property, if so do not change it
-        if ($parentNode instanceof Assign && $parentNode->var instanceof PropertyFetch) {
+        if ($parentNode instanceof \PhpParser\Node\Expr\Assign && $parentNode->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
             return \true;
         }
         if (!$this->isNames($propertyFetch->name, self::REFACTOR_PROPERTIES)) {
             return \true;
         }
-        if ($this->isObjectType($propertyFetch->var, new ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
+        if ($this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Frontend\\Controller\\TypoScriptFrontendController'))) {
             return \false;
         }
-        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
+        return !$this->typo3NodeResolver->isPropertyFetchOnAnyPropertyOfGlobals($propertyFetch, \Ssch\TYPO3Rector\Helper\Typo3NodeResolver::TYPO_SCRIPT_FRONTEND_CONTROLLER);
     }
 }

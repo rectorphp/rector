@@ -1,27 +1,27 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\FuncCall;
+namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayDimFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://stackoverflow.com/questions/559844/whats-better-to-use-in-php-array-value-or-array-pusharray-value
  *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector\ChangeArrayPushToArrayAssignRectorTest
  */
-final class ChangeArrayPushToArrayAssignRector extends AbstractRector
+final class ChangeArrayPushToArrayAssignRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change array_push() to direct variable assign', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change array_push() to direct variable assign', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 $items = [];
 array_push($items, $item);
 CODE_SAMPLE
@@ -36,15 +36,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class];
+        return [\PhpParser\Node\Stmt\Expression::class];
     }
     /**
      * @param Expression[] $node
      * @param Expression[]|null $node
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(\PhpParser\Node $node) : ?array
     {
-        if (!$node->expr instanceof FuncCall) {
+        if (!$node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return null;
         }
         $funcCall = $node->expr;
@@ -63,11 +63,11 @@ CODE_SAMPLE
         if ($args === []) {
             return null;
         }
-        $arrayDimFetch = new ArrayDimFetch($firstArg->value);
+        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($firstArg->value);
         $newStmts = [];
         foreach ($args as $key => $arg) {
-            $assign = new Assign($arrayDimFetch, $arg->value);
-            $assignExpression = new Expression($assign);
+            $assign = new \PhpParser\Node\Expr\Assign($arrayDimFetch, $arg->value);
+            $assignExpression = new \PhpParser\Node\Stmt\Expression($assign);
             $newStmts[] = $assignExpression;
             // keep comments of first line
             if ($key === 0) {
@@ -76,7 +76,7 @@ CODE_SAMPLE
         }
         return $newStmts;
     }
-    private function hasArraySpread(FuncCall $funcCall) : bool
+    private function hasArraySpread(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
     {
         foreach ($funcCall->getArgs() as $arg) {
             if ($arg->unpack) {

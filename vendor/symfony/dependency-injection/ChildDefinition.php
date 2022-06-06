@@ -17,7 +17,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\OutOfBo
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ChildDefinition extends Definition
+class ChildDefinition extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition
 {
     /**
      * @var string
@@ -85,7 +85,7 @@ class ChildDefinition extends Definition
         } elseif (\strncmp($index, '$', \strlen('$')) === 0) {
             $this->arguments[$index] = $value;
         } else {
-            throw new InvalidArgumentException('The argument must be an existing index or the name of a constructor\'s parameter.');
+            throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('The argument must be an existing index or the name of a constructor\'s parameter.');
         }
         return $this;
     }

@@ -7,6 +7,6 @@ use Exception;
 /**
  * @api
  */
-final class ShouldNotHappenException extends Exception
+final class ShouldNotHappenException extends \Exception
 {
 }

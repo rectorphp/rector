@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\Set;
+namespace Rector\Nette\Set;
 
-use RectorPrefix20220606\Rector\Set\Contract\SetListInterface;
-final class NetteSetList implements SetListInterface
+use Rector\Set\Contract\SetListInterface;
+final class NetteSetList implements \Rector\Set\Contract\SetListInterface
 {
     /**
      * @var string

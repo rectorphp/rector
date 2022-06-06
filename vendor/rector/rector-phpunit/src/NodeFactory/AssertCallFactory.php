@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PHPUnit\NodeFactory;
+namespace Rector\PHPUnit\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 final class AssertCallFactory
 {
     /**
@@ -13,9 +13,9 @@ final class AssertCallFactory
      */
     public function createCallWithName($node, string $name)
     {
-        if ($node instanceof MethodCall) {
-            return new MethodCall($node->var, $name);
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+            return new \PhpParser\Node\Expr\MethodCall($node->var, $name);
         }
-        return new StaticCall($node->class, $name);
+        return new \PhpParser\Node\Expr\StaticCall($node->class, $name);
     }
 }

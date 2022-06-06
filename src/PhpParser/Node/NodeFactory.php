@@ -1,65 +1,65 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\PhpParser\Node;
+namespace Rector\Core\PhpParser\Node;
 
-use RectorPrefix20220606\PhpParser\BuilderFactory;
-use RectorPrefix20220606\PhpParser\BuilderHelpers;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Const_;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Concat;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use RectorPrefix20220606\PhpParser\Node\Expr\Cast;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Closure;
-use RectorPrefix20220606\PhpParser\Node\Expr\ConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Error;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticPropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Scalar;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassConst;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Use_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\UseUse;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use RectorPrefix20220606\PHPStan\Reflection\MethodReflection;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use RectorPrefix20220606\Rector\Core\Configuration\CurrentNodeProvider;
-use RectorPrefix20220606\Rector\Core\Enum\ObjectReference;
-use RectorPrefix20220606\Rector\Core\Exception\NotImplementedYetException;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\NodeDecorator\PropertyTypeDecorator;
-use RectorPrefix20220606\Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix20220606\Rector\Core\PhpParser\AstResolver;
-use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix20220606\Rector\PostRector\ValueObject\PropertyMetadata;
-use RectorPrefix20220606\Rector\StaticTypeMapper\StaticTypeMapper;
+use PhpParser\BuilderFactory;
+use PhpParser\BuilderHelpers;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Const_;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\Cast;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\Error;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
+use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Enum\ObjectReference;
+use Rector\Core\Exception\NotImplementedYetException;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeDecorator\PropertyTypeDecorator;
+use Rector\Core\Php\PhpVersionProvider;
+use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PostRector\ValueObject\PropertyMetadata;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
@@ -117,7 +117,7 @@ final class NodeFactory
      * @var \Rector\Core\NodeDecorator\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
-    public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory, PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, CurrentNodeProvider $currentNodeProvider, AstResolver $reflectionAstResolver, PropertyTypeDecorator $propertyTypeDecorator)
+    public function __construct(\PhpParser\BuilderFactory $builderFactory, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\Core\PhpParser\AstResolver $reflectionAstResolver, \Rector\Core\NodeDecorator\PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->builderFactory = $builderFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -132,16 +132,16 @@ final class NodeFactory
     /**
      * Creates "SomeClass::CONSTANT"
      */
-    public function createShortClassConstFetch(string $shortClassName, string $constantName) : ClassConstFetch
+    public function createShortClassConstFetch(string $shortClassName, string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
     {
-        $name = new Name($shortClassName);
+        $name = new \PhpParser\Node\Name($shortClassName);
         return $this->createClassConstFetchFromName($name, $constantName);
     }
     /**
      * @param string|ObjectReference::* $className
      * Creates "\SomeClass::CONSTANT"
      */
-    public function createClassConstFetch(string $className, string $constantName) : ClassConstFetch
+    public function createClassConstFetch(string $className, string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
     {
         $name = $this->createName($className);
         return $this->createClassConstFetchFromName($name, $constantName);
@@ -150,7 +150,7 @@ final class NodeFactory
      * @param string|ObjectReference::* $className
      * Creates "\SomeClass::class"
      */
-    public function createClassConstReference(string $className) : ClassConstFetch
+    public function createClassConstReference(string $className) : \PhpParser\Node\Expr\ClassConstFetch
     {
         return $this->createClassConstFetch($className, 'class');
     }
@@ -159,7 +159,7 @@ final class NodeFactory
      *
      * @param mixed[] $items
      */
-    public function createArray(array $items) : Array_
+    public function createArray(array $items) : \PhpParser\Node\Expr\Array_
     {
         $arrayItems = [];
         $defaultKey = 0;
@@ -168,7 +168,7 @@ final class NodeFactory
             $arrayItems[] = $this->createArrayItem($item, $customKey);
             ++$defaultKey;
         }
-        return new Array_($arrayItems);
+        return new \PhpParser\Node\Expr\Array_($arrayItems);
     }
     /**
      * Creates "($args)"
@@ -186,54 +186,54 @@ final class NodeFactory
     /**
      * Creates $this->property = $property;
      */
-    public function createPropertyAssignment(string $propertyName) : Assign
+    public function createPropertyAssignment(string $propertyName) : \PhpParser\Node\Expr\Assign
     {
-        $variable = new Variable($propertyName);
+        $variable = new \PhpParser\Node\Expr\Variable($propertyName);
         return $this->createPropertyAssignmentWithExpr($propertyName, $variable);
     }
-    public function createPropertyAssignmentWithExpr(string $propertyName, Expr $expr) : Assign
+    public function createPropertyAssignmentWithExpr(string $propertyName, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\Assign
     {
         $propertyFetch = $this->createPropertyFetch(self::THIS, $propertyName);
-        return new Assign($propertyFetch, $expr);
+        return new \PhpParser\Node\Expr\Assign($propertyFetch, $expr);
     }
     /**
      * @param mixed $argument
      */
-    public function createArg($argument) : Arg
+    public function createArg($argument) : \PhpParser\Node\Arg
     {
-        return new Arg(BuilderHelpers::normalizeValue($argument));
+        return new \PhpParser\Node\Arg(\PhpParser\BuilderHelpers::normalizeValue($argument));
     }
-    public function createPublicMethod(string $name) : ClassMethod
+    public function createPublicMethod(string $name) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new MethodBuilder($name);
+        $methodBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($name);
         $methodBuilder->makePublic();
         return $methodBuilder->getNode();
     }
-    public function createParamFromNameAndType(string $name, ?Type $type) : Param
+    public function createParamFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Param
     {
-        $paramBuilder = new ParamBuilder($name);
+        $paramBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($name);
         if ($type !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
             if ($typeNode !== null) {
                 $paramBuilder->setType($typeNode);
             }
         }
         return $paramBuilder->getNode();
     }
-    public function createPublicInjectPropertyFromNameAndType(string $name, ?Type $type) : Property
+    public function createPublicInjectPropertyFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePublic();
         $property = $propertyBuilder->getNode();
         $this->propertyTypeDecorator->decorate($property, $type);
         // add @inject
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@inject', new GenericTagValueNode('')));
+        $phpDocInfo->addPhpDocTagNode(new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode('@inject', new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode('')));
         return $property;
     }
-    public function createPrivatePropertyFromNameAndType(string $name, ?Type $type) : Property
+    public function createPrivatePropertyFromNameAndType(string $name, ?\PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePrivate();
         $property = $propertyBuilder->getNode();
         $this->propertyTypeDecorator->decorate($property, $type);
@@ -242,123 +242,123 @@ final class NodeFactory
     /**
      * @param mixed[] $arguments
      */
-    public function createLocalMethodCall(string $method, array $arguments = []) : MethodCall
+    public function createLocalMethodCall(string $method, array $arguments = []) : \PhpParser\Node\Expr\MethodCall
     {
-        $variable = new Variable('this');
+        $variable = new \PhpParser\Node\Expr\Variable('this');
         return $this->createMethodCall($variable, $method, $arguments);
     }
     /**
      * @param mixed[] $arguments
      * @param string|\PhpParser\Node\Expr $variable
      */
-    public function createMethodCall($variable, string $method, array $arguments = []) : MethodCall
+    public function createMethodCall($variable, string $method, array $arguments = []) : \PhpParser\Node\Expr\MethodCall
     {
         if (\is_string($variable)) {
-            $variable = new Variable($variable);
+            $variable = new \PhpParser\Node\Expr\Variable($variable);
         }
-        if ($variable instanceof PropertyFetch) {
-            $variable = new PropertyFetch($variable->var, $variable->name);
+        if ($variable instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            $variable = new \PhpParser\Node\Expr\PropertyFetch($variable->var, $variable->name);
         }
-        if ($variable instanceof StaticPropertyFetch) {
-            $variable = new StaticPropertyFetch($variable->class, $variable->name);
+        if ($variable instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+            $variable = new \PhpParser\Node\Expr\StaticPropertyFetch($variable->class, $variable->name);
         }
-        if ($variable instanceof MethodCall) {
-            $variable = new MethodCall($variable->var, $variable->name, $variable->args);
+        if ($variable instanceof \PhpParser\Node\Expr\MethodCall) {
+            $variable = new \PhpParser\Node\Expr\MethodCall($variable->var, $variable->name, $variable->args);
         }
         return $this->builderFactory->methodCall($variable, $method, $arguments);
     }
     /**
      * @param string|\PhpParser\Node\Expr $variable
      */
-    public function createPropertyFetch($variable, string $property) : PropertyFetch
+    public function createPropertyFetch($variable, string $property) : \PhpParser\Node\Expr\PropertyFetch
     {
         if (\is_string($variable)) {
-            $variable = new Variable($variable);
+            $variable = new \PhpParser\Node\Expr\Variable($variable);
         }
         return $this->builderFactory->propertyFetch($variable, $property);
     }
     /**
      * @param Param[] $params
      */
-    public function createParentConstructWithParams(array $params) : StaticCall
+    public function createParentConstructWithParams(array $params) : \PhpParser\Node\Expr\StaticCall
     {
-        return new StaticCall(new Name(ObjectReference::PARENT), new Identifier(MethodName::CONSTRUCT), $this->createArgsFromParams($params));
+        return new \PhpParser\Node\Expr\StaticCall(new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT), new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::CONSTRUCT), $this->createArgsFromParams($params));
     }
-    public function createProperty(string $name) : Property
+    public function createProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
         return $property;
     }
-    public function createPrivateProperty(string $name) : Property
+    public function createPrivateProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePrivate();
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
         return $property;
     }
-    public function createPublicProperty(string $name) : Property
+    public function createPublicProperty(string $name) : \PhpParser\Node\Stmt\Property
     {
-        $propertyBuilder = new PropertyBuilder($name);
+        $propertyBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($name);
         $propertyBuilder->makePublic();
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
         return $property;
     }
-    public function createGetterClassMethod(string $propertyName, Type $type) : ClassMethod
+    public function createGetterClassMethod(string $propertyName, \PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new MethodBuilder('get' . \ucfirst($propertyName));
+        $methodBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('get' . \ucfirst($propertyName));
         $methodBuilder->makePublic();
-        $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
-        $return = new Return_($propertyFetch);
+        $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable(self::THIS), $propertyName);
+        $return = new \PhpParser\Node\Stmt\Return_($propertyFetch);
         $methodBuilder->addStmt($return);
-        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::RETURN);
+        $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
         if ($typeNode !== null) {
             $methodBuilder->setReturnType($typeNode);
         }
         return $methodBuilder->getNode();
     }
-    public function createSetterClassMethod(string $propertyName, Type $type) : ClassMethod
+    public function createSetterClassMethod(string $propertyName, \PHPStan\Type\Type $type) : \PhpParser\Node\Stmt\ClassMethod
     {
-        $methodBuilder = new MethodBuilder('set' . \ucfirst($propertyName));
+        $methodBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder('set' . \ucfirst($propertyName));
         $methodBuilder->makePublic();
-        $variable = new Variable($propertyName);
+        $variable = new \PhpParser\Node\Expr\Variable($propertyName);
         $param = $this->createParamWithType($variable, $type);
         $methodBuilder->addParam($param);
-        $propertyFetch = new PropertyFetch(new Variable(self::THIS), $propertyName);
-        $assign = new Assign($propertyFetch, $variable);
+        $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable(self::THIS), $propertyName);
+        $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, $variable);
         $methodBuilder->addStmt($assign);
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::VOID_TYPE)) {
-            $methodBuilder->setReturnType(new Name('void'));
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::VOID_TYPE)) {
+            $methodBuilder->setReturnType(new \PhpParser\Node\Name('void'));
         }
         return $methodBuilder->getNode();
     }
     /**
      * @param Expr[] $exprs
      */
-    public function createConcat(array $exprs) : ?Concat
+    public function createConcat(array $exprs) : ?\PhpParser\Node\Expr\BinaryOp\Concat
     {
         if (\count($exprs) < 2) {
             return null;
         }
         $previousConcat = \array_shift($exprs);
         foreach ($exprs as $expr) {
-            $previousConcat = new Concat($previousConcat, $expr);
+            $previousConcat = new \PhpParser\Node\Expr\BinaryOp\Concat($previousConcat, $expr);
         }
-        if (!$previousConcat instanceof Concat) {
-            throw new ShouldNotHappenException();
+        if (!$previousConcat instanceof \PhpParser\Node\Expr\BinaryOp\Concat) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $previousConcat;
     }
-    public function createClosureFromClassMethod(ClassMethod $classMethod) : Closure
+    public function createClosureFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : \PhpParser\Node\Expr\Closure
     {
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
         $args = $this->createArgs($classMethod->params);
-        $methodCall = new MethodCall(new Variable(self::THIS), $classMethodName, $args);
-        $return = new Return_($methodCall);
-        return new Closure(['params' => $classMethod->params, 'stmts' => [$return], 'returnType' => $classMethod->returnType]);
+        $methodCall = new \PhpParser\Node\Expr\MethodCall(new \PhpParser\Node\Expr\Variable(self::THIS), $classMethodName, $args);
+        $return = new \PhpParser\Node\Stmt\Return_($methodCall);
+        return new \PhpParser\Node\Expr\Closure(['params' => $classMethod->params, 'stmts' => [$return], 'returnType' => $classMethod->returnType]);
     }
     /**
      * @param string[] $names
@@ -368,8 +368,8 @@ final class NodeFactory
     {
         $uses = [];
         foreach ($names as $name) {
-            $useUse = new UseUse(new Name($name));
-            $uses[] = new Use_([$useUse]);
+            $useUse = new \PhpParser\Node\Stmt\UseUse(new \PhpParser\Node\Name($name));
+            $uses[] = new \PhpParser\Node\Stmt\Use_([$useUse]);
         }
         return $uses;
     }
@@ -377,24 +377,24 @@ final class NodeFactory
      * @param string|ObjectReference::* $class
      * @param Node[] $args
      */
-    public function createStaticCall(string $class, string $method, array $args = []) : StaticCall
+    public function createStaticCall(string $class, string $method, array $args = []) : \PhpParser\Node\Expr\StaticCall
     {
         $name = $this->createName($class);
         $args = $this->createArgs($args);
-        return new StaticCall($name, $method, $args);
+        return new \PhpParser\Node\Expr\StaticCall($name, $method, $args);
     }
     /**
      * @param mixed[] $arguments
      */
-    public function createFuncCall(string $name, array $arguments = []) : FuncCall
+    public function createFuncCall(string $name, array $arguments = []) : \PhpParser\Node\Expr\FuncCall
     {
         $arguments = $this->createArgs($arguments);
-        return new FuncCall(new Name($name), $arguments);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name($name), $arguments);
     }
-    public function createSelfFetchConstant(string $constantName) : ClassConstFetch
+    public function createSelfFetchConstant(string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
     {
-        $name = new Name(ObjectReference::SELF);
-        return new ClassConstFetch($name, $constantName);
+        $name = new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::SELF);
+        return new \PhpParser\Node\Expr\ClassConstFetch($name, $constantName);
     }
     /**
      * @param Param[] $params
@@ -404,66 +404,66 @@ final class NodeFactory
     {
         $args = [];
         foreach ($params as $param) {
-            $args[] = new Arg($param->var);
+            $args[] = new \PhpParser\Node\Arg($param->var);
         }
         return $args;
     }
-    public function createNull() : ConstFetch
+    public function createNull() : \PhpParser\Node\Expr\ConstFetch
     {
-        return new ConstFetch(new Name('null'));
+        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('null'));
     }
-    public function createPromotedPropertyParam(PropertyMetadata $propertyMetadata) : Param
+    public function createPromotedPropertyParam(\Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata) : \PhpParser\Node\Param
     {
-        $paramBuilder = new ParamBuilder($propertyMetadata->getName());
+        $paramBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($propertyMetadata->getName());
         $propertyType = $propertyMetadata->getType();
         if ($propertyType !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
+            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PROPERTY);
             if ($typeNode !== null) {
                 $paramBuilder->setType($typeNode);
             }
         }
         $param = $paramBuilder->getNode();
         $propertyFlags = $propertyMetadata->getFlags();
-        $param->flags = $propertyFlags !== 0 ? $propertyFlags : Class_::MODIFIER_PRIVATE;
+        $param->flags = $propertyFlags !== 0 ? $propertyFlags : \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE;
         return $param;
     }
-    public function createFalse() : ConstFetch
+    public function createFalse() : \PhpParser\Node\Expr\ConstFetch
     {
-        return new ConstFetch(new Name('false'));
+        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('false'));
     }
-    public function createTrue() : ConstFetch
+    public function createTrue() : \PhpParser\Node\Expr\ConstFetch
     {
-        return new ConstFetch(new Name('true'));
+        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('true'));
     }
-    public function createClosureFromMethodReflection(MethodReflection $methodReflection) : Closure
+    public function createClosureFromMethodReflection(\PHPStan\Reflection\MethodReflection $methodReflection) : \PhpParser\Node\Expr\Closure
     {
         $classMethod = $this->reflectionAstResolver->resolveClassMethodFromMethodReflection($methodReflection);
-        if (!$classMethod instanceof ClassMethod) {
-            throw new ShouldNotHappenException();
+        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $this->createClosureFromClassMethod($classMethod);
     }
     /**
      * @param string|ObjectReference::* $constantName
      */
-    public function createClassConstFetchFromName(Name $className, string $constantName) : ClassConstFetch
+    public function createClassConstFetchFromName(\PhpParser\Node\Name $className, string $constantName) : \PhpParser\Node\Expr\ClassConstFetch
     {
         $classConstFetch = $this->builderFactory->classConstFetch($className, $constantName);
         $classNameString = $className->toString();
-        if (\in_array($classNameString, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
+        if (\in_array($classNameString, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC], \true)) {
             $currentNode = $this->currentNodeProvider->getNode();
             if ($currentNode !== null) {
-                $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $className);
+                $classConstFetch->class->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME, $className);
             }
         } else {
-            $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $classNameString);
+            $classConstFetch->class->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RESOLVED_NAME, $classNameString);
         }
         return $classConstFetch;
     }
     /**
      * @param array<NotIdentical|BooleanAnd> $newNodes
      */
-    public function createReturnBooleanAnd(array $newNodes) : ?Expr
+    public function createReturnBooleanAnd(array $newNodes) : ?\PhpParser\Node\Expr
     {
         if ($newNodes === []) {
             return null;
@@ -473,15 +473,15 @@ final class NodeFactory
         }
         return $this->createBooleanAndFromNodes($newNodes);
     }
-    public function createClassConstant(string $name, Expr $expr, int $modifier) : ClassConst
+    public function createClassConstant(string $name, \PhpParser\Node\Expr $expr, int $modifier) : \PhpParser\Node\Stmt\ClassConst
     {
-        $expr = BuilderHelpers::normalizeValue($expr);
-        $const = new Const_($name, $expr);
-        $classConst = new ClassConst([$const]);
+        $expr = \PhpParser\BuilderHelpers::normalizeValue($expr);
+        $const = new \PhpParser\Node\Const_($name, $expr);
+        $classConst = new \PhpParser\Node\Stmt\ClassConst([$const]);
         $classConst->flags |= $modifier;
         // add @var type by default
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($expr);
-        if (!$staticType instanceof MixedType) {
+        if (!$staticType instanceof \PHPStan\Type\MixedType) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classConst);
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $staticType);
         }
@@ -491,33 +491,33 @@ final class NodeFactory
      * @param mixed $item
      * @param string|int|null $key
      */
-    private function createArrayItem($item, $key = null) : ArrayItem
+    private function createArrayItem($item, $key = null) : \PhpParser\Node\Expr\ArrayItem
     {
         $arrayItem = null;
-        if ($item instanceof Variable || $item instanceof MethodCall || $item instanceof StaticCall || $item instanceof FuncCall || $item instanceof Concat || $item instanceof Scalar || $item instanceof Cast) {
-            $arrayItem = new ArrayItem($item);
-        } elseif ($item instanceof Identifier) {
-            $string = new String_($item->toString());
-            $arrayItem = new ArrayItem($string);
-        } elseif (\is_scalar($item) || $item instanceof Array_) {
-            $itemValue = BuilderHelpers::normalizeValue($item);
-            $arrayItem = new ArrayItem($itemValue);
+        if ($item instanceof \PhpParser\Node\Expr\Variable || $item instanceof \PhpParser\Node\Expr\MethodCall || $item instanceof \PhpParser\Node\Expr\StaticCall || $item instanceof \PhpParser\Node\Expr\FuncCall || $item instanceof \PhpParser\Node\Expr\BinaryOp\Concat || $item instanceof \PhpParser\Node\Scalar || $item instanceof \PhpParser\Node\Expr\Cast) {
+            $arrayItem = new \PhpParser\Node\Expr\ArrayItem($item);
+        } elseif ($item instanceof \PhpParser\Node\Identifier) {
+            $string = new \PhpParser\Node\Scalar\String_($item->toString());
+            $arrayItem = new \PhpParser\Node\Expr\ArrayItem($string);
+        } elseif (\is_scalar($item) || $item instanceof \PhpParser\Node\Expr\Array_) {
+            $itemValue = \PhpParser\BuilderHelpers::normalizeValue($item);
+            $arrayItem = new \PhpParser\Node\Expr\ArrayItem($itemValue);
         } elseif (\is_array($item)) {
-            $arrayItem = new ArrayItem($this->createArray($item));
+            $arrayItem = new \PhpParser\Node\Expr\ArrayItem($this->createArray($item));
         }
-        if ($item === null || $item instanceof ClassConstFetch) {
-            $itemValue = BuilderHelpers::normalizeValue($item);
-            $arrayItem = new ArrayItem($itemValue);
+        if ($item === null || $item instanceof \PhpParser\Node\Expr\ClassConstFetch) {
+            $itemValue = \PhpParser\BuilderHelpers::normalizeValue($item);
+            $arrayItem = new \PhpParser\Node\Expr\ArrayItem($itemValue);
         }
-        if ($item instanceof Arg) {
-            $arrayItem = new ArrayItem($item->value);
+        if ($item instanceof \PhpParser\Node\Arg) {
+            $arrayItem = new \PhpParser\Node\Expr\ArrayItem($item->value);
         }
         if ($arrayItem !== null) {
             $this->decorateArrayItemWithKey($key, $arrayItem);
             return $arrayItem;
         }
         $nodeClass = \is_object($item) ? \get_class($item) : $item;
-        throw new NotImplementedYetException(\sprintf('Not implemented yet. Go to "%s()" and add check for "%s" node.', __METHOD__, (string) $nodeClass));
+        throw new \Rector\Core\Exception\NotImplementedYetException(\sprintf('Not implemented yet. Go to "%s()" and add check for "%s" node.', __METHOD__, (string) $nodeClass));
     }
     /**
      * @param mixed $value
@@ -525,7 +525,7 @@ final class NodeFactory
      */
     private function normalizeArgValue($value)
     {
-        if ($value instanceof Param) {
+        if ($value instanceof \PhpParser\Node\Param) {
             return $value->var;
         }
         return $value;
@@ -533,29 +533,29 @@ final class NodeFactory
     /**
      * @param int|string|null $key
      */
-    private function decorateArrayItemWithKey($key, ArrayItem $arrayItem) : void
+    private function decorateArrayItemWithKey($key, \PhpParser\Node\Expr\ArrayItem $arrayItem) : void
     {
         if ($key !== null) {
-            $arrayItem->key = BuilderHelpers::normalizeValue($key);
+            $arrayItem->key = \PhpParser\BuilderHelpers::normalizeValue($key);
         }
     }
     /**
      * @param NotIdentical[]|BooleanAnd[] $exprs
      */
-    private function createBooleanAndFromNodes(array $exprs) : BooleanAnd
+    private function createBooleanAndFromNodes(array $exprs) : \PhpParser\Node\Expr\BinaryOp\BooleanAnd
     {
         /** @var NotIdentical|BooleanAnd $booleanAnd */
         $booleanAnd = \array_shift($exprs);
         foreach ($exprs as $expr) {
-            $booleanAnd = new BooleanAnd($booleanAnd, $expr);
+            $booleanAnd = new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($booleanAnd, $expr);
         }
         /** @var BooleanAnd $booleanAnd */
         return $booleanAnd;
     }
-    private function createParamWithType(Variable $variable, Type $type) : Param
+    private function createParamWithType(\PhpParser\Node\Expr\Variable $variable, \PHPStan\Type\Type $type) : \PhpParser\Node\Param
     {
-        $param = new Param($variable);
-        $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
+        $param = new \PhpParser\Node\Param($variable);
+        $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
         $param->type = $phpParserTypeNode;
         return $param;
     }
@@ -565,9 +565,9 @@ final class NodeFactory
      */
     private function createName(string $className)
     {
-        if (\in_array($className, [ObjectReference::PARENT, ObjectReference::SELF, ObjectReference::STATIC], \true)) {
-            return new Name($className);
+        if (\in_array($className, [\Rector\Core\Enum\ObjectReference::PARENT, \Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC], \true)) {
+            return new \PhpParser\Node\Name($className);
         }
-        return new FullyQualified($className);
+        return new \PhpParser\Node\Name\FullyQualified($className);
     }
 }

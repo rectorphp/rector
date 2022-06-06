@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DeadCode\ValueObject;
+namespace Rector\DeadCode\ValueObject;
 
-use RectorPrefix20220606\Rector\DeadCode\Contract\ConditionInterface;
-final class VersionCompareCondition implements ConditionInterface
+use Rector\DeadCode\Contract\ConditionInterface;
+final class VersionCompareCondition implements \Rector\DeadCode\Contract\ConditionInterface
 {
     /**
      * @readonly

@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix20220606\Nette\Neon\Node;
 
 /** @internal */
-final class InlineArrayNode extends ArrayNode
+final class InlineArrayNode extends \RectorPrefix20220606\Nette\Neon\Node\ArrayNode
 {
     /** @var string */
     public $bracket;
@@ -18,6 +18,6 @@ final class InlineArrayNode extends ArrayNode
     }
     public function toString() : string
     {
-        return $this->bracket . ArrayItemNode::itemsToInlineString($this->items) . ['[' => ']', '{' => '}', '(' => ')'][$this->bracket];
+        return $this->bracket . \RectorPrefix20220606\Nette\Neon\Node\ArrayItemNode::itemsToInlineString($this->items) . ['[' => ']', '{' => '}', '(' => ')'][$this->bracket];
     }
 }

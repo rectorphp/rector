@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\ValueObject;
+namespace Rector\CodeQuality\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Comment;
-use RectorPrefix20220606\PhpParser\Node\Expr;
+use PhpParser\Comment;
+use PhpParser\Node\Expr;
 final class KeyAndExpr
 {
     /**
@@ -25,17 +25,17 @@ final class KeyAndExpr
     /**
      * @param Comment[] $comments
      */
-    public function __construct(?Expr $keyExpr, Expr $expr, array $comments)
+    public function __construct(?\PhpParser\Node\Expr $keyExpr, \PhpParser\Node\Expr $expr, array $comments)
     {
         $this->keyExpr = $keyExpr;
         $this->expr = $expr;
         $this->comments = $comments;
     }
-    public function getKeyExpr() : ?Expr
+    public function getKeyExpr() : ?\PhpParser\Node\Expr
     {
         return $this->keyExpr;
     }
-    public function getExpr() : Expr
+    public function getExpr() : \PhpParser\Node\Expr
     {
         return $this->expr;
     }

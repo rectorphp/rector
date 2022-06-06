@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\TypeAnalyzer;
+namespace Rector\NodeTypeResolver\TypeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PHPStan\Type\StringType;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node;
+use PHPStan\Type\StringType;
+use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class StringTypeAnalyzer
 {
     /**
@@ -14,19 +14,19 @@ final class StringTypeAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function isStringOrUnionStringOnlyType(Node $node) : bool
+    public function isStringOrUnionStringOnlyType(\PhpParser\Node $node) : bool
     {
         $nodeType = $this->nodeTypeResolver->getType($node);
-        if ($nodeType instanceof StringType) {
+        if ($nodeType instanceof \PHPStan\Type\StringType) {
             return \true;
         }
-        if ($nodeType instanceof UnionType) {
+        if ($nodeType instanceof \PHPStan\Type\UnionType) {
             foreach ($nodeType->getTypes() as $singleType) {
-                if ($singleType->isSuperTypeOf(new StringType())->no()) {
+                if ($singleType->isSuperTypeOf(new \PHPStan\Type\StringType())->no()) {
                     return \false;
                 }
             }

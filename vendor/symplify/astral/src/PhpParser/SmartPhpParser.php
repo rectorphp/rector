@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace RectorPrefix20220606\Symplify\Astral\PhpParser;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PHPStan\Parser\Parser;
+use PhpParser\Node\Stmt;
+use PHPStan\Parser\Parser;
 /**
  * @see \Symplify\Astral\PhpParser\SmartPhpParserFactory
  */
@@ -14,7 +14,7 @@ final class SmartPhpParser
      * @var \PHPStan\Parser\Parser
      */
     private $parser;
-    public function __construct(Parser $parser)
+    public function __construct(\PHPStan\Parser\Parser $parser)
     {
         $this->parser = $parser;
     }

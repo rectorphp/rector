@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CakePHP\ValueObject;
+namespace Rector\CakePHP\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectType;
 final class FactoryMethod
 {
     /**
@@ -33,9 +33,9 @@ final class FactoryMethod
         $this->newClass = $newClass;
         $this->position = $position;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     public function getMethod() : string
     {

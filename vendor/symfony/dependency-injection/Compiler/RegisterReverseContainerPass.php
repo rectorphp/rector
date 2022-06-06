@@ -18,7 +18,7 @@ use RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class RegisterReverseContainerPass implements CompilerPassInterface
+class RegisterReverseContainerPass implements \RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface
 {
     /**
      * @var bool
@@ -28,27 +28,27 @@ class RegisterReverseContainerPass implements CompilerPassInterface
     {
         $this->beforeRemoving = $beforeRemoving;
     }
-    public function process(ContainerBuilder $container)
+    public function process(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         if (!$container->hasDefinition('reverse_container')) {
             return;
         }
-        $refType = $this->beforeRemoving ? ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE : ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+        $refType = $this->beforeRemoving ? \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE : \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
         $services = [];
         foreach ($container->findTaggedServiceIds('container.reversible') as $id => $tags) {
-            $services[$id] = new Reference($id, $refType);
+            $services[$id] = new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference($id, $refType);
         }
         if ($this->beforeRemoving) {
             // prevent inlining of the reverse container
-            $services['reverse_container'] = new Reference('reverse_container', $refType);
+            $services['reverse_container'] = new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference('reverse_container', $refType);
         }
         $locator = $container->getDefinition('reverse_container')->getArgument(1);
-        if ($locator instanceof Reference) {
+        if ($locator instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference) {
             $locator = $container->getDefinition((string) $locator);
         }
-        if ($locator instanceof Definition) {
+        if ($locator instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition) {
             foreach ($services as $id => $ref) {
-                $services[$id] = new ServiceClosureArgument($ref);
+                $services[$id] = new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument($ref);
             }
             $locator->replaceArgument(0, $services);
         } else {

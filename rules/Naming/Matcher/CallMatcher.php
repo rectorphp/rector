@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\Matcher;
+namespace Rector\Naming\Matcher;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Foreach_;
 final class CallMatcher
 {
     /**
      * @return FuncCall|StaticCall|MethodCall|null
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Stmt\Foreach_ $node
      */
-    public function matchCall($node) : ?Node
+    public function matchCall($node) : ?\PhpParser\Node
     {
-        if ($node->expr instanceof MethodCall) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
             return $node->expr;
         }
-        if ($node->expr instanceof StaticCall) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\StaticCall) {
             return $node->expr;
         }
-        if ($node->expr instanceof FuncCall) {
+        if ($node->expr instanceof \PhpParser\Node\Expr\FuncCall) {
             return $node->expr;
         }
         return null;

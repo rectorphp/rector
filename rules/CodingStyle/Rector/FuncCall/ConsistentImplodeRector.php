@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodingStyle\Rector\FuncCall;
+namespace Rector\CodingStyle\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ArgsAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog http://php.net/manual/en/function.implode.php#refsect1-function.implode-description
  * @changelog https://3v4l.org/iYTgh
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ConsistentImplodeRector\ConsistentImplodeRectorTest
  */
-final class ConsistentImplodeRector extends AbstractRector
+final class ConsistentImplodeRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -29,14 +29,14 @@ final class ConsistentImplodeRector extends AbstractRector
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer, ArgsAnalyzer $argsAnalyzer)
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
         $this->argsAnalyzer = $argsAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes various implode forms to consistent one', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes various implode forms to consistent one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(array $items)
@@ -67,12 +67,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node, 'implode')) {
             return null;
@@ -80,7 +80,7 @@ CODE_SAMPLE
         if (\count($node->args) === 1) {
             // complete default value ''
             $node->args[1] = $node->args[0];
-            $node->args[0] = new Arg(new String_(''));
+            $node->args[0] = new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_(''));
             return $node;
         }
         if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
@@ -89,7 +89,7 @@ CODE_SAMPLE
         /** @var Arg $arg0 */
         $arg0 = $node->args[0];
         $firstArgumentValue = $arg0->value;
-        if ($firstArgumentValue instanceof String_) {
+        if ($firstArgumentValue instanceof \PhpParser\Node\Scalar\String_) {
             return null;
         }
         if (\count($node->args) !== 2) {

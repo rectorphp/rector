@@ -1,24 +1,24 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory;
+namespace Ssch\TYPO3Rector\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Nop;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20220606\Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\ObjectType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 use RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class InjectMethodFactory
@@ -38,7 +38,7 @@ final class InjectMethodFactory
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocTagRemover $phpDocTagRemover, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTagRemover = $phpDocTagRemover;
@@ -47,39 +47,39 @@ final class InjectMethodFactory
     /**
      * @return Node\Stmt[]
      */
-    public function createInjectMethodStatements(Class_ $class, Property $property, string $oldAnnotation) : array
+    public function createInjectMethodStatements(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\Property $property, string $oldAnnotation) : array
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $statements = [];
         /** @var string $variableName */
         $variableName = $this->nodeNameResolver->getName($property);
-        $paramBuilder = new ParamBuilder($variableName);
+        $paramBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder($variableName);
         $varType = $propertyPhpDocInfo->getVarType();
-        if (!$varType instanceof ObjectType) {
+        if (!$varType instanceof \PHPStan\Type\ObjectType) {
             return $statements;
         }
         // Remove the old annotation and use setterInjection instead
         $this->phpDocTagRemover->removeByName($propertyPhpDocInfo, $oldAnnotation);
-        if ($varType instanceof FullyQualifiedObjectType) {
-            $paramBuilder->setType(new FullyQualified($varType->getClassName()));
-        } elseif ($varType instanceof ShortenedObjectType) {
+        if ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            $paramBuilder->setType(new \PhpParser\Node\Name\FullyQualified($varType->getClassName()));
+        } elseif ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType) {
             $paramBuilder->setType($varType->getShortName());
         }
         $param = $paramBuilder->getNode();
-        $propertyFetch = new PropertyFetch(new Variable('this'), $variableName);
-        $assign = new Assign($propertyFetch, new Variable($variableName));
+        $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $variableName);
+        $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, new \PhpParser\Node\Expr\Variable($variableName));
         // Add new line and then the method
-        $statements[] = new Nop();
+        $statements[] = new \PhpParser\Node\Stmt\Nop();
         $methodAlreadyExists = $class->getMethod($this->createInjectMethodName($variableName));
-        if (!$methodAlreadyExists instanceof ClassMethod) {
+        if (!$methodAlreadyExists instanceof \PhpParser\Node\Stmt\ClassMethod) {
             $statements[] = $this->createInjectClassMethod($variableName, $param, $assign);
         }
         return $statements;
     }
-    private function createInjectClassMethod(string $variableName, Param $param, Assign $assign) : ClassMethod
+    private function createInjectClassMethod(string $variableName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Assign $assign) : \PhpParser\Node\Stmt\ClassMethod
     {
         $injectMethodName = $this->createInjectMethodName($variableName);
-        $injectMethodBuilder = new MethodBuilder($injectMethodName);
+        $injectMethodBuilder = new \RectorPrefix20220606\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($injectMethodName);
         $injectMethodBuilder->makePublic();
         $injectMethodBuilder->addParam($param);
         $injectMethodBuilder->setReturnType('void');

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Transform\ValueObject;
+namespace Rector\Transform\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PHPStan\Type\ObjectType;
 final class StaticCallToMethodCall
 {
     /**
@@ -36,9 +36,9 @@ final class StaticCallToMethodCall
         $this->classType = $classType;
         $this->methodName = $methodName;
     }
-    public function getClassObjectType() : ObjectType
+    public function getClassObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->classType);
+        return new \PHPStan\Type\ObjectType($this->classType);
     }
     public function getClassType() : string
     {
@@ -48,16 +48,16 @@ final class StaticCallToMethodCall
     {
         return $this->methodName;
     }
-    public function isStaticCallMatch(StaticCall $staticCall) : bool
+    public function isStaticCallMatch(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
     {
-        if (!$staticCall->class instanceof Name) {
+        if (!$staticCall->class instanceof \PhpParser\Node\Name) {
             return \false;
         }
         $staticCallClassName = $staticCall->class->toString();
         if ($staticCallClassName !== $this->staticClass) {
             return \false;
         }
-        if (!$staticCall->name instanceof Identifier) {
+        if (!$staticCall->name instanceof \PhpParser\Node\Identifier) {
             return \false;
         }
         // all methods

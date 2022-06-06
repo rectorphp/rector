@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\PostRector\Rector;
+namespace Rector\PostRector\Rector;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassDependencyManipulator;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\ClassInsertManipulator;
-use RectorPrefix20220606\Rector\PostRector\Collector\PropertyToAddCollector;
-use RectorPrefix20220606\Rector\PostRector\NodeAnalyzer\NetteInjectDetector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\NodeManipulator\ClassDependencyManipulator;
+use Rector\Core\NodeManipulator\ClassInsertManipulator;
+use Rector\PostRector\Collector\PropertyToAddCollector;
+use Rector\PostRector\NodeAnalyzer\NetteInjectDetector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Adds new private properties to class + to constructor
  */
-final class PropertyAddingPostRector extends AbstractPostRector
+final class PropertyAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
      * @readonly
@@ -42,7 +42,7 @@ final class PropertyAddingPostRector extends AbstractPostRector
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(ClassDependencyManipulator $classDependencyManipulator, ClassInsertManipulator $classInsertManipulator, NetteInjectDetector $netteInjectDetector, PropertyToAddCollector $propertyToAddCollector, ClassAnalyzer $classAnalyzer)
+    public function __construct(\Rector\Core\NodeManipulator\ClassDependencyManipulator $classDependencyManipulator, \Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\PostRector\NodeAnalyzer\NetteInjectDetector $netteInjectDetector, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->classInsertManipulator = $classInsertManipulator;
@@ -54,9 +54,9 @@ final class PropertyAddingPostRector extends AbstractPostRector
     {
         return 900;
     }
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$node instanceof Class_) {
+        if (!$node instanceof \PhpParser\Node\Stmt\Class_) {
             return null;
         }
         if ($this->classAnalyzer->isAnonymousClass($node)) {
@@ -67,9 +67,9 @@ final class PropertyAddingPostRector extends AbstractPostRector
         $this->addPropertiesWithoutConstructor($node);
         return $node;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Add dependency properties', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add dependency properties', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -90,14 +90,14 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    private function addConstants(Class_ $class) : void
+    private function addConstants(\PhpParser\Node\Stmt\Class_ $class) : void
     {
         $constants = $this->propertyToAddCollector->getConstantsByClass($class);
         foreach ($constants as $constantName => $nodeConst) {
             $this->classInsertManipulator->addConstantToClass($class, $constantName, $nodeConst);
         }
     }
-    private function addProperties(Class_ $class) : void
+    private function addProperties(\PhpParser\Node\Stmt\Class_ $class) : void
     {
         $propertiesMetadatas = $this->propertyToAddCollector->getPropertiesByClass($class);
         $isNetteInjectPreferred = $this->netteInjectDetector->isNetteInjectPreferred($class);
@@ -109,7 +109,7 @@ CODE_SAMPLE
             }
         }
     }
-    private function addPropertiesWithoutConstructor(Class_ $class) : void
+    private function addPropertiesWithoutConstructor(\PhpParser\Node\Stmt\Class_ $class) : void
     {
         $propertiesWithoutConstructor = $this->propertyToAddCollector->getPropertiesWithoutConstructorByClass($class);
         foreach ($propertiesWithoutConstructor as $propertyName => $propertyType) {

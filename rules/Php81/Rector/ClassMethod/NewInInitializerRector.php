@@ -1,35 +1,35 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php81\Rector\ClassMethod;
+namespace Rector\Php81\Rector\ClassMethod;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Coalesce;
-use RectorPrefix20220606\PhpParser\Node\Expr\New_;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassLike;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Interface_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\Reflection\ReflectionResolver;
-use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
-use RectorPrefix20220606\Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\MethodName;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
+use Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/new_in_initializers
  *
  * @see \Rector\Tests\Php81\Rector\ClassMethod\NewInInitializerRector\NewInInitializerRectorTest
  */
-final class NewInInitializerRector extends AbstractRector implements MinPhpVersionInterface
+final class NewInInitializerRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -46,15 +46,15 @@ final class NewInInitializerRector extends AbstractRector implements MinPhpVersi
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
-    public function __construct(ComplexNewAnalyzer $complexNewAnalyzer, ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer)
+    public function __construct(\Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer $complexNewAnalyzer, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->complexNewAnalyzer = $complexNewAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
         $this->classChildAnalyzer = $classChildAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace property declaration of new state with direct new', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace property declaration of new state with direct new', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private Logger $logger;
@@ -82,12 +82,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [\PhpParser\Node\Stmt\ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isLegalClass($node)) {
             return null;
@@ -103,13 +103,13 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $toPropertyAssigns = $this->betterNodeFinder->findClassMethodAssignsToLocalProperty($node, $paramName);
-            $toPropertyAssigns = \array_filter($toPropertyAssigns, function (Assign $assign) : bool {
-                return $assign->expr instanceof Coalesce;
+            $toPropertyAssigns = \array_filter($toPropertyAssigns, function (\PhpParser\Node\Expr\Assign $assign) : bool {
+                return $assign->expr instanceof \PhpParser\Node\Expr\BinaryOp\Coalesce;
             });
             foreach ($toPropertyAssigns as $toPropertyAssign) {
                 /** @var Coalesce $coalesce */
                 $coalesce = $toPropertyAssign->expr;
-                if (!$coalesce->right instanceof New_) {
+                if (!$coalesce->right instanceof \PhpParser\Node\Expr\New_) {
                     continue;
                 }
                 if ($this->complexNewAnalyzer->isDynamic($coalesce->right)) {
@@ -127,34 +127,34 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::NEW_INITIALIZERS;
+        return \Rector\Core\ValueObject\PhpVersionFeature::NEW_INITIALIZERS;
     }
-    private function isOverrideAbstractMethod(ClassMethod $classMethod) : bool
+    private function isOverrideAbstractMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        return $classReflection instanceof ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $methodName);
+        return $classReflection instanceof \PHPStan\Reflection\ClassReflection && $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $methodName);
     }
-    private function processPropertyPromotion(ClassMethod $classMethod, Param $param, string $paramName) : void
+    private function processPropertyPromotion(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param, string $paramName) : void
     {
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
+        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
             return;
         }
         $property = $classLike->getProperty($paramName);
-        if (!$property instanceof Property) {
+        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
             return;
         }
         $param->flags = $property->flags;
         $this->removeNode($property);
     }
-    private function isLegalClass(ClassMethod $classMethod) : bool
+    private function isLegalClass(\PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
-        if ($classLike instanceof Interface_) {
+        $classLike = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\ClassLike::class);
+        if ($classLike instanceof \PhpParser\Node\Stmt\Interface_) {
             return \false;
         }
-        if ($classLike instanceof Class_) {
+        if ($classLike instanceof \PhpParser\Node\Stmt\Class_) {
             return !$classLike->isAbstract();
         }
         return \true;
@@ -162,9 +162,9 @@ CODE_SAMPLE
     /**
      * @return Param[]
      */
-    private function matchConstructorParams(ClassMethod $classMethod) : array
+    private function matchConstructorParams(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
     {
-        if (!$this->isName($classMethod, MethodName::CONSTRUCT)) {
+        if (!$this->isName($classMethod, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
             return [];
         }
         if ($classMethod->params === []) {
@@ -173,8 +173,8 @@ CODE_SAMPLE
         if ((array) $classMethod->stmts === []) {
             return [];
         }
-        return \array_filter($classMethod->params, function (Param $param) : bool {
-            return $param->type instanceof NullableType;
+        return \array_filter($classMethod->params, function (\PhpParser\Node\Param $param) : bool {
+            return $param->type instanceof \PhpParser\Node\NullableType;
         });
     }
 }

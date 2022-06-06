@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeFactory;
+namespace Rector\Symfony\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\NodeFactory;
-use RectorPrefix20220606\Rector\Symfony\ValueObject\EventNameToClassAndConstant;
+use PhpParser\Node;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Reflection\ReflectionProvider;
+use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
 final class EventReferenceFactory
 {
     /**
@@ -21,7 +21,7 @@ final class EventReferenceFactory
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(NodeFactory $nodeFactory, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeFactory = $nodeFactory;
         $this->reflectionProvider = $reflectionProvider;
@@ -30,7 +30,7 @@ final class EventReferenceFactory
      * @param EventNameToClassAndConstant[] $eventNamesToClassConstants
      * @return String_|ClassConstFetch
      */
-    public function createEventName(string $eventName, array $eventNamesToClassConstants) : Node
+    public function createEventName(string $eventName, array $eventNamesToClassConstants) : \PhpParser\Node
     {
         if ($this->reflectionProvider->hasClass($eventName)) {
             return $this->nodeFactory->createClassConstReference($eventName);
@@ -42,6 +42,6 @@ final class EventReferenceFactory
             }
             return $this->nodeFactory->createClassConstFetch($eventNameToClassConstant->getEventClass(), $eventNameToClassConstant->getEventConstant());
         }
-        return new String_($eventName);
+        return new \PhpParser\Node\Scalar\String_($eventName);
     }
 }

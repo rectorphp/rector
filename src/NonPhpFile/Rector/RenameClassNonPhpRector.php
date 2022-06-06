@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\NonPhpFile\Rector;
+namespace Rector\Core\NonPhpFile\Rector;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\Rector\Core\Configuration\RenamedClassesDataCollector;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\NonPhpRectorInterface;
-use RectorPrefix20220606\Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Rector\Core\Configuration\RenamedClassesDataCollector;
+use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Contract\Rector\NonPhpRectorInterface;
+use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
+use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
-final class RenameClassNonPhpRector implements NonPhpRectorInterface, ConfigurableRuleInterface, ConfigurableRectorInterface, ComplementaryRectorInterface
+final class RenameClassNonPhpRector implements \Rector\Core\Contract\Rector\NonPhpRectorInterface, \Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface, \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\PostRector\Contract\Rector\ComplementaryRectorInterface
 {
     /**
      * @see https://regex101.com/r/HKUFJD/7
@@ -35,13 +35,13 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector)
+    public function __construct(\Rector\Core\Configuration\RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change class names and just renamed classes in non-PHP files, NEON, YAML, TWIG, LATTE, blade etc. mostly with regular expressions', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change class names and just renamed classes in non-PHP files, NEON, YAML, TWIG, LATTE, blade etc. mostly with regular expressions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
 services:
     - SomeOldClass
 CODE_SAMPLE
@@ -62,8 +62,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $renameClasses = $configuration;
-        Assert::allString(\array_keys($renameClasses));
-        Assert::allString($renameClasses);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allString(\array_keys($renameClasses));
+        \RectorPrefix20220606\Webmozart\Assert\Assert::allString($renameClasses);
         $this->renameClasses = $renameClasses;
     }
     /**
@@ -75,7 +75,7 @@ CODE_SAMPLE
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             $oldClassRegex = $this->createOldClassRegex($oldClass);
-            $newContent = Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
+            $newContent = \RectorPrefix20220606\Nette\Utils\Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
                 return ($match['extra_space'] ?? '') . $newClass;
             });
         }

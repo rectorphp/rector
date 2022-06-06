@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Caching\Config;
+namespace Rector\Caching\Config;
 
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix20220606\Symfony\Component\Config\FileLocator;
 use RectorPrefix20220606\Symfony\Component\Config\Loader\LoaderInterface;
 use RectorPrefix20220606\Symfony\Component\Config\Loader\LoaderResolver;
@@ -18,7 +18,7 @@ final class FileHashComputer
     public function compute(string $filePath) : string
     {
         $this->ensureIsPhp($filePath);
-        $containerBuilder = new ContainerBuilder();
+        $containerBuilder = new \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder();
         $fileLoader = $this->createFileLoader($filePath, $containerBuilder);
         $fileLoader->load($filePath);
         $parameterBag = $containerBuilder->getParameterBag();
@@ -30,20 +30,20 @@ final class FileHashComputer
         if ($fileExtension === 'php') {
             return;
         }
-        throw new ShouldNotHappenException(\sprintf(
+        throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf(
             // getRealPath() cannot be used, as it breaks in phar
             'Provide only PHP file, ready for Symfony Dependency Injection. "%s" given',
             $filePath
         ));
     }
-    private function createFileLoader(string $filePath, ContainerBuilder $containerBuilder) : LoaderInterface
+    private function createFileLoader(string $filePath, \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder) : \RectorPrefix20220606\Symfony\Component\Config\Loader\LoaderInterface
     {
-        $fileLocator = new FileLocator([$filePath]);
-        $fileLoaders = [new GlobFileLoader($containerBuilder, $fileLocator), new PhpFileLoader($containerBuilder, $fileLocator)];
-        $loaderResolver = new LoaderResolver($fileLoaders);
+        $fileLocator = new \RectorPrefix20220606\Symfony\Component\Config\FileLocator([$filePath]);
+        $fileLoaders = [new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\GlobFileLoader($containerBuilder, $fileLocator), new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\PhpFileLoader($containerBuilder, $fileLocator)];
+        $loaderResolver = new \RectorPrefix20220606\Symfony\Component\Config\Loader\LoaderResolver($fileLoaders);
         $loader = $loaderResolver->resolve($filePath);
         if ($loader === \false) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         return $loader;
     }

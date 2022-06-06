@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Application;
+namespace Rector\Core\Application;
 
 use DateTime;
-use RectorPrefix20220606\Rector\Core\Exception\VersionException;
+use Rector\Core\Exception\VersionException;
 /**
  * Inspired by https://github.com/composer/composer/blob/master/src/Composer/Composer.php
  * See https://github.com/composer/composer/blob/6587715d0f8cae0cd39073b3bc5f018d0e6b84fe/src/Composer/Compiler.php#L208
@@ -16,11 +16,11 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = 'fb6e2f92b3dd64c2392ffdcddf53d145a1539e71';
+    public const PACKAGE_VERSION = '0eba231b075849ea4b327ce96c28ec359e7b7636';
     /**
      * @var string
      */
-    public const RELEASE_DATE = '2022-06-06 18:36:55';
+    public const RELEASE_DATE = '2022-06-06 15:48:45';
     /**
      * @var int
      */
@@ -30,7 +30,7 @@ final class VersionResolver
         // resolve current tag
         \exec('git tag --points-at', $tagExecOutput, $tagExecResultCode);
         if ($tagExecResultCode !== self::SUCCESS_CODE) {
-            throw new VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
+            throw new \Rector\Core\Exception\VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
         }
         if ($tagExecOutput !== []) {
             $tag = $tagExecOutput[0];
@@ -40,17 +40,17 @@ final class VersionResolver
         }
         \exec('git log --pretty="%H" -n1 HEAD', $commitHashExecOutput, $commitHashResultCode);
         if ($commitHashResultCode !== 0) {
-            throw new VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
+            throw new \Rector\Core\Exception\VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
         }
         $version = \trim($commitHashExecOutput[0]);
         return \trim($version, '"');
     }
-    public static function resolverReleaseDateTime() : DateTime
+    public static function resolverReleaseDateTime() : \DateTime
     {
         \exec('git log -n1 --pretty=%ci HEAD', $output, $resultCode);
         if ($resultCode !== self::SUCCESS_CODE) {
-            throw new VersionException('You must ensure to run compile from composer git repository clone and that git binary is available.');
+            throw new \Rector\Core\Exception\VersionException('You must ensure to run compile from composer git repository clone and that git binary is available.');
         }
-        return new DateTime(\trim($output[0]));
+        return new \DateTime(\trim($output[0]));
     }
 }

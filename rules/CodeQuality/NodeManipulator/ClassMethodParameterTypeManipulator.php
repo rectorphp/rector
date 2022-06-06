@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\NodeManipulator;
+namespace Rector\CodeQuality\NodeManipulator;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\NullableType;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PHPStan\Type\NullType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ParamAnalyzer;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodParameterTypeManipulator
 {
@@ -58,7 +58,7 @@ final class ClassMethodParameterTypeManipulator
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, NodeTypeResolver $nodeTypeResolver, ParamAnalyzer $paramAnalyzer, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\NodeAnalyzer\ParamAnalyzer $paramAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
@@ -71,7 +71,7 @@ final class ClassMethodParameterTypeManipulator
      * @param string[] $methodsReturningClassInstance
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType $replaceIntoType
      */
-    public function refactorFunctionParameters(ClassMethod $classMethod, ObjectType $objectType, $replaceIntoType, Type $phpDocType, array $methodsReturningClassInstance) : void
+    public function refactorFunctionParameters(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\ObjectType $objectType, $replaceIntoType, \PHPStan\Type\Type $phpDocType, array $methodsReturningClassInstance) : void
     {
         foreach ($classMethod->getParams() as $param) {
             if (!$this->nodeTypeResolver->isObjectType($param, $objectType)) {
@@ -89,26 +89,26 @@ final class ClassMethodParameterTypeManipulator
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType $replaceIntoType
      */
-    private function refactorParamTypeHint(Param $param, $replaceIntoType) : void
+    private function refactorParamTypeHint(\PhpParser\Node\Param $param, $replaceIntoType) : void
     {
-        if ($this->paramAnalyzer->isNullable($param) && !$replaceIntoType instanceof NullableType) {
-            $replaceIntoType = new NullableType($replaceIntoType);
+        if ($this->paramAnalyzer->isNullable($param) && !$replaceIntoType instanceof \PhpParser\Node\NullableType) {
+            $replaceIntoType = new \PhpParser\Node\NullableType($replaceIntoType);
         }
         $param->type = $replaceIntoType;
     }
-    private function refactorParamDocBlock(Param $param, ClassMethod $classMethod, Type $phpDocType) : void
+    private function refactorParamDocBlock(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $phpDocType) : void
     {
         $paramName = $this->nodeNameResolver->getName($param->var);
         if ($paramName === null) {
-            throw new ShouldNotHappenException();
+            throw new \Rector\Core\Exception\ShouldNotHappenException();
         }
         if ($this->paramAnalyzer->isNullable($param)) {
-            if ($phpDocType instanceof UnionType) {
+            if ($phpDocType instanceof \PHPStan\Type\UnionType) {
                 $item0Unpacked = $phpDocType->getTypes();
                 // Adding a UnionType into a new UnionType throws an exception so we need to "unpack" the types
-                $phpDocType = new UnionType(\array_merge($item0Unpacked, [new NullType()]));
+                $phpDocType = new \PHPStan\Type\UnionType(\array_merge($item0Unpacked, [new \PHPStan\Type\NullType()]));
             } else {
-                $phpDocType = new UnionType([$phpDocType, new NullType()]);
+                $phpDocType = new \PHPStan\Type\UnionType([$phpDocType, new \PHPStan\Type\NullType()]);
             }
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
@@ -117,13 +117,13 @@ final class ClassMethodParameterTypeManipulator
     /**
      * @param string[] $methodsReturningClassInstance
      */
-    private function refactorMethodCalls(Param $param, ClassMethod $classMethod, array $methodsReturningClassInstance) : void
+    private function refactorMethodCalls(\PhpParser\Node\Param $param, \PhpParser\Node\Stmt\ClassMethod $classMethod, array $methodsReturningClassInstance) : void
     {
         if ($classMethod->stmts === null) {
             return;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use($param, $methodsReturningClassInstance) {
-            if (!$node instanceof MethodCall) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (\PhpParser\Node $node) use($param, $methodsReturningClassInstance) {
+            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
                 return null;
             }
             $this->refactorMethodCall($param, $node, $methodsReturningClassInstance);
@@ -133,7 +133,7 @@ final class ClassMethodParameterTypeManipulator
     /**
      * @param string[] $methodsReturningClassInstance
      */
-    private function refactorMethodCall(Param $param, MethodCall $methodCall, array $methodsReturningClassInstance) : void
+    private function refactorMethodCall(\PhpParser\Node\Param $param, \PhpParser\Node\Expr\MethodCall $methodCall, array $methodsReturningClassInstance) : void
     {
         $paramName = $this->nodeNameResolver->getName($param->var);
         if ($paramName === null) {
@@ -142,14 +142,14 @@ final class ClassMethodParameterTypeManipulator
         if ($this->shouldSkipMethodCallRefactor($paramName, $methodCall, $methodsReturningClassInstance)) {
             return;
         }
-        $assign = new Assign(new Variable($paramName), $methodCall);
+        $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable($paramName), $methodCall);
         /** @var Node $parent */
-        $parent = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Arg) {
+        $parent = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if ($parent instanceof \PhpParser\Node\Arg) {
             $parent->value = $assign;
             return;
         }
-        if (!$parent instanceof Expression) {
+        if (!$parent instanceof \PhpParser\Node\Stmt\Expression) {
             return;
         }
         $parent->expr = $assign;
@@ -157,7 +157,7 @@ final class ClassMethodParameterTypeManipulator
     /**
      * @param string[] $methodsReturningClassInstance
      */
-    private function shouldSkipMethodCallRefactor(string $paramName, MethodCall $methodCall, array $methodsReturningClassInstance) : bool
+    private function shouldSkipMethodCallRefactor(string $paramName, \PhpParser\Node\Expr\MethodCall $methodCall, array $methodsReturningClassInstance) : bool
     {
         if (!$this->nodeNameResolver->isName($methodCall->var, $paramName)) {
             return \true;
@@ -165,10 +165,10 @@ final class ClassMethodParameterTypeManipulator
         if (!$this->nodeNameResolver->isNames($methodCall->name, $methodsReturningClassInstance)) {
             return \true;
         }
-        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
+        $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof \PhpParser\Node) {
             return \true;
         }
-        return $parentNode instanceof Assign;
+        return $parentNode instanceof \PhpParser\Node\Expr\Assign;
     }
 }

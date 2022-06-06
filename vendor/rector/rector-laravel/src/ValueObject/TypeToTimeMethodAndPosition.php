@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Laravel\ValueObject;
+namespace Rector\Laravel\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectType;
 final class TypeToTimeMethodAndPosition
 {
     /**
@@ -27,9 +27,9 @@ final class TypeToTimeMethodAndPosition
         $this->methodName = $methodName;
         $this->position = $position;
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->type);
+        return new \PHPStan\Type\ObjectType($this->type);
     }
     public function getMethodName() : string
     {

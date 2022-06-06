@@ -16,13 +16,13 @@ use RectorPrefix20220606\Symfony\Component\Config\Definition\FloatNode;
  *
  * @author Jeanmonod David <david.jeanmonod@gmail.com>
  */
-class FloatNodeDefinition extends NumericNodeDefinition
+class FloatNodeDefinition extends \RectorPrefix20220606\Symfony\Component\Config\Definition\Builder\NumericNodeDefinition
 {
     /**
      * Instantiates a Node.
      */
     protected function instantiateNode() : \RectorPrefix20220606\Symfony\Component\Config\Definition\ScalarNode
     {
-        return new FloatNode($this->name, $this->parent, $this->min, $this->max, $this->pathSeparator);
+        return new \RectorPrefix20220606\Symfony\Component\Config\Definition\FloatNode($this->name, $this->parent, $this->min, $this->max, $this->pathSeparator);
     }
 }

@@ -1,31 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\NodeVisitor;
+namespace Rector\NodeTypeResolver\NodeVisitor;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\New_;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\FunctionLike;
-use RectorPrefix20220606\PhpParser\NodeVisitorAbstract;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-final class FunctionLikeParamArgPositionNodeVisitor extends NodeVisitorAbstract
+use PhpParser\Node;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\FunctionLike;
+use PhpParser\NodeVisitorAbstract;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+final class FunctionLikeParamArgPositionNodeVisitor extends \PhpParser\NodeVisitorAbstract
 {
     /**
      * @return Node
      */
-    public function enterNode(Node $node) : ?Node
+    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof FunctionLike) {
+        if ($node instanceof \PhpParser\Node\FunctionLike) {
             foreach ($node->getParams() as $position => $param) {
-                $param->setAttribute(AttributeKey::PARAMETER_POSITION, $position);
+                $param->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARAMETER_POSITION, $position);
             }
         }
-        if ($node instanceof MethodCall || $node instanceof StaticCall || $node instanceof FuncCall || $node instanceof New_) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall || $node instanceof \PhpParser\Node\Expr\StaticCall || $node instanceof \PhpParser\Node\Expr\FuncCall || $node instanceof \PhpParser\Node\Expr\New_) {
             foreach ($node->args as $position => $arg) {
-                $arg->setAttribute(AttributeKey::ARGUMENT_POSITION, $position);
+                $arg->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ARGUMENT_POSITION, $position);
             }
         }
         return $node;

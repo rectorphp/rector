@@ -1,37 +1,37 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php71\Rector\TryCatch;
+namespace Rector\Php71\Rector\TryCatch;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Catch_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\TryCatch;
-use RectorPrefix20220606\Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/multiple-catch
  *
  * @see \Rector\Tests\Php71\Rector\TryCatch\MultiExceptionCatchRector\MultiExceptionCatchRectorTest
  */
-final class MultiExceptionCatchRector extends AbstractRector implements MinPhpVersionInterface
+final class MultiExceptionCatchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(NodePrinterInterface $nodePrinter)
+    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->nodePrinter = $nodePrinter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes multi catch of same exception to single one | separated.', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes multi catch of same exception to single one | separated.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 try {
     // Some code...
 } catch (ExceptionType1 $exception) {
@@ -54,12 +54,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [TryCatch::class];
+        return [\PhpParser\Node\Stmt\TryCatch::class];
     }
     /**
      * @param TryCatch $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (\count($node->catches) < 2) {
             return null;
@@ -89,12 +89,12 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::MULTI_EXCEPTION_CATCH;
+        return \Rector\Core\ValueObject\PhpVersionFeature::MULTI_EXCEPTION_CATCH;
     }
     /**
      * @return array<string, Catch_[]>
      */
-    private function collectCatchKeysByContent(TryCatch $tryCatch) : array
+    private function collectCatchKeysByContent(\PhpParser\Node\Stmt\TryCatch $tryCatch) : array
     {
         $catchKeysByContent = [];
         foreach ($tryCatch->catches as $catch) {

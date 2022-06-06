@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\Foreach_;
+namespace Rector\CodeQuality\Rector\Foreach_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Foreach_;
-use RectorPrefix20220606\PHPStan\Analyser\Scope;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\ThisType;
-use RectorPrefix20220606\Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractScopeAwareRector;
-use RectorPrefix20220606\Rector\NodeNestingScope\ValueObject\ControlStructure;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\ReadWrite\NodeFinder\NodeUsageFinder;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Stmt\Foreach_;
+use PHPStan\Analyser\Scope;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
+use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
+use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\NodeNestingScope\ValueObject\ControlStructure;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector\ForeachItemsAssignToEmptyArrayToAssignRectorTest
  */
-final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractScopeAwareRector
+final class ForeachItemsAssignToEmptyArrayToAssignRector extends \Rector\Core\Rector\AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -32,14 +32,14 @@ final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractScopeAw
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachAnalyzer $foreachAnalyzer)
+    public function __construct(\Rector\ReadWrite\NodeFinder\NodeUsageFinder $nodeUsageFinder, \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer $foreachAnalyzer)
     {
         $this->nodeUsageFinder = $nodeUsageFinder;
         $this->foreachAnalyzer = $foreachAnalyzer;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change foreach() items assign to empty array to direct assign', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change foreach() items assign to empty array to direct assign', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($items)
@@ -70,35 +70,35 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Foreach_::class];
+        return [\PhpParser\Node\Stmt\Foreach_::class];
     }
     /**
      * @param Foreach_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node, $scope)) {
             return null;
         }
         /** @var Expr $assignVariable */
         $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
-        return new Assign($assignVariable, $node->expr);
+        return new \PhpParser\Node\Expr\Assign($assignVariable, $node->expr);
     }
-    private function shouldSkip(Foreach_ $foreach, Scope $scope) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\Foreach_ $foreach, \PHPStan\Analyser\Scope $scope) : bool
     {
         $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($foreach);
-        if (!$assignVariable instanceof Expr) {
+        if (!$assignVariable instanceof \PhpParser\Node\Expr) {
             return \true;
         }
         if ($this->shouldSkipAsPartOfOtherLoop($foreach)) {
             return \true;
         }
         $previousDeclaration = $this->nodeUsageFinder->findPreviousForeachNodeUsage($foreach, $assignVariable);
-        if (!$previousDeclaration instanceof Node) {
+        if (!$previousDeclaration instanceof \PhpParser\Node) {
             return \true;
         }
-        $previousDeclarationParentNode = $previousDeclaration->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$previousDeclarationParentNode instanceof Assign) {
+        $previousDeclarationParentNode = $previousDeclaration->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        if (!$previousDeclarationParentNode instanceof \PhpParser\Node\Expr\Assign) {
             return \true;
         }
         // must be empty array, otherwise it will false override
@@ -107,17 +107,17 @@ CODE_SAMPLE
             return \true;
         }
         $type = $scope->getType($foreach->expr);
-        if ($type instanceof ObjectType) {
+        if ($type instanceof \PHPStan\Type\ObjectType) {
             return $type->isIterable()->yes();
         }
-        if ($type instanceof ThisType) {
+        if ($type instanceof \PHPStan\Type\ThisType) {
             return $type->isIterable()->yes();
         }
         return \false;
     }
-    private function shouldSkipAsPartOfOtherLoop(Foreach_ $foreach) : bool
+    private function shouldSkipAsPartOfOtherLoop(\PhpParser\Node\Stmt\Foreach_ $foreach) : bool
     {
-        $foreachParent = $this->betterNodeFinder->findParentByTypes($foreach, ControlStructure::LOOP_NODES);
-        return $foreachParent instanceof Node;
+        $foreachParent = $this->betterNodeFinder->findParentByTypes($foreach, \Rector\NodeNestingScope\ValueObject\ControlStructure::LOOP_NODES);
+        return $foreachParent instanceof \PhpParser\Node;
     }
 }

@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Configuration;
+namespace Rector\Core\Configuration;
 
-use RectorPrefix20220606\PhpParser\Node;
+use PhpParser\Node;
 final class CurrentNodeProvider
 {
     /**
      * @var \PhpParser\Node|null
      */
     private $node;
-    public function setNode(Node $node) : void
+    public function setNode(\PhpParser\Node $node) : void
     {
         $this->node = $node;
     }
-    public function getNode() : ?Node
+    public function getNode() : ?\PhpParser\Node
     {
         return $this->node;
     }

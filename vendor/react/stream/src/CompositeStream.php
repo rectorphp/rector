@@ -3,12 +3,12 @@
 namespace RectorPrefix20220606\React\Stream;
 
 use RectorPrefix20220606\Evenement\EventEmitter;
-final class CompositeStream extends EventEmitter implements DuplexStreamInterface
+final class CompositeStream extends \RectorPrefix20220606\Evenement\EventEmitter implements \RectorPrefix20220606\React\Stream\DuplexStreamInterface
 {
     private $readable;
     private $writable;
     private $closed = \false;
-    public function __construct(ReadableStreamInterface $readable, WritableStreamInterface $writable)
+    public function __construct(\RectorPrefix20220606\React\Stream\ReadableStreamInterface $readable, \RectorPrefix20220606\React\Stream\WritableStreamInterface $writable)
     {
         $this->readable = $readable;
         $this->writable = $writable;
@@ -16,8 +16,8 @@ final class CompositeStream extends EventEmitter implements DuplexStreamInterfac
             $this->close();
             return;
         }
-        Util::forwardEvents($this->readable, $this, array('data', 'end', 'error'));
-        Util::forwardEvents($this->writable, $this, array('drain', 'error', 'pipe'));
+        \RectorPrefix20220606\React\Stream\Util::forwardEvents($this->readable, $this, array('data', 'end', 'error'));
+        \RectorPrefix20220606\React\Stream\Util::forwardEvents($this->writable, $this, array('drain', 'error', 'pipe'));
         $this->readable->on('close', array($this, 'close'));
         $this->writable->on('close', array($this, 'close'));
     }
@@ -36,9 +36,9 @@ final class CompositeStream extends EventEmitter implements DuplexStreamInterfac
         }
         $this->readable->resume();
     }
-    public function pipe(WritableStreamInterface $dest, array $options = array())
+    public function pipe(\RectorPrefix20220606\React\Stream\WritableStreamInterface $dest, array $options = array())
     {
-        return Util::pipe($this, $dest, $options);
+        return \RectorPrefix20220606\React\Stream\Util::pipe($this, $dest, $options);
     }
     public function isWritable()
     {

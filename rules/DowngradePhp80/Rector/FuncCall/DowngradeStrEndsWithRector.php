@@ -1,64 +1,64 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp80\Rector\FuncCall;
+namespace Rector\DowngradePhp80\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\UnaryMinus;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\LNumber;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/add_str_starts_with_and_ends_with_functions
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector\DowngradeStrEndsWithRectorTest
  */
-final class DowngradeStrEndsWithRector extends AbstractRector
+final class DowngradeStrEndsWithRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Downgrade str_ends_with() to strncmp() version', [new CodeSample('str_ends_with($haystack, $needle);', '"" === $needle || ("" !== $haystack && 0 === substr_compare($haystack, $needle, -\\strlen($needle)));')]);
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade str_ends_with() to strncmp() version', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('str_ends_with($haystack, $needle);', '"" === $needle || ("" !== $haystack && 0 === substr_compare($haystack, $needle, -\\strlen($needle)));')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, BooleanNot::class];
+        return [\PhpParser\Node\Expr\FuncCall::class, \PhpParser\Node\Expr\BooleanNot::class];
     }
     /**
      * @param FuncCall|BooleanNot $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if ($node instanceof FuncCall && $this->isName($node->name, 'str_ends_with')) {
-            return new Identical($this->createSubstrCompareFuncCall($node), new LNumber(0));
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($node->name, 'str_ends_with')) {
+            return new \PhpParser\Node\Expr\BinaryOp\Identical($this->createSubstrCompareFuncCall($node), new \PhpParser\Node\Scalar\LNumber(0));
         }
-        if ($node instanceof BooleanNot) {
+        if ($node instanceof \PhpParser\Node\Expr\BooleanNot) {
             $funcCall = $node->expr;
-            if ($funcCall instanceof FuncCall && $this->isName($funcCall->name, 'str_ends_with')) {
-                return new NotIdentical($this->createSubstrCompareFuncCall($funcCall), new LNumber(0));
+            if ($funcCall instanceof \PhpParser\Node\Expr\FuncCall && $this->isName($funcCall->name, 'str_ends_with')) {
+                return new \PhpParser\Node\Expr\BinaryOp\NotIdentical($this->createSubstrCompareFuncCall($funcCall), new \PhpParser\Node\Scalar\LNumber(0));
             }
         }
         return null;
     }
-    private function createSubstrCompareFuncCall(FuncCall $funcCall) : FuncCall
+    private function createSubstrCompareFuncCall(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
     {
         $args = $funcCall->args;
         $strlenFuncCall = $this->createStrlenFuncCall($args[1]->value);
-        $args[] = new Arg(new UnaryMinus($strlenFuncCall));
-        return new FuncCall(new Name('substr_compare'), $args);
+        $args[] = new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\UnaryMinus($strlenFuncCall));
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('substr_compare'), $args);
     }
-    private function createStrlenFuncCall(Expr $expr) : FuncCall
+    private function createStrlenFuncCall(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\FuncCall
     {
-        return new FuncCall(new Name('strlen'), [new Arg($expr)]);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('strlen'), [new \PhpParser\Node\Arg($expr)]);
     }
 }

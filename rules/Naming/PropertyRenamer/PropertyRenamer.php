@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Naming\PropertyRenamer;
+namespace Rector\Naming\PropertyRenamer;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PhpParser\Node\VarLikeIdentifier;
-use RectorPrefix20220606\Rector\Naming\RenameGuard\PropertyRenameGuard;
-use RectorPrefix20220606\Rector\Naming\ValueObject\PropertyRename;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\VarLikeIdentifier;
+use Rector\Naming\RenameGuard\PropertyRenameGuard;
+use Rector\Naming\ValueObject\PropertyRename;
 final class PropertyRenamer
 {
     /**
@@ -19,12 +19,12 @@ final class PropertyRenamer
      * @var \Rector\Naming\PropertyRenamer\PropertyFetchRenamer
      */
     private $propertyFetchRenamer;
-    public function __construct(PropertyRenameGuard $propertyRenameGuard, PropertyFetchRenamer $propertyFetchRenamer)
+    public function __construct(\Rector\Naming\RenameGuard\PropertyRenameGuard $propertyRenameGuard, \Rector\Naming\PropertyRenamer\PropertyFetchRenamer $propertyFetchRenamer)
     {
         $this->propertyRenameGuard = $propertyRenameGuard;
         $this->propertyFetchRenamer = $propertyFetchRenamer;
     }
-    public function rename(PropertyRename $propertyRename) : ?Property
+    public function rename(\Rector\Naming\ValueObject\PropertyRename $propertyRename) : ?\PhpParser\Node\Stmt\Property
     {
         if ($propertyRename->isAlreadyExpectedName()) {
             return null;
@@ -33,11 +33,11 @@ final class PropertyRenamer
             return null;
         }
         $onlyPropertyProperty = $propertyRename->getPropertyProperty();
-        $onlyPropertyProperty->name = new VarLikeIdentifier($propertyRename->getExpectedName());
+        $onlyPropertyProperty->name = new \PhpParser\Node\VarLikeIdentifier($propertyRename->getExpectedName());
         $this->renamePropertyFetchesInClass($propertyRename);
         return $propertyRename->getProperty();
     }
-    private function renamePropertyFetchesInClass(PropertyRename $propertyRename) : void
+    private function renamePropertyFetchesInClass(\Rector\Naming\ValueObject\PropertyRename $propertyRename) : void
     {
         $this->propertyFetchRenamer->renamePropertyFetchesInClass($propertyRename->getClassLike(), $propertyRename->getCurrentName(), $propertyRename->getExpectedName());
     }

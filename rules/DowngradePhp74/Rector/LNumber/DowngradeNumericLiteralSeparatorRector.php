@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp74\Rector\LNumber;
+namespace Rector\DowngradePhp74\Rector\LNumber;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Scalar\DNumber;
-use RectorPrefix20220606\PhpParser\Node\Scalar\LNumber;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Scalar\DNumber;
+use PhpParser\Node\Scalar\LNumber;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/numeric_literal_separator
  *
  * @see \Rector\Tests\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector\DowngradeNumericLiteralSeparatorRectorTest
  */
-final class DowngradeNumericLiteralSeparatorRector extends AbstractRector
+final class DowngradeNumericLiteralSeparatorRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove "_" as thousands separator in numbers', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "_" as thousands separator in numbers', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -46,14 +46,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [LNumber::class, DNumber::class];
+        return [\PhpParser\Node\Scalar\LNumber::class, \PhpParser\Node\Scalar\DNumber::class];
     }
     /**
      * @param LNumber|DNumber $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        $rawValue = $node->getAttribute(AttributeKey::RAW_VALUE);
+        $rawValue = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RAW_VALUE);
         if ($this->shouldSkip($node, $rawValue)) {
             return null;
         }
@@ -61,7 +61,7 @@ CODE_SAMPLE
             return null;
         }
         // trigger reprint
-        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
     /**
@@ -74,9 +74,9 @@ CODE_SAMPLE
             return \true;
         }
         // "_" notation can be applied to decimal numbers only
-        if ($node instanceof LNumber) {
-            $numberKind = $node->getAttribute(AttributeKey::KIND);
-            if ($numberKind !== LNumber::KIND_DEC) {
+        if ($node instanceof \PhpParser\Node\Scalar\LNumber) {
+            $numberKind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
+            if ($numberKind !== \PhpParser\Node\Scalar\LNumber::KIND_DEC) {
                 return \true;
             }
         }

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\ValueObject;
+namespace Rector\TypeDeclaration\ValueObject;
 
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\Core\Validation\RectorAssert;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
+use Rector\Core\Validation\RectorAssert;
 final class AddParamTypeDeclaration
 {
     /**
@@ -31,17 +31,17 @@ final class AddParamTypeDeclaration
     /**
      * @param int<0, max> $position
      */
-    public function __construct(string $className, string $methodName, int $position, Type $paramType)
+    public function __construct(string $className, string $methodName, int $position, \PHPStan\Type\Type $paramType)
     {
         $this->className = $className;
         $this->methodName = $methodName;
         $this->position = $position;
         $this->paramType = $paramType;
-        RectorAssert::className($className);
+        \Rector\Core\Validation\RectorAssert::className($className);
     }
-    public function getObjectType() : ObjectType
+    public function getObjectType() : \PHPStan\Type\ObjectType
     {
-        return new ObjectType($this->className);
+        return new \PHPStan\Type\ObjectType($this->className);
     }
     public function getMethodName() : string
     {
@@ -51,7 +51,7 @@ final class AddParamTypeDeclaration
     {
         return $this->position;
     }
-    public function getParamType() : Type
+    public function getParamType() : \PHPStan\Type\Type
     {
         return $this->paramType;
     }

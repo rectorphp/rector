@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\NodeManipulator;
+namespace Rector\Doctrine\NodeManipulator;
 
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Type\BooleanType;
-use RectorPrefix20220606\PHPStan\Type\FloatType;
-use RectorPrefix20220606\PHPStan\Type\IntegerType;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\NullType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\StringType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\Doctrine\NodeAnalyzer\AttributeFinder;
-use RectorPrefix20220606\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 final class ColumnPropertyTypeResolver
 {
     /**
@@ -52,54 +52,54 @@ final class ColumnPropertyTypeResolver
      * @param array<string, Type> $doctrineTypeToScalarType
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, TypeFactory $typeFactory, AttributeFinder $attributeFinder, array $doctrineTypeToScalarType = null)
+    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder, array $doctrineTypeToScalarType = null)
     {
         $doctrineTypeToScalarType = $doctrineTypeToScalarType ?? [
-            'tinyint' => new BooleanType(),
-            'boolean' => new BooleanType(),
+            'tinyint' => new \PHPStan\Type\BooleanType(),
+            'boolean' => new \PHPStan\Type\BooleanType(),
             // integers
-            'smallint' => new IntegerType(),
-            'mediumint' => new IntegerType(),
-            'int' => new IntegerType(),
-            'integer' => new IntegerType(),
-            'numeric' => new IntegerType(),
+            'smallint' => new \PHPStan\Type\IntegerType(),
+            'mediumint' => new \PHPStan\Type\IntegerType(),
+            'int' => new \PHPStan\Type\IntegerType(),
+            'integer' => new \PHPStan\Type\IntegerType(),
+            'numeric' => new \PHPStan\Type\IntegerType(),
             // floats
-            'float' => new FloatType(),
-            'double' => new FloatType(),
-            'real' => new FloatType(),
+            'float' => new \PHPStan\Type\FloatType(),
+            'double' => new \PHPStan\Type\FloatType(),
+            'real' => new \PHPStan\Type\FloatType(),
             // strings
-            'decimal' => new StringType(),
-            'bigint' => new StringType(),
-            'tinytext' => new StringType(),
-            'mediumtext' => new StringType(),
-            'longtext' => new StringType(),
-            'text' => new StringType(),
-            'varchar' => new StringType(),
-            'string' => new StringType(),
-            'char' => new StringType(),
-            'longblob' => new StringType(),
-            'blob' => new StringType(),
-            'mediumblob' => new StringType(),
-            'tinyblob' => new StringType(),
-            'binary' => new StringType(),
-            'varbinary' => new StringType(),
-            'set' => new StringType(),
+            'decimal' => new \PHPStan\Type\StringType(),
+            'bigint' => new \PHPStan\Type\StringType(),
+            'tinytext' => new \PHPStan\Type\StringType(),
+            'mediumtext' => new \PHPStan\Type\StringType(),
+            'longtext' => new \PHPStan\Type\StringType(),
+            'text' => new \PHPStan\Type\StringType(),
+            'varchar' => new \PHPStan\Type\StringType(),
+            'string' => new \PHPStan\Type\StringType(),
+            'char' => new \PHPStan\Type\StringType(),
+            'longblob' => new \PHPStan\Type\StringType(),
+            'blob' => new \PHPStan\Type\StringType(),
+            'mediumblob' => new \PHPStan\Type\StringType(),
+            'tinyblob' => new \PHPStan\Type\StringType(),
+            'binary' => new \PHPStan\Type\StringType(),
+            'varbinary' => new \PHPStan\Type\StringType(),
+            'set' => new \PHPStan\Type\StringType(),
             // date time objects
-            'date' => new ObjectType(self::DATE_TIME_INTERFACE),
-            'datetime' => new ObjectType(self::DATE_TIME_INTERFACE),
-            'timestamp' => new ObjectType(self::DATE_TIME_INTERFACE),
-            'time' => new ObjectType(self::DATE_TIME_INTERFACE),
-            'year' => new ObjectType(self::DATE_TIME_INTERFACE),
+            'date' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
+            'datetime' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
+            'timestamp' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
+            'time' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
+            'year' => new \PHPStan\Type\ObjectType(self::DATE_TIME_INTERFACE),
         ];
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->typeFactory = $typeFactory;
         $this->attributeFinder = $attributeFinder;
         $this->doctrineTypeToScalarType = $doctrineTypeToScalarType;
     }
-    public function resolve(Property $property, bool $isNullable) : ?Type
+    public function resolve(\PhpParser\Node\Stmt\Property $property, bool $isNullable) : ?\PHPStan\Type\Type
     {
         $argValue = $this->attributeFinder->findAttributeByClassArgByName($property, self::COLUMN_CLASS, 'type');
-        if ($argValue instanceof String_) {
+        if ($argValue instanceof \PhpParser\Node\Scalar\String_) {
             return $this->createPHPStanTypeFromDoctrineStringType($argValue->value, $isNullable);
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
@@ -108,15 +108,15 @@ final class ColumnPropertyTypeResolver
     /**
      * @return null|\PHPStan\Type\Type
      */
-    private function resolveFromPhpDocInfo(PhpDocInfo $phpDocInfo, bool $isNullable)
+    private function resolveFromPhpDocInfo(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, bool $isNullable)
     {
         $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(self::COLUMN_CLASS);
-        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
             return null;
         }
         $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
         if (!\is_string($type)) {
-            return new MixedType();
+            return new \PHPStan\Type\MixedType();
         }
         return $this->createPHPStanTypeFromDoctrineStringType($type, $isNullable);
     }
@@ -126,12 +126,12 @@ final class ColumnPropertyTypeResolver
     private function createPHPStanTypeFromDoctrineStringType(string $type, bool $isNullable)
     {
         $scalarType = $this->doctrineTypeToScalarType[$type] ?? null;
-        if (!$scalarType instanceof Type) {
-            return new MixedType();
+        if (!$scalarType instanceof \PHPStan\Type\Type) {
+            return new \PHPStan\Type\MixedType();
         }
         $types = [$scalarType];
         if ($isNullable) {
-            $types[] = new NullType();
+            $types[] = new \PHPStan\Type\NullType();
         }
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }

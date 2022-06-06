@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\Sorter;
+namespace Rector\TypeDeclaration\Sorter;
 
-use RectorPrefix20220606\Rector\TypeDeclaration\Contract\PriorityAwareInterface;
-use RectorPrefix20220606\Rector\TypeDeclaration\Exception\ConflictingPriorityException;
+use Rector\TypeDeclaration\Contract\PriorityAwareInterface;
+use Rector\TypeDeclaration\Exception\ConflictingPriorityException;
 final class PriorityAwareSorter
 {
     /**
@@ -25,12 +25,12 @@ final class PriorityAwareSorter
     /**
      * @param PriorityAwareInterface[] $sortedTypeInferers
      */
-    private function ensurePriorityIsUnique(array $sortedTypeInferers, PriorityAwareInterface $priorityAware) : void
+    private function ensurePriorityIsUnique(array $sortedTypeInferers, \Rector\TypeDeclaration\Contract\PriorityAwareInterface $priorityAware) : void
     {
         if (!isset($sortedTypeInferers[$priorityAware->getPriority()])) {
             return;
         }
         $alreadySetPropertyTypeInferer = $sortedTypeInferers[$priorityAware->getPriority()];
-        throw new ConflictingPriorityException($priorityAware, $alreadySetPropertyTypeInferer);
+        throw new \Rector\TypeDeclaration\Exception\ConflictingPriorityException($priorityAware, $alreadySetPropertyTypeInferer);
     }
 }

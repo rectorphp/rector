@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\NodeManipulator;
+namespace Rector\Core\NodeManipulator;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Foreach_;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Foreach_;
 final class ForeachManipulator
 {
     /**
      * @param callable(Node $node, Foreach_ $foreach=): ?Node $callable
      */
-    public function matchOnlyStmt(Foreach_ $foreach, callable $callable) : ?Node
+    public function matchOnlyStmt(\PhpParser\Node\Stmt\Foreach_ $foreach, callable $callable) : ?\PhpParser\Node
     {
         if (\count($foreach->stmts) !== 1) {
             return null;
         }
         $innerNode = $foreach->stmts[0];
-        $innerNode = $innerNode instanceof Expression ? $innerNode->expr : $innerNode;
+        $innerNode = $innerNode instanceof \PhpParser\Node\Stmt\Expression ? $innerNode->expr : $innerNode;
         return $callable($innerNode, $foreach);
     }
 }

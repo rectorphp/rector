@@ -1,26 +1,26 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\If_;
+namespace Rector\CodeQuality\Rector\If_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\Identical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\Comment\CommentsMerger;
-use RectorPrefix20220606\Rector\CodeQuality\NodeManipulator\ExprBoolCaster;
-use RectorPrefix20220606\Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
+use Rector\BetterPhpDocParser\Comment\CommentsMerger;
+use Rector\CodeQuality\NodeManipulator\ExprBoolCaster;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector\SimplifyIfReturnBoolRectorTest
  */
-final class SimplifyIfReturnBoolRector extends AbstractRector
+final class SimplifyIfReturnBoolRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -37,15 +37,15 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(CommentsMerger $commentsMerger, ExprBoolCaster $exprBoolCaster, NodePrinterInterface $nodePrinter)
+    public function __construct(\Rector\BetterPhpDocParser\Comment\CommentsMerger $commentsMerger, \Rector\CodeQuality\NodeManipulator\ExprBoolCaster $exprBoolCaster, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
     {
         $this->commentsMerger = $commentsMerger;
         $this->exprBoolCaster = $exprBoolCaster;
         $this->nodePrinter = $nodePrinter;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Shortens if return false/true to direct return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Shortens if return false/true to direct return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 if (strpos($docToken->getContent(), "\n") === false) {
     return true;
 }
@@ -59,12 +59,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
      * @param If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -72,7 +72,7 @@ CODE_SAMPLE
         /** @var Return_ $ifInnerNode */
         $ifInnerNode = $node->stmts[0];
         /** @var Return_ $nextNode */
-        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        $nextNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
         /** @var Node $innerIfInnerNode */
         $innerIfInnerNode = $ifInnerNode->expr;
         if ($this->valueResolver->isTrue($innerIfInnerNode)) {
@@ -80,8 +80,8 @@ CODE_SAMPLE
         } elseif ($this->valueResolver->isFalse($innerIfInnerNode)) {
             /** @var Expr $expr */
             $expr = $nextNode->expr;
-            if ($node->cond instanceof NotIdentical && $this->valueResolver->isTrue($expr)) {
-                $node->cond = new Identical($node->cond->left, $node->cond->right);
+            if ($node->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical && $this->valueResolver->isTrue($expr)) {
+                $node->cond = new \PhpParser\Node\Expr\BinaryOp\Identical($node->cond->left, $node->cond->right);
                 $newReturnNode = $this->processReturnTrue($node, $nextNode);
             } else {
                 $newReturnNode = $this->processReturnFalse($node, $nextNode);
@@ -96,7 +96,7 @@ CODE_SAMPLE
         $this->removeNode($nextNode);
         return $newReturnNode;
     }
-    private function shouldSkip(If_ $if) : bool
+    private function shouldSkip(\PhpParser\Node\Stmt\If_ $if) : bool
     {
         if ($if->elseifs !== []) {
             return \true;
@@ -114,11 +114,11 @@ CODE_SAMPLE
         if (!$this->valueResolver->isTrueOrFalse($returnedExpr)) {
             return \true;
         }
-        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof Return_) {
+        $nextNode = $if->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof \PhpParser\Node\Stmt\Return_) {
             return \true;
         }
-        if (!$nextNode->expr instanceof Expr) {
+        if (!$nextNode->expr instanceof \PhpParser\Node\Expr) {
             return \true;
         }
         // negate + negate → skip for now
@@ -129,20 +129,20 @@ CODE_SAMPLE
         if (\strpos($condString, '!=') === \false) {
             return !$this->valueResolver->isTrueOrFalse($nextNode->expr);
         }
-        return !$if->cond instanceof NotIdentical;
+        return !$if->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical;
     }
-    private function processReturnTrue(If_ $if, Return_ $nextReturnNode) : Return_
+    private function processReturnTrue(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Stmt\Return_ $nextReturnNode) : \PhpParser\Node\Stmt\Return_
     {
-        if ($if->cond instanceof BooleanNot && $nextReturnNode->expr !== null && $this->valueResolver->isTrue($nextReturnNode->expr)) {
-            return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond->expr));
+        if ($if->cond instanceof \PhpParser\Node\Expr\BooleanNot && $nextReturnNode->expr !== null && $this->valueResolver->isTrue($nextReturnNode->expr)) {
+            return new \PhpParser\Node\Stmt\Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond->expr));
         }
-        return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond));
+        return new \PhpParser\Node\Stmt\Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond));
     }
-    private function processReturnFalse(If_ $if, Return_ $nextReturnNode) : ?Return_
+    private function processReturnFalse(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Stmt\Return_ $nextReturnNode) : ?\PhpParser\Node\Stmt\Return_
     {
-        if ($if->cond instanceof Identical) {
-            $notIdentical = new NotIdentical($if->cond->left, $if->cond->right);
-            return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($notIdentical));
+        if ($if->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
+            $notIdentical = new \PhpParser\Node\Expr\BinaryOp\NotIdentical($if->cond->left, $if->cond->right);
+            return new \PhpParser\Node\Stmt\Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($notIdentical));
         }
         if ($nextReturnNode->expr === null) {
             return null;
@@ -150,15 +150,15 @@ CODE_SAMPLE
         if (!$this->valueResolver->isTrue($nextReturnNode->expr)) {
             return null;
         }
-        if ($if->cond instanceof BooleanNot) {
-            return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond->expr));
+        if ($if->cond instanceof \PhpParser\Node\Expr\BooleanNot) {
+            return new \PhpParser\Node\Stmt\Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded($if->cond->expr));
         }
-        return new Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded(new BooleanNot($if->cond)));
+        return new \PhpParser\Node\Stmt\Return_($this->exprBoolCaster->boolCastOrNullCompareIfNeeded(new \PhpParser\Node\Expr\BooleanNot($if->cond)));
     }
     /**
      * Matches: "else if"
      */
-    private function isElseSeparatedThenIf(If_ $if) : bool
+    private function isElseSeparatedThenIf(\PhpParser\Node\Stmt\If_ $if) : bool
     {
         if ($if->else === null) {
             return \false;
@@ -167,9 +167,9 @@ CODE_SAMPLE
             return \false;
         }
         $onlyStmt = $if->else->stmts[0];
-        return $onlyStmt instanceof If_;
+        return $onlyStmt instanceof \PhpParser\Node\Stmt\If_;
     }
-    private function isIfWithSingleReturnExpr(If_ $if) : bool
+    private function isIfWithSingleReturnExpr(\PhpParser\Node\Stmt\If_ $if) : bool
     {
         if (\count($if->stmts) !== 1) {
             return \false;
@@ -178,7 +178,7 @@ CODE_SAMPLE
             return \false;
         }
         $ifInnerNode = $if->stmts[0];
-        if (!$ifInnerNode instanceof Return_) {
+        if (!$ifInnerNode instanceof \PhpParser\Node\Stmt\Return_) {
             return \false;
         }
         // return must have value

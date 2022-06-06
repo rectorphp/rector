@@ -10,9 +10,9 @@ namespace RectorPrefix20220606\Nette\Neon\Node;
 use RectorPrefix20220606\Nette;
 use RectorPrefix20220606\Nette\Neon\Node;
 /** @internal */
-final class StringNode extends Node
+final class StringNode extends \RectorPrefix20220606\Nette\Neon\Node
 {
-    private const EscapeSequences = ['t' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\f", 'b' => "\x08", '"' => '"', '\\' => '\\', '/' => '/', '_' => " "];
+    private const EscapeSequences = ['t' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\f", 'b' => "\10", '"' => '"', '\\' => '\\', '/' => '/', '_' => " "];
     /** @var string */
     public $value;
     public function __construct(string $value)
@@ -47,12 +47,12 @@ final class StringNode extends Node
                 if (($res = \json_decode('"' . $sq . '"')) !== null) {
                     return $res;
                 }
-                throw new Nette\Neon\Exception("Invalid UTF-8 sequence {$sq}");
+                throw new \RectorPrefix20220606\Nette\Neon\Exception("Invalid UTF-8 sequence {$sq}");
             } elseif ($sq[1] === 'x' && \strlen($sq) === 4) {
                 \trigger_error("Neon: '{$sq}' is deprecated, use '\\uXXXX' instead.", \E_USER_DEPRECATED);
                 return \chr(\hexdec(\substr($sq, 2)));
             } else {
-                throw new Nette\Neon\Exception("Invalid escaping sequence {$sq}");
+                throw new \RectorPrefix20220606\Nette\Neon\Exception("Invalid escaping sequence {$sq}");
             }
         }, $res);
     }

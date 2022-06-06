@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\ValueObject;
+namespace Rector\Nette\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
+use PhpParser\Node\Expr;
 final class TemplateParametersAssigns
 {
     /**

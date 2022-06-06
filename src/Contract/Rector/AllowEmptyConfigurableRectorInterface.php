@@ -1,8 +1,8 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\Contract\Rector;
+namespace Rector\Core\Contract\Rector;
 
-interface AllowEmptyConfigurableRectorInterface extends ConfigurableRectorInterface
+interface AllowEmptyConfigurableRectorInterface extends \Rector\Core\Contract\Rector\ConfigurableRectorInterface
 {
 }

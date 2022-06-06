@@ -1,32 +1,32 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v8\v0;
+namespace Ssch\TYPO3Rector\Rector\v8\v0;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://docs.typo3.org/c/typo3/cms-core/master/en-us/Changelog/8.0/Breaking-72686-RemovedRteHtmlParserMethods.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v8\v0\RteHtmlParserRector\RteHtmlParserRectorTest
  */
-final class RteHtmlParserRector extends AbstractRector
+final class RteHtmlParserRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -35,7 +35,7 @@ final class RteHtmlParserRector extends AbstractRector
             return $this->removeSecondArgumentFromMethod($node);
         }
         if ($this->isName($node->name, 'siteUrl')) {
-            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [$this->nodeFactory->createArg(new String_('TYPO3_SITE_URL'))]);
+            return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getIndpEnv', [$this->nodeFactory->createArg(new \PhpParser\Node\Scalar\String_('TYPO3_SITE_URL'))]);
         }
         if ($this->isName($node->name, 'getUrl')) {
             return $this->nodeFactory->createStaticCall('TYPO3\\CMS\\Core\\Utility\\GeneralUtility', 'getUrl', [$node->args[0]]);
@@ -45,9 +45,9 @@ final class RteHtmlParserRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove second argument of HTMLcleaner_db getKeepTags. Substitute calls for siteUrl getUrl', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove second argument of HTMLcleaner_db getKeepTags. Substitute calls for siteUrl getUrl', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Html\RteHtmlParser;
 
 $rteHtmlParser = new RteHtmlParser();
@@ -67,7 +67,7 @@ $rteHtmlParser->getKeepTags('arg1');
 CODE_SAMPLE
 )]);
     }
-    private function removeSecondArgumentFromMethod(MethodCall $methodCall) : Node
+    private function removeSecondArgumentFromMethod(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node
     {
         $numberOfArguments = \count($methodCall->args);
         if ($numberOfArguments > 1) {
@@ -75,8 +75,8 @@ CODE_SAMPLE
         }
         return $methodCall;
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkip(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
     {
-        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new ObjectType('TYPO3\\CMS\\Core\\Html\\RteHtmlParser'));
+        return !$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($methodCall, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Html\\RteHtmlParser'));
     }
 }

@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\NodeTypeAnalyzer;
+namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
 
-use RectorPrefix20220606\PHPStan\Reflection\ReflectionProvider;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class TraitTypeAnalyzer
 {
     /**
@@ -19,14 +19,14 @@ final class TraitTypeAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isTraitType(Type $type) : bool
+    public function isTraitType(\PHPStan\Type\Type $type) : bool
     {
-        if (!$type instanceof TypeWithClassName) {
+        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return \false;
         }
         $fullyQualifiedName = $this->nodeTypeResolver->getFullyQualifiedClassName($type);

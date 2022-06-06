@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Doctrine\NodeFactory;
+namespace Rector\Doctrine\NodeFactory;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Expr\PropertyFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\Variable;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 final class ConstructorClassMethodAssignFactory
 {
     /**
@@ -17,9 +17,9 @@ final class ConstructorClassMethodAssignFactory
     {
         $expressions = [];
         foreach ($paramNames as $paramName) {
-            $propertyFetch = new PropertyFetch(new Variable('this'), $paramName);
-            $assign = new Assign($propertyFetch, new Variable($paramName));
-            $expressions[] = new Expression($assign);
+            $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $paramName);
+            $assign = new \PhpParser\Node\Expr\Assign($propertyFetch, new \PhpParser\Node\Expr\Variable($paramName));
+            $expressions[] = new \PhpParser\Node\Stmt\Expression($assign);
         }
         return $expressions;
     }

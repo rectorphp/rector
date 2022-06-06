@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\NodeTypeResolver\TypeAnalyzer;
+namespace Rector\NodeTypeResolver\TypeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node;
+use PHPStan\Type\ObjectType;
+use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class CountableTypeAnalyzer
 {
     /**
@@ -28,14 +28,14 @@ final class CountableTypeAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector
      */
     private $pregMatchTypeCorrector;
-    public function __construct(ArrayTypeAnalyzer $arrayTypeAnalyzer, NodeTypeResolver $nodeTypeResolver, PregMatchTypeCorrector $pregMatchTypeCorrector)
+    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector $pregMatchTypeCorrector)
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
-        $this->countableObjectTypes = [new ObjectType('Countable'), new ObjectType('SimpleXMLElement'), new ObjectType('ResourceBundle')];
+        $this->countableObjectTypes = [new \PHPStan\Type\ObjectType('Countable'), new \PHPStan\Type\ObjectType('SimpleXMLElement'), new \PHPStan\Type\ObjectType('ResourceBundle')];
     }
-    public function isCountableType(Node $node) : bool
+    public function isCountableType(\PhpParser\Node $node) : bool
     {
         $nodeType = $this->nodeTypeResolver->getType($node);
         $nodeType = $this->pregMatchTypeCorrector->correct($node, $nodeType);

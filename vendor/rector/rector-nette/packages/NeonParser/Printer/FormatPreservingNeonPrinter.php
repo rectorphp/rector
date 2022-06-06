@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\NeonParser\Printer;
+namespace Rector\Nette\NeonParser\Printer;
 
 use RectorPrefix20220606\Nette\Neon\Node;
 use RectorPrefix20220606\Nette\Utils\Strings;
@@ -15,20 +15,20 @@ final class FormatPreservingNeonPrinter
      * @var string
      */
     private const INDENT_SPACES = 'spaces';
-    public function printNode(Node $node, string $originalContenet) : string
+    public function printNode(\RectorPrefix20220606\Nette\Neon\Node $node, string $originalContenet) : string
     {
         $neonContent = $node->toString();
         $indentType = $this->resolveIndentType($originalContenet);
         $neonContent = $this->formatIndent($neonContent, $indentType);
         // replace quotes - @todo resolve defaults
-        return Strings::replace($neonContent, '#\\"#', '\'');
+        return \RectorPrefix20220606\Nette\Utils\Strings::replace($neonContent, '#\\"#', '\'');
     }
     /**
      * Some files prefer tabs, some spaces. This will resolve first found space.
      */
     private function resolveIndentType(string $neonContent) : string
     {
-        $indentMatch = Strings::match($neonContent, '#(\\t|  )#ms');
+        $indentMatch = \RectorPrefix20220606\Nette\Utils\Strings::match($neonContent, '#(\\t|  )#ms');
         if ($indentMatch[0] === "\t") {
             return self::INDENT_TABS;
         }
@@ -37,7 +37,7 @@ final class FormatPreservingNeonPrinter
     private function formatIndent(string $neonContent, string $indentType) : string
     {
         if ($indentType === self::INDENT_SPACES) {
-            return Strings::replace($neonContent, '#\\t#', '    ');
+            return \RectorPrefix20220606\Nette\Utils\Strings::replace($neonContent, '#\\t#', '    ');
         }
         return $neonContent;
     }

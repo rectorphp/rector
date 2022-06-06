@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PhpParser\Node\Stmt;
+namespace PhpParser\Node\Stmt;
 
-use RectorPrefix20220606\PhpParser\Node;
-class Echo_ extends Node\Stmt
+use PhpParser\Node;
+class Echo_ extends \PhpParser\Node\Stmt
 {
     /** @var Node\Expr[] Expressions */
     public $exprs;

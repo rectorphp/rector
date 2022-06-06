@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\EarlyReturn\NodeTransformer;
+namespace Rector\EarlyReturn\NodeTransformer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use RectorPrefix20220606\PhpParser\Node\Expr\BooleanNot;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\BinaryOpManipulator;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BooleanNot;
+use Rector\Core\NodeManipulator\BinaryOpManipulator;
 final class ConditionInverter
 {
     /**
@@ -15,26 +15,26 @@ final class ConditionInverter
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
-    public function __construct(BinaryOpManipulator $binaryOpManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\BinaryOpManipulator $binaryOpManipulator)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
-    public function createInvertedCondition(Expr $expr) : Expr
+    public function createInvertedCondition(\PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr
     {
         // inverse condition
-        if ($expr instanceof BinaryOp) {
+        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp) {
             $inversedCondition = $this->binaryOpManipulator->invertCondition($expr);
-            if (!$inversedCondition instanceof BinaryOp) {
-                return new BooleanNot($expr);
+            if (!$inversedCondition instanceof \PhpParser\Node\Expr\BinaryOp) {
+                return new \PhpParser\Node\Expr\BooleanNot($expr);
             }
-            if ($inversedCondition instanceof BooleanAnd) {
-                return new BooleanNot($expr);
+            if ($inversedCondition instanceof \PhpParser\Node\Expr\BinaryOp\BooleanAnd) {
+                return new \PhpParser\Node\Expr\BooleanNot($expr);
             }
             return $inversedCondition;
         }
-        if ($expr instanceof BooleanNot) {
+        if ($expr instanceof \PhpParser\Node\Expr\BooleanNot) {
             return $expr->expr;
         }
-        return new BooleanNot($expr);
+        return new \PhpParser\Node\Expr\BooleanNot($expr);
     }
 }

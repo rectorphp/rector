@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocParser;
+namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use RectorPrefix20220606\PhpParser\Node as PhpNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use RectorPrefix20220606\Rector\StaticTypeMapper\Naming\NameScopeFactory;
+use PhpParser\Node as PhpNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
+use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
+use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * Decorate node with fully qualified class name for const epxr,
  * e.g. Direction::*
  */
-final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
+final class ConstExprClassNameDecorator implements \Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface
 {
     /**
      * @readonly
@@ -28,28 +28,28 @@ final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
      * @var \Symplify\Astral\PhpDocParser\PhpDocNodeTraverser
      */
     private $phpDocNodeTraverser;
-    public function __construct(NameScopeFactory $nameScopeFactory, PhpDocNodeTraverser $phpDocNodeTraverser)
+    public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser $phpDocNodeTraverser)
     {
         $this->nameScopeFactory = $nameScopeFactory;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
-    public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode) : void
+    public function decorate(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \PhpParser\Node $phpNode) : void
     {
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use($phpNode) {
-            if (!$node instanceof ConstExprNode) {
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use($phpNode) {
+            if (!$node instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode) {
                 return null;
             }
             $className = $this->resolveFullyQualifiedClass($node, $phpNode);
             if ($className === null) {
                 return null;
             }
-            $node->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $className);
+            $node->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS, $className);
             return $node;
         });
     }
-    private function resolveFullyQualifiedClass(ConstExprNode $constExprNode, PhpNode $phpNode) : ?string
+    private function resolveFullyQualifiedClass(\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode $constExprNode, \PhpParser\Node $phpNode) : ?string
     {
-        if (!$constExprNode instanceof ConstFetchNode) {
+        if (!$constExprNode instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode) {
             return null;
         }
         $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($phpNode);

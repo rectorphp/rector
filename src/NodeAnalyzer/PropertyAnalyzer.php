@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\NodeAnalyzer;
+namespace Rector\Core\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
-use RectorPrefix20220606\PHPStan\Type\CallableType;
-use RectorPrefix20220606\PHPStan\Type\NullType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\PHPStan\Type\UnionType;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Type\CallableType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\UnionType;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class PropertyAnalyzer
 {
     /**
@@ -17,20 +17,20 @@ final class PropertyAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function hasForbiddenType(Property $property) : bool
+    public function hasForbiddenType(\PhpParser\Node\Stmt\Property $property) : bool
     {
         $propertyType = $this->nodeTypeResolver->getType($property);
-        if ($propertyType instanceof NullType) {
+        if ($propertyType instanceof \PHPStan\Type\NullType) {
             return \true;
         }
         if ($this->isCallableType($propertyType)) {
             return \true;
         }
-        if (!$propertyType instanceof UnionType) {
+        if (!$propertyType instanceof \PHPStan\Type\UnionType) {
             return \false;
         }
         $types = $propertyType->getTypes();
@@ -41,11 +41,11 @@ final class PropertyAnalyzer
         }
         return \false;
     }
-    private function isCallableType(Type $type) : bool
+    private function isCallableType(\PHPStan\Type\Type $type) : bool
     {
-        if ($type instanceof TypeWithClassName) {
+        if ($type instanceof \PHPStan\Type\TypeWithClassName) {
             return $type->getClassName() === 'Closure';
         }
-        return $type instanceof CallableType;
+        return $type instanceof \PHPStan\Type\CallableType;
     }
 }

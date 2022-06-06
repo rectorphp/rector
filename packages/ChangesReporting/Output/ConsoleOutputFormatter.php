@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\ChangesReporting\Output;
+namespace Rector\ChangesReporting\Output;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
-use RectorPrefix20220606\Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use RectorPrefix20220606\Rector\Core\Contract\Console\OutputStyleInterface;
-use RectorPrefix20220606\Rector\Core\ValueObject\Configuration;
-use RectorPrefix20220606\Rector\Core\ValueObject\Error\SystemError;
-use RectorPrefix20220606\Rector\Core\ValueObject\ProcessResult;
-use RectorPrefix20220606\Rector\Core\ValueObject\Reporting\FileDiff;
-final class ConsoleOutputFormatter implements OutputFormatterInterface
+use Rector\ChangesReporting\Annotation\RectorsChangelogResolver;
+use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
+use Rector\Core\Contract\Console\OutputStyleInterface;
+use Rector\Core\ValueObject\Configuration;
+use Rector\Core\ValueObject\Error\SystemError;
+use Rector\Core\ValueObject\ProcessResult;
+use Rector\Core\ValueObject\Reporting\FileDiff;
+final class ConsoleOutputFormatter implements \Rector\ChangesReporting\Contract\Output\OutputFormatterInterface
 {
     /**
      * @var string
@@ -32,12 +32,12 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
-    public function __construct(OutputStyleInterface $rectorOutputStyle, RectorsChangelogResolver $rectorsChangelogResolver)
+    public function __construct(\Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\ChangesReporting\Annotation\RectorsChangelogResolver $rectorsChangelogResolver)
     {
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration) : void
+    public function report(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : void
     {
         if ($configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs());
@@ -105,7 +105,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $this->rectorOutputStyle->error($message);
         }
     }
-    private function reportRemovedFilesAndNodes(ProcessResult $processResult) : void
+    private function reportRemovedFilesAndNodes(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
         if ($processResult->getAddedFilesCount() !== 0) {
             $message = \sprintf('%d files were added', $processResult->getAddedFilesCount());
@@ -120,10 +120,10 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private function normalizePathsToRelativeWithLine(string $errorMessage) : string
     {
         $regex = '#' . \preg_quote(\getcwd(), '#') . '/#';
-        $errorMessage = Strings::replace($errorMessage, $regex, '');
-        return Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
+        $errorMessage = \RectorPrefix20220606\Nette\Utils\Strings::replace($errorMessage, $regex, '');
+        return \RectorPrefix20220606\Nette\Utils\Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
     }
-    private function reportRemovedNodes(ProcessResult $processResult) : void
+    private function reportRemovedNodes(\Rector\Core\ValueObject\ProcessResult $processResult) : void
     {
         if ($processResult->getRemovedNodeCount() === 0) {
             return;
@@ -131,7 +131,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         $message = \sprintf('%d nodes were removed', $processResult->getRemovedNodeCount());
         $this->rectorOutputStyle->warning($message);
     }
-    private function createSuccessMessage(ProcessResult $processResult, Configuration $configuration) : string
+    private function createSuccessMessage(\Rector\Core\ValueObject\ProcessResult $processResult, \Rector\Core\ValueObject\Configuration $configuration) : string
     {
         $changeCount = \count($processResult->getFileDiffs()) + $processResult->getRemovedAndAddedFilesCount();
         if ($changeCount === 0) {
@@ -142,12 +142,12 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     /**
      * @return string[]
      */
-    private function createRectorChangelogLines(FileDiff $fileDiff) : array
+    private function createRectorChangelogLines(\Rector\Core\ValueObject\Reporting\FileDiff $fileDiff) : array
     {
         $rectorsChangelogs = $this->rectorsChangelogResolver->resolveIncludingMissing($fileDiff->getRectorClasses());
         $rectorsChangelogsLines = [];
         foreach ($rectorsChangelogs as $rectorClass => $changelog) {
-            $rectorShortClass = (string) Strings::after($rectorClass, '\\', -1);
+            $rectorShortClass = (string) \RectorPrefix20220606\Nette\Utils\Strings::after($rectorClass, '\\', -1);
             $rectorsChangelogsLines[] = $changelog === null ? $rectorShortClass : $rectorShortClass . ' (' . $changelog . ')';
         }
         return $rectorsChangelogsLines;

@@ -1,18 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\FileProcessor\Resources\Icons\Rector;
+namespace Ssch\TYPO3Rector\FileProcessor\Resources\Icons\Rector;
 
-use RectorPrefix20220606\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use RectorPrefix20220606\Rector\Core\Configuration\Option;
-use RectorPrefix20220606\Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220606\Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use RectorPrefix20220606\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Core\Configuration\Option;
+use Rector\Core\ValueObject\Application\File;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+use Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface;
 use RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-final class IconsRector implements IconRectorInterface
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+final class IconsRector implements \Ssch\TYPO3Rector\Contract\FileProcessor\Resources\IconRectorInterface
 {
     /**
      * @readonly
@@ -24,21 +24,21 @@ final class IconsRector implements IconRectorInterface
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(ParameterProvider $parameterProvider, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(\RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->parameterProvider = $parameterProvider;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
-    public function refactorFile(File $file) : void
+    public function refactorFile(\Rector\Core\ValueObject\Application\File $file) : void
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $newFullPath = $this->createIconPath($file);
         $this->createDeepDirectory($newFullPath);
-        $this->removedAndAddedFilesCollector->addAddedFile(new AddedFileWithContent($newFullPath, $smartFileInfo->getContents()));
+        $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($newFullPath, $smartFileInfo->getContents()));
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Copy ext_icon.* to Resources/Icons/Extension.*', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Copy ext_icon.* to Resources/Icons/Extension.*', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 ext_icon.gif
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -53,7 +53,7 @@ CODE_SAMPLE
         }
         \mkdir(\dirname($newFullPath), 0777, \true);
     }
-    private function createIconPath(File $file) : string
+    private function createIconPath(\Rector\Core\ValueObject\Application\File $file) : string
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $realPath = $smartFileInfo->getRealPathDirectory();
@@ -62,6 +62,6 @@ CODE_SAMPLE
     }
     private function shouldSkip() : bool
     {
-        return $this->parameterProvider->provideBoolParameter(Option::DRY_RUN) && !StaticPHPUnitEnvironment::isPHPUnitRun();
+        return $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::DRY_RUN) && !\Rector\Testing\PHPUnit\StaticPHPUnitEnvironment::isPHPUnitRun();
     }
 }

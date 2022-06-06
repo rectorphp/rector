@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\ValueObject;
+namespace Rector\Php80\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
 final class StrStartsWith
 {
     /**
@@ -27,18 +27,18 @@ final class StrStartsWith
      * @var bool
      */
     private $isPositive;
-    public function __construct(FuncCall $funcCall, Expr $haystackExpr, Expr $needleExpr, bool $isPositive)
+    public function __construct(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr $haystackExpr, \PhpParser\Node\Expr $needleExpr, bool $isPositive)
     {
         $this->funcCall = $funcCall;
         $this->haystackExpr = $haystackExpr;
         $this->needleExpr = $needleExpr;
         $this->isPositive = $isPositive;
     }
-    public function getFuncCall() : FuncCall
+    public function getFuncCall() : \PhpParser\Node\Expr\FuncCall
     {
         return $this->funcCall;
     }
-    public function getHaystackExpr() : Expr
+    public function getHaystackExpr() : \PhpParser\Node\Expr
     {
         return $this->haystackExpr;
     }
@@ -46,7 +46,7 @@ final class StrStartsWith
     {
         return $this->isPositive;
     }
-    public function getNeedleExpr() : Expr
+    public function getNeedleExpr() : \PhpParser\Node\Expr
     {
         return $this->needleExpr;
     }

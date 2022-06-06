@@ -2,7 +2,7 @@
 
 namespace RectorPrefix20220606\React\Promise;
 
-class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
+class Promise implements \RectorPrefix20220606\React\Promise\ExtendedPromiseInterface, \RectorPrefix20220606\React\Promise\CancellablePromiseInterface
 {
     private $canceller;
     private $result;
@@ -47,7 +47,7 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
         if (null !== $this->result) {
             return $this->result->done($onFulfilled, $onRejected, $onProgress);
         }
-        $this->handlers[] = static function (ExtendedPromiseInterface $promise) use($onFulfilled, $onRejected) {
+        $this->handlers[] = static function (\RectorPrefix20220606\React\Promise\ExtendedPromiseInterface $promise) use($onFulfilled, $onRejected) {
             $promise->done($onFulfilled, $onRejected);
         };
         if ($onProgress) {
@@ -58,7 +58,7 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
     {
         return $this->then(null, static function ($reason) use($onRejected) {
             if (!_checkTypehint($onRejected, $reason)) {
-                return new RejectedPromise($reason);
+                return new \RectorPrefix20220606\React\Promise\RejectedPromise($reason);
             }
             return $onRejected($reason);
         });
@@ -71,7 +71,7 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
             });
         }, static function ($reason) use($onFulfilledOrRejected) {
             return resolve($onFulfilledOrRejected())->then(function () use($reason) {
-                return new RejectedPromise($reason);
+                return new \RectorPrefix20220606\React\Promise\RejectedPromise($reason);
             });
         });
     }
@@ -104,7 +104,7 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
             } else {
                 $progressHandler = $notify;
             }
-            $this->handlers[] = static function (ExtendedPromiseInterface $promise) use($onFulfilled, $onRejected, $resolve, $reject, $progressHandler) {
+            $this->handlers[] = static function (\RectorPrefix20220606\React\Promise\ExtendedPromiseInterface $promise) use($onFulfilled, $onRejected, $resolve, $reject, $progressHandler) {
                 $promise->then($onFulfilled, $onRejected)->done($resolve, $reject, $progressHandler);
             };
             $this->progressHandlers[] = $progressHandler;
@@ -117,11 +117,11 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
         }
         $this->settle(reject($reason));
     }
-    private function settle(ExtendedPromiseInterface $promise)
+    private function settle(\RectorPrefix20220606\React\Promise\ExtendedPromiseInterface $promise)
     {
         $promise = $this->unwrap($promise);
         if ($promise === $this) {
-            $promise = new RejectedPromise(new \LogicException('Cannot resolve a promise with itself.'));
+            $promise = new \RectorPrefix20220606\React\Promise\RejectedPromise(new \LogicException('Cannot resolve a promise with itself.'));
         }
         $handlers = $this->handlers;
         $this->progressHandlers = $this->handlers = [];
@@ -141,7 +141,7 @@ class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
     }
     private function extract($promise)
     {
-        if ($promise instanceof LazyPromise) {
+        if ($promise instanceof \RectorPrefix20220606\React\Promise\LazyPromise) {
             $promise = $promise->promise();
         }
         return $promise;

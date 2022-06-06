@@ -1,25 +1,25 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Rector\Class_;
+namespace Rector\Symfony\Rector\Class_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Class_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Namespace_;
-use RectorPrefix20220606\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220606\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter;
-use RectorPrefix20220606\Rector\Symfony\NodeFactory\InvokableControllerClassFactory;
-use RectorPrefix20220606\Rector\Symfony\Printer\NeighbourClassLikePrinter;
-use RectorPrefix20220606\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
+use Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter;
+use Rector\Symfony\NodeFactory\InvokableControllerClassFactory;
+use Rector\Symfony\Printer\NeighbourClassLikePrinter;
+use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/doc/2.8/controller/service.html#referring-to-the-service
  *
@@ -27,7 +27,7 @@ use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * Inspiration @see https://github.com/rectorphp/rector-src/blob/main/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php
  */
-final class InvokableControllerRector extends AbstractRector
+final class InvokableControllerRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -54,7 +54,7 @@ final class InvokableControllerRector extends AbstractRector
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, SymfonyControllerFilter $symfonyControllerFilter, NeighbourClassLikePrinter $neighbourClassLikePrinter, InvokableControllerClassFactory $invokableControllerClassFactory, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer, \Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter $symfonyControllerFilter, \Rector\Symfony\Printer\NeighbourClassLikePrinter $neighbourClassLikePrinter, \Rector\Symfony\NodeFactory\InvokableControllerClassFactory $invokableControllerClassFactory, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->symfonyControllerFilter = $symfonyControllerFilter;
@@ -62,9 +62,9 @@ final class InvokableControllerRector extends AbstractRector
         $this->invokableControllerClassFactory = $invokableControllerClassFactory;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change god controller to single-action invokable controllers', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change god controller to single-action invokable controllers', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 final class SomeController extends Controller
@@ -104,15 +104,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [\PhpParser\Node\Stmt\Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         // skip anonymous controllers
-        if (!$node->name instanceof Identifier) {
+        if (!$node->name instanceof \PhpParser\Node\Identifier) {
             return null;
         }
         if (!$this->controllerAnalyzer->isInsideController($node)) {
@@ -130,9 +130,9 @@ CODE_SAMPLE
         foreach ($actionClassMethods as $actionClassMethod) {
             $invokableControllerClass = $this->invokableControllerClassFactory->createWithActionClassMethod($node, $actionClassMethod);
             /** @var Namespace_|FileWithoutNamespace|null $parentNamespace */
-            $parentNamespace = $this->betterNodeFinder->findParentByTypes($node, [Namespace_::class, FileWithoutNamespace::class]);
-            if (!$parentNamespace instanceof Node) {
-                throw new ShouldNotHappenException('Missing parent namespace or without namespace node');
+            $parentNamespace = $this->betterNodeFinder->findParentByTypes($node, [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class]);
+            if (!$parentNamespace instanceof \PhpParser\Node) {
+                throw new \Rector\Core\Exception\ShouldNotHappenException('Missing parent namespace or without namespace node');
             }
             $this->neighbourClassLikePrinter->printClassLike($invokableControllerClass, $parentNamespace, $this->file->getSmartFileInfo(), $this->file);
         }
@@ -141,9 +141,9 @@ CODE_SAMPLE
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
         return null;
     }
-    private function refactorSingleAction(ClassMethod $actionClassMethod, Class_ $class) : Class_
+    private function refactorSingleAction(\PhpParser\Node\Stmt\ClassMethod $actionClassMethod, \PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt\Class_
     {
-        $actionClassMethod->name = new Identifier(MethodName::INVOKE);
+        $actionClassMethod->name = new \PhpParser\Node\Identifier(\Rector\Core\ValueObject\MethodName::INVOKE);
         return $class;
     }
 }

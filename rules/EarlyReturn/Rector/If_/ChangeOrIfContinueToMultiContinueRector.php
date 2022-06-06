@@ -1,34 +1,34 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\EarlyReturn\Rector\If_;
+namespace Rector\EarlyReturn\Rector\If_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Continue_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\IfManipulator;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Stmt\Continue_;
+use PhpParser\Node\Stmt\If_;
+use Rector\Core\NodeManipulator\IfManipulator;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector\ChangeOrIfContinueToMultiContinueRectorTest
  */
-final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
+final class ChangeOrIfContinueToMultiContinueRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
-    public function __construct(IfManipulator $ifManipulator)
+    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator)
     {
         $this->ifManipulator = $ifManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Changes if || to early return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes if || to early return', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function canDrive(Car $newCar)
@@ -70,18 +70,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
      * @param If_ $node
      * @return null|If_[]
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(\PhpParser\Node $node) : ?array
     {
-        if (!$this->ifManipulator->isIfWithOnly($node, Continue_::class)) {
+        if (!$this->ifManipulator->isIfWithOnly($node, \PhpParser\Node\Stmt\Continue_::class)) {
             return null;
         }
-        if (!$node->cond instanceof BooleanOr) {
+        if (!$node->cond instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return null;
         }
         return $this->processMultiIfContinue($node);
@@ -89,7 +89,7 @@ CODE_SAMPLE
     /**
      * @return null|If_[]
      */
-    private function processMultiIfContinue(If_ $if) : ?array
+    private function processMultiIfContinue(\PhpParser\Node\Stmt\If_ $if) : ?array
     {
         $node = clone $if;
         /** @var Continue_ $continue */
@@ -106,9 +106,9 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function createMultipleIfs(Expr $expr, Continue_ $continue, array $ifs) : array
+    private function createMultipleIfs(\PhpParser\Node\Expr $expr, \PhpParser\Node\Stmt\Continue_ $continue, array $ifs) : array
     {
-        while ($expr instanceof BooleanOr) {
+        while ($expr instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             $ifs = \array_merge($ifs, $this->collectLeftbooleanOrToIfs($expr, $continue, $ifs));
             $ifs[] = $this->ifManipulator->createIfStmt($expr->right, $continue);
             $expr = $expr->right;
@@ -119,10 +119,10 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function collectLeftbooleanOrToIfs(BooleanOr $booleanOr, Continue_ $continue, array $ifs) : array
+    private function collectLeftbooleanOrToIfs(\PhpParser\Node\Expr\BinaryOp\BooleanOr $booleanOr, \PhpParser\Node\Stmt\Continue_ $continue, array $ifs) : array
     {
         $left = $booleanOr->left;
-        if (!$left instanceof BooleanOr) {
+        if (!$left instanceof \PhpParser\Node\Expr\BinaryOp\BooleanOr) {
             return [$this->ifManipulator->createIfStmt($left, $continue)];
         }
         return $this->createMultipleIfs($left, $continue, $ifs);

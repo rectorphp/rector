@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\NodeAnalyzer\FormType;
+namespace Rector\Symfony\NodeAnalyzer\FormType;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\New_;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Rector\NodeTypeResolver\NodeTypeResolver;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\New_;
+use PHPStan\Type\TypeWithClassName;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class FormTypeClassResolver
 {
     /**
@@ -20,19 +20,19 @@ final class FormTypeClassResolver
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolveFromExpr(Expr $expr) : ?string
+    public function resolveFromExpr(\PhpParser\Node\Expr $expr) : ?string
     {
-        if ($expr instanceof New_) {
+        if ($expr instanceof \PhpParser\Node\Expr\New_) {
             // we can only process direct name
             return $this->nodeNameResolver->getName($expr->class);
         }
         $exprType = $this->nodeTypeResolver->getType($expr);
-        if ($exprType instanceof TypeWithClassName) {
+        if ($exprType instanceof \PHPStan\Type\TypeWithClassName) {
             return $exprType->getClassName();
         }
         return null;

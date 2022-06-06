@@ -1,30 +1,30 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Ssch\TYPO3Rector\Rector\v11\v5;
+namespace Ssch\TYPO3Rector\Rector\v11\v5;
 
 use RectorPrefix20220606\Nette\Utils\Strings;
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Return_;
-use RectorPrefix20220606\PhpParser\NodeTraverser;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
-use RectorPrefix20220606\Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use RectorPrefix20220606\Rector\Core\PhpParser\Parser\SimplePhpParser;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use RectorPrefix20220606\Ssch\TYPO3Rector\Helper\FilesFinder;
-use RectorPrefix20220606\Ssch\TYPO3Rector\NodeFactory\IconArrayItemFactory;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\PhpParser\Parser\SimplePhpParser;
+use Rector\Core\Rector\AbstractRector;
+use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Ssch\TYPO3Rector\Helper\FilesFinder;
+use Ssch\TYPO3Rector\NodeFactory\IconArrayItemFactory;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @changelog https://docs.typo3.org/m/typo3/reference-coreapi/main/en-us/ApiOverview/Icon/Index.html
  * @see \Ssch\TYPO3Rector\Tests\Rector\v11\v5\RegisterIconToIconFileRector\RegisterIconToIconFileRectorTest
  */
-final class RegisterIconToIconFileRector extends AbstractRector
+final class RegisterIconToIconFileRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @var string
@@ -55,7 +55,7 @@ final class RegisterIconToIconFileRector extends AbstractRector
      * @var \Ssch\TYPO3Rector\NodeFactory\IconArrayItemFactory
      */
     private $iconArrayItemFactory;
-    public function __construct(FilesFinder $filesFinder, SimplePhpParser $simplePhpParser, NodePrinterInterface $nodePrinter, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, IconArrayItemFactory $iconArrayItemFactory)
+    public function __construct(\Ssch\TYPO3Rector\Helper\FilesFinder $filesFinder, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Ssch\TYPO3Rector\NodeFactory\IconArrayItemFactory $iconArrayItemFactory)
     {
         $this->filesFinder = $filesFinder;
         $this->simplePhpParser = $simplePhpParser;
@@ -68,14 +68,14 @@ final class RegisterIconToIconFileRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [\PhpParser\Node\Expr\MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
-        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconRegistry'))) {
+        if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, new \PHPStan\Type\ObjectType('TYPO3\\CMS\\Core\\Imaging\\IconRegistry'))) {
             return null;
         }
         if (!$this->nodeNameResolver->isName($node->name, 'registerIcon')) {
@@ -83,7 +83,7 @@ final class RegisterIconToIconFileRector extends AbstractRector
         }
         $currentSmartFileInfo = $this->file->getSmartFileInfo();
         $extEmConfFileInfo = $this->filesFinder->findExtEmConfRelativeFromGivenFileInfo($currentSmartFileInfo);
-        if (!$extEmConfFileInfo instanceof SmartFileInfo) {
+        if (!$extEmConfFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
             return null;
         }
         $extensionDirectory = \dirname($extEmConfFileInfo->getRealPath());
@@ -104,9 +104,9 @@ final class RegisterIconToIconFileRector extends AbstractRector
     /**
      * @codeCoverageIgnore
      */
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Generate or add registerIcon calls to Icons.php file', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Generate or add registerIcon calls to Icons.php file', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 use TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider;
 use TYPO3\CMS\Core\Imaging\IconRegistry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -146,19 +146,19 @@ CODE_SAMPLE
         $iconArrayItem = $this->iconArrayItemFactory->create($iconConfiguration, $iconIdentifier);
         if (\is_string($existingIcons)) {
             $stmts = $this->simplePhpParser->parseString($existingIcons);
-            $this->traverseNodesWithCallable($stmts, function (Node $node) use($iconArrayItem) {
-                if (!$node instanceof Array_) {
+            $this->traverseNodesWithCallable($stmts, function (\PhpParser\Node $node) use($iconArrayItem) {
+                if (!$node instanceof \PhpParser\Node\Expr\Array_) {
                     return null;
                 }
                 $node->items[] = $iconArrayItem;
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                return \PhpParser\NodeTraverser::DONT_TRAVERSE_CHILDREN;
             });
         } else {
-            $array = new Array_([$iconArrayItem]);
-            $stmts = [new Return_($array)];
+            $array = new \PhpParser\Node\Expr\Array_([$iconArrayItem]);
+            $stmts = [new \PhpParser\Node\Stmt\Return_($array)];
         }
         $changedIconsContent = $this->nodePrinter->prettyPrintFile($stmts);
-        $changedIconsContent = Strings::replace($changedIconsContent, self::REMOVE_EMPTY_LINES);
-        $this->removedAndAddedFilesCollector->addAddedFile(new AddedFileWithContent($iconsFilePath, $changedIconsContent));
+        $changedIconsContent = \RectorPrefix20220606\Nette\Utils\Strings::replace($changedIconsContent, self::REMOVE_EMPTY_LINES);
+        $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($iconsFilePath, $changedIconsContent));
     }
 }

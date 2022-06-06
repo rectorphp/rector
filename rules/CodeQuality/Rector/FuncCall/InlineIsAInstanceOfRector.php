@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\CodeQuality\Rector\FuncCall;
+namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\Instanceof_;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PHPStan\Type\Generic\GenericClassStringType;
-use RectorPrefix20220606\PHPStan\Type\ObjectType;
-use RectorPrefix20220606\PHPStan\Type\ObjectWithoutClassType;
-use RectorPrefix20220606\PHPStan\Type\TypeWithClassName;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Type\Generic\GenericClassStringType;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\ObjectWithoutClassType;
+use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Rector\AbstractRector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector\InlineIsAInstanceOfRectorTest
  */
-final class InlineIsAInstanceOfRector extends AbstractRector
+final class InlineIsAInstanceOfRector extends \Rector\Core\Rector\AbstractRector
 {
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Change is_a() with object and class name check to instanceof', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change is_a() with object and class name check to instanceof', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(object $object)
@@ -48,12 +48,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [\PhpParser\Node\Expr\FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         if (!$this->isName($node->name, 'is_a')) {
             return null;
@@ -67,28 +67,28 @@ CODE_SAMPLE
         if ($className === null) {
             return null;
         }
-        return new Instanceof_($firstArgValue, new FullyQualified($className));
+        return new \PhpParser\Node\Expr\Instanceof_($firstArgValue, new \PhpParser\Node\Name\FullyQualified($className));
     }
-    private function resolveClassName(Expr $expr) : ?string
+    private function resolveClassName(\PhpParser\Node\Expr $expr) : ?string
     {
-        if (!$expr instanceof ClassConstFetch) {
+        if (!$expr instanceof \PhpParser\Node\Expr\ClassConstFetch) {
             return null;
         }
         $type = $this->getType($expr);
-        if ($type instanceof GenericClassStringType) {
+        if ($type instanceof \PHPStan\Type\Generic\GenericClassStringType) {
             $type = $type->getGenericType();
         }
-        if (!$type instanceof TypeWithClassName) {
+        if (!$type instanceof \PHPStan\Type\TypeWithClassName) {
             return null;
         }
         return $type->getClassName();
     }
-    private function isFirstObjectType(Expr $expr) : bool
+    private function isFirstObjectType(\PhpParser\Node\Expr $expr) : bool
     {
         $exprType = $this->getType($expr);
-        if ($exprType instanceof ObjectWithoutClassType) {
+        if ($exprType instanceof \PHPStan\Type\ObjectWithoutClassType) {
             return \true;
         }
-        return $exprType instanceof ObjectType;
+        return $exprType instanceof \PHPStan\Type\ObjectType;
     }
 }

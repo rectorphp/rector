@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Nette\Contract\Rector;
+namespace Rector\Nette\Contract\Rector;
 
 use RectorPrefix20220606\Nette\Neon\Node;
-use RectorPrefix20220606\Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 /**
  * @template TNode as Node
  */
-interface NeonRectorInterface extends RectorInterface
+interface NeonRectorInterface extends \Rector\Core\Contract\Rector\RectorInterface
 {
     /**
      * @return class-string<TNode>
@@ -18,5 +18,5 @@ interface NeonRectorInterface extends RectorInterface
      * @param TNode $node
      * @return \Nette\Neon\Node|null
      */
-    public function enterNode(Node $node);
+    public function enterNode(\RectorPrefix20220606\Nette\Neon\Node $node);
 }

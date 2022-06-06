@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\PHPStan\PhpDocParser\Ast\Type;
+namespace PHPStan\PhpDocParser\Ast\Type;
 
-use RectorPrefix20220606\PHPStan\PhpDocParser\Ast\NodeAttributes;
+use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use function implode;
-class ArrayShapeNode implements TypeNode
+class ArrayShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
     use NodeAttributes;
     /** @var ArrayShapeItemNode[] */
@@ -16,6 +16,6 @@ class ArrayShapeNode implements TypeNode
     }
     public function __toString() : string
     {
-        return 'array{' . implode(', ', $this->items) . '}';
+        return 'array{' . \implode(', ', $this->items) . '}';
     }
 }

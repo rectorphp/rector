@@ -1,47 +1,47 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DowngradePhp56\Rector\CallLike;
+namespace Rector\DowngradePhp56\Rector\CallLike;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Expr\CallLike;
-use RectorPrefix20220606\PhpParser\Node\Expr\ClassConstFetch;
-use RectorPrefix20220606\PhpParser\Node\Expr\FuncCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\MethodCall;
-use RectorPrefix20220606\PhpParser\Node\Expr\New_;
-use RectorPrefix20220606\PhpParser\Node\Expr\StaticCall;
-use RectorPrefix20220606\PhpParser\Node\Identifier;
-use RectorPrefix20220606\PhpParser\Node\Name;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\PhpParser\Node\Scalar\String_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\DowngradePhp56\NodeManipulator\ArgManipulator;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\CallLike;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\DowngradePhp56\NodeManipulator\ArgManipulator;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/argument_unpacking
  *
  * @see \Rector\Tests\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector\DowngradeArgumentUnpackingRectorTest
  */
-final class DowngradeArgumentUnpackingRector extends AbstractRector
+final class DowngradeArgumentUnpackingRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\DowngradePhp56\NodeManipulator\ArgManipulator
      */
     private $argManipulator;
-    public function __construct(ArgManipulator $argManipulator)
+    public function __construct(\Rector\DowngradePhp56\NodeManipulator\ArgManipulator $argManipulator)
     {
         $this->argManipulator = $argManipulator;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Replace argument unpacking by call_user_func_array()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace argument unpacking by call_user_func_array()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(array $items)
@@ -66,27 +66,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [CallLike::class];
+        return [\PhpParser\Node\Expr\CallLike::class];
     }
     /**
      * @param CallLike $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $args = $node->getArgs();
         if ($this->shouldSkip($args)) {
             return null;
         }
-        if ($node instanceof FuncCall) {
+        if ($node instanceof \PhpParser\Node\Expr\FuncCall) {
             return $this->createCallUserFuncArrayFuncCall($this->funcCallToCallbackArg($node), $args);
         }
-        if ($node instanceof MethodCall) {
+        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
             return $this->createCallUserFuncArrayFuncCall($this->methodCallToCallbackArg($node), $args);
         }
-        if ($node instanceof New_) {
+        if ($node instanceof \PhpParser\Node\Expr\New_) {
             return $this->createReflectionInstantiation($node, $args);
         }
-        if ($node instanceof StaticCall) {
+        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
             return $this->createCallUserFuncArrayFuncCall($this->staticCallToCallbackArg($node), $args);
         }
         return null;
@@ -98,84 +98,84 @@ CODE_SAMPLE
     {
         return !$this->argManipulator->hasUnpackedArg($args);
     }
-    private function funcCallToCallbackArg(FuncCall $funcCall) : Arg
+    private function funcCallToCallbackArg(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Arg
     {
-        $callback = $funcCall->name instanceof Name ? new String_($funcCall->name->toString()) : $funcCall->name;
-        return new Arg($callback);
+        $callback = $funcCall->name instanceof \PhpParser\Node\Name ? new \PhpParser\Node\Scalar\String_($funcCall->name->toString()) : $funcCall->name;
+        return new \PhpParser\Node\Arg($callback);
     }
-    private function methodCallToCallbackArg(MethodCall $methodCall) : Arg
+    private function methodCallToCallbackArg(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Arg
     {
         $object = $methodCall->var;
-        $method = $methodCall->name instanceof Identifier ? new String_($methodCall->name->toString()) : $methodCall->name;
-        $array = new Array_([new ArrayItem($object), new ArrayItem($method)]);
-        return new Arg($array);
+        $method = $methodCall->name instanceof \PhpParser\Node\Identifier ? new \PhpParser\Node\Scalar\String_($methodCall->name->toString()) : $methodCall->name;
+        $array = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($object), new \PhpParser\Node\Expr\ArrayItem($method)]);
+        return new \PhpParser\Node\Arg($array);
     }
-    private function staticCallToCallbackArg(StaticCall $staticCall) : Arg
+    private function staticCallToCallbackArg(\PhpParser\Node\Expr\StaticCall $staticCall) : \PhpParser\Node\Arg
     {
-        if ($staticCall->class instanceof Name) {
-            $class = $staticCall->class->isSpecialClassName() ? new String_($staticCall->class->toString()) : new ClassConstFetch($staticCall->class, 'class');
+        if ($staticCall->class instanceof \PhpParser\Node\Name) {
+            $class = $staticCall->class->isSpecialClassName() ? new \PhpParser\Node\Scalar\String_($staticCall->class->toString()) : new \PhpParser\Node\Expr\ClassConstFetch($staticCall->class, 'class');
         } else {
             $class = $staticCall->class;
         }
-        $method = $staticCall->name instanceof Identifier ? new String_($staticCall->name->toString()) : $staticCall->name;
-        $array = new Array_([new ArrayItem($class), new ArrayItem($method)]);
-        return new Arg($array);
+        $method = $staticCall->name instanceof \PhpParser\Node\Identifier ? new \PhpParser\Node\Scalar\String_($staticCall->name->toString()) : $staticCall->name;
+        $array = new \PhpParser\Node\Expr\Array_([new \PhpParser\Node\Expr\ArrayItem($class), new \PhpParser\Node\Expr\ArrayItem($method)]);
+        return new \PhpParser\Node\Arg($array);
     }
     /**
      * @param Arg[] $args
      */
-    private function createCallUserFuncArrayFuncCall(Arg $arg, array $args) : FuncCall
+    private function createCallUserFuncArrayFuncCall(\PhpParser\Node\Arg $arg, array $args) : \PhpParser\Node\Expr\FuncCall
     {
-        return new FuncCall(new Name('call_user_func_array'), [$arg, $this->mergeArgs($args)]);
+        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('call_user_func_array'), [$arg, $this->mergeArgs($args)]);
     }
     /**
      * @param Arg[] $args
      */
-    private function mergeArgs(array $args) : Arg
+    private function mergeArgs(array $args) : \PhpParser\Node\Arg
     {
         $unpackedArgs = $this->argManipulator->unpack($args);
         if (\count($unpackedArgs) === 1) {
             return $unpackedArgs[0];
         }
-        return new Arg(new FuncCall(new Name('array_merge'), $unpackedArgs));
+        return new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('array_merge'), $unpackedArgs));
     }
     /**
      * @param Arg[] $args
      */
-    private function createReflectionInstantiation(New_ $new, array $args) : ?Expr
+    private function createReflectionInstantiation(\PhpParser\Node\Expr\New_ $new, array $args) : ?\PhpParser\Node\Expr
     {
         if ($this->argManipulator->canBeInlined($args)) {
             $unpackedArgs = $this->argManipulator->unpack($args);
-            Assert::minCount($unpackedArgs, 1);
+            \RectorPrefix20220606\Webmozart\Assert\Assert::minCount($unpackedArgs, 1);
             /** @var Array_ $array */
             $array = $unpackedArgs[0]->value;
             $arrayItems = \array_filter($array->items);
-            $new->args = \array_map(function (ArrayItem $item) : Arg {
-                return new Arg($item->value);
+            $new->args = \array_map(function (\PhpParser\Node\Expr\ArrayItem $item) : Arg {
+                return new \PhpParser\Node\Arg($item->value);
             }, $arrayItems);
             return $new;
         }
-        if ($new->class instanceof Name) {
+        if ($new->class instanceof \PhpParser\Node\Name) {
             switch (\strtolower($new->class->toString())) {
                 case 'self':
-                    $class = new FuncCall(new Name('get_class'));
+                    $class = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('get_class'));
                     break;
                 case 'static':
-                    $class = new FuncCall(new Name('get_called_class'));
+                    $class = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('get_called_class'));
                     break;
                 case 'parent':
-                    $class = new FuncCall(new Name('get_parent_class'));
+                    $class = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('get_parent_class'));
                     break;
                 default:
-                    $class = new ClassConstFetch($new->class, 'class');
+                    $class = new \PhpParser\Node\Expr\ClassConstFetch($new->class, 'class');
                     break;
             }
-        } elseif ($new->class instanceof Expr) {
+        } elseif ($new->class instanceof \PhpParser\Node\Expr) {
             $class = $new->class;
         } else {
             return null;
         }
-        $newReflection = new New_(new FullyQualified('ReflectionClass'), [new Arg($class)]);
-        return new MethodCall($newReflection, 'newInstanceArgs', [$this->mergeArgs($args)]);
+        $newReflection = new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name\FullyQualified('ReflectionClass'), [new \PhpParser\Node\Arg($class)]);
+        return new \PhpParser\Node\Expr\MethodCall($newReflection, 'newInstanceArgs', [$this->mergeArgs($args)]);
     }
 }

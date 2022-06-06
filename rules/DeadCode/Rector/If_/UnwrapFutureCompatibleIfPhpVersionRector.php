@@ -1,23 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\DeadCode\Rector\If_;
+namespace Rector\DeadCode\Rector\If_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt;
-use RectorPrefix20220606\PhpParser\Node\Stmt\If_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\DeadCode\ConditionEvaluator;
-use RectorPrefix20220606\Rector\DeadCode\ConditionResolver;
-use RectorPrefix20220606\Rector\DeadCode\Contract\ConditionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\If_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\ConditionEvaluator;
+use Rector\DeadCode\ConditionResolver;
+use Rector\DeadCode\Contract\ConditionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/function.version-compare.php
  *
  * @see \Rector\Tests\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\UnwrapFutureCompatibleIfPhpVersionRectorTest
  */
-final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
+final class UnwrapFutureCompatibleIfPhpVersionRector extends \Rector\Core\Rector\AbstractRector
 {
     /**
      * @readonly
@@ -29,14 +29,14 @@ final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
      * @var \Rector\DeadCode\ConditionResolver
      */
     private $conditionResolver;
-    public function __construct(ConditionEvaluator $conditionEvaluator, ConditionResolver $conditionResolver)
+    public function __construct(\Rector\DeadCode\ConditionEvaluator $conditionEvaluator, \Rector\DeadCode\ConditionResolver $conditionResolver)
     {
         $this->conditionEvaluator = $conditionEvaluator;
         $this->conditionResolver = $conditionResolver;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove php version checks if they are passed', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove php version checks if they are passed', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 // current PHP: 7.2
 if (version_compare(PHP_VERSION, '7.2', '<')) {
     return 'is PHP 7.1-';
@@ -55,19 +55,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [\PhpParser\Node\Stmt\If_::class];
     }
     /**
      * @param If_ $node
      * @return Stmt[]|null
      */
-    public function refactor(Node $node) : ?array
+    public function refactor(\PhpParser\Node $node) : ?array
     {
         if ($node->elseifs !== []) {
             return null;
         }
         $condition = $this->conditionResolver->resolveFromExpr($node->cond);
-        if (!$condition instanceof ConditionInterface) {
+        if (!$condition instanceof \Rector\DeadCode\Contract\ConditionInterface) {
             return null;
         }
         $result = $this->conditionEvaluator->evaluate($condition);
@@ -86,7 +86,7 @@ CODE_SAMPLE
     /**
      * @return Stmt[]|null
      */
-    private function refactorIsMatch(If_ $if) : ?array
+    private function refactorIsMatch(\PhpParser\Node\Stmt\If_ $if) : ?array
     {
         if ($if->elseifs !== []) {
             return null;
@@ -96,7 +96,7 @@ CODE_SAMPLE
     /**
      * @return Stmt[]|null
      */
-    private function refactorIsNotMatch(If_ $if) : ?array
+    private function refactorIsNotMatch(\PhpParser\Node\Stmt\If_ $if) : ?array
     {
         // no else → just remove the node
         if ($if->else === null) {

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\ValueObject;
+namespace Rector\Php80\ValueObject;
 
-use RectorPrefix20220606\PhpParser\Node\Expr\Assign;
-use RectorPrefix20220606\PhpParser\Node\Param;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Property;
 final class PropertyPromotionCandidate
 {
     /**
@@ -23,21 +23,21 @@ final class PropertyPromotionCandidate
      * @var \PhpParser\Node\Param
      */
     private $param;
-    public function __construct(Property $property, Assign $assign, Param $param)
+    public function __construct(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Param $param)
     {
         $this->property = $property;
         $this->assign = $assign;
         $this->param = $param;
     }
-    public function getProperty() : Property
+    public function getProperty() : \PhpParser\Node\Stmt\Property
     {
         return $this->property;
     }
-    public function getAssign() : Assign
+    public function getAssign() : \PhpParser\Node\Expr\Assign
     {
         return $this->assign;
     }
-    public function getParam() : Param
+    public function getParam() : \PhpParser\Node\Param
     {
         return $this->param;
     }

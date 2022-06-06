@@ -28,7 +28,7 @@ use RectorPrefix20220606\Symfony\Component\ExpressionLanguage\Expression;
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class AnalyzeServiceReferencesPass extends AbstractRecursivePass
+class AnalyzeServiceReferencesPass extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * @var \Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph
@@ -78,7 +78,7 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
     /**
      * Processes a ContainerBuilder object to populate the service reference graph.
      */
-    public function process(ContainerBuilder $container)
+    public function process(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->container = $container;
         $this->graph = $container->getCompiler()->getServiceReferenceGraph();
@@ -106,22 +106,22 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
     {
         $lazy = $this->lazy;
         $inExpression = $this->inExpression();
-        if ($value instanceof ArgumentInterface) {
-            $this->lazy = !$this->byFactory || !$value instanceof IteratorArgument;
+        if ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
+            $this->lazy = !$this->byFactory || !$value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
             parent::processValue($value->getValues());
             $this->lazy = $lazy;
             return $value;
         }
-        if ($value instanceof Reference) {
+        if ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference) {
             $targetId = $this->getDefinitionId((string) $value);
             $targetDefinition = null !== $targetId ? $this->container->getDefinition($targetId) : null;
-            $this->graph->connect($this->currentId, $this->currentDefinition, $targetId, $targetDefinition, $value, $this->lazy || $this->hasProxyDumper && (($targetDefinition2 = $targetDefinition) ? $targetDefinition2->isLazy() : null), ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE === $value->getInvalidBehavior(), $this->byConstructor);
+            $this->graph->connect($this->currentId, $this->currentDefinition, $targetId, $targetDefinition, $value, $this->lazy || $this->hasProxyDumper && (($targetDefinition2 = $targetDefinition) ? $targetDefinition2->isLazy() : null), \RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE === $value->getInvalidBehavior(), $this->byConstructor);
             if ($inExpression) {
                 $this->graph->connect('.internal.reference_in_expression', null, $targetId, $targetDefinition, $value, $this->lazy || (($targetDefinition2 = $targetDefinition) ? $targetDefinition2->isLazy() : null), \true);
             }
             return $value;
         }
-        if (!$value instanceof Definition) {
+        if (!$value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition) {
             return parent::processValue($value, $isRoot);
         }
         if ($isRoot) {
@@ -138,10 +138,10 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
         $byFactory = $this->byFactory;
         $this->byFactory = \true;
         if (\is_string($factory = $value->getFactory()) && \strncmp($factory, '@=', \strlen('@=')) === 0) {
-            if (!\class_exists(Expression::class)) {
-                throw new LogicException('Expressions cannot be used in service factories without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
+            if (!\class_exists(\RectorPrefix20220606\Symfony\Component\ExpressionLanguage\Expression::class)) {
+                throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\LogicException('Expressions cannot be used in service factories without the ExpressionLanguage component. Try running "composer require symfony/expression-language".');
             }
-            $factory = new Expression(\substr($factory, 2));
+            $factory = new \RectorPrefix20220606\Symfony\Component\ExpressionLanguage\Expression(\substr($factory, 2));
         }
         $this->processValue($factory);
         $this->byFactory = $byFactory;

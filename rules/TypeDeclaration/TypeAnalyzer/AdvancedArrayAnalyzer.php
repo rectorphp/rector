@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\TypeDeclaration\TypeAnalyzer;
+namespace Rector\TypeDeclaration\TypeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix20220606\PHPStan\Type\ArrayType;
-use RectorPrefix20220606\PHPStan\Type\ClassStringType;
-use RectorPrefix20220606\PHPStan\Type\Constant\ConstantArrayType;
-use RectorPrefix20220606\PHPStan\Type\MixedType;
-use RectorPrefix20220606\PHPStan\Type\NeverType;
-use RectorPrefix20220606\PHPStan\Type\StringType;
-use RectorPrefix20220606\PHPStan\Type\Type;
-use RectorPrefix20220606\PHPStan\Type\TypeUtils;
-use RectorPrefix20220606\PHPStan\Type\VoidType;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use RectorPrefix20220606\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use RectorPrefix20220606\Rector\TypeDeclaration\TypeNormalizer;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\ClassStringType;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\StringType;
+use PHPStan\Type\Type;
+use PHPStan\Type\TypeUtils;
+use PHPStan\Type\VoidType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\TypeDeclaration\TypeNormalizer;
 final class AdvancedArrayAnalyzer
 {
     /**
@@ -28,57 +28,57 @@ final class AdvancedArrayAnalyzer
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(TypeNormalizer $typeNormalizer, PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(\Rector\TypeDeclaration\TypeNormalizer $typeNormalizer, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function isClassStringArrayByStringArrayOverride(ArrayType $arrayType, ClassMethod $classMethod) : bool
+    public function isClassStringArrayByStringArrayOverride(\PHPStan\Type\ArrayType $arrayType, \PhpParser\Node\Stmt\ClassMethod $classMethod) : bool
     {
-        if (!$arrayType instanceof ConstantArrayType) {
+        if (!$arrayType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return \false;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $arrayType = $this->typeNormalizer->convertConstantArrayTypeToArrayType($arrayType);
-        if (!$arrayType instanceof ArrayType) {
+        if (!$arrayType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
         $currentReturnType = $phpDocInfo->getReturnType();
-        if (!$currentReturnType instanceof ArrayType) {
+        if (!$currentReturnType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
-        if (!$currentReturnType->getItemType() instanceof ClassStringType) {
+        if (!$currentReturnType->getItemType() instanceof \PHPStan\Type\ClassStringType) {
             return \false;
         }
-        return $arrayType->getItemType() instanceof StringType;
+        return $arrayType->getItemType() instanceof \PHPStan\Type\StringType;
     }
-    public function isMixedOfSpecificOverride(ArrayType $arrayType, PhpDocInfo $phpDocInfo) : bool
+    public function isMixedOfSpecificOverride(\PHPStan\Type\ArrayType $arrayType, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
     {
-        if (!$arrayType->getItemType() instanceof MixedType) {
+        if (!$arrayType->getItemType() instanceof \PHPStan\Type\MixedType) {
             return \false;
         }
         $currentReturnType = $phpDocInfo->getReturnType();
-        $arrayTypes = TypeUtils::getArrays($currentReturnType);
+        $arrayTypes = \PHPStan\Type\TypeUtils::getArrays($currentReturnType);
         return $arrayTypes !== [];
     }
-    public function isMoreSpecificArrayTypeOverride(Type $newType, PhpDocInfo $phpDocInfo) : bool
+    public function isMoreSpecificArrayTypeOverride(\PHPStan\Type\Type $newType, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
     {
-        if (!$newType instanceof ConstantArrayType) {
+        if (!$newType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
             return \false;
         }
-        if (!$newType->getItemType() instanceof NeverType) {
+        if (!$newType->getItemType() instanceof \PHPStan\Type\NeverType) {
             return \false;
         }
         $phpDocReturnType = $phpDocInfo->getReturnType();
-        if (!$phpDocReturnType instanceof ArrayType) {
+        if (!$phpDocReturnType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
-        return !$phpDocReturnType->getItemType() instanceof VoidType;
+        return !$phpDocReturnType->getItemType() instanceof \PHPStan\Type\VoidType;
     }
-    public function isNewAndCurrentTypeBothCallable(ArrayType $newArrayType, PhpDocInfo $phpDocInfo) : bool
+    public function isNewAndCurrentTypeBothCallable(\PHPStan\Type\ArrayType $newArrayType, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
     {
         $currentReturnType = $phpDocInfo->getReturnType();
-        if (!$currentReturnType instanceof ArrayType) {
+        if (!$currentReturnType instanceof \PHPStan\Type\ArrayType) {
             return \false;
         }
         if (!$newArrayType->getItemType()->isCallable()->yes()) {

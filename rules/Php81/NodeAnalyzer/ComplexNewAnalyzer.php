@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php81\NodeAnalyzer;
+namespace Rector\Php81\NodeAnalyzer;
 
-use RectorPrefix20220606\PhpParser\Node\Expr;
-use RectorPrefix20220606\PhpParser\Node\Expr\Array_;
-use RectorPrefix20220606\PhpParser\Node\Expr\ArrayItem;
-use RectorPrefix20220606\PhpParser\Node\Expr\New_;
-use RectorPrefix20220606\PhpParser\Node\Name\FullyQualified;
-use RectorPrefix20220606\Rector\Core\NodeAnalyzer\ExprAnalyzer;
-use RectorPrefix20220606\Rector\Core\NodeManipulator\ArrayManipulator;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Name\FullyQualified;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
+use Rector\Core\NodeManipulator\ArrayManipulator;
 final class ComplexNewAnalyzer
 {
     /**
@@ -22,14 +22,14 @@ final class ComplexNewAnalyzer
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
-    public function __construct(ArrayManipulator $arrayManipulator, ExprAnalyzer $exprAnalyzer)
+    public function __construct(\Rector\Core\NodeManipulator\ArrayManipulator $arrayManipulator, \Rector\Core\NodeAnalyzer\ExprAnalyzer $exprAnalyzer)
     {
         $this->arrayManipulator = $arrayManipulator;
         $this->exprAnalyzer = $exprAnalyzer;
     }
-    public function isDynamic(New_ $new) : bool
+    public function isDynamic(\PhpParser\Node\Expr\New_ $new) : bool
     {
-        if (!$new->class instanceof FullyQualified) {
+        if (!$new->class instanceof \PhpParser\Node\Name\FullyQualified) {
             return \true;
         }
         $args = $new->getArgs();
@@ -39,7 +39,7 @@ final class ComplexNewAnalyzer
                 continue;
             }
             // new inside array is allowed for New in initializer
-            if ($value instanceof Array_ && $this->isAllowedArray($value)) {
+            if ($value instanceof \PhpParser\Node\Expr\Array_ && $this->isAllowedArray($value)) {
                 continue;
             }
             if (!$this->exprAnalyzer->isDynamicExpr($value)) {
@@ -49,24 +49,24 @@ final class ComplexNewAnalyzer
         }
         return \false;
     }
-    private function isAllowedNew(Expr $expr) : bool
+    private function isAllowedNew(\PhpParser\Node\Expr $expr) : bool
     {
-        if ($expr instanceof New_) {
+        if ($expr instanceof \PhpParser\Node\Expr\New_) {
             return !$this->isDynamic($expr);
         }
         return \false;
     }
-    private function isAllowedArray(Array_ $array) : bool
+    private function isAllowedArray(\PhpParser\Node\Expr\Array_ $array) : bool
     {
         if (!$this->arrayManipulator->isDynamicArray($array)) {
             return \true;
         }
         $arrayItems = $array->items;
         foreach ($arrayItems as $arrayItem) {
-            if (!$arrayItem instanceof ArrayItem) {
+            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
                 continue;
             }
-            if (!$arrayItem->value instanceof New_) {
+            if (!$arrayItem->value instanceof \PhpParser\Node\Expr\New_) {
                 return \false;
             }
             if ($this->isDynamic($arrayItem->value)) {

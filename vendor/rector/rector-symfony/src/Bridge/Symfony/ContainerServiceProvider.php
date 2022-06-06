@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Symfony\Bridge\Symfony;
+namespace Rector\Symfony\Bridge\Symfony;
 
-use RectorPrefix20220606\Rector\Core\Configuration\RectorConfigProvider;
-use RectorPrefix20220606\Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Configuration\RectorConfigProvider;
+use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix20220606\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
@@ -13,20 +13,20 @@ final class ContainerServiceProvider
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;
-    public function __construct(RectorConfigProvider $rectorConfigProvider)
+    public function __construct(\Rector\Core\Configuration\RectorConfigProvider $rectorConfigProvider)
     {
         $this->rectorConfigProvider = $rectorConfigProvider;
     }
     public function provideByName(string $serviceName) : object
     {
         $symfonyContainerPhp = $this->rectorConfigProvider->getSymfonyContainerPhp();
-        Assert::fileExists($symfonyContainerPhp);
+        \RectorPrefix20220606\Webmozart\Assert\Assert::fileExists($symfonyContainerPhp);
         $container = (require_once $symfonyContainerPhp);
         // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
-        Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
+        \RectorPrefix20220606\Webmozart\Assert\Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
         if (!$container->has($serviceName)) {
             $errorMessage = \sprintf('Symfony container has no service "%s", maybe it is private', 'router');
-            throw new ShouldNotHappenException($errorMessage);
+            throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
         }
         return $container->get($serviceName);
     }

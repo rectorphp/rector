@@ -1,17 +1,17 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php70\Rector\Switch_;
+namespace Rector\Php70\Rector\Switch_;
 
-use RectorPrefix20220606\PhpParser\Node;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Case_;
-use RectorPrefix20220606\PhpParser\Node\Stmt\Switch_;
-use RectorPrefix20220606\Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220606\Rector\Core\ValueObject\PhpVersionFeature;
-use RectorPrefix20220606\Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220606\Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Case_;
+use PhpParser\Node\Stmt\Switch_;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://3v4l.org/iGDVW
  *
@@ -19,15 +19,15 @@ use RectorPrefix20220606\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector\ReduceMultipleDefaultSwitchRectorTest
  */
-final class ReduceMultipleDefaultSwitchRector extends AbstractRector implements MinPhpVersionInterface
+final class ReduceMultipleDefaultSwitchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::NO_MULTIPLE_DEFAULT_SWITCH;
+        return \Rector\Core\ValueObject\PhpVersionFeature::NO_MULTIPLE_DEFAULT_SWITCH;
     }
-    public function getRuleDefinition() : RuleDefinition
+    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
     {
-        return new RuleDefinition('Remove first default switch, that is ignored', [new CodeSample(<<<'CODE_SAMPLE'
+        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove first default switch, that is ignored', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
 switch ($expr) {
     default:
          echo "Hello World";
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Switch_::class];
+        return [\PhpParser\Node\Stmt\Switch_::class];
     }
     /**
      * @param Switch_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
     {
         $defaultCases = [];
         foreach ($node->cases as $case) {
@@ -83,10 +83,10 @@ CODE_SAMPLE
             $this->removeNode($defaultCase);
         }
     }
-    private function keepStatementsToParentCase(Case_ $case) : void
+    private function keepStatementsToParentCase(\PhpParser\Node\Stmt\Case_ $case) : void
     {
-        $previousNode = $case->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (!$previousNode instanceof Case_) {
+        $previousNode = $case->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PREVIOUS_NODE);
+        if (!$previousNode instanceof \PhpParser\Node\Stmt\Case_) {
             return;
         }
         if ($previousNode->stmts === []) {

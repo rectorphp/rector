@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Core\FileSystem;
+namespace Rector\Core\FileSystem;
 
-use RectorPrefix20220606\Rector\Caching\UnchangedFilesFilter;
-use RectorPrefix20220606\Rector\Core\Util\StringUtils;
-use RectorPrefix20220606\Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
+use Rector\Caching\UnchangedFilesFilter;
+use Rector\Core\Util\StringUtils;
+use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class PhpFilesFinder
 {
@@ -19,7 +19,7 @@ final class PhpFilesFinder
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;
-    public function __construct(FilesFinder $filesFinder, UnchangedFilesFilter $unchangedFilesFilter)
+    public function __construct(\Rector\Core\FileSystem\FilesFinder $filesFinder, \Rector\Caching\UnchangedFilesFilter $unchangedFilesFilter)
     {
         $this->filesFinder = $filesFinder;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
@@ -31,7 +31,7 @@ final class PhpFilesFinder
     public function findInPaths(array $paths) : array
     {
         $phpFileInfos = $this->filesFinder->findInDirectoriesAndFiles($paths);
-        $suffixRegexPattern = StaticNonPhpFileSuffixes::getSuffixRegexPattern();
+        $suffixRegexPattern = \Rector\Core\ValueObject\StaticNonPhpFileSuffixes::getSuffixRegexPattern();
         // filter out non-PHP files
         foreach ($phpFileInfos as $key => $phpFileInfo) {
             $pathName = $phpFileInfo->getPathname();
@@ -51,7 +51,7 @@ final class PhpFilesFinder
             /**
              * only check with regex when needed
              */
-            if (StringUtils::isMatch($pathName, $suffixRegexPattern)) {
+            if (\Rector\Core\Util\StringUtils::isMatch($pathName, $suffixRegexPattern)) {
                 unset($phpFileInfos[$key]);
             }
         }

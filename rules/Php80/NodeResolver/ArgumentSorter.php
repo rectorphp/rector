@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220606\Rector\Php80\NodeResolver;
+namespace Rector\Php80\NodeResolver;
 
-use RectorPrefix20220606\PhpParser\Node\Arg;
-use RectorPrefix20220606\PhpParser\Node\Param;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Param;
 final class ArgumentSorter
 {
     /**
