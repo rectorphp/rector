@@ -7,8 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
-    'Ssch\\TYPO3Rector\\PHPStan\\' => array($vendorDir . '/ssch/typo3-rector/utils/phpstan/src'),
-    'Ssch\\TYPO3Rector\\' => array($vendorDir . '/ssch/typo3-rector/src'),
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
     'Rector\\RectorGenerator\\' => array($vendorDir . '/rector/rector-generator/src'),
@@ -34,7 +32,6 @@ return array(
     'RectorPrefix20220606\\Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'RectorPrefix20220606\\Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'RectorPrefix20220606\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
-    'RectorPrefix20220606\\Symfony\\Component\\Yaml\\' => array($vendorDir . '/symfony/yaml'),
     'RectorPrefix20220606\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix20220606\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'RectorPrefix20220606\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
@@ -54,7 +51,6 @@ return array(
     'RectorPrefix20220606\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'RectorPrefix20220606\\Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'RectorPrefix20220606\\OndraM\\CiDetector\\' => array($vendorDir . '/ondram/ci-detector/src'),
-    'RectorPrefix20220606\\Helmich\\TypoScriptParser\\' => array($vendorDir . '/helmich/typo3-typoscript-parser/src'),
     'RectorPrefix20220606\\Evenement\\' => array($vendorDir . '/evenement/evenement/src/Evenement'),
     'RectorPrefix20220606\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Inflector'),
     'RectorPrefix20220606\\Composer\\XdebugHandler\\' => array($vendorDir . '/composer/xdebug-handler/src'),
