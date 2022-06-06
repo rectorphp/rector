@@ -3,27 +3,24 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\TypeWithClassName;
+use PhpParser\Node\Expr\Variable;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use ReflectionMethod;
+use Rector\NodeRemoval\NodeRemover;
+use Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover;
+use Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
 final class FormInstanceToFormClassConstFetchConverter
 {
     /**
      * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover
      */
-    private $reflectionProvider;
+    private $createFormTypeOptionsArgMover;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
@@ -31,101 +28,68 @@ final class FormInstanceToFormClassConstFetchConverter
     private $nodeFactory;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
+     * @var \Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver
      */
-    private $nodeNameResolver;
+    private $formTypeClassResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
-    private $nodeTypeResolver;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    private $betterNodeFinder;
+    /**
+     * @readonly
+     * @var \Rector\NodeRemoval\NodeRemover
+     */
+    private $nodeRemover;
+    public function __construct(\Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver $formTypeClassResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover)
     {
-        $this->reflectionProvider = $reflectionProvider;
+        $this->createFormTypeOptionsArgMover = $createFormTypeOptionsArgMover;
         $this->nodeFactory = $nodeFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->formTypeClassResolver = $formTypeClassResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeRemover = $nodeRemover;
     }
-    public function processNewInstance(\PhpParser\Node\Expr\MethodCall $methodCall, int $position, int $optionsPosition) : ?\PhpParser\Node
+    public function processNewInstance(\PhpParser\Node\Expr\MethodCall $methodCall, int $position, int $optionsPosition) : ?\PhpParser\Node\Expr\MethodCall
     {
         $args = $methodCall->getArgs();
         if (!isset($args[$position])) {
             return null;
         }
         $argValue = $args[$position]->value;
-        $formClassName = $this->resolveFormClassName($argValue);
+        $formClassName = $this->formTypeClassResolver->resolveFromExpr($argValue);
         if ($formClassName === null) {
             return null;
         }
-        if ($argValue instanceof \PhpParser\Node\Expr\New_ && $argValue->args !== []) {
-            $methodCall = $this->moveArgumentsToOptions($methodCall, $position, $optionsPosition, $formClassName, $argValue->getArgs());
+        $formNew = $this->resolveFormNew($argValue);
+        if ($formNew instanceof \PhpParser\Node\Expr\New_ && $formNew->getArgs() !== []) {
+            $methodCall = $this->createFormTypeOptionsArgMover->moveArgumentsToOptions($methodCall, $position, $optionsPosition, $formClassName, $formNew->getArgs());
             if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
-                return null;
+                throw new \Rector\Core\Exception\ShouldNotHappenException();
             }
         }
-        $currentArg = $methodCall->getArgs()[$position];
+        // remove previous assign
+        $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($argValue);
+        if ($previousAssign instanceof \PhpParser\Node\Expr\Assign) {
+            $this->nodeRemover->removeNode($previousAssign);
+        }
         $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
+        $currentArg = $methodCall->getArgs()[$position];
         $currentArg->value = $classConstFetch;
         return $methodCall;
     }
-    /**
-     * @param Arg[] $argNodes
-     */
-    private function moveArgumentsToOptions(\PhpParser\Node\Expr\MethodCall $methodCall, int $position, int $optionsPosition, string $className, array $argNodes) : ?\PhpParser\Node\Expr\MethodCall
-    {
-        $namesToArgs = $this->resolveNamesToArgs($className, $argNodes);
-        // set default data in between
-        if ($position + 1 !== $optionsPosition && !isset($methodCall->args[$position + 1])) {
-            $methodCall->args[$position + 1] = new \PhpParser\Node\Arg($this->nodeFactory->createNull());
-        }
-        // @todo decopule and name, so I know what it is
-        if (!isset($methodCall->args[$optionsPosition])) {
-            $array = new \PhpParser\Node\Expr\Array_();
-            foreach ($namesToArgs as $name => $arg) {
-                $array->items[] = new \PhpParser\Node\Expr\ArrayItem($arg->value, new \PhpParser\Node\Scalar\String_($name));
-            }
-            $methodCall->args[$optionsPosition] = new \PhpParser\Node\Arg($array);
-        }
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return null;
-        }
-        $formTypeClassReflection = $this->reflectionProvider->getClass($className);
-        if (!$formTypeClassReflection->hasConstructor()) {
-            return null;
-        }
-        // nothing we can do, out of scope
-        return $methodCall;
-    }
-    /**
-     * @param Arg[] $args
-     * @return array<string, Arg>
-     */
-    private function resolveNamesToArgs(string $className, array $args) : array
-    {
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return [];
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        $nativeReflection = $classReflection->getNativeReflection();
-        $constructorReflectionMethod = $nativeReflection->getConstructor();
-        if (!$constructorReflectionMethod instanceof \ReflectionMethod) {
-            return [];
-        }
-        $namesToArgs = [];
-        foreach ($constructorReflectionMethod->getParameters() as $position => $reflectionParameter) {
-            $namesToArgs[$reflectionParameter->getName()] = $args[$position];
-        }
-        return $namesToArgs;
-    }
-    private function resolveFormClassName(\PhpParser\Node\Expr $expr) : ?string
+    private function resolveFormNew(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\New_
     {
         if ($expr instanceof \PhpParser\Node\Expr\New_) {
-            // we can only process direct name
-            return $this->nodeNameResolver->getName($expr->class);
+            return $expr;
         }
-        $exprType = $this->nodeTypeResolver->getType($expr);
-        if ($exprType instanceof \PHPStan\Type\TypeWithClassName) {
-            return $exprType->getClassName();
+        if ($expr instanceof \PhpParser\Node\Expr\Variable) {
+            $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($expr);
+            if (!$previousAssign instanceof \PhpParser\Node\Expr\Assign) {
+                return null;
+            }
+            if ($previousAssign->expr instanceof \PhpParser\Node\Expr\New_) {
+                return $previousAssign->expr;
+            }
         }
         return null;
     }

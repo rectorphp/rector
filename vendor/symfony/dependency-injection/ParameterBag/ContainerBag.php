@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220605\Symfony\Component\DependencyInjection\ParameterBag;
+namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\ParameterBag;
 
-use RectorPrefix20220605\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix20220606\Symfony\Component\DependencyInjection\Container;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ContainerBag extends \RectorPrefix20220605\Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag implements \RectorPrefix20220605\Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface
+class ContainerBag extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag implements \RectorPrefix20220606\Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface
 {
     /**
      * @var \Symfony\Component\DependencyInjection\Container
      */
     private $container;
-    public function __construct(\RectorPrefix20220605\Symfony\Component\DependencyInjection\Container $container)
+    public function __construct(\RectorPrefix20220606\Symfony\Component\DependencyInjection\Container $container)
     {
         $this->container = $container;
     }

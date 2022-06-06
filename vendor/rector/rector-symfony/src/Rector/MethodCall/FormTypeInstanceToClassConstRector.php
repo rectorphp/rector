@@ -20,11 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Best resource with clear example:
  *
- * @see https://stackoverflow.com/questions/34027711/passing-data-to-buildform-in-symfony-2-8-3-0
+ * @changelog https://stackoverflow.com/questions/34027711/passing-data-to-buildform-in-symfony-2-8-3-0
  *
- * @see https://github.com/symfony/symfony/commit/adf20c86fb0d8dc2859aa0d2821fe339d3551347
- * @see http://www.keganv.com/passing-arguments-controller-file-type-symfony-3/
- * @see https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
+ * @changelog https://github.com/symfony/symfony/commit/adf20c86fb0d8dc2859aa0d2821fe339d3551347
+ * @changelog http://www.keganv.com/passing-arguments-controller-file-type-symfony-3/
+ * @changelog https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\FormTypeInstanceToClassConstRector\FormTypeInstanceToClassConstRectorTest
  */

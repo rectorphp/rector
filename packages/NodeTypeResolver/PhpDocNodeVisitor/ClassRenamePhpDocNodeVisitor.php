@@ -23,8 +23,8 @@ use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use RectorPrefix20220605\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20220605\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
      * @var OldToNewType[]
@@ -77,6 +77,10 @@ final class ClassRenamePhpDocNodeVisitor extends \RectorPrefix20220605\Symplify\
         $phpParserNode = $this->currentNodeProvider->getNode();
         if (!$phpParserNode instanceof \PhpParser\Node) {
             throw new \Rector\Core\Exception\ShouldNotHappenException();
+        }
+        $virtualNode = $phpParserNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE);
+        if ($virtualNode === \true) {
+            return null;
         }
         $identifier = clone $node;
         $namespacedName = $this->resolveNamespacedName($phpParserNode, $identifier->name);

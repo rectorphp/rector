@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v7\v1;
 
-use RectorPrefix20220605\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
+use RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -15,7 +15,7 @@ final class AdditionalHeadersToArrayTypoScriptRector extends \Ssch\TYPO3Rector\F
 {
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220605\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
+        if (!$statement instanceof \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\Assignment) {
             return;
         }
         if (\substr_compare($statement->object->relativeName, 'additionalHeaders', -\strlen('additionalHeaders')) !== 0) {

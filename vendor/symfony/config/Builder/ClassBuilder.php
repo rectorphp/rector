@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220605\Symfony\Component\Config\Builder;
+namespace RectorPrefix20220606\Symfony\Component\Config\Builder;
 
 /**
  * Build PHP classes to generate config.
@@ -120,11 +120,11 @@ BODY
     }
     public function addMethod(string $name, string $body, array $params = []) : void
     {
-        $this->methods[] = new \RectorPrefix20220605\Symfony\Component\Config\Builder\Method(\strtr($body, ['NAME' => $this->camelCase($name)] + $params));
+        $this->methods[] = new \RectorPrefix20220606\Symfony\Component\Config\Builder\Method(\strtr($body, ['NAME' => $this->camelCase($name)] + $params));
     }
-    public function addProperty(string $name, string $classType = null, string $defaultValue = null) : \RectorPrefix20220605\Symfony\Component\Config\Builder\Property
+    public function addProperty(string $name, string $classType = null, string $defaultValue = null) : \RectorPrefix20220606\Symfony\Component\Config\Builder\Property
     {
-        $property = new \RectorPrefix20220605\Symfony\Component\Config\Builder\Property($name, '_' !== $name[0] ? $this->camelCase($name) : $name);
+        $property = new \RectorPrefix20220606\Symfony\Component\Config\Builder\Property($name, '_' !== $name[0] ? $this->camelCase($name) : $name);
         if (null !== $classType) {
             $property->setType($classType);
         }

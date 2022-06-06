@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220605\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument;
 
-trigger_deprecation('symfony/dependency-injection', '6.1', '"%s" is deprecated.', \RectorPrefix20220605\Symfony\Component\DependencyInjection\Argument\ReferenceSetArgumentTrait::class);
-use RectorPrefix20220605\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220605\Symfony\Component\DependencyInjection\Reference;
+trigger_deprecation('symfony/dependency-injection', '6.1', '"%s" is deprecated.', \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ReferenceSetArgumentTrait::class);
+use RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference;
 /**
  * @author Titouan Galopin <galopintitouan@gmail.com>
  * @author Nicolas Grekas <p@tchwork.com>
@@ -45,8 +45,8 @@ trait ReferenceSetArgumentTrait
     public function setValues(array $values)
     {
         foreach ($values as $k => $v) {
-            if (null !== $v && !$v instanceof \RectorPrefix20220605\Symfony\Component\DependencyInjection\Reference) {
-                throw new \RectorPrefix20220605\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A "%s" must hold only Reference instances, "%s" given.', __CLASS__, \get_debug_type($v)));
+            if (null !== $v && !$v instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Reference) {
+                throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A "%s" must hold only Reference instances, "%s" given.', __CLASS__, \get_debug_type($v)));
             }
         }
         $this->values = $values;

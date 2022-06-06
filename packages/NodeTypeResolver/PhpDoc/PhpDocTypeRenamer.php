@@ -8,7 +8,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220605\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocTypeRenamer
 {
     /**
@@ -24,7 +24,7 @@ final class PhpDocTypeRenamer
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $underscoreRenamePhpDocNodeVisitor = new \Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor($this->staticTypeMapper, $pseudoNamespaceToNamespace, $node);
-        $phpDocNodeTraverser = new \RectorPrefix20220605\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($underscoreRenamePhpDocNodeVisitor);
         $phpDocNodeTraverser->traverse($phpDocNode);
         // has changed?

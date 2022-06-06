@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220605;
+namespace RectorPrefix20220606;
 
 use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector;
@@ -9,6 +9,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
+use Rector\Symfony\Rector\Class_\FormTypeWithDependencyToOptionsRector;
 use Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
 use Rector\Symfony\Rector\ClassMethod\GetRequestRector;
 use Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
@@ -22,19 +23,22 @@ use Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     # resources:
     # - https://github.com/symfony/symfony/blob/3.4/UPGRADE-3.0.md
-    # php
-    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\GetRequestRector::class);
-    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector::class);
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\OptionNameRector::class);
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector::class);
-    # forms
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector::class);
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector::class);
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector::class);
-    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector::class);
-    # forms - collection
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector::class);
-    $rectorConfig->rule(\Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class);
+    $rectorConfig->rules([
+        // php
+        \Rector\Symfony\Rector\ClassMethod\GetRequestRector::class,
+        \Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector::class,
+        \Rector\Symfony\Rector\MethodCall\OptionNameRector::class,
+        \Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector::class,
+        // forms
+        \Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector::class,
+        \Rector\Symfony\Rector\Class_\FormTypeWithDependencyToOptionsRector::class,
+        \Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector::class,
+        \Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector::class,
+        \Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector::class,
+        // forms - collection
+        \Rector\Symfony\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector::class,
+        \Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector::class,
+    ]);
     $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector::class, [new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'PRE_BIND', 'PRE_SUBMIT'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'BIND', 'SUBMIT'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\FormEvents', 'POST_BIND', 'POST_SUBMIT'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFEVEN', 'ROUND_HALF_EVEN'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFUP', 'ROUND_HALF_UP'), new \Rector\Renaming\ValueObject\RenameClassConstFetch('Symfony\\Component\\Form\\Extension\\Core\\DataTransformer', 'ROUND_HALFDOWN', 'ROUND_HALF_DOWN')]);
     $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\MethodCall\RenameMethodRector::class, [
         new \Rector\Renaming\ValueObject\MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'registerNamespaces', 'addPrefixes'),

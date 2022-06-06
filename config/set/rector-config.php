@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220605;
+namespace RectorPrefix20220606;
 
 use Rector\Config\RectorConfig;
 use Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector;

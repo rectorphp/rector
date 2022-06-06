@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\v11\v0;
 
-use RectorPrefix20220605\Helmich\TypoScriptParser\Parser\AST\Operator\ObjectCreation;
-use RectorPrefix20220605\Helmich\TypoScriptParser\Parser\AST\Scalar;
+use RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\ObjectCreation;
+use RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Scalar;
 use Helmich\TypoScriptParser\Parser\AST\Statement;
 use Ssch\TYPO3Rector\FileProcessor\TypoScript\Rector\AbstractTypoScriptRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -17,10 +17,10 @@ final class TemplateToFluidTemplateTypoScriptRector extends \Ssch\TYPO3Rector\Fi
 {
     public function enterNode(\Helmich\TypoScriptParser\Parser\AST\Statement $statement) : void
     {
-        if (!$statement instanceof \RectorPrefix20220605\Helmich\TypoScriptParser\Parser\AST\Operator\ObjectCreation) {
+        if (!$statement instanceof \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Operator\ObjectCreation) {
             return;
         }
-        if (!$statement->value instanceof \RectorPrefix20220605\Helmich\TypoScriptParser\Parser\AST\Scalar) {
+        if (!$statement->value instanceof \RectorPrefix20220606\Helmich\TypoScriptParser\Parser\AST\Scalar) {
             return;
         }
         if ('TEMPLATE' !== $statement->value->value) {

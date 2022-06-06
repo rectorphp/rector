@@ -3,9 +3,10 @@
 declare (strict_types=1);
 namespace Ssch\TYPO3Rector\Rector\v9\v5;
 
-use RectorPrefix20220605\Nette\Utils\Strings;
+use RectorPrefix20220606\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -24,7 +25,7 @@ use Ssch\TYPO3Rector\Helper\FilesFinder;
 use Ssch\TYPO3Rector\NodeAnalyzer\CommandArrayDecorator;
 use Ssch\TYPO3Rector\NodeAnalyzer\CommandMethodDecorator;
 use Ssch\TYPO3Rector\Template\TemplateFinder;
-use RectorPrefix20220605\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20220606\Symfony\Component\Console\Input\InputArgument;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -108,6 +109,9 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
         if ([] === $commandClassMethods) {
             return null;
         }
+        if (!$node->namespacedName instanceof \PhpParser\Node\Name) {
+            return null;
+        }
         if ([] === $node->namespacedName->parts) {
             return null;
         }
@@ -146,7 +150,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             }
             $commandDescription = $descriptionPhpDocNodes[0]->text;
             $commandTemplate = $this->templateFinder->getCommand();
-            $commandName = \RectorPrefix20220605\Nette\Utils\Strings::firstUpper($commandMethodName);
+            $commandName = \RectorPrefix20220606\Nette\Utils\Strings::firstUpper($commandMethodName);
             $commandContent = $commandTemplate->getContents();
             $filePath = \sprintf('%s/Classes/Command/%s.php', $extensionDirectory, $commandName);
             // Do not overwrite existing file
@@ -167,7 +171,7 @@ final class ExtbaseCommandControllerToSymfonyCommandRector extends \Rector\Core\
             });
             $changedSetConfigContent = $this->nodePrinter->prettyPrintFile($stmts);
             $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($filePath, $changedSetConfigContent));
-            $newCommandName = \sprintf('%s:%s', \RectorPrefix20220605\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20220605\Nette\Utils\Strings::lower($commandName));
+            $newCommandName = \sprintf('%s:%s', \RectorPrefix20220606\Nette\Utils\Strings::lower($vendorName), \RectorPrefix20220606\Nette\Utils\Strings::lower($commandName));
             $newCommandsWithFullQualifiedNamespace[$newCommandName] = \sprintf('%s\\%s', $commandNamespace, $commandName);
         }
         $this->addNewCommandsToCommandsFile($commandsFilePath, $newCommandsWithFullQualifiedNamespace);
@@ -248,7 +252,7 @@ CODE_SAMPLE
             $stmts = [new \PhpParser\Node\Stmt\Return_($array)];
         }
         $changedCommandsContent = $this->nodePrinter->prettyPrintFile($stmts);
-        $changedCommandsContent = \RectorPrefix20220605\Nette\Utils\Strings::replace($changedCommandsContent, self::REMOVE_EMPTY_LINES, '');
+        $changedCommandsContent = \RectorPrefix20220606\Nette\Utils\Strings::replace($changedCommandsContent, self::REMOVE_EMPTY_LINES, '');
         $this->removedAndAddedFilesCollector->addAddedFile(new \Rector\FileSystemRector\ValueObject\AddedFileWithContent($commandsFilePath, $changedCommandsContent));
     }
     /**
@@ -265,7 +269,7 @@ CODE_SAMPLE
             if (null === $methodParamName) {
                 continue;
             }
-            $inputArguments[$methodParamName] = ['name' => $methodParamName, 'description' => null !== $paramTag ? $paramTag->description : '', 'mode' => null !== $methodParameter->default ? \RectorPrefix20220605\Symfony\Component\Console\Input\InputArgument::OPTIONAL : \RectorPrefix20220605\Symfony\Component\Console\Input\InputArgument::REQUIRED, 'default' => $methodParameter->default];
+            $inputArguments[$methodParamName] = ['name' => $methodParamName, 'description' => null !== $paramTag ? $paramTag->description : '', 'mode' => null !== $methodParameter->default ? \RectorPrefix20220606\Symfony\Component\Console\Input\InputArgument::OPTIONAL : \RectorPrefix20220606\Symfony\Component\Console\Input\InputArgument::REQUIRED, 'default' => $methodParameter->default];
         }
         return $inputArguments;
     }

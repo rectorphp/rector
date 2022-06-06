@@ -21,7 +21,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220605\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20220606\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
@@ -50,9 +50,9 @@ final class BetterPhpDocParser extends \PHPStan\PhpDocParser\Parser\PhpDocParser
     /**
      * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecorators
      */
-    public function __construct(\PHPStan\PhpDocParser\Parser\TypeParser $typeParser, \PHPStan\PhpDocParser\Parser\ConstExprParser $constExprParser, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory $tokenIteratorFactory, array $phpDocNodeDecorators, \RectorPrefix20220605\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller = null)
+    public function __construct(\PHPStan\PhpDocParser\Parser\TypeParser $typeParser, \PHPStan\PhpDocParser\Parser\ConstExprParser $constExprParser, \Rector\Core\Configuration\CurrentNodeProvider $currentNodeProvider, \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory $tokenIteratorFactory, array $phpDocNodeDecorators, \RectorPrefix20220606\Symplify\PackageBuilder\Reflection\PrivatesCaller $privatesCaller = null)
     {
-        $privatesCaller = $privatesCaller ?? new \RectorPrefix20220605\Symplify\PackageBuilder\Reflection\PrivatesCaller();
+        $privatesCaller = $privatesCaller ?? new \RectorPrefix20220606\Symplify\PackageBuilder\Reflection\PrivatesCaller();
         $this->currentNodeProvider = $currentNodeProvider;
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->phpDocNodeDecorators = $phpDocNodeDecorators;

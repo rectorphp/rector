@@ -1,21 +1,31 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220605;
+namespace RectorPrefix20220606;
 
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->importNames();
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
     $rectorConfig->parallel();
-    $rectorConfig->skip(['*/Fixture/*', '*/Source/*', '*/Source*/*', '*/tests/*/Fixture*/Expected/*', \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => [__DIR__ . '/config'], \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
-        // "data" => "datum" false positive
-        __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
-    ], \Rector\Renaming\Rector\Name\RenameClassRector::class]);
+    $rectorConfig->skip([
+        '*/Fixture/*',
+        '*/Source/*',
+        '*/Source*/*',
+        '*/tests/*/Fixture*/Expected/*',
+        \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
+        \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
+            // "data" => "datum" false positive
+            __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
+        ],
+        // marked as skipped
+        \Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector::class => ['*/tests/*'],
+    ]);
     $rectorConfig->ruleWithConfiguration(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class, [
         'Symfony\\*',
         'Twig_*',
