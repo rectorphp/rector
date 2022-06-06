@@ -4,17 +4,17 @@ namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 abstract class Validator
 {
-	protected function validateLineLengths(): void
-	{
-	}
+    protected function validateLineLengths(): void
+    {
+    }
 }
 
 final class GeneratorStubUseAbstract extends Validator
 {
-	public function __construct()
-	{
-		$this->validateLineLengths();
-	}
+    public function __construct()
+    {
+        $this->validateLineLengths();
+    }
 }
 
 ?>
@@ -25,16 +25,16 @@ namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 abstract class Validator
 {
-	protected function validateLineLengths(): void
-	{
-	}
+    protected function validateLineLengths(): void
+    {
+    }
 }
 
 final class GeneratorStubUseAbstract extends Validator
 {
-	public function __construct()
-	{
-	}
+    public function __construct()
+    {
+    }
 }
 
 ?>

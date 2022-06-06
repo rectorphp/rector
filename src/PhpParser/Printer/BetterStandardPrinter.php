@@ -27,9 +27,9 @@ use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
+use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\PhpParser\Printer\Whitespace\IndentCharacterDetector;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
@@ -80,8 +80,8 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
      * @param mixed[] $options
      */
     public function __construct(
-        private readonly IndentCharacterDetector $indentCharacterDetector,
         private readonly DocBlockUpdater $docBlockUpdater,
+        private readonly RectorConfigProvider $rectorConfigProvider,
         array $options = []
     ) {
         parent::__construct($options);
@@ -103,8 +103,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     {
         $newStmts = $this->resolveNewStmts($stmts);
 
-        // detect per print
-        $this->tabOrSpaceIndentCharacter = $this->indentCharacterDetector->detect($origTokens);
+        $this->tabOrSpaceIndentCharacter = $this->rectorConfigProvider->getIndentChar();
 
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
 

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Core\Tests\Issues\DoNotReplaceUnknownClasses;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-class DoNotReplaceUnknownClassesTest extends AbstractRectorTestCase
+final class DoNotReplaceUnknownClassesTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()

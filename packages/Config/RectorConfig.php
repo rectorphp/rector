@@ -230,4 +230,14 @@ final class RectorConfig extends ContainerConfigurator
         $parameters = $this->parameters();
         $parameters->set(Option::CACHE_CLASS, $cacheClass);
     }
+
+    /**
+     * @see https://github.com/nikic/PHP-Parser/issues/723#issuecomment-712401963
+     */
+    public function indent(string $character, int $count): void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::INDENT_CHAR, $character);
+        $parameters->set(Option::INDENT_SIZE, $count);
+    }
 }

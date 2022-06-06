@@ -9,23 +9,23 @@ class Z {}
 
 final class CopyDoc
 {
-	public Y $y;
+    public Y $y;
 
-	/**
-	 * @var Z[]
-	 * @Assert\Valid()
-	 * @Assert\NotBlank()
-	 */
-	public array $z = [];
+    /**
+     * @var Z[]
+     * @Assert\Valid()
+     * @Assert\NotBlank()
+     */
+    public array $z = [];
 
-	/**
-	 * @param Z[] $z
-	 */
-	public function __construct(Y $y, array $z = [])
-	{
-		$this->y = $y;
-		$this->z = $z;
-	}
+    /**
+     * @param Z[] $z
+     */
+    public function __construct(Y $y, array $z = [])
+    {
+        $this->y = $y;
+        $this->z = $z;
+    }
 }
 ?>
 -----
@@ -40,18 +40,18 @@ class Z {}
 
 final class CopyDoc
 {
-	/**
-	 * @param Z[] $z
-	 */
-	public function __construct(
-		public Y $y,
-		/**
-		 * @Assert\Valid()
-		 * @Assert\NotBlank()
-		 */
-		public array $z = []
-	)
-	{
-	}
+    /**
+     * @param Z[] $z
+     */
+    public function __construct(
+        public Y $y,
+        /**
+         * @Assert\Valid()
+         * @Assert\NotBlank()
+         */
+        public array $z = []
+    )
+    {
+    }
 }
 ?>

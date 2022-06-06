@@ -4,14 +4,14 @@ namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 final class FixtureRemoveMethodCallOnThis
 {
-	public function __construct()
-	{
-		$this->validateLineLengths();
-	}
+    public function __construct()
+    {
+        $this->validateLineLengths();
+    }
 
-	protected function validateLineLengths(): void
-	{
-	}
+    protected function validateLineLengths(): void
+    {
+    }
 }
 
 ?>
@@ -22,13 +22,13 @@ namespace Rector\Tests\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector\Fi
 
 final class FixtureRemoveMethodCallOnThis
 {
-	public function __construct()
-	{
-	}
+    public function __construct()
+    {
+    }
 
-	protected function validateLineLengths(): void
-	{
-	}
+    protected function validateLineLengths(): void
+    {
+    }
 }
 
 ?>

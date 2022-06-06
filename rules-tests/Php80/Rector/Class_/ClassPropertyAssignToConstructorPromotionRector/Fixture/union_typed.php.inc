@@ -7,12 +7,12 @@ use DateTime;
 
 final class UnionTyped
 {
-	public stdClass|DateTime $property;
+    public stdClass|DateTime $property;
 
-	public function __construct(stdClass|DateTime $property)
-	{
-		$this->property = $property;
-	}
+    public function __construct(stdClass|DateTime $property)
+    {
+        $this->property = $property;
+    }
 }
 
 ?>
@@ -26,9 +26,9 @@ use DateTime;
 
 final class UnionTyped
 {
-	public function __construct(public stdClass|DateTime $property)
-	{
-	}
+    public function __construct(public stdClass|DateTime $property)
+    {
+    }
 }
 
 ?>

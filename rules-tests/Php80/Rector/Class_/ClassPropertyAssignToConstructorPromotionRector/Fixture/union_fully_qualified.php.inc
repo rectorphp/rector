@@ -10,20 +10,20 @@ class Z {}
 
 final class UnionFullyQualified
 {
-	public Y $y;
+    public Y $y;
 
-	public Z $z;
+    public Z $z;
 
-	public function __construct(Y $y, Z $z)
-	{
-		$this->y = $y;
-		$this->z = $z;
-	}
+    public function __construct(Y $y, Z $z)
+    {
+        $this->y = $y;
+        $this->z = $z;
+    }
 
-	public function getX(): X
-	{
-		return $this->y;
-	}
+    public function getX(): X
+    {
+        return $this->y;
+    }
 }
 ?>
 -----
@@ -39,13 +39,13 @@ class Z {}
 
 final class UnionFullyQualified
 {
-	public function __construct(public Y $y, public Z $z)
-	{
-	}
+    public function __construct(public Y $y, public Z $z)
+    {
+    }
 
-	public function getX(): X
-	{
-		return $this->y;
-	}
+    public function getX(): X
+    {
+        return $this->y;
+    }
 }
 ?>

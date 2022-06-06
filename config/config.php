@@ -64,6 +64,7 @@ return static function (RectorConfig $rectorConfig): void {
 
     $rectorConfig->disableImportNames();
     $rectorConfig->importShortClasses();
+    $rectorConfig->indent(' ', 4);
 
     $rectorConfig->fileExtensions(['php']);
     $rectorConfig->nestedChainMethodCallLimit(60);

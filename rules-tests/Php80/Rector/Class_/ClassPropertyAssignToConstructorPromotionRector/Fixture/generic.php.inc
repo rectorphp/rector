@@ -7,18 +7,18 @@ namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromo
  */
 final class Generic
 {
-	/**
-	 * @var T
-	 */
-	public mixed $value;
+    /**
+     * @var T
+     */
+    public mixed $value;
 
-	/**
-	 * @param T $value
-	 */
-	public function __construct(mixed $value)
-	{
-		$this->value = $value;
-	}
+    /**
+     * @param T $value
+     */
+    public function __construct(mixed $value)
+    {
+        $this->value = $value;
+    }
 }
 ?>
 -----
@@ -31,11 +31,11 @@ namespace Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromo
  */
 final class Generic
 {
-	/**
-	 * @param T $value
-	 */
-	public function __construct(public mixed $value)
-	{
-	}
+    /**
+     * @param T $value
+     */
+    public function __construct(public mixed $value)
+    {
+    }
 }
 ?>
