@@ -3303,6 +3303,7 @@ return array(
     'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\RemoveUpdateRootlineDataRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/RemoveUpdateRootlineDataRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\ReplaceTSFECheckEnableFieldsRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/ReplaceTSFECheckEnableFieldsRector.php',
+    'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\ReplaceTSFEWithContextMethodsRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/ReplaceTSFEWithContextMethodsRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveDivider2TabsConfigurationRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveDivider2TabsConfigurationRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveMethodCallConnectDbRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveMethodCallConnectDbRector.php',
     'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveMethodCallLoadTcaRector' => $vendorDir . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveMethodCallLoadTcaRector.php',

@@ -20,4 +20,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\typo3\ReplaceTSFECheckEnableFieldsRector::class);
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\typo3\ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector::class);
     $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\typo3\RemoveUpdateRootlineDataRector::class);
+    $rectorConfig->rule(\Ssch\TYPO3Rector\Rector\v12\v0\typo3\ReplaceTSFEWithContextMethodsRector::class);
 };

@@ -1,4 +1,4 @@
-# 244 Rules Overview
+# 245 Rules Overview
 
 ## AddRenderTypeToSelectFieldRector
 
@@ -3640,6 +3640,31 @@ Replace TSFE calls to checkEnableFields with new RecordAccessVoter->accessGrante
 -$baz = $typoscriptFrontendController->checkPagerecordForIncludeSection($row);
 +$bar = GeneralUtility::makeInstance(RecordAccessVoter::class)->accessGranted('pages', $row, $typoscriptFrontendController->getContext());
 +$baz = GeneralUtility::makeInstance(RecordAccessVoter::class)->accessGrantedForPageInRootLine($row, $typoscriptFrontendController->getContext());
+```
+
+<br>
+
+## ReplaceTSFEWithContextMethodsRector
+
+Replace TSFE with Context methods
+
+- class: [`Ssch\TYPO3Rector\Rector\v12\v0\typo3\ReplaceTSFEWithContextMethodsRector`](../src/Rector/v12/v0/typo3/ReplaceTSFEWithContextMethodsRector.php)
+
+```diff
+-$GLOBALS['TSFE']->initUserGroups();
++$GLOBALS['TSFE']->getContext()->setAspect('frontend.user', $GLOBALS['TSFE']->fe_user->createUserAspect());
+
+-$GLOBALS['TSFE']->isUserOrGroupSet();
++$GLOBALS['TSFE']->getContext()->getAspect('frontend.user')->isUserOrGroupSet();
+
+-$GLOBALS['TSFE']->isBackendUserLoggedIn();
++$GLOBALS['TSFE']->getContext()->getPropertyFromAspect('backend.user', 'isLoggedIn', false);
+
+-$GLOBALS['TSFE']->doWorkspacePreview();
++$GLOBALS['TSFE']->getContext()->getPropertyFromAspect('workspace', 'isOffline', false);
+
+-$GLOBALS['TSFE']->whichWorkspace();
++$GLOBALS['TSFE']->getContext()->getPropertyFromAspect('workspace', 'id', 0);
 ```
 
 <br>

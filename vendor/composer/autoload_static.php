@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit137333913e97d2372c9aac183e5d1543
+class ComposerStaticInit3374bf55bac88f8f4e8fbc6554aff688
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3624,6 +3624,7 @@ class ComposerStaticInit137333913e97d2372c9aac183e5d1543
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\RemoveUpdateRootlineDataRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/RemoveUpdateRootlineDataRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/ReplaceContentObjectRendererGetMailToWithEmailLinkBuilderRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\ReplaceTSFECheckEnableFieldsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/ReplaceTSFECheckEnableFieldsRector.php',
+        'Ssch\\TYPO3Rector\\Rector\\v12\\v0\\typo3\\ReplaceTSFEWithContextMethodsRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v12/v0/typo3/ReplaceTSFEWithContextMethodsRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveDivider2TabsConfigurationRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveDivider2TabsConfigurationRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveMethodCallConnectDbRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveMethodCallConnectDbRector.php',
         'Ssch\\TYPO3Rector\\Rector\\v7\\v0\\RemoveMethodCallLoadTcaRector' => __DIR__ . '/..' . '/ssch/typo3-rector/src/Rector/v7/v0/RemoveMethodCallLoadTcaRector.php',
@@ -3796,9 +3797,9 @@ class ComposerStaticInit137333913e97d2372c9aac183e5d1543
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit137333913e97d2372c9aac183e5d1543::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit137333913e97d2372c9aac183e5d1543::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit137333913e97d2372c9aac183e5d1543::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3374bf55bac88f8f4e8fbc6554aff688::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3374bf55bac88f8f4e8fbc6554aff688::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3374bf55bac88f8f4e8fbc6554aff688::$classMap;
 
         }, null, ClassLoader::class);
     }
