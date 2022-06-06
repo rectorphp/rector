@@ -39,7 +39,7 @@ jobs:
                     coverage: none
 
             # wait for deploy to packagist
-            -   run: sleep 70
+            -   run: sleep 40
 
             -   run: |
                     mkdir standalone
