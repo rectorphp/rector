@@ -45,9 +45,9 @@ const POLYFILL_STUBS_NAME_REGEX = '#vendor\/symfony\/polyfill\-(.*)\/Resources\/
 
 // see https://github.com/humbug/php-scoper
 return [
-    ScoperOption::PREFIX => 'RectorPrefix' . $timestamp,
-    ScoperOption::WHITELIST => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
-    ScoperOption::PATCHERS => [
+    'prefix' => 'RectorPrefix' . $timestamp,
+    'whitelist' => StaticEasyPrefixer::getExcludedNamespacesAndClasses(),
+    'patchers' => [
         function (string $filePath, string $prefix, string $content): string {
             foreach (UNPREFIX_CLASSES_BY_FILE as $endFilePath => $unprefixClasses) {
                 if (! \str_ends_with($filePath, $endFilePath)) {
