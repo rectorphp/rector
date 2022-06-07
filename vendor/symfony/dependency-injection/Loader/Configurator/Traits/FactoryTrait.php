@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
+namespace RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
-use RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220606\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
-use RectorPrefix20220606\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
+use RectorPrefix20220607\Symfony\Component\ExpressionLanguage\Expression;
 trait FactoryTrait
 {
     /**
@@ -25,9 +25,9 @@ trait FactoryTrait
     {
         if (\is_string($factory) && 1 === \substr_count($factory, ':')) {
             $factoryParts = \explode(':', $factory);
-            throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid factory "%s": the "service:method" notation is not available when using PHP-based DI configuration. Use "[service(\'%s\'), \'%s\']" instead.', $factory, $factoryParts[0], $factoryParts[1]));
+            throw new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Invalid factory "%s": the "service:method" notation is not available when using PHP-based DI configuration. Use "[service(\'%s\'), \'%s\']" instead.', $factory, $factoryParts[0], $factoryParts[1]));
         }
-        if ($factory instanceof \RectorPrefix20220606\Symfony\Component\ExpressionLanguage\Expression) {
+        if ($factory instanceof \RectorPrefix20220607\Symfony\Component\ExpressionLanguage\Expression) {
             $factory = '@=' . $factory;
         }
         $this->definition->setFactory(static::processValue($factory, \true));

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
-use RectorPrefix20220606\Nette\Utils\Strings;
+use RectorPrefix20220607\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\InlineHTML;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -21,7 +21,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
-use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
  */
@@ -103,7 +103,7 @@ final class PhpDocInfoPrinter
         $this->docBlockInliner = $docBlockInliner;
         $this->removeNodesStartAndEndResolver = $removeNodesStartAndEndResolver;
         $this->changedPhpDocNodeVisitor = $changedPhpDocNodeVisitor;
-        $changedPhpDocNodeTraverser = new \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $changedPhpDocNodeTraverser = new \RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $changedPhpDocNodeTraverser->addPhpDocNodeVisitor($this->changedPhpDocNodeVisitor);
         $this->changedPhpDocNodeTraverser = $changedPhpDocNodeTraverser;
     }
@@ -147,7 +147,7 @@ final class PhpDocInfoPrinter
         $this->currentTokenPosition = 0;
         $phpDocString = $this->printPhpDocNode($phpDocNode);
         // hotfix of extra space with callable ()
-        return \RectorPrefix20220606\Nette\Utils\Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
+        return \RectorPrefix20220607\Nette\Utils\Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
     }
     public function getCurrentPhpDocInfo() : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
@@ -198,7 +198,7 @@ final class PhpDocInfoPrinter
                 if ($silentValue === null) {
                     $printedNode = (string) $phpDocChildNode;
                     // remove extra space between tags
-                    $printedNode = \RectorPrefix20220606\Nette\Utils\Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
+                    $printedNode = \RectorPrefix20220607\Nette\Utils\Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');
                     return self::NEWLINE_WITH_ASTERISK . ($printedNode === '' ? '' : ' ' . $printedNode);
                 }
             }

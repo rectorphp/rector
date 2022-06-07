@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20220607\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use RectorPrefix20220606\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 /**
  * Resolves all parameter placeholders "%somevalue%" to their real values.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220606\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220607\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
 {
     /**
      * @var \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface
@@ -43,7 +43,7 @@ class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220606\Symfony\Com
      *
      * @throws ParameterNotFoundException
      */
-    public function process(\RectorPrefix20220606\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(\RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder $container)
     {
         $this->bag = $container->getParameterBag();
         try {
@@ -54,7 +54,7 @@ class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220606\Symfony\Com
                 $aliases[$this->bag->resolveValue($name)] = $target;
             }
             $container->setAliases($aliases);
-        } catch (\RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
+        } catch (\RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
             $e->setSourceId($this->currentId);
             throw $e;
         }
@@ -70,7 +70,7 @@ class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220606\Symfony\Com
         if (\is_string($value)) {
             try {
                 $v = $this->bag->resolveValue($value);
-            } catch (\RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
+            } catch (\RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException $e) {
                 if ($this->throwOnResolveException) {
                     throw $e;
                 }
@@ -79,7 +79,7 @@ class ResolveParameterPlaceHoldersPass extends \RectorPrefix20220606\Symfony\Com
             }
             return $this->resolveArrays || !$v || !\is_array($v) ? $v : $value;
         }
-        if ($value instanceof \RectorPrefix20220606\Symfony\Component\DependencyInjection\Definition) {
+        if ($value instanceof \RectorPrefix20220607\Symfony\Component\DependencyInjection\Definition) {
             $value->setBindings($this->processValue($value->getBindings()));
             $changes = $value->getChanges();
             if (isset($changes['class'])) {

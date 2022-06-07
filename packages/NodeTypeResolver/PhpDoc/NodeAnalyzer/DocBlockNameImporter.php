@@ -6,7 +6,7 @@ namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor;
-use RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class DocBlockNameImporter
 {
     /**
@@ -24,7 +24,7 @@ final class DocBlockNameImporter
             return;
         }
         $this->nameImportingPhpDocNodeVisitor->setCurrentNode($node);
-        $phpDocNodeTraverser = new \RectorPrefix20220606\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new \RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($this->nameImportingPhpDocNodeVisitor);
         $phpDocNodeTraverser->traverse($phpDocNode);
     }

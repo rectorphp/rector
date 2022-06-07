@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220606\Symfony\Contracts\Cache;
+namespace RectorPrefix20220607\Symfony\Contracts\Cache;
 
-use RectorPrefix20220606\Psr\Cache\CacheItemInterface;
-use RectorPrefix20220606\Psr\Cache\InvalidArgumentException;
+use RectorPrefix20220607\Psr\Cache\CacheItemInterface;
+use RectorPrefix20220607\Psr\Cache\InvalidArgumentException;
 /**
  * Covers most simple to advanced caching needs.
  *

@@ -5,11 +5,11 @@ namespace Rector\Core\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Core\Util\StringUtils;
-use RectorPrefix20220606\Symfony\Component\Finder\Finder;
-use RectorPrefix20220606\Symfony\Component\Finder\SplFileInfo;
-use RectorPrefix20220606\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
-use RectorPrefix20220606\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix20220606\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix20220607\Symfony\Component\Finder\Finder;
+use RectorPrefix20220607\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix20220607\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
+use RectorPrefix20220607\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix20220607\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
@@ -51,7 +51,7 @@ final class FilesFinder
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;
-    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, \RectorPrefix20220606\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20220606\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \RectorPrefix20220606\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver, \Rector\Caching\UnchangedFilesFilter $unchangedFilesFilter)
+    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, \RectorPrefix20220607\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20220607\Symplify\SmartFileSystem\FileSystemFilter $fileSystemFilter, \RectorPrefix20220607\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver $skippedPathsResolver, \Rector\Caching\UnchangedFilesFilter $unchangedFilesFilter)
     {
         $this->filesystemTweaker = $filesystemTweaker;
         $this->finderSanitizer = $finderSanitizer;
@@ -82,7 +82,7 @@ final class FilesFinder
         if ($directories === []) {
             return [];
         }
-        $finder = \RectorPrefix20220606\Symfony\Component\Finder\Finder::create()->files()->size('> 0')->in($directories)->sortByName();
+        $finder = \RectorPrefix20220607\Symfony\Component\Finder\Finder::create()->files()->size('> 0')->in($directories)->sortByName();
         if ($suffixes !== []) {
             $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
             $finder->name($suffixesPattern);
@@ -99,13 +99,13 @@ final class FilesFinder
         $suffixesPattern = \implode('|', $suffixes);
         return '#\\.(' . $suffixesPattern . ')$#';
     }
-    private function addFilterWithExcludedPaths(\RectorPrefix20220606\Symfony\Component\Finder\Finder $finder) : void
+    private function addFilterWithExcludedPaths(\RectorPrefix20220607\Symfony\Component\Finder\Finder $finder) : void
     {
         $excludePaths = $this->skippedPathsResolver->resolve();
         if ($excludePaths === []) {
             return;
         }
-        $finder->filter(function (\RectorPrefix20220606\Symfony\Component\Finder\SplFileInfo $splFileInfo) use($excludePaths) : bool {
+        $finder->filter(function (\RectorPrefix20220607\Symfony\Component\Finder\SplFileInfo $splFileInfo) use($excludePaths) : bool {
             /** @var string|false $realPath */
             $realPath = $splFileInfo->getRealPath();
             if ($realPath === \false) {

@@ -20,7 +20,7 @@ use Rector\Core\NodeManipulator\FuncCallManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220607\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ParamAnalyzer
 {
     /**
@@ -48,7 +48,7 @@ final class ParamAnalyzer
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\FuncCallManipulator $funcCallManipulator, \RectorPrefix20220606\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\FuncCallManipulator $funcCallManipulator, \RectorPrefix20220607\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeComparator = $nodeComparator;
         $this->valueResolver = $valueResolver;

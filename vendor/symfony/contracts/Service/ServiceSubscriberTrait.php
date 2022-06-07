@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220606\Symfony\Contracts\Service;
+namespace RectorPrefix20220607\Symfony\Contracts\Service;
 
-use RectorPrefix20220606\Psr\Container\ContainerInterface;
-use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix20220606\Symfony\Contracts\Service\Attribute\SubscribedService;
+use RectorPrefix20220607\Psr\Container\ContainerInterface;
+use RectorPrefix20220607\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220607\Symfony\Contracts\Service\Attribute\SubscribedService;
 /**
  * Implementation of ServiceSubscriberInterface that determines subscribed services from
  * method return types. Service ids are available as "ClassName::methodName".
@@ -37,14 +37,14 @@ trait ServiceSubscriberTrait
             if (self::class !== $method->getDeclaringClass()->name) {
                 continue;
             }
-            if (!($attribute = (\method_exists($method, 'getAttributes') ? $method->getAttributes(\RectorPrefix20220606\Symfony\Contracts\Service\Attribute\SubscribedService::class) : [])[0] ?? null)) {
+            if (!($attribute = (\method_exists($method, 'getAttributes') ? $method->getAttributes(\RectorPrefix20220607\Symfony\Contracts\Service\Attribute\SubscribedService::class) : [])[0] ?? null)) {
                 continue;
             }
             if ($method->isStatic() || $method->isAbstract() || $method->isGenerator() || $method->isInternal() || $method->getNumberOfRequiredParameters()) {
-                throw new \LogicException(\sprintf('Cannot use "%s" on method "%s::%s()" (can only be used on non-static, non-abstract methods with no parameters).', \RectorPrefix20220606\Symfony\Contracts\Service\Attribute\SubscribedService::class, self::class, $method->name));
+                throw new \LogicException(\sprintf('Cannot use "%s" on method "%s::%s()" (can only be used on non-static, non-abstract methods with no parameters).', \RectorPrefix20220607\Symfony\Contracts\Service\Attribute\SubscribedService::class, self::class, $method->name));
             }
             if (!($returnType = $method->getReturnType())) {
-                throw new \LogicException(\sprintf('Cannot use "%s" on methods without a return type in "%s::%s()".', \RectorPrefix20220606\Symfony\Contracts\Service\Attribute\SubscribedService::class, $method->name, self::class));
+                throw new \LogicException(\sprintf('Cannot use "%s" on methods without a return type in "%s::%s()".', \RectorPrefix20220607\Symfony\Contracts\Service\Attribute\SubscribedService::class, $method->name, self::class));
             }
             $serviceId = $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
             if ($returnType->allowsNull()) {
@@ -57,7 +57,7 @@ trait ServiceSubscriberTrait
     /**
      * @required
      */
-    public function setContainer(\RectorPrefix20220606\Psr\Container\ContainerInterface $container) : ?\RectorPrefix20220606\Psr\Container\ContainerInterface
+    public function setContainer(\RectorPrefix20220607\Psr\Container\ContainerInterface $container) : ?\RectorPrefix20220607\Psr\Container\ContainerInterface
     {
         $this->container = $container;
         if (\method_exists(\get_parent_class(self::class) ?: '', __FUNCTION__)) {

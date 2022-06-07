@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20220607\Symfony\Component\DependencyInjection\Argument;
 
-use RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * Represents a service wrapped in a memoizing closure.
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServiceClosureArgument implements \RectorPrefix20220606\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
+class ServiceClosureArgument implements \RectorPrefix20220607\Symfony\Component\DependencyInjection\Argument\ArgumentInterface
 {
     /**
      * @var mixed[]
@@ -42,7 +42,7 @@ class ServiceClosureArgument implements \RectorPrefix20220606\Symfony\Component\
     public function setValues(array $values)
     {
         if ([0] !== \array_keys($values)) {
-            throw new \RectorPrefix20220606\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('A ServiceClosureArgument must hold one and only one value.');
+            throw new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('A ServiceClosureArgument must hold one and only one value.');
         }
         $this->values = $values;
     }

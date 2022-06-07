@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220606\Symfony\Component\Console\Input;
+namespace RectorPrefix20220607\Symfony\Component\Console\Input;
 
-use RectorPrefix20220606\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220606\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix20220606\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix20220606\Symfony\Component\Console\Completion\Suggestion;
-use RectorPrefix20220606\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20220607\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220607\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix20220607\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix20220607\Symfony\Component\Console\Completion\Suggestion;
+use RectorPrefix20220607\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220607\Symfony\Component\Console\Exception\LogicException;
 /**
  * Represents a command line argument.
  *
@@ -60,7 +60,7 @@ class InputArgument
         if (null === $mode) {
             $mode = self::OPTIONAL;
         } elseif ($mode > 7 || $mode < 1) {
-            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
+            throw new \RectorPrefix20220607\Symfony\Component\Console\Exception\InvalidArgumentException(\sprintf('Argument mode "%s" is not valid.', $mode));
         }
         $this->name = $name;
         $this->mode = $mode;
@@ -102,13 +102,13 @@ class InputArgument
     public function setDefault($default = null)
     {
         if ($this->isRequired() && null !== $default) {
-            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
+            throw new \RectorPrefix20220607\Symfony\Component\Console\Exception\LogicException('Cannot set a default value except for InputArgument::OPTIONAL mode.');
         }
         if ($this->isArray()) {
             if (null === $default) {
                 $default = [];
             } elseif (!\is_array($default)) {
-                throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException('A default value for an array argument must be an array.');
+                throw new \RectorPrefix20220607\Symfony\Component\Console\Exception\LogicException('A default value for an array argument must be an array.');
             }
         }
         $this->default = $default;
@@ -130,11 +130,11 @@ class InputArgument
      *
      * @see Command::complete()
      */
-    public function complete(\RectorPrefix20220606\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20220606\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
+    public function complete(\RectorPrefix20220607\Symfony\Component\Console\Completion\CompletionInput $input, \RectorPrefix20220607\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions) : void
     {
         $values = $this->suggestedValues;
         if ($values instanceof \Closure && !\is_array($values = $values($input))) {
-            throw new \RectorPrefix20220606\Symfony\Component\Console\Exception\LogicException(\sprintf('Closure for argument "%s" must return an array. Got "%s".', $this->name, \get_debug_type($values)));
+            throw new \RectorPrefix20220607\Symfony\Component\Console\Exception\LogicException(\sprintf('Closure for argument "%s" must return an array. Got "%s".', $this->name, \get_debug_type($values)));
         }
         if ($values) {
             $suggestions->suggestValues($values);

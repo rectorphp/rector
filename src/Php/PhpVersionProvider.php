@@ -10,7 +10,7 @@ use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use ReflectionClass;
-use RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * @see \Rector\Core\Tests\Php\PhpVersionProviderTest
  */
@@ -31,7 +31,7 @@ final class PhpVersionProvider
      * @var \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver
      */
     private $projectComposerJsonPhpVersionResolver;
-    public function __construct(\RectorPrefix20220606\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver)
+    public function __construct(\RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver)
     {
         $this->parameterProvider = $parameterProvider;
         $this->projectComposerJsonPhpVersionResolver = $projectComposerJsonPhpVersionResolver;

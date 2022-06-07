@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\PhpDocParser;
 
-use RectorPrefix20220606\Nette\Utils\Strings;
+use RectorPrefix20220607\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\NameScope;
@@ -99,7 +99,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
             return new \PHPStan\Type\IterableType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
         }
         if (\strncmp($typeNode->name, '\\', \strlen('\\')) === 0) {
-            $typeWithoutPreslash = \RectorPrefix20220606\Nette\Utils\Strings::substring($typeNode->name, 1);
+            $typeWithoutPreslash = \RectorPrefix20220607\Nette\Utils\Strings::substring($typeNode->name, 1);
             $objectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($typeWithoutPreslash);
         } else {
             if ($typeNode->name === 'scalar') {
