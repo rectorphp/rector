@@ -48,7 +48,7 @@ final class DependencyClassMethodDecorator
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Core\NodeAnalyzer\PromotedPropertyParamCleaner $promotedPropertyParamCleaner, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver, \RectorPrefix20220607\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeFactory $nodeFactory, PromotedPropertyParamCleaner $promotedPropertyParamCleaner, ReflectionProvider $reflectionProvider, AstResolver $astResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeFactory = $nodeFactory;
         $this->promotedPropertyParamCleaner = $promotedPropertyParamCleaner;
@@ -60,7 +60,7 @@ final class DependencyClassMethodDecorator
     /**
      * Add "parent::__construct(X, Y, Z)" where needed
      */
-    public function decorateConstructorWithParentDependencies(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Analyser\Scope $scope) : void
+    public function decorateConstructorWithParentDependencies(Class_ $class, ClassMethod $classMethod, Scope $scope) : void
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         if (!$this->reflectionProvider->hasClass($className)) {
@@ -68,19 +68,19 @@ final class DependencyClassMethodDecorator
         }
         $classReflection = $this->reflectionProvider->getClass($className);
         foreach ($classReflection->getParents() as $parentClassReflection) {
-            if (!$parentClassReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+            if (!$parentClassReflection->hasMethod(MethodName::CONSTRUCT)) {
                 continue;
             }
-            $constructorMethodReflection = $parentClassReflection->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT, $scope);
+            $constructorMethodReflection = $parentClassReflection->getMethod(MethodName::CONSTRUCT, $scope);
             $parentConstructorClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($constructorMethodReflection);
-            if (!$parentConstructorClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+            if (!$parentConstructorClassMethod instanceof ClassMethod) {
                 continue;
             }
             $this->completeParentConstructorBasedOnParentNode($classMethod, $parentConstructorClassMethod);
             break;
         }
     }
-    private function completeParentConstructorBasedOnParentNode(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Stmt\ClassMethod $parentClassMethod) : void
+    private function completeParentConstructorBasedOnParentNode(ClassMethod $classMethod, ClassMethod $parentClassMethod) : void
     {
         $paramsWithoutDefaultValue = [];
         foreach ($parentClassMethod->params as $param) {
@@ -95,7 +95,7 @@ final class DependencyClassMethodDecorator
             $classMethod->params = \array_merge($cleanParams, $classMethod->params);
         }
         $staticCall = $this->nodeFactory->createParentConstructWithParams($cleanParams);
-        $classMethod->stmts[] = new \PhpParser\Node\Stmt\Expression($staticCall);
+        $classMethod->stmts[] = new Expression($staticCall);
     }
     /**
      * @param Param[] $params
@@ -105,7 +105,7 @@ final class DependencyClassMethodDecorator
     {
         $cleanParams = $this->promotedPropertyParamCleaner->cleanFromFlags($params);
         // remove deep attributes to avoid bugs with nested tokens re-print
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($cleanParams, function (\PhpParser\Node $node) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($cleanParams, function (Node $node) {
             $node->setAttributes([]);
             return null;
         });

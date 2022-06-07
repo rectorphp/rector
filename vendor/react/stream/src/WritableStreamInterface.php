@@ -138,7 +138,7 @@ use RectorPrefix20220607\Evenement\EventEmitterInterface;
  * @see EventEmitterInterface
  * @see DuplexStreamInterface
  */
-interface WritableStreamInterface extends \RectorPrefix20220607\Evenement\EventEmitterInterface
+interface WritableStreamInterface extends EventEmitterInterface
 {
     /**
      * Checks whether this stream is in a writable state (not closed already).

@@ -12,14 +12,14 @@ final class AttributeFlagFactory
      * @param ClassConstFetch[] $classConstFetches
      * @return ClassConstFetch|BitwiseOr|null
      */
-    public function createFlagCollection(array $classConstFetches) : ?\PhpParser\Node\Expr
+    public function createFlagCollection(array $classConstFetches) : ?Expr
     {
         if ($classConstFetches === []) {
             return null;
         }
         $flagCollection = \array_shift($classConstFetches);
         foreach ($classConstFetches as $classConstFetch) {
-            $flagCollection = new \PhpParser\Node\Expr\BinaryOp\BitwiseOr($flagCollection, $classConstFetch);
+            $flagCollection = new BitwiseOr($flagCollection, $classConstFetch);
         }
         return $flagCollection;
     }

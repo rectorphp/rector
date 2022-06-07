@@ -15,14 +15,14 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php55\RegexMatcher;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/remove_preg_replace_eval_modifier https://stackoverflow.com/q/19245205/1348344
  *
  * @see \Rector\Tests\Php55\Rector\FuncCall\PregReplaceEModifierRector\PregReplaceEModifierRectorTest
  */
-final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class PregReplaceEModifierRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -39,7 +39,7 @@ final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(\Rector\Php72\NodeFactory\AnonymousFunctionFactory $anonymousFunctionFactory, \Rector\Php55\RegexMatcher $regexMatcher, \Rector\Core\NodeAnalyzer\ArgsAnalyzer $argsAnalyzer)
+    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory, RegexMatcher $regexMatcher, ArgsAnalyzer $argsAnalyzer)
     {
         $this->anonymousFunctionFactory = $anonymousFunctionFactory;
         $this->regexMatcher = $regexMatcher;
@@ -47,11 +47,11 @@ final class PregReplaceEModifierRector extends \Rector\Core\Rector\AbstractRecto
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::PREG_REPLACE_CALLBACK_E_MODIFIER;
+        return PhpVersionFeature::PREG_REPLACE_CALLBACK_E_MODIFIER;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('The /e modifier is no longer supported, use preg_replace_callback instead', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('The /e modifier is no longer supported, use preg_replace_callback instead', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -78,12 +78,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->isName($node, 'preg_replace')) {
             return null;
@@ -95,17 +95,17 @@ CODE_SAMPLE
         $firstArgument = $node->args[0];
         $firstArgumentValue = $firstArgument->value;
         $patternWithoutE = $this->regexMatcher->resolvePatternExpressionWithoutEIfFound($firstArgumentValue);
-        if (!$patternWithoutE instanceof \PhpParser\Node\Expr) {
+        if (!$patternWithoutE instanceof Expr) {
             return null;
         }
         /** @var Arg $secondArgument */
         $secondArgument = $node->args[1];
         $secondArgumentValue = $secondArgument->value;
         $anonymousFunction = $this->anonymousFunctionFactory->createAnonymousFunctionFromString($secondArgumentValue);
-        if (!$anonymousFunction instanceof \PhpParser\Node\Expr\Closure) {
+        if (!$anonymousFunction instanceof Closure) {
             return null;
         }
-        $node->name = new \PhpParser\Node\Name('preg_replace_callback');
+        $node->name = new Name('preg_replace_callback');
         $firstArgument->value = $patternWithoutE;
         $secondArgument->value = $anonymousFunction;
         return $node;

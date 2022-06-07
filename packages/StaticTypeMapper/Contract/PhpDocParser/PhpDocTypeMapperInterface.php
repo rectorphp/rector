@@ -19,5 +19,5 @@ interface PhpDocTypeMapperInterface
     /**
      * @param TTypeNode $typeNode
      */
-    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type;
+    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type;
 }

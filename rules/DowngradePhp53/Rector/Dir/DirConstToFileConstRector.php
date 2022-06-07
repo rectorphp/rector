@@ -8,18 +8,18 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/nikic/PHP-Backporter/blob/master/lib/PHPBackporter/Converter/Dir.php
  *
  * @see \Rector\Tests\DowngradePhp53\Rector\Dir\DirConstToFileConstRector\DirConstToFileConstRectorTest
  */
-final class DirConstToFileConstRector extends \Rector\Core\Rector\AbstractRector
+final class DirConstToFileConstRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Refactor __DIR__ to dirname(__FILE__)', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor __DIR__ to dirname(__FILE__)', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -44,13 +44,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\MagicConst\Dir::class];
+        return [Dir::class];
     }
     /**
      * @param Dir $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Expr\FuncCall
+    public function refactor(Node $node) : FuncCall
     {
-        return $this->nodeFactory->createFuncCall('dirname', [new \PhpParser\Node\Scalar\MagicConst\File()]);
+        return $this->nodeFactory->createFuncCall('dirname', [new File()]);
     }
 }

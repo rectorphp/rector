@@ -29,21 +29,21 @@ final class NamedArgsFactory
     {
         $args = [];
         foreach ($values as $key => $argValue) {
-            $expr = \PhpParser\BuilderHelpers::normalizeValue($argValue);
+            $expr = BuilderHelpers::normalizeValue($argValue);
             $this->normalizeArrayWithConstFetchKey($expr);
             $name = null;
             // for named arguments
             if (\is_string($key)) {
-                $name = new \PhpParser\Node\Identifier($key);
+                $name = new Identifier($key);
             }
             $this->normalizeStringDoubleQuote($expr);
-            $args[] = new \PhpParser\Node\Arg($expr, \false, \false, [], $name);
+            $args[] = new Arg($expr, \false, \false, [], $name);
         }
         return $args;
     }
-    private function normalizeStringDoubleQuote(\PhpParser\Node\Expr $expr) : void
+    private function normalizeStringDoubleQuote(Expr $expr) : void
     {
-        if (!$expr instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$expr instanceof String_) {
             return;
         }
         // avoid escaping quotes + preserve newlines
@@ -53,22 +53,22 @@ final class NamedArgsFactory
         if (\strpos($expr->value, "\n") !== \false) {
             return;
         }
-        $expr->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
+        $expr->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
     }
-    private function normalizeArrayWithConstFetchKey(\PhpParser\Node\Expr $expr) : void
+    private function normalizeArrayWithConstFetchKey(Expr $expr) : void
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\Array_) {
+        if (!$expr instanceof Array_) {
             return;
         }
         foreach ($expr->items as $arrayItem) {
-            if (!$arrayItem instanceof \PhpParser\Node\Expr\ArrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            if (!$arrayItem->key instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$arrayItem->key instanceof String_) {
                 continue;
             }
             $string = $arrayItem->key;
-            $match = \RectorPrefix20220607\Nette\Utils\Strings::match($string->value, self::CLASS_CONST_REGEX);
+            $match = Strings::match($string->value, self::CLASS_CONST_REGEX);
             if ($match === null) {
                 continue;
             }
@@ -76,7 +76,7 @@ final class NamedArgsFactory
             $class = $match['class'];
             /** @var string $constant */
             $constant = $match['constant'];
-            $arrayItem->key = new \PhpParser\Node\Expr\ClassConstFetch(new \PhpParser\Node\Name($class), $constant);
+            $arrayItem->key = new ClassConstFetch(new Name($class), $constant);
         }
     }
 }

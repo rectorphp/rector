@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Set;
 
 use Rector\Set\Contract\SetListInterface;
-final class DoctrineSetList implements \Rector\Set\Contract\SetListInterface
+final class DoctrineSetList implements SetListInterface
 {
     /**
      * @var string

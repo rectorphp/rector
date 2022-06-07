@@ -44,7 +44,7 @@ final class ParentPropertyLookupGuard
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\Core\PhpParser\AstResolver $astResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, AstResolver $astResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionResolver = $reflectionResolver;
@@ -52,17 +52,17 @@ final class ParentPropertyLookupGuard
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->astResolver = $astResolver;
     }
-    public function isLegal(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isLegal(Property $property) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
+        if (!$class instanceof Class_) {
             return \false;
         }
         if ($class->extends === null) {
             return \true;
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($property);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
@@ -82,10 +82,10 @@ final class ParentPropertyLookupGuard
         }
         return \true;
     }
-    private function isFoundInParentClassMethods(\PHPStan\Reflection\ClassReflection $parentClassReflection, string $propertyName, string $className) : bool
+    private function isFoundInParentClassMethods(ClassReflection $parentClassReflection, string $propertyName, string $className) : bool
     {
         $classLike = $this->astResolver->resolveClassFromName($parentClassReflection->getName());
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$classLike instanceof Class_) {
             return \false;
         }
         $methods = $classLike->getMethods();
@@ -102,13 +102,13 @@ final class ParentPropertyLookupGuard
      */
     private function isFoundInMethodStmts(array $stmts, string $propertyName, string $className) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($stmts, function (\PhpParser\Node $subNode) use($propertyName, $className) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($stmts, function (Node $subNode) use($propertyName, $className) : bool {
             if (!$this->propertyFetchAnalyzer->isPropertyFetch($subNode)) {
                 return \false;
             }
             /** @var PropertyFetch|StaticPropertyFetch $subNode */
-            if ($subNode instanceof \PhpParser\Node\Expr\PropertyFetch) {
-                if (!$subNode->var instanceof \PhpParser\Node\Expr\Variable) {
+            if ($subNode instanceof PropertyFetch) {
+                if (!$subNode->var instanceof Variable) {
                     return \false;
                 }
                 if (!$this->nodeNameResolver->isName($subNode->var, 'this')) {
@@ -116,7 +116,7 @@ final class ParentPropertyLookupGuard
                 }
                 return $this->nodeNameResolver->isName($subNode, $propertyName);
             }
-            if (!$this->nodeNameResolver->isNames($subNode->class, [\Rector\Core\Enum\ObjectReference::SELF, \Rector\Core\Enum\ObjectReference::STATIC, $className])) {
+            if (!$this->nodeNameResolver->isNames($subNode->class, [ObjectReference::SELF, ObjectReference::STATIC, $className])) {
                 return \false;
             }
             return $this->nodeNameResolver->isName($subNode->name, $propertyName);

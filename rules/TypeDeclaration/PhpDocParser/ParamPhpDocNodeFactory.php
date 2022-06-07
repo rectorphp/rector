@@ -14,12 +14,12 @@ final class ParamPhpDocNodeFactory
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function create(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node\Param $param) : \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode
+    public function create(TypeNode $typeNode, Param $param) : ParamTagValueNode
     {
-        return new \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode($typeNode, $param->variadic, '$' . $this->nodeNameResolver->getName($param), '');
+        return new ParamTagValueNode($typeNode, $param->variadic, '$' . $this->nodeNameResolver->getName($param), '');
     }
 }

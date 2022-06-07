@@ -6,7 +6,7 @@ namespace RectorPrefix20220607;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp82\Rector\Class_\DowngradeReadonlyClassRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->phpVersion(\Rector\Core\ValueObject\PhpVersion::PHP_81);
-    $rectorConfig->rule(\Rector\DowngradePhp82\Rector\Class_\DowngradeReadonlyClassRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->phpVersion(PhpVersion::PHP_81);
+    $rectorConfig->rule(DowngradeReadonlyClassRector::class);
 };

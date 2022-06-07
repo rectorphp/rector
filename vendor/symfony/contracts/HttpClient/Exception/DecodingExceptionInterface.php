@@ -15,6 +15,6 @@ namespace RectorPrefix20220607\Symfony\Contracts\HttpClient\Exception;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-interface DecodingExceptionInterface extends \RectorPrefix20220607\Symfony\Contracts\HttpClient\Exception\ExceptionInterface
+interface DecodingExceptionInterface extends ExceptionInterface
 {
 }

@@ -85,7 +85,7 @@ final class Option
      * @deprecated Use @see \Rector\Config\RectorConfig::skip() instead
      * @var string
      */
-    public const SKIP = \RectorPrefix20220607\Symplify\Skipper\ValueObject\Option::SKIP;
+    public const SKIP = SkipperOption::SKIP;
     /**
      * @deprecated Use RectorConfig::fileExtensions() instead
      * @var string
@@ -108,7 +108,7 @@ final class Option
      * @var class-string<CacheStorageInterface>
      * @internal
      */
-    public const CACHE_CLASS = \Rector\Caching\ValueObject\Storage\FileCacheStorage::class;
+    public const CACHE_CLASS = FileCacheStorage::class;
     /**
      * @var string
      */

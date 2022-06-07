@@ -56,7 +56,7 @@ final class NameImporter
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\CodingStyle\ClassNameImport\AliasUsesResolver $aliasUsesResolver, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\PostRector\Collector\UseNodesToAddCollector $useNodesToAddCollector, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(AliasUsesResolver $aliasUsesResolver, ClassNameImportSkipper $classNameImportSkipper, ParameterProvider $parameterProvider, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector, ReflectionProvider $reflectionProvider)
     {
         $this->aliasUsesResolver = $aliasUsesResolver;
         $this->classNameImportSkipper = $classNameImportSkipper;
@@ -68,7 +68,7 @@ final class NameImporter
     /**
      * @param Use_[] $uses
      */
-    public function importName(\PhpParser\Node\Name $name, \Rector\Core\ValueObject\Application\File $file, array $uses) : ?\PhpParser\Node\Name
+    public function importName(Name $name, File $file, array $uses) : ?Name
     {
         if ($this->shouldSkipName($name)) {
             return null;
@@ -77,7 +77,7 @@ final class NameImporter
             return null;
         }
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
-        if (!$staticType instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+        if (!$staticType instanceof FullyQualifiedObjectType) {
             return null;
         }
         $className = $staticType->getClassName();
@@ -85,9 +85,9 @@ final class NameImporter
         $this->aliasedUses = \strpos($className, '\\') !== \false ? [] : $this->aliasUsesResolver->resolveFromStmts($uses);
         return $this->importNameAndCollectNewUseStatement($file, $name, $staticType, $className);
     }
-    private function shouldSkipName(\PhpParser\Node\Name $name) : bool
+    private function shouldSkipName(Name $name) : bool
     {
-        $virtualNode = (bool) $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE);
+        $virtualNode = (bool) $name->getAttribute(AttributeKey::VIRTUAL_NODE);
         if ($virtualNode) {
             return \true;
         }
@@ -104,7 +104,7 @@ final class NameImporter
             return \true;
         }
         // Importing root namespace classes (like \DateTime) is optional
-        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::IMPORT_SHORT_CLASSES)) {
+        if (!$this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES)) {
             $stringName = $name->toString();
             if (\substr_count($stringName, '\\') === 0) {
                 return \true;
@@ -112,7 +112,7 @@ final class NameImporter
         }
         return \false;
     }
-    private function importNameAndCollectNewUseStatement(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType, string $className) : ?\PhpParser\Node\Name
+    private function importNameAndCollectNewUseStatement(File $file, Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType, string $className) : ?Name
     {
         // the same end is already imported → skip
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $name, $fullyQualifiedObjectType)) {
@@ -141,37 +141,37 @@ final class NameImporter
      * - namespace name
      * - use import name
      */
-    private function isNamespaceOrUseImportName(\PhpParser\Node\Name $name) : bool
+    private function isNamespaceOrUseImportName(Name $name) : bool
     {
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Namespace_) {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Namespace_) {
             return \true;
         }
-        return $parentNode instanceof \PhpParser\Node\Stmt\UseUse;
+        return $parentNode instanceof UseUse;
     }
-    private function isFunctionOrConstantImportWithSingleName(\PhpParser\Node\Name $name) : bool
+    private function isFunctionOrConstantImportWithSingleName(Name $name) : bool
     {
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         $fullName = $name->toString();
-        $autoImportNames = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
-        if ($autoImportNames && !$parentNode instanceof \PhpParser\Node && \strpos($fullName, '\\') === \false && $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($fullName), null)) {
+        $autoImportNames = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
+        if ($autoImportNames && !$parentNode instanceof Node && \strpos($fullName, '\\') === \false && $this->reflectionProvider->hasFunction(new Name($fullName), null)) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if ($parentNode instanceof ConstFetch) {
             return \count($name->parts) === 1;
         }
-        if ($parentNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        if ($parentNode instanceof FuncCall) {
             return \count($name->parts) === 1;
         }
         return \false;
     }
-    private function addUseImport(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node\Name $name, \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $fullyQualifiedObjectType) : void
+    private function addUseImport(File $file, Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType) : void
     {
         if ($this->useNodesToAddCollector->hasImport($file, $name, $fullyQualifiedObjectType)) {
             return;
         }
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof FuncCall) {
             $this->useNodesToAddCollector->addFunctionUseImport($fullyQualifiedObjectType);
         } else {
             $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);

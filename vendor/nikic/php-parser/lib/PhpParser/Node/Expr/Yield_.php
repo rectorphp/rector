@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr;
 
 use PhpParser\Node\Expr;
-class Yield_ extends \PhpParser\Node\Expr
+class Yield_ extends Expr
 {
     /** @var null|Expr Key expression */
     public $key;
@@ -17,7 +17,7 @@ class Yield_ extends \PhpParser\Node\Expr
      * @param null|Expr $key        Key expression
      * @param array     $attributes Additional attributes
      */
-    public function __construct(\PhpParser\Node\Expr $value = null, \PhpParser\Node\Expr $key = null, array $attributes = [])
+    public function __construct(Expr $value = null, Expr $key = null, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->key = $key;

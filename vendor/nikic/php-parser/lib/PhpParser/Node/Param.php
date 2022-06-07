@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node;
 
 use PhpParser\NodeAbstract;
-class Param extends \PhpParser\NodeAbstract
+class Param extends NodeAbstract
 {
     /** @var null|Identifier|Name|ComplexType Type declaration */
     public $type;

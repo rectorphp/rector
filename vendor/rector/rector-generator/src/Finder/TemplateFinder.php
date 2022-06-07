@@ -6,7 +6,7 @@ namespace Rector\RectorGenerator\Finder;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use RectorPrefix20220607\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix20220607\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFinder
 {
     /**
@@ -23,7 +23,7 @@ final class TemplateFinder
      * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
-    public function __construct(\RectorPrefix20220607\Symplify\SmartFileSystem\Finder\FinderSanitizer $finderSanitizer, \RectorPrefix20220607\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard)
+    public function __construct(FinderSanitizer $finderSanitizer, FileSystemGuard $fileSystemGuard)
     {
         $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemGuard = $fileSystemGuard;
@@ -31,7 +31,7 @@ final class TemplateFinder
     /**
      * @return SmartFileInfo[]
      */
-    public function find(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe) : array
+    public function find(RectorRecipe $rectorRecipe) : array
     {
         $filePaths = [];
         $filePaths = $this->addRuleAndTestCase($rectorRecipe, $filePaths);
@@ -45,7 +45,7 @@ final class TemplateFinder
      *
      * @note the ".inc" suffix is needed, so PHPUnit doens't load it as a test case
      */
-    private function addRuleAndTestCase(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, array $filePaths) : array
+    private function addRuleAndTestCase(RectorRecipe $rectorRecipe, array $filePaths) : array
     {
         if ($rectorRecipe->getConfiguration() !== []) {
             $filePaths[] = __DIR__ . '/../../templates/rules-tests/__Package__/Rector/__Category__/__Name__/config/__Configuredconfigured_rule.php';

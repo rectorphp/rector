@@ -13,16 +13,16 @@ final class ControllerMethodAnalyzer
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
-    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer)
+    public function __construct(ControllerAnalyzer $controllerAnalyzer)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
     }
     /**
      * Detect if is <some>Action() in Controller
      */
-    public function isAction(\PhpParser\Node $node) : bool
+    public function isAction(Node $node) : bool
     {
-        if (!$node instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$node instanceof ClassMethod) {
             return \false;
         }
         if (!$this->controllerAnalyzer->isInsideController($node)) {

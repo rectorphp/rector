@@ -15,7 +15,7 @@ use RectorPrefix20220607\Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-class ServiceConfigurator extends \RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\AbstractServiceConfigurator
+class ServiceConfigurator extends AbstractServiceConfigurator
 {
     use Traits\AbstractTrait;
     use Traits\ArgumentTrait;
@@ -57,7 +57,7 @@ class ServiceConfigurator extends \RectorPrefix20220607\Symfony\Component\Depend
      * @var bool
      */
     private $destructed = \false;
-    public function __construct(\RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder $container, array $instanceof, bool $allowParent, \RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator $parent, \RectorPrefix20220607\Symfony\Component\DependencyInjection\Definition $definition, ?string $id, array $defaultTags, string $path = null)
+    public function __construct(ContainerBuilder $container, array $instanceof, bool $allowParent, ServicesConfigurator $parent, Definition $definition, ?string $id, array $defaultTags, string $path = null)
     {
         $this->container = $container;
         $this->instanceof = $instanceof;

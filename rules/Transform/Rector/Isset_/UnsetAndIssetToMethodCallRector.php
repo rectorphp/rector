@@ -10,21 +10,21 @@ use PhpParser\Node\Stmt\Unset_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\UnsetAndIssetToMethodCall;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector\UnsetAndIssetToMethodCallRectorTest
  */
-final class UnsetAndIssetToMethodCallRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class UnsetAndIssetToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var UnsetAndIssetToMethodCall[]
      */
     private $issetUnsetToMethodCalls = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns defined `__isset`/`__unset` calls to specific method calls.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 $container = new SomeContainer;
 isset($container["someKey"]);
 unset($container["someKey"]);
@@ -34,22 +34,22 @@ $container = new SomeContainer;
 $container->hasService("someKey");
 $container->removeService("someKey");
 CODE_SAMPLE
-, [new \Rector\Transform\ValueObject\UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService')])]);
+, [new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Isset_::class, \PhpParser\Node\Stmt\Unset_::class];
+        return [Isset_::class, Unset_::class];
     }
     /**
      * @param Isset_|Unset_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($node->vars as $arrayDimFetch) {
-            if (!$arrayDimFetch instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+            if (!$arrayDimFetch instanceof ArrayDimFetch) {
                 continue;
             }
             foreach ($this->issetUnsetToMethodCalls as $issetUnsetToMethodCall) {
@@ -69,18 +69,18 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\UnsetAndIssetToMethodCall::class);
+        Assert::allIsAOf($configuration, UnsetAndIssetToMethodCall::class);
         $this->issetUnsetToMethodCalls = $configuration;
     }
-    private function processArrayDimFetchNode(\PhpParser\Node $node, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, \Rector\Transform\ValueObject\UnsetAndIssetToMethodCall $unsetAndIssetToMethodCall) : ?\PhpParser\Node
+    private function processArrayDimFetchNode(Node $node, ArrayDimFetch $arrayDimFetch, UnsetAndIssetToMethodCall $unsetAndIssetToMethodCall) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\Isset_) {
+        if ($node instanceof Isset_) {
             if ($unsetAndIssetToMethodCall->getIssetMethodCall() === '') {
                 return null;
             }
             return $this->nodeFactory->createMethodCall($arrayDimFetch->var, $unsetAndIssetToMethodCall->getIssetMethodCall(), [$arrayDimFetch->dim]);
         }
-        if ($node instanceof \PhpParser\Node\Stmt\Unset_) {
+        if ($node instanceof Unset_) {
             if ($unsetAndIssetToMethodCall->getUnsedMethodCall() === '') {
                 return null;
             }

@@ -26,10 +26,10 @@ final class PhpParserNodeMapper
     {
         $this->phpParserNodeMappers = $phpParserNodeMappers;
     }
-    public function mapToPHPStanType(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStanType(Node $node) : Type
     {
-        if (\get_class($node) === \PhpParser\Node\Name::class && $node->hasAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME)) {
-            $node = new \PhpParser\Node\Name\FullyQualified($node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME));
+        if (\get_class($node) === Name::class && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
+            $node = new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME));
         }
         foreach ($this->phpParserNodeMappers as $phpParserNodeMapper) {
             if (!\is_a($node, $phpParserNodeMapper->getNodeType())) {
@@ -37,13 +37,13 @@ final class PhpParserNodeMapper
             }
             // do not let Expr collect all the types
             // note: can be solve later with priorities on mapper interface, making this last
-            if ($phpParserNodeMapper->getNodeType() !== \PhpParser\Node\Expr::class) {
+            if ($phpParserNodeMapper->getNodeType() !== Expr::class) {
                 return $phpParserNodeMapper->mapToPHPStan($node);
             }
-            if (!$node instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$node instanceof String_) {
                 return $phpParserNodeMapper->mapToPHPStan($node);
             }
         }
-        throw new \Rector\Core\Exception\NotImplementedYetException(\get_class($node));
+        throw new NotImplementedYetException(\get_class($node));
     }
 }

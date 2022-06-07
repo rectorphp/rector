@@ -63,9 +63,9 @@ class NodeDumper
                 } elseif (\is_scalar($value)) {
                     if ('flags' === $key || 'newModifier' === $key) {
                         $r .= $this->dumpFlags($value);
-                    } elseif ('type' === $key && $node instanceof \PhpParser\Node\Expr\Include_) {
+                    } elseif ('type' === $key && $node instanceof Include_) {
                         $r .= $this->dumpIncludeType($value);
-                    } elseif ('type' === $key && ($node instanceof \PhpParser\Node\Stmt\Use_ || $node instanceof \PhpParser\Node\Stmt\UseUse || $node instanceof \PhpParser\Node\Stmt\GroupUse)) {
+                    } elseif ('type' === $key && ($node instanceof Use_ || $node instanceof UseUse || $node instanceof GroupUse)) {
                         $r .= $this->dumpUseType($value);
                     } else {
                         $r .= $value;
@@ -103,25 +103,25 @@ class NodeDumper
     protected function dumpFlags($flags)
     {
         $strs = [];
-        if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC) {
+        if ($flags & Class_::MODIFIER_PUBLIC) {
             $strs[] = 'MODIFIER_PUBLIC';
         }
-        if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PROTECTED) {
+        if ($flags & Class_::MODIFIER_PROTECTED) {
             $strs[] = 'MODIFIER_PROTECTED';
         }
-        if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE) {
+        if ($flags & Class_::MODIFIER_PRIVATE) {
             $strs[] = 'MODIFIER_PRIVATE';
         }
-        if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_ABSTRACT) {
+        if ($flags & Class_::MODIFIER_ABSTRACT) {
             $strs[] = 'MODIFIER_ABSTRACT';
         }
-        if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_STATIC) {
+        if ($flags & Class_::MODIFIER_STATIC) {
             $strs[] = 'MODIFIER_STATIC';
         }
-        if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_FINAL) {
+        if ($flags & Class_::MODIFIER_FINAL) {
             $strs[] = 'MODIFIER_FINAL';
         }
-        if ($flags & \PhpParser\Node\Stmt\Class_::MODIFIER_READONLY) {
+        if ($flags & Class_::MODIFIER_READONLY) {
             $strs[] = 'MODIFIER_READONLY';
         }
         if ($strs) {
@@ -132,7 +132,7 @@ class NodeDumper
     }
     protected function dumpIncludeType($type)
     {
-        $map = [\PhpParser\Node\Expr\Include_::TYPE_INCLUDE => 'TYPE_INCLUDE', \PhpParser\Node\Expr\Include_::TYPE_INCLUDE_ONCE => 'TYPE_INCLUDE_ONCE', \PhpParser\Node\Expr\Include_::TYPE_REQUIRE => 'TYPE_REQUIRE', \PhpParser\Node\Expr\Include_::TYPE_REQUIRE_ONCE => 'TYPE_REQUIRE_ONCE'];
+        $map = [Include_::TYPE_INCLUDE => 'TYPE_INCLUDE', Include_::TYPE_INCLUDE_ONCE => 'TYPE_INCLUDE_ONCE', Include_::TYPE_REQUIRE => 'TYPE_REQUIRE', Include_::TYPE_REQUIRE_ONCE => 'TYPE_REQUIRE_ONCE'];
         if (!isset($map[$type])) {
             return $type;
         }
@@ -140,7 +140,7 @@ class NodeDumper
     }
     protected function dumpUseType($type)
     {
-        $map = [\PhpParser\Node\Stmt\Use_::TYPE_UNKNOWN => 'TYPE_UNKNOWN', \PhpParser\Node\Stmt\Use_::TYPE_NORMAL => 'TYPE_NORMAL', \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION => 'TYPE_FUNCTION', \PhpParser\Node\Stmt\Use_::TYPE_CONSTANT => 'TYPE_CONSTANT'];
+        $map = [Use_::TYPE_UNKNOWN => 'TYPE_UNKNOWN', Use_::TYPE_NORMAL => 'TYPE_NORMAL', Use_::TYPE_FUNCTION => 'TYPE_FUNCTION', Use_::TYPE_CONSTANT => 'TYPE_CONSTANT'];
         if (!isset($map[$type])) {
             return $type;
         }

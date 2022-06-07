@@ -13,7 +13,7 @@ final class FuncCallManipulator
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
@@ -26,7 +26,7 @@ final class FuncCallManipulator
         $arguments = [];
         foreach ($compactFuncCalls as $compactFuncCall) {
             foreach ($compactFuncCall->args as $arg) {
-                if (!$arg instanceof \PhpParser\Node\Arg) {
+                if (!$arg instanceof Arg) {
                     continue;
                 }
                 $value = $this->valueResolver->getValue($arg->value);

@@ -11,11 +11,11 @@ final class NeonParser
      * @var \Nette\Neon\Decoder
      */
     private $decoder;
-    public function __construct(\RectorPrefix20220607\Nette\Neon\Decoder $decoder)
+    public function __construct(Decoder $decoder)
     {
         $this->decoder = $decoder;
     }
-    public function parseString(string $neonContent) : \RectorPrefix20220607\Nette\Neon\Node
+    public function parseString(string $neonContent) : Node
     {
         return $this->decoder->parseToNode($neonContent);
     }

@@ -17,16 +17,16 @@ final class VariableAndPropertyFetchAssign
      * @var \PhpParser\Node\Expr\PropertyFetch
      */
     private $propertyFetch;
-    public function __construct(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr\PropertyFetch $propertyFetch)
+    public function __construct(Variable $variable, PropertyFetch $propertyFetch)
     {
         $this->variable = $variable;
         $this->propertyFetch = $propertyFetch;
     }
-    public function getVariable() : \PhpParser\Node\Expr\Variable
+    public function getVariable() : Variable
     {
         return $this->variable;
     }
-    public function getPropertyFetch() : \PhpParser\Node\Expr\PropertyFetch
+    public function getPropertyFetch() : PropertyFetch
     {
         return $this->propertyFetch;
     }

@@ -23,9 +23,9 @@ use RectorPrefix20220607\Symfony\Component\DependencyInjection\Reference;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Diego Saint Esteben <diego@saintesteben.me>
  */
-class DecoratorServicePass extends \RectorPrefix20220607\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class DecoratorServicePass extends AbstractRecursivePass
 {
-    public function process(\RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(ContainerBuilder $container)
     {
         $definitions = new \SplPriorityQueue();
         $order = \PHP_INT_MAX;
@@ -40,7 +40,7 @@ class DecoratorServicePass extends \RectorPrefix20220607\Symfony\Component\Depen
         foreach ($definitions as [$id, $definition]) {
             $decoratedService = $definition->getDecoratedService();
             [$inner, $renamedId] = $decoratedService;
-            $invalidBehavior = $decoratedService[3] ?? \RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+            $invalidBehavior = $decoratedService[3] ?? ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
             $definition->setDecoratedService(null);
             if (!$renamedId) {
                 $renamedId = $id . '.inner';
@@ -54,7 +54,7 @@ class DecoratorServicePass extends \RectorPrefix20220607\Symfony\Component\Depen
             if ($container->hasAlias($inner)) {
                 $alias = $container->getAlias($inner);
                 $public = $alias->isPublic();
-                $container->setAlias($renamedId, new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Alias((string) $alias, \false));
+                $container->setAlias($renamedId, new Alias((string) $alias, \false));
                 $decoratedDefinition = $container->findDefinition($alias);
             } elseif ($container->hasDefinition($inner)) {
                 $decoratedDefinition = $container->getDefinition($inner);
@@ -62,17 +62,17 @@ class DecoratorServicePass extends \RectorPrefix20220607\Symfony\Component\Depen
                 $decoratedDefinition->setPublic(\false);
                 $container->setDefinition($renamedId, $decoratedDefinition);
                 $decoratingDefinitions[$inner] = $decoratedDefinition;
-            } elseif (\RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerInterface::IGNORE_ON_INVALID_REFERENCE === $invalidBehavior) {
+            } elseif (ContainerInterface::IGNORE_ON_INVALID_REFERENCE === $invalidBehavior) {
                 $container->removeDefinition($id);
                 continue;
-            } elseif (\RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerInterface::NULL_ON_INVALID_REFERENCE === $invalidBehavior) {
+            } elseif (ContainerInterface::NULL_ON_INVALID_REFERENCE === $invalidBehavior) {
                 $public = $definition->isPublic();
                 $decoratedDefinition = null;
             } else {
-                throw new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException($inner, $id);
+                throw new ServiceNotFoundException($inner, $id);
             }
             if (($decoratedDefinition2 = $decoratedDefinition) ? $decoratedDefinition2->isSynthetic() : null) {
-                throw new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('A synthetic service cannot be decorated: service "%s" cannot decorate "%s".', $id, $inner));
+                throw new InvalidArgumentException(\sprintf('A synthetic service cannot be decorated: service "%s" cannot decorate "%s".', $id, $inner));
             }
             if (isset($decoratingDefinitions[$inner])) {
                 $decoratingDefinition = $decoratingDefinitions[$inner];
@@ -98,8 +98,8 @@ class DecoratorServicePass extends \RectorPrefix20220607\Symfony\Component\Depen
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if ($value instanceof \RectorPrefix20220607\Symfony\Component\DependencyInjection\Reference && '.inner' === (string) $value) {
-            return new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Reference($this->currentId, $value->getInvalidBehavior());
+        if ($value instanceof Reference && '.inner' === (string) $value) {
+            return new Reference($this->currentId, $value->getInvalidBehavior());
         }
         return parent::processValue($value, $isRoot);
     }

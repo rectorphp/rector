@@ -10,13 +10,13 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\Class_\AddInterfaceByTraitRector\AddInterfaceByTraitRectorTest
  */
-final class AddInterfaceByTraitRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class AddInterfaceByTraitRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var array<string, string>
@@ -27,13 +27,13 @@ final class AddInterfaceByTraitRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add interface by used trait', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add interface by used trait', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     use SomeTrait;
@@ -52,15 +52,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         $hasChanged = \false;
@@ -73,7 +73,7 @@ CODE_SAMPLE
                     continue 2;
                 }
             }
-            $node->implements[] = new \PhpParser\Node\Name\FullyQualified($interfaceName);
+            $node->implements[] = new FullyQualified($interfaceName);
             $hasChanged = \true;
         }
         if (!$hasChanged) {
@@ -87,8 +87,8 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allString($configuration);
+        Assert::allString(\array_keys($configuration));
+        Assert::allString($configuration);
         $this->interfaceByTrait = $configuration;
     }
 }

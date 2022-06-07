@@ -10,19 +10,19 @@ use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector\DowngradeThrowableTypeDeclarationRectorTest
  */
-final class DowngradeThrowableTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeThrowableTypeDeclarationRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
+    public function __construct(PhpDocFromTypeDeclarationDecorator $phpDocFromTypeDeclarationDecorator)
     {
         $this->phpDocFromTypeDeclarationDecorator = $phpDocFromTypeDeclarationDecorator;
     }
@@ -31,11 +31,11 @@ final class DowngradeThrowableTypeDeclarationRector extends \Rector\Core\Rector\
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Expr\Closure::class];
+        return [Function_::class, ClassMethod::class, Closure::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace `Throwable` type hints by PHPDoc tags', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace `Throwable` type hints by PHPDoc tags', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function foo(\Throwable $e): ?\Throwable
@@ -62,9 +62,9 @@ CODE_SAMPLE
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $objectType = new \PHPStan\Type\ObjectType('Throwable');
+        $objectType = new ObjectType('Throwable');
         foreach ($node->getParams() as $param) {
             $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $objectType);
         }

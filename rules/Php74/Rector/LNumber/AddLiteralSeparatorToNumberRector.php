@@ -13,8 +13,8 @@ use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/numeric_literal_separator
@@ -25,7 +25,7 @@ use RectorPrefix20220607\Webmozart\Assert\Assert;
  * Taking the most generic use case to the account: https://wiki.php.net/rfc/numeric_literal_separator#should_it_be_the_role_of_an_ide_to_group_digits
  * The final check should be done manually
  */
-final class AddLiteralSeparatorToNumberRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class AddLiteralSeparatorToNumberRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @api
@@ -50,12 +50,12 @@ final class AddLiteralSeparatorToNumberRector extends \Rector\Core\Rector\Abstra
     public function configure(array $configuration) : void
     {
         $limitValue = $configuration[self::LIMIT_VALUE] ?? self::DEFAULT_LIMIT_VALUE;
-        \RectorPrefix20220607\Webmozart\Assert\Assert::integer($limitValue);
+        Assert::integer($limitValue);
         $this->limitValue = $limitValue;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add "_" as thousands separator in numbers for higher or equals to limitValue config', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add "_" as thousands separator in numbers for higher or equals to limitValue config', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -82,14 +82,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Scalar\LNumber::class, \PhpParser\Node\Scalar\DNumber::class];
+        return [LNumber::class, DNumber::class];
     }
     /**
      * @param LNumber|DNumber $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $rawValue = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::RAW_VALUE);
+        $rawValue = $node->getAttribute(AttributeKey::RAW_VALUE);
         if ($this->shouldSkip($node, $rawValue)) {
             return null;
         }
@@ -110,7 +110,7 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::LITERAL_SEPARATOR;
+        return PhpVersionFeature::LITERAL_SEPARATOR;
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $node
@@ -128,16 +128,16 @@ CODE_SAMPLE
         if ($node->value < $this->limitValue) {
             return \true;
         }
-        $kind = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND);
-        if (\in_array($kind, [\PhpParser\Node\Scalar\LNumber::KIND_BIN, \PhpParser\Node\Scalar\LNumber::KIND_OCT, \PhpParser\Node\Scalar\LNumber::KIND_HEX], \true)) {
+        $kind = $node->getAttribute(AttributeKey::KIND);
+        if (\in_array($kind, [LNumber::KIND_BIN, LNumber::KIND_OCT, LNumber::KIND_HEX], \true)) {
             return \true;
         }
         // e+/e-
-        if (\Rector\Core\Util\StringUtils::isMatch($rawValue, '#e#i')) {
+        if (StringUtils::isMatch($rawValue, '#e#i')) {
             return \true;
         }
         // too short
-        return \RectorPrefix20220607\Nette\Utils\Strings::length($rawValue) <= self::GROUP_SIZE;
+        return Strings::length($rawValue) <= self::GROUP_SIZE;
     }
     /**
      * @return string[]

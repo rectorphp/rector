@@ -12,17 +12,17 @@ final class CommandFromReflectionFactory
     /**
      * @param class-string<Command> $className
      */
-    public function create(string $className) : \RectorPrefix20220607\Symfony\Component\Console\Command\Command
+    public function create(string $className) : Command
     {
-        $commandReflectionClass = new \ReflectionClass($className);
+        $commandReflectionClass = new ReflectionClass($className);
         $command = $commandReflectionClass->newInstanceWithoutConstructor();
         $parentClassReflection = $commandReflectionClass->getParentClass();
-        if (!$parentClassReflection instanceof \ReflectionClass) {
-            throw new \RectorPrefix20220607\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException();
+        if (!$parentClassReflection instanceof ReflectionClass) {
+            throw new ParallelShouldNotHappenException();
         }
         $parentConstructorReflectionMethod = $parentClassReflection->getConstructor();
-        if (!$parentConstructorReflectionMethod instanceof \ReflectionMethod) {
-            throw new \RectorPrefix20220607\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException();
+        if (!$parentConstructorReflectionMethod instanceof ReflectionMethod) {
+            throw new ParallelShouldNotHappenException();
         }
         $parentConstructorReflectionMethod->invoke($command);
         return $command;

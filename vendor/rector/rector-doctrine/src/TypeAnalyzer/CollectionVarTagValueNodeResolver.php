@@ -13,11 +13,11 @@ final class CollectionVarTagValueNodeResolver
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function resolve(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode
+    public function resolve(Property $property) : ?VarTagValueNode
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         if (!$phpDocInfo->hasByAnnotationClass('Doctrine\\ORM\\Mapping\\OneToMany')) {

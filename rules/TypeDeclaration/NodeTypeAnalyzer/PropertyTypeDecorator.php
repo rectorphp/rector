@@ -37,7 +37,7 @@ final class PropertyTypeDecorator
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer $unionTypeAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(UnionTypeAnalyzer $unionTypeAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, PhpVersionProvider $phpVersionProvider, NodeFactory $nodeFactory)
     {
         $this->unionTypeAnalyzer = $unionTypeAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
@@ -47,10 +47,10 @@ final class PropertyTypeDecorator
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType $typeNode
      */
-    public function decoratePropertyUnionType(\PHPStan\Type\UnionType $unionType, $typeNode, \PhpParser\Node\Stmt\Property $property, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : void
+    public function decoratePropertyUnionType(UnionType $unionType, $typeNode, Property $property, PhpDocInfo $phpDocInfo) : void
     {
         if (!$this->unionTypeAnalyzer->isNullable($unionType)) {
-            if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
+            if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 $property->type = $typeNode;
             } else {
                 $this->phpDocTypeChanger->changeVarType($phpDocInfo, $unionType);
@@ -68,11 +68,11 @@ final class PropertyTypeDecorator
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $unionType);
         }
     }
-    private function isDocBlockRequired(\PHPStan\Type\UnionType $unionType) : bool
+    private function isDocBlockRequired(UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof \PHPStan\Type\ArrayType) {
-                $describedArray = $unionedType->describe(\PHPStan\Type\VerbosityLevel::value());
+            if ($unionedType instanceof ArrayType) {
+                $describedArray = $unionedType->describe(VerbosityLevel::value());
                 if ($describedArray !== 'array') {
                     return \true;
                 }

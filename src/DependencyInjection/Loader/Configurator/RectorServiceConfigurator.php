@@ -11,7 +11,7 @@ use RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurat
  * @api
  * Same as Symfony service configurator, with extra "configure()" method for easier DX
  */
-final class RectorServiceConfigurator extends \RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator
+final class RectorServiceConfigurator extends ServiceConfigurator
 {
     /**
      * @deprecated Use @see \Rector\Config\RectorConfig instead
@@ -23,7 +23,7 @@ final class RectorServiceConfigurator extends \RectorPrefix20220607\Symfony\Comp
         // decorate with value object inliner so Symfony understands, see https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config
         \array_walk_recursive($configuration, function (&$value) {
             if (\is_object($value)) {
-                $value = \Rector\Core\Configuration\ValueObjectInliner::inline($value);
+                $value = ValueObjectInliner::inline($value);
             }
             return $value;
         });
@@ -33,11 +33,11 @@ final class RectorServiceConfigurator extends \RectorPrefix20220607\Symfony\Comp
     private function ensureClassIsConfigurable(?string $class) : void
     {
         if ($class === null) {
-            throw new \RectorPrefix20220607\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException('The class is missing');
+            throw new InvalidConfigurationException('The class is missing');
         }
-        if (!\is_a($class, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class, \true)) {
-            $errorMessage = \sprintf('The service "%s" is not configurable. Make it implement "%s" or remove "configure()" call.', $class, \Rector\Core\Contract\Rector\ConfigurableRectorInterface::class);
-            throw new \RectorPrefix20220607\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException($errorMessage);
+        if (!\is_a($class, ConfigurableRectorInterface::class, \true)) {
+            $errorMessage = \sprintf('The service "%s" is not configurable. Make it implement "%s" or remove "configure()" call.', $class, ConfigurableRectorInterface::class);
+            throw new InvalidConfigurationException($errorMessage);
         }
     }
 }

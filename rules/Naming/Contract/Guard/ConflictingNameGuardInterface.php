@@ -12,5 +12,5 @@ interface ConflictingNameGuardInterface
     /**
      * @param TRename $renameValueObject
      */
-    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool;
+    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool;
 }

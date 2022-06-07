@@ -12,25 +12,25 @@ use RectorPrefix20220607\Symplify\Astral\Naming\SimpleNameResolver;
  *
  * @implements NodeValueResolverInterface<ConstFetch>
  */
-final class ConstFetchValueResolver implements \RectorPrefix20220607\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
+final class ConstFetchValueResolver implements NodeValueResolverInterface
 {
     /**
      * @var \Symplify\Astral\Naming\SimpleNameResolver
      */
     private $simpleNameResolver;
-    public function __construct(\RectorPrefix20220607\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver)
+    public function __construct(SimpleNameResolver $simpleNameResolver)
     {
         $this->simpleNameResolver = $simpleNameResolver;
     }
     public function getType() : string
     {
-        return \PhpParser\Node\Expr\ConstFetch::class;
+        return ConstFetch::class;
     }
     /**
      * @param ConstFetch $expr
      * @return mixed
      */
-    public function resolve(\PhpParser\Node\Expr $expr, string $currentFilePath)
+    public function resolve(Expr $expr, string $currentFilePath)
     {
         $constFetchName = $this->simpleNameResolver->getName($expr);
         if ($constFetchName === null) {

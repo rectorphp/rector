@@ -61,7 +61,7 @@ class HostsFile
         }
         $contents = @\file_get_contents($path);
         if ($contents === \false) {
-            throw new \RuntimeException('Unable to load hosts file "' . $path . '"');
+            throw new RuntimeException('Unable to load hosts file "' . $path . '"');
         }
         return new self($contents);
     }

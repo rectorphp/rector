@@ -6,6 +6,6 @@ namespace RectorPrefix20220607;
 use Rector\Config\RectorConfig;
 use Rector\Laravel\Set\LaravelLevelSetList;
 use Rector\Laravel\Set\LaravelSetList;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->sets([\Rector\Laravel\Set\LaravelSetList::LARAVEL_54, \Rector\Laravel\Set\LaravelLevelSetList::UP_TO_LARAVEL_53]);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->sets([LaravelSetList::LARAVEL_54, LaravelLevelSetList::UP_TO_LARAVEL_53]);
 };

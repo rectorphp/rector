@@ -26,13 +26,13 @@ final class CondAndExpr
      * @param Expr[]|null $condExprs
      * @param MatchKind::* $matchKind
      */
-    public function __construct($condExprs, \PhpParser\Node\Expr $expr, string $matchKind)
+    public function __construct($condExprs, Expr $expr, string $matchKind)
     {
         $this->condExprs = $condExprs;
         $this->expr = $expr;
         $this->matchKind = $matchKind;
     }
-    public function getExpr() : \PhpParser\Node\Expr
+    public function getExpr() : Expr
     {
         return $this->expr;
     }

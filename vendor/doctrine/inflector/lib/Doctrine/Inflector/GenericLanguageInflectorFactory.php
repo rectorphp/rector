@@ -5,7 +5,7 @@ namespace RectorPrefix20220607\Doctrine\Inflector;
 
 use RectorPrefix20220607\Doctrine\Inflector\Rules\Ruleset;
 use function array_unshift;
-abstract class GenericLanguageInflectorFactory implements \RectorPrefix20220607\Doctrine\Inflector\LanguageInflectorFactory
+abstract class GenericLanguageInflectorFactory implements LanguageInflectorFactory
 {
     /** @var Ruleset[] */
     private $singularRulesets = [];
@@ -16,30 +16,30 @@ abstract class GenericLanguageInflectorFactory implements \RectorPrefix20220607\
         $this->singularRulesets[] = $this->getSingularRuleset();
         $this->pluralRulesets[] = $this->getPluralRuleset();
     }
-    public final function build() : \RectorPrefix20220607\Doctrine\Inflector\Inflector
+    public final function build() : Inflector
     {
-        return new \RectorPrefix20220607\Doctrine\Inflector\Inflector(new \RectorPrefix20220607\Doctrine\Inflector\CachedWordInflector(new \RectorPrefix20220607\Doctrine\Inflector\RulesetInflector(...$this->singularRulesets)), new \RectorPrefix20220607\Doctrine\Inflector\CachedWordInflector(new \RectorPrefix20220607\Doctrine\Inflector\RulesetInflector(...$this->pluralRulesets)));
+        return new Inflector(new CachedWordInflector(new RulesetInflector(...$this->singularRulesets)), new CachedWordInflector(new RulesetInflector(...$this->pluralRulesets)));
     }
-    public final function withSingularRules(?\RectorPrefix20220607\Doctrine\Inflector\Rules\Ruleset $singularRules, bool $reset = \false) : \RectorPrefix20220607\Doctrine\Inflector\LanguageInflectorFactory
+    public final function withSingularRules(?Ruleset $singularRules, bool $reset = \false) : LanguageInflectorFactory
     {
         if ($reset) {
             $this->singularRulesets = [];
         }
-        if ($singularRules instanceof \RectorPrefix20220607\Doctrine\Inflector\Rules\Ruleset) {
-            \array_unshift($this->singularRulesets, $singularRules);
+        if ($singularRules instanceof Ruleset) {
+            array_unshift($this->singularRulesets, $singularRules);
         }
         return $this;
     }
-    public final function withPluralRules(?\RectorPrefix20220607\Doctrine\Inflector\Rules\Ruleset $pluralRules, bool $reset = \false) : \RectorPrefix20220607\Doctrine\Inflector\LanguageInflectorFactory
+    public final function withPluralRules(?Ruleset $pluralRules, bool $reset = \false) : LanguageInflectorFactory
     {
         if ($reset) {
             $this->pluralRulesets = [];
         }
-        if ($pluralRules instanceof \RectorPrefix20220607\Doctrine\Inflector\Rules\Ruleset) {
-            \array_unshift($this->pluralRulesets, $pluralRules);
+        if ($pluralRules instanceof Ruleset) {
+            array_unshift($this->pluralRulesets, $pluralRules);
         }
         return $this;
     }
-    protected abstract function getSingularRuleset() : \RectorPrefix20220607\Doctrine\Inflector\Rules\Ruleset;
-    protected abstract function getPluralRuleset() : \RectorPrefix20220607\Doctrine\Inflector\Rules\Ruleset;
+    protected abstract function getSingularRuleset() : Ruleset;
+    protected abstract function getPluralRuleset() : Ruleset;
 }

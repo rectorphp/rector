@@ -13,27 +13,27 @@ use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 /**
  * @implements TypeMapperInterface<SelfObjectType>
  */
-final class SelfObjectTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class SelfObjectTypeMapper implements TypeMapperInterface
 {
     /**
      * @return class-string<Type>
      */
     public function getNodeClass() : string
     {
-        return \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType::class;
+        return SelfObjectType::class;
     }
     /**
      * @param SelfObjectType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('self');
+        return new IdentifierTypeNode('self');
     }
     /**
      * @param SelfObjectType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        return new \PhpParser\Node\Name('self');
+        return new Name('self');
     }
 }

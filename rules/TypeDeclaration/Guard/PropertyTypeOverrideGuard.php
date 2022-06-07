@@ -19,15 +19,15 @@ final class PropertyTypeOverrideGuard
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isLegal(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isLegal(Property $property) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($property);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
         $propertyName = $this->nodeNameResolver->getName($property);

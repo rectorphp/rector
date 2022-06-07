@@ -16,7 +16,7 @@ final class PSR4AutoloadPathsProvider
      * @var \Symplify\SmartFileSystem\Json\JsonFileSystem
      */
     private $jsonFileSystem;
-    public function __construct(\RectorPrefix20220607\Symplify\SmartFileSystem\Json\JsonFileSystem $jsonFileSystem)
+    public function __construct(JsonFileSystem $jsonFileSystem)
     {
         $this->jsonFileSystem = $jsonFileSystem;
     }
@@ -29,7 +29,7 @@ final class PSR4AutoloadPathsProvider
             return $this->cachedComposerJsonPSR4AutoloadPaths;
         }
         $composerJson = $this->jsonFileSystem->loadFilePathToJson($this->getComposerJsonPath());
-        $psr4Autoloads = \array_merge($composerJson[\RectorPrefix20220607\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD]['psr-4'] ?? [], $composerJson[\RectorPrefix20220607\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection::AUTOLOAD_DEV]['psr-4'] ?? []);
+        $psr4Autoloads = \array_merge($composerJson[ComposerJsonSection::AUTOLOAD]['psr-4'] ?? [], $composerJson[ComposerJsonSection::AUTOLOAD_DEV]['psr-4'] ?? []);
         $this->cachedComposerJsonPSR4AutoloadPaths = $this->removeEmptyNamespaces($psr4Autoloads);
         return $this->cachedComposerJsonPSR4AutoloadPaths;
     }

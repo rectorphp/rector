@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-final class FullyQualifiedObjectType extends \PHPStan\Type\ObjectType
+final class FullyQualifiedObjectType extends ObjectType
 {
     public function getShortNameType() : \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType
     {
@@ -28,31 +28,31 @@ final class FullyQualifiedObjectType extends \PHPStan\Type\ObjectType
         if (\strpos($className, '\\') === \false) {
             return $className;
         }
-        return (string) \RectorPrefix20220607\Nette\Utils\Strings::after($className, '\\', -1);
+        return (string) Strings::after($className, '\\', -1);
     }
-    public function getShortNameNode() : \PhpParser\Node\Name
+    public function getShortNameNode() : Name
     {
-        $name = new \PhpParser\Node\Name($this->getShortName());
+        $name = new Name($this->getShortName());
         // to avoid processing short name twice
-        $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::VIRTUAL_NODE, \true);
+        $name->setAttribute(AttributeKey::VIRTUAL_NODE, \true);
         // keep original to avoid loss on while importing
-        $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NAMESPACED_NAME, $this->getClassName());
+        $name->setAttribute(AttributeKey::NAMESPACED_NAME, $this->getClassName());
         return $name;
     }
-    public function getUseNode() : \PhpParser\Node\Stmt\Use_
+    public function getUseNode() : Use_
     {
-        $name = new \PhpParser\Node\Name($this->getClassName());
-        $useUse = new \PhpParser\Node\Stmt\UseUse($name);
-        $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $useUse);
-        return new \PhpParser\Node\Stmt\Use_([$useUse]);
+        $name = new Name($this->getClassName());
+        $useUse = new UseUse($name);
+        $name->setAttribute(AttributeKey::PARENT_NODE, $useUse);
+        return new Use_([$useUse]);
     }
-    public function getFunctionUseNode() : \PhpParser\Node\Stmt\Use_
+    public function getFunctionUseNode() : Use_
     {
-        $name = new \PhpParser\Node\Name($this->getClassName());
-        $useUse = new \PhpParser\Node\Stmt\UseUse($name, null);
-        $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $useUse);
-        $use = new \PhpParser\Node\Stmt\Use_([$useUse]);
-        $use->type = \PhpParser\Node\Stmt\Use_::TYPE_FUNCTION;
+        $name = new Name($this->getClassName());
+        $useUse = new UseUse($name, null);
+        $name->setAttribute(AttributeKey::PARENT_NODE, $useUse);
+        $use = new Use_([$useUse]);
+        $use->type = Use_::TYPE_FUNCTION;
         return $use;
     }
     public function getShortNameLowered() : string

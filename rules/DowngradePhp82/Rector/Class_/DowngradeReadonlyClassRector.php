@@ -9,21 +9,21 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/readonly_classes
  *
  * @see \Rector\Tests\DowngradePhp82\Rector\Class_\DowngradeReadonlyClassRector\DowngradeReadonlyClassRectorTest
  */
-final class DowngradeReadonlyClassRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeReadonlyClassRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    public function __construct(VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;
     }
@@ -32,11 +32,11 @@ final class DowngradeReadonlyClassRector extends \Rector\Core\Rector\AbstractRec
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove "readonly" class type, decorate all properties to "readonly"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove "readonly" class type, decorate all properties to "readonly"', [new CodeSample(<<<'CODE_SAMPLE'
 final readonly class SomeClass
 {
     public string $foo;
@@ -63,7 +63,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->visibilityManipulator->isReadonly($node)) {
             return null;
@@ -73,7 +73,7 @@ CODE_SAMPLE
         $this->makePromotedPropertiesReadonly($node);
         return $node;
     }
-    private function makePropertiesReadonly(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function makePropertiesReadonly(Class_ $class) : void
     {
         foreach ($class->getProperties() as $property) {
             if ($property->isReadonly()) {
@@ -96,10 +96,10 @@ CODE_SAMPLE
             $this->visibilityManipulator->makeReadonly($property);
         }
     }
-    private function makePromotedPropertiesReadonly(\PhpParser\Node\Stmt\Class_ $class) : void
+    private function makePromotedPropertiesReadonly(Class_ $class) : void
     {
-        $classMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$classMethod instanceof ClassMethod) {
             return;
         }
         foreach ($classMethod->getParams() as $param) {

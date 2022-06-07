@@ -15,12 +15,12 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector\NewlineBeforeNewAssignSetRectorTest
  */
-final class NewlineBeforeNewAssignSetRector extends \Rector\Core\Rector\AbstractRector
+final class NewlineBeforeNewAssignSetRector extends AbstractRector
 {
     /**
      * @var string|null
@@ -30,9 +30,9 @@ final class NewlineBeforeNewAssignSetRector extends \Rector\Core\Rector\Abstract
      * @var string|null
      */
     private $previousPreviousStmtVariableName;
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add extra space before new assign set', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add extra space before new assign set', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -64,12 +64,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Expr\Closure::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
      * @param ClassMethod|Function_|Closure $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         // skip methods with no bodies (e.g interface methods)
         if ($node->stmts === null) {
@@ -83,7 +83,7 @@ CODE_SAMPLE
             if ($this->shouldAddEmptyLine($currentStmtVariableName, $node, $key)) {
                 $hasChanged = \true;
                 // insert newline before stmt
-                $newStmts[] = new \PhpParser\Node\Stmt\Nop();
+                $newStmts[] = new Nop();
             }
             $newStmts[] = $stmt;
             $this->previousPreviousStmtVariableName = $this->previousStmtVariableName;
@@ -97,17 +97,17 @@ CODE_SAMPLE
         $this->previousStmtVariableName = null;
         $this->previousPreviousStmtVariableName = null;
     }
-    private function resolveCurrentStmtVariableName(\PhpParser\Node\Stmt $stmt) : ?string
+    private function resolveCurrentStmtVariableName(Stmt $stmt) : ?string
     {
-        if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$stmt instanceof Expression) {
             return null;
         }
         $stmtExpr = $stmt->expr;
-        if ($stmtExpr instanceof \PhpParser\Node\Expr\Assign || $stmtExpr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($stmtExpr instanceof Assign || $stmtExpr instanceof MethodCall) {
             if ($this->shouldSkipLeftVariable($stmtExpr)) {
                 return null;
             }
-            if (!$stmtExpr->var instanceof \PhpParser\Node\Expr\MethodCall && !$stmtExpr->var instanceof \PhpParser\Node\Expr\StaticCall) {
+            if (!$stmtExpr->var instanceof MethodCall && !$stmtExpr->var instanceof StaticCall) {
                 return $this->getName($stmtExpr->var);
             }
         }
@@ -129,7 +129,7 @@ CODE_SAMPLE
      */
     private function shouldSkipLeftVariable($node) : bool
     {
-        if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node->var instanceof Variable) {
             return \false;
         }
         // local method call

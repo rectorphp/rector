@@ -15,15 +15,15 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony/pull/42422
  * @changelog https://github.com/symfony/symfony/pull/1195
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\GetHelperControllerToServiceRector\GetHelperControllerToServiceRectorTest
  */
-final class GetHelperControllerToServiceRector extends \Rector\Core\Rector\AbstractRector
+final class GetHelperControllerToServiceRector extends AbstractRector
 {
     /**
      * @readonly
@@ -40,15 +40,15 @@ final class GetHelperControllerToServiceRector extends \Rector\Core\Rector\Abstr
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(\Rector\Symfony\TypeAnalyzer\ControllerAnalyzer $controllerAnalyzer, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Naming\Naming\PropertyNaming $propertyNaming)
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, PropertyToAddCollector $propertyToAddCollector, PropertyNaming $propertyNaming)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->propertyNaming = $propertyNaming;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace $this->getDoctrine() and $this->dispatchMessage() calls in AbstractController with direct service use', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace $this->getDoctrine() and $this->dispatchMessage() calls in AbstractController with direct service use', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 final class SomeController extends AbstractController
@@ -83,18 +83,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->controllerAnalyzer->isController($node->var)) {
             return null;
         }
-        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$class instanceof Class_) {
             return null;
         }
         if ($this->isName($node->name, 'getDoctrine')) {
@@ -108,26 +108,26 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node|\PhpParser\Node\Expr\MethodCall
      */
-    private function refactorDispatchMessage(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\MethodCall $methodCall)
+    private function refactorDispatchMessage(Class_ $class, MethodCall $methodCall)
     {
         $propertyName = $this->propertyNaming->fqnToVariableName('Symfony\\Component\\Messenger\\MessageBusInterface');
         // add dependency
-        $propertyObjectType = new \PHPStan\Type\ObjectType('Symfony\\Component\\Messenger\\MessageBusInterface');
-        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $propertyObjectType = new ObjectType('Symfony\\Component\\Messenger\\MessageBusInterface');
+        $propertyMetadata = new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
-        $thisVariable = new \PhpParser\Node\Expr\Variable('this');
-        $methodCall->var = new \PhpParser\Node\Expr\PropertyFetch($thisVariable, $propertyName);
-        $methodCall->name = new \PhpParser\Node\Identifier('dispatch');
+        $thisVariable = new Variable('this');
+        $methodCall->var = new PropertyFetch($thisVariable, $propertyName);
+        $methodCall->name = new Identifier('dispatch');
         return $methodCall;
     }
-    private function refactorGetDoctrine(\PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Expr\PropertyFetch
+    private function refactorGetDoctrine(Class_ $class) : PropertyFetch
     {
         $propertyName = $this->propertyNaming->fqnToVariableName('Doctrine\\Persistence\\ManagerRegistry');
         // add dependency
-        $propertyObjectType = new \PHPStan\Type\ObjectType('Doctrine\\Persistence\\ManagerRegistry');
-        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $propertyObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $propertyObjectType = new ObjectType('Doctrine\\Persistence\\ManagerRegistry');
+        $propertyMetadata = new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
-        $thisVariable = new \PhpParser\Node\Expr\Variable('this');
-        return new \PhpParser\Node\Expr\PropertyFetch($thisVariable, $propertyName);
+        $thisVariable = new Variable('this');
+        return new PropertyFetch($thisVariable, $propertyName);
     }
 }

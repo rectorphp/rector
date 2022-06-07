@@ -16,12 +16,12 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector\ReplaceEachAssignmentWithKeyCurrentRectorTest
  */
-final class ReplaceEachAssignmentWithKeyCurrentRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ReplaceEachAssignmentWithKeyCurrentRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -29,11 +29,11 @@ final class ReplaceEachAssignmentWithKeyCurrentRector extends \Rector\Core\Recto
     private const KEY = 'key';
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NO_EACH_OUTSIDE_LOOP;
+        return PhpVersionFeature::NO_EACH_OUTSIDE_LOOP;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace each() assign outside loop', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace each() assign outside loop', [new CodeSample(<<<'CODE_SAMPLE'
 $array = ['b' => 1, 'a' => 2];
 $eachedArray = each($array);
 CODE_SAMPLE
@@ -52,12 +52,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -67,7 +67,7 @@ CODE_SAMPLE
         if (!isset($eachFuncCall->args[0])) {
             return null;
         }
-        if (!$eachFuncCall->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$eachFuncCall->args[0] instanceof Arg) {
             return null;
         }
         $eachedVariable = $eachFuncCall->args[0]->value;
@@ -77,38 +77,38 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\Assign $assign) : bool
+    private function shouldSkip(Assign $assign) : bool
     {
-        if (!$assign->expr instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$assign->expr instanceof FuncCall) {
             return \true;
         }
         if (!$this->nodeNameResolver->isName($assign->expr, 'each')) {
             return \true;
         }
-        $parentNode = $assign->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Stmt\While_) {
+        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof While_) {
             return \true;
         }
         // skip assign to List
-        if (!$parentNode instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$parentNode instanceof Assign) {
             return \false;
         }
-        return $parentNode->var instanceof \PhpParser\Node\Expr\List_;
+        return $parentNode->var instanceof List_;
     }
     /**
      * @return array<Assign|FuncCall>
      */
-    private function createNewNodes(\PhpParser\Node\Expr $assignVariable, \PhpParser\Node\Expr $eachedVariable) : array
+    private function createNewNodes(Expr $assignVariable, Expr $eachedVariable) : array
     {
-        return [$this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 1, 'current'), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 'value', 'current'), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 0, self::KEY), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, self::KEY, self::KEY), $this->nodeFactory->createFuncCall('next', [new \PhpParser\Node\Arg($eachedVariable)])];
+        return [$this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 1, 'current'), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 'value', 'current'), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, 0, self::KEY), $this->createDimFetchAssignWithFuncCall($assignVariable, $eachedVariable, self::KEY, self::KEY), $this->nodeFactory->createFuncCall('next', [new Arg($eachedVariable)])];
     }
     /**
      * @param string|int $dimValue
      */
-    private function createDimFetchAssignWithFuncCall(\PhpParser\Node\Expr $assignVariable, \PhpParser\Node\Expr $eachedVariable, $dimValue, string $functionName) : \PhpParser\Node\Expr\Assign
+    private function createDimFetchAssignWithFuncCall(Expr $assignVariable, Expr $eachedVariable, $dimValue, string $functionName) : Assign
     {
-        $dim = \PhpParser\BuilderHelpers::normalizeValue($dimValue);
-        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($assignVariable, $dim);
-        return new \PhpParser\Node\Expr\Assign($arrayDimFetch, $this->nodeFactory->createFuncCall($functionName, [new \PhpParser\Node\Arg($eachedVariable)]));
+        $dim = BuilderHelpers::normalizeValue($dimValue);
+        $arrayDimFetch = new ArrayDimFetch($assignVariable, $dim);
+        return new Assign($arrayDimFetch, $this->nodeFactory->createFuncCall($functionName, [new Arg($eachedVariable)]));
     }
 }

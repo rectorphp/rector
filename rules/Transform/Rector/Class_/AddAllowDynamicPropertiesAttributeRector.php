@@ -15,15 +15,15 @@ use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/deprecate_dynamic_properties
  *
  * @see \Rector\Tests\Transform\Rector\Class_\AddAllowDynamicPropertiesAttributeRector\AddAllowDynamicPropertiesAttributeRectorTest
  */
-final class AddAllowDynamicPropertiesAttributeRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @var string
@@ -53,16 +53,16 @@ final class AddAllowDynamicPropertiesAttributeRector extends \Rector\Core\Rector
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory $phpAttributeGroupFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionProvider $reflectionProvider)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add the `AllowDynamicProperties` attribute to all classes', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add the `AllowDynamicProperties` attribute to all classes', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 namespace Example\Domain;
 
 class SomeObject {
@@ -84,18 +84,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     public function configure(array $configuration) : void
     {
         $transformOnNamespaces = $configuration;
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allString($transformOnNamespaces);
+        Assert::allString($transformOnNamespaces);
         $this->transformOnNamespaces = $transformOnNamespaces;
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -104,34 +104,34 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::DEPRECATE_DYNAMIC_PROPERTIES;
+        return PhpVersionFeature::DEPRECATE_DYNAMIC_PROPERTIES;
     }
-    private function isDescendantOfStdclass(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function isDescendantOfStdclass(Class_ $class) : bool
     {
-        if (!$class->extends instanceof \PhpParser\Node\Name\FullyQualified) {
+        if (!$class->extends instanceof FullyQualified) {
             return \false;
         }
         $ancestorClassNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($class);
         return \in_array('stdClass', $ancestorClassNames, \true);
     }
-    private function hasNeededAttributeAlready(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function hasNeededAttributeAlready(Class_ $class) : bool
     {
         $nodeHasAttribute = $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE);
         if ($nodeHasAttribute) {
             return \true;
         }
-        if (!$class->extends instanceof \PhpParser\Node\Name\FullyQualified) {
+        if (!$class->extends instanceof FullyQualified) {
             return \false;
         }
         return $this->phpAttributeAnalyzer->hasInheritedPhpAttribute($class, self::ATTRIBUTE);
     }
-    private function addAllowDynamicPropertiesAttribute(\PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt\Class_
+    private function addAllowDynamicPropertiesAttribute(Class_ $class) : Class_
     {
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(self::ATTRIBUTE);
         $class->attrGroups[] = $attributeGroup;
         return $class;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkip(Class_ $class) : bool
     {
         if ($this->transformOnNamespaces !== []) {
             $className = (string) $this->nodeNameResolver->getName($class);
@@ -149,10 +149,10 @@ CODE_SAMPLE
         }
         return $this->hasMagicSetMethod($class);
     }
-    private function hasMagicSetMethod(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function hasMagicSetMethod(Class_ $class) : bool
     {
         $className = (string) $this->getName($class);
         $classReflection = $this->reflectionProvider->getClass($className);
-        return $classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::__SET);
+        return $classReflection->hasMethod(MethodName::__SET);
     }
 }

@@ -8,17 +8,17 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\LogicalAnd;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://3v4l.org/ji8bX
  * @see \Rector\Tests\CodeQuality\Rector\LogicalAnd\AndAssignsToSeparateLinesRector\AndAssignsToSeparateLinesRectorTest
  */
-final class AndAssignsToSeparateLinesRector extends \Rector\Core\Rector\AbstractRector
+final class AndAssignsToSeparateLinesRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Split 2 assigns ands to separate line', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Split 2 assigns ands to separate line', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -46,26 +46,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Expression::class];
+        return [Expression::class];
     }
     /**
      * @param Expression $node
      * @return Expression[]|null
      */
-    public function refactor(\PhpParser\Node $node) : ?array
+    public function refactor(Node $node) : ?array
     {
-        if (!$node->expr instanceof \PhpParser\Node\Expr\BinaryOp\LogicalAnd) {
+        if (!$node->expr instanceof LogicalAnd) {
             return null;
         }
         $logicalAnd = $node->expr;
-        if (!$logicalAnd->left instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$logicalAnd->left instanceof Assign) {
             return null;
         }
-        if (!$logicalAnd->right instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$logicalAnd->right instanceof Assign) {
             return null;
         }
-        $leftAssignExpression = new \PhpParser\Node\Stmt\Expression($logicalAnd->left);
-        $rightAssignExpression = new \PhpParser\Node\Stmt\Expression($logicalAnd->right);
+        $leftAssignExpression = new Expression($logicalAnd->left);
+        $rightAssignExpression = new Expression($logicalAnd->right);
         return [$leftAssignExpression, $rightAssignExpression];
     }
 }

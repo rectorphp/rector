@@ -13,17 +13,17 @@ use PhpParser\Node\Stmt;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/symfony/symfony/pull/27476
  * @see \Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
  */
-final class RootNodeTreeBuilderRector extends \Rector\Core\Rector\AbstractRector
+final class RootNodeTreeBuilderRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes  Process string argument to an array', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes  Process string argument to an array', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 $treeBuilder = new TreeBuilder();
@@ -44,50 +44,50 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->class, new \PHPStan\Type\ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+        if (!$this->isObjectType($node->class, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
             return null;
         }
         if (isset($node->args[1])) {
             return null;
         }
         $rootMethodCallNode = $this->getRootMethodCallNode($node);
-        if (!$rootMethodCallNode instanceof \PhpParser\Node\Expr\MethodCall) {
+        if (!$rootMethodCallNode instanceof MethodCall) {
             return null;
         }
         $firstArg = $rootMethodCallNode->args[0];
-        if (!$firstArg instanceof \PhpParser\Node\Arg) {
+        if (!$firstArg instanceof Arg) {
             return null;
         }
         $rootNameNode = $firstArg->value;
-        if (!$rootNameNode instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$rootNameNode instanceof String_) {
             return null;
         }
         [$node->args, $rootMethodCallNode->args] = [$rootMethodCallNode->args, $node->args];
-        $rootMethodCallNode->name = new \PhpParser\Node\Identifier('getRootNode');
+        $rootMethodCallNode->name = new Identifier('getRootNode');
         return $node;
     }
-    private function getRootMethodCallNode(\PhpParser\Node\Expr\New_ $new) : ?\PhpParser\Node
+    private function getRootMethodCallNode(New_ $new) : ?Node
     {
         $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($new);
-        if (!$currentStmt instanceof \PhpParser\Node\Stmt) {
+        if (!$currentStmt instanceof Stmt) {
             return null;
         }
-        $nextExpression = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
+        $nextExpression = $currentStmt->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextExpression === null) {
             return null;
         }
-        return $this->betterNodeFinder->findFirst([$nextExpression], function (\PhpParser\Node $node) : bool {
-            if (!$node instanceof \PhpParser\Node\Expr\MethodCall) {
+        return $this->betterNodeFinder->findFirst([$nextExpression], function (Node $node) : bool {
+            if (!$node instanceof MethodCall) {
                 return \false;
             }
-            if (!$this->isObjectType($node->var, new \PHPStan\Type\ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
                 return \false;
             }
             if (!$this->isName($node->name, 'root')) {

@@ -86,7 +86,7 @@ class Lexer
         $tokens = [];
         for ($i = $start; $i < $end; $i++) {
             $chr = $this->code[$i];
-            if ($chr === "\0") {
+            if ($chr === "\x00") {
                 // PHP cuts error message after null byte, so need special case
                 $errorMsg = 'Unexpected null byte';
             } else {
@@ -257,7 +257,7 @@ class Lexer
                 $token = $this->tokens[$this->pos];
             } else {
                 // EOF token with ID 0
-                $token = "\0";
+                $token = "\x00";
             }
             if ($this->attributeStartLineUsed) {
                 $startAttributes['startLine'] = $this->line;
@@ -417,44 +417,44 @@ class Lexer
         for ($i = 256; $i < 1000; ++$i) {
             if (\T_DOUBLE_COLON === $i) {
                 // T_DOUBLE_COLON is equivalent to T_PAAMAYIM_NEKUDOTAYIM
-                $tokenMap[$i] = \PhpParser\Parser\Tokens::T_PAAMAYIM_NEKUDOTAYIM;
+                $tokenMap[$i] = Tokens::T_PAAMAYIM_NEKUDOTAYIM;
             } elseif (\T_OPEN_TAG_WITH_ECHO === $i) {
                 // T_OPEN_TAG_WITH_ECHO with dropped T_OPEN_TAG results in T_ECHO
-                $tokenMap[$i] = \PhpParser\Parser\Tokens::T_ECHO;
+                $tokenMap[$i] = Tokens::T_ECHO;
             } elseif (\T_CLOSE_TAG === $i) {
                 // T_CLOSE_TAG is equivalent to ';'
                 $tokenMap[$i] = \ord(';');
             } elseif ('UNKNOWN' !== ($name = \token_name($i))) {
                 if ('T_HASHBANG' === $name) {
                     // HHVM uses a special token for #! hashbang lines
-                    $tokenMap[$i] = \PhpParser\Parser\Tokens::T_INLINE_HTML;
-                } elseif (\defined($name = \PhpParser\Parser\Tokens::class . '::' . $name)) {
+                    $tokenMap[$i] = Tokens::T_INLINE_HTML;
+                } elseif (\defined($name = Tokens::class . '::' . $name)) {
                     // Other tokens can be mapped directly
                     $tokenMap[$i] = \constant($name);
                 }
             }
         }
         // HHVM uses a special token for numbers that overflow to double
-        if (\defined('T_ONUMBER')) {
-            $tokenMap[\T_ONUMBER] = \PhpParser\Parser\Tokens::T_DNUMBER;
+        if (\defined('RectorPrefix20220607\\T_ONUMBER')) {
+            $tokenMap[\RectorPrefix20220607\T_ONUMBER] = Tokens::T_DNUMBER;
         }
         // HHVM also has a separate token for the __COMPILER_HALT_OFFSET__ constant
-        if (\defined('T_COMPILER_HALT_OFFSET')) {
-            $tokenMap[\T_COMPILER_HALT_OFFSET] = \PhpParser\Parser\Tokens::T_STRING;
+        if (\defined('RectorPrefix20220607\\T_COMPILER_HALT_OFFSET')) {
+            $tokenMap[\RectorPrefix20220607\T_COMPILER_HALT_OFFSET] = Tokens::T_STRING;
         }
         // Assign tokens for which we define compatibility constants, as token_name() does not know them.
-        $tokenMap[\T_FN] = \PhpParser\Parser\Tokens::T_FN;
-        $tokenMap[\T_COALESCE_EQUAL] = \PhpParser\Parser\Tokens::T_COALESCE_EQUAL;
-        $tokenMap[\T_NAME_QUALIFIED] = \PhpParser\Parser\Tokens::T_NAME_QUALIFIED;
-        $tokenMap[\T_NAME_FULLY_QUALIFIED] = \PhpParser\Parser\Tokens::T_NAME_FULLY_QUALIFIED;
-        $tokenMap[\T_NAME_RELATIVE] = \PhpParser\Parser\Tokens::T_NAME_RELATIVE;
-        $tokenMap[\T_MATCH] = \PhpParser\Parser\Tokens::T_MATCH;
-        $tokenMap[\T_NULLSAFE_OBJECT_OPERATOR] = \PhpParser\Parser\Tokens::T_NULLSAFE_OBJECT_OPERATOR;
-        $tokenMap[\T_ATTRIBUTE] = \PhpParser\Parser\Tokens::T_ATTRIBUTE;
-        $tokenMap[\T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG] = \PhpParser\Parser\Tokens::T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG;
-        $tokenMap[\T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG] = \PhpParser\Parser\Tokens::T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG;
-        $tokenMap[\T_ENUM] = \PhpParser\Parser\Tokens::T_ENUM;
-        $tokenMap[\T_READONLY] = \PhpParser\Parser\Tokens::T_READONLY;
+        $tokenMap[\T_FN] = Tokens::T_FN;
+        $tokenMap[\T_COALESCE_EQUAL] = Tokens::T_COALESCE_EQUAL;
+        $tokenMap[\T_NAME_QUALIFIED] = Tokens::T_NAME_QUALIFIED;
+        $tokenMap[\T_NAME_FULLY_QUALIFIED] = Tokens::T_NAME_FULLY_QUALIFIED;
+        $tokenMap[\T_NAME_RELATIVE] = Tokens::T_NAME_RELATIVE;
+        $tokenMap[\T_MATCH] = Tokens::T_MATCH;
+        $tokenMap[\T_NULLSAFE_OBJECT_OPERATOR] = Tokens::T_NULLSAFE_OBJECT_OPERATOR;
+        $tokenMap[\T_ATTRIBUTE] = Tokens::T_ATTRIBUTE;
+        $tokenMap[\T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG] = Tokens::T_AMPERSAND_NOT_FOLLOWED_BY_VAR_OR_VARARG;
+        $tokenMap[\T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG] = Tokens::T_AMPERSAND_FOLLOWED_BY_VAR_OR_VARARG;
+        $tokenMap[\T_ENUM] = Tokens::T_ENUM;
+        $tokenMap[\T_READONLY] = Tokens::T_READONLY;
         return $tokenMap;
     }
     private function createIdentifierTokenMap() : array

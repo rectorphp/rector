@@ -24,12 +24,12 @@ use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
  */
-final class RemoveDeadInstanceOfRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDeadInstanceOfRector extends AbstractRector
 {
     /**
      * @readonly
@@ -56,7 +56,7 @@ final class RemoveDeadInstanceOfRector extends \Rector\Core\Rector\AbstractRecto
      * @var \Rector\NodeNestingScope\ContextAnalyzer
      */
     private $contextAnalyzer;
-    public function __construct(\Rector\Core\NodeManipulator\IfManipulator $ifManipulator, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector $constructorAssignDetector, \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver, \Rector\NodeNestingScope\ContextAnalyzer $contextAnalyzer)
+    public function __construct(IfManipulator $ifManipulator, PropertyFetchAnalyzer $propertyFetchAnalyzer, ConstructorAssignDetector $constructorAssignDetector, PromotedPropertyResolver $promotedPropertyResolver, ContextAnalyzer $contextAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
@@ -64,9 +64,9 @@ final class RemoveDeadInstanceOfRector extends \Rector\Core\Rector\AbstractRecto
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->contextAnalyzer = $contextAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove dead instanceof check on type hinted variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove dead instanceof check on type hinted variable', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function go(stdClass $stdClass)
@@ -95,13 +95,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\If_::class];
+        return [If_::class];
     }
     /**
      * @param If_ $node
      * @return \PhpParser\Node\Stmt\If_|mixed[]|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         if (!$this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;
@@ -109,14 +109,14 @@ CODE_SAMPLE
         if ($this->contextAnalyzer->isInLoop($node)) {
             return null;
         }
-        $originalCondNode = $node->cond->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
-        if (!$originalCondNode instanceof \PhpParser\Node) {
+        $originalCondNode = $node->cond->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (!$originalCondNode instanceof Node) {
             return null;
         }
-        if ($node->cond instanceof \PhpParser\Node\Expr\BooleanNot && $node->cond->expr instanceof \PhpParser\Node\Expr\Instanceof_) {
+        if ($node->cond instanceof BooleanNot && $node->cond->expr instanceof Instanceof_) {
             return $this->processMayDeadInstanceOf($node, $node->cond->expr);
         }
-        if ($node->cond instanceof \PhpParser\Node\Expr\Instanceof_) {
+        if ($node->cond instanceof Instanceof_) {
             return $this->processMayDeadInstanceOf($node, $node->cond);
         }
         return null;
@@ -124,9 +124,9 @@ CODE_SAMPLE
     /**
      * @return null|mixed[]|\PhpParser\Node\Stmt\If_
      */
-    private function processMayDeadInstanceOf(\PhpParser\Node\Stmt\If_ $if, \PhpParser\Node\Expr\Instanceof_ $instanceof)
+    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof)
     {
-        if (!$instanceof->class instanceof \PhpParser\Node\Name) {
+        if (!$instanceof->class instanceof Name) {
             return null;
         }
         $classType = $this->nodeTypeResolver->getType($instanceof->class);
@@ -135,7 +135,7 @@ CODE_SAMPLE
         if (!$isSameStaticTypeOrSubtype) {
             return null;
         }
-        if (!$instanceof->expr instanceof \PhpParser\Node\Expr\Variable && !$this->isInPropertyPromotedParams($instanceof->expr) && $this->isSkippedPropertyFetch($instanceof->expr)) {
+        if (!$instanceof->expr instanceof Variable && !$this->isInPropertyPromotedParams($instanceof->expr) && $this->isSkippedPropertyFetch($instanceof->expr)) {
             return null;
         }
         if ($this->shouldSkipFromNotTypedParam($instanceof)) {
@@ -147,15 +147,15 @@ CODE_SAMPLE
         $this->removeNode($if);
         return $if;
     }
-    private function shouldSkipFromNotTypedParam(\PhpParser\Node\Expr\Instanceof_ $instanceof) : bool
+    private function shouldSkipFromNotTypedParam(Instanceof_ $instanceof) : bool
     {
-        $functionLike = $this->betterNodeFinder->findParentType($instanceof, \PhpParser\Node\FunctionLike::class);
-        if (!$functionLike instanceof \PhpParser\Node\FunctionLike) {
+        $functionLike = $this->betterNodeFinder->findParentType($instanceof, FunctionLike::class);
+        if (!$functionLike instanceof FunctionLike) {
             return \false;
         }
         $variable = $instanceof->expr;
-        $isReassign = (bool) $this->betterNodeFinder->findFirstPrevious($instanceof, function (\PhpParser\Node $subNode) use($variable) : bool {
-            return $subNode instanceof \PhpParser\Node\Expr\Assign && $this->nodeComparator->areNodesEqual($subNode->var, $variable);
+        $isReassign = (bool) $this->betterNodeFinder->findFirstPrevious($instanceof, function (Node $subNode) use($variable) : bool {
+            return $subNode instanceof Assign && $this->nodeComparator->areNodesEqual($subNode->var, $variable);
         });
         if ($isReassign) {
             return \false;
@@ -168,33 +168,33 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function isSkippedPropertyFetch(\PhpParser\Node\Expr $expr) : bool
+    private function isSkippedPropertyFetch(Expr $expr) : bool
     {
         if (!$this->propertyFetchAnalyzer->isPropertyFetch($expr)) {
             return \true;
         }
         /** @var PropertyFetch|StaticPropertyFetch $propertyFetch */
         $propertyFetch = $expr;
-        $classLike = $this->betterNodeFinder->findParentType($propertyFetch, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
+        if (!$classLike instanceof Class_) {
             return \true;
         }
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($propertyFetch);
         $property = $classLike->getProperty($propertyName);
-        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+        if (!$property instanceof Property) {
             return \true;
         }
         $isPropertyAssignedInConstuctor = $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
         return $property->type === null && !$isPropertyAssignedInConstuctor;
     }
-    private function isInPropertyPromotedParams(\PhpParser\Node\Expr $expr) : bool
+    private function isInPropertyPromotedParams(Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$expr instanceof PropertyFetch) {
             return \false;
         }
-        $classLike = $this->betterNodeFinder->findParentType($expr, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($expr, Class_::class);
+        if (!$classLike instanceof Class_) {
             return \false;
         }
         /** @var string $propertyName */

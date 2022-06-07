@@ -11,25 +11,25 @@ use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Laravel\Tests\Rector\MethodCall\RedirectBackToBackHelperRector\RedirectBackToBackHelperRectorTest
  */
-final class RedirectBackToBackHelperRector extends \Rector\Core\Rector\AbstractRector
+final class RedirectBackToBackHelperRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;
-    public function __construct(\Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
+    public function __construct(FluentChainMethodCallNodeAnalyzer $fluentChainMethodCallNodeAnalyzer)
     {
         $this->fluentChainMethodCallNodeAnalyzer = $fluentChainMethodCallNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace `redirect()->back()` and `Redirect::back()` with `back()`', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace `redirect()->back()` and `Redirect::back()` with `back()`', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Support\Facades\Redirect;
 
 class MyController
@@ -68,29 +68,29 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             return $this->updateRedirectHelperCall($node);
         }
         return $this->updateRedirectStaticCall($node);
     }
-    private function updateRedirectHelperCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
+    private function updateRedirectHelperCall(MethodCall $methodCall) : ?MethodCall
     {
         if (!$this->isName($methodCall->name, 'back')) {
             return null;
         }
         $rootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($methodCall);
-        $parentNode = $rootExpr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node\Expr\MethodCall) {
+        $parentNode = $rootExpr->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof MethodCall) {
             return null;
         }
-        if (!$parentNode->var instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$parentNode->var instanceof FuncCall) {
             return null;
         }
         if ($parentNode->var->getArgs() !== []) {
@@ -100,10 +100,10 @@ CODE_SAMPLE
             return null;
         }
         $this->removeNode($methodCall);
-        $parentNode->var->name = new \PhpParser\Node\Name('back');
+        $parentNode->var->name = new Name('back');
         return $parentNode;
     }
-    private function updateRedirectStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\FuncCall
+    private function updateRedirectStaticCall(StaticCall $staticCall) : ?FuncCall
     {
         if (!$this->isName($staticCall->class, 'Illuminate\\Support\\Facades\\Redirect')) {
             return null;
@@ -111,6 +111,6 @@ CODE_SAMPLE
         if (!$this->isName($staticCall->name, 'back')) {
             return null;
         }
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('back'), $staticCall->args);
+        return new FuncCall(new Name('back'), $staticCall->args);
     }
 }

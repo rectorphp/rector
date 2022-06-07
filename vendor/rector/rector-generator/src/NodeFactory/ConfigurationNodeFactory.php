@@ -25,7 +25,7 @@ final class ConfigurationNodeFactory
         $properties = [];
         foreach (\array_keys($ruleConfiguration) as $privatePropertyName) {
             $property = $this->nodeFactory->createPrivateArrayProperty($privatePropertyName);
-            $property->props[0]->default = new \PhpParser\Node\Expr\Array_([]);
+            $property->props[0]->default = new Array_([]);
             $properties[] = $property;
         }
         return $properties;

@@ -9,12 +9,12 @@ use Rector\Naming\ValueObject\PropertyRename;
 /**
  * @implements ConflictingNameGuardInterface<PropertyRename>
  */
-final class NotPrivatePropertyGuard implements \Rector\Naming\Contract\Guard\ConflictingNameGuardInterface
+final class NotPrivatePropertyGuard implements ConflictingNameGuardInterface
 {
     /**
      * @param PropertyRename $renameValueObject
      */
-    public function isConflicting(\Rector\Naming\Contract\RenameValueObjectInterface $renameValueObject) : bool
+    public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool
     {
         return !$renameValueObject->isPrivateProperty();
     }

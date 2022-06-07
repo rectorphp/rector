@@ -7,7 +7,7 @@ use PhpParser\Node;
 use Rector\Core\ValueObject\Application\File;
 final class WrappedInParenthesesAnalyzer
 {
-    public function isParenthesized(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node $node) : bool
+    public function isParenthesized(File $file, Node $node) : bool
     {
         $oldTokens = $file->getOldTokens();
         $startTokenPos = $node->getStartTokenPos();

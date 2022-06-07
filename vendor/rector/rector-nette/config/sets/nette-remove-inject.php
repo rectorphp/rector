@@ -5,6 +5,6 @@ namespace RectorPrefix20220607;
 
 use Rector\Config\RectorConfig;
 use Rector\Nette\Rector\Property\NetteInjectToConstructorInjectionRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Nette\Rector\Property\NetteInjectToConstructorInjectionRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(NetteInjectToConstructorInjectionRector::class);
 };

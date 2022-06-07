@@ -36,7 +36,7 @@ final class VariadicAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, AstResolver $astResolver, ReflectionResolver $reflectionResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -55,13 +55,13 @@ final class VariadicAnalyzer
         if ($this->hasVariadicVariant($functionLikeReflection)) {
             return \true;
         }
-        if ($functionLikeReflection instanceof \PHPStan\Reflection\FunctionReflection) {
+        if ($functionLikeReflection instanceof FunctionReflection) {
             $function = $this->astResolver->resolveFunctionFromFunctionReflection($functionLikeReflection);
-            if (!$function instanceof \PhpParser\Node\Stmt\Function_) {
+            if (!$function instanceof Function_) {
                 return \false;
             }
-            return (bool) $this->betterNodeFinder->findFirst($function->stmts, function (\PhpParser\Node $node) : bool {
-                if (!$node instanceof \PhpParser\Node\Expr\FuncCall) {
+            return (bool) $this->betterNodeFinder->findFirst($function->stmts, function (Node $node) : bool {
+                if (!$node instanceof FuncCall) {
                     return \false;
                 }
                 return $this->nodeNameResolver->isNames($node, ['func_get_args', 'func_num_args', 'func_get_arg']);

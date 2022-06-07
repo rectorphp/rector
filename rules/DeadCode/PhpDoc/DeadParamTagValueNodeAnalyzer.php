@@ -43,32 +43,32 @@ final class DeadParamTagValueNodeAnalyzer
      * @var \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer
      */
     private $mixedArrayTypeNodeAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeComparator = $typeComparator;
         $this->genericTypeNodeAnalyzer = $genericTypeNodeAnalyzer;
         $this->mixedArrayTypeNodeAnalyzer = $mixedArrayTypeNodeAnalyzer;
     }
-    public function isDead(\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $paramTagValueNode, \PhpParser\Node\FunctionLike $functionLike) : bool
+    public function isDead(ParamTagValueNode $paramTagValueNode, FunctionLike $functionLike) : bool
     {
         $param = $this->matchParamByName($paramTagValueNode->parameterName, $functionLike);
-        if (!$param instanceof \PhpParser\Node\Param) {
+        if (!$param instanceof Param) {
             return \false;
         }
         if ($param->type === null) {
             return \false;
         }
-        if ($param->type instanceof \PhpParser\Node\Name && $this->nodeNameResolver->isName($param->type, 'object')) {
-            return $paramTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode && (string) $paramTagValueNode->type === 'object';
+        if ($param->type instanceof Name && $this->nodeNameResolver->isName($param->type, 'object')) {
+            return $paramTagValueNode->type instanceof IdentifierTypeNode && (string) $paramTagValueNode->type === 'object';
         }
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($param->type, $paramTagValueNode->type, $functionLike)) {
             return \false;
         }
-        if (\in_array(\get_class($paramTagValueNode->type), \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger::ALLOWED_TYPES, \true)) {
+        if (\in_array(\get_class($paramTagValueNode->type), PhpDocTypeChanger::ALLOWED_TYPES, \true)) {
             return \false;
         }
-        if (!$paramTagValueNode->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
+        if (!$paramTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
             return $this->isEmptyDescription($paramTagValueNode, $param->type);
         }
         if ($this->mixedArrayTypeNodeAnalyzer->hasMixedArrayType($paramTagValueNode->type)) {
@@ -79,22 +79,22 @@ final class DeadParamTagValueNodeAnalyzer
         }
         return \false;
     }
-    private function isEmptyDescription(\PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode $paramTagValueNode, \PhpParser\Node $node) : bool
+    private function isEmptyDescription(ParamTagValueNode $paramTagValueNode, Node $node) : bool
     {
         if ($paramTagValueNode->description !== '') {
             return \false;
         }
-        $parent = $paramTagValueNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::PARENT);
-        if (!$parent instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
+        $parent = $paramTagValueNode->getAttribute(PhpDocAttributeKey::PARENT);
+        if (!$parent instanceof PhpDocTagNode) {
             return \true;
         }
-        $parent = $parent->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::PARENT);
-        if (!$parent instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode) {
+        $parent = $parent->getAttribute(PhpDocAttributeKey::PARENT);
+        if (!$parent instanceof PhpDocNode) {
             return \true;
         }
         $children = $parent->children;
         foreach ($children as $key => $child) {
-            if ($child instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode && $node instanceof \PhpParser\Node\Name\FullyQualified) {
+            if ($child instanceof PhpDocTagNode && $node instanceof FullyQualified) {
                 return $this->isUnionIdentifier($child);
             }
             if (!$this->isTextNextline($key, $child)) {
@@ -103,33 +103,33 @@ final class DeadParamTagValueNodeAnalyzer
         }
         return \true;
     }
-    private function isTextNextline(int $key, \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode $phpDocChildNode) : bool
+    private function isTextNextline(int $key, PhpDocChildNode $phpDocChildNode) : bool
     {
         if ($key < 1) {
             return \true;
         }
-        if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode) {
+        if (!$phpDocChildNode instanceof PhpDocTextNode) {
             return \true;
         }
         return (string) $phpDocChildNode === '';
     }
-    private function isUnionIdentifier(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $phpDocTagNode) : bool
+    private function isUnionIdentifier(PhpDocTagNode $phpDocTagNode) : bool
     {
-        if (!$phpDocTagNode->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
+        if (!$phpDocTagNode->value instanceof ParamTagValueNode) {
             return \true;
         }
-        if (!$phpDocTagNode->value->type instanceof \Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode) {
+        if (!$phpDocTagNode->value->type instanceof BracketsAwareUnionTypeNode) {
             return \true;
         }
         $types = $phpDocTagNode->value->type->types;
         foreach ($types as $type) {
-            if ($type instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+            if ($type instanceof IdentifierTypeNode) {
                 return \false;
             }
         }
         return \true;
     }
-    private function matchParamByName(string $desiredParamName, \PhpParser\Node\FunctionLike $functionLike) : ?\PhpParser\Node\Param
+    private function matchParamByName(string $desiredParamName, FunctionLike $functionLike) : ?Param
     {
         foreach ($functionLike->getParams() as $param) {
             $paramName = $this->nodeNameResolver->getName($param);

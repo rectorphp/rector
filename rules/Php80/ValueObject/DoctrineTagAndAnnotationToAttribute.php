@@ -16,12 +16,12 @@ final class DoctrineTagAndAnnotationToAttribute
      * @var \Rector\Php80\ValueObject\AnnotationToAttribute
      */
     private $annotationToAttribute;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute)
+    public function __construct(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, \Rector\Php80\ValueObject\AnnotationToAttribute $annotationToAttribute)
     {
         $this->doctrineAnnotationTagValueNode = $doctrineAnnotationTagValueNode;
         $this->annotationToAttribute = $annotationToAttribute;
     }
-    public function getDoctrineAnnotationTagValueNode() : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    public function getDoctrineAnnotationTagValueNode() : DoctrineAnnotationTagValueNode
     {
         return $this->doctrineAnnotationTagValueNode;
     }

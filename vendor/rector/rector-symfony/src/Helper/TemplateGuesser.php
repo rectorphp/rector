@@ -50,24 +50,24 @@ final class TemplateGuesser
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\Symfony\BundleClassResolver $bundleClassResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(BundleClassResolver $bundleClassResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->bundleClassResolver = $bundleClassResolver;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolveFromClassMethod(\PhpParser\Node\Stmt\ClassMethod $classMethod) : string
+    public function resolveFromClassMethod(ClassMethod $classMethod) : string
     {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            throw new ShouldNotHappenException();
         }
         $namespace = $scope->getNamespace();
         if (!\is_string($namespace)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $className = ($getClassReflection = $scope->getClassReflection()) ? $getClassReflection->getName() : null;
         if (!\is_string($className)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
@@ -80,7 +80,7 @@ final class TemplateGuesser
     {
         $bundle = $this->resolveBundle($class, $namespace);
         $controller = $this->resolveController($class);
-        $action = \RectorPrefix20220607\Nette\Utils\Strings::replace($method, self::ACTION_MATCH_REGEX, '');
+        $action = Strings::replace($method, self::ACTION_MATCH_REGEX, '');
         $fullPath = '';
         if ($bundle !== '') {
             $fullPath .= $bundle . '/';
@@ -96,17 +96,17 @@ final class TemplateGuesser
         if ($shortBundleClass !== null) {
             return '@' . $shortBundleClass;
         }
-        $bundle = \RectorPrefix20220607\Nette\Utils\Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
-        $bundle = \RectorPrefix20220607\Nette\Utils\Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX, '');
+        $bundle = Strings::match($namespace, self::BUNDLE_NAME_MATCHING_REGEX)['bundle'] ?? '';
+        $bundle = Strings::replace($bundle, self::BUNDLE_SUFFIX_REGEX, '');
         return $bundle !== '' ? '@' . $bundle : '';
     }
     private function resolveController(string $class) : string
     {
-        $match = \RectorPrefix20220607\Nette\Utils\Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
+        $match = Strings::match($class, self::CONTROLLER_NAME_MATCH_REGEX);
         if ($match === null) {
             return '';
         }
-        $controller = \RectorPrefix20220607\Nette\Utils\Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
+        $controller = Strings::replace($match['class_name_without_suffix'], self::SMALL_LETTER_BIG_LETTER_REGEX, '1_\\2');
         return \str_replace('\\', '/', $controller);
     }
 }

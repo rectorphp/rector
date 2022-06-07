@@ -9,9 +9,9 @@ use PhpParser\Node\Expr;
  */
 interface ReadNodeAnalyzerInterface
 {
-    public function supports(\PhpParser\Node\Expr $expr) : bool;
+    public function supports(Expr $expr) : bool;
     /**
      * @param TExpr $expr
      */
-    public function isRead(\PhpParser\Node\Expr $expr) : bool;
+    public function isRead(Expr $expr) : bool;
 }

@@ -14,25 +14,25 @@ final class DocBlockTagReplacer
      * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
      */
     private $annotationNaming;
-    public function __construct(\Rector\BetterPhpDocParser\Annotation\AnnotationNaming $annotationNaming)
+    public function __construct(AnnotationNaming $annotationNaming)
     {
         $this->annotationNaming = $annotationNaming;
     }
-    public function replaceTagByAnother(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, string $oldTag, string $newTag) : bool
+    public function replaceTagByAnother(PhpDocInfo $phpDocInfo, string $oldTag, string $newTag) : bool
     {
         $hasChanged = \false;
         $oldTag = $this->annotationNaming->normalizeName($oldTag);
         $newTag = $this->annotationNaming->normalizeName($newTag);
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if (!$phpDocChildNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode) {
+            if (!$phpDocChildNode instanceof PhpDocTagNode) {
                 continue;
             }
             if ($phpDocChildNode->name !== $oldTag) {
                 continue;
             }
             unset($phpDocNode->children[$key]);
-            $phpDocNode->children[] = new \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode($newTag, new \PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode(''));
+            $phpDocNode->children[] = new PhpDocTagNode($newTag, new GenericTagValueNode(''));
             $hasChanged = \true;
         }
         return $hasChanged;

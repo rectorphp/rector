@@ -35,14 +35,14 @@ final class RenamedClassesDataCollector
     {
         return $this->oldToNewClasses;
     }
-    public function matchClassName(\PHPStan\Type\ObjectType $objectType) : ?\PHPStan\Type\ObjectType
+    public function matchClassName(ObjectType $objectType) : ?ObjectType
     {
         $className = $objectType->getClassName();
         $renamedClassName = $this->oldToNewClasses[$className] ?? null;
         if ($renamedClassName === null) {
             return null;
         }
-        return new \PHPStan\Type\ObjectType($renamedClassName);
+        return new ObjectType($renamedClassName);
     }
     /**
      * @return string[]

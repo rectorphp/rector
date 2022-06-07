@@ -18,9 +18,9 @@ final class BuildFormOptionAssignsFactory
     {
         $expressions = [];
         foreach ($paramNames as $paramName) {
-            $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch(new \PhpParser\Node\Expr\Variable('options'), new \PhpParser\Node\Scalar\String_($paramName));
-            $assign = new \PhpParser\Node\Expr\Assign(new \PhpParser\Node\Expr\Variable($paramName), $arrayDimFetch);
-            $expressions[] = new \PhpParser\Node\Stmt\Expression($assign);
+            $arrayDimFetch = new ArrayDimFetch(new Variable('options'), new String_($paramName));
+            $assign = new Assign(new Variable($paramName), $arrayDimFetch);
+            $expressions[] = new Expression($assign);
         }
         return $expressions;
     }

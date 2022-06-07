@@ -25,20 +25,20 @@ final class NetteInjectDetector
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isNetteInjectPreferred(\PhpParser\Node\Stmt\Class_ $class) : bool
+    public function isNetteInjectPreferred(Class_ $class) : bool
     {
         if ($this->isInjectPropertyAlreadyInTheClass($class)) {
             return \true;
         }
         return $this->hasParentClassConstructor($class);
     }
-    private function isInjectPropertyAlreadyInTheClass(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function isInjectPropertyAlreadyInTheClass(Class_ $class) : bool
     {
         foreach ($class->getProperties() as $property) {
             if (!$property->isPublic()) {
@@ -51,7 +51,7 @@ final class NetteInjectDetector
         }
         return \false;
     }
-    private function hasParentClassConstructor(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function hasParentClassConstructor(Class_ $class) : bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         if (!$this->reflectionProvider->hasClass($className)) {
@@ -72,7 +72,7 @@ final class NetteInjectDetector
         }
         // prefer local constructor
         $classReflection = $this->reflectionProvider->getClass($className);
-        if ($classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if ($classReflection->hasMethod(MethodName::CONSTRUCT)) {
             $methodReflection = $classReflection->getConstructor();
             $declaringClass = $methodReflection->getDeclaringClass();
             // be sure its local constructor
@@ -81,6 +81,6 @@ final class NetteInjectDetector
             }
         }
         $classReflection = $this->reflectionProvider->getClass($parentClass);
-        return $classReflection->hasMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
+        return $classReflection->hasMethod(MethodName::CONSTRUCT);
     }
 }

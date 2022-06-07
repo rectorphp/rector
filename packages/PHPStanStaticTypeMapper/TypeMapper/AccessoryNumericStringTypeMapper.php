@@ -13,27 +13,27 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 /**
  * @implements TypeMapperInterface<AccessoryNumericStringType>
  */
-final class AccessoryNumericStringTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class AccessoryNumericStringTypeMapper implements TypeMapperInterface
 {
     /**
      * @return class-string<Type>
      */
     public function getNodeClass() : string
     {
-        return \PHPStan\Type\Accessory\AccessoryNumericStringType::class;
+        return AccessoryNumericStringType::class;
     }
     /**
      * @param AccessoryNumericStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('string');
+        return new IdentifierTypeNode('string');
     }
     /**
      * @param AccessoryNumericStringType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        return new \PhpParser\Node\Name('string');
+        return new Name('string');
     }
 }

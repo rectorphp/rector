@@ -15,7 +15,7 @@ use RectorPrefix20220607\Symfony\Contracts\Service\ResetInterface;
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
  */
-class OutputFormatterStyleStack implements \RectorPrefix20220607\Symfony\Contracts\Service\ResetInterface
+class OutputFormatterStyleStack implements ResetInterface
 {
     /**
      * @var OutputFormatterStyleInterface[]
@@ -25,9 +25,9 @@ class OutputFormatterStyleStack implements \RectorPrefix20220607\Symfony\Contrac
      * @var \Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
      */
     private $emptyStyle;
-    public function __construct(\RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle = null)
+    public function __construct(OutputFormatterStyleInterface $emptyStyle = null)
     {
-        $this->emptyStyle = $emptyStyle ?? new \RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterStyle();
+        $this->emptyStyle = $emptyStyle ?? new OutputFormatterStyle();
         $this->reset();
     }
     /**
@@ -40,7 +40,7 @@ class OutputFormatterStyleStack implements \RectorPrefix20220607\Symfony\Contrac
     /**
      * Pushes a style in the stack.
      */
-    public function push(\RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style)
+    public function push(OutputFormatterStyleInterface $style)
     {
         $this->styles[] = $style;
     }
@@ -49,7 +49,7 @@ class OutputFormatterStyleStack implements \RectorPrefix20220607\Symfony\Contrac
      *
      * @throws InvalidArgumentException When style tags incorrectly nested
      */
-    public function pop(\RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $style = null) : \RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    public function pop(OutputFormatterStyleInterface $style = null) : OutputFormatterStyleInterface
     {
         if (empty($this->styles)) {
             return $this->emptyStyle;
@@ -63,12 +63,12 @@ class OutputFormatterStyleStack implements \RectorPrefix20220607\Symfony\Contrac
                 return $stackedStyle;
             }
         }
-        throw new \RectorPrefix20220607\Symfony\Component\Console\Exception\InvalidArgumentException('Incorrectly nested style tag found.');
+        throw new InvalidArgumentException('Incorrectly nested style tag found.');
     }
     /**
      * Computes current style with stacks top codes.
      */
-    public function getCurrent() : \RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterStyle
+    public function getCurrent() : OutputFormatterStyle
     {
         if (empty($this->styles)) {
             return $this->emptyStyle;
@@ -78,12 +78,12 @@ class OutputFormatterStyleStack implements \RectorPrefix20220607\Symfony\Contrac
     /**
      * @return $this
      */
-    public function setEmptyStyle(\RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface $emptyStyle)
+    public function setEmptyStyle(OutputFormatterStyleInterface $emptyStyle)
     {
         $this->emptyStyle = $emptyStyle;
         return $this;
     }
-    public function getEmptyStyle() : \RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterStyleInterface
+    public function getEmptyStyle() : OutputFormatterStyleInterface
     {
         return $this->emptyStyle;
     }

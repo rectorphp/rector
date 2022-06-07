@@ -8,6 +8,6 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 interface TypeWithClassTypeSpecifierInterface
 {
-    public function match(\PHPStan\Type\ObjectType $objectType, \PHPStan\Analyser\Scope $scope) : bool;
-    public function resolveObjectReferenceType(\PHPStan\Type\ObjectType $objectType, \PHPStan\Analyser\Scope $scope) : \PHPStan\Type\TypeWithClassName;
+    public function match(ObjectType $objectType, Scope $scope) : bool;
+    public function resolveObjectReferenceType(ObjectType $objectType, Scope $scope) : TypeWithClassName;
 }

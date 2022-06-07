@@ -27,16 +27,16 @@ final class RectifiedAnalyzer
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;
     }
-    public function verify(\Rector\Core\Contract\Rector\RectorInterface $rector, \PhpParser\Node $node, \Rector\Core\ValueObject\Application\File $currentFile) : ?\Rector\Core\ValueObject\RectifiedNode
+    public function verify(RectorInterface $rector, Node $node, File $currentFile) : ?RectifiedNode
     {
         $smartFileInfo = $currentFile->getSmartFileInfo();
         $realPath = $smartFileInfo->getRealPath();
         if (!isset($this->previousFileWithNodes[$realPath])) {
-            $this->previousFileWithNodes[$realPath] = new \Rector\Core\ValueObject\RectifiedNode(\get_class($rector), $node);
+            $this->previousFileWithNodes[$realPath] = new RectifiedNode(\get_class($rector), $node);
             return null;
         }
         /** @var RectifiedNode $rectifiedNode */
@@ -48,20 +48,20 @@ final class RectifiedAnalyzer
         $this->previousFileWithNodes[$realPath] = null;
         return $rectifiedNode;
     }
-    private function shouldContinue(\Rector\Core\ValueObject\RectifiedNode $rectifiedNode, \Rector\Core\Contract\Rector\RectorInterface $rector, \PhpParser\Node $node) : bool
+    private function shouldContinue(RectifiedNode $rectifiedNode, RectorInterface $rector, Node $node) : bool
     {
-        $originalNode = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE);
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         if ($rectifiedNode->getRectorClass() === \get_class($rector) && $rectifiedNode->getNode() === $node) {
             /**
              * allow to revisit the Node with same Rector rule if Node is changed by other rule
              */
             return !$this->nodeComparator->areNodesEqual($originalNode, $node);
         }
-        if ($rector instanceof \Rector\Core\Rector\AbstractScopeAwareRector) {
-            $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-            return $scope instanceof \PHPStan\Analyser\Scope;
+        if ($rector instanceof AbstractScopeAwareRector) {
+            $scope = $node->getAttribute(AttributeKey::SCOPE);
+            return $scope instanceof Scope;
         }
-        if ($originalNode instanceof \PhpParser\Node) {
+        if ($originalNode instanceof Node) {
             return \true;
         }
         $startTokenPos = $node->getStartTokenPos();

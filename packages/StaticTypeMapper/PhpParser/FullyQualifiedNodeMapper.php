@@ -18,7 +18,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 /**
  * @implements PhpParserNodeMapperInterface<FullyQualified>
  */
-final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface
+final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
      * @readonly
@@ -30,53 +30,53 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
      * @var \Rector\CodingStyle\ClassNameImport\UsedImportsResolver
      */
     private $usedImportsResolver;
-    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\CodingStyle\ClassNameImport\UsedImportsResolver $usedImportsResolver)
+    public function __construct(CurrentFileProvider $currentFileProvider, UsedImportsResolver $usedImportsResolver)
     {
         $this->currentFileProvider = $currentFileProvider;
         $this->usedImportsResolver = $usedImportsResolver;
     }
     public function getNodeType() : string
     {
-        return \PhpParser\Node\Name\FullyQualified::class;
+        return FullyQualified::class;
     }
     /**
      * @param FullyQualified $node
      */
-    public function mapToPHPStan(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function mapToPHPStan(Node $node) : Type
     {
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
         if ($this->isParamTyped($node, $parent)) {
             $possibleAliasedObjectType = $this->resolvePossibleAliasedObjectType($node);
-            if ($possibleAliasedObjectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+            if ($possibleAliasedObjectType instanceof AliasedObjectType) {
                 return $possibleAliasedObjectType;
             }
         }
-        $originalName = (string) $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
+        $originalName = (string) $node->getAttribute(AttributeKey::ORIGINAL_NAME);
         $fullyQualifiedName = $node->toString();
         // is aliased?
         if ($this->isAliasedName($originalName, $fullyQualifiedName) && $originalName !== $fullyQualifiedName) {
-            return new \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType($originalName, $fullyQualifiedName);
+            return new AliasedObjectType($originalName, $fullyQualifiedName);
         }
-        return new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($fullyQualifiedName);
+        return new FullyQualifiedObjectType($fullyQualifiedName);
     }
-    private function isParamTyped(\PhpParser\Node\Name\FullyQualified $fullyQualified, ?\PhpParser\Node $node) : bool
+    private function isParamTyped(FullyQualified $fullyQualified, ?Node $node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Param && $node->type === $fullyQualified) {
+        if ($node instanceof Param && $node->type === $fullyQualified) {
             return \true;
         }
-        if (!$node instanceof \PhpParser\Node\NullableType) {
+        if (!$node instanceof NullableType) {
             return \false;
         }
-        $parentOfParent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentOfParent instanceof \PhpParser\Node\Param) {
+        $parentOfParent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentOfParent instanceof Param) {
             return \false;
         }
         return $node->type === $fullyQualified;
     }
-    private function resolvePossibleAliasedObjectType(\PhpParser\Node\Name\FullyQualified $fullyQualified) : ?\Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType
+    private function resolvePossibleAliasedObjectType(FullyQualified $fullyQualified) : ?AliasedObjectType
     {
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+        if (!$file instanceof File) {
             return null;
         }
         $oldTokens = $file->getOldTokens();
@@ -90,7 +90,7 @@ final class FullyQualifiedNodeMapper implements \Rector\StaticTypeMapper\Contrac
         }
         $objectTypes = $this->usedImportsResolver->resolveForNode($fullyQualified);
         foreach ($objectTypes as $objectType) {
-            if (!$objectType instanceof \Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType) {
+            if (!$objectType instanceof AliasedObjectType) {
                 continue;
             }
             if ($objectType->getClassName() !== $type) {

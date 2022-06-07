@@ -9,16 +9,16 @@ use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 /**
  * @implements NodeNameResolverInterface<Empty_>
  */
-final class EmptyNameResolver implements \Rector\NodeNameResolver\Contract\NodeNameResolverInterface
+final class EmptyNameResolver implements NodeNameResolverInterface
 {
     public function getNode() : string
     {
-        return \PhpParser\Node\Expr\Empty_::class;
+        return Empty_::class;
     }
     /**
      * @param Empty_ $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string
+    public function resolve(Node $node) : ?string
     {
         return 'empty';
     }

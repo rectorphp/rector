@@ -13,19 +13,19 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/laravel/framework/pull/25315
  * @see https://laracasts.com/discuss/channels/eloquent/laravel-eloquent-where-date-is-equal-or-smaller-than-datetime
  *
  * @see \Rector\Laravel\Tests\Rector\MethodCall\ChangeQueryWhereDateValueWithCarbonRector\ChangeQueryWhereDateValueWithCarbonRectorTest
  */
-final class ChangeQueryWhereDateValueWithCarbonRector extends \Rector\Core\Rector\AbstractRector
+final class ChangeQueryWhereDateValueWithCarbonRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Database\Query\Builder;
 
 final class SomeClass
@@ -56,29 +56,29 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $argValue = $this->matchWhereDateThirdArgValue($node);
-        if (!$argValue instanceof \PhpParser\Node\Expr) {
+        if (!$argValue instanceof Expr) {
             return null;
         }
         // is just made with static call?
-        if ($argValue instanceof \PhpParser\Node\Expr\StaticCall || $argValue instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($argValue instanceof StaticCall || $argValue instanceof MethodCall) {
             // now!
             // 1. extract assign
-            $dateTimeVariable = new \PhpParser\Node\Expr\Variable('dateTime');
-            $assign = new \PhpParser\Node\Expr\Assign($dateTimeVariable, $argValue);
+            $dateTimeVariable = new Variable('dateTime');
+            $assign = new Assign($dateTimeVariable, $argValue);
             $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
-            if (!$node->args[2] instanceof \PhpParser\Node\Arg) {
+            if (!$node->args[2] instanceof Arg) {
                 return null;
             }
             $node->args[2]->value = $dateTimeVariable;
-            if (!$node->args[1] instanceof \PhpParser\Node\Arg) {
+            if (!$node->args[1] instanceof Arg) {
                 return null;
             }
             // update assign ">" → ">="
@@ -88,7 +88,7 @@ CODE_SAMPLE
             $this->nodesToAddCollector->addNodeAfterNode($whereTimeMethodCall, $node);
             return $node;
         }
-        if ($argValue instanceof \PhpParser\Node\Expr\Variable && $node->args[1] instanceof \PhpParser\Node\Arg) {
+        if ($argValue instanceof Variable && $node->args[1] instanceof Arg) {
             $dateTimeVariable = $argValue;
             $this->changeCompareSignExpr($node->args[1]);
             // 2. add "whereTime()" time call
@@ -97,9 +97,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function matchWhereDateThirdArgValue(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr
+    private function matchWhereDateThirdArgValue(MethodCall $methodCall) : ?Expr
     {
-        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('Illuminate\\Database\\Query\\Builder'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Illuminate\\Database\\Query\\Builder'))) {
             return null;
         }
         if (!$this->isName($methodCall->name, 'whereDate')) {
@@ -108,18 +108,18 @@ CODE_SAMPLE
         if (!isset($methodCall->args[2])) {
             return null;
         }
-        if (!$methodCall->args[2] instanceof \PhpParser\Node\Arg) {
+        if (!$methodCall->args[2] instanceof Arg) {
             return null;
         }
         $argValue = $methodCall->args[2]->value;
-        if (!$this->isObjectType($argValue, new \PHPStan\Type\ObjectType('DateTimeInterface'))) {
+        if (!$this->isObjectType($argValue, new ObjectType('DateTimeInterface'))) {
             return null;
         }
         // nothing to change
         if ($this->isCarbonTodayStaticCall($argValue)) {
             return null;
         }
-        if (!$methodCall->args[1] instanceof \PhpParser\Node\Arg) {
+        if (!$methodCall->args[1] instanceof Arg) {
             return null;
         }
         if ($this->valueResolver->isValues($methodCall->args[1]->value, ['>=', '<='])) {
@@ -127,9 +127,9 @@ CODE_SAMPLE
         }
         return $argValue;
     }
-    private function changeCompareSignExpr(\PhpParser\Node\Arg $arg) : void
+    private function changeCompareSignExpr(Arg $arg) : void
     {
-        if (!$arg->value instanceof \PhpParser\Node\Scalar\String_) {
+        if (!$arg->value instanceof String_) {
             return;
         }
         $string = $arg->value;
@@ -140,17 +140,17 @@ CODE_SAMPLE
             $string->value = '>=';
         }
     }
-    private function createWhereTimeMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall, \PhpParser\Node\Expr\Variable $dateTimeVariable) : \PhpParser\Node\Expr\MethodCall
+    private function createWhereTimeMethodCall(MethodCall $methodCall, Variable $dateTimeVariable) : MethodCall
     {
-        $whereTimeArgs = [$methodCall->args[0], $methodCall->args[1], new \PhpParser\Node\Arg($dateTimeVariable)];
-        return new \PhpParser\Node\Expr\MethodCall($methodCall->var, 'whereTime', $whereTimeArgs);
+        $whereTimeArgs = [$methodCall->args[0], $methodCall->args[1], new Arg($dateTimeVariable)];
+        return new MethodCall($methodCall->var, 'whereTime', $whereTimeArgs);
     }
-    private function isCarbonTodayStaticCall(\PhpParser\Node\Expr $expr) : bool
+    private function isCarbonTodayStaticCall(Expr $expr) : bool
     {
-        if (!$expr instanceof \PhpParser\Node\Expr\StaticCall) {
+        if (!$expr instanceof StaticCall) {
             return \false;
         }
-        $carbonObjectType = new \PHPStan\Type\ObjectType('Carbon\\Carbon');
+        $carbonObjectType = new ObjectType('Carbon\\Carbon');
         $callerType = $this->nodeTypeResolver->getType($expr->class);
         if (!$carbonObjectType->isSuperTypeOf($callerType)->yes()) {
             return \false;

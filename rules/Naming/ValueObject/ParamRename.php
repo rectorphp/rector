@@ -9,7 +9,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Naming\Contract\RenameParamValueObjectInterface;
-final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjectInterface
+final class ParamRename implements RenameParamValueObjectInterface
 {
     /**
      * @readonly
@@ -39,7 +39,7 @@ final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjec
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
-    public function __construct(string $currentName, string $expectedName, \PhpParser\Node\Param $param, \PhpParser\Node\Expr\Variable $variable, $functionLike)
+    public function __construct(string $currentName, string $expectedName, Param $param, Variable $variable, $functionLike)
     {
         $this->currentName = $currentName;
         $this->expectedName = $expectedName;
@@ -62,11 +62,11 @@ final class ParamRename implements \Rector\Naming\Contract\RenameParamValueObjec
     {
         return $this->functionLike;
     }
-    public function getParam() : \PhpParser\Node\Param
+    public function getParam() : Param
     {
         return $this->param;
     }
-    public function getVariable() : \PhpParser\Node\Expr\Variable
+    public function getVariable() : Variable
     {
         return $this->variable;
     }

@@ -16,13 +16,13 @@ use RectorPrefix20220607\Symfony\Component\Config\Definition\IntegerNode;
  *
  * @author Jeanmonod David <david.jeanmonod@gmail.com>
  */
-class IntegerNodeDefinition extends \RectorPrefix20220607\Symfony\Component\Config\Definition\Builder\NumericNodeDefinition
+class IntegerNodeDefinition extends NumericNodeDefinition
 {
     /**
      * Instantiates a Node.
      */
     protected function instantiateNode() : \RectorPrefix20220607\Symfony\Component\Config\Definition\ScalarNode
     {
-        return new \RectorPrefix20220607\Symfony\Component\Config\Definition\IntegerNode($this->name, $this->parent, $this->min, $this->max, $this->pathSeparator);
+        return new IntegerNode($this->name, $this->parent, $this->min, $this->max, $this->pathSeparator);
     }
 }

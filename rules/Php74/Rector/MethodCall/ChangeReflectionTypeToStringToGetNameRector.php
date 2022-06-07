@@ -16,8 +16,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.reddit.com/r/PHP/comments/apikof/whats_the_deal_with_reflectiontype/ https://www.php.net/manual/en/reflectiontype.tostring.php
  *
@@ -26,7 +26,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector\ChangeReflectionTypeToStringToGetNameRectorTest
  */
-final class ChangeReflectionTypeToStringToGetNameRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ChangeReflectionTypeToStringToGetNameRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -39,11 +39,11 @@ final class ChangeReflectionTypeToStringToGetNameRector extends \Rector\Core\Rec
     private $callsByVariable = [];
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::REFLECTION_TYPE_GETNAME;
+        return PhpVersionFeature::REFLECTION_TYPE_GETNAME;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change string calls on ReflectionType', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change string calls on ReflectionType', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function go(ReflectionFunction $reflectionFunction)
@@ -82,27 +82,27 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\Cast\String_::class];
+        return [MethodCall::class, String_::class];
     }
     /**
      * @param MethodCall|String_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             return $this->refactorMethodCall($node);
         }
-        if ($node->expr instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node->expr instanceof MethodCall) {
             return $this->refactorIfHasReturnTypeWasCalled($node->expr);
         }
-        if (!$node->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node->expr instanceof Variable) {
             return null;
         }
-        if (!$this->isObjectType($node->expr, new \PHPStan\Type\ObjectType('ReflectionType'))) {
+        if (!$this->isObjectType($node->expr, new ObjectType('ReflectionType'))) {
             return null;
         }
         $type = $this->nodeTypeResolver->getType($node->expr);
-        if (!$type instanceof \PHPStan\Type\UnionType) {
+        if (!$type instanceof UnionType) {
             return $this->nodeFactory->createMethodCall($node->expr, self::GET_NAME);
         }
         if (!$this->isWithReflectionType($type)) {
@@ -110,10 +110,10 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function isWithReflectionType(\PHPStan\Type\UnionType $unionType) : bool
+    private function isWithReflectionType(UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $type) {
-            if (!$type instanceof \PHPStan\Type\ObjectType) {
+            if (!$type instanceof ObjectType) {
                 continue;
             }
             if ($type->getClassName() !== 'ReflectionType') {
@@ -123,7 +123,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function refactorMethodCall(MethodCall $methodCall) : ?Node
     {
         $this->collectCallByVariable($methodCall);
         if ($this->shouldSkipMethodCall($methodCall)) {
@@ -137,9 +137,9 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorIfHasReturnTypeWasCalled(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node
+    private function refactorIfHasReturnTypeWasCalled(MethodCall $methodCall) : ?Node
     {
-        if (!$methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$methodCall->var instanceof Variable) {
             return null;
         }
         $variableName = $this->getName($methodCall->var);
@@ -150,10 +150,10 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function collectCallByVariable(\PhpParser\Node\Expr\MethodCall $methodCall) : void
+    private function collectCallByVariable(MethodCall $methodCall) : void
     {
         // bit workaround for now
-        if ($methodCall->var instanceof \PhpParser\Node\Expr\Variable) {
+        if ($methodCall->var instanceof Variable) {
             $variableName = $this->getName($methodCall->var);
             $methodName = $this->getName($methodCall->name);
             if (!\is_string($variableName)) {
@@ -165,36 +165,36 @@ CODE_SAMPLE
             $this->callsByVariable[$variableName][] = $methodName;
         }
     }
-    private function shouldSkipMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function shouldSkipMethodCall(MethodCall $methodCall) : bool
     {
-        $scope = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $methodCall->getAttribute(AttributeKey::SCOPE);
         // just added node → skip it
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        if (!$scope instanceof Scope) {
             return \true;
         }
         // is to string retype?
-        $parentNode = $methodCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof \PhpParser\Node\Expr\Cast\String_) {
+        $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof String_) {
             return \false;
         }
         // probably already converted
-        return !$parentNode instanceof \PhpParser\Node\Expr\BinaryOp\Concat;
+        return !$parentNode instanceof Concat;
     }
-    private function isReflectionParameterGetTypeMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function isReflectionParameterGetTypeMethodCall(MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('ReflectionParameter'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('ReflectionParameter'))) {
             return \false;
         }
         return $this->isName($methodCall->name, 'getType');
     }
-    private function refactorReflectionParameterGetName(\PhpParser\Node\Expr\MethodCall $methodCall) : \PhpParser\Node\Expr\Ternary
+    private function refactorReflectionParameterGetName(MethodCall $methodCall) : Ternary
     {
         $getNameMethodCall = $this->nodeFactory->createMethodCall($methodCall, self::GET_NAME);
-        return new \PhpParser\Node\Expr\Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
+        return new Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
     }
-    private function isReflectionFunctionAbstractGetReturnTypeMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : bool
+    private function isReflectionFunctionAbstractGetReturnTypeMethodCall(MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType('ReflectionFunctionAbstract'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('ReflectionFunctionAbstract'))) {
             return \false;
         }
         return $this->isName($methodCall->name, 'getReturnType');
@@ -202,13 +202,13 @@ CODE_SAMPLE
     /**
      * @return \PhpParser\Node|\PhpParser\Node\Expr\Ternary
      */
-    private function refactorReflectionFunctionGetReturnType(\PhpParser\Node\Expr\MethodCall $methodCall)
+    private function refactorReflectionFunctionGetReturnType(MethodCall $methodCall)
     {
         $refactoredMethodCall = $this->refactorIfHasReturnTypeWasCalled($methodCall);
         if ($refactoredMethodCall !== null) {
             return $refactoredMethodCall;
         }
         $getNameMethodCall = $this->nodeFactory->createMethodCall($methodCall, self::GET_NAME);
-        return new \PhpParser\Node\Expr\Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
+        return new Ternary($methodCall, $getNameMethodCall, $this->nodeFactory->createNull());
     }
 }

@@ -19,6 +19,6 @@ class PhpDocTagNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode
     }
     public function __toString() : string
     {
-        return \trim("{$this->name} {$this->value}");
+        return trim("{$this->name} {$this->value}");
     }
 }

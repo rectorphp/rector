@@ -17,12 +17,12 @@ use Rector\Compatibility\NodeFactory\ConstructorClassMethodFactory;
 use Rector\Compatibility\ValueObject\PropertyWithPhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Compatibility\Rector\Class_\AttributeCompatibleAnnotationRector\AttributeCompatibleAnnotationRectorTest
  */
-final class AttributeCompatibleAnnotationRector extends \Rector\Core\Rector\AbstractRector
+final class AttributeCompatibleAnnotationRector extends AbstractRector
 {
     /**
      * @var string
@@ -48,16 +48,16 @@ final class AttributeCompatibleAnnotationRector extends \Rector\Core\Rector\Abst
      * @var \Rector\Compatibility\NodeFactory\ConstructorClassMethodFactory
      */
     private $constructorClassMethodFactory;
-    public function __construct(\Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover $phpDocTagRemover, \Rector\Compatibility\NodeAnalyzer\RequiredAnnotationPropertyAnalyzer $requiredAnnotationPropertyAnalyzer, \Rector\Compatibility\NodeFactory\ConstructorClassMethodFactory $constructorClassMethodFactory)
+    public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpDocTagRemover $phpDocTagRemover, RequiredAnnotationPropertyAnalyzer $requiredAnnotationPropertyAnalyzer, ConstructorClassMethodFactory $constructorClassMethodFactory)
     {
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->requiredAnnotationPropertyAnalyzer = $requiredAnnotationPropertyAnalyzer;
         $this->constructorClassMethodFactory = $constructorClassMethodFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change annotation to attribute compatible form, see https://tomasvotruba.com/blog/doctrine-annotations-and-attributes-living-together-in-peace/', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change annotation to attribute compatible form, see https://tomasvotruba.com/blog/doctrine-annotations-and-attributes-living-together-in-peace/', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\Common\Annotations\Annotation\Required;
 
 /**
@@ -97,22 +97,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+        if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
         if ($this->shouldSkipClass($phpDocInfo, $node)) {
             return null;
         }
         // add "NamedArgumentConstructor"
-        $phpDocInfo->addTagValueNode(new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor')));
+        $phpDocInfo->addTagValueNode(new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor')));
         // resolve required properties
         $requiredPropertiesWithPhpDocInfos = [];
         foreach ($node->getProperties() as $property) {
@@ -124,14 +124,14 @@ CODE_SAMPLE
                 continue;
             }
             $propertyName = $this->getName($property);
-            $requiredPropertiesWithPhpDocInfos[] = new \Rector\Compatibility\ValueObject\PropertyWithPhpDocInfo($propertyName, $property, $propertyPhpDocInfo);
+            $requiredPropertiesWithPhpDocInfos[] = new PropertyWithPhpDocInfo($propertyName, $property, $propertyPhpDocInfo);
         }
         $params = $this->createConstructParams($requiredPropertiesWithPhpDocInfos);
         $constructorClassMethod = $this->constructorClassMethodFactory->createConstructorClassMethod($requiredPropertiesWithPhpDocInfos, $params);
         $node->stmts = \array_merge($node->stmts, [$constructorClassMethod]);
         return $node;
     }
-    private function shouldSkipClass(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkipClass(PhpDocInfo $phpDocInfo, Class_ $class) : bool
     {
         if (!$phpDocInfo->hasByNames(['Annotation', 'annotation'])) {
             return \true;
@@ -154,10 +154,10 @@ CODE_SAMPLE
             $propertyName = $this->getName($property);
             // unwrap nullable type, as variable is required
             $propertyType = $property->type;
-            if ($propertyType instanceof \PhpParser\Node\NullableType) {
+            if ($propertyType instanceof NullableType) {
                 $propertyType = $propertyType->type;
             }
-            $param = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($propertyName), null, $propertyType, \false, \false, [], $property->flags);
+            $param = new Param(new Variable($propertyName), null, $propertyType, \false, \false, [], $property->flags);
             $params[] = $param;
             $propertyPhpDocInfo = $requiredPropertyWithPhpDocInfo->getPhpDocInfo();
             // remove required

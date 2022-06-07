@@ -35,28 +35,28 @@ final class NullabilityColumnPropertyTypeResolver
     /**
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Doctrine\NodeAnalyzer\AttributeFinder $attributeFinder, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, AttributeFinder $attributeFinder, ValueResolver $valueResolver)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->attributeFinder = $attributeFinder;
         $this->valueResolver = $valueResolver;
     }
-    public function isNullable(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isNullable(Property $property) : bool
     {
         $nullableExpr = $this->attributeFinder->findAttributeByClassArgByName($property, self::COLUMN_CLASS, 'nullable');
-        if ($nullableExpr instanceof \PhpParser\Node\Expr) {
+        if ($nullableExpr instanceof Expr) {
             return $this->valueResolver->isTrue($nullableExpr);
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $this->isNullableColumn($phpDocInfo);
     }
-    private function isNullableColumn(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : bool
+    private function isNullableColumn(PhpDocInfo $phpDocInfo) : bool
     {
         $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(self::COLUMN_CLASS);
-        if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return \true;
         }
         $nullableValue = $doctrineAnnotationTagValueNode->getValue('nullable');
-        return $nullableValue === null || $nullableValue instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+        return $nullableValue === null || $nullableValue instanceof ConstExprTrueNode;
     }
 }

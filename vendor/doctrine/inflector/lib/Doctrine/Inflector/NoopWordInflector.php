@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220607\Doctrine\Inflector;
 
-class NoopWordInflector implements \RectorPrefix20220607\Doctrine\Inflector\WordInflector
+class NoopWordInflector implements WordInflector
 {
     public function inflect(string $word) : string
     {

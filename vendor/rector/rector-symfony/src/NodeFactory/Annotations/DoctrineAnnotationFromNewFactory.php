@@ -20,7 +20,7 @@ final class DoctrineAnnotationFromNewFactory
     {
         $this->doctrineAnnotationKeyToValuesResolver = $doctrineAnnotationKeyToValuesResolver;
     }
-    public function create(\PhpParser\Node\Expr\New_ $new) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    public function create(New_ $new) : DoctrineAnnotationTagValueNode
     {
         $annotationName = $this->resolveAnnotationName($new);
         $newArgs = $new->getArgs();
@@ -30,14 +30,14 @@ final class DoctrineAnnotationFromNewFactory
         } else {
             $annotationKeyToValues = [];
         }
-        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode(new \Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode($annotationName), null, $annotationKeyToValues);
+        return new DoctrineAnnotationTagValueNode(new ShortenedIdentifierTypeNode($annotationName), null, $annotationKeyToValues);
     }
-    private function resolveAnnotationName(\PhpParser\Node\Expr\New_ $new) : string
+    private function resolveAnnotationName(New_ $new) : string
     {
         $className = $new->class;
-        $originalName = $className->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NAME);
-        if (!$originalName instanceof \PhpParser\Node\Name) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $originalName = $className->getAttribute(AttributeKey::ORIGINAL_NAME);
+        if (!$originalName instanceof Name) {
+            throw new ShouldNotHappenException();
         }
         return $originalName->toString();
     }

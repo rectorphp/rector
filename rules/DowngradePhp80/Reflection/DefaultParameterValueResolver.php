@@ -19,41 +19,41 @@ final class DefaultParameterValueResolver
     /**
      * @return \PhpParser\Node\Expr|null
      */
-    public function resolveFromParameterReflection(\PHPStan\Reflection\ParameterReflection $parameterReflection)
+    public function resolveFromParameterReflection(ParameterReflection $parameterReflection)
     {
         $defaultValue = $parameterReflection->getDefaultValue();
-        if (!$defaultValue instanceof \PHPStan\Type\Type) {
+        if (!$defaultValue instanceof Type) {
             return null;
         }
-        if (!$defaultValue instanceof \PHPStan\Type\ConstantType) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$defaultValue instanceof ConstantType) {
+            throw new ShouldNotHappenException();
         }
         return $this->resolveValueFromType($defaultValue);
     }
     /**
      * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr
      */
-    private function resolveValueFromType(\PHPStan\Type\ConstantType $constantType)
+    private function resolveValueFromType(ConstantType $constantType)
     {
-        if ($constantType instanceof \PHPStan\Type\Constant\ConstantBooleanType) {
+        if ($constantType instanceof ConstantBooleanType) {
             return $this->resolveConstantBooleanType($constantType);
         }
-        if ($constantType instanceof \PHPStan\Type\Constant\ConstantArrayType) {
+        if ($constantType instanceof ConstantArrayType) {
             $values = [];
             foreach ($constantType->getValueTypes() as $valueType) {
-                if (!$valueType instanceof \PHPStan\Type\ConstantType) {
-                    throw new \Rector\Core\Exception\ShouldNotHappenException();
+                if (!$valueType instanceof ConstantType) {
+                    throw new ShouldNotHappenException();
                 }
                 $values[] = $this->resolveValueFromType($valueType);
             }
-            return \PhpParser\BuilderHelpers::normalizeValue($values);
+            return BuilderHelpers::normalizeValue($values);
         }
-        return \PhpParser\BuilderHelpers::normalizeValue($constantType->getValue());
+        return BuilderHelpers::normalizeValue($constantType->getValue());
     }
-    private function resolveConstantBooleanType(\PHPStan\Type\Constant\ConstantBooleanType $constantBooleanType) : \PhpParser\Node\Expr\ConstFetch
+    private function resolveConstantBooleanType(ConstantBooleanType $constantBooleanType) : ConstFetch
     {
-        $value = $constantBooleanType->describe(\PHPStan\Type\VerbosityLevel::value());
-        $name = new \PhpParser\Node\Name($value);
-        return new \PhpParser\Node\Expr\ConstFetch($name);
+        $value = $constantBooleanType->describe(VerbosityLevel::value());
+        $name = new Name($value);
+        return new ConstFetch($name);
     }
 }

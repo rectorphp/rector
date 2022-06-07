@@ -10,7 +10,7 @@ class ConstTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     use NodeAttributes;
     /** @var ConstExprNode */
     public $constExpr;
-    public function __construct(\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode $constExpr)
+    public function __construct(ConstExprNode $constExpr)
     {
         $this->constExpr = $constExpr;
     }

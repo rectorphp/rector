@@ -16,7 +16,7 @@ use RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
  * Decorate node with fully qualified class name for const epxr,
  * e.g. Direction::*
  */
-final class ConstExprClassNameDecorator implements \Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface
+final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
 {
     /**
      * @readonly
@@ -28,28 +28,28 @@ final class ConstExprClassNameDecorator implements \Rector\BetterPhpDocParser\Co
      * @var \Symplify\Astral\PhpDocParser\PhpDocNodeTraverser
      */
     private $phpDocNodeTraverser;
-    public function __construct(\Rector\StaticTypeMapper\Naming\NameScopeFactory $nameScopeFactory, \RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser $phpDocNodeTraverser)
+    public function __construct(NameScopeFactory $nameScopeFactory, PhpDocNodeTraverser $phpDocNodeTraverser)
     {
         $this->nameScopeFactory = $nameScopeFactory;
         $this->phpDocNodeTraverser = $phpDocNodeTraverser;
     }
-    public function decorate(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \PhpParser\Node $phpNode) : void
+    public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode) : void
     {
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (\PHPStan\PhpDocParser\Ast\Node $node) use($phpNode) {
-            if (!$node instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode) {
+        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use($phpNode) {
+            if (!$node instanceof ConstExprNode) {
                 return null;
             }
             $className = $this->resolveFullyQualifiedClass($node, $phpNode);
             if ($className === null) {
                 return null;
             }
-            $node->setAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS, $className);
+            $node->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $className);
             return $node;
         });
     }
-    private function resolveFullyQualifiedClass(\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode $constExprNode, \PhpParser\Node $phpNode) : ?string
+    private function resolveFullyQualifiedClass(ConstExprNode $constExprNode, PhpNode $phpNode) : ?string
     {
-        if (!$constExprNode instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode) {
+        if (!$constExprNode instanceof ConstFetchNode) {
             return null;
         }
         $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($phpNode);

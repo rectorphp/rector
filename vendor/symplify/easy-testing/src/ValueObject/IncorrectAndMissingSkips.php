@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix20220607\Symplify\EasyTesting\ValueObject;
 
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
 final class IncorrectAndMissingSkips
 {
     /**

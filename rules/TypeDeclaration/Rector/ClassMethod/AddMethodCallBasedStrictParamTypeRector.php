@@ -9,14 +9,14 @@ use Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symplify/phpstan-rules/blob/master/docs/rules_overview.md#checktypehintcallertyperule
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector\AddMethodCallBasedStrictParamTypeRectorTest
  */
-final class AddMethodCallBasedStrictParamTypeRector extends \Rector\Core\Rector\AbstractRector
+final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
 {
     /**
      * @var int
@@ -37,15 +37,15 @@ final class AddMethodCallBasedStrictParamTypeRector extends \Rector\Core\Rector\
      * @var \Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder
      */
     private $localMethodCallFinder;
-    public function __construct(\Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver $callTypesResolver, \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter $classMethodParamTypeCompleter, \Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder $localMethodCallFinder)
+    public function __construct(CallTypesResolver $callTypesResolver, ClassMethodParamTypeCompleter $classMethodParamTypeCompleter, LocalMethodCallFinder $localMethodCallFinder)
     {
         $this->callTypesResolver = $callTypesResolver;
         $this->classMethodParamTypeCompleter = $classMethodParamTypeCompleter;
         $this->localMethodCallFinder = $localMethodCallFinder;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change private method param type to strict type, based on passed strict types', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change private method param type to strict type, based on passed strict types', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(int $value)
@@ -78,12 +78,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($node->params === []) {
             return null;

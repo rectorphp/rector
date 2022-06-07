@@ -13,12 +13,12 @@ use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector\AssertTrueFalseToSpecificMethodRectorTest
  */
-final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
+final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var FunctionNameWithAssertMethods[]
@@ -29,26 +29,26 @@ final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\Ab
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->functionNameWithAssertMethods = [new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('is_readable', 'assertIsReadable', 'assertNotIsReadable'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('array_search', 'assertContains', 'assertNotContains'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('in_array', 'assertContains', 'assertNotContains'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('empty', 'assertEmpty', 'assertNotEmpty'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('file_exists', 'assertFileExists', 'assertFileNotExists'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('is_infinite', 'assertInfinite', 'assertFinite'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('is_null', 'assertNull', 'assertNotNull'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('is_writable', 'assertIsWritable', 'assertNotIsWritable'), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('is_nan', 'assertNan', ''), new \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods('is_a', 'assertInstanceOf', 'assertNotInstanceOf')];
+        $this->functionNameWithAssertMethods = [new FunctionNameWithAssertMethods('is_readable', 'assertIsReadable', 'assertNotIsReadable'), new FunctionNameWithAssertMethods('array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'), new FunctionNameWithAssertMethods('array_search', 'assertContains', 'assertNotContains'), new FunctionNameWithAssertMethods('in_array', 'assertContains', 'assertNotContains'), new FunctionNameWithAssertMethods('empty', 'assertEmpty', 'assertNotEmpty'), new FunctionNameWithAssertMethods('file_exists', 'assertFileExists', 'assertFileNotExists'), new FunctionNameWithAssertMethods('is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'), new FunctionNameWithAssertMethods('is_infinite', 'assertInfinite', 'assertFinite'), new FunctionNameWithAssertMethods('is_null', 'assertNull', 'assertNotNull'), new FunctionNameWithAssertMethods('is_writable', 'assertIsWritable', 'assertNotIsWritable'), new FunctionNameWithAssertMethods('is_nan', 'assertNan', ''), new FunctionNameWithAssertMethods('is_a', 'assertInstanceOf', 'assertNotInstanceOf')];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertTrue(is_readable($readmeFile), "message");', '$this->assertIsReadable($readmeFile, "message");')]);
+        return new RuleDefinition('Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible', [new CodeSample('$this->assertTrue(is_readable($readmeFile), "message");', '$this->assertIsReadable($readmeFile, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse', 'assertNotTrue', 'assertNotFalse'])) {
             return null;
@@ -57,7 +57,7 @@ final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\Ab
             return null;
         }
         $firstArgumentValue = $node->args[0]->value;
-        if (!$firstArgumentValue instanceof \PhpParser\Node\Expr\FuncCall && !$firstArgumentValue instanceof \PhpParser\Node\Expr\Empty_) {
+        if (!$firstArgumentValue instanceof FuncCall && !$firstArgumentValue instanceof Empty_) {
             return null;
         }
         foreach ($this->functionNameWithAssertMethods as $functionNameWithAssertMethod) {
@@ -77,13 +77,13 @@ final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\Ab
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function renameMethod($node, \Rector\PHPUnit\ValueObject\FunctionNameWithAssertMethods $functionNameWithAssertMethods) : void
+    private function renameMethod($node, FunctionNameWithAssertMethods $functionNameWithAssertMethods) : void
     {
         /** @var Identifier $identifierNode */
         $identifierNode = $node->name;
         $oldMethodName = $identifierNode->toString();
         if (\in_array($oldMethodName, ['assertTrue', 'assertNotFalse'], \true)) {
-            $node->name = new \PhpParser\Node\Identifier($functionNameWithAssertMethods->getAssetMethodName());
+            $node->name = new Identifier($functionNameWithAssertMethods->getAssetMethodName());
         }
         if ($functionNameWithAssertMethods->getNotAssertMethodName() === '') {
             return;
@@ -91,7 +91,7 @@ final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\Ab
         if (!\in_array($oldMethodName, ['assertFalse', 'assertNotTrue'], \true)) {
             return;
         }
-        $node->name = new \PhpParser\Node\Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
+        $node->name = new Identifier($functionNameWithAssertMethods->getNotAssertMethodName());
     }
     /**
      * Before:
@@ -104,7 +104,7 @@ final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\Ab
     private function moveFunctionArgumentsUp($node) : void
     {
         $funcCallOrEmptyNode = $node->args[0]->value;
-        if ($funcCallOrEmptyNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        if ($funcCallOrEmptyNode instanceof FuncCall) {
             $funcCallOrEmptyNodeName = $this->getName($funcCallOrEmptyNode);
             if ($funcCallOrEmptyNodeName === null) {
                 return;
@@ -114,8 +114,8 @@ final class AssertTrueFalseToSpecificMethodRector extends \Rector\Core\Rector\Ab
             unset($oldArguments[0]);
             $node->args = $this->buildNewArguments($funcCallOrEmptyNodeName, $funcCallOrEmptyNodeArgs, $oldArguments);
         }
-        if ($funcCallOrEmptyNode instanceof \PhpParser\Node\Expr\Empty_) {
-            $node->args[0] = new \PhpParser\Node\Arg($funcCallOrEmptyNode->expr);
+        if ($funcCallOrEmptyNode instanceof Empty_) {
+            $node->args[0] = new Arg($funcCallOrEmptyNode->expr);
         }
     }
     /**

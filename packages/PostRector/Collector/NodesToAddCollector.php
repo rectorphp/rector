@@ -15,8 +15,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
-final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector\NodeCollectorInterface
+use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
+final class NodesToAddCollector implements NodeCollectorInterface
 {
     /**
      * @var Stmt[][]
@@ -46,7 +46,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
      * @var \Rector\Core\Application\ChangedNodeScopeRefresher
      */
     private $changedNodeScopeRefresher;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\ChangesReporting\Collector\RectorChangeCollector $rectorChangeCollector, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\Core\Application\ChangedNodeScopeRefresher $changedNodeScopeRefresher)
+    public function __construct(BetterNodeFinder $betterNodeFinder, RectorChangeCollector $rectorChangeCollector, NodePrinterInterface $nodePrinter, ChangedNodeScopeRefresher $changedNodeScopeRefresher)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->rectorChangeCollector = $rectorChangeCollector;
@@ -60,16 +60,16 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     /**
      * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
-    public function addNodeBeforeNode(\PhpParser\Node $addedNode, \PhpParser\Node $positionNode, ?\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo = null) : void
+    public function addNodeBeforeNode(Node $addedNode, Node $positionNode, ?SmartFileInfo $smartFileInfo = null) : void
     {
         if ($positionNode->getAttributes() === []) {
             $message = \sprintf('Switch arguments in "%s()" method', __METHOD__);
-            throw new \Rector\Core\Exception\ShouldNotHappenException($message);
+            throw new ShouldNotHappenException($message);
         }
         // @todo the node must be returned here, so traverser can refresh it
         // this is nasty hack to verify it works
-        if ($smartFileInfo instanceof \Symplify\SmartFileSystem\SmartFileInfo) {
-            $currentScope = $positionNode->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        if ($smartFileInfo instanceof SmartFileInfo) {
+            $currentScope = $positionNode->getAttribute(AttributeKey::SCOPE);
             $this->changedNodeScopeRefresher->refresh($addedNode, $smartFileInfo, $currentScope);
         }
         $position = $this->resolveNearestStmtPosition($positionNode);
@@ -80,12 +80,12 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
      * @param Node[] $addedNodes
      * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
-    public function addNodesAfterNode(array $addedNodes, \PhpParser\Node $positionNode) : void
+    public function addNodesAfterNode(array $addedNodes, Node $positionNode) : void
     {
         $position = $this->resolveNearestStmtPosition($positionNode);
         foreach ($addedNodes as $addedNode) {
             // prevent fluent method weird indent
-            $addedNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            $addedNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
         }
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
@@ -94,7 +94,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
      * Better return created nodes right in refactor() method to keep context
      * @deprecated
      */
-    public function addNodeAfterNode(\PhpParser\Node $addedNode, \PhpParser\Node $positionNode) : void
+    public function addNodeAfterNode(Node $addedNode, Node $positionNode) : void
     {
         $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
@@ -103,7 +103,7 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     /**
      * @return Stmt[]
      */
-    public function getNodesToAddAfterNode(\PhpParser\Node $node) : array
+    public function getNodesToAddAfterNode(Node $node) : array
     {
         $position = \spl_object_hash($node);
         return $this->nodesToAddAfter[$position] ?? [];
@@ -111,17 +111,17 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
     /**
      * @return Stmt[]
      */
-    public function getNodesToAddBeforeNode(\PhpParser\Node $node) : array
+    public function getNodesToAddBeforeNode(Node $node) : array
     {
         $position = \spl_object_hash($node);
         return $this->nodesToAddBefore[$position] ?? [];
     }
-    public function clearNodesToAddAfter(\PhpParser\Node $node) : void
+    public function clearNodesToAddAfter(Node $node) : void
     {
         $objectHash = \spl_object_hash($node);
         unset($this->nodesToAddAfter[$objectHash]);
     }
-    public function clearNodesToAddBefore(\PhpParser\Node $node) : void
+    public function clearNodesToAddBefore(Node $node) : void
     {
         $objectHash = \spl_object_hash($node);
         unset($this->nodesToAddBefore[$objectHash]);
@@ -130,39 +130,39 @@ final class NodesToAddCollector implements \Rector\PostRector\Contract\Collector
      * @deprecated Return created nodes right in refactor() method to keep context instead.
      * @param Node[] $newNodes
      */
-    public function addNodesBeforeNode(array $newNodes, \PhpParser\Node $positionNode) : void
+    public function addNodesBeforeNode(array $newNodes, Node $positionNode) : void
     {
         foreach ($newNodes as $newNode) {
             $this->addNodeBeforeNode($newNode, $positionNode, null);
         }
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
-    private function resolveNearestStmtPosition(\PhpParser\Node $node) : string
+    private function resolveNearestStmtPosition(Node $node) : string
     {
-        if ($node instanceof \PhpParser\Node\Stmt) {
+        if ($node instanceof Stmt) {
             return \spl_object_hash($node);
         }
         $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
-        if ($currentStmt instanceof \PhpParser\Node\Stmt) {
+        if ($currentStmt instanceof Stmt) {
             return \spl_object_hash($currentStmt);
         }
-        $parent = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Stmt\Return_) {
+        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Return_) {
             return \spl_object_hash($parent);
         }
-        $foundNode = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt::class);
-        if (!$foundNode instanceof \PhpParser\Node\Stmt) {
+        $foundNode = $this->betterNodeFinder->findParentType($node, Stmt::class);
+        if (!$foundNode instanceof Stmt) {
             $printedNode = $this->nodePrinter->print($node);
             $errorMessage = \sprintf('Could not find parent Stmt of "%s" node', $printedNode);
-            throw new \Rector\Core\Exception\ShouldNotHappenException($errorMessage);
+            throw new ShouldNotHappenException($errorMessage);
         }
         return \spl_object_hash($foundNode);
     }
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Stmt $node
      */
-    private function wrapToExpression($node) : \PhpParser\Node\Stmt
+    private function wrapToExpression($node) : Stmt
     {
-        return $node instanceof \PhpParser\Node\Stmt ? $node : new \PhpParser\Node\Stmt\Expression($node);
+        return $node instanceof Stmt ? $node : new Expression($node);
     }
 }

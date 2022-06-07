@@ -22,7 +22,7 @@ final class ConstructorClassMethodFactory
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ParamTagRemover $paramTagRemover)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->paramTagRemover = $paramTagRemover;
@@ -31,9 +31,9 @@ final class ConstructorClassMethodFactory
      * @param PropertyWithPhpDocInfo[] $requiredPropertiesWithPhpDocInfos
      * @param Param[] $params
      */
-    public function createConstructorClassMethod(array $requiredPropertiesWithPhpDocInfos, array $params) : \PhpParser\Node\Stmt\ClassMethod
+    public function createConstructorClassMethod(array $requiredPropertiesWithPhpDocInfos, array $params) : ClassMethod
     {
-        $classMethod = new \PhpParser\Node\Stmt\ClassMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT, ['flags' => \PhpParser\Node\Stmt\Class_::MODIFIER_PUBLIC, 'params' => $params]);
+        $classMethod = new ClassMethod(MethodName::CONSTRUCT, ['flags' => Class_::MODIFIER_PUBLIC, 'params' => $params]);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         foreach ($requiredPropertiesWithPhpDocInfos as $requiredPropertyWithPhpDocInfo) {
             $paramTagValueNode = $requiredPropertyWithPhpDocInfo->getParamTagValueNode();

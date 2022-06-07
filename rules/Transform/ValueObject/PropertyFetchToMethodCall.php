@@ -42,11 +42,11 @@ final class PropertyFetchToMethodCall
         $this->newGetMethod = $newGetMethod;
         $this->newSetMethod = $newSetMethod;
         $this->newGetArguments = $newGetArguments;
-        \Rector\Core\Validation\RectorAssert::className($oldType);
+        RectorAssert::className($oldType);
     }
-    public function getOldObjectType() : \PHPStan\Type\ObjectType
+    public function getOldObjectType() : ObjectType
     {
-        return new \PHPStan\Type\ObjectType($this->oldType);
+        return new ObjectType($this->oldType);
     }
     public function getOldProperty() : string
     {

@@ -23,7 +23,7 @@ use RectorPrefix20220607\Symfony\Component\Finder\Glob;
  *
  * @implements \IteratorAggregate<string, \SplFileInfo>
  */
-class GlobResource implements \IteratorAggregate, \RectorPrefix20220607\Symfony\Component\Config\Resource\SelfCheckingResourceInterface
+class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
 {
     /**
      * @var string
@@ -80,7 +80,7 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20220607\Symfony\
     }
     public function __toString() : string
     {
-        return 'glob.' . $this->prefix . (int) $this->recursive . $this->pattern . (int) $this->forExclusion . \implode("\0", $this->excludedPrefixes);
+        return 'glob.' . $this->prefix . (int) $this->recursive . $this->pattern . (int) $this->forExclusion . \implode("\x00", $this->excludedPrefixes);
     }
     /**
      * {@inheritdoc}
@@ -161,7 +161,7 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20220607\Symfony\
             }
             return;
         }
-        if (!\class_exists(\RectorPrefix20220607\Symfony\Component\Finder\Finder::class)) {
+        if (!\class_exists(Finder::class)) {
             throw new \LogicException(\sprintf('Extended glob pattern "%s" cannot be used as the Finder component is not installed.', $this->pattern));
         }
         if (\is_file($prefix = $this->prefix)) {
@@ -170,12 +170,12 @@ class GlobResource implements \IteratorAggregate, \RectorPrefix20220607\Symfony\
         } else {
             $pattern = $this->pattern;
         }
-        $regex = \RectorPrefix20220607\Symfony\Component\Finder\Glob::toRegex($pattern);
+        $regex = Glob::toRegex($pattern);
         if ($this->recursive) {
             $regex = \substr_replace($regex, '(/|$)', -2, 1);
         }
         $prefixLen = \strlen($prefix);
-        yield from (new \RectorPrefix20220607\Symfony\Component\Finder\Finder())->followLinks()->filter(function (\SplFileInfo $info) use($regex, $prefixLen, $prefix) {
+        yield from (new Finder())->followLinks()->filter(function (\SplFileInfo $info) use($regex, $prefixLen, $prefix) {
             $normalizedPath = \str_replace('\\', '/', $info->getPathname());
             if (!\preg_match($regex, \substr($normalizedPath, $prefixLen)) || !$info->isFile()) {
                 return \false;

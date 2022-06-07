@@ -16,22 +16,22 @@ use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog http://php.net/manual/en/migration72.incompatible.php#migration72.incompatible.no-null-to-get_class https://3v4l.org/sk0fp
  *
  * @see \Rector\Tests\Php72\Rector\FuncCall\GetClassOnNullRector\GetClassOnNullRectorTest
  */
-final class GetClassOnNullRector extends \Rector\Core\Rector\AbstractScopeAwareRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class GetClassOnNullRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::NO_NULL_ON_GET_CLASS;
+        return PhpVersionFeature::NO_NULL_ON_GET_CLASS;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Null is no more allowed in get_class()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Null is no more allowed in get_class()', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getItem()
@@ -58,12 +58,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if (!$this->isName($node, 'get_class')) {
             return null;
@@ -71,7 +71,7 @@ CODE_SAMPLE
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return null;
         }
         $firstArgValue = $node->args[0]->value;
@@ -83,26 +83,26 @@ CODE_SAMPLE
             return null;
         }
         $firstArgType = $this->getType($firstArgValue);
-        if (!$this->nodeTypeResolver->isNullableType($firstArgValue) && !$firstArgType instanceof \PHPStan\Type\NullType) {
+        if (!$this->nodeTypeResolver->isNullableType($firstArgValue) && !$firstArgType instanceof NullType) {
             return null;
         }
-        $notIdentical = new \PhpParser\Node\Expr\BinaryOp\NotIdentical($firstArgValue, $this->nodeFactory->createNull());
+        $notIdentical = new NotIdentical($firstArgValue, $this->nodeFactory->createNull());
         $funcCall = $this->createGetClassFuncCall($node);
         $selfClassConstFetch = $this->nodeFactory->createClassConstReference('self');
-        return new \PhpParser\Node\Expr\Ternary($notIdentical, $funcCall, $selfClassConstFetch);
+        return new Ternary($notIdentical, $funcCall, $selfClassConstFetch);
     }
-    private function shouldSkip(\PhpParser\Node\Expr\FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall) : bool
     {
-        $isJustAdded = (bool) $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DO_NOT_CHANGE);
+        $isJustAdded = (bool) $funcCall->getAttribute(AttributeKey::DO_NOT_CHANGE);
         if ($isJustAdded) {
             return \true;
         }
-        $classLike = $this->betterNodeFinder->findParentType($funcCall, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($funcCall, Class_::class);
+        if (!$classLike instanceof Class_) {
             return \true;
         }
-        $parent = $funcCall->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Expr\Ternary) {
+        $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Ternary) {
             if ($this->isIdenticalToNotNull($funcCall, $parent)) {
                 return \true;
             }
@@ -110,24 +110,24 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function createGetClassFuncCall(\PhpParser\Node\Expr\FuncCall $oldFuncCall) : \PhpParser\Node\Expr\FuncCall
+    private function createGetClassFuncCall(FuncCall $oldFuncCall) : FuncCall
     {
-        $funcCall = new \PhpParser\Node\Expr\FuncCall($oldFuncCall->name, $oldFuncCall->args);
-        $funcCall->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::DO_NOT_CHANGE, \true);
+        $funcCall = new FuncCall($oldFuncCall->name, $oldFuncCall->args);
+        $funcCall->setAttribute(AttributeKey::DO_NOT_CHANGE, \true);
         return $funcCall;
     }
     /**
      * E.g. "$value === [!null] ? get_class($value)"
      */
-    private function isIdenticalToNotNull(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Ternary $ternary) : bool
+    private function isIdenticalToNotNull(FuncCall $funcCall, Ternary $ternary) : bool
     {
-        if (!$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
+        if (!$ternary->cond instanceof Identical) {
             return \false;
         }
         if (!isset($funcCall->args[0])) {
             return \false;
         }
-        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$funcCall->args[0] instanceof Arg) {
             return \false;
         }
         if ($this->nodeComparator->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && !$this->valueResolver->isNull($ternary->cond->right)) {
@@ -141,15 +141,15 @@ CODE_SAMPLE
     /**
      * E.g. "$value !== null ? get_class($value)"
      */
-    private function isNotIdenticalToNull(\PhpParser\Node\Expr\FuncCall $funcCall, \PhpParser\Node\Expr\Ternary $ternary) : bool
+    private function isNotIdenticalToNull(FuncCall $funcCall, Ternary $ternary) : bool
     {
-        if (!$ternary->cond instanceof \PhpParser\Node\Expr\BinaryOp\NotIdentical) {
+        if (!$ternary->cond instanceof NotIdentical) {
             return \false;
         }
         if (!isset($funcCall->args[0])) {
             return \false;
         }
-        if (!$funcCall->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$funcCall->args[0] instanceof Arg) {
             return \false;
         }
         if ($this->nodeComparator->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && $this->valueResolver->isNull($ternary->cond->right)) {

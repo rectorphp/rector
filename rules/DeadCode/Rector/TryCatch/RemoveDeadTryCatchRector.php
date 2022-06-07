@@ -10,16 +10,16 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector\RemoveDeadTryCatchRectorTest
  */
-final class RemoveDeadTryCatchRector extends \Rector\Core\Rector\AbstractRector
+final class RemoveDeadTryCatchRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove dead try/catch', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove dead try/catch', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -48,15 +48,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\TryCatch::class];
+        return [TryCatch::class];
     }
     /**
      * @param TryCatch $node
      * @return mixed[]|null|\PhpParser\Node\Stmt\TryCatch
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
-        $isEmptyFinallyStmts = !$node->finally instanceof \PhpParser\Node\Stmt\Finally_ || $this->isEmpty($node->finally->stmts);
+        $isEmptyFinallyStmts = !$node->finally instanceof Finally_ || $this->isEmpty($node->finally->stmts);
         // not empty stmts on finally always executed
         if (!$isEmptyFinallyStmts) {
             return null;
@@ -73,7 +73,7 @@ CODE_SAMPLE
             return null;
         }
         $onlyCatchStmt = $onlyCatch->stmts[0];
-        if (!$onlyCatchStmt instanceof \PhpParser\Node\Stmt\Throw_) {
+        if (!$onlyCatchStmt instanceof Throw_) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($onlyCatch->var, $onlyCatchStmt->expr)) {
@@ -92,6 +92,6 @@ CODE_SAMPLE
         if (\count($stmts) > 1) {
             return \false;
         }
-        return $stmts[0] instanceof \PhpParser\Node\Stmt\Nop;
+        return $stmts[0] instanceof Nop;
     }
 }

@@ -31,7 +31,7 @@ final class PHPStanStaticTypeMapper
     /**
      * @param TypeKind::* $typeKind
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {
@@ -39,22 +39,22 @@ final class PHPStanStaticTypeMapper
             }
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type, $typeKind);
         }
-        if ($type instanceof \PHPStan\Type\Accessory\AccessoryNumericStringType) {
-            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('string');
+        if ($type instanceof AccessoryNumericStringType) {
+            return new IdentifierTypeNode('string');
         }
-        if ($type instanceof \PHPStan\Type\Accessory\HasMethodType) {
-            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('object');
+        if ($type instanceof HasMethodType) {
+            return new IdentifierTypeNode('object');
         }
-        if ($type instanceof \PHPStan\Type\Accessory\AccessoryLiteralStringType) {
-            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('string');
+        if ($type instanceof AccessoryLiteralStringType) {
+            return new IdentifierTypeNode('string');
         }
-        throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
     /**
      * @param TypeKind::* $typeKind
      * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind)
+    public function mapToPhpParserNode(Type $type, string $typeKind)
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {
@@ -62,6 +62,6 @@ final class PHPStanStaticTypeMapper
             }
             return $typeMapper->mapToPhpParserNode($type, $typeKind);
         }
-        throw new \Rector\Core\Exception\NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
+        throw new NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }
 }

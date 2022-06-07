@@ -19,7 +19,7 @@ use RectorPrefix20220607\Symfony\Component\Config\ResourceCheckerInterface;
  *
  * @author Matthias Pigulla <mp@webfactory.de>
  */
-class SelfCheckingResourceChecker implements \RectorPrefix20220607\Symfony\Component\Config\ResourceCheckerInterface
+class SelfCheckingResourceChecker implements ResourceCheckerInterface
 {
     // Common shared cache, because this checker can be used in different
     // situations. For example, when using the full stack framework, the router
@@ -29,14 +29,14 @@ class SelfCheckingResourceChecker implements \RectorPrefix20220607\Symfony\Compo
      * @var mixed[]
      */
     private static $cache = [];
-    public function supports(\RectorPrefix20220607\Symfony\Component\Config\Resource\ResourceInterface $metadata) : bool
+    public function supports(ResourceInterface $metadata) : bool
     {
-        return $metadata instanceof \RectorPrefix20220607\Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
+        return $metadata instanceof SelfCheckingResourceInterface;
     }
     /**
      * @param SelfCheckingResourceInterface $resource
      */
-    public function isFresh(\RectorPrefix20220607\Symfony\Component\Config\Resource\ResourceInterface $resource, int $timestamp) : bool
+    public function isFresh(ResourceInterface $resource, int $timestamp) : bool
     {
         $key = "{$resource}:{$timestamp}";
         return self::$cache[$key] ?? (self::$cache[$key] = $resource->isFresh($timestamp));

@@ -16,7 +16,7 @@ final class TypeNodeUnwrapper
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;
     }
@@ -28,11 +28,11 @@ final class TypeNodeUnwrapper
     {
         $unwrappedTypeNodes = [];
         foreach ($typeNodes as $typeNode) {
-            if ($typeNode instanceof \PhpParser\Node\UnionType) {
+            if ($typeNode instanceof UnionType) {
                 $unwrappedTypeNodes = \array_merge($unwrappedTypeNodes, $typeNode->types);
-            } elseif ($typeNode instanceof \PhpParser\Node\NullableType) {
+            } elseif ($typeNode instanceof NullableType) {
                 $unwrappedTypeNodes[] = $typeNode->type;
-                $unwrappedTypeNodes[] = new \PhpParser\Node\Identifier('null');
+                $unwrappedTypeNodes[] = new Identifier('null');
             } else {
                 $unwrappedTypeNodes[] = $typeNode;
             }

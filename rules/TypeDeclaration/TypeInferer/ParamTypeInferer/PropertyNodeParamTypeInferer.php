@@ -21,7 +21,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use RectorPrefix20220607\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-final class PropertyNodeParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
+final class PropertyNodeParamTypeInferer implements ParamTypeInfererInterface
 {
     /**
      * @readonly
@@ -63,7 +63,7 @@ final class PropertyNodeParamTypeInferer implements \Rector\TypeDeclaration\Cont
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(\Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \RectorPrefix20220607\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator)
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory, BetterNodeFinder $betterNodeFinder, StaticTypeMapper $staticTypeMapper, NodeComparator $nodeComparator)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -74,28 +74,28 @@ final class PropertyNodeParamTypeInferer implements \Rector\TypeDeclaration\Cont
         $this->staticTypeMapper = $staticTypeMapper;
         $this->nodeComparator = $nodeComparator;
     }
-    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    public function inferParam(Param $param) : Type
     {
-        $classLike = $this->betterNodeFinder->findParentType($param, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
-            return new \PHPStan\Type\MixedType();
+        $classLike = $this->betterNodeFinder->findParentType($param, Class_::class);
+        if (!$classLike instanceof Class_) {
+            return new MixedType();
         }
         $paramName = $this->nodeNameResolver->getName($param);
         /** @var ClassMethod $classMethod */
-        $classMethod = $param->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $classMethod = $param->getAttribute(AttributeKey::PARENT_NODE);
         $propertyStaticTypes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (\PhpParser\Node $node) use($paramName, &$propertyStaticTypes) {
-            if (!$node instanceof \PhpParser\Node\Expr\Assign) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use($paramName, &$propertyStaticTypes) {
+            if (!$node instanceof Assign) {
                 return null;
             }
             if (!$this->propertyFetchAnalyzer->isVariableAssignToThisPropertyFetch($node, $paramName)) {
                 return null;
             }
             $exprType = $this->nodeTypeResolver->getType($node->expr);
-            $nodeExprType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($exprType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
+            $nodeExprType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($exprType, TypeKind::PARAM);
             $varType = $this->nodeTypeResolver->getType($node->var);
-            $nodeVarType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::ANY);
-            if ($nodeExprType instanceof \PhpParser\Node && !$this->nodeComparator->areNodesEqual($nodeExprType, $nodeVarType)) {
+            $nodeVarType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::ANY);
+            if ($nodeExprType instanceof Node && !$this->nodeComparator->areNodesEqual($nodeExprType, $nodeVarType)) {
                 return null;
             }
             $propertyStaticTypes[] = $varType;

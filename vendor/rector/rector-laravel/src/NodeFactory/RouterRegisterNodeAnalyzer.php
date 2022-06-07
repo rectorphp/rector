@@ -22,7 +22,7 @@ final class RouterRegisterNodeAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -35,10 +35,10 @@ final class RouterRegisterNodeAnalyzer
         if (!$this->isRegisterName($node->name)) {
             return \false;
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall && $this->nodeTypeResolver->isObjectTypes($node->var, [new \PHPStan\Type\ObjectType('Illuminate\\Routing\\Router'), new \PHPStan\Type\ObjectType('Illuminate\\Routing\\RouteRegistrar')])) {
+        if ($node instanceof MethodCall && $this->nodeTypeResolver->isObjectTypes($node->var, [new ObjectType('Illuminate\\Routing\\Router'), new ObjectType('Illuminate\\Routing\\RouteRegistrar')])) {
             return \true;
         }
-        return $node instanceof \PhpParser\Node\Expr\StaticCall && $this->nodeNameResolver->isName($node->class, 'Illuminate\\Support\\Facades\\Route');
+        return $node instanceof StaticCall && $this->nodeNameResolver->isName($node->class, 'Illuminate\\Support\\Facades\\Route');
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Expr $name

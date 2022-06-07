@@ -6,19 +6,19 @@ namespace RectorPrefix20220607\OndraM\CiDetector\Ci;
 use RectorPrefix20220607\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220607\OndraM\CiDetector\Env;
 use RectorPrefix20220607\OndraM\CiDetector\TrinaryLogic;
-class Bamboo extends \RectorPrefix20220607\OndraM\CiDetector\Ci\AbstractCi
+class Bamboo extends AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220607\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(Env $env) : bool
     {
         return $env->get('bamboo_buildKey') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220607\OndraM\CiDetector\CiDetector::CI_BAMBOO;
+        return CiDetector::CI_BAMBOO;
     }
-    public function isPullRequest() : \RectorPrefix20220607\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : TrinaryLogic
     {
-        return \RectorPrefix20220607\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->get('bamboo_repository_pr_key') !== \false);
+        return TrinaryLogic::createFromBoolean($this->env->get('bamboo_repository_pr_key') !== \false);
     }
     public function getBuildNumber() : string
     {

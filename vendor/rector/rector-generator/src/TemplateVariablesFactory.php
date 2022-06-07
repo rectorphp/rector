@@ -34,7 +34,7 @@ final class TemplateVariablesFactory
      * @var \Rector\RectorGenerator\NodeFactory\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\PhpParser\PrettyPrinter\Standard $standard, \Rector\RectorGenerator\NodeFactory\ConfigurationNodeFactory $configurationNodeFactory, \Rector\RectorGenerator\NodeFactory\ConfigureClassMethodFactory $configureClassMethodFactory, \Rector\RectorGenerator\NodeFactory\NodeFactory $nodeFactory)
+    public function __construct(Standard $standard, ConfigurationNodeFactory $configurationNodeFactory, ConfigureClassMethodFactory $configureClassMethodFactory, NodeFactory $nodeFactory)
     {
         $this->standard = $standard;
         $this->configurationNodeFactory = $configurationNodeFactory;
@@ -44,9 +44,9 @@ final class TemplateVariablesFactory
     /**
      * @return array<string, mixed>
      */
-    public function createFromRectorRecipe(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe) : array
+    public function createFromRectorRecipe(RectorRecipe $rectorRecipe) : array
     {
-        $data = [\Rector\RectorGenerator\ValueObject\Placeholder::PACKAGE => $rectorRecipe->getPackage(), \Rector\RectorGenerator\ValueObject\Placeholder::CATEGORY => $rectorRecipe->getCategory(), \Rector\RectorGenerator\ValueObject\Placeholder::DESCRIPTION => $rectorRecipe->getDescription(), \Rector\RectorGenerator\ValueObject\Placeholder::NAME => $rectorRecipe->getName(), \Rector\RectorGenerator\ValueObject\Placeholder::CODE_BEFORE => \trim($rectorRecipe->getCodeBefore()) . \PHP_EOL, \Rector\RectorGenerator\ValueObject\Placeholder::CODE_BEFORE_EXAMPLE => $this->createCodeForDefinition($rectorRecipe->getCodeBefore()), \Rector\RectorGenerator\ValueObject\Placeholder::CODE_AFTER => \trim($rectorRecipe->getCodeAfter()) . \PHP_EOL, \Rector\RectorGenerator\ValueObject\Placeholder::CODE_AFTER_EXAMPLE => $this->createCodeForDefinition($rectorRecipe->getCodeAfter()), \Rector\RectorGenerator\ValueObject\Placeholder::RESOURCES => $this->createSourceDocBlock($rectorRecipe->getResources())];
+        $data = [Placeholder::PACKAGE => $rectorRecipe->getPackage(), Placeholder::CATEGORY => $rectorRecipe->getCategory(), Placeholder::DESCRIPTION => $rectorRecipe->getDescription(), Placeholder::NAME => $rectorRecipe->getName(), Placeholder::CODE_BEFORE => \trim($rectorRecipe->getCodeBefore()) . \PHP_EOL, Placeholder::CODE_BEFORE_EXAMPLE => $this->createCodeForDefinition($rectorRecipe->getCodeBefore()), Placeholder::CODE_AFTER => \trim($rectorRecipe->getCodeAfter()) . \PHP_EOL, Placeholder::CODE_AFTER_EXAMPLE => $this->createCodeForDefinition($rectorRecipe->getCodeAfter()), Placeholder::RESOURCES => $this->createSourceDocBlock($rectorRecipe->getResources())];
         if ($rectorRecipe->getConfiguration() !== []) {
             $configurationData = $this->createConfigurationData($rectorRecipe);
             $data = \array_merge($data, $configurationData);
@@ -86,10 +86,10 @@ final class TemplateVariablesFactory
     {
         $arrayItems = [];
         foreach ($configuration as $mainConfiguration) {
-            $mainConfiguration = \PhpParser\BuilderHelpers::normalizeValue($mainConfiguration);
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($mainConfiguration);
+            $mainConfiguration = BuilderHelpers::normalizeValue($mainConfiguration);
+            $arrayItems[] = new ArrayItem($mainConfiguration);
         }
-        $array = new \PhpParser\Node\Expr\Array_($arrayItems);
+        $array = new Array_($arrayItems);
         return $this->standard->prettyPrintExpr($array);
     }
     /**
@@ -108,7 +108,7 @@ final class TemplateVariablesFactory
         $classMethod = $this->configureClassMethodFactory->create($ruleConfiguration);
         return $this->standard->prettyPrint([$classMethod]);
     }
-    private function createNodeTypePhp(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe) : string
+    private function createNodeTypePhp(RectorRecipe $rectorRecipe) : string
     {
         $referencingClassConsts = [];
         foreach ($rectorRecipe->getNodeTypes() as $nodeType) {
@@ -120,7 +120,7 @@ final class TemplateVariablesFactory
     /**
      * @return array<string, mixed>
      */
-    private function createConfigurationData(\Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe) : array
+    private function createConfigurationData(RectorRecipe $rectorRecipe) : array
     {
         $configurationData = [];
         $configurationData['__TestRuleConfiguration__'] = $this->createRuleConfiguration($rectorRecipe->getConfiguration());
@@ -136,7 +136,7 @@ final class TemplateVariablesFactory
     private function createMainConfiguration(array $ruleConfiguration) : string
     {
         $firstItem = \array_pop($ruleConfiguration);
-        $valueExpr = \PhpParser\BuilderHelpers::normalizeValue($firstItem);
+        $valueExpr = BuilderHelpers::normalizeValue($firstItem);
         return $this->standard->prettyPrintExpr($valueExpr);
     }
 }

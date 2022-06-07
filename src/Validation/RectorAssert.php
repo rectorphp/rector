@@ -21,10 +21,10 @@ final class RectorAssert
      */
     public static function className(string $className) : void
     {
-        if (\Rector\Core\Util\StringUtils::isMatch($className, self::CLASS_NAME_REGEX)) {
+        if (StringUtils::isMatch($className, self::CLASS_NAME_REGEX)) {
             return;
         }
         $errorMessage = $className . ' is not a valid class name';
-        throw new \RectorPrefix20220607\Webmozart\Assert\InvalidArgumentException($errorMessage);
+        throw new InvalidArgumentException($errorMessage);
     }
 }

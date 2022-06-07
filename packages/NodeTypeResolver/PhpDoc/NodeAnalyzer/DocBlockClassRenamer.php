@@ -14,19 +14,19 @@ final class DocBlockClassRenamer
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor
      */
     private $classRenamePhpDocNodeVisitor;
-    public function __construct(\Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)
+    public function __construct(ClassRenamePhpDocNodeVisitor $classRenamePhpDocNodeVisitor)
     {
         $this->classRenamePhpDocNodeVisitor = $classRenamePhpDocNodeVisitor;
     }
     /**
      * @param OldToNewType[] $oldToNewTypes
      */
-    public function renamePhpDocType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, array $oldToNewTypes) : void
+    public function renamePhpDocType(PhpDocInfo $phpDocInfo, array $oldToNewTypes) : void
     {
         if ($oldToNewTypes === []) {
             return;
         }
-        $phpDocNodeTraverser = new \RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($this->classRenamePhpDocNodeVisitor);
         $this->classRenamePhpDocNodeVisitor->setOldToNewTypes($oldToNewTypes);
         $phpDocNodeTraverser->traverse($phpDocInfo->getPhpDocNode());

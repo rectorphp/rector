@@ -17,15 +17,15 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/Atlantic18/DoctrineExtensions/blob/v2.4.x/doc/sluggable.md
  * @see https://github.com/KnpLabs/DoctrineBehaviors/blob/4e0677379dd4adf84178f662d08454a9627781a8/docs/sluggable.md
  *
  * @see \Rector\Doctrine\Tests\Rector\Class_\SluggableBehaviorRector\SluggableBehaviorRectorTest
  */
-final class SluggableBehaviorRector extends \Rector\Core\Rector\AbstractRector
+final class SluggableBehaviorRector extends AbstractRector
 {
     /**
      * @readonly
@@ -37,14 +37,14 @@ final class SluggableBehaviorRector extends \Rector\Core\Rector\AbstractRector
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger)
+    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change Sluggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change Sluggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors', [new CodeSample(<<<'CODE_SAMPLE'
 use Gedmo\Mapping\Annotation as Gedmo;
 
 class SomeClass
@@ -90,23 +90,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $slugFields = [];
         $matchedProperty = null;
         foreach ($node->getProperties() as $property) {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             $doctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass('Gedmo\\Mapping\\Annotation\\Slug');
-            if (!$doctrineAnnotationTagValueNode instanceof \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode) {
+            if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
             $slugFields = $doctrineAnnotationTagValueNode->getValue('fields');
-            if ($slugFields instanceof \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode) {
+            if ($slugFields instanceof CurlyListNode) {
                 $slugFields = $slugFields->getValuesWithExplicitSilentAndWithoutQuotes();
             }
             $this->removeNode($property);
@@ -123,9 +123,9 @@ CODE_SAMPLE
             $this->removeNode($classMethod);
         }
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Sluggable\\SluggableTrait');
-        $node->implements[] = new \PhpParser\Node\Name\FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\SluggableInterface');
+        $node->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\SluggableInterface');
         if (!\is_array($slugFields)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $this->addGetSluggableFieldsClassMethod($node, $slugFields);
         return $node;
@@ -133,12 +133,12 @@ CODE_SAMPLE
     /**
      * @param string[] $slugFields
      */
-    private function addGetSluggableFieldsClassMethod(\PhpParser\Node\Stmt\Class_ $class, array $slugFields) : void
+    private function addGetSluggableFieldsClassMethod(Class_ $class, array $slugFields) : void
     {
         $classMethod = $this->nodeFactory->createPublicMethod('getSluggableFields');
-        $classMethod->returnType = new \PhpParser\Node\Identifier('array');
-        $classMethod->stmts[] = new \PhpParser\Node\Stmt\Return_($this->nodeFactory->createArray($slugFields));
-        $returnType = new \PHPStan\Type\ArrayType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\StringType());
+        $classMethod->returnType = new Identifier('array');
+        $classMethod->stmts[] = new Return_($this->nodeFactory->createArray($slugFields));
+        $returnType = new ArrayType(new MixedType(), new StringType());
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnType);
         $this->classInsertManipulator->addAsFirstMethod($class, $classMethod);

@@ -9,27 +9,27 @@ use PhpParser\Node\Stmt\Catch_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Naming\Naming\VariableNaming;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/non-capturing_catches
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector\DowngradeNonCapturingCatchesRectorTest
  */
-final class DowngradeNonCapturingCatchesRector extends \Rector\Core\Rector\AbstractScopeAwareRector
+final class DowngradeNonCapturingCatchesRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming)
+    public function __construct(VariableNaming $variableNaming)
     {
         $this->variableNaming = $variableNaming;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade catch () without variable to one', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade catch () without variable to one', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -62,18 +62,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Catch_::class];
+        return [Catch_::class];
     }
     /**
      * @param Catch_ $node
      */
-    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if ($node->var !== null) {
             return null;
         }
         $exceptionVarName = $this->variableNaming->createCountedValueName('exception', $scope);
-        $node->var = new \PhpParser\Node\Expr\Variable($exceptionVarName);
+        $node->var = new Variable($exceptionVarName);
         return $node;
     }
 }

@@ -6,7 +6,7 @@ namespace Rector\StaticTypeMapper\ValueObject\Type;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-final class ShortenedObjectType extends \PHPStan\Type\ObjectType
+final class ShortenedObjectType extends ObjectType
 {
     /**
      * @var class-string
@@ -21,9 +21,9 @@ final class ShortenedObjectType extends \PHPStan\Type\ObjectType
         $this->fullyQualifiedName = $fullyQualifiedName;
         parent::__construct($shortName);
     }
-    public function isSuperTypeOf(\PHPStan\Type\Type $type) : \PHPStan\TrinaryLogic
+    public function isSuperTypeOf(Type $type) : TrinaryLogic
     {
-        $fullyQualifiedObjectType = new \PHPStan\Type\ObjectType($this->fullyQualifiedName);
+        $fullyQualifiedObjectType = new ObjectType($this->fullyQualifiedName);
         return $fullyQualifiedObjectType->isSuperTypeOf($type);
     }
     public function getShortName() : string

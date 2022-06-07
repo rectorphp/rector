@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 final class FormOnSuccessCallbackFinder
 {
-    public function find(\PhpParser\Node\Stmt\Class_ $class, \PhpParser\Node\Expr\Variable $form) : ?\PhpParser\Node\Expr
+    public function find(Class_ $class, Variable $form) : ?Expr
     {
         foreach ($class->getMethods() as $classMethod) {
             $stmts = $classMethod->getStmts();
@@ -21,13 +21,13 @@ final class FormOnSuccessCallbackFinder
                 continue;
             }
             foreach ($stmts as $stmt) {
-                if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+                if (!$stmt instanceof Expression) {
                     continue;
                 }
-                if (!$stmt->expr instanceof \PhpParser\Node\Expr\Assign) {
+                if (!$stmt->expr instanceof Assign) {
                     continue;
                 }
-                if (!$stmt->expr->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+                if (!$stmt->expr->var instanceof ArrayDimFetch) {
                     continue;
                 }
                 /** @var ArrayDimFetch $arrayDimFetch */
@@ -40,18 +40,18 @@ final class FormOnSuccessCallbackFinder
         }
         return null;
     }
-    private function isFormOnSuccess(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, \PhpParser\Node\Expr\Variable $form) : bool
+    private function isFormOnSuccess(ArrayDimFetch $arrayDimFetch, Variable $form) : bool
     {
-        if (!$arrayDimFetch->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if (!$arrayDimFetch->var instanceof PropertyFetch) {
             return \false;
         }
-        if (!$arrayDimFetch->var->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$arrayDimFetch->var->var instanceof Variable) {
             return \false;
         }
         if ($arrayDimFetch->var->var->name !== $form->name) {
             return \false;
         }
-        if (!$arrayDimFetch->var->name instanceof \PhpParser\Node\Identifier) {
+        if (!$arrayDimFetch->var->name instanceof Identifier) {
             return \false;
         }
         return $arrayDimFetch->var->name->name === 'onSuccess';

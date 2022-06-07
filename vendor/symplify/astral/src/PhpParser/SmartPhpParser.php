@@ -14,7 +14,7 @@ final class SmartPhpParser
      * @var \PHPStan\Parser\Parser
      */
     private $parser;
-    public function __construct(\PHPStan\Parser\Parser $parser)
+    public function __construct(Parser $parser)
     {
         $this->parser = $parser;
     }

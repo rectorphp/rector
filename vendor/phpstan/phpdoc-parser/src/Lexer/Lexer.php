@@ -60,10 +60,10 @@ class Lexer
         if ($this->regexp === null || $this->types === null) {
             $this->initialize();
         }
-        \assert($this->regexp !== null);
-        \assert($this->types !== null);
-        \preg_match_all($this->regexp, $s, $tokens, \PREG_SET_ORDER);
-        $count = \count($this->types);
+        assert($this->regexp !== null);
+        assert($this->types !== null);
+        preg_match_all($this->regexp, $s, $tokens, PREG_SET_ORDER);
+        $count = count($this->types);
         foreach ($tokens as &$match) {
             for ($i = 1; $i <= $count; $i++) {
                 if ($match[$i] !== null && $match[$i] !== '') {
@@ -114,7 +114,7 @@ class Lexer
             // anything but TOKEN_CLOSE_PHPDOC or TOKEN_HORIZONTAL_WS or TOKEN_EOL
             self::TOKEN_OTHER => '(?:(?!\\*/)[^\\s])++',
         ];
-        $this->regexp = '~(' . \implode(')|(', $patterns) . ')~Asi';
-        $this->types = \array_keys($patterns);
+        $this->regexp = '~(' . implode(')|(', $patterns) . ')~Asi';
+        $this->types = array_keys($patterns);
     }
 }

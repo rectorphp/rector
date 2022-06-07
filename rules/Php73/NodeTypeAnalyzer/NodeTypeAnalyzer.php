@@ -10,15 +10,15 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 final class NodeTypeAnalyzer
 {
-    public function isStringyType(\PHPStan\Type\Type $type) : bool
+    public function isStringyType(Type $type) : bool
     {
-        if ($type instanceof \PHPStan\Type\StringType) {
+        if ($type instanceof StringType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\Accessory\AccessoryNumericStringType) {
+        if ($type instanceof AccessoryNumericStringType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\IntersectionType || $type instanceof \PHPStan\Type\UnionType) {
+        if ($type instanceof IntersectionType || $type instanceof UnionType) {
             foreach ($type->getTypes() as $innerType) {
                 if (!$this->isStringyType($innerType)) {
                     return \false;

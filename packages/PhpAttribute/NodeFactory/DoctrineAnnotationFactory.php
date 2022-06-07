@@ -17,15 +17,15 @@ final class DoctrineAnnotationFactory
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    public function __construct(NodePrinterInterface $nodePrinter)
     {
         $this->nodePrinter = $nodePrinter;
     }
-    public function createFromAttribute(\PhpParser\Node\Attribute $attribute, string $className) : \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+    public function createFromAttribute(Attribute $attribute, string $className) : DoctrineAnnotationTagValueNode
     {
         $items = $this->createItemsFromArgs($attribute->args);
-        $identifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($className);
-        return new \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode($identifierTypeNode, null, $items);
+        $identifierTypeNode = new IdentifierTypeNode($className);
+        return new DoctrineAnnotationTagValueNode($identifierTypeNode, null, $items);
     }
     /**
      * @param Arg[] $args
@@ -35,9 +35,9 @@ final class DoctrineAnnotationFactory
     {
         $items = [];
         foreach ($args as $arg) {
-            if ($arg->value instanceof \PhpParser\Node\Scalar\String_) {
+            if ($arg->value instanceof String_) {
                 // standardize double quotes for annotations
-                $arg->value->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::KIND, \PhpParser\Node\Scalar\String_::KIND_DOUBLE_QUOTED);
+                $arg->value->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
             }
             $itemValue = $this->nodePrinter->print($arg->value);
             if ($arg->name !== null) {

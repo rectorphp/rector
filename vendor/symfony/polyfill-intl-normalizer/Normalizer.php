@@ -34,8 +34,8 @@ class Normalizer
     private static $D;
     private static $KD;
     private static $cC;
-    private static $ulenMask = ["À" => 2, "Ð" => 2, "à" => 3, "ð" => 4];
-    private static $ASCII = " eiasntrolud][cmp'\ng|hv.fb,:=-q10C2*yx)(L9AS/P\"EjMIk3>5T<D4}B{8FwR67UGN;JzV#HOW_&!K?XQ%Y\\\tZ+~^\$@`\0\1\2\3\4\5\6\7\10\v\f\r\16\17\20\21\22\23\24\25\26\27\30\31\32\33\34\35\36\37";
+    private static $ulenMask = ["\xc0" => 2, "\xd0" => 2, "\xe0" => 3, "\xf0" => 4];
+    private static $ASCII = " eiasntrolud][cmp'\ng|hv.fb,:=-q10C2*yx)(L9AS/P\"EjMIk3>5T<D4}B{8FwR67UGN;JzV#HOW_&!K?XQ%Y\\\tZ+~^\$@`\x00\x01\x02\x03\x04\x05\x06\x07\x08\v\f\r\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f";
     public static function isNormalized(string $s, int $form = self::FORM_C)
     {
         if (!\in_array($form, [self::NFD, self::NFKD, self::NFC, self::NFKC])) {
@@ -112,12 +112,12 @@ class Normalizer
         $combClass = self::$cC;
         $ulenMask = self::$ulenMask;
         $result = $tail = '';
-        $i = $s[0] < "€" ? 1 : $ulenMask[$s[0] & "ð"];
+        $i = $s[0] < "\x80" ? 1 : $ulenMask[$s[0] & "\xf0"];
         $len = \strlen($s);
         $lastUchr = \substr($s, 0, $i);
         $lastUcls = isset($combClass[$lastUchr]) ? 256 : 0;
         while ($i < $len) {
-            if ($s[$i] < "€") {
+            if ($s[$i] < "\x80") {
                 // ASCII chars
                 if ($tail) {
                     $lastUchr .= $tail;
@@ -133,7 +133,7 @@ class Normalizer
                 ++$i;
                 continue;
             }
-            $ulen = $ulenMask[$s[$i] & "ð"];
+            $ulen = $ulenMask[$s[$i] & "\xf0"];
             $uchr = \substr($s, $i, $ulen);
             if ($lastUchr < "á„€" || "á„’" < $lastUchr || $uchr < "á…¡" || "á…µ" < $uchr || $lastUcls) {
                 // Table lookup and combining chars composition
@@ -182,7 +182,7 @@ class Normalizer
         $i = 0;
         $len = \strlen($s);
         while ($i < $len) {
-            if ($s[$i] < "€") {
+            if ($s[$i] < "\x80") {
                 // ASCII chars
                 if ($c) {
                     \ksort($c);
@@ -194,7 +194,7 @@ class Normalizer
                 $i += $j;
                 continue;
             }
-            $ulen = $ulenMask[$s[$i] & "ð"];
+            $ulen = $ulenMask[$s[$i] & "\xf0"];
             $uchr = \substr($s, $i, $ulen);
             $i += $ulen;
             if ($uchr < "ê°€" || "íž£" < $uchr) {
@@ -202,7 +202,7 @@ class Normalizer
                 if ($uchr !== ($j = $compatMap[$uchr] ?? $decompMap[$uchr] ?? $uchr)) {
                     $uchr = $j;
                     $j = \strlen($uchr);
-                    $ulen = $uchr[0] < "€" ? 1 : $ulenMask[$uchr[0] & "ð"];
+                    $ulen = $uchr[0] < "\x80" ? 1 : $ulenMask[$uchr[0] & "\xf0"];
                     if ($ulen != $j) {
                         // Put trailing chars in $s
                         $j -= $ulen;
@@ -230,9 +230,9 @@ class Normalizer
                 // Hangul chars
                 $uchr = \unpack('C*', $uchr);
                 $j = ($uchr[1] - 224 << 12) + ($uchr[2] - 128 << 6) + $uchr[3] - 0xac80;
-                $uchr = "á„" . \chr(0x80 + (int) ($j / 588)) . "á…" . \chr(0xa1 + (int) ($j % 588 / 28));
+                $uchr = "\xe1\x84" . \chr(0x80 + (int) ($j / 588)) . "\xe1\x85" . \chr(0xa1 + (int) ($j % 588 / 28));
                 if ($j %= 28) {
-                    $uchr .= $j < 25 ? "á†" . \chr(0xa7 + $j) : "á‡" . \chr(0x67 + $j);
+                    $uchr .= $j < 25 ? "\xe1\x86" . \chr(0xa7 + $j) : "\xe1\x87" . \chr(0x67 + $j);
                 }
             }
             if ($c) {

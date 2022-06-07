@@ -11,12 +11,12 @@ use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeDecorator\NamespacedNameDecorator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector\DowngradeAnonymousClassRectorTest
  */
-final class DowngradeAnonymousClassRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeAnonymousClassRector extends AbstractRector
 {
     /**
      * @var string
@@ -41,7 +41,7 @@ final class DowngradeAnonymousClassRector extends \Rector\Core\Rector\AbstractRe
      * @var \Rector\Core\NodeDecorator\NamespacedNameDecorator
      */
     private $namespacedNameDecorator;
-    public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory $classFromAnonymousFactory, \Rector\Core\NodeDecorator\NamespacedNameDecorator $namespacedNameDecorator)
+    public function __construct(ClassAnalyzer $classAnalyzer, ClassFromAnonymousFactory $classFromAnonymousFactory, NamespacedNameDecorator $namespacedNameDecorator)
     {
         $this->classAnalyzer = $classAnalyzer;
         $this->classFromAnonymousFactory = $classFromAnonymousFactory;
@@ -52,11 +52,11 @@ final class DowngradeAnonymousClassRector extends \Rector\Core\Rector\AbstractRe
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\New_::class];
+        return [New_::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove anonymous class', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove anonymous class', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -109,19 +109,19 @@ CODE_SAMPLE
     /**
      * @param New_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->classAnalyzer->isAnonymousClass($node->class)) {
             return null;
         }
-        if (!$node->class instanceof \PhpParser\Node\Stmt\Class_) {
+        if (!$node->class instanceof Class_) {
             return null;
         }
         $className = $this->createAnonymousClassName();
         $class = $this->classFromAnonymousFactory->create($className, $node->class);
         $this->classes[] = $class;
         $this->namespacedNameDecorator->decorate($class);
-        return new \PhpParser\Node\Expr\New_(new \PhpParser\Node\Name($className), $node->args);
+        return new New_(new Name($className), $node->args);
     }
     private function createAnonymousClassName() : string
     {

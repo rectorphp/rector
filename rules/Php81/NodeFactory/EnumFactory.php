@@ -37,21 +37,21 @@ final class EnumFactory
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PhpParser\BuilderFactory $builderFactory, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, BuilderFactory $builderFactory, ValueResolver $valueResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->builderFactory = $builderFactory;
         $this->valueResolver = $valueResolver;
     }
-    public function createFromClass(\PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt\Enum_
+    public function createFromClass(Class_ $class) : Enum_
     {
         $shortClassName = $this->nodeNameResolver->getShortName($class);
-        $enum = new \PhpParser\Node\Stmt\Enum_($shortClassName);
+        $enum = new Enum_($shortClassName);
         $constants = $class->getConstants();
         if ($constants !== []) {
             $value = $this->valueResolver->getValue($constants[0]->consts[0]->value);
-            $enum->scalarType = \is_string($value) ? new \PhpParser\Node\Identifier('string') : new \PhpParser\Node\Identifier('int');
+            $enum->scalarType = \is_string($value) ? new Identifier('string') : new Identifier('int');
             // constant to cases
             foreach ($constants as $constant) {
                 $enum->stmts[] = $this->createEnumCaseFromConst($constant);
@@ -59,34 +59,34 @@ final class EnumFactory
         }
         return $enum;
     }
-    public function createFromSpatieClass(\PhpParser\Node\Stmt\Class_ $class) : \PhpParser\Node\Stmt\Enum_
+    public function createFromSpatieClass(Class_ $class) : Enum_
     {
         $shortClassName = $this->nodeNameResolver->getShortName($class);
-        $enum = new \PhpParser\Node\Stmt\Enum_($shortClassName);
+        $enum = new Enum_($shortClassName);
         // constant to cases
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
         $docBlockMethods = ($phpDocInfo2 = $phpDocInfo) ? $phpDocInfo2->getTagsByName('@method') : null;
         if ($docBlockMethods !== null) {
-            $enum->scalarType = new \PhpParser\Node\Identifier('string');
+            $enum->scalarType = new Identifier('string');
             foreach ($docBlockMethods as $docBlockMethod) {
                 $enum->stmts[] = $this->createEnumCaseFromDocComment($docBlockMethod);
             }
         }
         return $enum;
     }
-    private function createEnumCaseFromConst(\PhpParser\Node\Stmt\ClassConst $classConst) : \PhpParser\Node\Stmt\EnumCase
+    private function createEnumCaseFromConst(ClassConst $classConst) : EnumCase
     {
         $constConst = $classConst->consts[0];
-        $enumCase = new \PhpParser\Node\Stmt\EnumCase($constConst->name, $constConst->value);
+        $enumCase = new EnumCase($constConst->name, $constConst->value);
         // mirror comments
-        $enumCase->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $classConst->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO));
-        $enumCase->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, $classConst->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS));
+        $enumCase->setAttribute(AttributeKey::PHP_DOC_INFO, $classConst->getAttribute(AttributeKey::PHP_DOC_INFO));
+        $enumCase->setAttribute(AttributeKey::COMMENTS, $classConst->getAttribute(AttributeKey::COMMENTS));
         return $enumCase;
     }
-    private function createEnumCaseFromDocComment(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode $phpDocTagNode) : \PhpParser\Node\Stmt\EnumCase
+    private function createEnumCaseFromDocComment(PhpDocTagNode $phpDocTagNode) : EnumCase
     {
         /** @var MethodTagValueNode $nodeValue */
         $nodeValue = $phpDocTagNode->value;
-        return new \PhpParser\Node\Stmt\EnumCase($nodeValue->methodName, $this->builderFactory->val($nodeValue->methodName));
+        return new EnumCase($nodeValue->methodName, $this->builderFactory->val($nodeValue->methodName));
     }
 }

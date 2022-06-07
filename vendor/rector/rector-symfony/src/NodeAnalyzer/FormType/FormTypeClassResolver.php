@@ -20,19 +20,19 @@ final class FormTypeClassResolver
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolveFromExpr(\PhpParser\Node\Expr $expr) : ?string
+    public function resolveFromExpr(Expr $expr) : ?string
     {
-        if ($expr instanceof \PhpParser\Node\Expr\New_) {
+        if ($expr instanceof New_) {
             // we can only process direct name
             return $this->nodeNameResolver->getName($expr->class);
         }
         $exprType = $this->nodeTypeResolver->getType($expr);
-        if ($exprType instanceof \PHPStan\Type\TypeWithClassName) {
+        if ($exprType instanceof TypeWithClassName) {
             return $exprType->getClassName();
         }
         return null;

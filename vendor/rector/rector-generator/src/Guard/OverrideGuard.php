@@ -6,7 +6,7 @@ namespace Rector\RectorGenerator\Guard;
 use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
 final class OverrideGuard
 {
     /**
@@ -19,7 +19,7 @@ final class OverrideGuard
      * @var \Rector\RectorGenerator\FileSystem\TemplateFileSystem
      */
     private $templateFileSystem;
-    public function __construct(\RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \Rector\RectorGenerator\FileSystem\TemplateFileSystem $templateFileSystem)
+    public function __construct(SymfonyStyle $symfonyStyle, TemplateFileSystem $templateFileSystem)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->templateFileSystem = $templateFileSystem;
@@ -28,7 +28,7 @@ final class OverrideGuard
      * @param array<string, mixed> $templateVariables
      * @param SmartFileInfo[] $templateFileInfos
      */
-    public function isUnwantedOverride(array $templateFileInfos, array $templateVariables, \Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, string $targetDirectory) : bool
+    public function isUnwantedOverride(array $templateFileInfos, array $templateVariables, RectorRecipe $rectorRecipe, string $targetDirectory) : bool
     {
         $message = \sprintf('Files for "%s" rule already exist. Should we override them?', $rectorRecipe->getName());
         foreach ($templateFileInfos as $templateFileInfo) {
@@ -42,7 +42,7 @@ final class OverrideGuard
     /**
      * @param array<string, string> $templateVariables
      */
-    private function doesFileInfoAlreadyExist(array $templateVariables, \Rector\RectorGenerator\ValueObject\RectorRecipe $rectorRecipe, \Symplify\SmartFileSystem\SmartFileInfo $templateFileInfo, string $targetDirectory) : bool
+    private function doesFileInfoAlreadyExist(array $templateVariables, RectorRecipe $rectorRecipe, SmartFileInfo $templateFileInfo, string $targetDirectory) : bool
     {
         $destination = $this->templateFileSystem->resolveDestination($templateFileInfo, $templateVariables, $rectorRecipe, $targetDirectory);
         return \file_exists($destination);

@@ -9,7 +9,7 @@ use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
+return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->importNames();
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
     $rectorConfig->parallel();
@@ -18,15 +18,15 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         '*/Source/*',
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
-        \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
+        StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive
             __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
         ],
         // marked as skipped
-        \Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector::class => ['*/tests/*'],
+        ReturnNeverTypeRector::class => ['*/tests/*'],
     ]);
-    $rectorConfig->ruleWithConfiguration(\Rector\Php55\Rector\String_\StringClassNameToClassConstantRector::class, [
+    $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
         'Symfony\\*',
         'Twig_*',
         'Swift_*',
@@ -38,5 +38,5 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     ]);
     // for testing
     $rectorConfig->import(__DIR__ . '/config/config.php');
-    $rectorConfig->sets([\Rector\Set\ValueObject\LevelSetList::UP_TO_PHP_81, \Rector\Set\ValueObject\SetList::CODE_QUALITY, \Rector\Set\ValueObject\SetList::DEAD_CODE, \Rector\Set\ValueObject\SetList::NAMING, \Rector\Symfony\Set\SymfonySetList::SYMFONY_60]);
+    $rectorConfig->sets([LevelSetList::UP_TO_PHP_81, SetList::CODE_QUALITY, SetList::DEAD_CODE, SetList::NAMING, SymfonySetList::SYMFONY_60]);
 };

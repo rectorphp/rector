@@ -11,7 +11,7 @@
 namespace RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use RectorPrefix20220607\Symfony\Component\Config\Loader\ParamConfigurator;
-class EnvConfigurator extends \RectorPrefix20220607\Symfony\Component\Config\Loader\ParamConfigurator
+class EnvConfigurator extends ParamConfigurator
 {
     /**
      * @var string[]

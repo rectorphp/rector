@@ -11,29 +11,29 @@ use Rector\NodeNameResolver\NodeNameResolver;
 /**
  * @implements AssignVariableNameResolverInterface<New_>
  */
-final class NewAssignVariableNameResolver implements \Rector\Naming\Contract\AssignVariableNameResolverInterface
+final class NewAssignVariableNameResolver implements AssignVariableNameResolverInterface
 {
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function match(\PhpParser\Node $node) : bool
+    public function match(Node $node) : bool
     {
-        return $node instanceof \PhpParser\Node\Expr\New_;
+        return $node instanceof New_;
     }
     /**
      * @param New_ $node
      */
-    public function resolve(\PhpParser\Node $node) : string
+    public function resolve(Node $node) : string
     {
         $className = $this->nodeNameResolver->getName($node->class);
         if ($className === null) {
-            throw new \Rector\Core\Exception\NotImplementedYetException();
+            throw new NotImplementedYetException();
         }
         return $this->nodeNameResolver->getShortName($className);
     }

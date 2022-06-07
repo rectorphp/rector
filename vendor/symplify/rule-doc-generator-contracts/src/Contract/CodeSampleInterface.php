@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Symplify\RuleDocGenerator\Contract;
+namespace RectorPrefix20220607\Symplify\RuleDocGenerator\Contract;
 
 interface CodeSampleInterface
 {

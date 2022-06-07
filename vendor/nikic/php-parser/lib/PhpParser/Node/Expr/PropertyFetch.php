@@ -5,7 +5,7 @@ namespace PhpParser\Node\Expr;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
-class PropertyFetch extends \PhpParser\Node\Expr
+class PropertyFetch extends Expr
 {
     /** @var Expr Variable holding object */
     public $var;
@@ -18,11 +18,11 @@ class PropertyFetch extends \PhpParser\Node\Expr
      * @param string|Identifier|Expr $name       Property name
      * @param array                  $attributes Additional attributes
      */
-    public function __construct(\PhpParser\Node\Expr $var, $name, array $attributes = [])
+    public function __construct(Expr $var, $name, array $attributes = [])
     {
         $this->attributes = $attributes;
         $this->var = $var;
-        $this->name = \is_string($name) ? new \PhpParser\Node\Identifier($name) : $name;
+        $this->name = \is_string($name) ? new Identifier($name) : $name;
     }
     public function getSubNodeNames() : array
     {

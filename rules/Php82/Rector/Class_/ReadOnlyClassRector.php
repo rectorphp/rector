@@ -16,14 +16,14 @@ use Rector\Core\ValueObject\Visibility;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/readonly_classes
  *
  * @see \Rector\Tests\Php82\Rector\Class_\ReadOnlyClassRector\ReadOnlyClassRectorTest
  */
-final class ReadOnlyClassRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @var string
@@ -44,15 +44,15 @@ final class ReadOnlyClassRector extends \Rector\Core\Rector\AbstractRector imple
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
-    public function __construct(\Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator, \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Decorate read-only class with `readonly` attribute', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Decorate read-only class with `readonly` attribute', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function __construct(
@@ -77,19 +77,19 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Class_::class];
+        return [Class_::class];
     }
     /**
      * @param Class_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $this->visibilityManipulator->makeReadonly($node);
-        $constructClassMethod = $node->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if ($constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if ($constructClassMethod instanceof ClassMethod) {
             foreach ($constructClassMethod->getParams() as $param) {
                 $this->visibilityManipulator->removeReadonly($param);
             }
@@ -101,9 +101,9 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::READONLY_CLASS;
+        return PhpVersionFeature::READONLY_CLASS;
     }
-    private function shouldSkip(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkip(Class_ $class) : bool
     {
         if ($this->shouldSkipClass($class)) {
             return \true;
@@ -118,8 +118,8 @@ CODE_SAMPLE
                 return \true;
             }
         }
-        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             // no __construct means no property promotion, skip if class has no property defined
             return $properties === [];
         }
@@ -142,10 +142,10 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldSkipClass(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function shouldSkipClass(Class_ $class) : bool
     {
         // need to have test fixture once feature added to  nikic/PHP-Parser
-        if ($this->visibilityManipulator->hasVisibility($class, \Rector\Core\ValueObject\Visibility::READONLY)) {
+        if ($this->visibilityManipulator->hasVisibility($class, Visibility::READONLY)) {
             return \true;
         }
         if ($this->classAnalyzer->isAnonymousClass($class)) {
@@ -163,7 +163,7 @@ CODE_SAMPLE
     {
         foreach ($params as $param) {
             // has non-property promotion, skip
-            if (!$this->visibilityManipulator->hasVisibility($param, \Rector\Core\ValueObject\Visibility::READONLY)) {
+            if (!$this->visibilityManipulator->hasVisibility($param, Visibility::READONLY)) {
                 return \true;
             }
             // type is missing, invalid syntax

@@ -25,8 +25,8 @@ class AsDecorator
     /**
      * @var int
      */
-    public $onInvalid = \RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
-    public function __construct(string $decorates, int $priority = 0, int $onInvalid = \RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
+    public $onInvalid = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE;
+    public function __construct(string $decorates, int $priority = 0, int $onInvalid = ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE)
     {
         $this->decorates = $decorates;
         $this->priority = $priority;

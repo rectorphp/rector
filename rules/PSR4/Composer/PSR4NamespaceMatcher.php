@@ -7,11 +7,11 @@ use RectorPrefix20220607\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Tests\PSR4\Composer\PSR4NamespaceMatcherTest
  */
-final class PSR4NamespaceMatcher implements \Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface
+final class PSR4NamespaceMatcher implements PSR4AutoloadNamespaceMatcherInterface
 {
     /**
      * @readonly
@@ -22,7 +22,7 @@ final class PSR4NamespaceMatcher implements \Rector\PSR4\Contract\PSR4AutoloadNa
     {
         $this->psr4AutoloadPathsProvider = $psr4AutoloadPathsProvider;
     }
-    public function getExpectedNamespace(\Rector\Core\ValueObject\Application\File $file, \PhpParser\Node $node) : ?string
+    public function getExpectedNamespace(File $file, Node $node) : ?string
     {
         $smartFileInfo = $file->getSmartFileInfo();
         $psr4Autoloads = $this->psr4AutoloadPathsProvider->provide();
@@ -46,10 +46,10 @@ final class PSR4NamespaceMatcher implements \Rector\PSR4\Contract\PSR4AutoloadNa
     /**
      * Get the extra path that is not included in root PSR-4 namespace
      */
-    private function resolveExtraNamespace(\Symplify\SmartFileSystem\SmartFileInfo $smartFileInfo, string $path) : string
+    private function resolveExtraNamespace(SmartFileInfo $smartFileInfo, string $path) : string
     {
-        $extraNamespace = \RectorPrefix20220607\Nette\Utils\Strings::substring($smartFileInfo->getRelativeDirectoryPath(), \RectorPrefix20220607\Nette\Utils\Strings::length($path) + 1);
-        $extraNamespace = \RectorPrefix20220607\Nette\Utils\Strings::replace($extraNamespace, '#/#', '\\');
+        $extraNamespace = Strings::substring($smartFileInfo->getRelativeDirectoryPath(), Strings::length($path) + 1);
+        $extraNamespace = Strings::replace($extraNamespace, '#/#', '\\');
         return \trim($extraNamespace);
     }
 }

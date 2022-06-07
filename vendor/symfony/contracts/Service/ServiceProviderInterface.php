@@ -19,7 +19,7 @@ use RectorPrefix20220607\Psr\Container\ContainerInterface;
  *
  * @template T of mixed
  */
-interface ServiceProviderInterface extends \RectorPrefix20220607\Psr\Container\ContainerInterface
+interface ServiceProviderInterface extends ContainerInterface
 {
     /**
      * {@inheritdoc}

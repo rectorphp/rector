@@ -21,13 +21,13 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/lsp_errors
  * @see \Rector\Tests\Php80\Rector\ClassMethod\AddParamBasedOnParentClassMethodRector\AddParamBasedOnParentClassMethodRectorTest
  */
-final class AddParamBasedOnParentClassMethodRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class AddParamBasedOnParentClassMethodRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -44,7 +44,7 @@ final class AddParamBasedOnParentClassMethodRector extends \Rector\Core\Rector\A
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(\Rector\VendorLocker\ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, AstResolver $astResolver, NodePrinterInterface $nodePrinter)
     {
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->astResolver = $astResolver;
@@ -52,11 +52,11 @@ final class AddParamBasedOnParentClassMethodRector extends \Rector\Core\Rector\A
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::FATAL_ERROR_ON_INCOMPATIBLE_METHOD_SIGNATURE;
+        return PhpVersionFeature::FATAL_ERROR_ON_INCOMPATIBLE_METHOD_SIGNATURE;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add missing parameter based on parent class method', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add missing parameter based on parent class method', [new CodeSample(<<<'CODE_SAMPLE'
 class A
 {
     public function execute($foo)
@@ -91,22 +91,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($this->nodeNameResolver->isName($node, \Rector\Core\ValueObject\MethodName::CONSTRUCT)) {
+        if ($this->nodeNameResolver->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
         $parentMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($node);
-        if (!$parentMethodReflection instanceof \PHPStan\Reflection\MethodReflection) {
+        if (!$parentMethodReflection instanceof MethodReflection) {
             return null;
         }
         $parentClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($parentMethodReflection);
-        if (!$parentClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        if (!$parentClassMethod instanceof ClassMethod) {
             return null;
         }
         if ($parentClassMethod->isPrivate()) {
@@ -128,14 +128,14 @@ CODE_SAMPLE
      * @param Param[] $currentClassMethodParams
      * @param Param[] $parentClassMethodParams
      */
-    private function processAddNullDefaultParam(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $currentClassMethodParams, array $parentClassMethodParams) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function processAddNullDefaultParam(ClassMethod $classMethod, array $currentClassMethodParams, array $parentClassMethodParams) : ?ClassMethod
     {
         $hasChanged = \false;
         foreach ($currentClassMethodParams as $key => $currentClassMethodParam) {
             if (isset($parentClassMethodParams[$key])) {
                 continue;
             }
-            if ($currentClassMethodParam->default instanceof \PhpParser\Node\Expr) {
+            if ($currentClassMethodParam->default instanceof Expr) {
                 continue;
             }
             $currentClassMethodParams[$key]->default = $this->nodeFactory->createNull();
@@ -150,7 +150,7 @@ CODE_SAMPLE
      * @param array<int, Param> $currentClassMethodParams
      * @param array<int, Param> $parentClassMethodParams
      */
-    private function processReplaceClassMethodParams(\PhpParser\Node\Stmt\ClassMethod $node, \PhpParser\Node\Stmt\ClassMethod $parentClassMethod, array $currentClassMethodParams, array $parentClassMethodParams) : ?\PhpParser\Node\Stmt\ClassMethod
+    private function processReplaceClassMethodParams(ClassMethod $node, ClassMethod $parentClassMethod, array $currentClassMethodParams, array $parentClassMethodParams) : ?ClassMethod
     {
         $originalParams = $node->params;
         foreach ($parentClassMethodParams as $key => $parentClassMethodParam) {
@@ -163,8 +163,8 @@ CODE_SAMPLE
                 }
                 continue;
             }
-            $isUsedInStmts = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, function (\PhpParser\Node $subNode) use($parentClassMethodParam) : bool {
-                if (!$subNode instanceof \PhpParser\Node\Expr\Variable) {
+            $isUsedInStmts = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, function (Node $subNode) use($parentClassMethodParam) : bool {
+                if (!$subNode instanceof Variable) {
                     return \false;
                 }
                 return $this->nodeComparator->areNodesEqual($subNode, $parentClassMethodParam->var);
@@ -174,32 +174,32 @@ CODE_SAMPLE
                 return null;
             }
             $paramDefault = $parentClassMethodParam->default;
-            if ($paramDefault instanceof \PhpParser\Node\Expr) {
+            if ($paramDefault instanceof Expr) {
                 $printParamDefault = $this->nodePrinter->print($paramDefault);
-                $paramDefault = new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name($printParamDefault));
+                $paramDefault = new ConstFetch(new Name($printParamDefault));
             }
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
             $paramType = $this->resolveParamType($parentClassMethodParam);
-            $node->params[$key] = new \PhpParser\Node\Param(new \PhpParser\Node\Expr\Variable($paramName), $paramDefault, $paramType, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags, $parentClassMethodParam->attrGroups);
+            $node->params[$key] = new Param(new Variable($paramName), $paramDefault, $paramType, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags, $parentClassMethodParam->attrGroups);
         }
         return $node;
     }
     /**
      * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\ComplexType
      */
-    private function resolveParamType(\PhpParser\Node\Param $param)
+    private function resolveParamType(Param $param)
     {
         if ($param->type === null) {
             return null;
         }
         $paramType = $param->type;
-        $paramType->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $paramType->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $paramType;
     }
     /**
      * @return string[]
      */
-    private function collectParamNamesNextKey(\PhpParser\Node\Stmt\ClassMethod $classMethod, int $key) : array
+    private function collectParamNamesNextKey(ClassMethod $classMethod, int $key) : array
     {
         $paramNames = [];
         foreach ($classMethod->params as $paramKey => $param) {

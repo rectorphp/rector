@@ -18,7 +18,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
-final class SetterNodeReturnTypeInfererTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface
+final class SetterNodeReturnTypeInfererTypeInferer implements ReturnTypeInfererInterface
 {
     /**
      * @readonly
@@ -50,7 +50,7 @@ final class SetterNodeReturnTypeInfererTypeInferer implements \Rector\TypeDeclar
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer $assignToPropertyTypeInferer, \Rector\Core\NodeManipulator\FunctionLikeManipulator $functionLikeManipulator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\AstResolver $astResolver, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(AssignToPropertyTypeInferer $assignToPropertyTypeInferer, FunctionLikeManipulator $functionLikeManipulator, TypeFactory $typeFactory, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver)
     {
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
         $this->functionLikeManipulator = $functionLikeManipulator;
@@ -59,33 +59,33 @@ final class SetterNodeReturnTypeInfererTypeInferer implements \Rector\TypeDeclar
         $this->astResolver = $astResolver;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function inferFunctionLike(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
+    public function inferFunctionLike(FunctionLike $functionLike) : Type
     {
-        $classLike = $this->betterNodeFinder->findParentType($functionLike, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
-            return new \PHPStan\Type\MixedType();
+        $classLike = $this->betterNodeFinder->findParentType($functionLike, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
+            return new MixedType();
         }
         $returnedPropertyNames = $this->functionLikeManipulator->getReturnedLocalPropertyNames($functionLike);
         $classReflection = $this->reflectionResolver->resolveClassReflection($classLike);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return new \PHPStan\Type\MixedType();
+        if (!$classReflection instanceof ClassReflection) {
+            return new MixedType();
         }
         $types = [];
-        $scope = $classLike->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $classLike->getAttribute(AttributeKey::SCOPE);
         foreach ($returnedPropertyNames as $returnedPropertyName) {
             if (!$classReflection->hasProperty($returnedPropertyName)) {
                 continue;
             }
             $propertyReflection = $classReflection->getProperty($returnedPropertyName, $scope);
-            if (!$propertyReflection instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+            if (!$propertyReflection instanceof PhpPropertyReflection) {
                 continue;
             }
             $property = $this->astResolver->resolvePropertyFromPropertyReflection($propertyReflection);
-            if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+            if (!$property instanceof Property) {
                 continue;
             }
             $inferredPropertyType = $this->assignToPropertyTypeInferer->inferPropertyInClassLike($property, $returnedPropertyName, $classLike);
-            if (!$inferredPropertyType instanceof \PHPStan\Type\Type) {
+            if (!$inferredPropertyType instanceof Type) {
                 continue;
             }
             $types[] = $inferredPropertyType;

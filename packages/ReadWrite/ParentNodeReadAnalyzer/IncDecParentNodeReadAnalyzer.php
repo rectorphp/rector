@@ -10,19 +10,19 @@ use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
 use Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface;
-final class IncDecParentNodeReadAnalyzer implements \Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface
+final class IncDecParentNodeReadAnalyzer implements ParentNodeReadAnalyzerInterface
 {
-    public function isRead(\PhpParser\Node\Expr $expr, \PhpParser\Node $parentNode) : bool
+    public function isRead(Expr $expr, Node $parentNode) : bool
     {
-        if ($parentNode instanceof \PhpParser\Node\Expr\PostDec) {
+        if ($parentNode instanceof PostDec) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node\Expr\PostInc) {
+        if ($parentNode instanceof PostInc) {
             return \true;
         }
-        if ($parentNode instanceof \PhpParser\Node\Expr\PreInc) {
+        if ($parentNode instanceof PreInc) {
             return \true;
         }
-        return $parentNode instanceof \PhpParser\Node\Expr\PreDec;
+        return $parentNode instanceof PreDec;
     }
 }

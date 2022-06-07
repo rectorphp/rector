@@ -12,23 +12,23 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class JustReadExprAnalyzer
 {
-    public function isReadContext(\PhpParser\Node\Expr $expr) : bool
+    public function isReadContext(Expr $expr) : bool
     {
-        $parent = $expr->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Stmt\Return_) {
+        $parent = $expr->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof Return_) {
             return \true;
         }
-        if ($parent instanceof \PhpParser\Node\Arg) {
+        if ($parent instanceof Arg) {
             return \true;
         }
-        if ($parent instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
-            $parentParent = $parent->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-            if (!$parentParent instanceof \PhpParser\Node\Expr\Assign) {
+        if ($parent instanceof ArrayDimFetch) {
+            $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parentParent instanceof Assign) {
                 return \true;
             }
             return $parentParent->var !== $parent;
         }
         // assume it's used by default
-        return !$parent instanceof \PhpParser\Node\Stmt\Expression;
+        return !$parent instanceof Expression;
     }
 }

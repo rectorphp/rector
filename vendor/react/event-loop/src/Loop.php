@@ -27,10 +27,10 @@ final class Loop
      */
     public static function get()
     {
-        if (self::$instance instanceof \RectorPrefix20220607\React\EventLoop\LoopInterface) {
+        if (self::$instance instanceof LoopInterface) {
             return self::$instance;
         }
-        self::$instance = $loop = \RectorPrefix20220607\React\EventLoop\Factory::create();
+        self::$instance = $loop = Factory::create();
         // Automatically run loop at end of program, unless already started or stopped explicitly.
         // This is tested using child processes, so coverage is actually 100%, see BinTest.
         // @codeCoverageIgnoreStart
@@ -59,7 +59,7 @@ final class Loop
      * @internal
      * @return void
      */
-    public static function set(\RectorPrefix20220607\React\EventLoop\LoopInterface $loop)
+    public static function set(LoopInterface $loop)
     {
         self::$instance = $loop;
     }
@@ -142,7 +142,7 @@ final class Loop
      * @return void
      * @see LoopInterface::cancelTimer()
      */
-    public static function cancelTimer(\RectorPrefix20220607\React\EventLoop\TimerInterface $timer)
+    public static function cancelTimer(TimerInterface $timer)
     {
         return self::get()->cancelTimer($timer);
     }

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace PhpParser\Builder;
 
-use RectorPrefix20220607\PhpParser;
+use PhpParser;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
@@ -18,7 +18,7 @@ class Namespace_ extends \PhpParser\Builder\Declaration
      */
     public function __construct($name)
     {
-        $this->name = null !== $name ? \PhpParser\BuilderHelpers::normalizeName($name) : null;
+        $this->name = null !== $name ? BuilderHelpers::normalizeName($name) : null;
     }
     /**
      * Adds a statement.
@@ -29,7 +29,7 @@ class Namespace_ extends \PhpParser\Builder\Declaration
      */
     public function addStmt($stmt)
     {
-        $this->stmts[] = \PhpParser\BuilderHelpers::normalizeStmt($stmt);
+        $this->stmts[] = BuilderHelpers::normalizeStmt($stmt);
         return $this;
     }
     /**
@@ -37,8 +37,8 @@ class Namespace_ extends \PhpParser\Builder\Declaration
      *
      * @return Stmt\Namespace_ The built node
      */
-    public function getNode() : \PhpParser\Node
+    public function getNode() : Node
     {
-        return new \PhpParser\Node\Stmt\Namespace_($this->name, $this->stmts, $this->attributes);
+        return new Stmt\Namespace_($this->name, $this->stmts, $this->attributes);
     }
 }

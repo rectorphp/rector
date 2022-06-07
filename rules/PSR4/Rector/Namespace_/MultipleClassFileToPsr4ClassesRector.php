@@ -13,12 +13,12 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Rector\PSR4\NodeManipulator\NamespaceManipulator;
 use Rector\Symfony\Printer\NeighbourClassLikePrinter;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector\MultipleClassFileToPsr4ClassesRectorTest
  */
-final class MultipleClassFileToPsr4ClassesRector extends \Rector\Core\Rector\AbstractRector
+final class MultipleClassFileToPsr4ClassesRector extends AbstractRector
 {
     /**
      * @readonly
@@ -40,16 +40,16 @@ final class MultipleClassFileToPsr4ClassesRector extends \Rector\Core\Rector\Abs
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(\Rector\PSR4\NodeManipulator\NamespaceManipulator $namespaceManipulator, \Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer, \Rector\Symfony\Printer\NeighbourClassLikePrinter $neighbourClassLikePrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(NamespaceManipulator $namespaceManipulator, FileInfoDeletionAnalyzer $fileInfoDeletionAnalyzer, NeighbourClassLikePrinter $neighbourClassLikePrinter, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->namespaceManipulator = $namespaceManipulator;
         $this->fileInfoDeletionAnalyzer = $fileInfoDeletionAnalyzer;
         $this->neighbourClassLikePrinter = $neighbourClassLikePrinter;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change multiple classes in one file to standalone PSR-4 classes.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change multiple classes in one file to standalone PSR-4 classes.', [new CodeSample(<<<'CODE_SAMPLE'
 namespace App\Exceptions;
 
 use Exception;
@@ -88,21 +88,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Namespace_::class, \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace::class];
+        return [Namespace_::class, FileWithoutNamespace::class];
     }
     /**
      * @param Namespace_|FileWithoutNamespace $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->hasAtLeastTwoClassLikes($node)) {
             return null;
         }
         $nodeToReturn = null;
-        if ($node instanceof \PhpParser\Node\Stmt\Namespace_) {
+        if ($node instanceof Namespace_) {
             $nodeToReturn = $this->refactorNamespace($node);
         }
-        if ($node instanceof \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace) {
+        if ($node instanceof FileWithoutNamespace) {
             $nodeToReturn = $this->refactorFileWithoutNamespace($node);
         }
         // 1. remove this node
@@ -114,12 +114,12 @@ CODE_SAMPLE
         $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
         return null;
     }
-    private function hasAtLeastTwoClassLikes(\PhpParser\Node $node) : bool
+    private function hasAtLeastTwoClassLikes(Node $node) : bool
     {
         $nonAnonymousClassLikes = $this->findNonAnonymousClassLikes($node);
         return \count($nonAnonymousClassLikes) > 1;
     }
-    private function refactorNamespace(\PhpParser\Node\Stmt\Namespace_ $namespace) : ?\PhpParser\Node\Stmt\Namespace_
+    private function refactorNamespace(Namespace_ $namespace) : ?Namespace_
     {
         $classLikes = $this->findNonAnonymousClassLikes($namespace);
         $this->namespaceManipulator->removeClassLikes($namespace);
@@ -137,7 +137,7 @@ CODE_SAMPLE
         }
         return $nodeToReturn;
     }
-    private function refactorFileWithoutNamespace(\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $fileWithoutNamespace) : ?\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace
+    private function refactorFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace) : ?FileWithoutNamespace
     {
         $classLikes = $this->findNonAnonymousClassLikes($fileWithoutNamespace);
         $nodeToReturn = null;
@@ -155,7 +155,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
      */
-    private function printNewNodes(\PhpParser\Node\Stmt\ClassLike $classLike, $mainNode) : void
+    private function printNewNodes(ClassLike $classLike, $mainNode) : void
     {
         $smartFileInfo = $this->file->getSmartFileInfo();
         $this->neighbourClassLikePrinter->printClassLike($classLike, $mainNode, $smartFileInfo, $this->file);
@@ -163,11 +163,11 @@ CODE_SAMPLE
     /**
      * @return ClassLike[]
      */
-    private function findNonAnonymousClassLikes(\PhpParser\Node $node) : array
+    private function findNonAnonymousClassLikes(Node $node) : array
     {
-        $classLikes = $this->betterNodeFinder->findInstanceOf([$node], \PhpParser\Node\Stmt\ClassLike::class);
-        return \array_filter($classLikes, function (\PhpParser\Node\Stmt\ClassLike $classLike) : bool {
-            if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLikes = $this->betterNodeFinder->findInstanceOf([$node], ClassLike::class);
+        return \array_filter($classLikes, function (ClassLike $classLike) : bool {
+            if (!$classLike instanceof Class_) {
                 return \true;
             }
             return !$classLike->isAnonymous();

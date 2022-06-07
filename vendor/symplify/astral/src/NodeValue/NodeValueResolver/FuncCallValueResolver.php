@@ -15,7 +15,7 @@ use RectorPrefix20220607\Symplify\Astral\Naming\SimpleNameResolver;
  *
  * @implements NodeValueResolverInterface<FuncCall>
  */
-final class FuncCallValueResolver implements \RectorPrefix20220607\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface
+final class FuncCallValueResolver implements NodeValueResolverInterface
 {
     /**
      * @var string[]
@@ -29,20 +29,20 @@ final class FuncCallValueResolver implements \RectorPrefix20220607\Symplify\Astr
      * @var \PhpParser\ConstExprEvaluator
      */
     private $constExprEvaluator;
-    public function __construct(\RectorPrefix20220607\Symplify\Astral\Naming\SimpleNameResolver $simpleNameResolver, \PhpParser\ConstExprEvaluator $constExprEvaluator)
+    public function __construct(SimpleNameResolver $simpleNameResolver, ConstExprEvaluator $constExprEvaluator)
     {
         $this->simpleNameResolver = $simpleNameResolver;
         $this->constExprEvaluator = $constExprEvaluator;
     }
     public function getType() : string
     {
-        return \PhpParser\Node\Expr\FuncCall::class;
+        return FuncCall::class;
     }
     /**
      * @param FuncCall $expr
      * @return mixed
      */
-    public function resolve(\PhpParser\Node\Expr $expr, string $currentFilePath)
+    public function resolve(Expr $expr, string $currentFilePath)
     {
         if ($this->simpleNameResolver->isName($expr, 'getcwd')) {
             return \dirname($currentFilePath);
@@ -52,7 +52,7 @@ final class FuncCallValueResolver implements \RectorPrefix20220607\Symplify\Astr
         foreach ($args as $arg) {
             $arguments[] = $this->constExprEvaluator->evaluateDirectly($arg->value);
         }
-        if ($expr->name instanceof \PhpParser\Node\Name) {
+        if ($expr->name instanceof Name) {
             $functionName = (string) $expr->name;
             if (!$this->isAllowedFunctionName($functionName)) {
                 return null;
@@ -60,7 +60,7 @@ final class FuncCallValueResolver implements \RectorPrefix20220607\Symplify\Astr
             if (\function_exists($functionName)) {
                 return $functionName(...$arguments);
             }
-            throw new \RectorPrefix20220607\Symplify\Astral\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         return null;
     }

@@ -14,27 +14,27 @@ use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 /**
  * @implements TypeMapperInterface<ParentStaticType>
  */
-final class ParentStaticTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class ParentStaticTypeMapper implements TypeMapperInterface
 {
     /**
      * @return class-string<Type>
      */
     public function getNodeClass() : string
     {
-        return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType::class;
+        return ParentStaticType::class;
     }
     /**
      * @param ParentStaticType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode(\Rector\Core\Enum\ObjectReference::PARENT);
+        return new IdentifierTypeNode(ObjectReference::PARENT);
     }
     /**
      * @param ParentStaticType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        return new \PhpParser\Node\Name(\Rector\Core\Enum\ObjectReference::PARENT);
+        return new Name(ObjectReference::PARENT);
     }
 }

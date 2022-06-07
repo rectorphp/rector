@@ -25,7 +25,7 @@ final class VariableDimFetchAssignResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeComparator = $nodeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -34,20 +34,20 @@ final class VariableDimFetchAssignResolver
      * @param Stmt[] $stmts
      * @return KeyAndExpr[]
      */
-    public function resolveFromStmtsAndVariable(array $stmts, \PhpParser\Node\Expr\Variable $variable) : array
+    public function resolveFromStmtsAndVariable(array $stmts, Variable $variable) : array
     {
         $keysAndExprs = [];
         foreach ($stmts as $stmt) {
-            if (!$stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if (!$stmt instanceof Expression) {
                 return [];
             }
             $stmtExpr = $stmt->expr;
-            if (!$stmtExpr instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$stmtExpr instanceof Assign) {
                 return [];
             }
             $assign = $stmtExpr;
             $keyExpr = $this->matchKeyOnArrayDimFetchOfVariable($assign, $variable);
-            $keysAndExprs[] = new \Rector\CodeQuality\ValueObject\KeyAndExpr($keyExpr, $assign->expr, $stmt->getComments());
+            $keysAndExprs[] = new KeyAndExpr($keyExpr, $assign->expr, $stmt->getComments());
         }
         // we can only work with same variable
         // and exclusively various keys or empty keys
@@ -56,16 +56,16 @@ final class VariableDimFetchAssignResolver
         }
         return $keysAndExprs;
     }
-    private function matchKeyOnArrayDimFetchOfVariable(\PhpParser\Node\Expr\Assign $assign, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Expr
+    private function matchKeyOnArrayDimFetchOfVariable(Assign $assign, Variable $variable) : ?Expr
     {
-        if (!$assign->var instanceof \PhpParser\Node\Expr\ArrayDimFetch) {
+        if (!$assign->var instanceof ArrayDimFetch) {
             return null;
         }
         $arrayDimFetch = $assign->var;
         if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $variable)) {
             return null;
         }
-        $isFoundInExpr = (bool) $this->betterNodeFinder->findFirst($assign->expr, function (\PhpParser\Node $subNode) use($variable) : bool {
+        $isFoundInExpr = (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $subNode) use($variable) : bool {
             return $this->nodeComparator->areNodesEqual($subNode, $variable);
         });
         if ($isFoundInExpr) {

@@ -16,6 +16,6 @@ namespace RectorPrefix20220607\Symfony\Component\Config\Util\Exception;
  *
  * @author Ole Rößner <ole@roessner.it>
  */
-class InvalidXmlException extends \RectorPrefix20220607\Symfony\Component\Config\Util\Exception\XmlParsingException
+class InvalidXmlException extends XmlParsingException
 {
 }

@@ -5,7 +5,7 @@ namespace PhpParser\Node;
 
 use PhpParser\Node\VariadicPlaceholder;
 use PhpParser\NodeAbstract;
-class Arg extends \PhpParser\NodeAbstract
+class Arg extends NodeAbstract
 {
     /** @var Identifier|null Parameter name (for named parameters) */
     public $name;

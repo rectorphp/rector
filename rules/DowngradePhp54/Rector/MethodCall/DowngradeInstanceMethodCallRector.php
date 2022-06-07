@@ -14,27 +14,27 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/instance-method-call
  *
  * @see \Rector\Tests\DowngradePhp54\Rector\MethodCall\DowngradeInstanceMethodCallRector\DowngradeInstanceMethodCallRectorTest
  */
-final class DowngradeInstanceMethodCallRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeInstanceMethodCallRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
     private $namedVariableFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
+    public function __construct(NamedVariableFactory $namedVariableFactory)
     {
         $this->namedVariableFactory = $namedVariableFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade instance and method call/property access', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade instance and method call/property access', [new CodeSample(<<<'CODE_SAMPLE'
 echo (new \ReflectionClass('\\stdClass'))->getName();
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -48,22 +48,22 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\ArrayDimFetch::class];
+        return [MethodCall::class, PropertyFetch::class, ArrayDimFetch::class];
     }
     /**
      * @param ArrayDimFetch|MethodCall|PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
         $variable = $this->namedVariableFactory->createVariable($node, 'object');
-        $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $node->var));
+        $expression = new Expression(new Assign($variable, $node->var));
         $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
         $node->var = $variable;
         // necessary to remove useless parentheses
-        $node->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
     /**
@@ -71,9 +71,9 @@ CODE_SAMPLE
      */
     private function shouldSkip($node) : bool
     {
-        if ($node->var instanceof \PhpParser\Node\Expr\New_) {
+        if ($node->var instanceof New_) {
             return \false;
         }
-        return !$node->var instanceof \PhpParser\Node\Expr\Clone_;
+        return !$node->var instanceof Clone_;
     }
 }

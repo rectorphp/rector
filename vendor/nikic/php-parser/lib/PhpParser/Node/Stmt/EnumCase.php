@@ -5,7 +5,7 @@ namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
-class EnumCase extends \PhpParser\Node\Stmt
+class EnumCase extends Node\Stmt
 {
     /** @var Node\Identifier Enum case name */
     public $name;
@@ -19,10 +19,10 @@ class EnumCase extends \PhpParser\Node\Stmt
      * @param AttributeGroup[]          $attrGroups PHP attribute groups
      * @param array                     $attributes Additional attributes
      */
-    public function __construct($name, \PhpParser\Node\Expr $expr = null, array $attrGroups = [], array $attributes = [])
+    public function __construct($name, Node\Expr $expr = null, array $attrGroups = [], array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->name = \is_string($name) ? new \PhpParser\Node\Identifier($name) : $name;
+        $this->name = \is_string($name) ? new Node\Identifier($name) : $name;
         $this->expr = $expr;
         $this->attrGroups = $attrGroups;
     }

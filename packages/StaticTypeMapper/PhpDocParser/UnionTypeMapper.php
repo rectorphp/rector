@@ -15,7 +15,7 @@ use RectorPrefix20220607\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements PhpDocTypeMapperInterface<UnionTypeNode>
  */
-final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
+final class UnionTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
@@ -26,25 +26,25 @@ final class UnionTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocP
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(\Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory)
+    public function __construct(TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;
     }
     public function getNodeType() : string
     {
-        return \PHPStan\PhpDocParser\Ast\Type\UnionTypeNode::class;
+        return UnionTypeNode::class;
     }
     /**
      * @required
      */
-    public function autowire(\Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper $phpDocTypeMapper) : void
+    public function autowire(PhpDocTypeMapper $phpDocTypeMapper) : void
     {
         $this->phpDocTypeMapper = $phpDocTypeMapper;
     }
     /**
      * @param UnionTypeNode $typeNode
      */
-    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
+    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
     {
         $unionedTypes = [];
         foreach ($typeNode->types as $unionedTypeNode) {

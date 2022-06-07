@@ -6,7 +6,7 @@ namespace PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\FunctionLike;
-class ArrowFunction extends \PhpParser\Node\Expr implements \PhpParser\Node\FunctionLike
+class ArrowFunction extends Expr implements FunctionLike
 {
     /** @var bool */
     public $static;
@@ -37,7 +37,7 @@ class ArrowFunction extends \PhpParser\Node\Expr implements \PhpParser\Node\Func
         $this->byRef = $subNodes['byRef'] ?? \false;
         $this->params = $subNodes['params'] ?? [];
         $returnType = $subNodes['returnType'] ?? null;
-        $this->returnType = \is_string($returnType) ? new \PhpParser\Node\Identifier($returnType) : $returnType;
+        $this->returnType = \is_string($returnType) ? new Node\Identifier($returnType) : $returnType;
         $this->expr = $subNodes['expr'];
         $this->attrGroups = $subNodes['attrGroups'] ?? [];
     }
@@ -66,7 +66,7 @@ class ArrowFunction extends \PhpParser\Node\Expr implements \PhpParser\Node\Func
      */
     public function getStmts() : ?array
     {
-        return [new \PhpParser\Node\Stmt\Return_($this->expr)];
+        return [new Node\Stmt\Return_($this->expr)];
     }
     public function getType() : string
     {

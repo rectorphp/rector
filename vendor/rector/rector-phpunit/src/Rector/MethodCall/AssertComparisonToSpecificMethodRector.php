@@ -23,12 +23,12 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertComparisonToSpecificMethodRector\AssertComparisonToSpecificMethodRectorTest
  */
-final class AssertComparisonToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
+final class AssertComparisonToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var BinaryOpWithAssertMethod[]
@@ -44,33 +44,33 @@ final class AssertComparisonToSpecificMethodRector extends \Rector\Core\Rector\A
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->binaryOpWithAssertMethods = [new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Identical::class, 'assertSame', 'assertNotSame'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\NotIdentical::class, 'assertNotSame', 'assertSame'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Equal::class, 'assertEquals', 'assertNotEquals'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\NotEqual::class, 'assertNotEquals', 'assertEquals'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Greater::class, 'assertGreaterThan', 'assertLessThan'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\Smaller::class, 'assertLessThan', 'assertGreaterThan'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\GreaterOrEqual::class, 'assertGreaterThanOrEqual', 'assertLessThanOrEqual'), new \Rector\PHPUnit\ValueObject\BinaryOpWithAssertMethod(\PhpParser\Node\Expr\BinaryOp\SmallerOrEqual::class, 'assertLessThanOrEqual', 'assertGreaterThanOrEqual')];
+        $this->binaryOpWithAssertMethods = [new BinaryOpWithAssertMethod(Identical::class, 'assertSame', 'assertNotSame'), new BinaryOpWithAssertMethod(NotIdentical::class, 'assertNotSame', 'assertSame'), new BinaryOpWithAssertMethod(Equal::class, 'assertEquals', 'assertNotEquals'), new BinaryOpWithAssertMethod(NotEqual::class, 'assertNotEquals', 'assertEquals'), new BinaryOpWithAssertMethod(Greater::class, 'assertGreaterThan', 'assertLessThan'), new BinaryOpWithAssertMethod(Smaller::class, 'assertLessThan', 'assertGreaterThan'), new BinaryOpWithAssertMethod(GreaterOrEqual::class, 'assertGreaterThanOrEqual', 'assertLessThanOrEqual'), new BinaryOpWithAssertMethod(SmallerOrEqual::class, 'assertLessThanOrEqual', 'assertGreaterThanOrEqual')];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns comparison operations to their method name alternatives in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertTrue($foo === $bar, "message");', '$this->assertSame($bar, $foo, "message");'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertFalse($foo >= $bar, "message");', '$this->assertLessThanOrEqual($bar, $foo, "message");')]);
+        return new RuleDefinition('Turns comparison operations to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertTrue($foo === $bar, "message");', '$this->assertSame($bar, $foo, "message");'), new CodeSample('$this->assertFalse($foo >= $bar, "message");', '$this->assertLessThanOrEqual($bar, $foo, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
         }
         $firstArgumentValue = $node->args[0]->value;
-        if (!$firstArgumentValue instanceof \PhpParser\Node\Expr\BinaryOp) {
+        if (!$firstArgumentValue instanceof BinaryOp) {
             return null;
         }
         return $this->processCallWithBinaryOp($node, $firstArgumentValue);
@@ -78,7 +78,7 @@ final class AssertComparisonToSpecificMethodRector extends \Rector\Core\Rector\A
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function processCallWithBinaryOp($node, \PhpParser\Node\Expr\BinaryOp $binaryOp) : ?\PhpParser\Node
+    private function processCallWithBinaryOp($node, BinaryOp $binaryOp) : ?Node
     {
         $binaryOpClass = \get_class($binaryOp);
         foreach ($this->binaryOpWithAssertMethods as $binaryOpWithAssertMethod) {
@@ -100,22 +100,22 @@ final class AssertComparisonToSpecificMethodRector extends \Rector\Core\Rector\A
         /** @var BinaryOp $expression */
         $expression = $oldArguments[0]->value;
         if ($this->isConstantValue($expression->left)) {
-            $firstArgument = new \PhpParser\Node\Arg($expression->left);
-            $secondArgument = new \PhpParser\Node\Arg($expression->right);
+            $firstArgument = new Arg($expression->left);
+            $secondArgument = new Arg($expression->right);
         } else {
-            $firstArgument = new \PhpParser\Node\Arg($expression->right);
-            $secondArgument = new \PhpParser\Node\Arg($expression->left);
+            $firstArgument = new Arg($expression->right);
+            $secondArgument = new Arg($expression->left);
         }
         unset($oldArguments[0]);
         $newArgs = [$firstArgument, $secondArgument];
         $node->args = $this->appendArgs($newArgs, $oldArguments);
     }
-    private function isConstantValue(\PhpParser\Node\Expr $expr) : bool
+    private function isConstantValue(Expr $expr) : bool
     {
         $staticType = $this->nodeTypeResolver->getType($expr);
-        if ($staticType instanceof \PHPStan\Type\ConstantScalarType) {
+        if ($staticType instanceof ConstantScalarType) {
             return \true;
         }
-        return $staticType instanceof \PHPStan\Type\Constant\ConstantArrayType;
+        return $staticType instanceof ConstantArrayType;
     }
 }

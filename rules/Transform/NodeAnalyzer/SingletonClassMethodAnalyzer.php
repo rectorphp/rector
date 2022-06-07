@@ -46,7 +46,7 @@ final class SingletonClassMethodAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, ValueResolver $valueResolver, NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->valueResolver = $valueResolver;
@@ -63,36 +63,36 @@ final class SingletonClassMethodAnalyzer
      *
      * Matches "static::$instance" on success
      */
-    public function matchStaticPropertyFetch(\PhpParser\Node\Stmt\ClassMethod $classMethod) : ?\PhpParser\Node\Expr\StaticPropertyFetch
+    public function matchStaticPropertyFetch(ClassMethod $classMethod) : ?StaticPropertyFetch
     {
         $stmts = (array) $classMethod->stmts;
         if (\count($stmts) !== 2) {
             return null;
         }
         $firstStmt = $stmts[0] ?? null;
-        if (!$firstStmt instanceof \PhpParser\Node\Stmt\If_) {
+        if (!$firstStmt instanceof If_) {
             return null;
         }
         $staticPropertyFetch = $this->matchStaticPropertyFetchInIfCond($firstStmt->cond);
         if (\count($firstStmt->stmts) !== 1) {
             return null;
         }
-        if (!$firstStmt->stmts[0] instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$firstStmt->stmts[0] instanceof Expression) {
             return null;
         }
         $stmt = $firstStmt->stmts[0]->expr;
         // create self and assign to static property
-        if (!$stmt instanceof \PhpParser\Node\Expr\Assign) {
+        if (!$stmt instanceof Assign) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($staticPropertyFetch, $stmt->var)) {
             return null;
         }
-        if (!$stmt->expr instanceof \PhpParser\Node\Expr\New_) {
+        if (!$stmt->expr instanceof New_) {
             return null;
         }
-        $class = $this->betterNodeFinder->findParentType($classMethod, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (!$class instanceof Class_) {
             return null;
         }
         $className = $this->nodeNameResolver->getName($class);
@@ -100,28 +100,28 @@ final class SingletonClassMethodAnalyzer
             return null;
         }
         // the "self" class is created
-        if (!$this->nodeTypeResolver->isObjectType($stmt->expr->class, new \PHPStan\Type\ObjectType($className))) {
+        if (!$this->nodeTypeResolver->isObjectType($stmt->expr->class, new ObjectType($className))) {
             return null;
         }
         return $staticPropertyFetch;
     }
-    private function matchStaticPropertyFetchInIfCond(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\StaticPropertyFetch
+    private function matchStaticPropertyFetchInIfCond(Expr $expr) : ?StaticPropertyFetch
     {
         // matching: "self::$static === null"
-        if ($expr instanceof \PhpParser\Node\Expr\BinaryOp\Identical) {
-            if ($this->valueResolver->isNull($expr->left) && $expr->right instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+        if ($expr instanceof Identical) {
+            if ($this->valueResolver->isNull($expr->left) && $expr->right instanceof StaticPropertyFetch) {
                 return $expr->right;
             }
-            if ($this->valueResolver->isNull($expr->right) && $expr->left instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+            if ($this->valueResolver->isNull($expr->right) && $expr->left instanceof StaticPropertyFetch) {
                 return $expr->left;
             }
         }
         // matching: "! self::$static"
-        if (!$expr instanceof \PhpParser\Node\Expr\BooleanNot) {
+        if (!$expr instanceof BooleanNot) {
             return null;
         }
         $negatedExpr = $expr->expr;
-        if (!$negatedExpr instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+        if (!$negatedExpr instanceof StaticPropertyFetch) {
             return null;
         }
         return $negatedExpr;

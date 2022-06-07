@@ -7,11 +7,11 @@ use RectorPrefix20220607\OndraM\CiDetector\Env;
 /**
  * Unified adapter to retrieve environment variables from current continuous integration server
  */
-abstract class AbstractCi implements \RectorPrefix20220607\OndraM\CiDetector\Ci\CiInterface
+abstract class AbstractCi implements CiInterface
 {
     /** @var Env */
     protected $env;
-    public function __construct(\RectorPrefix20220607\OndraM\CiDetector\Env $env)
+    public function __construct(Env $env)
     {
         $this->env = $env;
     }

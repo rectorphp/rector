@@ -12,15 +12,15 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/object-typehint https://github.com/cebe/yii2/commit/9548a212ecf6e50fcdb0e5ba6daad88019cfc544
  *
  * @see \Rector\Tests\Php71\Rector\Name\ReservedObjectRector\ReservedObjectRectorTest
  */
-final class ReservedObjectRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface, \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class ReservedObjectRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @var array<string, string>
@@ -28,11 +28,11 @@ final class ReservedObjectRector extends \Rector\Core\Rector\AbstractRector impl
     private $reservedKeywordsToReplacements = [];
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::RESERVED_OBJECT_KEYWORD;
+        return PhpVersionFeature::RESERVED_OBJECT_KEYWORD;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class Object
 {
 }
@@ -49,14 +49,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Identifier::class, \PhpParser\Node\Name::class];
+        return [Identifier::class, Name::class];
     }
     /**
      * @param Identifier|Name $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Identifier) {
+        if ($node instanceof Identifier) {
             return $this->processIdentifier($node);
         }
         return $this->processName($node);
@@ -66,11 +66,11 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allString(\array_keys($configuration));
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allString($configuration);
+        Assert::allString(\array_keys($configuration));
+        Assert::allString($configuration);
         $this->reservedKeywordsToReplacements = $configuration;
     }
-    private function processIdentifier(\PhpParser\Node\Identifier $identifier) : \PhpParser\Node\Identifier
+    private function processIdentifier(Identifier $identifier) : Identifier
     {
         foreach ($this->reservedKeywordsToReplacements as $reservedKeyword => $replacement) {
             if (!$this->isName($identifier, $reservedKeyword)) {
@@ -81,12 +81,12 @@ CODE_SAMPLE
         }
         return $identifier;
     }
-    private function processName(\PhpParser\Node\Name $name) : \PhpParser\Node\Name
+    private function processName(Name $name) : Name
     {
         // we look for "extends <Name>"
-        $parentNode = $name->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         // "Object" can part of namespace name
-        if ($parentNode instanceof \PhpParser\Node\Stmt\Namespace_) {
+        if ($parentNode instanceof Namespace_) {
             return $name;
         }
         // process lass part
@@ -94,7 +94,7 @@ CODE_SAMPLE
             if (\strtolower($name->getLast()) === \strtolower($reservedKeyword)) {
                 $name->parts[\count($name->parts) - 1] = $replacement;
                 // invoke override
-                $name->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+                $name->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             }
         }
         return $name;

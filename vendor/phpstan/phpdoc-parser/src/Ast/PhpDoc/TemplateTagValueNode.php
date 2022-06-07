@@ -15,7 +15,7 @@ class TemplateTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTag
     public $bound;
     /** @var string (may be empty) */
     public $description;
-    public function __construct(string $name, ?\PHPStan\PhpDocParser\Ast\Type\TypeNode $bound, string $description)
+    public function __construct(string $name, ?TypeNode $bound, string $description)
     {
         $this->name = $name;
         $this->bound = $bound;
@@ -24,6 +24,6 @@ class TemplateTagValueNode implements \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTag
     public function __toString() : string
     {
         $bound = $this->bound !== null ? " of {$this->bound}" : '';
-        return \trim("{$this->name}{$bound} {$this->description}");
+        return trim("{$this->name}{$bound} {$this->description}");
     }
 }

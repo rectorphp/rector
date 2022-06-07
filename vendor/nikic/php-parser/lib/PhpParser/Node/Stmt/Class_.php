@@ -38,7 +38,7 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
     {
         $this->attributes = $attributes;
         $this->flags = $subNodes['flags'] ?? $subNodes['type'] ?? 0;
-        $this->name = \is_string($name) ? new \PhpParser\Node\Identifier($name) : $name;
+        $this->name = \is_string($name) ? new Node\Identifier($name) : $name;
         $this->extends = $subNodes['extends'] ?? null;
         $this->implements = $subNodes['implements'] ?? [];
         $this->stmts = $subNodes['stmts'] ?? [];
@@ -85,16 +85,16 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
     public static function verifyClassModifier($a, $b)
     {
         if ($a & self::MODIFIER_ABSTRACT && $b & self::MODIFIER_ABSTRACT) {
-            throw new \PhpParser\Error('Multiple abstract modifiers are not allowed');
+            throw new Error('Multiple abstract modifiers are not allowed');
         }
         if ($a & self::MODIFIER_FINAL && $b & self::MODIFIER_FINAL) {
-            throw new \PhpParser\Error('Multiple final modifiers are not allowed');
+            throw new Error('Multiple final modifiers are not allowed');
         }
         if ($a & self::MODIFIER_READONLY && $b & self::MODIFIER_READONLY) {
-            throw new \PhpParser\Error('Multiple readonly modifiers are not allowed');
+            throw new Error('Multiple readonly modifiers are not allowed');
         }
         if ($a & 48 && $b & 48) {
-            throw new \PhpParser\Error('Cannot use the final modifier on an abstract class');
+            throw new Error('Cannot use the final modifier on an abstract class');
         }
     }
     /**
@@ -103,22 +103,22 @@ class Class_ extends \PhpParser\Node\Stmt\ClassLike
     public static function verifyModifier($a, $b)
     {
         if ($a & self::VISIBILITY_MODIFIER_MASK && $b & self::VISIBILITY_MODIFIER_MASK) {
-            throw new \PhpParser\Error('Multiple access type modifiers are not allowed');
+            throw new Error('Multiple access type modifiers are not allowed');
         }
         if ($a & self::MODIFIER_ABSTRACT && $b & self::MODIFIER_ABSTRACT) {
-            throw new \PhpParser\Error('Multiple abstract modifiers are not allowed');
+            throw new Error('Multiple abstract modifiers are not allowed');
         }
         if ($a & self::MODIFIER_STATIC && $b & self::MODIFIER_STATIC) {
-            throw new \PhpParser\Error('Multiple static modifiers are not allowed');
+            throw new Error('Multiple static modifiers are not allowed');
         }
         if ($a & self::MODIFIER_FINAL && $b & self::MODIFIER_FINAL) {
-            throw new \PhpParser\Error('Multiple final modifiers are not allowed');
+            throw new Error('Multiple final modifiers are not allowed');
         }
         if ($a & self::MODIFIER_READONLY && $b & self::MODIFIER_READONLY) {
-            throw new \PhpParser\Error('Multiple readonly modifiers are not allowed');
+            throw new Error('Multiple readonly modifiers are not allowed');
         }
         if ($a & 48 && $b & 48) {
-            throw new \PhpParser\Error('Cannot use the final modifier on an abstract class member');
+            throw new Error('Cannot use the final modifier on an abstract class member');
         }
     }
     public function getType() : string

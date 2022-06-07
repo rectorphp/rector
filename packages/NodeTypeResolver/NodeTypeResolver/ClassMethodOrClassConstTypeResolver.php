@@ -17,7 +17,7 @@ use RectorPrefix20220607\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeTypeResolverInterface<ClassMethod|ClassConst>
  */
-final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
+final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -28,14 +28,14 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @required
      */
-    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -44,17 +44,17 @@ final class ClassMethodOrClassConstTypeResolver implements \Rector\NodeTypeResol
      */
     public function getNodeClasses() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\ClassConst::class];
+        return [ClassMethod::class, ClassConst::class];
     }
     /**
      * @param ClassMethod|ClassConst $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve(Node $node) : Type
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             // anonymous class
-            return new \PHPStan\Type\ObjectWithoutClassType();
+            return new ObjectWithoutClassType();
         }
         return $this->nodeTypeResolver->getType($classLike);
     }

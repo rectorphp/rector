@@ -41,7 +41,7 @@ final class FormInstanceToFormClassConstFetchConverter
      * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
-    public function __construct(\Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver $formTypeClassResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeRemoval\NodeRemover $nodeRemover)
+    public function __construct(CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, NodeFactory $nodeFactory, FormTypeClassResolver $formTypeClassResolver, BetterNodeFinder $betterNodeFinder, NodeRemover $nodeRemover)
     {
         $this->createFormTypeOptionsArgMover = $createFormTypeOptionsArgMover;
         $this->nodeFactory = $nodeFactory;
@@ -49,7 +49,7 @@ final class FormInstanceToFormClassConstFetchConverter
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeRemover = $nodeRemover;
     }
-    public function processNewInstance(\PhpParser\Node\Expr\MethodCall $methodCall, int $position, int $optionsPosition) : ?\PhpParser\Node\Expr\MethodCall
+    public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition) : ?MethodCall
     {
         $args = $methodCall->getArgs();
         if (!isset($args[$position])) {
@@ -61,15 +61,15 @@ final class FormInstanceToFormClassConstFetchConverter
             return null;
         }
         $formNew = $this->resolveFormNew($argValue);
-        if ($formNew instanceof \PhpParser\Node\Expr\New_ && $formNew->getArgs() !== []) {
+        if ($formNew instanceof New_ && $formNew->getArgs() !== []) {
             $methodCall = $this->createFormTypeOptionsArgMover->moveArgumentsToOptions($methodCall, $position, $optionsPosition, $formClassName, $formNew->getArgs());
-            if (!$methodCall instanceof \PhpParser\Node\Expr\MethodCall) {
-                throw new \Rector\Core\Exception\ShouldNotHappenException();
+            if (!$methodCall instanceof MethodCall) {
+                throw new ShouldNotHappenException();
             }
         }
         // remove previous assign
         $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($argValue);
-        if ($previousAssign instanceof \PhpParser\Node\Expr\Assign) {
+        if ($previousAssign instanceof Assign) {
             $this->nodeRemover->removeNode($previousAssign);
         }
         $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
@@ -77,17 +77,17 @@ final class FormInstanceToFormClassConstFetchConverter
         $currentArg->value = $classConstFetch;
         return $methodCall;
     }
-    private function resolveFormNew(\PhpParser\Node\Expr $expr) : ?\PhpParser\Node\Expr\New_
+    private function resolveFormNew(Expr $expr) : ?New_
     {
-        if ($expr instanceof \PhpParser\Node\Expr\New_) {
+        if ($expr instanceof New_) {
             return $expr;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\Variable) {
+        if ($expr instanceof Variable) {
             $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($expr);
-            if (!$previousAssign instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$previousAssign instanceof Assign) {
                 return null;
             }
-            if ($previousAssign->expr instanceof \PhpParser\Node\Expr\New_) {
+            if ($previousAssign->expr instanceof New_) {
                 return $previousAssign->expr;
             }
         }

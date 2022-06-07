@@ -22,12 +22,12 @@ final class ArrayCallable
      * @var string
      */
     private $method;
-    public function __construct(\PhpParser\Node\Expr $callerExpr, string $class, string $method)
+    public function __construct(Expr $callerExpr, string $class, string $method)
     {
         $this->callerExpr = $callerExpr;
         $this->class = $class;
         $this->method = $method;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
     public function getClass() : string
     {
@@ -37,7 +37,7 @@ final class ArrayCallable
     {
         return $this->method;
     }
-    public function getCallerExpr() : \PhpParser\Node\Expr
+    public function getCallerExpr() : Expr
     {
         return $this->callerExpr;
     }

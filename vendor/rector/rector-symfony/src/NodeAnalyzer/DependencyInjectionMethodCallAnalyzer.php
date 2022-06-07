@@ -58,7 +58,7 @@ final class DependencyInjectionMethodCallAnalyzer
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\PropertyManipulator $propertyManipulator)
+    public function __construct(PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, NodeFactory $nodeFactory, PropertyToAddCollector $propertyToAddCollector, BetterNodeFinder $betterNodeFinder, PromotedPropertyResolver $promotedPropertyResolver, NodeNameResolver $nodeNameResolver, PropertyManipulator $propertyManipulator)
     {
         $this->propertyNaming = $propertyNaming;
         $this->serviceTypeMethodCallResolver = $serviceTypeMethodCallResolver;
@@ -69,14 +69,14 @@ final class DependencyInjectionMethodCallAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyManipulator = $propertyManipulator;
     }
-    public function replaceMethodCallWithPropertyFetchAndDependency(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\PropertyFetch
+    public function replaceMethodCallWithPropertyFetchAndDependency(MethodCall $methodCall) : ?PropertyFetch
     {
         $serviceType = $this->serviceTypeMethodCallResolver->resolve($methodCall);
-        if (!$serviceType instanceof \PHPStan\Type\ObjectType) {
+        if (!$serviceType instanceof ObjectType) {
             return null;
         }
-        $class = $this->betterNodeFinder->findParentType($methodCall, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
+        if (!$class instanceof Class_) {
             return null;
         }
         $resolvedPropertyNameByType = $this->propertyManipulator->resolveExistingClassPropertyNameByType($class, $serviceType);
@@ -86,11 +86,11 @@ final class DependencyInjectionMethodCallAnalyzer
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
             $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
         }
-        $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $serviceType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+        $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         return $this->nodeFactory->createPropertyFetch('this', $propertyName);
     }
-    private function resolveNewPropertyNameWhenExists(\PhpParser\Node\Stmt\Class_ $class, string $originalPropertyName, string $propertyName, int $count = 1) : string
+    private function resolveNewPropertyNameWhenExists(Class_ $class, string $originalPropertyName, string $propertyName, int $count = 1) : string
     {
         $lastCount = \substr($propertyName, \strlen($originalPropertyName));
         if (\is_numeric($lastCount)) {
@@ -104,7 +104,7 @@ final class DependencyInjectionMethodCallAnalyzer
             }
         }
         $property = $class->getProperty($propertyName);
-        if (!$property instanceof \PhpParser\Node\Stmt\Property) {
+        if (!$property instanceof Property) {
             return $propertyName;
         }
         $propertyName = $this->resolveIncrementPropertyName($originalPropertyName, $count);

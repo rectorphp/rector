@@ -39,7 +39,7 @@ final class PropertyPresenceChecker
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(\Rector\Php80\NodeAnalyzer\PromotedPropertyResolver $promotedPropertyResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\PhpParser\AstResolver $astResolver)
+    public function __construct(PromotedPropertyResolver $promotedPropertyResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, AstResolver $astResolver)
     {
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -49,7 +49,7 @@ final class PropertyPresenceChecker
     /**
      * Includes parent classes and traits
      */
-    public function hasClassContextProperty(\PhpParser\Node\Stmt\Class_ $class, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata) : bool
+    public function hasClassContextProperty(Class_ $class, PropertyMetadata $propertyMetadata) : bool
     {
         $propertyOrParam = $this->getClassContextProperty($class, $propertyMetadata);
         return $propertyOrParam !== null;
@@ -57,7 +57,7 @@ final class PropertyPresenceChecker
     /**
      * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
      */
-    public function getClassContextProperty(\PhpParser\Node\Stmt\Class_ $class, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata)
+    public function getClassContextProperty(Class_ $class, PropertyMetadata $propertyMetadata)
     {
         $className = $this->nodeNameResolver->getName($class);
         if ($className === null) {
@@ -67,11 +67,11 @@ final class PropertyPresenceChecker
             return null;
         }
         $property = $class->getProperty($propertyMetadata->getName());
-        if ($property instanceof \PhpParser\Node\Stmt\Property) {
+        if ($property instanceof Property) {
             return $property;
         }
         $property = $this->matchPropertyByParentNonPrivateProperties($className, $propertyMetadata);
-        if ($property instanceof \PhpParser\Node\Stmt\Property || $property instanceof \PhpParser\Node\Param) {
+        if ($property instanceof Property || $property instanceof Param) {
             return $property;
         }
         $promotedPropertyParams = $this->promotedPropertyResolver->resolveFromClass($class);
@@ -103,15 +103,15 @@ final class PropertyPresenceChecker
     /**
      * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
      */
-    private function matchPropertyByType(\Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata, \PHPStan\Reflection\Php\PhpPropertyReflection $phpPropertyReflection)
+    private function matchPropertyByType(PropertyMetadata $propertyMetadata, PhpPropertyReflection $phpPropertyReflection)
     {
         if ($propertyMetadata->getType() === null) {
             return null;
         }
-        if (!$propertyMetadata->getType() instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$propertyMetadata->getType() instanceof TypeWithClassName) {
             return null;
         }
-        if (!$phpPropertyReflection->getWritableType() instanceof \PHPStan\Type\TypeWithClassName) {
+        if (!$phpPropertyReflection->getWritableType() instanceof TypeWithClassName) {
             return null;
         }
         $propertyObjectType = $propertyMetadata->getType();
@@ -123,13 +123,13 @@ final class PropertyPresenceChecker
     /**
      * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
      */
-    private function matchPropertyByParentNonPrivateProperties(string $className, \Rector\PostRector\ValueObject\PropertyMetadata $propertyMetadata)
+    private function matchPropertyByParentNonPrivateProperties(string $className, PropertyMetadata $propertyMetadata)
     {
         $availablePropertyReflections = $this->getParentClassNonPrivatePropertyReflections($className);
         foreach ($availablePropertyReflections as $availablePropertyReflection) {
             // 1. match type by priority
             $property = $this->matchPropertyByType($propertyMetadata, $availablePropertyReflection);
-            if ($property instanceof \PhpParser\Node\Stmt\Property || $property instanceof \PhpParser\Node\Param) {
+            if ($property instanceof Property || $property instanceof Param) {
                 return $property;
             }
             $nativePropertyReflection = $availablePropertyReflection->getNativeReflection();
@@ -143,7 +143,7 @@ final class PropertyPresenceChecker
     /**
      * @return string[]
      */
-    private function resolveNonPrivatePropertyNames(\PHPStan\Reflection\ClassReflection $classReflection) : array
+    private function resolveNonPrivatePropertyNames(ClassReflection $classReflection) : array
     {
         $propertyNames = [];
         $nativeReflection = $classReflection->getNativeReflection();

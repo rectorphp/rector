@@ -15,7 +15,7 @@ final class NodeTypes
     /**
      * @var array<class-string<PhpDocTagValueNode>>
      */
-    public const TYPE_AWARE_NODES = [\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode::class, \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode::class, \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode::class, \PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode::class, \PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode::class, \PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode::class];
+    public const TYPE_AWARE_NODES = [VarTagValueNode::class, ParamTagValueNode::class, ReturnTagValueNode::class, ThrowsTagValueNode::class, PropertyTagValueNode::class, TemplateTagValueNode::class];
     /**
      * @var string[]
      */

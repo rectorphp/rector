@@ -25,6 +25,6 @@ final class Uninflected
      */
     private static function getDefault() : iterable
     {
-        (yield new \RectorPrefix20220607\Doctrine\Inflector\Rules\Pattern(''));
+        (yield new Pattern(''));
     }
 }

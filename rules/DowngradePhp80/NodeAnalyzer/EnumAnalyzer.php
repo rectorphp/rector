@@ -27,19 +27,19 @@ final class EnumAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(\Rector\Core\PhpParser\AstResolver $astResolver, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver)
+    public function __construct(AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->astResolver = $astResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function resolveType(\PHPStan\Reflection\ClassReflection $classReflection) : ?\PhpParser\Node\Identifier
+    public function resolveType(ClassReflection $classReflection) : ?Identifier
     {
         $class = $this->astResolver->resolveClassFromClassReflection($classReflection, $classReflection->getName());
-        if (!$class instanceof \PhpParser\Node\Stmt\Enum_) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$class instanceof Enum_) {
+            throw new ShouldNotHappenException();
         }
         $scalarType = $class->scalarType;
-        if ($scalarType instanceof \PhpParser\Node\Identifier) {
+        if ($scalarType instanceof Identifier) {
             // can be only int or string
             return $scalarType;
         }
@@ -51,14 +51,14 @@ final class EnumAnalyzer
         $uniqueEnumExprTypeClasses = \array_unique($enumExprTypeClasses);
         if (\count($uniqueEnumExprTypeClasses) === 1) {
             $uniqueEnumExprTypeClass = $uniqueEnumExprTypeClasses[0];
-            if (\is_a($uniqueEnumExprTypeClass, \PHPStan\Type\StringType::class, \true)) {
-                return new \PhpParser\Node\Identifier('string');
+            if (\is_a($uniqueEnumExprTypeClass, StringType::class, \true)) {
+                return new Identifier('string');
             }
-            if (\is_a($uniqueEnumExprTypeClass, \PHPStan\Type\IntegerType::class, \true)) {
-                return new \PhpParser\Node\Identifier('int');
+            if (\is_a($uniqueEnumExprTypeClass, IntegerType::class, \true)) {
+                return new Identifier('int');
             }
-            if (\is_a($uniqueEnumExprTypeClass, \PHPStan\Type\FloatType::class, \true)) {
-                return new \PhpParser\Node\Identifier('float');
+            if (\is_a($uniqueEnumExprTypeClass, FloatType::class, \true)) {
+                return new Identifier('float');
             }
         }
         // unknown or multiple types
@@ -67,24 +67,24 @@ final class EnumAnalyzer
     /**
      * @return Type[]
      */
-    private function resolveEnumExprTypes(\PhpParser\Node\Stmt\Enum_ $enum) : array
+    private function resolveEnumExprTypes(Enum_ $enum) : array
     {
         $enumExprTypes = [];
         foreach ($enum->stmts as $classStmt) {
-            if (!$classStmt instanceof \PhpParser\Node\Stmt\EnumCase) {
+            if (!$classStmt instanceof EnumCase) {
                 continue;
             }
             $enumExprTypes[] = $this->resolveEnumCaseType($classStmt);
         }
         return $enumExprTypes;
     }
-    private function resolveEnumCaseType(\PhpParser\Node\Stmt\EnumCase $enumCase) : \PHPStan\Type\Type
+    private function resolveEnumCaseType(EnumCase $enumCase) : Type
     {
         $classExpr = $enumCase->expr;
-        if ($classExpr instanceof \PhpParser\Node\Expr) {
+        if ($classExpr instanceof Expr) {
             return $this->nodeTypeResolver->getType($classExpr);
         }
         // in case of no value, fallback to string type
-        return new \PHPStan\Type\StringType();
+        return new StringType();
     }
 }

@@ -20,7 +20,7 @@ use RectorPrefix20220607\Symfony\Component\DependencyInjection\Reference;
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class InlineServiceDefinitionsPass extends \RectorPrefix20220607\Symfony\Component\DependencyInjection\Compiler\AbstractRecursivePass
+class InlineServiceDefinitionsPass extends AbstractRecursivePass
 {
     /**
      * @var \Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass|null
@@ -50,15 +50,15 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20220607\Symfony\Compone
      * @var \Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraph|null
      */
     private $graph;
-    public function __construct(\RectorPrefix20220607\Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass $analyzingPass = null)
+    public function __construct(AnalyzeServiceReferencesPass $analyzingPass = null)
     {
         $this->analyzingPass = $analyzingPass;
     }
-    public function process(\RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    public function process(ContainerBuilder $container)
     {
         $this->container = $container;
         if ($this->analyzingPass) {
-            $analyzedContainer = new \RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder();
+            $analyzedContainer = new ContainerBuilder();
             $analyzedContainer->setAliases($container->getAliases());
             $analyzedContainer->setDefinitions($container->getDefinitions());
             foreach ($container->getExpressionLanguageProviders() as $provider) {
@@ -122,17 +122,17 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20220607\Symfony\Compone
      */
     protected function processValue($value, bool $isRoot = \false)
     {
-        if ($value instanceof \RectorPrefix20220607\Symfony\Component\DependencyInjection\Argument\ArgumentInterface) {
+        if ($value instanceof ArgumentInterface) {
             // References found in ArgumentInterface::getValues() are not inlineable
             return $value;
         }
-        if ($value instanceof \RectorPrefix20220607\Symfony\Component\DependencyInjection\Definition && $this->cloningIds) {
+        if ($value instanceof Definition && $this->cloningIds) {
             if ($value->isShared()) {
                 return $value;
             }
             $value = clone $value;
         }
-        if (!$value instanceof \RectorPrefix20220607\Symfony\Component\DependencyInjection\Reference) {
+        if (!$value instanceof Reference) {
             return parent::processValue($value, $isRoot);
         } elseif (!$this->container->hasDefinition($id = (string) $value)) {
             return $value;
@@ -151,7 +151,7 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20220607\Symfony\Compone
         if (isset($this->cloningIds[$id])) {
             $ids = \array_keys($this->cloningIds);
             $ids[] = $id;
-            throw new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException($id, \array_slice($ids, \array_search($id, $ids)));
+            throw new ServiceCircularReferenceException($id, \array_slice($ids, \array_search($id, $ids)));
         }
         $this->cloningIds[$id] = \true;
         try {
@@ -163,7 +163,7 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20220607\Symfony\Compone
     /**
      * Checks if the definition is inlineable.
      */
-    private function isInlineableDefinition(string $id, \RectorPrefix20220607\Symfony\Component\DependencyInjection\Definition $definition) : bool
+    private function isInlineableDefinition(string $id, Definition $definition) : bool
     {
         if ($definition->hasErrors() || $definition->isDeprecated() || $definition->isLazy() || $definition->isSynthetic() || $definition->hasTag('container.do_not_inline')) {
             return \false;
@@ -206,7 +206,7 @@ class InlineServiceDefinitionsPass extends \RectorPrefix20220607\Symfony\Compone
             $this->notInlinedIds[$id] = \true;
             return \false;
         }
-        if ($srcCount > 1 && \is_array($factory = $definition->getFactory()) && ($factory[0] instanceof \RectorPrefix20220607\Symfony\Component\DependencyInjection\Reference || $factory[0] instanceof \RectorPrefix20220607\Symfony\Component\DependencyInjection\Definition)) {
+        if ($srcCount > 1 && \is_array($factory = $definition->getFactory()) && ($factory[0] instanceof Reference || $factory[0] instanceof Definition)) {
             return \false;
         }
         return $this->container->getDefinition($srcId)->isShared();

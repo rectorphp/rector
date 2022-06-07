@@ -22,8 +22,8 @@ use RectorPrefix20220607\Symfony\Component\Process\Process;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-#[AsCommand(name: 'completion', description: 'Dump the shell completion script')]
-final class DumpCompletionCommand extends \RectorPrefix20220607\Symfony\Component\Console\Command\Command
+#[\Symfony\Component\Console\Attribute\AsCommand(name: 'completion', description: 'Dump the shell completion script')]
+final class DumpCompletionCommand extends Command
 {
     /**
      * @deprecated since Symfony 6.1
@@ -79,9 +79,9 @@ Add this to the end of your shell configuration file (e.g. <info>"{$rcFile}"</>)
 
     <info>eval "\$({$fullCommand} completion {$shell})"</>
 EOH
-)->addArgument('shell', \RectorPrefix20220607\Symfony\Component\Console\Input\InputArgument::OPTIONAL, 'The shell type (e.g. "bash"), the value of the "$SHELL" env var will be used if this is not given', null, \Closure::fromCallable([$this, 'getSupportedShells']))->addOption('debug', null, \RectorPrefix20220607\Symfony\Component\Console\Input\InputOption::VALUE_NONE, 'Tail the completion debug log');
+)->addArgument('shell', InputArgument::OPTIONAL, 'The shell type (e.g. "bash"), the value of the "$SHELL" env var will be used if this is not given', null, \Closure::fromCallable([$this, 'getSupportedShells']))->addOption('debug', null, InputOption::VALUE_NONE, 'Tail the completion debug log');
     }
-    protected function execute(\RectorPrefix20220607\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220607\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $commandName = \basename($_SERVER['argv'][0]);
         if ($input->getOption('debug')) {
@@ -92,7 +92,7 @@ EOH
         $completionFile = __DIR__ . '/../Resources/completion.' . $shell;
         if (!\file_exists($completionFile)) {
             $supportedShells = $this->getSupportedShells();
-            ($output instanceof \RectorPrefix20220607\Symfony\Component\Console\Output\ConsoleOutputInterface ? $output->getErrorOutput() : $output)->writeln(\sprintf('<error>Detected shell "%s", which is not supported by Symfony shell completion (supported shells: "%s").</>', $shell, \implode('", "', $supportedShells)));
+            ($output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output)->writeln(\sprintf('<error>Detected shell "%s", which is not supported by Symfony shell completion (supported shells: "%s").</>', $shell, \implode('", "', $supportedShells)));
             return self::INVALID;
         }
         $output->write(\str_replace(['{{ COMMAND_NAME }}', '{{ VERSION }}'], [$commandName, $this->getApplication()->getVersion()], \file_get_contents($completionFile)));
@@ -102,13 +102,13 @@ EOH
     {
         return \basename($_SERVER['SHELL'] ?? '');
     }
-    private function tailDebugLog(string $commandName, \RectorPrefix20220607\Symfony\Component\Console\Output\OutputInterface $output) : void
+    private function tailDebugLog(string $commandName, OutputInterface $output) : void
     {
         $debugFile = \sys_get_temp_dir() . '/sf_' . $commandName . '.log';
         if (!\file_exists($debugFile)) {
             \touch($debugFile);
         }
-        $process = new \RectorPrefix20220607\Symfony\Component\Process\Process(['tail', '-f', $debugFile], null, null, null, 0);
+        $process = new Process(['tail', '-f', $debugFile], null, null, null, 0);
         $process->run(function (string $type, string $line) use($output) : void {
             $output->write($line);
         });

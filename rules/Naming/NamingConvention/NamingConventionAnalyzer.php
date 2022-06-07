@@ -15,7 +15,7 @@ final class NamingConventionAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
@@ -35,6 +35,6 @@ final class NamingConventionAnalyzer
             return \true;
         }
         // starts with or ends with
-        return \Rector\Core\Util\StringUtils::isMatch($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
+        return StringUtils::isMatch($currentName, '#^(' . $expectedName . '|' . $expectedName . '$)#i');
     }
 }

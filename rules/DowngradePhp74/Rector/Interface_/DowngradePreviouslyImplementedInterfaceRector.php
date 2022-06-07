@@ -8,25 +8,25 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector\DowngradePreviouslyImplementedInterfaceRectorTest
  */
-final class DowngradePreviouslyImplementedInterfaceRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradePreviouslyImplementedInterfaceRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade previously implemented interface', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade previously implemented interface', [new CodeSample(<<<'CODE_SAMPLE'
 interface ContainerExceptionInterface extends Throwable
 {
 }
@@ -51,12 +51,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\Interface_::class];
+        return [Interface_::class];
     }
     /**
      * @param Interface_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $extends = $node->extends;
         if ($extends === []) {
@@ -68,7 +68,7 @@ CODE_SAMPLE
         $collectInterfaces = [];
         $isCleaned = \false;
         foreach ($extends as $key => $extend) {
-            if (!$extend instanceof \PhpParser\Node\Name\FullyQualified) {
+            if (!$extend instanceof FullyQualified) {
                 continue;
             }
             if (\in_array($extend->toString(), $collectInterfaces, \true)) {

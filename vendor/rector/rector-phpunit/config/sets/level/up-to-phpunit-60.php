@@ -6,7 +6,7 @@ namespace RectorPrefix20220607;
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Set\PHPUnitLevelSetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->import(\Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_60);
-    $rectorConfig->import(\Rector\PHPUnit\Set\PHPUnitLevelSetList::UP_TO_PHPUNIT_50);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->import(PHPUnitSetList::PHPUNIT_60);
+    $rectorConfig->import(PHPUnitLevelSetList::UP_TO_PHPUNIT_50);
 };

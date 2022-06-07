@@ -17,13 +17,13 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector\ServiceGetterToConstructorInjectionRectorTest
  */
-final class ServiceGetterToConstructorInjectionRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class ServiceGetterToConstructorInjectionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var ServiceGetterToConstructorInjection[]
@@ -44,15 +44,15 @@ final class ServiceGetterToConstructorInjectionRector extends \Rector\Core\Recto
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
-    public function __construct(\Rector\Naming\Naming\PropertyNaming $propertyNaming, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\PostRector\Collector\PropertyToAddCollector $propertyToAddCollector)
+    public function __construct(PropertyNaming $propertyNaming, ClassAnalyzer $classAnalyzer, PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyNaming = $propertyNaming;
         $this->classAnalyzer = $classAnalyzer;
         $this->propertyToAddCollector = $propertyToAddCollector;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Get service call to constructor injection', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Get service call to constructor injection', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -116,22 +116,22 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService')])]);
+, [new ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class];
+        return [MethodCall::class];
     }
     /**
      * @param MethodCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$classLike instanceof Class_) {
             return null;
         }
         if ($this->classAnalyzer->isAnonymousClass($classLike)) {
@@ -144,11 +144,11 @@ CODE_SAMPLE
             if (!$this->isName($node->name, $methodCallToService->getOldMethod())) {
                 continue;
             }
-            $serviceObjectType = new \PHPStan\Type\ObjectType($methodCallToService->getServiceType());
+            $serviceObjectType = new ObjectType($methodCallToService->getServiceType());
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-            $propertyMetadata = new \Rector\PostRector\ValueObject\PropertyMetadata($propertyName, $serviceObjectType, \PhpParser\Node\Stmt\Class_::MODIFIER_PRIVATE);
+            $propertyMetadata = new PropertyMetadata($propertyName, $serviceObjectType, Class_::MODIFIER_PRIVATE);
             $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
-            return new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), new \PhpParser\Node\Identifier($propertyName));
+            return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
         }
         return $node;
     }
@@ -157,7 +157,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\ServiceGetterToConstructorInjection::class);
+        Assert::allIsAOf($configuration, ServiceGetterToConstructorInjection::class);
         $this->methodCallToServices = $configuration;
     }
 }

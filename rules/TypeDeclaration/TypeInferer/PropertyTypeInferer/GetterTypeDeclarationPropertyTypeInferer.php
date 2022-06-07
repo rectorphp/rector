@@ -35,17 +35,17 @@ final class GetterTypeDeclarationPropertyTypeInferer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\TypeDeclaration\FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(FunctionLikeReturnTypeResolver $functionLikeReturnTypeResolver, ClassMethodAndPropertyAnalyzer $classMethodAndPropertyAnalyzer, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->functionLikeReturnTypeResolver = $functionLikeReturnTypeResolver;
         $this->classMethodAndPropertyAnalyzer = $classMethodAndPropertyAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function inferProperty(\PhpParser\Node\Stmt\Property $property) : ?\PHPStan\Type\Type
+    public function inferProperty(Property $property) : ?Type
     {
-        $classLike = $this->betterNodeFinder->findParentType($property, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
+        if (!$classLike instanceof Class_) {
             // anonymous class
             return null;
         }
@@ -57,10 +57,10 @@ final class GetterTypeDeclarationPropertyTypeInferer
             }
             $returnType = $this->functionLikeReturnTypeResolver->resolveFunctionLikeReturnTypeToPHPStanType($classMethod);
             // let PhpDoc solve that later for more precise type
-            if ($returnType instanceof \PHPStan\Type\ArrayType) {
-                return new \PHPStan\Type\MixedType();
+            if ($returnType instanceof ArrayType) {
+                return new MixedType();
             }
-            if (!$returnType instanceof \PHPStan\Type\MixedType) {
+            if (!$returnType instanceof MixedType) {
                 return $returnType;
             }
         }

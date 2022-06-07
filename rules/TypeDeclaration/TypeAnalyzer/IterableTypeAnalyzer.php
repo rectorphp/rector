@@ -17,22 +17,22 @@ final class IterableTypeAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function isIterableType(\PHPStan\Type\Type $type) : bool
+    public function isIterableType(Type $type) : bool
     {
         if ($this->isUnionOfIterableTypes($type)) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\ArrayType) {
+        if ($type instanceof ArrayType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\IterableType) {
+        if ($type instanceof IterableType) {
             return \true;
         }
-        if ($type instanceof \PHPStan\Type\Generic\GenericObjectType) {
+        if ($type instanceof GenericObjectType) {
             if (!$this->reflectionProvider->hasClass($type->getClassName())) {
                 return \false;
             }
@@ -43,14 +43,14 @@ final class IterableTypeAnalyzer
         }
         return \false;
     }
-    private function isUnionOfIterableTypes(\PHPStan\Type\Type $type) : bool
+    private function isUnionOfIterableTypes(Type $type) : bool
     {
-        if (!$type instanceof \PHPStan\Type\UnionType) {
+        if (!$type instanceof UnionType) {
             return \false;
         }
         foreach ($type->getTypes() as $unionedType) {
             // nullable union is allowed
-            if ($unionedType instanceof \PHPStan\Type\NullType) {
+            if ($unionedType instanceof NullType) {
                 continue;
             }
             if (!$this->isIterableType($unionedType)) {

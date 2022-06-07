@@ -5,6 +5,6 @@ namespace RectorPrefix20220607;
 
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(UnwrapFutureCompatibleIfFunctionExistsRector::class);
 };

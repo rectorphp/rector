@@ -16,5 +16,5 @@ interface NodeNameResolverInterface
     /**
      * @param TNode $node
      */
-    public function resolve(\PhpParser\Node $node) : ?string;
+    public function resolve(Node $node) : ?string;
 }

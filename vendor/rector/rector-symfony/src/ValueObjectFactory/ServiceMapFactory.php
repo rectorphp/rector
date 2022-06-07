@@ -23,17 +23,17 @@ final class ServiceMapFactory
      * @var \Symplify\SmartFileSystem\SmartFileSystem
      */
     private $smartFileSystem;
-    public function __construct(\RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem)
+    public function __construct(SmartFileSystem $smartFileSystem)
     {
         $this->smartFileSystem = $smartFileSystem;
     }
-    public function createFromFileContent(string $configFilePath) : \Rector\Symfony\ValueObject\ServiceMap\ServiceMap
+    public function createFromFileContent(string $configFilePath) : ServiceMap
     {
         $fileContents = $this->smartFileSystem->readFile($configFilePath);
         // "@" intentionally
         $xml = @\simplexml_load_string($fileContents);
         if ($xml === \false) {
-            throw new \Rector\Symfony\Exception\XmlContainerNotExistsException(\sprintf('Container "%s" cannot be parsed', $configFilePath));
+            throw new XmlContainerNotExistsException(\sprintf('Container "%s" cannot be parsed', $configFilePath));
         }
         /** @var ServiceDefinition[] $services */
         $services = [];
@@ -55,11 +55,11 @@ final class ServiceMapFactory
             }
         }
         $services = $this->createAliasServiceDefinitions($aliases, $services);
-        return new \Rector\Symfony\ValueObject\ServiceMap\ServiceMap($services);
+        return new ServiceMap($services);
     }
-    public function createEmpty() : \Rector\Symfony\ValueObject\ServiceMap\ServiceMap
+    public function createEmpty() : ServiceMap
     {
-        return new \Rector\Symfony\ValueObject\ServiceMap\ServiceMap([]);
+        return new ServiceMap([]);
     }
     /**
      * @param mixed[] $def
@@ -81,10 +81,10 @@ final class ServiceMapFactory
     /**
      * @param mixed[] $tags
      */
-    private function createServiceFromXmlAndTagsData(\SimpleXMLElement $attrs, array $tags) : \Rector\Symfony\ValueObject\ServiceDefinition
+    private function createServiceFromXmlAndTagsData(SimpleXMLElement $attrs, array $tags) : ServiceDefinition
     {
         $tags = $this->createTagsFromData($tags);
-        return new \Rector\Symfony\ValueObject\ServiceDefinition(\strncmp((string) $attrs->id, '.', \strlen('.')) === 0 ? \RectorPrefix20220607\Nette\Utils\Strings::substring((string) $attrs->id, 1) : (string) $attrs->id, \property_exists($attrs, 'class') && $attrs->class !== null ? (string) $attrs->class : null, !(\property_exists($attrs, 'public') && $attrs->public !== null) || (string) $attrs->public !== 'false', \property_exists($attrs, 'synthetic') && $attrs->synthetic !== null && (string) $attrs->synthetic === 'true', \property_exists($attrs, 'alias') && $attrs->alias !== null ? (string) $attrs->alias : null, $tags);
+        return new ServiceDefinition(\strncmp((string) $attrs->id, '.', \strlen('.')) === 0 ? Strings::substring((string) $attrs->id, 1) : (string) $attrs->id, \property_exists($attrs, 'class') && $attrs->class !== null ? (string) $attrs->class : null, !(\property_exists($attrs, 'public') && $attrs->public !== null) || (string) $attrs->public !== 'false', \property_exists($attrs, 'synthetic') && $attrs->synthetic !== null && (string) $attrs->synthetic === 'true', \property_exists($attrs, 'alias') && $attrs->alias !== null ? (string) $attrs->alias : null, $tags);
     }
     /**
      * @param ServiceDefinition[] $aliases
@@ -102,7 +102,7 @@ final class ServiceMapFactory
                 continue;
             }
             $id = $service->getId();
-            $services[$id] = new \Rector\Symfony\ValueObject\ServiceDefinition($id, $services[$alias]->getClass(), $service->isPublic(), $service->isSynthetic(), $alias, []);
+            $services[$id] = new ServiceDefinition($id, $services[$alias]->getClass(), $service->isPublic(), $service->isSynthetic(), $alias, []);
         }
         return $services;
     }
@@ -115,16 +115,16 @@ final class ServiceMapFactory
         $tagValueObjects = [];
         foreach ($tagsData as $key => $tag) {
             if (\is_string($tag)) {
-                $tagValueObjects[$key] = new \Rector\Symfony\ValueObject\Tag($tag);
+                $tagValueObjects[$key] = new Tag($tag);
                 continue;
             }
             $data = $tag;
             $name = $data['name'] ?? '';
             if ($name === 'kernel.event_listener') {
-                $tagValueObjects[$key] = new \Rector\Symfony\ValueObject\Tag\EventListenerTag($data['event'] ?? '', $data['method'] ?? '', (int) ($data['priority'] ?? 0));
+                $tagValueObjects[$key] = new EventListenerTag($data['event'] ?? '', $data['method'] ?? '', (int) ($data['priority'] ?? 0));
             } else {
                 unset($data['name']);
-                $tagValueObjects[$key] = new \Rector\Symfony\ValueObject\Tag($name, $data ?? []);
+                $tagValueObjects[$key] = new Tag($name, $data ?? []);
             }
         }
         return $tagValueObjects;
@@ -132,14 +132,14 @@ final class ServiceMapFactory
     /**
      * @return mixed[]
      */
-    private function convertXmlToArray(\SimpleXMLElement $simpleXMLElement) : array
+    private function convertXmlToArray(SimpleXMLElement $simpleXMLElement) : array
     {
-        $data = \RectorPrefix20220607\Nette\Utils\Json::decode(\RectorPrefix20220607\Nette\Utils\Json::encode((array) $simpleXMLElement), \RectorPrefix20220607\Nette\Utils\Json::FORCE_ARRAY);
+        $data = Json::decode(Json::encode((array) $simpleXMLElement), Json::FORCE_ARRAY);
         $data = $this->unWrapAttributes($data);
         foreach ($data as $key => $value) {
             if (\is_array($value)) {
                 $data = $this->convertedNestedArrayOrXml($value, $data, $key);
-            } elseif ($value instanceof \SimpleXMLElement) {
+            } elseif ($value instanceof SimpleXMLElement) {
                 $data[$key] = $this->convertXmlToArray($value);
             }
         }
@@ -168,7 +168,7 @@ final class ServiceMapFactory
     private function convertedNestedArrayOrXml(array $value, array $data, $key) : array
     {
         foreach ($value as $subKey => $subValue) {
-            if ($subValue instanceof \SimpleXMLElement) {
+            if ($subValue instanceof SimpleXMLElement) {
                 $data[$key][$subKey] = $this->convertXmlToArray($subValue);
             } elseif (\is_array($subValue)) {
                 $data[$key][$subKey] = $this->unWrapAttributes($subValue);

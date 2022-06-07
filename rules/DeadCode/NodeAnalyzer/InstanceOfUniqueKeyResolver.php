@@ -13,13 +13,13 @@ final class InstanceOfUniqueKeyResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function resolve(\PhpParser\Node\Expr\Instanceof_ $instanceof) : ?string
+    public function resolve(Instanceof_ $instanceof) : ?string
     {
-        if (!$instanceof->expr instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$instanceof->expr instanceof Variable) {
             return null;
         }
         $variableName = $this->nodeNameResolver->getName($instanceof->expr);

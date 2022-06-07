@@ -8,7 +8,7 @@ declare (strict_types=1);
 namespace RectorPrefix20220607\Nette\Neon\Node;
 
 /** @internal */
-final class BlockArrayNode extends \RectorPrefix20220607\Nette\Neon\Node\ArrayNode
+final class BlockArrayNode extends ArrayNode
 {
     /** @var string */
     public $indentation;
@@ -21,7 +21,7 @@ final class BlockArrayNode extends \RectorPrefix20220607\Nette\Neon\Node\ArrayNo
         if (\count($this->items) === 0) {
             return '[]';
         }
-        $res = \RectorPrefix20220607\Nette\Neon\Node\ArrayItemNode::itemsToBlockString($this->items);
+        $res = ArrayItemNode::itemsToBlockString($this->items);
         return \preg_replace('#^(?=.)#m', $this->indentation, $res);
     }
 }

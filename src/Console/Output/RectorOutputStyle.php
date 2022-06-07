@@ -9,14 +9,14 @@ use Rector\Core\Contract\Console\OutputStyleInterface;
  * This services helps to abstract from Symfony, and allow custom output formatters to use this Rector internal class.
  * It is very helpful while scoping Rector from analysed project.
  */
-final class RectorOutputStyle implements \Rector\Core\Contract\Console\OutputStyleInterface
+final class RectorOutputStyle implements OutputStyleInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\Console\Style\RectorConsoleOutputStyle
      */
     private $rectorConsoleOutputStyle;
-    public function __construct(\Rector\Core\Console\Style\RectorConsoleOutputStyle $rectorConsoleOutputStyle)
+    public function __construct(RectorConsoleOutputStyle $rectorConsoleOutputStyle)
     {
         $this->rectorConsoleOutputStyle = $rectorConsoleOutputStyle;
     }

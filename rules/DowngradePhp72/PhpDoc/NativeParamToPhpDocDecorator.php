@@ -40,7 +40,7 @@ final class NativeParamToPhpDocDecorator
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger $phpDocTypeChanger, \Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, NodeNameResolver $nodeNameResolver, StaticTypeMapper $staticTypeMapper, PhpDocTypeChanger $phpDocTypeChanger, ValueResolver $valueResolver)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -48,7 +48,7 @@ final class NativeParamToPhpDocDecorator
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->valueResolver = $valueResolver;
     }
-    public function decorate(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Param $param) : void
+    public function decorate(ClassMethod $classMethod, Param $param) : void
     {
         if ($param->type === null) {
             return;
@@ -57,8 +57,8 @@ final class NativeParamToPhpDocDecorator
         $paramName = $this->nodeNameResolver->getName($param);
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         // add default null type
-        if ($param->default !== null && $this->valueResolver->isNull($param->default) && !\PHPStan\Type\TypeCombinator::containsNull($mappedCurrentParamType)) {
-            $mappedCurrentParamType = new \PHPStan\Type\UnionType([$mappedCurrentParamType, new \PHPStan\Type\NullType()]);
+        if ($param->default !== null && $this->valueResolver->isNull($param->default) && !TypeCombinator::containsNull($mappedCurrentParamType)) {
+            $mappedCurrentParamType = new UnionType([$mappedCurrentParamType, new NullType()]);
         }
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $mappedCurrentParamType, $param, $paramName);
     }

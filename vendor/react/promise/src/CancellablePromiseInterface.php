@@ -2,7 +2,7 @@
 
 namespace RectorPrefix20220607\React\Promise;
 
-interface CancellablePromiseInterface extends \RectorPrefix20220607\React\Promise\PromiseInterface
+interface CancellablePromiseInterface extends PromiseInterface
 {
     /**
      * The `cancel()` method notifies the creator of the promise that there is no

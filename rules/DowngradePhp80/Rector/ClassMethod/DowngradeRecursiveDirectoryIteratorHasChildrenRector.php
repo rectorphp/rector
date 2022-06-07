@@ -8,19 +8,19 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\ClassMethod\DowngradeRecursiveDirectoryIteratorHasChildrenRector\DowngradeRecursiveDirectoryIteratorHasChildrenRectorTest
  */
-final class DowngradeRecursiveDirectoryIteratorHasChildrenRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeRecursiveDirectoryIteratorHasChildrenRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
@@ -29,11 +29,11 @@ final class DowngradeRecursiveDirectoryIteratorHasChildrenRector extends \Rector
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove bool type hint on child of RecursiveDirectoryIterator hasChildren allowLinks parameter', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove bool type hint on child of RecursiveDirectoryIterator hasChildren allowLinks parameter', [new CodeSample(<<<'CODE_SAMPLE'
 class RecursiveDirectoryIteratorChild extends \RecursiveDirectoryIterator
 {
     public function hasChildren(bool $allowLinks = false): bool
@@ -56,7 +56,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$this->nodeNameResolver->isName($node, 'hasChildren')) {
             return null;
@@ -64,8 +64,8 @@ CODE_SAMPLE
         if (!isset($node->params[0])) {
             return null;
         }
-        $classLike = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\Class_) {
+        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$classLike instanceof Class_) {
             return null;
         }
         $ancestorClassNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($classLike);

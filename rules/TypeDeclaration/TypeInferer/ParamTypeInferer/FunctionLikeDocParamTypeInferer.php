@@ -14,7 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-final class FunctionLikeDocParamTypeInferer implements \Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface
+final class FunctionLikeDocParamTypeInferer implements ParamTypeInfererInterface
 {
     /**
      * @readonly
@@ -31,38 +31,38 @@ final class FunctionLikeDocParamTypeInferer implements \Rector\TypeDeclaration\C
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function inferParam(\PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    public function inferParam(Param $param) : Type
     {
         $functionLike = $this->resolveScopeNode($param);
-        if (!$functionLike instanceof \PhpParser\Node\FunctionLike) {
-            return new \PHPStan\Type\MixedType();
+        if (!$functionLike instanceof FunctionLike) {
+            return new MixedType();
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
         $paramTypesByName = $phpDocInfo->getParamTypesByName();
         if ($paramTypesByName === []) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         return $this->matchParamNodeFromDoc($paramTypesByName, $param);
     }
     /**
      * @return ClassMethod|Function_|null
      */
-    private function resolveScopeNode(\PhpParser\Node\Param $param) : ?\PhpParser\Node
+    private function resolveScopeNode(Param $param) : ?Node
     {
-        return $this->betterNodeFinder->findParentByTypes($param, [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class]);
+        return $this->betterNodeFinder->findParentByTypes($param, [ClassMethod::class, Function_::class]);
     }
     /**
      * @param Type[] $paramWithTypes
      */
-    private function matchParamNodeFromDoc(array $paramWithTypes, \PhpParser\Node\Param $param) : \PHPStan\Type\Type
+    private function matchParamNodeFromDoc(array $paramWithTypes, Param $param) : Type
     {
         $paramNodeName = '$' . $this->nodeNameResolver->getName($param->var);
-        return $paramWithTypes[$paramNodeName] ?? new \PHPStan\Type\MixedType();
+        return $paramWithTypes[$paramNodeName] ?? new MixedType();
     }
 }

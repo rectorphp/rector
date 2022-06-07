@@ -27,7 +27,7 @@ final class ListenerServiceDefinitionProvider
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;
-    public function __construct(\Rector\Symfony\DataProvider\ServiceMapProvider $serviceMapProvider)
+    public function __construct(ServiceMapProvider $serviceMapProvider)
     {
         $this->serviceMapProvider = $serviceMapProvider;
     }
@@ -43,11 +43,11 @@ final class ListenerServiceDefinitionProvider
         $eventListeners = $serviceMap->getServicesByTag('kernel.event_listener');
         foreach ($eventListeners as $eventListener) {
             // skip Symfony core listeners
-            if (\Rector\Core\Util\StringUtils::isMatch((string) $eventListener->getClass(), self::SYMFONY_FAMILY_REGEX)) {
+            if (StringUtils::isMatch((string) $eventListener->getClass(), self::SYMFONY_FAMILY_REGEX)) {
                 continue;
             }
             foreach ($eventListener->getTags() as $tag) {
-                if (!$tag instanceof \Rector\Symfony\ValueObject\Tag\EventListenerTag) {
+                if (!$tag instanceof EventListenerTag) {
                     continue;
                 }
                 $eventName = $tag->getEvent();

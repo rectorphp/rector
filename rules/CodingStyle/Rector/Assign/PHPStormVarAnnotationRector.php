@@ -13,13 +13,13 @@ use PhpParser\Node\Stmt\Nop;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/shopsys/shopsys/pull/524
  * @see \Rector\Tests\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector\PHPStormVarAnnotationRectorTest
  */
-final class PHPStormVarAnnotationRector extends \Rector\Core\Rector\AbstractRector
+final class PHPStormVarAnnotationRector extends AbstractRector
 {
     /**
      * @var string
@@ -36,9 +36,9 @@ final class PHPStormVarAnnotationRector extends \Rector\Core\Rector\AbstractRect
      * @see https://regex101.com/r/yz2AZ7/1
      */
     private const VARIABLE_NAME_AND_TYPE_MATCH_REGEX = '#(?<variableName>\\$\\w+)(?<space>\\s+)(?<type>[\\\\\\w]+)#';
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Change various @var annotation formats to one PHPStorm understands', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change various @var annotation formats to one PHPStorm understands', [new CodeSample(<<<'CODE_SAMPLE'
 $config = 5;
 /** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
 CODE_SAMPLE
@@ -53,20 +53,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Assign::class];
+        return [Assign::class];
     }
     /**
      * @param Assign $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $expression = $this->betterNodeFinder->resolveCurrentStatement($node);
         // unable to analyze
-        if (!$expression instanceof \PhpParser\Node\Stmt\Expression) {
+        if (!$expression instanceof Expression) {
             return null;
         }
-        $nextNode = $expression->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof \PhpParser\Node) {
+        $nextNode = $expression->getAttribute(AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof Node) {
             return null;
         }
         $docContent = $this->getDocContent($nextNode);
@@ -76,31 +76,31 @@ CODE_SAMPLE
         if (\strpos($docContent, '@var') === \false) {
             return null;
         }
-        if (!$node->var instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node->var instanceof Variable) {
             return null;
         }
         $varName = '$' . $this->getName($node->var);
         $varPattern = '# ' . \preg_quote($varName, '#') . ' #';
-        if (!\Rector\Core\Util\StringUtils::isMatch($docContent, $varPattern)) {
+        if (!StringUtils::isMatch($docContent, $varPattern)) {
             return null;
         }
         // switch docs
         $expression->setDocComment($this->createDocComment($nextNode));
         $expressionPhpDocInfo = $this->phpDocInfoFactory->createFromNode($expression);
-        $expression->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
+        $expression->setAttribute(AttributeKey::PHP_DOC_INFO, $expressionPhpDocInfo);
         // invoke override
-        $expression->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+        $expression->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         // remove otherwise empty node
-        if ($nextNode instanceof \PhpParser\Node\Stmt\Nop) {
+        if ($nextNode instanceof Nop) {
             $this->removeNode($nextNode);
             return null;
         }
         // remove commnets
-        $nextNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PHP_DOC_INFO, null);
-        $nextNode->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::COMMENTS, null);
+        $nextNode->setAttribute(AttributeKey::PHP_DOC_INFO, null);
+        $nextNode->setAttribute(AttributeKey::COMMENTS, null);
         return $node;
     }
-    private function getDocContent(\PhpParser\Node $node) : string
+    private function getDocContent(Node $node) : string
     {
         $docComment = $node->getDocComment();
         if ($docComment !== null) {
@@ -115,7 +115,7 @@ CODE_SAMPLE
         }
         return '';
     }
-    private function createDocComment(\PhpParser\Node $node) : \PhpParser\Comment\Doc
+    private function createDocComment(Node $node) : Doc
     {
         if ($node->getDocComment() !== null) {
             return $node->getDocComment();
@@ -124,12 +124,12 @@ CODE_SAMPLE
         // normalize content
         // starts with "/*", instead of "/**"
         if (\strncmp($docContent, '/* ', \strlen('/* ')) === 0) {
-            $docContent = \RectorPrefix20220607\Nette\Utils\Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
+            $docContent = Strings::replace($docContent, self::SINGLE_ASTERISK_COMMENT_START_REGEX, '/** ');
         }
         // $value is first, instead of type is first
-        if (\Rector\Core\Util\StringUtils::isMatch($docContent, self::VAR_ANNOTATION_REGEX)) {
-            $docContent = \RectorPrefix20220607\Nette\Utils\Strings::replace($docContent, self::VARIABLE_NAME_AND_TYPE_MATCH_REGEX, '$3$2$1');
+        if (StringUtils::isMatch($docContent, self::VAR_ANNOTATION_REGEX)) {
+            $docContent = Strings::replace($docContent, self::VARIABLE_NAME_AND_TYPE_MATCH_REGEX, '$3$2$1');
         }
-        return new \PhpParser\Comment\Doc($docContent);
+        return new Doc($docContent);
     }
 }

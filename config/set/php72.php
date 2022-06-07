@@ -15,12 +15,12 @@ use Rector\Php72\Rector\FuncCall\StringsAssertNakedRector;
 use Rector\Php72\Rector\Unset_\UnsetCastRector;
 use Rector\Php72\Rector\While_\WhileEachToForeachRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Php72\Rector\While_\WhileEachToForeachRector::class);
-    $rectorConfig->rule(\Rector\Php72\Rector\Assign\ListEachRector::class);
-    $rectorConfig->rule(\Rector\Php72\Rector\Assign\ReplaceEachAssignmentWithKeyCurrentRector::class);
-    $rectorConfig->rule(\Rector\Php72\Rector\Unset_\UnsetCastRector::class);
-    $rectorConfig->ruleWithConfiguration(\Rector\Renaming\Rector\FuncCall\RenameFunctionRector::class, [
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(WhileEachToForeachRector::class);
+    $rectorConfig->rule(ListEachRector::class);
+    $rectorConfig->rule(ReplaceEachAssignmentWithKeyCurrentRector::class);
+    $rectorConfig->rule(UnsetCastRector::class);
+    $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
         # and imagewbmp
         'jpeg2wbmp' => 'imagecreatefromjpeg',
         # or imagewbmp
@@ -31,10 +31,10 @@ return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
         'gmp_random' => 'gmp_random_bits',
         'read_exif_data' => 'exif_read_data',
     ]);
-    $rectorConfig->rule(\Rector\Php72\Rector\FuncCall\GetClassOnNullRector::class);
-    $rectorConfig->rule(\Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector::class);
-    $rectorConfig->rule(\Rector\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector::class);
-    $rectorConfig->rule(\Rector\Php72\Rector\FuncCall\StringsAssertNakedRector::class);
-    $rectorConfig->rule(\Rector\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector::class);
-    $rectorConfig->rule(\Rector\Php72\Rector\FuncCall\StringifyDefineRector::class);
+    $rectorConfig->rule(GetClassOnNullRector::class);
+    $rectorConfig->rule(IsObjectOnIncompleteClassRector::class);
+    $rectorConfig->rule(ParseStrWithResultArgumentRector::class);
+    $rectorConfig->rule(StringsAssertNakedRector::class);
+    $rectorConfig->rule(CreateFunctionToAnonymousFunctionRector::class);
+    $rectorConfig->rule(StringifyDefineRector::class);
 };

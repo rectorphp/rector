@@ -28,7 +28,7 @@ class StaticCall extends \PhpParser\Node\Expr\CallLike
     {
         $this->attributes = $attributes;
         $this->class = $class;
-        $this->name = \is_string($name) ? new \PhpParser\Node\Identifier($name) : $name;
+        $this->name = \is_string($name) ? new Identifier($name) : $name;
         $this->args = $args;
     }
     public function getSubNodeNames() : array

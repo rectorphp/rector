@@ -18,14 +18,14 @@ use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 /**
  * @implements TypeMapperInterface<ObjectWithoutClassType>
  */
-final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface
+final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
 {
     /**
      * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
@@ -34,30 +34,30 @@ final class ObjectWithoutClassTypeMapper implements \Rector\PHPStanStaticTypeMap
      */
     public function getNodeClass() : string
     {
-        return \PHPStan\Type\ObjectWithoutClassType::class;
+        return ObjectWithoutClassType::class;
     }
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(\PHPStan\Type\Type $type, string $typeKind) : \PHPStan\PhpDocParser\Ast\Type\TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
-        if ($type instanceof \Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType) {
-            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('parent');
+        if ($type instanceof ParentObjectWithoutClassType) {
+            return new IdentifierTypeNode('parent');
         }
-        if ($type instanceof \PHPStan\Type\Generic\TemplateObjectWithoutClassType) {
-            $attributeAwareIdentifierTypeNode = new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($type->getName());
-            return new \Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode($attributeAwareIdentifierTypeNode);
+        if ($type instanceof TemplateObjectWithoutClassType) {
+            $attributeAwareIdentifierTypeNode = new IdentifierTypeNode($type->getName());
+            return new EmptyGenericTypeNode($attributeAwareIdentifierTypeNode);
         }
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('object');
+        return new IdentifierTypeNode('object');
     }
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPhpParserNode(\PHPStan\Type\Type $type, string $typeKind) : ?\PhpParser\Node
+    public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::OBJECT_TYPE)) {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::OBJECT_TYPE)) {
             return null;
         }
-        return new \PhpParser\Node\Name('object');
+        return new Name('object');
     }
 }

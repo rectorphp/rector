@@ -9,7 +9,7 @@ namespace RectorPrefix20220607\Nette\Neon\Node;
 
 use RectorPrefix20220607\Nette\Neon\Node;
 /** @internal */
-final class LiteralNode extends \RectorPrefix20220607\Nette\Neon\Node
+final class LiteralNode extends Node
 {
     private const SimpleTypes = ['true' => \true, 'True' => \true, 'TRUE' => \true, 'yes' => \true, 'Yes' => \true, 'YES' => \true, 'on' => \true, 'On' => \true, 'ON' => \true, 'false' => \false, 'False' => \false, 'FALSE' => \false, 'no' => \false, 'No' => \false, 'NO' => \false, 'off' => \false, 'Off' => \false, 'OFF' => \false, 'null' => null, 'Null' => null, 'NULL' => null];
     private const DeprecatedTypes = ['on' => 1, 'On' => 1, 'ON' => 1, 'off' => 1, 'Off' => 1, 'OFF' => 1];

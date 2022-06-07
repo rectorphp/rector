@@ -27,7 +27,7 @@ final class RepositoryAssignFactory
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    public function __construct(\Rector\Doctrine\NodeAnalyzer\EntityObjectTypeResolver $entityObjectTypeResolver, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\NodeFactory $nodeFactory)
+    public function __construct(EntityObjectTypeResolver $entityObjectTypeResolver, NodeNameResolver $nodeNameResolver, NodeFactory $nodeFactory)
     {
         $this->entityObjectTypeResolver = $entityObjectTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -36,16 +36,16 @@ final class RepositoryAssignFactory
     /**
      * Creates: "$this->repository = $entityManager->getRepository(SomeEntityClass::class)"
      */
-    public function create(\PhpParser\Node\Stmt\Class_ $repositoryClass) : \PhpParser\Node\Expr\Assign
+    public function create(Class_ $repositoryClass) : Assign
     {
         $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($repositoryClass);
         $className = $this->nodeNameResolver->getName($repositoryClass);
         if (!\is_string($className)) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
         $repositoryClassName = $className;
-        if (!$entityObjectType instanceof \PHPStan\Type\TypeWithClassName) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException(\sprintf('An entity was not found for "%s" repository.', $repositoryClassName));
+        if (!$entityObjectType instanceof TypeWithClassName) {
+            throw new ShouldNotHappenException(\sprintf('An entity was not found for "%s" repository.', $repositoryClassName));
         }
         $classConstFetch = $this->nodeFactory->createClassConstReference($entityObjectType->getClassName());
         $methodCall = $this->nodeFactory->createMethodCall('entityManager', 'getRepository', [$classConstFetch]);

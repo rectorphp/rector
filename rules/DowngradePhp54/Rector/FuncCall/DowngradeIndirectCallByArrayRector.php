@@ -10,27 +10,27 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/indirect-method-call-by-array-var
  *
  * @see \Rector\Tests\DowngradePhp54\Rector\FuncCall\DowngradeIndirectCallByArrayRector\DowngradeIndirectCallByArrayRectorTest
  */
-final class DowngradeIndirectCallByArrayRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeIndirectCallByArrayRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer
      */
     private $stringTypeAnalyzer;
-    public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer $stringTypeAnalyzer)
+    public function __construct(StringTypeAnalyzer $stringTypeAnalyzer)
     {
         $this->stringTypeAnalyzer = $stringTypeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade indirect method call by array variable', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade indirect method call by array variable', [new CodeSample(<<<'CODE_SAMPLE'
 class Hello {
     public static function world($x) {
         echo "Hello, $x\n";
@@ -57,20 +57,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node\Expr\FuncCall
+    public function refactor(Node $node) : ?FuncCall
     {
-        if (!$node->name instanceof \PhpParser\Node\Expr\Variable) {
+        if (!$node->name instanceof Variable) {
             return null;
         }
         if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($node->name)) {
             return null;
         }
-        $args = \array_merge([new \PhpParser\Node\Arg($node->name)], $node->args);
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('call_user_func'), $args);
+        $args = \array_merge([new Arg($node->name)], $node->args);
+        return new FuncCall(new Name('call_user_func'), $args);
     }
 }

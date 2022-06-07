@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
 final class InvalidNameNodeReporter
 {
     /**
@@ -27,7 +27,7 @@ final class InvalidNameNodeReporter
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(\Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter)
+    public function __construct(CurrentFileProvider $currentFileProvider, NodePrinterInterface $nodePrinter)
     {
         $this->currentFileProvider = $currentFileProvider;
         $this->nodePrinter = $nodePrinter;
@@ -39,7 +39,7 @@ final class InvalidNameNodeReporter
     {
         $message = \sprintf('Pick more specific node than "%s", e.g. "$node->name"', \get_class($node));
         $file = $this->currentFileProvider->getFile();
-        if ($file instanceof \Rector\Core\ValueObject\Application\File) {
+        if ($file instanceof File) {
             $smartFileInfo = $file->getSmartFileInfo();
             $message .= \PHP_EOL . \PHP_EOL;
             $message .= \sprintf('Caused in "%s" file on line %d on code "%s"', $smartFileInfo->getRelativeFilePathFromCwd(), $node->getStartLine(), $this->nodePrinter->print($node));
@@ -49,7 +49,7 @@ final class InvalidNameNodeReporter
         if ($rectorBacktrace !== null) {
             // issues to find the file in prefixed
             if (\file_exists($rectorBacktrace[self::FILE])) {
-                $smartFileInfo = new \Symplify\SmartFileSystem\SmartFileInfo($rectorBacktrace[self::FILE]);
+                $smartFileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
                 $fileAndLine = $smartFileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
             } else {
                 $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
@@ -57,7 +57,7 @@ final class InvalidNameNodeReporter
             $message .= \PHP_EOL . \PHP_EOL;
             $message .= \sprintf('Look at "%s"', $fileAndLine);
         }
-        throw new \Rector\Core\Exception\ShouldNotHappenException($message);
+        throw new ShouldNotHappenException($message);
     }
     /**
      * @param mixed[] $backtrace
@@ -70,7 +70,7 @@ final class InvalidNameNodeReporter
                 continue;
             }
             // match a Rector class
-            if (!\is_a($singleBacktrace['object'], \Rector\Core\Contract\Rector\RectorInterface::class)) {
+            if (!\is_a($singleBacktrace['object'], RectorInterface::class)) {
                 continue;
             }
             return $singleBacktrace;

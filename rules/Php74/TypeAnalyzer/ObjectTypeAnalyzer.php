@@ -9,15 +9,15 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 final class ObjectTypeAnalyzer
 {
-    public function isSpecial(\PHPStan\Type\Type $varType) : bool
+    public function isSpecial(Type $varType) : bool
     {
         // we are not sure what object type this is
-        if ($varType instanceof \Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType) {
+        if ($varType instanceof NonExistingObjectType) {
             return \true;
         }
-        $types = $varType instanceof \PHPStan\Type\UnionType ? $varType->getTypes() : [$varType];
+        $types = $varType instanceof UnionType ? $varType->getTypes() : [$varType];
         foreach ($types as $type) {
-            if (!$type instanceof \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType) {
+            if (!$type instanceof FullyQualifiedObjectType) {
                 continue;
             }
             if ($type->getClassName() !== 'Prophecy\\Prophecy\\ObjectProphecy') {

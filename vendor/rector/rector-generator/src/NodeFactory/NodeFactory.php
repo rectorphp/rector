@@ -21,38 +21,38 @@ final class NodeFactory
     /**
      * @param array<string|int, mixed> $values
      */
-    public function createArray(array $values) : \PhpParser\Node\Expr\Array_
+    public function createArray(array $values) : Array_
     {
         $arrayItems = [];
         foreach ($values as $key => $value) {
             // natural key, no need for value
             if (\is_int($key)) {
-                $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem(\PhpParser\BuilderHelpers::normalizeValue($value));
+                $arrayItems[] = new ArrayItem(BuilderHelpers::normalizeValue($value));
             } else {
-                $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem(\PhpParser\BuilderHelpers::normalizeValue($value), \PhpParser\BuilderHelpers::normalizeValue($key));
+                $arrayItems[] = new ArrayItem(BuilderHelpers::normalizeValue($value), BuilderHelpers::normalizeValue($key));
             }
         }
-        return new \PhpParser\Node\Expr\Array_($arrayItems);
+        return new Array_($arrayItems);
     }
-    public function createClassConstReference(string $class) : \PhpParser\Node\Expr\ClassConstFetch
+    public function createClassConstReference(string $class) : ClassConstFetch
     {
-        $fullyQualified = new \PhpParser\Node\Name\FullyQualified($class);
-        return new \PhpParser\Node\Expr\ClassConstFetch($fullyQualified, 'class');
+        $fullyQualified = new FullyQualified($class);
+        return new ClassConstFetch($fullyQualified, 'class');
     }
-    public function createPropertyAssign(string $propertyName, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Expr\Assign
+    public function createPropertyAssign(string $propertyName, Expr $expr) : Assign
     {
-        $propertyFetch = new \PhpParser\Node\Expr\PropertyFetch(new \PhpParser\Node\Expr\Variable('this'), $propertyName);
-        return new \PhpParser\Node\Expr\Assign($propertyFetch, $expr);
+        $propertyFetch = new PropertyFetch(new Variable('this'), $propertyName);
+        return new Assign($propertyFetch, $expr);
     }
-    public function createPublicMethod(string $methodName) : \PhpParser\Node\Stmt\ClassMethod
+    public function createPublicMethod(string $methodName) : ClassMethod
     {
-        $methodBuilder = new \RectorPrefix20220607\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder($methodName);
+        $methodBuilder = new MethodBuilder($methodName);
         $methodBuilder->makePublic();
         return $methodBuilder->getNode();
     }
-    public function createPrivateArrayProperty(string $propertyName) : \PhpParser\Node\Stmt\Property
+    public function createPrivateArrayProperty(string $propertyName) : Property
     {
-        $propertyBuilder = new \RectorPrefix20220607\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder($propertyName);
+        $propertyBuilder = new PropertyBuilder($propertyName);
         $propertyBuilder->makePrivate();
         $docContent = <<<'CODE_SAMPLE'
 /**

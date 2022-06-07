@@ -7,5 +7,5 @@ use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 interface PhpDocNodeDecoratorInterface
 {
-    public function decorate(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \PhpParser\Node $phpNode) : void;
+    public function decorate(PhpDocNode $phpDocNode, Node $phpNode) : void;
 }

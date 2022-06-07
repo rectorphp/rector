@@ -33,7 +33,7 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;
-    public function __construct(\Rector\Parallel\WorkerRunner $workerRunner, \Rector\Core\Util\MemoryLimiter $memoryLimiter)
+    public function __construct(WorkerRunner $workerRunner, MemoryLimiter $memoryLimiter)
     {
         $this->workerRunner = $workerRunner;
         $this->memoryLimiter = $memoryLimiter;
@@ -45,19 +45,19 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
         $this->setDescription('(Internal) Support for parallel process');
         parent::configure();
     }
-    protected function execute(\RectorPrefix20220607\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220607\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $configuration = $this->configurationFactory->createFromInput($input);
         $this->memoryLimiter->adjust($configuration);
-        $streamSelectLoop = new \RectorPrefix20220607\React\EventLoop\StreamSelectLoop();
+        $streamSelectLoop = new StreamSelectLoop();
         $parallelIdentifier = $configuration->getParallelIdentifier();
-        $tcpConnector = new \RectorPrefix20220607\React\Socket\TcpConnector($streamSelectLoop);
+        $tcpConnector = new TcpConnector($streamSelectLoop);
         $promise = $tcpConnector->connect('127.0.0.1:' . $configuration->getParallelPort());
-        $promise->then(function (\RectorPrefix20220607\React\Socket\ConnectionInterface $connection) use($parallelIdentifier, $configuration) : void {
-            $inDecoder = new \RectorPrefix20220607\Clue\React\NDJson\Decoder($connection, \true, 512, \JSON_INVALID_UTF8_IGNORE);
-            $outEncoder = new \RectorPrefix20220607\Clue\React\NDJson\Encoder($connection, \JSON_INVALID_UTF8_IGNORE);
+        $promise->then(function (ConnectionInterface $connection) use($parallelIdentifier, $configuration) : void {
+            $inDecoder = new Decoder($connection, \true, 512, \JSON_INVALID_UTF8_IGNORE);
+            $outEncoder = new Encoder($connection, \JSON_INVALID_UTF8_IGNORE);
             // handshake?
-            $outEncoder->write([\RectorPrefix20220607\Symplify\EasyParallel\Enum\ReactCommand::ACTION => \RectorPrefix20220607\Symplify\EasyParallel\Enum\Action::HELLO, \RectorPrefix20220607\Symplify\EasyParallel\Enum\ReactCommand::IDENTIFIER => $parallelIdentifier]);
+            $outEncoder->write([ReactCommand::ACTION => Action::HELLO, ReactCommand::IDENTIFIER => $parallelIdentifier]);
             $this->workerRunner->run($outEncoder, $inDecoder, $configuration);
         });
         $streamSelectLoop->run();

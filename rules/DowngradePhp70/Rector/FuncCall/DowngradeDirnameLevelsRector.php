@@ -21,14 +21,14 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\While_;
 use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://bugs.php.net/bug.php?id=70112
  *
  * @see \Rector\Tests\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector\DowngradeDirnameLevelsRectorTest
  */
-final class DowngradeDirnameLevelsRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeDirnameLevelsRector extends AbstractRector
 {
     /**
      * @var string
@@ -39,13 +39,13 @@ final class DowngradeDirnameLevelsRector extends \Rector\Core\Rector\AbstractRec
      * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
     private $namedVariableFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
+    public function __construct(NamedVariableFactory $namedVariableFactory)
     {
         $this->namedVariableFactory = $namedVariableFactory;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace the 2nd argument of dirname()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace the 2nd argument of dirname()', [new CodeSample(<<<'CODE_SAMPLE'
 return dirname($path, 2);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -58,15 +58,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $levelsArg = $this->getLevelsArg($node);
-        if (!$levelsArg instanceof \PhpParser\Node\Arg) {
+        if (!$levelsArg instanceof Arg) {
             return null;
         }
         $levels = $this->getLevelsRealValue($levelsArg);
@@ -75,7 +75,7 @@ CODE_SAMPLE
         }
         return $this->refactorForVariableLevels($node);
     }
-    private function getLevelsArg(\PhpParser\Node\Expr\FuncCall $funcCall) : ?\PhpParser\Node\Arg
+    private function getLevelsArg(FuncCall $funcCall) : ?Arg
     {
         if (!$this->isName($funcCall, self::DIRNAME)) {
             return null;
@@ -83,28 +83,28 @@ CODE_SAMPLE
         if (!isset($funcCall->args[1])) {
             return null;
         }
-        if (!$funcCall->args[1] instanceof \PhpParser\Node\Arg) {
+        if (!$funcCall->args[1] instanceof Arg) {
             return null;
         }
         return $funcCall->args[1];
     }
-    private function getLevelsRealValue(\PhpParser\Node\Arg $levelsArg) : ?int
+    private function getLevelsRealValue(Arg $levelsArg) : ?int
     {
-        if ($levelsArg->value instanceof \PhpParser\Node\Scalar\LNumber) {
+        if ($levelsArg->value instanceof LNumber) {
             return $levelsArg->value->value;
         }
         return null;
     }
-    private function refactorForFixedLevels(\PhpParser\Node\Expr\FuncCall $funcCall, int $levels) : \PhpParser\Node\Expr\FuncCall
+    private function refactorForFixedLevels(FuncCall $funcCall, int $levels) : FuncCall
     {
         // keep only the 1st argument
         $funcCall->args = [$funcCall->args[0]];
         for ($i = 1; $i < $levels; ++$i) {
-            $funcCall = $this->createDirnameFuncCall(new \PhpParser\Node\Arg($funcCall));
+            $funcCall = $this->createDirnameFuncCall(new Arg($funcCall));
         }
         return $funcCall;
     }
-    private function refactorForVariableLevels(\PhpParser\Node\Expr\FuncCall $funcCall) : \PhpParser\Node\Expr\FuncCall
+    private function refactorForVariableLevels(FuncCall $funcCall) : FuncCall
     {
         $funcVariable = $this->namedVariableFactory->createVariable($funcCall, 'dirnameFunc');
         $closure = $this->createClosure();
@@ -113,25 +113,25 @@ CODE_SAMPLE
         $funcCall->name = $funcVariable;
         return $funcCall;
     }
-    private function createExprAssign(\PhpParser\Node\Expr\Variable $variable, \PhpParser\Node\Expr $expr) : \PhpParser\Node\Stmt\Expression
+    private function createExprAssign(Variable $variable, Expr $expr) : Expression
     {
-        return new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($variable, $expr));
+        return new Expression(new Assign($variable, $expr));
     }
-    private function createClosure() : \PhpParser\Node\Expr\Closure
+    private function createClosure() : Closure
     {
-        $dirVariable = new \PhpParser\Node\Expr\Variable('dir');
-        $pathVariable = new \PhpParser\Node\Expr\Variable('path');
-        $levelsVariable = new \PhpParser\Node\Expr\Variable('levels');
-        $closure = new \PhpParser\Node\Expr\Closure();
-        $closure->params = [new \PhpParser\Node\Param($pathVariable), new \PhpParser\Node\Param($levelsVariable)];
+        $dirVariable = new Variable('dir');
+        $pathVariable = new Variable('path');
+        $levelsVariable = new Variable('levels');
+        $closure = new Closure();
+        $closure->params = [new Param($pathVariable), new Param($levelsVariable)];
         $closure->stmts[] = $this->createExprAssign($dirVariable, $this->nodeFactory->createNull());
-        $greaterOrEqual = new \PhpParser\Node\Expr\BinaryOp\GreaterOrEqual(new \PhpParser\Node\Expr\PreDec($levelsVariable), new \PhpParser\Node\Scalar\LNumber(0));
-        $closure->stmts[] = new \PhpParser\Node\Stmt\While_($greaterOrEqual, [$this->createExprAssign($dirVariable, $this->createDirnameFuncCall(new \PhpParser\Node\Arg(new \PhpParser\Node\Expr\Ternary($dirVariable, null, $pathVariable))))]);
-        $closure->stmts[] = new \PhpParser\Node\Stmt\Return_($dirVariable);
+        $greaterOrEqual = new GreaterOrEqual(new PreDec($levelsVariable), new LNumber(0));
+        $closure->stmts[] = new While_($greaterOrEqual, [$this->createExprAssign($dirVariable, $this->createDirnameFuncCall(new Arg(new Ternary($dirVariable, null, $pathVariable))))]);
+        $closure->stmts[] = new Return_($dirVariable);
         return $closure;
     }
-    private function createDirnameFuncCall(\PhpParser\Node\Arg $pathArg) : \PhpParser\Node\Expr\FuncCall
+    private function createDirnameFuncCall(Arg $pathArg) : FuncCall
     {
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name(self::DIRNAME), [$pathArg]);
+        return new FuncCall(new Name(self::DIRNAME), [$pathArg]);
     }
 }

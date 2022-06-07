@@ -13,7 +13,7 @@ use RectorPrefix20220607\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix20220607\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem;
-final class InitCommand extends \RectorPrefix20220607\Symfony\Component\Console\Command\Command
+final class InitCommand extends Command
 {
     /**
      * @var string
@@ -39,7 +39,7 @@ final class InitCommand extends \RectorPrefix20220607\Symfony\Component\Console\
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider, \RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle)
+    public function __construct(SmartFileSystem $smartFileSystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, SymfonyStyle $symfonyStyle)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->rectorOutputStyle = $rectorOutputStyle;
@@ -52,11 +52,11 @@ final class InitCommand extends \RectorPrefix20220607\Symfony\Component\Console\
         $this->setName('init');
         $this->setDescription('Generate rector.php configuration file');
         // deprecated
-        $this->addOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE, null, \RectorPrefix20220607\Symfony\Component\Console\Input\InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.');
+        $this->addOption(Option::TEMPLATE_TYPE, null, InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.');
     }
-    protected function execute(\RectorPrefix20220607\Symfony\Component\Console\Input\InputInterface $input, \RectorPrefix20220607\Symfony\Component\Console\Output\OutputInterface $output) : int
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
-        $templateType = (string) $input->getOption(\Rector\Core\Configuration\Option::TEMPLATE_TYPE);
+        $templateType = (string) $input->getOption(Option::TEMPLATE_TYPE);
         if ($templateType !== '') {
             // notice warning
             $this->symfonyStyle->warning('The option "--type" is deprecated. Custom config should be part of project documentation instead.');
@@ -69,12 +69,12 @@ final class InitCommand extends \RectorPrefix20220607\Symfony\Component\Console\
         } else {
             $this->smartFileSystem->copy(self::TEMPLATE_PATH, $rectorRootFilePath);
             $fullPHPVersion = (string) $this->phpVersionProvider->provide();
-            $phpVersion = \RectorPrefix20220607\Nette\Utils\Strings::substring($fullPHPVersion, 0, 1) . \RectorPrefix20220607\Nette\Utils\Strings::substring($fullPHPVersion, 2, 1);
+            $phpVersion = Strings::substring($fullPHPVersion, 0, 1) . Strings::substring($fullPHPVersion, 2, 1);
             $fileContent = $this->smartFileSystem->readFile($rectorRootFilePath);
             $fileContent = \str_replace('LevelSetList::UP_TO_PHP_XY', \sprintf('LevelSetList::UP_TO_PHP_%d', $phpVersion), $fileContent);
             $this->smartFileSystem->dumpFile($rectorRootFilePath, $fileContent);
             $this->rectorOutputStyle->success('"rector.php" config file was added');
         }
-        return \RectorPrefix20220607\Symfony\Component\Console\Command\Command::SUCCESS;
+        return Command::SUCCESS;
     }
 }

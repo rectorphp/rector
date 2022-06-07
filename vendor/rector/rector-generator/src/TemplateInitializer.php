@@ -23,7 +23,7 @@ final class TemplateInitializer
      * @var \Symplify\SmartFileSystem\FileSystemGuard
      */
     private $fileSystemGuard;
-    public function __construct(\RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle $symfonyStyle, \RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \RectorPrefix20220607\Symplify\SmartFileSystem\FileSystemGuard $fileSystemGuard)
+    public function __construct(SymfonyStyle $symfonyStyle, SmartFileSystem $smartFileSystem, FileSystemGuard $fileSystemGuard)
     {
         $this->symfonyStyle = $symfonyStyle;
         $this->smartFileSystem = $smartFileSystem;

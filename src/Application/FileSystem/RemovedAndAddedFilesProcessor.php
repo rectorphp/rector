@@ -32,21 +32,21 @@ final class RemovedAndAddedFilesProcessor
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
-    public function __construct(\RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem $smartFileSystem, \Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, \Rector\Core\Contract\Console\OutputStyleInterface $rectorOutputStyle)
+    public function __construct(SmartFileSystem $smartFileSystem, NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle)
     {
         $this->smartFileSystem = $smartFileSystem;
         $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
     }
-    public function run(\Rector\Core\ValueObject\Configuration $configuration) : void
+    public function run(Configuration $configuration) : void
     {
         $this->processAddedFilesWithContent($configuration);
         $this->processAddedFilesWithNodes($configuration);
         $this->processMovedFilesWithNodes($configuration);
         $this->processDeletedFiles($configuration);
     }
-    private function processDeletedFiles(\Rector\Core\ValueObject\Configuration $configuration) : void
+    private function processDeletedFiles(Configuration $configuration) : void
     {
         foreach ($this->removedAndAddedFilesCollector->getRemovedFiles() as $removedFile) {
             $relativePath = $removedFile->getRelativeFilePathFromDirectory(\getcwd());
@@ -60,7 +60,7 @@ final class RemovedAndAddedFilesProcessor
             }
         }
     }
-    private function processAddedFilesWithContent(\Rector\Core\ValueObject\Configuration $configuration) : void
+    private function processAddedFilesWithContent(Configuration $configuration) : void
     {
         foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithContent() as $addedFileWithContent) {
             if ($configuration->isDryRun()) {
@@ -73,7 +73,7 @@ final class RemovedAndAddedFilesProcessor
             }
         }
     }
-    private function processAddedFilesWithNodes(\Rector\Core\ValueObject\Configuration $configuration) : void
+    private function processAddedFilesWithNodes(Configuration $configuration) : void
     {
         foreach ($this->removedAndAddedFilesCollector->getAddedFilesWithNodes() as $addedFileWithNode) {
             $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination($addedFileWithNode);
@@ -87,7 +87,7 @@ final class RemovedAndAddedFilesProcessor
             }
         }
     }
-    private function processMovedFilesWithNodes(\Rector\Core\ValueObject\Configuration $configuration) : void
+    private function processMovedFilesWithNodes(Configuration $configuration) : void
     {
         foreach ($this->removedAndAddedFilesCollector->getMovedFiles() as $movedFile) {
             $fileContent = $this->nodesWithFileDestinationPrinter->printNodesWithFileDestination($movedFile);

@@ -43,14 +43,14 @@ final class VariableNodeUse
      * @var string|null
      */
     private $nestingHash;
-    public function __construct(int $startTokenPosition, string $variableName, string $type, \PhpParser\Node\Expr\Variable $variable, ?string $nestingHash = null)
+    public function __construct(int $startTokenPosition, string $variableName, string $type, Variable $variable, ?string $nestingHash = null)
     {
         $this->startTokenPosition = $startTokenPosition;
         $this->variableName = $variableName;
         $this->type = $type;
         $this->variable = $variable;
         $this->nestingHash = $nestingHash;
-        \Rector\Core\Validation\RectorAssert::className($type);
+        RectorAssert::className($type);
     }
     public function isName(string $name) : bool
     {
@@ -64,15 +64,15 @@ final class VariableNodeUse
     {
         return $this->type === $type;
     }
-    public function getVariableNode() : \PhpParser\Node\Expr\Variable
+    public function getVariableNode() : Variable
     {
         return $this->variable;
     }
-    public function getParentNode() : \PhpParser\Node
+    public function getParentNode() : Node
     {
-        $parentNode = $this->variable->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $parentNode = $this->variable->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Node) {
+            throw new ShouldNotHappenException();
         }
         return $parentNode;
     }

@@ -8,7 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitorAbstract;
-final class CallableNodeVisitor extends \PhpParser\NodeVisitorAbstract
+final class CallableNodeVisitor extends NodeVisitorAbstract
 {
     /**
      * @var callable(Node): (int|Node|null)
@@ -24,14 +24,14 @@ final class CallableNodeVisitor extends \PhpParser\NodeVisitorAbstract
     /**
      * @return int|\PhpParser\Node|null
      */
-    public function enterNode(\PhpParser\Node $node)
+    public function enterNode(Node $node)
     {
         $originalNode = $node;
         $callable = $this->callable;
         /** @var int|Node|null $newNode */
         $newNode = $callable($node);
-        if ($originalNode instanceof \PhpParser\Node\Stmt && $newNode instanceof \PhpParser\Node\Expr) {
-            return new \PhpParser\Node\Stmt\Expression($newNode);
+        if ($originalNode instanceof Stmt && $newNode instanceof Expr) {
+            return new Expression($newNode);
         }
         return $newNode;
     }

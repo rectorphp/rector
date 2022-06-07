@@ -5,6 +5,6 @@ namespace RectorPrefix20220607;
 
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector;
-return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(\Rector\Symfony\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector::class);
+return static function (RectorConfig $rectorConfig) : void {
+    $rectorConfig->rule(RenderMethodParamToTypeDeclarationRector::class);
 };

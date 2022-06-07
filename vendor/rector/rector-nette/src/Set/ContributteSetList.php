@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Nette\Set;
 
 use Rector\Set\Contract\SetListInterface;
-final class ContributteSetList implements \Rector\Set\Contract\SetListInterface
+final class ContributteSetList implements SetListInterface
 {
     /**
      * @var string

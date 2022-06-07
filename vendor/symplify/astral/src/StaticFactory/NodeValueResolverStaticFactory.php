@@ -12,10 +12,10 @@ use RectorPrefix20220607\Symplify\PackageBuilder\Php\TypeChecker;
  */
 final class NodeValueResolverStaticFactory
 {
-    public static function create() : \RectorPrefix20220607\Symplify\Astral\NodeValue\NodeValueResolver
+    public static function create() : NodeValueResolver
     {
-        $simpleNameResolver = \RectorPrefix20220607\Symplify\Astral\StaticFactory\SimpleNameResolverStaticFactory::create();
-        $simpleNodeFinder = new \RectorPrefix20220607\Symplify\Astral\NodeFinder\SimpleNodeFinder(new \PhpParser\NodeFinder());
-        return new \RectorPrefix20220607\Symplify\Astral\NodeValue\NodeValueResolver($simpleNameResolver, new \RectorPrefix20220607\Symplify\PackageBuilder\Php\TypeChecker(), $simpleNodeFinder);
+        $simpleNameResolver = SimpleNameResolverStaticFactory::create();
+        $simpleNodeFinder = new SimpleNodeFinder(new NodeFinder());
+        return new NodeValueResolver($simpleNameResolver, new TypeChecker(), $simpleNodeFinder);
     }
 }

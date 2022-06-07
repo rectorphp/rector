@@ -15,19 +15,19 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/empty_isset_exprs
  *
  * @see Rector\Tests\DowngradePhp55\Rector\Isset_\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector\DowngradeArbitraryExpressionArgsToEmptyAndIssetRectorTest
  */
-final class DowngradeArbitraryExpressionArgsToEmptyAndIssetRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeArbitraryExpressionArgsToEmptyAndIssetRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Downgrade arbitrary expression arguments to empty() and isset()', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade arbitrary expression arguments to empty() and isset()', [new CodeSample(<<<'CODE_SAMPLE'
 if (isset(some_function())) {
     // ...
 }
@@ -44,24 +44,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Isset_::class, \PhpParser\Node\Expr\Empty_::class];
+        return [Isset_::class, Empty_::class];
     }
     /**
      * @param Isset_|Empty_ $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        return $node instanceof \PhpParser\Node\Expr\Empty_ ? $this->refactorEmpty($node) : $this->refactorIsset($node);
+        return $node instanceof Empty_ ? $this->refactorEmpty($node) : $this->refactorIsset($node);
     }
     /**
      * @param \PhpParser\Node\Expr\Isset_|\PhpParser\Node\Expr\Empty_ $node
      */
     private function shouldSkip($node) : bool
     {
-        if ($node instanceof \PhpParser\Node\Expr\Empty_) {
+        if ($node instanceof Empty_) {
             return $this->isAcceptable($node->expr);
         }
         foreach ($node->vars as $var) {
@@ -74,51 +74,51 @@ CODE_SAMPLE
     /**
      * Check whether an expression can be passed to empty/isset before PHP 5.5
      */
-    private function isAcceptable(\PhpParser\Node\Expr $expr) : bool
+    private function isAcceptable(Expr $expr) : bool
     {
-        if ($expr instanceof \PhpParser\Node\Expr\Variable) {
+        if ($expr instanceof Variable) {
             return \true;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\PropertyFetch) {
+        if ($expr instanceof PropertyFetch) {
             return \true;
         }
-        if ($expr instanceof \PhpParser\Node\Expr\StaticPropertyFetch) {
+        if ($expr instanceof StaticPropertyFetch) {
             return \true;
         }
-        return $expr instanceof \PhpParser\Node\Expr\ArrayDimFetch;
+        return $expr instanceof ArrayDimFetch;
     }
-    private function refactorEmpty(\PhpParser\Node\Expr\Empty_ $empty) : \PhpParser\Node\Expr\BooleanNot
+    private function refactorEmpty(Empty_ $empty) : BooleanNot
     {
-        return new \PhpParser\Node\Expr\BooleanNot($empty->expr);
+        return new BooleanNot($empty->expr);
     }
-    private function refactorIsset(\PhpParser\Node\Expr\Isset_ $isset) : \PhpParser\Node\Expr
+    private function refactorIsset(Isset_ $isset) : Expr
     {
         $exprs = [];
         $currentExpr = null;
         foreach ($isset->vars as $var) {
             if (!$this->isAcceptable($var)) {
-                $currentExpr = new \PhpParser\Node\Expr\BinaryOp\NotIdentical($var, $this->nodeFactory->createNull());
+                $currentExpr = new NotIdentical($var, $this->nodeFactory->createNull());
                 $exprs[] = $currentExpr;
                 continue;
             }
-            if (!$currentExpr instanceof \PhpParser\Node\Expr\Isset_) {
-                $currentExpr = new \PhpParser\Node\Expr\Isset_([]);
+            if (!$currentExpr instanceof Isset_) {
+                $currentExpr = new Isset_([]);
                 $exprs[] = $currentExpr;
             }
             $currentExpr->vars[] = $var;
         }
-        \RectorPrefix20220607\Webmozart\Assert\Assert::minCount($exprs, 1);
+        Assert::minCount($exprs, 1);
         return $this->joinWithBooleanAnd($exprs);
     }
     /**
      * @param non-empty-array<int, Expr> $exprs
      */
-    private function joinWithBooleanAnd(array $exprs) : \PhpParser\Node\Expr
+    private function joinWithBooleanAnd(array $exprs) : Expr
     {
         $expr = $exprs[0];
         $nbExprs = \count($exprs);
         for ($i = 1; $i < $nbExprs; ++$i) {
-            $expr = new \PhpParser\Node\Expr\BinaryOp\BooleanAnd($expr, $exprs[$i]);
+            $expr = new BooleanAnd($expr, $exprs[$i]);
         }
         return $expr;
     }

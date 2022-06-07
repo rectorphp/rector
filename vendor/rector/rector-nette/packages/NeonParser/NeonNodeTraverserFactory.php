@@ -15,7 +15,7 @@ final class NeonNodeTraverserFactory
      * @var \Rector\Nette\NeonParser\NodeFactory\ServiceFactory
      */
     private $serviceFactory;
-    public function __construct(\Rector\Nette\NeonParser\Services\ServiceTypeResolver $serviceTypeResolver, \Rector\Nette\NeonParser\NodeFactory\ServiceFactory $serviceFactory)
+    public function __construct(ServiceTypeResolver $serviceTypeResolver, ServiceFactory $serviceFactory)
     {
         $this->serviceTypeResolver = $serviceTypeResolver;
         $this->serviceFactory = $serviceFactory;

@@ -18,12 +18,12 @@ final class NodesWithFileDestinationPrinter
      * @var \Rector\PostRector\Application\PostFileProcessor
      */
     private $postFileProcessor;
-    public function __construct(\Rector\Core\Contract\PhpParser\NodePrinterInterface $nodePrinter, \Rector\PostRector\Application\PostFileProcessor $postFileProcessor)
+    public function __construct(NodePrinterInterface $nodePrinter, PostFileProcessor $postFileProcessor)
     {
         $this->nodePrinter = $nodePrinter;
         $this->postFileProcessor = $postFileProcessor;
     }
-    public function printNodesWithFileDestination(\Rector\FileSystemRector\Contract\FileWithNodesInterface $fileWithNodes) : string
+    public function printNodesWithFileDestination(FileWithNodesInterface $fileWithNodes) : string
     {
         $nodes = $this->postFileProcessor->traverse($fileWithNodes->getNodes());
         return $this->nodePrinter->prettyPrintFile($nodes);

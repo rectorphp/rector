@@ -15,6 +15,6 @@ namespace RectorPrefix20220607\Symfony\Component\Console\Exception;
  *
  * @author Gabriel Ostrolucký <gabriel.ostrolucky@gmail.com>
  */
-class MissingInputException extends \RectorPrefix20220607\Symfony\Component\Console\Exception\RuntimeException implements \RectorPrefix20220607\Symfony\Component\Console\Exception\ExceptionInterface
+class MissingInputException extends RuntimeException implements ExceptionInterface
 {
 }

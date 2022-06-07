@@ -10,13 +10,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Laravel\ValueObject\AddArgumentDefaultValue;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Laravel\Tests\Rector\ClassMethod\AddArgumentDefaultValueRector\AddArgumentDefaultValueRectorTest
  */
-final class AddArgumentDefaultValueRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class AddArgumentDefaultValueRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -26,9 +26,9 @@ final class AddArgumentDefaultValueRector extends \Rector\Core\Rector\AbstractRe
      * @var AddArgumentDefaultValue[]
      */
     private $addedArguments = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Adds default value for arguments in defined methods.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Adds default value for arguments in defined methods.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function someMethod($value)
@@ -44,19 +44,19 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::ADDED_ARGUMENTS => [new \Rector\Laravel\ValueObject\AddArgumentDefaultValue('SomeClass', 'someMethod', 0, \false)]])]);
+, [self::ADDED_ARGUMENTS => [new AddArgumentDefaultValue('SomeClass', 'someMethod', 0, \false)]])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node) : \PhpParser\Node\Stmt\ClassMethod
+    public function refactor(Node $node) : ClassMethod
     {
         foreach ($this->addedArguments as $addedArgument) {
             if (!$this->nodeTypeResolver->isObjectType($node, $addedArgument->getObjectType())) {
@@ -73,7 +73,7 @@ CODE_SAMPLE
             if ($param->default !== null) {
                 continue;
             }
-            $node->params[$position] = new \PhpParser\Node\Param($param->var, \PhpParser\BuilderHelpers::normalizeValue($addedArgument->getDefaultValue()));
+            $node->params[$position] = new Param($param->var, BuilderHelpers::normalizeValue($addedArgument->getDefaultValue()));
         }
         return $node;
     }
@@ -83,8 +83,8 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         $addedArguments = $configuration[self::ADDED_ARGUMENTS] ?? $configuration;
-        \RectorPrefix20220607\Webmozart\Assert\Assert::isArray($addedArguments);
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allIsInstanceOf($addedArguments, \Rector\Laravel\ValueObject\AddArgumentDefaultValue::class);
+        Assert::isArray($addedArguments);
+        Assert::allIsInstanceOf($addedArguments, AddArgumentDefaultValue::class);
         $this->addedArguments = $addedArguments;
     }
 }

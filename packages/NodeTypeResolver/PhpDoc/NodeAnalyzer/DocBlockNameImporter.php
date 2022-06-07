@@ -14,17 +14,17 @@ final class DocBlockNameImporter
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor
      */
     private $nameImportingPhpDocNodeVisitor;
-    public function __construct(\Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor)
+    public function __construct(NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor)
     {
         $this->nameImportingPhpDocNodeVisitor = $nameImportingPhpDocNodeVisitor;
     }
-    public function importNames(\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDocNode, \PhpParser\Node $node) : void
+    public function importNames(PhpDocNode $phpDocNode, Node $node) : void
     {
         if ($phpDocNode->children === []) {
             return;
         }
         $this->nameImportingPhpDocNodeVisitor->setCurrentNode($node);
-        $phpDocNodeTraverser = new \RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($this->nameImportingPhpDocNodeVisitor);
         $phpDocNodeTraverser->traverse($phpDocNode);
     }

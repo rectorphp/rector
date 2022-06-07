@@ -47,7 +47,7 @@ final class CurrentAndParentClassMethodComparator
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\DeadCode\Comparator\Parameter\ParameterDefaultsComparator $parameterDefaultsComparator, \Rector\DeadCode\Comparator\Parameter\ParameterTypeComparator $parameterTypeComparator, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\Core\Reflection\ReflectionResolver $reflectionResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, ParameterDefaultsComparator $parameterDefaultsComparator, ParameterTypeComparator $parameterTypeComparator, NodeComparator $nodeComparator, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parameterDefaultsComparator = $parameterDefaultsComparator;
@@ -55,7 +55,7 @@ final class CurrentAndParentClassMethodComparator
         $this->nodeComparator = $nodeComparator;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isParentCallMatching(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    public function isParentCallMatching(ClassMethod $classMethod, StaticCall $staticCall) : bool
     {
         if (!$this->isSameMethodParentCall($classMethod, $staticCall)) {
             return \false;
@@ -68,12 +68,12 @@ final class CurrentAndParentClassMethodComparator
         }
         return !$this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall);
     }
-    private function isSameMethodParentCall(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    private function isSameMethodParentCall(ClassMethod $classMethod, StaticCall $staticCall) : bool
     {
         if (!$this->nodeNameResolver->areNamesEqual($staticCall->name, $classMethod->name)) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($staticCall->class, \Rector\Core\Enum\ObjectReference::PARENT);
+        return $this->nodeNameResolver->isName($staticCall->class, ObjectReference::PARENT);
     }
     /**
      * @param Arg[]|VariadicPlaceholder[] $parentStaticCallArgs
@@ -91,7 +91,7 @@ final class CurrentAndParentClassMethodComparator
             if (!isset($currentClassMethodParams[$key])) {
                 return \false;
             }
-            if (!$arg instanceof \PhpParser\Node\Arg) {
+            if (!$arg instanceof Arg) {
                 continue;
             }
             // this only compares variable name, but those can be differnt, so its kinda useless
@@ -102,10 +102,10 @@ final class CurrentAndParentClassMethodComparator
         }
         return \true;
     }
-    private function isParentClassMethodVisibilityOrDefaultOverride(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    private function isParentClassMethodVisibilityOrDefaultOverride(ClassMethod $classMethod, StaticCall $staticCall) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         $methodName = $this->nodeNameResolver->getName($staticCall->name);
@@ -128,11 +128,11 @@ final class CurrentAndParentClassMethodComparator
         }
         return \false;
     }
-    private function isOverridingParentParameters(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Reflection\ClassReflection $classReflection, string $methodName) : bool
+    private function isOverridingParentParameters(ClassMethod $classMethod, ClassReflection $classReflection, string $methodName) : bool
     {
-        $scope = $classMethod->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            throw new ShouldNotHappenException();
         }
         $parentMethodReflection = $classReflection->getMethod($methodName, $scope);
         // 3rd party code
@@ -145,9 +145,9 @@ final class CurrentAndParentClassMethodComparator
         }
         return $this->areParameterDefaultsDifferent($classMethod, $parentMethodReflection);
     }
-    private function areParameterDefaultsDifferent(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Reflection\MethodReflection $methodReflection) : bool
+    private function areParameterDefaultsDifferent(ClassMethod $classMethod, MethodReflection $methodReflection) : bool
     {
-        $parametersAcceptor = \PHPStan\Reflection\ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             if (!isset($classMethod->params[$key])) {
                 if ($parameterReflection->getDefaultValue() !== null) {

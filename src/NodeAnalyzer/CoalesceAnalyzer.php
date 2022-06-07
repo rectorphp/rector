@@ -14,8 +14,8 @@ final class CoalesceAnalyzer
     /**
      * @var array<class-string<Expr>>
      */
-    private const ISSETABLE_EXPR = [\PhpParser\Node\Expr\Variable::class, \PhpParser\Node\Expr\ArrayDimFetch::class, \PhpParser\Node\Expr\PropertyFetch::class, \PhpParser\Node\Expr\StaticPropertyFetch::class];
-    public function hasIssetableLeft(\PhpParser\Node\Expr\BinaryOp\Coalesce $coalesce) : bool
+    private const ISSETABLE_EXPR = [Variable::class, ArrayDimFetch::class, PropertyFetch::class, StaticPropertyFetch::class];
+    public function hasIssetableLeft(Coalesce $coalesce) : bool
     {
         $leftClass = \get_class($coalesce->left);
         return \in_array($leftClass, self::ISSETABLE_EXPR, \true);

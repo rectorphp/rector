@@ -29,7 +29,7 @@ final class VariableWithType
     /**
      * @param ComplexType|Identifier|Name|NullableType|UnionType|null $phpParserTypeNode
      */
-    public function __construct(string $name, \PHPStan\Type\Type $type, $phpParserTypeNode)
+    public function __construct(string $name, Type $type, $phpParserTypeNode)
     {
         $this->name = $name;
         $this->type = $type;
@@ -39,14 +39,14 @@ final class VariableWithType
     {
         return $this->name;
     }
-    public function getType() : \PHPStan\Type\Type
+    public function getType() : Type
     {
         return $this->type;
     }
     /**
      * @return ComplexType|Identifier|Name|NullableType|UnionType|null
      */
-    public function getPhpParserTypeNode() : ?\PhpParser\Node
+    public function getPhpParserTypeNode() : ?Node
     {
         return $this->phpParserTypeNode;
     }

@@ -28,7 +28,7 @@ if ($argc < 2) {
     echo "Usage: neon-lint <path>\n";
     exit(1);
 }
-$ok = \RectorPrefix20220607\scanPath($argv[1]);
+$ok = scanPath($argv[1]);
 exit($ok ? 0 : 1);
 function scanPath(string $path) : bool
 {
@@ -40,7 +40,7 @@ function scanPath(string $path) : bool
     $success = \true;
     foreach ($it as $file) {
         echo \str_pad(\str_repeat('.', $counter++ % 40), 40), "\r";
-        $success = \RectorPrefix20220607\lintFile((string) $file) && $success;
+        $success = lintFile((string) $file) && $success;
     }
     echo \str_pad('', 40), "\r";
     echo "Done.\n";
@@ -61,9 +61,9 @@ function lintFile(string $file) : bool
         $contents = \substr($s, 3);
     }
     try {
-        \RectorPrefix20220607\Nette\Neon\Neon::decode($s);
+        Nette\Neon\Neon::decode($s);
         return \true;
-    } catch (\RectorPrefix20220607\Nette\Neon\Exception $e) {
+    } catch (Nette\Neon\Exception $e) {
         \fwrite(\STDERR, "[ERROR]      {$file}    {$e->getMessage()}\n");
     } finally {
         \restore_error_handler();

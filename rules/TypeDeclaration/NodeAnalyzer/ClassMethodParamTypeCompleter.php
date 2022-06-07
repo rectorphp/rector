@@ -40,7 +40,7 @@ final class ClassMethodParamTypeCompleter
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, \Rector\Core\Php\PhpVersionProvider $phpVersionProvider)
+    public function __construct(StaticTypeMapper $staticTypeMapper, ClassMethodParamVendorLockResolver $classMethodParamVendorLockResolver, UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, PhpVersionProvider $phpVersionProvider)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->classMethodParamVendorLockResolver = $classMethodParamVendorLockResolver;
@@ -50,7 +50,7 @@ final class ClassMethodParamTypeCompleter
     /**
      * @param array<int, Type> $classParameterTypes
      */
-    public function complete(\PhpParser\Node\Stmt\ClassMethod $classMethod, array $classParameterTypes, int $maxUnionTypes) : ?\PhpParser\Node\Stmt\ClassMethod
+    public function complete(ClassMethod $classMethod, array $classParameterTypes, int $maxUnionTypes) : ?ClassMethod
     {
         $hasChanged = \false;
         foreach ($classParameterTypes as $position => $argumentStaticType) {
@@ -58,8 +58,8 @@ final class ClassMethodParamTypeCompleter
             if ($this->shouldSkipArgumentStaticType($classMethod, $argumentStaticType, $position, $maxUnionTypes)) {
                 continue;
             }
-            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
-            if (!$phpParserTypeNode instanceof \PhpParser\Node) {
+            $phpParserTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($argumentStaticType, TypeKind::PARAM);
+            if (!$phpParserTypeNode instanceof Node) {
                 continue;
             }
             // check default override
@@ -76,13 +76,13 @@ final class ClassMethodParamTypeCompleter
         }
         return null;
     }
-    private function shouldSkipArgumentStaticType(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PHPStan\Type\Type $argumentStaticType, int $position, int $maxUnionTypes) : bool
+    private function shouldSkipArgumentStaticType(ClassMethod $classMethod, Type $argumentStaticType, int $position, int $maxUnionTypes) : bool
     {
-        if ($argumentStaticType instanceof \PHPStan\Type\MixedType) {
+        if ($argumentStaticType instanceof MixedType) {
             return \true;
         }
         // skip mixed in union type
-        if ($argumentStaticType instanceof \PHPStan\Type\UnionType && $argumentStaticType->isSuperTypeOf(new \PHPStan\Type\MixedType())->yes()) {
+        if ($argumentStaticType instanceof UnionType && $argumentStaticType->isSuperTypeOf(new MixedType())->yes()) {
             return \true;
         }
         if (!isset($classMethod->params[$position])) {
@@ -116,48 +116,48 @@ final class ClassMethodParamTypeCompleter
         // already completed → skip
         return $currentParameterStaticType->equals($argumentStaticType);
     }
-    private function isClosureAndCallableType(\PHPStan\Type\Type $parameterStaticType, \PHPStan\Type\Type $argumentStaticType) : bool
+    private function isClosureAndCallableType(Type $parameterStaticType, Type $argumentStaticType) : bool
     {
-        if ($parameterStaticType instanceof \PHPStan\Type\CallableType && $this->isClosureObjectType($argumentStaticType)) {
+        if ($parameterStaticType instanceof CallableType && $this->isClosureObjectType($argumentStaticType)) {
             return \true;
         }
-        return $argumentStaticType instanceof \PHPStan\Type\CallableType && $this->isClosureObjectType($parameterStaticType);
+        return $argumentStaticType instanceof CallableType && $this->isClosureObjectType($parameterStaticType);
     }
-    private function isClosureObjectType(\PHPStan\Type\Type $type) : bool
+    private function isClosureObjectType(Type $type) : bool
     {
-        if (!$type instanceof \PHPStan\Type\ObjectType) {
+        if (!$type instanceof ObjectType) {
             return \false;
         }
         return $type->getClassName() === 'Closure';
     }
-    private function isTooDetailedUnionType(\PHPStan\Type\Type $currentType, \PHPStan\Type\Type $newType, int $maxUnionTypes) : bool
+    private function isTooDetailedUnionType(Type $currentType, Type $newType, int $maxUnionTypes) : bool
     {
-        if ($currentType instanceof \PHPStan\Type\MixedType) {
+        if ($currentType instanceof MixedType) {
             return \false;
         }
-        if (!$newType instanceof \PHPStan\Type\UnionType) {
+        if (!$newType instanceof UnionType) {
             return \false;
         }
         return \count($newType->getTypes()) > $maxUnionTypes;
     }
-    private function narrowUnionTypeIfNotSupported(\PHPStan\Type\Type $type) : \PHPStan\Type\Type
+    private function narrowUnionTypeIfNotSupported(Type $type) : Type
     {
-        if (!$type instanceof \PHPStan\Type\UnionType) {
+        if (!$type instanceof UnionType) {
             return $type;
         }
         // union is supported, so it's ok
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(\Rector\Core\ValueObject\PhpVersionFeature::UNION_TYPES)) {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return $type;
         }
         $narrowedObjectType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($type);
-        if ($narrowedObjectType instanceof \PHPStan\Type\ObjectType) {
+        if ($narrowedObjectType instanceof ObjectType) {
             return $narrowedObjectType;
         }
         return $type;
     }
-    private function isAcceptedByDefault(\PhpParser\Node\Param $param, \PHPStan\Type\Type $argumentStaticType) : bool
+    private function isAcceptedByDefault(Param $param, Type $argumentStaticType) : bool
     {
-        if (!$param->default instanceof \PhpParser\Node\Expr) {
+        if (!$param->default instanceof Expr) {
             return \true;
         }
         $defaultExpr = $param->default;

@@ -13,7 +13,7 @@ use RectorPrefix20220607\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeTypeResolverInterface<Return_>
  */
-final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface
+final class ReturnTypeResolver implements NodeTypeResolverInterface
 {
     /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -22,7 +22,7 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
     /**
      * @required
      */
-    public function autowire(\Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver) : void
+    public function autowire(NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -31,15 +31,15 @@ final class ReturnTypeResolver implements \Rector\NodeTypeResolver\Contract\Node
      */
     public function getNodeClasses() : array
     {
-        return [\PhpParser\Node\Stmt\Return_::class];
+        return [Return_::class];
     }
     /**
      * @param Return_ $node
      */
-    public function resolve(\PhpParser\Node $node) : \PHPStan\Type\Type
+    public function resolve(Node $node) : Type
     {
         if ($node->expr === null) {
-            return new \PHPStan\Type\VoidType();
+            return new VoidType();
         }
         return $this->nodeTypeResolver->getType($node->expr);
     }

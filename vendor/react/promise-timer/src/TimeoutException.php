@@ -3,7 +3,7 @@
 namespace RectorPrefix20220607\React\Promise\Timer;
 
 use RuntimeException;
-class TimeoutException extends \RuntimeException
+class TimeoutException extends RuntimeException
 {
     /** @var float */
     private $timeout;

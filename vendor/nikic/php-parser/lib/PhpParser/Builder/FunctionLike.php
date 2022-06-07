@@ -30,8 +30,8 @@ abstract class FunctionLike extends \PhpParser\Builder\Declaration
      */
     public function addParam($param)
     {
-        $param = \PhpParser\BuilderHelpers::normalizeNode($param);
-        if (!$param instanceof \PhpParser\Node\Param) {
+        $param = BuilderHelpers::normalizeNode($param);
+        if (!$param instanceof Node\Param) {
             throw new \LogicException(\sprintf('Expected parameter node, got "%s"', $param->getType()));
         }
         $this->params[] = $param;
@@ -60,7 +60,7 @@ abstract class FunctionLike extends \PhpParser\Builder\Declaration
      */
     public function setReturnType($type)
     {
-        $this->returnType = \PhpParser\BuilderHelpers::normalizeType($type);
+        $this->returnType = BuilderHelpers::normalizeType($type);
         return $this;
     }
 }

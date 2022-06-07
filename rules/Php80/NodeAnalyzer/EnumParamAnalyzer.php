@@ -25,14 +25,14 @@ final class EnumParamAnalyzer
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function matchParameterClassName(\PHPStan\Reflection\ParameterReflection $parameterReflection, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?\Rector\Php80\ValueObject\ClassNameAndTagValueNode
+    public function matchParameterClassName(ParameterReflection $parameterReflection, PhpDocInfo $phpDocInfo) : ?ClassNameAndTagValueNode
     {
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($parameterReflection->getName());
-        if (!$paramTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode) {
+        if (!$paramTagValueNode instanceof ParamTagValueNode) {
             return null;
         }
         $className = $this->resolveClassFromConstType($paramTagValueNode->type);
@@ -42,41 +42,41 @@ final class EnumParamAnalyzer
         if (!$this->reflectionProvider->hasClass($className)) {
             return null;
         }
-        return new \Rector\Php80\ValueObject\ClassNameAndTagValueNode($className, $paramTagValueNode);
+        return new ClassNameAndTagValueNode($className, $paramTagValueNode);
     }
-    public function matchReturnClassName(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?\Rector\Php80\ValueObject\ClassNameAndTagValueNode
+    public function matchReturnClassName(PhpDocInfo $phpDocInfo) : ?ClassNameAndTagValueNode
     {
         $returnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if (!$returnTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode) {
+        if (!$returnTagValueNode instanceof ReturnTagValueNode) {
             return null;
         }
         $className = $this->resolveClassFromConstType($returnTagValueNode->type);
         if (!\is_string($className)) {
             return null;
         }
-        return new \Rector\Php80\ValueObject\ClassNameAndTagValueNode($className, $returnTagValueNode);
+        return new ClassNameAndTagValueNode($className, $returnTagValueNode);
     }
-    public function matchPropertyClassName(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo) : ?\Rector\Php80\ValueObject\ClassNameAndTagValueNode
+    public function matchPropertyClassName(PhpDocInfo $phpDocInfo) : ?ClassNameAndTagValueNode
     {
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+        if (!$varTagValueNode instanceof VarTagValueNode) {
             return null;
         }
         $className = $this->resolveClassFromConstType($varTagValueNode->type);
         if (!\is_string($className)) {
             return null;
         }
-        return new \Rector\Php80\ValueObject\ClassNameAndTagValueNode($className, $varTagValueNode);
+        return new ClassNameAndTagValueNode($className, $varTagValueNode);
     }
-    private function resolveClassFromConstType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode) : ?string
+    private function resolveClassFromConstType(TypeNode $typeNode) : ?string
     {
-        if (!$typeNode instanceof \PHPStan\PhpDocParser\Ast\Type\ConstTypeNode) {
+        if (!$typeNode instanceof ConstTypeNode) {
             return null;
         }
-        if (!$typeNode->constExpr instanceof \PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode) {
+        if (!$typeNode->constExpr instanceof ConstFetchNode) {
             return null;
         }
         $constExpr = $typeNode->constExpr;
-        return $constExpr->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS);
+        return $constExpr->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
     }
 }

@@ -8,7 +8,7 @@ class ExplicitOctalEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmulator
 {
     public function getPhpVersion() : string
     {
-        return \PhpParser\Lexer\Emulative::PHP_8_1;
+        return Emulative::PHP_8_1;
     }
     public function isEmulationNeeded(string $code) : bool
     {

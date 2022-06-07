@@ -34,13 +34,13 @@ final class AssignAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\PostRector\Collector\NodesToAddCollector $nodesToAddCollector, \Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator $varAnnotationManipulator, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodesToAddCollector $nodesToAddCollector, VarAnnotationManipulator $varAnnotationManipulator, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodesToAddCollector = $nodesToAddCollector;
         $this->varAnnotationManipulator = $varAnnotationManipulator;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function addAssignExpressionForFirstCase(string $variableName, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, \PHPStan\Type\ObjectType $controlObjectType) : void
+    public function addAssignExpressionForFirstCase(string $variableName, ArrayDimFetch $arrayDimFetch, ObjectType $controlObjectType) : void
     {
         if ($this->shouldSkipForAlreadyAddedInCurrentClassMethod($arrayDimFetch, $variableName)) {
             return;
@@ -48,10 +48,10 @@ final class AssignAnalyzer
         $assignExpression = $this->createAnnotatedAssignExpression($variableName, $arrayDimFetch, $controlObjectType);
         $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $arrayDimFetch);
     }
-    private function shouldSkipForAlreadyAddedInCurrentClassMethod(\PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, string $variableName) : bool
+    private function shouldSkipForAlreadyAddedInCurrentClassMethod(ArrayDimFetch $arrayDimFetch, string $variableName) : bool
     {
-        $classMethod = $this->betterNodeFinder->findParentType($arrayDimFetch, \PhpParser\Node\Stmt\ClassMethod::class);
-        if (!$classMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $classMethod = $this->betterNodeFinder->findParentType($arrayDimFetch, ClassMethod::class);
+        if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
         $classMethodObjectHash = \spl_object_hash($classMethod) . $variableName;
@@ -61,19 +61,19 @@ final class AssignAnalyzer
         $this->alreadyInitializedAssignsClassMethodObjectHashes[] = $classMethodObjectHash;
         return \false;
     }
-    private function createAnnotatedAssignExpression(string $variableName, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch, \PHPStan\Type\ObjectType $controlObjectType) : \PhpParser\Node\Stmt\Expression
+    private function createAnnotatedAssignExpression(string $variableName, ArrayDimFetch $arrayDimFetch, ObjectType $controlObjectType) : Expression
     {
         $assignExpression = $this->createAssignExpression($variableName, $arrayDimFetch);
         $this->varAnnotationManipulator->decorateNodeWithInlineVarType($assignExpression, $controlObjectType, $variableName);
         return $assignExpression;
     }
-    private function createAssignExpression(string $variableName, \PhpParser\Node\Expr\ArrayDimFetch $arrayDimFetch) : \PhpParser\Node\Stmt\Expression
+    private function createAssignExpression(string $variableName, ArrayDimFetch $arrayDimFetch) : Expression
     {
-        $variable = new \PhpParser\Node\Expr\Variable($variableName);
+        $variable = new Variable($variableName);
         $assignedArrayDimFetch = clone $arrayDimFetch;
-        $assign = new \PhpParser\Node\Expr\Assign($variable, $assignedArrayDimFetch);
-        $variable->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $assign);
-        $assignedArrayDimFetch->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE, $assign);
-        return new \PhpParser\Node\Stmt\Expression($assign);
+        $assign = new Assign($variable, $assignedArrayDimFetch);
+        $variable->setAttribute(AttributeKey::PARENT_NODE, $assign);
+        $assignedArrayDimFetch->setAttribute(AttributeKey::PARENT_NODE, $assign);
+        return new Expression($assign);
     }
 }

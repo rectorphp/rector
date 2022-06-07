@@ -7,7 +7,7 @@ use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Stringable;
-final class SpacingAwareCallableTypeNode extends \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode
+final class SpacingAwareCallableTypeNode extends CallableTypeNode
 {
     public function __toString() : string
     {

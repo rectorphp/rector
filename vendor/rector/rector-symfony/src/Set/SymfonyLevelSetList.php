@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Set;
 
 use Rector\Set\Contract\SetListInterface;
-final class SymfonyLevelSetList implements \Rector\Set\Contract\SetListInterface
+final class SymfonyLevelSetList implements SetListInterface
 {
     /**
      * @var string

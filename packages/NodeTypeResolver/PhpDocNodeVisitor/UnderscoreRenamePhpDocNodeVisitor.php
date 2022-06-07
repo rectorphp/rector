@@ -10,7 +10,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
      * @var bool
@@ -31,19 +31,19 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220607\Symp
      * @var \PhpParser\Node
      */
     private $phpNode;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace, \PhpParser\Node $phpNode)
+    public function __construct(StaticTypeMapper $staticTypeMapper, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace, \PhpParser\Node $phpNode)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->pseudoNamespaceToNamespace = $pseudoNamespaceToNamespace;
         $this->phpNode = $phpNode;
     }
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node) : void
+    public function beforeTraverse(Node $node) : void
     {
         $this->hasChanged = \false;
     }
-    public function enterNode(\PHPStan\PhpDocParser\Ast\Node $node) : ?\PHPStan\PhpDocParser\Ast\Node
+    public function enterNode(Node $node) : ?Node
     {
-        if (!$node instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+        if (!$node instanceof IdentifierTypeNode) {
             return null;
         }
         if ($this->shouldSkip($node, $this->phpNode, $this->pseudoNamespaceToNamespace)) {
@@ -51,22 +51,22 @@ final class UnderscoreRenamePhpDocNodeVisitor extends \RectorPrefix20220607\Symp
         }
         /** @var IdentifierTypeNode $node */
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($node, $this->phpNode);
-        if (!$staticType instanceof \PHPStan\Type\ObjectType) {
+        if (!$staticType instanceof ObjectType) {
             return null;
         }
         $this->hasChanged = \true;
         // change underscore to \\
-        $slashedName = '\\' . \RectorPrefix20220607\Nette\Utils\Strings::replace($staticType->getClassName(), '#_#', '\\');
-        return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode($slashedName);
+        $slashedName = '\\' . Strings::replace($staticType->getClassName(), '#_#', '\\');
+        return new IdentifierTypeNode($slashedName);
     }
     public function hasChanged() : bool
     {
         return $this->hasChanged;
     }
-    private function shouldSkip(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifierTypeNode, \PhpParser\Node $phpParserNode, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
+    private function shouldSkip(IdentifierTypeNode $identifierTypeNode, \PhpParser\Node $phpParserNode, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
     {
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifierTypeNode, $phpParserNode);
-        if (!$staticType instanceof \PHPStan\Type\ObjectType) {
+        if (!$staticType instanceof ObjectType) {
             return \true;
         }
         if (\strncmp($staticType->getClassName(), $pseudoNamespaceToNamespace->getNamespacePrefix(), \strlen($pseudoNamespaceToNamespace->getNamespacePrefix())) !== 0) {

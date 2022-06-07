@@ -16,15 +16,15 @@ final class PhpDocTypeRenamer
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function changeUnderscoreType(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node $node, \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
+    public function changeUnderscoreType(PhpDocInfo $phpDocInfo, Node $node, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace) : bool
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
-        $underscoreRenamePhpDocNodeVisitor = new \Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor($this->staticTypeMapper, $pseudoNamespaceToNamespace, $node);
-        $phpDocNodeTraverser = new \RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
+        $underscoreRenamePhpDocNodeVisitor = new UnderscoreRenamePhpDocNodeVisitor($this->staticTypeMapper, $pseudoNamespaceToNamespace, $node);
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $phpDocNodeTraverser->addPhpDocNodeVisitor($underscoreRenamePhpDocNodeVisitor);
         $phpDocNodeTraverser->traverse($phpDocNode);
         // has changed?

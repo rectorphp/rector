@@ -47,8 +47,8 @@ final class ColorConsoleDiffFormatter
     }
     private function formatWithTemplate(string $diff, string $template) : string
     {
-        $escapedDiff = \RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatter::escape(\rtrim($diff));
-        $escapedDiffLines = \RectorPrefix20220607\Nette\Utils\Strings::split($escapedDiff, self::NEWLINES_REGEX);
+        $escapedDiff = OutputFormatter::escape(\rtrim($diff));
+        $escapedDiffLines = Strings::split($escapedDiff, self::NEWLINES_REGEX);
         // remove description of added + remove; obvious on diffs
         foreach ($escapedDiffLines as $key => $escapedDiffLine) {
             if ($escapedDiffLine === '--- Original') {
@@ -71,14 +71,14 @@ final class ColorConsoleDiffFormatter
     }
     private function makePlusLinesGreen(string $string) : string
     {
-        return \RectorPrefix20220607\Nette\Utils\Strings::replace($string, self::PLUS_START_REGEX, '<fg=green>$1</fg=green>');
+        return Strings::replace($string, self::PLUS_START_REGEX, '<fg=green>$1</fg=green>');
     }
     private function makeMinusLinesRed(string $string) : string
     {
-        return \RectorPrefix20220607\Nette\Utils\Strings::replace($string, self::MINUT_START_REGEX, '<fg=red>$1</fg=red>');
+        return Strings::replace($string, self::MINUT_START_REGEX, '<fg=red>$1</fg=red>');
     }
     private function makeAtNoteCyan(string $string) : string
     {
-        return \RectorPrefix20220607\Nette\Utils\Strings::replace($string, self::AT_START_REGEX, '<fg=cyan>$1</fg=cyan>');
+        return Strings::replace($string, self::AT_START_REGEX, '<fg=cyan>$1</fg=cyan>');
     }
 }

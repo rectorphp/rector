@@ -15,9 +15,9 @@ use RectorPrefix20220607\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Guillaume Aveline <guillaume.aveline@pm.me>
  */
-class FishCompletionOutput implements \RectorPrefix20220607\Symfony\Component\Console\Completion\Output\CompletionOutputInterface
+class FishCompletionOutput implements CompletionOutputInterface
 {
-    public function write(\RectorPrefix20220607\Symfony\Component\Console\Completion\CompletionSuggestions $suggestions, \RectorPrefix20220607\Symfony\Component\Console\Output\OutputInterface $output) : void
+    public function write(CompletionSuggestions $suggestions, OutputInterface $output) : void
     {
         $values = $suggestions->getValueSuggestions();
         foreach ($suggestions->getOptionSuggestions() as $option) {

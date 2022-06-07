@@ -10,13 +10,13 @@ use RectorPrefix20220607\Symfony\Component\Config\Loader\LoaderResolver;
 use RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20220607\Symplify\PackageBuilder\DependencyInjection\FileLoader\ParameterMergingPhpFileLoader;
 use RectorPrefix20220607\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
-final class ParameterMergingLoaderFactory implements \RectorPrefix20220607\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface
+final class ParameterMergingLoaderFactory implements LoaderFactoryInterface
 {
-    public function create(\RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder $containerBuilder, string $currentWorkingDirectory) : \RectorPrefix20220607\Symfony\Component\Config\Loader\LoaderInterface
+    public function create(ContainerBuilder $containerBuilder, string $currentWorkingDirectory) : \RectorPrefix20220607\Symfony\Component\Config\Loader\LoaderInterface
     {
-        $fileLocator = new \RectorPrefix20220607\Symfony\Component\Config\FileLocator([$currentWorkingDirectory]);
-        $loaders = [new \RectorPrefix20220607\Symfony\Component\Config\Loader\GlobFileLoader($fileLocator), new \RectorPrefix20220607\Symplify\PackageBuilder\DependencyInjection\FileLoader\ParameterMergingPhpFileLoader($containerBuilder, $fileLocator)];
-        $loaderResolver = new \RectorPrefix20220607\Symfony\Component\Config\Loader\LoaderResolver($loaders);
-        return new \RectorPrefix20220607\Symfony\Component\Config\Loader\DelegatingLoader($loaderResolver);
+        $fileLocator = new FileLocator([$currentWorkingDirectory]);
+        $loaders = [new GlobFileLoader($fileLocator), new ParameterMergingPhpFileLoader($containerBuilder, $fileLocator)];
+        $loaderResolver = new LoaderResolver($loaders);
+        return new DelegatingLoader($loaderResolver);
     }
 }

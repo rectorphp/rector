@@ -14,12 +14,12 @@ namespace RectorPrefix20220607;
 const ITERATIONS = 10000000;
 use RectorPrefix20220607\Evenement\EventEmitter;
 require __DIR__ . '/../vendor/autoload.php';
-$emitter = new \RectorPrefix20220607\Evenement\EventEmitter();
+$emitter = new EventEmitter();
 $emitter->on('event', function () {
 });
 $start = \microtime(\true);
-for ($i = 0; $i < \ITERATIONS; $i++) {
+for ($i = 0; $i < \RectorPrefix20220607\ITERATIONS; $i++) {
     $emitter->emit('event');
 }
 $time = \microtime(\true) - $start;
-echo 'Emitting ', \number_format(\ITERATIONS), ' events took: ', \number_format($time, 2), 's', \PHP_EOL;
+echo 'Emitting ', \number_format(\RectorPrefix20220607\ITERATIONS), ' events took: ', \number_format($time, 2), 's', \PHP_EOL;

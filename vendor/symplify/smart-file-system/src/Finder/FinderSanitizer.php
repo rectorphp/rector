@@ -7,7 +7,7 @@ use RectorPrefix20220607\Nette\Utils\Finder as NetteFinder;
 use SplFileInfo;
 use RectorPrefix20220607\Symfony\Component\Finder\Finder as SymfonyFinder;
 use RectorPrefix20220607\Symfony\Component\Finder\SplFileInfo as SymfonySplFileInfo;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\SmartFileSystem\Tests\Finder\FinderSanitizer\FinderSanitizerTest
  */
@@ -21,17 +21,17 @@ final class FinderSanitizer
     {
         $smartFileInfos = [];
         foreach ($files as $file) {
-            $fileInfo = \is_string($file) ? new \SplFileInfo($file) : $file;
+            $fileInfo = \is_string($file) ? new SplFileInfo($file) : $file;
             if (!$this->isFileInfoValid($fileInfo)) {
                 continue;
             }
             /** @var string $realPath */
             $realPath = $fileInfo->getRealPath();
-            $smartFileInfos[] = new \Symplify\SmartFileSystem\SmartFileInfo($realPath);
+            $smartFileInfos[] = new SmartFileInfo($realPath);
         }
         return $smartFileInfos;
     }
-    private function isFileInfoValid(\SplFileInfo $fileInfo) : bool
+    private function isFileInfoValid(SplFileInfo $fileInfo) : bool
     {
         return (bool) $fileInfo->getRealPath();
     }

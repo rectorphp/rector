@@ -9,8 +9,8 @@ use Rector\Arguments\ArgumentDefaultValueReplacer;
 use Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/versions/8.1/version_compare-operator-restrictions
@@ -18,7 +18,7 @@ use RectorPrefix20220607\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector\FunctionArgumentDefaultValueReplacerRectorTest
  */
-final class FunctionArgumentDefaultValueReplacerRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var ReplaceFuncCallArgumentDefaultValue[]
@@ -29,32 +29,32 @@ final class FunctionArgumentDefaultValueReplacerRector extends \Rector\Core\Rect
      * @var \Rector\Arguments\ArgumentDefaultValueReplacer
      */
     private $argumentDefaultValueReplacer;
-    public function __construct(\Rector\Arguments\ArgumentDefaultValueReplacer $argumentDefaultValueReplacer)
+    public function __construct(ArgumentDefaultValueReplacer $argumentDefaultValueReplacer)
     {
         $this->argumentDefaultValueReplacer = $argumentDefaultValueReplacer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Streamline the operator arguments of version_compare function', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Streamline the operator arguments of version_compare function', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 version_compare(PHP_VERSION, '5.6', 'gte');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 version_compare(PHP_VERSION, '5.6', 'ge');
 CODE_SAMPLE
-, [new \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge')])]);
+, [new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge')])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\FuncCall::class];
+        return [FuncCall::class];
     }
     /**
      * @param FuncCall $node
      * @return \PhpParser\Node\Expr\FuncCall|null
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         $hasChanged = \false;
         foreach ($this->replacedArguments as $replacedArgument) {
@@ -62,7 +62,7 @@ CODE_SAMPLE
                 continue;
             }
             $changedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
-            if ($changedNode instanceof \PhpParser\Node) {
+            if ($changedNode instanceof Node) {
                 $hasChanged = \true;
             }
         }
@@ -76,7 +76,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue::class);
+        Assert::allIsAOf($configuration, ReplaceFuncCallArgumentDefaultValue::class);
         $this->replacedArguments = $configuration;
     }
 }

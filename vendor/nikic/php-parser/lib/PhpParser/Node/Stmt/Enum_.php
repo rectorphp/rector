@@ -21,7 +21,7 @@ class Enum_ extends \PhpParser\Node\Stmt\ClassLike
      */
     public function __construct($name, array $subNodes = [], array $attributes = [])
     {
-        $this->name = \is_string($name) ? new \PhpParser\Node\Identifier($name) : $name;
+        $this->name = \is_string($name) ? new Node\Identifier($name) : $name;
         $this->scalarType = $subNodes['scalarType'] ?? null;
         $this->implements = $subNodes['implements'] ?? [];
         $this->stmts = $subNodes['stmts'] ?? [];

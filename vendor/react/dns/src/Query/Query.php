@@ -48,7 +48,7 @@ final class Query
      */
     public function describe()
     {
-        $class = $this->class !== \RectorPrefix20220607\React\Dns\Model\Message::CLASS_IN ? 'CLASS' . $this->class . ' ' : '';
+        $class = $this->class !== Message::CLASS_IN ? 'CLASS' . $this->class . ' ' : '';
         $type = 'TYPE' . $this->type;
         $ref = new \ReflectionClass('RectorPrefix20220607\\React\\Dns\\Model\\Message');
         foreach ($ref->getConstants() as $name => $value) {

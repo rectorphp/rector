@@ -16,11 +16,11 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = '39c7ae65e9489b88a886f035a22db8f427db0e16';
+    public const PACKAGE_VERSION = 'dbdb5931d619487a9a6cad7432df8201661cafa0';
     /**
      * @var string
      */
-    public const RELEASE_DATE = '2022-06-07 09:34:38';
+    public const RELEASE_DATE = '2022-06-07 08:17:10';
     /**
      * @var int
      */
@@ -30,7 +30,7 @@ final class VersionResolver
         // resolve current tag
         \exec('git tag --points-at', $tagExecOutput, $tagExecResultCode);
         if ($tagExecResultCode !== self::SUCCESS_CODE) {
-            throw new \Rector\Core\Exception\VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
+            throw new VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
         }
         if ($tagExecOutput !== []) {
             $tag = $tagExecOutput[0];
@@ -40,17 +40,17 @@ final class VersionResolver
         }
         \exec('git log --pretty="%H" -n1 HEAD', $commitHashExecOutput, $commitHashResultCode);
         if ($commitHashResultCode !== 0) {
-            throw new \Rector\Core\Exception\VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
+            throw new VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
         }
         $version = \trim($commitHashExecOutput[0]);
         return \trim($version, '"');
     }
-    public static function resolverReleaseDateTime() : \DateTime
+    public static function resolverReleaseDateTime() : DateTime
     {
         \exec('git log -n1 --pretty=%ci HEAD', $output, $resultCode);
         if ($resultCode !== self::SUCCESS_CODE) {
-            throw new \Rector\Core\Exception\VersionException('You must ensure to run compile from composer git repository clone and that git binary is available.');
+            throw new VersionException('You must ensure to run compile from composer git repository clone and that git binary is available.');
         }
-        return new \DateTime(\trim($output[0]));
+        return new DateTime(\trim($output[0]));
     }
 }

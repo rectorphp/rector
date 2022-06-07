@@ -25,5 +25,5 @@ final class NodeTypeGroup
      * @var array<class-string<Node>>
      * @api
      */
-    public const STMTS_AWARE = [\PhpParser\Node\Stmt\ClassMethod::class, \PhpParser\Node\Stmt\Function_::class, \PhpParser\Node\Stmt\If_::class, \PhpParser\Node\Stmt\Else_::class, \PhpParser\Node\Stmt\ElseIf_::class, \PhpParser\Node\Stmt\Do_::class, \PhpParser\Node\Stmt\Foreach_::class, \PhpParser\Node\Stmt\TryCatch::class, \PhpParser\Node\Stmt\While_::class, \PhpParser\Node\Stmt\For_::class, \PhpParser\Node\Expr\Closure::class, \PhpParser\Node\Stmt\Finally_::class, \PhpParser\Node\Stmt\Case_::class, \PhpParser\Node\Stmt\Catch_::class];
+    public const STMTS_AWARE = [ClassMethod::class, Function_::class, If_::class, Else_::class, ElseIf_::class, Do_::class, Foreach_::class, TryCatch::class, While_::class, For_::class, Closure::class, Finally_::class, Case_::class, Catch_::class];
 }

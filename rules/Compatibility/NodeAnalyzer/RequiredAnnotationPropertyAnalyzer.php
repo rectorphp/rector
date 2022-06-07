@@ -17,11 +17,11 @@ final class RequiredAnnotationPropertyAnalyzer
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(\Rector\Core\PhpParser\Node\Value\ValueResolver $valueResolver)
+    public function __construct(ValueResolver $valueResolver)
     {
         $this->valueResolver = $valueResolver;
     }
-    public function isRequiredProperty(\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\Property $property) : bool
+    public function isRequiredProperty(PhpDocInfo $phpDocInfo, Property $property) : bool
     {
         if ($phpDocInfo->hasByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\Required')) {
             return \true;
@@ -29,19 +29,19 @@ final class RequiredAnnotationPropertyAnalyzer
         // sometimes property has default null, but @var says its not null - that's due to nullability of typed properties
         // in that case, we should treat property as required
         $firstProperty = $property->props[0];
-        if (!$firstProperty->default instanceof \PhpParser\Node\Expr) {
+        if (!$firstProperty->default instanceof Expr) {
             return \false;
         }
         if (!$this->valueResolver->isNull($firstProperty->default)) {
             return \false;
         }
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if (!$varTagValueNode instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode) {
+        if (!$varTagValueNode instanceof VarTagValueNode) {
             return \false;
         }
-        if ($varTagValueNode->type instanceof \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode) {
+        if ($varTagValueNode->type instanceof NullableTypeNode) {
             return \false;
         }
-        return $property->type instanceof \PhpParser\Node\NullableType;
+        return $property->type instanceof NullableType;
     }
 }

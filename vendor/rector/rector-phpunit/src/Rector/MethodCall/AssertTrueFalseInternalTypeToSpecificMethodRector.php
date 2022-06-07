@@ -12,12 +12,12 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector\AssertTrueFalseInternalTypeToSpecificMethodRectorTest
  */
-final class AssertTrueFalseInternalTypeToSpecificMethodRector extends \Rector\Core\Rector\AbstractRector
+final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRector
 {
     /**
      * @var array<string, string>
@@ -37,26 +37,26 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends \Rector\Co
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(\Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator $identifierManipulator, \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertTrue(is_{internal_type}($anything), "message");', '$this->assertInternalType({internal_type}, $anything, "message");'), new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample('$this->assertFalse(is_{internal_type}($anything), "message");', '$this->assertNotInternalType({internal_type}, $anything, "message");')]);
+        return new RuleDefinition('Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertTrue(is_{internal_type}($anything), "message");', '$this->assertInternalType({internal_type}, $anything, "message");'), new CodeSample('$this->assertFalse(is_{internal_type}($anything), "message");', '$this->assertNotInternalType({internal_type}, $anything, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\StaticCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
      * @param MethodCall|StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         $oldMethods = \array_keys(self::RENAME_METHODS_MAP);
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethods)) {
@@ -64,7 +64,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends \Rector\Co
         }
         /** @var FuncCall|Node $firstArgumentValue */
         $firstArgumentValue = $node->args[0]->value;
-        if (!$firstArgumentValue instanceof \PhpParser\Node\Expr\FuncCall) {
+        if (!$firstArgumentValue instanceof FuncCall) {
             return null;
         }
         $functionName = $this->getName($firstArgumentValue);
@@ -77,13 +77,13 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends \Rector\Co
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function moveFunctionArgumentsUp($node) : \PhpParser\Node
+    private function moveFunctionArgumentsUp($node) : Node
     {
         /** @var FuncCall $isFunctionNode */
         $isFunctionNode = $node->args[0]->value;
         $firstArgumentValue = $isFunctionNode->args[0]->value;
         $isFunctionName = $this->getName($isFunctionNode);
-        $newArgs = [new \PhpParser\Node\Arg(new \PhpParser\Node\Scalar\String_(self::OLD_FUNCTIONS_TO_TYPES[$isFunctionName])), new \PhpParser\Node\Arg($firstArgumentValue)];
+        $newArgs = [new Arg(new String_(self::OLD_FUNCTIONS_TO_TYPES[$isFunctionName])), new Arg($firstArgumentValue)];
         $oldArguments = $node->args;
         unset($oldArguments[0]);
         $node->args = $this->appendArgs($newArgs, $oldArguments);

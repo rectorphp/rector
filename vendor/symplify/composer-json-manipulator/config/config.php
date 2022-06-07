@@ -4,22 +4,22 @@ declare (strict_types=1);
 namespace RectorPrefix20220607;
 
 use RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix20220607\Symplify\ComposerJsonManipulator\ValueObject\Option;
 use RectorPrefix20220607\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix20220607\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem;
 use function RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-return static function (\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator) : void {
+return static function (ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
-    $parameters->set(\RectorPrefix20220607\Symplify\ComposerJsonManipulator\ValueObject\Option::INLINE_SECTIONS, ['keywords']);
+    $parameters->set(Option::INLINE_SECTIONS, ['keywords']);
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire();
     $services->load('RectorPrefix20220607\Symplify\\ComposerJsonManipulator\\', __DIR__ . '/../src');
-    $services->set(\RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem::class);
-    $services->set(\RectorPrefix20220607\Symplify\PackageBuilder\Reflection\PrivatesCaller::class);
-    $services->set(\RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider::class)->args([\RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\service('service_container')]);
-    $services->set(\RectorPrefix20220607\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class);
-    $services->set(\RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle::class)->factory([\RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\service(\RectorPrefix20220607\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory::class), 'create']);
+    $services->set(SmartFileSystem::class);
+    $services->set(PrivatesCaller::class);
+    $services->set(ParameterProvider::class)->args([service('service_container')]);
+    $services->set(SymfonyStyleFactory::class);
+    $services->set(SymfonyStyle::class)->factory([service(SymfonyStyleFactory::class), 'create']);
 };

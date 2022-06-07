@@ -25,7 +25,7 @@ final class JsonConstCleaner
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -37,7 +37,7 @@ final class JsonConstCleaner
      */
     public function clean($node, array $constants)
     {
-        if ($node instanceof \PhpParser\Node\Expr\ConstFetch) {
+        if ($node instanceof ConstFetch) {
             return $this->cleanByConstFetch($node, $constants);
         }
         return $this->cleanByBitwiseOr($node, $constants);
@@ -48,8 +48,8 @@ final class JsonConstCleaner
      */
     private function hasDefinedCheck($node, array $constants) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($node, function (\PhpParser\Node $subNode) use($constants) : bool {
-            if (!$subNode instanceof \PhpParser\Node\Expr\FuncCall) {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($node, function (Node $subNode) use($constants) : bool {
+            if (!$subNode instanceof FuncCall) {
                 return \false;
             }
             if (!$this->nodeNameResolver->isName($subNode, 'defined')) {
@@ -59,7 +59,7 @@ final class JsonConstCleaner
             if (!isset($args[0])) {
                 return \false;
             }
-            if (!$args[0]->value instanceof \PhpParser\Node\Scalar\String_) {
+            if (!$args[0]->value instanceof String_) {
                 return \false;
             }
             return \in_array($args[0]->value->value, $constants, \true);
@@ -68,24 +68,24 @@ final class JsonConstCleaner
     /**
      * @param string[] $constants
      */
-    private function cleanByConstFetch(\PhpParser\Node\Expr\ConstFetch $constFetch, array $constants) : ?\PhpParser\Node\Expr\ConstFetch
+    private function cleanByConstFetch(ConstFetch $constFetch, array $constants) : ?ConstFetch
     {
         if (!$this->nodeNameResolver->isNames($constFetch, $constants)) {
             return null;
         }
-        $parent = $constFetch->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::PARENT_NODE);
-        if ($parent instanceof \PhpParser\Node\Expr\BinaryOp\BitwiseOr) {
+        $parent = $constFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parent instanceof BitwiseOr) {
             return null;
         }
         if ($this->hasDefinedCheck($constFetch, $constants)) {
             return null;
         }
-        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('0'));
+        return new ConstFetch(new Name('0'));
     }
     /**
      * @param string[] $constants
      */
-    private function cleanByBitwiseOr(\PhpParser\Node\Expr\BinaryOp\BitwiseOr $bitwiseOr, array $constants) : ?\PhpParser\Node\Expr
+    private function cleanByBitwiseOr(BitwiseOr $bitwiseOr, array $constants) : ?Expr
     {
         $isLeftTransformed = $this->isTransformed($bitwiseOr->left, $constants);
         $isRightTransformed = $this->isTransformed($bitwiseOr->right, $constants);
@@ -101,13 +101,13 @@ final class JsonConstCleaner
         if (!$isRightTransformed) {
             return $bitwiseOr->right;
         }
-        return new \PhpParser\Node\Expr\ConstFetch(new \PhpParser\Node\Name('0'));
+        return new ConstFetch(new Name('0'));
     }
     /**
      * @param string[] $constants
      */
-    private function isTransformed(\PhpParser\Node\Expr $expr, array $constants) : bool
+    private function isTransformed(Expr $expr, array $constants) : bool
     {
-        return $expr instanceof \PhpParser\Node\Expr\ConstFetch && $this->nodeNameResolver->isNames($expr, $constants);
+        return $expr instanceof ConstFetch && $this->nodeNameResolver->isNames($expr, $constants);
     }
 }

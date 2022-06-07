@@ -5,7 +5,7 @@ namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
 /** Nop/empty statement (;). */
-class Nop extends \PhpParser\Node\Stmt
+class Nop extends Node\Stmt
 {
     public function getSubNodeNames() : array
     {

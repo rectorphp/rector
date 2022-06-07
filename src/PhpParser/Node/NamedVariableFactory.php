@@ -20,19 +20,19 @@ final class NamedVariableFactory
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\Rector\Naming\Naming\VariableNaming $variableNaming, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(VariableNaming $variableNaming, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
     {
         $this->variableNaming = $variableNaming;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function createVariable(\PhpParser\Node $node, string $variableName) : \PhpParser\Node\Expr\Variable
+    public function createVariable(Node $node, string $variableName) : Variable
     {
         $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($node);
-        if (!$currentStmt instanceof \PhpParser\Node) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+        if (!$currentStmt instanceof Node) {
+            throw new ShouldNotHappenException();
         }
-        $scope = $currentStmt->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
         $variableName = $this->variableNaming->createCountedValueName($variableName, $scope);
-        return new \PhpParser\Node\Expr\Variable($variableName);
+        return new Variable($variableName);
     }
 }

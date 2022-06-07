@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace PhpParser\Node\Expr;
 
 use PhpParser\Node\Expr;
-class ShellExec extends \PhpParser\Node\Expr
+class ShellExec extends Expr
 {
     /** @var array Encapsed string array */
     public $parts;

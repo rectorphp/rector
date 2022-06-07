@@ -6,16 +6,16 @@ namespace Rector\DowngradePhp54\Rector\Closure;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector\DowngradeStaticClosureRectorTest
  */
-final class DowngradeStaticClosureRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeStaticClosureRector extends AbstractRector
 {
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Remove static from closure', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove static from closure', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -44,12 +44,12 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Closure::class];
+        return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if (!$node->static) {
             return null;

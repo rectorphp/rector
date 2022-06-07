@@ -14,15 +14,15 @@ final class FunctionLikeReturnTypeResolver
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\StaticTypeMapper $staticTypeMapper)
+    public function __construct(StaticTypeMapper $staticTypeMapper)
     {
         $this->staticTypeMapper = $staticTypeMapper;
     }
-    public function resolveFunctionLikeReturnTypeToPHPStanType(\PhpParser\Node\FunctionLike $functionLike) : \PHPStan\Type\Type
+    public function resolveFunctionLikeReturnTypeToPHPStanType(FunctionLike $functionLike) : Type
     {
         $functionReturnType = $functionLike->getReturnType();
         if ($functionReturnType === null) {
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         return $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionReturnType);
     }

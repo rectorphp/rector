@@ -14,7 +14,7 @@ use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<mixed[]>
  */
-final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface
+final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
 {
     /**
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
@@ -24,7 +24,7 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
      * Avoid circular reference
      * @required
      */
-    public function autowire(\Rector\PhpAttribute\AnnotationToAttributeMapper $annotationToAttributeMapper) : void
+    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper) : void
     {
         $this->annotationToAttributeMapper = $annotationToAttributeMapper;
     }
@@ -38,16 +38,16 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
     /**
      * @param mixed[] $value
      */
-    public function map($value) : \PhpParser\Node\Expr
+    public function map($value) : Expr
     {
         $arrayItems = [];
         foreach ($value as $key => $singleValue) {
             $valueExpr = $this->annotationToAttributeMapper->map($singleValue);
             // remove node
-            if ($valueExpr === \Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY) {
+            if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
-            \RectorPrefix20220607\Webmozart\Assert\Assert::isInstanceOf($valueExpr, \PhpParser\Node\Expr::class);
+            Assert::isInstanceOf($valueExpr, Expr::class);
             // remove value
             if ($this->isRemoveArrayPlaceholder($singleValue)) {
                 continue;
@@ -55,11 +55,11 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
             $keyExpr = null;
             if (!\is_int($key)) {
                 $keyExpr = $this->annotationToAttributeMapper->map($key);
-                \RectorPrefix20220607\Webmozart\Assert\Assert::isInstanceOf($keyExpr, \PhpParser\Node\Expr::class);
+                Assert::isInstanceOf($keyExpr, Expr::class);
             }
-            $arrayItems[] = new \PhpParser\Node\Expr\ArrayItem($valueExpr, $keyExpr);
+            $arrayItems[] = new ArrayItem($valueExpr, $keyExpr);
         }
-        return new \PhpParser\Node\Expr\Array_($arrayItems);
+        return new Array_($arrayItems);
     }
     /**
      * @param mixed $value
@@ -69,6 +69,6 @@ final class ArrayAnnotationToAttributeMapper implements \Rector\PhpAttribute\Con
         if (!\is_array($value)) {
             return \false;
         }
-        return \in_array(\Rector\PhpAttribute\Enum\DocTagNodeState::REMOVE_ARRAY, $value, \true);
+        return \in_array(DocTagNodeState::REMOVE_ARRAY, $value, \true);
     }
 }

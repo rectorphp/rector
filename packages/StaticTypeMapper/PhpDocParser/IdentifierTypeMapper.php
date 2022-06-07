@@ -34,7 +34,7 @@ use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
 /**
  * @implements PhpDocTypeMapperInterface<IdentifierTypeNode>
  */
-final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface
+final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
      * @readonly
@@ -61,7 +61,7 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(\Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier $objectTypeSpecifier, \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper $scalarStringToTypeMapper, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \PHPStan\Reflection\ReflectionProvider $reflectionProvider)
+    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ScalarStringToTypeMapper $scalarStringToTypeMapper, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
@@ -71,96 +71,96 @@ final class IdentifierTypeMapper implements \Rector\StaticTypeMapper\Contract\Ph
     }
     public function getNodeType() : string
     {
-        return \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode::class;
+        return IdentifierTypeNode::class;
     }
     /**
      * @param IdentifierTypeNode $typeNode
      */
-    public function mapToPHPStanType(\PHPStan\PhpDocParser\Ast\Type\TypeNode $typeNode, \PhpParser\Node $node, \PHPStan\Analyser\NameScope $nameScope) : \PHPStan\Type\Type
+    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope) : Type
     {
         $type = $this->scalarStringToTypeMapper->mapScalarStringToType($typeNode->name);
-        if (!$type instanceof \PHPStan\Type\MixedType) {
+        if (!$type instanceof MixedType) {
             return $type;
         }
         if ($type->isExplicitMixed()) {
             return $type;
         }
         $loweredName = \strtolower($typeNode->name);
-        if ($loweredName === \Rector\Core\Enum\ObjectReference::SELF) {
+        if ($loweredName === ObjectReference::SELF) {
             return $this->mapSelf($node);
         }
-        if ($loweredName === \Rector\Core\Enum\ObjectReference::PARENT) {
+        if ($loweredName === ObjectReference::PARENT) {
             return $this->mapParent($node);
         }
-        if ($loweredName === \Rector\Core\Enum\ObjectReference::STATIC) {
+        if ($loweredName === ObjectReference::STATIC) {
             return $this->mapStatic($node);
         }
         if ($loweredName === 'iterable') {
-            return new \PHPStan\Type\IterableType(new \PHPStan\Type\MixedType(), new \PHPStan\Type\MixedType());
+            return new IterableType(new MixedType(), new MixedType());
         }
         if (\strncmp($typeNode->name, '\\', \strlen('\\')) === 0) {
-            $typeWithoutPreslash = \RectorPrefix20220607\Nette\Utils\Strings::substring($typeNode->name, 1);
-            $objectType = new \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType($typeWithoutPreslash);
+            $typeWithoutPreslash = Strings::substring($typeNode->name, 1);
+            $objectType = new FullyQualifiedObjectType($typeWithoutPreslash);
         } else {
             if ($typeNode->name === 'scalar') {
                 // pseudo type, see https://www.php.net/manual/en/language.types.intro.php
-                $scalarTypes = [new \PHPStan\Type\BooleanType(), new \PHPStan\Type\StringType(), new \PHPStan\Type\IntegerType(), new \PHPStan\Type\FloatType()];
-                return new \PHPStan\Type\UnionType($scalarTypes);
+                $scalarTypes = [new BooleanType(), new StringType(), new IntegerType(), new FloatType()];
+                return new UnionType($scalarTypes);
             }
-            $objectType = new \PHPStan\Type\ObjectType($typeNode->name);
+            $objectType = new ObjectType($typeNode->name);
         }
-        $scope = $node->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
         return $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($node, $objectType, $scope);
     }
     /**
      * @return \PHPStan\Type\MixedType|\Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType
      */
-    private function mapSelf(\PhpParser\Node $node)
+    private function mapSelf(Node $node)
     {
         // @todo check FQN
         $className = $this->resolveClassName($node);
         if (!\is_string($className)) {
             // self outside the class, e.g. in a function
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
-        return new \Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType($className);
+        return new SelfObjectType($className);
     }
     /**
      * @return \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType|\PHPStan\Type\MixedType
      */
-    private function mapParent(\PhpParser\Node $node)
+    private function mapParent(Node $node)
     {
         $className = $this->resolveClassName($node);
         if (!\is_string($className)) {
             // parent outside the class, e.g. in a function
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         /** @var ClassReflection $classReflection */
         $classReflection = $this->reflectionProvider->getClass($className);
         $parentClassReflection = $classReflection->getParentClass();
-        if (!$parentClassReflection instanceof \PHPStan\Reflection\ClassReflection) {
-            return new \PHPStan\Type\MixedType();
+        if (!$parentClassReflection instanceof ClassReflection) {
+            return new MixedType();
         }
-        return new \Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType($parentClassReflection);
+        return new ParentStaticType($parentClassReflection);
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType
      */
-    private function mapStatic(\PhpParser\Node $node)
+    private function mapStatic(Node $node)
     {
         $className = $this->resolveClassName($node);
         if (!\is_string($className)) {
             // static outside the class, e.g. in a function
-            return new \PHPStan\Type\MixedType();
+            return new MixedType();
         }
         /** @var ClassReflection $classReflection */
         $classReflection = $this->reflectionProvider->getClass($className);
-        return new \PHPStan\Type\StaticType($classReflection);
+        return new StaticType($classReflection);
     }
-    private function resolveClassName(\PhpParser\Node $node) : ?string
+    private function resolveClassName(Node $node) : ?string
     {
-        $classLike = $node instanceof \PhpParser\Node\Stmt\ClassLike ? $node : $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\ClassLike::class);
-        if (!$classLike instanceof \PhpParser\Node\Stmt\ClassLike) {
+        $classLike = $node instanceof ClassLike ? $node : $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
             return null;
         }
         $className = $this->nodeNameResolver->getName($classLike);

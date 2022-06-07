@@ -16,8 +16,8 @@ use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
@@ -60,7 +60,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(\RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider $parameterProvider, \Rector\CodingStyle\Node\NameImporter $nameImporter, \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter $docBlockNameImporter, \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper $classNameImportSkipper, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\Provider\CurrentFileProvider $currentFileProvider, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder)
+    public function __construct(ParameterProvider $parameterProvider, NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter, ClassNameImportSkipper $classNameImportSkipper, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, BetterNodeFinder $betterNodeFinder)
     {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
@@ -71,19 +71,19 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->currentFileProvider = $currentFileProvider;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function enterNode(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function enterNode(Node $node) : ?Node
     {
-        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES)) {
+        if (!$this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
             return null;
         }
         $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+        if (!$file instanceof File) {
             return null;
         }
         if (!$this->shouldApply($file)) {
             return null;
         }
-        if ($node instanceof \PhpParser\Node\Name) {
+        if ($node instanceof Name) {
             return $this->processNodeName($node, $file);
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
@@ -95,9 +95,9 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         // this must run after NodeRemovingPostRector, sine renamed use imports can block next import
         return 600;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Imports fully qualified names', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Imports fully qualified names', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(App\AnotherClass $anotherClass)
@@ -117,14 +117,14 @@ class SomeClass
 CODE_SAMPLE
 )]);
     }
-    private function processNodeName(\PhpParser\Node\Name $name, \Rector\Core\ValueObject\Application\File $file) : ?\PhpParser\Node
+    private function processNodeName(Name $name, File $file) : ?Node
     {
         if ($name->isSpecialClassName()) {
             return $name;
         }
         // @todo test if old stmts or new stmts! or both? :)
         /** @var Use_[] $currentUses */
-        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), \PhpParser\Node\Stmt\Use_::class);
+        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), Use_::class);
         if ($this->shouldImportName($name, $currentUses)) {
             return $this->nameImporter->importName($name, $file, $currentUses);
         }
@@ -133,7 +133,7 @@ CODE_SAMPLE
     /**
      * @param Use_[] $currentUses
      */
-    private function shouldImportName(\PhpParser\Node\Name $name, array $currentUses) : bool
+    private function shouldImportName(Name $name, array $currentUses) : bool
     {
         if (\substr_count($name->toCodeString(), '\\') <= 1) {
             return \true;
@@ -144,11 +144,11 @@ CODE_SAMPLE
         if ($this->classNameImportSkipper->isAlreadyImported($name, $currentUses)) {
             return \true;
         }
-        return $this->reflectionProvider->hasFunction(new \PhpParser\Node\Name($name->getLast()), null);
+        return $this->reflectionProvider->hasFunction(new Name($name->getLast()), null);
     }
-    private function shouldApply(\Rector\Core\ValueObject\Application\File $file) : bool
+    private function shouldApply(File $file) : bool
     {
-        if (!$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY)) {
+        if (!$this->parameterProvider->provideBoolParameter(Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY)) {
             return \true;
         }
         return $file->hasContentChanged();

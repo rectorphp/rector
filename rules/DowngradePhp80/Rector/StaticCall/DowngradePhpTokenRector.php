@@ -15,20 +15,20 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector\DowngradePhpTokenRectorTest
  */
-final class DowngradePhpTokenRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradePhpTokenRector extends AbstractRector
 {
     /**
      * @var string
      */
     private const PHP_TOKEN = 'PhpToken';
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('"something()" will be renamed to "somethingElse()"', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('"something()" will be renamed to "somethingElse()"', [new CodeSample(<<<'CODE_SAMPLE'
 $tokens = \PhpToken::tokenize($code);
 
 foreach ($tokens as $phpToken) {
@@ -51,54 +51,54 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class, \PhpParser\Node\Expr\MethodCall::class, \PhpParser\Node\Expr\PropertyFetch::class];
+        return [StaticCall::class, MethodCall::class, PropertyFetch::class];
     }
     /**
      * @param StaticCall|MethodCall|PropertyFetch $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof \PhpParser\Node\Expr\StaticCall) {
+        if ($node instanceof StaticCall) {
             return $this->refactorStaticCall($node);
         }
-        if ($node instanceof \PhpParser\Node\Expr\MethodCall) {
+        if ($node instanceof MethodCall) {
             return $this->refactorMethodCall($node);
         }
         return $this->refactorPropertyFetch($node);
     }
-    private function refactorStaticCall(\PhpParser\Node\Expr\StaticCall $staticCall) : ?\PhpParser\Node\Expr\FuncCall
+    private function refactorStaticCall(StaticCall $staticCall) : ?FuncCall
     {
-        if (!$this->isObjectType($staticCall->class, new \PHPStan\Type\ObjectType(self::PHP_TOKEN))) {
+        if (!$this->isObjectType($staticCall->class, new ObjectType(self::PHP_TOKEN))) {
             return null;
         }
         if (!$this->isName($staticCall->name, 'tokenize')) {
             return null;
         }
-        return new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('token_get_all'), $staticCall->args);
+        return new FuncCall(new Name('token_get_all'), $staticCall->args);
     }
-    private function refactorMethodCall(\PhpParser\Node\Expr\MethodCall $methodCall) : ?\PhpParser\Node\Expr\Ternary
+    private function refactorMethodCall(MethodCall $methodCall) : ?Ternary
     {
-        if (!$this->isObjectType($methodCall->var, new \PHPStan\Type\ObjectType(self::PHP_TOKEN))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType(self::PHP_TOKEN))) {
             return null;
         }
         if (!$this->isName($methodCall->name, 'getTokenName')) {
             return null;
         }
-        $isArrayFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_array'), [new \PhpParser\Node\Arg($methodCall->var)]);
-        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($methodCall->var, new \PhpParser\Node\Scalar\LNumber(0));
-        $tokenGetNameFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('token_name'), [new \PhpParser\Node\Arg($arrayDimFetch)]);
-        return new \PhpParser\Node\Expr\Ternary($isArrayFuncCall, $tokenGetNameFuncCall, $this->nodeFactory->createNull());
+        $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($methodCall->var)]);
+        $arrayDimFetch = new ArrayDimFetch($methodCall->var, new LNumber(0));
+        $tokenGetNameFuncCall = new FuncCall(new Name('token_name'), [new Arg($arrayDimFetch)]);
+        return new Ternary($isArrayFuncCall, $tokenGetNameFuncCall, $this->nodeFactory->createNull());
     }
-    private function refactorPropertyFetch(\PhpParser\Node\Expr\PropertyFetch $propertyFetch) : ?\PhpParser\Node\Expr\Ternary
+    private function refactorPropertyFetch(PropertyFetch $propertyFetch) : ?Ternary
     {
-        if (!$this->isObjectType($propertyFetch->var, new \PHPStan\Type\ObjectType(self::PHP_TOKEN))) {
+        if (!$this->isObjectType($propertyFetch->var, new ObjectType(self::PHP_TOKEN))) {
             return null;
         }
         if (!$this->isName($propertyFetch->name, 'text')) {
             return null;
         }
-        $isArrayFuncCall = new \PhpParser\Node\Expr\FuncCall(new \PhpParser\Node\Name('is_array'), [new \PhpParser\Node\Arg($propertyFetch->var)]);
-        $arrayDimFetch = new \PhpParser\Node\Expr\ArrayDimFetch($propertyFetch->var, new \PhpParser\Node\Scalar\LNumber(1));
-        return new \PhpParser\Node\Expr\Ternary($isArrayFuncCall, $arrayDimFetch, $propertyFetch->var);
+        $isArrayFuncCall = new FuncCall(new Name('is_array'), [new Arg($propertyFetch->var)]);
+        $arrayDimFetch = new ArrayDimFetch($propertyFetch->var, new LNumber(1));
+        return new Ternary($isArrayFuncCall, $arrayDimFetch, $propertyFetch->var);
     }
 }

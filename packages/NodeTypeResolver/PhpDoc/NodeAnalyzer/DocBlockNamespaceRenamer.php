@@ -28,7 +28,7 @@ final class DocBlockNamespaceRenamer
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(\Rector\Naming\NamespaceMatcher $namespaceMatcher, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory $phpDocInfoFactory)
+    public function __construct(NamespaceMatcher $namespaceMatcher, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->namespaceMatcher = $namespaceMatcher;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -37,12 +37,12 @@ final class DocBlockNamespaceRenamer
      * @param array<string, string> $oldToNewNamespaces
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\ClassLike|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $node
      */
-    public function renameFullyQualifiedNamespace($node, array $oldToNewNamespaces) : ?\PhpParser\Node
+    public function renameFullyQualifiedNamespace($node, array $oldToNewNamespaces) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $phpDocNodeTraverser = new \RectorPrefix20220607\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (\PHPStan\PhpDocParser\Ast\Node $docNode) use($oldToNewNamespaces) : ?DocNode {
-            if (!$docNode instanceof \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode) {
+        $phpDocNodeTraverser = new PhpDocNodeTraverser();
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (DocNode $docNode) use($oldToNewNamespaces) : ?DocNode {
+            if (!$docNode instanceof IdentifierTypeNode) {
                 return null;
             }
             $trimmedName = \ltrim($docNode->name, '\\');
@@ -50,10 +50,10 @@ final class DocBlockNamespaceRenamer
                 return null;
             }
             $renamedNamespaceValueObject = $this->namespaceMatcher->matchRenamedNamespace($trimmedName, $oldToNewNamespaces);
-            if (!$renamedNamespaceValueObject instanceof \Rector\Renaming\ValueObject\RenamedNamespace) {
+            if (!$renamedNamespaceValueObject instanceof RenamedNamespace) {
                 return null;
             }
-            return new \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode('\\' . $renamedNamespaceValueObject->getNameInNewNamespace());
+            return new IdentifierTypeNode('\\' . $renamedNamespaceValueObject->getNameInNewNamespace());
         });
         if (!$phpDocInfo->hasChanged()) {
             return null;

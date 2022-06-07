@@ -68,7 +68,7 @@ final class PromotedPropertyCandidateResolver
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\Core\PhpParser\Node\BetterNodeFinder $betterNodeFinder, \Rector\Core\PhpParser\Comparing\NodeComparator $nodeComparator, \Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer $varDocPropertyTypeInferer, \Rector\NodeTypeResolver\NodeTypeResolver $nodeTypeResolver, \Rector\NodeTypeResolver\TypeComparator\TypeComparator $typeComparator, \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory $typeFactory, \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, VarDocPropertyTypeInferer $varDocPropertyTypeInferer, NodeTypeResolver $nodeTypeResolver, TypeComparator $typeComparator, TypeFactory $typeFactory, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -82,10 +82,10 @@ final class PromotedPropertyCandidateResolver
     /**
      * @return PropertyPromotionCandidate[]
      */
-    public function resolveFromClass(\PhpParser\Node\Stmt\Class_ $class) : array
+    public function resolveFromClass(Class_ $class) : array
     {
-        $constructClassMethod = $class->getMethod(\Rector\Core\ValueObject\MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return [];
         }
         $propertyPromotionCandidates = [];
@@ -95,29 +95,29 @@ final class PromotedPropertyCandidateResolver
                 continue;
             }
             $propertyPromotionCandidate = $this->matchPropertyPromotionCandidate($property, $constructClassMethod);
-            if (!$propertyPromotionCandidate instanceof \Rector\Php80\ValueObject\PropertyPromotionCandidate) {
+            if (!$propertyPromotionCandidate instanceof PropertyPromotionCandidate) {
                 continue;
             }
             $propertyPromotionCandidates[] = $propertyPromotionCandidate;
         }
         return $propertyPromotionCandidates;
     }
-    private function matchPropertyPromotionCandidate(\PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Stmt\ClassMethod $constructClassMethod) : ?\Rector\Php80\ValueObject\PropertyPromotionCandidate
+    private function matchPropertyPromotionCandidate(Property $property, ClassMethod $constructClassMethod) : ?PropertyPromotionCandidate
     {
         $onlyProperty = $property->props[0];
         $propertyName = $this->nodeNameResolver->getName($onlyProperty);
         $firstParamAsVariable = $this->resolveFirstParamUses($constructClassMethod);
         // match property name to assign in constructor
         foreach ((array) $constructClassMethod->stmts as $stmt) {
-            if ($stmt instanceof \PhpParser\Node\Stmt\Expression) {
+            if ($stmt instanceof Expression) {
                 $stmt = $stmt->expr;
             }
-            if (!$stmt instanceof \PhpParser\Node\Expr\Assign) {
+            if (!$stmt instanceof Assign) {
                 continue;
             }
             $assign = $stmt;
             // promoted property must use non-static property only
-            if (!$assign->var instanceof \PhpParser\Node\Expr\PropertyFetch) {
+            if (!$assign->var instanceof PropertyFetch) {
                 continue;
             }
             if (!$this->propertyFetchAnalyzer->isLocalPropertyFetchName($assign->var, $propertyName)) {
@@ -125,42 +125,42 @@ final class PromotedPropertyCandidateResolver
             }
             // 1. is param
             $assignedExpr = $assign->expr;
-            if (!$assignedExpr instanceof \PhpParser\Node\Expr\Variable) {
+            if (!$assignedExpr instanceof Variable) {
                 continue;
             }
             $matchedParam = $this->matchClassMethodParamByAssignedVariable($constructClassMethod, $assignedExpr);
-            if (!$matchedParam instanceof \PhpParser\Node\Param) {
+            if (!$matchedParam instanceof Param) {
                 continue;
             }
             if ($this->shouldSkipParam($matchedParam, $property, $assignedExpr, $firstParamAsVariable)) {
                 continue;
             }
-            return new \Rector\Php80\ValueObject\PropertyPromotionCandidate($property, $assign, $matchedParam);
+            return new PropertyPromotionCandidate($property, $assign, $matchedParam);
         }
         return null;
     }
     /**
      * @return array<string, int>
      */
-    private function resolveFirstParamUses(\PhpParser\Node\Stmt\ClassMethod $classMethod) : array
+    private function resolveFirstParamUses(ClassMethod $classMethod) : array
     {
         $paramByFirstUsage = [];
         foreach ($classMethod->params as $param) {
             $paramName = $this->nodeNameResolver->getName($param);
-            $firstParamVariable = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (\PhpParser\Node $node) use($paramName) : bool {
-                if (!$node instanceof \PhpParser\Node\Expr\Variable) {
+            $firstParamVariable = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, function (Node $node) use($paramName) : bool {
+                if (!$node instanceof Variable) {
                     return \false;
                 }
                 return $this->nodeNameResolver->isName($node, $paramName);
             });
-            if (!$firstParamVariable instanceof \PhpParser\Node) {
+            if (!$firstParamVariable instanceof Node) {
                 continue;
             }
             $paramByFirstUsage[$paramName] = $firstParamVariable->getStartTokenPos();
         }
         return $paramByFirstUsage;
     }
-    private function matchClassMethodParamByAssignedVariable(\PhpParser\Node\Stmt\ClassMethod $classMethod, \PhpParser\Node\Expr\Variable $variable) : ?\PhpParser\Node\Param
+    private function matchClassMethodParamByAssignedVariable(ClassMethod $classMethod, Variable $variable) : ?Param
     {
         foreach ($classMethod->params as $param) {
             if (!$this->nodeComparator->areNodesEqual($variable, $param->var)) {
@@ -173,7 +173,7 @@ final class PromotedPropertyCandidateResolver
     /**
      * @param array<string, int> $firstParamAsVariable
      */
-    private function isParamUsedBeforeAssign(\PhpParser\Node\Expr\Variable $variable, array $firstParamAsVariable) : bool
+    private function isParamUsedBeforeAssign(Variable $variable, array $firstParamAsVariable) : bool
     {
         $variableName = $this->nodeNameResolver->getName($variable);
         $firstVariablePosition = $firstParamAsVariable[$variableName] ?? null;
@@ -182,7 +182,7 @@ final class PromotedPropertyCandidateResolver
         }
         return $firstVariablePosition < $variable->getStartTokenPos();
     }
-    private function hasConflictingParamType(\PhpParser\Node\Param $param, \PHPStan\Type\Type $propertyType) : bool
+    private function hasConflictingParamType(Param $param, Type $propertyType) : bool
     {
         if ($param->type === null) {
             return \false;
@@ -192,7 +192,7 @@ final class PromotedPropertyCandidateResolver
             $defaultValueType = $this->nodeTypeResolver->getType($param->default);
             $matchedParamType = $this->typeFactory->createMixedPassedOrUnionType([$matchedParamType, $defaultValueType]);
         }
-        if (!$propertyType instanceof \PHPStan\Type\UnionType) {
+        if (!$propertyType instanceof UnionType) {
             return \false;
         }
         if ($this->typeComparator->areTypesEqual($propertyType, $matchedParamType)) {
@@ -204,19 +204,19 @@ final class PromotedPropertyCandidateResolver
         }
         return !$this->hasTemplatedGenericType($propertyType);
     }
-    private function hasTemplatedGenericType(\PHPStan\Type\UnionType $unionType) : bool
+    private function hasTemplatedGenericType(UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof \PHPStan\Type\Generic\TemplateType) {
+            if ($type instanceof TemplateType) {
                 return \true;
             }
         }
         return \false;
     }
-    private function hasMixedType(\PHPStan\Type\UnionType $unionType) : bool
+    private function hasMixedType(UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof \PHPStan\Type\MixedType) {
+            if ($type instanceof MixedType) {
                 return \true;
             }
         }
@@ -225,7 +225,7 @@ final class PromotedPropertyCandidateResolver
     /**
      * @param int[] $firstParamAsVariable
      */
-    private function shouldSkipParam(\PhpParser\Node\Param $matchedParam, \PhpParser\Node\Stmt\Property $property, \PhpParser\Node\Expr\Variable $assignedVariable, array $firstParamAsVariable) : bool
+    private function shouldSkipParam(Param $matchedParam, Property $property, Variable $assignedVariable, array $firstParamAsVariable) : bool
     {
         // already promoted
         if ($matchedParam->flags !== 0) {

@@ -6,19 +6,19 @@ namespace RectorPrefix20220607\OndraM\CiDetector\Ci;
 use RectorPrefix20220607\OndraM\CiDetector\CiDetector;
 use RectorPrefix20220607\OndraM\CiDetector\Env;
 use RectorPrefix20220607\OndraM\CiDetector\TrinaryLogic;
-class GitLab extends \RectorPrefix20220607\OndraM\CiDetector\Ci\AbstractCi
+class GitLab extends AbstractCi
 {
-    public static function isDetected(\RectorPrefix20220607\OndraM\CiDetector\Env $env) : bool
+    public static function isDetected(Env $env) : bool
     {
         return $env->get('GITLAB_CI') !== \false;
     }
     public function getCiName() : string
     {
-        return \RectorPrefix20220607\OndraM\CiDetector\CiDetector::CI_GITLAB;
+        return CiDetector::CI_GITLAB;
     }
-    public function isPullRequest() : \RectorPrefix20220607\OndraM\CiDetector\TrinaryLogic
+    public function isPullRequest() : TrinaryLogic
     {
-        return \RectorPrefix20220607\OndraM\CiDetector\TrinaryLogic::createFromBoolean($this->env->get('CI_MERGE_REQUEST_ID') !== \false || $this->env->get('CI_EXTERNAL_PULL_REQUEST_IID') !== \false);
+        return TrinaryLogic::createFromBoolean($this->env->get('CI_MERGE_REQUEST_ID') !== \false || $this->env->get('CI_EXTERNAL_PULL_REQUEST_IID') !== \false);
     }
     public function getBuildNumber() : string
     {

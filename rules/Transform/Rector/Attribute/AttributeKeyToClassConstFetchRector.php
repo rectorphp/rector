@@ -9,23 +9,23 @@ use PhpParser\Node\Identifier;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/doctrine/dbal/blob/3.1.x/src/Types/Types.php
  *
  * @see \Rector\Tests\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector\AttributeKeyToClassConstFetchRectorTest
  */
-final class AttributeKeyToClassConstFetchRector extends \Rector\Core\Rector\AbstractRector implements \Rector\Core\Contract\Rector\ConfigurableRectorInterface
+final class AttributeKeyToClassConstFetchRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @var AttributeKeyToClassConstFetch[]
      */
     private $attributeKeysToClassConstFetches = [];
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Replace key value on specific attribute to class constant', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace key value on specific attribute to class constant', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping\Column;
 
 class SomeClass
@@ -44,19 +44,19 @@ class SomeClass
     public $name;
 }
 CODE_SAMPLE
-, [new \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch('Doctrine\\ORM\\Mapping\\Column', 'type', 'Doctrine\\DBAL\\Types\\Types', ['string' => 'STRING'])])]);
+, [new AttributeKeyToClassConstFetch('Doctrine\\ORM\\Mapping\\Column', 'type', 'Doctrine\\DBAL\\Types\\Types', ['string' => 'STRING'])])]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Attribute::class];
+        return [Attribute::class];
     }
     /**
      * @param Attribute $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         foreach ($this->attributeKeysToClassConstFetches as $attributeKeyToClassConstFetch) {
             if (!$this->isName($node->name, $attributeKeyToClassConstFetch->getAttributeClass())) {
@@ -64,7 +64,7 @@ CODE_SAMPLE
             }
             foreach ($node->args as $arg) {
                 $argName = $arg->name;
-                if (!$argName instanceof \PhpParser\Node\Identifier) {
+                if (!$argName instanceof Identifier) {
                     continue;
                 }
                 if (!$this->isName($argName, $attributeKeyToClassConstFetch->getAttributeKey())) {
@@ -86,7 +86,7 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        \RectorPrefix20220607\Webmozart\Assert\Assert::allIsAOf($configuration, \Rector\Transform\ValueObject\AttributeKeyToClassConstFetch::class);
+        Assert::allIsAOf($configuration, AttributeKeyToClassConstFetch::class);
         $this->attributeKeysToClassConstFetches = $configuration;
     }
 }

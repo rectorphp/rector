@@ -21,7 +21,7 @@ final class StartAndEnd
         $this->start = $start;
         $this->end = $end;
         if ($end < $start) {
-            throw new \Rector\Core\Exception\ShouldNotHappenException();
+            throw new ShouldNotHappenException();
         }
     }
     public function getStart() : int

@@ -23,20 +23,20 @@ final class PropertyTypeVendorLockResolver
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
-    public function __construct(\Rector\NodeNameResolver\NodeNameResolver $nodeNameResolver, \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, FamilyRelationsAnalyzer $familyRelationsAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
     }
-    public function isVendorLocked(\PhpParser\Node\Stmt\Property $property) : bool
+    public function isVendorLocked(Property $property) : bool
     {
-        $scope = $property->getAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::SCOPE);
+        $scope = $property->getAttribute(AttributeKey::SCOPE);
         // possibly trait
-        if (!$scope instanceof \PHPStan\Analyser\Scope) {
+        if (!$scope instanceof Scope) {
             return \true;
         }
         $classReflection = $scope->getClassReflection();
-        if (!$classReflection instanceof \PHPStan\Reflection\ClassReflection) {
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         if (\count($classReflection->getAncestors()) === 1) {
@@ -49,7 +49,7 @@ final class PropertyTypeVendorLockResolver
         }
         return $this->isChildClassLocked($property, $classReflection, $propertyName);
     }
-    private function isParentClassLocked(\PHPStan\Reflection\ClassReflection $classReflection, string $propertyName, \PHPStan\Analyser\Scope $scope) : bool
+    private function isParentClassLocked(ClassReflection $classReflection, string $propertyName, Scope $scope) : bool
     {
         $fileName = $classReflection->getFileName();
         // extract to some "inherited parent method" service
@@ -61,19 +61,19 @@ final class PropertyTypeVendorLockResolver
                 continue;
             }
             $property = $parentClassReflection->getProperty($propertyName, $scope);
-            if (!$property instanceof \PHPStan\Reflection\Php\PhpPropertyReflection) {
+            if (!$property instanceof PhpPropertyReflection) {
                 // validate type is conflicting
                 // parent class property in external scope → it's not ok
                 return \true;
             }
-            if ($property->getNativeType() instanceof \PHPStan\Type\MixedType) {
+            if ($property->getNativeType() instanceof MixedType) {
                 // validate parent not typed yet → it's not ok
                 return \true;
             }
         }
         return \false;
     }
-    private function isChildClassLocked(\PhpParser\Node\Stmt\Property $property, \PHPStan\Reflection\ClassReflection $classReflection, string $propertyName) : bool
+    private function isChildClassLocked(Property $property, ClassReflection $classReflection, string $propertyName) : bool
     {
         if (!$classReflection->isClass()) {
             return \false;

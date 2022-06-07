@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace PhpParser\Builder;
 
-use RectorPrefix20220607\PhpParser;
+use PhpParser;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node;
 use PhpParser\Node\Name;
@@ -35,7 +35,7 @@ class Interface_ extends \PhpParser\Builder\Declaration
     public function extend(...$interfaces)
     {
         foreach ($interfaces as $interface) {
-            $this->extends[] = \PhpParser\BuilderHelpers::normalizeName($interface);
+            $this->extends[] = BuilderHelpers::normalizeName($interface);
         }
         return $this;
     }
@@ -48,10 +48,10 @@ class Interface_ extends \PhpParser\Builder\Declaration
      */
     public function addStmt($stmt)
     {
-        $stmt = \PhpParser\BuilderHelpers::normalizeNode($stmt);
-        if ($stmt instanceof \PhpParser\Node\Stmt\ClassConst) {
+        $stmt = BuilderHelpers::normalizeNode($stmt);
+        if ($stmt instanceof Stmt\ClassConst) {
             $this->constants[] = $stmt;
-        } elseif ($stmt instanceof \PhpParser\Node\Stmt\ClassMethod) {
+        } elseif ($stmt instanceof Stmt\ClassMethod) {
             // we erase all statements in the body of an interface method
             $stmt->stmts = null;
             $this->methods[] = $stmt;
@@ -69,7 +69,7 @@ class Interface_ extends \PhpParser\Builder\Declaration
      */
     public function addAttribute($attribute)
     {
-        $this->attributeGroups[] = \PhpParser\BuilderHelpers::normalizeAttribute($attribute);
+        $this->attributeGroups[] = BuilderHelpers::normalizeAttribute($attribute);
         return $this;
     }
     /**
@@ -77,8 +77,8 @@ class Interface_ extends \PhpParser\Builder\Declaration
      *
      * @return Stmt\Interface_ The built interface node
      */
-    public function getNode() : \PhpParser\Node
+    public function getNode() : PhpParser\Node
     {
-        return new \PhpParser\Node\Stmt\Interface_($this->name, ['extends' => $this->extends, 'stmts' => \array_merge($this->constants, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
+        return new Stmt\Interface_($this->name, ['extends' => $this->extends, 'stmts' => \array_merge($this->constants, $this->methods), 'attrGroups' => $this->attributeGroups], $this->attributes);
     }
 }

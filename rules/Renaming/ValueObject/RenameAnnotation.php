@@ -7,7 +7,7 @@ use Rector\Renaming\Contract\RenameAnnotationInterface;
 /**
  * @api
  */
-final class RenameAnnotation implements \Rector\Renaming\Contract\RenameAnnotationInterface
+final class RenameAnnotation implements RenameAnnotationInterface
 {
     /**
      * @readonly

@@ -17,10 +17,10 @@ final class VarTypeParser
      */
     public function parse(string $content) : array
     {
-        $matches = \RectorPrefix20220607\Nette\Utils\Strings::matchAll($content, self::VAR_TYPE_REGEX);
+        $matches = Strings::matchAll($content, self::VAR_TYPE_REGEX);
         $variableTypes = [];
         foreach ($matches as $match) {
-            $variableTypes[] = new \Rector\Nette\ValueObject\LatteVariableType($match['variable'], $match['type']);
+            $variableTypes[] = new LatteVariableType($match['variable'], $match['type']);
         }
         return $variableTypes;
     }

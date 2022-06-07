@@ -12,12 +12,12 @@ use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\NodeAnalyzer\ControllerRenderMethodAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector\RenderMethodParamToTypeDeclarationRectorTest
  */
-final class RenderMethodParamToTypeDeclarationRector extends \Rector\Core\Rector\AbstractRector
+final class RenderMethodParamToTypeDeclarationRector extends AbstractRector
 {
     /**
      * @var bool
@@ -38,15 +38,15 @@ final class RenderMethodParamToTypeDeclarationRector extends \Rector\Core\Rector
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ControllerRenderMethodAnalyzer
      */
     private $controllerRenderMethodAnalyzer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\ParamTypeInferer $paramTypeInferer, \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover $paramTagRemover, \Rector\TypeDeclaration\NodeAnalyzer\ControllerRenderMethodAnalyzer $controllerRenderMethodAnalyzer)
+    public function __construct(ParamTypeInferer $paramTypeInferer, ParamTagRemover $paramTagRemover, ControllerRenderMethodAnalyzer $controllerRenderMethodAnalyzer)
     {
         $this->paramTypeInferer = $paramTypeInferer;
         $this->paramTagRemover = $paramTagRemover;
         $this->controllerRenderMethodAnalyzer = $controllerRenderMethodAnalyzer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Move @param docs on render() method in Symfony controller to strict type declaration', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move @param docs on render() method in Symfony controller to strict type declaration', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -82,15 +82,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassMethod::class];
+        return [ClassMethod::class];
     }
     /**
      * @param ClassMethod $node
      */
-    public function refactor(\PhpParser\Node $node)
+    public function refactor(Node $node)
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if (!$phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
+        if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
         if (!$this->controllerRenderMethodAnalyzer->isRenderMethod($node)) {
@@ -105,14 +105,14 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function refactorParam(\PhpParser\Node\Param $param, \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo $phpDocInfo, \PhpParser\Node\Stmt\ClassMethod $classMethod) : void
+    private function refactorParam(Param $param, PhpDocInfo $phpDocInfo, ClassMethod $classMethod) : void
     {
         if ($param->type !== null) {
             return;
         }
         $inferedType = $this->paramTypeInferer->inferParam($param);
-        $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::PARAM);
-        if (!$paramType instanceof \PhpParser\Node) {
+        $paramType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedType, TypeKind::PARAM);
+        if (!$paramType instanceof Node) {
             return;
         }
         $param->type = $paramType;

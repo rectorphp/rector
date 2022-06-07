@@ -5,7 +5,7 @@ namespace PhpParser\Node\Stmt;
 
 use PhpParser\Node;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-class Else_ extends \PhpParser\Node\Stmt implements \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface
+class Else_ extends Node\Stmt implements StmtsAwareInterface
 {
     /** @var Node\Stmt[] Statements */
     public $stmts;

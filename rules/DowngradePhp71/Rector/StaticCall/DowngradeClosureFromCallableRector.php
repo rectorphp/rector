@@ -14,21 +14,21 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/closurefromcallable
  *
  * @see \Rector\Tests\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector\DowngradeClosureFromCallableRectorTest
  */
-final class DowngradeClosureFromCallableRector extends \Rector\Core\Rector\AbstractRector
+final class DowngradeClosureFromCallableRector extends AbstractRector
 {
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
     private $namedVariableFactory;
-    public function __construct(\Rector\Core\PhpParser\Node\NamedVariableFactory $namedVariableFactory)
+    public function __construct(NamedVariableFactory $namedVariableFactory)
     {
         $this->namedVariableFactory = $namedVariableFactory;
     }
@@ -37,11 +37,11 @@ final class DowngradeClosureFromCallableRector extends \Rector\Core\Rector\Abstr
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\StaticCall::class];
+        return [StaticCall::class];
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Converts Closure::fromCallable() to compatible alternative.', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Converts Closure::fromCallable() to compatible alternative.', [new CodeSample(<<<'CODE_SAMPLE'
 \Closure::fromCallable('callable');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -55,7 +55,7 @@ CODE_SAMPLE
     /**
      * @param StaticCall $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -63,19 +63,19 @@ CODE_SAMPLE
         if (!isset($node->args[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof \PhpParser\Node\Arg) {
+        if (!$node->args[0] instanceof Arg) {
             return null;
         }
         $tempVariable = $this->namedVariableFactory->createVariable($node, 'callable');
-        $expression = new \PhpParser\Node\Stmt\Expression(new \PhpParser\Node\Expr\Assign($tempVariable, $node->args[0]->value));
+        $expression = new Expression(new Assign($tempVariable, $node->args[0]->value));
         $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
-        $closure = new \PhpParser\Node\Expr\Closure();
-        $closure->uses[] = new \PhpParser\Node\Expr\ClosureUse($tempVariable);
-        $innerFuncCall = new \PhpParser\Node\Expr\FuncCall($tempVariable, [new \PhpParser\Node\Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);
-        $closure->stmts[] = new \PhpParser\Node\Stmt\Return_($innerFuncCall);
+        $closure = new Closure();
+        $closure->uses[] = new ClosureUse($tempVariable);
+        $innerFuncCall = new FuncCall($tempVariable, [new Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);
+        $closure->stmts[] = new Return_($innerFuncCall);
         return $closure;
     }
-    private function shouldSkip(\PhpParser\Node\Expr\StaticCall $staticCall) : bool
+    private function shouldSkip(StaticCall $staticCall) : bool
     {
         if (!$this->nodeNameResolver->isName($staticCall->class, 'Closure')) {
             return \true;

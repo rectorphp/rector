@@ -16,7 +16,7 @@ use SplObjectStorage;
  *
  * @see https://github.com/bwoebi/php-uv
  */
-final class ExtUvLoop implements \RectorPrefix20220607\React\EventLoop\LoopInterface
+final class ExtUvLoop implements LoopInterface
 {
     private $uv;
     private $futureTickQueue;
@@ -34,10 +34,10 @@ final class ExtUvLoop implements \RectorPrefix20220607\React\EventLoop\LoopInter
             throw new \BadMethodCallException('Cannot create LibUvLoop, ext-uv extension missing');
         }
         $this->uv = \uv_loop_new();
-        $this->futureTickQueue = new \RectorPrefix20220607\React\EventLoop\Tick\FutureTickQueue();
-        $this->timers = new \SplObjectStorage();
+        $this->futureTickQueue = new FutureTickQueue();
+        $this->timers = new SplObjectStorage();
         $this->streamListener = $this->createStreamListener();
-        $this->signals = new \RectorPrefix20220607\React\EventLoop\SignalsHandler();
+        $this->signals = new SignalsHandler();
     }
     /**
      * Returns the underlying ext-uv event loop. (Internal ReactPHP use only.)
@@ -99,7 +99,7 @@ final class ExtUvLoop implements \RectorPrefix20220607\React\EventLoop\LoopInter
      */
     public function addTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220607\React\EventLoop\Timer\Timer($interval, $callback, \false);
+        $timer = new Timer($interval, $callback, \false);
         $that = $this;
         $timers = $this->timers;
         $callback = function () use($timer, $timers, $that) {
@@ -118,7 +118,7 @@ final class ExtUvLoop implements \RectorPrefix20220607\React\EventLoop\LoopInter
      */
     public function addPeriodicTimer($interval, $callback)
     {
-        $timer = new \RectorPrefix20220607\React\EventLoop\Timer\Timer($interval, $callback, \true);
+        $timer = new Timer($interval, $callback, \true);
         $callback = function () use($timer) {
             \call_user_func($timer->getCallback(), $timer);
         };
@@ -131,7 +131,7 @@ final class ExtUvLoop implements \RectorPrefix20220607\React\EventLoop\LoopInter
     /**
      * {@inheritdoc}
      */
-    public function cancelTimer(\RectorPrefix20220607\React\EventLoop\TimerInterface $timer)
+    public function cancelTimer(TimerInterface $timer)
     {
         if (isset($this->timers[$timer])) {
             @\uv_timer_stop($this->timers[$timer]);

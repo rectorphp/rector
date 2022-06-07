@@ -22,22 +22,22 @@ final class ArrayCallableDynamicMethod
      * @var \PhpParser\Node\Expr
      */
     private $method;
-    public function __construct(\PhpParser\Node\Expr $callerExpr, string $class, \PhpParser\Node\Expr $method)
+    public function __construct(Expr $callerExpr, string $class, Expr $method)
     {
         $this->callerExpr = $callerExpr;
         $this->class = $class;
         $this->method = $method;
-        \Rector\Core\Validation\RectorAssert::className($class);
+        RectorAssert::className($class);
     }
     public function getClass() : string
     {
         return $this->class;
     }
-    public function getMethod() : \PhpParser\Node\Expr
+    public function getMethod() : Expr
     {
         return $this->method;
     }
-    public function getCallerExpr() : \PhpParser\Node\Expr
+    public function getCallerExpr() : Expr
     {
         return $this->callerExpr;
     }

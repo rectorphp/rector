@@ -11,25 +11,25 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector\AddClosureReturnTypeRectorTest
  */
-final class AddClosureReturnTypeRector extends \Rector\Core\Rector\AbstractScopeAwareRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class AddClosureReturnTypeRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
-    public function __construct(\Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer $returnTypeInferer)
+    public function __construct(ReturnTypeInferer $returnTypeInferer)
     {
         $this->returnTypeInferer = $returnTypeInferer;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add known return type to functions', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add known return type to functions', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -58,18 +58,18 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Expr\Closure::class];
+        return [Closure::class];
     }
     /**
      * @param Closure $node
      */
-    public function refactorWithScope(\PhpParser\Node $node, \PHPStan\Analyser\Scope $scope) : ?\PhpParser\Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if ($node->returnType !== null) {
             return null;
         }
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedReturnType, \Rector\PHPStanStaticTypeMapper\Enum\TypeKind::RETURN);
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferedReturnType, TypeKind::RETURN);
         if ($returnTypeNode === null) {
             return null;
         }
@@ -78,6 +78,6 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::SCALAR_TYPES;
+        return PhpVersionFeature::SCALAR_TYPES;
     }
 }

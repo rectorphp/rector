@@ -26,12 +26,12 @@ final class RemovableAnnotationAnalyzer
     {
         $this->annotationsToAttributes = $annotationsToAttributes;
     }
-    public function isRemovable(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : bool
+    public function isRemovable(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : bool
     {
-        $annotationClassName = $doctrineAnnotationTagValueNode->identifierTypeNode->getAttribute(\Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey::RESOLVED_CLASS);
+        $annotationClassName = $doctrineAnnotationTagValueNode->identifierTypeNode->getAttribute(PhpDocAttributeKey::RESOLVED_CLASS);
         $annotationToAttribute = $this->matchAnnotationToAttribute($doctrineAnnotationTagValueNode);
         // the nested annotation should be convertable
-        if (!$annotationToAttribute instanceof \Rector\Php80\ValueObject\AnnotationToAttribute) {
+        if (!$annotationToAttribute instanceof AnnotationToAttribute) {
             return \false;
         }
         return \in_array($annotationClassName, self::REMOVABLE_ANNOTATION_CLASSES, \true);
@@ -39,7 +39,7 @@ final class RemovableAnnotationAnalyzer
     /**
      * @return \Rector\Php80\ValueObject\AnnotationToAttribute|null
      */
-    private function matchAnnotationToAttribute(\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    private function matchAnnotationToAttribute(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {
         foreach ($this->annotationsToAttributes as $annotationToAttribute) {
             if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {

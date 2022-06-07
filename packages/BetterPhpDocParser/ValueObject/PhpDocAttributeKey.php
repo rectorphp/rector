@@ -18,7 +18,7 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const PARENT = \RectorPrefix20220607\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey::PARENT;
+    public const PARENT = NativePhpDocAttributeKey::PARENT;
     /**
      * @var string
      */
@@ -26,5 +26,5 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const ORIG_NODE = \RectorPrefix20220607\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey::ORIG_NODE;
+    public const ORIG_NODE = NativePhpDocAttributeKey::ORIG_NODE;
 }

@@ -20,7 +20,7 @@ use RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use RectorPrefix20220607\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface;
 use RectorPrefix20220607\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 /**
  * PhpFileLoader loads service definitions from a PHP file.
  *
@@ -29,14 +29,14 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
-class PhpFileLoader extends \RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\FileLoader
+class PhpFileLoader extends FileLoader
 {
     protected $autoRegisterAliasesForSinglyImplementedInterfaces = \false;
     /**
      * @var \Symfony\Component\Config\Builder\ConfigBuilderGeneratorInterface|null
      */
     private $generator;
-    public function __construct(\RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder $container, \RectorPrefix20220607\Symfony\Component\Config\FileLocatorInterface $locator, string $env = null, \RectorPrefix20220607\Symfony\Component\Config\Builder\ConfigBuilderGeneratorInterface $generator = null)
+    public function __construct(ContainerBuilder $container, FileLocatorInterface $locator, string $env = null, ConfigBuilderGeneratorInterface $generator = null)
     {
         parent::__construct($container, $locator, $env);
         $this->generator = $generator;
@@ -57,7 +57,7 @@ class PhpFileLoader extends \RectorPrefix20220607\Symfony\Component\DependencyIn
         // the closure forbids access to the private scope in the included file
         $load = \Closure::bind(function ($path, $env) use($container, $loader, $resource, $type) {
             return include $path;
-        }, $this, \RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\ProtectedPhpFileLoader::class);
+        }, $this, ProtectedPhpFileLoader::class);
         try {
             $callback = $load($path, $this->env);
             if (\is_object($callback) && \is_callable($callback)) {
@@ -89,14 +89,14 @@ class PhpFileLoader extends \RectorPrefix20220607\Symfony\Component\DependencyIn
     /**
      * Resolve the parameters to the $callback and execute it.
      */
-    private function executeCallback(callable $callback, \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator $containerConfigurator, string $path)
+    private function executeCallback(callable $callback, ContainerConfigurator $containerConfigurator, string $path)
     {
         $callback = \Closure::fromCallable($callback);
         $arguments = [];
         $configBuilders = [];
         $r = new \ReflectionFunction($callback);
         $attribute = null;
-        foreach (\method_exists($r, 'getAttributes') ? $r->getAttributes(\RectorPrefix20220607\Symfony\Component\DependencyInjection\Attribute\When::class) : [] as $attribute) {
+        foreach (\method_exists($r, 'getAttributes') ? $r->getAttributes(When::class) : [] as $attribute) {
             if ($this->env === $attribute->newInstance()->env) {
                 $attribute = null;
                 break;
@@ -108,24 +108,24 @@ class PhpFileLoader extends \RectorPrefix20220607\Symfony\Component\DependencyIn
         foreach ($r->getParameters() as $parameter) {
             $reflectionType = $parameter->getType();
             if (!$reflectionType instanceof \ReflectionNamedType) {
-                throw new \InvalidArgumentException(\sprintf('Could not resolve argument "$%s" for "%s". You must typehint it (for example with "%s" or "%s").', $parameter->getName(), $path, \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class, \RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder::class));
+                throw new \InvalidArgumentException(\sprintf('Could not resolve argument "$%s" for "%s". You must typehint it (for example with "%s" or "%s").', $parameter->getName(), $path, ContainerConfigurator::class, ContainerBuilder::class));
             }
             $type = $reflectionType->getName();
-            if (\is_a($type, \Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class, \true)) {
+            if (\is_a($type, ContainerConfigurator::class, \true)) {
                 $arguments[] = $containerConfigurator;
             } else {
                 switch ($type) {
-                    case \RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder::class:
+                    case ContainerBuilder::class:
                         $arguments[] = $this->container;
                         break;
-                    case \RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\FileLoader::class:
+                    case FileLoader::class:
                     case self::class:
                         $arguments[] = $this;
                         break;
                     default:
                         try {
                             $configBuilder = $this->configBuilder($type);
-                        } catch (\RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException|\LogicException $e) {
+                        } catch (InvalidArgumentException|\LogicException $e) {
                             throw new \InvalidArgumentException(\sprintf('Could not resolve argument "%s" for "%s".', $type . ' $' . $parameter->getName(), $path), 0, $e);
                         }
                         $configBuilders[] = $configBuilder;
@@ -134,7 +134,7 @@ class PhpFileLoader extends \RectorPrefix20220607\Symfony\Component\DependencyIn
             }
         }
         // Force load ContainerConfigurator to make env(), param() etc available.
-        \class_exists(\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator::class);
+        \class_exists(ContainerConfigurator::class);
         $callback(...$arguments);
         /** @var ConfigBuilderInterface $configBuilder */
         foreach ($configBuilders as $configBuilder) {
@@ -144,36 +144,36 @@ class PhpFileLoader extends \RectorPrefix20220607\Symfony\Component\DependencyIn
     /**
      * @param string $namespace FQCN string for a class implementing ConfigBuilderInterface
      */
-    private function configBuilder(string $namespace) : \RectorPrefix20220607\Symfony\Component\Config\Builder\ConfigBuilderInterface
+    private function configBuilder(string $namespace) : ConfigBuilderInterface
     {
-        if (!\class_exists(\RectorPrefix20220607\Symfony\Component\Config\Builder\ConfigBuilderGenerator::class)) {
+        if (!\class_exists(ConfigBuilderGenerator::class)) {
             throw new \LogicException('You cannot use the config builder as the Config component is not installed. Try running "composer require symfony/config".');
         }
         if (null === $this->generator) {
             throw new \LogicException('You cannot use the ConfigBuilders without providing a class implementing ConfigBuilderGeneratorInterface.');
         }
         // If class exists and implements ConfigBuilderInterface
-        if (\class_exists($namespace) && \is_subclass_of($namespace, \RectorPrefix20220607\Symfony\Component\Config\Builder\ConfigBuilderInterface::class)) {
+        if (\class_exists($namespace) && \is_subclass_of($namespace, ConfigBuilderInterface::class)) {
             return new $namespace();
         }
         // If it does not start with Symfony\Config\ we dont know how to handle this
         if (\strncmp($namespace, 'Symfony\\Config\\', \strlen('Symfony\\Config\\')) !== 0) {
-            throw new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('Could not find or generate class "%s".', $namespace));
+            throw new InvalidArgumentException(\sprintf('Could not find or generate class "%s".', $namespace));
         }
         // Try to get the extension alias
-        $alias = \RectorPrefix20220607\Symfony\Component\DependencyInjection\Container::underscore(\substr($namespace, 15, -6));
+        $alias = Container::underscore(\substr($namespace, 15, -6));
         if (\strpos($alias, '\\') !== \false) {
-            throw new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException('You can only use "root" ConfigBuilders from "Symfony\\Config\\" namespace. Nested classes like "Symfony\\Config\\Framework\\CacheConfig" cannot be used.');
+            throw new InvalidArgumentException('You can only use "root" ConfigBuilders from "Symfony\\Config\\" namespace. Nested classes like "Symfony\\Config\\Framework\\CacheConfig" cannot be used.');
         }
         if (!$this->container->hasExtension($alias)) {
-            $extensions = \array_filter(\array_map(function (\RectorPrefix20220607\Symfony\Component\DependencyInjection\Extension\ExtensionInterface $ext) {
+            $extensions = \array_filter(\array_map(function (ExtensionInterface $ext) {
                 return $ext->getAlias();
             }, $this->container->getExtensions()));
-            throw new \RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException(\sprintf('There is no extension able to load the configuration for "%s". Looked for namespace "%s", found "%s".', $namespace, $alias, $extensions ? \implode('", "', $extensions) : 'none'));
+            throw new InvalidArgumentException(\sprintf('There is no extension able to load the configuration for "%s". Looked for namespace "%s", found "%s".', $namespace, $alias, $extensions ? \implode('", "', $extensions) : 'none'));
         }
         $extension = $this->container->getExtension($alias);
-        if (!$extension instanceof \RectorPrefix20220607\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface) {
-            throw new \LogicException(\sprintf('You cannot use the config builder for "%s" because the extension does not implement "%s".', $namespace, \RectorPrefix20220607\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface::class));
+        if (!$extension instanceof ConfigurationExtensionInterface) {
+            throw new \LogicException(\sprintf('You cannot use the config builder for "%s" because the extension does not implement "%s".', $namespace, ConfigurationExtensionInterface::class));
         }
         $configuration = $extension->getConfiguration([], $this->container);
         $loader = $this->generator->build($configuration);
@@ -183,6 +183,6 @@ class PhpFileLoader extends \RectorPrefix20220607\Symfony\Component\DependencyIn
 /**
  * @internal
  */
-final class ProtectedPhpFileLoader extends \RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\PhpFileLoader
+final class ProtectedPhpFileLoader extends PhpFileLoader
 {
 }

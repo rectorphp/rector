@@ -13,14 +13,14 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://php.watch/versions/8.1/final-class-const
  *
  * @see \Rector\Tests\Php81\Rector\ClassConst\FinalizePublicClassConstantRector\FinalizePublicClassConstantRectorTest
  */
-final class FinalizePublicClassConstantRector extends \Rector\Core\Rector\AbstractRector implements \Rector\VersionBonding\Contract\MinPhpVersionInterface
+final class FinalizePublicClassConstantRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -42,16 +42,16 @@ final class FinalizePublicClassConstantRector extends \Rector\Core\Rector\Abstra
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(\Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer $familyRelationsAnalyzer, \PHPStan\Reflection\ReflectionProvider $reflectionProvider, \Rector\Core\NodeAnalyzer\ClassAnalyzer $classAnalyzer, \Rector\Privatization\NodeManipulator\VisibilityManipulator $visibilityManipulator)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReflectionProvider $reflectionProvider, ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
         $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
     }
-    public function getRuleDefinition() : \Symplify\RuleDocGenerator\ValueObject\RuleDefinition
+    public function getRuleDefinition() : RuleDefinition
     {
-        return new \Symplify\RuleDocGenerator\ValueObject\RuleDefinition('Add final to constants that does not have children', [new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add final to constants that does not have children', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public const NAME = 'value';
@@ -70,15 +70,15 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [\PhpParser\Node\Stmt\ClassConst::class];
+        return [ClassConst::class];
     }
     /**
      * @param ClassConst $node
      */
-    public function refactor(\PhpParser\Node $node) : ?\PhpParser\Node
+    public function refactor(Node $node) : ?Node
     {
-        $class = $this->betterNodeFinder->findParentType($node, \PhpParser\Node\Stmt\Class_::class);
-        if (!$class instanceof \PhpParser\Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$class instanceof Class_) {
             return null;
         }
         if ($class->isFinal()) {
@@ -101,9 +101,9 @@ CODE_SAMPLE
     }
     public function provideMinPhpVersion() : int
     {
-        return \Rector\Core\ValueObject\PhpVersionFeature::FINAL_CLASS_CONSTANTS;
+        return PhpVersionFeature::FINAL_CLASS_CONSTANTS;
     }
-    private function isClassHasChildren(\PhpParser\Node\Stmt\Class_ $class) : bool
+    private function isClassHasChildren(Class_ $class) : bool
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         if (!$this->reflectionProvider->hasClass($className)) {
