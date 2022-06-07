@@ -20,7 +20,7 @@ use RectorPrefix20220607\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 \error_reporting(\E_ALL);
 \ini_set('display_errors', 'stderr');
 \gc_disable();
-\define('RectorPrefix20220607\\__RECTOR_RUNNING__', \true);
+\define('__RECTOR_RUNNING__', \true);
 // Require Composer autoload.php
 $autoloadIncluder = new AutoloadIncluder();
 $autoloadIncluder->includeDependencyOrRepositoryVendorAutoloadIfExists();
