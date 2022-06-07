@@ -6,8 +6,8 @@ namespace Rector\PostRector\Rector;
 use PhpParser\Node;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**

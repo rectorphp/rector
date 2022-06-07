@@ -18,8 +18,8 @@ use Rector\Symfony\NodeAnalyzer\SymfonyControllerFilter;
 use Rector\Symfony\NodeFactory\InvokableControllerClassFactory;
 use Rector\Symfony\Printer\NeighbourClassLikePrinter;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/doc/2.8/controller/service.html#referring-to-the-service
  *

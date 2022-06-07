@@ -5,8 +5,8 @@ namespace Rector\__Package__\Rector\__Category__;
 
 use PhpParser\Node;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
 __Resources__
 * @see \Rector\Tests\__Package__\Rector\__Category__\__Name__\__Name__Test

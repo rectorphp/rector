@@ -20,8 +20,8 @@ use Rector\Nette\NodeAnalyzer\TemplatePropertyAssignCollector;
 use Rector\Nette\NodeAnalyzer\TemplatePropertyParametersReplacer;
 use Rector\Nette\NodeFactory\RenderParameterArrayFactory;
 use Rector\Nette\ValueObject\TemplateParametersAssigns;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\ClassMethod\TemplateMagicAssignToExplicitVariableArrayRector\TemplateMagicAssignToExplicitVariableArrayRectorTest
  */

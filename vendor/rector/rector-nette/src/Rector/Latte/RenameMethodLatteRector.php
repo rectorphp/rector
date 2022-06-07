@@ -7,8 +7,8 @@ use Rector\Nette\Contract\Rector\LatteRectorInterface;
 use Rector\Nette\Latte\Parser\TemplateTypeParser;
 use Rector\Nette\Latte\Parser\VarTypeParser;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Rector\Latte\RenameMethodLatteRector\RenameMethodLatteRectorTest
  */

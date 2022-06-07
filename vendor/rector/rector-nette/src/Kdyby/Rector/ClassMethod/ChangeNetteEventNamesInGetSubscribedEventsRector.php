@@ -18,8 +18,8 @@ use Rector\Nette\Kdyby\NodeManipulator\GetSubscribedEventsArrayManipulator;
 use Rector\Nette\Kdyby\NodeManipulator\ListeningClassMethodArgumentManipulator;
 use Rector\Nette\Kdyby\NodeResolver\ListeningMethodsCollector;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Nette\Tests\Kdyby\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector\ChangeNetteEventNamesInGetSubscribedEventsRectorTest
  */

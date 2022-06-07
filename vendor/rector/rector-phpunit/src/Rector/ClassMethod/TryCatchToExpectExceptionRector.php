@@ -15,8 +15,8 @@ use Rector\PHPUnit\NodeFactory\ExpectExceptionCodeFactory;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionFactory;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionMessageFactory;
 use Rector\PHPUnit\NodeFactory\ExpectExceptionMessageRegExpFactory;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\TryCatchToExpectExceptionRector\TryCatchToExpectExceptionRectorTest
  */

@@ -19,8 +19,8 @@ use Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer;
 use Rector\DogFood\NodeManipulator\ContainerConfiguratorEmptyAssignRemover;
 use Rector\DogFood\NodeManipulator\ContainerConfiguratorImportsMerger;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DogFood\Rector\Closure\UpgradeRectorConfigRector\UpgradeRectorConfigRectorTest
  */

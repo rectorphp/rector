@@ -15,8 +15,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeCollector\BinaryOpTreeRootLocator;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * Throwable was introduced in PHP 7.0 so to support older versions we need to also check for Exception.
  * @changelog https://www.php.net/manual/en/class.throwable.php

@@ -14,8 +14,8 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp70\Tokenizer\WrappedInParenthesesAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://wiki.php.net/rfc/uniform_variable_syntax
  *

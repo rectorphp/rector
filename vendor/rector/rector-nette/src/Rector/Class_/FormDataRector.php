@@ -19,8 +19,8 @@ use Rector\Nette\NodeFinder\FormFieldsFinder;
 use Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder;
 use Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder;
 use Rector\Nette\NodeFinder\FormVariableFinder;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix20220607\Webmozart\Assert\Assert;
 /**
  * @see https://doc.nette.org/en/3.1/form-presenter#toc-mapping-to-classes

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample;
+namespace Symplify\RuleDocGenerator\ValueObject\CodeSample;
 
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
 /**
  * @api
  */

@@ -21,8 +21,8 @@ use Rector\Doctrine\NodeFactory\ConstructorClassMethodAssignFactory;
 use Rector\Doctrine\NodeFactory\ParamFactory;
 use Rector\Doctrine\NodeManipulator\IssetDimFetchCleaner;
 use Rector\Doctrine\ValueObject\AssignToPropertyFetch;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/doctrine/annotations/blob/1.13.x/docs/en/custom.rst#optional-constructors-with-named-parameters
  *

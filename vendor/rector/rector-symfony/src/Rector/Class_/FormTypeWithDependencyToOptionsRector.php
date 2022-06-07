@@ -14,8 +14,8 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeFactory\FormType\BuildFormOptionAssignsFactory;
 use Rector\Symfony\NodeRemover\ConstructorDependencyRemover;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://speakerdeck.com/webmozart/symfony-forms-101?slide=24
  *

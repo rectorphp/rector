@@ -6,6 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
     'Rector\\RectorGenerator\\' => array($vendorDir . '/rector/rector-generator/src'),
@@ -22,7 +23,6 @@ return array(
     'RectorPrefix20220607\\Symplify\\SymplifyKernel\\' => array($vendorDir . '/symplify/symplify-kernel/src'),
     'RectorPrefix20220607\\Symplify\\SmartFileSystem\\' => array($vendorDir . '/symplify/smart-file-system/src'),
     'RectorPrefix20220607\\Symplify\\Skipper\\' => array($vendorDir . '/symplify/skipper/src'),
-    'RectorPrefix20220607\\Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
     'RectorPrefix20220607\\Symplify\\PackageBuilder\\' => array($vendorDir . '/symplify/package-builder/src'),
     'RectorPrefix20220607\\Symplify\\EasyTesting\\' => array($vendorDir . '/symplify/easy-testing/src'),
     'RectorPrefix20220607\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),

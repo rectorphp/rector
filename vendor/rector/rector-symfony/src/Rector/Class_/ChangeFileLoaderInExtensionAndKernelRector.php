@@ -18,8 +18,8 @@ use Rector\Symfony\Exception\InvalidConfigurationException;
 use RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
-use RectorPrefix20220607\Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Symfony\Tests\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector\ChangeFileLoaderInExtensionAndKernelRectorTest
  *
