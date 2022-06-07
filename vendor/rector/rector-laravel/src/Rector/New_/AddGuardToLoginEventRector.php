@@ -22,7 +22,7 @@ final class AddGuardToLoginEventRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('RectorPrefix20220607\\Add new $guard argument to Illuminate\\Auth\\Events\\Login', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add new $guard argument to Illuminate\\Auth\\Events\\Login', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Auth\Events\Login;
 
 final class SomeClass
@@ -59,7 +59,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node->class, 'RectorPrefix20220607\\Illuminate\\Auth\\Events\\Login')) {
+        if (!$this->isName($node->class, 'Illuminate\\Auth\\Events\\Login')) {
             return null;
         }
         if (\count($node->args) === 3) {

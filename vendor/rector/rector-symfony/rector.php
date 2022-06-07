@@ -32,9 +32,9 @@ return static function (RectorConfig $rectorConfig) : void {
         'Swift_*',
         'Doctrine\\*',
         // loaded from project itself
-        'RectorPrefix20220607\\Psr\\Container\\ContainerInterface',
-        'RectorPrefix20220607\\Symfony\\Component\\Routing\\RouterInterface',
-        'RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Container',
+        'Psr\\Container\\ContainerInterface',
+        'Symfony\\Component\\Routing\\RouterInterface',
+        'Symfony\\Component\\DependencyInjection\\Container',
     ]);
     // for testing
     $rectorConfig->import(__DIR__ . '/config/config.php');

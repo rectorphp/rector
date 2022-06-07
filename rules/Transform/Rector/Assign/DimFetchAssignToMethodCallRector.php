@@ -51,7 +51,7 @@ class RouterFactory
     }
 }
 CODE_SAMPLE
-, [new DimFetchAssignToMethodCall('RectorPrefix20220607\\Nette\\Application\\Routers\\RouteList', 'RectorPrefix20220607\\Nette\\Application\\Routers\\Route', 'addRoute')])]);
+, [new DimFetchAssignToMethodCall('Nette\\Application\\Routers\\RouteList', 'Nette\\Application\\Routers\\Route', 'addRoute')])]);
     }
     /**
      * @return array<class-string<Node>>

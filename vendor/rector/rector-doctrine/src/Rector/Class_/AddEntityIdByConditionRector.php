@@ -82,7 +82,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::DETECTED_TRAITS => ['RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Model\\Translatable\\Translation', 'RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslationTrait']])]);
+, [self::DETECTED_TRAITS => ['Knp\\DoctrineBehaviors\\Model\\Translatable\\Translation', 'Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslationTrait']])]);
     }
     /**
      * @return array<class-string<Node>>

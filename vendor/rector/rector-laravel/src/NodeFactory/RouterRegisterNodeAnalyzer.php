@@ -35,10 +35,10 @@ final class RouterRegisterNodeAnalyzer
         if (!$this->isRegisterName($node->name)) {
             return \false;
         }
-        if ($node instanceof MethodCall && $this->nodeTypeResolver->isObjectTypes($node->var, [new ObjectType('RectorPrefix20220607\\Illuminate\\Routing\\Router'), new ObjectType('RectorPrefix20220607\\Illuminate\\Routing\\RouteRegistrar')])) {
+        if ($node instanceof MethodCall && $this->nodeTypeResolver->isObjectTypes($node->var, [new ObjectType('Illuminate\\Routing\\Router'), new ObjectType('Illuminate\\Routing\\RouteRegistrar')])) {
             return \true;
         }
-        return $node instanceof StaticCall && $this->nodeNameResolver->isName($node->class, 'RectorPrefix20220607\\Illuminate\\Support\\Facades\\Route');
+        return $node instanceof StaticCall && $this->nodeNameResolver->isName($node->class, 'Illuminate\\Support\\Facades\\Route');
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Expr $name

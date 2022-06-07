@@ -53,11 +53,11 @@ final class PropertyManipulator
     /**
      * @var string[]|class-string<Table>[]
      */
-    private const ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = ['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Entity', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Table'];
+    private const ALLOWED_NOT_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = ['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Table'];
     /**
      * @var string[]|class-string<ManyToMany>[]
      */
-    private const ALLOWED_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = ['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Id', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Column', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToMany', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToMany', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToOne', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToOne', 'RectorPrefix20220607\\JMS\\Serializer\\Annotation\\Type'];
+    private const ALLOWED_READONLY_ANNOTATION_CLASS_OR_ATTRIBUTES = ['Doctrine\\ORM\\Mapping\\Id', 'Doctrine\\ORM\\Mapping\\Column', 'Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\ManyToOne', 'Doctrine\\ORM\\Mapping\\OneToOne', 'JMS\\Serializer\\Annotation\\Type'];
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator

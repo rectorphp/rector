@@ -55,7 +55,7 @@ final class ParentGetterStmtsToExternalStmtsFactory
             if (!$getUserStmt->expr instanceof StaticCall) {
                 continue;
             }
-            if (!$this->nodeTypeResolver->isObjectType($getUserStmt->expr, new ObjectType('RectorPrefix20220607\\Nette\\Security\\User'))) {
+            if (!$this->nodeTypeResolver->isObjectType($getUserStmt->expr, new ObjectType('Nette\\Security\\User'))) {
                 continue;
             }
             $userExpression = $getUserStmt->var;

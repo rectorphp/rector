@@ -93,7 +93,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('RectorPrefix20220607\\Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface'))) {
             return \true;
         }
         if (!$this->isName($methodCall->name, 'dispatch')) {

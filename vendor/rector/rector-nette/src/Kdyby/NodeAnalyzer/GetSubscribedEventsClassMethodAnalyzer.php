@@ -38,7 +38,7 @@ final class GetSubscribedEventsClassMethodAnalyzer
         if (!$classLike instanceof ClassLike) {
             return \false;
         }
-        if (!$this->nodeTypeResolver->isObjectType($classLike, new ObjectType('RectorPrefix20220607\\Kdyby\\Events\\Subscriber'))) {
+        if (!$this->nodeTypeResolver->isObjectType($classLike, new ObjectType('Kdyby\\Events\\Subscriber'))) {
             return \false;
         }
         return $this->nodeNameResolver->isName($classMethod, 'getSubscribedEvents');

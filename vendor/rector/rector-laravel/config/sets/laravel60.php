@@ -21,32 +21,32 @@ return static function (RectorConfig $rectorConfig) : void {
     # https://github.com/laravel/framework/commit/67a38ba0fa2acfbd1f4af4bf7d462bb4419cc091
     $rectorConfig->rule(ParamTypeDeclarationRector::class);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename(
-        'RectorPrefix20220607\\Illuminate\\Auth\\Access\\Gate',
+        'Illuminate\\Auth\\Access\\Gate',
         # https://github.com/laravel/framework/commit/69de466ddc25966a0f6551f48acab1afa7bb9424
         'access',
         'inspect'
     ), new MethodCallRename(
-        'RectorPrefix20220607\\Illuminate\\Support\\Facades\\Lang',
+        'Illuminate\\Support\\Facades\\Lang',
         # https://github.com/laravel/framework/commit/efbe23c4116f86846ad6edc0d95cd56f4175a446
         'trans',
         'get'
-    ), new MethodCallRename('RectorPrefix20220607\\Illuminate\\Support\\Facades\\Lang', 'transChoice', 'choice'), new MethodCallRename(
-        'RectorPrefix20220607\\Illuminate\\Translation\\Translator',
+    ), new MethodCallRename('Illuminate\\Support\\Facades\\Lang', 'transChoice', 'choice'), new MethodCallRename(
+        'Illuminate\\Translation\\Translator',
         # https://github.com/laravel/framework/commit/697b898a1c89881c91af83ecc4493fa681e2aa38
         'getFromJson',
         'get'
     )]);
     $rectorConfig->ruleWithConfiguration(RenameStaticMethodRector::class, [
         // https://github.com/laravel/framework/commit/55785d3514a8149d4858acef40c56a31b6b2ccd1
-        new RenameStaticMethod('RectorPrefix20220607\\Illuminate\\Support\\Facades\\Input', 'get', 'RectorPrefix20220607\\Illuminate\\Support\\Facades\\Request', 'input'),
+        new RenameStaticMethod('Illuminate\\Support\\Facades\\Input', 'get', 'Illuminate\\Support\\Facades\\Request', 'input'),
     ]);
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['RectorPrefix20220607\\Illuminate\\Support\\Facades\\Input' => 'RectorPrefix20220607\\Illuminate\\Support\\Facades\\Request']);
-    $rectorConfig->ruleWithConfiguration(ChangeMethodVisibilityRector::class, [new ChangeMethodVisibility('RectorPrefix20220607\\Illuminate\\Foundation\\Http\\FormRequest', 'validationData', Visibility::PUBLIC)]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Illuminate\\Support\\Facades\\Input' => 'Illuminate\\Support\\Facades\\Request']);
+    $rectorConfig->ruleWithConfiguration(ChangeMethodVisibilityRector::class, [new ChangeMethodVisibility('Illuminate\\Foundation\\Http\\FormRequest', 'validationData', Visibility::PUBLIC)]);
     $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [
         // https://github.com/laravel/framework/commit/6c1e014943a508afb2c10869c3175f7783a004e1
-        new ArgumentAdder('RectorPrefix20220607\\Illuminate\\Database\\Capsule\\Manager', 'table', 1, 'as', null),
-        new ArgumentAdder('RectorPrefix20220607\\Illuminate\\Database\\Connection', 'table', 1, 'as', null),
-        new ArgumentAdder('RectorPrefix20220607\\Illuminate\\Database\\ConnectionInterface', 'table', 1, 'as', null),
-        new ArgumentAdder('RectorPrefix20220607\\Illuminate\\Database\\Query\\Builder', 'from', 1, 'as', null),
+        new ArgumentAdder('Illuminate\\Database\\Capsule\\Manager', 'table', 1, 'as', null),
+        new ArgumentAdder('Illuminate\\Database\\Connection', 'table', 1, 'as', null),
+        new ArgumentAdder('Illuminate\\Database\\ConnectionInterface', 'table', 1, 'as', null),
+        new ArgumentAdder('Illuminate\\Database\\Query\\Builder', 'from', 1, 'as', null),
     ]);
 };

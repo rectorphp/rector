@@ -20,6 +20,6 @@ final class CollectionTypeFactory
     private function createGenericObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType) : GenericObjectType
     {
         $genericTypes = [new IntegerType(), $fullyQualifiedObjectType];
-        return new GenericObjectType('RectorPrefix20220607\\Doctrine\\Common\\Collections\\Collection', $genericTypes);
+        return new GenericObjectType('Doctrine\\Common\\Collections\\Collection', $genericTypes);
     }
 }

@@ -85,7 +85,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        if (!$classReflection->isSubclassOf('RectorPrefix20220607\\Nette\\Localization\\ITranslator')) {
+        if (!$classReflection->isSubclassOf('Nette\\Localization\\ITranslator')) {
             return null;
         }
         if (!$this->isName($node->name, 'translate')) {

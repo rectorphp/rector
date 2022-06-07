@@ -22,7 +22,7 @@ final class ArrayCollectionAssignFactory
     public function createFromPropertyName(string $toManyPropertyName) : Expression
     {
         $propertyFetch = $this->nodeFactory->createPropertyFetch('this', $toManyPropertyName);
-        $new = new New_(new FullyQualified('RectorPrefix20220607\\Doctrine\\Common\\Collections\\ArrayCollection'));
+        $new = new New_(new FullyQualified('Doctrine\\Common\\Collections\\ArrayCollection'));
         $assign = new Assign($propertyFetch, $new);
         return new Expression($assign);
     }

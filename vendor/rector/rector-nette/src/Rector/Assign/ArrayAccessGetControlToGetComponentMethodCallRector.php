@@ -71,6 +71,6 @@ CODE_SAMPLE
             return \false;
         }
         $arrayDimFetch = $assign->expr;
-        return $this->isObjectType($arrayDimFetch->var, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Presenter'));
+        return $this->isObjectType($arrayDimFetch->var, new ObjectType('Nette\\Application\\UI\\Presenter'));
     }
 }

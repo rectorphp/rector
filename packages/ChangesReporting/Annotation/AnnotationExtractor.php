@@ -22,7 +22,7 @@ final class AnnotationExtractor
             return null;
         }
         // @see https://3v4l.org/ouYfB
-        // uses '\r?\n' instead of '$' because windows compat
+        // uses 'r?\n' instead of '$' because windows compat
         $pattern = '#' . \preg_quote($annotation, '#') . '\\s+(?<content>.*?)\\r?\\n#m';
         $matches = Strings::match($docComment, $pattern);
         return $matches['content'] ?? null;

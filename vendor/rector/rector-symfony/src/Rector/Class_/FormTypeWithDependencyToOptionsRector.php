@@ -93,7 +93,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $formObjectType = new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\AbstractType');
+        $formObjectType = new ObjectType('Symfony\\Component\\Form\\AbstractType');
         if (!$this->isObjectType($node, $formObjectType)) {
             return null;
         }

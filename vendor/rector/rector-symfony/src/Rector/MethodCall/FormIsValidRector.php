@@ -70,7 +70,7 @@ CODE_SAMPLE
         if (!$originalNode instanceof Node) {
             return \true;
         }
-        if (!$this->isObjectType($methodCall->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\Form'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Form\\Form'))) {
             return \true;
         }
         if (!$this->isName($methodCall->name, 'isValid')) {

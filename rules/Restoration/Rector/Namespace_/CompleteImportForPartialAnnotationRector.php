@@ -57,7 +57,7 @@ class SomeClass
     public $id;
 }
 CODE_SAMPLE
-, [new CompleteImportForPartialAnnotation('RectorPrefix20220607\\Doctrine\\ORM\\Mapping', 'ORM')])]);
+, [new CompleteImportForPartialAnnotation('Doctrine\\ORM\\Mapping', 'ORM')])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -96,7 +96,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         Assert::allIsAOf($configuration, CompleteImportForPartialAnnotation::class);
-        $default = [new CompleteImportForPartialAnnotation('RectorPrefix20220607\\Doctrine\\ORM\\Mapping', 'ORM'), new CompleteImportForPartialAnnotation('RectorPrefix20220607\\Symfony\\Component\\Validator\\Constraints', 'Assert'), new CompleteImportForPartialAnnotation('RectorPrefix20220607\\JMS\\Serializer\\Annotation', 'Serializer')];
+        $default = [new CompleteImportForPartialAnnotation('Doctrine\\ORM\\Mapping', 'ORM'), new CompleteImportForPartialAnnotation('Symfony\\Component\\Validator\\Constraints', 'Assert'), new CompleteImportForPartialAnnotation('JMS\\Serializer\\Annotation', 'Serializer')];
         $this->useImportsToRestore = \array_merge($configuration, $default);
     }
     private function addImportToNamespaceIfMissing(Namespace_ $namespace, CompleteImportForPartialAnnotation $completeImportForPartialAnnotation) : Namespace_

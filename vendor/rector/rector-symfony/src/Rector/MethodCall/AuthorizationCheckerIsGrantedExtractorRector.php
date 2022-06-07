@@ -58,7 +58,7 @@ CODE_SAMPLE
         if (!$objectType instanceof ObjectType) {
             return null;
         }
-        $authorizationChecker = new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface');
+        $authorizationChecker = new ObjectType('Symfony\\Component\\Security\\Core\\Authorization\\AuthorizationCheckerInterface');
         if (!$authorizationChecker->isSuperTypeOf($objectType)->yes()) {
             return null;
         }

@@ -42,7 +42,7 @@ final class FormVariableFinder
                 if (!$var instanceof Variable) {
                     continue;
                 }
-                if (!$this->nodeTypeResolver->isObjectType($expr, new ObjectType('RectorPrefix20220607\\Nette\\Forms\\Form'))) {
+                if (!$this->nodeTypeResolver->isObjectType($expr, new ObjectType('Nette\\Forms\\Form'))) {
                     continue;
                 }
                 return $var;

@@ -32,10 +32,10 @@ final class TranslationClassNodeFactory
     public function create(string $classShortName) : Class_
     {
         $class = new Class_($classShortName);
-        $class->implements[] = new FullyQualified('RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslationInterface');
-        $this->classInsertManipulator->addAsFirstTrait($class, 'RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslationTrait');
+        $class->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslationInterface');
+        $this->classInsertManipulator->addAsFirstTrait($class, 'Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslationTrait');
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode('RectorPrefix20220607\\@ORM\\Entity', new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Entity'), null, []));
+        $spacelessPhpDocTagNode = new SpacelessPhpDocTagNode('@ORM\\Entity', new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('Doctrine\\ORM\\Mapping\\Entity'), null, []));
         $phpDocInfo->addPhpDocTagNode($spacelessPhpDocTagNode);
         // traverse with node name resolver, to to comply with PHPStan default parser
         $nameResolver = new NameResolver(null, ['replaceNodes' => \false, 'preserveOriginalNames' => \true]);

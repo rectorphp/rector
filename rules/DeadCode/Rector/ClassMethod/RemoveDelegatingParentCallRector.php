@@ -29,7 +29,7 @@ final class RemoveDelegatingParentCallRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const ALLOWED_ATTRIBUTES = ['RectorPrefix20220607\\Symfony\\Component\\Routing\\Annotation\\Route', 'RectorPrefix20220607\\Symfony\\Contracts\\Service\\Attribute\\Required'];
+    private const ALLOWED_ATTRIBUTES = ['Symfony\\Component\\Routing\\Annotation\\Route', 'Symfony\\Contracts\\Service\\Attribute\\Required'];
     /**
      * @readonly
      * @var \Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator

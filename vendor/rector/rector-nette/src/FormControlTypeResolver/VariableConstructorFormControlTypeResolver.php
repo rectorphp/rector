@@ -65,7 +65,7 @@ final class VariableConstructorFormControlTypeResolver implements FormControlTyp
             return [];
         }
         $formClassReflection = $this->reflectionProvider->getClass($formType->getClassName());
-        if (!$formClassReflection->isSubclassOf('RectorPrefix20220607\\Nette\\Application\\UI\\Form')) {
+        if (!$formClassReflection->isSubclassOf('Nette\\Application\\UI\\Form')) {
             return [];
         }
         $classMethod = $this->astResolver->resolveClassMethod($formType->getClassName(), MethodName::CONSTRUCT);

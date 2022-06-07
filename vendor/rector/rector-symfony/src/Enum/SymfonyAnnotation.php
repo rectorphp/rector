@@ -8,5 +8,5 @@ final class SymfonyAnnotation
     /**
      * @var string
      */
-    public const ROUTE = 'RectorPrefix20220607\\Symfony\\Component\\Routing\\Annotation\\Route';
+    public const ROUTE = 'Symfony\\Component\\Routing\\Annotation\\Route';
 }

@@ -143,10 +143,10 @@ CODE_SAMPLE
     private function refactorProperty(Property $property) : ?Property
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($phpDocInfo->hasByAnnotationClass('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToMany')) {
+        if ($phpDocInfo->hasByAnnotationClass('Doctrine\\ORM\\Mapping\\OneToMany')) {
             return $this->refactorPropertyPhpDocInfo($property, $phpDocInfo);
         }
-        $targetEntityExpr = $this->attributeFinder->findAttributeByClassArgByName($property, 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToMany', 'targetEntity');
+        $targetEntityExpr = $this->attributeFinder->findAttributeByClassArgByName($property, 'Doctrine\\ORM\\Mapping\\OneToMany', 'targetEntity');
         if (!$targetEntityExpr instanceof Expr) {
             return null;
         }

@@ -83,11 +83,11 @@ CODE_SAMPLE
         if (isset($args[1])) {
             $secondArgumentValue = $args[1]->value;
             if ($this->isName($secondArgumentValue, 'JSON_PRETTY_PRINT')) {
-                $classConstFetch = $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Nette\\Utils\\Json', 'PRETTY');
+                $classConstFetch = $this->nodeFactory->createClassConstFetch('Nette\\Utils\\Json', 'PRETTY');
                 $args[1] = new Arg($classConstFetch);
             }
         }
-        return $this->nodeFactory->createStaticCall('RectorPrefix20220607\\Nette\\Utils\\Json', 'encode', $args);
+        return $this->nodeFactory->createStaticCall('Nette\\Utils\\Json', 'encode', $args);
     }
     private function refactorJsonDecode(FuncCall $funcCall) : StaticCall
     {
@@ -97,10 +97,10 @@ CODE_SAMPLE
             if ($this->valueResolver->isFalse($secondArgumentValue)) {
                 unset($args[1]);
             } elseif ($this->valueResolver->isTrue($secondArgumentValue)) {
-                $classConstFetch = $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Nette\\Utils\\Json', 'FORCE_ARRAY');
+                $classConstFetch = $this->nodeFactory->createClassConstFetch('Nette\\Utils\\Json', 'FORCE_ARRAY');
                 $args[1] = new Arg($classConstFetch);
             }
         }
-        return $this->nodeFactory->createStaticCall('RectorPrefix20220607\\Nette\\Utils\\Json', 'decode', $args);
+        return $this->nodeFactory->createStaticCall('Nette\\Utils\\Json', 'decode', $args);
     }
 }

@@ -25,7 +25,7 @@ final class FormBuilderSetDataMapperRector extends AbstractRector
     private $dataMapperObjectType;
     public function __construct()
     {
-        $this->dataMapperObjectType = new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\Extension\\Core\\DataMapper\\DataMapper');
+        $this->dataMapperObjectType = new ObjectType('Symfony\\Component\\Form\\Extension\\Core\\DataMapper\\DataMapper');
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -69,7 +69,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\FormConfigBuilderInterface'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Form\\FormConfigBuilderInterface'))) {
             return null;
         }
         if (!$this->isName($node->name, 'setDataMapper')) {
@@ -79,7 +79,7 @@ CODE_SAMPLE
         if ($this->isObjectType($argumentValue, $this->dataMapperObjectType)) {
             return null;
         }
-        $propertyPathAccessor = new New_(new FullyQualified('RectorPrefix20220607\\Symfony\\Component\\Form\\Extension\\Core\\DataAccessor\\PropertyPathAccessor'));
+        $propertyPathAccessor = new New_(new FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataAccessor\\PropertyPathAccessor'));
         $newArgumentValue = new New_(new FullyQualified($this->dataMapperObjectType->getClassName()), [new Arg($propertyPathAccessor)]);
         $node->getArgs()[0]->value = $newArgumentValue;
         return $node;

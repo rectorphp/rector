@@ -55,7 +55,7 @@ class SomeClass
     use Nette\SmartObject;
 }
 CODE_SAMPLE
-, [new ParentClassToTraits('RectorPrefix20220607\\Nette\\Object', ['RectorPrefix20220607\\Nette\\SmartObject'])])]);
+, [new ParentClassToTraits('Nette\\Object', ['Nette\\SmartObject'])])]);
     }
     /**
      * @return array<class-string<Node>>

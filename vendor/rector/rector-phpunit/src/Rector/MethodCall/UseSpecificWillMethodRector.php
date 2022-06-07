@@ -78,7 +78,7 @@ CODE_SAMPLE
             return null;
         }
         $callerNode = $node instanceof StaticCall ? $node->class : $node->var;
-        if (!$this->isObjectType($callerNode, new ObjectType('RectorPrefix20220607\\PHPUnit\\Framework\\MockObject\\Builder\\InvocationMocker'))) {
+        if (!$this->isObjectType($callerNode, new ObjectType('PHPUnit\\Framework\\MockObject\\Builder\\InvocationMocker'))) {
             return null;
         }
         if ($this->isName($node->name, 'with')) {

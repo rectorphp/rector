@@ -25,7 +25,7 @@ class AddGenericReturnTypeToRelationsRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('RectorPrefix20220607\\Add generic return type to relations in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add generic return type to relations in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
 use App\Account;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -77,7 +77,7 @@ CODE_SAMPLE
         if ($methodReturnTypeName === null) {
             return null;
         }
-        if (!$this->isObjectType($methodReturnType, new ObjectType('RectorPrefix20220607\\Illuminate\\Database\\Eloquent\\Relations\\Relation'))) {
+        if (!$this->isObjectType($methodReturnType, new ObjectType('Illuminate\\Database\\Eloquent\\Relations\\Relation'))) {
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
@@ -141,7 +141,7 @@ CODE_SAMPLE
             return \true;
         }
         if ($classLike instanceof Class_) {
-            return !$this->isObjectType($classLike, new ObjectType('RectorPrefix20220607\\Illuminate\\Database\\Eloquent\\Model'));
+            return !$this->isObjectType($classLike, new ObjectType('Illuminate\\Database\\Eloquent\\Model'));
         }
         return \false;
     }

@@ -96,7 +96,7 @@ CODE_SAMPLE
             return null;
         }
         // skip PHPUnit calls, as they accept both self:: and $this-> formats
-        if ($this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase'))) {
+        if ($this->isObjectType($node->var, new ObjectType('PHPUnit\\Framework\\TestCase'))) {
             return null;
         }
         $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);

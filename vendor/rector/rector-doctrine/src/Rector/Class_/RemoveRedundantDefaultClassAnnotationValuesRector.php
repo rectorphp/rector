@@ -70,7 +70,7 @@ CODE_SAMPLE
     private function refactorEntityAnnotation(Class_ $class) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Entity');
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\Entity');
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }

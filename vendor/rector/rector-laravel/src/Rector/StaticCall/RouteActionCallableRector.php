@@ -38,7 +38,7 @@ final class RouteActionCallableRector extends AbstractRector implements Configur
     /**
      * @var string
      */
-    private const DEFAULT_NAMESPACE = 'RectorPrefix20220607\\App\\Http\\Controllers';
+    private const DEFAULT_NAMESPACE = 'App\\Http\\Controllers';
     /**
      * @var string
      */
@@ -70,7 +70,7 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 Route::get('/users', [\App\Http\Controllers\UserController::class, 'index']);
 CODE_SAMPLE
-, [self::NAMESPACE => 'RectorPrefix20220607\\App\\Http\\Controllers'])]);
+, [self::NAMESPACE => 'App\\Http\\Controllers'])]);
     }
     /**
      * @return array<class-string<Node>>

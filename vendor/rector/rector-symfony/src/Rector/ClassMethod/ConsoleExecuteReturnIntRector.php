@@ -68,7 +68,7 @@ CODE_SAMPLE
         if (!$class instanceof Class_) {
             return null;
         }
-        if (!$this->isObjectType($class, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($class, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
         $this->refactorReturnTypeDeclaration($node);

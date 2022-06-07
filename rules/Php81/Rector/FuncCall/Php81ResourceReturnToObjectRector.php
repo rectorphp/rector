@@ -26,26 +26,26 @@ final class Php81ResourceReturnToObjectRector extends AbstractRector implements 
         // finfo
         'finfo_open' => 'finfo',
         // ftp
-        'ftp_connect' => 'RectorPrefix20220607\\FTP\\Connection',
+        'ftp_connect' => 'FTP\\Connection',
         // imap_open
-        'imap_open' => 'RectorPrefix20220607\\IMAP\\Connection',
+        'imap_open' => 'IMAP\\Connection',
         // pspell
-        'pspell_config_create' => 'RectorPrefix20220607\\PSpell\\Config',
-        'pspell_new_config' => 'RectorPrefix20220607\\PSpell\\Dictionary',
+        'pspell_config_create' => 'PSpell\\Config',
+        'pspell_new_config' => 'PSpell\\Dictionary',
         // ldap
-        'ldap_connect' => 'RectorPrefix20220607\\LDAP\\Connection',
-        'ldap_read' => 'RectorPrefix20220607\\LDAP\\Result',
-        'ldap_first_entry' => 'RectorPrefix20220607\\LDAP\\ResultEntry',
-        'ldap_first_reference' => 'RectorPrefix20220607\\LDAP\\ResultEntry',
-        'ldap_next_entry' => 'RectorPrefix20220607\\LDAP\\ResultEntry',
-        'ldap_next_reference' => 'RectorPrefix20220607\\LDAP\\ResultEntry',
+        'ldap_connect' => 'LDAP\\Connection',
+        'ldap_read' => 'LDAP\\Result',
+        'ldap_first_entry' => 'LDAP\\ResultEntry',
+        'ldap_first_reference' => 'LDAP\\ResultEntry',
+        'ldap_next_entry' => 'LDAP\\ResultEntry',
+        'ldap_next_reference' => 'LDAP\\ResultEntry',
         // psql
-        'pg_pconnect' => 'RectorPrefix20220607\\PgSql\\Connection',
-        'pg_connect' => 'RectorPrefix20220607\\PgSql\\Connection',
-        'pg_query' => 'RectorPrefix20220607\\PgSql\\Result',
-        'pg_prepare' => 'RectorPrefix20220607\\PgSql\\Result',
-        'pg_execute' => 'RectorPrefix20220607\\PgSql\\Result',
-        'pg_lo_open' => 'RectorPrefix20220607\\PgSql\\Lob',
+        'pg_pconnect' => 'PgSql\\Connection',
+        'pg_connect' => 'PgSql\\Connection',
+        'pg_query' => 'PgSql\\Result',
+        'pg_prepare' => 'PgSql\\Result',
+        'pg_execute' => 'PgSql\\Result',
+        'pg_lo_open' => 'PgSql\\Lob',
     ];
     /**
      * @readonly

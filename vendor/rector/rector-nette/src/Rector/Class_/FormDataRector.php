@@ -33,11 +33,11 @@ final class FormDataRector extends AbstractRector implements ConfigurableRectorI
     /**
      * @var string
      */
-    private $formDataClassParent = 'RectorPrefix20220607\\Nette\\Utils\\ArrayHash';
+    private $formDataClassParent = 'Nette\\Utils\\ArrayHash';
     /**
      * @var string[]
      */
-    private $formDataClassTraits = ['RectorPrefix20220607\\Nette\\SmartObject'];
+    private $formDataClassTraits = ['Nette\\SmartObject'];
     /**
      * @readonly
      * @var \Rector\Nette\NodeFinder\FormVariableFinder

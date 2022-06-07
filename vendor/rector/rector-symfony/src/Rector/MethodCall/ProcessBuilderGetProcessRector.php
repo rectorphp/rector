@@ -40,7 +40,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Process\\ProcessBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Process\\ProcessBuilder'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getProcess')) {

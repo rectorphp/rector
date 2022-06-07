@@ -24,20 +24,20 @@ final class DowngradePhp81ResourceReturnToObjectRector extends AbstractRector
         // finfo
         'finfo',
         // ftp
-        'RectorPrefix20220607\\FTP\\Connection',
+        'FTP\\Connection',
         // imap_open
-        'RectorPrefix20220607\\IMAP\\Connection',
+        'IMAP\\Connection',
         // pspell
-        'RectorPrefix20220607\\PSpell\\Config',
-        'RectorPrefix20220607\\PSpell\\Dictionary',
+        'PSpell\\Config',
+        'PSpell\\Dictionary',
         // ldap
-        'RectorPrefix20220607\\LDAP\\Connection',
-        'RectorPrefix20220607\\LDAP\\Result',
-        'RectorPrefix20220607\\LDAP\\ResultEntry',
+        'LDAP\\Connection',
+        'LDAP\\Result',
+        'LDAP\\ResultEntry',
         // psql
-        'RectorPrefix20220607\\PgSql\\Connection',
-        'RectorPrefix20220607\\PgSql\\Result',
-        'RectorPrefix20220607\\PgSql\\Lob',
+        'PgSql\\Connection',
+        'PgSql\\Result',
+        'PgSql\\Lob',
     ];
     /**
      * @readonly

@@ -62,7 +62,7 @@ final class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-, [new RenameAnnotationByType('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase', 'test', 'scenario')])]);
+, [new RenameAnnotationByType('PHPUnit\\Framework\\TestCase', 'test', 'scenario')])]);
     }
     /**
      * @return array<class-string<Node>>

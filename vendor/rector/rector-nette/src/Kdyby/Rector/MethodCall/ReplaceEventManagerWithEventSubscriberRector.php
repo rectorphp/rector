@@ -130,7 +130,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('RectorPrefix20220607\\Kdyby\\Events\\EventManager'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Kdyby\\Events\\EventManager'))) {
             return \true;
         }
         return !$this->isName($methodCall->name, 'dispatchEvent');

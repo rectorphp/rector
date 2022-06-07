@@ -60,7 +60,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if (!$phpDocInfo->hasByAnnotationClasses(['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Entity', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Embeddable'])) {
+        if (!$phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable'])) {
             return null;
         }
         if (!$node->isFinal()) {

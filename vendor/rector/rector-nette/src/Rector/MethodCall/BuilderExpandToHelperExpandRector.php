@@ -59,7 +59,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Nette\\DI\\ContainerBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Nette\\DI\\ContainerBuilder'))) {
             return null;
         }
         if (!$this->isName($node->name, 'expand')) {
@@ -69,6 +69,6 @@ CODE_SAMPLE
         $getContainerBuilderMethodCall = new MethodCall(new Variable('this'), 'getContainerBuilder');
         $parametersPropertyFetch = new PropertyFetch($getContainerBuilderMethodCall, 'parameters');
         $args[] = new Arg($parametersPropertyFetch);
-        return new StaticCall(new FullyQualified('RectorPrefix20220607\\Nette\\DI\\Helpers'), 'expand', $args);
+        return new StaticCall(new FullyQualified('Nette\\DI\\Helpers'), 'expand', $args);
     }
 }

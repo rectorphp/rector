@@ -33,7 +33,7 @@ final class RequestStaticValidateToInjectRector extends AbstractRector
     public function __construct(ClassMethodManipulator $classMethodManipulator)
     {
         $this->classMethodManipulator = $classMethodManipulator;
-        $this->requestObjectTypes = [new ObjectType('RectorPrefix20220607\\Illuminate\\Http\\Request'), new ObjectType('Request')];
+        $this->requestObjectTypes = [new ObjectType('Illuminate\\Http\\Request'), new ObjectType('Request')];
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -76,7 +76,7 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $requestName = $this->classMethodManipulator->addMethodParameterIfMissing($node, new ObjectType('RectorPrefix20220607\\Illuminate\\Http\\Request'), ['request', 'httpRequest']);
+        $requestName = $this->classMethodManipulator->addMethodParameterIfMissing($node, new ObjectType('Illuminate\\Http\\Request'), ['request', 'httpRequest']);
         $variable = new Variable($requestName);
         $methodName = $this->getName($node->name);
         if ($methodName === null) {

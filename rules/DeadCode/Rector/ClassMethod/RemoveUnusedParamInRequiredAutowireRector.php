@@ -95,7 +95,7 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $hasRequiredAnnotation = $phpDocInfo->hasByName('required');
-        $hasRequiredAttribute = $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'RectorPrefix20220607\\Symfony\\Contracts\\Service\\Attribute\\Required');
+        $hasRequiredAttribute = $this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Symfony\\Contracts\\Service\\Attribute\\Required');
         return !$hasRequiredAnnotation && !$hasRequiredAttribute;
     }
 }

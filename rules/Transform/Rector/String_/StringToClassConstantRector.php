@@ -40,7 +40,7 @@ final class SomeSubscriber
     }
 }
 CODE_SAMPLE
-, [new StringToClassConstant('compiler.post_dump', 'RectorPrefix20220607\\Yet\\AnotherClass', 'CONSTANT')])]);
+, [new StringToClassConstant('compiler.post_dump', 'Yet\\AnotherClass', 'CONSTANT')])]);
     }
     /**
      * @return array<class-string<Node>>

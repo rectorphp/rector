@@ -64,7 +64,7 @@ CODE_SAMPLE
         if (isset($funcCall->args[2]) && !$this->valueResolver->isValue($funcCall->args[2]->value, 0)) {
             return null;
         }
-        $containsStaticCall = $this->nodeFactory->createStaticCall('RectorPrefix20220607\\Nette\\Utils\\Strings', 'contains');
+        $containsStaticCall = $this->nodeFactory->createStaticCall('Nette\\Utils\\Strings', 'contains');
         $containsStaticCall->args[0] = $funcCall->args[0];
         $containsStaticCall->args[1] = $funcCall->args[1];
         if ($node instanceof Identical) {

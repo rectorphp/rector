@@ -91,7 +91,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityRepository'))) {
+        if (!$this->isObjectType($node, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
             return null;
         }
         if ($node->extends === null) {
@@ -100,12 +100,12 @@ CODE_SAMPLE
         // remove parent class
         $node->extends = null;
         $entityObjectType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($node);
-        $genericObjectType = new GenericObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityRepository', [$entityObjectType]);
+        $genericObjectType = new GenericObjectType('Doctrine\\ORM\\EntityRepository', [$entityObjectType]);
         // add $repository property
         $this->classInsertManipulator->addPropertyToClass($node, 'repository', $genericObjectType);
         // add $entityManager and assign to constuctor
         $repositoryAssign = $this->repositoryAssignFactory->create($node);
-        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($node, 'entityManager', new ObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityManagerInterface'), $repositoryAssign);
+        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($node, 'entityManager', new ObjectType('Doctrine\\ORM\\EntityManagerInterface'), $repositoryAssign);
         return $node;
     }
 }

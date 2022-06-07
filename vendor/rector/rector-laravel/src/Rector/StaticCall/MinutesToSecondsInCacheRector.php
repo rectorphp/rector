@@ -40,11 +40,11 @@ final class MinutesToSecondsInCacheRector extends AbstractRector
     private $typeToTimeMethodsAndPositions = [];
     public function __construct()
     {
-        $this->typeToTimeMethodsAndPositions = [new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Support\\Facades\\Cache', self::PUT, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Repository', self::PUT, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Store', self::PUT, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Repository', self::ADD, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Store', self::ADD, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Support\\Facades\\Cache', self::ADD, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Repository', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Support\\Facades\\Cache', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Store', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Store', 'putMany', 1)];
+        $this->typeToTimeMethodsAndPositions = [new TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::PUT, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::PUT, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::PUT, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::ADD, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::ADD, 2), new TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::ADD, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Repository', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('Illuminate\\Support\\Facades\\Cache', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', self::REMEMBER, 2), new TypeToTimeMethodAndPosition('Illuminate\\Contracts\\Cache\\Store', 'putMany', 1)];
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('RectorPrefix20220607\\Change minutes argument to seconds in Illuminate\\Contracts\\Cache\\Store and Illuminate\\Support\\Facades\\Cache', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change minutes argument to seconds in Illuminate\\Contracts\\Cache\\Store and Illuminate\\Support\\Facades\\Cache', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

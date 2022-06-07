@@ -59,7 +59,7 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'addSearchLocation')) {
             return null;
         }
-        $node->class = new FullyQualified('RectorPrefix20220607\\PhpOffice\\PhpSpreadsheet\\IOFactory');
+        $node->class = new FullyQualified('PhpOffice\\PhpSpreadsheet\\IOFactory');
         $node->name = new Identifier('registerReader');
         // remove middle argument
         $args = $node->args;

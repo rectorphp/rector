@@ -23,18 +23,18 @@ final class ControlDimFetchAnalyzer
     }
     public function matchNameOnFormOrControlVariable(Node $node) : ?string
     {
-        return $this->matchNameOnVariableType($node, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Form'));
+        return $this->matchNameOnVariableType($node, new ObjectType('Nette\\Application\\UI\\Form'));
     }
     public function matchNameOnControlVariable(Node $node) : ?string
     {
-        return $this->matchNameOnVariableType($node, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Control'));
+        return $this->matchNameOnVariableType($node, new ObjectType('Nette\\Application\\UI\\Control'));
     }
     public function matchName(Node $node) : ?string
     {
         if (!$node instanceof ArrayDimFetch) {
             return null;
         }
-        if (!$this->isVariableTypes($node->var, [new ObjectType('RectorPrefix20220607\\Nette\\ComponentModel\\IContainer')])) {
+        if (!$this->isVariableTypes($node->var, [new ObjectType('Nette\\ComponentModel\\IContainer')])) {
             return null;
         }
         if (!$node->dim instanceof String_) {

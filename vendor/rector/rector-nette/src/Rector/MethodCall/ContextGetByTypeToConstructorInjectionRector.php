@@ -83,7 +83,7 @@ CODE_SAMPLE
             return null;
         }
         $callerType = $this->nodeTypeResolver->getType($node->var);
-        $containerObjectType = new ObjectType('RectorPrefix20220607\\Nette\\DI\\Container');
+        $containerObjectType = new ObjectType('Nette\\DI\\Container');
         if (!$containerObjectType->isSuperTypeOf($callerType)->yes()) {
             return null;
         }

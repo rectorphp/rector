@@ -48,11 +48,11 @@ final class TemplateAnnotationToThisRenderRector extends AbstractRector
     /**
      * @var class-string
      */
-    private const RESPONSE_CLASS = 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Response';
+    private const RESPONSE_CLASS = 'Symfony\\Component\\HttpFoundation\\Response';
     /**
      * @var string
      */
-    private const TEMPLATE_ANNOTATION_CLASS = 'RectorPrefix20220607\\Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template';
+    private const TEMPLATE_ANNOTATION_CLASS = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template';
     /**
      * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer
@@ -129,7 +129,7 @@ CODE_SAMPLE
         if (!$this->hasClassMethodWithTemplateAnnotation($class)) {
             return null;
         }
-        $class->extends = new FullyQualified('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
+        $class->extends = new FullyQualified('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
         return $class;
     }
     private function replaceTemplateAnnotation(ClassMethod $classMethod) : ?Node

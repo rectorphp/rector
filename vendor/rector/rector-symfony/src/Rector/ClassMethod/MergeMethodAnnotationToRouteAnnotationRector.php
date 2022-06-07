@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('RectorPrefix20220607\\Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Method');
+        $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Method');
         if (!$sensioDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }

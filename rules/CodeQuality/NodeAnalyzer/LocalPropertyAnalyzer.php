@@ -31,7 +31,7 @@ final class LocalPropertyAnalyzer
     /**
      * @var string
      */
-    private const LARAVEL_COLLECTION_CLASS = 'RectorPrefix20220607\\Illuminate\\Support\\Collection';
+    private const LARAVEL_COLLECTION_CLASS = 'Illuminate\\Support\\Collection';
     /**
      * @readonly
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser

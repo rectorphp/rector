@@ -65,10 +65,10 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $expr = $node instanceof New_ ? $node->class : $node->var;
-        if ($this->isObjectType($expr, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Process\\Process'))) {
+        if ($this->isObjectType($expr, new ObjectType('Symfony\\Component\\Process\\Process'))) {
             return $this->processArgumentPosition($node, 0);
         }
-        if ($this->isObjectType($expr, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Console\\Helper\\ProcessHelper'))) {
+        if ($this->isObjectType($expr, new ObjectType('Symfony\\Component\\Console\\Helper\\ProcessHelper'))) {
             return $this->processArgumentPosition($node, 1);
         }
         return null;

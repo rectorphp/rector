@@ -16,7 +16,7 @@ return static function (RectorConfig $rectorConfig) : void {
         '*/Source/*',
         '*/Fixture/*',
     ]);
-    $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, ['Nette\\*', 'RectorPrefix20220607\\Symfony\\Component\\Translation\\TranslatorInterface', 'RectorPrefix20220607\\Symfony\\Contracts\\EventDispatcher\\Event', 'RectorPrefix20220607\\Kdyby\\Events\\Subscriber']);
+    $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, ['Nette\\*', 'Symfony\\Component\\Translation\\TranslatorInterface', 'Symfony\\Contracts\\EventDispatcher\\Event', 'Kdyby\\Events\\Subscriber']);
     // needed for DEAD_CODE list, just in split package like this
     $rectorConfig->sets([__DIR__ . '/config/config.php', LevelSetList::UP_TO_PHP_81, SetList::DEAD_CODE, SetList::CODE_QUALITY]);
 };

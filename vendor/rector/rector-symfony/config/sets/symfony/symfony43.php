@@ -18,59 +18,59 @@ return static function (RectorConfig $rectorConfig) : void {
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
     $rectorConfig->rule(WebTestCaseAssertResponseCodeRector::class);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
-        new MethodCallRename('RectorPrefix20220607\\Symfony\\Component\\BrowserKit\\Response', 'getStatus', 'getStatusCode'),
-        new MethodCallRename('RectorPrefix20220607\\Symfony\\Component\\Security\\Http\\Firewall', 'handleRequest', 'callListeners'),
+        new MethodCallRename('Symfony\\Component\\BrowserKit\\Response', 'getStatus', 'getStatusCode'),
+        new MethodCallRename('Symfony\\Component\\Security\\Http\\Firewall', 'handleRequest', 'callListeners'),
         # https://github.com/symfony/http-kernel/blob/801b925e308518ddf821ba91952c41ae77c77507/Event/GetResponseForExceptionEvent.php#L55
-        new MethodCallRename('RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent', 'getException', 'getThrowable'),
+        new MethodCallRename('Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent', 'getException', 'getThrowable'),
         # https://github.com/symfony/http-kernel/blob/801b925e308518ddf821ba91952c41ae77c77507/Event/GetResponseForExceptionEvent.php#L67
-        new MethodCallRename('RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent', 'setException', 'setThrowable'),
+        new MethodCallRename('Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent', 'setException', 'setThrowable'),
     ]);
     $rectorConfig->rule(MakeDispatchFirstArgumentEventRector::class);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
         # Browser Kit
-        'RectorPrefix20220607\\Symfony\\Component\\BrowserKit\\Client' => 'RectorPrefix20220607\\Symfony\\Component\\BrowserKit\\AbstractBrowser',
+        'Symfony\\Component\\BrowserKit\\Client' => 'Symfony\\Component\\BrowserKit\\AbstractBrowser',
         # Cache
         # https://github.com/symfony/symfony/pull/29236
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Traits\\ApcuTrait\\ApcuCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Traits\\ApcuTrait\\ApcuAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\SimpleCacheAdapter' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\Psr16Adapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\ArrayCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\ArrayAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\ChainCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\ChainAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\DoctrineCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\DoctrineAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\FilesystemCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\MemcachedCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\MemcachedAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\NullCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\NullAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\PdoCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\PdoAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\PhpArrayCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\PhpArrayAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\PhpFilesCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\PhpFilesAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\RedisCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\RedisAdapter',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\TraceableCache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Adapter\\TraceableAdapterCache',
-        'RectorPrefix20220607\\Symfony\\Component\\Cache\\Simple\\Psr6Cache' => 'RectorPrefix20220607\\Symfony\\Component\\Cache\\Psr16Cache',
-        'RectorPrefix20220607\\Psr\\SimpleCache\\CacheInterface' => 'RectorPrefix20220607\\Symfony\\Contracts\\Cache\\CacheInterface',
+        'Symfony\\Component\\Cache\\Traits\\ApcuTrait\\ApcuCache' => 'Symfony\\Component\\Cache\\Traits\\ApcuTrait\\ApcuAdapter',
+        'Symfony\\Component\\Cache\\Adapter\\SimpleCacheAdapter' => 'Symfony\\Component\\Cache\\Adapter\\Psr16Adapter',
+        'Symfony\\Component\\Cache\\Simple\\ArrayCache' => 'Symfony\\Component\\Cache\\Adapter\\ArrayAdapter',
+        'Symfony\\Component\\Cache\\Simple\\ChainCache' => 'Symfony\\Component\\Cache\\Adapter\\ChainAdapter',
+        'Symfony\\Component\\Cache\\Simple\\DoctrineCache' => 'Symfony\\Component\\Cache\\Adapter\\DoctrineAdapter',
+        'Symfony\\Component\\Cache\\Simple\\FilesystemCache' => 'Symfony\\Component\\Cache\\Adapter\\FilesystemAdapter',
+        'Symfony\\Component\\Cache\\Simple\\MemcachedCache' => 'Symfony\\Component\\Cache\\Adapter\\MemcachedAdapter',
+        'Symfony\\Component\\Cache\\Simple\\NullCache' => 'Symfony\\Component\\Cache\\Adapter\\NullAdapter',
+        'Symfony\\Component\\Cache\\Simple\\PdoCache' => 'Symfony\\Component\\Cache\\Adapter\\PdoAdapter',
+        'Symfony\\Component\\Cache\\Simple\\PhpArrayCache' => 'Symfony\\Component\\Cache\\Adapter\\PhpArrayAdapter',
+        'Symfony\\Component\\Cache\\Simple\\PhpFilesCache' => 'Symfony\\Component\\Cache\\Adapter\\PhpFilesAdapter',
+        'Symfony\\Component\\Cache\\Simple\\RedisCache' => 'Symfony\\Component\\Cache\\Adapter\\RedisAdapter',
+        'Symfony\\Component\\Cache\\Simple\\TraceableCache' => 'Symfony\\Component\\Cache\\Adapter\\TraceableAdapterCache',
+        'Symfony\\Component\\Cache\\Simple\\Psr6Cache' => 'Symfony\\Component\\Cache\\Psr16Cache',
+        'Psr\\SimpleCache\\CacheInterface' => 'Symfony\\Contracts\\Cache\\CacheInterface',
         # EventDispatcher
-        'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\FilterControllerArgumentsEvent' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\ControllerArgumentsEvent',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\ControllerEvent',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\FilterResponseEvent' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\ResponseEvent',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\GetResponseEvent' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\RequestEvent',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\GetResponseForControllerResultEvent' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\ViewEvent',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\ExceptionEvent',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\PostResponseEvent' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Event\\TerminateEvent',
+        'Symfony\\Component\\HttpKernel\\Event\\FilterControllerArgumentsEvent' => 'Symfony\\Component\\HttpKernel\\Event\\ControllerArgumentsEvent',
+        'Symfony\\Component\\HttpKernel\\Event\\FilterControllerEvent' => 'Symfony\\Component\\HttpKernel\\Event\\ControllerEvent',
+        'Symfony\\Component\\HttpKernel\\Event\\FilterResponseEvent' => 'Symfony\\Component\\HttpKernel\\Event\\ResponseEvent',
+        'Symfony\\Component\\HttpKernel\\Event\\GetResponseEvent' => 'Symfony\\Component\\HttpKernel\\Event\\RequestEvent',
+        'Symfony\\Component\\HttpKernel\\Event\\GetResponseForControllerResultEvent' => 'Symfony\\Component\\HttpKernel\\Event\\ViewEvent',
+        'Symfony\\Component\\HttpKernel\\Event\\GetResponseForExceptionEvent' => 'Symfony\\Component\\HttpKernel\\Event\\ExceptionEvent',
+        'Symfony\\Component\\HttpKernel\\Event\\PostResponseEvent' => 'Symfony\\Component\\HttpKernel\\Event\\TerminateEvent',
         # has lowest priority, have to be last
-        'RectorPrefix20220607\\Symfony\\Component\\EventDispatcher\\Event' => 'RectorPrefix20220607\\Symfony\\Contracts\\EventDispatcher\\Event',
+        'Symfony\\Component\\EventDispatcher\\Event' => 'Symfony\\Contracts\\EventDispatcher\\Event',
         # MimeType
-        'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\File\\MimeType\\MimeTypeGuesserInterface' => 'RectorPrefix20220607\\Symfony\\Component\\Mime\\MimeTypesInterface',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\File\\MimeType\\ExtensionGuesserInterface' => 'RectorPrefix20220607\\Symfony\\Component\\Mime\\MimeTypesInterface',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\File\\MimeType\\MimeTypeExtensionGuesser' => 'RectorPrefix20220607\\Symfony\\Component\\Mime\\MimeTypes',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\File\\MimeType\\FileBinaryMimeTypeGuesser' => 'RectorPrefix20220607\\Symfony\\Component\\Mime\\FileBinaryMimeTypeGuesser',
-        'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\File\\MimeType\\FileinfoMimeTypeGuesser' => 'RectorPrefix20220607\\Symfony\\Component\\Mime\\FileinfoMimeTypeGuesser',
+        'Symfony\\Component\\HttpFoundation\\File\\MimeType\\MimeTypeGuesserInterface' => 'Symfony\\Component\\Mime\\MimeTypesInterface',
+        'Symfony\\Component\\HttpFoundation\\File\\MimeType\\ExtensionGuesserInterface' => 'Symfony\\Component\\Mime\\MimeTypesInterface',
+        'Symfony\\Component\\HttpFoundation\\File\\MimeType\\MimeTypeExtensionGuesser' => 'Symfony\\Component\\Mime\\MimeTypes',
+        'Symfony\\Component\\HttpFoundation\\File\\MimeType\\FileBinaryMimeTypeGuesser' => 'Symfony\\Component\\Mime\\FileBinaryMimeTypeGuesser',
+        'Symfony\\Component\\HttpFoundation\\File\\MimeType\\FileinfoMimeTypeGuesser' => 'Symfony\\Component\\Mime\\FileinfoMimeTypeGuesser',
         # HttpKernel
         # @todo unpack after YAML to PHP migration, Symfony\Component\HttpKernel\Client: Symfony\Component\HttpKernel\HttpKernelBrowser
-        'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\EventListener\\TranslatorListener' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\EventListener\\LocaleAwareListener',
+        'Symfony\\Component\\HttpKernel\\EventListener\\TranslatorListener' => 'Symfony\\Component\\HttpKernel\\EventListener\\LocaleAwareListener',
         # Security
-        'RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Encoder\\Argon2iPasswordEncoder' => 'RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Encoder\\SodiumPasswordEncoder',
-        'RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Encoder\\BCryptPasswordEncoder' => 'RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Encoder\\NativePasswordEncoder',
+        'Symfony\\Component\\Security\\Core\\Encoder\\Argon2iPasswordEncoder' => 'Symfony\\Component\\Security\\Core\\Encoder\\SodiumPasswordEncoder',
+        'Symfony\\Component\\Security\\Core\\Encoder\\BCryptPasswordEncoder' => 'Symfony\\Component\\Security\\Core\\Encoder\\NativePasswordEncoder',
     ]);
     # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md#workflow
-    $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [new ArgumentAdder('RectorPrefix20220607\\Symfony\\Component\\Workflow\\MarkingStore\\MarkingStoreInterface', 'setMarking', 2, 'context', [])]);
-    $rectorConfig->ruleWithConfiguration(AddMethodParentCallRector::class, ['RectorPrefix20220607\\Symfony\\Component\\EventDispatcher\\EventDispatcher' => MethodName::CONSTRUCT]);
+    $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [new ArgumentAdder('Symfony\\Component\\Workflow\\MarkingStore\\MarkingStoreInterface', 'setMarking', 2, 'context', [])]);
+    $rectorConfig->ruleWithConfiguration(AddMethodParentCallRector::class, ['Symfony\\Component\\EventDispatcher\\EventDispatcher' => MethodName::CONSTRUCT]);
 };

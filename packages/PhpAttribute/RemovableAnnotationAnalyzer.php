@@ -14,7 +14,7 @@ final class RemovableAnnotationAnalyzer
      *
      * @var string[]
      */
-    private const REMOVABLE_ANNOTATION_CLASSES = ['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\JoinColumns'];
+    private const REMOVABLE_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\JoinColumns'];
     /**
      * @var AnnotationToAttribute[]
      */

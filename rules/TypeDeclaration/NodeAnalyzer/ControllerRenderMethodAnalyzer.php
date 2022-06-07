@@ -53,7 +53,7 @@ final class ControllerRenderMethodAnalyzer
     }
     private function isNetteRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
-        if (!$classReflection->isSubclassOf('RectorPrefix20220607\\Nette\\Application\\UI\\Control')) {
+        if (!$classReflection->isSubclassOf('Nette\\Application\\UI\\Control')) {
             return \false;
         }
         if (!$classMethod->isPublic()) {
@@ -63,7 +63,7 @@ final class ControllerRenderMethodAnalyzer
     }
     private function isSymfonyRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
-        if (!$classReflection->isSubclassOf('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller') && !$classReflection->isSubclassOf('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController')) {
+        if (!$classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller') && !$classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController')) {
             return \false;
         }
         if (!$classMethod->isPublic()) {
@@ -72,13 +72,13 @@ final class ControllerRenderMethodAnalyzer
         if ($this->simpleNameResolver->isNames($classMethod->name, ['__invoke', '*action'])) {
             return \true;
         }
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'RectorPrefix20220607\\Symfony\\Component\\Routing\\Annotation\\Route')) {
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Symfony\\Component\\Routing\\Annotation\\Route')) {
             return \true;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return \false;
         }
-        return $phpDocInfo->hasByAnnotationClass('RectorPrefix20220607\\Symfony\\Component\\Routing\\Annotation\\Route');
+        return $phpDocInfo->hasByAnnotationClass('Symfony\\Component\\Routing\\Annotation\\Route');
     }
 }

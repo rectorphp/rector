@@ -77,7 +77,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
         $defaultNameProperty = $node->getProperty('defaultName');
@@ -111,7 +111,7 @@ CODE_SAMPLE
             if (!$node instanceof StaticCall) {
                 return null;
             }
-            if (!$this->isObjectType($node->class, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->isObjectType($node->class, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             $commandName = $this->matchCommandNameNodeInConstruct($node);
@@ -134,7 +134,7 @@ CODE_SAMPLE
             if (!$node instanceof MethodCall) {
                 return null;
             }
-            if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             if (!$this->isName($node->name, 'setName')) {

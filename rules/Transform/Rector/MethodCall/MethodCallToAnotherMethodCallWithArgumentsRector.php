@@ -31,7 +31,7 @@ CODE_SAMPLE
 $serviceDefinition = new Nette\DI\ServiceDefinition;
 $serviceDefinition->addTag('inject');
 CODE_SAMPLE
-, [new MethodCallToAnotherMethodCallWithArguments('RectorPrefix20220607\\Nette\\DI\\ServiceDefinition', 'setInject', 'addTag', ['inject'])])]);
+, [new MethodCallToAnotherMethodCallWithArguments('Nette\\DI\\ServiceDefinition', 'setInject', 'addTag', ['inject'])])]);
     }
     /**
      * @return array<class-string<Node>>

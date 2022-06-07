@@ -23,7 +23,7 @@ final class ContainerServiceProvider
         Assert::fileExists($symfonyContainerPhp);
         $container = (require_once $symfonyContainerPhp);
         // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
-        Assert::isInstanceOf($container, 'RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Container');
+        Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
         if (!$container->has($serviceName)) {
             $errorMessage = \sprintf('Symfony container has no service "%s", maybe it is private', 'router');
             throw new ShouldNotHappenException($errorMessage);

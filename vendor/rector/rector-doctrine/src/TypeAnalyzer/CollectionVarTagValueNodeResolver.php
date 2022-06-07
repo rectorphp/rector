@@ -20,7 +20,7 @@ final class CollectionVarTagValueNodeResolver
     public function resolve(Property $property) : ?VarTagValueNode
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if (!$phpDocInfo->hasByAnnotationClass('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToMany')) {
+        if (!$phpDocInfo->hasByAnnotationClass('Doctrine\\ORM\\Mapping\\OneToMany')) {
             return null;
         }
         return $phpDocInfo->getVarTagValueNode();

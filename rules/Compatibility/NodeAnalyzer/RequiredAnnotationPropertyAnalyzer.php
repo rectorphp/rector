@@ -23,7 +23,7 @@ final class RequiredAnnotationPropertyAnalyzer
     }
     public function isRequiredProperty(PhpDocInfo $phpDocInfo, Property $property) : bool
     {
-        if ($phpDocInfo->hasByAnnotationClass('RectorPrefix20220607\\Doctrine\\Common\\Annotations\\Annotation\\Required')) {
+        if ($phpDocInfo->hasByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\Required')) {
             return \true;
         }
         // sometimes property has default null, but @var says its not null - that's due to nullability of typed properties

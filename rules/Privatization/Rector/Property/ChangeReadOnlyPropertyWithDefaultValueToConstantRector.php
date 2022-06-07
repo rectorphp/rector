@@ -131,6 +131,6 @@ CODE_SAMPLE
         if ($property->attrGroups !== []) {
             return \true;
         }
-        return $this->isObjectType($classLike, new ObjectType('RectorPrefix20220607\\PHP_CodeSniffer\\Sniffs\\Sniff'));
+        return $this->isObjectType($classLike, new ObjectType('PHP_CodeSniffer\\Sniffs\\Sniff'));
     }
 }

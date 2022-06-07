@@ -72,7 +72,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityRepository'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
             return null;
         }
         if (!$this->isNames($node->name, self::ENTITY_REPOSITORY_PUBLIC_METHODS)) {
@@ -116,7 +116,7 @@ CODE_SAMPLE
             if (!$class instanceof Class_) {
                 return null;
             }
-            if ($this->isObjectType($class, new ObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityRepository'))) {
+            if ($this->isObjectType($class, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
                 return null;
             }
             $firstArgValue = $parentMethodCall->args[0]->value;

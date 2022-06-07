@@ -70,7 +70,7 @@ CODE_SAMPLE
         if (!$contentExprAndNeedleExpr instanceof ContentExprAndNeedleExpr) {
             return null;
         }
-        $staticCall = $this->nodeFactory->createStaticCall('RectorPrefix20220607\\Nette\\Utils\\Strings', 'startsWith', [$contentExprAndNeedleExpr->getContentExpr(), $contentExprAndNeedleExpr->getNeedleExpr()]);
+        $staticCall = $this->nodeFactory->createStaticCall('Nette\\Utils\\Strings', 'startsWith', [$contentExprAndNeedleExpr->getContentExpr(), $contentExprAndNeedleExpr->getNeedleExpr()]);
         if ($node instanceof NotIdentical) {
             return new BooleanNot($staticCall);
         }

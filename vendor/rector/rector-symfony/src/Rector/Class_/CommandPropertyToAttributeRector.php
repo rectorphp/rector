@@ -25,7 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CommandPropertyToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
-    private const ATTRIBUTE = 'RectorPrefix20220607\\Symfony\\Component\\Console\\Attribute\\AsCommand';
+    private const ATTRIBUTE = 'Symfony\\Component\\Console\\Attribute\\AsCommand';
     /**
      * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
@@ -80,7 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Console\\Command\\Command'))) {
+        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
         if (!$this->reflectionProvider->hasClass(self::ATTRIBUTE)) {

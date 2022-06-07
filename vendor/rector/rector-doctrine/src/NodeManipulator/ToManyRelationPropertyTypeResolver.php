@@ -18,11 +18,11 @@ final class ToManyRelationPropertyTypeResolver
     /**
      * @var string
      */
-    private const COLLECTION_TYPE = 'RectorPrefix20220607\\Doctrine\\Common\\Collections\\Collection';
+    private const COLLECTION_TYPE = 'Doctrine\\Common\\Collections\\Collection';
     /**
      * @var class-string[]
      */
-    private const TO_MANY_ANNOTATION_CLASSES = ['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToMany', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToMany'];
+    private const TO_MANY_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany'];
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory

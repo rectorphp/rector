@@ -96,7 +96,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(MethodCall $methodCall) : bool
     {
-        $reflectionExtractorObjectType = new ObjectType('RectorPrefix20220607\\Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor');
+        $reflectionExtractorObjectType = new ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor');
         if (!$this->isObjectType($methodCall->var, $reflectionExtractorObjectType)) {
             return \true;
         }
@@ -144,12 +144,12 @@ CODE_SAMPLE
     }
     private function prepareEnableMagicMethodsExtractionFlags(bool $enableMagicCallExtractionValue) : BitwiseOr
     {
-        $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_GET');
-        $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_SET');
+        $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_GET');
+        $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_SET');
         if (!$enableMagicCallExtractionValue) {
             return new BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
         }
-        $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_CALL');
+        $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor', 'MAGIC_CALL');
         return new BitwiseOr(new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch);
     }
 }

@@ -48,7 +48,7 @@ CODE_SAMPLE
         if (!$this->isNames($node->name, ['state', 'states'])) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Illuminate\\Database\\Eloquent\\FactoryBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Illuminate\\Database\\Eloquent\\FactoryBuilder'))) {
             return null;
         }
         $var = $node->var;

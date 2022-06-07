@@ -23,7 +23,7 @@ final class CellStaticToCoordinateRector extends AbstractRector
     private const DECOUPLED_METHODS = ['absoluteCoordinate', 'absoluteReference', 'buildRange', 'columnIndexFromString', 'coordinateFromString', 'extractAllCellReferencesInRange', 'getRangeBoundaries', 'mergeRangesInCollection', 'rangeBoundaries', 'rangeDimension', 'splitRange', 'stringFromColumnIndex'];
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('RectorPrefix20220607\\Methods to manipulate coordinates that used to exists in PHPExcel_Cell to PhpOffice\\PhpSpreadsheet\\Cell\\Coordinate', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Methods to manipulate coordinates that used to exists in PHPExcel_Cell to PhpOffice\\PhpSpreadsheet\\Cell\\Coordinate', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -61,7 +61,7 @@ CODE_SAMPLE
         if (!$this->isNames($node->name, self::DECOUPLED_METHODS)) {
             return null;
         }
-        $node->class = new FullyQualified('RectorPrefix20220607\\PhpOffice\\PhpSpreadsheet\\Cell\\Coordinate');
+        $node->class = new FullyQualified('PhpOffice\\PhpSpreadsheet\\Cell\\Coordinate');
         return $node;
     }
 }

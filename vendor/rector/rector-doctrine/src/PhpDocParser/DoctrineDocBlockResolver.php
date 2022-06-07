@@ -36,12 +36,12 @@ final class DoctrineDocBlockResolver
     public function isDoctrineEntityClass(Class_ $class) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
-        return $phpDocInfo->hasByAnnotationClasses(['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Entity', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Embeddable']);
+        return $phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable']);
     }
     public function getTargetEntity(Property $property) : ?string
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToMany', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToMany', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToOne', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToOne']);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\OneToOne', 'Doctrine\\ORM\\Mapping\\ManyToOne']);
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }

@@ -75,13 +75,13 @@ CODE_SAMPLE
         if (!$assign->var instanceof ArrayDimFetch) {
             return \false;
         }
-        if (!$this->isObjectType($assign->expr, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Control'))) {
+        if (!$this->isObjectType($assign->expr, new ObjectType('Nette\\Application\\UI\\Control'))) {
             return \false;
         }
         $arrayDimFetch = $assign->var;
         if (!$arrayDimFetch->var instanceof Variable) {
             return \false;
         }
-        return $this->isObjectType($arrayDimFetch->var, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Presenter'));
+        return $this->isObjectType($arrayDimFetch->var, new ObjectType('Nette\\Application\\UI\\Presenter'));
     }
 }

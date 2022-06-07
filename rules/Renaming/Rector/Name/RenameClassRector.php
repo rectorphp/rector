@@ -73,7 +73,7 @@ function someFunction(SomeNewClass $someOldClass): SomeNewClass
     }
 }
 CODE_SAMPLE
-, ['RectorPrefix20220607\\App\\SomeOldClass' => 'RectorPrefix20220607\\App\\SomeNewClass'])]);
+, ['App\\SomeOldClass' => 'App\\SomeNewClass'])]);
     }
     /**
      * @return array<class-string<Node>>

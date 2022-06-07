@@ -139,7 +139,7 @@ CODE_SAMPLE
         $node->params = [];
         // 3. add $entityManager->getRepository() fetch assign
         $repositoryAssign = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
-        $entityManagerObjectType = new ObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityManagerInterface');
+        $entityManagerObjectType = new ObjectType('Doctrine\\ORM\\EntityManagerInterface');
         $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($class, 'entityManager', $entityManagerObjectType, $repositoryAssign);
         $this->addRepositoryProperty($class, $entityReferenceExpr);
         // 5. add param + add property, dependency
@@ -158,7 +158,7 @@ CODE_SAMPLE
             // fresh node or possibly trait/interface
             return \true;
         }
-        return !$classReflection->isSubclassOf('RectorPrefix20220607\\Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository');
+        return !$classReflection->isSubclassOf('Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository');
     }
     private function removeParentConstructAndCollectEntityReference(ClassMethod $classMethod) : ?Expr
     {

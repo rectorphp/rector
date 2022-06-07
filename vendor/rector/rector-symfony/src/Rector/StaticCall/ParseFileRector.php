@@ -76,7 +76,7 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'parse')) {
             return null;
         }
-        if (!$this->isObjectType($node->class, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Yaml\\Yaml'))) {
+        if (!$this->isObjectType($node->class, new ObjectType('Symfony\\Component\\Yaml\\Yaml'))) {
             return null;
         }
         if (!$this->isArgumentYamlFile($node)) {

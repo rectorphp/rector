@@ -42,9 +42,9 @@ final class EntityIdNodeFactory
         $phpDocInfo->addTagValueNode($varTagValueNode);
         // add @ORM\Id
         $phpDocTagNodes = [];
-        $phpDocTagNodes[] = new SpacelessPhpDocTagNode('RectorPrefix20220607\\@ORM\\Id', new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Id'), null, []));
-        $phpDocTagNodes[] = new SpacelessPhpDocTagNode('RectorPrefix20220607\\@ORM\\Column', new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Column'), null, ['type' => '"integer"']));
-        $phpDocTagNodes[] = new SpacelessPhpDocTagNode('RectorPrefix20220607\\@ORM\\GeneratedValue', new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\GeneratedValue'), null, ['strategy' => '"AUTO"']));
+        $phpDocTagNodes[] = new SpacelessPhpDocTagNode('@ORM\\Id', new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('Doctrine\\ORM\\Mapping\\Id'), null, []));
+        $phpDocTagNodes[] = new SpacelessPhpDocTagNode('@ORM\\Column', new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('Doctrine\\ORM\\Mapping\\Column'), null, ['type' => '"integer"']));
+        $phpDocTagNodes[] = new SpacelessPhpDocTagNode('@ORM\\GeneratedValue', new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('Doctrine\\ORM\\Mapping\\GeneratedValue'), null, ['strategy' => '"AUTO"']));
         foreach ($phpDocTagNodes as $phpDocTagNode) {
             $phpDocInfo->addPhpDocTagNode($phpDocTagNode);
         }

@@ -140,16 +140,16 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $classType = $this->nodeTypeResolver->getType($node);
-        $translatableObjectType = new ObjectType('RectorPrefix20220607\\Gedmo\\Translatable\\Translatable');
+        $translatableObjectType = new ObjectType('Gedmo\\Translatable\\Translatable');
         if (!$translatableObjectType->isSuperTypeOf($classType)->yes()) {
             return null;
         }
         if (!$this->hasImplements($node)) {
             return null;
         }
-        $this->classManipulator->removeInterface($node, 'RectorPrefix20220607\\Gedmo\\Translatable\\Translatable');
-        $this->classInsertManipulator->addAsFirstTrait($node, 'RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslatableTrait');
-        $node->implements[] = new FullyQualified('RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslatableInterface');
+        $this->classManipulator->removeInterface($node, 'Gedmo\\Translatable\\Translatable');
+        $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslatableTrait');
+        $node->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslatableInterface');
         $propertyNamesAndPhpDocInfos = $this->translatablePropertyCollectorAndRemover->processClass($node);
         $this->removeSetAndGetMethods($node, $propertyNamesAndPhpDocInfos->getPropertyNames());
         $this->dumpEntityTranslation($node, $propertyNamesAndPhpDocInfos);
@@ -197,7 +197,7 @@ CODE_SAMPLE
     private function hasImplements(Class_ $class) : bool
     {
         foreach ($class->implements as $implement) {
-            if ($this->isName($implement, 'RectorPrefix20220607\\Gedmo\\Translatable\\Translatable')) {
+            if ($this->isName($implement, 'Gedmo\\Translatable\\Translatable')) {
                 return \true;
             }
         }

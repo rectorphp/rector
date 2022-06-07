@@ -27,7 +27,7 @@ final class SetUpMethodDecorator
         if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return;
         }
-        $setUpClassMethod = $this->astResolver->resolveClassMethod('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase', MethodName::SET_UP);
+        $setUpClassMethod = $this->astResolver->resolveClassMethod('PHPUnit\\Framework\\TestCase', MethodName::SET_UP);
         if (!$setUpClassMethod instanceof ClassMethod) {
             return;
         }

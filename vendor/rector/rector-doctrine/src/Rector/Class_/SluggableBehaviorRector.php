@@ -101,7 +101,7 @@ CODE_SAMPLE
         $matchedProperty = null;
         foreach ($node->getProperties() as $property) {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            $doctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass('RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\Slug');
+            $doctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass('Gedmo\\Mapping\\Annotation\\Slug');
             if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
@@ -122,8 +122,8 @@ CODE_SAMPLE
             }
             $this->removeNode($classMethod);
         }
-        $this->classInsertManipulator->addAsFirstTrait($node, 'RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Model\\Sluggable\\SluggableTrait');
-        $node->implements[] = new FullyQualified('RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Contract\\Entity\\SluggableInterface');
+        $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Sluggable\\SluggableTrait');
+        $node->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\SluggableInterface');
         if (!\is_array($slugFields)) {
             throw new ShouldNotHappenException();
         }

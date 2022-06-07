@@ -15,6 +15,6 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(SpecificAssertContainsWithoutIdentityRector::class);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // see https://github.com/sebastianbergmann/phpunit/issues/3957
-        new MethodCallRename('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase', 'expectExceptionMessageRegExp', 'expectExceptionMessageMatches'),
+        new MethodCallRename('PHPUnit\\Framework\\TestCase', 'expectExceptionMessageRegExp', 'expectExceptionMessageMatches'),
     ]);
 };

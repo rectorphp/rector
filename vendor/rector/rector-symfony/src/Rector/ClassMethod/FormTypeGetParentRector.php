@@ -111,10 +111,10 @@ CODE_SAMPLE
         if (!$class instanceof Class_) {
             return \false;
         }
-        if ($this->isObjectType($class, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\AbstractType'))) {
+        if ($this->isObjectType($class, new ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
             return $this->isName($classMethod->name, 'getParent');
         }
-        if ($this->isObjectType($classMethod, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\AbstractTypeExtension'))) {
+        if ($this->isObjectType($classMethod, new ObjectType('Symfony\\Component\\Form\\AbstractTypeExtension'))) {
             return $this->isName($classMethod->name, 'getExtendedType');
         }
         return \false;

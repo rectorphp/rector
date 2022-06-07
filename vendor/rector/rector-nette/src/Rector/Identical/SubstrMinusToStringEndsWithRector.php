@@ -76,7 +76,7 @@ CODE_SAMPLE
             return null;
         }
         $arguments = [$substrFuncCall->args[0]->value, $string];
-        $staticCall = $this->nodeFactory->createStaticCall('RectorPrefix20220607\\Nette\\Utils\\Strings', 'endsWith', $arguments);
+        $staticCall = $this->nodeFactory->createStaticCall('Nette\\Utils\\Strings', 'endsWith', $arguments);
         if ($node instanceof Identical) {
             return $staticCall;
         }

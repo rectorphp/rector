@@ -211,6 +211,6 @@ CODE_SAMPLE
         if (!$classMethod->isPublic()) {
             return \false;
         }
-        return $classReflection->isSubclassOf('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase');
+        return $classReflection->isSubclassOf('PHPUnit\\Framework\\TestCase');
     }
 }

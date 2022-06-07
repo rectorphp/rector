@@ -16,7 +16,7 @@ use Rector\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(RemoveExpectAnyFromMockRector::class);
     $rectorConfig->rule(AddSeeTestAnnotationRector::class);
-    $rectorConfig->ruleWithConfiguration(ReturnArrayClassMethodToYieldRector::class, [new ReturnArrayClassMethodToYield('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase', 'provide*'), new ReturnArrayClassMethodToYield('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase', 'dataProvider*')]);
+    $rectorConfig->ruleWithConfiguration(ReturnArrayClassMethodToYieldRector::class, [new ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'provide*'), new ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', 'dataProvider*')]);
     $rectorConfig->rule(ConstructClassMethodToSetUpTestCaseRector::class);
     $rectorConfig->rule(AssertSameTrueFalseToAssertTrueFalseRector::class);
     $rectorConfig->rule(AssertEqualsToSameRector::class);

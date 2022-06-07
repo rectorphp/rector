@@ -100,7 +100,7 @@ CODE_SAMPLE
         if (!$expr instanceof ClassConstFetch) {
             return \false;
         }
-        return $this->isObjectType($expr->class, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Response'));
+        return $this->isObjectType($expr->class, new ObjectType('Symfony\\Component\\HttpFoundation\\Response'));
     }
     /**
      * @return Variable|MethodCall|Expr|null

@@ -37,7 +37,7 @@ final class PhpDocClassRenamer
      */
     private function processAssertChoiceTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo) : void
     {
-        $assertChoiceTagValueNode = $phpDocInfo->findOneByAnnotationClass('RectorPrefix20220607\\Symfony\\Component\\Validator\\Constraints\\Choice');
+        $assertChoiceTagValueNode = $phpDocInfo->findOneByAnnotationClass('Symfony\\Component\\Validator\\Constraints\\Choice');
         if (!$assertChoiceTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }
@@ -60,7 +60,7 @@ final class PhpDocClassRenamer
      */
     private function processDoctrineRelationTagValueNode(Node $node, array $oldToNewClasses, PhpDocInfo $phpDocInfo) : void
     {
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToMany', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToMany', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Embedded']);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany', 'Doctrine\\ORM\\Mapping\\Embedded']);
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }
@@ -71,7 +71,7 @@ final class PhpDocClassRenamer
      */
     private function processSerializerTypeTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo) : void
     {
-        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('RectorPrefix20220607\\JMS\\Serializer\\Annotation\\Type');
+        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('JMS\\Serializer\\Annotation\\Type');
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }
@@ -101,7 +101,7 @@ final class PhpDocClassRenamer
      */
     private function processDoctrineToMany(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, Node $node, array $oldToNewClasses) : void
     {
-        $classKey = $doctrineAnnotationTagValueNode->hasClassName('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Embedded') ? 'class' : 'targetEntity';
+        $classKey = $doctrineAnnotationTagValueNode->hasClassName('Doctrine\\ORM\\Mapping\\Embedded') ? 'class' : 'targetEntity';
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes($classKey);
         if ($targetEntity === null) {
             return;

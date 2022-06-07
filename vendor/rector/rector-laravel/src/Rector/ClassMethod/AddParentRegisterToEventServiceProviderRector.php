@@ -34,7 +34,7 @@ final class AddParentRegisterToEventServiceProviderRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('RectorPrefix20220607\\Add parent::register(); call to register() class method in child of Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add parent::register(); call to register() class method in child of Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -73,7 +73,7 @@ CODE_SAMPLE
         if (!$classLike instanceof ClassLike) {
             return null;
         }
-        if (!$this->isObjectType($classLike, new ObjectType('RectorPrefix20220607\\Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider'))) {
+        if (!$this->isObjectType($classLike, new ObjectType('Illuminate\\Foundation\\Support\\Providers\\EventServiceProvider'))) {
             return null;
         }
         if (!$this->isName($node->name, self::REGISTER)) {

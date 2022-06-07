@@ -143,7 +143,7 @@ CODE_SAMPLE
             if (!$propertyPhpDocInfo instanceof PhpDocInfo) {
                 continue;
             }
-            $requiredDoctrineAnnotationTagValueNode = $propertyPhpDocInfo->findOneByAnnotationClass('RectorPrefix20220607\\Doctrine\\Common\\Annotations\\Annotation\\Required');
+            $requiredDoctrineAnnotationTagValueNode = $propertyPhpDocInfo->findOneByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\Required');
             if (!$requiredDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
@@ -172,7 +172,7 @@ CODE_SAMPLE
     }
     private function decorateTarget(PhpDocInfo $phpDocInfo, AttributeGroup $attributeGroup) : void
     {
-        $targetDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClasses(['RectorPrefix20220607\\Doctrine\\Common\\Annotations\\Annotation\\Target', 'Target']);
+        $targetDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClasses(['Doctrine\\Common\\Annotations\\Annotation\\Target', 'Target']);
         if (!$targetDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }

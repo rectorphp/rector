@@ -68,7 +68,7 @@ CODE_SAMPLE
         if (!$new->class instanceof Name) {
             return \true;
         }
-        if (!$this->isName($new->class, 'RectorPrefix20220607\\Symfony\\Component\\PropertyAccess\\PropertyAccessor')) {
+        if (!$this->isName($new->class, 'Symfony\\Component\\PropertyAccess\\PropertyAccessor')) {
             return \true;
         }
         if (!isset($new->args[0])) {
@@ -82,12 +82,12 @@ CODE_SAMPLE
     }
     private function prepareFlags(bool $currentValue) : BitwiseOr
     {
-        $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_GET');
-        $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_SET');
+        $magicGetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_GET');
+        $magicSetClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_SET');
         if (!$currentValue) {
             return new BitwiseOr($magicGetClassConstFetch, $magicSetClassConstFetch);
         }
-        $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_CALL');
+        $magicCallClassConstFetch = $this->nodeFactory->createClassConstFetch('Symfony\\Component\\PropertyAccess\\PropertyAccessor', 'MAGIC_CALL');
         return new BitwiseOr(new BitwiseOr($magicCallClassConstFetch, $magicGetClassConstFetch), $magicSetClassConstFetch);
     }
 }

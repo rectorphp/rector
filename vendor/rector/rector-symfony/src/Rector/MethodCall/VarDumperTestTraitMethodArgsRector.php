@@ -33,7 +33,7 @@ final class VarDumperTestTraitMethodArgsRector extends AbstractRector
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\VarDumper\\Test\\VarDumperTestTrait'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\VarDumper\\Test\\VarDumperTestTrait'))) {
             return null;
         }
         if (!$this->isNames($node->name, ['assertDumpEquals', 'assertDumpMatchesFormat'])) {

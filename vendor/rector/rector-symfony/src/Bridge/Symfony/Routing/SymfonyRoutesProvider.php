@@ -32,7 +32,7 @@ final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
             return $this->symfonyRouteMetadatas;
         }
         $router = $this->containerServiceProvider->provideByName('router');
-        Assert::isInstanceOf($router, 'RectorPrefix20220607\\Symfony\\Component\\Routing\\RouterInterface');
+        Assert::isInstanceOf($router, 'Symfony\\Component\\Routing\\RouterInterface');
         $symfonyRoutesMetadatas = [];
         /** @var RouterInterface $router */
         $routeCollection = $router->getRouteCollection();

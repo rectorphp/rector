@@ -72,7 +72,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Translation\\TranslatorInterface'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Translation\\TranslatorInterface'))) {
             return null;
         }
         if (!$this->isName($node->name, 'trans')) {

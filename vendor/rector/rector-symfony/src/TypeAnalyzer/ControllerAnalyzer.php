@@ -56,9 +56,9 @@ final class ControllerAnalyzer
     }
     private function isControllerClassReflection(ClassReflection $classReflection) : bool
     {
-        if ($classReflection->isSubclassOf('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller')) {
+        if ($classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller')) {
             return \true;
         }
-        return $classReflection->isSubclassOf('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
+        return $classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController');
     }
 }

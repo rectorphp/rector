@@ -33,7 +33,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(StrContainsRector::class);
     $rectorConfig->rule(StrStartsWithRector::class);
     $rectorConfig->rule(StrEndsWithRector::class);
-    $rectorConfig->ruleWithConfiguration(StaticCallToFuncCallRector::class, [new StaticCallToFuncCall('RectorPrefix20220607\\Nette\\Utils\\Strings', 'startsWith', 'str_starts_with'), new StaticCallToFuncCall('RectorPrefix20220607\\Nette\\Utils\\Strings', 'endsWith', 'str_ends_with'), new StaticCallToFuncCall('RectorPrefix20220607\\Nette\\Utils\\Strings', 'contains', 'str_contains')]);
+    $rectorConfig->ruleWithConfiguration(StaticCallToFuncCallRector::class, [new StaticCallToFuncCall('Nette\\Utils\\Strings', 'startsWith', 'str_starts_with'), new StaticCallToFuncCall('Nette\\Utils\\Strings', 'endsWith', 'str_ends_with'), new StaticCallToFuncCall('Nette\\Utils\\Strings', 'contains', 'str_contains')]);
     $rectorConfig->rule(StringableForToStringRector::class);
     $rectorConfig->rule(ClassOnObjectRector::class);
     $rectorConfig->rule(GetDebugTypeRector::class);
@@ -42,7 +42,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(ClassPropertyAssignToConstructorPromotionRector::class);
     $rectorConfig->rule(ChangeSwitchToMatchRector::class);
     // nette\utils and Strings::replace()
-    $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [new ArgumentAdder('RectorPrefix20220607\\Nette\\Utils\\Strings', 'replace', 2, 'replacement', '')]);
+    $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [new ArgumentAdder('Nette\\Utils\\Strings', 'replace', 2, 'replacement', '')]);
     $rectorConfig->rule(RemoveParentCallWithoutParentRector::class);
     $rectorConfig->rule(SetStateToStaticRector::class);
     $rectorConfig->rule(FinalPrivateToPrivateVisibilityRector::class);

@@ -97,7 +97,7 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if (!$phpDocInfo->hasByAnnotationClass('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToOne')) {
+        if (!$phpDocInfo->hasByAnnotationClass('Doctrine\\ORM\\Mapping\\ManyToOne')) {
             return null;
         }
         $param = $node->params[0];

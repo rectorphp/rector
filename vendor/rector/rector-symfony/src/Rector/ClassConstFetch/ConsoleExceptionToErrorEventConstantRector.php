@@ -26,7 +26,7 @@ final class ConsoleExceptionToErrorEventConstantRector extends AbstractRector
     private $consoleEventsObjectType;
     public function __construct()
     {
-        $this->consoleEventsObjectType = new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Console\\ConsoleEvents');
+        $this->consoleEventsObjectType = new ObjectType('Symfony\\Component\\Console\\ConsoleEvents');
     }
     public function getRuleDefinition() : RuleDefinition
     {

@@ -57,7 +57,7 @@ final class ParentAttributeSourceLocator implements SourceLocator
             $class->namespacedName = new FullyQualified($identifierName);
             $fakeLocatedSource = new LocatedSource('virtual', null);
             $classReflector = new ClassReflector($this);
-            return ReflectionClass::createFromNode($classReflector, $class, $fakeLocatedSource, new Namespace_(new Name('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Attribute')));
+            return ReflectionClass::createFromNode($classReflector, $class, $fakeLocatedSource, new Namespace_(new Name('Symfony\\Component\\DependencyInjection\\Attribute')));
         }
         return null;
     }

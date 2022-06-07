@@ -58,7 +58,7 @@ final class NetteInjectDetector
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        if (!$classReflection->isSubclassOf('RectorPrefix20220607\\Nette\\Application\\IPresenter')) {
+        if (!$classReflection->isSubclassOf('Nette\\Application\\IPresenter')) {
             return \false;
         }
         // has no parent class

@@ -62,7 +62,7 @@ final class SomeClass extends TestCase
     }
 }
 CODE_SAMPLE
-, ['RectorPrefix20220607\\PHPUnit\\Framework\\TestCase' => PreferenceSelfThis::PREFER_SELF])]);
+, ['PHPUnit\\Framework\\TestCase' => PreferenceSelfThis::PREFER_SELF])]);
     }
     /**
      * @return array<class-string<Node>>

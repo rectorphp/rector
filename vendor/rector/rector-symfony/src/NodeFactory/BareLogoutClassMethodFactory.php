@@ -41,7 +41,7 @@ final class BareLogoutClassMethodFactory
     private function createLogoutEventParam(Variable $variable) : Param
     {
         $param = new Param($variable);
-        $param->type = new FullyQualified('RectorPrefix20220607\\Symfony\\Component\\Security\\Http\\Event\\LogoutEvent');
+        $param->type = new FullyQualified('Symfony\\Component\\Security\\Http\\Event\\LogoutEvent');
         return $param;
     }
 }

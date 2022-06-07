@@ -32,7 +32,7 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
     public function __construct(AppAssignFactory $appAssignFactory)
     {
         $this->appAssignFactory = $appAssignFactory;
-        $this->serviceNameTypeAndVariableNames[] = new ServiceNameTypeAndVariableName('validator', 'RectorPrefix20220607\\Illuminate\\Validation\\Factory', 'validationFactory');
+        $this->serviceNameTypeAndVariableNames[] = new ServiceNameTypeAndVariableName('validator', 'Illuminate\\Validation\\Factory', 'validationFactory');
     }
     /**
      * @return array<class-string<Node>>
@@ -54,7 +54,7 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
             return null;
         }
         $arrayDimFetch = $methodCall->var;
-        if (!$this->isObjectType($arrayDimFetch->var, new ObjectType('RectorPrefix20220607\\Illuminate\\Contracts\\Foundation\\Application'))) {
+        if (!$this->isObjectType($arrayDimFetch->var, new ObjectType('Illuminate\\Contracts\\Foundation\\Application'))) {
             return null;
         }
         $arrayDimFetchDim = $methodCall->var->dim;

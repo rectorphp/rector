@@ -31,9 +31,9 @@ final class NetteClassAnalyzer
         if (!$class instanceof Class_) {
             return \false;
         }
-        if (!$this->nodeTypeResolver->isObjectType($class, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Control'))) {
+        if (!$this->nodeTypeResolver->isObjectType($class, new ObjectType('Nette\\Application\\UI\\Control'))) {
             return \false;
         }
-        return !$this->nodeTypeResolver->isObjectType($class, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Presenter'));
+        return !$this->nodeTypeResolver->isObjectType($class, new ObjectType('Nette\\Application\\UI\\Presenter'));
     }
 }

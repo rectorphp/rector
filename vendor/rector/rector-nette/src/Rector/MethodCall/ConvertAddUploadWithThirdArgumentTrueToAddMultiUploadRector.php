@@ -39,7 +39,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Nette\\Forms\\Form'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Forms\\Form'))) {
             return null;
         }
         if (!$this->isName($node->name, 'addUpload')) {

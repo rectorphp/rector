@@ -117,7 +117,7 @@ final class ConstructorAssignDetector
         if ($constructClassMethod instanceof ClassMethod) {
             $initializingClassMethods[] = $constructClassMethod;
         }
-        $testCaseObjectType = new ObjectType('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase');
+        $testCaseObjectType = new ObjectType('PHPUnit\\Framework\\TestCase');
         if ($this->nodeTypeResolver->isObjectType($classLike, $testCaseObjectType)) {
             $setUpClassMethod = $classLike->getMethod(MethodName::SET_UP);
             if ($setUpClassMethod instanceof ClassMethod) {

@@ -40,7 +40,7 @@ final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRe
     {
         $this->onSuccessLogoutClassMethodFactory = $onSuccessLogoutClassMethodFactory;
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
-        $this->successHandlerObjectType = new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Security\\Http\\Logout\\LogoutSuccessHandlerInterface');
+        $this->successHandlerObjectType = new ObjectType('Symfony\\Component\\Security\\Http\\Logout\\LogoutSuccessHandlerInterface');
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -129,7 +129,7 @@ CODE_SAMPLE
         }
         $node->stmts[] = $this->onSuccessLogoutClassMethodFactory->createFromOnLogoutSuccessClassMethod($onLogoutSuccessClassMethod);
         // 3. add getSubscribedEvents() class method
-        $classConstFetch = $this->nodeFactory->createClassConstReference('RectorPrefix20220607\\Symfony\\Component\\Security\\Http\\Event\\LogoutEvent');
+        $classConstFetch = $this->nodeFactory->createClassConstReference('Symfony\\Component\\Security\\Http\\Event\\LogoutEvent');
         $eventReferencesToMethodNames = [new EventReferenceToMethodNameWithPriority($classConstFetch, 'onLogout', 64)];
         $getSubscribedEventsClassMethod = $this->getSubscribedEventsClassMethodFactory->create($eventReferencesToMethodNames);
         $node->stmts[] = $getSubscribedEventsClassMethod;
@@ -138,7 +138,7 @@ CODE_SAMPLE
     }
     private function refactorImplements(Class_ $class) : void
     {
-        $class->implements[] = new FullyQualified('RectorPrefix20220607\\Symfony\\Component\\EventDispatcher\\EventSubscriberInterface');
+        $class->implements[] = new FullyQualified('Symfony\\Component\\EventDispatcher\\EventSubscriberInterface');
         foreach ($class->implements as $key => $implement) {
             if (!$this->isName($implement, $this->successHandlerObjectType->getClassName())) {
                 continue;
@@ -149,7 +149,7 @@ CODE_SAMPLE
     private function hasImplements(Class_ $class) : bool
     {
         foreach ($class->implements as $implement) {
-            if ($this->isName($implement, 'RectorPrefix20220607\\Symfony\\Component\\Security\\Http\\Logout\\LogoutSuccessHandlerInterface')) {
+            if ($this->isName($implement, 'Symfony\\Component\\Security\\Http\\Logout\\LogoutSuccessHandlerInterface')) {
                 return \true;
             }
         }

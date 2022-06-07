@@ -127,7 +127,7 @@ CODE_SAMPLE
         if (!$expr instanceof MethodCall) {
             return $this->isArrayDimFetchStringOnControlVariable($expr);
         }
-        if (!$this->isObjectType($expr->var, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Control'))) {
+        if (!$this->isObjectType($expr->var, new ObjectType('Nette\\Application\\UI\\Control'))) {
             return $this->isArrayDimFetchStringOnControlVariable($expr);
         }
         if (!$this->isName($expr->name, 'getComponent')) {
@@ -161,7 +161,7 @@ CODE_SAMPLE
         if (!$varStaticType instanceof TypeWithClassName) {
             return \false;
         }
-        $controlObjecType = new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Control');
+        $controlObjecType = new ObjectType('Nette\\Application\\UI\\Control');
         return $controlObjecType->isSuperTypeOf($varStaticType)->yes();
     }
     private function resolveCreateComponentMethodCallReturnType(MethodCall $methodCall) : Type
