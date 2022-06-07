@@ -1,4 +1,4 @@
-# 518 Rules Overview
+# 517 Rules Overview
 
 <br>
 
@@ -70,7 +70,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (14)
+- [Php74](#php74) (13)
 
 - [Php80](#php80) (18)
 
@@ -8052,31 +8052,6 @@ Change deprecated (real) to (float)
 +        $number = (float) 5;
          $number = (float) 5;
          $number = (double) 5;
-     }
- }
-```
-
-<br>
-
-### ReservedFnFunctionRector
-
-Change `fn()` function name to `f()`, since it will be reserved keyword
-
-- class: [`Rector\Php74\Rector\Function_\ReservedFnFunctionRector`](../rules/Php74/Rector/Function_/ReservedFnFunctionRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        function fn($value)
-+        function f($value)
-         {
-             return $value;
-         }
-
--        fn(5);
-+        f(5);
      }
  }
 ```
