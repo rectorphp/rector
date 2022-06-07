@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
+class ComposerStaticInitcaef21ecb9a1c6a93299e78edc4b689f
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -23,6 +23,8 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
         'S' => 
         array (
             'Symplify\\RuleDocGenerator\\' => 26,
+            'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Intl\\Normalizer\\' => 33,
         ),
         'R' => 
         array (
@@ -48,8 +50,6 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
             'RectorPrefix20220607\\Symplify\\ComposerJsonManipulator\\' => 54,
             'RectorPrefix20220607\\Symplify\\AutowireArrayParameter\\' => 53,
             'RectorPrefix20220607\\Symplify\\Astral\\' => 37,
-            'RectorPrefix20220607\\Symfony\\Polyfill\\Mbstring\\' => 47,
-            'RectorPrefix20220607\\Symfony\\Polyfill\\Intl\\Normalizer\\' => 54,
             'RectorPrefix20220607\\Symfony\\Contracts\\' => 39,
             'RectorPrefix20220607\\Symfony\\Component\\String\\' => 46,
             'RectorPrefix20220607\\Symfony\\Component\\Finder\\' => 46,
@@ -89,6 +89,14 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
         'Symplify\\RuleDocGenerator\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src',
+        ),
+        'Symfony\\Polyfill\\Mbstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
         ),
         'Rector\\Symfony\\' => 
         array (
@@ -179,14 +187,6 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
         'RectorPrefix20220607\\Symplify\\Astral\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/astral/src',
-        ),
-        'RectorPrefix20220607\\Symfony\\Polyfill\\Mbstring\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
-        ),
-        'RectorPrefix20220607\\Symfony\\Polyfill\\Intl\\Normalizer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
         ),
         'RectorPrefix20220607\\Symfony\\Contracts\\' => 
         array (
@@ -308,6 +308,7 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFalseNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFalseNode.php',
@@ -761,7 +762,6 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
         'RectorPrefix20220607\\Nette\\Utils\\Type' => __DIR__ . '/..' . '/nette/utils/src/Utils/Type.php',
         'RectorPrefix20220607\\Nette\\Utils\\UnknownImageFileException' => __DIR__ . '/..' . '/nette/utils/src/Utils/exceptions.php',
         'RectorPrefix20220607\\Nette\\Utils\\Validators' => __DIR__ . '/..' . '/nette/utils/src/Utils/Validators.php',
-        'RectorPrefix20220607\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
         'RectorPrefix20220607\\OndraM\\CiDetector\\CiDetector' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetector.php',
         'RectorPrefix20220607\\OndraM\\CiDetector\\CiDetectorInterface' => __DIR__ . '/..' . '/ondram/ci-detector/src/CiDetectorInterface.php',
         'RectorPrefix20220607\\OndraM\\CiDetector\\Ci\\AbstractCi' => __DIR__ . '/..' . '/ondram/ci-detector/src/Ci/AbstractCi.php',
@@ -1335,8 +1335,6 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
         'RectorPrefix20220607\\Symfony\\Contracts\\Translation\\TranslatableInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatableInterface.php',
         'RectorPrefix20220607\\Symfony\\Contracts\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorInterface.php',
         'RectorPrefix20220607\\Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorTrait.php',
-        'RectorPrefix20220607\\Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
-        'RectorPrefix20220607\\Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'RectorPrefix20220607\\Symplify\\Astral\\Contract\\NodeNameResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeNameResolverInterface.php',
         'RectorPrefix20220607\\Symplify\\Astral\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeValueResolver/NodeValueResolverInterface.php',
         'RectorPrefix20220607\\Symplify\\Astral\\Exception\\ShouldNotHappenException' => __DIR__ . '/..' . '/symplify/astral/src/Exception/ShouldNotHappenException.php',
@@ -3371,6 +3369,8 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
         'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
         'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
         'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => __DIR__ . '/../..' . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
+        'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/Normalizer.php',
+        'Symfony\\Polyfill\\Mbstring\\Mbstring' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/Mbstring.php',
         'Symplify\\RuleDocGenerator\\Contract\\Category\\CategoryInfererInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/Category/CategoryInfererInterface.php',
         'Symplify\\RuleDocGenerator\\Contract\\CodeSampleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/CodeSampleInterface.php',
         'Symplify\\RuleDocGenerator\\Contract\\ConfigurableRuleInterface' => __DIR__ . '/..' . '/symplify/rule-doc-generator-contracts/src/Contract/ConfigurableRuleInterface.php',
@@ -3389,9 +3389,9 @@ class ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitad75ac2dbc0fedaa476c6906d8faabf2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcaef21ecb9a1c6a93299e78edc4b689f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcaef21ecb9a1c6a93299e78edc4b689f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcaef21ecb9a1c6a93299e78edc4b689f::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFalseNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFalseNode.php',
@@ -460,7 +461,6 @@ return array(
     'RectorPrefix20220607\\Nette\\Utils\\Type' => $vendorDir . '/nette/utils/src/Utils/Type.php',
     'RectorPrefix20220607\\Nette\\Utils\\UnknownImageFileException' => $vendorDir . '/nette/utils/src/Utils/exceptions.php',
     'RectorPrefix20220607\\Nette\\Utils\\Validators' => $vendorDir . '/nette/utils/src/Utils/Validators.php',
-    'RectorPrefix20220607\\Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
     'RectorPrefix20220607\\OndraM\\CiDetector\\CiDetector' => $vendorDir . '/ondram/ci-detector/src/CiDetector.php',
     'RectorPrefix20220607\\OndraM\\CiDetector\\CiDetectorInterface' => $vendorDir . '/ondram/ci-detector/src/CiDetectorInterface.php',
     'RectorPrefix20220607\\OndraM\\CiDetector\\Ci\\AbstractCi' => $vendorDir . '/ondram/ci-detector/src/Ci/AbstractCi.php',
@@ -1034,8 +1034,6 @@ return array(
     'RectorPrefix20220607\\Symfony\\Contracts\\Translation\\TranslatableInterface' => $vendorDir . '/symfony/contracts/Translation/TranslatableInterface.php',
     'RectorPrefix20220607\\Symfony\\Contracts\\Translation\\TranslatorInterface' => $vendorDir . '/symfony/contracts/Translation/TranslatorInterface.php',
     'RectorPrefix20220607\\Symfony\\Contracts\\Translation\\TranslatorTrait' => $vendorDir . '/symfony/contracts/Translation/TranslatorTrait.php',
-    'RectorPrefix20220607\\Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Normalizer.php',
-    'RectorPrefix20220607\\Symfony\\Polyfill\\Mbstring\\Mbstring' => $vendorDir . '/symfony/polyfill-mbstring/Mbstring.php',
     'RectorPrefix20220607\\Symplify\\Astral\\Contract\\NodeNameResolverInterface' => $vendorDir . '/symplify/astral/src/Contract/NodeNameResolverInterface.php',
     'RectorPrefix20220607\\Symplify\\Astral\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => $vendorDir . '/symplify/astral/src/Contract/NodeValueResolver/NodeValueResolverInterface.php',
     'RectorPrefix20220607\\Symplify\\Astral\\Exception\\ShouldNotHappenException' => $vendorDir . '/symplify/astral/src/Exception/ShouldNotHappenException.php',
@@ -3070,6 +3068,8 @@ return array(
     'Rector\\Visibility\\Rector\\ClassMethod\\ExplicitPublicClassMethodRector' => $baseDir . '/rules/Visibility/Rector/ClassMethod/ExplicitPublicClassMethodRector.php',
     'Rector\\Visibility\\ValueObject\\ChangeConstantVisibility' => $baseDir . '/rules/Visibility/ValueObject/ChangeConstantVisibility.php',
     'Rector\\Visibility\\ValueObject\\ChangeMethodVisibility' => $baseDir . '/rules/Visibility/ValueObject/ChangeMethodVisibility.php',
+    'Symfony\\Polyfill\\Intl\\Normalizer\\Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Normalizer.php',
+    'Symfony\\Polyfill\\Mbstring\\Mbstring' => $vendorDir . '/symfony/polyfill-mbstring/Mbstring.php',
     'Symplify\\RuleDocGenerator\\Contract\\Category\\CategoryInfererInterface' => $vendorDir . '/symplify/rule-doc-generator-contracts/src/Contract/Category/CategoryInfererInterface.php',
     'Symplify\\RuleDocGenerator\\Contract\\CodeSampleInterface' => $vendorDir . '/symplify/rule-doc-generator-contracts/src/Contract/CodeSampleInterface.php',
     'Symplify\\RuleDocGenerator\\Contract\\ConfigurableRuleInterface' => $vendorDir . '/symplify/rule-doc-generator-contracts/src/Contract/ConfigurableRuleInterface.php',
