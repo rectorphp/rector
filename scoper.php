@@ -95,19 +95,19 @@ return [
         },
 
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
-//        function (string $filePath, string $prefix, string $content): string {
-//            // skip vendor, expect rector packages
-//            if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector')) {
-//                return $content;
-//            }
-//
-//            // skip bin/rector.php for composer autoload class
-//            if (\str_ends_with($filePath, 'bin/rector.php')) {
-//                return $content;
-//            }
-//
-//            return Unprefixer::unprefixQuoted($content, $prefix);
-//        },
+        function (string $filePath, string $prefix, string $content): string {
+            // skip vendor, expect rector packages
+            if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector')) {
+                return $content;
+            }
+
+            // skip bin/rector.php for composer autoload class
+            if (\str_ends_with($filePath, 'bin/rector.php')) {
+                return $content;
+            }
+
+            return Unprefixer::unprefixQuoted($content, $prefix);
+        },
 
         // scoper missed PSR-4 autodiscovery in Symfony
         function (string $filePath, string $prefix, string $content): string {
