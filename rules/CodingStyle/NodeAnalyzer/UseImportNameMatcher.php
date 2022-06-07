@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\StringUtils;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class UseImportNameMatcher
 {
@@ -27,9 +28,15 @@ final class UseImportNameMatcher
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    public function __construct(BetterNodeFinder $betterNodeFinder, UseImportsResolver $useImportsResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->useImportsResolver = $useImportsResolver;
     }
     /**
      * @param Stmt[] $stmts
@@ -46,7 +53,7 @@ final class UseImportNameMatcher
     public function matchNameWithUses(string $tag, array $uses) : ?string
     {
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
+            $prefix = $this->useImportsResolver->resolvePrefix($use);
             foreach ($use->uses as $useUse) {
                 if (!$this->isUseMatchingName($tag, $useUse)) {
                     continue;

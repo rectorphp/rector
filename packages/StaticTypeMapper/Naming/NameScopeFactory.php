@@ -79,7 +79,7 @@ final class NameScopeFactory
     {
         $useNamesByAlias = [];
         foreach ($useNodes as $useNode) {
-            $prefix = $useNode instanceof GroupUse ? $useNode->prefix . '\\' : '';
+            $prefix = $this->useImportsResolver->resolvePrefix($useNode);
             foreach ($useNode->uses as $useUse) {
                 /** @var UseUse $useUse */
                 $aliasName = $useUse->getAlias()->name;

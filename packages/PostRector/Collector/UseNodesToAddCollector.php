@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\GroupUse;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Naming\Naming\UseImportsResolver;
@@ -65,7 +64,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         $objectTypes = $this->useImportTypesInFilePath[$filePath] ?? [];
         $uses = $this->useImportsResolver->resolveForNode($node);
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
+            $prefix = $this->useImportsResolver->resolvePrefix($use);
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias !== null) {
                     $objectTypes[] = new AliasedObjectType($useUse->alias->toString(), $prefix . $useUse->name);

@@ -47,4 +47,11 @@ final class UseImportsResolver
             return $stmt instanceof Use_;
         });
     }
+    /**
+     * @param \PhpParser\Node\Stmt\Use_|\PhpParser\Node\Stmt\GroupUse $use
+     */
+    public function resolvePrefix($use) : string
+    {
+        return $use instanceof GroupUse ? $use->prefix . '\\' : '';
+    }
 }

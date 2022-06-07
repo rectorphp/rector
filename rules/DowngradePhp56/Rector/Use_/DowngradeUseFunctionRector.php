@@ -100,7 +100,7 @@ CODE_SAMPLE
         $name = $node->name->toLowerString();
         $typeFilter = $node instanceof ConstFetch ? Use_::TYPE_CONSTANT : Use_::TYPE_FUNCTION;
         foreach ($useNodes as $useNode) {
-            $prefix = $this->resolvePrefix($useNode);
+            $prefix = $this->useImportsResolver->resolvePrefix($useNode);
             if ($useNode->type !== $typeFilter) {
                 continue;
             }
@@ -115,12 +115,5 @@ CODE_SAMPLE
             }
         }
         return null;
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\Use_|\PhpParser\Node\Stmt\GroupUse $useNode
-     */
-    private function resolvePrefix($useNode) : string
-    {
-        return $useNode instanceof GroupUse ? $useNode->prefix . '\\' : '';
     }
 }
