@@ -3,6 +3,8 @@
 name: Build Scoped Rector
 
 on:
+    # testing
+    pull_request: null
     push:
         branches:
             - main
@@ -53,8 +55,7 @@ jobs:
 
             # early downgrade individual functions
             -   run: |
-                    bin/rector process src/functions -c build/config/config-downgrade.php --ansi
-                    bin/rector process vendor/symfony/string/Resources/functions.php -c build/config/config-downgrade.php --ansi
+                    bin/rector process src/functions vendor/symfony/string/Resources/functions.php -c build/config/config-downgrade.php --ansi
 
             # 1. copy files to $NESTED_DIRECTORY directory Exclude the scoped/nested directories to prevent rsync from copying in a loop
             -  run: rsync --exclude rector-build -av * rector-build --quiet
@@ -63,17 +64,6 @@ jobs:
 
             # 2. downgrade rector
             -   run: php -d memory_limit=-1 bin/rector process rector-build/bin rector-build/config rector-build/src rector-build/packages rector-build/rules rector-build/vendor --config build/config/config-downgrade.php --ansi --no-diffs
-
-            # scoped using php-scoper.phar which require #[\ReturnTypeWillChange] inside so use php 8.0 for scoping
-            -
-                uses: shivammathur/setup-php@v2
-                with:
-                    php-version: 8.0
-                    coverage: none
-
-                # fixes https://github.com/rectorphp/rector/pull/4559/checks?check_run_id=1359814403, see https://github.com/shivammathur/setup-php#composer-github-oauth
-                env:
-                    COMPOSER_TOKEN: ${{ secrets.ACCESS_TOKEN }}
 
             # 3. prefix classes
             -   run: sh build/build-rector-scoped.sh rector-build rector-prefixed-downgraded
@@ -84,8 +74,8 @@ jobs:
                 with:
                     php-version: 7.2
                     coverage: none
-            -   run: composer global require php-parallel-lint/php-parallel-lint
-            -   run: /home/runner/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache --exclude rector-prefixed-downgraded/vendor/symfony/contracts/HttpClient/Test
+            -   run: composer global require php-parallel-lint/php-parallel-lint --ansi
+            -   run: /home/runner/.composer/vendor/bin/parallel-lint rector-prefixed-downgraded --exclude rector-prefixed-downgraded/stubs --exclude rector-prefixed-downgraded/vendor/tracy/tracy/examples --exclude rector-prefixed-downgraded/vendor/ssch/typo3-rector/templates/maker --exclude rector-prefixed-downgraded/vendor/rector/rector-generator/templates --exclude rector-prefixed-downgraded/vendor/symfony/contracts/Cache --exclude rector-prefixed-downgraded/vendor/symfony/contracts/HttpClient/Test
 
             # 5. copy repository meta files
             -   run: |

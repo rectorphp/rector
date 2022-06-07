@@ -30,7 +30,7 @@ jobs:
                 paths:
                     - src tests rules-tests packages packages-tests
                     - rules
-                    - config utils scoper.php
+                    - config utils
 
         runs-on: ubuntu-latest
         timeout-minutes: 10

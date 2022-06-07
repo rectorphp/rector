@@ -106,12 +106,6 @@ PHP;
         // 1. fine php-parser file infos
         $fileInfos = $this->findPhpParserFiles($vendorDir);
 
-        // append ContainerConfiguration to avoid accidental load of prefixed one from another tool
-        $fileInfos[] = new SplFileInfo(__DIR__ . '/../vendor/symfony/dependency-injection/Loader/Configurator/AbstractConfigurator.php');
-        $fileInfos[] = new SplFileInfo(__DIR__ . '/../vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php');
-        // attempt to fix https://github.com/rectorphp/rector-src/pull/1199
-        $fileInfos[] = new SplFileInfo(__DIR__ . '/../vendor/symfony/contracts/Deprecation/function.php');
-
         // 2. put first-class usages first
         usort($fileInfos, function (SplFileInfo $firstFileInfo, SplFileInfo $secondFileInfo) {
             $firstFilePosition = $this->matchFilePriorityPosition($firstFileInfo);
