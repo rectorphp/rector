@@ -13,6 +13,31 @@ require_once __DIR__ . '/vendor/autoload.php';
 $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');
 
+// @see https://github.com/humbug/php-scoper/blob/master/docs/further-reading.md
+use Isolated\Symfony\Component\Finder\Finder;
+
+$polyfillsBootstraps = array_map(
+    static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
+    iterator_to_array(
+        Finder::create()
+            ->files()
+            ->in(__DIR__ . '/vendor/symfony/polyfill-*')
+            ->name('bootstrap*.php'),
+        false,
+    ),
+);
+
+$polyfillsStubs = array_map(
+    static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
+    iterator_to_array(
+        Finder::create()
+            ->files()
+            ->in(__DIR__ . '/vendor/symfony/polyfill-*/Resources/stubs')
+            ->name('*.php'),
+        false,
+    ),
+);
+
 // see https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#configuration
 return [
     'prefix' => 'RectorPrefix' . $timestamp,
@@ -23,19 +48,17 @@ return [
         'PHPUnit\Framework\TestCase',
         'PHPUnit\Framework\ExpectationFailedException',
     ],
-    'exclude-namespaces' => ['#^Rector#', '#^PhpParser#', '#^PHPStan#', '#^Symplify\\\\RuleDocGenerator#'],
+    'exclude-namespaces' => [
+        '#^Rector#',
+        '#^PhpParser#',
+        '#^PHPStan#',
+        '#^Symplify\\\\RuleDocGenerator#',
+        '#^Symfony\\\\Polyfill#',
+    ],
     'exclude-files' => [
+        ...$polyfillsBootstraps,
+        ...$polyfillsStubs,
         'vendor/symfony/deprecation-contracts/function.php',
-        'vendor/symfony/polyfill-intl-normalizer/bootstrap.php',
-        'vendor/symfony/polyfill-intl-normalizer/bootstrap80.php',
-        'vendor/symfony/polyfill-mbstring/bootstrap.php',
-        'vendor/symfony/polyfill-mbstring/bootstrap80.php',
-        'vendor/symfony/polyfill-php80/bootstrap.php',
-        'vendor/symfony/polyfill-php80/Resources/stubs/Attribute.php',
-        'vendor/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'vendor/symfony/polyfill-php80/Resources/stubs/Stringable.php',
-        'vendor/symfony/polyfill-php80/Resources/stubs/ValueError.php',
-        'vendor/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
     ],
 
     // expose
@@ -47,7 +70,7 @@ return [
         'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
     ],
     'expose-functions' => ['u', 'b', 's', 'trigger_deprecation'],
-    'expose-constants' => ['__RECTOR_RUNNING__'],
+    'expose-constants' => ['__RECTOR_RUNNING__', '#^SYMFONY\_[\p{L}_]+$#',],
 
     'patchers' => [
         // fix short import bug, @see https://github.com/rectorphp/rector-scoper-017/blob/23f3256a6f5a18483d6eb4659d69ba117501e2e3/vendor/nikic/php-parser/lib/PhpParser/Builder/Declaration.php#L6
