@@ -53,4 +53,11 @@ final class UseImportsResolver
 
         return array_filter($namespace->stmts, fn (Stmt $stmt): bool => $stmt instanceof Use_);
     }
+
+    public function resolvePrefix(Use_|GroupUse $use): string
+    {
+        return $use instanceof GroupUse
+            ? $use->prefix . '\\'
+            : '';
+    }
 }

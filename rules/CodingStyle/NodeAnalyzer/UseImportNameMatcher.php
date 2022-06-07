@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\StringUtils;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 
 final class UseImportNameMatcher
@@ -26,7 +27,8 @@ final class UseImportNameMatcher
     private const SHORT_NAME_REGEX = '#^%s(\\\\[\w]+)?$#i';
 
     public function __construct(
-        private readonly BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly UseImportsResolver $useImportsResolver
     ) {
     }
 
@@ -46,9 +48,7 @@ final class UseImportNameMatcher
     public function matchNameWithUses(string $tag, array $uses): ?string
     {
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse
-                ? $use->prefix . '\\'
-                : '';
+            $prefix = $this->useImportsResolver->resolvePrefix($use);
             foreach ($use->uses as $useUse) {
                 if (! $this->isUseMatchingName($tag, $useUse)) {
                     continue;

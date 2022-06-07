@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Isolated\Symfony\Component\Finder\Finder;
 use Nette\Utils\DateTime;
 use Nette\Utils\Strings;
 use Rector\Compiler\Unprefixer;
@@ -14,8 +15,6 @@ $dateTime = DateTime::from('now');
 $timestamp = $dateTime->format('Ymd');
 
 // @see https://github.com/humbug/php-scoper/blob/master/docs/further-reading.md
-use Isolated\Symfony\Component\Finder\Finder;
-
 $polyfillsBootstraps = array_map(
     static fn (SplFileInfo $fileInfo) => $fileInfo->getPathname(),
     iterator_to_array(
@@ -70,7 +69,7 @@ return [
         'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
     ],
     'expose-functions' => ['u', 'b', 's', 'trigger_deprecation'],
-    'expose-constants' => ['__RECTOR_RUNNING__', '#^SYMFONY\_[\p{L}_]+$#',],
+    'expose-constants' => ['__RECTOR_RUNNING__', '#^SYMFONY\_[\p{L}_]+$#'],
 
     'patchers' => [
         // fix short import bug, @see https://github.com/rectorphp/rector-scoper-017/blob/23f3256a6f5a18483d6eb4659d69ba117501e2e3/vendor/nikic/php-parser/lib/PhpParser/Builder/Declaration.php#L6

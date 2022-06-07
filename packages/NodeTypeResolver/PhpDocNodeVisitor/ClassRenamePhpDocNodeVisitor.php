@@ -23,6 +23,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
@@ -66,10 +67,13 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         }
 
         $identifier = clone $node;
-
-        $namespacedName = $this->resolveNamespacedName($phpParserNode, $identifier->name);
+        $namespacedName = $this->resolveNamespacedName($phpParserNode, $node->name);
         $identifier->name = $namespacedName;
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifier, $phpParserNode);
+
+        if ($staticType instanceof AliasedObjectType) {
+            return null;
+        }
 
         // make sure to compare FQNs
         if ($staticType instanceof ShortenedObjectType) {
@@ -116,8 +120,8 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return $name;
         }
 
-        $namespace = $this->betterNodeFinder->findParentType($phpParserNode, Namespace_::class);
         $uses = $this->useImportsResolver->resolveForNode($phpParserNode);
+        $namespace = $this->betterNodeFinder->findParentType($phpParserNode, Namespace_::class);
 
         if (! $namespace instanceof Namespace_) {
             return $this->resolveNamefromUse($uses, $name);
@@ -143,9 +147,7 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private function resolveNamefromUse(array $uses, string $name): string
     {
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse
-                ? $use->prefix . '\\'
-                : '';
+            $prefix = $this->useImportsResolver->resolvePrefix($use);
 
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias instanceof Identifier) {

@@ -103,9 +103,7 @@ final class ObjectTypeSpecifier
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
 
         foreach ($uses as $use) {
-            $prefix = $use instanceof GroupUse
-                ? $use->prefix . '\\'
-                : '';
+            $prefix = $this->useImportsResolver->resolvePrefix($use);
             foreach ($use->uses as $useUse) {
                 if ($useUse->alias === null) {
                     continue;
