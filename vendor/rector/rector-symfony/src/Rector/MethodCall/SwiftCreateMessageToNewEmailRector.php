@@ -21,7 +21,7 @@ final class SwiftCreateMessageToNewEmailRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes createMessage() into a new Symfony\\Component\\Mime\\Email', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('RectorPrefix20220607\\Changes createMessage() into a new Symfony\\Component\\Mime\\Email', [new CodeSample(<<<'CODE_SAMPLE'
 $email = $this->swift->createMessage('message');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
@@ -44,7 +44,7 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        return new New_(new FullyQualified('Symfony\\Component\\Mime\\Email'));
+        return new New_(new FullyQualified('RectorPrefix20220607\\Symfony\\Component\\Mime\\Email'));
     }
     private function shouldSkip(MethodCall $methodCall) : bool
     {

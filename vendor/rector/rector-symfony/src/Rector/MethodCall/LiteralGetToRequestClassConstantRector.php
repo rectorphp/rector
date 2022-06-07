@@ -76,29 +76,29 @@ CODE_SAMPLE
         }
         // for client, the transitional dependency to browser-kit might be missing and cause fatal error on PHPStan reflection
         // in most cases that should be skipped, @see https://github.com/rectorphp/rector/issues/7135
-        if ($this->reflectionProvider->hasClass('Symfony\\Component\\BrowserKit\\AbstractBrowser') && $this->isObjectType($node->var, new ObjectType('Symfony\\Component\\HttpKernel\\Client'))) {
+        if ($this->reflectionProvider->hasClass('RectorPrefix20220607\\Symfony\\Component\\BrowserKit\\AbstractBrowser') && $this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\Client'))) {
             return $this->refactorClientMethodCall($node);
         }
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\FormBuilderInterface'))) {
             return null;
         }
         if (!$this->isName($node->name, 'setMethod')) {
             return null;
         }
-        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($node, 0, 'Symfony\\Component\\HttpFoundation\\Request', SymfonyRequestConstantMap::METHOD_TO_CONST);
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($node, 0, 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Request', SymfonyRequestConstantMap::METHOD_TO_CONST);
     }
     /**
      * @return \PhpParser\Node\Expr\StaticCall|null
      */
     private function refactorStaticCall(StaticCall $staticCall)
     {
-        if (!$this->isObjectType($staticCall->class, new ObjectType('Symfony\\Component\\HttpFoundation\\Request'))) {
+        if (!$this->isObjectType($staticCall->class, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Request'))) {
             return null;
         }
         if (!$this->isName($staticCall->name, 'create')) {
             return null;
         }
-        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($staticCall, 1, 'Symfony\\Component\\HttpFoundation\\Request', SymfonyRequestConstantMap::METHOD_TO_CONST);
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($staticCall, 1, 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Request', SymfonyRequestConstantMap::METHOD_TO_CONST);
     }
     /**
      * @return \PhpParser\Node\Expr\MethodCall|null
@@ -108,6 +108,6 @@ CODE_SAMPLE
         if (!$this->isName($methodCall->name, 'request')) {
             return null;
         }
-        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, 'Symfony\\Component\\HttpFoundation\\Request', SymfonyRequestConstantMap::METHOD_TO_CONST);
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Request', SymfonyRequestConstantMap::METHOD_TO_CONST);
     }
 }

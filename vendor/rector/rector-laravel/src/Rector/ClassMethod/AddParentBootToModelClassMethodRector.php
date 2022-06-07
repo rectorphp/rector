@@ -34,7 +34,7 @@ final class AddParentBootToModelClassMethodRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('RectorPrefix20220607\\Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -73,7 +73,7 @@ CODE_SAMPLE
         if (!$classLike instanceof ClassLike) {
             return null;
         }
-        if (!$this->isObjectType($classLike, new ObjectType('Illuminate\\Database\\Eloquent\\Model'))) {
+        if (!$this->isObjectType($classLike, new ObjectType('RectorPrefix20220607\\Illuminate\\Database\\Eloquent\\Model'))) {
             return null;
         }
         if (!$this->isName($node->name, self::BOOT)) {

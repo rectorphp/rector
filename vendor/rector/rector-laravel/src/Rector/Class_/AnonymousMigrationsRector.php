@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Illuminate\\Database\\Migrations\\Migration'))) {
+        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Illuminate\\Database\\Migrations\\Migration'))) {
             return null;
         }
         if ($this->classAnalyzer->isAnonymousClass($node)) {

@@ -70,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Enum_
     {
-        if (!$this->isObjectType($node, new ObjectType('Spatie\\Enum\\Enum'))) {
+        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Spatie\\Enum\\Enum'))) {
             return null;
         }
         return $this->enumFactory->createFromSpatieClass($node);

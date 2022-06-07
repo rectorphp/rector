@@ -122,7 +122,7 @@ CODE_SAMPLE
             return \true;
         }
         // one of the cases when we are in the repo and it's extended from EntityRepository
-        if (!$this->isObjectType($classLike, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
+        if (!$this->isObjectType($classLike, new ObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityRepository'))) {
             return \true;
         }
         if (!$this->isName($methodCall->name, 'setParameters')) {
@@ -133,7 +133,7 @@ CODE_SAMPLE
         if (!$rootExpr instanceof MethodCall) {
             return \true;
         }
-        return !$this->isObjectType($rootExpr, new ObjectType('Doctrine\\ORM\\QueryBuilder'));
+        return !$this->isObjectType($rootExpr, new ObjectType('RectorPrefix20220607\\Doctrine\\ORM\\QueryBuilder'));
     }
     private function getNewArrayCollectionFromSetParametersArgument(Arg $arg) : New_
     {
@@ -146,11 +146,11 @@ CODE_SAMPLE
             if (!$firstArgumentArrayItem->key instanceof String_ || !$firstArgumentArrayItem->value instanceof String_) {
                 throw new ShouldNotHappenException();
             }
-            $queryParameter = new New_(new FullyQualified('Doctrine\\ORM\\Query\\Parameter'));
+            $queryParameter = new New_(new FullyQualified('RectorPrefix20220607\\Doctrine\\ORM\\Query\\Parameter'));
             $queryParameter->args = [new Arg($firstArgumentArrayItem->key), new Arg($firstArgumentArrayItem->value)];
             $arrayCollectionArrayArguments[] = new ArrayItem($queryParameter);
         }
-        $arrayCollection = new New_(new FullyQualified('Doctrine\\Common\\Collections\\ArrayCollection'));
+        $arrayCollection = new New_(new FullyQualified('RectorPrefix20220607\\Doctrine\\Common\\Collections\\ArrayCollection'));
         $arrayCollection->args = [new Arg(new Array_($arrayCollectionArrayArguments))];
         return $arrayCollection;
     }

@@ -7,5 +7,5 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 return static function (RectorConfig $rectorConfig) : void {
     # https://github.com/doctrine/dbal/blob/master/UPGRADE.md#deprecated-type-constants
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Doctrine\\DBAL\\Types\\Type' => 'Doctrine\\DBAL\\Types\\Types']);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['RectorPrefix20220607\\Doctrine\\DBAL\\Types\\Type' => 'RectorPrefix20220607\\Doctrine\\DBAL\\Types\\Types']);
 };

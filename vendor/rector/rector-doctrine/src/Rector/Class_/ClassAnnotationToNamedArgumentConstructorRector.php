@@ -129,7 +129,7 @@ CODE_SAMPLE
         if ($this->shouldSkipPhpDocInfo($phpDocInfo)) {
             return null;
         }
-        $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor'));
+        $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('RectorPrefix20220607\\Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor'));
         $phpDocInfo->addTagValueNode($doctrineAnnotationTagValueNode);
         $classMethod = $node->getMethod(MethodName::CONSTRUCT);
         if (!$classMethod instanceof ClassMethod) {
@@ -158,7 +158,7 @@ CODE_SAMPLE
         if (!$phpDocInfo->hasByNames(['annotation', 'Annotation'])) {
             return \true;
         }
-        return $phpDocInfo->hasByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor');
+        return $phpDocInfo->hasByAnnotationClass('RectorPrefix20220607\\Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor');
     }
     private function hasSingleArrayParam(ClassMethod $classMethod) : bool
     {

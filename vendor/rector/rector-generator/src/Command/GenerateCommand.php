@@ -114,6 +114,6 @@ final class GenerateCommand extends Command
         if (\substr_compare($generatedFilePath, 'Test.php.inc', -\strlen('Test.php.inc')) !== 0) {
             return \false;
         }
-        return \defined('PHPUNIT_COMPOSER_INSTALL');
+        return \defined('RectorPrefix20220607\\PHPUNIT_COMPOSER_INSTALL');
     }
 }

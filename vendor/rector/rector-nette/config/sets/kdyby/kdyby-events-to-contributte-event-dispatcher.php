@@ -13,6 +13,6 @@ use Rector\Visibility\ValueObject\ChangeMethodVisibility;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(ChangeNetteEventNamesInGetSubscribedEventsRector::class);
     $rectorConfig->rule(ReplaceEventManagerWithEventSubscriberRector::class);
-    $rectorConfig->ruleWithConfiguration(ChangeMethodVisibilityRector::class, [new ChangeMethodVisibility('Kdyby\\Events\\Subscriber', 'getSubscribedEvents', Visibility::STATIC)]);
-    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Kdyby\\Events\\Subscriber' => 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface', 'Kdyby\\Events\\EventManager' => 'Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface']);
+    $rectorConfig->ruleWithConfiguration(ChangeMethodVisibilityRector::class, [new ChangeMethodVisibility('RectorPrefix20220607\\Kdyby\\Events\\Subscriber', 'getSubscribedEvents', Visibility::STATIC)]);
+    $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['RectorPrefix20220607\\Kdyby\\Events\\Subscriber' => 'RectorPrefix20220607\\Symfony\\Component\\EventDispatcher\\EventSubscriberInterface', 'RectorPrefix20220607\\Kdyby\\Events\\EventManager' => 'RectorPrefix20220607\\Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface']);
 };

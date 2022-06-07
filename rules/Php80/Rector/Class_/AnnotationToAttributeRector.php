@@ -130,7 +130,7 @@ class SymfonyRoute
     }
 }
 CODE_SAMPLE
-, [new AnnotationToAttribute('Symfony\\Component\\Routing\\Annotation\\Route')])]);
+, [new AnnotationToAttribute('RectorPrefix20220607\\Symfony\\Component\\Routing\\Annotation\\Route')])]);
     }
     /**
      * @return array<class-string<Node>>

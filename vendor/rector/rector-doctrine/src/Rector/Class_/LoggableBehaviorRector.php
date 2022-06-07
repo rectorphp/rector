@@ -104,7 +104,7 @@ CODE_SAMPLE
                 return null;
             }
             $doctrineAnnotationTagValueNode = $node->value;
-            if (!$doctrineAnnotationTagValueNode->hasClassName('Gedmo\\Mapping\\Annotation\\Loggable')) {
+            if (!$doctrineAnnotationTagValueNode->hasClassName('RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\Loggable')) {
                 return null;
             }
             $hasLoggableAnnotation = \true;
@@ -115,8 +115,8 @@ CODE_SAMPLE
         }
         // invoke phpdoc re-print as annotation was removed
         $classPhpDocInfo->markAsChanged();
-        $this->classInsertManipulator->addAsFirstTrait($class, 'Knp\\DoctrineBehaviors\\Model\\Loggable\\LoggableTrait');
-        $class->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\LoggableInterface');
+        $this->classInsertManipulator->addAsFirstTrait($class, 'RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Model\\Loggable\\LoggableTrait');
+        $class->implements[] = new FullyQualified('RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Contract\\Entity\\LoggableInterface');
         return $class;
     }
     private function refactorProperty(Property $property) : ?Property
@@ -132,7 +132,7 @@ CODE_SAMPLE
             if (!$node->value instanceof DoctrineAnnotationTagValueNode) {
                 return null;
             }
-            if (!$node->value->hasClassName('Gedmo\\Mapping\\Annotation\\Versioned')) {
+            if (!$node->value->hasClassName('RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\Versioned')) {
                 return null;
             }
             $phpDocInfo->markAsChanged();

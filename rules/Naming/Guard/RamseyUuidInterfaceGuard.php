@@ -27,6 +27,6 @@ final class RamseyUuidInterfaceGuard implements ConflictingNameGuardInterface
      */
     public function isConflicting(RenameValueObjectInterface $renameValueObject) : bool
     {
-        return $this->nodeTypeResolver->isObjectType($renameValueObject->getProperty(), new ObjectType('Ramsey\\Uuid\\UuidInterface'));
+        return $this->nodeTypeResolver->isObjectType($renameValueObject->getProperty(), new ObjectType('RectorPrefix20220607\\Ramsey\\Uuid\\UuidInterface'));
     }
 }

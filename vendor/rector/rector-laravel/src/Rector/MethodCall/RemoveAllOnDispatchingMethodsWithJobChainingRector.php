@@ -71,7 +71,7 @@ CODE_SAMPLE
             return null;
         }
         $rootExpr = $this->fluentChainMethodCallNodeAnalyzer->resolveRootExpr($node);
-        if (!$this->isObjectType($rootExpr, new ObjectType('Illuminate\\Foundation\\Bus\\Dispatchable'))) {
+        if (!$this->isObjectType($rootExpr, new ObjectType('RectorPrefix20220607\\Illuminate\\Foundation\\Bus\\Dispatchable'))) {
             return null;
         }
         // Note that this change only affects code using the withChain method.

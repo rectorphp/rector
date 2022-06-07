@@ -42,7 +42,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\DependencyInjection\\ContainerBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\ContainerBuilder'))) {
             return null;
         }
         if (!$this->isName($node->name, 'compile')) {

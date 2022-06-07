@@ -59,7 +59,7 @@ final class ModelFactoryNodeFactory
     public function createEmptyFactory(string $name, Expr $expr) : Class_
     {
         $class = new Class_($name . 'Factory');
-        $class->extends = new FullyQualified('Illuminate\\Database\\Eloquent\\Factories\\Factory');
+        $class->extends = new FullyQualified('RectorPrefix20220607\\Illuminate\\Database\\Eloquent\\Factories\\Factory');
         $propertyBuilder = new PropertyBuilder('model');
         $propertyBuilder->makeProtected();
         $propertyBuilder->setDefault($expr);

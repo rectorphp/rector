@@ -20,18 +20,18 @@ use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
     $rectorConfig->import(__DIR__ . '/symfony6/symfony-return-types.php');
-    $rectorConfig->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [new ReplaceServiceArgument('Psr\\Container\\ContainerInterface', new String_('service_container')), new ReplaceServiceArgument('Symfony\\Component\\DependencyInjection\\ContainerInterface', new String_('service_container'))]);
+    $rectorConfig->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [new ReplaceServiceArgument('RectorPrefix20220607\\Psr\\Container\\ContainerInterface', new String_('service_container')), new ReplaceServiceArgument('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\ContainerInterface', new String_('service_container'))]);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/39484
-        'Symfony\\Contracts\\HttpClient\\HttpClientInterface\\RemoteJsonManifestVersionStrategy' => 'Symfony\\Component\\Asset\\VersionStrategy\\JsonManifestVersionStrategy',
+        'RectorPrefix20220607\\Symfony\\Contracts\\HttpClient\\HttpClientInterface\\RemoteJsonManifestVersionStrategy' => 'RectorPrefix20220607\\Symfony\\Component\\Asset\\VersionStrategy\\JsonManifestVersionStrategy',
     ]);
-    $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [new AddParamTypeDeclaration('Symfony\\Component\\Config\\Loader\\LoaderInterface', 'load', 0, new MixedType()), new AddParamTypeDeclaration('Symfony\\Bundle\\FrameworkBundle\\Kernel\\MicroKernelTrait', 'configureRoutes', 0, new ObjectType('Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator'))]);
+    $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [new AddParamTypeDeclaration('RectorPrefix20220607\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'load', 0, new MixedType()), new AddParamTypeDeclaration('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Kernel\\MicroKernelTrait', 'configureRoutes', 0, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator'))]);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40403
-        new MethodCallRename('Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface', 'loadUserByUsername', 'loadUserByIdentifier'),
-        new MethodCallRename('Symfony\\Component\\Security\\Core\\User\\UserProviderInterface', 'loadUserByUsername', 'loadUserByIdentifier'),
+        new MethodCallRename('RectorPrefix20220607\\Symfony\\Bridge\\Doctrine\\Security\\User\\UserLoaderInterface', 'loadUserByUsername', 'loadUserByIdentifier'),
+        new MethodCallRename('RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\User\\UserProviderInterface', 'loadUserByUsername', 'loadUserByIdentifier'),
         // @see https://github.com/rectorphp/rector-symfony/issues/112
-        new MethodCallRename('Symfony\\Component\\Security\\Core\\User\\UserInterface', 'getUsername', 'getUserIdentifier'),
+        new MethodCallRename('RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\User\\UserInterface', 'getUsername', 'getUserIdentifier'),
     ]);
     $rectorConfig->rule(GetHelperControllerToServiceRector::class);
 };

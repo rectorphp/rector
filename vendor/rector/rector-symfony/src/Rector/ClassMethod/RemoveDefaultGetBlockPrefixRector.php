@@ -91,7 +91,7 @@ CODE_SAMPLE
         if (!$class instanceof Class_) {
             return \false;
         }
-        if (!$this->isObjectType($classMethod, new ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
+        if (!$this->isObjectType($classMethod, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\AbstractType'))) {
             return \false;
         }
         return $this->isName($classMethod->name, 'getBlockPrefix');

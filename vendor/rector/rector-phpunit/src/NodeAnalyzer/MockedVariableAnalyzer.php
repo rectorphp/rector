@@ -51,7 +51,7 @@ final class MockedVariableAnalyzer
             if ($variableType instanceof MixedType) {
                 return null;
             }
-            if ($variableType->isSuperTypeOf(new ObjectType('PHPUnit\\Framework\\MockObject\\MockObject'))->yes()) {
+            if ($variableType->isSuperTypeOf(new ObjectType('RectorPrefix20220607\\PHPUnit\\Framework\\MockObject\\MockObject'))->yes()) {
                 $doesContainMock = \true;
             }
             return null;

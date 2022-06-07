@@ -75,7 +75,7 @@ final class EventValueObjectClassFactory
         $shortClassName = $this->classNaming->getShortName($className);
         $classBuilder = new ClassBuilder($shortClassName);
         $classBuilder->makeFinal();
-        $classBuilder->extend(new FullyQualified('Symfony\\Contracts\\EventDispatcher\\Event'));
+        $classBuilder->extend(new FullyQualified('RectorPrefix20220607\\Symfony\\Contracts\\EventDispatcher\\Event'));
         return $classBuilder;
     }
     /**

@@ -112,7 +112,7 @@ CODE_SAMPLE
             return null;
         }
         // add "NamedArgumentConstructor"
-        $phpDocInfo->addTagValueNode(new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor')));
+        $phpDocInfo->addTagValueNode(new DoctrineAnnotationTagValueNode(new IdentifierTypeNode('RectorPrefix20220607\\Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor')));
         // resolve required properties
         $requiredPropertiesWithPhpDocInfos = [];
         foreach ($node->getProperties() as $property) {
@@ -136,7 +136,7 @@ CODE_SAMPLE
         if (!$phpDocInfo->hasByNames(['Annotation', 'annotation'])) {
             return \true;
         }
-        if ($phpDocInfo->hasByAnnotationClass('Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor')) {
+        if ($phpDocInfo->hasByAnnotationClass('RectorPrefix20220607\\Doctrine\\Common\\Annotations\\Annotation\\NamedArgumentConstructor')) {
             return \true;
         }
         // has attribute? skip it
@@ -161,7 +161,7 @@ CODE_SAMPLE
             $params[] = $param;
             $propertyPhpDocInfo = $requiredPropertyWithPhpDocInfo->getPhpDocInfo();
             // remove required
-            $this->phpDocTagRemover->removeByName($propertyPhpDocInfo, 'Doctrine\\Common\\Annotations\\Annotation\\Required');
+            $this->phpDocTagRemover->removeByName($propertyPhpDocInfo, 'RectorPrefix20220607\\Doctrine\\Common\\Annotations\\Annotation\\Required');
             $this->removeNode($property);
         }
         return $params;

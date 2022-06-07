@@ -27,6 +27,6 @@ final class RepositoryTypeFactory
         }
         /** @var string $className */
         $className = $this->nodeNameResolver->getName($entityReferenceExpr->class);
-        return new GenericObjectType('Doctrine\\ORM\\EntityRepository', [new FullyQualifiedObjectType($className)]);
+        return new GenericObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityRepository', [new FullyQualifiedObjectType($className)]);
     }
 }

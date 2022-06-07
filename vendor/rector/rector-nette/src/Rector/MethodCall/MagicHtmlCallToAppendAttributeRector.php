@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Utils\\Html'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Nette\\Utils\\Html'))) {
             return null;
         }
         // @todo posibly extends by more common names

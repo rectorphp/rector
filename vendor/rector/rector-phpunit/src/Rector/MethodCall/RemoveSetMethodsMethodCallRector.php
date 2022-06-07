@@ -75,7 +75,7 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'setMethods')) {
             return null;
         }
-        if (!$this->isObjectType($node->var, new ObjectType('PHPUnit\\Framework\\MockObject\\MockBuilder'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\PHPUnit\\Framework\\MockObject\\MockBuilder'))) {
             return null;
         }
         return $node->var;

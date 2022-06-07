@@ -12,5 +12,5 @@ return static function (RectorConfig $rectorConfig) : void {
     # handles 2nd and 3rd argument of setExpectedException
     $rectorConfig->rule(DelegateExceptionArgumentsRector::class);
     $rectorConfig->rule(ExceptionAnnotationRector::class);
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('PHPUnit\\Framework\\TestClass', 'setExpectedException', 'expectedException'), new MethodCallRename('PHPUnit\\Framework\\TestClass', 'setExpectedExceptionRegExp', 'expectedException')]);
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('RectorPrefix20220607\\PHPUnit\\Framework\\TestClass', 'setExpectedException', 'expectedException'), new MethodCallRename('RectorPrefix20220607\\PHPUnit\\Framework\\TestClass', 'setExpectedExceptionRegExp', 'expectedException')]);
 };

@@ -27,7 +27,7 @@ final class FormAddMethodCallAnalyzer
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->formObjectTypes = [new ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'), new ObjectType('Symfony\\Component\\Form\\FormInterface')];
+        $this->formObjectTypes = [new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\FormBuilderInterface'), new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Form\\FormInterface')];
     }
     public function isMatching(MethodCall $methodCall) : bool
     {

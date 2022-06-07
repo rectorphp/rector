@@ -62,7 +62,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new FuncCallToMethodCall('view', 'Namespaced\\SomeRenderer', 'render')])]);
+, [new FuncCallToMethodCall('view', 'RectorPrefix20220607\\Namespaced\\SomeRenderer', 'render')])]);
     }
     /**
      * @return array<class-string<Node>>

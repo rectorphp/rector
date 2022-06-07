@@ -25,7 +25,7 @@ final class ChangeQueryWhereDateValueWithCarbonRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('RectorPrefix20220607\\Add parent::boot(); call to boot() class method in child of Illuminate\\Database\\Eloquent\\Model', [new CodeSample(<<<'CODE_SAMPLE'
 use Illuminate\Database\Query\Builder;
 
 final class SomeClass
@@ -99,7 +99,7 @@ CODE_SAMPLE
     }
     private function matchWhereDateThirdArgValue(MethodCall $methodCall) : ?Expr
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('Illuminate\\Database\\Query\\Builder'))) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('RectorPrefix20220607\\Illuminate\\Database\\Query\\Builder'))) {
             return null;
         }
         if (!$this->isName($methodCall->name, 'whereDate')) {
@@ -150,7 +150,7 @@ CODE_SAMPLE
         if (!$expr instanceof StaticCall) {
             return \false;
         }
-        $carbonObjectType = new ObjectType('Carbon\\Carbon');
+        $carbonObjectType = new ObjectType('RectorPrefix20220607\\Carbon\\Carbon');
         $callerType = $this->nodeTypeResolver->getType($expr->class);
         if (!$carbonObjectType->isSuperTypeOf($callerType)->yes()) {
             return \false;

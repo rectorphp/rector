@@ -28,7 +28,7 @@ final class JMSInjectPropertyToConstructorInjectionRector extends AbstractRector
     /**
      * @var string
      */
-    private const INJECT_ANNOTATION_CLASS = 'JMS\\DiExtraBundle\\Annotation\\Inject';
+    private const INJECT_ANNOTATION_CLASS = 'RectorPrefix20220607\\JMS\\DiExtraBundle\\Annotation\\Inject';
     /**
      * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\JMSDITypeResolver

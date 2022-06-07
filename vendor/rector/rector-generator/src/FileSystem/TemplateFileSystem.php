@@ -62,7 +62,7 @@ final class TemplateFileSystem
         }
         // special hack for tests, so PHPUnit doesn't load the generated file as a test case
         /** @var string $destination */
-        if (\substr_compare($destination, 'Test.php', -\strlen('Test.php')) === 0 && \defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if (\substr_compare($destination, 'Test.php', -\strlen('Test.php')) === 0 && \defined('RectorPrefix20220607\\PHPUNIT_COMPOSER_INSTALL')) {
             $destination .= '.inc';
         }
         return $targetDirectory . \DIRECTORY_SEPARATOR . $destination;

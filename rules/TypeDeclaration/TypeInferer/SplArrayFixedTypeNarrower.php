@@ -22,10 +22,10 @@ final class SplArrayFixedTypeNarrower
         }
         $types = [];
         if ($paramType->getClassName() === 'PhpCsFixer\\Tokenizer\\Tokens') {
-            $types[] = new ObjectType('PhpCsFixer\\Tokenizer\\Token');
+            $types[] = new ObjectType('RectorPrefix20220607\\PhpCsFixer\\Tokenizer\\Token');
         }
         if ($paramType->getClassName() === 'PhpCsFixer\\Doctrine\\Annotation\\Tokens') {
-            $types[] = new ObjectType('PhpCsFixer\\Doctrine\\Annotation\\Token');
+            $types[] = new ObjectType('RectorPrefix20220607\\PhpCsFixer\\Doctrine\\Annotation\\Token');
         }
         if ($types === []) {
             return $paramType;

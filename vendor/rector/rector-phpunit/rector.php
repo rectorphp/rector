@@ -30,9 +30,9 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(SetList::NAMING);
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
         // keep unprefixed to protected from downgrade
-        'PHPUnit\\Framework\\Assert',
+        'RectorPrefix20220607\\PHPUnit\\Framework\\Assert',
         'PHPUnit\\Framework\\MockObject\\*',
-        'PHPUnit\\Framework\\TestCase',
-        'Prophecy\\Prophet',
+        'RectorPrefix20220607\\PHPUnit\\Framework\\TestCase',
+        'RectorPrefix20220607\\Prophecy\\Prophet',
     ]);
 };

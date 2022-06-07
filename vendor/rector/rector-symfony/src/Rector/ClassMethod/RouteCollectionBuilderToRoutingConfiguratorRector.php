@@ -75,10 +75,10 @@ CODE_SAMPLE
         if ($firstParam->type === null) {
             return null;
         }
-        if (!$this->isName($firstParam->type, 'Symfony\\Component\\Routing\\RouteCollectionBuilder')) {
+        if (!$this->isName($firstParam->type, 'RectorPrefix20220607\\Symfony\\Component\\Routing\\RouteCollectionBuilder')) {
             return null;
         }
-        $firstParam->type = new FullyQualified('Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator');
+        $firstParam->type = new FullyQualified('RectorPrefix20220607\\Symfony\\Component\\Routing\\Loader\\Configurator\\RoutingConfigurator');
         $node->name = new Identifier('configureRouting');
         $node->returnType = new Identifier('void');
         $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) : ?MethodCall {

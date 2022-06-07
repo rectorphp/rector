@@ -26,7 +26,7 @@ final class EregToPcreTransformer
         ':print:' => '[:print:]',
         ':punct:' => '[:punct:]',
         // should include VT
-        ':space:' => '013\\s',
+        ':space:' => 'RectorPrefix20220607\\013\\s',
         ':upper:' => '[:upper:]',
         ':xdigit:' => '[:xdigit:]',
     ];

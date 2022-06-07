@@ -20,7 +20,7 @@ final class ContainerAwareAnalyzer
     public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->getMethodAwareObjectTypes = [new ObjectType('Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController'), new ObjectType('Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller'), new ObjectType('Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerTrait')];
+        $this->getMethodAwareObjectTypes = [new ObjectType('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Controller\\AbstractController'), new ObjectType('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Controller\\Controller'), new ObjectType('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Controller\\ControllerTrait')];
     }
     public function isGetMethodAwareType(Expr $expr) : bool
     {

@@ -15,7 +15,7 @@ final class UnwrapableAnnotationAnalyzer
      * @see https://github.com/doctrine/orm/commit/b6b3c974361d7042e4b7d868fb34daca76bb2a48 - repeatable attributes
      * @var string[]
      */
-    private const UNWRAPEABLE_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\UniqueConstraint', 'Doctrine\\ORM\\Mapping\\JoinColumn', 'Doctrine\\ORM\\Mapping\\Index', 'Doctrine\\ORM\\Mapping\\AttributeOverride'];
+    private const UNWRAPEABLE_ANNOTATION_CLASSES = ['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\UniqueConstraint', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\JoinColumn', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Index', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\AttributeOverride'];
     /**
      * @var AnnotationToAttribute[]
      */

@@ -44,9 +44,9 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(DowngradeNamedArgumentRector::class);
     $rectorConfig->ruleWithConfiguration(DowngradeAttributeToAnnotationRector::class, [
         // Symfony
-        new DowngradeAttributeToAnnotation('Symfony\\Contracts\\Service\\Attribute\\Required', 'required'),
+        new DowngradeAttributeToAnnotation('RectorPrefix20220607\\Symfony\\Contracts\\Service\\Attribute\\Required', 'required'),
         // Nette
-        new DowngradeAttributeToAnnotation('Nette\\DI\\Attributes\\Inject', 'inject'),
+        new DowngradeAttributeToAnnotation('RectorPrefix20220607\\Nette\\DI\\Attributes\\Inject', 'inject'),
     ]);
     $rectorConfig->rule(DowngradeDereferenceableOperationRector::class);
     $rectorConfig->rule(DowngradeUnionTypeTypedPropertyRector::class);

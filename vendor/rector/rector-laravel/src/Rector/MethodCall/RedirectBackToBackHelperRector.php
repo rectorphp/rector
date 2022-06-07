@@ -105,7 +105,7 @@ CODE_SAMPLE
     }
     private function updateRedirectStaticCall(StaticCall $staticCall) : ?FuncCall
     {
-        if (!$this->isName($staticCall->class, 'Illuminate\\Support\\Facades\\Redirect')) {
+        if (!$this->isName($staticCall->class, 'RectorPrefix20220607\\Illuminate\\Support\\Facades\\Redirect')) {
             return null;
         }
         if (!$this->isName($staticCall->name, 'back')) {

@@ -44,7 +44,7 @@ class SomeClass
     public $name;
 }
 CODE_SAMPLE
-, [new AttributeKeyToClassConstFetch('Doctrine\\ORM\\Mapping\\Column', 'type', 'Doctrine\\DBAL\\Types\\Types', ['string' => 'STRING'])])]);
+, [new AttributeKeyToClassConstFetch('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Column', 'type', 'RectorPrefix20220607\\Doctrine\\DBAL\\Types\\Types', ['string' => 'STRING'])])]);
     }
     /**
      * @return array<class-string<Node>>

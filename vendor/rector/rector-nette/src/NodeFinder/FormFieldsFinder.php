@@ -79,14 +79,14 @@ final class FormFieldsFinder
     {
         if ($methodCall->var instanceof Variable) {
             // skip submit buttons
-            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('Nette\\Forms\\Controls\\SubmitButton'))) {
+            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('RectorPrefix20220607\\Nette\\Forms\\Controls\\SubmitButton'))) {
                 return null;
             }
-            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('Nette\\Forms\\Container'))) {
+            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('RectorPrefix20220607\\Nette\\Forms\\Container'))) {
                 return $methodCall;
             }
             // skip groups, renderers, translator etc.
-            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('Nette\\Forms\\Controls\\BaseControl'))) {
+            if ($this->nodeTypeResolver->isObjectType($methodCall, new ObjectType('RectorPrefix20220607\\Nette\\Forms\\Controls\\BaseControl'))) {
                 return $methodCall;
             }
             return null;

@@ -45,11 +45,11 @@ final class UpgradeRectorConfigRector extends AbstractRector
     /**
      * @var string
      */
-    private const CONTAINER_CONFIGURATOR_CLASS = 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator';
+    private const CONTAINER_CONFIGURATOR_CLASS = 'RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator';
     /**
      * @var string
      */
-    private const SERVICE_CONFIGURATOR_CLASS = 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator';
+    private const SERVICE_CONFIGURATOR_CLASS = 'RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator';
     /**
      * @readonly
      * @var \Rector\DogFood\NodeAnalyzer\ContainerConfiguratorCallAnalyzer

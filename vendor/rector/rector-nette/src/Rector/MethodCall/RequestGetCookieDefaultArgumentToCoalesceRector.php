@@ -53,7 +53,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Http\\Request'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Nette\\Http\\Request'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getCookie')) {

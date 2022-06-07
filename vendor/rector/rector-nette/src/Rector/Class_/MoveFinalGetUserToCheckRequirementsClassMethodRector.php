@@ -76,7 +76,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Nette\\Application\\UI\\Presenter'))) {
+        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Presenter'))) {
             return null;
         }
         $getUserClassMethod = $node->getMethod('getUser');

@@ -65,8 +65,8 @@ final class FileGenerator
         $content = $this->templateFactory->create($smartFileInfo->getContents(), $templateVariables);
         // replace "Rector\Utils\" with "Utils\Rector\" for 3rd party packages
         if (!$rectorRecipe->isRectorRepository()) {
-            $content = Strings::replace($content, self::RECTOR_UTILS_REGEX, 'Utils\\Rector');
-            $content = Strings::replace($content, self::RECTOR_UTILS_TESTS_REGEX, 'Utils\\Rector\\Tests');
+            $content = Strings::replace($content, self::RECTOR_UTILS_REGEX, 'RectorPrefix20220607\\Utils\\Rector');
+            $content = Strings::replace($content, self::RECTOR_UTILS_TESTS_REGEX, 'RectorPrefix20220607\\Utils\\Rector\\Tests');
         }
         // correct tests PSR-4 namespace for core rector packages
         if (\in_array($rectorRecipe->getPackage(), Packages::RECTOR_CORE, \true)) {

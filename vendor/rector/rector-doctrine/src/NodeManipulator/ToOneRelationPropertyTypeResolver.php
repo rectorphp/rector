@@ -24,7 +24,7 @@ final class ToOneRelationPropertyTypeResolver
     /**
      * @var class-string[]
      */
-    private const TO_ONE_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\ManyToOne', 'Doctrine\\ORM\\Mapping\\OneToOne'];
+    private const TO_ONE_ANNOTATION_CLASSES = ['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToOne', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToOne'];
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
@@ -99,7 +99,7 @@ final class ToOneRelationPropertyTypeResolver
     }
     private function resolveFromDocBlock(PhpDocInfo $phpDocInfo, Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : Type
     {
-        $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Doctrine\\ORM\\Mapping\\JoinColumn');
+        $joinDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\JoinColumn');
         return $this->processToOneRelation($property, $doctrineAnnotationTagValueNode, $joinDoctrineAnnotationTagValueNode);
     }
     private function resolveFromObjectType(FullyQualifiedObjectType $fullyQualifiedObjectType, bool $isNullable) : Type

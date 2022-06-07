@@ -87,7 +87,7 @@ CODE_SAMPLE
         if (!$this->attrinationFinder->hasByOne($node, SymfonyAnnotation::ROUTE)) {
             return null;
         }
-        $node->returnType = new FullyQualified('Symfony\\Component\\HttpFoundation\\Response');
+        $node->returnType = new FullyQualified('RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Response');
         return $node;
     }
 }

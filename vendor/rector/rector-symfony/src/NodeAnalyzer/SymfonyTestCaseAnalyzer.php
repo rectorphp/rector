@@ -23,6 +23,6 @@ final class SymfonyTestCaseAnalyzer
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        return $classReflection->isSubclassOf('Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase');
+        return $classReflection->isSubclassOf('RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\Test\\WebTestCase');
     }
 }

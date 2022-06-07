@@ -51,7 +51,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->class, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+        if (!$this->isObjectType($node->class, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
             return null;
         }
         if (isset($node->args[1])) {
@@ -87,7 +87,7 @@ CODE_SAMPLE
             if (!$node instanceof MethodCall) {
                 return \false;
             }
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+            if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
                 return \false;
             }
             if (!$this->isName($node->name, 'root')) {

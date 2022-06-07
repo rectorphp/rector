@@ -147,7 +147,7 @@ CODE_SAMPLE
     }
     private function createValidConstraintsArray() : Array_
     {
-        $new = new New_(new FullyQualified('Symfony\\Component\\Validator\\Constraints\\Valid'));
+        $new = new New_(new FullyQualified('RectorPrefix20220607\\Symfony\\Component\\Validator\\Constraints\\Valid'));
         return new Array_([new ArrayItem($new)]);
     }
     /**

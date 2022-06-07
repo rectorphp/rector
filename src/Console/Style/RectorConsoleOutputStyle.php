@@ -23,7 +23,7 @@ final class RectorConsoleOutputStyle extends SymfonyStyle
     {
         parent::__construct($input, $output);
         // silent output in tests
-        if (\defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if (\defined('RectorPrefix20220607\\PHPUNIT_COMPOSER_INSTALL')) {
             $this->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
     }
@@ -54,7 +54,7 @@ final class RectorConsoleOutputStyle extends SymfonyStyle
     public function progressAdvance(int $step = 1) : void
     {
         // hide progress bar in tests
-        if (\defined('PHPUNIT_COMPOSER_INSTALL')) {
+        if (\defined('RectorPrefix20220607\\PHPUNIT_COMPOSER_INSTALL')) {
             return;
         }
         $progressBar = $this->getProgressBar();

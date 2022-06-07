@@ -45,7 +45,7 @@ final class TestsNodeAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->testCaseObjectTypes = [new ObjectType('PHPUnit\\Framework\\TestCase'), new ObjectType('PHPUnit_Framework_TestCase')];
+        $this->testCaseObjectTypes = [new ObjectType('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase'), new ObjectType('PHPUnit_Framework_TestCase')];
     }
     public function isInTestClass(Node $node) : bool
     {
@@ -75,7 +75,7 @@ final class TestsNodeAnalyzer
         } else {
             return \false;
         }
-        $assertObjectType = new ObjectType('PHPUnit\\Framework\\Assert');
+        $assertObjectType = new ObjectType('RectorPrefix20220607\\PHPUnit\\Framework\\Assert');
         if (!$assertObjectType->isSuperTypeOf($callerType)->yes()) {
             return \false;
         }

@@ -18,20 +18,20 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
     // @see https://symfony.com/blog/new-in-symfony-5-4-nested-validation-attributes
     // @see https://github.com/symfony/symfony/pull/41994
-    $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [new AnnotationToAttribute('Symfony\\Component\\Validator\\Constraints\\All'), new AnnotationToAttribute('Symfony\\Component\\Validator\\Constraints\\Collection'), new AnnotationToAttribute('Symfony\\Component\\Validator\\Constraints\\AtLeastOneOf'), new AnnotationToAttribute('Symfony\\Component\\Validator\\Constraints\\Sequentially')]);
+    $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [new AnnotationToAttribute('RectorPrefix20220607\\Symfony\\Component\\Validator\\Constraints\\All'), new AnnotationToAttribute('RectorPrefix20220607\\Symfony\\Component\\Validator\\Constraints\\Collection'), new AnnotationToAttribute('RectorPrefix20220607\\Symfony\\Component\\Validator\\Constraints\\AtLeastOneOf'), new AnnotationToAttribute('RectorPrefix20220607\\Symfony\\Component\\Validator\\Constraints\\Sequentially')]);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/42582
-        new MethodCallRename('Symfony\\Bundle\\SecurityBundle\\Security\\FirewallConfig', 'getListeners', 'getAuthenticators'),
+        new MethodCallRename('RectorPrefix20220607\\Symfony\\Bundle\\SecurityBundle\\Security\\FirewallConfig', 'getListeners', 'getAuthenticators'),
     ]);
     $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [
-        new RenameClassAndConstFetch('Symfony\\Component\\Security\\Core\\AuthenticationEvents', 'AUTHENTICATION_SUCCESS', 'Symfony\\Component\\Security\\Core\\Event\\AuthenticationSuccessEvent', 'class'),
-        new RenameClassAndConstFetch('Symfony\\Component\\Security\\Core\\AuthenticationEvents', 'AUTHENTICATION_FAILURE', 'Symfony\\Component\\Security\\Core\\Event\\AuthenticationFailureEvent', 'class'),
+        new RenameClassAndConstFetch('RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\AuthenticationEvents', 'AUTHENTICATION_SUCCESS', 'RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Event\\AuthenticationSuccessEvent', 'class'),
+        new RenameClassAndConstFetch('RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\AuthenticationEvents', 'AUTHENTICATION_FAILURE', 'RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Event\\AuthenticationFailureEvent', 'class'),
         // @see https://github.com/symfony/symfony/pull/42510
-        new RenameClassConstFetch('Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AuthenticatedVoter', 'IS_ANONYMOUS', 'PUBLIC_ACCESS'),
-        new RenameClassConstFetch('Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AuthenticatedVoter', 'IS_AUTHENTICATED_ANONYMOUSLY', 'PUBLIC_ACCESS'),
+        new RenameClassConstFetch('RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AuthenticatedVoter', 'IS_ANONYMOUS', 'PUBLIC_ACCESS'),
+        new RenameClassConstFetch('RectorPrefix20220607\\Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AuthenticatedVoter', 'IS_AUTHENTICATED_ANONYMOUSLY', 'PUBLIC_ACCESS'),
     ]);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // @see https://github.com/symfony/symfony/pull/42050
-        'Symfony\\Component\\Security\\Http\\Event\\DeauthenticatedEvent' => 'Symfony\\Component\\Security\\Http\\Event\\TokenDeauthenticatedEvent',
+        'RectorPrefix20220607\\Symfony\\Component\\Security\\Http\\Event\\DeauthenticatedEvent' => 'RectorPrefix20220607\\Symfony\\Component\\Security\\Http\\Event\\TokenDeauthenticatedEvent',
     ]);
 };

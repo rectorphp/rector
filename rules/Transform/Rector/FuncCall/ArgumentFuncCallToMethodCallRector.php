@@ -87,7 +87,7 @@ class SomeController
     }
 }
 CODE_SAMPLE
-, [new ArgumentFuncCallToMethodCall('view', 'Illuminate\\Contracts\\View\\Factory', 'make')])]);
+, [new ArgumentFuncCallToMethodCall('view', 'RectorPrefix20220607\\Illuminate\\Contracts\\View\\Factory', 'make')])]);
     }
     /**
      * @return array<class-string<Node>>

@@ -11,8 +11,8 @@ use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 return static function (RectorConfig $rectorConfig) : void {
-    $configuration = [new FuncCallToMethodCall('GuzzleHttp\\json_decode', 'GuzzleHttp\\Utils', 'jsonDecode'), new FuncCallToMethodCall('GuzzleHttp\\get_path', 'GuzzleHttp\\Utils', 'getPath')];
+    $configuration = [new FuncCallToMethodCall('RectorPrefix20220607\\GuzzleHttp\\json_decode', 'RectorPrefix20220607\\GuzzleHttp\\Utils', 'jsonDecode'), new FuncCallToMethodCall('RectorPrefix20220607\\GuzzleHttp\\get_path', 'RectorPrefix20220607\\GuzzleHttp\\Utils', 'getPath')];
     $rectorConfig->ruleWithConfiguration(FuncCallToMethodCallRector::class, $configuration);
-    $rectorConfig->ruleWithConfiguration(StaticCallToFuncCallRector::class, [new StaticCallToFuncCall('GuzzleHttp\\Utils', 'setPath', 'GuzzleHttp\\set_path'), new StaticCallToFuncCall('GuzzleHttp\\Pool', 'batch', 'GuzzleHttp\\Pool\\batch')]);
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('GuzzleHttp\\Message\\MessageInterface', 'getHeaderLines', 'getHeaderAsArray')]);
+    $rectorConfig->ruleWithConfiguration(StaticCallToFuncCallRector::class, [new StaticCallToFuncCall('RectorPrefix20220607\\GuzzleHttp\\Utils', 'setPath', 'RectorPrefix20220607\\GuzzleHttp\\set_path'), new StaticCallToFuncCall('RectorPrefix20220607\\GuzzleHttp\\Pool', 'batch', 'RectorPrefix20220607\\GuzzleHttp\\Pool\\batch')]);
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('RectorPrefix20220607\\GuzzleHttp\\Message\\MessageInterface', 'getHeaderLines', 'getHeaderAsArray')]);
 };

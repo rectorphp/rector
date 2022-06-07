@@ -32,7 +32,7 @@ final class TemplateTypeBasedOnPresenterTemplateParametersRector extends Abstrac
     /**
      * @var string
      */
-    private $templateClassParent = 'Nette\\Bridges\\ApplicationLatte\\Template';
+    private $templateClassParent = 'RectorPrefix20220607\\Nette\\Bridges\\ApplicationLatte\\Template';
     /**
      * @var string[]
      */
@@ -138,7 +138,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
-        if (!$this->nodeTypeResolver->isObjectType($node, new ObjectType('Nette\\Application\\UI\\Presenter'))) {
+        if (!$this->nodeTypeResolver->isObjectType($node, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Presenter'))) {
             return null;
         }
         if ($node->name === null) {

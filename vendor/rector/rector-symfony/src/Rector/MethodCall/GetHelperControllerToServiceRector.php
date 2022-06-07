@@ -110,9 +110,9 @@ CODE_SAMPLE
      */
     private function refactorDispatchMessage(Class_ $class, MethodCall $methodCall)
     {
-        $propertyName = $this->propertyNaming->fqnToVariableName('Symfony\\Component\\Messenger\\MessageBusInterface');
+        $propertyName = $this->propertyNaming->fqnToVariableName('RectorPrefix20220607\\Symfony\\Component\\Messenger\\MessageBusInterface');
         // add dependency
-        $propertyObjectType = new ObjectType('Symfony\\Component\\Messenger\\MessageBusInterface');
+        $propertyObjectType = new ObjectType('RectorPrefix20220607\\Symfony\\Component\\Messenger\\MessageBusInterface');
         $propertyMetadata = new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         $thisVariable = new Variable('this');
@@ -122,9 +122,9 @@ CODE_SAMPLE
     }
     private function refactorGetDoctrine(Class_ $class) : PropertyFetch
     {
-        $propertyName = $this->propertyNaming->fqnToVariableName('Doctrine\\Persistence\\ManagerRegistry');
+        $propertyName = $this->propertyNaming->fqnToVariableName('RectorPrefix20220607\\Doctrine\\Persistence\\ManagerRegistry');
         // add dependency
-        $propertyObjectType = new ObjectType('Doctrine\\Persistence\\ManagerRegistry');
+        $propertyObjectType = new ObjectType('RectorPrefix20220607\\Doctrine\\Persistence\\ManagerRegistry');
         $propertyMetadata = new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
         $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
         $thisVariable = new Variable('this');

@@ -22,11 +22,11 @@ final class FinalizeClassesWithoutChildrenRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const DOCTRINE_ORM_MAPPING_ANNOTATION = ['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable'];
+    private const DOCTRINE_ORM_MAPPING_ANNOTATION = ['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Entity', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Embeddable'];
     /**
      * @var string[]
      */
-    private const DOCTRINE_ODM_MAPPING_ANNOTATION = ['Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\Document', 'Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\EmbeddedDocument'];
+    private const DOCTRINE_ODM_MAPPING_ANNOTATION = ['RectorPrefix20220607\\Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\Document', 'RectorPrefix20220607\\Doctrine\\ODM\\MongoDB\\Mapping\\Annotations\\EmbeddedDocument'];
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer

@@ -34,7 +34,7 @@ final class ProcessBuilderInstanceRector extends AbstractRector
         if (!$node->class instanceof Name) {
             return null;
         }
-        if (!$this->isName($node->class, 'Symfony\\Component\\Process\\ProcessBuilder')) {
+        if (!$this->isName($node->class, 'RectorPrefix20220607\\Symfony\\Component\\Process\\ProcessBuilder')) {
             return null;
         }
         if (!$this->isName($node->name, 'create')) {

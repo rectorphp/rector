@@ -70,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Illuminate\\Database\\Eloquent\\Model'))) {
+        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Illuminate\\Database\\Eloquent\\Model'))) {
             return null;
         }
         $datesProperty = $node->getProperty('dates');

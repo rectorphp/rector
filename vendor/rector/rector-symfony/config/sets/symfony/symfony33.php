@@ -11,23 +11,23 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [new ArgumentAdder('Symfony\\Component\\DependencyInjection\\ContainerBuilder', 'compile', 2, '__unknown__', 0), new ArgumentAdder('Symfony\\Component\\DependencyInjection\\ContainerBuilder', 'addCompilerPass', 2, 'priority', 0), new ArgumentAdder('Symfony\\Component\\DependencyInjection\\Compiler\\ServiceReferenceGraph', 'connect', 6, 'weak', \false)]);
+    $rectorConfig->ruleWithConfiguration(ArgumentAdderRector::class, [new ArgumentAdder('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\ContainerBuilder', 'compile', 2, '__unknown__', 0), new ArgumentAdder('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\ContainerBuilder', 'addCompilerPass', 2, 'priority', 0), new ArgumentAdder('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Compiler\\ServiceReferenceGraph', 'connect', 6, 'weak', \false)]);
     $rectorConfig->rule(ConsoleExceptionToErrorEventConstantRector::class);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         # console
-        'Symfony\\Component\\Console\\Event\\ConsoleExceptionEvent' => 'Symfony\\Component\\Console\\Event\\ConsoleErrorEvent',
+        'RectorPrefix20220607\\Symfony\\Component\\Console\\Event\\ConsoleExceptionEvent' => 'RectorPrefix20220607\\Symfony\\Component\\Console\\Event\\ConsoleErrorEvent',
         # debug
-        'Symfony\\Component\\Debug\\Exception\\ContextErrorException' => 'ErrorException',
+        'RectorPrefix20220607\\Symfony\\Component\\Debug\\Exception\\ContextErrorException' => 'ErrorException',
         # dependency-injection
-        'Symfony\\Component\\DependencyInjection\\DefinitionDecorator' => 'Symfony\\Component\\DependencyInjection\\ChildDefinition',
+        'RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\DefinitionDecorator' => 'RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\ChildDefinition',
         # framework bundle
-        'Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\AddConsoleCommandPass' => 'Symfony\\Component\\Console\\DependencyInjection\\AddConsoleCommandPass',
-        'Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\SerializerPass' => 'Symfony\\Component\\Serializer\\DependencyInjection\\SerializerPass',
-        'Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\FormPass' => 'Symfony\\Component\\Form\\DependencyInjection\\FormPass',
-        'Symfony\\Bundle\\FrameworkBundle\\EventListener\\SessionListener' => 'Symfony\\Component\\HttpKernel\\EventListener\\SessionListener',
-        'Symfony\\Bundle\\FrameworkBundle\\EventListener\\TestSessionListenr' => 'Symfony\\Component\\HttpKernel\\EventListener\\TestSessionListener',
-        'Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\ConfigCachePass' => 'Symfony\\Component\\Config\\DependencyInjection\\ConfigCachePass',
-        'Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\PropertyInfoPass' => 'Symfony\\Component\\PropertyInfo\\DependencyInjection\\PropertyInfoPass',
+        'RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\AddConsoleCommandPass' => 'RectorPrefix20220607\\Symfony\\Component\\Console\\DependencyInjection\\AddConsoleCommandPass',
+        'RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\SerializerPass' => 'RectorPrefix20220607\\Symfony\\Component\\Serializer\\DependencyInjection\\SerializerPass',
+        'RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\FormPass' => 'RectorPrefix20220607\\Symfony\\Component\\Form\\DependencyInjection\\FormPass',
+        'RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\EventListener\\SessionListener' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\EventListener\\SessionListener',
+        'RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\EventListener\\TestSessionListenr' => 'RectorPrefix20220607\\Symfony\\Component\\HttpKernel\\EventListener\\TestSessionListener',
+        'RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\ConfigCachePass' => 'RectorPrefix20220607\\Symfony\\Component\\Config\\DependencyInjection\\ConfigCachePass',
+        'RectorPrefix20220607\\Symfony\\Bundle\\FrameworkBundle\\DependencyInjection\\Compiler\\PropertyInfoPass' => 'RectorPrefix20220607\\Symfony\\Component\\PropertyInfo\\DependencyInjection\\PropertyInfoPass',
     ]);
-    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Symfony\\Component\\DependencyInjection\\Container', 'isFrozen', 'isCompiled')]);
+    $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Container', 'isFrozen', 'isCompiled')]);
 };

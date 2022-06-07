@@ -45,11 +45,11 @@ final class TranslatablePropertyCollectorAndRemover
         $propertyNameAndPhpDocInfos = [];
         foreach ($class->getProperties() as $property) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            if ($phpDocInfo->hasByAnnotationClass('Gedmo\\Mapping\\Annotation\\Locale')) {
+            if ($phpDocInfo->hasByAnnotationClass('RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\Locale')) {
                 $this->nodeRemover->removeNode($property);
                 continue;
             }
-            $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Gedmo\\Mapping\\Annotation\\Translatable');
+            $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\Translatable');
             if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }

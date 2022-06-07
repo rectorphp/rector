@@ -17,7 +17,7 @@ use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
 use Rector\Transform\ValueObject\FuncCallToStaticCall;
 # @see https://tomasvotruba.com/blog/2018/07/30/hidden-gems-of-php-packages-nette-utils
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->ruleWithConfiguration(FuncCallToStaticCallRector::class, [new FuncCallToStaticCall('file_get_contents', 'Nette\\Utils\\FileSystem', 'read'), new FuncCallToStaticCall('unlink', 'Nette\\Utils\\FileSystem', 'delete'), new FuncCallToStaticCall('rmdir', 'Nette\\Utils\\FileSystem', 'delete')]);
+    $rectorConfig->ruleWithConfiguration(FuncCallToStaticCallRector::class, [new FuncCallToStaticCall('file_get_contents', 'RectorPrefix20220607\\Nette\\Utils\\FileSystem', 'read'), new FuncCallToStaticCall('unlink', 'RectorPrefix20220607\\Nette\\Utils\\FileSystem', 'delete'), new FuncCallToStaticCall('rmdir', 'RectorPrefix20220607\\Nette\\Utils\\FileSystem', 'delete')]);
     $rectorConfig->rule(StrposToStringsContainsRector::class);
     $rectorConfig->rule(SubstrStrlenFunctionToNetteUtilsStringsRector::class);
     $rectorConfig->rule(StartsWithFunctionToNetteUtilsStringsRector::class);

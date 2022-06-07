@@ -32,7 +32,7 @@ final class EntityAliasToClassConstantReferenceRector extends AbstractRector imp
     private $aliasesToNamespaces = [];
     public function __construct()
     {
-        $this->doctrineManagerRegistryObjectTypes = [new ObjectType('Doctrine\\ORM\\EntityManagerInterface'), new ObjectType('Doctrine\\Persistence\\ObjectManager'), new ObjectType('Doctrine\\Common\\Persistence\\ObjectManager'), new ObjectType('Doctrine\\Persistence\\ManagerRegistry'), new ObjectType('Doctrine\\Common\\Persistence\\ManagerRegistry')];
+        $this->doctrineManagerRegistryObjectTypes = [new ObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityManagerInterface'), new ObjectType('RectorPrefix20220607\\Doctrine\\Persistence\\ObjectManager'), new ObjectType('RectorPrefix20220607\\Doctrine\\Common\\Persistence\\ObjectManager'), new ObjectType('RectorPrefix20220607\\Doctrine\\Persistence\\ManagerRegistry'), new ObjectType('RectorPrefix20220607\\Doctrine\\Common\\Persistence\\ManagerRegistry')];
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -44,7 +44,7 @@ CODE_SAMPLE
 $entityManager = new Doctrine\ORM\EntityManager();
 $entityManager->getRepository(\App\Entity\Post::class);
 CODE_SAMPLE
-, [self::ALIASES_TO_NAMESPACES => ['App' => 'App\\Entity']])]);
+, [self::ALIASES_TO_NAMESPACES => ['App' => 'RectorPrefix20220607\\App\\Entity']])]);
     }
     /**
      * @return array<class-string<Node>>

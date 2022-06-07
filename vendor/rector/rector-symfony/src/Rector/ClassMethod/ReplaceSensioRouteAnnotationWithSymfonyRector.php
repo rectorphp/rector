@@ -89,11 +89,11 @@ CODE_SAMPLE
         if ($phpDocInfo->hasByAnnotationClass(SymfonyAnnotation::ROUTE)) {
             return null;
         }
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route');
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('RectorPrefix20220607\\Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route');
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
-        $this->renamedClassesDataCollector->addOldToNewClasses(['Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route' => SymfonyAnnotation::ROUTE]);
+        $this->renamedClassesDataCollector->addOldToNewClasses(['RectorPrefix20220607\\Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Route' => SymfonyAnnotation::ROUTE]);
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $doctrineAnnotationTagValueNode);
         // unset service, that is deprecated
         $values = $doctrineAnnotationTagValueNode->getValues();

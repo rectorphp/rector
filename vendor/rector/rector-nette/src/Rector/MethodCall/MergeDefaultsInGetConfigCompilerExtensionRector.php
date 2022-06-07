@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Nette\\DI\\CompilerExtension'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Nette\\DI\\CompilerExtension'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getConfig')) {

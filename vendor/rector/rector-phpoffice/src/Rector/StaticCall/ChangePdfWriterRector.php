@@ -70,7 +70,7 @@ CODE_SAMPLE
                 return null;
             }
             if (StringUtils::isMatch($secondArgValue, '#pdf#i')) {
-                return new New_(new FullyQualified('PhpOffice\\PhpSpreadsheet\\Writer\\Pdf\\Mpdf'), [$node->args[0]]);
+                return new New_(new FullyQualified('RectorPrefix20220607\\PhpOffice\\PhpSpreadsheet\\Writer\\Pdf\\Mpdf'), [$node->args[0]]);
             }
         }
         return null;

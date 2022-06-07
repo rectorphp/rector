@@ -53,7 +53,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Illuminate\\Support\\ServiceProvider'))) {
+        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Illuminate\\Support\\ServiceProvider'))) {
             return null;
         }
         $deferProperty = $this->matchDeferWithFalseProperty($node);
@@ -61,7 +61,7 @@ CODE_SAMPLE
             return null;
         }
         $this->removeNode($deferProperty);
-        $node->implements[] = new FullyQualified('Illuminate\\Contracts\\Support\\DeferrableProvider');
+        $node->implements[] = new FullyQualified('RectorPrefix20220607\\Illuminate\\Contracts\\Support\\DeferrableProvider');
         return $node;
     }
     private function matchDeferWithFalseProperty(Class_ $class) : ?Property

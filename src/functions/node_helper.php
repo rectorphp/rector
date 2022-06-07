@@ -6,7 +6,7 @@ namespace RectorPrefix20220607;
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
 use RectorPrefix20220607\Tracy\Dumper;
-if (!\function_exists('dump_with_depth')) {
+if (!\function_exists('RectorPrefix20220607\\dump_with_depth')) {
     /**
      * @param mixed $value
      */
@@ -15,13 +15,13 @@ if (!\function_exists('dump_with_depth')) {
         Dumper::dump($value, [Dumper::DEPTH => $depth]);
     }
 }
-if (!\function_exists('dn')) {
+if (!\function_exists('RectorPrefix20220607\\dn')) {
     function dn(Node $node, int $depth = 2) : void
     {
         dump_node($node, $depth);
     }
 }
-if (!\function_exists('dump_node')) {
+if (!\function_exists('RectorPrefix20220607\\dump_node')) {
     /**
      * @param \PhpParser\Node|mixed[] $node
      */
@@ -33,7 +33,7 @@ if (!\function_exists('dump_node')) {
         }
     }
 }
-if (!\function_exists('print_node')) {
+if (!\function_exists('RectorPrefix20220607\\print_node')) {
     /**
      * @param \PhpParser\Node|mixed[] $node
      */

@@ -58,6 +58,6 @@ CODE_SAMPLE
         if ($constantName === null) {
             return null;
         }
-        return $this->nodeFactory->createClassConstFetch('Nette\\Utils\\DateTime', $constantName);
+        return $this->nodeFactory->createClassConstFetch('RectorPrefix20220607\\Nette\\Utils\\DateTime', $constantName);
     }
 }

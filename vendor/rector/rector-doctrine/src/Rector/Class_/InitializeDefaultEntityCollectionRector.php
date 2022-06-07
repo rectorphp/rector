@@ -23,7 +23,7 @@ final class InitializeDefaultEntityCollectionRector extends AbstractRector
     /**
      * @var class-string[]
      */
-    private const TO_MANY_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany'];
+    private const TO_MANY_ANNOTATION_CLASSES = ['RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\OneToMany', 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\ManyToMany'];
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
@@ -100,7 +100,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->attrinationFinder->hasByOne($node, 'Doctrine\\ORM\\Mapping\\Entity')) {
+        if (!$this->attrinationFinder->hasByOne($node, 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Entity')) {
             return null;
         }
         return $this->refactorClass($node);

@@ -27,7 +27,7 @@ final class ColumnPropertyTypeResolver
     /**
      * @var string
      */
-    private const COLUMN_CLASS = 'Doctrine\\ORM\\Mapping\\Column';
+    private const COLUMN_CLASS = 'RectorPrefix20220607\\Doctrine\\ORM\\Mapping\\Column';
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory

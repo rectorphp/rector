@@ -23,7 +23,7 @@ final class Redirect301ToPermanentRedirectRector extends AbstractRector
     private $routerObjectTypes = [];
     public function __construct()
     {
-        $this->routerObjectTypes = [new ObjectType('Illuminate\\Support\\Facades\\Route'), new ObjectType('Illuminate\\Routing\\Route')];
+        $this->routerObjectTypes = [new ObjectType('RectorPrefix20220607\\Illuminate\\Support\\Facades\\Route'), new ObjectType('RectorPrefix20220607\\Illuminate\\Routing\\Route')];
     }
     public function getRuleDefinition() : RuleDefinition
     {

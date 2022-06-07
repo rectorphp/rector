@@ -70,7 +70,7 @@ final class SomeTest implements TestCase
     }
 }
 CODE_SAMPLE
-, [new ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', '*provide*')])]);
+, [new ReturnArrayClassMethodToYield('RectorPrefix20220607\\PHPUnit\\Framework\\TestCase', '*provide*')])]);
     }
     /**
      * @return array<class-string<Node>>

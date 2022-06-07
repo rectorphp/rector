@@ -85,7 +85,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Illuminate\\Foundation\\Testing\\TestCase'))) {
+        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Illuminate\\Foundation\\Testing\\TestCase'))) {
             return null;
         }
         if (!$this->isTestingConsoleOutput($node)) {
@@ -106,7 +106,7 @@ CODE_SAMPLE
                 return \false;
             }
             $callerType = $this->nodeTypeResolver->getType($node->class);
-            if (!$callerType->isSuperTypeOf(new ObjectType('Illuminate\\Support\\Facades\\Artisan'))->yes()) {
+            if (!$callerType->isSuperTypeOf(new ObjectType('RectorPrefix20220607\\Illuminate\\Support\\Facades\\Artisan'))->yes()) {
                 return \false;
             }
             return $this->isName($node->name, 'output');

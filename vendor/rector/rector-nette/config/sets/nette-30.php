@@ -30,35 +30,35 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(RemoveParentCallWithoutParentRector::class);
     // https://github.com/nette/utils/commit/d0041ba59f5d8bf1f5b3795fd76d43fb13ea2e15
     $rectorConfig->rule(FormerNullableArgumentToScalarTypedRector::class);
-    $rectorConfig->ruleWithConfiguration(StaticCallToMethodCallRector::class, [new StaticCallToMethodCall('Nette\\Security\\Passwords', 'hash', 'Nette\\Security\\Passwords', 'hash'), new StaticCallToMethodCall('Nette\\Security\\Passwords', 'verify', 'Nette\\Security\\Passwords', 'verify'), new StaticCallToMethodCall('Nette\\Security\\Passwords', 'needsRehash', 'Nette\\Security\\Passwords', 'needsRehash')]);
+    $rectorConfig->ruleWithConfiguration(StaticCallToMethodCallRector::class, [new StaticCallToMethodCall('RectorPrefix20220607\\Nette\\Security\\Passwords', 'hash', 'RectorPrefix20220607\\Nette\\Security\\Passwords', 'hash'), new StaticCallToMethodCall('RectorPrefix20220607\\Nette\\Security\\Passwords', 'verify', 'RectorPrefix20220607\\Nette\\Security\\Passwords', 'verify'), new StaticCallToMethodCall('RectorPrefix20220607\\Nette\\Security\\Passwords', 'needsRehash', 'RectorPrefix20220607\\Nette\\Security\\Passwords', 'needsRehash')]);
     // https://github.com/contributte/event-dispatcher-extra/tree/v0.4.3 and higher
-    $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [new RenameClassConstFetch('Contributte\\Events\\Extra\\Event\\Security\\LoggedInEvent', 'NAME', 'class'), new RenameClassConstFetch('Contributte\\Events\\Extra\\Event\\Security\\LoggedOutEvent', 'NAME', 'class'), new RenameClassConstFetch('Contributte\\Events\\Extra\\Event\\Application\\ShutdownEvent', 'NAME', 'class')]);
+    $rectorConfig->ruleWithConfiguration(RenameClassConstFetchRector::class, [new RenameClassConstFetch('RectorPrefix20220607\\Contributte\\Events\\Extra\\Event\\Security\\LoggedInEvent', 'NAME', 'class'), new RenameClassConstFetch('RectorPrefix20220607\\Contributte\\Events\\Extra\\Event\\Security\\LoggedOutEvent', 'NAME', 'class'), new RenameClassConstFetch('RectorPrefix20220607\\Contributte\\Events\\Extra\\Event\\Application\\ShutdownEvent', 'NAME', 'class')]);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         # nextras/forms was split into 2 packages
-        'Nextras\\FormComponents\\Controls\\DatePicker' => 'Nextras\\FormComponents\\Controls\\DateControl',
+        'RectorPrefix20220607\\Nextras\\FormComponents\\Controls\\DatePicker' => 'RectorPrefix20220607\\Nextras\\FormComponents\\Controls\\DateControl',
         # @see https://github.com/nette/di/commit/a0d361192f8ac35f1d9f82aab7eb351e4be395ea
-        'Nette\\DI\\ServiceDefinition' => 'Nette\\DI\\Definitions\\ServiceDefinition',
-        'Nette\\DI\\Statement' => 'Nette\\DI\\Definitions\\Statement',
-        'WebChemistry\\Forms\\Controls\\Multiplier' => 'Contributte\\FormMultiplier\\Multiplier',
+        'RectorPrefix20220607\\Nette\\DI\\ServiceDefinition' => 'RectorPrefix20220607\\Nette\\DI\\Definitions\\ServiceDefinition',
+        'RectorPrefix20220607\\Nette\\DI\\Statement' => 'RectorPrefix20220607\\Nette\\DI\\Definitions\\Statement',
+        'RectorPrefix20220607\\WebChemistry\\Forms\\Controls\\Multiplier' => 'RectorPrefix20220607\\Contributte\\FormMultiplier\\Multiplier',
     ]);
     $rectorConfig->ruleWithConfiguration(ReplaceArgumentDefaultValueRector::class, [
         // json 2nd argument is now `int` typed
-        new ReplaceArgumentDefaultValue('Nette\\Utils\\Json', 'decode', 1, \true, 'Nette\\Utils\\Json::FORCE_ARRAY'),
+        new ReplaceArgumentDefaultValue('RectorPrefix20220607\\Nette\\Utils\\Json', 'decode', 1, \true, 'Nette\\Utils\\Json::FORCE_ARRAY'),
         // @see https://github.com/nette/forms/commit/574b97f9d5e7a902a224e57d7d584e7afc9fefec
-        new ReplaceArgumentDefaultValue('Nette\\Forms\\Form', 'decode', 0, \true, 'array'),
+        new ReplaceArgumentDefaultValue('RectorPrefix20220607\\Nette\\Forms\\Form', 'decode', 0, \true, 'array'),
     ]);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // see https://github.com/nette/forms/commit/b99385aa9d24d729a18f6397a414ea88eab6895a
-        new MethodCallRename('Nette\\Forms\\Controls\\BaseControl', 'setType', 'setHtmlType'),
-        new MethodCallRename('Nette\\Forms\\Controls\\BaseControl', 'setAttribute', 'setHtmlAttribute'),
+        new MethodCallRename('RectorPrefix20220607\\Nette\\Forms\\Controls\\BaseControl', 'setType', 'setHtmlType'),
+        new MethodCallRename('RectorPrefix20220607\\Nette\\Forms\\Controls\\BaseControl', 'setAttribute', 'setHtmlAttribute'),
         new MethodCallRename(
-            'Nette\\DI\\Definitions\\ServiceDefinition',
+            'RectorPrefix20220607\\Nette\\DI\\Definitions\\ServiceDefinition',
             # see https://github.com/nette/di/commit/1705a5db431423fc610a6f339f88dead1b5dc4fb
             'setClass',
             'setType'
         ),
-        new MethodCallRename('Nette\\DI\\Definitions\\ServiceDefinition', 'getClass', 'getType'),
-        new MethodCallRename('Nette\\DI\\Definitions\\Definition', 'isAutowired', 'getAutowired'),
+        new MethodCallRename('RectorPrefix20220607\\Nette\\DI\\Definitions\\ServiceDefinition', 'getClass', 'getType'),
+        new MethodCallRename('RectorPrefix20220607\\Nette\\DI\\Definitions\\Definition', 'isAutowired', 'getAutowired'),
     ]);
     $rectorConfig->rule(MagicHtmlCallToAppendAttributeRector::class);
     $rectorConfig->rule(RequestGetCookieDefaultArgumentToCoalesceRector::class);

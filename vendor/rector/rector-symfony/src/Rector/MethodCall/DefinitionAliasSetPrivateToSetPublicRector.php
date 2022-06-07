@@ -23,7 +23,7 @@ final class DefinitionAliasSetPrivateToSetPublicRector extends AbstractRector
     private $definitionObjectTypes = [];
     public function __construct()
     {
-        $this->definitionObjectTypes = [new ObjectType('Symfony\\Component\\DependencyInjection\\Alias'), new ObjectType('Symfony\\Component\\DependencyInjection\\Definition')];
+        $this->definitionObjectTypes = [new ObjectType('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Alias'), new ObjectType('RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Definition')];
     }
     public function getRuleDefinition() : RuleDefinition
     {

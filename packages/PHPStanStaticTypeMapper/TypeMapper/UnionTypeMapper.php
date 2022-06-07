@@ -293,7 +293,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     private function resolveCompatibleObjectCandidate(UnionType $unionType)
     {
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {
-            $objectType = new ObjectType('Doctrine\\Common\\Collections\\Collection');
+            $objectType = new ObjectType('RectorPrefix20220607\\Doctrine\\Common\\Collections\\Collection');
             return $this->unionTypeAnalyzer->isNullable($unionType) ? new UnionType([new NullType(), $objectType]) : $objectType;
         }
         $typesWithClassNames = $this->unionTypeAnalyzer->matchExclusiveTypesWithClassNames($unionType);

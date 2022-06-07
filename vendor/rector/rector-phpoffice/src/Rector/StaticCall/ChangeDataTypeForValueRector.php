@@ -58,7 +58,7 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($node->name, 'dataTypeForValue')) {
             return null;
         }
-        $node->class = new FullyQualified('PhpOffice\\PhpSpreadsheet\\Cell\\DefaultValueBinder');
+        $node->class = new FullyQualified('RectorPrefix20220607\\PhpOffice\\PhpSpreadsheet\\Cell\\DefaultValueBinder');
         return $node;
     }
 }

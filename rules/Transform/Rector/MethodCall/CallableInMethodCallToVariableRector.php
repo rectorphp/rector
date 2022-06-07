@@ -60,7 +60,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new CallableInMethodCallToVariable('Nette\\Caching\\Cache', 'save', 1)])]);
+, [new CallableInMethodCallToVariable('RectorPrefix20220607\\Nette\\Caching\\Cache', 'save', 1)])]);
     }
     /**
      * @return array<class-string<Node>>

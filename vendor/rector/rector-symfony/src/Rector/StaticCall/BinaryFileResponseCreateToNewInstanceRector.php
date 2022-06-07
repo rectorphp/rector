@@ -57,7 +57,7 @@ CODE_SAMPLE
         if (!$node->class instanceof Name) {
             return null;
         }
-        if (!$this->isName($node->class, 'Symfony\\Component\\HttpFoundation\\BinaryFileResponse')) {
+        if (!$this->isName($node->class, 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\BinaryFileResponse')) {
             return null;
         }
         if (!$this->isName($node->name, 'create')) {

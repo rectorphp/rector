@@ -59,7 +59,7 @@ final class TypedPropertyFromColumnTypeRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Complete @var annotations or types based on @ORM\\Column', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('RectorPrefix20220607\\Complete @var annotations or types based on @ORM\\Column', [new CodeSample(<<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping as ORM;
 
 class SimpleColumn

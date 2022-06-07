@@ -17,7 +17,7 @@ use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/laravel-array-str-functions-to-static-call.php');
     $rectorConfig->rule(MinutesToSecondsInCacheRector::class);
-    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Repository', 'put', new BooleanType()), new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Repository', 'forever', new BooleanType()), new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'put', new BooleanType()), new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'putMany', new BooleanType()), new AddReturnTypeDeclaration('Illuminate\\Contracts\\Cache\\Store', 'forever', new BooleanType())]);
-    $rectorConfig->ruleWithConfiguration(RenamePropertyRector::class, [new RenameProperty('Illuminate\\Routing\\UrlGenerator', 'cachedSchema', 'cachedScheme')]);
+    $rectorConfig->ruleWithConfiguration(AddReturnTypeDeclarationRector::class, [new AddReturnTypeDeclaration('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Repository', 'put', new BooleanType()), new AddReturnTypeDeclaration('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Repository', 'forever', new BooleanType()), new AddReturnTypeDeclaration('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Store', 'put', new BooleanType()), new AddReturnTypeDeclaration('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Store', 'putMany', new BooleanType()), new AddReturnTypeDeclaration('RectorPrefix20220607\\Illuminate\\Contracts\\Cache\\Store', 'forever', new BooleanType())]);
+    $rectorConfig->ruleWithConfiguration(RenamePropertyRector::class, [new RenameProperty('RectorPrefix20220607\\Illuminate\\Routing\\UrlGenerator', 'cachedSchema', 'cachedScheme')]);
     $rectorConfig->rule(PropertyDeferToDeferrableProviderToRector::class);
 };

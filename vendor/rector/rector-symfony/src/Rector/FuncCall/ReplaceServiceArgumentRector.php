@@ -48,7 +48,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
-        if (!$this->isName($node, 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\service')) {
+        if (!$this->isName($node, 'RectorPrefix20220607\\Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\service')) {
             return null;
         }
         $firstArg = $node->args[0];

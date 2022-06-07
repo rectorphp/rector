@@ -42,7 +42,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('MyCLabs\\Enum\\Enum'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\MyCLabs\\Enum\\Enum'))) {
             return null;
         }
         if (!$this->isName($node->name, 'getKey')) {

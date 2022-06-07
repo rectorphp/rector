@@ -70,7 +70,7 @@ class SymfonyRoute
     }
 }
 CODE_SAMPLE
-, [new DowngradeAttributeToAnnotation('Symfony\\Component\\Routing\\Annotation\\Route')])]);
+, [new DowngradeAttributeToAnnotation('RectorPrefix20220607\\Symfony\\Component\\Routing\\Annotation\\Route')])]);
     }
     /**
      * @return array<class-string<Node>>

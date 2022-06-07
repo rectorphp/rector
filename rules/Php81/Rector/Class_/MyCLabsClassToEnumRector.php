@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('MyCLabs\\Enum\\Enum'))) {
+        if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\MyCLabs\\Enum\\Enum'))) {
             return null;
         }
         return $this->enumFactory->createFromClass($node);

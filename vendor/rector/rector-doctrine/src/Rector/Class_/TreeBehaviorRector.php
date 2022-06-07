@@ -130,14 +130,14 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $doctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass('Gedmo\\Mapping\\Annotation\\Tree');
+        $doctrineAnnotationTagValueNode = $propertyPhpDocInfo->getByAnnotationClass('RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\Tree');
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
         // we're in a tree entity
         $this->phpDocTagRemover->removeTagValueFromNode($propertyPhpDocInfo, $doctrineAnnotationTagValueNode);
-        $node->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\TreeNodeInterface');
-        $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Tree\\TreeNodeTrait');
+        $node->implements[] = new FullyQualified('RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Contract\\Entity\\TreeNodeInterface');
+        $this->classInsertManipulator->addAsFirstTrait($node, 'RectorPrefix20220607\\Knp\\DoctrineBehaviors\\Model\\Tree\\TreeNodeTrait');
         // remove all tree-related properties and their getters and setters - it's handled by behavior trait
         $removedPropertyNames = [];
         foreach ($node->getProperties() as $property) {
@@ -155,7 +155,7 @@ CODE_SAMPLE
     private function shouldRemoveProperty(Property $property) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        return $phpDocInfo->hasByAnnotationClasses(['Gedmo\\Mapping\\Annotation\\TreeLeft', 'Gedmo\\Mapping\\Annotation\\TreeRight', 'Gedmo\\Mapping\\Annotation\\TreeRoot', 'Gedmo\\Mapping\\Annotation\\TreeParent', 'Gedmo\\Mapping\\Annotation\\TreeLevel']);
+        return $phpDocInfo->hasByAnnotationClasses(['RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\TreeLeft', 'RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\TreeRight', 'RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\TreeRoot', 'RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\TreeParent', 'RectorPrefix20220607\\Gedmo\\Mapping\\Annotation\\TreeLevel']);
     }
     /**
      * @param string[] $removedPropertyNames

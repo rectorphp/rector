@@ -64,7 +64,7 @@ CODE_SAMPLE
     {
         // 1. chain call
         if ($node->var instanceof MethodCall) {
-            if (!$this->isObjectType($node->var->var, new ObjectType('Nette\\Application\\UI\\Form'))) {
+            if (!$this->isObjectType($node->var->var, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Form'))) {
                 return null;
             }
             if (!$this->isName($node->var->name, 'addDatePicker')) {
@@ -82,7 +82,7 @@ CODE_SAMPLE
             return $node;
         }
         // 2. assign call
-        if (!$this->isObjectType($node->var, new ObjectType('Nette\\Application\\UI\\Form'))) {
+        if (!$this->isObjectType($node->var, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Form'))) {
             return null;
         }
         if (!$this->isName($node->name, 'addDatePicker')) {
@@ -122,7 +122,7 @@ CODE_SAMPLE
     }
     private function createDateTimeControlNew(MethodCall $methodCall) : New_
     {
-        $fullyQualified = new FullyQualified('Nextras\\FormComponents\\Controls\\DateControl');
+        $fullyQualified = new FullyQualified('RectorPrefix20220607\\Nextras\\FormComponents\\Controls\\DateControl');
         $new = new New_($fullyQualified);
         if (isset($methodCall->args[1])) {
             $new->args[] = $methodCall->args[1];

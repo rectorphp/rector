@@ -128,7 +128,7 @@ CODE_SAMPLE
             return null;
         }
         // collect on registry method calls, so we know if the manager registry is needed
-        $registryCalledMethods = $this->methodCallNameOnTypeResolver->resolve($node, new ObjectType('Doctrine\\Common\\Persistence\\ManagerRegistry'));
+        $registryCalledMethods = $this->methodCallNameOnTypeResolver->resolve($node, new ObjectType('RectorPrefix20220607\\Doctrine\\Common\\Persistence\\ManagerRegistry'));
         if (!\in_array(self::GET_MANAGER, $registryCalledMethods, \true)) {
             return null;
         }
@@ -144,7 +144,7 @@ CODE_SAMPLE
         $this->replaceEntityRegistryVariableWithEntityManagerProperty($node);
         $this->removeAssignGetRepositoryCalls($node);
         // add entity manager via constructor
-        $this->addConstructorDependencyWithProperty($node, $constructorClassMethod, self::ENTITY_MANAGER, new FullyQualifiedObjectType('Doctrine\\ORM\\EntityManagerInterface'));
+        $this->addConstructorDependencyWithProperty($node, $constructorClassMethod, self::ENTITY_MANAGER, new FullyQualifiedObjectType('RectorPrefix20220607\\Doctrine\\ORM\\EntityManagerInterface'));
         return $node;
     }
     private function resolveManagerRegistryParam(ClassMethod $classMethod) : ?Param
@@ -153,7 +153,7 @@ CODE_SAMPLE
             if ($param->type === null) {
                 continue;
             }
-            if (!$this->isName($param->type, 'Doctrine\\Common\\Persistence\\ManagerRegistry')) {
+            if (!$this->isName($param->type, 'RectorPrefix20220607\\Doctrine\\Common\\Persistence\\ManagerRegistry')) {
                 continue;
             }
             return $param;
@@ -167,12 +167,12 @@ CODE_SAMPLE
             if ($param->type === null) {
                 continue;
             }
-            if (!$this->isName($param->type, 'Doctrine\\Common\\Persistence\\ManagerRegistry')) {
+            if (!$this->isName($param->type, 'RectorPrefix20220607\\Doctrine\\Common\\Persistence\\ManagerRegistry')) {
                 continue;
             }
             unset($classMethod->params[$key]);
         }
-        $this->dependencyRemover->removeByType($class, $classMethod, $registryParam, 'Doctrine\\Common\\Persistence\\ManagerRegistry');
+        $this->dependencyRemover->removeByType($class, $classMethod, $registryParam, 'RectorPrefix20220607\\Doctrine\\Common\\Persistence\\ManagerRegistry');
     }
     /**
      * Before: $entityRegistry->
@@ -185,7 +185,7 @@ CODE_SAMPLE
             if (!$node instanceof Variable) {
                 return null;
             }
-            if (!$this->isObjectType($node, new ObjectType('Doctrine\\Common\\Persistence\\ObjectManager'))) {
+            if (!$this->isObjectType($node, new ObjectType('RectorPrefix20220607\\Doctrine\\Common\\Persistence\\ObjectManager'))) {
                 return null;
             }
             return new PropertyFetch(new Variable('this'), self::ENTITY_MANAGER);
@@ -217,7 +217,7 @@ CODE_SAMPLE
         if (!$assign->expr instanceof MethodCall) {
             return \false;
         }
-        if (!$this->isObjectType($assign->expr->var, new ObjectType('Doctrine\\Common\\Persistence\\ManagerRegistry'))) {
+        if (!$this->isObjectType($assign->expr->var, new ObjectType('RectorPrefix20220607\\Doctrine\\Common\\Persistence\\ManagerRegistry'))) {
             return \false;
         }
         return $this->isName($assign->expr->name, self::GET_MANAGER);

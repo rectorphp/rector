@@ -222,7 +222,7 @@ CODE_SAMPLE
         // is nette return type?
         $returnType = $functionLike->returnType;
         if ($returnType instanceof FullyQualified) {
-            $objectType = new ObjectType('Nette\\Application\\UI\\Control');
+            $objectType = new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Control');
             $returnObjectType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
             if ($objectType->isSuperTypeOf($returnObjectType)->yes()) {
                 return \true;

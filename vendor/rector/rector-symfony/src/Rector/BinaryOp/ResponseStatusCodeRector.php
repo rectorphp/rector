@@ -41,7 +41,7 @@ final class ResponseStatusCodeRector extends AbstractRector
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
         $this->literalCallLikeConstFetchReplacer = $literalCallLikeConstFetchReplacer;
-        $this->responseObjectType = new ObjectType('Symfony\\Component\\HttpFoundation\\Response');
+        $this->responseObjectType = new ObjectType('RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Response');
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -114,7 +114,7 @@ CODE_SAMPLE
         if (!$this->isName($methodCall->name, 'setStatusCode')) {
             return null;
         }
-        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, 'Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
     }
     private function processBinaryOp(BinaryOp $binaryOp) : ?BinaryOp
     {
@@ -164,7 +164,7 @@ CODE_SAMPLE
         if (!$this->isGetStatusMethod($secondArg->value)) {
             return null;
         }
-        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, 'Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
     }
     /**
      * @return \PhpParser\Node\Expr\MethodCall|null
@@ -174,7 +174,7 @@ CODE_SAMPLE
         if (!$this->controllerAnalyzer->isController($methodCall->var)) {
             return null;
         }
-        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 1, 'Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 1, 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
     }
     /**
      * @return \PhpParser\Node\Expr\New_|null
@@ -184,6 +184,6 @@ CODE_SAMPLE
         if (!$this->isObjectType($new->class, $this->responseObjectType)) {
             return null;
         }
-        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($new, 1, 'Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
+        return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($new, 1, 'RectorPrefix20220607\\Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
     }
 }

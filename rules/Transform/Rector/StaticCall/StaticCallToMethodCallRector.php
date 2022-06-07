@@ -70,7 +70,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new StaticCallToMethodCall('Nette\\Utils\\FileSystem', 'write', 'Symplify\\SmartFileSystem\\SmartFileSystem', 'dumpFile')])]);
+, [new StaticCallToMethodCall('RectorPrefix20220607\\Nette\\Utils\\FileSystem', 'write', 'RectorPrefix20220607\\Symplify\\SmartFileSystem\\SmartFileSystem', 'dumpFile')])]);
     }
     /**
      * @return array<class-string<Node>>

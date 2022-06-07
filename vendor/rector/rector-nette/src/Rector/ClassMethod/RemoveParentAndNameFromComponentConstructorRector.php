@@ -61,7 +61,7 @@ final class RemoveParentAndNameFromComponentConstructorRector extends AbstractRe
         $this->paramFinder = $paramFinder;
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
-        $this->controlObjectType = new ObjectType('Nette\\Application\\UI\\Control');
+        $this->controlObjectType = new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Control');
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -108,7 +108,7 @@ CODE_SAMPLE
         if ($node instanceof StaticCall) {
             return $this->refactorStaticCall($node);
         }
-        if ($this->isObjectType($node->class, new ObjectType('Nette\\Application\\UI\\Control'))) {
+        if ($this->isObjectType($node->class, new ObjectType('RectorPrefix20220607\\Nette\\Application\\UI\\Control'))) {
             $this->refactorNew($node);
             return $node;
         }
@@ -181,7 +181,7 @@ CODE_SAMPLE
             return \false;
         }
         // presenter is not a component
-        if ($classReflection->isSubclassOf('Nette\\Application\\UI\\Presenter')) {
+        if ($classReflection->isSubclassOf('RectorPrefix20220607\\Nette\\Application\\UI\\Presenter')) {
             return \false;
         }
         return $classReflection->isSubclassOf($this->controlObjectType->getClassName());
@@ -192,7 +192,7 @@ CODE_SAMPLE
             if ($this->paramFinder->isInAssign((array) $classMethod->stmts, $param)) {
                 continue;
             }
-            if ($this->isObjectType($param, new ObjectType('Nette\\ComponentModel\\IContainer'))) {
+            if ($this->isObjectType($param, new ObjectType('RectorPrefix20220607\\Nette\\ComponentModel\\IContainer'))) {
                 $this->removeNode($param);
                 continue;
             }
