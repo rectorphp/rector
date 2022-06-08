@@ -11,13 +11,14 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\MutatingScope;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
  */
@@ -76,6 +77,9 @@ final class ChangedNodeScopeRefresher
             // we'll have to fake-traverse 2 layers up, as PHPStan skips Scope for AttributeGroups and consequently Attributes
             $attributeGroup = new AttributeGroup([$node]);
             $node = new Property(0, [], [], null, [$attributeGroup]);
+        }
+        if ($node instanceof StmtsAwareInterface && $node->stmts !== null) {
+            $node->stmts = \array_values($node->stmts);
         }
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo, $mutatingScope);

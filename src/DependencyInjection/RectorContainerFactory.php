@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection;
 
-use RectorPrefix20220607\Nette\Utils\FileSystem;
-use RectorPrefix20220607\Psr\Container\ContainerInterface;
+use RectorPrefix20220608\Nette\Utils\FileSystem;
+use RectorPrefix20220608\Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220608\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorContainerFactory
 {
     public function createFromBootstrapConfigs(BootstrapConfigs $bootstrapConfigs) : ContainerInterface

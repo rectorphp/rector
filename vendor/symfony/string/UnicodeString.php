@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\String;
+namespace RectorPrefix20220608\Symfony\Component\String;
 
-use RectorPrefix20220607\Symfony\Component\String\Exception\ExceptionInterface;
-use RectorPrefix20220607\Symfony\Component\String\Exception\InvalidArgumentException;
+use RectorPrefix20220608\Symfony\Component\String\Exception\ExceptionInterface;
+use RectorPrefix20220608\Symfony\Component\String\Exception\InvalidArgumentException;
 /**
  * Represents a string of Unicode grapheme clusters encoded as UTF-8.
  *

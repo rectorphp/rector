@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\Config\Definition\Dumper;
+namespace RectorPrefix20220608\Symfony\Component\Config\Definition\Dumper;
 
-use RectorPrefix20220607\Symfony\Component\Config\Definition\ArrayNode;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\BaseNode;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\ConfigurationInterface;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\EnumNode;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\NodeInterface;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\PrototypedArrayNode;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\ScalarNode;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\VariableNode;
-use RectorPrefix20220607\Symfony\Component\Yaml\Inline;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\ArrayNode;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\BaseNode;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\EnumNode;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\PrototypedArrayNode;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\ScalarNode;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\VariableNode;
+use RectorPrefix20220608\Symfony\Component\Yaml\Inline;
 /**
  * Dumps a Yaml reference configuration for the given configuration/node instance.
  *

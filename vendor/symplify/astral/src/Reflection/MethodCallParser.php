@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607\Symplify\Astral\Reflection;
+namespace RectorPrefix20220608\Symplify\Astral\Reflection;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -9,7 +9,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
-use RectorPrefix20220607\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20220608\Symplify\Astral\Naming\SimpleNameResolver;
 /**
  * @api
  */

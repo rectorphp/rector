@@ -10,7 +10,7 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20220607\Symplify\Skipper\Skipper\Skipper;
+use RectorPrefix20220608\Symplify\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
     /**

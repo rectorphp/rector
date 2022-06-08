@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607\Symplify\SmartFileSystem\Normalizer;
+namespace RectorPrefix20220608\Symplify\SmartFileSystem\Normalizer;
 
-use RectorPrefix20220607\Nette\Utils\Strings;
+use RectorPrefix20220608\Nette\Utils\Strings;
 /**
  * @api
  *

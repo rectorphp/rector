@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607\Symplify\Skipper\Matcher;
+namespace RectorPrefix20220608\Symplify\Skipper\Matcher;
 
-use RectorPrefix20220607\Symplify\Skipper\FileSystem\FnMatchPathNormalizer;
-use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220608\Symplify\Skipper\FileSystem\FnMatchPathNormalizer;
+use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoMatcher
 {
     /**

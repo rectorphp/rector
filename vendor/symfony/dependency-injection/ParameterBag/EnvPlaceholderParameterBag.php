@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\DependencyInjection\ParameterBag;
+namespace RectorPrefix20220608\Symfony\Component\DependencyInjection\ParameterBag;
 
-use RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\RuntimeException;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

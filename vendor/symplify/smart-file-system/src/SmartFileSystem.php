@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607\Symplify\SmartFileSystem;
+namespace RectorPrefix20220608\Symplify\SmartFileSystem;
 
-use RectorPrefix20220607\Nette\Utils\Strings;
-use RectorPrefix20220607\Symfony\Component\Filesystem\Exception\IOException;
-use RectorPrefix20220607\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix20220608\Nette\Utils\Strings;
+use RectorPrefix20220608\Symfony\Component\Filesystem\Exception\IOException;
+use RectorPrefix20220608\Symfony\Component\Filesystem\Filesystem;
 /**
  * @see \Symplify\SmartFileSystem\Tests\SmartFileSystem\SmartFileSystemTest
  */

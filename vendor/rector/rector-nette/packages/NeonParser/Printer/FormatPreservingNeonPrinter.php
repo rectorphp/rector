@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser\Printer;
 
-use RectorPrefix20220607\Nette\Neon\Node;
-use RectorPrefix20220607\Nette\Utils\Strings;
+use RectorPrefix20220608\Nette\Neon\Node;
+use RectorPrefix20220608\Nette\Utils\Strings;
 final class FormatPreservingNeonPrinter
 {
     /**

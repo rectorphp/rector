@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\DependencyInjection\Argument;
+namespace RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument;
 
-use RectorPrefix20220607\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * Represents a service wrapped in a memoizing closure.
  *

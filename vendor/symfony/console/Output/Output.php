@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\Console\Output;
+namespace RectorPrefix20220608\Symfony\Component\Console\Output;
 
-use RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix20220607\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20220608\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix20220608\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * Base class for output classes.
  *

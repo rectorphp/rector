@@ -5,12 +5,12 @@ namespace Rector\Core\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Core\Util\StringUtils;
-use RectorPrefix20220607\Symfony\Component\Finder\Finder;
-use RectorPrefix20220607\Symfony\Component\Finder\SplFileInfo;
-use RectorPrefix20220607\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
-use RectorPrefix20220607\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix20220607\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220608\Symfony\Component\Finder\Finder;
+use RectorPrefix20220608\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix20220608\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
+use RectorPrefix20220608\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix20220608\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
  */

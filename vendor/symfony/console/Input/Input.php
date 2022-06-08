@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\Console\Input;
+namespace RectorPrefix20220608\Symfony\Component\Console\Input;
 
-use RectorPrefix20220607\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20220607\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix20220608\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220608\Symfony\Component\Console\Exception\RuntimeException;
 /**
  * Input is the base class for all concrete Input classes.
  *

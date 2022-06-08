@@ -20,7 +20,7 @@ use Rector\Core\Provider\CurrentFileProvider;
 use Rector\NodeRemoval\BreakingRemovalGuard;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
-use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
 final class NodesToRemoveCollector implements NodeCollectorInterface
 {
     /**

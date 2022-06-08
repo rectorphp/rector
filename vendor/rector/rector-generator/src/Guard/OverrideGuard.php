@@ -5,8 +5,8 @@ namespace Rector\RectorGenerator\Guard;
 
 use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
-use RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220608\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
 final class OverrideGuard
 {
     /**

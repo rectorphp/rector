@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix20220608\Symfony\Component\Finder\Iterator;
 
-use RectorPrefix20220607\Symfony\Component\Finder\Exception\AccessDeniedException;
-use RectorPrefix20220607\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix20220608\Symfony\Component\Finder\Exception\AccessDeniedException;
+use RectorPrefix20220608\Symfony\Component\Finder\SplFileInfo;
 /**
  * Extends the \RecursiveDirectoryIterator to support relative paths.
  *

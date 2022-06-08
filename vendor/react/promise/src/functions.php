@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220607\React\Promise;
+namespace RectorPrefix20220608\React\Promise;
 
 /**
  * Creates a promise for the supplied `$promiseOrValue`.
@@ -276,7 +276,7 @@ function _checkTypehint(callable $callback, $object)
     }
     $expectedException = $parameters[0];
     // PHP before v8 used an easy API:
-    if (\PHP_VERSION_ID < 70100 || \defined('RectorPrefix20220607\\HHVM_VERSION')) {
+    if (\PHP_VERSION_ID < 70100 || \defined('RectorPrefix20220608\\HHVM_VERSION')) {
         if (!$expectedException->getClass()) {
             return \true;
         }

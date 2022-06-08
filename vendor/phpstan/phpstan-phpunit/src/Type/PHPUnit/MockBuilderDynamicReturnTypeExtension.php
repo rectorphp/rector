@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
-use RectorPrefix20220607\PHPUnit\Framework\MockObject\MockBuilder;
+use RectorPrefix20220608\PHPUnit\Framework\MockObject\MockBuilder;
 use function in_array;
 class MockBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {

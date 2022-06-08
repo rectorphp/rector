@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Latte\Parser;
 
-use RectorPrefix20220607\Nette\Utils\Strings;
+use RectorPrefix20220608\Nette\Utils\Strings;
 use Rector\Nette\ValueObject\LatteVariableType;
 final class VarTypeParser
 {

@@ -6,7 +6,7 @@ namespace Rector\Testing\PHPUnit;
 use Iterator;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
-use RectorPrefix20220607\Psr\Container\ContainerInterface;
+use RectorPrefix20220608\Psr\Container\ContainerInterface;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Autoloading\AdditionalAutoloader;
@@ -18,11 +18,11 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
 use Rector\Testing\PHPUnit\Behavior\MultipleFilesChangedTrait;
-use RectorPrefix20220607\Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
-use RectorPrefix20220607\Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
-use RectorPrefix20220607\Symplify\EasyTesting\StaticFixtureSplitter;
-use RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220608\Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
+use RectorPrefix20220608\Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
+use RectorPrefix20220608\Symplify\EasyTesting\StaticFixtureSplitter;
+use RectorPrefix20220608\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTestCase implements RectorTestInterface
 {
     use MovingFilesTrait;

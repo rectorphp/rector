@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\ArrayItem;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix20220607\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix20220607\Webmozart\Assert\Assert;
+use RectorPrefix20220608\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220608\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<mixed[]>
  */

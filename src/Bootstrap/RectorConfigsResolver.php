@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\Bootstrap;
 
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
-use RectorPrefix20220607\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20220607\Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix20220608\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20220608\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 final class RectorConfigsResolver
 {
     public function provide() : BootstrapConfigs

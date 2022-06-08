@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220607\Tracy;
+namespace RectorPrefix20220608\Tracy;
 
-use RectorPrefix20220607\Nette;
+use RectorPrefix20220608\Nette;
 /**
  * Rendering helpers for Debugger.
  */

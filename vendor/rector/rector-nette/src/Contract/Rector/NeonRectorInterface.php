@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Contract\Rector;
 
-use RectorPrefix20220607\Nette\Neon\Node;
+use RectorPrefix20220608\Nette\Neon\Node;
 use Rector\Core\Contract\Rector\RectorInterface;
 /**
  * @template TNode as Node

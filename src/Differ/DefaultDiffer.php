@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\Differ;
 
-use RectorPrefix20220607\SebastianBergmann\Diff\Differ;
-use RectorPrefix20220607\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
+use RectorPrefix20220608\SebastianBergmann\Diff\Differ;
+use RectorPrefix20220608\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
 final class DefaultDiffer
 {
     /**

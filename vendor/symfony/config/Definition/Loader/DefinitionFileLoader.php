@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\Config\Definition\Loader;
+namespace RectorPrefix20220608\Symfony\Component\Config\Definition\Loader;
 
-use RectorPrefix20220607\Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
-use RectorPrefix20220607\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix20220607\Symfony\Component\Config\Loader\FileLoader;
-use RectorPrefix20220607\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+use RectorPrefix20220608\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix20220608\Symfony\Component\Config\Loader\FileLoader;
+use RectorPrefix20220608\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * DefinitionFileLoader loads config definitions from a PHP file.
  *

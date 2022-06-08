@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix20220607\React\Promise\Timer;
+namespace RectorPrefix20220608\React\Promise\Timer;
 
-use RectorPrefix20220607\React\EventLoop\Loop;
-use RectorPrefix20220607\React\EventLoop\LoopInterface;
-use RectorPrefix20220607\React\Promise\CancellablePromiseInterface;
-use RectorPrefix20220607\React\Promise\Promise;
-use RectorPrefix20220607\React\Promise\PromiseInterface;
+use RectorPrefix20220608\React\EventLoop\Loop;
+use RectorPrefix20220608\React\EventLoop\LoopInterface;
+use RectorPrefix20220608\React\Promise\CancellablePromiseInterface;
+use RectorPrefix20220608\React\Promise\Promise;
+use RectorPrefix20220608\React\Promise\PromiseInterface;
 /**
  * Cancel operations that take *too long*.
  *
@@ -143,7 +143,7 @@ function timeout(PromiseInterface $promise, $time, LoopInterface $loop = null)
     // cancelling this promise will only try to cancel the input promise,
     // thus leaving responsibility to the input promise.
     $canceller = null;
-    if ($promise instanceof CancellablePromiseInterface || !\interface_exists('RectorPrefix20220607\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
+    if ($promise instanceof CancellablePromiseInterface || !\interface_exists('RectorPrefix20220608\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
         // pass promise by reference to clean reference after cancellation handler
         // has been invoked once in order to avoid garbage references in call stack.
         $canceller = function () use(&$promise) {
@@ -178,7 +178,7 @@ function timeout(PromiseInterface $promise, $time, LoopInterface $loop = null)
             $reject(new TimeoutException($time, 'Timed out after ' . $time . ' seconds'));
             // try to invoke cancellation handler of input promise and then clean
             // reference in order to avoid garbage references in call stack.
-            if ($promise instanceof CancellablePromiseInterface || !\interface_exists('RectorPrefix20220607\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
+            if ($promise instanceof CancellablePromiseInterface || !\interface_exists('RectorPrefix20220608\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
                 $promise->cancel();
             }
             $promise = null;

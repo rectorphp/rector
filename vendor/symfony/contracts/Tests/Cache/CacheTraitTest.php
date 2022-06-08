@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Contracts\Tests\Cache;
+namespace RectorPrefix20220608\Symfony\Contracts\Tests\Cache;
 
 use PHPUnit\Framework\TestCase;
-use RectorPrefix20220607\Psr\Cache\CacheItemInterface;
-use RectorPrefix20220607\Psr\Cache\CacheItemPoolInterface;
-use RectorPrefix20220607\Symfony\Contracts\Cache\CacheTrait;
+use RectorPrefix20220608\Psr\Cache\CacheItemInterface;
+use RectorPrefix20220608\Psr\Cache\CacheItemPoolInterface;
+use RectorPrefix20220608\Symfony\Contracts\Cache\CacheTrait;
 /**
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
  */

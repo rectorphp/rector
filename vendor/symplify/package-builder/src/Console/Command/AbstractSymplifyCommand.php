@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607\Symplify\PackageBuilder\Console\Command;
+namespace RectorPrefix20220608\Symplify\PackageBuilder\Console\Command;
 
-use RectorPrefix20220607\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220607\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220607\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix20220607\Symplify\PackageBuilder\ValueObject\Option;
-use RectorPrefix20220607\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20220607\Symplify\SmartFileSystem\Finder\SmartFinder;
-use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220608\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220608\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20220608\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220608\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220608\Symplify\PackageBuilder\ValueObject\Option;
+use RectorPrefix20220608\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20220608\Symplify\SmartFileSystem\Finder\SmartFinder;
+use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileSystem;
 abstract class AbstractSymplifyCommand extends Command
 {
     /**

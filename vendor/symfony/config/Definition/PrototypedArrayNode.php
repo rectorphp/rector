@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220607\Symfony\Component\Config\Definition;
+namespace RectorPrefix20220608\Symfony\Component\Config\Definition;
 
-use RectorPrefix20220607\Symfony\Component\Config\Definition\Exception\DuplicateKeyException;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\Exception\Exception;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix20220607\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\Exception\DuplicateKeyException;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\Exception\Exception;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix20220608\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
 /**
  * Represents a prototyped Array node in the config tree.
  *

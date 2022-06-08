@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607\Symplify\Skipper\SkipCriteriaResolver;
+namespace RectorPrefix20220608\Symplify\Skipper\SkipCriteriaResolver;
 
-use RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220607\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix20220608\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220608\Symplify\Skipper\ValueObject\Option;
 final class SkippedMessagesResolver
 {
     /**

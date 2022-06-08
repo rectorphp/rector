@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607;
+namespace RectorPrefix20220608;
 
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
-use RectorPrefix20220607\Tracy\Dumper;
+use RectorPrefix20220608\Tracy\Dumper;
 if (!\function_exists('dump_with_depth')) {
     /**
      * @param mixed $value

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607\Symplify\Astral\Reflection;
+namespace RectorPrefix20220608\Symplify\Astral\Reflection;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -12,7 +12,7 @@ use PHPStan\Reflection\MethodReflection;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
-use RectorPrefix20220607\Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix20220608\Symplify\Astral\PhpParser\SmartPhpParser;
 use Throwable;
 /**
  * @api

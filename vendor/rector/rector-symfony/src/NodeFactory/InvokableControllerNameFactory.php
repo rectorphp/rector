@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeFactory;
 
-use RectorPrefix20220607\Nette\Utils\Strings;
+use RectorPrefix20220608\Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 final class InvokableControllerNameFactory
 {

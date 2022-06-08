@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220607;
+namespace RectorPrefix20220608;
 
-use RectorPrefix20220607\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220607\Symplify\ComposerJsonManipulator\ValueObject\Option;
-use RectorPrefix20220607\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20220607\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220607\Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use RectorPrefix20220607\Symplify\SmartFileSystem\SmartFileSystem;
-use function RectorPrefix20220607\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix20220608\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220608\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20220608\Symplify\ComposerJsonManipulator\ValueObject\Option;
+use RectorPrefix20220608\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20220608\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220608\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileSystem;
+use function RectorPrefix20220608\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $containerConfigurator) : void {
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::INLINE_SECTIONS, ['keywords']);
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire();
-    $services->load('RectorPrefix20220607\Symplify\\ComposerJsonManipulator\\', __DIR__ . '/../src');
+    $services->load('RectorPrefix20220608\Symplify\\ComposerJsonManipulator\\', __DIR__ . '/../src');
     $services->set(SmartFileSystem::class);
     $services->set(PrivatesCaller::class);
     $services->set(ParameterProvider::class)->args([service('service_container')]);

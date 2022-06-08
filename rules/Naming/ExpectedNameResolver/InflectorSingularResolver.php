@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Naming\ExpectedNameResolver;
 
-use RectorPrefix20220607\Doctrine\Inflector\Inflector;
-use RectorPrefix20220607\Nette\Utils\Strings;
+use RectorPrefix20220608\Doctrine\Inflector\Inflector;
+use RectorPrefix20220608\Nette\Utils\Strings;
 use Rector\Core\Util\StringUtils;
 /**
  * @see \Rector\Core\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
