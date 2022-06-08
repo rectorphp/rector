@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\MutatingScope;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
@@ -67,6 +68,10 @@ final class ChangedNodeScopeRefresher
             // we'll have to fake-traverse 2 layers up, as PHPStan skips Scope for AttributeGroups and consequently Attributes
             $attributeGroup = new AttributeGroup([$node]);
             $node = new Property(0, [], [], null, [$attributeGroup]);
+        }
+
+        if ($node instanceof StmtsAwareInterface && $node->stmts !== null) {
+            $node->stmts = array_values($node->stmts);
         }
 
         $stmts = $this->resolveStmts($node);
