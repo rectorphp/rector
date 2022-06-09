@@ -47,7 +47,9 @@ jobs:
 
             # test with current commit in a pull-request
             -
-                run: composer require rector/rector-src dev-main#${{github.event.pull_request.head.sha}} --no-update
+                run: |
+                    composer require phpstan/phpdoc-parser:1.5.* --no-update
+                    composer require rector/rector-src dev-main#${{github.event.pull_request.head.sha}} --no-update
                 if: ${{ github.event_name == 'pull_request' }}
 
             -   run: composer install --ansi
