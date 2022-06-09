@@ -120,9 +120,6 @@ PHP;
         $stmtsAwareInterface = new SplFileInfo(__DIR__ . '/../src/Contract/PhpParser/Node/StmtsAwareInterface.php');
         array_splice($fileInfos, 1, 0, [$stmtsAwareInterface]);
 
-        // hotfix for phpdoc-parser 1.6, possibly waits on phpstan release with this package, see https://github.com/phpstan/phpdoc-parser/issues/132
-        $fileInfos[] = new SmartFileInfo('vendor/phpstan/phpdoc-parser/src/Parser/TokenIterator.php');
-
         // 3. create preload.php from provided files
         $preloadFileContent = $this->createPreloadFileContent($fileInfos);
 
