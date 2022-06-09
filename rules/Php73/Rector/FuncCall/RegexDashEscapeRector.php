@@ -40,6 +40,10 @@ final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersio
      */
     private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\\[)-(\\\\(w|s|d)[.*]?)\\]#i';
     /**
+     * @var bool
+     */
+    private $hasChanged = \false;
+    /**
      * @readonly
      * @var \Rector\Core\Php\Regex\RegexPatternArgumentManipulator
      */
@@ -78,18 +82,16 @@ CODE_SAMPLE
         if ($regexArguments === []) {
             return null;
         }
-        $hasChanged = \false;
         foreach ($regexArguments as $regexArgument) {
             if (StringUtils::isMatch($regexArgument->value, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX)) {
                 continue;
             }
             $this->escapeStringNode($regexArgument);
-            $hasChanged = \true;
         }
-        if ($hasChanged) {
-            return $node;
+        if (!$this->hasChanged) {
+            return null;
         }
-        return null;
+        return $node;
     }
     private function escapeStringNode(String_ $string) : void
     {
@@ -98,12 +100,14 @@ CODE_SAMPLE
             $string->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX, '$1\\-');
             // helped needed to skip re-escaping regular expression
             $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, \true);
+            $this->hasChanged = \true;
             return;
         }
         if (StringUtils::isMatch($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_REGEX)) {
             $string->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_REGEX, '\\-$1]');
             // helped needed to skip re-escaping regular expression
             $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, \true);
+            $this->hasChanged = \true;
         }
     }
 }

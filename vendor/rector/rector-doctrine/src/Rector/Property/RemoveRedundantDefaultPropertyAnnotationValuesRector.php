@@ -113,20 +113,16 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
         if ($phpDocInfo instanceof PhpDocInfo) {
             foreach ($this->defaultAnnotationArgValues as $defaultAnnotationArgValue) {
-                $this->refactorAnnotation($phpDocInfo, $defaultAnnotationArgValue->getAnnotationClass(), $defaultAnnotationArgValue->getArgName(), $defaultAnnotationArgValue->getDefaultValue());
+                $this->refactorAnnotation($phpDocInfo, $defaultAnnotationArgValue);
             }
         }
     }
-    /**
-     * @param class-string $annotationClass
-     * @param string|bool|int $defaultValue
-     */
-    private function refactorAnnotation(PhpDocInfo $phpDocInfo, string $annotationClass, string $argName, $defaultValue) : void
+    private function refactorAnnotation(PhpDocInfo $phpDocInfo, DefaultAnnotationArgValue $defaultAnnotationArgValue) : void
     {
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass($annotationClass);
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass($defaultAnnotationArgValue->getAnnotationClass());
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }
-        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $doctrineAnnotationTagValueNode, $argName, $defaultValue);
+        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $doctrineAnnotationTagValueNode, $defaultAnnotationArgValue->getArgName(), $defaultAnnotationArgValue->getDefaultValue());
     }
 }

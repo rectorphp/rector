@@ -111,6 +111,9 @@ CODE_SAMPLE
             if ($fullyQualified === $value) {
                 continue;
             }
+            if ($fullyQualified === null) {
+                continue;
+            }
             $arg->value = $this->nodeFactory->createClassConstFetch($fullyQualified, 'class');
             return $property;
         }
