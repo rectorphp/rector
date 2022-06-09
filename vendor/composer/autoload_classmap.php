@@ -1547,6 +1547,7 @@ return array(
     'Rector\\Core\\Error\\ExceptionCorrector' => $baseDir . '/src/Error/ExceptionCorrector.php',
     'Rector\\Core\\Exception\\Cache\\CachingException' => $baseDir . '/src/Exception/Cache/CachingException.php',
     'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => $baseDir . '/src/Exception/Configuration/InvalidConfigurationException.php',
+    'Rector\\Core\\Exception\\DeprecatedException' => $baseDir . '/src/Exception/DeprecatedException.php',
     'Rector\\Core\\Exception\\NotImplementedYetException' => $baseDir . '/src/Exception/NotImplementedYetException.php',
     'Rector\\Core\\Exception\\ShouldNotHappenException' => $baseDir . '/src/Exception/ShouldNotHappenException.php',
     'Rector\\Core\\Exception\\VersionException' => $baseDir . '/src/Exception/VersionException.php',
