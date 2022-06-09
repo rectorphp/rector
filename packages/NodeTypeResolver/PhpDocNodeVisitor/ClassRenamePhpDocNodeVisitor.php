@@ -6,6 +6,7 @@ namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
 use PhpParser\Node as PhpParserNode;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
@@ -63,6 +64,11 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 
         $virtualNode = $phpParserNode->getAttribute(AttributeKey::VIRTUAL_NODE);
         if ($virtualNode === true) {
+            return null;
+        }
+
+        $previousNode = $phpParserNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($previousNode instanceof FullyQualified) {
             return null;
         }
 
