@@ -64,6 +64,9 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, new ObjectType('Illuminate\\Database\\Migrations\\Migration'))) {
             return null;
         }
+        if ($node->isAbstract()) {
+            return null;
+        }
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
