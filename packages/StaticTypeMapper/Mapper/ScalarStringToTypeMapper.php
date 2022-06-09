@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Rector\StaticTypeMapper\Mapper;
 
 use Nette\Utils\Strings;
+use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\CallableType;
@@ -29,6 +30,7 @@ final class ScalarStringToTypeMapper
      */
     private const SCALAR_NAME_BY_TYPE = [
         StringType::class => ['string'],
+        AccessoryNonEmptyStringType::class => ['non-empty-string'],
         ClassStringType::class => ['class-string'],
         FloatType::class => ['float', 'real', 'double'],
         IntegerType::class => ['int', 'integer'],
