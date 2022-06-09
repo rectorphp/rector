@@ -7,15 +7,10 @@ namespace Rector\Core\PhpParser\Parser;
 use Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
-use PhpParser\Parser;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Symplify\SmartFileSystem\SmartFileSystem;
@@ -91,10 +86,6 @@ final class InlineCodeParser
             return $this->stringify($expr->left) . $this->stringify($expr->right);
         }
 
-        if ($expr instanceof Variable || $expr instanceof PropertyFetch || $expr instanceof StaticPropertyFetch) {
-            return $this->nodePrinter->print($expr);
-        }
-
-        throw new ShouldNotHappenException($expr::class . ' ' . __METHOD__);
+        return $this->nodePrinter->print($expr);
     }
 }
