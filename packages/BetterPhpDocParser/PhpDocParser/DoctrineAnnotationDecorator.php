@@ -181,10 +181,10 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
             return \true;
         }
         do {
-            if ($composedTokenIterator->isCurrentTokenTypes([Lexer::TOKEN_OPEN_CURLY_BRACKET, Lexer::TOKEN_OPEN_PARENTHESES]) || \strpos($composedTokenIterator->currentTokenValue(), '(') !== \false) {
+            if ($composedTokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET, Lexer::TOKEN_OPEN_PARENTHESES) || \strpos($composedTokenIterator->currentTokenValue(), '(') !== \false) {
                 ++$openBracketCount;
             }
-            if ($composedTokenIterator->isCurrentTokenTypes([Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_CLOSE_PARENTHESES]) || \strpos($composedTokenIterator->currentTokenValue(), ')') !== \false) {
+            if ($composedTokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_CLOSE_PARENTHESES) || \strpos($composedTokenIterator->currentTokenValue(), ')') !== \false) {
                 ++$closeBracketCount;
             }
             $composedTokenIterator->next();

@@ -46,9 +46,9 @@ class TokenIterator
     {
         return $this->tokens[$this->index][Lexer::VALUE_OFFSET] === $tokenValue;
     }
-    public function isCurrentTokenType(int $tokenType) : bool
+    public function isCurrentTokenType(int ...$tokenType) : bool
     {
-        return $this->tokens[$this->index][Lexer::TYPE_OFFSET] === $tokenType;
+        return in_array($this->tokens[$this->index][Lexer::TYPE_OFFSET], $tokenType, \true);
     }
     public function isPrecededByHorizontalWhitespace() : bool
     {

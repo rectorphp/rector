@@ -58,6 +58,15 @@ class PhpDocNode implements Node
         });
     }
     /**
+     * @return TypelessParamTagValueNode[]
+     */
+    public function getTypelessParamTagValues(string $tagName = '@param') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\TypelessParamTagValueNode;
+        });
+    }
+    /**
      * @return TemplateTagValueNode[]
      */
     public function getTemplateTagValues(string $tagName = '@template') : array

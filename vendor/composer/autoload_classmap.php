@@ -41,6 +41,7 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ThrowsTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ThrowsTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\TypeAliasImportTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/TypeAliasImportTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\TypeAliasTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/TypeAliasTagValueNode.php',
+    'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\TypelessParamTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/TypelessParamTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\UsesTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/UsesTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\VarTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/VarTagValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeItemNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeItemNode.php',

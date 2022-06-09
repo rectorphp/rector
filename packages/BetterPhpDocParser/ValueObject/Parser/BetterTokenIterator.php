@@ -46,18 +46,6 @@ final class BetterTokenIterator extends TokenIterator
         }
         return \false;
     }
-    /**
-     * @param int[] $tokenTypes
-     */
-    public function isCurrentTokenTypes(array $tokenTypes) : bool
-    {
-        foreach ($tokenTypes as $tokenType) {
-            if ($this->isCurrentTokenType($tokenType)) {
-                return \true;
-            }
-        }
-        return \false;
-    }
     public function isTokenTypeOnPosition(int $tokenType, int $position) : bool
     {
         $tokens = $this->getTokens();
