@@ -219,7 +219,6 @@ final class EregToPcreTransformer
                 }
                 if ($i < $l && $s[$i] === '-') {
                     $b = $s[++$i];
-                    ++$i;
                     if ($b === ']') {
                         $cls .= $this->_ere2pcre_escape($a) . '\\-';
                         break;
@@ -228,6 +227,7 @@ final class EregToPcreTransformer
                         throw new InvalidEregException($errorMessage);
                     }
                     $cls .= $this->_ere2pcre_escape($a) . '-' . $this->_ere2pcre_escape($b);
+                    ++$i;
                 } else {
                     $cls .= $this->_ere2pcre_escape($a);
                 }
