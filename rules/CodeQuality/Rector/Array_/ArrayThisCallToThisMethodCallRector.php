@@ -120,8 +120,8 @@ CODE_SAMPLE
             return new MethodCall(new Variable('this'), $arrayCallable->getMethod());
         }
 
-        $methodReflection = $classReflection->getNativeMethod($arrayCallable->getMethod());
-        return $this->nodeFactory->createClosureFromMethodReflection($methodReflection);
+        $extendedMethodReflection = $classReflection->getNativeMethod($arrayCallable->getMethod());
+        return $this->nodeFactory->createClosureFromMethodReflection($extendedMethodReflection);
     }
 
     private function isAssignedToNetteMagicOnProperty(Array_ $array): bool
