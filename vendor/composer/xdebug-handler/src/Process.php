@@ -9,9 +9,9 @@
  * the LICENSE file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix20220608\Composer\XdebugHandler;
+namespace RectorPrefix20220609\Composer\XdebugHandler;
 
-use RectorPrefix20220608\Composer\Pcre\Preg;
+use RectorPrefix20220609\Composer\Pcre\Preg;
 /**
  * Process utility functions
  *

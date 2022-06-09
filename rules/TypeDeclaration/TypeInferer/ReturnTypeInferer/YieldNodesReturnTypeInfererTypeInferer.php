@@ -19,7 +19,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use RectorPrefix20220608\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220609\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class YieldNodesReturnTypeInfererTypeInferer implements ReturnTypeInfererInterface
 {
     /**

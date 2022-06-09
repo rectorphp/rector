@@ -18,7 +18,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use ReflectionClass;
-use RectorPrefix20220608\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220609\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * Factory so Symfony app can use services from PHPStan container
  */

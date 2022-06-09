@@ -7,7 +7,7 @@ use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\Guard\OverrideGuard;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
-use RectorPrefix20220608\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220609\Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * @see \Rector\RectorGenerator\Tests\RectorGenerator\RectorGeneratorTest
  */

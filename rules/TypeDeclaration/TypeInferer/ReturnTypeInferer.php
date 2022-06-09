@@ -37,7 +37,7 @@ use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\Sorter\PriorityAwareSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeNormalizer;
-use RectorPrefix20220608\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220609\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ReturnTypeInferer
 {
     /**

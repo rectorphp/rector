@@ -18,11 +18,11 @@ use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use RectorPrefix20220608\Symfony\Component\Console\Application;
-use RectorPrefix20220608\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220608\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220608\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Symfony\Component\Console\Application;
+use RectorPrefix20220609\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220609\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220609\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**

@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220608\Nette\Neon\Node;
+namespace RectorPrefix20220609\Nette\Neon\Node;
 
-use RectorPrefix20220608\Nette;
-use RectorPrefix20220608\Nette\Neon\Node;
+use RectorPrefix20220609\Nette;
+use RectorPrefix20220609\Nette\Neon\Node;
 /** @internal */
 final class StringNode extends Node
 {

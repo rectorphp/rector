@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix20220608\React\Stream;
+namespace RectorPrefix20220609\React\Stream;
 
-use RectorPrefix20220608\Evenement\EventEmitterInterface;
+use RectorPrefix20220609\Evenement\EventEmitterInterface;
 /**
  * The `ReadableStreamInterface` is responsible for providing an interface for
  * read-only streams and the readable side of duplex streams.

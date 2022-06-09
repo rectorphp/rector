@@ -8,7 +8,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220608\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220609\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocTypeRenamer
 {
     /**

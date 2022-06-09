@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220608\Symplify\EasyTesting;
+namespace RectorPrefix20220609\Symplify\EasyTesting;
 
-use RectorPrefix20220608\Nette\Utils\Strings;
-use RectorPrefix20220608\Symplify\EasyTesting\ValueObject\InputAndExpected;
-use RectorPrefix20220608\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpected;
-use RectorPrefix20220608\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpectedFileInfo;
-use RectorPrefix20220608\Symplify\EasyTesting\ValueObject\SplitLine;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220609\Nette\Utils\Strings;
+use RectorPrefix20220609\Symplify\EasyTesting\ValueObject\InputAndExpected;
+use RectorPrefix20220609\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpected;
+use RectorPrefix20220609\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpectedFileInfo;
+use RectorPrefix20220609\Symplify\EasyTesting\ValueObject\SplitLine;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @api
  */

@@ -23,7 +23,7 @@ use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
-use RectorPrefix20220608\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220609\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

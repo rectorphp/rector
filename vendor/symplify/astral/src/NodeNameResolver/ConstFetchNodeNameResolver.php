@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220608\Symplify\Astral\NodeNameResolver;
+namespace RectorPrefix20220609\Symplify\Astral\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ConstFetch;
-use RectorPrefix20220608\Symplify\Astral\Contract\NodeNameResolverInterface;
+use RectorPrefix20220609\Symplify\Astral\Contract\NodeNameResolverInterface;
 final class ConstFetchNodeNameResolver implements NodeNameResolverInterface
 {
     public function match(Node $node) : bool

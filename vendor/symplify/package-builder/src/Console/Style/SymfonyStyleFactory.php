@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220608\Symplify\PackageBuilder\Console\Style;
+namespace RectorPrefix20220609\Symplify\PackageBuilder\Console\Style;
 
-use RectorPrefix20220608\Symfony\Component\Console\Application;
-use RectorPrefix20220608\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix20220608\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix20220608\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220608\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220608\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix20220608\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20220609\Symfony\Component\Console\Application;
+use RectorPrefix20220609\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix20220609\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix20220609\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220609\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220609\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
+use RectorPrefix20220609\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 /**
  * @api
  */

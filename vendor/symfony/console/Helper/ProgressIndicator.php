@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\Symfony\Component\Console\Helper;
+namespace RectorPrefix20220609\Symfony\Component\Console\Helper;
 
-use RectorPrefix20220608\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix20220608\Symfony\Component\Console\Exception\LogicException;
-use RectorPrefix20220608\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220609\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix20220609\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix20220609\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Kevin Bond <kevinbond@gmail.com>
  */

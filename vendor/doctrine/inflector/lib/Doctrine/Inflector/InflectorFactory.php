@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220608\Doctrine\Inflector;
+namespace RectorPrefix20220609\Doctrine\Inflector;
 
-use RectorPrefix20220608\Doctrine\Inflector\Rules\English;
-use RectorPrefix20220608\Doctrine\Inflector\Rules\French;
-use RectorPrefix20220608\Doctrine\Inflector\Rules\NorwegianBokmal;
-use RectorPrefix20220608\Doctrine\Inflector\Rules\Portuguese;
-use RectorPrefix20220608\Doctrine\Inflector\Rules\Spanish;
-use RectorPrefix20220608\Doctrine\Inflector\Rules\Turkish;
+use RectorPrefix20220609\Doctrine\Inflector\Rules\English;
+use RectorPrefix20220609\Doctrine\Inflector\Rules\French;
+use RectorPrefix20220609\Doctrine\Inflector\Rules\NorwegianBokmal;
+use RectorPrefix20220609\Doctrine\Inflector\Rules\Portuguese;
+use RectorPrefix20220609\Doctrine\Inflector\Rules\Spanish;
+use RectorPrefix20220609\Doctrine\Inflector\Rules\Turkish;
 use InvalidArgumentException;
 use function sprintf;
 final class InflectorFactory

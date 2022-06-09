@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220608\Symplify\SymplifyKernel\Tests\ContainerBuilderFactory;
+namespace RectorPrefix20220609\Symplify\SymplifyKernel\Tests\ContainerBuilderFactory;
 
 use PHPUnit\Framework\TestCase;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileSystem;
-use RectorPrefix20220608\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
-use RectorPrefix20220608\Symplify\SymplifyKernel\ContainerBuilderFactory;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220609\Symplify\SymplifyKernel\Config\Loader\ParameterMergingLoaderFactory;
+use RectorPrefix20220609\Symplify\SymplifyKernel\ContainerBuilderFactory;
 final class ContainerBuilderFactoryTest extends TestCase
 {
     public function test() : void

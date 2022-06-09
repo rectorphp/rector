@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220608\Symplify\ComposerJsonManipulator\ValueObject;
+namespace RectorPrefix20220609\Symplify\ComposerJsonManipulator\ValueObject;
 
-use RectorPrefix20220608\Nette\Utils\Arrays;
-use RectorPrefix20220608\Nette\Utils\Strings;
-use RectorPrefix20220608\Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220608\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
+use RectorPrefix20220609\Nette\Utils\Arrays;
+use RectorPrefix20220609\Nette\Utils\Strings;
+use RectorPrefix20220609\Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 /**
  * @api
  * @see \Symplify\ComposerJsonManipulator\Tests\ValueObject\ComposerJsonTest
@@ -733,4 +733,4 @@ final class ComposerJson
  * @api
  * @see \Symplify\ComposerJsonManipulator\Tests\ValueObject\ComposerJsonTest
  */
-\class_alias('RectorPrefix20220608\\Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJson', 'Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJson', \false);
+\class_alias('RectorPrefix20220609\\Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJson', 'Symplify\\ComposerJsonManipulator\\ValueObject\\ComposerJson', \false);

@@ -19,7 +19,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix20220608\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220609\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class NameImporter
 {
     /**

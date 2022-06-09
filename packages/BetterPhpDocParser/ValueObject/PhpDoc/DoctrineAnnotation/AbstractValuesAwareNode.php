@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
-use RectorPrefix20220608\Nette\Utils\Strings;
+use RectorPrefix20220609\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;

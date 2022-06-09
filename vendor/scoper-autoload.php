@@ -7,20 +7,20 @@ $loader = require_once __DIR__.'/autoload.php';
 // Exposed classes. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-classes
 if (!class_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false) && !interface_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false) && !trait_exists('Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator', false)) {
-    spl_autoload_call('RectorPrefix20220608\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator');
+    spl_autoload_call('RectorPrefix20220609\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator');
 }
 if (!class_exists('Symplify\ComposerJsonManipulator\ValueObject\ComposerJson', false) && !interface_exists('Symplify\ComposerJsonManipulator\ValueObject\ComposerJson', false) && !trait_exists('Symplify\ComposerJsonManipulator\ValueObject\ComposerJson', false)) {
-    spl_autoload_call('RectorPrefix20220608\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson');
+    spl_autoload_call('RectorPrefix20220609\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson');
 }
 if (!class_exists('Symplify\SmartFileSystem\SmartFileInfo', false) && !interface_exists('Symplify\SmartFileSystem\SmartFileInfo', false) && !trait_exists('Symplify\SmartFileSystem\SmartFileInfo', false)) {
-    spl_autoload_call('RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo');
+    spl_autoload_call('RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo');
 }
 
 // Exposed functions. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-functions
 if (!function_exists('trigger_deprecation')) {
     function trigger_deprecation() {
-        return \RectorPrefix20220608\trigger_deprecation(...func_get_args());
+        return \RectorPrefix20220609\trigger_deprecation(...func_get_args());
     }
 }
 

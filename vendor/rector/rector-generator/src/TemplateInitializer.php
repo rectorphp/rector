@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator;
 
-use RectorPrefix20220608\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220608\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220609\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220609\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileSystem;
 final class TemplateInitializer
 {
     /**

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\Symfony\Component\Config;
+namespace RectorPrefix20220609\Symfony\Component\Config;
 
-use RectorPrefix20220608\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
+use RectorPrefix20220609\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 /**
  * FileLocator uses an array of pre-defined paths to find files.
  *

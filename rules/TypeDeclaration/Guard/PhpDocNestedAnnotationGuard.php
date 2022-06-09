@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Guard;
 
-use RectorPrefix20220608\Nette\Utils\Strings;
+use RectorPrefix20220609\Nette\Utils\Strings;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;

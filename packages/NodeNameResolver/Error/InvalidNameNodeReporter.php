@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
 final class InvalidNameNodeReporter
 {
     /**

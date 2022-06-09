@@ -1,4 +1,4 @@
-# 62 Rules Overview
+# 65 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -37,6 +37,29 @@ Add response content to response code assert, so it is easier to debug
              $response->getStatusCode()
 +            $response->getContent()
          );
+     }
+ }
+```
+
+<br>
+
+## AddRouteAnnotationRector
+
+Collect routes from Symfony project router and add Route annotation to controller action
+
+- class: [`Rector\Symfony\Rector\ClassMethod\AddRouteAnnotationRector`](../src/Rector/ClassMethod/AddRouteAnnotationRector.php)
+
+```diff
+ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
++use Symfony\Component\Routing\Annotation\Route;
+
+ final class SomeController extends AbstractController
+ {
++    /**
++     * @Route(name="homepage", path="/welcome")
++     */
+     public function index()
+     {
      }
  }
 ```
@@ -202,6 +225,23 @@ Change type in CollectionType from alias string to class reference
 +            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
          ]);
      }
+ }
+```
+
+<br>
+
+## CommandPropertyToAttributeRector
+
+Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remove the deprecated properties
+
+- class: [`Rector\Symfony\Rector\Class_\CommandPropertyToAttributeRector`](../src/Rector/Class_/CommandPropertyToAttributeRector.php)
+
+```diff
++#[\Symfony\Component\Console\Attribute\AsCommand('sunshine')]
+ class SunshineCommand extends \Symfony\Component\Console\Command\Command
+ {
+-    /** @var string|null */
+-    public static $defaultName = 'sunshine';
  }
 ```
 
@@ -454,6 +494,40 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
      {
 -        $form = $this->createForm(new TeamType);
 +        $form = $this->createForm(TeamType::class);
+     }
+ }
+```
+
+<br>
+
+## FormTypeWithDependencyToOptionsRector
+
+Move constructor dependency from form type class to an `$options` parameter
+
+- class: [`Rector\Symfony\Rector\Class_\FormTypeWithDependencyToOptionsRector`](../src/Rector/Class_/FormTypeWithDependencyToOptionsRector.php)
+
+```diff
+ use Symfony\Component\Form\AbstractType;
+ use Symfony\Component\Form\Extension\Core\Type\TextType;
+ use Symfony\Component\Form\FormBuilderInterface;
+
+ final class FormTypeWithDependency extends AbstractType
+ {
+-    private Agent $agent;
+-
+-    public function __construct(Agent $agent)
++    public function buildForm(FormBuilderInterface $builder, array $options): void
+     {
+-        $this->agent = $agent;
+-    }
++        $agent = $options['agent'];
+
+-    public function buildForm(FormBuilderInterface $builder, array $options): void
+-    {
+-        if ($this->agent) {
++        if ($agent) {
+             $builder->add('agent', TextType::class);
+         }
      }
  }
 ```

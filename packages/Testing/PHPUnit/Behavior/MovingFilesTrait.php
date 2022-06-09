@@ -6,8 +6,8 @@ namespace Rector\Testing\PHPUnit\Behavior;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220608\Webmozart\Assert\Assert;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Webmozart\Assert\Assert;
 /**
  * @property-read RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
  */

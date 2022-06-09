@@ -5,7 +5,7 @@ namespace Rector\Composer\ValueObject;
 
 use Rector\Composer\Contract\VersionAwareInterface;
 use Rector\Composer\Rector\ChangePackageVersionComposerRector;
-use RectorPrefix20220608\Webmozart\Assert\Assert;
+use RectorPrefix20220609\Webmozart\Assert\Assert;
 final class ReplacePackageAndVersion implements VersionAwareInterface
 {
     /**

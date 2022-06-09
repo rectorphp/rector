@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\ValueObject;
 
-use RectorPrefix20220608\Nette\Utils\Json;
-use RectorPrefix20220608\Nette\Utils\Strings;
+use RectorPrefix20220609\Nette\Utils\Json;
+use RectorPrefix20220609\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\RectorGenerator\Exception\ConfigurationException;

@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220609\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220608\Symfony\Component\Config\Definition\ArrayNode;
-use RectorPrefix20220608\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
-use RectorPrefix20220608\Symfony\Component\Config\Definition\NodeInterface;
-use RectorPrefix20220608\Symfony\Component\Config\Definition\PrototypedArrayNode;
+use RectorPrefix20220609\Symfony\Component\Config\Definition\ArrayNode;
+use RectorPrefix20220609\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
+use RectorPrefix20220609\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix20220609\Symfony\Component\Config\Definition\PrototypedArrayNode;
 /**
  * This class provides a fluent interface for defining an array node.
  *

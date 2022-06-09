@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Naming;
 
-use RectorPrefix20220608\Nette\Utils\Strings;
+use RectorPrefix20220609\Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;

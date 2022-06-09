@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\Neon;
 
-use RectorPrefix20220608\Nette\Neon\Node;
+use RectorPrefix20220609\Nette\Neon\Node;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
 use Rector\Nette\NeonParser\Node\Service_\SetupMethodCall;
 use Rector\Renaming\Collector\MethodCallRenameCollector;

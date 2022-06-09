@@ -22,7 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp56\NodeManipulator\ArgManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220608\Webmozart\Assert\Assert;
+use RectorPrefix20220609\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/argument_unpacking
  *

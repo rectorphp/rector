@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\For_;
 
-use RectorPrefix20220608\Doctrine\Inflector\Inflector;
+use RectorPrefix20220609\Doctrine\Inflector\Inflector;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;

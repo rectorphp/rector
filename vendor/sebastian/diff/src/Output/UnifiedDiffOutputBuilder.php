@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\SebastianBergmann\Diff\Output;
+namespace RectorPrefix20220609\SebastianBergmann\Diff\Output;
 
 use function array_splice;
 use function count;
@@ -21,7 +21,7 @@ use function min;
 use function stream_get_contents;
 use function strlen;
 use function substr;
-use RectorPrefix20220608\SebastianBergmann\Diff\Differ;
+use RectorPrefix20220609\SebastianBergmann\Diff\Differ;
 /**
  * Builds a diff string representation in unified diff format in chunks.
  */

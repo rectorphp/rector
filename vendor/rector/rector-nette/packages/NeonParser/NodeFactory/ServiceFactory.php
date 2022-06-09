@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser\NodeFactory;
 
-use RectorPrefix20220608\Nette\Neon\Node\ArrayItemNode;
-use RectorPrefix20220608\Nette\Neon\Node\ArrayNode;
-use RectorPrefix20220608\Nette\Neon\Node\EntityNode;
-use RectorPrefix20220608\Nette\Neon\Node\LiteralNode;
+use RectorPrefix20220609\Nette\Neon\Node\ArrayItemNode;
+use RectorPrefix20220609\Nette\Neon\Node\ArrayNode;
+use RectorPrefix20220609\Nette\Neon\Node\EntityNode;
+use RectorPrefix20220609\Nette\Neon\Node\LiteralNode;
 use Rector\Nette\NeonParser\Node\Service_;
-use RectorPrefix20220608\Nette\Neon\Node;
+use RectorPrefix20220609\Nette\Neon\Node;
 use Rector\Nette\NeonParser\Node\Service_\SetupMethodCall;
 final class ServiceFactory
 {

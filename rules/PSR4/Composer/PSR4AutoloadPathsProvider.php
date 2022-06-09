@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PSR4\Composer;
 
-use RectorPrefix20220608\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
-use RectorPrefix20220608\Symplify\SmartFileSystem\Json\JsonFileSystem;
+use RectorPrefix20220609\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
+use RectorPrefix20220609\Symplify\SmartFileSystem\Json\JsonFileSystem;
 final class PSR4AutoloadPathsProvider
 {
     /**

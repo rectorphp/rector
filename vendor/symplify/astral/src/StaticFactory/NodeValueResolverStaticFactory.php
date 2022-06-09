@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220608\Symplify\Astral\StaticFactory;
+namespace RectorPrefix20220609\Symplify\Astral\StaticFactory;
 
 use PhpParser\NodeFinder;
-use RectorPrefix20220608\Symplify\Astral\NodeFinder\SimpleNodeFinder;
-use RectorPrefix20220608\Symplify\Astral\NodeValue\NodeValueResolver;
-use RectorPrefix20220608\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20220609\Symplify\Astral\NodeFinder\SimpleNodeFinder;
+use RectorPrefix20220609\Symplify\Astral\NodeValue\NodeValueResolver;
+use RectorPrefix20220609\Symplify\PackageBuilder\Php\TypeChecker;
 /**
  * @api
  */

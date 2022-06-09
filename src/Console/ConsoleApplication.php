@@ -3,18 +3,18 @@
 declare (strict_types=1);
 namespace Rector\Core\Console;
 
-use RectorPrefix20220608\Composer\XdebugHandler\XdebugHandler;
+use RectorPrefix20220609\Composer\XdebugHandler\XdebugHandler;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Command\ProcessCommand;
-use RectorPrefix20220608\Symfony\Component\Console\Application;
-use RectorPrefix20220608\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220608\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20220608\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220608\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix20220608\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220608\Symplify\PackageBuilder\Console\Command\CommandNaming;
+use RectorPrefix20220609\Symfony\Component\Console\Application;
+use RectorPrefix20220609\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220609\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20220609\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220609\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20220609\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220609\Symplify\PackageBuilder\Console\Command\CommandNaming;
 final class ConsoleApplication extends Application
 {
     /**

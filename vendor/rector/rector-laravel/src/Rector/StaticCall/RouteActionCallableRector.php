@@ -18,8 +18,8 @@ use Rector\Laravel\NodeFactory\RouterRegisterNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220608\Webmozart\Assert\Assert;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Webmozart\Assert\Assert;
 /**
  * @see https://laravel.com/docs/8.x/upgrade#automatic-controller-namespace-prefixing
  *

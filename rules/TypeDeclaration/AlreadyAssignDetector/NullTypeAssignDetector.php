@@ -12,7 +12,7 @@ use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
-use RectorPrefix20220608\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220609\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 /**
  * Should add extra null type
  */

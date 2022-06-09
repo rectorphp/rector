@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix20220609\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220608\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
+use RectorPrefix20220609\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
 /**
  * This class builds an if expression.
  *

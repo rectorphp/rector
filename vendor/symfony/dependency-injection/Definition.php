@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\Symfony\Component\DependencyInjection;
+namespace RectorPrefix20220609\Symfony\Component\DependencyInjection;
 
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\BoundArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
 /**
  * Definition represents a service definition.
  *

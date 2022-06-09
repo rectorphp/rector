@@ -8,40 +8,40 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\Symfony\Component\DependencyInjection\Dumper;
+namespace RectorPrefix20220609\Symfony\Component\DependencyInjection\Dumper;
 
-use RectorPrefix20220608\Composer\Autoload\ClassLoader;
-use RectorPrefix20220608\Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\ServiceLocator;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Compiler\CheckCircularReferencesPass;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraphNode;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\EnvParameterException;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\ExpressionLanguage;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface as ProxyDumper;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\NullDumper;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Loader\FileLoader;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Parameter;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\ServiceLocator as BaseServiceLocator;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\TypedReference;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Variable;
-use RectorPrefix20220608\Symfony\Component\ErrorHandler\DebugClassLoader;
-use RectorPrefix20220608\Symfony\Component\ExpressionLanguage\Expression;
-use RectorPrefix20220608\Symfony\Component\HttpKernel\Kernel;
+use RectorPrefix20220609\Composer\Autoload\ClassLoader;
+use RectorPrefix20220609\Symfony\Component\Debug\DebugClassLoader as LegacyDebugClassLoader;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\ServiceLocator;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Compiler\AnalyzeServiceReferencesPass;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Compiler\CheckCircularReferencesPass;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Compiler\ServiceReferenceGraphNode;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\EnvParameterException;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\ExpressionLanguage;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\DumperInterface as ProxyDumper;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\LazyProxy\PhpDumper\NullDumper;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Loader\FileLoader;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Parameter;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\ServiceLocator as BaseServiceLocator;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Variable;
+use RectorPrefix20220609\Symfony\Component\ErrorHandler\DebugClassLoader;
+use RectorPrefix20220609\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix20220609\Symfony\Component\HttpKernel\Kernel;
 /**
  * PhpDumper dumps a service container as a PHP class.
  *
@@ -268,8 +268,8 @@ class PhpDumper extends Dumper
             $fileTemplate = <<<EOF
 <?php
 
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\Argument\\RewindableGenerator;
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\Exception\\RuntimeException;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\Argument\\RewindableGenerator;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\Exception\\RuntimeException;
 
 /*{$this->docStar}
  * @internal This class has been auto-generated by the Symfony Dependency Injection Component.
@@ -338,7 +338,7 @@ EOF;
 // This file has been auto-generated by the Symfony Dependency Injection Component
 // You can reference it in the "opcache.preload" php.ini setting on PHP >= 7.4 when preloading is desired
 
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\Dumper\\Preloader;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\Dumper\\Preloader;
 
 if (in_array(PHP_SAPI, ['cli', 'phpdbg'], true)) {
     return;
@@ -1064,14 +1064,14 @@ EOTXT
         $code = <<<EOF
 <?php
 {$namespaceLine}
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\Argument\\RewindableGenerator;
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\ContainerInterface;
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\Container;
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\Exception\\InvalidArgumentException;
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\Exception\\LogicException;
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\Exception\\RuntimeException;
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\ParameterBag\\FrozenParameterBag;
-use RectorPrefix20220608\\Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBagInterface;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\Argument\\RewindableGenerator;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\ContainerInterface;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\Container;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\Exception\\InvalidArgumentException;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\Exception\\LogicException;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\Exception\\RuntimeException;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\ParameterBag\\FrozenParameterBag;
+use RectorPrefix20220609\\Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBagInterface;
 
 /*{$this->docStar}
  * @internal This class has been auto-generated by the Symfony Dependency Injection Component.
@@ -1820,7 +1820,7 @@ EOF;
     private function getExpressionLanguage() : ExpressionLanguage
     {
         if (!isset($this->expressionLanguage)) {
-            if (!\class_exists(\RectorPrefix20220608\Symfony\Component\ExpressionLanguage\ExpressionLanguage::class)) {
+            if (!\class_exists(\RectorPrefix20220609\Symfony\Component\ExpressionLanguage\ExpressionLanguage::class)) {
                 throw new LogicException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed.');
             }
             $providers = $this->container->getExpressionLanguageProviders();

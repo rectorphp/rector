@@ -31,7 +31,7 @@ class MockObjectTypeNodeResolverExtension implements TypeNodeResolverExtension, 
         if (!$typeNode instanceof UnionTypeNode) {
             return null;
         }
-        static $mockClassNames = ['PHPUnit_Framework_MockObject_MockObject' => \true, 'RectorPrefix20220608\\PHPUnit\\Framework\\MockObject\\MockObject' => \true, 'RectorPrefix20220608\\PHPUnit\\Framework\\MockObject\\Stub' => \true];
+        static $mockClassNames = ['PHPUnit_Framework_MockObject_MockObject' => \true, 'RectorPrefix20220609\\PHPUnit\\Framework\\MockObject\\MockObject' => \true, 'RectorPrefix20220609\\PHPUnit\\Framework\\MockObject\\Stub' => \true];
         $types = $this->typeNodeResolver->resolveMultiple($typeNode->types, $nameScope);
         foreach ($types as $type) {
             if (!$type instanceof TypeWithClassName) {

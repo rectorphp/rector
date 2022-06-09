@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeNameResolver\Regex;
 
-use RectorPrefix20220608\Nette\Utils\Strings;
+use RectorPrefix20220609\Nette\Utils\Strings;
 final class RegexPatternDetector
 {
     /**

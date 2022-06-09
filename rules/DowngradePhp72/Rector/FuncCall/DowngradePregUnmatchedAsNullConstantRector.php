@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
-use RectorPrefix20220608\Nette\NotImplementedException;
+use RectorPrefix20220609\Nette\NotImplementedException;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;

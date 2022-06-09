@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser;
 
-use RectorPrefix20220608\Nette\Neon\Decoder;
-use RectorPrefix20220608\Nette\Neon\Node;
+use RectorPrefix20220609\Nette\Neon\Decoder;
+use RectorPrefix20220609\Nette\Neon\Node;
 final class NeonParser
 {
     /**

@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\Symfony\Component\DependencyInjection\Dumper;
+namespace RectorPrefix20220609\Symfony\Component\DependencyInjection\Dumper;
 
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Parameter;
-use RectorPrefix20220608\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20220608\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Parameter;
+use RectorPrefix20220609\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220609\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * XmlDumper dumps a service container as an XML string.
  *

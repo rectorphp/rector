@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220608;
+namespace RectorPrefix20220609;
 
-if (!\function_exists('RectorPrefix20220608\\dump')) {
+if (!\function_exists('RectorPrefix20220609\\dump')) {
     /**
      * Tracy\Debugger::dump() shortcut.
      * @tracySkipLocation
@@ -18,7 +18,7 @@ if (!\function_exists('RectorPrefix20220608\\dump')) {
         return $var;
     }
 }
-if (!\function_exists('RectorPrefix20220608\\dumpe')) {
+if (!\function_exists('RectorPrefix20220609\\dumpe')) {
     /**
      * Tracy\Debugger::dump() & exit shortcut.
      * @tracySkipLocation
@@ -31,7 +31,7 @@ if (!\function_exists('RectorPrefix20220608\\dumpe')) {
         }
     }
 }
-if (!\function_exists('RectorPrefix20220608\\bdump')) {
+if (!\function_exists('RectorPrefix20220609\\bdump')) {
     /**
      * Tracy\Debugger::barDump() shortcut.
      * @tracySkipLocation

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220608\Symfony\Component\Config\Resource;
+namespace RectorPrefix20220609\Symfony\Component\Config\Resource;
 
-use RectorPrefix20220608\Symfony\Component\Finder\Finder;
-use RectorPrefix20220608\Symfony\Component\Finder\Glob;
+use RectorPrefix20220609\Symfony\Component\Finder\Finder;
+use RectorPrefix20220609\Symfony\Component\Finder\Glob;
 /**
  * GlobResource represents a set of resources stored on the filesystem.
  *

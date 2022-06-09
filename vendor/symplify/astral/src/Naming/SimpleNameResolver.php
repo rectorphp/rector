@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220608\Symplify\Astral\Naming;
+namespace RectorPrefix20220609\Symplify\Astral\Naming;
 
-use RectorPrefix20220608\Nette\Utils\Strings;
+use RectorPrefix20220609\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Variable;
@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix20220608\Symplify\Astral\Contract\NodeNameResolverInterface;
+use RectorPrefix20220609\Symplify\Astral\Contract\NodeNameResolverInterface;
 /**
  * @see \Symplify\Astral\Tests\Naming\SimpleNameResolverTest
  */

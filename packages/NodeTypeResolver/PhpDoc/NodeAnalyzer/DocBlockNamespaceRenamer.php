@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Naming\NamespaceMatcher;
 use Rector\Renaming\ValueObject\RenamedNamespace;
-use RectorPrefix20220608\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220609\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class DocBlockNamespaceRenamer
 {
     /**

@@ -6,7 +6,7 @@ namespace Rector\ChangesReporting\ValueObjectFactory;
 use PHPStan\AnalysedCodeException;
 use Rector\Core\Error\ExceptionCorrector;
 use Rector\Core\ValueObject\Error\SystemError;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
 final class ErrorFactory
 {
     /**

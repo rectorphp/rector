@@ -8,7 +8,7 @@ use Rector\Core\ValueObject\Application\MovedFile;
 use Rector\FileSystemRector\Contract\AddedFileInterface;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\FileSystemRector\ValueObject\AddedFileWithNodes;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
 final class RemovedAndAddedFilesCollector
 {
     /**

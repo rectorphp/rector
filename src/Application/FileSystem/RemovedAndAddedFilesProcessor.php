@@ -6,7 +6,7 @@ namespace Rector\Core\Application\FileSystem;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Adds and removes scheduled file
  */

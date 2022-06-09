@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220608\React\Promise;
+namespace RectorPrefix20220609\React\Promise;
 
 interface ExtendedPromiseInterface extends PromiseInterface
 {

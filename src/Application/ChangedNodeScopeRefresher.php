@@ -18,7 +18,7 @@ use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-use RectorPrefix20220608\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
  */
