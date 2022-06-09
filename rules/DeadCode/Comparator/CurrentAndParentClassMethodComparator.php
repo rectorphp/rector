@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ExtendedMethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -134,20 +134,20 @@ final class CurrentAndParentClassMethodComparator
         if (!$scope instanceof Scope) {
             throw new ShouldNotHappenException();
         }
-        $parentMethodReflection = $classReflection->getMethod($methodName, $scope);
+        $extendedMethodReflection = $classReflection->getMethod($methodName, $scope);
         // 3rd party code
-        if (!$parentMethodReflection->isPrivate() && !$parentMethodReflection->isPublic() && $classMethod->isPublic()) {
+        if (!$extendedMethodReflection->isPrivate() && !$extendedMethodReflection->isPublic() && $classMethod->isPublic()) {
             return \true;
         }
-        if ($parentMethodReflection->isInternal()->yes()) {
+        if ($extendedMethodReflection->isInternal()->yes()) {
             // we can't know for certain so we assume its a override with purpose
             return \true;
         }
-        return $this->areParameterDefaultsDifferent($classMethod, $parentMethodReflection);
+        return $this->areParameterDefaultsDifferent($classMethod, $extendedMethodReflection);
     }
-    private function areParameterDefaultsDifferent(ClassMethod $classMethod, MethodReflection $methodReflection) : bool
+    private function areParameterDefaultsDifferent(ClassMethod $classMethod, ExtendedMethodReflection $extendedMethodReflection) : bool
     {
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
         foreach ($parametersAcceptor->getParameters() as $key => $parameterReflection) {
             if (!isset($classMethod->params[$key])) {
                 if ($parameterReflection->getDefaultValue() !== null) {
