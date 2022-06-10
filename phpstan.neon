@@ -731,4 +731,55 @@ parameters:
             message:  '#@\\ini_set\(.*\)" is forbidden to use#'
             path: bin/rector.php
 
-        - '#New objects with "\$.*" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+        # should be fixed in symplify next
+        -
+            message: '#New objects with "\$arrayItem" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path:  src/PhpParser/Node/NodeFactory.php
+
+        # reducing original node
+        -
+            message: '#New objects with "\$bitwiseOr" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path: rules/DowngradePhp72/NodeManipulator/BitwiseFlagCleaner.php
+
+        # faking node to invoke scope callable on attribute
+        -
+            message: '#New objects with "\$node" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path: src/Application/ChangedNodeScopeRefresher.php
+
+        # added nullable type
+        -
+            message: '#New objects with "\$mappedCurrentParamType" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path:  rules/DowngradePhp72/PhpDoc/NativeParamToPhpDocDecorator.php
+
+        -
+            message: '#New objects with "\$node" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path: src/Rector/AbstractRector.php
+
+        # joined items
+        -
+            message: '#New objects with "\$expr" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path: rules/DowngradePhp55/Rector/Isset_/DowngradeArbitraryExpressionArgsToEmptyAndIssetRector.php
+
+        # mixed type correction
+        -
+            message: '#New objects with "\$(first|second)KeyType" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path: packages/NodeTypeResolver/TypeComparator/TypeComparator.php
+
+        -
+            message: '#New objects with "\$staticType" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path: packages/NodeTypeResolver/PhpDocNodeVisitor/NameImportingPhpDocNodeVisitor.php
+
+        -
+            message: '#New objects with "\$replaceIntoType" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path: rules/CodeQuality/NodeManipulator/ClassMethodReturnTypeManipulator.php
+
+        -
+            path: rules/DowngradePhp74/Rector/ClassMethod/DowngradeCovariantReturnTypeRector.php
+            message: '#New objects with "\$parentReturnTypeNode" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+        -
+            path: rules/DowngradePhp80/NodeAnalyzer/UnnamedArgumentResolver.php
+            message: '#New objects with "\$functionLikeReflection" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+
+        -
+            message: '#New objects with "\$fullyQualifiedObjectType" name are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
+            path: packages/NodeTypeResolver/PhpDocNodeVisitor/NameImportingPhpDocNodeVisitor.php

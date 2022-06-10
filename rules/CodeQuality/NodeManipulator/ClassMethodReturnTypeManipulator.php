@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Rector\CodeQuality\NodeManipulator;
 
+use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\DowngradePhp72\UnionTypeFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 
 final class ClassMethodReturnTypeManipulator
@@ -21,7 +21,8 @@ final class ClassMethodReturnTypeManipulator
     public function __construct(
         private readonly PhpDocInfoFactory $phpDocInfoFactory,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
-        private readonly NodeTypeResolver $nodeTypeResolver
+        private readonly NodeTypeResolver $nodeTypeResolver,
+        private readonly UnionTypeFactory $unionTypeFactory,
     ) {
     }
 
@@ -32,7 +33,7 @@ final class ClassMethodReturnTypeManipulator
         Type $phpDocType
     ): ?ClassMethod {
         $returnType = $classMethod->returnType;
-        if ($returnType === null) {
+        if (! $returnType instanceof Node) {
             return null;
         }
 
@@ -52,12 +53,7 @@ final class ClassMethodReturnTypeManipulator
         }
 
         if ($isNullable) {
-            if ($phpDocType instanceof UnionType) {
-                // Adding a UnionType into a new UnionType throws an exception so we need to "unpack" the types
-                $phpDocType = new UnionType([...$phpDocType->getTypes(), new NullType()]);
-            } else {
-                $phpDocType = new UnionType([$phpDocType, new NullType()]);
-            }
+            $phpDocType = $this->unionTypeFactory->createNullableUnionType($phpDocType);
 
             if (! $replaceIntoType instanceof NullableType) {
                 $replaceIntoType = new NullableType($replaceIntoType);

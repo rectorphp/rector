@@ -141,8 +141,9 @@ CODE_SAMPLE
     private function joinWithBooleanAnd(array $exprs): Expr
     {
         $expr = $exprs[0];
-        $nbExprs = count($exprs);
-        for ($i = 1; $i < $nbExprs; ++$i) {
+
+        $exprCount = count($exprs);
+        for ($i = 1; $i < $exprCount; ++$i) {
             $expr = new BooleanAnd($expr, $exprs[$i]);
         }
 

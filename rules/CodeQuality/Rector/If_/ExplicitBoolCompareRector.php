@@ -206,9 +206,9 @@ CODE_SAMPLE
 
     private function resolveString(bool $isNegated, Expr $expr): Identical | NotIdentical | BooleanAnd | BooleanOr
     {
-        $string = new String_('');
+        $emptyString = new String_('');
 
-        $identical = $this->resolveIdentical($expr, $isNegated, $string);
+        $identical = $this->resolveIdentical($expr, $isNegated, $emptyString);
 
         $value = $this->valueResolver->getValue($expr);
 
@@ -220,8 +220,8 @@ CODE_SAMPLE
         $length = strlen((string) $value);
 
         if ($length === 1) {
-            $string = new String_('0');
-            return $this->resolveIdentical($expr, $isNegated, $string);
+            $zeroString = new String_('0');
+            return $this->resolveIdentical($expr, $isNegated, $zeroString);
         }
 
         return $identical;

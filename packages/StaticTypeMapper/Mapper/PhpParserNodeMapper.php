@@ -26,26 +26,33 @@ final class PhpParserNodeMapper
 
     public function mapToPHPStanType(Node $node): Type
     {
-        if ($node::class === Name::class && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
-            $node = new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME));
-        }
+        $nameOrExpr = $this->expandedNamespacedName($node);
 
         foreach ($this->phpParserNodeMappers as $phpParserNodeMapper) {
-            if (! is_a($node, $phpParserNodeMapper->getNodeType())) {
+            if (! is_a($nameOrExpr, $phpParserNodeMapper->getNodeType())) {
                 continue;
             }
 
             // do not let Expr collect all the types
             // note: can be solve later with priorities on mapper interface, making this last
             if ($phpParserNodeMapper->getNodeType() !== Expr::class) {
-                return $phpParserNodeMapper->mapToPHPStan($node);
+                return $phpParserNodeMapper->mapToPHPStan($nameOrExpr);
             }
 
-            if (! $node instanceof String_) {
-                return $phpParserNodeMapper->mapToPHPStan($node);
+            if (! $nameOrExpr instanceof String_) {
+                return $phpParserNodeMapper->mapToPHPStan($nameOrExpr);
             }
         }
 
-        throw new NotImplementedYetException($node::class);
+        throw new NotImplementedYetException($nameOrExpr::class);
+    }
+
+    private function expandedNamespacedName(Node $node): Node|FullyQualified
+    {
+        if ($node::class === Name::class && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
+            return new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME));
+        }
+
+        return $node;
     }
 }

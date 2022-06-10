@@ -15,14 +15,13 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
+use Rector\DowngradePhp72\UnionTypeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -36,7 +35,8 @@ final class ClassMethodParameterTypeManipulator
         private readonly NodeTypeResolver $nodeTypeResolver,
         private readonly ParamAnalyzer $paramAnalyzer,
         private readonly NodeNameResolver $nodeNameResolver,
-        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
+        private readonly UnionTypeFactory $unionTypeFactory,
     ) {
     }
 
@@ -69,10 +69,10 @@ final class ClassMethodParameterTypeManipulator
     private function refactorParamTypeHint(Param $param, Identifier|Name|NullableType $replaceIntoType): void
     {
         if ($this->paramAnalyzer->isNullable($param) && ! $replaceIntoType instanceof NullableType) {
-            $replaceIntoType = new NullableType($replaceIntoType);
+            $param->type = new NullableType($replaceIntoType);
+        } else {
+            $param->type = $replaceIntoType;
         }
-
-        $param->type = $replaceIntoType;
     }
 
     private function refactorParamDocBlock(Param $param, ClassMethod $classMethod, Type $phpDocType): void
@@ -83,12 +83,7 @@ final class ClassMethodParameterTypeManipulator
         }
 
         if ($this->paramAnalyzer->isNullable($param)) {
-            if ($phpDocType instanceof UnionType) {
-                // Adding a UnionType into a new UnionType throws an exception so we need to "unpack" the types
-                $phpDocType = new UnionType([...$phpDocType->getTypes(), new NullType()]);
-            } else {
-                $phpDocType = new UnionType([$phpDocType, new NullType()]);
-            }
+            $phpDocType = $this->unionTypeFactory->createNullableUnionType($phpDocType);
         }
 
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);

@@ -138,14 +138,10 @@ CODE_SAMPLE
         // special case
         if ($invertedCondition instanceof BooleanNot && $invertedCondition->expr instanceof BooleanAnd) {
             $leftExpr = $this->negateOrDeNegate($invertedCondition->expr->left);
-            $if = new If_($leftExpr);
-            $if->stmts[] = new Continue_();
-            $foreach->stmts[] = $if;
+            $foreach->stmts[] = $this->createIfContinue($leftExpr);
 
             $rightExpr = $this->negateOrDeNegate($invertedCondition->expr->right);
-            $if = new If_($rightExpr);
-            $if->stmts[] = new Continue_();
-            $foreach->stmts[] = $if;
+            $foreach->stmts[] = $this->createIfContinue($rightExpr);
 
             return;
         }
@@ -200,5 +196,12 @@ CODE_SAMPLE
         }
 
         return new BooleanNot($expr);
+    }
+
+    private function createIfContinue(Expr $expr): If_
+    {
+        return new If_($expr, [
+            'stmts' => [new Continue_()],
+        ]);
     }
 }

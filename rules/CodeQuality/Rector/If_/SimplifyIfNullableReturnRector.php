@@ -223,11 +223,11 @@ CODE_SAMPLE
         $this->removeNode($return);
         $this->removeNode($expression);
 
-        $return = new Return_($expr);
+        $exprReturn = new Return_($expr);
         $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($expression, $unionType);
-        $this->mirrorComments($return, $expression);
+        $this->mirrorComments($exprReturn, $expression);
 
-        return $return;
+        return $exprReturn;
     }
 
     private function shouldSkip(If_ $if): bool

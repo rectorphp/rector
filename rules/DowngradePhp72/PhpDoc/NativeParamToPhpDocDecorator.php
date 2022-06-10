@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rector\DowngradePhp72\PhpDoc;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\NullType;
@@ -38,12 +39,19 @@ final class NativeParamToPhpDocDecorator
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
 
         // add default null type
-        if ($param->default !== null && $this->valueResolver->isNull($param->default) && ! TypeCombinator::containsNull(
-            $mappedCurrentParamType
-        )) {
+        if ($this->isParamNullable($param) && ! TypeCombinator::containsNull($mappedCurrentParamType)) {
             $mappedCurrentParamType = new UnionType([$mappedCurrentParamType, new NullType()]);
         }
 
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $mappedCurrentParamType, $param, $paramName);
+    }
+
+    private function isParamNullable(Param $param): bool
+    {
+        if (! $param->default instanceof Expr) {
+            return false;
+        }
+
+        return $this->valueResolver->isNull($param->default);
     }
 }

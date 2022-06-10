@@ -235,34 +235,16 @@ final class NodeFactory
     /**
      * @param mixed[] $arguments
      */
-    public function createMethodCall(string | Expr $variable, string $method, array $arguments = []): MethodCall
+    public function createMethodCall(Expr|string $exprOrVariableName, string $method, array $arguments = []): MethodCall
     {
-        if (is_string($variable)) {
-            $variable = new Variable($variable);
-        }
-
-        if ($variable instanceof PropertyFetch) {
-            $variable = new PropertyFetch($variable->var, $variable->name);
-        }
-
-        if ($variable instanceof StaticPropertyFetch) {
-            $variable = new StaticPropertyFetch($variable->class, $variable->name);
-        }
-
-        if ($variable instanceof MethodCall) {
-            $variable = new MethodCall($variable->var, $variable->name, $variable->args);
-        }
-
-        return $this->builderFactory->methodCall($variable, $method, $arguments);
+        $callerExpr = $this->createMethodCaller($exprOrVariableName);
+        return $this->builderFactory->methodCall($callerExpr, $method, $arguments);
     }
 
-    public function createPropertyFetch(string | Expr $variable, string $property): PropertyFetch
+    public function createPropertyFetch(string | Expr $variableNameOrExpr, string $property): PropertyFetch
     {
-        if (is_string($variable)) {
-            $variable = new Variable($variable);
-        }
-
-        return $this->builderFactory->propertyFetch($variable, $property);
+        $fetcherExpr = is_string($variableNameOrExpr) ? new Variable($variableNameOrExpr) : $variableNameOrExpr;
+        return $this->builderFactory->propertyFetch($fetcherExpr, $property);
     }
 
     /**
@@ -577,7 +559,7 @@ final class NodeFactory
             $arrayItem = new ArrayItem($item->value);
         }
 
-        if ($arrayItem !== null) {
+        if ($arrayItem instanceof ArrayItem) {
             $this->decorateArrayItemWithKey($key, $arrayItem);
             return $arrayItem;
         }
@@ -638,12 +620,34 @@ final class NodeFactory
     /**
      * @param string|ObjectReference::* $className
      */
-    private function createName(string $className): FullyQualified|Name
+    private function createName(string $className): Name|FullyQualified
     {
         if (in_array($className, [ObjectReference::PARENT, ObjectReference::SELF, ObjectReference::STATIC], true)) {
             return new Name($className);
         }
 
         return new FullyQualified($className);
+    }
+
+    private function createMethodCaller(
+        Expr|string $exprOrVariableName
+    ): PropertyFetch|Variable|MethodCall|StaticPropertyFetch|Expr {
+        if (is_string($exprOrVariableName)) {
+            return new Variable($exprOrVariableName);
+        }
+
+        if ($exprOrVariableName instanceof PropertyFetch) {
+            return new PropertyFetch($exprOrVariableName->var, $exprOrVariableName->name);
+        }
+
+        if ($exprOrVariableName instanceof StaticPropertyFetch) {
+            return new StaticPropertyFetch($exprOrVariableName->class, $exprOrVariableName->name);
+        }
+
+        if ($exprOrVariableName instanceof MethodCall) {
+            return new MethodCall($exprOrVariableName->var, $exprOrVariableName->name, $exprOrVariableName->args);
+        }
+
+        return $exprOrVariableName;
     }
 }

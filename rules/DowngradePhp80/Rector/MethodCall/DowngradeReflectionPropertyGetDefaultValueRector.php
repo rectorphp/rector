@@ -73,10 +73,11 @@ CODE_SAMPLE
         }
 
         $getName = new MethodCall($node->var, 'getName');
-        $node = new MethodCall($node->var, 'getDeclaringClass');
-        $node = new MethodCall($node, 'getDefaultProperties');
-        $node = new ArrayDimFetch($node, $getName);
+        $getDeclaringClassMethodCall = new MethodCall($node->var, 'getDeclaringClass');
+        $getDefaultPropertiesMethodCall = new MethodCall($getDeclaringClassMethodCall, 'getDefaultProperties');
 
-        return new Coalesce($node, $this->nodeFactory->createNull());
+        $arrayDimFetch = new ArrayDimFetch($getDefaultPropertiesMethodCall, $getName);
+
+        return new Coalesce($arrayDimFetch, $this->nodeFactory->createNull());
     }
 }
