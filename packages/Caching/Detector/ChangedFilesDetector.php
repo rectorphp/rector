@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Caching\Detector;
 
-use RectorPrefix20220609\Nette\Utils\Strings;
+use RectorPrefix20220610\Nette\Utils\Strings;
 use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
 use Rector\Caching\Enum\CacheKey;
-use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * Inspired by https://github.com/symplify/symplify/pull/90/files#diff-72041b2e1029a08930e13d79d298ef11
  *

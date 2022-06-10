@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Core\ValueObjectFactory\Application\FileFactory
  */

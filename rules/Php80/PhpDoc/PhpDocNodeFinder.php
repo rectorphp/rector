@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Node;
-use RectorPrefix20220609\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220610\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocNodeFinder
 {
     /**

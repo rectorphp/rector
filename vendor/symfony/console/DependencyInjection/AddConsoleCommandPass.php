@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220609\Symfony\Component\Console\DependencyInjection;
+namespace RectorPrefix20220610\Symfony\Component\Console\DependencyInjection;
 
-use RectorPrefix20220609\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220609\Symfony\Component\Console\Command\LazyCommand;
-use RectorPrefix20220609\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
-use RectorPrefix20220609\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix20220609\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20220609\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use RectorPrefix20220609\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220609\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220609\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20220609\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix20220610\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220610\Symfony\Component\Console\Command\LazyCommand;
+use RectorPrefix20220610\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
+use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix20220610\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20220610\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
+use RectorPrefix20220610\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220610\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220610\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Registers console commands.
  *
@@ -46,7 +46,7 @@ class AddConsoleCommandPass implements CompilerPassInterface
                 if (!$r->isSubclassOf(Command::class)) {
                     throw new InvalidArgumentException(\sprintf('The service "%s" tagged "%s" must be a subclass of "%s".', $id, 'console.command', Command::class));
                 }
-                $aliases = $class::getDefaultName();
+                $aliases = \str_replace('%', '%%', $class::getDefaultName() ?? '');
             }
             $aliases = \explode('|', $aliases ?? '');
             $commandName = \array_shift($aliases);
@@ -90,7 +90,7 @@ class AddConsoleCommandPass implements CompilerPassInterface
                 if (!$r->isSubclassOf(Command::class)) {
                     throw new InvalidArgumentException(\sprintf('The service "%s" tagged "%s" must be a subclass of "%s".', $id, 'console.command', Command::class));
                 }
-                $description = $class::getDefaultDescription();
+                $description = \str_replace('%', '%%', $class::getDefaultDescription() ?? '');
             }
             if ($description) {
                 $definition->addMethodCall('setDescription', [$description]);

@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\PSR4\Composer;
 
-use RectorPrefix20220609\Nette\Utils\Strings;
+use RectorPrefix20220610\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
-use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Tests\PSR4\Composer\PSR4NamespaceMatcherTest
  */

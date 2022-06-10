@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\ValueObject;
 
-use RectorPrefix20220609\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey as NativePhpDocAttributeKey;
+use RectorPrefix20220610\Symplify\Astral\PhpDocParser\ValueObject\PhpDocAttributeKey as NativePhpDocAttributeKey;
 final class PhpDocAttributeKey
 {
     /**

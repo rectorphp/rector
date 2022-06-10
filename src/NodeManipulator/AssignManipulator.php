@@ -23,7 +23,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix20220609\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20220610\Symplify\PackageBuilder\Php\TypeChecker;
 final class AssignManipulator
 {
     /**

@@ -29,7 +29,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220609\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220610\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo\PhpDocInfoTest

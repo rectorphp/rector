@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
-use RectorPrefix20220609\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220610\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * Rector native configuration provider, to keep deprecated options hidden,
  * but also provide configuration that custom rules can check

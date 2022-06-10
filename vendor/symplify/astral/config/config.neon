@@ -1,3 +1,0 @@
-conditionalTags:
-	PhpParser\NodeVisitor\NodeConnectingVisitor:
-		phpstan.parser.richParserNodeVisitor: true

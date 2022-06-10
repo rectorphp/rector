@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Parallel;
 
-use RectorPrefix20220609\Clue\React\NDJson\Decoder;
-use RectorPrefix20220609\Clue\React\NDJson\Encoder;
+use RectorPrefix20220610\Clue\React\NDJson\Decoder;
+use RectorPrefix20220610\Clue\React\NDJson\Encoder;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -13,11 +13,11 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix20220609\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix20220609\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix20220609\Symplify\EasyParallel\Enum\ReactEvent;
-use RectorPrefix20220609\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220610\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix20220610\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix20220610\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix20220610\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 final class WorkerRunner
 {

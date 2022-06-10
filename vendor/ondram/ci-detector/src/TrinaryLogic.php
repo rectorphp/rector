@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220609\OndraM\CiDetector;
+namespace RectorPrefix20220610\OndraM\CiDetector;
 
 /**
  * @see https://en.wikipedia.org/wiki/Three-valued_logic

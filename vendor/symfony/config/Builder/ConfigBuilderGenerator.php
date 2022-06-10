@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220609\Symfony\Component\Config\Builder;
+namespace RectorPrefix20220610\Symfony\Component\Config\Builder;
 
-use RectorPrefix20220609\Symfony\Component\Config\Definition\ArrayNode;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\BaseNode;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\BooleanNode;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\ConfigurationInterface;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\EnumNode;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\FloatNode;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\IntegerNode;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\NodeInterface;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\PrototypedArrayNode;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\ScalarNode;
-use RectorPrefix20220609\Symfony\Component\Config\Definition\VariableNode;
-use RectorPrefix20220609\Symfony\Component\Config\Loader\ParamConfigurator;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\ArrayNode;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\BaseNode;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\BooleanNode;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\EnumNode;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\FloatNode;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\IntegerNode;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\PrototypedArrayNode;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\ScalarNode;
+use RectorPrefix20220610\Symfony\Component\Config\Definition\VariableNode;
+use RectorPrefix20220610\Symfony\Component\Config\Loader\ParamConfigurator;
 /**
  * Generate ConfigBuilders to help create valid config.
  *
@@ -49,7 +49,7 @@ class ConfigBuilderGenerator implements ConfigBuilderGeneratorInterface
     {
         $this->classes = [];
         $rootNode = $configuration->getConfigTreeBuilder()->buildTree();
-        $rootClass = new ClassBuilder('RectorPrefix20220609\\Symfony\\Config', $rootNode->getName());
+        $rootClass = new ClassBuilder('RectorPrefix20220610\\Symfony\\Config', $rootNode->getName());
         $path = $this->getFullPath($rootClass);
         if (!\is_file($path)) {
             // Generate the class if the file not exists

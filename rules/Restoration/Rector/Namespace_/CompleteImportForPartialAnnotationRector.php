@@ -13,10 +13,10 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StringUtils;
 use Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
-use RectorPrefix20220609\Symplify\Astral\ValueObject\NodeBuilder\UseBuilder;
+use RectorPrefix20220610\Symplify\Astral\ValueObject\NodeBuilder\UseBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220609\Webmozart\Assert\Assert;
+use RectorPrefix20220610\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector\CompleteImportForPartialAnnotationRectorTest
  */

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220609\React\Promise;
+namespace RectorPrefix20220610\React\Promise;
 
 /**
  * @deprecated 2.8.0 LazyPromise is deprecated and should not be used anymore.

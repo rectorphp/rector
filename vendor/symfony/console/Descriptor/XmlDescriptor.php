@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220609\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix20220610\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix20220609\Symfony\Component\Console\Application;
-use RectorPrefix20220609\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220609\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix20220609\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20220609\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix20220610\Symfony\Component\Console\Application;
+use RectorPrefix20220610\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220610\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix20220610\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix20220610\Symfony\Component\Console\Input\InputOption;
 /**
  * XML descriptor.
  *

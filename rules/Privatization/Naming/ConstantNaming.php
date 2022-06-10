@@ -6,7 +6,7 @@ namespace Rector\Privatization\Naming;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220609\Symfony\Component\String\UnicodeString;
+use RectorPrefix20220610\Symfony\Component\String\UnicodeString;
 final class ConstantNaming
 {
     /**

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220609\Symplify\Astral\TypeAnalyzer;
+namespace RectorPrefix20220610\Symplify\Astral\TypeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -10,8 +10,8 @@ use PHPStan\Reflection\FunctionVariant;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use RectorPrefix20220609\Symplify\Astral\Exception\ShouldNotHappenException;
-use RectorPrefix20220609\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20220610\Symplify\Astral\Exception\ShouldNotHappenException;
+use RectorPrefix20220610\Symplify\Astral\Naming\SimpleNameResolver;
 /**
  * @api
  */
@@ -35,8 +35,8 @@ final class ClassMethodReturnTypeResolver
         if (!$classReflection instanceof ClassReflection) {
             return new MixedType();
         }
-        $methodReflection = $classReflection->getMethod($methodName, $scope);
-        $functionVariant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $extendedMethodReflection = $classReflection->getMethod($methodName, $scope);
+        $functionVariant = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
         if (!$functionVariant instanceof FunctionVariant) {
             return new MixedType();
         }

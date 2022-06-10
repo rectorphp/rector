@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Rector\LNumber;
 
-use RectorPrefix20220609\Nette\Utils\DateTime;
+use RectorPrefix20220610\Nette\Utils\DateTime;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;

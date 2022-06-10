@@ -1,14 +1,18 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220609\Symplify\Astral\ValueObject;
+namespace RectorPrefix20220610\Symplify\Astral\ValueObject;
 
+/**
+ * @api
+ */
 final class AttributeKey
 {
     /**
      * Convention key name in php-parser and PHPStan for parent node
      *
      * @var string
+     * @deprecated Use hook to parent node
      */
     public const PARENT = 'parent';
     /**
@@ -27,6 +31,7 @@ final class AttributeKey
      *
      * @api
      * @var string
+     * @deprecated Use hook to parent node
      */
     public const PREVIOUS = 'previous';
     /**
@@ -34,10 +39,11 @@ final class AttributeKey
      *
      * @api
      * @var string
+     * @deprecated Use hook to parent node
      */
     public const NEXT = 'next';
     /**
-     * Do not change, part of internal PHPStan naming
+     * PHPStan @api Do not change, part of internal PHPStan naming
      *
      * @api
      * @var string
@@ -58,9 +64,24 @@ final class AttributeKey
      */
     public const REFERENCED_METHOD_CALLS = 'referenced_method_calls';
     /**
-     * Used in PHPStan for printed node content. Useful for printing error messages without need to reprint it again.
+     * PHPStan @api Used in PHPStan for printed node content. Useful for printing error messages without need to reprint
+     * it again.
      *
      * @var string
      */
     public const PHPSTAN_CACHE_PRINTER = 'phpstan_cache_printer';
+    /**
+     * @var string
+     */
+    public const ASSIGNED_TO = 'assigned_to';
+    /**
+     * @var string
+     */
+    public const NULLSAFE_CHECKED = 'nullsafe_checked';
+    /**
+     * PHPStan @api
+     *
+     * @var string
+     */
+    public const PARENT_STMT_TYPES = 'parentStmtTypes';
 }

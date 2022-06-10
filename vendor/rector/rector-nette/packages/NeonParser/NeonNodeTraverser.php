@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser;
 
-use RectorPrefix20220609\Nette\Neon\Node;
+use RectorPrefix20220610\Nette\Neon\Node;
 use Rector\Nette\Contract\Rector\NeonRectorInterface;
 use Rector\Nette\NeonParser\Contract\NeonNodeVisitorInterface;
 use Rector\Nette\NeonParser\Node\Service_;

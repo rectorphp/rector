@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix20220609\React\Dns\Query;
+namespace RectorPrefix20220610\React\Dns\Query;
 
-use RectorPrefix20220609\React\Dns\Model\Message;
-use RectorPrefix20220609\React\Dns\Protocol\BinaryDumper;
-use RectorPrefix20220609\React\Dns\Protocol\Parser;
-use RectorPrefix20220609\React\EventLoop\Loop;
-use RectorPrefix20220609\React\EventLoop\LoopInterface;
-use RectorPrefix20220609\React\Promise\Deferred;
+use RectorPrefix20220610\React\Dns\Model\Message;
+use RectorPrefix20220610\React\Dns\Protocol\BinaryDumper;
+use RectorPrefix20220610\React\Dns\Protocol\Parser;
+use RectorPrefix20220610\React\EventLoop\Loop;
+use RectorPrefix20220610\React\EventLoop\LoopInterface;
+use RectorPrefix20220610\React\Promise\Deferred;
 /**
  * Send DNS queries over a TCP/IP stream transport.
  *
@@ -150,14 +150,14 @@ class TcpTransportExecutor implements ExecutorInterface
         $queryData = $this->dumper->toBinary($request);
         $length = \strlen($queryData);
         if ($length > 0xffff) {
-            return \RectorPrefix20220609\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Query too large for TCP transport'));
+            return \RectorPrefix20220610\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Query too large for TCP transport'));
         }
         $queryData = \pack('n', $length) . $queryData;
         if ($this->socket === null) {
             // create async TCP/IP connection (may take a while)
             $socket = @\stream_socket_client($this->nameserver, $errno, $errstr, 0, \STREAM_CLIENT_CONNECT | \STREAM_CLIENT_ASYNC_CONNECT);
             if ($socket === \false) {
-                return \RectorPrefix20220609\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Unable to connect to DNS server ' . $this->nameserver . ' (' . $errstr . ')', $errno));
+                return \RectorPrefix20220610\React\Promise\reject(new \RuntimeException('DNS query for ' . $query->describe() . ' failed: Unable to connect to DNS server ' . $this->nameserver . ' (' . $errstr . ')', $errno));
             }
             // set socket to non-blocking and wait for it to become writable (connection success/rejected)
             \stream_set_blocking($socket, \false);

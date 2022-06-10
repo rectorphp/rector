@@ -5,7 +5,7 @@ namespace Rector\Core\Configuration;
 
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-use RectorPrefix20220609\Symplify\Skipper\ValueObject\Option as SkipperOption;
+use RectorPrefix20220610\Symplify\Skipper\ValueObject\Option as SkipperOption;
 final class Option
 {
     /**

@@ -5,9 +5,9 @@ namespace Rector\Core\Autoloading;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
-use RectorPrefix20220609\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220609\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220609\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20220610\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix20220610\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220610\Symplify\SmartFileSystem\FileSystemGuard;
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
  */

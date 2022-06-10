@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220609\Symfony\Component\String\Slugger;
+namespace RectorPrefix20220610\Symfony\Component\String\Slugger;
 
-use RectorPrefix20220609\Symfony\Component\String\AbstractUnicodeString;
+use RectorPrefix20220610\Symfony\Component\String\AbstractUnicodeString;
 /**
  * Creates a URL-friendly slug from a given string.
  *

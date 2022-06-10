@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220609\Symplify\PackageBuilder\Console\Formatter;
+namespace RectorPrefix20220610\Symplify\PackageBuilder\Console\Formatter;
 
-use RectorPrefix20220609\Nette\Utils\Strings;
-use RectorPrefix20220609\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix20220610\Nette\Utils\Strings;
+use RectorPrefix20220610\Symfony\Component\Console\Formatter\OutputFormatter;
 /**
  * Inspired by @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/src/Differ/DiffConsoleFormatter.php to be
  * used as standalone class, without need to require whole package by Dariusz Rumiński <dariusz.ruminski@gmail.com>

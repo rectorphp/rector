@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220609;
+namespace RectorPrefix20220610;
 
 use Rector\Config\RectorConfig;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
-use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileSystem;
 return static function (RectorConfig $rectorConfig) : void {
     $services = $rectorConfig->services();
     $services->defaults()->public()->autowire()->autoconfigure();

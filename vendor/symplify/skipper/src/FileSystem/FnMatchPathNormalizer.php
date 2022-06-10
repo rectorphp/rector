@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220609\Symplify\Skipper\FileSystem;
+namespace RectorPrefix20220610\Symplify\Skipper\FileSystem;
 
-use RectorPrefix20220609\Nette\Utils\Strings;
+use RectorPrefix20220610\Nette\Utils\Strings;
 /**
  * @see \Symplify\Skipper\Tests\FileSystem\FnMatchPathNormalizerTest
  */

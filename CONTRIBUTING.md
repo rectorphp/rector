@@ -13,11 +13,11 @@ cd rector-src
 
 2. We use PHP 8.1 and composer
 
-Verify your local environment and update dependencies:
+Install dependencies and verify your local environment:
 
 ```bash
-composer check-platform-reqs
 composer update
+composer check-platform-reqs
 ```
 
 *Note: using Docker for contributing is strongly discouraged, as it requires [extra knowledge of composer internals](https://github.com/composer/composer/issues/9368#issuecomment-718112361).*

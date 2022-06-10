@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220609;
+namespace RectorPrefix20220610;
 
-use RectorPrefix20220609\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220609\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220609\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20220609\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix20220609\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix20220609\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix20220609\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20220609\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix20220609\Symplify\SmartFileSystem\Finder\SmartFinder;
-use RectorPrefix20220609\Symplify\SmartFileSystem\SmartFileSystem;
-use function RectorPrefix20220609\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix20220610\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20220610\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20220610\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220610\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220610\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix20220610\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20220610\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix20220610\Symplify\SmartFileSystem\Finder\SmartFinder;
+use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileSystem;
+use function RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire();

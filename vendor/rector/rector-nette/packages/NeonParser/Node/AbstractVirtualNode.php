@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser\Node;
 
-use RectorPrefix20220609\Nette\Neon\Node;
+use RectorPrefix20220610\Nette\Neon\Node;
 use Rector\Nette\NeonParser\Exception\UnusedVirtualMethodException;
 abstract class AbstractVirtualNode extends Node
 {

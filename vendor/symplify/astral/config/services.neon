@@ -5,7 +5,6 @@ services:
     - Symplify\SmartFileSystem\Finder\FinderSanitizer
 
     - Symplify\Astral\Reflection\ReflectionParser
-    - Symplify\Astral\Reflection\MethodCallParser
 
     - Symplify\Astral\PhpParser\SmartPhpParserFactory
     -
@@ -17,7 +16,6 @@ services:
         factory: ['Symplify\Astral\StaticFactory\SimpleNameResolverStaticFactory', 'create']
 
     - Symplify\Astral\NodeValue\NodeValueResolver
-    - Symplify\Astral\NodeFinder\SimpleNodeFinder
     - Symplify\PackageBuilder\Php\TypeChecker
     - Symplify\SmartFileSystem\SmartFileSystem
 

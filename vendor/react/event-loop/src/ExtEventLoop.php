@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix20220609\React\EventLoop;
+namespace RectorPrefix20220610\React\EventLoop;
 
 use BadMethodCallException;
 use Event;
 use EventBase;
-use RectorPrefix20220609\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix20220609\React\EventLoop\Timer\Timer;
+use RectorPrefix20220610\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix20220610\React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 /**
  * An `ext-event` based event loop.
