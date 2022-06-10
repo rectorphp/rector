@@ -62,15 +62,10 @@ class Lexer
         }
         assert($this->regexp !== null);
         assert($this->types !== null);
-        preg_match_all($this->regexp, $s, $tokens, PREG_SET_ORDER);
-        $count = count($this->types);
-        foreach ($tokens as &$match) {
-            for ($i = 1; $i <= $count; $i++) {
-                if ($match[$i] !== null && $match[$i] !== '') {
-                    $match = [$match[0], $this->types[$i - 1]];
-                    break;
-                }
-            }
+        preg_match_all($this->regexp, $s, $matches, PREG_SET_ORDER);
+        $tokens = [];
+        foreach ($matches as $match) {
+            $tokens[] = [$match[0], $this->types[count($match) - 2]];
         }
         $tokens[] = ['', self::TOKEN_END];
         return $tokens;
@@ -78,6 +73,10 @@ class Lexer
     private function initialize() : void
     {
         $patterns = [
+            self::TOKEN_HORIZONTAL_WS => '[\\x09\\x20]++',
+            self::TOKEN_IDENTIFIER => '(?:[\\\\]?+[a-z_\\x80-\\xFF][0-9a-z_\\x80-\\xFF-]*+)++',
+            self::TOKEN_THIS_VARIABLE => '\\$this(?![0-9a-z_\\x80-\\xFF])',
+            self::TOKEN_VARIABLE => '\\$[a-z_\\x80-\\xFF][0-9a-z_\\x80-\\xFF]*+',
             // '&' followed by TOKEN_VARIADIC, TOKEN_VARIABLE, TOKEN_EQUAL, TOKEN_EQUAL or TOKEN_CLOSE_PARENTHESES
             self::TOKEN_REFERENCE => '&(?=\\s*+(?:[.,=)]|(?:\\$(?!this(?![0-9a-z_\\x80-\\xFF])))))',
             self::TOKEN_UNION => '\\|',
@@ -106,10 +105,6 @@ class Lexer
             self::TOKEN_INTEGER => '-?(?:(?:0b[0-1]++)|(?:0o[0-7]++)|(?:0x[0-9a-f]++)|(?:[0-9]++))',
             self::TOKEN_SINGLE_QUOTED_STRING => '\'(?:\\\\[^\\r\\n]|[^\'\\r\\n\\\\])*+\'',
             self::TOKEN_DOUBLE_QUOTED_STRING => '"(?:\\\\[^\\r\\n]|[^"\\r\\n\\\\])*+"',
-            self::TOKEN_IDENTIFIER => '(?:[\\\\]?+[a-z_\\x80-\\xFF][0-9a-z_\\x80-\\xFF-]*+)++',
-            self::TOKEN_THIS_VARIABLE => '\\$this(?![0-9a-z_\\x80-\\xFF])',
-            self::TOKEN_VARIABLE => '\\$[a-z_\\x80-\\xFF][0-9a-z_\\x80-\\xFF]*+',
-            self::TOKEN_HORIZONTAL_WS => '[\\x09\\x20]++',
             self::TOKEN_WILDCARD => '\\*',
             // anything but TOKEN_CLOSE_PHPDOC or TOKEN_HORIZONTAL_WS or TOKEN_EOL
             self::TOKEN_OTHER => '(?:(?!\\*/)[^\\s])++',

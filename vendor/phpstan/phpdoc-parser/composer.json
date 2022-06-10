@@ -9,6 +9,7 @@
         "php-parallel-lint\/php-parallel-lint": "^1.2",
         "phpstan\/extension-installer": "^1.0",
         "phpstan\/phpstan": "^1.5",
+        "phpstan\/phpstan-phpunit": "^1.1",
         "phpstan\/phpstan-strict-rules": "^1.0",
         "phpunit\/phpunit": "^9.5",
         "symfony\/process": "^5.2"

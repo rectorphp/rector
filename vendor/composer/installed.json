@@ -755,17 +755,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.6.0",
-            "version_normalized": "1.6.0.0",
+            "version": "1.6.2",
+            "version_normalized": "1.6.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "3cb62d10845338136ff4ba299ab0986bbf84ba77"
+                "reference": "76150ae7512439b4e6903db834e4a327596b617d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/3cb62d10845338136ff4ba299ab0986bbf84ba77",
-                "reference": "3cb62d10845338136ff4ba299ab0986bbf84ba77",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/76150ae7512439b4e6903db834e4a327596b617d",
+                "reference": "76150ae7512439b4e6903db834e4a327596b617d",
                 "shasum": ""
             },
             "require": {
@@ -775,11 +775,12 @@
                 "php-parallel-lint\/php-parallel-lint": "^1.2",
                 "phpstan\/extension-installer": "^1.0",
                 "phpstan\/phpstan": "^1.5",
+                "phpstan\/phpstan-phpunit": "^1.1",
                 "phpstan\/phpstan-strict-rules": "^1.0",
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2022-06-09T09:45:59+00:00",
+            "time": "2022-06-10T09:29:33+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -796,7 +797,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.6.0"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.6.2"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
