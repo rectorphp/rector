@@ -6,6 +6,7 @@ namespace Rector\CodingStyle\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\Enum\PreferenceSelfThis;
@@ -136,10 +137,10 @@ CODE_SAMPLE
         // avoid adding dynamic method call to static method
         $classMethod = $this->betterNodeFinder->findParentByTypes($node, [ClassMethod::class]);
         if (!$classMethod instanceof ClassMethod) {
-            return $this->nodeFactory->createMethodCall(self::THIS, $name, $node->args);
+            return $this->nodeFactory->createMethodCall(new Variable(self::THIS), $name, $node->args);
         }
         if (!$classMethod->isStatic()) {
-            return $this->nodeFactory->createMethodCall(self::THIS, $name, $node->args);
+            return $this->nodeFactory->createMethodCall(new Variable(self::THIS), $name, $node->args);
         }
         return null;
     }

@@ -249,33 +249,20 @@ final class NodeFactory
     }
     /**
      * @param mixed[] $arguments
-     * @param string|\PhpParser\Node\Expr $variable
+     * @param \PhpParser\Node\Expr|string $exprOrVariableName
      */
-    public function createMethodCall($variable, string $method, array $arguments = []) : MethodCall
+    public function createMethodCall($exprOrVariableName, string $method, array $arguments = []) : MethodCall
     {
-        if (\is_string($variable)) {
-            $variable = new Variable($variable);
-        }
-        if ($variable instanceof PropertyFetch) {
-            $variable = new PropertyFetch($variable->var, $variable->name);
-        }
-        if ($variable instanceof StaticPropertyFetch) {
-            $variable = new StaticPropertyFetch($variable->class, $variable->name);
-        }
-        if ($variable instanceof MethodCall) {
-            $variable = new MethodCall($variable->var, $variable->name, $variable->args);
-        }
-        return $this->builderFactory->methodCall($variable, $method, $arguments);
+        $callerExpr = $this->createMethodCaller($exprOrVariableName);
+        return $this->builderFactory->methodCall($callerExpr, $method, $arguments);
     }
     /**
-     * @param string|\PhpParser\Node\Expr $variable
+     * @param string|\PhpParser\Node\Expr $variableNameOrExpr
      */
-    public function createPropertyFetch($variable, string $property) : PropertyFetch
+    public function createPropertyFetch($variableNameOrExpr, string $property) : PropertyFetch
     {
-        if (\is_string($variable)) {
-            $variable = new Variable($variable);
-        }
-        return $this->builderFactory->propertyFetch($variable, $property);
+        $fetcherExpr = \is_string($variableNameOrExpr) ? new Variable($variableNameOrExpr) : $variableNameOrExpr;
+        return $this->builderFactory->propertyFetch($fetcherExpr, $property);
     }
     /**
      * @param Param[] $params
@@ -512,7 +499,7 @@ final class NodeFactory
         if ($item instanceof Arg) {
             $arrayItem = new ArrayItem($item->value);
         }
-        if ($arrayItem !== null) {
+        if ($arrayItem instanceof ArrayItem) {
             $this->decorateArrayItemWithKey($key, $arrayItem);
             return $arrayItem;
         }
@@ -561,7 +548,7 @@ final class NodeFactory
     }
     /**
      * @param string|ObjectReference::* $className
-     * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
+     * @return \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
      */
     private function createName(string $className)
     {
@@ -569,5 +556,25 @@ final class NodeFactory
             return new Name($className);
         }
         return new FullyQualified($className);
+    }
+    /**
+     * @param \PhpParser\Node\Expr|string $exprOrVariableName
+     * @return \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr
+     */
+    private function createMethodCaller($exprOrVariableName)
+    {
+        if (\is_string($exprOrVariableName)) {
+            return new Variable($exprOrVariableName);
+        }
+        if ($exprOrVariableName instanceof PropertyFetch) {
+            return new PropertyFetch($exprOrVariableName->var, $exprOrVariableName->name);
+        }
+        if ($exprOrVariableName instanceof StaticPropertyFetch) {
+            return new StaticPropertyFetch($exprOrVariableName->class, $exprOrVariableName->name);
+        }
+        if ($exprOrVariableName instanceof MethodCall) {
+            return new MethodCall($exprOrVariableName->var, $exprOrVariableName->name, $exprOrVariableName->args);
+        }
+        return $exprOrVariableName;
     }
 }

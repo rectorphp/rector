@@ -189,8 +189,8 @@ CODE_SAMPLE
      */
     private function resolveString(bool $isNegated, Expr $expr)
     {
-        $string = new String_('');
-        $identical = $this->resolveIdentical($expr, $isNegated, $string);
+        $emptyString = new String_('');
+        $identical = $this->resolveIdentical($expr, $isNegated, $emptyString);
         $value = $this->valueResolver->getValue($expr);
         // unknown value. may be from parameter
         if ($value === null) {
@@ -198,8 +198,8 @@ CODE_SAMPLE
         }
         $length = \strlen((string) $value);
         if ($length === 1) {
-            $string = new String_('0');
-            return $this->resolveIdentical($expr, $isNegated, $string);
+            $zeroString = new String_('0');
+            return $this->resolveIdentical($expr, $isNegated, $zeroString);
         }
         return $identical;
     }

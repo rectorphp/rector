@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\NodeManipulator;
 
+use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
+use Rector\DowngradePhp72\UnionTypeFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ClassMethodReturnTypeManipulator
 {
@@ -31,11 +31,17 @@ final class ClassMethodReturnTypeManipulator
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @readonly
+     * @var \Rector\DowngradePhp72\UnionTypeFactory
+     */
+    private $unionTypeFactory;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, NodeTypeResolver $nodeTypeResolver, UnionTypeFactory $unionTypeFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->unionTypeFactory = $unionTypeFactory;
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType $replaceIntoType
@@ -43,7 +49,7 @@ final class ClassMethodReturnTypeManipulator
     public function refactorFunctionReturnType(ClassMethod $classMethod, ObjectType $objectType, $replaceIntoType, Type $phpDocType) : ?ClassMethod
     {
         $returnType = $classMethod->returnType;
-        if ($returnType === null) {
+        if (!$returnType instanceof Node) {
             return null;
         }
         $isNullable = \false;
@@ -59,13 +65,7 @@ final class ClassMethodReturnTypeManipulator
             return null;
         }
         if ($isNullable) {
-            if ($phpDocType instanceof UnionType) {
-                $item0Unpacked = $phpDocType->getTypes();
-                // Adding a UnionType into a new UnionType throws an exception so we need to "unpack" the types
-                $phpDocType = new UnionType(\array_merge($item0Unpacked, [new NullType()]));
-            } else {
-                $phpDocType = new UnionType([$phpDocType, new NullType()]);
-            }
+            $phpDocType = $this->unionTypeFactory->createNullableUnionType($phpDocType);
             if (!$replaceIntoType instanceof NullableType) {
                 $replaceIntoType = new NullableType($replaceIntoType);
             }

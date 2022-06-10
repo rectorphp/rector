@@ -8,6 +8,7 @@ use RectorPrefix20220610\Symfony\Component\Console\Command\Command;
 /**
  * @api
  * @see \Symplify\PackageBuilder\Tests\Console\Command\CommandNamingTest
+ * @deprecated Be explicit about the command name. It makes it easier to discover and explore in IDE/GUI.
  */
 final class CommandNaming
 {

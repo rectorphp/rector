@@ -39,12 +39,7 @@ final class ClassStringTypeMapper implements TypeMapperInterface
     {
         $attributeAwareIdentifierTypeNode = new IdentifierTypeNode('class-string');
         if ($type instanceof GenericClassStringType) {
-            $genericType = $type->getGenericType();
-            if ($genericType instanceof ObjectType) {
-                $className = $genericType->getClassName();
-                $className = $this->normalizeType($className);
-                $genericType = new ObjectType($className);
-            }
+            $genericType = $this->resolveGenericObjectType($type);
             $genericTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType, $typeKind);
             return new GenericTypeNode($attributeAwareIdentifierTypeNode, [$genericTypeNode]);
         }
@@ -73,5 +68,18 @@ final class ClassStringTypeMapper implements TypeMapperInterface
             return Node::class;
         }
         return $classType;
+    }
+    /**
+     * @return \PHPStan\Type\ObjectType|\PHPStan\Type\Type
+     */
+    private function resolveGenericObjectType(GenericClassStringType $genericClassStringType)
+    {
+        $genericType = $genericClassStringType->getGenericType();
+        if (!$genericType instanceof ObjectType) {
+            return $genericType;
+        }
+        $className = $genericType->getClassName();
+        $className = $this->normalizeType($className);
+        return new ObjectType($className);
     }
 }

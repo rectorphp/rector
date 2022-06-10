@@ -13,6 +13,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -96,11 +97,9 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return null;
         }
         // make sure to compare FQNs
-        if ($staticType instanceof ShortenedObjectType) {
-            $staticType = new ObjectType($staticType->getFullyQualifiedName());
-        }
+        $objectType = $this->expandShortenedObjectType($staticType);
         foreach ($this->oldToNewTypes as $oldToNewType) {
-            if (!$staticType->equals($oldToNewType->getOldType())) {
+            if (!$objectType->equals($oldToNewType->getOldType())) {
                 continue;
             }
             $newTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($oldToNewType->getNewType(), TypeKind::ANY);
@@ -161,5 +160,15 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             }
         }
         return $name;
+    }
+    /**
+     * @return \PHPStan\Type\ObjectType|\PHPStan\Type\Type
+     */
+    private function expandShortenedObjectType(Type $type)
+    {
+        if ($type instanceof ShortenedObjectType) {
+            return new ObjectType($type->getFullyQualifiedName());
+        }
+        return $type;
     }
 }

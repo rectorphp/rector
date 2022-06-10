@@ -14,14 +14,13 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
+use Rector\DowngradePhp72\UnionTypeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -58,7 +57,12 @@ final class ClassMethodParameterTypeManipulator
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, NodeTypeResolver $nodeTypeResolver, ParamAnalyzer $paramAnalyzer, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    /**
+     * @readonly
+     * @var \Rector\DowngradePhp72\UnionTypeFactory
+     */
+    private $unionTypeFactory;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, NodeTypeResolver $nodeTypeResolver, ParamAnalyzer $paramAnalyzer, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, UnionTypeFactory $unionTypeFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
@@ -66,6 +70,7 @@ final class ClassMethodParameterTypeManipulator
         $this->paramAnalyzer = $paramAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->unionTypeFactory = $unionTypeFactory;
     }
     /**
      * @param string[] $methodsReturningClassInstance
@@ -92,9 +97,10 @@ final class ClassMethodParameterTypeManipulator
     private function refactorParamTypeHint(Param $param, $replaceIntoType) : void
     {
         if ($this->paramAnalyzer->isNullable($param) && !$replaceIntoType instanceof NullableType) {
-            $replaceIntoType = new NullableType($replaceIntoType);
+            $param->type = new NullableType($replaceIntoType);
+        } else {
+            $param->type = $replaceIntoType;
         }
-        $param->type = $replaceIntoType;
     }
     private function refactorParamDocBlock(Param $param, ClassMethod $classMethod, Type $phpDocType) : void
     {
@@ -103,13 +109,7 @@ final class ClassMethodParameterTypeManipulator
             throw new ShouldNotHappenException();
         }
         if ($this->paramAnalyzer->isNullable($param)) {
-            if ($phpDocType instanceof UnionType) {
-                $item0Unpacked = $phpDocType->getTypes();
-                // Adding a UnionType into a new UnionType throws an exception so we need to "unpack" the types
-                $phpDocType = new UnionType(\array_merge($item0Unpacked, [new NullType()]));
-            } else {
-                $phpDocType = new UnionType([$phpDocType, new NullType()]);
-            }
+            $phpDocType = $this->unionTypeFactory->createNullableUnionType($phpDocType);
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         $this->phpDocTypeChanger->changeParamType($phpDocInfo, $phpDocType, $param, $paramName);

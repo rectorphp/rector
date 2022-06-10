@@ -47,12 +47,12 @@ final class TestingParser
     /**
      * @return Node[]
      */
-    public function parseFileToDecoratedNodes(string $file) : array
+    public function parseFileToDecoratedNodes(string $filepath) : array
     {
         // autoload file
-        require_once $file;
-        $smartFileInfo = new SmartFileInfo($file);
-        $this->parameterProvider->changeParameter(Option::SOURCE, [$file]);
+        require_once $filepath;
+        $smartFileInfo = new SmartFileInfo($filepath);
+        $this->parameterProvider->changeParameter(Option::SOURCE, [$filepath]);
         $nodes = $this->rectorParser->parseFile($smartFileInfo);
         $file = new File($smartFileInfo, $smartFileInfo->getContents());
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
