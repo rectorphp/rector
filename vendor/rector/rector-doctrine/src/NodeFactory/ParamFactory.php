@@ -74,11 +74,13 @@ final class ParamFactory
         // the param is optional - make it nullable
         if (\in_array($propertyName, $optionalParamNames, \true)) {
             if (!$paramTypeNode instanceof ComplexType && $paramTypeNode !== null) {
-                $paramTypeNode = new NullableType($paramTypeNode);
+                $param->type = new NullableType($paramTypeNode);
             }
             $param->default = $this->nodeFactory->createNull();
         }
-        $param->type = $paramTypeNode;
+        if ($param->type === null) {
+            $param->type = $paramTypeNode;
+        }
         return $param;
     }
 }

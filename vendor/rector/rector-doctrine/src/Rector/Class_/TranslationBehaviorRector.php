@@ -179,11 +179,11 @@ CODE_SAMPLE
         $smartFileInfo = $this->file->getSmartFileInfo();
         $classShortName = $class->name . 'Translation';
         $filePath = \dirname($smartFileInfo->getRealPath()) . \DIRECTORY_SEPARATOR . $classShortName . '.php';
-        $namespace = $class->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$namespace instanceof Namespace_) {
+        $parentNode = $class->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Namespace_) {
             throw new ShouldNotHappenException();
         }
-        $namespace = new Namespace_($namespace->name);
+        $namespace = new Namespace_($parentNode->name);
         $class = $this->translationClassNodeFactory->create($classShortName);
         foreach ($propertyNamesAndPhpDocInfos->all() as $propertyNameAndPhpDocInfo) {
             $property = $this->nodeFactory->createPrivateProperty($propertyNameAndPhpDocInfo->getPropertyName());
