@@ -12,7 +12,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // remove phpstan, because it is already prefixed in its own scope
 $dateTime = DateTime::from('now');
-$timestamp = $dateTime->format('Ymd');
+$timestamp = $dateTime->format('Ym');
 
 // @see https://github.com/humbug/php-scoper/blob/master/docs/further-reading.md
 $polyfillsBootstraps = array_map(
