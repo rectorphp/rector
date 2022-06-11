@@ -118,17 +118,14 @@ CODE_SAMPLE
         if ($this->isAlwaysIterableType($countedType)) {
             return null;
         }
-        if ($this->nodeTypeResolver->isNullableType($countedNode) || $countedType instanceof NullType) {
-            $identical = new Identical($countedNode, $this->nodeFactory->createNull());
-            return new Ternary($identical, new LNumber(0), $node);
-        }
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::IS_COUNTABLE)) {
             $conditionNode = new FuncCall(new Name('is_countable'), [new Arg($countedNode)]);
         } else {
             $instanceof = new Instanceof_($countedNode, new FullyQualified('Countable'));
             $conditionNode = new BooleanOr($this->nodeFactory->createFuncCall('is_array', [new Arg($countedNode)]), $instanceof);
         }
-        return new Ternary($conditionNode, $node, new LNumber(0));
+        $nonCountableNonNullTernary = (new Ternary(new FuncCall(new Name('is_null'), [new Arg($countedNode)]), new LNumber(0), new LNumber(1)));
+        return new Ternary($conditionNode, $node, $nonCountableNonNullTernary);
     }
     private function isAlwaysIterableType(Type $possibleUnionType) : bool
     {
