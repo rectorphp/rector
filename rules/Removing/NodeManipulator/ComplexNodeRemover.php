@@ -46,11 +46,13 @@ final class ComplexNodeRemover
     ): bool {
         $propertyName = $this->nodeNameResolver->getName($property);
         $totalPropertyFetch = $this->propertyFetchAnalyzer->countLocalPropertyFetchName($class, $propertyName);
+        $expressions = [];
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             $removeAssignSideEffect,
             $propertyName,
-            &$totalPropertyFetch
+            &$totalPropertyFetch,
+            &$expressions
         ): ?Node {
             // here should be checked all expr like stmts that can hold assign, e.f. if, foreach etc. etc.
             if (! $node instanceof Expression) {
@@ -93,8 +95,7 @@ final class ComplexNodeRemover
             }
 
             if ($totalPropertyFetch < $currentTotalPropertyFetch) {
-                $this->nodeRemover->removeNode($node);
-                return $node;
+                $expressions[] = $node;
             }
 
             return null;
@@ -107,6 +108,7 @@ final class ComplexNodeRemover
 
         $this->removeConstructorDependency($class, $propertyName);
 
+        $this->nodeRemover->removeNodes($expressions);
         $this->nodeRemover->removeNode($property);
 
         return true;
