@@ -8,7 +8,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Symfony\NodeAnalyzer\Annotations\ConstraintAnnotationResolver;
+use Rector\Symfony\NodeAnalyzer\Annotations\MethodCallAnnotationAssertResolver;
+use Rector\Symfony\NodeAnalyzer\Annotations\PropertyAnnotationAssertResolver;
+use Rector\Symfony\ValueObject\ClassMethodAndAnnotation;
+use Rector\Symfony\ValueObject\PropertyAndAnnotation;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,12 +24,18 @@ final class LoadValidatorMetadataToAnnotationRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\Annotations\ConstraintAnnotationResolver
+     * @var \Rector\Symfony\NodeAnalyzer\Annotations\MethodCallAnnotationAssertResolver
      */
-    private $constraintAnnotationResolver;
-    public function __construct(ConstraintAnnotationResolver $constraintAnnotationResolver)
+    private $methodCallAnnotationAssertResolver;
+    /**
+     * @readonly
+     * @var \Rector\Symfony\NodeAnalyzer\Annotations\PropertyAnnotationAssertResolver
+     */
+    private $propertyAnnotationAssertResolver;
+    public function __construct(MethodCallAnnotationAssertResolver $methodCallAnnotationAssertResolver, PropertyAnnotationAssertResolver $propertyAnnotationAssertResolver)
     {
-        $this->constraintAnnotationResolver = $constraintAnnotationResolver;
+        $this->methodCallAnnotationAssertResolver = $methodCallAnnotationAssertResolver;
+        $this->propertyAnnotationAssertResolver = $propertyAnnotationAssertResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -76,27 +85,40 @@ CODE_SAMPLE
         if (!$loadValidatorMetadataClassMethod instanceof ClassMethod) {
             return null;
         }
-        // @todo extract annotations from loadValidatorMetadata()
-        $annotationsToMethodNames = $this->constraintAnnotationResolver->resolveGetterTagValueNodes($loadValidatorMetadataClassMethod);
-        foreach ($annotationsToMethodNames as $methodName => $doctrineTagValueNode) {
-            $classMethod = $node->getMethod($methodName);
-            if (!$classMethod instanceof ClassMethod) {
-                continue;
+        foreach ((array) $loadValidatorMetadataClassMethod->stmts as $stmtKey => $classStmt) {
+            $classMethodAndAnnotation = $this->methodCallAnnotationAssertResolver->resolve($classStmt);
+            if ($classMethodAndAnnotation instanceof ClassMethodAndAnnotation) {
+                $this->refactorClassMethodAndAnnotation($node, $classMethodAndAnnotation, $loadValidatorMetadataClassMethod, $stmtKey);
             }
-            $getterPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            $getterPhpDocInfo->addTagValueNode($doctrineTagValueNode);
-        }
-        $annotationsToPropertyNames = $this->constraintAnnotationResolver->resolvePropertyTagValueNodes($loadValidatorMetadataClassMethod);
-        foreach ($annotationsToPropertyNames as $propertyName => $doctrineTagValueNode) {
-            $property = $node->getProperty($propertyName);
-            if (!$property instanceof Property) {
-                continue;
+            $propertyAndAnnotation = $this->propertyAnnotationAssertResolver->resolve($classStmt);
+            if ($propertyAndAnnotation instanceof PropertyAndAnnotation) {
+                $this->refactorPropertyAndAnnotation($node, $propertyAndAnnotation, $loadValidatorMetadataClassMethod, $stmtKey);
             }
-            $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            $propertyPhpDocInfo->addTagValueNode($doctrineTagValueNode);
         }
-        // in the end this should be only empty class method removal
-        $this->removeNode($loadValidatorMetadataClassMethod);
+        // remove empty class method
+        if ((array) $loadValidatorMetadataClassMethod->stmts === []) {
+            $this->removeNode($loadValidatorMetadataClassMethod);
+        }
         return $node;
+    }
+    private function refactorClassMethodAndAnnotation(Class_ $class, ClassMethodAndAnnotation $classMethodAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey) : void
+    {
+        $classMethod = $class->getMethod($classMethodAndAnnotation->getMethodName());
+        if (!$classMethod instanceof ClassMethod) {
+            return;
+        }
+        $getterPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $getterPhpDocInfo->addTagValueNode($classMethodAndAnnotation->getDoctrineAnnotationTagValueNode());
+        unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
+    }
+    private function refactorPropertyAndAnnotation(Class_ $class, PropertyAndAnnotation $propertyAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey) : void
+    {
+        $property = $class->getProperty($propertyAndAnnotation->getProperty());
+        if (!$property instanceof Property) {
+            return;
+        }
+        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+        $propertyPhpDocInfo->addTagValueNode($propertyAndAnnotation->getDoctrineAnnotationTagValueNode());
+        unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
     }
 }

@@ -54,15 +54,20 @@ final class CommandPropertyToAttributeRector extends AbstractRector implements M
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add Symfony\\Component\\Console\\Attribute\\AsCommand to Symfony Commands and remove the deprecated properties', [new CodeSample(<<<'CODE_SAMPLE'
-class SunshineCommand extends \Symfony\Component\Console\Command\Command
+use Symfony\Component\Console\Command\Command;
+
+final class SunshineCommand extends Command
 {
     /** @var string|null */
     public static $defaultName = 'sunshine';
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-#[\Symfony\Component\Console\Attribute\AsCommand('sunshine')]
-class SunshineCommand extends \Symfony\Component\Console\Command\Command
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
+
+#[AsCommand('sunshine')]
+final class SunshineCommand extends Command
 {
 }
 CODE_SAMPLE

@@ -77,11 +77,11 @@ final class ReadWritePropertyAnalyzer
         if ($parent instanceof AssignOp) {
             return \true;
         }
-        if ($parent instanceof ArrayDimFetch && $parent->dim === $node && $this->isNotInsideIssetUnset($parent)) {
-            return $this->isArrayDimFetchRead($parent);
-        }
         if (!$parent instanceof ArrayDimFetch) {
             return !$this->assignManipulator->isLeftPartOfAssign($node);
+        }
+        if ($parent->dim === $node && $this->isNotInsideIssetUnset($parent)) {
+            return $this->isArrayDimFetchRead($parent);
         }
         if ($this->assignManipulator->isLeftPartOfAssign($parent)) {
             return \false;
