@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
 use PhpParser\Node as PhpParserNode;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
@@ -25,7 +24,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 
@@ -68,19 +66,10 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return null;
         }
 
-        $previousNode = $phpParserNode->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousNode instanceof FullyQualified) {
-            return null;
-        }
-
         $identifier = clone $node;
-        $namespacedName = $this->resolveNamespacedName($phpParserNode, $node->name);
+        $namespacedName = $this->resolveNamespacedName($identifier, $phpParserNode, $node->name);
         $identifier->name = $namespacedName;
         $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($identifier, $phpParserNode);
-
-        if ($staticType instanceof AliasedObjectType) {
-            return null;
-        }
 
         // make sure to compare FQNs
         $objectType = $this->expandShortenedObjectType($staticType);
@@ -115,13 +104,29 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         $this->oldToNewTypes = $oldToNewTypes;
     }
 
-    private function resolveNamespacedName(PhpParserNode $phpParserNode, string $name): string
-    {
+    private function resolveNamespacedName(
+        IdentifierTypeNode $identifierTypeNode,
+        PhpParserNode $phpParserNode,
+        string $name
+    ): string {
         if (str_starts_with($name, '\\')) {
             return $name;
         }
 
         if (str_contains($name, '\\')) {
+            return $name;
+        }
+
+        $staticType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType(
+            $identifierTypeNode,
+            $phpParserNode
+        );
+
+        if (! $staticType instanceof ObjectType) {
+            return $name;
+        }
+
+        if ($staticType instanceof ShortenedObjectType) {
             return $name;
         }
 
@@ -143,7 +148,13 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return $namespaceName . '\\' . $name;
         }
 
-        return $this->resolveNamefromUse($uses, $name);
+        $nameFromUse = $this->resolveNamefromUse($uses, $name);
+
+        if ($nameFromUse !== $name) {
+            return $nameFromUse;
+        }
+
+        return $namespaceName . '\\' . $nameFromUse;
     }
 
     /**
