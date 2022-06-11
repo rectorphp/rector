@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611\Symplify\PackageBuilder\Parameter;
+namespace RectorPrefix202206\Symplify\PackageBuilder\Parameter;
 
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use RectorPrefix20220611\Symfony\Component\HttpFoundation\ParameterBag;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix202206\Symfony\Component\HttpFoundation\ParameterBag;
 /**
  * @api
  * @see \Symplify\PackageBuilder\Tests\Parameter\ParameterProviderTest

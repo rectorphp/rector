@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220611\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix202206\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix20220611\Symfony\Component\Config\Definition\NodeInterface;
-use RectorPrefix20220611\Symfony\Component\Config\Definition\VariableNode;
+use RectorPrefix202206\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix202206\Symfony\Component\Config\Definition\VariableNode;
 /**
  * This class provides a fluent interface for defining a node.
  *

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611;
+namespace RectorPrefix202206;
 
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix20220611\Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker;
-use RectorPrefix20220611\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202206\Symplify\MonorepoBuilder\Release\ReleaseWorker\PushTagReleaseWorker;
+use RectorPrefix202206\Symplify\MonorepoBuilder\Release\ReleaseWorker\TagVersionReleaseWorker;
 return static function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     // @see https://github.com/symplify/monorepo-builder#6-release-flow

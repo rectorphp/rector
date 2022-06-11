@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220611\Symfony\Component\Finder;
+namespace RectorPrefix202206\Symfony\Component\Finder;
 
-use RectorPrefix20220611\Symfony\Component\Finder\Comparator\DateComparator;
-use RectorPrefix20220611\Symfony\Component\Finder\Comparator\NumberComparator;
-use RectorPrefix20220611\Symfony\Component\Finder\Exception\DirectoryNotFoundException;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\CustomFilterIterator;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\DateRangeFilterIterator;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\DepthRangeFilterIterator;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\ExcludeDirectoryFilterIterator;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\FilecontentFilterIterator;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\FilenameFilterIterator;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\LazyIterator;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\SizeRangeFilterIterator;
-use RectorPrefix20220611\Symfony\Component\Finder\Iterator\SortableIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Comparator\DateComparator;
+use RectorPrefix202206\Symfony\Component\Finder\Comparator\NumberComparator;
+use RectorPrefix202206\Symfony\Component\Finder\Exception\DirectoryNotFoundException;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\CustomFilterIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\DateRangeFilterIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\DepthRangeFilterIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\ExcludeDirectoryFilterIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\FilecontentFilterIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\FilenameFilterIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\LazyIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\SizeRangeFilterIterator;
+use RectorPrefix202206\Symfony\Component\Finder\Iterator\SortableIterator;
 /**
  * Finder allows to build rules to find files and directories.
  *

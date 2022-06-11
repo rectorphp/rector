@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220611\Symfony\Component\Console\Command;
+namespace RectorPrefix202206\Symfony\Component\Console\Command;
 
-use RectorPrefix20220611\Symfony\Component\Console\Application;
-use RectorPrefix20220611\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix20220611\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix20220611\Symfony\Component\Console\Completion\Suggestion;
-use RectorPrefix20220611\Symfony\Component\Console\Helper\HelperSet;
-use RectorPrefix20220611\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix20220611\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220611\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202206\Symfony\Component\Console\Application;
+use RectorPrefix202206\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202206\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202206\Symfony\Component\Console\Completion\Suggestion;
+use RectorPrefix202206\Symfony\Component\Console\Helper\HelperSet;
+use RectorPrefix202206\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202206\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202206\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

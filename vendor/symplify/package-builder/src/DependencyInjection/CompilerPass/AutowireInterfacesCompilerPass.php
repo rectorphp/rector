@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611\Symplify\PackageBuilder\DependencyInjection\CompilerPass;
+namespace RectorPrefix202206\Symplify\PackageBuilder\DependencyInjection\CompilerPass;
 
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerBuilder;
 final class AutowireInterfacesCompilerPass implements CompilerPassInterface
 {
     /**

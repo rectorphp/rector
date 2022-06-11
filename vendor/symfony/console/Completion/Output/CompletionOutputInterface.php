@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220611\Symfony\Component\Console\Completion\Output;
+namespace RectorPrefix202206\Symfony\Component\Console\Completion\Output;
 
-use RectorPrefix20220611\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix20220611\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202206\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202206\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Transforms the {@see CompletionSuggestions} object into output readable by the shell completion.
  *

@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\RectorGenerator\Finder;
 
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
-use RectorPrefix20220611\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20220611\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202206\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix202206\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFinder
 {
     /**

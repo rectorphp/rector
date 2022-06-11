@@ -6,7 +6,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\Analyser\ScopeFactory as PHPStanScopeFactory;
-use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
 final class ScopeFactory
 {
     /**

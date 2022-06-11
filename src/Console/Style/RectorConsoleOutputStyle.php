@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Style;
 
-use RectorPrefix20220611\OndraM\CiDetector\CiDetector;
-use RectorPrefix20220611\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix20220611\Symfony\Component\Console\Helper\ProgressBar;
-use RectorPrefix20220611\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220611\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220611\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202206\OndraM\CiDetector\CiDetector;
+use RectorPrefix202206\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202206\Symfony\Component\Console\Helper\ProgressBar;
+use RectorPrefix202206\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202206\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202206\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorConsoleOutputStyle extends SymfonyStyle
 {
     /**

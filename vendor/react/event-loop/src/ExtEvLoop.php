@@ -1,12 +1,12 @@
 <?php
 
-namespace RectorPrefix20220611\React\EventLoop;
+namespace RectorPrefix202206\React\EventLoop;
 
 use Ev;
 use EvIo;
 use EvLoop;
-use RectorPrefix20220611\React\EventLoop\Tick\FutureTickQueue;
-use RectorPrefix20220611\React\EventLoop\Timer\Timer;
+use RectorPrefix202206\React\EventLoop\Tick\FutureTickQueue;
+use RectorPrefix202206\React\EventLoop\Timer\Timer;
 use SplObjectStorage;
 /**
  * An `ext-ev` based event loop.

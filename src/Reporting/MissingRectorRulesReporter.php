@@ -7,7 +7,7 @@ use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix20220611\Symfony\Component\Console\Command\Command;
+use RectorPrefix202206\Symfony\Component\Console\Command\Command;
 final class MissingRectorRulesReporter
 {
     /**

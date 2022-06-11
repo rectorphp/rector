@@ -13,7 +13,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Naming\VariableRenamer;
-use RectorPrefix20220611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix202206\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ArrayDimFetchRenamer
 {
     /**

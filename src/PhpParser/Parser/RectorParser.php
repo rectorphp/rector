@@ -7,7 +7,7 @@ use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
 use PHPStan\Parser\Parser;
 use Rector\Core\PhpParser\ValueObject\StmtsAndTokens;
-use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorParser
 {
     /**

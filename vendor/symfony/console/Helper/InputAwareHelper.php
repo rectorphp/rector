@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220611\Symfony\Component\Console\Helper;
+namespace RectorPrefix202206\Symfony\Component\Console\Helper;
 
-use RectorPrefix20220611\Symfony\Component\Console\Input\InputAwareInterface;
-use RectorPrefix20220611\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202206\Symfony\Component\Console\Input\InputAwareInterface;
+use RectorPrefix202206\Symfony\Component\Console\Input\InputInterface;
 /**
  * An implementation of InputAwareInterface for Helpers.
  *

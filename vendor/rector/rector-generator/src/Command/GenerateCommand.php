@@ -9,11 +9,11 @@ use Rector\RectorGenerator\Generator\RectorGenerator;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\TemplateVariablesFactory;
 use Rector\RectorGenerator\ValueObject\NamePattern;
-use RectorPrefix20220611\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220611\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix20220611\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220611\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202206\Symfony\Component\Console\Command\Command;
+use RectorPrefix202206\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202206\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202206\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\RectorGenerator\Tests\RectorGenerator\GenerateCommandInteractiveModeTest
  */

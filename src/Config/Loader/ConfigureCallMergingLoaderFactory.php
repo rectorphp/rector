@@ -5,13 +5,13 @@ namespace Rector\Core\Config\Loader;
 
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\Loader\ConfigurableCallValuesCollectingPhpFileLoader;
-use RectorPrefix20220611\Symfony\Component\Config\FileLocator;
-use RectorPrefix20220611\Symfony\Component\Config\Loader\DelegatingLoader;
-use RectorPrefix20220611\Symfony\Component\Config\Loader\GlobFileLoader;
-use RectorPrefix20220611\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix20220611\Symfony\Component\Config\Loader\LoaderResolver;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220611\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
+use RectorPrefix202206\Symfony\Component\Config\FileLocator;
+use RectorPrefix202206\Symfony\Component\Config\Loader\DelegatingLoader;
+use RectorPrefix202206\Symfony\Component\Config\Loader\GlobFileLoader;
+use RectorPrefix202206\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix202206\Symfony\Component\Config\Loader\LoaderResolver;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202206\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
 final class ConfigureCallMergingLoaderFactory implements LoaderFactoryInterface
 {
     /**

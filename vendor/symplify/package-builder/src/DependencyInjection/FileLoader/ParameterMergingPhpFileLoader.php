@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611\Symplify\PackageBuilder\DependencyInjection\FileLoader;
+namespace RectorPrefix202206\Symplify\PackageBuilder\DependencyInjection\FileLoader;
 
-use RectorPrefix20220611\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix20220611\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix202206\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix202206\Symplify\PackageBuilder\Yaml\ParametersMerger;
 /**
  * @api
  *

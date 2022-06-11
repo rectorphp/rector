@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611\Symplify\AutowireArrayParameter\TypeResolver;
+namespace RectorPrefix202206\Symplify\AutowireArrayParameter\TypeResolver;
 
-use RectorPrefix20220611\Nette\Utils\Reflection;
+use RectorPrefix202206\Nette\Utils\Reflection;
 use ReflectionMethod;
-use RectorPrefix20220611\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver;
+use RectorPrefix202206\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver;
 final class ParameterTypeResolver
 {
     /**

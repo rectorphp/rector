@@ -11,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
-use RectorPrefix20220611\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix202206\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * Decorate node with fully qualified class name for const epxr,
  * e.g. Direction::*

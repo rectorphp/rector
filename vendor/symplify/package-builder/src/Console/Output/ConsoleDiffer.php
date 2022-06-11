@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611\Symplify\PackageBuilder\Console\Output;
+namespace RectorPrefix202206\Symplify\PackageBuilder\Console\Output;
 
-use RectorPrefix20220611\SebastianBergmann\Diff\Differ;
-use RectorPrefix20220611\Symplify\PackageBuilder\Console\Formatter\ColorConsoleDiffFormatter;
+use RectorPrefix202206\SebastianBergmann\Diff\Differ;
+use RectorPrefix202206\Symplify\PackageBuilder\Console\Formatter\ColorConsoleDiffFormatter;
 /**
  * @api
  */

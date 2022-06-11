@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser\Node\Service_;
 
-use RectorPrefix20220611\Nette\Neon\Node\EntityNode;
-use RectorPrefix20220611\Nette\Neon\Node\LiteralNode;
+use RectorPrefix202206\Nette\Neon\Node\EntityNode;
+use RectorPrefix202206\Nette\Neon\Node\LiteralNode;
 use Rector\Nette\NeonParser\Node\AbstractVirtualNode;
 final class SetupMethodCall extends AbstractVirtualNode
 {

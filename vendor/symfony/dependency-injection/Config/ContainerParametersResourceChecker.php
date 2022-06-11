@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220611\Symfony\Component\DependencyInjection\Config;
+namespace RectorPrefix202206\Symfony\Component\DependencyInjection\Config;
 
-use RectorPrefix20220611\Symfony\Component\Config\Resource\ResourceInterface;
-use RectorPrefix20220611\Symfony\Component\Config\ResourceCheckerInterface;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202206\Symfony\Component\Config\Resource\ResourceInterface;
+use RectorPrefix202206\Symfony\Component\Config\ResourceCheckerInterface;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * @author Maxime Steinhausser <maxime.steinhausser@gmail.com>
  */

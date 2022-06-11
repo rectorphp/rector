@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611\Symplify\Astral\PhpParser;
+namespace RectorPrefix202206\Symplify\Astral\PhpParser;
 
 use PhpParser\Lexer\Emulative;
 use PhpParser\NodeVisitor\NameResolver;

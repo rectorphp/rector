@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611\Symplify\EasyTesting\PHPUnit;
+namespace RectorPrefix202206\Symplify\EasyTesting\PHPUnit;
 
 /**
  * @api
@@ -13,6 +13,6 @@ final class StaticPHPUnitEnvironment
      */
     public static function isPHPUnitRun() : bool
     {
-        return \defined('RectorPrefix20220611\\PHPUNIT_COMPOSER_INSTALL') || \defined('RectorPrefix20220611\\__PHPUNIT_PHAR__');
+        return \defined('RectorPrefix202206\\PHPUNIT_COMPOSER_INSTALL') || \defined('RectorPrefix202206\\__PHPUNIT_PHAR__');
     }
 }

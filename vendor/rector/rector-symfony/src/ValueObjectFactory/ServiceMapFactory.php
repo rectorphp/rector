@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Rector\Symfony\ValueObjectFactory;
 
-use RectorPrefix20220611\Nette\Utils\Json;
-use RectorPrefix20220611\Nette\Utils\Strings;
+use RectorPrefix202206\Nette\Utils\Json;
+use RectorPrefix202206\Nette\Utils\Strings;
 use Rector\Symfony\Exception\XmlContainerNotExistsException;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 use Rector\Symfony\ValueObject\Tag;
 use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 use SimpleXMLElement;
-use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileSystem;
 final class ServiceMapFactory
 {
     /**

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611;
+namespace RectorPrefix202206;
 
-use RectorPrefix20220611\Nette\Neon\Decoder;
+use RectorPrefix202206\Nette\Neon\Decoder;
 return static function (\Rector\Config\RectorConfig $rectorConfig) : void {
     $services = $rectorConfig->services();
     $services->defaults()->public()->autowire()->autoconfigure();

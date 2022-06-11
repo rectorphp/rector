@@ -10,7 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
-use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class DataProviderClassMethodFactory
 {
     public function createFromRecipe(DataProviderClassMethodRecipe $dataProviderClassMethodRecipe) : ClassMethod

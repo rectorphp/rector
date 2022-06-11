@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220611\Symplify\EasyTesting\DataProvider;
+namespace RectorPrefix202206\Symplify\EasyTesting\DataProvider;
 
-use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @api
  */

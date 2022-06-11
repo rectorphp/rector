@@ -12,7 +12,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix202206\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class MockedVariableAnalyzer
 {
     /**

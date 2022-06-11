@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220611\Symfony\Component\DependencyInjection\Extension;
+namespace RectorPrefix202206\Symfony\Component\DependencyInjection\Extension;
 
-use RectorPrefix20220611\Symfony\Component\Config\Definition\Configuration;
-use RectorPrefix20220611\Symfony\Component\Config\Definition\ConfigurationInterface;
-use RectorPrefix20220611\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202206\Symfony\Component\Config\Definition\Configuration;
+use RectorPrefix202206\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix202206\Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 /**
  * An Extension that provides configuration hooks.
  *

@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix20220611\React\Socket;
+namespace RectorPrefix202206\React\Socket;
 
-use RectorPrefix20220611\Evenement\EventEmitter;
-use RectorPrefix20220611\React\EventLoop\LoopInterface;
+use RectorPrefix202206\Evenement\EventEmitter;
+use RectorPrefix202206\React\EventLoop\LoopInterface;
 final class SocketServer extends EventEmitter implements ServerInterface
 {
     private $server;

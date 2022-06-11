@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\RectorInstaller;
 
-use RectorPrefix20220611\Composer\Installer\InstallationManager;
-use RectorPrefix20220611\Composer\IO\IOInterface;
-use RectorPrefix20220611\Composer\Package\PackageInterface;
-use RectorPrefix20220611\Composer\Repository\InstalledRepositoryInterface;
-use RectorPrefix20220611\Composer\Util\Filesystem as ComposerFilesystem;
+use RectorPrefix202206\Composer\Installer\InstallationManager;
+use RectorPrefix202206\Composer\IO\IOInterface;
+use RectorPrefix202206\Composer\Package\PackageInterface;
+use RectorPrefix202206\Composer\Repository\InstalledRepositoryInterface;
+use RectorPrefix202206\Composer\Util\Filesystem as ComposerFilesystem;
 /**
  * @see \Rector\RectorInstaller\Tests\PluginInstallerTest
  */

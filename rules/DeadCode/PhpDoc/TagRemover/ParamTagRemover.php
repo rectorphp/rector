@@ -9,7 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
-use RectorPrefix20220611\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix202206\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class ParamTagRemover
 {
     /**

@@ -12,10 +12,10 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220611\Webmozart\Assert\Assert;
+use RectorPrefix202206\Webmozart\Assert\Assert;
 /**
  * @see https://github.com/laravel/framework/pull/32856
  *

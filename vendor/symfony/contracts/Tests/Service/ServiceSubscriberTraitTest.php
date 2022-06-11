@@ -8,16 +8,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220611\Symfony\Contracts\Tests\Service;
+namespace RectorPrefix202206\Symfony\Contracts\Tests\Service;
 
 use PHPUnit\Framework\TestCase;
-use RectorPrefix20220611\Psr\Container\ContainerInterface;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir1\Service1;
-use RectorPrefix20220611\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir2\Service2;
-use RectorPrefix20220611\Symfony\Contracts\Service\Attribute\SubscribedService;
-use RectorPrefix20220611\Symfony\Contracts\Service\ServiceLocatorTrait;
-use RectorPrefix20220611\Symfony\Contracts\Service\ServiceSubscriberInterface;
-use RectorPrefix20220611\Symfony\Contracts\Service\ServiceSubscriberTrait;
+use RectorPrefix202206\Psr\Container\ContainerInterface;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir1\Service1;
+use RectorPrefix202206\Symfony\Component\DependencyInjection\Tests\Fixtures\Prototype\OtherDir\Component1\Dir2\Service2;
+use RectorPrefix202206\Symfony\Contracts\Service\Attribute\SubscribedService;
+use RectorPrefix202206\Symfony\Contracts\Service\ServiceLocatorTrait;
+use RectorPrefix202206\Symfony\Contracts\Service\ServiceSubscriberInterface;
+use RectorPrefix202206\Symfony\Contracts\Service\ServiceSubscriberTrait;
 class ServiceSubscriberTraitTest extends TestCase
 {
     public function testMethodsOnParentsAndChildrenAreIgnoredInGetSubscribedServices()

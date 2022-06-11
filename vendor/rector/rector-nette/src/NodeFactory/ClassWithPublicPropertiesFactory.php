@@ -6,10 +6,10 @@ namespace Rector\Nette\NodeFactory;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
-use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
-use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
-use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\TraitUseBuilder;
+use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
+use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
+use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\TraitUseBuilder;
 /**
  * @see \Rector\Nette\Tests\NodeFactory\ClassWithPublicPropertiesFactory\ClassWithPublicPropertiesFactoryTest
  */

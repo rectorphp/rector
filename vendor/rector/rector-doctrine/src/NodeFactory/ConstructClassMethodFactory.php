@@ -16,7 +16,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class ConstructClassMethodFactory
 {
     /**
