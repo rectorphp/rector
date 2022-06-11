@@ -83,7 +83,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $hasChanged = false;
+        $hasRemoved = false;
 
         foreach ($node->getProperties() as $property) {
             if ($this->shouldSkipProperty($property)) {
@@ -94,12 +94,20 @@ CODE_SAMPLE
                 continue;
             }
 
-            $this->complexNodeRemover->removePropertyAndUsages($node, $property, $this->removeAssignSideEffect);
+            // use different variable to avoid re-assign back $hasRemoved to false
+            // when already asssigned to true
+            $isRemoved = $this->complexNodeRemover->removePropertyAndUsages(
+                $node,
+                $property,
+                $this->removeAssignSideEffect
+            );
 
-            $hasChanged = true;
+            if ($isRemoved) {
+                $hasRemoved = true;
+            }
         }
 
-        return $hasChanged ? $node : null;
+        return $hasRemoved ? $node : null;
     }
 
     private function shouldSkipProperty(Property $property): bool

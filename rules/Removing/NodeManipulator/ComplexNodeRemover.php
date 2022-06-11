@@ -17,11 +17,13 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class ComplexNodeRemover
@@ -32,7 +34,8 @@ final class ComplexNodeRemover
         private readonly NodeRemover $nodeRemover,
         private readonly SideEffectNodeDetector $sideEffectNodeDetector,
         private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser,
-        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer
+        private readonly PropertyFetchAnalyzer $propertyFetchAnalyzer,
+        private readonly NodeComparator $nodeComparator
     ) {
     }
 
@@ -40,18 +43,15 @@ final class ComplexNodeRemover
         Class_ $class,
         Property $property,
         bool $removeAssignSideEffect
-    ): void {
+    ): bool {
         $propertyName = $this->nodeNameResolver->getName($property);
-
-        $hasSideEffect = false;
-        $isPartOfAnotherAssign = false;
+        $totalPropertyFetch = $this->propertyFetchAnalyzer->countLocalPropertyFetchName($class, $propertyName);
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use (
             $removeAssignSideEffect,
             $propertyName,
-            &$hasSideEffect,
-            &$isPartOfAnotherAssign
-        ) {
+            &$totalPropertyFetch
+        ): ?Node {
             // here should be checked all expr like stmts that can hold assign, e.f. if, foreach etc. etc.
             if (! $node instanceof Expression) {
                 return null;
@@ -68,7 +68,11 @@ final class ComplexNodeRemover
 
             // skip double assigns
             if ($assign->expr instanceof Assign) {
-                $isPartOfAnotherAssign = true;
+                return null;
+            }
+
+            $originalNode = $assign->getAttribute(AttributeKey::ORIGINAL_NODE);
+            if (! $this->nodeComparator->areNodesEqual($originalNode, $assign)) {
                 return null;
             }
 
@@ -77,32 +81,35 @@ final class ComplexNodeRemover
                 return null;
             }
 
+            $currentTotalPropertyFetch = $totalPropertyFetch;
             foreach ($propertyFetches as $propertyFetch) {
                 if ($this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
                     if (! $removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
-                        $hasSideEffect = true;
                         return null;
                     }
 
-                    $this->nodeRemover->removeNode($node);
+                    --$totalPropertyFetch;
                 }
+            }
+
+            if ($totalPropertyFetch < $currentTotalPropertyFetch) {
+                $this->nodeRemover->removeNode($node);
+                return $node;
             }
 
             return null;
         });
 
-        // do not remove anyhting in case of side-effect
-        if ($hasSideEffect) {
-            return;
-        }
-
-        if ($isPartOfAnotherAssign) {
-            return;
+        // not all property fetch with name removed
+        if ($totalPropertyFetch > 0) {
+            return false;
         }
 
         $this->removeConstructorDependency($class, $propertyName);
 
         $this->nodeRemover->removeNode($property);
+
+        return true;
     }
 
     /**

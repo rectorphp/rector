@@ -23,6 +23,7 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 
 final class PropertyFetchAnalyzer
 {
@@ -34,7 +35,8 @@ final class PropertyFetchAnalyzer
     public function __construct(
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly AstResolver $astResolver
+        private readonly AstResolver $astResolver,
+        private readonly SimpleCallableNodeTraverser $simpleCallableNodeTraverser
     ) {
     }
 
@@ -72,11 +74,58 @@ final class PropertyFetchAnalyzer
         return $this->nodeNameResolver->isName($node->name, $desiredPropertyName);
     }
 
+    public function countLocalPropertyFetchName(ClassLike $classLike, string $propertyName): int
+    {
+        $total = 0;
+
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classLike->stmts, function (Node $subNode) use (
+            $classLike,
+            $propertyName,
+            &$total
+        ): ?Node {
+            if (! $this->isLocalPropertyFetchName($subNode, $propertyName)) {
+                return null;
+            }
+
+            $parentClassLike = $this->betterNodeFinder->findParentType($subNode, ClassLike::class);
+
+            // property fetch in Trait cannot get parent ClassLike
+            if (! $parentClassLike instanceof ClassLike) {
+                ++$total;
+            }
+
+            if ($parentClassLike === $classLike) {
+                ++$total;
+            }
+
+            return $subNode;
+        });
+
+        return $total;
+    }
+
     public function containsLocalPropertyFetchName(Node $node, string $propertyName): bool
     {
+        $classLike = $node instanceof ClassLike
+            ? $node
+            : $this->betterNodeFinder->findParentType($node, ClassLike::class);
+
         return (bool) $this->betterNodeFinder->findFirst(
             $node,
-            fn (Node $node): bool => $this->isLocalPropertyFetchName($node, $propertyName)
+            function (Node $node) use ($classLike, $propertyName): bool {
+                if (! $this->isLocalPropertyFetchName($node, $propertyName)) {
+                    return false;
+                }
+
+                $parentClassLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+
+                // property fetch in Trait cannot get parent ClassLike
+                if (! $parentClassLike instanceof ClassLike) {
+                    return true;
+                }
+
+                return $parentClassLike === $classLike;
+            }
         );
     }
 
