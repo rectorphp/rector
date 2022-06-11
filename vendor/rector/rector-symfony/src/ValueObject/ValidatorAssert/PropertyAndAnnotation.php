@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\ValueObject;
+namespace Rector\Symfony\ValueObject\ValidatorAssert;
 
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-final class ClassMethodAndAnnotation
+final class PropertyAndAnnotation
 {
     /**
      * @readonly
      * @var string
      */
-    private $methodName;
+    private $property;
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     private $doctrineAnnotationTagValueNode;
-    public function __construct(string $methodName, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    public function __construct(string $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {
-        $this->methodName = $methodName;
+        $this->property = $property;
         $this->doctrineAnnotationTagValueNode = $doctrineAnnotationTagValueNode;
     }
-    public function getMethodName() : string
+    public function getProperty() : string
     {
-        return $this->methodName;
+        return $this->property;
     }
     public function getDoctrineAnnotationTagValueNode() : DoctrineAnnotationTagValueNode
     {

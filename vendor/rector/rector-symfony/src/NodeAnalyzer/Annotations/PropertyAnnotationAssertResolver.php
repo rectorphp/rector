@@ -6,11 +6,9 @@ namespace Rector\Symfony\NodeAnalyzer\Annotations;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory;
-use Rector\Symfony\ValueObject\PropertyAndAnnotation;
+use Rector\Symfony\ValueObject\ValidatorAssert\PropertyAndAnnotation;
 final class PropertyAnnotationAssertResolver
 {
     /**
@@ -25,25 +23,19 @@ final class PropertyAnnotationAssertResolver
     private $doctrineAnnotationFromNewFactory;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
+     * @var \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher
      */
-    private $nodeNameResolver;
-    public function __construct(ValueResolver $valueResolver, DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory, NodeNameResolver $nodeNameResolver)
+    private $stmtMethodCallMatcher;
+    public function __construct(ValueResolver $valueResolver, DoctrineAnnotationFromNewFactory $doctrineAnnotationFromNewFactory, \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher $stmtMethodCallMatcher)
     {
         $this->valueResolver = $valueResolver;
         $this->doctrineAnnotationFromNewFactory = $doctrineAnnotationFromNewFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->stmtMethodCallMatcher = $stmtMethodCallMatcher;
     }
     public function resolve(Stmt $stmt) : ?PropertyAndAnnotation
     {
-        if (!$stmt instanceof Expression) {
-            return null;
-        }
-        if (!$stmt->expr instanceof MethodCall) {
-            return null;
-        }
-        $methodCall = $stmt->expr;
-        if (!$this->nodeNameResolver->isName($methodCall->name, 'addPropertyConstraint')) {
+        $methodCall = $this->stmtMethodCallMatcher->match($stmt, 'addPropertyConstraint');
+        if (!$methodCall instanceof MethodCall) {
             return null;
         }
         $args = $methodCall->getArgs();

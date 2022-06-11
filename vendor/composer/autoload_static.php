@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbefe56bb1d3fefbcab50ce5415e9cd27
+class ComposerStaticInit376f3b17c6c2bb014736d4c6d3cb06cf
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3071,8 +3071,10 @@ class ComposerStaticInitbefe56bb1d3fefbcab50ce5415e9cd27
         'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',
         'Rector\\Symfony\\FormHelper\\FormTypeStringToTypeProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/FormHelper/FormTypeStringToTypeProvider.php',
         'Rector\\Symfony\\Helper\\TemplateGuesser' => __DIR__ . '/..' . '/rector/rector-symfony/src/Helper/TemplateGuesser.php',
+        'Rector\\Symfony\\NodeAnalyzer\\Annotations\\ClassAnnotationAssertResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/ClassAnnotationAssertResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\MethodCallAnnotationAssertResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/MethodCallAnnotationAssertResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\PropertyAnnotationAssertResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/PropertyAnnotationAssertResolver.php',
+        'Rector\\Symfony\\NodeAnalyzer\\Annotations\\StmtMethodCallMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/StmtMethodCallMatcher.php',
         'Rector\\Symfony\\NodeAnalyzer\\DependencyInjectionMethodCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/DependencyInjectionMethodCallAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormAddMethodCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormAddMethodCallAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormCollectionAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormCollectionAnalyzer.php',
@@ -3180,20 +3182,20 @@ class ComposerStaticInitbefe56bb1d3fefbcab50ce5415e9cd27
         'Rector\\Symfony\\TypeAnalyzer\\JMSDITypeResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/JMSDITypeResolver.php',
         'Rector\\Symfony\\TypeDeclaration\\ReturnTypeDeclarationUpdater' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeDeclaration/ReturnTypeDeclarationUpdater.php',
         'Rector\\Symfony\\ValueObjectFactory\\ServiceMapFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObjectFactory/ServiceMapFactory.php',
-        'Rector\\Symfony\\ValueObject\\ClassMethodAndAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ClassMethodAndAnnotation.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyRequestConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyRequestConstantMap.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyResponseConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyResponseConstantMap.php',
         'Rector\\Symfony\\ValueObject\\EventNameToClassAndConstant' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventNameToClassAndConstant.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodName' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodName.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodNameWithPriority' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodNameWithPriority.php',
         'Rector\\Symfony\\ValueObject\\InvokableController\\ActiveClassElements' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/InvokableController/ActiveClassElements.php',
-        'Rector\\Symfony\\ValueObject\\PropertyAndAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/PropertyAndAnnotation.php',
         'Rector\\Symfony\\ValueObject\\ReplaceServiceArgument' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ReplaceServiceArgument.php',
         'Rector\\Symfony\\ValueObject\\ServiceDefinition' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceDefinition.php',
         'Rector\\Symfony\\ValueObject\\ServiceMap\\ServiceMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceMap/ServiceMap.php',
         'Rector\\Symfony\\ValueObject\\SymfonyRouteMetadata' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/SymfonyRouteMetadata.php',
         'Rector\\Symfony\\ValueObject\\Tag' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/Tag.php',
         'Rector\\Symfony\\ValueObject\\Tag\\EventListenerTag' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/Tag/EventListenerTag.php',
+        'Rector\\Symfony\\ValueObject\\ValidatorAssert\\ClassMethodAndAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ValidatorAssert/ClassMethodAndAnnotation.php',
+        'Rector\\Symfony\\ValueObject\\ValidatorAssert\\PropertyAndAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ValidatorAssert/PropertyAndAnnotation.php',
         'Rector\\Testing\\Contract\\RectorTestInterface' => __DIR__ . '/../..' . '/packages/Testing/Contract/RectorTestInterface.php',
         'Rector\\Testing\\PHPUnit\\AbstractRectorTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractRectorTestCase.php',
         'Rector\\Testing\\PHPUnit\\AbstractTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractTestCase.php',
@@ -3393,9 +3395,9 @@ class ComposerStaticInitbefe56bb1d3fefbcab50ce5415e9cd27
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbefe56bb1d3fefbcab50ce5415e9cd27::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbefe56bb1d3fefbcab50ce5415e9cd27::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbefe56bb1d3fefbcab50ce5415e9cd27::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit376f3b17c6c2bb014736d4c6d3cb06cf::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit376f3b17c6c2bb014736d4c6d3cb06cf::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit376f3b17c6c2bb014736d4c6d3cb06cf::$classMap;
 
         }, null, ClassLoader::class);
     }
