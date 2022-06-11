@@ -20,6 +20,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\TypeDeclaration\PhpDocParser\NonInformativeReturnTagRemover;
 use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
@@ -131,7 +132,7 @@ CODE_SAMPLE
             return null;
         }
         $inferedReturnType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers($node, [ReturnTypeDeclarationReturnTypeInfererTypeInferer::class]);
-        if ($inferedReturnType instanceof MixedType) {
+        if ($inferedReturnType instanceof MixedType || $inferedReturnType instanceof NonExistingObjectType) {
             return null;
         }
         if ($this->returnTypeAlreadyAddedChecker->isSameOrBetterReturnTypeAlreadyAdded($node, $inferedReturnType)) {
