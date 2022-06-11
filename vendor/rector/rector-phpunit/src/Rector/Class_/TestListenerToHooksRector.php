@@ -13,10 +13,10 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/sebastianbergmann/phpunit/issues/3388
- * @see https://github.com/sebastianbergmann/phpunit/commit/34a0abd8b56a4a9de83c9e56384f462541a0f939
+ * @changelog https://github.com/sebastianbergmann/phpunit/issues/3388
+ * @changelog https://github.com/sebastianbergmann/phpunit/commit/34a0abd8b56a4a9de83c9e56384f462541a0f939
  *
- * @see https://github.com/sebastianbergmann/phpunit/tree/master/src/Runner/Hook
+ * @changelog https://github.com/sebastianbergmann/phpunit/tree/master/src/Runner/Hook
  * @see \Rector\PHPUnit\Tests\Rector\Class_\TestListenerToHooksRector\TestListenerToHooksRectorTest
  */
 final class TestListenerToHooksRector extends AbstractRector

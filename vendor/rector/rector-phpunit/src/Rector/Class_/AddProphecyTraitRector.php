@@ -12,9 +12,9 @@ use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/sebastianbergmann/phpunit/issues/4142
- * @see https://github.com/sebastianbergmann/phpunit/issues/4141
- * @see https://github.com/sebastianbergmann/phpunit/issues/4149
+ * @changelog https://github.com/sebastianbergmann/phpunit/issues/4142
+ * @changelog https://github.com/sebastianbergmann/phpunit/issues/4141
+ * @changelog https://github.com/sebastianbergmann/phpunit/issues/4149
  *
  * @see \Rector\PHPUnit\Tests\Rector\Class_\AddProphecyTraitRector\AddProphecyTraitRectorTest
  */

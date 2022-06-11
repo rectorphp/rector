@@ -6,7 +6,6 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -15,12 +14,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/symfony/symfony/pull/29685/files
  * @see \Rector\PHPUnit\Tests\Rector\MethodCall\UseSpecificWillMethodRector\UseSpecificWillMethodRectorTest
  */
-final class UseSpecificWillMethodRector extends AbstractRector
+final class UseSpecificWithMethodRector extends AbstractRector
 {
-    /**
-     * @var array<string, string>
-     */
-    private const NESTED_METHOD_TO_RENAME_MAP = ['returnArgument' => 'willReturnArgument', 'returnCallback' => 'willReturnCallback', 'returnSelf' => 'willReturnSelf', 'returnValue' => 'willReturn', 'returnValueMap' => 'willReturnMap', 'throwException' => 'willThrowException'];
     /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
@@ -32,15 +27,16 @@ final class UseSpecificWillMethodRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes $mock->will() call to more specific method', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes ->with() to more specific method', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass extends PHPUnit\Framework\TestCase
 {
     public function test()
     {
         $translator = $this->createMock('SomeClass');
+
         $translator->expects($this->any())
             ->method('trans')
-            ->will($this->returnValue('translated max {{ max }}!'));
+            ->with($this->equalTo('old max {{ max }}!'));
     }
 }
 CODE_SAMPLE
@@ -50,9 +46,10 @@ class SomeClass extends PHPUnit\Framework\TestCase
     public function test()
     {
         $translator = $this->createMock('SomeClass');
+
         $translator->expects($this->any())
             ->method('trans')
-            ->willReturnValue('translated max {{ max }}!');
+            ->with('old max {{ max }}!');
     }
 }
 CODE_SAMPLE
@@ -74,23 +71,19 @@ CODE_SAMPLE
             return null;
         }
         // we cannot check caller types, as on old PHPUnit version, this the magic ->method() call result to a mixed type
-        if (!$this->isName($node->name, 'will')) {
+        if (!$this->isName($node->name, 'with')) {
             return null;
         }
-        $callArgs = $node->getArgs();
-        if (!$callArgs[0]->value instanceof MethodCall) {
-            return null;
-        }
-        $nestedMethodCall = $callArgs[0]->value;
-        foreach (self::NESTED_METHOD_TO_RENAME_MAP as $oldMethodName => $newParentMethodName) {
-            if (!$this->isName($nestedMethodCall->name, $oldMethodName)) {
+        foreach ($node->getArgs() as $i => $argNode) {
+            if (!$argNode->value instanceof MethodCall) {
                 continue;
             }
-            $node->name = new Identifier($newParentMethodName);
-            // move args up
-            $node->args = $nestedMethodCall->args;
-            return $node;
+            $methodCall = $argNode->value;
+            if (!$this->isName($methodCall->name, 'equalTo')) {
+                continue;
+            }
+            $node->args[$i] = $methodCall->args[0];
         }
-        return null;
+        return $node;
     }
 }
