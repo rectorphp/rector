@@ -9,7 +9,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use RectorPrefix20220610\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix20220611\Symplify\Astral\Naming\SimpleNameResolver;
 final class ControllerRenderMethodAnalyzer
 {
     /**

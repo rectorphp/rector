@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\Printer;
 
-use RectorPrefix20220610\Nette\Utils\Strings;
+use RectorPrefix20220611\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\InlineHTML;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
@@ -21,7 +21,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
-use RectorPrefix20220610\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220611\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
  */

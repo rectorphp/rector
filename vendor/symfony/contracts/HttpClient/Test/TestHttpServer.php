@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Contracts\HttpClient\Test;
+namespace RectorPrefix20220611\Symfony\Contracts\HttpClient\Test;
 
-use RectorPrefix20220610\Symfony\Component\Process\PhpExecutableFinder;
-use RectorPrefix20220610\Symfony\Component\Process\Process;
+use RectorPrefix20220611\Symfony\Component\Process\PhpExecutableFinder;
+use RectorPrefix20220611\Symfony\Component\Process\Process;
 class TestHttpServer
 {
     private static $process = [];

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix20220610\React\Dns\Query;
+namespace RectorPrefix20220611\React\Dns\Query;
 
 final class TimeoutException extends \Exception
 {

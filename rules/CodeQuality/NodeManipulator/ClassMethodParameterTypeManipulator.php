@@ -24,7 +24,7 @@ use Rector\DowngradePhp72\UnionTypeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220610\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodParameterTypeManipulator
 {
     /**

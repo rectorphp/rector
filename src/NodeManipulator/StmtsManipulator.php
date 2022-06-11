@@ -8,7 +8,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use RectorPrefix20220610\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class StmtsManipulator
 {
     /**

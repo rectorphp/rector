@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Symfony\ValueObject\InvokableController\ActiveClassElements;
-use RectorPrefix20220610\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ActiveClassElementsClassMethodResolver
 {
     /**

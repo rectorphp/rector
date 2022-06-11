@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\Console\Output;
+namespace RectorPrefix20220611\Symfony\Component\Console\Output;
 
-use RectorPrefix20220610\Symfony\Component\Console\Formatter\NullOutputFormatter;
-use RectorPrefix20220610\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix20220611\Symfony\Component\Console\Formatter\NullOutputFormatter;
+use RectorPrefix20220611\Symfony\Component\Console\Formatter\OutputFormatterInterface;
 /**
  * NullOutput suppresses all output.
  *

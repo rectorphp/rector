@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\Console\Helper;
+namespace RectorPrefix20220611\Symfony\Component\Console\Helper;
 
-use RectorPrefix20220610\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix20220610\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix20220610\Symfony\Component\Process\Exception\ProcessFailedException;
-use RectorPrefix20220610\Symfony\Component\Process\Process;
+use RectorPrefix20220611\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix20220611\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix20220611\Symfony\Component\Process\Exception\ProcessFailedException;
+use RectorPrefix20220611\Symfony\Component\Process\Process;
 /**
  * The ProcessHelper class provides helpers to run external processes.
  *

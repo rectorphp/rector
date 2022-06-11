@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\Config\Definition\Configurator;
+namespace RectorPrefix20220611\Symfony\Component\Config\Definition\Configurator;
 
-use RectorPrefix20220610\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use RectorPrefix20220610\Symfony\Component\Config\Definition\Builder\NodeDefinition;
-use RectorPrefix20220610\Symfony\Component\Config\Definition\Builder\TreeBuilder;
-use RectorPrefix20220610\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader;
+use RectorPrefix20220611\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use RectorPrefix20220611\Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use RectorPrefix20220611\Symfony\Component\Config\Definition\Builder\TreeBuilder;
+use RectorPrefix20220611\Symfony\Component\Config\Definition\Loader\DefinitionFileLoader;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */

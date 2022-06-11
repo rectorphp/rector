@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Naming;
 
-use RectorPrefix20220610\Symfony\Component\String\UnicodeString;
+use RectorPrefix20220611\Symfony\Component\String\UnicodeString;
 final class NetteControlNaming
 {
     public function createVariableName(string $shortName) : string

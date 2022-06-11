@@ -5,7 +5,7 @@ namespace Rector\Symfony\Bridge\Symfony;
 
 use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220610\Webmozart\Assert\Assert;
+use RectorPrefix20220611\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
     /**

@@ -14,8 +14,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use RectorPrefix20220610\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix20220610\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 final class NodeFactory
 {
     /**

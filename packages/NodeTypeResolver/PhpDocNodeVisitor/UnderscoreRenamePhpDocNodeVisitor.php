@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
-use RectorPrefix20220610\Nette\Utils\Strings;
+use RectorPrefix20220611\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\Type\ObjectType;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix20220610\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
+use RectorPrefix20220611\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**

@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Contracts\Cache;
+namespace RectorPrefix20220611\Symfony\Contracts\Cache;
 
-use RectorPrefix20220610\Psr\Cache\CacheItemInterface;
+use RectorPrefix20220611\Psr\Cache\CacheItemInterface;
 /**
  * Computes and returns the cached value of an item.
  *

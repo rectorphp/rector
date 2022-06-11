@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20220610\Symfony\Component\Config\Loader\ParamConfigurator;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Parameter;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20220610\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix20220611\Symfony\Component\Config\Loader\ParamConfigurator;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Parameter;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220611\Symfony\Component\ExpressionLanguage\Expression;
 abstract class AbstractConfigurator
 {
     public const FACTORY = 'unknown';

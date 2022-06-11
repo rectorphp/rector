@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610\Symplify\PackageBuilder\Reflection;
+namespace RectorPrefix20220611\Symplify\PackageBuilder\Reflection;
 
 use ReflectionProperty;
-use RectorPrefix20220610\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException;
-use RectorPrefix20220610\Symplify\PackageBuilder\Exception\MissingPrivatePropertyException;
+use RectorPrefix20220611\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException;
+use RectorPrefix20220611\Symplify\PackageBuilder\Exception\MissingPrivatePropertyException;
 /**
  * @api
  * @see \Symplify\PackageBuilder\Tests\Reflection\PrivatesAccessorTest

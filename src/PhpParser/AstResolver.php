@@ -31,8 +31,8 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220610\Symplify\Astral\PhpParser\SmartPhpParser;
-use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220611\Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * The nodes provided by this resolver is for read-only analysis only!
  * They are not part of node tree processed by Rector, so any changes will not make effect in final printed file.

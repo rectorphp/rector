@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Reflection;
 
 use PHPStan\Reflection\MethodReflection;
-use RectorPrefix20220610\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix20220611\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class VendorLocationDetector
 {
     /**

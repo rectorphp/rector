@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception;
 
-use RectorPrefix20220610\Psr\Container\ContainerExceptionInterface;
+use RectorPrefix20220611\Psr\Container\ContainerExceptionInterface;
 /**
  * Base ExceptionInterface for Dependency Injection component.
  *

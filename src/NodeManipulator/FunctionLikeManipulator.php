@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220610\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class FunctionLikeManipulator
 {
     /**

@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix20220611\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\ServiceLocator;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\ServiceLocator;
 /**
  * Applies the "container.service_locator" tag by wrapping references into ServiceClosureArgument instances.
  *

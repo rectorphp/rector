@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\FileSystem;
 
-use RectorPrefix20220610\Nette\Utils\Strings;
+use RectorPrefix20220611\Nette\Utils\Strings;
 use Rector\RectorGenerator\Exception\ShouldNotHappenException;
 use Rector\RectorGenerator\TemplateFactory;
-use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileSystem;
 final class ConfigFilesystem
 {
     /**

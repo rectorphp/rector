@@ -8,9 +8,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
-use RectorPrefix20220610\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220611\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
-use RectorPrefix20220610\Webmozart\Assert\Assert;
+use RectorPrefix20220611\Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     /**

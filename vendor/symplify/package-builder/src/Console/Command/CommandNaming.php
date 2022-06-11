@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610\Symplify\PackageBuilder\Console\Command;
+namespace RectorPrefix20220611\Symplify\PackageBuilder\Console\Command;
 
-use RectorPrefix20220610\Nette\Utils\Strings;
-use RectorPrefix20220610\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220611\Nette\Utils\Strings;
+use RectorPrefix20220611\Symfony\Component\Console\Command\Command;
 /**
  * @api
  * @see \Symplify\PackageBuilder\Tests\Console\Command\CommandNamingTest

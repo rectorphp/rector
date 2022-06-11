@@ -12,7 +12,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @todo re-use in https://github.com/rectorphp/rector-src/blob/main/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php
  *

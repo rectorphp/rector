@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
+namespace RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator\Traits;
 
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\BoundArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator\DefaultsConfigurator;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator\InstanceofConfigurator;
 trait BindTrait
 {
     /**

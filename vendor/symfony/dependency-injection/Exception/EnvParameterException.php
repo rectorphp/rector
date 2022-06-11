@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception;
 
 /**
  * This exception wraps exceptions whose messages contain a reference to an env parameter.

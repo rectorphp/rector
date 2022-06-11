@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610\Symplify\PackageBuilder\Diff\Output;
+namespace RectorPrefix20220611\Symplify\PackageBuilder\Diff\Output;
 
-use RectorPrefix20220610\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
-use RectorPrefix20220610\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220611\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
+use RectorPrefix20220611\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 /**
  * @api
  * Creates @see UnifiedDiffOutputBuilder with "$contextLines = 1000;"

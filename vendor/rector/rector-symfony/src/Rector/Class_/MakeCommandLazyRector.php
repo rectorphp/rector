@@ -20,7 +20,7 @@ use PHPStan\Type\StringType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use RectorPrefix20220610\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

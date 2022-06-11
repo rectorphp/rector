@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610\Symplify\SymplifyKernel\DependencyInjection;
+namespace RectorPrefix20220611\Symplify\SymplifyKernel\DependencyInjection;
 
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPass;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Compiler\MergeExtensionConfigurationPass;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * Mimics @see \Symfony\Component\HttpKernel\DependencyInjection\MergeExtensionConfigurationPass without dependency on
  * symfony/http-kernel

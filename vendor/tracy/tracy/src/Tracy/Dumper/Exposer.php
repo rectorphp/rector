@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix20220610\Tracy\Dumper;
+namespace RectorPrefix20220611\Tracy\Dumper;
 
-use RectorPrefix20220610\Ds;
+use RectorPrefix20220611\Ds;
 /**
  * Exposes internal PHP objects.
  * @internal

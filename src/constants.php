@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610;
+namespace RectorPrefix20220611;
 
 // mimic missing T_ENUM constant on PHP 8.0-
 if (!\defined('T_ENUM')) {

@@ -19,7 +19,7 @@ use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 use Rector\PhpAttribute\NodeFactory\DoctrineAnnotationFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix20220610\Webmozart\Assert\Assert;
+use RectorPrefix20220611\Webmozart\Assert\Assert;
 /**
  * @changelog https://php.watch/articles/php-attributes#syntax
  *

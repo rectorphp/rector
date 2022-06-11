@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610\Symplify\EasyParallel\Reflection;
+namespace RectorPrefix20220611\Symplify\EasyParallel\Reflection;
 
 use ReflectionClass;
 use ReflectionMethod;
-use RectorPrefix20220610\Symfony\Component\Console\Command\Command;
-use RectorPrefix20220610\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix20220611\Symfony\Component\Console\Command\Command;
+use RectorPrefix20220611\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 final class CommandFromReflectionFactory
 {
     /**

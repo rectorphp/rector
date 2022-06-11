@@ -8,7 +8,7 @@ use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoParser
 {
     /**

@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
-use RectorPrefix20220610\Doctrine\ORM\Mapping\ManyToMany;
-use RectorPrefix20220610\Doctrine\ORM\Mapping\Table;
+use RectorPrefix20220611\Doctrine\ORM\Mapping\ManyToMany;
+use RectorPrefix20220611\Doctrine\ORM\Mapping\Table;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -43,7 +43,7 @@ use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 use Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use RectorPrefix20220610\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix20220611\Symplify\PackageBuilder\Php\TypeChecker;
 /**
  * For inspiration to improve this service,
  * @see examples of variable modifications in https://wiki.php.net/rfc/readonly_properties_v2#proposal

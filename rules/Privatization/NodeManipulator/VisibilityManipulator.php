@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\Visibility;
-use RectorPrefix20220610\Webmozart\Assert\Assert;
+use RectorPrefix20220611\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Privatization\NodeManipulator\VisibilityManipulatorTest
  */

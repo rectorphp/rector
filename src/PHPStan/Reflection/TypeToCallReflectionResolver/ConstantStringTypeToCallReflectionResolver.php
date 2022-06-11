@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver;
 
-use RectorPrefix20220610\Nette\Utils\Strings;
+use RectorPrefix20220611\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionReflection;

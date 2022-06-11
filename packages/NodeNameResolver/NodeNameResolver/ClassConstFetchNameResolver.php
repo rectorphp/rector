@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix20220610\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix20220611\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeNameResolverInterface<ClassConstFetch>
  */

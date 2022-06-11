@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocNodeFinder;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use RectorPrefix20220610\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
+use RectorPrefix20220611\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
  * @template TNode as \PHPStan\PhpDocParser\Ast\Node
  */

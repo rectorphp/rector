@@ -1,21 +1,21 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610;
+namespace RectorPrefix20220611;
 
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use PhpParser\PrettyPrinter\Standard;
-use RectorPrefix20220610\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use function RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use RectorPrefix20220610\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix20220610\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix20220610\Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use RectorPrefix20220610\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix20220610\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix20220610\Symplify\SmartFileSystem\Json\JsonFileSystem;
-use RectorPrefix20220610\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix20220611\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use function RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix20220611\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix20220611\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220611\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix20220611\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix20220611\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix20220611\Symplify\SmartFileSystem\Json\JsonFileSystem;
+use RectorPrefix20220611\Symplify\SmartFileSystem\SmartFileSystem;
 return static function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire()->autoconfigure();

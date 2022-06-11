@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Exception\NotImplementedYetException;
-use RectorPrefix20220610\Webmozart\Assert\Assert;
+use RectorPrefix20220611\Webmozart\Assert\Assert;
 final class AttributeArrayNameInliner
 {
     /**

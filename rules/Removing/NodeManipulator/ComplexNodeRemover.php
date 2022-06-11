@@ -21,7 +21,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
-use RectorPrefix20220610\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix20220611\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ComplexNodeRemover
 {
     /**

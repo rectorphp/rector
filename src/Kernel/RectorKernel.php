@@ -10,16 +10,16 @@ use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix20220610\Symplify\Astral\ValueObject\AstralConfig;
-use RectorPrefix20220610\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use RectorPrefix20220610\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig;
-use RectorPrefix20220610\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
-use RectorPrefix20220610\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
-use RectorPrefix20220610\Symplify\Skipper\ValueObject\SkipperConfig;
-use RectorPrefix20220610\Symplify\SymplifyKernel\ContainerBuilderFactory;
-use RectorPrefix20220610\Symplify\SymplifyKernel\Contract\LightKernelInterface;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix20220611\Symplify\Astral\ValueObject\AstralConfig;
+use RectorPrefix20220611\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
+use RectorPrefix20220611\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonManipulatorConfig;
+use RectorPrefix20220611\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
+use RectorPrefix20220611\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
+use RectorPrefix20220611\Symplify\Skipper\ValueObject\SkipperConfig;
+use RectorPrefix20220611\Symplify\SymplifyKernel\ContainerBuilderFactory;
+use RectorPrefix20220611\Symplify\SymplifyKernel\Contract\LightKernelInterface;
 final class RectorKernel implements LightKernelInterface
 {
     /**
@@ -38,7 +38,7 @@ final class RectorKernel implements LightKernelInterface
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix20220610\Psr\Container\ContainerInterface
+    public function createFromConfigs(array $configFiles) : \RectorPrefix20220611\Psr\Container\ContainerInterface
     {
         $defaultConfigFiles = $this->createDefaultConfigFiles();
         $configFiles = \array_merge($defaultConfigFiles, $configFiles);
@@ -54,7 +54,7 @@ final class RectorKernel implements LightKernelInterface
         $this->container = $containerBuilder;
         return $containerBuilder;
     }
-    public function getContainer() : \RectorPrefix20220610\Psr\Container\ContainerInterface
+    public function getContainer() : \RectorPrefix20220611\Psr\Container\ContainerInterface
     {
         if ($this->container === null) {
             throw new ShouldNotHappenException();

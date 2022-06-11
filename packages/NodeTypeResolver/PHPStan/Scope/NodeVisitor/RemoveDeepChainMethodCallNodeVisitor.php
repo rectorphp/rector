@@ -11,7 +11,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use RectorPrefix20220610\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix20220611\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * Skips performance trap in PHPStan: https://github.com/phpstan/phpstan/issues/254
  */

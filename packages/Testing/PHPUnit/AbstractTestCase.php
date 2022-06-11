@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
-use RectorPrefix20220610\Psr\Container\ContainerInterface;
+use RectorPrefix20220611\Psr\Container\ContainerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Kernel\RectorKernel;
-use RectorPrefix20220610\Webmozart\Assert\Assert;
+use RectorPrefix20220611\Webmozart\Assert\Assert;
 abstract class AbstractTestCase extends TestCase
 {
     /**

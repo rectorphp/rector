@@ -12,7 +12,7 @@ use PHPStan\BetterReflection\Reflector\Reflector;
 use PHPStan\BetterReflection\SourceLocator\Located\LocatedSource;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
-use RectorPrefix20220610\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
+use RectorPrefix20220611\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
 /**
  * Inspired from \PHPStan\BetterReflection\SourceLocator\Type\StringSourceLocator
  */

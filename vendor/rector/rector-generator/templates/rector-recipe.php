@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610;
+namespace RectorPrefix20220611;
 
 use PhpParser\Node\Expr\MethodCall;
 use Rector\RectorGenerator\Provider\RectorRecipeProvider;
 use Rector\RectorGenerator\ValueObject\Option;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 // run "bin/rector generate" to a new Rector basic schema + tests from this config
 return static function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();

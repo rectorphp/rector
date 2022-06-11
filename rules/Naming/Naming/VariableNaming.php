@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
-use RectorPrefix20220610\Nette\Utils\Strings;
+use RectorPrefix20220611\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -22,7 +22,7 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix20220610\Symfony\Component\String\UnicodeString;
+use RectorPrefix20220611\Symfony\Component\String\UnicodeString;
 final class VariableNaming
 {
     /**

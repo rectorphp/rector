@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\DependencyInjection;
+namespace RectorPrefix20220611\Symfony\Component\DependencyInjection;
 
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\ServiceLocator as ArgumentServiceLocator;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\EnvNotFoundException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use RectorPrefix20220610\Symfony\Contracts\Service\ResetInterface;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\ServiceLocator as ArgumentServiceLocator;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\EnvNotFoundException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\ParameterBag\FrozenParameterBag;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use RectorPrefix20220611\Symfony\Contracts\Service\ResetInterface;
 // Help opcache.preload discover always-needed symbols
 \class_exists(RewindableGenerator::class);
 \class_exists(ArgumentServiceLocator::class);

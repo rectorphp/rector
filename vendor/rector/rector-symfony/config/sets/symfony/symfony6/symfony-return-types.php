@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix20220610;
+namespace RectorPrefix20220611;
 
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
@@ -19,7 +19,7 @@ use Rector\Config\RectorConfig;
 use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
-use RectorPrefix20220610\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix20220611\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 // https://github.com/symfony/symfony/blob/6.1/UPGRADE-6.0.md
 // @see https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
 return static function (RectorConfig $rectorConfig) : void {

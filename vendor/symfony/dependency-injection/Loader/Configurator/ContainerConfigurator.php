@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix20220610\Symfony\Component\Config\Loader\ParamConfigurator;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix20220610\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix20220610\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix20220611\Symfony\Component\Config\Loader\ParamConfigurator;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix20220611\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix20220611\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
@@ -111,7 +111,7 @@ class ContainerConfigurator extends AbstractConfigurator
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */
-\class_alias('RectorPrefix20220610\\Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator', 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator', \false);
+\class_alias('RectorPrefix20220611\\Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator', 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator', \false);
 /**
  * Creates a parameter.
  */
