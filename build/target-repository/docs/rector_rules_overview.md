@@ -72,9 +72,9 @@
 
 - [Php74](#php74) (13)
 
-- [Php80](#php80) (18)
+- [Php80](#php80) (17)
 
-- [Php81](#php81) (9)
+- [Php81](#php81) (10)
 
 - [Php82](#php82) (1)
 
@@ -8244,26 +8244,6 @@ Change simple property init and assign to constructor promotion
 
 <br>
 
-### ConstantListClassToEnumRector
-
-Upgrade constant list classes to full blown enum
-
-- class: [`Rector\Php81\Rector\Class_\ConstantListClassToEnumRector`](../rules/Php80/Rector/Class_/ConstantListClassToEnumRector.php)
-
-```diff
--class Direction
-+enum Direction
- {
--    public const LEFT = 'left';
-+    case LEFT;
-
--    public const RIGHT = 'right';
-+    case RIGHT;
- }
-```
-
-<br>
-
 ### DoctrineAnnotationClassToAttributeRector
 
 Refactor Doctrine `@annotation` annotated class to a PHP 8.0 attribute class
@@ -8550,6 +8530,26 @@ Change docs types to union types, where possible (properties are covered by Type
 <br>
 
 ## Php81
+
+### ConstantListClassToEnumRector
+
+Upgrade constant list classes to full blown enum
+
+- class: [`Rector\Php81\Rector\Class_\ConstantListClassToEnumRector`](../rules/Php81/Rector/Class_/ConstantListClassToEnumRector.php)
+
+```diff
+-class Direction
++enum Direction
+ {
+-    public const LEFT = 'left';
++    case LEFT;
+
+-    public const RIGHT = 'right';
++    case RIGHT;
+ }
+```
+
+<br>
 
 ### FinalizePublicClassConstantRector
 
