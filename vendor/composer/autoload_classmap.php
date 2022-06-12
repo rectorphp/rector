@@ -2794,6 +2794,7 @@ return array(
     'Rector\\Symfony\\NodeFactory\\BareLogoutClassMethodFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/BareLogoutClassMethodFactory.php',
     'Rector\\Symfony\\NodeFactory\\EventReferenceFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/EventReferenceFactory.php',
     'Rector\\Symfony\\NodeFactory\\FormType\\BuildFormOptionAssignsFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/FormType/BuildFormOptionAssignsFactory.php',
+    'Rector\\Symfony\\NodeFactory\\FormType\\ConfigureDefaultsFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/FormType/ConfigureDefaultsFactory.php',
     'Rector\\Symfony\\NodeFactory\\GetSubscribedEventsClassMethodFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/GetSubscribedEventsClassMethodFactory.php',
     'Rector\\Symfony\\NodeFactory\\InvokableControllerClassFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/InvokableControllerClassFactory.php',
     'Rector\\Symfony\\NodeFactory\\InvokableControllerNameFactory' => $vendorDir . '/rector/rector-symfony/src/NodeFactory/InvokableControllerNameFactory.php',

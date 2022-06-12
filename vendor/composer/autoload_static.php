@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit47bfae53c533fdd39ebb83bc6ae54952
+class ComposerStaticInitce304557a03ed74efcfbea7c64bdecfe
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3095,6 +3095,7 @@ class ComposerStaticInit47bfae53c533fdd39ebb83bc6ae54952
         'Rector\\Symfony\\NodeFactory\\BareLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/BareLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\EventReferenceFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/EventReferenceFactory.php',
         'Rector\\Symfony\\NodeFactory\\FormType\\BuildFormOptionAssignsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/FormType/BuildFormOptionAssignsFactory.php',
+        'Rector\\Symfony\\NodeFactory\\FormType\\ConfigureDefaultsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/FormType/ConfigureDefaultsFactory.php',
         'Rector\\Symfony\\NodeFactory\\GetSubscribedEventsClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/GetSubscribedEventsClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\InvokableControllerClassFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableControllerClassFactory.php',
         'Rector\\Symfony\\NodeFactory\\InvokableControllerNameFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableControllerNameFactory.php',
@@ -3396,9 +3397,9 @@ class ComposerStaticInit47bfae53c533fdd39ebb83bc6ae54952
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit47bfae53c533fdd39ebb83bc6ae54952::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit47bfae53c533fdd39ebb83bc6ae54952::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit47bfae53c533fdd39ebb83bc6ae54952::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitce304557a03ed74efcfbea7c64bdecfe::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitce304557a03ed74efcfbea7c64bdecfe::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitce304557a03ed74efcfbea7c64bdecfe::$classMap;
 
         }, null, ClassLoader::class);
     }
