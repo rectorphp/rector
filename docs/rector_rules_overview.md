@@ -8724,9 +8724,9 @@ Refactor Spatie enum class to native Enum
 -class StatusEnum extends Enum
 +enum StatusEnum : string
  {
-+    case draft = 'draft';
-+    case published = 'published';
-+    case archived = 'archived';
++    case DRAFT = 'draft';
++    case PUBLISHED = 'published';
++    case ARCHIVED = 'archived';
  }
 ```
 
