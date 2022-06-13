@@ -38,11 +38,11 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -108,7 +108,12 @@ final class AnonymousFunctionFactory
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, NodeComparator $nodeComparator, AstResolver $astResolver, NodePrinterInterface $nodePrinter, PrivatesAccessor $privatesAccessor)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
+     */
+    private $inlineCodeParser;
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, NodeComparator $nodeComparator, AstResolver $astResolver, NodePrinterInterface $nodePrinter, PrivatesAccessor $privatesAccessor, InlineCodeParser $inlineCodeParser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -120,6 +125,7 @@ final class AnonymousFunctionFactory
         $this->astResolver = $astResolver;
         $this->nodePrinter = $nodePrinter;
         $this->privatesAccessor = $privatesAccessor;
+        $this->inlineCodeParser = $inlineCodeParser;
     }
     /**
      * @param Param[] $params
@@ -166,13 +172,10 @@ final class AnonymousFunctionFactory
         }
         return $anonymousFunction;
     }
-    public function createAnonymousFunctionFromString(Expr $expr) : ?Closure
+    public function createAnonymousFunctionFromExpr(Expr $expr) : ?Closure
     {
-        if (!$expr instanceof String_) {
-            // not supported yet
-            throw new ShouldNotHappenException();
-        }
-        $phpCode = '<?php ' . $expr->value . ';';
+        $stringValue = $this->inlineCodeParser->stringify($expr);
+        $phpCode = '<?php ' . $stringValue . ';';
         $contentStmts = $this->simplePhpParser->parseString($phpCode);
         $anonymousFunction = new Closure();
         $firstNode = $contentStmts[0] ?? null;
@@ -193,6 +196,10 @@ final class AnonymousFunctionFactory
         });
         $anonymousFunction->stmts[] = new Return_($stmt);
         $anonymousFunction->params[] = new Param(new Variable('matches'));
+        $variables = $expr instanceof Variable ? [] : $this->betterNodeFinder->findInstanceOf($expr, Variable::class);
+        $anonymousFunction->uses = \array_map(function (Variable $variable) : ClosureUse {
+            return new ClosureUse($variable);
+        }, $variables);
         return $anonymousFunction;
     }
     /**

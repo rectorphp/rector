@@ -36,6 +36,11 @@ final class InlineCodeParser
      */
     private const ENDING_SEMI_COLON_REGEX = '#;(\\s+)?$#';
     /**
+     * @var string
+     * @see https://regex101.com/r/8fDjnR/1
+     */
+    private const VARIABLE_IN_SINGLE_QUOTED_REGEX = '#\'(?<variable>\\$.*)\'#U';
+    /**
      * @readonly
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
@@ -91,7 +96,10 @@ final class InlineCodeParser
             return Strings::replace($expr, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
         }
         if ($expr instanceof Concat) {
-            return $this->stringify($expr->left) . $this->stringify($expr->right);
+            $string = $this->stringify($expr->left) . $this->stringify($expr->right);
+            return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, function (array $match) {
+                return $match['variable'];
+            });
         }
         return $this->nodePrinter->print($expr);
     }
