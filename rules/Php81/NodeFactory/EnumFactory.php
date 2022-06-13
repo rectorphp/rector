@@ -55,10 +55,10 @@ final class EnumFactory
         $enum = new Enum_($shortClassName);
 
         // constant to cases
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($class);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
 
-        $docBlockMethods = $phpDocInfo?->getTagsByName('@method');
-        if ($docBlockMethods !== null) {
+        $docBlockMethods = $phpDocInfo->getTagsByName('@method');
+        if ($docBlockMethods !== []) {
             $enum->scalarType = new Identifier('string');
 
             foreach ($docBlockMethods as $docBlockMethod) {
@@ -85,6 +85,10 @@ final class EnumFactory
     {
         /** @var MethodTagValueNode $nodeValue */
         $nodeValue = $phpDocTagNode->value;
-        return new EnumCase($nodeValue->methodName, $this->builderFactory->val($nodeValue->methodName));
+
+        $enumName = strtoupper($nodeValue->methodName);
+        $enumExpr = $this->builderFactory->val($nodeValue->methodName);
+
+        return new EnumCase($enumName, $enumExpr);
     }
 }
