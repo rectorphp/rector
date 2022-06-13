@@ -8,6 +8,8 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Reflection\Constant\RuntimeConstantReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
@@ -64,6 +66,14 @@ final class FullyQualifyStmtsAnalyzer
                 return null;
             }
             if ($this->isNativeConstant($node)) {
+                return null;
+            }
+            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parent instanceof GroupUse) {
+                $parent->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+                return null;
+            }
+            if ($parent instanceof UseUse) {
                 return null;
             }
             return new FullyQualified($name);
