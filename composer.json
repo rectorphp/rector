@@ -62,7 +62,7 @@
         "phpstan/phpstan-strict-rules": "^1.2",
         "phpstan/phpstan-webmozart-assert": "^1.1",
         "phpunit/phpunit": "^9.5",
-        "rector/phpstan-rules": "^0.5.0",
+        "rector/phpstan-rules": "^0.5",
         "spatie/enum": "^3.13",
         "symfony/process": "6.1.*",
         "symplify/easy-ci": "^11.0",
