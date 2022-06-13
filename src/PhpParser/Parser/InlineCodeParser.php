@@ -41,6 +41,12 @@ final class InlineCodeParser
      */
     private const ENDING_SEMI_COLON_REGEX = '#;(\s+)?$#';
 
+    /**
+     * @var string
+     * @see https://regex101.com/r/8fDjnR/1
+     */
+    private const VARIABLE_IN_SINGLE_QUOTED_REGEX = '#\'(?<variable>\$.*)\'#U';
+
     public function __construct(
         private readonly NodePrinterInterface $nodePrinter,
         private readonly NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator,
@@ -83,7 +89,12 @@ final class InlineCodeParser
         }
 
         if ($expr instanceof Concat) {
-            return $this->stringify($expr->left) . $this->stringify($expr->right);
+            $string = $this->stringify($expr->left) . $this->stringify($expr->right);
+            return Strings::replace(
+                $string,
+                self::VARIABLE_IN_SINGLE_QUOTED_REGEX,
+                fn (array $match) => $match['variable']
+            );
         }
 
         return $this->nodePrinter->print($expr);

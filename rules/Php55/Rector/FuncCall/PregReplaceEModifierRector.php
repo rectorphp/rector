@@ -102,9 +102,7 @@ CODE_SAMPLE
         /** @var Arg $secondArgument */
         $secondArgument = $node->args[1];
         $secondArgumentValue = $secondArgument->value;
-        $anonymousFunction = $this->anonymousFunctionFactory->createAnonymousFunctionFromString(
-            $secondArgumentValue
-        );
+        $anonymousFunction = $this->anonymousFunctionFactory->createAnonymousFunctionFromExpr($secondArgumentValue);
         if (! $anonymousFunction instanceof Closure) {
             return null;
         }

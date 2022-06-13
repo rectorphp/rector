@@ -39,11 +39,11 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -71,7 +71,8 @@ final class AnonymousFunctionFactory
         private readonly NodeComparator $nodeComparator,
         private readonly AstResolver $astResolver,
         private readonly NodePrinterInterface $nodePrinter,
-        private readonly PrivatesAccessor $privatesAccessor
+        private readonly PrivatesAccessor $privatesAccessor,
+        private readonly InlineCodeParser $inlineCodeParser
     ) {
     }
 
@@ -142,14 +143,11 @@ final class AnonymousFunctionFactory
         return $anonymousFunction;
     }
 
-    public function createAnonymousFunctionFromString(Expr $expr): ?Closure
+    public function createAnonymousFunctionFromExpr(Expr $expr): ?Closure
     {
-        if (! $expr instanceof String_) {
-            // not supported yet
-            throw new ShouldNotHappenException();
-        }
+        $stringValue = $this->inlineCodeParser->stringify($expr);
 
-        $phpCode = '<?php ' . $expr->value . ';';
+        $phpCode = '<?php ' . $stringValue . ';';
         $contentStmts = $this->simplePhpParser->parseString($phpCode);
 
         $anonymousFunction = new Closure();
@@ -178,6 +176,15 @@ final class AnonymousFunctionFactory
 
         $anonymousFunction->stmts[] = new Return_($stmt);
         $anonymousFunction->params[] = new Param(new Variable('matches'));
+
+        $variables = $expr instanceof Variable
+            ? []
+            : $this->betterNodeFinder->findInstanceOf($expr, Variable::class);
+
+        $anonymousFunction->uses = array_map(
+            fn (Variable $variable): ClosureUse => new ClosureUse($variable),
+            $variables
+        );
 
         return $anonymousFunction;
     }
