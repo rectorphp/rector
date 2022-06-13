@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.9.0 (2022-06-13)
+
+*   Feature: Improve forward compatibility with upcoming Promise v3 API.
+    (#54 and #55 by @clue)
+
+*   Minor documentation improvements for upcoming Promise v3.
+    (#58 by @clue and #56 by @SimonFrings)
+
+*   Improve test suite, fix legacy HHVM build by downgrading Composer.
+    (#57 by @SimonFrings)
+
 ## 1.8.0 (2021-12-06)
 
 *   Feature: Add new `sleep()` function and deprecate `resolve()` and `reject()` functions.

@@ -4,7 +4,6 @@ namespace RectorPrefix202206\React\Promise\Timer;
 
 use RectorPrefix202206\React\EventLoop\Loop;
 use RectorPrefix202206\React\EventLoop\LoopInterface;
-use RectorPrefix202206\React\Promise\CancellablePromiseInterface;
 use RectorPrefix202206\React\Promise\Promise;
 use RectorPrefix202206\React\Promise\PromiseInterface;
 /**
@@ -64,20 +63,16 @@ use RectorPrefix202206\React\Promise\PromiseInterface;
  * );
  * ```
  *
- * Or if you're using [react/promise v2.2.0](https://github.com/reactphp/promise) or up:
+ * Or if you're using [react/promise v3](https://github.com/reactphp/promise):
  *
  * ```php
- * React\Promise\Timer\timeout($promise, 10.0)
- *     ->then(function ($value) {
- *         // the operation finished within 10.0 seconds
- *     })
- *     ->otherwise(function (React\Promise\Timer\TimeoutException $error) {
- *         // the operation has failed due to a timeout
- *     })
- *     ->otherwise(function ($error) {
- *         // the input operation has failed due to some other error
- *     })
- * ;
+ * React\Promise\Timer\timeout($promise, 10.0)->then(function ($value) {
+ *     // the operation finished within 10.0 seconds
+ * })->catch(function (React\Promise\Timer\TimeoutException $error) {
+ *     // the operation has failed due to a timeout
+ * })->catch(function (Throwable $error) {
+ *     // the input operation has failed due to some other error
+ * });
  * ```
  *
  * As discussed above, the [`timeout()`](#timeout) function will take care of
@@ -133,17 +128,17 @@ use RectorPrefix202206\React\Promise\PromiseInterface;
  * For more details on the promise primitives, please refer to the
  * [Promise documentation](https://github.com/reactphp/promise#functions).
  *
- * @param PromiseInterface<mixed, \Exception|mixed> $promise
+ * @param PromiseInterface<mixed, \Throwable|mixed> $promise
  * @param float $time
  * @param ?LoopInterface $loop
- * @return PromiseInterface<mixed, TimeoutException|\Exception|mixed>
+ * @return PromiseInterface<mixed, TimeoutException|\Throwable|mixed>
  */
 function timeout(PromiseInterface $promise, $time, LoopInterface $loop = null)
 {
     // cancelling this promise will only try to cancel the input promise,
     // thus leaving responsibility to the input promise.
     $canceller = null;
-    if ($promise instanceof CancellablePromiseInterface || !\interface_exists('RectorPrefix202206\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
+    if (\method_exists($promise, 'cancel')) {
         // pass promise by reference to clean reference after cancellation handler
         // has been invoked once in order to avoid garbage references in call stack.
         $canceller = function () use(&$promise) {
@@ -178,7 +173,7 @@ function timeout(PromiseInterface $promise, $time, LoopInterface $loop = null)
             $reject(new TimeoutException($time, 'Timed out after ' . $time . ' seconds'));
             // try to invoke cancellation handler of input promise and then clean
             // reference in order to avoid garbage references in call stack.
-            if ($promise instanceof CancellablePromiseInterface || !\interface_exists('RectorPrefix202206\\React\\Promise\\CancellablePromiseInterface') && \method_exists($promise, 'cancel')) {
+            if (\method_exists($promise, 'cancel')) {
                 $promise->cancel();
             }
             $promise = null;
@@ -228,7 +223,7 @@ function sleep($time, LoopInterface $loop = null)
     return new Promise(function ($resolve) use($loop, $time, &$timer) {
         // resolve the promise when the timer fires in $time seconds
         $timer = $loop->addTimer($time, function () use($resolve) {
-            $resolve();
+            $resolve(null);
         });
     }, function () use(&$timer, $loop) {
         // cancelling this promise will cancel the timer, clean the reference

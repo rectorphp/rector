@@ -13,21 +13,21 @@
     "require-dev": {
         "rector\/rector-src": "dev-main",
         "phpunit\/phpunit": "^9.5",
-        "symplify\/phpstan-extensions": "^10.2",
-        "symplify\/phpstan-rules": "^10.2",
-        "symplify\/easy-coding-standard": "^10.2",
-        "symplify\/monorepo-builder": "^10.2",
+        "symplify\/phpstan-extensions": "^11.0",
+        "symplify\/phpstan-rules": "^11.0",
+        "symplify\/easy-coding-standard": "^11.0",
+        "symplify\/monorepo-builder": "^11.0",
         "phpstan\/phpstan": "^1.7.10",
         "phpstan\/phpstan-nette": "^1.0",
         "nette\/application": "^3.1",
         "nette\/di": "^3.0",
         "nette\/forms": "3.0.*",
-        "symplify\/rule-doc-generator": "^10.2",
+        "symplify\/rule-doc-generator": "^11.0",
         "phpstan\/extension-installer": "^1.1",
         "rector\/phpstan-rules": "^0.5",
         "phpstan\/phpstan-webmozart-assert": "^1.1",
         "phpstan\/phpstan-strict-rules": "^1.2",
-        "symplify\/vendor-patches": "^10.2"
+        "symplify\/vendor-patches": "^11.0"
     },
     "autoload": {
         "psr-4": {

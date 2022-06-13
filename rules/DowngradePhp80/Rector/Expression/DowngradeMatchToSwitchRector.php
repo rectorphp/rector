@@ -24,7 +24,6 @@ use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
@@ -161,9 +160,6 @@ CODE_SAMPLE
                 foreach ((array) $matchArm->conds as $matchArmCond) {
                     $lastCase = new Case_($matchArmCond);
                     $switchCases[] = $lastCase;
-                }
-                if (!$lastCase instanceof Case_) {
-                    throw new ShouldNotHappenException();
                 }
                 $lastCase->stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
             } else {
