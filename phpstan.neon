@@ -22,10 +22,6 @@ parameters:
         # this cannot be put it, because it wipes PHPStan cache on each run :( - must run in separate
         #- config
 
-    # to allow installing with various phsptan versions without reporting old errors here
-    bootstrapFiles:
-        - vendor/symfony/dependency-injection/Loader/Configurator/ContainerConfigurator.php
-
     scanDirectories:
         - stubs
 

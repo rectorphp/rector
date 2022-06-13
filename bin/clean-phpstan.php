@@ -9,7 +9,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 require __DIR__ . '/../vendor/autoload.php';
 
@@ -34,7 +33,7 @@ final class CleanPhpstanCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
+        $this->setName('clean-phpstan');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -109,5 +108,5 @@ $command = new CleanPhpstanCommand();
 
 $application = new Application();
 $application->add($command);
-$application->setDefaultCommand(CommandNaming::classToName($command::class), true);
+$application->setDefaultCommand('clean-phpstan', true);
 $application->run();

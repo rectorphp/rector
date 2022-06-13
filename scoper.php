@@ -66,7 +66,6 @@ return [
         // used by public API
         'Symplify\SmartFileSystem\SmartFileInfo',
         'Symplify\ComposerJsonManipulator\ValueObject\ComposerJson',
-        'Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator',
     ],
     'expose-functions' => ['u', 'b', 's', 'trigger_deprecation'],
     'expose-constants' => ['__RECTOR_RUNNING__', '#^SYMFONY\_[\p{L}_]+$#'],

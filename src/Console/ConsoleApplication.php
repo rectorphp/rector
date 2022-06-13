@@ -8,14 +8,12 @@ use Composer\XdebugHandler\XdebugHandler;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Command\ProcessCommand;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symplify\PackageBuilder\Console\Command\CommandNaming;
 
 final class ConsoleApplication extends Application
 {
@@ -32,7 +30,7 @@ final class ConsoleApplication extends Application
         parent::__construct(self::NAME, VersionResolver::PACKAGE_VERSION);
 
         $this->addCommands($commands);
-        $this->setDefaultCommand(CommandNaming::classToName(ProcessCommand::class));
+        $this->setDefaultCommand('process');
     }
 
     public function doRun(InputInterface $input, OutputInterface $output): int
