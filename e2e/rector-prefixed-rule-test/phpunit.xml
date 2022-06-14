@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<phpunit
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+    bootstrap="vendor/rector/rector/vendor/scoper-autoload.php"
+    colors="true"
+>
+    <testsuites>
+        <testsuite name="main">
+            <directory>utils/rector/tests</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
