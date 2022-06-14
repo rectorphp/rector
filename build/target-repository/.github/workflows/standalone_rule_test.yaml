@@ -9,32 +9,30 @@ on:
 jobs:
     standalone_rule_test:
         runs-on: ubuntu-latest
-
         strategy:
             fail-fast: false
             matrix:
-                actions:
-                    -
-                        name: 'Rector Prefixed'
-                        run: |
-                            composer config minimum-stability dev
-                            composer config prefer-stable true
-                            composer require rector/rector:dev-main --dev
+                php_version: ['7.3']
+                directory:
+                    - 'e2e/rector-prefixed-rule-test'
+
+        name: End to end test - ${{ matrix.directory }}
 
         steps:
-            # see https://github.com/rectorphp/rector-prefixed-rule-test
-            -
-                uses: actions/checkout@v2
-                with:
-                    repository: rectorphp/rector-prefixed-rule-test
+            -   uses: actions/checkout@v2
 
             -   uses: shivammathur/setup-php@v2
                 with:
-                    php-version: '7.3'
+                    php-version: ${{ matrix.php_version }}
                     coverage: none
 
-            -   uses: "ramsey/composer-install@v1"
+            # wait for deploy to packagist
+            -   run: sleep 40
 
-            -   run: ${{ matrix.actions.run }}
+            -
+                run: composer install --ansi
+                working-directory: ${{ matrix.directory }}
 
-            -   run: vendor/bin/phpunit
+            -
+                run: vendor/bin/phpunit
+                working-directory: ${{ matrix.directory }}
