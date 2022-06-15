@@ -15,6 +15,7 @@ final class ConfigFilesystem
     private const REQUIRED_KEYS = ['__Package__', '__Category__', '__Name__'];
     /**
      * @see https://regex101.com/r/gJ0bHJ/1
+     * @var string
      */
     private const LAST_ITEM_REGEX = '#;\\n};#';
     /**

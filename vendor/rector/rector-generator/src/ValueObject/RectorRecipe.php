@@ -237,7 +237,7 @@ final class RectorRecipe
             if (!isset($composerJson['name'])) {
                 continue;
             }
-            if (\strncmp($composerJson['name'], 'rector/', \strlen('rector/')) === 0) {
+            if (\strncmp((string) $composerJson['name'], 'rector/', \strlen('rector/')) === 0) {
                 return \true;
             }
         }

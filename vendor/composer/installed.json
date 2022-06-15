@@ -755,17 +755,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.6.2",
-            "version_normalized": "1.6.2.0",
+            "version": "1.6.3",
+            "version_normalized": "1.6.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "76150ae7512439b4e6903db834e4a327596b617d"
+                "reference": "4a07085f74cb1f3fc7103efa537d9f00ebb74ec7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/76150ae7512439b4e6903db834e4a327596b617d",
-                "reference": "76150ae7512439b4e6903db834e4a327596b617d",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/4a07085f74cb1f3fc7103efa537d9f00ebb74ec7",
+                "reference": "4a07085f74cb1f3fc7103efa537d9f00ebb74ec7",
                 "shasum": ""
             },
             "require": {
@@ -780,7 +780,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2022-06-10T09:29:33+00:00",
+            "time": "2022-06-14T11:40:08+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -797,23 +797,23 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.6.2"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.6.3"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.7.13",
-            "version_normalized": "1.7.13.0",
+            "version": "1.7.14",
+            "version_normalized": "1.7.14.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "86ffc063bfd8f264c9eba568e84b0225a6090d09"
+                "reference": "e6f145f196a59c7ca91ea926c87ef3d936c4305f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/86ffc063bfd8f264c9eba568e84b0225a6090d09",
-                "reference": "86ffc063bfd8f264c9eba568e84b0225a6090d09",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/e6f145f196a59c7ca91ea926c87ef3d936c4305f",
+                "reference": "e6f145f196a59c7ca91ea926c87ef3d936c4305f",
                 "shasum": ""
             },
             "require": {
@@ -822,7 +822,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-06-13T15:15:39+00:00",
+            "time": "2022-06-14T13:09:35+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -841,7 +841,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.7.13"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.7.14"
             },
             "funding": [
                 {
@@ -1854,12 +1854,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-cakephp.git",
-                "reference": "424bf6deed216860c4d668843f1ab7b228a46739"
+                "reference": "527dc2358abe525b4ccacd5889340ef1a6c296c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/424bf6deed216860c4d668843f1ab7b228a46739",
-                "reference": "424bf6deed216860c4d668843f1ab7b228a46739",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/527dc2358abe525b4ccacd5889340ef1a6c296c5",
+                "reference": "527dc2358abe525b4ccacd5889340ef1a6c296c5",
                 "shasum": ""
             },
             "require": {
@@ -1885,7 +1885,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-06-13T22:54:46+00:00",
+            "time": "2022-06-15T06:54:15+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1991,12 +1991,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-generator.git",
-                "reference": "63b3f96952e6c7b43f596d3096b7e6328b4d6893"
+                "reference": "285cbcacd4f3f798fd404b7bfa3efbf1744709ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/63b3f96952e6c7b43f596d3096b7e6328b4d6893",
-                "reference": "63b3f96952e6c7b43f596d3096b7e6328b4d6893",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/285cbcacd4f3f798fd404b7bfa3efbf1744709ba",
+                "reference": "285cbcacd4f3f798fd404b7bfa3efbf1744709ba",
                 "shasum": ""
             },
             "require": {
@@ -2012,7 +2012,7 @@
             "require-dev": {
                 "php-parallel-lint\/php-parallel-lint": "^1.3",
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpdoc-parser": "^1.2",
+                "phpstan\/phpdoc-parser": "^1.6",
                 "phpstan\/phpstan-strict-rules": "^1.2",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
@@ -2025,7 +2025,7 @@
                 "symplify\/phpstan-rules": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-06-13T22:13:09+00:00",
+            "time": "2022-06-14T07:06:32+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2050,7 +2050,7 @@
             "homepage": "https:\/\/getrector.org",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-generator\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-generator\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-generator\/tree\/0.6.7"
             },
             "funding": [
                 {
