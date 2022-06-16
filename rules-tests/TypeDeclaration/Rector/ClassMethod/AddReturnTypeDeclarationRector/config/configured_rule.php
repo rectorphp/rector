@@ -8,6 +8,7 @@ use Rector\Config\RectorConfig;
 use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\ReturnOfStatic;
 use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector\Fixture\ReturnTheMixed;
+use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\DataTransformerInterface;
 use Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector\Source\PHPUnitTestCase;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
@@ -22,5 +23,6 @@ return static function (RectorConfig $rectorConfig): void {
                 'create',
                 new SimpleStaticType(ReturnOfStatic::class)
             ),
+            new AddReturnTypeDeclaration(DataTransformerInterface::class, 'transform', new MixedType()),
         ]);
 };
