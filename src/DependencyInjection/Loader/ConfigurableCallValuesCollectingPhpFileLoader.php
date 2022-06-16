@@ -27,7 +27,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
      * @param mixed $resource
      * @return mixed
      */
-    public function load($resource, string $type = null)
+    public function load($resource, ?string $type = null)
     {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();
@@ -40,7 +40,7 @@ final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
      * @param mixed $resource
      * @return mixed
      */
-    public function import($resource, string $type = null, $ignoreErrors = \false, string $sourceResource = null, $exclude = null)
+    public function import($resource, ?string $type = null, $ignoreErrors = \false, ?string $sourceResource = null, $exclude = null)
     {
         // this call collects root values
         $this->collectConfigureCallsFromJustImportedConfigurableRectorDefinitions();
