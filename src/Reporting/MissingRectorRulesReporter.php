@@ -30,7 +30,7 @@ final class MissingRectorRulesReporter
     }
     public function reportIfMissing() : ?int
     {
-        $activeRectors = \array_filter($this->rectors, function (RectorInterface $rector) : bool {
+        $activeRectors = \array_filter($this->rectors, static function (RectorInterface $rector) : bool {
             if ($rector instanceof PostRectorInterface) {
                 return \false;
             }

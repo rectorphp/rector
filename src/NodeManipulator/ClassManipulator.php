@@ -64,7 +64,7 @@ final class ClassManipulator
      */
     public function getPrivatePropertyNames(Class_ $class) : array
     {
-        $privateProperties = \array_filter($class->getProperties(), function (Property $property) : bool {
+        $privateProperties = \array_filter($class->getProperties(), static function (Property $property) : bool {
             return $property->isPrivate();
         });
         return $this->nodeNameResolver->getNames($privateProperties);

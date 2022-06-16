@@ -117,7 +117,7 @@ final class BinaryOpManipulator
         if (\is_callable($condition)) {
             return $condition;
         }
-        return function (Node $node) use($condition) : bool {
+        return static function (Node $node) use($condition) : bool {
             return \is_a($node, $condition, \true);
         };
     }

@@ -75,7 +75,7 @@ CODE_SAMPLE
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             $oldClassRegex = $this->createOldClassRegex($oldClass);
-            $newContent = Strings::replace($newContent, $oldClassRegex, function (array $match) use($newClass) : string {
+            $newContent = Strings::replace($newContent, $oldClassRegex, static function (array $match) use($newClass) : string {
                 return ($match['extra_space'] ?? '') . $newClass;
             });
         }

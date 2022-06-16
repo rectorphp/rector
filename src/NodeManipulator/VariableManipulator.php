@@ -132,7 +132,7 @@ final class VariableManipulator
     }
     private function hasEncapsedStringPart(Expr $expr) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($expr, function (Node $subNode) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($expr, static function (Node $subNode) : bool {
             return $subNode instanceof Encapsed || $subNode instanceof EncapsedStringPart;
         });
     }

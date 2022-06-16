@@ -97,7 +97,7 @@ final class InlineCodeParser
         }
         if ($expr instanceof Concat) {
             $string = $this->stringify($expr->left) . $this->stringify($expr->right);
-            return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, function (array $match) {
+            return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, static function (array $match) {
                 return $match['variable'];
             });
         }
