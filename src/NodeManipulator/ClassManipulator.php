@@ -54,7 +54,7 @@ final class ClassManipulator
     {
         $privateProperties = array_filter(
             $class->getProperties(),
-            fn (Property $property): bool => $property->isPrivate()
+            static fn (Property $property): bool => $property->isPrivate()
         );
 
         return $this->nodeNameResolver->getNames($privateProperties);

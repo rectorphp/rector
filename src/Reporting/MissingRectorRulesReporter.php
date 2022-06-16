@@ -25,7 +25,7 @@ final class MissingRectorRulesReporter
     {
         $activeRectors = array_filter(
             $this->rectors,
-            function (RectorInterface $rector): bool {
+            static function (RectorInterface $rector): bool {
                 if ($rector instanceof PostRectorInterface) {
                     return false;
                 }

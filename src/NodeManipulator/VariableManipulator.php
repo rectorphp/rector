@@ -127,7 +127,7 @@ final class VariableManipulator
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $expr,
-            fn (Node $subNode): bool => $subNode instanceof Encapsed || $subNode instanceof EncapsedStringPart
+            static fn (Node $subNode): bool => $subNode instanceof Encapsed || $subNode instanceof EncapsedStringPart
         );
     }
 

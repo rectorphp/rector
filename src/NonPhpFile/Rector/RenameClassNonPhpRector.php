@@ -96,7 +96,7 @@ CODE_SAMPLE
             $newContent = Strings::replace(
                 $newContent,
                 $oldClassRegex,
-                fn (array $match): string => ($match['extra_space'] ?? '') . $newClass
+                static fn (array $match): string => ($match['extra_space'] ?? '') . $newClass
             );
         }
 

@@ -79,7 +79,7 @@ final class RemovedAndAddedFilesCollector
     {
         return array_filter(
             $this->addedFiles,
-            fn (AddedFileInterface $addedFile): bool => $addedFile instanceof AddedFileWithContent
+            static fn (AddedFileInterface $addedFile): bool => $addedFile instanceof AddedFileWithContent
         );
     }
 
@@ -90,7 +90,7 @@ final class RemovedAndAddedFilesCollector
     {
         return array_filter(
             $this->addedFiles,
-            fn (AddedFileInterface $addedFile): bool => $addedFile instanceof AddedFileWithNodes
+            static fn (AddedFileInterface $addedFile): bool => $addedFile instanceof AddedFileWithNodes
         );
     }
 

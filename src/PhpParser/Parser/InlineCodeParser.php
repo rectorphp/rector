@@ -93,7 +93,7 @@ final class InlineCodeParser
             return Strings::replace(
                 $string,
                 self::VARIABLE_IN_SINGLE_QUOTED_REGEX,
-                fn (array $match) => $match['variable']
+                static fn (array $match) => $match['variable']
             );
         }
 

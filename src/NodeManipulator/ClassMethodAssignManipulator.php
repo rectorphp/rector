@@ -127,7 +127,7 @@ final class ClassMethodAssignManipulator
      */
     private function filterOutMultiAssigns(array $readOnlyVariableAssigns): array
     {
-        return array_filter($readOnlyVariableAssigns, function (Assign $assign): bool {
+        return array_filter($readOnlyVariableAssigns, static function (Assign $assign): bool {
             $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
             return ! $parent instanceof Assign;
         });
