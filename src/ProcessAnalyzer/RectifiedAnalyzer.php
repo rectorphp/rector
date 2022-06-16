@@ -60,13 +60,13 @@ final class RectifiedAnalyzer
             return ! $this->nodeComparator->areNodesEqual($originalNode, $node);
         }
 
-        if ($originalNode instanceof Node) {
-            return true;
-        }
-
         if ($rector instanceof AbstractScopeAwareRector) {
             $scope = $node->getAttribute(AttributeKey::SCOPE);
             return $scope instanceof Scope;
+        }
+
+        if ($originalNode instanceof Node) {
+            return true;
         }
 
         $startTokenPos = $node->getStartTokenPos();
