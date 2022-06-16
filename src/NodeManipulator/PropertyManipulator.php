@@ -25,6 +25,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\Unset_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\Type;
@@ -306,7 +307,16 @@ final class PropertyManipulator
             return false;
         }
 
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
+        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $parametersAcceptor = ParametersAcceptorSelector::selectFromArgs(
+            $scope,
+            $node->getArgs(),
+            $functionLikeReflection->getVariants()
+        );
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
             if ($parameterReflection->passedByReference()->yes()) {
                 return true;
