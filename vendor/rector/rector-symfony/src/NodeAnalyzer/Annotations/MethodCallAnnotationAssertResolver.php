@@ -41,13 +41,14 @@ final class MethodCallAnnotationAssertResolver
         $args = $methodCall->getArgs();
         $firstArgValue = $args[0]->value;
         $propertyName = $this->valueResolver->getValue($firstArgValue);
-        $getterMethodName = 'get' . \ucfirst($propertyName);
+        // based on https://github.com/symfony/symfony/blob/7d4b42cbeef195e0a01272b9c5f464f0afe52542/src/Symfony/Component/Validator/Mapping/GetterMetadata.php#L45-L47
+        $possibleMethodNames = ['get' . \ucfirst($propertyName), 'is' . \ucfirst($propertyName), 'has' . \ucfirst($propertyName)];
         $secondArgValue = $args[1]->value;
         if (!$secondArgValue instanceof New_) {
             // nothing we can do... or can we?
             return null;
         }
         $doctrineAnnotationTagValueNode = $this->doctrineAnnotationFromNewFactory->create($secondArgValue);
-        return new ClassMethodAndAnnotation($getterMethodName, $doctrineAnnotationTagValueNode);
+        return new ClassMethodAndAnnotation($possibleMethodNames, $doctrineAnnotationTagValueNode);
     }
 }

@@ -118,13 +118,15 @@ CODE_SAMPLE
     }
     private function refactorClassMethodAndAnnotation(Class_ $class, ClassMethodAndAnnotation $classMethodAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey) : void
     {
-        $classMethod = $class->getMethod($classMethodAndAnnotation->getMethodName());
-        if (!$classMethod instanceof ClassMethod) {
-            return;
+        foreach ($classMethodAndAnnotation->getPossibleMethodNames() as $possibleMethodName) {
+            $classMethod = $class->getMethod($possibleMethodName);
+            if (!$classMethod instanceof ClassMethod) {
+                continue;
+            }
+            $getterPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            $getterPhpDocInfo->addTagValueNode($classMethodAndAnnotation->getDoctrineAnnotationTagValueNode());
+            unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
         }
-        $getterPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $getterPhpDocInfo->addTagValueNode($classMethodAndAnnotation->getDoctrineAnnotationTagValueNode());
-        unset($loadValidatorMetadataClassMethod->stmts[$stmtKey]);
     }
     private function refactorPropertyAndAnnotation(Class_ $class, PropertyAndAnnotation $propertyAndAnnotation, ClassMethod $loadValidatorMetadataClassMethod, int $stmtKey) : void
     {

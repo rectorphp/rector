@@ -6,6 +6,7 @@ namespace Rector\Symfony\Helper;
 use RectorPrefix202206\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -65,10 +66,11 @@ final class TemplateGuesser
         if (!\is_string($namespace)) {
             throw new ShouldNotHappenException();
         }
-        $className = ($getClassReflection = $scope->getClassReflection()) ? $getClassReflection->getName() : null;
-        if (!\is_string($className)) {
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
             throw new ShouldNotHappenException();
         }
+        $className = $classReflection->getName();
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
         return $this->resolve($namespace, $className, $methodName);

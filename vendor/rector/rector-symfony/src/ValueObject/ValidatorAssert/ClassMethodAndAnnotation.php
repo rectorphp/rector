@@ -7,23 +7,29 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 final class ClassMethodAndAnnotation
 {
     /**
+     * @var string[]
      * @readonly
-     * @var string
      */
-    private $methodName;
+    private $possibleMethodNames;
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     private $doctrineAnnotationTagValueNode;
-    public function __construct(string $methodName, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    /**
+     * @param string[] $possibleMethodNames
+     */
+    public function __construct(array $possibleMethodNames, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {
-        $this->methodName = $methodName;
+        $this->possibleMethodNames = $possibleMethodNames;
         $this->doctrineAnnotationTagValueNode = $doctrineAnnotationTagValueNode;
     }
-    public function getMethodName() : string
+    /**
+     * @return string[]
+     */
+    public function getPossibleMethodNames() : array
     {
-        return $this->methodName;
+        return $this->possibleMethodNames;
     }
     public function getDoctrineAnnotationTagValueNode() : DoctrineAnnotationTagValueNode
     {
