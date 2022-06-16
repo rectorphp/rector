@@ -50,12 +50,17 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
         if ($currentStmt instanceof Stmt && $unreachableStmtAnalyzer->isStmtPHPStanUnreachable($currentStmt)) {
             $parentStmt = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
             while ($parentStmt instanceof Stmt) {
-                if (!$parentStmt instanceof UnreachableStatementNode) {
-                    $scope = $parentStmt->getAttribute(AttributeKey::SCOPE);
-                    $node->setAttribute(AttributeKey::SCOPE, $scope);
-                    return $scope;
+                if ($parentStmt instanceof UnreachableStatementNode) {
+                    $parentStmt = $parentStmt->getAttribute(AttributeKey::PARENT_NODE);
+                    continue;
                 }
-                $parentStmt = $parentStmt->getAttribute(AttributeKey::PARENT_NODE);
+                $scope = $parentStmt->getAttribute(AttributeKey::SCOPE);
+                if (!$scope instanceof Scope) {
+                    $parentStmt = $parentStmt->getAttribute(AttributeKey::PARENT_NODE);
+                    continue;
+                }
+                $node->setAttribute(AttributeKey::SCOPE, $scope);
+                return $scope;
             }
         }
         return null;
