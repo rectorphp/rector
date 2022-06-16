@@ -4,14 +4,17 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
@@ -80,13 +83,14 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         foreach ($this->methodReturnTypes as $methodReturnType) {
-            if (!$this->isObjectType($node, $methodReturnType->getObjectType())) {
+            $objectType = $methodReturnType->getObjectType();
+            if (!$this->isObjectType($node, $objectType)) {
                 continue;
             }
             if (!$this->isName($node, $methodReturnType->getMethod())) {
                 continue;
             }
-            $this->processClassMethodNodeWithTypehints($node, $methodReturnType->getReturnType());
+            $this->processClassMethodNodeWithTypehints($node, $methodReturnType->getReturnType(), $objectType);
             if (!$this->hasChanged) {
                 return null;
             }
@@ -102,8 +106,19 @@ CODE_SAMPLE
         Assert::allIsAOf($configuration, AddReturnTypeDeclaration::class);
         $this->methodReturnTypes = $configuration;
     }
-    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, Type $newType) : void
+    private function processClassMethodNodeWithTypehints(ClassMethod $classMethod, Type $newType, ObjectType $objectType) : void
     {
+        if ($newType instanceof MixedType) {
+            $class = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$class instanceof Class_) {
+                return;
+            }
+            $className = (string) $this->nodeNameResolver->getName($class);
+            $currentObjectType = new ObjectType($className);
+            if (!$objectType->equals($currentObjectType) && $classMethod->returnType !== null) {
+                return;
+            }
+        }
         // remove it
         if ($newType instanceof MixedType && !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::MIXED_TYPE)) {
             $classMethod->returnType = null;
