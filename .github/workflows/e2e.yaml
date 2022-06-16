@@ -33,6 +33,7 @@ jobs:
                     - 'e2e/use-rector-configurator'
                     - 'e2e/applied-rule-removed-node'
                     - 'e2e/parallel with space'
+                    - 'e2e/parent-arg-from-func-call'
 
         name: End to end test - ${{ matrix.directory }}
 
