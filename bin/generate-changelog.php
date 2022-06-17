@@ -62,7 +62,7 @@ final class GenerateChangelogCommand extends Command
 
     protected function configure(): void
     {
-        $this->setName(CommandNaming::classToName(self::class));
+        $this->setName('generate-changelog');
         $this->addArgument(self::OPTION_FROM_COMMIT, InputArgument::REQUIRED);
         $this->addArgument(self::OPTION_TO_COMMIT, InputArgument::REQUIRED);
     }
@@ -205,5 +205,5 @@ $generateChangelogCommand = new GenerateChangelogCommand();
 
 $application = new Application();
 $application->add($generateChangelogCommand);
-$application->setDefaultCommand(CommandNaming::classToName($generateChangelogCommand::class), true);
+$application->setDefaultCommand('generate-changelog', true);
 $application->run();
