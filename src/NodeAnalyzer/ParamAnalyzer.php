@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
@@ -18,8 +19,10 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use Rector\Core\NodeManipulator\FuncCallManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use RectorPrefix202206\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ParamAnalyzer
 {
@@ -48,13 +51,19 @@ final class ParamAnalyzer
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(NodeComparator $nodeComparator, ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver, FuncCallManipulator $funcCallManipulator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(NodeComparator $nodeComparator, ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver, FuncCallManipulator $funcCallManipulator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeComparator = $nodeComparator;
         $this->valueResolver = $valueResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->funcCallManipulator = $funcCallManipulator;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     public function isParamUsedInClassMethod(ClassMethod $classMethod, Param $param) : bool
     {
@@ -105,6 +114,23 @@ final class ParamAnalyzer
     public function hasDefaultNull(Param $param) : bool
     {
         return $param->default instanceof ConstFetch && $this->valueResolver->isNull($param->default);
+    }
+    public function isParamReassign(Param $param) : bool
+    {
+        $classMethod = $param->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$classMethod instanceof ClassMethod) {
+            return \false;
+        }
+        $paramName = (string) $this->nodeNameResolver->getName($param->var);
+        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (Node $node) use($paramName) : bool {
+            if (!$node instanceof Assign) {
+                return \false;
+            }
+            if (!$node->var instanceof Variable) {
+                return \false;
+            }
+            return $this->nodeNameResolver->isName($node->var, $paramName);
+        });
     }
     private function isVariableInClosureUses(Closure $closure, Variable $variable) : bool
     {

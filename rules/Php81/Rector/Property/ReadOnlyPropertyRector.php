@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -36,13 +37,19 @@ final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersi
     private $propertyFetchAssignManipulator;
     /**
      * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, VisibilityManipulator $visibilityManipulator)
+    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, ParamAnalyzer $paramAnalyzer, VisibilityManipulator $visibilityManipulator)
     {
         $this->propertyManipulator = $propertyManipulator;
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
+        $this->paramAnalyzer = $paramAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -145,6 +152,9 @@ CODE_SAMPLE
             return null;
         }
         if ($this->visibilityManipulator->isReadonly($param)) {
+            return null;
+        }
+        if ($this->paramAnalyzer->isParamReassign($param)) {
             return null;
         }
         $this->visibilityManipulator->makeReadonly($param);
