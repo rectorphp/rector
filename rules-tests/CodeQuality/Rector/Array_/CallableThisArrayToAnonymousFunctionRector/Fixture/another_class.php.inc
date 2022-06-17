@@ -4,7 +4,7 @@ namespace Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFun
 
 use Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Source\SortingClass;
 
-class AnotherClass
+final class AnotherClass
 {
     /**
      * @var SortingClass
@@ -34,7 +34,7 @@ namespace Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFun
 
 use Rector\Tests\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector\Source\SortingClass;
 
-class AnotherClass
+final class AnotherClass
 {
     /**
      * @var SortingClass
