@@ -129,7 +129,7 @@ final class PHPStanNodeScopeResolver
         $this->removeDeepChainMethodCallNodes($stmts);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($smartFileInfo);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use(&$nodeCallback, $isScopeRefreshing) : void {
+        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use(&$nodeCallback, $isScopeRefreshing, $smartFileInfo) : void {
             if ($node instanceof Arg) {
                 $node->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
@@ -196,6 +196,7 @@ final class PHPStanNodeScopeResolver
                 $originalStmt = $node->getOriginalStatement();
                 $originalStmt->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
                 $originalStmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $this->processNodes([$originalStmt], $smartFileInfo, $mutatingScope);
             } else {
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
