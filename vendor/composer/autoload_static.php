@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbe88ff28d0a64de61be744151b1f5636
+class ComposerStaticInit9e65b461ee35181bfb5655862c382102
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2770,6 +2770,7 @@ class ComposerStaticInitbe88ff28d0a64de61be744151b1f5636
         'Rector\\Php71\\Rector\\TryCatch\\MultiExceptionCatchRector' => __DIR__ . '/../..' . '/rules/Php71/Rector/TryCatch/MultiExceptionCatchRector.php',
         'Rector\\Php71\\ValueObject\\TwoNodeMatch' => __DIR__ . '/../..' . '/rules/Php71/ValueObject/TwoNodeMatch.php',
         'Rector\\Php72\\NodeFactory\\AnonymousFunctionFactory' => __DIR__ . '/../..' . '/rules/Php72/NodeFactory/AnonymousFunctionFactory.php',
+        'Rector\\Php72\\NodeManipulator\\ClosureNestedUsesDecorator' => __DIR__ . '/../..' . '/rules/Php72/NodeManipulator/ClosureNestedUsesDecorator.php',
         'Rector\\Php72\\Rector\\Assign\\ListEachRector' => __DIR__ . '/../..' . '/rules/Php72/Rector/Assign/ListEachRector.php',
         'Rector\\Php72\\Rector\\Assign\\ReplaceEachAssignmentWithKeyCurrentRector' => __DIR__ . '/../..' . '/rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php',
         'Rector\\Php72\\Rector\\FuncCall\\CreateFunctionToAnonymousFunctionRector' => __DIR__ . '/../..' . '/rules/Php72/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector.php',
@@ -3396,9 +3397,9 @@ class ComposerStaticInitbe88ff28d0a64de61be744151b1f5636
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbe88ff28d0a64de61be744151b1f5636::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbe88ff28d0a64de61be744151b1f5636::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbe88ff28d0a64de61be744151b1f5636::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9e65b461ee35181bfb5655862c382102::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9e65b461ee35181bfb5655862c382102::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9e65b461ee35181bfb5655862c382102::$classMap;
 
         }, null, ClassLoader::class);
     }

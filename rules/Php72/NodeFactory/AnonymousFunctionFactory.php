@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
@@ -37,15 +36,14 @@ use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\AstResolver;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Php72\NodeManipulator\ClosureNestedUsesDecorator;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use ReflectionParameter;
@@ -90,19 +88,14 @@ final class AnonymousFunctionFactory
     private $simplePhpParser;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     * @var \Rector\Php72\NodeManipulator\ClosureNestedUsesDecorator
      */
-    private $nodeComparator;
+    private $closureNestedUsesDecorator;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
-     */
-    private $nodePrinter;
     /**
      * @readonly
      * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
@@ -113,7 +106,7 @@ final class AnonymousFunctionFactory
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, NodeComparator $nodeComparator, AstResolver $astResolver, NodePrinterInterface $nodePrinter, PrivatesAccessor $privatesAccessor, InlineCodeParser $inlineCodeParser)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, ClosureNestedUsesDecorator $closureNestedUsesDecorator, AstResolver $astResolver, PrivatesAccessor $privatesAccessor, InlineCodeParser $inlineCodeParser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -121,9 +114,8 @@ final class AnonymousFunctionFactory
         $this->staticTypeMapper = $staticTypeMapper;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->simplePhpParser = $simplePhpParser;
-        $this->nodeComparator = $nodeComparator;
+        $this->closureNestedUsesDecorator = $closureNestedUsesDecorator;
         $this->astResolver = $astResolver;
-        $this->nodePrinter = $nodePrinter;
         $this->privatesAccessor = $privatesAccessor;
         $this->inlineCodeParser = $inlineCodeParser;
     }
@@ -141,7 +133,7 @@ final class AnonymousFunctionFactory
             $anonymousFunctionNode->static = $static;
         }
         foreach ($useVariables as $useVariable) {
-            $anonymousFunctionNode = $this->applyNestedUses($anonymousFunctionNode, $useVariable);
+            $anonymousFunctionNode = $this->closureNestedUsesDecorator->applyNestedUses($anonymousFunctionNode, $useVariable);
             $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);
         }
         if ($returnTypeNode instanceof Node) {
@@ -154,9 +146,8 @@ final class AnonymousFunctionFactory
     {
         /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
         $functionVariantWithPhpDoc = ParametersAcceptorSelector::selectSingle($phpMethodReflection->getVariants());
-        $anonymousFunction = new Closure();
         $newParams = $this->createParams($phpMethodReflection, $functionVariantWithPhpDoc->getParameters());
-        $anonymousFunction->params = $newParams;
+        $anonymousFunction = new Closure(['params' => $newParams]);
         $innerMethodCall = $this->createInnerMethodCall($phpMethodReflection, $expr, $newParams);
         if ($innerMethodCall === null) {
             return null;
@@ -201,63 +192,6 @@ final class AnonymousFunctionFactory
             return new ClosureUse($variable);
         }, $variables);
         return $anonymousFunction;
-    }
-    /**
-     * @param ClosureUse[] $uses
-     * @return ClosureUse[]
-     */
-    private function cleanClosureUses(array $uses) : array
-    {
-        $uniqueUses = [];
-        foreach ($uses as $use) {
-            if (!\is_string($use->var->name)) {
-                continue;
-            }
-            $variableName = $use->var->name;
-            if (\array_key_exists($variableName, $uniqueUses)) {
-                continue;
-            }
-            $uniqueUses[$variableName] = $use;
-        }
-        return \array_values($uniqueUses);
-    }
-    private function applyNestedUses(Closure $anonymousFunctionNode, Variable $useVariable) : Closure
-    {
-        $parent = $this->betterNodeFinder->findParentType($useVariable, Closure::class);
-        if (!$parent instanceof Closure) {
-            return $anonymousFunctionNode;
-        }
-        $paramNames = $this->nodeNameResolver->getNames($parent->params);
-        if ($this->nodeNameResolver->isNames($useVariable, $paramNames)) {
-            return $anonymousFunctionNode;
-        }
-        $anonymousFunctionNode = clone $anonymousFunctionNode;
-        while ($parent instanceof Closure) {
-            $parentOfParent = $this->betterNodeFinder->findParentType($parent, Closure::class);
-            $uses = [];
-            while ($parentOfParent instanceof Closure) {
-                $uses = $this->collectUsesEqual($parentOfParent, $uses, $useVariable);
-                $parentOfParent = $this->betterNodeFinder->findParentType($parentOfParent, Closure::class);
-            }
-            $uses = \array_merge($parent->uses, $uses);
-            $uses = $this->cleanClosureUses($uses);
-            $parent->uses = $uses;
-            $parent = $this->betterNodeFinder->findParentType($parent, Closure::class);
-        }
-        return $anonymousFunctionNode;
-    }
-    /**
-     * @param ClosureUse[] $uses
-     * @return ClosureUse[]
-     */
-    private function collectUsesEqual(Closure $closure, array $uses, Variable $useVariable) : array
-    {
-        foreach ($closure->params as $param) {
-            if ($this->nodeComparator->areNodesEqual($param->var, $useVariable)) {
-                $uses[] = new ClosureUse($param->var);
-            }
-        }
-        return $uses;
     }
     /**
      * @param Param[] $paramNodes
@@ -345,8 +279,17 @@ final class AnonymousFunctionFactory
         if (!$parameterReflection->getDefaultValue() instanceof Type) {
             return;
         }
-        $printDefaultValue = $this->nodePrinter->print($classMethod->params[$key]->default);
-        $param->default = new ConstFetch(new Name($printDefaultValue));
+        $paramDefaultExpr = $classMethod->params[$key]->default;
+        if (!$paramDefaultExpr instanceof Expr) {
+            return;
+        }
+        // reset original node, to allow the printer to re-use the expr
+        $paramDefaultExpr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($paramDefaultExpr, function (Node $node) : Node {
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            return $node;
+        });
+        $param->default = $paramDefaultExpr;
     }
     /**
      * @param Param[] $params
@@ -387,7 +330,10 @@ final class AnonymousFunctionFactory
             return null;
         }
         $name = new Name($className);
-        return $name->isSpecialClassName() ? $name : new FullyQualified($className);
+        if ($name->isSpecialClassName()) {
+            return $name;
+        }
+        return new FullyQualified($className);
     }
     /**
      * @return \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr|null
