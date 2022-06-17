@@ -147,21 +147,21 @@ final class AnonymousFunctionFactory
         /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
         $functionVariantWithPhpDoc = ParametersAcceptorSelector::selectSingle($phpMethodReflection->getVariants());
         $newParams = $this->createParams($phpMethodReflection, $functionVariantWithPhpDoc->getParameters());
-        $anonymousFunction = new Closure(['params' => $newParams]);
         $innerMethodCall = $this->createInnerMethodCall($phpMethodReflection, $expr, $newParams);
         if ($innerMethodCall === null) {
             return null;
         }
+        $returnTypeNode = null;
         if (!$functionVariantWithPhpDoc->getReturnType() instanceof MixedType) {
-            $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), TypeKind::RETURN);
-            $anonymousFunction->returnType = $returnType;
+            $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), TypeKind::RETURN);
+        }
+        $uses = [];
+        if ($expr instanceof Variable && !$this->nodeNameResolver->isName($expr, 'this')) {
+            $uses[] = new ClosureUse($expr);
         }
         // does method return something?
-        $anonymousFunction->stmts[] = $functionVariantWithPhpDoc->getReturnType() instanceof VoidType ? new Expression($innerMethodCall) : new Return_($innerMethodCall);
-        if ($expr instanceof Variable && !$this->nodeNameResolver->isName($expr, 'this')) {
-            $anonymousFunction->uses[] = new ClosureUse($expr);
-        }
-        return $anonymousFunction;
+        $stmts = $this->resolveStmts($functionVariantWithPhpDoc, $innerMethodCall);
+        return new Closure(['params' => $newParams, 'returnType' => $returnTypeNode, 'uses' => $uses, 'stmts' => $stmts]);
     }
     public function createAnonymousFunctionFromExpr(Expr $expr) : ?Closure
     {
@@ -253,35 +253,38 @@ final class AnonymousFunctionFactory
         $classMethod = $this->astResolver->resolveClassMethod($className, $methodName);
         $params = [];
         foreach ($parameterReflections as $key => $parameterReflection) {
-            $param = new Param(new Variable($parameterReflection->getName()));
-            $this->applyParamType($param, $parameterReflection);
-            $this->applyParamDefaultValue($param, $parameterReflection, $key, $classMethod);
-            $this->applyParamByReference($param, $parameterReflection);
-            $params[] = $param;
+            $variable = new Variable($parameterReflection->getName());
+            $defaultExpr = $this->resolveParamDefaultExpr($parameterReflection, $key, $classMethod);
+            $type = $this->resolveParamType($parameterReflection);
+            $byRef = $this->isParamByReference($parameterReflection);
+            $params[] = new Param($variable, $defaultExpr, $type, $byRef);
         }
         return $params;
     }
-    private function applyParamType(Param $param, ParameterReflection $parameterReflection) : void
+    /**
+     * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
+     */
+    private function resolveParamType(ParameterReflection $parameterReflection)
     {
         if ($parameterReflection->getType() instanceof MixedType) {
-            return;
+            return null;
         }
-        $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), TypeKind::PARAM);
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parameterReflection->getType(), TypeKind::PARAM);
     }
-    private function applyParamByReference(Param $param, ParameterReflection $parameterReflection) : void
+    private function isParamByReference(ParameterReflection $parameterReflection) : bool
     {
         /** @var ReflectionParameter $reflection */
         $reflection = $this->privatesAccessor->getPrivateProperty($parameterReflection, 'reflection');
-        $param->byRef = $reflection->isPassedByReference();
+        return $reflection->isPassedByReference();
     }
-    private function applyParamDefaultValue(Param $param, ParameterReflection $parameterReflection, int $key, ClassMethod $classMethod) : void
+    private function resolveParamDefaultExpr(ParameterReflection $parameterReflection, int $key, ClassMethod $classMethod) : ?Expr
     {
         if (!$parameterReflection->getDefaultValue() instanceof Type) {
-            return;
+            return null;
         }
         $paramDefaultExpr = $classMethod->params[$key]->default;
         if (!$paramDefaultExpr instanceof Expr) {
-            return;
+            return null;
         }
         // reset original node, to allow the printer to re-use the expr
         $paramDefaultExpr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
@@ -289,7 +292,7 @@ final class AnonymousFunctionFactory
             $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             return $node;
         });
-        $param->default = $paramDefaultExpr;
+        return $paramDefaultExpr;
     }
     /**
      * @param Param[] $params
@@ -349,5 +352,16 @@ final class AnonymousFunctionFactory
         // dynamic name, nothing we can do
         $className = $this->nodeNameResolver->getName($expr->class);
         return $className === null ? null : new New_(new FullyQualified($className));
+    }
+    /**
+     * @return Stmt[]
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $innerMethodCall
+     */
+    private function resolveStmts(FunctionVariantWithPhpDocs $functionVariantWithPhpDocs, $innerMethodCall) : array
+    {
+        if ($functionVariantWithPhpDocs->getReturnType() instanceof VoidType) {
+            return [new Expression($innerMethodCall)];
+        }
+        return [new Return_($innerMethodCall)];
     }
 }
