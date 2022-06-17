@@ -72,7 +72,11 @@ return [
 
     'patchers' => [
         // fix short import bug, @see https://github.com/rectorphp/rector-scoper-017/blob/23f3256a6f5a18483d6eb4659d69ba117501e2e3/vendor/nikic/php-parser/lib/PhpParser/Builder/Declaration.php#L6
-        fn (string $filePath, string $prefix, string $content): string => str_replace(sprintf('use %s\PhpParser;', $prefix), 'use PhpParser;', $content),
+        fn (string $filePath, string $prefix, string $content): string => str_replace(
+            sprintf('use %s\PhpParser;', $prefix),
+            'use PhpParser;',
+            $content
+        ),
 
         function (string $filePath, string $prefix, string $content): string {
             if (! \str_ends_with($filePath, 'src/Application/VersionResolver.php')) {

@@ -35,6 +35,7 @@ jobs:
                     - 'e2e/parallel with space'
                     - 'e2e/parent-arg-from-func-call'
                     - 'e2e/parent-binaryop-from-func-call'
+                    - 'e2e/parent-assign-from-func-call'
 
         name: End to end test - ${{ matrix.directory }}
 
