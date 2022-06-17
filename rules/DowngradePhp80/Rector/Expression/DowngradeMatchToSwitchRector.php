@@ -183,6 +183,7 @@ CODE_SAMPLE
                     $switchCases[] = $lastCase;
                 }
 
+                /** @var Case_ $lastCase */
                 $lastCase->stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
             } else {
                 $stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
