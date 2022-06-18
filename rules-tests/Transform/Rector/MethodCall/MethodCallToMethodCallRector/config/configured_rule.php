@@ -3,6 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+use Rector\Tests\Transform\Rector\MethodCall\MethodCallToMethodCallRector\Fixture\AClass;
+use Rector\Tests\Transform\Rector\MethodCall\MethodCallToMethodCallRector\Fixture\AnotherClass;
 use Rector\Tests\Transform\Rector\MethodCall\MethodCallToMethodCallRector\Source\FirstDependency;
 use Rector\Tests\Transform\Rector\MethodCall\MethodCallToMethodCallRector\Source\SecondDependency;
 use Rector\Transform\Rector\MethodCall\MethodCallToMethodCallRector;
@@ -12,6 +14,14 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig
         ->ruleWithConfiguration(
             MethodCallToMethodCallRector::class,
-            [new MethodCallToMethodCall(FirstDependency::class, 'go', SecondDependency::class, 'away')]
+            [
+                new MethodCallToMethodCall(FirstDependency::class, 'go', SecondDependency::class, 'away'),
+                new MethodCallToMethodCall(
+                    AClass::class,
+                    'methodFromAClass',
+                    AnotherClass::class,
+                    'methodFromAnotherClass'
+                ),
+            ]
         );
 };
