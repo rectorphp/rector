@@ -59,21 +59,28 @@ final class RectorConfig extends ContainerConfigurator
         $parameters = $this->parameters();
         $parameters->set(Option::SKIP, $criteria);
     }
-    public function importNames() : void
+    public function importNames(bool $importNames = \true, bool $importDocBlockNames = \true) : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::AUTO_IMPORT_NAMES, \true);
+        $parameters->set(Option::AUTO_IMPORT_NAMES, $importNames);
+        $parameters->set(Option::AUTO_IMPORT_DOC_BLOCK_NAMES, $importDocBlockNames);
     }
-    public function importShortClasses() : void
+    public function importShortClasses(bool $importShortClasses = \true) : void
     {
         $parameters = $this->parameters();
-        $parameters->set(Option::IMPORT_SHORT_CLASSES, \true);
+        $parameters->set(Option::IMPORT_SHORT_CLASSES, $importShortClasses);
     }
+    /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::importShortClasses(false) instead
+     */
     public function disableImportShortClasses() : void
     {
         $parameters = $this->parameters();
         $parameters->set(Option::IMPORT_SHORT_CLASSES, \false);
     }
+    /**
+     * @deprecated Use @see \Rector\Config\RectorConfig::importNames(false) instead
+     */
     public function disableImportNames() : void
     {
         $parameters = $this->parameters();
