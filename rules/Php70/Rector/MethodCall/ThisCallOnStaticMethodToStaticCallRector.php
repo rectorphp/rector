@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\Php\PhpMethodReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
@@ -34,10 +35,16 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector impl
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(StaticAnalyzer $staticAnalyzer, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(StaticAnalyzer $staticAnalyzer, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider)
     {
         $this->staticAnalyzer = $staticAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function provideMinPhpVersion() : int
     {
@@ -104,7 +111,11 @@ CODE_SAMPLE
             return null;
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
-        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
+        if (!$this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
+        $classReflection = $this->reflectionProvider->getClass($className);
+        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($classReflection, $methodName);
         if (!$isStaticMethod) {
             return null;
         }
