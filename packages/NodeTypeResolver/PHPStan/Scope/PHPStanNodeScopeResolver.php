@@ -8,6 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -101,6 +104,18 @@ final class PHPStanNodeScopeResolver
             $isScopeRefreshing,
             $smartFileInfo
         ): void {
+            if ($node instanceof Ternary) {
+                $this->processTernary($node, $mutatingScope);
+            }
+
+            if ($node instanceof AssignOp) {
+                $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+
+            if ($node instanceof BinaryOp) {
+                $this->processBinaryOp($node, $mutatingScope);
+            }
+
             if ($node instanceof Arg) {
                 $node->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
@@ -111,13 +126,7 @@ final class PHPStanNodeScopeResolver
             }
 
             if ($node instanceof Property) {
-                foreach ($node->props as $propertyProperty) {
-                    $propertyProperty->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-
-                    if ($propertyProperty->default instanceof Expr) {
-                        $propertyProperty->default->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                    }
-                }
+                $this->processProperty($node, $mutatingScope);
             }
 
             if ($node instanceof Switch_) {
@@ -127,8 +136,14 @@ final class PHPStanNodeScopeResolver
                 }
             }
 
-            if ($node instanceof TryCatch && $node->finally instanceof Finally_) {
-                $node->finally->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if ($node instanceof TryCatch) {
+                foreach ($node->catches as $catch) {
+                    $this->processNodes($catch->stmts, $smartFileInfo, $mutatingScope);
+                }
+
+                if ($node->finally instanceof Finally_) {
+                    $node->finally->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                }
             }
 
             if ($node instanceof Assign) {
@@ -140,16 +155,6 @@ final class PHPStanNodeScopeResolver
             // decorate value as well
             if ($node instanceof Return_ && $node->expr instanceof Expr) {
                 $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-
-            // scope is missing on attributes
-            // @todo decorate parent nodes too
-            if ($node instanceof Property) {
-                foreach ($node->attrGroups as $attrGroup) {
-                    foreach ($attrGroup->attrs as $attribute) {
-                        $attribute->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                    }
-                }
             }
 
             if ($node instanceof Trait_) {
@@ -196,11 +201,7 @@ final class PHPStanNodeScopeResolver
 
             // special case for unreachable nodes
             if ($node instanceof UnreachableStatementNode) {
-                $originalStmt = $node->getOriginalStatement();
-                $originalStmt->setAttribute(AttributeKey::IS_UNREACHABLE, true);
-                $originalStmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-
-                $this->processNodes([$originalStmt], $smartFileInfo, $mutatingScope);
+                $this->processUnreachableStatementNode($node, $smartFileInfo, $mutatingScope);
             } else {
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
@@ -209,6 +210,58 @@ final class PHPStanNodeScopeResolver
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
 
         return $this->processNodesWithDependentFiles($smartFileInfo, $stmts, $scope, $nodeCallback);
+    }
+
+    private function processUnreachableStatementNode(
+        UnreachableStatementNode $unreachableStatementNode,
+        SmartFileInfo $smartFileInfo,
+        MutatingScope $mutatingScope
+    ): void {
+        $originalStmt = $unreachableStatementNode->getOriginalStatement();
+        $originalStmt->setAttribute(AttributeKey::IS_UNREACHABLE, true);
+        $originalStmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+
+        $this->processNodes([$originalStmt], $smartFileInfo, $mutatingScope);
+
+        $next = $originalStmt->getAttribute(AttributeKey::NEXT_NODE);
+        while ($next instanceof Stmt) {
+            $next->setAttribute(AttributeKey::IS_UNREACHABLE, true);
+
+            $this->processNodes([$next], $smartFileInfo, $mutatingScope);
+            $next = $next->getAttribute(AttributeKey::NEXT_NODE);
+        }
+    }
+
+    private function processProperty(Property $property, MutatingScope $mutatingScope): void
+    {
+        foreach ($property->props as $propertyProperty) {
+            $propertyProperty->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+
+            if ($propertyProperty->default instanceof Expr) {
+                $propertyProperty->default->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+        }
+
+        foreach ($property->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+                $attribute->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+        }
+    }
+
+    private function processBinaryOp(BinaryOp $binaryOp, MutatingScope $mutatingScope): void
+    {
+        $binaryOp->left->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        $binaryOp->right->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+    }
+
+    private function processTernary(Ternary $ternary, MutatingScope $mutatingScope): void
+    {
+        if ($ternary->if instanceof Expr) {
+            $ternary->if->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
+
+        $ternary->else->setAttribute(AttributeKey::SCOPE, $mutatingScope);
     }
 
     /**

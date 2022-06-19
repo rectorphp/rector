@@ -1,5 +1,7 @@
 <?php
 
+namespace Rector\Tests\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector\Fixture;
+
 final class Parser
 {
     private function parseBlock()
