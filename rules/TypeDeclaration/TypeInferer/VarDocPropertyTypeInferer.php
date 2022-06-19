@@ -50,8 +50,8 @@ final class VarDocPropertyTypeInferer
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
 
-        $resolvedType = $phpDocInfo->getVarType();
-        if ($resolvedType instanceof VoidType) {
+        $varDocType = $phpDocInfo->getVarType();
+        if ($varDocType instanceof VoidType) {
             return new MixedType();
         }
 
@@ -63,9 +63,9 @@ final class VarDocPropertyTypeInferer
         // default value type must be added to each resolved type if set
         $propertyDefaultValue = $property->props[0]->default;
         if ($propertyDefaultValue instanceof Expr) {
-            $resolvedType = $this->unionTypeWithDefaultExpr($property, $resolvedType);
+            $resolvedType = $this->unionTypeWithDefaultExpr($property, $varDocType);
         } else {
-            $resolvedType = $this->makeNullableForAccessedBeforeInitialization($property, $resolvedType, $phpDocInfo);
+            $resolvedType = $this->makeNullableForAccessedBeforeInitialization($property, $varDocType, $phpDocInfo);
         }
 
         $resolvedType = $this->genericClassStringTypeNormalizer->normalize($resolvedType);
@@ -75,6 +75,11 @@ final class VarDocPropertyTypeInferer
             $propertyName,
             $class
         );
+
+        // if we have no idea what is assigned, the default should be ignored
+        if ($assignInferredPropertyType instanceof MixedType) {
+            return new MixedType();
+        }
 
         if ($this->shouldAddNull($resolvedType, $assignInferredPropertyType)) {
             $resolvedType = TypeCombinator::addNull($resolvedType);
@@ -176,17 +181,17 @@ final class VarDocPropertyTypeInferer
         return $this->typeFactory->createMixedPassedOrUnionType($types);
     }
 
-    private function unionTypeWithDefaultExpr(Property $property, Type $resolvedType): Type
+    private function unionTypeWithDefaultExpr(Property $property, Type $varDocType): Type
     {
         $defaultValueType = $this->defaultValuePropertyTypeInferer->inferProperty($property);
         if (! $defaultValueType instanceof Type) {
-            return $resolvedType;
+            return $varDocType;
         }
 
-        if (! $this->shouldUnionWithDefaultValue($defaultValueType, $resolvedType)) {
-            return $resolvedType;
+        if (! $this->shouldUnionWithDefaultValue($defaultValueType, $varDocType)) {
+            return $varDocType;
         }
 
-        return $this->unionWithDefaultValueType($defaultValueType, $resolvedType);
+        return $this->unionWithDefaultValueType($defaultValueType, $varDocType);
     }
 }
