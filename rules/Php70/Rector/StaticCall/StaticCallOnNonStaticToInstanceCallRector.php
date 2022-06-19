@@ -144,7 +144,17 @@ CODE_SAMPLE
 
     private function shouldSkip(string $methodName, string $className, StaticCall $staticCall): bool
     {
-        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return true;
+        }
+
+        // does the method even exist?
+        $classReflection = $this->reflectionProvider->getClass($className);
+        if (! $classReflection->hasMethod($methodName)) {
+            return true;
+        }
+
+        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($classReflection, $methodName);
         if ($isStaticMethod) {
             return true;
         }

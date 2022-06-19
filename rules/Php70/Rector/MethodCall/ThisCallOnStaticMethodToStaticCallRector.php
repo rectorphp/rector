@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\Php\PhpMethodReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
@@ -28,7 +29,8 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector impl
 {
     public function __construct(
         private readonly StaticAnalyzer $staticAnalyzer,
-        private readonly ReflectionResolver $reflectionResolver
+        private readonly ReflectionResolver $reflectionResolver,
+        private readonly ReflectionProvider $reflectionProvider,
     ) {
     }
 
@@ -112,8 +114,13 @@ CODE_SAMPLE
         }
 
         $className = (string) $this->nodeNameResolver->getName($classLike);
+        if (! $this->reflectionProvider->hasClass($className)) {
+            return null;
+        }
 
-        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($methodName, $className);
+        $classReflection = $this->reflectionProvider->getClass($className);
+
+        $isStaticMethod = $this->staticAnalyzer->isStaticMethod($classReflection, $methodName);
         if (! $isStaticMethod) {
             return null;
         }

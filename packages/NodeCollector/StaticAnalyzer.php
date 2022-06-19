@@ -6,24 +6,12 @@ namespace Rector\NodeCollector;
 
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Util\StringUtils;
 
 final class StaticAnalyzer
 {
-    public function __construct(
-        private readonly ReflectionProvider $reflectionProvider
-    ) {
-    }
-
-    public function isStaticMethod(string $methodName, string $className): bool
+    public function isStaticMethod(ClassReflection $classReflection, string $methodName): bool
     {
-        if (! $this->reflectionProvider->hasClass($className)) {
-            return false;
-        }
-
-        $classReflection = $this->reflectionProvider->getClass($className);
-
         if ($classReflection->hasNativeMethod($methodName)) {
             $methodReflection = $classReflection->getNativeMethod($methodName);
             if ($methodReflection->isStatic()) {
