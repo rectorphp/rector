@@ -6,7 +6,6 @@ namespace Rector\Symfony\NodeFactory\Annotations;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class DoctrineAnnotationKeyToValuesResolver
 {
@@ -15,9 +14,15 @@ final class DoctrineAnnotationKeyToValuesResolver
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    /**
+     * @readonly
+     * @var \Rector\Symfony\NodeFactory\Annotations\StringValueQuoteWrapper
+     */
+    private $stringValueQuoteWrapper;
+    public function __construct(ValueResolver $valueResolver, \Rector\Symfony\NodeFactory\Annotations\StringValueQuoteWrapper $stringValueQuoteWrapper)
     {
         $this->valueResolver = $valueResolver;
+        $this->stringValueQuoteWrapper = $stringValueQuoteWrapper;
     }
     /**
      * @return array<string|null, mixed>|mixed[]
@@ -32,7 +37,7 @@ final class DoctrineAnnotationKeyToValuesResolver
                 }
                 $key = $this->resolveKey($arrayItem);
                 $value = $this->valueResolver->getValue($arrayItem->value);
-                $value = $this->wrapStringValuesInQuotes($value, $key);
+                $value = $this->stringValueQuoteWrapper->wrap($value, $key);
                 // implicit key with no name
                 if ($key === null) {
                     $annotationKeyToValues[] = $value;
@@ -42,7 +47,7 @@ final class DoctrineAnnotationKeyToValuesResolver
             }
         } else {
             $singleValue = $this->valueResolver->getValue($expr);
-            $singleValue = $this->wrapStringValuesInQuotes($singleValue, null);
+            $singleValue = $this->stringValueQuoteWrapper->wrap($singleValue, null);
             return [$singleValue];
         }
         return $annotationKeyToValues;
@@ -53,25 +58,5 @@ final class DoctrineAnnotationKeyToValuesResolver
             return null;
         }
         return $this->valueResolver->getValue($arrayItem->key);
-    }
-    /**
-     * @return mixed
-     * @param mixed $value
-     */
-    private function wrapStringValuesInQuotes($value, ?string $key)
-    {
-        if (\is_string($value)) {
-            return '"' . $value . '"';
-        }
-        if (\is_array($value)) {
-            // include quotes in groups
-            if ($key === 'groups') {
-                foreach ($value as $nestedKey => $nestedValue) {
-                    $value[$nestedKey] = '"' . $nestedValue . '"';
-                }
-            }
-            return new CurlyListNode($value);
-        }
-        return $value;
     }
 }

@@ -74,7 +74,7 @@ final class FileGenerator
             // add core package main config
             if (\substr_compare($targetFilePath, 'configured_rule.php', -\strlen('configured_rule.php')) === 0) {
                 $rectorConfigLine = 'return static function (RectorConfig $rectorConfig): void {';
-                $content = \str_replace($rectorConfigLine, $rectorConfigLine . \PHP_EOL . '    $rectorConfig->import(__DIR__ . \'/../../../../../config/config.php\')' . \PHP_EOL, $content);
+                $content = \str_replace($rectorConfigLine, $rectorConfigLine . \PHP_EOL . '    $rectorConfig->import(__DIR__ . \'/../../../../../config/config.php\');' . \PHP_EOL, $content);
             }
         }
         $this->smartFileSystem->dumpFile($targetFilePath, $content);

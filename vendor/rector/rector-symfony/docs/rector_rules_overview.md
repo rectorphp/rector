@@ -1,4 +1,4 @@
-# 65 Rules Overview
+# 66 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -171,7 +171,10 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ChangeFileLoaderInExtensionAndKernelRector::class, [Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector::FROM: 'xml', Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector::TO: 'yaml']);
+    $rectorConfig->ruleWithConfiguration(ChangeFileLoaderInExtensionAndKernelRector::class, [
+        ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
+        ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
+    ]);
 };
 ```
 
@@ -237,8 +240,11 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remo
 - class: [`Rector\Symfony\Rector\Class_\CommandPropertyToAttributeRector`](../src/Rector/Class_/CommandPropertyToAttributeRector.php)
 
 ```diff
-+#[\Symfony\Component\Console\Attribute\AsCommand('sunshine')]
- class SunshineCommand extends \Symfony\Component\Console\Command\Command
++use Symfony\Component\Console\Attribute\AsCommand;
+ use Symfony\Component\Console\Command\Command;
+
++#[AsCommand('sunshine')]
+ final class SunshineCommand extends Command
  {
 -    /** @var string|null */
 -    public static $defaultName = 'sunshine';
@@ -823,6 +829,38 @@ Change logout success handler to an event listener that listens to LogoutEvent
 +        return [
 +            LogoutEvent::class => [['onLogout', 64]],
 +        ];
+     }
+ }
+```
+
+<br>
+
+## MagicClosureTwigExtensionToNativeMethodsRector
+
+Change TwigExtension function/filter magic closures to inlined and clear callables
+
+- class: [`Rector\Symfony\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector`](../src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php)
+
+```diff
+ use Twig\Extension\AbstractExtension;
+ use Twig\TwigFunction;
+
+ final class TerminologyExtension extends AbstractExtension
+ {
+     public function getFunctions(): array
+     {
+         return [
+-            new TwigFunction('resolve', [$this, 'resolve']);
++            new TwigFunction('resolve', function ($values) {
++                return $value + 100;
++            }),
+         ];
+-    }
+-
+-
+-    private function resolve($value)
+-    {
+-        return $value + 100;
      }
  }
 ```
