@@ -71,7 +71,7 @@ final class InitCommand extends Command
             $fullPHPVersion = (string) $this->phpVersionProvider->provide();
             $phpVersion = Strings::substring($fullPHPVersion, 0, 1) . Strings::substring($fullPHPVersion, 2, 1);
             $fileContent = $this->smartFileSystem->readFile($rectorRootFilePath);
-            $fileContent = \str_replace('LevelSetList::UP_TO_PHP_XY', \sprintf('LevelSetList::UP_TO_PHP_%d', $phpVersion), $fileContent);
+            $fileContent = \str_replace('LevelSetList::UP_TO_PHP_XY', 'LevelSetList::UP_TO_PHP_' . $phpVersion, $fileContent);
             $this->smartFileSystem->dumpFile($rectorRootFilePath, $fileContent);
             $this->rectorOutputStyle->success('"rector.php" config file was added');
         }
