@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Symfony\NodeFactory\FormType\BuildFormOptionAssignsFactory;
@@ -119,7 +118,7 @@ CODE_SAMPLE
         $buildFormClassMethod = $node->getMethod('buildForm');
         if (!$buildFormClassMethod instanceof ClassMethod) {
             // form has to have some items
-            throw new ShouldNotHappenException();
+            return null;
         }
         $paramNames = $this->nodeNameResolver->getNames($params);
         // 1. add assigns at start of ClassMethod
