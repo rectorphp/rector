@@ -116,9 +116,9 @@ CODE_SAMPLE
         if ($isReturn) {
             return $this->processReturn($match);
         }
-        $assignExpr = $this->resolveAssignExpr($condAndExprs);
-        if ($assignExpr instanceof Expr) {
-            return $this->changeToAssign($node, $match, $assignExpr);
+        $assignVar = $this->resolveAssignVar($condAndExprs);
+        if ($assignVar instanceof Expr) {
+            return $this->changeToAssign($node, $match, $assignVar);
         }
         return $match;
     }
@@ -133,12 +133,16 @@ CODE_SAMPLE
         }
         return new Return_($match);
     }
-    private function changeToAssign(Switch_ $switch, Match_ $match, Expr $assignExpr) : Assign
+    private function changeToAssign(Switch_ $switch, Match_ $match, Expr $expr) : ?Assign
     {
-        $prevInitializedAssign = $this->betterNodeFinder->findFirstInlinedPrevious($switch, function (Node $node) use($assignExpr) : bool {
-            return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $assignExpr);
+        $nextReturn = $switch->getAttribute(AttributeKey::NEXT_NODE);
+        if ($nextReturn instanceof Return_ && $nextReturn->expr instanceof Expr && !$this->nodeComparator->areNodesEqual($expr, $nextReturn->expr)) {
+            return null;
+        }
+        $prevInitializedAssign = $this->betterNodeFinder->findFirstInlinedPrevious($switch, function (Node $node) use($expr) : bool {
+            return $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $expr);
         });
-        $assign = new Assign($assignExpr, $match);
+        $assign = new Assign($expr, $match);
         if (!$prevInitializedAssign instanceof Assign) {
             return $assign;
         }
@@ -159,7 +163,7 @@ CODE_SAMPLE
     /**
      * @param CondAndExpr[] $condAndExprs
      */
-    private function resolveAssignExpr(array $condAndExprs) : ?Expr
+    private function resolveAssignVar(array $condAndExprs) : ?Expr
     {
         foreach ($condAndExprs as $condAndExpr) {
             $expr = $condAndExpr->getExpr();
@@ -186,8 +190,8 @@ CODE_SAMPLE
         if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
             return $match;
         }
-        $assignExpr = $this->resolveAssignExpr($condAndExprs);
-        if (!$assignExpr instanceof Expr) {
+        $assignVar = $this->resolveAssignVar($condAndExprs);
+        if (!$assignVar instanceof Expr) {
             $this->removeNode($nextNode);
         }
         $condAndExprs[] = new CondAndExpr([], $returnedExpr, MatchKind::RETURN);
