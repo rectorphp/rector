@@ -8,10 +8,6 @@ use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ScopeAwarePhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-/**
- * @internal Currently in experimental testing for core Rector rules. So we can verify if this feature is useful or not.
- * Do not use outside in custom rules. Go for AbstractRector instead.
- */
 abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRector implements ScopeAwarePhpRectorInterface
 {
     /**
