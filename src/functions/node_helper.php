@@ -18,7 +18,7 @@ if (!\function_exists('dump_with_depth')) {
 if (!\function_exists('dn')) {
     function dn(Node $node, int $depth = 2) : void
     {
-        dump_node($node, $depth);
+        \RectorPrefix202206\dump_node($node, $depth);
     }
 }
 if (!\function_exists('dump_node')) {
