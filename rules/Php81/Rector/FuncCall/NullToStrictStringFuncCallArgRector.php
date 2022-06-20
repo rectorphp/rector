@@ -20,7 +20,6 @@ use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -187,7 +186,11 @@ CODE_SAMPLE
             return null;
         }
 
-        if ($this->isAnErrorTypeFromParentScope($argValue, $type)) {
+        if (! $type instanceof MixedType) {
+            return null;
+        }
+
+        if ($this->isAnErrorTypeFromParentScope($argValue)) {
             return null;
         }
 
@@ -223,12 +226,8 @@ CODE_SAMPLE
         });
     }
 
-    private function isAnErrorTypeFromParentScope(Expr $expr, Type $type): bool
+    private function isAnErrorTypeFromParentScope(Expr $expr): bool
     {
-        if (! $type instanceof MixedType) {
-            return false;
-        }
-
         $scope = $expr->getAttribute(AttributeKey::SCOPE);
         if (! $scope instanceof Scope) {
             return false;
