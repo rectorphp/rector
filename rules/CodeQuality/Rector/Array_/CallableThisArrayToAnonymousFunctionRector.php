@@ -6,17 +6,13 @@ namespace Rector\CodeQuality\Rector\Array_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
-use PHPStan\Type\ThisType;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
-use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -33,7 +29,6 @@ final class CallableThisArrayToAnonymousFunctionRector extends AbstractScopeAwar
         private readonly AnonymousFunctionFactory $anonymousFunctionFactory,
         private readonly ReflectionResolver $reflectionResolver,
         private readonly ArrayCallableMethodMatcher $arrayCallableMethodMatcher,
-        private readonly VisibilityManipulator $visibilityManipulator,
     ) {
     }
 
@@ -103,8 +98,6 @@ CODE_SAMPLE
             return null;
         }
 
-        $this->privatizeLocalClassMethod($arrayCallable, $node);
-
         $phpMethodReflection = $this->reflectionResolver->resolveMethodReflection(
             $arrayCallable->getClass(),
             $arrayCallable->getMethod(),
@@ -119,28 +112,5 @@ CODE_SAMPLE
             $phpMethodReflection,
             $arrayCallable->getCallerExpr()
         );
-    }
-
-    private function privatizeLocalClassMethod(ArrayCallable $arrayCallable, Array_ $array): void
-    {
-        $callerExpr = $arrayCallable->getCallerExpr();
-        $callerType = $this->getType($callerExpr);
-
-        // local method, lets make it private
-        if (! $callerType instanceof ThisType) {
-            return;
-        }
-
-        $methodName = $arrayCallable->getMethod();
-
-        $class = $this->betterNodeFinder->findParentType($array, Class_::class);
-        if (! $class instanceof Class_) {
-            return;
-        }
-
-        $currentClassMethod = $class->getMethod($methodName);
-        if ($currentClassMethod instanceof ClassMethod) {
-            $this->visibilityManipulator->makePrivate($currentClassMethod);
-        }
     }
 }
