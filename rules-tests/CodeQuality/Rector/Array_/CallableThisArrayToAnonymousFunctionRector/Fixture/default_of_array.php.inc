@@ -29,7 +29,7 @@ final class DefaultOfArray
         });
     }
 
-    public function sortMe($values = [])
+    private function sortMe($values = [])
     {
     }
 }

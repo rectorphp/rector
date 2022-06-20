@@ -71,7 +71,7 @@ final class InitCommand extends Command
             $fileContent = $this->smartFileSystem->readFile($rectorRootFilePath);
             $fileContent = str_replace(
                 'LevelSetList::UP_TO_PHP_XY',
-                sprintf('LevelSetList::UP_TO_PHP_%d', $phpVersion),
+                'LevelSetList::UP_TO_PHP_' . $phpVersion,
                 $fileContent
             );
             $this->smartFileSystem->dumpFile($rectorRootFilePath, $fileContent);

@@ -42,7 +42,7 @@ class HasDefaultValue2 extends AbstractExtension
         ];
     }
 
-    public function run($a, $b = "test")
+    private function run($a, $b = "test")
     {
         return $a . $b;
     }

@@ -34,7 +34,6 @@ parameters:
         - bin/detect-rules-not-used-in-any-set.php
 
         # temporary stinrgable migration from template type provider
-        - src/Console/Command/InitCommand.php
         - bin/generate-changelog.php
 
         - */config.php
@@ -62,9 +61,6 @@ parameters:
         - tests/DependencyInjection/config
 
     ignoreErrors:
-        # PHP 7.4 1_000 support
-        - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\) does not accept string#'
-
         - '#Parameter \#1 \$node of method Rector\\PostRector\\Collector\\NodesToAddCollector\:\:wrapToExpression\(\) expects PhpParser\\Node\\Expr\|PhpParser\\Node\\Stmt, PhpParser\\Node given#'
 
         - '#Cognitive complexity for "Rector\\Php80\\NodeResolver\\SwitchExprsResolver\:\:resolve\(\)" is (.*?), keep it under 10#'
@@ -75,7 +71,6 @@ parameters:
                 - rules/Php70/EregToPcreTransformer.php
                 - packages/NodeTypeResolver/NodeTypeResolver.php
                 - rules/Renaming/NodeManipulator/ClassRenamer.php
-                - src/Rector/AbstractRector.php
 
         - "#^Cognitive complexity for \"Rector\\\\Php70\\\\EregToPcreTransformer\\:\\:(.*?)\" is (.*?), keep it under 10$#"
         - '#Cognitive complexity for "Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver\:\:getValue\(\)" is \d+, keep it under 10#'
@@ -99,7 +94,6 @@ parameters:
 
         # symplify 9
         - '#Use another value object over array with string\-keys and objects, array<string, ValueObject\>#'
-        - '#Do not use factory/method call in constructor\. Put factory in config and get service with dependency injection#'
 
         # false positives checked in another method
         -
@@ -113,11 +107,6 @@ parameters:
         - '#Access to an undefined property PhpParser\\Node\\Expr\\Error\|PhpParser\\Node\\Expr\\Variable\:\:\$name#'
 
         -
-            message: '#Comparison operation "<" between 0 and 2 is always true#'
-            paths:
-                - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
-
-        -
             message: '#Call to function is_string\(\) with float will always evaluate to false#'
             path: src/PhpParser/Printer/BetterStandardPrinter.php
 
@@ -125,7 +114,6 @@ parameters:
         -
             message:  '#Function "class_exists\(\)" cannot be used/left in the code#'
             paths:
-                 - src/DependencyInjection/CompilerPass/VerifyRectorServiceExistsCompilerPass.php
                  # for config class reflection
                  - packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php
 
@@ -134,27 +122,14 @@ parameters:
         - '#Method Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector\:\:matchReturnOrAssignNode\(\) should return PhpParser\\Node\\Expr\\Assign\|PhpParser\\Node\\Stmt\\Return_\|null but returns PhpParser\\Node\|null#'
 
         -
-            message: '#Unreachable statement \- code above always terminates#'
-            paths:
-                - bin/rector.php
-                - rules/Php70/Rector/FuncCall/MultiDirnameRector.php
-
-        -
             message: '#Function "class_exists\(\)" cannot be used/left in the code#'
             paths:
                 - src/Bootstrap/ExtensionConfigResolver.php
 
-        # @todo fix later
         -
             message: '#There should be no empty class#'
             paths:
                 - packages/StaticTypeMapper/ValueObject/Type/*Type.php
-                - */Exception/*
-
-        -
-            message: '#Namespace "Rector\\(.*?)\\Rector" is only reserved for "Rector"\. Move the class somewhere else#'
-            paths:
-                - */Contract/*
 
         # generics nullable bugs
         - '#Method (.*?) should return (.*?)\|null but returns PhpParser\\Node\|null#'
@@ -189,12 +164,6 @@ parameters:
 
         - '#(.*?) class\-string, string given#'
 
-        # part of refactor() API, node must be returned, or does bring any value
-        -
-            message: '#Use void instead of modify and return self object#'
-            paths:
-                - '*Rector.php'
-
         # PHP 7_4 literal syntax
         - '#Property PhpParser\\Node\\Scalar\\DNumber\:\:\$value \(float\|int\) does not accept string#'
 
@@ -216,9 +185,6 @@ parameters:
         -
             message: '#Property with protected modifier is not allowed\. Use interface contract method instead#'
             path: 'packages/BetterPhpDocParser/ValueObject/PhpDoc/DoctrineAnnotation/AbstractValuesAwareNode.php'
-
-        # known type
-        - '#Parameter \#3 \$pseudoNamespaceToNamespace of method Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\UnderscoreRenamePhpDocNodeVisitor\:\:shouldSkip\(\) expects Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace, Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace\|null given#'
 
         # known types
         - '#Parameter (.*?) expects PhpParser\\Node, PhpParser\\Node\|null given#'
@@ -254,9 +220,6 @@ parameters:
         # union false positive
         - '#Method Rector\\Comments\\CommentRemover\:\:removeFromNode\(\) has parameter \$node with no value type specified in iterable type array#'
 
-        # false positive
-        - '#Attribute class JetBrains\\PhpStorm\\Immutable does not exist#'
-
         # class-string miss match
         - '#Parameter \#1 \$classes of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<PHPStan\\PhpDocParser\\Ast\\Node\>\:\:getByAnnotationClasses\(\) expects array<class\-string\>, array<int, string\> given#'
         - '#Parameter \#1 \$classes of method Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo<TNode of PHPStan\\PhpDocParser\\Ast\\Node\>\:\:getByAnnotationClasses\(\) expects array<class\-string\>, array<string\> given#'
@@ -289,9 +252,6 @@ parameters:
             paths:
                 - packages/Caching/ValueObject/Storage/FileCacheStorage.php
 
-        # resolve later
-        -  '#Variables "\$(.*?)" are overridden\. This can lead to unwanted bugs, please pick a different name to avoid it#'
-
         -
             message: '#Instead of abstract class, use specific service with composition#'
             paths:
@@ -299,11 +259,6 @@ parameters:
                 - packages/PostRector/Rector/AbstractPostRector.php
                 - src/Rector/AbstractRector.php
                 - src/Rector/AbstractScopeAwareRector.php
-
-        -
-            message: '#This call has duplicate argument#'
-            paths:
-                - rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php
 
         -
             message: '#foreach\(\), while\(\), for\(\) or if\(\) cannot contain a complex expression\. Extract it to a new variable on a line before#'
@@ -326,8 +281,6 @@ parameters:
         -
             message: '#Class has a static method must so must contains "Static" in its name#'
             paths:
-                - packages/FileFormatter/ValueObject/Indent.php #17
-                - packages/FileFormatter/ValueObject/NewLine.php #15
                 - src/Application/VersionResolver.php #16
                 - utils/compiler/src/Unprefixer.php #9
                 - src/Configuration/ValueObjectInliner.php
@@ -364,12 +317,6 @@ parameters:
 
         - '#Cognitive complexity for "Rector\\Core\\NodeManipulator\\ClassMethodAssignManipulator\:\:collectReferenceVariableNames\(\)" is 13, keep it under 10#'
 
-        # caching
-        -
-            message: '#Use separate function calls with readable variable names#'
-            paths:
-                - src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php
-
         # on purpose to make use of worker paralle pattern
         -
             message: '#Instead of abstract class, use specific service with composition#'
@@ -382,8 +329,6 @@ parameters:
 
         # parallel complexity
         - '#Cognitive complexity for "Rector\\Parallel\\Application\\ParallelFileProcessor\:\:process\(\)" is \d+, keep it under 10#'
-
-        - '#Argument and options "debug", "clear\-cache" got confused#'
 
         # strict rules
         - '#Dynamic call to static method PHPUnit\\Framework\\Assert\:\:(.*?)\(\)#'
@@ -442,7 +387,6 @@ parameters:
                 - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
                 - src/Contract/Processor/FileProcessorInterface.php
                 - packages/Parallel/Application/ParallelFileProcessor.php
-                - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
 
         # skipped on purpose, as ctor overrie
         - '#Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType\:\:__construct\(\) does not call parent constructor from PHPStan\\Type\\StaticType#'
@@ -477,7 +421,6 @@ parameters:
                 - packages/Parallel/Application/ParallelFileProcessor.php
                 - packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php
                 - rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php
-                - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
                 - rules/Php70/EregToPcreTransformer.php
                 - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
                 - src/Kernel/RectorKernel.php
@@ -519,10 +462,6 @@ parameters:
         -
             message: '#Make callable type explicit#'
             path: src/NodeManipulator/BinaryOpManipulator.php
-
-        # resolve later
-        - '#Complete known array shape to the method @return type#'
-        # @todo remove from phpstan-rules for reoctr
 
         # 3rd party code without types
         - '#Add explicit array type to assigned "(.*?)->(args|params|items|parts|stmts)" expression#'
@@ -595,11 +534,6 @@ parameters:
 
         - '#Class "Rector\\(.*?)" has invalid namespace category "(.*?)"\. Pick one of\: "StmtsAwareInterface"#'
 
-        # to be fixed in https://github.com/symplify/symplify/pull/4052
-        -
-            message: '#Use separate function calls with readable variable names#'
-            path: rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php
-
         - '#Class "Rector\\CodeQuality\\Rector\\FunctionLike\\RemoveAlwaysTrueConditionSetInConstructorRector" has invalid namespace category "FunctionLike"\. Pick one of\: "If_"#'
 
         # doc arrays cannot be trusted
@@ -612,26 +546,10 @@ parameters:
             path: rules/Renaming/NodeManipulator/ClassRenamer.php
             message: '#Use separate function calls with readable variable names#'
 
-        # doc validation
-        -
-            message: '#Call to function array_key_exists\(\) with (.*?) and array(.*?) will always evaluate to true#'
-            path: packages/FileFormatter/ValueObject/Indent.php
-
-        # hash key
-        -
-            path: rules/Renaming/NodeManipulator/ClassRenamer.php
-            message: '#Use separate function calls with readable variable names#'
-
         - '#Cognitive complexity for "Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver\:\:processNodes\(\)" is \d+, keep it under 10#'
 
         # depends on falsy docs
         - '#Call to static method Webmozart\\Assert\\Assert\:\:allIsInstanceOf\(\) with array<PhpParser\\Node\\Stmt> and (.*?)Stmt(.*?) will always evaluate to true#'
-
-        # doc validation
-        -
-            message: '#Call to function array_key_exists\(\) with (.*?) and array(.*?) will always evaluate to true#'
-            path: packages/FileFormatter/ValueObject/Indent.php
-
 
         # autoload check in bin file
         -
@@ -649,10 +567,6 @@ parameters:
         -
             message: '#Creating new PHPStan\\Reflection\\Native\\NativeFunctionReflection is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
             path: src/PHPStan/Reflection/TypeToCallReflectionResolver/ClosureTypeToCallReflectionResolver
-
-        -
-            message: '#Creating new PHPStan\\Reflection\\Php\\PhpParameterReflection is not covered by backward compatibility promise\. The class might change in a minor PHPStan version#'
-            path: rules/DowngradePhp80/NodeAnalyzer/NamedToUnnamedArgs.php
 
         -
             message: '#Do not name "[a-z]", shorter than 2 chars#'
@@ -684,9 +598,6 @@ parameters:
         -
             message: '#Class cognitive complexity is 55, keep it under 50#'
             path: src/PhpParser/Printer/BetterStandardPrinter.php #41
-
-        # trust in 3rd party api
-        - '#Parameter \#1 \$indentStyle of method Rector\\FileFormatter\\ValueObjectFactory\\EditorConfigConfigurationBuilder\:\:withIndentStyle\(\) expects (.*?) string given#'
 
         # list() function accepts null arguments
         - '#Parameter \#2 \$args of class PhpParser\\Node\\Expr\\FuncCall constructor expects array<PhpParser\\Node\\Arg\|PhpParser\\Node\\VariadicPlaceholder>, array<int, PhpParser\\Node\\Arg\|null> given#'
