@@ -121,7 +121,7 @@ CODE_SAMPLE
         $key = $closure->params[1]->var;
         $foreach = new Foreach_($arrayValue, $value, ['keyVar' => $key]);
         $stmts = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (Node $subNode) use($variable, $key, $value, &$stmts) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, static function (Node $subNode) use($variable, $key, $value, &$stmts) {
             if (!$subNode instanceof Stmt) {
                 return null;
             }
@@ -150,7 +150,7 @@ CODE_SAMPLE
         $key = $closure->params[0]->var;
         $foreach = new Foreach_($funcCall, $key);
         $stmts = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (Node $subNode) use($variable, $key, $arrayValue, &$stmts) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, static function (Node $subNode) use($variable, $key, $arrayValue, &$stmts) {
             if (!$subNode instanceof Stmt) {
                 return null;
             }

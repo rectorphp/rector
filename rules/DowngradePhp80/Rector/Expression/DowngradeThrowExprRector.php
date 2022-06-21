@@ -151,7 +151,7 @@ CODE_SAMPLE
     }
     private function hasThrowInAssignExpr(Assign $assign) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, static function (Node $node) : bool {
             return $node instanceof Throw_;
         });
     }

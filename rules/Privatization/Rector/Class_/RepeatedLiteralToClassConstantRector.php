@@ -233,7 +233,7 @@ CODE_SAMPLE
         }
         // convert camelcase parts to underscore
         $parts = \explode(self::UNDERSCORE, (string) $value);
-        $parts = \array_map(function (string $value) : string {
+        $parts = \array_map(static function (string $value) : string {
             return StaticRectorStrings::camelCaseToUnderscore($value);
         }, $parts);
         // apply "CONST" prefix if constant beginning with number

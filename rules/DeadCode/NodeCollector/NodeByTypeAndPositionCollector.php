@@ -68,7 +68,7 @@ final class NodeByTypeAndPositionCollector
      */
     private function sortByStart(array $nodesByTypeAndPosition) : array
     {
-        \usort($nodesByTypeAndPosition, function (VariableNodeUse $firstVariableNodeUse, VariableNodeUse $secondVariableNodeUse) : int {
+        \usort($nodesByTypeAndPosition, static function (VariableNodeUse $firstVariableNodeUse, VariableNodeUse $secondVariableNodeUse) : int {
             return $firstVariableNodeUse->getStartTokenPosition() <=> $secondVariableNodeUse->getStartTokenPosition();
         });
         return $nodesByTypeAndPosition;

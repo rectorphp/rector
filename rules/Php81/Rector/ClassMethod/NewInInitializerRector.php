@@ -103,7 +103,7 @@ CODE_SAMPLE
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
             $toPropertyAssigns = $this->betterNodeFinder->findClassMethodAssignsToLocalProperty($node, $paramName);
-            $toPropertyAssigns = \array_filter($toPropertyAssigns, function (Assign $assign) : bool {
+            $toPropertyAssigns = \array_filter($toPropertyAssigns, static function (Assign $assign) : bool {
                 return $assign->expr instanceof Coalesce;
             });
             foreach ($toPropertyAssigns as $toPropertyAssign) {
@@ -173,7 +173,7 @@ CODE_SAMPLE
         if ((array) $classMethod->stmts === []) {
             return [];
         }
-        return \array_filter($classMethod->params, function (Param $param) : bool {
+        return \array_filter($classMethod->params, static function (Param $param) : bool {
             return $param->type instanceof NullableType;
         });
     }

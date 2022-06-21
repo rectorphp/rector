@@ -98,7 +98,7 @@ final class PregMatchTypeCorrector
         if ($scope === null) {
             return [];
         }
-        return $this->betterNodeFinder->find((array) $scope->stmts, function (Node $node) use($variable) : bool {
+        return $this->betterNodeFinder->find((array) $scope->stmts, static function (Node $node) use($variable) : bool {
             if (!$node instanceof Variable) {
                 return \false;
             }

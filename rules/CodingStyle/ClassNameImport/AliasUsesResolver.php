@@ -45,7 +45,7 @@ final class AliasUsesResolver
     public function resolveFromStmts(array $stmts) : array
     {
         $aliasedUses = [];
-        $this->useImportsTraverser->traverserStmts($stmts, function (UseUse $useUse, string $name) use(&$aliasedUses) : void {
+        $this->useImportsTraverser->traverserStmts($stmts, static function (UseUse $useUse, string $name) use(&$aliasedUses) : void {
             if ($useUse->alias === null) {
                 return;
             }

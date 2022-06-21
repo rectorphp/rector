@@ -91,7 +91,7 @@ final class YieldNodesReturnTypeInfererTypeInferer implements ReturnTypeInfererI
     private function findCurrentScopeYieldNodes(FunctionLike $functionLike) : array
     {
         $yieldNodes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use(&$yieldNodes) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (Node $node) use(&$yieldNodes) : ?int {
             // skip nested scope
             if ($node instanceof FunctionLike) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;

@@ -61,7 +61,7 @@ final class UsedImportsResolver
             $className = (string) $this->nodeNameResolver->getName($class);
             $usedImports[] = new FullyQualifiedObjectType($className);
         }
-        $this->useImportsTraverser->traverserStmts($stmts, function (UseUse $useUse, string $name) use(&$usedImports) : void {
+        $this->useImportsTraverser->traverserStmts($stmts, static function (UseUse $useUse, string $name) use(&$usedImports) : void {
             if ($useUse->alias !== null) {
                 $usedImports[] = new AliasedObjectType($useUse->alias->toString(), $name);
             } else {
@@ -77,7 +77,7 @@ final class UsedImportsResolver
     public function resolveFunctionImportsForStmts(array $stmts) : array
     {
         $usedFunctionImports = [];
-        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, function (UseUse $useUse, string $name) use(&$usedFunctionImports) : void {
+        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, static function (UseUse $useUse, string $name) use(&$usedFunctionImports) : void {
             $usedFunctionImports[] = new FullyQualifiedObjectType($name);
         });
         return $usedFunctionImports;

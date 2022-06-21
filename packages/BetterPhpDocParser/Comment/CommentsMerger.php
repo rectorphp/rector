@@ -66,7 +66,7 @@ final class CommentsMerger
     private function collectChildrenComments(Node $node) : array
     {
         $childrenComments = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use(&$childrenComments) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, static function (Node $node) use(&$childrenComments) {
             $comments = $node->getComments();
             if ($comments !== []) {
                 $childrenComments = \array_merge($childrenComments, $comments);

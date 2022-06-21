@@ -101,7 +101,7 @@ final class ForAnalyzer
     }
     public function isArrayWithKeyValueNameUnsetted(For_ $for) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($for->stmts, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($for->stmts, static function (Node $node) : bool {
             /** @var Node $parent */
             $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
             if (!$parent instanceof Unset_) {

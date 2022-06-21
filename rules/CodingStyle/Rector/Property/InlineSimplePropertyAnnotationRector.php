@@ -69,7 +69,7 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         Assert::allString($configuration);
-        $this->annotationsToConsiderForInlining = \array_map(function (string $annotation) : string {
+        $this->annotationsToConsiderForInlining = \array_map(static function (string $annotation) : string {
             return '@' . \ltrim($annotation, '@');
         }, $configuration);
     }

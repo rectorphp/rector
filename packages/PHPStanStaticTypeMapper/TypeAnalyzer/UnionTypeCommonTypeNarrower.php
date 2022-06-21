@@ -158,7 +158,7 @@ final class UnionTypeCommonTypeNarrower
      */
     private function filterOutNativeClassReflections(array $classReflections) : array
     {
-        return \array_filter($classReflections, function (ClassReflection $classReflection) : bool {
+        return \array_filter($classReflections, static function (ClassReflection $classReflection) : bool {
             return !$classReflection->isBuiltin();
         });
     }

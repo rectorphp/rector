@@ -46,7 +46,7 @@ final class TypeHasher
         }
         $type = $this->normalizeObjectType($type);
         // normalize iterable
-        $type = TypeTraverser::map($type, function (Type $currentType, callable $traverseCallback) : Type {
+        $type = TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback) : Type {
             if (!$currentType instanceof ObjectType) {
                 return $traverseCallback($currentType);
             }
@@ -75,7 +75,7 @@ final class TypeHasher
         }
         $normalizedUnionType = clone $unionType;
         // change alias to non-alias
-        $normalizedUnionType = TypeTraverser::map($normalizedUnionType, function (Type $type, callable $callable) : Type {
+        $normalizedUnionType = TypeTraverser::map($normalizedUnionType, static function (Type $type, callable $callable) : Type {
             if (!$type instanceof AliasedObjectType && !$type instanceof ShortenedObjectType) {
                 return $callable($type);
             }
@@ -85,7 +85,7 @@ final class TypeHasher
     }
     private function normalizeObjectType(Type $type) : Type
     {
-        return TypeTraverser::map($type, function (Type $currentType, callable $traverseCallback) : Type {
+        return TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback) : Type {
             if ($currentType instanceof ShortenedObjectType) {
                 return new FullyQualifiedObjectType($currentType->getFullyQualifiedName());
             }

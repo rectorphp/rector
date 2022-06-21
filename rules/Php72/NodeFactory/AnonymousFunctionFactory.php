@@ -174,7 +174,7 @@ final class AnonymousFunctionFactory
             return null;
         }
         $stmt = $firstNode->expr;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node) : Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $node) : Node {
             if (!$node instanceof String_) {
                 return $node;
             }
@@ -188,7 +188,7 @@ final class AnonymousFunctionFactory
         $anonymousFunction->stmts[] = new Return_($stmt);
         $anonymousFunction->params[] = new Param(new Variable('matches'));
         $variables = $expr instanceof Variable ? [] : $this->betterNodeFinder->findInstanceOf($expr, Variable::class);
-        $anonymousFunction->uses = \array_map(function (Variable $variable) : ClosureUse {
+        $anonymousFunction->uses = \array_map(static function (Variable $variable) : ClosureUse {
             return new ClosureUse($variable);
         }, $variables);
         return $anonymousFunction;
@@ -288,7 +288,7 @@ final class AnonymousFunctionFactory
         }
         // reset original node, to allow the printer to re-use the expr
         $paramDefaultExpr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($paramDefaultExpr, function (Node $node) : Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($paramDefaultExpr, static function (Node $node) : Node {
             $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             return $node;
         });

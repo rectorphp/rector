@@ -31,7 +31,7 @@ final class PhpDocTagRemover
     {
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function ($node) use($desiredNode, $phpDocInfo) : ?int {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', static function ($node) use($desiredNode, $phpDocInfo) : ?int {
             if ($node instanceof PhpDocTagNode && $node->value === $desiredNode) {
                 $phpDocInfo->markAsChanged();
                 return PhpDocNodeTraverser::NODE_REMOVE;

@@ -97,7 +97,7 @@ CODE_SAMPLE
         $selfVariable = $this->namedVariableFactory->createVariable($node, 'self');
         $expression = new Expression(new Assign($selfVariable, new Variable('this')));
         $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
-        $this->traverseNodesWithCallable($node, function (Node $subNode) use($selfVariable) : ?Closure {
+        $this->traverseNodesWithCallable($node, static function (Node $subNode) use($selfVariable) : ?Closure {
             if (!$subNode instanceof Closure) {
                 return null;
             }

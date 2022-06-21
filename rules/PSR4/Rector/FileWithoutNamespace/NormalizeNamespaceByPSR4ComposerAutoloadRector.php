@@ -108,7 +108,7 @@ CODE_SAMPLE
     }
     private function hasNamespaceInPreviousNamespace(Namespace_ $namespace) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($namespace, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirstPrevious($namespace, static function (Node $node) : bool {
             return $node instanceof Namespace_;
         });
     }

@@ -68,7 +68,7 @@ final class SimplifyConditionsRector extends AbstractRector
     }
     private function processIdenticalAndNotIdentical(Identical $identical) : ?Node
     {
-        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($identical, function (Node $binaryOp) : bool {
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($identical, static function (Node $binaryOp) : bool {
             return $binaryOp instanceof Identical || $binaryOp instanceof NotIdentical;
         }, function (Node $binaryOp) : bool {
             return $this->valueResolver->isTrueOrFalse($binaryOp);

@@ -162,7 +162,7 @@ CODE_SAMPLE
         if (!$variable->name instanceof Variable) {
             return $this->followedByCurlyBracketAnalyzer->isFollowed($this->file, $variable);
         }
-        return (bool) $this->betterNodeFinder->findFirstNext($assign, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirstNext($assign, static function (Node $node) : bool {
             return $node instanceof Variable;
         });
     }

@@ -168,7 +168,7 @@ final class ShortNameResolver
                 return null;
             }
             $phpDocNodeTraverser = new PhpDocNodeTraverser();
-            $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use(&$shortNames) {
+            $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', static function ($node) use(&$shortNames) {
                 if ($node instanceof PhpDocTagNode) {
                     $shortName = \trim($node->name, '@');
                     if (StringUtils::isMatch($shortName, self::BIG_LETTER_START_REGEX)) {

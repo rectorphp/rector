@@ -122,7 +122,7 @@ final class ReturnedNodesReturnTypeInfererTypeInferer implements ReturnTypeInfer
     private function collectReturns(FunctionLike $functionLike) : array
     {
         $returns = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use(&$returns) : ?int {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (Node $node) use(&$returns) : ?int {
             // skip Return_ nodes in nested functions or switch statements
             if ($node instanceof FunctionLike) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;

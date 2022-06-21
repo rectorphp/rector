@@ -129,7 +129,7 @@ final class MatchSwitchAnalyzer
         }
         foreach ($switch->cases as $case) {
             /** @var Expression[] $expressions */
-            $expressions = \array_filter($case->stmts, function (Node $node) : bool {
+            $expressions = \array_filter($case->stmts, static function (Node $node) : bool {
                 return $node instanceof Expression;
             });
             foreach ($expressions as $expression) {

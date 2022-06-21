@@ -149,7 +149,7 @@ final class PhpDocInfo
         }
         $tags = $this->phpDocNode->getTags();
         $name = $this->annotationNaming->normalizeName($name);
-        $tags = \array_filter($tags, function (PhpDocTagNode $tag) use($name) : bool {
+        $tags = \array_filter($tags, static function (PhpDocTagNode $tag) use($name) : bool {
             return $tag->name === $name;
         });
         $tags = \array_values($tags);

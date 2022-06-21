@@ -30,7 +30,7 @@ final class UseImportsResolver
         if (!$namespace instanceof Node) {
             return [];
         }
-        return \array_filter($namespace->stmts, function (Stmt $stmt) : bool {
+        return \array_filter($namespace->stmts, static function (Stmt $stmt) : bool {
             return $stmt instanceof Use_ || $stmt instanceof GroupUse;
         });
     }
@@ -43,7 +43,7 @@ final class UseImportsResolver
         if (!$namespace instanceof Node) {
             return [];
         }
-        return \array_filter($namespace->stmts, function (Stmt $stmt) : bool {
+        return \array_filter($namespace->stmts, static function (Stmt $stmt) : bool {
             return $stmt instanceof Use_;
         });
     }

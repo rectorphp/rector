@@ -177,7 +177,7 @@ final class ReturnTypeInferer
     private function resolveTypeWithVoidHandling($functionLike, Type $resolvedType) : Type
     {
         if ($resolvedType instanceof VoidType) {
-            $hasReturnValue = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, function (Node $subNode) : bool {
+            $hasReturnValue = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, static function (Node $subNode) : bool {
                 if (!$subNode instanceof Return_) {
                     return \false;
                 }
@@ -210,7 +210,7 @@ final class ReturnTypeInferer
             return $unionType;
         }
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
-        $returnsWithExpr = \array_filter($returns, function (Return_ $return) : bool {
+        $returnsWithExpr = \array_filter($returns, static function (Return_ $return) : bool {
             return $return->expr instanceof Expr;
         });
         if ($returns !== $returnsWithExpr) {

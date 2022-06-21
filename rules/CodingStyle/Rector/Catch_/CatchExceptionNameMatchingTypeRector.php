@@ -100,7 +100,7 @@ CODE_SAMPLE
         if (\is_string($aliasName)) {
             $typeShortName = $aliasName;
         }
-        $newVariableName = Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, function (array $matches) : string {
+        $newVariableName = Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, static function (array $matches) : string {
             $output = '';
             $output .= isset($matches[1]) ? \strtolower((string) $matches[1]) : '';
             $output .= $matches[2] ?? '';

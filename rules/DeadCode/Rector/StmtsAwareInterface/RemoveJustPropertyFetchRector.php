@@ -116,7 +116,7 @@ CODE_SAMPLE
     {
         // remove assign node
         unset($stmtsAware->stmts[$currentStmtsKey]);
-        $this->traverseNodesWithCallable($stmtsAware, function (Node $node) use($variableUsages, $propertyFetch) : ?PropertyFetch {
+        $this->traverseNodesWithCallable($stmtsAware, static function (Node $node) use($variableUsages, $propertyFetch) : ?PropertyFetch {
             if (!\in_array($node, $variableUsages, \true)) {
                 return null;
             }

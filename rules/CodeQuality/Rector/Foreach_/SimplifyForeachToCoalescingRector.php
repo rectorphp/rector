@@ -95,7 +95,7 @@ CODE_SAMPLE
      */
     private function matchReturnOrAssignNode(Foreach_ $foreach) : ?Node
     {
-        return $this->foreachManipulator->matchOnlyStmt($foreach, function (Node $node) : ?Node {
+        return $this->foreachManipulator->matchOnlyStmt($foreach, static function (Node $node) : ?Node {
             if (!$node instanceof If_) {
                 return null;
             }

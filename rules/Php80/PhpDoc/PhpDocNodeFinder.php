@@ -16,7 +16,7 @@ final class PhpDocNodeFinder
     {
         $foundNodes = [];
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($node, '', function (Node $node) use(&$foundNodes, $nodeType) {
+        $phpDocNodeTraverser->traverseWithCallable($node, '', static function (Node $node) use(&$foundNodes, $nodeType) {
             if (!\is_a($node, $nodeType, \true)) {
                 return null;
             }

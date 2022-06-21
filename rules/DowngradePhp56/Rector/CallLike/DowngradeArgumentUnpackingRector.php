@@ -150,7 +150,7 @@ CODE_SAMPLE
             /** @var Array_ $array */
             $array = $unpackedArgs[0]->value;
             $arrayItems = \array_filter($array->items);
-            $new->args = \array_map(function (ArrayItem $item) : Arg {
+            $new->args = \array_map(static function (ArrayItem $item) : Arg {
                 return new Arg($item->value);
             }, $arrayItems);
             return $new;

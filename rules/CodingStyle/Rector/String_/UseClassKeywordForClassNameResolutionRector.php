@@ -92,7 +92,7 @@ CODE_SAMPLE
         $quotedClassNames = \array_map('preg_quote', $classNames);
         // @see https://regex101.com/r/8nGS0F/1
         $parts = Strings::split($string->value, '#(' . \implode('|', $quotedClassNames) . ')#');
-        return \array_filter($parts, function (string $className) : bool {
+        return \array_filter($parts, static function (string $className) : bool {
             return $className !== '';
         });
     }

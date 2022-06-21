@@ -88,10 +88,10 @@ CODE_SAMPLE
     private function filterItemsWithSameKey(array $arrayItemsByKeys) : array
     {
         /** @var ArrayItem[][] $arrayItemsByKeys */
-        $arrayItemsByKeys = \array_filter($arrayItemsByKeys, function (array $arrayItems) : bool {
+        $arrayItemsByKeys = \array_filter($arrayItemsByKeys, static function (array $arrayItems) : bool {
             return \count($arrayItems) > 1;
         });
-        return \array_filter($arrayItemsByKeys, function (array $arrayItems) : bool {
+        return \array_filter($arrayItemsByKeys, static function (array $arrayItems) : bool {
             return \count($arrayItems) > 1;
         });
     }
