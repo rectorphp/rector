@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Goto_;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Label;
 use PhpParser\Node\Stmt\Nop;
@@ -18,7 +19,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\NodeAnalyzer\TryCatchAnalyzer;
+use Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,7 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnreachableStatementRector extends AbstractRector
 {
-    public function __construct(private readonly TryCatchAnalyzer $tryCatchAnalyzer)
+    public function __construct(private readonly TerminatedNodeAnalyzer $terminatedNodeAnalyzer)
     {
     }
 
@@ -141,10 +142,14 @@ CODE_SAMPLE
             return true;
         }
 
-        if (! $previousStmt instanceof TryCatch) {
-            return false;
+        if ($previousStmt instanceof TryCatch) {
+            return $this->terminatedNodeAnalyzer->isAlwaysTerminated($previousStmt);
         }
 
-        return $this->tryCatchAnalyzer->isAlwaysTerminated($previousStmt);
+        if ($previousStmt instanceof If_) {
+            return $this->terminatedNodeAnalyzer->isAlwaysTerminated($previousStmt);
+        }
+
+        return false;
     }
 }

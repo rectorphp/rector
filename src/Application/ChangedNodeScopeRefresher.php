@@ -21,7 +21,9 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Analyser\MutatingScope;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -105,6 +107,14 @@ final class ChangedNodeScopeRefresher
         if ($node instanceof CallLike) {
             /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $node */
             $node->args = array_values($node->args);
+        }
+
+        if ($node instanceof If_) {
+            $node->elseifs = array_values($node->elseifs);
+        }
+
+        if ($node instanceof TryCatch) {
+            $node->catches = array_values($node->catches);
         }
     }
 
