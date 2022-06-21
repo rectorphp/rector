@@ -16,7 +16,7 @@ final class VersionResolver
     /**
      * @var string
      */
-    public const PACKAGE_VERSION = '0fb4f5bfbbf4460ddb40b168cf40555f089d3a45';
+    public const PACKAGE_VERSION = '0.13.6';
     /**
      * @var string
      */
