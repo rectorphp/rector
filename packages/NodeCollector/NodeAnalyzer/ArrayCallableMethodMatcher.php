@@ -5,6 +5,7 @@ namespace Rector\NodeCollector\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -17,6 +18,8 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -81,8 +84,8 @@ final class ArrayCallableMethodMatcher
         $items = $array->items;
         // $this, self, static, FQN
         $firstItemValue = $items[0]->value;
-        $calleeType = $firstItemValue instanceof ClassConstFetch ? $this->resolveClassConstFetchType($firstItemValue) : $this->nodeTypeResolver->getType($firstItemValue);
-        if (!$calleeType instanceof TypeWithClassName) {
+        $callerType = $this->resolveCallerType($firstItemValue);
+        if (!$callerType instanceof TypeWithClassName) {
             return null;
         }
         $isInAttribute = (bool) $this->betterNodeFinder->findParentType($array, Attribute::class);
@@ -90,7 +93,7 @@ final class ArrayCallableMethodMatcher
             return null;
         }
         $values = $this->valueResolver->getValue($array);
-        $className = $calleeType->getClassName();
+        $className = $callerType->getClassName();
         $secondItemValue = $items[1]->value;
         if ($values === null) {
             return new ArrayCallableDynamicMethod($firstItemValue, $className, $secondItemValue);
@@ -106,6 +109,10 @@ final class ArrayCallableMethodMatcher
         }
         $methodName = $secondItemValue->value;
         if ($methodName === MethodName::CONSTRUCT) {
+            return null;
+        }
+        // skip non-existing methods
+        if (!$callerType->hasMethod($methodName)->yes()) {
             return null;
         }
         return new ArrayCallable($firstItemValue, $className, $methodName);
@@ -180,5 +187,18 @@ final class ArrayCallableMethodMatcher
             }
         }
         return new ObjectType($classConstantReference, null, $classReflection);
+    }
+    private function resolveCallerType(Expr $expr) : Type
+    {
+        if ($expr instanceof ClassConstFetch) {
+            // static ::class reference?
+            $callerType = $this->resolveClassConstFetchType($expr);
+        } else {
+            $callerType = $this->nodeTypeResolver->getType($expr);
+        }
+        if ($callerType instanceof ThisType) {
+            return $callerType->getStaticObjectType();
+        }
+        return $callerType;
     }
 }

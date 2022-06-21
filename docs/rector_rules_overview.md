@@ -1,4 +1,4 @@
-# 517 Rules Overview
+# 518 Rules Overview
 
 <br>
 
@@ -74,7 +74,7 @@
 
 - [Php80](#php80) (17)
 
-- [Php81](#php81) (10)
+- [Php81](#php81) (11)
 
 - [Php82](#php82) (1)
 
@@ -8562,6 +8562,29 @@ Add final to constants that does not have children
  {
 -    public const NAME = 'value';
 +    final public const NAME = 'value';
+ }
+```
+
+<br>
+
+### FirstClassCallableRector
+
+Upgrade array callable to first class callable
+
+- class: [`Rector\Php81\Rector\Array_\FirstClassCallableRector`](../rules/Php81/Rector/Array_/FirstClassCallableRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+-        $name = [$this, 'name'];
++        $name = $this->name(...);
+     }
+
+     public function name()
+     {
+     }
  }
 ```
 

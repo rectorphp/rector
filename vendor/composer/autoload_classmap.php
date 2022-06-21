@@ -2561,6 +2561,7 @@ return array(
     'Rector\\Php81\\NodeAnalyzer\\EnumConstListClassDetector' => $baseDir . '/rules/Php81/NodeAnalyzer/EnumConstListClassDetector.php',
     'Rector\\Php81\\NodeFactory\\ClassFromEnumFactory' => $baseDir . '/rules/Php81/NodeFactory/ClassFromEnumFactory.php',
     'Rector\\Php81\\NodeFactory\\EnumFactory' => $baseDir . '/rules/Php81/NodeFactory/EnumFactory.php',
+    'Rector\\Php81\\Rector\\Array_\\FirstClassCallableRector' => $baseDir . '/rules/Php81/Rector/Array_/FirstClassCallableRector.php',
     'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => $baseDir . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
     'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => $baseDir . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
     'Rector\\Php81\\Rector\\Class_\\ConstantListClassToEnumRector' => $baseDir . '/rules/Php81/Rector/Class_/ConstantListClassToEnumRector.php',

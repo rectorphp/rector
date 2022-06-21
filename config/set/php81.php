@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix202206;
 
 use Rector\Config\RectorConfig;
+use Rector\Php81\Rector\Array_\FirstClassCallableRector;
 use Rector\Php81\Rector\Class_\MyCLabsClassToEnumRector;
 use Rector\Php81\Rector\Class_\SpatieEnumClassToEnumRector;
 use Rector\Php81\Rector\ClassConst\FinalizePublicClassConstantRector;
@@ -25,4 +26,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(NewInInitializerRector::class);
     $rectorConfig->rule(IntersectionTypesRector::class);
     $rectorConfig->rule(NullToStrictStringFuncCallArgRector::class);
+    $rectorConfig->rule(FirstClassCallableRector::class);
 };

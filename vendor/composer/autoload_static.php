@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit73d382890f12bde41f2d8fcab5746055
+class ComposerStaticInitebf48716d1452b3c30b2ef68cd893b66
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2862,6 +2862,7 @@ class ComposerStaticInit73d382890f12bde41f2d8fcab5746055
         'Rector\\Php81\\NodeAnalyzer\\EnumConstListClassDetector' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/EnumConstListClassDetector.php',
         'Rector\\Php81\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/ClassFromEnumFactory.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
+        'Rector\\Php81\\Rector\\Array_\\FirstClassCallableRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Array_/FirstClassCallableRector.php',
         'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
         'Rector\\Php81\\Rector\\ClassMethod\\NewInInitializerRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassMethod/NewInInitializerRector.php',
         'Rector\\Php81\\Rector\\Class_\\ConstantListClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/ConstantListClassToEnumRector.php',
@@ -3400,9 +3401,9 @@ class ComposerStaticInit73d382890f12bde41f2d8fcab5746055
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit73d382890f12bde41f2d8fcab5746055::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit73d382890f12bde41f2d8fcab5746055::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit73d382890f12bde41f2d8fcab5746055::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitebf48716d1452b3c30b2ef68cd893b66::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitebf48716d1452b3c30b2ef68cd893b66::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitebf48716d1452b3c30b2ef68cd893b66::$classMap;
 
         }, null, ClassLoader::class);
     }
