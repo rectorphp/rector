@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHP_CodeSniffer\Standards\Generic\Sniffs\CodeAnalysis\AssignmentInConditionSniff;
 use PhpCsFixer\Fixer\FunctionNotation\FunctionTypehintSpaceFixer;
+use PhpCsFixer\Fixer\FunctionNotation\StaticLambdaFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
@@ -49,6 +50,8 @@ return static function (ECSConfig $ecsConfig): void {
             'phpstan-ignore-next-line',
         ],
     ]);
+
+    $ecsConfig->rule(StaticLambdaFixer::class);
 
     $ecsConfig->skip([
         '*/Source/*',

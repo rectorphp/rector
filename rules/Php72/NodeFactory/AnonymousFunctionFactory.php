@@ -160,7 +160,7 @@ final class AnonymousFunctionFactory
 
         $stmt = $firstNode->expr;
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, function (Node $node): Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $node): Node {
             if (! $node instanceof String_) {
                 return $node;
             }
@@ -183,7 +183,7 @@ final class AnonymousFunctionFactory
             : $this->betterNodeFinder->findInstanceOf($expr, Variable::class);
 
         $anonymousFunction->uses = array_map(
-            fn (Variable $variable): ClosureUse => new ClosureUse($variable),
+            static fn (Variable $variable): ClosureUse => new ClosureUse($variable),
             $variables
         );
 
@@ -314,7 +314,7 @@ final class AnonymousFunctionFactory
         $paramDefaultExpr->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             $paramDefaultExpr,
-            function (Node $node): Node {
+            static function (Node $node): Node {
                 $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
                 return $node;
             }

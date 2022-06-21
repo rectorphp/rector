@@ -285,7 +285,7 @@ final class TypeComparator
 
     private function normalizeConstantBooleanType(Type $type): Type
     {
-        return TypeTraverser::map($type, function (Type $type, callable $callable): Type {
+        return TypeTraverser::map($type, static function (Type $type, callable $callable): Type {
             if ($type instanceof ConstantBooleanType) {
                 return new BooleanType();
             }

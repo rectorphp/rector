@@ -78,7 +78,7 @@ final class CommentsMerger
     {
         $childrenComments = [];
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, static function (Node $node) use (
             &$childrenComments
         ) {
             $comments = $node->getComments();

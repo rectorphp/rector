@@ -113,7 +113,7 @@ CODE_SAMPLE
             $paramType = $parentParam->type;
 
             // original attributes have to removed to avoid tokens crashing from origin positions
-            $this->traverseNodesWithCallable($paramType, function (Node $node) {
+            $this->traverseNodesWithCallable($paramType, static function (Node $node) {
                 $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
                 return null;
             });

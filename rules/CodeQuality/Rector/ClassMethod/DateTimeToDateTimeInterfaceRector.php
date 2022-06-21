@@ -193,7 +193,7 @@ CODE_SAMPLE
     {
         $return = $this->betterNodeFinder->findFirstInFunctionLikeScoped(
             $classMethod,
-            fn (Node $node): bool => $node instanceof Return_
+            static fn (Node $node): bool => $node instanceof Return_
         );
         if (! $return instanceof Return_) {
             return false;

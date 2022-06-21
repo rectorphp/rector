@@ -99,7 +99,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
-        $match = $this->betterNodeFinder->findFirst($node, fn (Node $subNode): bool => $subNode instanceof Match_);
+        $match = $this->betterNodeFinder->findFirst($node, static fn (Node $subNode): bool => $subNode instanceof Match_);
         if (! $match instanceof Match_) {
             return null;
         }

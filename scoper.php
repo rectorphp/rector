@@ -72,13 +72,13 @@ return [
 
     'patchers' => [
         // fix short import bug, @see https://github.com/rectorphp/rector-scoper-017/blob/23f3256a6f5a18483d6eb4659d69ba117501e2e3/vendor/nikic/php-parser/lib/PhpParser/Builder/Declaration.php#L6
-        fn (string $filePath, string $prefix, string $content): string => str_replace(
+        static fn (string $filePath, string $prefix, string $content): string => str_replace(
             sprintf('use %s\PhpParser;', $prefix),
             'use PhpParser;',
             $content
         ),
 
-        function (string $filePath, string $prefix, string $content): string {
+        static function (string $filePath, string $prefix, string $content): string {
             if (! \str_ends_with($filePath, 'src/Application/VersionResolver.php')) {
                 return $content;
             }
@@ -95,7 +95,7 @@ return [
         },
 
         // fixes https://github.com/rectorphp/rector/issues/7017
-        function (string $filePath, string $prefix, string $content): string {
+        static function (string $filePath, string $prefix, string $content): string {
             if (str_ends_with($filePath, 'vendor/symfony/string/ByteString.php')) {
                 return Strings::replace($content, '#' . $prefix . '\\\\\\\\1_\\\\\\\\2#', '\\\\1_\\\\2');
             }
@@ -108,7 +108,7 @@ return [
         },
 
         // un-prefix composer plugin
-        function (string $filePath, string $prefix, string $content): string {
+        static function (string $filePath, string $prefix, string $content): string {
             if (! \str_ends_with($filePath, 'vendor/rector/extension-installer/src/Plugin.php')) {
                 return $content;
             }
@@ -118,7 +118,7 @@ return [
         },
 
         // unprefix string classes, as they're string on purpose - they have to be checked in original form, not prefixed
-        function (string $filePath, string $prefix, string $content): string {
+        static function (string $filePath, string $prefix, string $content): string {
             // skip vendor, expect rector packages
             if (\str_contains($filePath, 'vendor/') && ! \str_contains($filePath, 'vendor/rector')) {
                 return $content;
@@ -133,7 +133,7 @@ return [
         },
 
         // scoper missed PSR-4 autodiscovery in Symfony
-        function (string $filePath, string $prefix, string $content): string {
+        static function (string $filePath, string $prefix, string $content): string {
             // scoper missed PSR-4 autodiscovery in Symfony
             if (! \str_ends_with($filePath, 'config.php') && ! \str_ends_with($filePath, 'services.php')) {
                 return $content;

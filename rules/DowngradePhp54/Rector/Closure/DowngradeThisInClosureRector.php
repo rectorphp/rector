@@ -106,7 +106,7 @@ CODE_SAMPLE
 
         $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
 
-        $this->traverseNodesWithCallable($node, function (Node $subNode) use ($selfVariable): ?Closure {
+        $this->traverseNodesWithCallable($node, static function (Node $subNode) use ($selfVariable): ?Closure {
             if (! $subNode instanceof Closure) {
                 return null;
             }

@@ -41,7 +41,7 @@ final class ArrayDimFetchParentNodeReadAnalyzer implements ParentNodeReadAnalyze
 
         return ! (bool) $this->betterNodeFinder->findFirst(
             $parentAssign->var,
-            fn (Node $node): bool => $node === $expr
+            static fn (Node $node): bool => $node === $expr
         );
     }
 }

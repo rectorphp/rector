@@ -161,7 +161,7 @@ final class ReturnTypeInferer
         if ($resolvedType instanceof VoidType) {
             $hasReturnValue = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped(
                 $functionLike,
-                function (Node $subNode): bool {
+                static function (Node $subNode): bool {
                     if (! $subNode instanceof Return_) {
                         return false;
                     }
@@ -201,7 +201,7 @@ final class ReturnTypeInferer
         }
 
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
-        $returnsWithExpr = array_filter($returns, fn (Return_ $return): bool => $return->expr instanceof Expr);
+        $returnsWithExpr = array_filter($returns, static fn (Return_ $return): bool => $return->expr instanceof Expr);
 
         if ($returns !== $returnsWithExpr) {
             return $unionType;

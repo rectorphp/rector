@@ -53,7 +53,7 @@ final class PSR4AutoloadPathsProvider
     {
         return array_filter(
             $psr4Autoloads,
-            fn (string $psr4Autoload): bool => $psr4Autoload !== '',
+            static fn (string $psr4Autoload): bool => $psr4Autoload !== '',
             ARRAY_FILTER_USE_KEY
         );
     }

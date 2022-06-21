@@ -119,7 +119,7 @@ CODE_SAMPLE
     {
         return (bool) $this->betterNodeFinder->findFirstPrevious(
             $namespace,
-            fn (Node $node): bool => $node instanceof Namespace_
+            static fn (Node $node): bool => $node instanceof Namespace_
         );
     }
 

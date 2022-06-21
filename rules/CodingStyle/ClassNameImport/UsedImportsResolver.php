@@ -58,7 +58,7 @@ final class UsedImportsResolver
             $usedImports[] = new FullyQualifiedObjectType($className);
         }
 
-        $this->useImportsTraverser->traverserStmts($stmts, function (
+        $this->useImportsTraverser->traverserStmts($stmts, static function (
             UseUse $useUse,
             string $name
         ) use (&$usedImports): void {
@@ -80,7 +80,7 @@ final class UsedImportsResolver
     {
         $usedFunctionImports = [];
 
-        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, function (
+        $this->useImportsTraverser->traverserStmtsForFunctions($stmts, static function (
             UseUse $useUse,
             string $name
         ) use (&$usedFunctionImports): void {

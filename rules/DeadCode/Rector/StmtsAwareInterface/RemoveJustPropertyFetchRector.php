@@ -149,7 +149,7 @@ CODE_SAMPLE
 
         $this->traverseNodesWithCallable(
             $stmtsAware,
-            function (Node $node) use ($variableUsages, $propertyFetch): ?PropertyFetch {
+            static function (Node $node) use ($variableUsages, $propertyFetch): ?PropertyFetch {
                 if (! in_array($node, $variableUsages, true)) {
                     return null;
                 }

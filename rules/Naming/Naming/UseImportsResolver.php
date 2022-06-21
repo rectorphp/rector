@@ -34,7 +34,7 @@ final class UseImportsResolver
 
         return array_filter(
             $namespace->stmts,
-            fn (Stmt $stmt): bool => $stmt instanceof Use_ || $stmt instanceof GroupUse
+            static fn (Stmt $stmt): bool => $stmt instanceof Use_ || $stmt instanceof GroupUse
         );
     }
 
@@ -51,7 +51,7 @@ final class UseImportsResolver
             return [];
         }
 
-        return array_filter($namespace->stmts, fn (Stmt $stmt): bool => $stmt instanceof Use_);
+        return array_filter($namespace->stmts, static fn (Stmt $stmt): bool => $stmt instanceof Use_);
     }
 
     public function resolvePrefix(Use_|GroupUse $use): string

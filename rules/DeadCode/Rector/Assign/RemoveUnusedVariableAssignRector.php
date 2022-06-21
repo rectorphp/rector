@@ -158,7 +158,7 @@ CODE_SAMPLE
 
         return (bool) $this->betterNodeFinder->findFirstNext(
             $assign,
-            fn (Node $node): bool => $node instanceof Variable
+            static fn (Node $node): bool => $node instanceof Variable
         );
     }
 

@@ -99,7 +99,7 @@ final class ForAnalyzer
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $for->stmts,
-            function (Node $node): bool {
+            static function (Node $node): bool {
                 /** @var Node $parent */
                 $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
                 if (! $parent instanceof Unset_) {

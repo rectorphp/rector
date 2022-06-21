@@ -73,7 +73,7 @@ final class GenerateChangelogCommand extends Command
 
         $commitLines = $this->resolveCommitLinesFromToHashes($fromCommit, $toCommit);
 
-        $commits = array_map(function (string $line): array {
+        $commits = array_map(static function (string $line): array {
             [$hash, $message] = explode(' ', $line, 2);
             return [
                 self::HASH => $hash,

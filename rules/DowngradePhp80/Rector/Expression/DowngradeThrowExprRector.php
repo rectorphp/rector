@@ -170,7 +170,7 @@ CODE_SAMPLE
     {
         return (bool) $this->betterNodeFinder->findFirst(
             $assign->expr,
-            fn (Node $node): bool => $node instanceof Throw_
+            static fn (Node $node): bool => $node instanceof Throw_
         );
     }
 

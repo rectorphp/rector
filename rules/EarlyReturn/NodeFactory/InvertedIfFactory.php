@@ -59,7 +59,7 @@ final class InvertedIfFactory
     {
         return $this->betterNodeFinder->findFirstNext(
             $if,
-            fn (Node $node): bool => $node instanceof Return_ && $node->expr instanceof Expr
+            static fn (Node $node): bool => $node instanceof Return_ && $node->expr instanceof Expr
         );
     }
 

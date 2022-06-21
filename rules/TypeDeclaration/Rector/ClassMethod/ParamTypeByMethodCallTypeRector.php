@@ -167,7 +167,7 @@ CODE_SAMPLE
 
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable(
             $newParamType,
-            function (Node $node) {
+            static function (Node $node) {
                 // original attributes have to removed to avoid tokens crashing from origin positions
                 $node->setAttributes([]);
                 return null;

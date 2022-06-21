@@ -178,7 +178,7 @@ CODE_SAMPLE
             /** @var Array_ $array */
             $array = $unpackedArgs[0]->value;
             $arrayItems = array_filter($array->items);
-            $new->args = array_map(fn (ArrayItem $item): Arg => new Arg($item->value), $arrayItems);
+            $new->args = array_map(static fn (ArrayItem $item): Arg => new Arg($item->value), $arrayItems);
 
             return $new;
         }

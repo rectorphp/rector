@@ -86,7 +86,7 @@ final class YieldNodesReturnTypeInfererTypeInferer implements ReturnTypeInfererI
     {
         $yieldNodes = [];
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (
             Node $node
         ) use (&$yieldNodes): ?int {
             // skip nested scope

@@ -192,7 +192,7 @@ final class UnionTypeCommonTypeNarrower
     {
         return array_filter(
             $classReflections,
-            fn (ClassReflection $classReflection): bool => ! $classReflection->isBuiltin()
+            static fn (ClassReflection $classReflection): bool => ! $classReflection->isBuiltin()
         );
     }
 }

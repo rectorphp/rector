@@ -173,7 +173,7 @@ final class UndefinedVariableResolver
     {
         $previousSwitch = $this->betterNodeFinder->findFirstPrevious(
             $variable,
-            fn (Node $subNode): bool => $subNode instanceof Switch_
+            static fn (Node $subNode): bool => $subNode instanceof Switch_
         );
 
         if (! $previousSwitch instanceof Switch_) {

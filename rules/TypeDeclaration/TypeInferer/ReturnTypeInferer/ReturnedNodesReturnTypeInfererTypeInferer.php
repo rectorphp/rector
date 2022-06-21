@@ -90,7 +90,7 @@ final class ReturnedNodesReturnTypeInfererTypeInferer implements ReturnTypeInfer
     {
         $returns = [];
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), static function (
             Node $node
         ) use (&$returns): ?int {
             // skip Return_ nodes in nested functions or switch statements

@@ -111,7 +111,7 @@ CODE_SAMPLE
         $newVariableName = Strings::replace(
             lcfirst($typeShortName),
             self::STARTS_WITH_ABBREVIATION_REGEX,
-            function (array $matches): string {
+            static function (array $matches): string {
                 $output = '';
 
                 $output .= isset($matches[1]) ? strtolower((string) $matches[1]) : '';

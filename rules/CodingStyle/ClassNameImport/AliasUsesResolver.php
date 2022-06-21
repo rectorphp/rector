@@ -42,7 +42,7 @@ final class AliasUsesResolver
     {
         $aliasedUses = [];
 
-        $this->useImportsTraverser->traverserStmts($stmts, function (
+        $this->useImportsTraverser->traverserStmts($stmts, static function (
             UseUse $useUse,
             string $name
         ) use (&$aliasedUses): void {

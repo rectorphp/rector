@@ -139,7 +139,7 @@ CODE_SAMPLE
         ]);
         $stmts = [];
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (Node $subNode) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, static function (Node $subNode) use (
             $variable,
             $key,
             $value,
@@ -184,7 +184,7 @@ CODE_SAMPLE
         $foreach = new Foreach_($funcCall, $key);
         $stmts = [];
 
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, function (Node $subNode) use (
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($closure->stmts, static function (Node $subNode) use (
             $variable,
             $key,
             $arrayValue,
