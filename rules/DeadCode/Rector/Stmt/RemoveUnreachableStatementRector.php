@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Goto_;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Label;
@@ -18,8 +17,8 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\NodeAnalyzer\TryCatchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,6 +28,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveUnreachableStatementRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\TryCatchAnalyzer
+     */
+    private $tryCatchAnalyzer;
+    public function __construct(TryCatchAnalyzer $tryCatchAnalyzer)
+    {
+        $this->tryCatchAnalyzer = $tryCatchAnalyzer;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove unreachable statements', [new CodeSample(<<<'CODE_SAMPLE'
@@ -118,23 +126,6 @@ CODE_SAMPLE
         if (!$previousStmt instanceof TryCatch) {
             return \false;
         }
-        $isUnreachable = $currentStmt->getAttribute(AttributeKey::IS_UNREACHABLE);
-        if ($isUnreachable !== \true) {
-            return \false;
-        }
-        if (!$previousStmt->finally instanceof Finally_) {
-            return \false;
-        }
-        return $this->cleanNop($previousStmt->finally->stmts) !== [];
-    }
-    /**
-     * @param Stmt[] $stmts
-     * @return Stmt[]
-     */
-    private function cleanNop(array $stmts) : array
-    {
-        return \array_filter($stmts, function (Stmt $stmt) : bool {
-            return !$stmt instanceof Nop;
-        });
+        return $this->tryCatchAnalyzer->isAlwaysTerminated($previousStmt);
     }
 }

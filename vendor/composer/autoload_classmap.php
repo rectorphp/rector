@@ -1570,6 +1570,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\PropertyFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyFetchAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\PropertyPresenceChecker' => $baseDir . '/src/NodeAnalyzer/PropertyPresenceChecker.php',
     'Rector\\Core\\NodeAnalyzer\\ScopeAnalyzer' => $baseDir . '/src/NodeAnalyzer/ScopeAnalyzer.php',
+    'Rector\\Core\\NodeAnalyzer\\TryCatchAnalyzer' => $baseDir . '/src/NodeAnalyzer/TryCatchAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\UnreachableStmtAnalyzer' => $baseDir . '/src/NodeAnalyzer/UnreachableStmtAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\VariableAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariableAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\VariadicAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariadicAnalyzer.php',
