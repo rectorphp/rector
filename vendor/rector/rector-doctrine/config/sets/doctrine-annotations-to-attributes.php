@@ -46,6 +46,7 @@ return static function (RectorConfig $rectorConfig) : void {
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\PostPersist'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\PostRemove'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\PostUpdate'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\PreFlush'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\PrePersist'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\PreRemove'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\PreUpdate'),
