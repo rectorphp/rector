@@ -4,7 +4,7 @@ namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\Fixt
 
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 
-final class SkipChangeDuplicateType
+final class SkipChangePromotedDuplicateType
 {
     public function __construct(
         private ClassAnalyzer $classAnalyzer1,

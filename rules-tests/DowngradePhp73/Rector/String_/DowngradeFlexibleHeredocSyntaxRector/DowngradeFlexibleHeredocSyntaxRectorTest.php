@@ -8,9 +8,6 @@ use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP >= 7.3
- */
 final class DowngradeFlexibleHeredocSyntaxRectorTest extends AbstractRectorTestCase
 {
     /**

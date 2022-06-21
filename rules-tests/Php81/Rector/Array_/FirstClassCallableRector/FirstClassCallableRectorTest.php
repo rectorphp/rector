@@ -2,16 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
+namespace Rector\Tests\Php81\Rector\Array_\FirstClassCallableRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
-/**
- * @requires PHP 8.0
- */
-final class Php80Test extends AbstractRectorTestCase
+final class FirstClassCallableRectorTest extends AbstractRectorTestCase
 {
     /**
      * @dataProvider provideData()
@@ -26,11 +23,11 @@ final class Php80Test extends AbstractRectorTestCase
      */
     public function provideData(): Iterator
     {
-        return $this->yieldFilesFromDirectory(__DIR__ . '/FixturePhp80');
+        return $this->yieldFilesFromDirectory(__DIR__ . '/Fixture');
     }
 
     public function provideConfigFilePath(): string
     {
-        return __DIR__ . '/config/property_promotion.php';
+        return __DIR__ . '/config/configured_rule.php';
     }
 }

@@ -17,8 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 /**
  * @see \Rector\Tests\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector\DowngradeUnionTypeDeclarationRectorTest
- *
- * @requires PHP 8.0
  */
 final class DowngradeUnionTypeDeclarationRector extends AbstractRector
 {

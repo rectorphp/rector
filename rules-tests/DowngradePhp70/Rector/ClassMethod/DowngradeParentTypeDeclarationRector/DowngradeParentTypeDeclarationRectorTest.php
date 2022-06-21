@@ -11,7 +11,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 final class DowngradeParentTypeDeclarationRectorTest extends AbstractRectorTestCase
 {
     /**
-     * @requires PHP 7.0
      * @dataProvider provideData()
      */
     public function test(SmartFileInfo $fileInfo): void
