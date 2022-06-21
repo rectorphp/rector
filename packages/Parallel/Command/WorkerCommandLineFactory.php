@@ -48,7 +48,7 @@ final class WorkerCommandLineFactory
             if (\in_array($arg, $mainCommandNames, \true)) {
                 break;
             }
-            $workerCommandArray[] = \escapeshellarg($arg);
+            $workerCommandArray[] = \escapeshellarg((string) $arg);
         }
         $workerCommandArray[] = $workerCommandName;
         $mainCommandOptionNames = $this->getCommandOptionNames($mainCommand);
@@ -89,7 +89,7 @@ final class WorkerCommandLineFactory
              *
              * tested in macOS and Ubuntu (github action)
              */
-            $workerCommandArray[] = \escapeshellarg($input->getOption(Option::CONFIG));
+            $workerCommandArray[] = \escapeshellarg((string) $input->getOption(Option::CONFIG));
         }
         return \implode(' ', $workerCommandArray);
     }

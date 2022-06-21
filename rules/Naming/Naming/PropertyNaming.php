@@ -71,7 +71,7 @@ final class PropertyNaming
         if ($matches === null) {
             return null;
         }
-        $originalName = \lcfirst($matches['root_name']);
+        $originalName = \lcfirst((string) $matches['root_name']);
         return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
     public function getExpectedNameFromType(Type $type) : ?ExpectedName
@@ -118,11 +118,7 @@ final class PropertyNaming
             $objectType = $objectType->getStaticObjectType();
         }
         $className = $this->resolveClassName($objectType);
-        if (\strpos($className, '\\') !== \false) {
-            $shortClassName = (string) Strings::after($className, '\\', -1);
-        } else {
-            $shortClassName = $className;
-        }
+        $shortClassName = \strpos($className, '\\') !== \false ? (string) Strings::after($className, '\\', -1) : $className;
         $variableName = $this->removeInterfaceSuffixPrefix($shortClassName, 'interface');
         $variableName = $this->removeInterfaceSuffixPrefix($variableName, 'abstract');
         $variableName = $this->fqnToShortName($variableName);
