@@ -61,7 +61,7 @@ final class WorkerCommandLineFactory
                 break;
             }
 
-            $workerCommandArray[] = escapeshellarg($arg);
+            $workerCommandArray[] = escapeshellarg((string) $arg);
         }
 
         $workerCommandArray[] = $workerCommandName;
@@ -110,7 +110,7 @@ final class WorkerCommandLineFactory
              *
              * tested in macOS and Ubuntu (github action)
              */
-            $workerCommandArray[] = escapeshellarg($input->getOption(Option::CONFIG));
+            $workerCommandArray[] = escapeshellarg((string) $input->getOption(Option::CONFIG));
         }
 
         return implode(' ', $workerCommandArray);

@@ -56,7 +56,7 @@ final class VersionResolver
             );
         }
 
-        $version = trim($commitHashExecOutput[0]);
+        $version = trim((string) $commitHashExecOutput[0]);
         return trim($version, '"');
     }
 
@@ -69,6 +69,6 @@ final class VersionResolver
             );
         }
 
-        return new DateTime(trim($output[0]));
+        return new DateTime(trim((string) $output[0]));
     }
 }

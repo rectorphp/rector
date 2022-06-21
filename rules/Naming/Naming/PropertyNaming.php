@@ -64,7 +64,7 @@ final class PropertyNaming
             return null;
         }
 
-        $originalName = lcfirst($matches['root_name']);
+        $originalName = lcfirst((string) $matches['root_name']);
 
         return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
     }
@@ -123,11 +123,7 @@ final class PropertyNaming
         }
 
         $className = $this->resolveClassName($objectType);
-        if (str_contains($className, '\\')) {
-            $shortClassName = (string) Strings::after($className, '\\', -1);
-        } else {
-            $shortClassName = $className;
-        }
+        $shortClassName = str_contains($className, '\\') ? (string) Strings::after($className, '\\', -1) : $className;
 
         $variableName = $this->removeInterfaceSuffixPrefix($shortClassName, 'interface');
         $variableName = $this->removeInterfaceSuffixPrefix($variableName, 'abstract');

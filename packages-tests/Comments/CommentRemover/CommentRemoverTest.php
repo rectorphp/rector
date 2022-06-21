@@ -46,7 +46,7 @@ final class CommentRemoverTest extends AbstractTestCase
         $fileContent = $this->nodePrinter->print($nodesWithoutComments);
         $fileContent = trim($fileContent);
 
-        $expectedContent = trim($fileInfoToLocalInputAndExpected->getExpected());
+        $expectedContent = trim((string) $fileInfoToLocalInputAndExpected->getExpected());
 
         $this->assertSame($fileContent, $expectedContent, $smartFileInfo->getRelativeFilePathFromCwd());
 

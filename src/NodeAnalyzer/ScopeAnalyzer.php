@@ -9,7 +9,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 
@@ -23,7 +22,6 @@ final class ScopeAnalyzer
         Namespace_::class,
         FileWithoutNamespace::class,
         Identifier::class,
-        Enum_::class,
         Param::class,
         Arg::class,
     ];
