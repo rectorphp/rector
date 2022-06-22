@@ -7,6 +7,8 @@ namespace Rector\Php54\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -55,13 +57,13 @@ CODE_SAMPLE
      */
     public function getNodeTypes(): array
     {
-        return [FuncCall::class];
+        return [FuncCall::class, MethodCall::class, StaticCall::class];
     }
 
     /**
-     * @param FuncCall $node
+     * @param FuncCall|MethodCall|StaticCall $node
      */
-    public function refactor(Node $node): FuncCall|null
+    public function refactor(Node $node): FuncCall|MethodCall|StaticCall|null
     {
         $hasChanged = false;
 
