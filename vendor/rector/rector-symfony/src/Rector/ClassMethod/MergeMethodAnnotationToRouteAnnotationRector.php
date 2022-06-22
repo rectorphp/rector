@@ -107,7 +107,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return mixed[]|null|\Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode
+     * @return string[]|null
      */
     private function resolveMethods(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {

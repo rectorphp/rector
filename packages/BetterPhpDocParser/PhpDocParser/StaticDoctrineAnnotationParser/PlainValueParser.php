@@ -52,7 +52,7 @@ final class PlainValueParser
         $this->arrayParser = $arrayParser;
     }
     /**
-     * @return string|mixed[]|\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|\Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
+     * @return mixed[]
      */
     public function parseValue(BetterTokenIterator $tokenIterator)
     {

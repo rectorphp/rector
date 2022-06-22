@@ -476,7 +476,7 @@ final class BetterNodeFinder
         return null;
     }
     /**
-     * @return \PhpParser\Node|null
+     * @return Closure|Function_|ClassMethod|Class_|Namespace_|null
      */
     private function findParentScope(Node $node)
     {

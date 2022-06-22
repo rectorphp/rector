@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -98,8 +99,9 @@ final class PhpDocFromTypeDeclarationDecorator
         if ($functionLike->returnType === null) {
             return;
         }
-        $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
+        $returnTagValueNode = $phpDocInfo->getReturnTagValue();
+        $type = $returnTagValueNode instanceof ReturnTagValueNode ? $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($returnTagValueNode, $functionLike->returnType) : $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
         $functionLike->returnType = null;
         if (!$functionLike instanceof ClassMethod) {

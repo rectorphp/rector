@@ -26,7 +26,7 @@ class ValidationBuilder
     /**
      * Registers a closure to run as normalization or an expression builder to build it if null is provided.
      *
-     * @return \Symfony\Component\Config\Definition\Builder\ExprBuilder|$this
+     * @return ExprBuilder|$this
      */
     public function rule(\Closure $closure = null)
     {

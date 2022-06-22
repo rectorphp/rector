@@ -11,7 +11,7 @@ final class ValueObjectInliner
 {
     /**
      * @param object|object[] $object
-     * @return \Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator|mixed[]
+     * @return InlineServiceConfigurator|InlineServiceConfigurator[]
      * @noRector \Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector
      */
     public static function inline($object)

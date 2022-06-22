@@ -7,7 +7,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 final class StringValueQuoteWrapper
 {
     /**
-     * @return mixed
+     * @return mixed|CurlyListNode|string
      * @param mixed $value
      */
     public function wrap($value, ?string $key)

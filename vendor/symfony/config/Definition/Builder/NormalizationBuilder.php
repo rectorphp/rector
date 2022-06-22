@@ -40,7 +40,7 @@ class NormalizationBuilder
     /**
      * Registers a closure to run before the normalization or an expression builder to build it if null is provided.
      *
-     * @return \Symfony\Component\Config\Definition\Builder\ExprBuilder|$this
+     * @return ExprBuilder|$this
      */
     public function before(\Closure $closure = null)
     {

@@ -96,7 +96,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Expression|null|mixed[]
+     * @return If_|Expression|Stmt[]|null
      */
     private function refactorAssign(Expression $expression, Assign $assign)
     {
@@ -115,7 +115,7 @@ CODE_SAMPLE
         return $expression;
     }
     /**
-     * @return \PhpParser\Node\Stmt\If_|null|mixed[]
+     * @return If_|Stmt[]|null
      */
     private function refactorTernary(Ternary $ternary, ?Assign $assign)
     {
@@ -131,7 +131,7 @@ CODE_SAMPLE
         return [$if, new Expression($assign)];
     }
     /**
-     * @return \PhpParser\Node\Stmt\If_|null|mixed[]
+     * @return If_|Stmt[]|null
      */
     private function refactorCoalesce(Coalesce $coalesce, ?Assign $assign)
     {

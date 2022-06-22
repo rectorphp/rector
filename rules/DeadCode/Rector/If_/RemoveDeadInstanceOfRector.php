@@ -99,7 +99,7 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return \PhpParser\Node\Stmt\If_|mixed[]|null
+     * @return Stmt[]|null|If_
      */
     public function refactor(Node $node)
     {
@@ -122,7 +122,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return null|mixed[]|\PhpParser\Node\Stmt\If_
+     * @return Stmt[]|null
      */
     private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof)
     {

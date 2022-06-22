@@ -416,7 +416,7 @@ final class ComposerJson
         $this->license = $license;
     }
     /**
-     * @return string|mixed[]|null
+     * @return string|string[]|null
      */
     public function getLicense()
     {

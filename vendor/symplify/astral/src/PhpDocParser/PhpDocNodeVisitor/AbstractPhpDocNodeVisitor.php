@@ -21,7 +21,7 @@ abstract class AbstractPhpDocNodeVisitor implements PhpDocNodeVisitorInterface
         return null;
     }
     /**
-     * @return int|\PhpParser\Node|mixed[]|null Replacement node (or special return)
+     * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return)
      */
     public function leaveNode(Node $node)
     {

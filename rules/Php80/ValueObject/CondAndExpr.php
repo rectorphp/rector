@@ -37,7 +37,7 @@ final class CondAndExpr
         return $this->expr;
     }
     /**
-     * @return mixed[]|null
+     * @return Expr[]|null
      */
     public function getCondExprs()
     {

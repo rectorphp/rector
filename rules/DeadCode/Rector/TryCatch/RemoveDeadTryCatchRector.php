@@ -52,7 +52,7 @@ CODE_SAMPLE
     }
     /**
      * @param TryCatch $node
-     * @return mixed[]|null|\PhpParser\Node\Stmt\TryCatch
+     * @return Stmt[]|null|TryCatch
      */
     public function refactor(Node $node)
     {

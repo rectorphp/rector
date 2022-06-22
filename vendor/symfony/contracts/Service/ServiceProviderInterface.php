@@ -24,7 +24,7 @@ interface ServiceProviderInterface extends ContainerInterface
     /**
      * {@inheritdoc}
      *
-     * @return mixed
+     * @return T
      */
     public function get(string $id);
     /**

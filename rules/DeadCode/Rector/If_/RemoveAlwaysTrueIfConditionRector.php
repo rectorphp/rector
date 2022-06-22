@@ -52,7 +52,7 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return \PhpParser\Node\Stmt\If_|null|mixed[]
+     * @return If_|null|Stmt[]
      */
     public function refactor(Node $node)
     {

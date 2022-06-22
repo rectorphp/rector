@@ -81,7 +81,7 @@ CODE_SAMPLE
     }
     /**
      * @param FileWithoutNamespace|Namespace_ $node
-     * @return \PhpParser\Node|null|mixed[]
+     * @return Node|null|Stmt[]
      */
     public function refactor(Node $node)
     {
@@ -115,7 +115,7 @@ CODE_SAMPLE
         });
     }
     /**
-     * @return \PhpParser\Node\Stmt\Namespace_|mixed[]
+     * @return Namespace_|Stmt[]
      */
     private function refactorFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace)
     {

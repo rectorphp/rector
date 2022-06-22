@@ -90,7 +90,7 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
-     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
+     * @return null|If_|Stmt[]
      */
     public function refactor(Node $node)
     {
@@ -116,7 +116,7 @@ CODE_SAMPLE
         return $this->refactorConstFetch($binaryOp->right, $node, $binaryOp);
     }
     /**
-     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
+     * @return null|If_|Stmt[]
      */
     private function processSmaller(ConstFetch $constFetch, Smaller $smaller, If_ $if)
     {
@@ -129,7 +129,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
+     * @return null|If_|Stmt[]
      */
     private function processGreaterOrEqual(ConstFetch $constFetch, GreaterOrEqual $greaterOrEqual, If_ $if)
     {
@@ -154,7 +154,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
+     * @return null|If_|Stmt[]
      */
     private function processSmallerRight(Smaller $smaller, If_ $if)
     {
@@ -172,7 +172,7 @@ CODE_SAMPLE
         return $if->stmts;
     }
     /**
-     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
+     * @return null|If_|Stmt[]
      */
     private function processGreaterOrEqualLeft(GreaterOrEqual $greaterOrEqual, If_ $if)
     {
@@ -202,7 +202,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
+     * @return null|If_|Stmt[]
      */
     private function processGreater(ConstFetch $constFetch, Greater $greater, If_ $if)
     {
@@ -215,7 +215,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
+     * @return null|If_|Stmt[]
      */
     private function processGreaterLeft(Greater $greater, If_ $if)
     {
@@ -245,7 +245,7 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @return null|\PhpParser\Node\Stmt\If_|mixed[]
+     * @return null|If_|Stmt[]
      */
     private function refactorConstFetch(ConstFetch $constFetch, If_ $if, BinaryOp $binaryOp)
     {

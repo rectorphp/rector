@@ -32,7 +32,7 @@ final class ParentConnectingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         return $node;
     }
     /**
-     * @return int|\PhpParser\Node|mixed[]|null Replacement node (or special return
+     * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return
      */
     public function leaveNode(Node $node)
     {

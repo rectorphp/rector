@@ -48,7 +48,7 @@ CODE_SAMPLE
     }
     /**
      * @param Do_ $node
-     * @return mixed[]|null
+     * @return Stmt[]|null
      */
     public function refactor(Node $node)
     {
