@@ -21,6 +21,7 @@ class GroupUseClass
 -----
 <?php
 
+declare(strict_types=1);
 namespace Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Fixture;
 
 use Foo\Bar\{SomeLongClass as SomeClass};
@@ -37,3 +38,5 @@ class GroupUseClass
         new \Foo\Bar\SomeLongClass2;
     }
 }
+
+?>

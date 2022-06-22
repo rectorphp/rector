@@ -100,7 +100,10 @@ CODE_SAMPLE
     private function filterItemsWithSameKey(array $arrayItemsByKeys): array
     {
         /** @var ArrayItem[][] $arrayItemsByKeys */
-        $arrayItemsByKeys = array_filter($arrayItemsByKeys, static fn (array $arrayItems): bool => count($arrayItems) > 1);
+        $arrayItemsByKeys = array_filter(
+            $arrayItemsByKeys,
+            static fn (array $arrayItems): bool => count($arrayItems) > 1
+        );
 
         return array_filter($arrayItemsByKeys, static fn (array $arrayItems): bool => count($arrayItems) > 1);
     }

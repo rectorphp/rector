@@ -22,6 +22,8 @@ final class NoPrefixConsts
 -----
 <?php
 
+declare(strict_types=1);
+
 namespace Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\Fixture;
 
 final class NoPrefixConsts
@@ -39,3 +41,5 @@ final class NoPrefixConsts
         $localConstant = \LOCAL_CONSTANT;
     }
 }
+
+?>

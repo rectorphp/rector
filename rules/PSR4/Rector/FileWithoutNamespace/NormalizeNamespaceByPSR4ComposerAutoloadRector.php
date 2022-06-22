@@ -6,6 +6,7 @@ namespace Rector\PSR4\Rector\FileWithoutNamespace;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
@@ -79,8 +80,9 @@ CODE_SAMPLE
 
     /**
      * @param FileWithoutNamespace|Namespace_ $node
+     * @return Node|null|Stmt[]
      */
-    public function refactor(Node $node): ?Node
+    public function refactor(Node $node): Node|null|array
     {
         $processNode = clone $node;
         if ($this->inlineHTMLAnalyzer->hasInlineHTML($processNode)) {
@@ -123,16 +125,25 @@ CODE_SAMPLE
         );
     }
 
+    /**
+     * @return Namespace_|Stmt[]
+     */
     private function refactorFileWithoutNamespace(
         FileWithoutNamespace $fileWithoutNamespace,
         string $expectedNamespace
-    ): Namespace_ {
+    ): Namespace_|array {
         $nodes = $fileWithoutNamespace->stmts;
 
+        $declare = null;
         $nodesWithStrictTypesThenNamespace = [];
+
         foreach ($nodes as $key => $fileWithoutNamespace) {
+            if ($key > 0) {
+                break;
+            }
+
             if ($fileWithoutNamespace instanceof Declare_) {
-                $nodesWithStrictTypesThenNamespace[] = $fileWithoutNamespace;
+                $declare = $fileWithoutNamespace;
                 unset($nodes[$key]);
             }
         }
@@ -141,6 +152,10 @@ CODE_SAMPLE
         $nodesWithStrictTypesThenNamespace[] = $namespace;
 
         $this->fullyQualifyStmtsAnalyzer->process($nodes);
+
+        if ($declare instanceof Declare_) {
+            return [$declare, $namespace];
+        }
 
         return $namespace;
     }

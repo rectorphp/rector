@@ -425,6 +425,7 @@ parameters:
                 - rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php
                 - src/Kernel/RectorKernel.php
                 - rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php
+                - rules/PSR4/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php
 
         - '#Method Rector\\Core\\Application\\ApplicationFileProcessor\:\:runParallel\(\) should return array\{system_errors\: array<Rector\\Core\\ValueObject\\Error\\SystemError\>, file_diffs\: array<Rector\\Core\\ValueObject\\Reporting\\FileDiff\>\} but returns array#'
 

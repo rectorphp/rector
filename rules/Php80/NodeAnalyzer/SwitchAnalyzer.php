@@ -84,7 +84,10 @@ final class SwitchAnalyzer
     {
         foreach ($switch->cases as $case) {
             if ($case->cond === null) {
-                $stmtsWithoutBreak = array_filter($case->stmts, static fn (Node $node): bool => ! $node instanceof Break_);
+                $stmtsWithoutBreak = array_filter(
+                    $case->stmts,
+                    static fn (Node $node): bool => ! $node instanceof Break_
+                );
                 return count($stmtsWithoutBreak) === 1;
             }
         }
