@@ -5,6 +5,7 @@ namespace Rector\PSR4\Rector\FileWithoutNamespace;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
@@ -80,8 +81,9 @@ CODE_SAMPLE
     }
     /**
      * @param FileWithoutNamespace|Namespace_ $node
+     * @return \PhpParser\Node|null|mixed[]
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
         $processNode = clone $node;
         if ($this->inlineHTMLAnalyzer->hasInlineHTML($processNode)) {
@@ -112,19 +114,29 @@ CODE_SAMPLE
             return $node instanceof Namespace_;
         });
     }
-    private function refactorFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace) : Namespace_
+    /**
+     * @return \PhpParser\Node\Stmt\Namespace_|mixed[]
+     */
+    private function refactorFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace)
     {
         $nodes = $fileWithoutNamespace->stmts;
+        $declare = null;
         $nodesWithStrictTypesThenNamespace = [];
         foreach ($nodes as $key => $fileWithoutNamespace) {
+            if ($key > 0) {
+                break;
+            }
             if ($fileWithoutNamespace instanceof Declare_) {
-                $nodesWithStrictTypesThenNamespace[] = $fileWithoutNamespace;
+                $declare = $fileWithoutNamespace;
                 unset($nodes[$key]);
             }
         }
         $namespace = new Namespace_(new Name($expectedNamespace), $nodes);
         $nodesWithStrictTypesThenNamespace[] = $namespace;
         $this->fullyQualifyStmtsAnalyzer->process($nodes);
+        if ($declare instanceof Declare_) {
+            return [$declare, $namespace];
+        }
         return $namespace;
     }
 }
