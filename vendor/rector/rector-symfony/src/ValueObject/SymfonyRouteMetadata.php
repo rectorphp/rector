@@ -8,7 +8,7 @@ class SymfonyRouteMetadata
     /**
      * Format <class>::<method>
      * @readonly
-     * @var string
+     * @var string|null
      */
     private $controllerReference;
     /**
@@ -67,7 +67,7 @@ class SymfonyRouteMetadata
         $this->schemes = $schemes;
         $this->methods = $methods;
         $this->condition = $condition;
-        $this->controllerReference = $defaults['_controller'];
+        $this->controllerReference = $defaults['_controller'] ?? null;
     }
     public function getName() : string
     {
@@ -132,7 +132,7 @@ class SymfonyRouteMetadata
     /**
      * Format <class>::<method>
      */
-    public function getControllerReference() : string
+    public function getControllerReference() : ?string
     {
         return $this->controllerReference;
     }

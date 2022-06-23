@@ -124,15 +124,23 @@ CODE_SAMPLE
             $classMethod->returnType = null;
             return;
         }
-        // already set → no change
-        if ($classMethod->returnType !== null) {
-            $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
-            if ($this->typeComparator->areTypesEqual($currentReturnType, $newType)) {
-                return;
-            }
+        // already set and sub type or equal → no change
+        if ($this->shouldSkipType($classMethod, $newType)) {
+            return;
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, TypeKind::RETURN);
         $classMethod->returnType = $returnTypeNode;
         $this->hasChanged = \true;
+    }
+    private function shouldSkipType(ClassMethod $classMethod, Type $newType) : bool
+    {
+        if ($classMethod->returnType === null) {
+            return \false;
+        }
+        $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+        if ($this->typeComparator->isSubtype($currentReturnType, $newType)) {
+            return \true;
+        }
+        return $this->typeComparator->areTypesEqual($currentReturnType, $newType);
     }
 }

@@ -42,7 +42,7 @@ final class MethodCallAnnotationAssertResolver
         $firstArgValue = $args[0]->value;
         $propertyName = $this->valueResolver->getValue($firstArgValue);
         // based on https://github.com/symfony/symfony/blob/7d4b42cbeef195e0a01272b9c5f464f0afe52542/src/Symfony/Component/Validator/Mapping/GetterMetadata.php#L45-L47
-        $possibleMethodNames = ['get' . \ucfirst($propertyName), 'is' . \ucfirst($propertyName), 'has' . \ucfirst($propertyName)];
+        $possibleMethodNames = ['get' . \ucfirst((string) $propertyName), 'is' . \ucfirst((string) $propertyName), 'has' . \ucfirst((string) $propertyName)];
         $secondArgValue = $args[1]->value;
         if (!$secondArgValue instanceof New_) {
             // nothing we can do... or can we?
