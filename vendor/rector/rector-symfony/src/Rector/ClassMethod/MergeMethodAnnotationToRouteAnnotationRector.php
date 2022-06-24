@@ -107,7 +107,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return string[]|null
+     * @return string[]|null|CurlyListNode
      */
     private function resolveMethods(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {

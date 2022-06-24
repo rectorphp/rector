@@ -99,20 +99,20 @@ CODE_SAMPLE
             return null;
         }
         $isMethodCallCurrentClass = $this->isMethodCallCurrentClass($node);
+        if (!$node->var instanceof PropertyFetch && !$isMethodCallCurrentClass) {
+            return null;
+        }
         foreach ($this->methodCallsToMethodsCalls as $methodCallToMethodCall) {
-            if (!$node->var instanceof PropertyFetch && !$isMethodCallCurrentClass) {
+            if (!$this->isMatch($node, $methodCallToMethodCall, $isMethodCallCurrentClass, $class)) {
                 continue;
             }
-            if (!$this->isMatch($node, $methodCallToMethodCall, $isMethodCallCurrentClass, $class)) {
+            $newPropertyName = $this->matchNewPropertyName($methodCallToMethodCall, $class);
+            if ($newPropertyName === null) {
                 continue;
             }
             /** @var PropertyFetch $propertyFetch */
             $propertyFetch = $isMethodCallCurrentClass ? $node : $node->var;
             $newObjectType = new ObjectType($methodCallToMethodCall->getNewType());
-            $newPropertyName = $this->matchNewPropertyName($methodCallToMethodCall, $class);
-            if ($newPropertyName === null) {
-                continue;
-            }
             $propertyMetadata = new PropertyMetadata($newPropertyName, $newObjectType, Class_::MODIFIER_PRIVATE);
             $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
             // rename property
