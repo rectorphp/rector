@@ -110,7 +110,7 @@ final class StaticDoctrineAnnotationParser
     }
 
     /**
-     * @return array<mixed>
+     * @return CurlyListNode|string|array<mixed>|ConstExprNode|DoctrineAnnotationTagValueNode
      */
     private function parseValue(
         BetterTokenIterator $tokenIterator
