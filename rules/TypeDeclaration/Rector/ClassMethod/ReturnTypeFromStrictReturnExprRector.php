@@ -76,6 +76,27 @@ CODE_SAMPLE
     {
         return PhpVersion::PHP_74;
     }
+    /**
+     * @param Return_[] $returns
+     */
+    private function areExclusiveExprReturns(array $returns) : bool
+    {
+        foreach ($returns as $return) {
+            if (!$return->expr instanceof Expr) {
+                return \false;
+            }
+        }
+        return \true;
+    }
+    private function hasClassMethodRootReturn(ClassMethod $classMethod) : bool
+    {
+        foreach ((array) $classMethod->stmts as $stmt) {
+            if ($stmt instanceof Return_) {
+                return \true;
+            }
+        }
+        return \false;
+    }
     private function hasSingleStrictReturn(ClassMethod $classMethod) : bool
     {
         if ($classMethod->stmts === null) {
@@ -84,22 +105,28 @@ CODE_SAMPLE
         if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($classMethod, [Yield_::class])) {
             return \false;
         }
+        /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
-        if (\count($returns) !== 1) {
+        if ($returns === []) {
             return \false;
         }
-        foreach ($classMethod->stmts as $stmt) {
-            if (!$stmt instanceof Return_) {
-                continue;
-            }
+        // is one statement depth 3?
+        if (!$this->areExclusiveExprReturns($returns)) {
+            return \false;
+        }
+        // has root return?
+        if (!$this->hasClassMethodRootReturn($classMethod)) {
+            return \false;
+        }
+        foreach ($returns as $return) {
             // we need exact expr return
-            if (!$stmt->expr instanceof Expr) {
+            if (!$return->expr instanceof Expr) {
                 return \false;
             }
-            if ($this->alwaysStrictBoolExprAnalyzer->isStrictBoolExpr($stmt->expr)) {
-                return \true;
+            if (!$this->alwaysStrictBoolExprAnalyzer->isStrictBoolExpr($return->expr)) {
+                return \false;
             }
         }
-        return \false;
+        return \true;
     }
 }
