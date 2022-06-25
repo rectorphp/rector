@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit93f0bbaa77876060210357e31273c54f
+class ComposerStaticInite0c92f5c18237696f7adede999ed63b3
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3340,6 +3340,7 @@ class ComposerStaticInit93f0bbaa77876060210357e31273c54f
         'Rector\\TypeDeclaration\\Sorter\\PriorityAwareSorter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Sorter/PriorityAwareSorter.php',
         'Rector\\TypeDeclaration\\TypeAlreadyAddedChecker\\ReturnTypeAlreadyAddedChecker' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAlreadyAddedChecker/ReturnTypeAlreadyAddedChecker.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',
+        'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\IterableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/IterableTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\ObjectTypeComparator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/ObjectTypeComparator.php',
@@ -3402,9 +3403,9 @@ class ComposerStaticInit93f0bbaa77876060210357e31273c54f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit93f0bbaa77876060210357e31273c54f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit93f0bbaa77876060210357e31273c54f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit93f0bbaa77876060210357e31273c54f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite0c92f5c18237696f7adede999ed63b3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite0c92f5c18237696f7adede999ed63b3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite0c92f5c18237696f7adede999ed63b3::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -3039,6 +3039,7 @@ return array(
     'Rector\\TypeDeclaration\\Sorter\\PriorityAwareSorter' => $baseDir . '/rules/TypeDeclaration/Sorter/PriorityAwareSorter.php',
     'Rector\\TypeDeclaration\\TypeAlreadyAddedChecker\\ReturnTypeAlreadyAddedChecker' => $baseDir . '/rules/TypeDeclaration/TypeAlreadyAddedChecker/ReturnTypeAlreadyAddedChecker.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',
+    'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\IterableTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/IterableTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\ObjectTypeComparator' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/ObjectTypeComparator.php',
