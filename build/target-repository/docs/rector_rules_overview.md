@@ -11903,15 +11903,10 @@ Add strict return type based on returned strict expr type
 ```diff
  final class SomeClass
  {
-     public function run()
+-    public function run()
++    public function run(): bool
      {
-         return $this->first() && true;
-     }
-
--    public function first()
-+    public function first(): bool
-     {
-         return true;
+         return $this->first() && $this->somethingElse();
      }
  }
 ```
