@@ -11,6 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Type\MixedType;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -72,7 +73,12 @@ final class ReturnStrictTypeAnalyzer
             return null;
         }
         $parametersAcceptor = $methodReflection->getVariants()[0];
-        $returnType = $parametersAcceptor->getReturnType();
+        if ($parametersAcceptor instanceof FunctionVariantWithPhpDocs) {
+            // native return type is needed, as docblock can be false
+            $returnType = $parametersAcceptor->getNativeReturnType();
+        } else {
+            $returnType = $parametersAcceptor->getReturnType();
+        }
         if ($returnType instanceof MixedType) {
             return null;
         }

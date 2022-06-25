@@ -149,7 +149,7 @@ CODE_SAMPLE
             return;
         }
         $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
-        if ($arrayNode !== null) {
+        if ($arrayNode !== null && \count($arrayNode->items) > 1) {
             $assign->expr = $arrayNode;
         }
     }
