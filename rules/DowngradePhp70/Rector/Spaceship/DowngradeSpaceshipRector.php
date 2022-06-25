@@ -85,7 +85,7 @@ CODE_SAMPLE
         $anonymousFunction->stmts[1] = new Return_($ternary);
         $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
         $assignExpression = $this->getAssignExpression($anonymousFunction, $assignVariable);
-        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node);
         return new FuncCall($assignVariable, [new Arg($node->left), new Arg($node->right)]);
     }
     private function getAssignExpression(Closure $closure, Variable $variable) : Expression

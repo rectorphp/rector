@@ -164,7 +164,7 @@ final class ArrayMergeFromArraySpreadFactory
         // Assign the value to the variable, and replace the element with the variable
         $newVariable = new Variable($variableName);
         $newVariableAssign = new Assign($newVariable, $arrayItem->value);
-        $this->nodesToAddCollector->addNodeBeforeNode($newVariableAssign, $array, $file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode($newVariableAssign, $array);
         return $newVariable;
     }
     /**

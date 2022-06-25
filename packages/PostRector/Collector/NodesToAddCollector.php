@@ -15,7 +15,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
-use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
 final class NodesToAddCollector implements NodeCollectorInterface
 {
     /**
@@ -60,18 +59,13 @@ final class NodesToAddCollector implements NodeCollectorInterface
     /**
      * @deprecated Return created nodes right in refactor() method to keep context instead.
      */
-    public function addNodeBeforeNode(Node $addedNode, Node $positionNode, ?SmartFileInfo $smartFileInfo = null) : void
+    public function addNodeBeforeNode(Node $addedNode, Node $positionNode) : void
     {
         if ($positionNode->getAttributes() === []) {
             $message = \sprintf('Switch arguments in "%s()" method', __METHOD__);
             throw new ShouldNotHappenException($message);
         }
-        // @todo the node must be returned here, so traverser can refresh it
-        // this is nasty hack to verify it works
-        if ($smartFileInfo instanceof SmartFileInfo) {
-            $currentScope = $positionNode->getAttribute(AttributeKey::SCOPE);
-            $this->changedNodeScopeRefresher->refresh($addedNode, $smartFileInfo, $currentScope);
-        }
+        $this->changedNodeScopeRefresher->refresh($addedNode, $positionNode->getAttribute(AttributeKey::SCOPE));
         $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
@@ -82,11 +76,10 @@ final class NodesToAddCollector implements NodeCollectorInterface
      */
     public function addNodesAfterNode(array $addedNodes, Node $positionNode) : void
     {
-        $position = $this->resolveNearestStmtPosition($positionNode);
         foreach ($addedNodes as $addedNode) {
             // prevent fluent method weird indent
             $addedNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
+            $this->addNodeAfterNode($addedNode, $positionNode);
         }
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
@@ -96,6 +89,11 @@ final class NodesToAddCollector implements NodeCollectorInterface
      */
     public function addNodeAfterNode(Node $addedNode, Node $positionNode) : void
     {
+        if ($positionNode->getAttributes() === []) {
+            $message = \sprintf('Switch arguments in "%s()" method', __METHOD__);
+            throw new ShouldNotHappenException($message);
+        }
+        $this->changedNodeScopeRefresher->refresh($addedNode, $positionNode->getAttribute(AttributeKey::SCOPE));
         $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
@@ -133,7 +131,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
     public function addNodesBeforeNode(array $newNodes, Node $positionNode) : void
     {
         foreach ($newNodes as $newNode) {
-            $this->addNodeBeforeNode($newNode, $positionNode, null);
+            $this->addNodeBeforeNode($newNode, $positionNode);
         }
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
