@@ -8,14 +8,17 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersion;
 use Rector\TypeDeclaration\TypeAnalyzer\AlwaysStrictBoolExprAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictReturnExprRector\ReturnTypeFromStrictReturnExprRectorTest
  */
-final class ReturnTypeFromStrictReturnExprRector extends AbstractRector
+final class ReturnTypeFromStrictReturnExprRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -97,5 +100,9 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersion::PHP_74;
     }
 }
