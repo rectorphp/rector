@@ -1,4 +1,4 @@
-# 518 Rules Overview
+# 519 Rules Overview
 
 <br>
 
@@ -94,7 +94,7 @@
 
 - [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (26)
+- [TypeDeclaration](#typedeclaration) (27)
 
 - [Visibility](#visibility) (3)
 
@@ -11888,6 +11888,30 @@ Add return type to function like with return new
 +    public function action(): Response
      {
          return new Response();
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictReturnExprRector
+
+Add strict return type based on returned strict expr type
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictReturnExprRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictReturnExprRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run()
+     {
+         return $this->first() && true;
+     }
+
+-    public function first()
++    public function first(): bool
+     {
+         return true;
      }
  }
 ```

@@ -3022,6 +3022,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnAnnotationIncorrectNullableRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnAnnotationIncorrectNullableRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnNeverTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnNeverTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromReturnNewRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnNewRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictReturnExprRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictReturnExprRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php',
