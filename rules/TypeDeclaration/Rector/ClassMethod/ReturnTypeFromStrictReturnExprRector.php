@@ -36,26 +36,16 @@ final class SomeClass
 {
     public function run()
     {
-        return $this->first() && true;
-    }
-
-    public function first()
-    {
-        return true;
+        return $this->first() && $this->somethingElse();
     }
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 final class SomeClass
 {
-    public function run()
+    public function run(): bool
     {
-        return $this->first() && true;
-    }
-
-    public function first(): bool
-    {
-        return true;
+        return $this->first() && $this->somethingElse();
     }
 }
 CODE_SAMPLE
