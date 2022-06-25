@@ -6,18 +6,11 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use PhpParser\Node\Expr\BinaryOp\Equal;
-use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotEqual;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\TypeDeclaration\TypeAnalyzer\AlwaysStrictBoolExprAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
@@ -26,6 +19,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnTypeFromStrictReturnExprRector extends AbstractRector
 {
+    public function __construct(
+        private readonly AlwaysStrictBoolExprAnalyzer $alwaysStrictBoolExprAnalyzer
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add strict return type based on returned strict expr type', [
@@ -89,40 +87,6 @@ CODE_SAMPLE
         return $node;
     }
 
-    private function isStrictBoolExpr(Expr $expr): bool
-    {
-        // detect strict type here :)
-        if ($expr instanceof Empty_) {
-            return true;
-        }
-
-        if ($expr instanceof BooleanAnd) {
-            return true;
-        }
-
-        if ($expr instanceof BooleanOr) {
-            return true;
-        }
-
-        if ($expr instanceof Equal) {
-            return true;
-        }
-
-        if ($expr instanceof NotEqual) {
-            return true;
-        }
-
-        if ($expr instanceof Identical) {
-            return true;
-        }
-
-        if ($expr instanceof NotIdentical) {
-            return true;
-        }
-
-        return $expr instanceof ConstFetch && in_array($expr->name->toLowerString(), ['true', 'false'], true);
-    }
-
     private function hasSingleStrictReturn(ClassMethod $classMethod): bool
     {
         if ($classMethod->stmts === null) {
@@ -139,7 +103,7 @@ CODE_SAMPLE
                 return false;
             }
 
-            if ($this->isStrictBoolExpr($stmt->expr)) {
+            if ($this->alwaysStrictBoolExprAnalyzer->isStrictBoolExpr($stmt->expr)) {
                 return true;
             }
         }
