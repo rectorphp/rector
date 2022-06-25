@@ -104,7 +104,7 @@ CODE_SAMPLE
 
         $expression = new Expression(new Assign($selfVariable, new Variable('this')));
 
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
 
         $this->traverseNodesWithCallable($node, static function (Node $subNode) use ($selfVariable): ?Closure {
             if (! $subNode instanceof Closure) {

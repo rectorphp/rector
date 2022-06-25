@@ -88,7 +88,7 @@ CODE_SAMPLE
             $assign = new Assign($variable, $node->var);
         }
 
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $node, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $node);
         $node->var = $variable;
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
 

@@ -32,6 +32,8 @@ use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Symplify\SmartFileSystem\SmartFileInfo;
@@ -45,11 +47,12 @@ final class ChangedNodeScopeRefresher
         private readonly PHPStanNodeScopeResolver $phpStanNodeScopeResolver,
         private readonly ScopeAnalyzer $scopeAnalyzer,
         private readonly UnreachableStmtAnalyzer $unreachableStmtAnalyzer,
-        private readonly BetterNodeFinder $betterNodeFinder
+        private readonly BetterNodeFinder $betterNodeFinder,
+        private readonly CurrentFileProvider $currentFileProvider
     ) {
     }
 
-    public function refresh(Node $node, SmartFileInfo $smartFileInfo, ?MutatingScope $mutatingScope): void
+    public function refresh(Node $node, ?MutatingScope $mutatingScope, ?SmartFileInfo $smartFileInfo = null): void
     {
         // nothing to refresh
         if (! $this->scopeAnalyzer->hasScope($node)) {
@@ -74,6 +77,12 @@ final class ChangedNodeScopeRefresher
 
                 throw new ShouldNotHappenException($errorMessage);
             }
+        }
+
+        if (! $smartFileInfo instanceof SmartFileInfo) {
+            /** @var File $file */
+            $file = $this->currentFileProvider->getFile();
+            $smartFileInfo = $file->getSmartFileInfo();
         }
 
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes

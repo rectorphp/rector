@@ -154,7 +154,7 @@ CODE_SAMPLE
         $assignVariable = $firstArg->value;
         $preAssign = new Assign($assignVariable, $array);
 
-        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt);
 
         return $expr;
     }

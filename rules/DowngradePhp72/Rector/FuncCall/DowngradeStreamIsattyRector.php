@@ -108,7 +108,7 @@ CODE_SAMPLE
         $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
         $assign = new Assign($variable, $function);
 
-        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
 
         return new FuncCall($variable, $node->args);
     }

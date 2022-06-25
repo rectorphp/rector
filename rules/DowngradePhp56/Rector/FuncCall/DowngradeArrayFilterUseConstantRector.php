@@ -111,8 +111,7 @@ CODE_SAMPLE
 
         $this->nodesToAddCollector->addNodeBeforeNode(
             new Expression(new Assign($variable, new Array_([]))),
-            $funcCall,
-            $this->file->getSmartFileInfo()
+            $funcCall
         );
 
         /** @var ConstFetch $constant */
@@ -121,7 +120,7 @@ CODE_SAMPLE
             ? $this->applyArrayFilterUseKey($args, $closure, $variable)
             : $this->applyArrayFilterUseBoth($args, $closure, $variable);
 
-        $this->nodesToAddCollector->addNodeBeforeNode($foreach, $funcCall, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode($foreach, $funcCall);
 
         return $variable;
     }
