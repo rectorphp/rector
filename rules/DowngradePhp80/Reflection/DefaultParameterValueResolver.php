@@ -57,8 +57,6 @@ final class DefaultParameterValueResolver
     private function resolveConstantBooleanType(ConstantBooleanType $constantBooleanType): ConstFetch
     {
         $value = $constantBooleanType->describe(VerbosityLevel::value());
-        $name = new Name($value);
-
-        return new ConstFetch($name);
+        return new ConstFetch(new Name($value));
     }
 }
