@@ -91,11 +91,11 @@ CODE_SAMPLE
             return false;
         }
 
-        if ($this->betterNodeFinder->hasInstancesOf($classMethod->stmts, [Yield_::class])) {
+        if ($this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($classMethod, [Yield_::class])) {
             return false;
         }
 
-        $returns = $this->betterNodeFinder->findInstanceOf($classMethod->stmts, Return_::class);
+        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
         if (count($returns) !== 1) {
             return false;
         }
