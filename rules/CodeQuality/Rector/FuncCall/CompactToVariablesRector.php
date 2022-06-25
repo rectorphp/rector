@@ -138,7 +138,7 @@ CODE_SAMPLE
         $firstArg = $funcCall->args[0];
         $assignVariable = $firstArg->value;
         $preAssign = new Assign($assignVariable, $array);
-        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt);
         return $expr;
     }
     private function refactorAssignArray(Expr $expr, FuncCall $funcCall) : ?Expr

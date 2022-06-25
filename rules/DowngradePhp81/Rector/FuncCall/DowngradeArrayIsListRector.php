@@ -93,7 +93,7 @@ CODE_SAMPLE
         $variable = new Variable($this->variableNaming->createCountedValueName('arrayIsList', $scope));
         $function = $this->createClosure();
         $expression = new Expression(new Assign($variable, $function));
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
         return new FuncCall($variable, $node->args);
     }
     private function createClosure() : Closure

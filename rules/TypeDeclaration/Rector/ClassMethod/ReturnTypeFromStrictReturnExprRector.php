@@ -5,10 +5,10 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\TypeDeclaration\TypeAnalyzer\AlwaysStrictBoolExprAnalyzer;
@@ -72,9 +72,20 @@ CODE_SAMPLE
         $node->returnType = new Identifier('bool');
         return $node;
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersion::PHP_74;
+    }
     private function hasSingleStrictReturn(ClassMethod $classMethod) : bool
     {
         if ($classMethod->stmts === null) {
+            return \false;
+        }
+        if ($this->betterNodeFinder->hasInstancesOf($classMethod->stmts, [Yield_::class])) {
+            return \false;
+        }
+        $returns = $this->betterNodeFinder->findInstanceOf($classMethod->stmts, Return_::class);
+        if (\count($returns) !== 1) {
             return \false;
         }
         foreach ($classMethod->stmts as $stmt) {
@@ -90,9 +101,5 @@ CODE_SAMPLE
             }
         }
         return \false;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersion::PHP_74;
     }
 }

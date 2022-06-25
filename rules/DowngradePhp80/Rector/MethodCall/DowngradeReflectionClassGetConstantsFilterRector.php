@@ -118,11 +118,11 @@ CODE_SAMPLE
         $reflectionClassConstants = $this->variableNaming->createCountedValueName('reflectionClassConstants', $scope);
         $variableReflectionClassConstants = new Variable($this->variableNaming->createCountedValueName($reflectionClassConstants, $scope));
         $assign = new Assign($variableReflectionClassConstants, new MethodCall($methodCall->var, 'getReflectionConstants'));
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $methodCall, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $methodCall);
         $result = $this->variableNaming->createCountedValueName('result', $scope);
         $variableResult = new Variable($result);
         $assignVariableResult = new Assign($variableResult, new Array_());
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assignVariableResult), $methodCall, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assignVariableResult), $methodCall);
         $ifs = [];
         $valueVariable = new Variable('value');
         $key = new MethodCall($valueVariable, 'getName');
@@ -138,7 +138,7 @@ CODE_SAMPLE
         $closure->uses = [new ClosureUse($variableResult, \true)];
         $closure->stmts = $ifs;
         $funcCall = $this->nodeFactory->createFuncCall('array_walk', [$variableReflectionClassConstants, $closure]);
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($funcCall), $methodCall, $this->file->getSmartFileInfo());
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($funcCall), $methodCall);
         return $variableResult;
     }
     private function resolveClassConstFetchName(ClassConstFetch $classConstFetch) : ?string
