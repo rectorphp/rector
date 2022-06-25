@@ -7,6 +7,7 @@ use RectorPrefix202206\Clue\React\NDJson\Decoder;
 use RectorPrefix202206\Clue\React\NDJson\Encoder;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
+use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\Application\File;
@@ -50,13 +51,19 @@ final class WorkerRunner
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
-    public function __construct(ParametersMerger $parametersMerger, CurrentFileProvider $currentFileProvider, PhpFileProcessor $phpFileProcessor, NodeScopeResolver $nodeScopeResolver, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
+    /**
+     * @readonly
+     * @var \Rector\Core\Console\Style\RectorConsoleOutputStyle
+     */
+    private $rectorConsoleOutputStyle;
+    public function __construct(ParametersMerger $parametersMerger, CurrentFileProvider $currentFileProvider, PhpFileProcessor $phpFileProcessor, NodeScopeResolver $nodeScopeResolver, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle)
     {
         $this->parametersMerger = $parametersMerger;
         $this->currentFileProvider = $currentFileProvider;
         $this->phpFileProcessor = $phpFileProcessor;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
+        $this->rectorConsoleOutputStyle = $rectorConsoleOutputStyle;
     }
     public function run(Encoder $encoder, Decoder $decoder, Configuration $configuration) : void
     {
@@ -93,9 +100,7 @@ final class WorkerRunner
                     $errorAndFileDiffs = $this->parametersMerger->merge($errorAndFileDiffs, $currentErrorsAndFileDiffs);
                 } catch (Throwable $throwable) {
                     ++$systemErrorsCount;
-                    $errorMessage = \sprintf('System error: "%s"', $throwable->getMessage()) . \PHP_EOL;
-                    $errorMessage .= 'Run Rector with "--debug" option and post the report here: https://github.com/rectorphp/rector/issues/new';
-                    $systemErrors[] = new SystemError($errorMessage, $filePath, $throwable->getLine());
+                    $systemErrors = $this->collectSystemErrors($systemErrors, $throwable, $filePath);
                 }
             }
             /**
@@ -104,5 +109,20 @@ final class WorkerRunner
             $encoder->write([ReactCommand::ACTION => Action::RESULT, self::RESULT => [Bridge::FILE_DIFFS => $errorAndFileDiffs[Bridge::FILE_DIFFS] ?? [], Bridge::FILES_COUNT => \count($filePaths), Bridge::SYSTEM_ERRORS => $systemErrors, Bridge::SYSTEM_ERRORS_COUNT => $systemErrorsCount]]);
         });
         $decoder->on(ReactEvent::ERROR, $handleErrorCallback);
+    }
+    /**
+     * @param SystemError[] $systemErrors
+     * @return SystemError[]
+     */
+    private function collectSystemErrors(array $systemErrors, Throwable $throwable, string $filePath) : array
+    {
+        $errorMessage = \sprintf('System error: "%s"', $throwable->getMessage()) . \PHP_EOL;
+        if ($this->rectorConsoleOutputStyle->isDebug()) {
+            $systemErrors[] = new SystemError($errorMessage . \PHP_EOL . 'Stack trace:' . \PHP_EOL . $throwable->getTraceAsString(), $filePath, $throwable->getLine());
+            return $systemErrors;
+        }
+        $errorMessage .= 'Run Rector with "--debug" option and post the report here: https://github.com/rectorphp/rector/issues/new';
+        $systemErrors[] = new SystemError($errorMessage, $filePath, $throwable->getLine());
+        return $systemErrors;
     }
 }
