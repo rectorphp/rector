@@ -8,7 +8,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\NeverType;
@@ -83,6 +85,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node): ?Node
     {
+        if ($this->isInTestCase($node)) {
+            return null;
+        }
+
         /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($node, Return_::class);
         // exact one shape only
@@ -167,5 +173,24 @@ CODE_SAMPLE
         }
 
         return false;
+    }
+
+    /**
+     * Skip test case, as return methods there are usually with test data only.
+     * Those arrays are hand made and return types are getting complex and messy, so this rule should skip it.
+     */
+    private function isInTestCase(ClassMethod $classMethod): bool
+    {
+        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
+        if (! $scope instanceof Scope) {
+            return false;
+        }
+
+        $classReflection = $scope->getClassReflection();
+        if (! $classReflection instanceof ClassReflection) {
+            return false;
+        }
+
+        return $classReflection->isSubclassOf('PHPUnit\Framework\TestCase');
     }
 }
