@@ -36,6 +36,8 @@ use PHPStan\Node\UnreachableStatementNode;
 use PHPStan\Reflection\BetterReflection\Reflector\MemoizingReflector;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\TypeCombinator;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -144,7 +146,13 @@ final class PHPStanNodeScopeResolver
                     $varName = $catch->var instanceof Variable
                         ? $this->nodeNameResolver->getName($catch->var)
                         : null;
-                    $catchMutatingScope = $mutatingScope->enterCatch($catch->types, $varName);
+                    $type = TypeCombinator::union(
+                        ...array_map(
+                            static fn (Name $class): ObjectType => new ObjectType((string) $class),
+                            $catch->types
+                        )
+                    );
+                    $catchMutatingScope = $mutatingScope->enterCatchType($type, $varName);
                     $this->processNodes($catch->stmts, $smartFileInfo, $catchMutatingScope);
                 }
 
