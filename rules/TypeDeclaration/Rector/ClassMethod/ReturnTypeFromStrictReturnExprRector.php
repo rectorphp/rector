@@ -82,7 +82,7 @@ CODE_SAMPLE
 
     public function provideMinPhpVersion(): int
     {
-        return PhpVersion::PHP_74;
+        return PhpVersion::PHP_70;
     }
 
     /**
