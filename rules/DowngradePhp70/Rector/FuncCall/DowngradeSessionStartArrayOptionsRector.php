@@ -68,7 +68,7 @@ CODE_SAMPLE
             $sessionKey = new String_('session.' . $option->key->value);
             $funcName = new Name('ini_set');
             $iniSet = new FuncCall($funcName, [new Arg($sessionKey), new Arg($option->value)]);
-            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($iniSet), $node);
+            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($iniSet), $node, $this->file->getSmartFileInfo());
         }
         unset($node->args[0]);
         return $node;

@@ -73,7 +73,7 @@ CODE_SAMPLE
             $variable = new Variable($newVariableName);
             $assign = new Assign($variable, $node->var);
         }
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $node);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression($assign), $node, $this->file->getSmartFileInfo());
         $node->var = $variable;
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;

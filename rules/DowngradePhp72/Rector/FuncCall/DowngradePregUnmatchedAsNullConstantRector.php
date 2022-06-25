@@ -209,7 +209,7 @@ CODE_SAMPLE
     {
         if ($if->stmts !== []) {
             $firstStmt = $if->stmts[0];
-            $this->nodesToAddCollector->addNodeBeforeNode($funcCall, $firstStmt);
+            $this->nodesToAddCollector->addNodeBeforeNode($funcCall, $firstStmt, $this->file->getSmartFileInfo());
             return;
         }
         $if->stmts[0] = new Expression($funcCall);

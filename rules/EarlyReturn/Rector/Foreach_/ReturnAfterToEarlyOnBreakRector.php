@@ -115,7 +115,7 @@ CODE_SAMPLE
     private function processEarlyReturn(Expression $expression, Assign $assign, array $breaks, Return_ $return, Assign $assignPreviousVariable, Foreach_ $foreach) : Foreach_
     {
         $this->removeNode($expression);
-        $this->nodesToAddCollector->addNodeBeforeNode(new Return_($assign->expr), $breaks[0]);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Return_($assign->expr), $breaks[0], $this->file->getSmartFileInfo());
         $this->removeNode($breaks[0]);
         $return->expr = $assignPreviousVariable->expr;
         $this->removeNode($assignPreviousVariable);

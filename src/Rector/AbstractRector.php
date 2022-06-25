@@ -246,7 +246,7 @@ CODE_SAMPLE;
         /** @var Node $node */
         $this->mirrorAttributes($originalAttributes, $node);
         $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
-        $this->changedNodeScopeRefresher->refresh($node, $currentScope, $this->file->getSmartFileInfo());
+        $this->changedNodeScopeRefresher->refresh($node, $this->file->getSmartFileInfo(), $currentScope);
         $this->connectParentNodes($node);
         // is equals node type? return node early
         if (\get_class($originalNode) === \get_class($node)) {

@@ -111,7 +111,7 @@ CODE_SAMPLE
         $function = $this->createClosure();
         $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
         $assign = new Assign($variable, $function);
-        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node, $this->file->getSmartFileInfo());
         return new FuncCall($variable, $node->args);
     }
     private function createClosure() : Closure

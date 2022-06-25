@@ -60,7 +60,7 @@ CODE_SAMPLE
         }
         $variable = $this->namedVariableFactory->createVariable($node, 'object');
         $expression = new Expression(new Assign($variable, $node->var));
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
         $node->var = $variable;
         // necessary to remove useless parentheses
         $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);

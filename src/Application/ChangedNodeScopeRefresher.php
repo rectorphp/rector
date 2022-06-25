@@ -31,8 +31,6 @@ use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\Core\NodeAnalyzer\UnreachableStmtAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\Provider\CurrentFileProvider;
-use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
@@ -61,20 +59,14 @@ final class ChangedNodeScopeRefresher
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\Core\Provider\CurrentFileProvider
-     */
-    private $currentFileProvider;
-    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, UnreachableStmtAnalyzer $unreachableStmtAnalyzer, BetterNodeFinder $betterNodeFinder, CurrentFileProvider $currentFileProvider)
+    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, UnreachableStmtAnalyzer $unreachableStmtAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->scopeAnalyzer = $scopeAnalyzer;
         $this->unreachableStmtAnalyzer = $unreachableStmtAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->currentFileProvider = $currentFileProvider;
     }
-    public function refresh(Node $node, ?MutatingScope $mutatingScope, ?SmartFileInfo $smartFileInfo = null) : void
+    public function refresh(Node $node, SmartFileInfo $smartFileInfo, ?MutatingScope $mutatingScope) : void
     {
         // nothing to refresh
         if (!$this->scopeAnalyzer->hasScope($node)) {
@@ -93,11 +85,6 @@ final class ChangedNodeScopeRefresher
                 $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parent instanceof Node ? \get_class($parent) : null);
                 throw new ShouldNotHappenException($errorMessage);
             }
-        }
-        if (!$smartFileInfo instanceof SmartFileInfo) {
-            /** @var File $file */
-            $file = $this->currentFileProvider->getFile();
-            $smartFileInfo = $file->getSmartFileInfo();
         }
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes
         // so we need to somehow get a parent scope that is already in the same place the $node is

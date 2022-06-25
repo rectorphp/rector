@@ -112,7 +112,7 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
             if (!$currentStmt instanceof Stmt) {
                 continue;
             }
-            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $currentStmt);
+            $this->nodesToAddCollector->addNodeBeforeNode($replacements->getAssign(), $currentStmt, $this->file->getSmartFileInfo());
             $node->args[$key]->value = $replacements->getVariable();
             // add variable name to scope, so we prevent duplication of new variable of the same name
             $currentScope = $currentScope->assignExpression($replacements->getVariable(), $currentScope->getType($replacements->getVariable()));

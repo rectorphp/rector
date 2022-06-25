@@ -68,7 +68,7 @@ CODE_SAMPLE
         }
         $tempVariable = $this->namedVariableFactory->createVariable($node, 'callable');
         $expression = new Expression(new Assign($tempVariable, $node->args[0]->value));
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
+        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node, $this->file->getSmartFileInfo());
         $closure = new Closure();
         $closure->uses[] = new ClosureUse($tempVariable);
         $innerFuncCall = new FuncCall($tempVariable, [new Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);

@@ -90,7 +90,7 @@ CODE_SAMPLE
             $this->addAssignNewVariable($funcCall, $originalArray, $array);
         }
         $resetFuncCall = $this->nodeFactory->createFuncCall('reset', [$array]);
-        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall, $this->file->getSmartFileInfo());
         $funcCall->name = new Name('key');
         if ($originalArray !== $array) {
             $funcCall->args[0]->value = $array;
@@ -111,7 +111,7 @@ CODE_SAMPLE
             $this->addAssignNewVariable($funcCall, $originalArray, $array);
         }
         $resetFuncCall = $this->nodeFactory->createFuncCall('end', [$array]);
-        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode($resetFuncCall, $funcCall, $this->file->getSmartFileInfo());
         $funcCall->name = new Name('key');
         if ($originalArray !== $array) {
             $funcCall->args[0]->value = $array;
@@ -123,7 +123,7 @@ CODE_SAMPLE
      */
     private function addAssignNewVariable(FuncCall $funcCall, Expr $expr, $variable) : void
     {
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression(new Assign($variable, $expr)), $funcCall);
+        $this->nodesToAddCollector->addNodeBeforeNode(new Expression(new Assign($variable, $expr)), $funcCall, $this->file->getSmartFileInfo());
     }
     /**
      * @return \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable
