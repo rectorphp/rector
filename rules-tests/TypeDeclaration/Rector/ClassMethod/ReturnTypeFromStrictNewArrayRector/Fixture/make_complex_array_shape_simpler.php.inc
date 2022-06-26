@@ -31,7 +31,7 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNe
 final class MakeComplexArrayShapeSimpler
 {
     /**
-     * @return mixed[]
+     * @return array{one: int, two: int, three: int, four: int, five: int}
      */
     public function run(): array
     {

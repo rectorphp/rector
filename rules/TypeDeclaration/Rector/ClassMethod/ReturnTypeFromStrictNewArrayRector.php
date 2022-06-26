@@ -20,7 +20,9 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
@@ -213,7 +215,15 @@ CODE_SAMPLE
             return $type;
         }
 
-        if (count($type->getValueTypes()) > 3) {
+        if (count($type->getValueTypes()) === 1) {
+            $singleValueType = $type->getValueTypes()[0];
+            if ($singleValueType instanceof ObjectType) {
+                return $type;
+            }
+        }
+
+        $printedDescription = $type->describe(VerbosityLevel::precise());
+        if (strlen($printedDescription) > 50) {
             return new ArrayType(new MixedType(), new MixedType());
         }
 
