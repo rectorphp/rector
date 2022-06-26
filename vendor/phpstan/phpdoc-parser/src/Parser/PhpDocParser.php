@@ -136,6 +136,9 @@ class PhpDocParser
                 case '@template-covariant':
                 case '@phpstan-template-covariant':
                 case '@psalm-template-covariant':
+                case '@template-contravariant':
+                case '@phpstan-template-contravariant':
+                case '@psalm-template-contravariant':
                     $tagValue = $this->parseTemplateTagValue($tokens);
                     break;
                 case '@extends':
@@ -328,9 +331,7 @@ class PhpDocParser
     {
         $importedAlias = $tokens->currentTokenValue();
         $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
-        if (!$tokens->tryConsumeTokenValue('from')) {
-            throw new \PHPStan\PhpDocParser\Parser\ParserException($tokens->currentTokenValue(), $tokens->currentTokenType(), $tokens->currentTokenOffset(), Lexer::TOKEN_IDENTIFIER);
-        }
+        $tokens->consumeTokenValue(Lexer::TOKEN_IDENTIFIER, 'from');
         $importedFrom = $tokens->currentTokenValue();
         $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
         $importedAs = null;
