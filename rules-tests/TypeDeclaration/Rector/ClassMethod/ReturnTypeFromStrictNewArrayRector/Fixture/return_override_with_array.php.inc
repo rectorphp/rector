@@ -22,6 +22,9 @@ namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNe
 
 final class ReturnOverrideWithArray
 {
+    /**
+     * @return int[]
+     */
     public function run(): array
     {
         $values = [];

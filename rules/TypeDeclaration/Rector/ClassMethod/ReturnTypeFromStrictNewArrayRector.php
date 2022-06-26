@@ -16,6 +16,11 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ArrayType;
+use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\NeverType;
+use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -27,6 +32,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReturnTypeFromStrictNewArrayRector extends AbstractRector implements MinPhpVersionInterface
 {
+    public function __construct(
+        private readonly PhpDocTypeChanger $phpDocTypeChanger
+    ) {
+    }
+
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add strict return array type based on created empty array and returned', [
@@ -114,6 +124,14 @@ CODE_SAMPLE
         // 3. always returns array
         $node->returnType = new Identifier('array');
 
+        // 4. add more precise type if suitable
+        $exprType = $this->getType($onlyReturn->expr);
+
+        if ($this->shouldAddReturnArrayDocType($exprType)) {
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $exprType);
+        }
+
         return $node;
     }
 
@@ -173,5 +191,15 @@ CODE_SAMPLE
         }
 
         return null;
+    }
+
+    private function shouldAddReturnArrayDocType(Type $exprType): bool
+    {
+        if ($exprType instanceof ConstantArrayType) {
+            // sign of empty array, keep empty
+            return ! $exprType->getItemType() instanceof NeverType;
+        }
+
+        return $exprType instanceof ArrayType;
     }
 }
