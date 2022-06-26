@@ -42,7 +42,6 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -53,7 +52,6 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeDecorator\PropertyTypeDecorator;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -83,7 +81,6 @@ final class NodeFactory
         private readonly NodeNameResolver $nodeNameResolver,
         private readonly PhpDocTypeChanger $phpDocTypeChanger,
         private readonly CurrentNodeProvider $currentNodeProvider,
-        private readonly AstResolver $reflectionAstResolver,
         private readonly PropertyTypeDecorator $propertyTypeDecorator
     ) {
     }
@@ -457,16 +454,6 @@ final class NodeFactory
     public function createTrue(): ConstFetch
     {
         return new ConstFetch(new Name('true'));
-    }
-
-    public function createClosureFromMethodReflection(MethodReflection $methodReflection): Closure
-    {
-        $classMethod = $this->reflectionAstResolver->resolveClassMethodFromMethodReflection($methodReflection);
-        if (! $classMethod instanceof ClassMethod) {
-            throw new ShouldNotHappenException();
-        }
-
-        return $this->createClosureFromClassMethod($classMethod);
     }
 
     /**

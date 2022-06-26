@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector;
 use Rector\CodeQuality\Rector\Array_\CallableThisArrayToAnonymousFunctionRector;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector;
@@ -162,7 +161,6 @@ return static function (RectorConfig $rectorConfig): void {
         ArrayKeysAndInArrayToArrayKeyExistsRector::class,
         SplitListAssignToSeparateLineRector::class,
         UnusedForeachValueToArrayKeysRector::class,
-        ArrayThisCallToThisMethodCallRector::class,
         CommonNotEqualRector::class,
         SetTypeToCastRector::class,
         LogicalToBooleanRector::class,
