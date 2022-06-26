@@ -19,7 +19,9 @@ final class CreatedByRuleDecorator
         }
 
         foreach ($node as $singleNode) {
-            $this->createByRule($singleNode, $rectorClass);
+            if ($singleNode::class === $originalNode::class) {
+                $this->createByRule($singleNode, $rectorClass);
+            }
         }
 
         $this->createByRule($originalNode, $rectorClass);
