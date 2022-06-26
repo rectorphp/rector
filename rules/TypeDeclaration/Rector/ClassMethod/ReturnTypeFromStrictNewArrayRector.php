@@ -18,6 +18,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -129,6 +130,9 @@ CODE_SAMPLE
 
         if ($this->shouldAddReturnArrayDocType($exprType)) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+
+            $exprType = $this->narrowConstantArrayType($exprType);
+
             $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $exprType);
         }
 
@@ -201,5 +205,18 @@ CODE_SAMPLE
         }
 
         return $exprType instanceof ArrayType;
+    }
+
+    private function narrowConstantArrayType(Type $type): Type
+    {
+        if (! $type instanceof ConstantArrayType) {
+            return $type;
+        }
+
+        if (count($type->getValueTypes()) > 3) {
+            return new ArrayType(new MixedType(), new MixedType());
+        }
+
+        return $type;
     }
 }
