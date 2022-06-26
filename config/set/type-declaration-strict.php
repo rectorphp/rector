@@ -10,6 +10,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnR
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictBoolReturnExprRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeFuncCallRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNewArrayRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
@@ -32,4 +33,5 @@ return static function (RectorConfig $rectorConfig): void {
         ReturnTypeFromStrictBoolReturnExprRector::class,
     ]);
     $rectorConfig->rule(ReturnTypeFromStrictNativeFuncCallRector::class);
+    $rectorConfig->rule(ReturnTypeFromStrictNewArrayRector::class);
 };

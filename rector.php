@@ -35,7 +35,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(
         PreferThisOrSelfMethodCallRector::class,
         [
-            'PHPUnit\Framework\TestCase' => PreferenceSelfThis::PREFER_THIS(),
+            'PHPUnit\Framework\TestCase' => PreferenceSelfThis::PREFER_THIS,
         ]
     );
 

@@ -1,4 +1,4 @@
-# 519 Rules Overview
+# 520 Rules Overview
 
 <br>
 
@@ -94,7 +94,7 @@
 
 - [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (28)
+- [TypeDeclaration](#typedeclaration) (29)
 
 - [Visibility](#visibility) (3)
 
@@ -11902,6 +11902,27 @@ Add strict return type based native function return
 +    public function run(): int
      {
          return strlen('value');
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictNewArrayRector
+
+Add strict return array type based on created empty array and returned
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNewArrayRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNewArrayRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function run()
++    public function run(): array
+     {
+         $values = [];
+
+         return $values;
      }
  }
 ```
