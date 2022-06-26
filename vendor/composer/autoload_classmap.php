@@ -3026,6 +3026,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromReturnNewRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnNewRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictBoolReturnExprRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictBoolReturnExprRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictNativeFuncCallRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNativeFuncCallRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictNewArrayRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNewArrayRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php',
