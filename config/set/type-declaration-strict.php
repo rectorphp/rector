@@ -3,11 +3,13 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
+
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
-use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictReturnExprRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictBoolReturnExprRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeFuncCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
@@ -27,6 +29,7 @@ return static function (RectorConfig $rectorConfig): void {
         TypedPropertyFromStrictGetterMethodReturnTypeRector::class,
         AddMethodCallBasedStrictParamTypeRector::class,
         ArrayShapeFromConstantArrayReturnRector::class,
-        ReturnTypeFromStrictReturnExprRector::class,
+        ReturnTypeFromStrictBoolReturnExprRector::class,
     ]);
+    $rectorConfig->rule(ReturnTypeFromStrictNativeFuncCallRector::class);
 };

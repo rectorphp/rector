@@ -1,4 +1,4 @@
-# 519 Rules Overview
+# 520 Rules Overview
 
 <br>
 
@@ -94,7 +94,7 @@
 
 - [Transform](#transform) (36)
 
-- [TypeDeclaration](#typedeclaration) (27)
+- [TypeDeclaration](#typedeclaration) (28)
 
 - [Visibility](#visibility) (3)
 
@@ -11894,11 +11894,11 @@ Add return type to function like with return new
 
 <br>
 
-### ReturnTypeFromStrictReturnExprRector
+### ReturnTypeFromStrictBoolReturnExprRector
 
 Add strict return type based on returned strict expr type
 
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictReturnExprRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictReturnExprRector.php)
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictBoolReturnExprRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictBoolReturnExprRector.php)
 
 ```diff
  final class SomeClass
@@ -11907,6 +11907,25 @@ Add strict return type based on returned strict expr type
 +    public function run(): bool
      {
          return $this->first() && $this->somethingElse();
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictNativeFuncCallRector
+
+Add strict return type based native function return
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeFuncCallRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNativeFuncCallRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function run()
++    public function run(): int
+     {
+         return strlen('value');
      }
  }
 ```

@@ -1,8 +1,8 @@
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictReturnExprRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictBoolReturnExprRector\Fixture;
 
-final class YieldParentInnerFunction
+final class VoidReturnInInnerFunction
 {
     public function run()
     {
@@ -12,7 +12,7 @@ final class YieldParentInnerFunction
     public function first()
     {
         function () {
-            yield 1;
+            return;
         };
 
         return true;
@@ -23,9 +23,9 @@ final class YieldParentInnerFunction
 -----
 <?php
 
-namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictReturnExprRector\Fixture;
+namespace Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictBoolReturnExprRector\Fixture;
 
-final class YieldParentInnerFunction
+final class VoidReturnInInnerFunction
 {
     public function run(): bool
     {
@@ -35,7 +35,7 @@ final class YieldParentInnerFunction
     public function first(): bool
     {
         function () {
-            yield 1;
+            return;
         };
 
         return true;
