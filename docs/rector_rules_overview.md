@@ -1,4 +1,4 @@
-# 520 Rules Overview
+# 519 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (73)
+- [CodeQuality](#codequality) (72)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -384,30 +384,6 @@ Change array_merge of non arrays to array directly
 
 -        return array_merge([$value], [$value2]);
 +        return [$value, $value2];
-     }
- }
-```
-
-<br>
-
-### ArrayThisCallToThisMethodCallRector
-
-Change `[$this, someMethod]` without any args to `$this->someMethod()`
-
-- class: [`Rector\CodeQuality\Rector\Array_\ArrayThisCallToThisMethodCallRector`](../rules/CodeQuality/Rector/Array_/ArrayThisCallToThisMethodCallRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $values = [$this, 'giveMeMore'];
-+        $values = $this->giveMeMore();
-     }
-
-     public function giveMeMore()
-     {
-         return 'more';
      }
  }
 ```

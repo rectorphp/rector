@@ -41,7 +41,6 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -52,7 +51,6 @@ use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeDecorator\PropertyTypeDecorator;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -109,15 +107,10 @@ final class NodeFactory
     private $currentNodeProvider;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
-     */
-    private $reflectionAstResolver;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeDecorator\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
-    public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory, PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, CurrentNodeProvider $currentNodeProvider, AstResolver $reflectionAstResolver, PropertyTypeDecorator $propertyTypeDecorator)
+    public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory, PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, CurrentNodeProvider $currentNodeProvider, PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->builderFactory = $builderFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
@@ -126,7 +119,6 @@ final class NodeFactory
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->currentNodeProvider = $currentNodeProvider;
-        $this->reflectionAstResolver = $reflectionAstResolver;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
     }
     /**
@@ -421,14 +413,6 @@ final class NodeFactory
     public function createTrue() : ConstFetch
     {
         return new ConstFetch(new Name('true'));
-    }
-    public function createClosureFromMethodReflection(MethodReflection $methodReflection) : Closure
-    {
-        $classMethod = $this->reflectionAstResolver->resolveClassMethodFromMethodReflection($methodReflection);
-        if (!$classMethod instanceof ClassMethod) {
-            throw new ShouldNotHappenException();
-        }
-        return $this->createClosureFromClassMethod($classMethod);
     }
     /**
      * @param string|ObjectReference::* $constantName

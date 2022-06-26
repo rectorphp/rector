@@ -1336,7 +1336,6 @@ return array(
     'Rector\\CodeQuality\\NodeManipulator\\ClassMethodReturnTypeManipulator' => $baseDir . '/rules/CodeQuality/NodeManipulator/ClassMethodReturnTypeManipulator.php',
     'Rector\\CodeQuality\\NodeManipulator\\ExprBoolCaster' => $baseDir . '/rules/CodeQuality/NodeManipulator/ExprBoolCaster.php',
     'Rector\\CodeQuality\\NodeTypeGroup' => $baseDir . '/rules/CodeQuality/NodeTypeGroup.php',
-    'Rector\\CodeQuality\\Rector\\Array_\\ArrayThisCallToThisMethodCallRector' => $baseDir . '/rules/CodeQuality/Rector/Array_/ArrayThisCallToThisMethodCallRector.php',
     'Rector\\CodeQuality\\Rector\\Array_\\CallableThisArrayToAnonymousFunctionRector' => $baseDir . '/rules/CodeQuality/Rector/Array_/CallableThisArrayToAnonymousFunctionRector.php',
     'Rector\\CodeQuality\\Rector\\Assign\\CombinedAssignRector' => $baseDir . '/rules/CodeQuality/Rector/Assign/CombinedAssignRector.php',
     'Rector\\CodeQuality\\Rector\\Assign\\SplitListAssignToSeparateLineRector' => $baseDir . '/rules/CodeQuality/Rector/Assign/SplitListAssignToSeparateLineRector.php',
