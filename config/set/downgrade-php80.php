@@ -30,6 +30,7 @@ use Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionGetAttributesRect
 use Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionPropertyGetDefaultValueRector;
 use Rector\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector;
 use Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector;
+use Rector\DowngradePhp80\Rector\Property\DowngradeMixedTypeTypedPropertyRector;
 use Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector;
 use Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
@@ -79,4 +80,5 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rule(DowngradeArrayFilterNullableCallbackRector::class);
     $rectorConfig->rule(DowngradeNumberFormatNoFourthArgRector::class);
     $rectorConfig->rule(DowngradeStringReturnTypeOnToStringRector::class);
+    $rectorConfig->rule(DowngradeMixedTypeTypedPropertyRector::class);
 };
