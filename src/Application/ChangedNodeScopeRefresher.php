@@ -35,6 +35,7 @@ use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
+use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
@@ -66,19 +67,33 @@ final class ChangedNodeScopeRefresher
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, UnreachableStmtAnalyzer $unreachableStmtAnalyzer, BetterNodeFinder $betterNodeFinder, CurrentFileProvider $currentFileProvider)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
+     */
+    private $scopeFactory;
+    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, UnreachableStmtAnalyzer $unreachableStmtAnalyzer, BetterNodeFinder $betterNodeFinder, CurrentFileProvider $currentFileProvider, ScopeFactory $scopeFactory)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->scopeAnalyzer = $scopeAnalyzer;
         $this->unreachableStmtAnalyzer = $unreachableStmtAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->currentFileProvider = $currentFileProvider;
+        $this->scopeFactory = $scopeFactory;
     }
     public function refresh(Node $node, ?MutatingScope $mutatingScope, ?SmartFileInfo $smartFileInfo = null) : void
     {
         // nothing to refresh
         if (!$this->scopeAnalyzer->hasScope($node)) {
             return;
+        }
+        if (!$smartFileInfo instanceof SmartFileInfo) {
+            /** @var File $file */
+            $file = $this->currentFileProvider->getFile();
+            $smartFileInfo = $file->getSmartFileInfo();
+        }
+        if ($this->scopeAnalyzer->isScopeResolvableFromFile($node, $mutatingScope)) {
+            $mutatingScope = $this->scopeFactory->createFromFile($smartFileInfo);
         }
         if (!$mutatingScope instanceof MutatingScope) {
             /**
@@ -93,11 +108,6 @@ final class ChangedNodeScopeRefresher
                 $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parent instanceof Node ? \get_class($parent) : null);
                 throw new ShouldNotHappenException($errorMessage);
             }
-        }
-        if (!$smartFileInfo instanceof SmartFileInfo) {
-            /** @var File $file */
-            $file = $this->currentFileProvider->getFile();
-            $smartFileInfo = $file->getSmartFileInfo();
         }
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes
         // so we need to somehow get a parent scope that is already in the same place the $node is

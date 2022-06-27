@@ -2563,17 +2563,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.1.1",
-            "version_normalized": "6.1.1.0",
+            "version": "v6.1.2",
+            "version_normalized": "6.1.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "6187424023fbffcd757789aeb517c9161b1eabee"
+                "reference": "7a86c1c42fbcb69b59768504c7bca1d3767760b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/6187424023fbffcd757789aeb517c9161b1eabee",
-                "reference": "6187424023fbffcd757789aeb517c9161b1eabee",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/7a86c1c42fbcb69b59768504c7bca1d3767760b7",
+                "reference": "7a86c1c42fbcb69b59768504c7bca1d3767760b7",
                 "shasum": ""
             },
             "require": {
@@ -2608,7 +2608,7 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2022-06-08T14:02:09+00:00",
+            "time": "2022-06-26T13:01:30+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2642,7 +2642,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.1"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.2"
             },
             "funding": [
                 {
@@ -2766,17 +2766,17 @@
         },
         {
             "name": "symfony\/dependency-injection",
-            "version": "v6.1.0",
-            "version_normalized": "6.1.0.0",
+            "version": "v6.1.2",
+            "version_normalized": "6.1.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "fc1fcd2b153f585934e80055bb3254913def2a6e"
+                "reference": "5635ff016a814d7984b1c4644ad28e7df546077b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/fc1fcd2b153f585934e80055bb3254913def2a6e",
-                "reference": "fc1fcd2b153f585934e80055bb3254913def2a6e",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/5635ff016a814d7984b1c4644ad28e7df546077b",
+                "reference": "5635ff016a814d7984b1c4644ad28e7df546077b",
                 "shasum": ""
             },
             "require": {
@@ -2808,7 +2808,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2022-05-27T06:40:20+00:00",
+            "time": "2022-06-26T13:01:30+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2842,7 +2842,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v6.1.0"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v6.1.2"
             },
             "funding": [
                 {
@@ -3168,17 +3168,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v6.1.0",
-            "version_normalized": "6.1.0.0",
+            "version": "v6.1.2",
+            "version_normalized": "6.1.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "d3edc75baf9f1d4f94879764dda2e1ac33499529"
+                "reference": "1903f2879875280c5af944625e8246d81c2f0604"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/d3edc75baf9f1d4f94879764dda2e1ac33499529",
-                "reference": "d3edc75baf9f1d4f94879764dda2e1ac33499529",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/1903f2879875280c5af944625e8246d81c2f0604",
+                "reference": "1903f2879875280c5af944625e8246d81c2f0604",
                 "shasum": ""
             },
             "require": {
@@ -3197,7 +3197,7 @@
                 "symfony\/translation-contracts": "^2.0|^3.0",
                 "symfony\/var-exporter": "^5.4|^6.0"
             },
-            "time": "2022-04-22T08:18:23+00:00",
+            "time": "2022-06-26T16:35:04+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -3236,7 +3236,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.0"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.2"
             },
             "funding": [
                 {
