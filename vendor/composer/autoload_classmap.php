@@ -1948,6 +1948,7 @@ return array(
     'Rector\\DowngradePhp80\\Rector\\MethodCall\\DowngradeReflectionPropertyGetDefaultValueRector' => $baseDir . '/rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionPropertyGetDefaultValueRector.php',
     'Rector\\DowngradePhp80\\Rector\\New_\\DowngradeArbitraryExpressionsSupportRector' => $baseDir . '/rules/DowngradePhp80/Rector/New_/DowngradeArbitraryExpressionsSupportRector.php',
     'Rector\\DowngradePhp80\\Rector\\NullsafeMethodCall\\DowngradeNullsafeToTernaryOperatorRector' => $baseDir . '/rules/DowngradePhp80/Rector/NullsafeMethodCall/DowngradeNullsafeToTernaryOperatorRector.php',
+    'Rector\\DowngradePhp80\\Rector\\Property\\DowngradeMixedTypeTypedPropertyRector' => $baseDir . '/rules/DowngradePhp80/Rector/Property/DowngradeMixedTypeTypedPropertyRector.php',
     'Rector\\DowngradePhp80\\Rector\\Property\\DowngradeUnionTypeTypedPropertyRector' => $baseDir . '/rules/DowngradePhp80/Rector/Property/DowngradeUnionTypeTypedPropertyRector.php',
     'Rector\\DowngradePhp80\\Rector\\StaticCall\\DowngradePhpTokenRector' => $baseDir . '/rules/DowngradePhp80/Rector/StaticCall/DowngradePhpTokenRector.php',
     'Rector\\DowngradePhp80\\Reflection\\DefaultParameterValueResolver' => $baseDir . '/rules/DowngradePhp80/Reflection/DefaultParameterValueResolver.php',
