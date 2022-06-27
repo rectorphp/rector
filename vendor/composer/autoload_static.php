@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7054cd214c077d9a6af690023f8bc423
+class ComposerStaticInitd8561ffcb30467add40a975f4f9d2a0e
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2198,7 +2198,6 @@ class ComposerStaticInit7054cd214c077d9a6af690023f8bc423
         'Rector\\DowngradePhp72\\Rector\\FuncCall\\DowngradePregUnmatchedAsNullConstantRector' => __DIR__ . '/../..' . '/rules/DowngradePhp72/Rector/FuncCall/DowngradePregUnmatchedAsNullConstantRector.php',
         'Rector\\DowngradePhp72\\Rector\\FuncCall\\DowngradeStreamIsattyRector' => __DIR__ . '/../..' . '/rules/DowngradePhp72/Rector/FuncCall/DowngradeStreamIsattyRector.php',
         'Rector\\DowngradePhp72\\Rector\\FunctionLike\\DowngradeObjectTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/DowngradePhp72/Rector/FunctionLike/DowngradeObjectTypeDeclarationRector.php',
-        'Rector\\DowngradePhp72\\UnionTypeFactory' => __DIR__ . '/../..' . '/rules/DowngradePhp72/UnionTypeFactory.php',
         'Rector\\DowngradePhp73\\Rector\\ConstFetch\\DowngradePhp73JsonConstRector' => __DIR__ . '/../..' . '/rules/DowngradePhp73/Rector/ConstFetch/DowngradePhp73JsonConstRector.php',
         'Rector\\DowngradePhp73\\Rector\\FuncCall\\DowngradeArrayKeyFirstLastRector' => __DIR__ . '/../..' . '/rules/DowngradePhp73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php',
         'Rector\\DowngradePhp73\\Rector\\FuncCall\\DowngradeIsCountableRector' => __DIR__ . '/../..' . '/rules/DowngradePhp73/Rector/FuncCall/DowngradeIsCountableRector.php',
@@ -2561,6 +2560,7 @@ class ComposerStaticInit7054cd214c077d9a6af690023f8bc423
         'Rector\\NodeTypeResolver\\PHPStan\\TypeHasher' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/TypeHasher.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Type\\StaticTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Type/StaticTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Type/TypeFactory.php',
+        'Rector\\NodeTypeResolver\\PHPStan\\Type\\UnionTypeFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Type/UnionTypeFactory.php',
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\ClassRenamePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDocNodeVisitor/ClassRenamePhpDocNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\NameImportingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDocNodeVisitor/NameImportingPhpDocNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\UnderscoreRenamePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDocNodeVisitor/UnderscoreRenamePhpDocNodeVisitor.php',
@@ -3408,9 +3408,9 @@ class ComposerStaticInit7054cd214c077d9a6af690023f8bc423
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7054cd214c077d9a6af690023f8bc423::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7054cd214c077d9a6af690023f8bc423::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7054cd214c077d9a6af690023f8bc423::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd8561ffcb30467add40a975f4f9d2a0e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd8561ffcb30467add40a975f4f9d2a0e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd8561ffcb30467add40a975f4f9d2a0e::$classMap;
 
         }, null, ClassLoader::class);
     }

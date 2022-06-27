@@ -20,10 +20,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
-use Rector\DowngradePhp72\UnionTypeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\UnionTypeFactory;
 use RectorPrefix202206\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class ClassMethodParameterTypeManipulator
 {
@@ -59,7 +59,7 @@ final class ClassMethodParameterTypeManipulator
     private $simpleCallableNodeTraverser;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp72\UnionTypeFactory
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\UnionTypeFactory
      */
     private $unionTypeFactory;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, NodeTypeResolver $nodeTypeResolver, ParamAnalyzer $paramAnalyzer, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, UnionTypeFactory $unionTypeFactory)

@@ -8,8 +8,8 @@
     },
     "require-dev": {
         "phpstan\/extension-installer": "^1.1",
-        "rector\/phpstan-rules": "^0.5",
-        "phpstan\/phpstan": "^1.0",
+        "rector\/phpstan-rules": "^0.5.5",
+        "phpstan\/phpstan": "^1.7.15",
         "phpunit\/phpunit": "^9.5",
         "symplify\/phpstan-rules": "^11.0",
         "symplify\/phpstan-extensions": "^11.0",

@@ -12,8 +12,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\DowngradePhp72\UnionTypeFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\UnionTypeFactory;
 final class ClassMethodReturnTypeManipulator
 {
     /**
@@ -33,7 +33,7 @@ final class ClassMethodReturnTypeManipulator
     private $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp72\UnionTypeFactory
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\UnionTypeFactory
      */
     private $unionTypeFactory;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, NodeTypeResolver $nodeTypeResolver, UnionTypeFactory $unionTypeFactory)

@@ -2067,12 +2067,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "a2e37f39692d74fff90d355c2c97f15fc214346a"
+                "reference": "f01e64fb51c06c0d8f7fc99f93ebc35484e9a120"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/a2e37f39692d74fff90d355c2c97f15fc214346a",
-                "reference": "a2e37f39692d74fff90d355c2c97f15fc214346a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/f01e64fb51c06c0d8f7fc99f93ebc35484e9a120",
+                "reference": "f01e64fb51c06c0d8f7fc99f93ebc35484e9a120",
                 "shasum": ""
             },
             "require": {
@@ -2087,7 +2087,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.2",
                 "phpstan\/phpstan-webmozart-assert": "^1.1",
                 "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.5.1",
+                "rector\/phpstan-rules": "^0.5.4",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^11.0",
                 "symplify\/monorepo-builder": "^11.0",
@@ -2096,7 +2096,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-06-13T22:53:50+00:00",
+            "time": "2022-06-27T12:27:48+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2212,12 +2212,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpoffice.git",
-                "reference": "fdbecca415d89907e721a3b613eaadde53e9675e"
+                "reference": "df7a34f6f36410a200e3f0d7bb9de3d86a467446"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/fdbecca415d89907e721a3b613eaadde53e9675e",
-                "reference": "fdbecca415d89907e721a3b613eaadde53e9675e",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/df7a34f6f36410a200e3f0d7bb9de3d86a467446",
+                "reference": "df7a34f6f36410a200e3f0d7bb9de3d86a467446",
                 "shasum": ""
             },
             "require": {
@@ -2228,11 +2228,11 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.0",
+                "phpstan\/phpstan": "^1.7.15",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.5",
+                "rector\/phpstan-rules": "^0.5.5",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^11.0",
                 "symplify\/monorepo-builder": "^11.0",
@@ -2241,7 +2241,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-06-13T22:55:44+00:00",
+            "time": "2022-06-27T12:29:19+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
