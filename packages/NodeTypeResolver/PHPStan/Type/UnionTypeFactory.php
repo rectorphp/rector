@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rector\DowngradePhp72;
+namespace Rector\NodeTypeResolver\PHPStan\Type;
 
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
