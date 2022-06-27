@@ -36,6 +36,7 @@ use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
+use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 use Symplify\SmartFileSystem\SmartFileInfo;
 
 /**
@@ -48,7 +49,8 @@ final class ChangedNodeScopeRefresher
         private readonly ScopeAnalyzer $scopeAnalyzer,
         private readonly UnreachableStmtAnalyzer $unreachableStmtAnalyzer,
         private readonly BetterNodeFinder $betterNodeFinder,
-        private readonly CurrentFileProvider $currentFileProvider
+        private readonly CurrentFileProvider $currentFileProvider,
+        private readonly ScopeFactory $scopeFactory
     ) {
     }
 
@@ -57,6 +59,16 @@ final class ChangedNodeScopeRefresher
         // nothing to refresh
         if (! $this->scopeAnalyzer->hasScope($node)) {
             return;
+        }
+
+        if (! $smartFileInfo instanceof SmartFileInfo) {
+            /** @var File $file */
+            $file = $this->currentFileProvider->getFile();
+            $smartFileInfo = $file->getSmartFileInfo();
+        }
+
+        if ($this->scopeAnalyzer->isScopeResolvableFromFile($node, $mutatingScope)) {
+            $mutatingScope = $this->scopeFactory->createFromFile($smartFileInfo);
         }
 
         if (! $mutatingScope instanceof MutatingScope) {
@@ -77,12 +89,6 @@ final class ChangedNodeScopeRefresher
 
                 throw new ShouldNotHappenException($errorMessage);
             }
-        }
-
-        if (! $smartFileInfo instanceof SmartFileInfo) {
-            /** @var File $file */
-            $file = $this->currentFileProvider->getFile();
-            $smartFileInfo = $file->getSmartFileInfo();
         }
 
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes
