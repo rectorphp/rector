@@ -38,7 +38,7 @@ final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
         $routeCollection = $router->getRouteCollection();
         // route name is hidden in the key - https://github.com/symfony/symfony/blob/4dde1619d6c65b662170a6a3cbbdc7092eeb1fa2/src/Symfony/Component/Routing/RouteCollection.php#L99
         foreach ($routeCollection->all() as $routeName => $route) {
-            $symfonyRoutesMetadatas[] = new SymfonyRouteMetadata($routeName, $route->getPath(), $route->getDefaults(), $route->getRequirements(), $route->getHost(), $route->getSchemes(), $route->getMethods(), $route->getCondition());
+            $symfonyRoutesMetadatas[] = new SymfonyRouteMetadata($routeName, $route->getPath(), $route->getDefaults(), $route->getRequirements(), $route->getHost(), $route->getSchemes(), $route->getMethods(), $route->getCondition(), $route->getOptions());
         }
         $this->symfonyRouteMetadatas = $symfonyRoutesMetadatas;
         return $symfonyRoutesMetadatas;

@@ -115,7 +115,7 @@ CODE_SAMPLE
         return $className . '::' . $methodName;
     }
     /**
-     * @return array{path: string, name: string, defaults?: CurlyListNode, host?: string, methods?: CurlyListNode, condition?: string}
+     * @return array{path: string, name: string, defaults?: CurlyListNode, host?: string, methods?: CurlyListNode, condition?: string, options?: CurlyListNode}
      */
     private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata) : array
     {
@@ -138,6 +138,10 @@ CODE_SAMPLE
         }
         if ($symfonyRouteMetadata->getRequirements() !== []) {
             $items['requirements'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getRequirements());
+        }
+        $optionsWithoutDefaultCompilerClass = $symfonyRouteMetadata->getOptionsWithoutDefaultCompilerClass();
+        if ($optionsWithoutDefaultCompilerClass !== []) {
+            $items['options'] = $this->valueQuoteWrapper->wrap($optionsWithoutDefaultCompilerClass);
         }
         return $items;
     }

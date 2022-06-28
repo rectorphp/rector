@@ -52,12 +52,18 @@ class SymfonyRouteMetadata
      */
     private $condition;
     /**
+     * @var array<string, mixed>
+     * @readonly
+     */
+    private $options;
+    /**
      * @param array<string, mixed> $defaults
      * @param array<string, mixed> $requirements
      * @param string[] $schemes
      * @param string[] $methods
+     * @param array<string, mixed> $options
      */
-    public function __construct(string $name, string $path, array $defaults, array $requirements, string $host, array $schemes, array $methods, string $condition)
+    public function __construct(string $name, string $path, array $defaults, array $requirements, string $host, array $schemes, array $methods, string $condition, array $options)
     {
         $this->name = $name;
         $this->path = $path;
@@ -67,6 +73,7 @@ class SymfonyRouteMetadata
         $this->schemes = $schemes;
         $this->methods = $methods;
         $this->condition = $condition;
+        $this->options = $options;
         $this->controllerReference = $defaults['_controller'] ?? null;
     }
     public function getName() : string
@@ -128,6 +135,25 @@ class SymfonyRouteMetadata
     public function getCondition() : string
     {
         return $this->condition;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptions() : array
+    {
+        return $this->options;
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptionsWithoutDefaultCompilerClass() : array
+    {
+        $options = $this->options;
+        $compilerClass = $options['compiler_class'] ?? null;
+        if ($compilerClass === 'Symfony\\Component\\Routing\\RouteCompiler') {
+            unset($options['compiler_class']);
+        }
+        return $options;
     }
     /**
      * Format <class>::<method>
