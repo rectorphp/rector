@@ -10,6 +10,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
 use Rector\Symfony\Enum\SymfonyAnnotation;
+use Rector\Symfony\NodeFactory\Annotations\ValueQuoteWrapper;
 use Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory;
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,10 +30,16 @@ final class AddRouteAnnotationRector extends AbstractRector
      * @var \Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory
      */
     private $symfonyRouteTagValueNodeFactory;
-    public function __construct(SymfonyRoutesProviderInterface $symfonyRoutesProvider, SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory)
+    /**
+     * @readonly
+     * @var \Rector\Symfony\NodeFactory\Annotations\ValueQuoteWrapper
+     */
+    private $valueQuoteWrapper;
+    public function __construct(SymfonyRoutesProviderInterface $symfonyRoutesProvider, SymfonyRouteTagValueNodeFactory $symfonyRouteTagValueNodeFactory, ValueQuoteWrapper $valueQuoteWrapper)
     {
         $this->symfonyRoutesProvider = $symfonyRoutesProvider;
         $this->symfonyRouteTagValueNodeFactory = $symfonyRouteTagValueNodeFactory;
+        $this->valueQuoteWrapper = $valueQuoteWrapper;
     }
     public function getNodeTypes() : array
     {
@@ -108,53 +115,29 @@ CODE_SAMPLE
         return $className . '::' . $methodName;
     }
     /**
-     * @param array<string, mixed> $defaults
-     */
-    private function createDefaults(array $defaults) : CurlyListNode
-    {
-        return new CurlyListNode(\array_map(static function ($default) {
-            switch (\true) {
-                case \is_string($default):
-                    return \sprintf('"%s"', $default);
-                default:
-                    return $default;
-            }
-        }, $defaults));
-    }
-    /**
-     * @param string[] $items
-     */
-    private function createCurlyListNodeFromItems(array $items) : CurlyListNode
-    {
-        $quotedItems = \array_map(static function (string $item) : string {
-            return \sprintf('"%s"', $item);
-        }, $items);
-        return new CurlyListNode($quotedItems);
-    }
-    /**
      * @return array{path: string, name: string, defaults?: CurlyListNode, host?: string, methods?: CurlyListNode, condition?: string}
      */
     private function createRouteItems(SymfonyRouteMetadata $symfonyRouteMetadata) : array
     {
-        $items = ['path' => \sprintf('"%s"', $symfonyRouteMetadata->getPath()), 'name' => \sprintf('"%s"', $symfonyRouteMetadata->getName())];
+        $items = ['path' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getPath()), 'name' => $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getName())];
         $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
         if ($defaultsWithoutController !== []) {
-            $items['defaults'] = $this->createDefaults($defaultsWithoutController);
+            $items['defaults'] = $this->valueQuoteWrapper->wrap($defaultsWithoutController);
         }
         if ($symfonyRouteMetadata->getHost() !== '') {
-            $items['host'] = \sprintf('"%s"', $symfonyRouteMetadata->getHost());
+            $items['host'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getHost());
         }
         if ($symfonyRouteMetadata->getSchemes() !== []) {
-            $items['schemes'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getSchemes());
+            $items['schemes'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getSchemes());
         }
         if ($symfonyRouteMetadata->getMethods() !== []) {
-            $items['methods'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getMethods());
+            $items['methods'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getMethods());
         }
         if ($symfonyRouteMetadata->getCondition() !== '') {
-            $items['condition'] = \sprintf('"%s"', $symfonyRouteMetadata->getCondition());
+            $items['condition'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getCondition());
         }
         if ($symfonyRouteMetadata->getRequirements() !== []) {
-            $items['requirements'] = $this->createCurlyListNodeFromItems($symfonyRouteMetadata->getRequirements());
+            $items['requirements'] = $this->valueQuoteWrapper->wrap($symfonyRouteMetadata->getRequirements());
         }
         return $items;
     }

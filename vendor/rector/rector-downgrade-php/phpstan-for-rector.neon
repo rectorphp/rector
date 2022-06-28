@@ -1,0 +1,12 @@
+# this config has extensions, that helps PHPStan inside Rector to resolve more precise types
+parameters:
+    inferPrivatePropertyTypeFromConstructor: true
+
+    # see https://github.com/rectorphp/rector/issues/3490#issue-634342324
+    featureToggles:
+        disableRuntimeReflectionProvider: true
+
+# load extension
+includes:
+    - vendor/phpstan/phpstan-webmozart-assert/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
