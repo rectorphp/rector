@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
+use Rector\CodeQuality\NodeTypeGroup;
 use Rector\CodingStyle\Contract\ClassNameImport\ClassNameImportSkipVoterInterface;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
@@ -11,18 +12,25 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Contract\Template\TemplateResolverInterface;
+use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
+use Rector\Core\NodeDecorator\NamespacedNameDecorator;
 use Rector\Core\NodeManipulator\MethodCallManipulator;
+use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Defluent\NodeAnalyzer\SameClassMethodCallAnalyzer;
 use Rector\DependencyInjection\NodeManipulator\PropertyConstructorInjectionManipulator;
 use Rector\FileSystemRector\Parser\FileInfoParser;
 use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
+use Rector\NodeCollector\BinaryOpTreeRootLocator;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory;
+use Rector\NodeTypeResolver\TypeAnalyzer\MethodTypeAnalyzer;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
+use Rector\Php81\NodeFactory\ClassFromEnumFactory;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+use Rector\PhpAttribute\NodeFactory\DoctrineAnnotationFactory;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
@@ -77,8 +85,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         TypeWithClassTypeSpecifierInterface::class,
         ParentNodeReadAnalyzerInterface::class,
         StmtsAwareInterface::class,
-        \Rector\CodeQuality\NodeTypeGroup::class,
+        NodeTypeGroup::class,
         // deprecated, keep it for now
         TemplateResolverInterface::class,
+
+        MethodTypeAnalyzer::class,
+        DoctrineAnnotationFactory::class,
+        ClassFromEnumFactory::class,
+        CoalesceAnalyzer::class,
+        NamespacedNameDecorator::class,
+        NamedVariableFactory::class,
+        BinaryOpTreeRootLocator::class,
     ]);
 };
