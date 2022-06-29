@@ -386,6 +386,7 @@ parameters:
                 - src/*/*Processor.php
                 - rules/Composer/Application/FileProcessor/ComposerFileProcessor.php
                 - src/Contract/Processor/FileProcessorInterface.php
+                - packages/Parallel/Application/ParallelFileProcessor.php
 
         # skipped on purpose, as ctor overrie
         - '#Rector\\StaticTypeMapper\\ValueObject\\Type\\SimpleStaticType\:\:__construct\(\) does not call parent constructor from PHPStan\\Type\\StaticType#'
