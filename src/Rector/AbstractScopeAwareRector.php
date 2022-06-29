@@ -17,6 +17,11 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
     public function refactor(Node $node)
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
+        if ($this->scopeAnalyzer->isScopeResolvableFromFile($node, $scope)) {
+            $smartFileInfo = $this->file->getSmartFileInfo();
+            $scope = $this->scopeFactory->createFromFile($smartFileInfo);
+            $this->changedNodeScopeRefresher->refresh($node, $scope, $smartFileInfo);
+        }
         if (!$scope instanceof Scope) {
             $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
             $errorMessage = \sprintf('Scope not available on "%s" node with parent node of "%s", but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first', \get_class($node), $parent instanceof Node ? \get_class($parent) : null, static::class);
