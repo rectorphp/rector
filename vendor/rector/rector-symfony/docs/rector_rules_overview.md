@@ -68,13 +68,13 @@ Collect routes from Symfony project router and add Route annotation to controlle
 
 ## AuthorizationCheckerIsGrantedExtractorRector
 
-Extract `$this->authorizationChecker->isGranted([$a,` $b]) to `$this->authorizationChecker->isGranted($a)` || `$this->authorizationChecker->isGranted($b)`
+Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)`
 
 - class: [`Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector`](../src/Rector/MethodCall/AuthorizationCheckerIsGrantedExtractorRector.php)
 
 ```diff
 -if ($this->authorizationChecker->isGranted(['ROLE_USER', 'ROLE_ADMIN'])) {
-+if ($this->authorizationChecker->isGranted('ROLE_USER') || $this->authorizationChecker->isGranted('ROLE_USER')) {
++if ($this->authorizationChecker->isGranted('ROLE_USER') || $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
  }
 ```
 

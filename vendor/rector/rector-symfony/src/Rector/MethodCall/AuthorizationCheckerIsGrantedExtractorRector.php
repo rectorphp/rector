@@ -31,12 +31,12 @@ final class AuthorizationCheckerIsGrantedExtractorRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Extract $this->authorizationChecker->isGranted([$a, $b]) to $this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)`', [new CodeSample(<<<'CODE_SAMPLE'
 if ($this->authorizationChecker->isGranted(['ROLE_USER', 'ROLE_ADMIN'])) {
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-if ($this->authorizationChecker->isGranted('ROLE_USER') || $this->authorizationChecker->isGranted('ROLE_USER')) {
+if ($this->authorizationChecker->isGranted('ROLE_USER') || $this->authorizationChecker->isGranted('ROLE_ADMIN')) {
 }
 CODE_SAMPLE
 )]);
