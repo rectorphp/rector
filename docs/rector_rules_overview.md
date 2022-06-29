@@ -1,4 +1,4 @@
-# 410 Rules Overview
+# 411 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (72)
+- [CodeQuality](#codequality) (73)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -1589,6 +1589,27 @@ Switch negated ternary condition rector
 
 <br>
 
+### TernaryFalseExpressionToIfRector
+
+Change ternary with false to if and explicit call
+
+- class: [`Rector\CodeQuality\Rector\Expression\TernaryFalseExpressionToIfRector`](../rules/CodeQuality/Rector/Expression/TernaryFalseExpressionToIfRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run($value, $someMethod)
+     {
+-        $value ? $someMethod->call($value) : false;
++        if ($value) {
++            $someMethod->call($value);
++        }
+     }
+ }
+```
+
+<br>
+
 ### ThrowWithPreviousExceptionRector
 
 When throwing into a catch block, checks that the previous exception is passed to the new throw clause
@@ -1954,7 +1975,7 @@ return static function (RectorConfig $rectorConfig): void {
 -    /**
 -     * @var DateTime[]
 -     */
-+    /** @var DateTime[]|null */
++    /** @var DateTime[] */
      private ?array $dateTimes;
  }
 ```

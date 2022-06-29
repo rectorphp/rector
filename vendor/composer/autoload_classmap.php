@@ -1353,6 +1353,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\Do_\\DoWhileBreakFalseToIfElseRector' => $baseDir . '/rules/CodeQuality/Rector/Do_/DoWhileBreakFalseToIfElseRector.php',
     'Rector\\CodeQuality\\Rector\\Equal\\UseIdenticalOverEqualWithSameTypeRector' => $baseDir . '/rules/CodeQuality/Rector/Equal/UseIdenticalOverEqualWithSameTypeRector.php',
     'Rector\\CodeQuality\\Rector\\Expression\\InlineIfToExplicitIfRector' => $baseDir . '/rules/CodeQuality/Rector/Expression/InlineIfToExplicitIfRector.php',
+    'Rector\\CodeQuality\\Rector\\Expression\\TernaryFalseExpressionToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Expression/TernaryFalseExpressionToIfRector.php',
     'Rector\\CodeQuality\\Rector\\For_\\ForRepeatedCountToOwnVariableRector' => $baseDir . '/rules/CodeQuality/Rector/For_/ForRepeatedCountToOwnVariableRector.php',
     'Rector\\CodeQuality\\Rector\\For_\\ForToForeachRector' => $baseDir . '/rules/CodeQuality/Rector/For_/ForToForeachRector.php',
     'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachItemsAssignToEmptyArrayToAssignRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/ForeachItemsAssignToEmptyArrayToAssignRector.php',
