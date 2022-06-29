@@ -17,6 +17,7 @@ use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
 use Rector\CodeQuality\Rector\Do_\DoWhileBreakFalseToIfElseRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\CodeQuality\Rector\Expression\InlineIfToExplicitIfRector;
+use Rector\CodeQuality\Rector\Expression\TernaryFalseExpressionToIfRector;
 use Rector\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector;
 use Rector\CodeQuality\Rector\For_\ForToForeachRector;
 use Rector\CodeQuality\Rector\Foreach_\ForeachItemsAssignToEmptyArrayToAssignRector;
@@ -182,5 +183,6 @@ return static function (RectorConfig $rectorConfig): void {
         DoWhileBreakFalseToIfElseRector::class,
         InlineArrayReturnAssignRector::class,
         InlineIsAInstanceOfRector::class,
+        TernaryFalseExpressionToIfRector::class,
     ]);
 };

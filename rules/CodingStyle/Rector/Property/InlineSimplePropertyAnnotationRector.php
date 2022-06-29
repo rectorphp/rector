@@ -58,7 +58,7 @@ final class SomeClass
     /** @phpstan-var string */
     private const TEXT = 'text';
 
-    /** @var DateTime[]|null */
+    /** @var DateTime[] */
     private ?array $dateTimes;
 }
 CODE_SAMPLE
