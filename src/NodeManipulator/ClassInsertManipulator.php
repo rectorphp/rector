@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 
 final class ClassInsertManipulator
@@ -32,9 +31,6 @@ final class ClassInsertManipulator
 
     public function addAsFirstMethod(Class_ $class, Property | ClassConst | ClassMethod $stmt): void
     {
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        $stmt->setAttribute(AttributeKey::SCOPE, $scope);
-
         if ($this->isSuccessToInsertBeforeFirstMethod($class, $stmt)) {
             return;
         }

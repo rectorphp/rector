@@ -144,7 +144,6 @@ CODE_SAMPLE
         if (($node instanceof Identical || $node instanceof NotIdentical) && $node->right instanceof LNumber && $node->right->value === 0) {
             $this->removeNode($funcCall);
             $node->right = new Array_([]);
-            $node->right->setAttribute(AttributeKey::SCOPE, $node->getAttribute(AttributeKey::SCOPE));
 
             return $expr;
         }
@@ -152,7 +151,6 @@ CODE_SAMPLE
         if (($node instanceof Identical || $node instanceof NotIdentical) && $node->left instanceof LNumber && $node->left->value === 0) {
             $this->removeNode($funcCall);
             $node->left = new Array_([]);
-            $node->left->setAttribute(AttributeKey::SCOPE, $node->getAttribute(AttributeKey::SCOPE));
 
             return $expr;
         }
