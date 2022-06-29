@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4ee80129413cf282a1aea076a9d00719
+class ComposerStaticInitb47055983a31f5f0b99f7fdce24e8393
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2266,6 +2266,7 @@ class ComposerStaticInit4ee80129413cf282a1aea076a9d00719
         'Rector\\DowngradePhp81\\Rector\\Array_\\DowngradeArraySpreadStringKeyRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php',
         'Rector\\DowngradePhp81\\Rector\\ClassConst\\DowngradeFinalizePublicClassConstantRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php',
         'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeArrayIsListRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/DowngradePhp81/Rector/FuncCall/DowngradeArrayIsListRector.php',
+        'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeEnumExistsRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/DowngradePhp81/Rector/FuncCall/DowngradeEnumExistsRector.php',
         'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeFirstClassCallableSyntaxRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php',
         'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNeverTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/DowngradePhp81/Rector/FunctionLike/DowngradeNeverTypeDeclarationRector.php',
         'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNewInInitializerRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/DowngradePhp81/Rector/FunctionLike/DowngradeNewInInitializerRector.php',
@@ -3415,9 +3416,9 @@ class ComposerStaticInit4ee80129413cf282a1aea076a9d00719
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4ee80129413cf282a1aea076a9d00719::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4ee80129413cf282a1aea076a9d00719::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4ee80129413cf282a1aea076a9d00719::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb47055983a31f5f0b99f7fdce24e8393::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb47055983a31f5f0b99f7fdce24e8393::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb47055983a31f5f0b99f7fdce24e8393::$classMap;
 
         }, null, ClassLoader::class);
     }

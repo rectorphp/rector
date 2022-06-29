@@ -8,6 +8,7 @@ use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector;
 use Rector\DowngradePhp81\Rector\ClassConst\DowngradeFinalizePublicClassConstantRector;
 use Rector\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector;
+use Rector\DowngradePhp81\Rector\FuncCall\DowngradeEnumExistsRector;
 use Rector\DowngradePhp81\Rector\FuncCall\DowngradeFirstClassCallableSyntaxRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNeverTypeDeclarationRector;
 use Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector;
@@ -25,4 +26,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(DowngradeReadonlyPropertyRector::class);
     $rectorConfig->rule(DowngradeArraySpreadStringKeyRector::class);
     $rectorConfig->rule(DowngradeArrayIsListRector::class);
+    $rectorConfig->rule(DowngradeEnumExistsRector::class);
 };
