@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitddf510289ef549bb5ae140bb78df7cba
+class ComposerStaticInitfca18ff1edd9fce0f35bc4b9397ad687
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -28,6 +28,7 @@ class ComposerStaticInitddf510289ef549bb5ae140bb78df7cba
         ),
         'R' => 
         array (
+            'Rector\\Utils\\' => 13,
             'Rector\\Symfony\\' => 15,
             'Rector\\Set\\' => 11,
             'Rector\\RectorInstaller\\' => 23,
@@ -38,7 +39,6 @@ class ComposerStaticInitddf510289ef549bb5ae140bb78df7cba
             'Rector\\Laravel\\' => 15,
             'Rector\\Doctrine\\' => 16,
             'Rector\\Core\\' => 12,
-            'Rector\\Compiler\\' => 16,
             'Rector\\CakePHP\\' => 15,
             'Rector\\' => 7,
             'RectorPrefix202206\\Webmozart\\Assert\\' => 36,
@@ -99,6 +99,10 @@ class ComposerStaticInitddf510289ef549bb5ae140bb78df7cba
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
         ),
+        'Rector\\Utils\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/utils',
+        ),
         'Rector\\Symfony\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/rector-symfony/src',
@@ -139,10 +143,6 @@ class ComposerStaticInitddf510289ef549bb5ae140bb78df7cba
         'Rector\\Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
-        ),
-        'Rector\\Compiler\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/utils/compiler/src',
         ),
         'Rector\\CakePHP\\' => 
         array (
@@ -3417,9 +3417,9 @@ class ComposerStaticInitddf510289ef549bb5ae140bb78df7cba
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitddf510289ef549bb5ae140bb78df7cba::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitddf510289ef549bb5ae140bb78df7cba::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitddf510289ef549bb5ae140bb78df7cba::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfca18ff1edd9fce0f35bc4b9397ad687::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfca18ff1edd9fce0f35bc4b9397ad687::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfca18ff1edd9fce0f35bc4b9397ad687::$classMap;
 
         }, null, ClassLoader::class);
     }
