@@ -23,6 +23,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Analyser\MutatingScope;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
@@ -141,6 +142,9 @@ final class ChangedNodeScopeRefresher
         }
         if ($node instanceof TryCatch) {
             $node->catches = \array_values($node->catches);
+        }
+        if ($node instanceof Switch_) {
+            $node->cases = \array_values($node->cases);
         }
     }
     /**
