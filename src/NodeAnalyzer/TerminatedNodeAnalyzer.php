@@ -78,9 +78,12 @@ final class TerminatedNodeAnalyzer
             return \false;
         }
         $hasDefault = \false;
-        foreach ($switch->cases as $case) {
+        foreach ($switch->cases as $key => $case) {
             if (!$case->cond instanceof Expr) {
                 $hasDefault = \true;
+            }
+            if ($case->stmts === [] && isset($switch->cases[$key + 1])) {
+                continue;
             }
             if (!$this->isTerminatedInLastStmts($case->stmts, $node)) {
                 return \false;
