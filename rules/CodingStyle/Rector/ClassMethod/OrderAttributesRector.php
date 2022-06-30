@@ -23,6 +23,7 @@ use RectorPrefix202206\Webmozart\Assert\Assert;
 final class OrderAttributesRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @api
      * @var string
      */
     public const ALPHABETICALLY = 'alphabetically';

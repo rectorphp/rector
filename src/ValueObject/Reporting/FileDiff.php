@@ -6,6 +6,7 @@ namespace Rector\Core\ValueObject\Reporting;
 use RectorPrefix202206\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Parallel\ValueObject\Name;
 use RectorPrefix202206\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix202206\Webmozart\Assert\Assert;
 final class FileDiff implements SerializableInterface
@@ -19,22 +20,6 @@ final class FileDiff implements SerializableInterface
      * @var string
      */
     private const FIRST_LINE_KEY = 'first_line';
-    /**
-     * @var string
-     */
-    private const KEY_RELATIVE_FILE_PATH = 'relative_file_path';
-    /**
-     * @var string
-     */
-    private const KEY_DIFF = 'diff';
-    /**
-     * @var string
-     */
-    private const KEY_DIFF_CONSOLE_FORMATTED = 'diff_console_formatted';
-    /**
-     * @var string
-     */
-    private const KEY_RECTORS_WITH_LINE_CHANGES = 'rectors_with_line_changes';
     /**
      * @readonly
      * @var string
@@ -110,7 +95,7 @@ final class FileDiff implements SerializableInterface
      */
     public function jsonSerialize() : array
     {
-        return [self::KEY_RELATIVE_FILE_PATH => $this->relativeFilePath, self::KEY_DIFF => $this->diff, self::KEY_DIFF_CONSOLE_FORMATTED => $this->diffConsoleFormatted, self::KEY_RECTORS_WITH_LINE_CHANGES => $this->rectorsWithLineChanges];
+        return [Name::RELATIVE_FILE_PATH => $this->relativeFilePath, Name::DIFF => $this->diff, Name::DIFF_CONSOLE_FORMATTED => $this->diffConsoleFormatted, Name::RECTORS_WITH_LINE_CHANGES => $this->rectorsWithLineChanges];
     }
     /**
      * @param array<string, mixed> $json
@@ -118,10 +103,10 @@ final class FileDiff implements SerializableInterface
     public static function decode(array $json) : SerializableInterface
     {
         $rectorWithLineChanges = [];
-        foreach ($json[self::KEY_RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {
+        foreach ($json[Name::RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {
             $rectorWithLineChanges[] = RectorWithLineChange::decode($rectorWithLineChangesJson);
         }
-        return new self($json[self::KEY_RELATIVE_FILE_PATH], $json[self::KEY_DIFF], $json[self::KEY_DIFF_CONSOLE_FORMATTED], $rectorWithLineChanges);
+        return new self($json[Name::RELATIVE_FILE_PATH], $json[Name::DIFF], $json[Name::DIFF_CONSOLE_FORMATTED], $rectorWithLineChanges);
     }
     /**
      * @template TType as object

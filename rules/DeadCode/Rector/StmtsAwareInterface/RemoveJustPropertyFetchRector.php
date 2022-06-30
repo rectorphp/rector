@@ -117,9 +117,12 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $followingStmts
      */
-    public function isFollowingStatementStaticClosure(array $followingStmts) : bool
+    private function isFollowingStatementStaticClosure(array $followingStmts) : bool
     {
-        return \count($followingStmts) > 0 && $followingStmts[0] instanceof Expression && $followingStmts[0]->expr instanceof Closure && $followingStmts[0]->expr->static;
+        if ($followingStmts === []) {
+            return \false;
+        }
+        return $followingStmts[0] instanceof Expression && $followingStmts[0]->expr instanceof Closure && $followingStmts[0]->expr->static;
     }
     /**
      * @param Variable[] $variableUsages

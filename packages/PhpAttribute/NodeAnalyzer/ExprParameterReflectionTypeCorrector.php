@@ -55,8 +55,8 @@ final class ExprParameterReflectionTypeCorrector
         if (!$attributeClassReflection->hasConstructor()) {
             return $items;
         }
-        $constructorClassMethodReflection = $attributeClassReflection->getConstructor();
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($constructorClassMethodReflection->getVariants());
+        $extendedMethodReflection = $attributeClassReflection->getConstructor();
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
         foreach ($items as $name => $item) {
             foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
                 $correctedItem = $this->correctItemByParameterReflection($name, $item, $parameterReflection);

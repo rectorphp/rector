@@ -40,6 +40,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
+     * @api
      * @var string
      */
     public const INLINE_PUBLIC = 'inline_public';

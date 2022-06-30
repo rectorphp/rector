@@ -37,6 +37,7 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\Intermedia
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\PSR4\Composer\PSR4NamespaceMatcher;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
+use Rector\Utils\Command\MissingInSetCommand;
 use RectorPrefix202206\Symfony\Component\Console\Application;
 use function RectorPrefix202206\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix202206\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
@@ -138,4 +139,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(ScopeFactory::class)->factory([service(PHPStanServicesFactory::class), 'createScopeFactory']);
     $services->set(TypeNodeResolver::class)->factory([service(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
     $services->set(DynamicSourceLocatorProvider::class)->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
+    $services->set(MissingInSetCommand::class);
 };

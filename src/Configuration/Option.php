@@ -141,18 +141,9 @@ final class Option
      */
     public const TEMPLATE_TYPE = 'template-type';
     /**
-     * @deprecated
-     * @var string
-     */
-    public const ENABLE_EDITORCONFIG = 'enable_editorconfig';
-    /**
      * @var string
      */
     public const AUTOLOAD_FILE_SHORT = 'a';
-    /**
-     * @var string
-     */
-    public const OUTPUT_FORMAT_SHORT = 'o';
     /**
      * @var string
      */
@@ -180,11 +171,6 @@ final class Option
      * @var string
      */
     public const PARALLEL_TIMEOUT_IN_SECONDS = 'parallel-timeout-in-seconds';
-    /**
-     * @deprecated Rector should not run on external unknown sources, as PHPStan needs to know about paths to reflect on those. Instead, provide the path directly.
-     * @var string
-     */
-    public const FOLLOW_SYMLINKS = 'follow-symlinks';
     /**
      * @var string
      */
