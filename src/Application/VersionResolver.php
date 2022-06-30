@@ -14,9 +14,15 @@ use Rector\Core\Exception\VersionException;
 final class VersionResolver
 {
     /**
+     * @api
      * @var string
      */
-    public const PACKAGE_VERSION = 'ed92724c846790f1bab66cd81b3e20a6561694ed';
+    public const PACKAGE_VERSION = '29935703b1f53a5588adece78f23c53b5b07fec4';
+    /**
+     * @api
+     * @var string
+     */
+    public const RELEASE_DATE = '2022-06-30 16:04:29';
     /**
      * @var int
      */
