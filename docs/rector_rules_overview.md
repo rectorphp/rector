@@ -1,4 +1,4 @@
-# 411 Rules Overview
+# 410 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (73)
+- [CodeQuality](#codequality) (72)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -575,27 +575,6 @@ Change multiple null compares to ?? queue
 -
 -        return null;
 +        return $this->orderItem ?? $this->orderItemUnit;
-     }
- }
-```
-
-<br>
-
-### DateTimeToDateTimeInterfaceRector
-
-Changes DateTime type-hint to DateTimeInterface
-
-- class: [`Rector\CodeQuality\Rector\ClassMethod\DateTimeToDateTimeInterfaceRector`](../rules/CodeQuality/Rector/ClassMethod/DateTimeToDateTimeInterfaceRector.php)
-
-```diff
- class SomeClass {
--    public function methodWithDateTime(\DateTime $dateTime)
-+    /**
-+     * @param \DateTime|\DateTimeImmutable $dateTime
-+     */
-+    public function methodWithDateTime(\DateTimeInterface $dateTime)
-     {
-         return true;
      }
  }
 ```
