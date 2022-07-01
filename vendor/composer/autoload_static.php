@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita7e5cd079bd25c28bf270ce0da68be44
+class ComposerStaticInit82f72a9cc0a0e7a903cbec60470ab38d
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1639,8 +1639,6 @@ class ComposerStaticInita7e5cd079bd25c28bf270ce0da68be44
         'Rector\\CodeQuality\\NodeFactory\\ForeachFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/ForeachFactory.php',
         'Rector\\CodeQuality\\NodeFactory\\MissingPropertiesFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/MissingPropertiesFactory.php',
         'Rector\\CodeQuality\\NodeFactory\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/PropertyTypeDecorator.php',
-        'Rector\\CodeQuality\\NodeManipulator\\ClassMethodParameterTypeManipulator' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/ClassMethodParameterTypeManipulator.php',
-        'Rector\\CodeQuality\\NodeManipulator\\ClassMethodReturnTypeManipulator' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/ClassMethodReturnTypeManipulator.php',
         'Rector\\CodeQuality\\NodeManipulator\\ExprBoolCaster' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/ExprBoolCaster.php',
         'Rector\\CodeQuality\\NodeTypeGroup' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeTypeGroup.php',
         'Rector\\CodeQuality\\Rector\\Array_\\CallableThisArrayToAnonymousFunctionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Array_/CallableThisArrayToAnonymousFunctionRector.php',
@@ -1650,7 +1648,6 @@ class ComposerStaticInita7e5cd079bd25c28bf270ce0da68be44
         'Rector\\CodeQuality\\Rector\\BooleanNot\\ReplaceMultipleBooleanNotRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanNot/ReplaceMultipleBooleanNotRector.php',
         'Rector\\CodeQuality\\Rector\\BooleanNot\\SimplifyDeMorganBinaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/BooleanNot/SimplifyDeMorganBinaryRector.php',
         'Rector\\CodeQuality\\Rector\\Catch_\\ThrowWithPreviousExceptionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Catch_/ThrowWithPreviousExceptionRector.php',
-        'Rector\\CodeQuality\\Rector\\ClassMethod\\DateTimeToDateTimeInterfaceRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/DateTimeToDateTimeInterfaceRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/InlineArrayReturnAssignRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\NarrowUnionTypeDocRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/NarrowUnionTypeDocRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
@@ -2568,7 +2565,6 @@ class ComposerStaticInita7e5cd079bd25c28bf270ce0da68be44
         'Rector\\NodeTypeResolver\\PHPStan\\TypeHasher' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/TypeHasher.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Type\\StaticTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Type/StaticTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Type\\TypeFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Type/TypeFactory.php',
-        'Rector\\NodeTypeResolver\\PHPStan\\Type\\UnionTypeFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Type/UnionTypeFactory.php',
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\ClassRenamePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDocNodeVisitor/ClassRenamePhpDocNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\NameImportingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDocNodeVisitor/NameImportingPhpDocNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\UnderscoreRenamePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDocNodeVisitor/UnderscoreRenamePhpDocNodeVisitor.php',
@@ -3417,9 +3413,9 @@ class ComposerStaticInita7e5cd079bd25c28bf270ce0da68be44
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita7e5cd079bd25c28bf270ce0da68be44::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita7e5cd079bd25c28bf270ce0da68be44::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita7e5cd079bd25c28bf270ce0da68be44::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit82f72a9cc0a0e7a903cbec60470ab38d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit82f72a9cc0a0e7a903cbec60470ab38d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit82f72a9cc0a0e7a903cbec60470ab38d::$classMap;
 
         }, null, ClassLoader::class);
     }
