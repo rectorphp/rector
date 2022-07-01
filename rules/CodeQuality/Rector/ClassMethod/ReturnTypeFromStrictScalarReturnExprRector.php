@@ -79,6 +79,9 @@ CODE_SAMPLE
             return null;
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($scalarReturnType, TypeKind::RETURN);
+        if (!$returnTypeNode instanceof Node) {
+            return null;
+        }
         $node->returnType = $returnTypeNode;
         return $node;
     }

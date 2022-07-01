@@ -48,13 +48,8 @@ final class AlwaysStrictScalarExprAnalyzer
             }
             return null;
         }
-        if ($expr instanceof FuncCall && $expr->name instanceof Name) {
-            $functionReflection = $this->reflectionProvider->getFunction($expr->name, null);
-            if (!$functionReflection instanceof NativeFunctionReflection) {
-                return null;
-            }
-            $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionReflection->getVariants());
-            return $parametersAcceptor->getReturnType();
+        if ($expr instanceof FuncCall) {
+            return $this->resolveFuncCallType($expr);
         }
         return null;
     }
@@ -79,5 +74,20 @@ final class AlwaysStrictScalarExprAnalyzer
             return new StringType();
         }
         return null;
+    }
+    private function resolveFuncCallType(FuncCall $funcCall) : ?Type
+    {
+        if (!$funcCall->name instanceof Name) {
+            return null;
+        }
+        if (!$this->reflectionProvider->hasFunction($funcCall->name, null)) {
+            return null;
+        }
+        $functionReflection = $this->reflectionProvider->getFunction($funcCall->name, null);
+        if (!$functionReflection instanceof NativeFunctionReflection) {
+            return null;
+        }
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionReflection->getVariants());
+        return $parametersAcceptor->getReturnType();
     }
 }
