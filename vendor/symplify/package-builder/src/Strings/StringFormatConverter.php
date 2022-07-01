@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202206\Symplify\PackageBuilder\Strings;
+namespace RectorPrefix202207\Symplify\PackageBuilder\Strings;
 
-use RectorPrefix202206\Nette\Utils\Strings;
+use RectorPrefix202207\Nette\Utils\Strings;
 /**
  * @api
  * @see \Symplify\PackageBuilder\Tests\Strings\StringFormatConverterTest

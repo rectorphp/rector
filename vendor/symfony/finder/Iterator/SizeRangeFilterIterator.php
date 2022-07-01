@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202206\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix202207\Symfony\Component\Finder\Iterator;
 
-use RectorPrefix202206\Symfony\Component\Finder\Comparator\NumberComparator;
+use RectorPrefix202207\Symfony\Component\Finder\Comparator\NumberComparator;
 /**
  * SizeRangeFilterIterator filters out files that are not in the given size range.
  *

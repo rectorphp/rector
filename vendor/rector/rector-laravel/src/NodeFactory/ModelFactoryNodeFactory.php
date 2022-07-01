@@ -20,9 +20,9 @@ use PhpParser\NodeVisitor\NameResolver;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix202207\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 final class ModelFactoryNodeFactory
 {
     /**

@@ -58,9 +58,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
-use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\NodeFactoryTest
  */

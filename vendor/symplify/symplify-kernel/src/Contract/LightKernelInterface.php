@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202206\Symplify\SymplifyKernel\Contract;
+namespace RectorPrefix202207\Symplify\SymplifyKernel\Contract;
 
-use RectorPrefix202206\Psr\Container\ContainerInterface;
+use RectorPrefix202207\Psr\Container\ContainerInterface;
 /**
  * @api
  */

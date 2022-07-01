@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202206\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202207\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Reference;
 /**
  * Overwrites a service but keeps the overridden one.
  *

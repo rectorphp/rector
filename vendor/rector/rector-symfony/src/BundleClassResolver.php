@@ -11,7 +11,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
 final class BundleClassResolver
 {
     /**

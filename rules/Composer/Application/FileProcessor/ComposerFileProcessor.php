@@ -12,9 +12,9 @@ use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix202206\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
-use RectorPrefix202206\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
-use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202207\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
+use RectorPrefix202207\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
+use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
 final class ComposerFileProcessor implements FileProcessorInterface
 {
     /**

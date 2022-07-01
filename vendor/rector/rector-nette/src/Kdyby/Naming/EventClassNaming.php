@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Nette\Kdyby\Naming;
 
-use RectorPrefix202206\Nette\Utils\Strings;
+use RectorPrefix202207\Nette\Utils\Strings;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
 final class EventClassNaming
 {
     /**

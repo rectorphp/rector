@@ -16,16 +16,16 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202206\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202206\Symplify\EasyParallel\CpuCoreCountProvider;
-use RectorPrefix202206\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-use RectorPrefix202206\Symplify\EasyParallel\FileSystem\FilePathNormalizer;
-use RectorPrefix202206\Symplify\EasyParallel\ScheduleFactory;
-use RectorPrefix202206\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202206\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileSystem;
-use RectorPrefix202206\Webmozart\Assert\Assert;
+use RectorPrefix202207\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202207\Symplify\EasyParallel\CpuCoreCountProvider;
+use RectorPrefix202207\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix202207\Symplify\EasyParallel\FileSystem\FilePathNormalizer;
+use RectorPrefix202207\Symplify\EasyParallel\ScheduleFactory;
+use RectorPrefix202207\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202207\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202207\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
     /**

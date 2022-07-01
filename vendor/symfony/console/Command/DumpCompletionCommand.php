@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202206\Symfony\Component\Console\Command;
+namespace RectorPrefix202207\Symfony\Component\Console\Command;
 
-use RectorPrefix202206\Symfony\Component\Console\Attribute\AsCommand;
-use RectorPrefix202206\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202206\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202206\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202206\Symfony\Component\Console\Output\ConsoleOutputInterface;
-use RectorPrefix202206\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202206\Symfony\Component\Process\Process;
+use RectorPrefix202207\Symfony\Component\Console\Attribute\AsCommand;
+use RectorPrefix202207\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202207\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202207\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202207\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202207\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202207\Symfony\Component\Process\Process;
 /**
  * Dumps the completion script for the current shell.
  *

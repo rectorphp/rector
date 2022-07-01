@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202206;
+namespace RectorPrefix202207;
 
 use Rector\Config\RectorConfig;
 use Rector\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector;

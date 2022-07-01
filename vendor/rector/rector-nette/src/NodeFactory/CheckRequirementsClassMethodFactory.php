@@ -10,8 +10,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassMethod;
-use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
+use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\ParamBuilder;
 final class CheckRequirementsClassMethodFactory
 {
     /**

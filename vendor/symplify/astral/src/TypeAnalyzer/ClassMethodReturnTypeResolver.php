@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202206\Symplify\Astral\TypeAnalyzer;
+namespace RectorPrefix202207\Symplify\Astral\TypeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
@@ -10,8 +10,8 @@ use PHPStan\Reflection\FunctionVariant;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use RectorPrefix202206\Symplify\Astral\Exception\ShouldNotHappenException;
-use RectorPrefix202206\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix202207\Symplify\Astral\Exception\ShouldNotHappenException;
+use RectorPrefix202207\Symplify\Astral\Naming\SimpleNameResolver;
 /**
  * @api
  */

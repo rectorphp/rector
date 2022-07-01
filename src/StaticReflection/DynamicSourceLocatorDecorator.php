@@ -5,7 +5,7 @@ namespace Rector\Core\StaticReflection;
 
 use Rector\Core\FileSystem\PhpFilesFinder;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use RectorPrefix202206\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix202207\Symplify\SmartFileSystem\FileSystemFilter;
 /**
  * @see https://phpstan.org/blog/zero-config-analysis-with-static-reflection
  * @see https://github.com/rectorphp/rector/issues/3490

@@ -6,7 +6,7 @@ namespace Rector\Symfony\DataProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 use Rector\Symfony\ValueObjectFactory\ServiceMapFactory;
-use RectorPrefix202206\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202207\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * Inspired by https://github.com/phpstan/phpstan-symfony/tree/master/src/Symfony
  */

@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202206\Symplify\Astral\NodeAnalyzer;
+namespace RectorPrefix202207\Symplify\Astral\NodeAnalyzer;
 
-use RectorPrefix202206\Nette\Application\UI\Template;
+use RectorPrefix202207\Nette\Application\UI\Template;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PHPStan\Analyser\Scope;
-use RectorPrefix202206\Symplify\Astral\Naming\SimpleNameResolver;
-use RectorPrefix202206\Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser;
+use RectorPrefix202207\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix202207\Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser;
 /**
  * @api
  */
@@ -17,7 +17,7 @@ final class NetteTypeAnalyzer
     /**
      * @var array<class-string<Template>>
      */
-    private const TEMPLATE_TYPES = ['RectorPrefix202206\\Nette\\Application\\UI\\Template', 'RectorPrefix202206\\Nette\\Application\\UI\\ITemplate', 'RectorPrefix202206\\Nette\\Bridges\\ApplicationLatte\\Template', 'RectorPrefix202206\\Nette\\Bridges\\ApplicationLatte\\DefaultTemplate'];
+    private const TEMPLATE_TYPES = ['RectorPrefix202207\\Nette\\Application\\UI\\Template', 'RectorPrefix202207\\Nette\\Application\\UI\\ITemplate', 'RectorPrefix202207\\Nette\\Bridges\\ApplicationLatte\\Template', 'RectorPrefix202207\\Nette\\Bridges\\ApplicationLatte\\DefaultTemplate'];
     /**
      * @var \Symplify\Astral\Naming\SimpleNameResolver
      */
@@ -61,7 +61,7 @@ final class NetteTypeAnalyzer
             return \false;
         }
         // this type has getComponent() method
-        return \is_a($className, 'RectorPrefix202206\\Nette\\ComponentModel\\Container', \true);
+        return \is_a($className, 'RectorPrefix202207\\Nette\\ComponentModel\\Container', \true);
     }
     public function isInsideControl(Scope $scope) : bool
     {
@@ -69,6 +69,6 @@ final class NetteTypeAnalyzer
         if ($className === null) {
             return \false;
         }
-        return \is_a($className, 'RectorPrefix202206\\Nette\\Application\\UI\\Control', \true);
+        return \is_a($className, 'RectorPrefix202207\\Nette\\Application\\UI\\Control', \true);
     }
 }

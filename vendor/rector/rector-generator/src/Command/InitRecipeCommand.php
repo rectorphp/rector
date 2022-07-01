@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\RectorGenerator\Command;
 
 use Rector\RectorGenerator\TemplateInitializer;
-use RectorPrefix202206\Symfony\Component\Console\Command\Command;
-use RectorPrefix202206\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202206\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202207\Symfony\Component\Console\Command\Command;
+use RectorPrefix202207\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202207\Symfony\Component\Console\Output\OutputInterface;
 final class InitRecipeCommand extends Command
 {
     /**

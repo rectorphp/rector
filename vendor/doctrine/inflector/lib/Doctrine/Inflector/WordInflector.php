@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202206\Doctrine\Inflector;
+namespace RectorPrefix202207\Doctrine\Inflector;
 
 interface WordInflector
 {

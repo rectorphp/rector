@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202206\Symplify\Astral\StaticFactory;
+namespace RectorPrefix202207\Symplify\Astral\StaticFactory;
 
-use RectorPrefix202206\Symplify\Astral\Naming\SimpleNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\ArgNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\AttributeNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\ClassLikeNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\ClassMethodNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\ConstFetchNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\FuncCallNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\IdentifierNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\NamespaceNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\ParamNodeNameResolver;
-use RectorPrefix202206\Symplify\Astral\NodeNameResolver\PropertyNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\ArgNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\AttributeNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\ClassLikeNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\ClassMethodNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\ConstFetchNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\FuncCallNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\IdentifierNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\NamespaceNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\ParamNodeNameResolver;
+use RectorPrefix202207\Symplify\Astral\NodeNameResolver\PropertyNodeNameResolver;
 /**
  * This would be normally handled by standard Symfony or Nette DI, but PHPStan does not use any of those, so we have to
  * make it manually.

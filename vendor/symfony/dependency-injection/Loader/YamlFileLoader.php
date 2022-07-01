@@ -8,28 +8,28 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202206\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix202207\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Argument\BoundArgument;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202206\Symfony\Component\ExpressionLanguage\Expression;
-use RectorPrefix202206\Symfony\Component\Yaml\Exception\ParseException;
-use RectorPrefix202206\Symfony\Component\Yaml\Parser as YamlParser;
-use RectorPrefix202206\Symfony\Component\Yaml\Tag\TaggedValue;
-use RectorPrefix202206\Symfony\Component\Yaml\Yaml;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202207\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix202207\Symfony\Component\Yaml\Exception\ParseException;
+use RectorPrefix202207\Symfony\Component\Yaml\Parser as YamlParser;
+use RectorPrefix202207\Symfony\Component\Yaml\Tag\TaggedValue;
+use RectorPrefix202207\Symfony\Component\Yaml\Yaml;
 /**
  * YamlFileLoader loads YAML files service definitions.
  *
@@ -565,7 +565,7 @@ class YamlFileLoader extends FileLoader
      */
     protected function loadFile(string $file) : ?array
     {
-        if (!\class_exists(\RectorPrefix202206\Symfony\Component\Yaml\Parser::class)) {
+        if (!\class_exists(\RectorPrefix202207\Symfony\Component\Yaml\Parser::class)) {
             throw new RuntimeException('Unable to load YAML config files as the Symfony Yaml Component is not installed.');
         }
         if (!\stream_is_local($file)) {

@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
-use RectorPrefix202206\Symplify\Astral\PhpParser\SmartPhpParser;
+use RectorPrefix202207\Symplify\Astral\PhpParser\SmartPhpParser;
 final class ClassLikeAstResolver
 {
     /**

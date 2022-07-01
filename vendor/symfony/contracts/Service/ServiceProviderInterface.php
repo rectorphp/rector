@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202206\Symfony\Contracts\Service;
+namespace RectorPrefix202207\Symfony\Contracts\Service;
 
-use RectorPrefix202206\Psr\Container\ContainerInterface;
+use RectorPrefix202207\Psr\Container\ContainerInterface;
 /**
  * A ServiceProviderInterface exposes the identifiers and the types of services provided by a container.
  *

@@ -6,7 +6,7 @@ namespace Rector\ChangesReporting\ValueObjectFactory;
 use Rector\Core\Differ\DefaultDiffer;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix202206\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
+use RectorPrefix202207\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
 final class FileDiffFactory
 {
     /**

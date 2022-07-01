@@ -15,7 +15,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix202206\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix202207\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class OnSuccessLogoutClassMethodFactory
 {
     /**

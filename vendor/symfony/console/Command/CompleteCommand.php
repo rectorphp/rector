@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202206\Symfony\Component\Console\Command;
+namespace RectorPrefix202207\Symfony\Component\Console\Command;
 
-use RectorPrefix202206\Symfony\Component\Console\Attribute\AsCommand;
-use RectorPrefix202206\Symfony\Component\Console\Completion\CompletionInput;
-use RectorPrefix202206\Symfony\Component\Console\Completion\CompletionSuggestions;
-use RectorPrefix202206\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
-use RectorPrefix202206\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
-use RectorPrefix202206\Symfony\Component\Console\Completion\Output\FishCompletionOutput;
-use RectorPrefix202206\Symfony\Component\Console\Exception\CommandNotFoundException;
-use RectorPrefix202206\Symfony\Component\Console\Exception\ExceptionInterface;
-use RectorPrefix202206\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202206\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202206\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202207\Symfony\Component\Console\Attribute\AsCommand;
+use RectorPrefix202207\Symfony\Component\Console\Completion\CompletionInput;
+use RectorPrefix202207\Symfony\Component\Console\Completion\CompletionSuggestions;
+use RectorPrefix202207\Symfony\Component\Console\Completion\Output\BashCompletionOutput;
+use RectorPrefix202207\Symfony\Component\Console\Completion\Output\CompletionOutputInterface;
+use RectorPrefix202207\Symfony\Component\Console\Completion\Output\FishCompletionOutput;
+use RectorPrefix202207\Symfony\Component\Console\Exception\CommandNotFoundException;
+use RectorPrefix202207\Symfony\Component\Console\Exception\ExceptionInterface;
+use RectorPrefix202207\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202207\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202207\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Responsible for providing the values to the shell completion.
  *

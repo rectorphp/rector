@@ -41,9 +41,9 @@ use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix202206\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202206\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix202206\Symplify\Skipper\Skipper\Skipper;
+use RectorPrefix202207\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202207\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix202207\Symplify\Skipper\Skipper\Skipper;
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     /**

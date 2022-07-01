@@ -12,7 +12,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\ValueObject\MethodName;
 use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
 use Rector\PHPUnit\NodeManipulator\StmtManipulator;
-use RectorPrefix202206\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class SetUpClassMethodFactory
 {
     /**

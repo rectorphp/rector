@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace Rector\Caching\ValueObject\Storage;
 
 use FilesystemIterator;
-use RectorPrefix202206\Nette\Utils\FileSystem;
-use RectorPrefix202206\Nette\Utils\Random;
+use RectorPrefix202207\Nette\Utils\FileSystem;
+use RectorPrefix202207\Nette\Utils\Random;
 use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Caching\ValueObject\CacheFilePaths;
 use Rector\Caching\ValueObject\CacheItem;
 use Rector\Core\Exception\Cache\CachingException;
-use RectorPrefix202206\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/blob/1e7ceae933f07e5a250b61ed94799e6c2ea8daa2/src/Cache/FileCacheStorage.php
  * @see \Rector\Tests\Caching\ValueObject\Storage\FileCacheStorageTest

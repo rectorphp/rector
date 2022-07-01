@@ -5,8 +5,8 @@ namespace Rector\Core\Configuration;
 
 use ReflectionClass;
 use ReflectionMethod;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202206\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\Configurator\InlineServiceConfigurator;
 final class ValueObjectInliner
 {
     /**
