@@ -16,7 +16,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
@@ -24,6 +23,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -205,7 +205,11 @@ CODE_SAMPLE
         if (!$functionReflection instanceof NativeFunctionReflection) {
             return [];
         }
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionReflection->getVariants());
+        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            return [];
+        }
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall->getArgs(), $scope);
         $functionName = $this->nodeNameResolver->getName($funcCall);
         $argNames = self::ARG_POSITION_NAME_NULL_TO_STRICT_STRING[$functionName];
         $positions = [];
