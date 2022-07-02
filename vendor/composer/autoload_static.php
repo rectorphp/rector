@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitba155cf4ae068d8f259d841ace7436d2
+class ComposerStaticInit70cb0b7998b14f59b5ef2112d08f87e3
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2285,6 +2285,7 @@ class ComposerStaticInitba155cf4ae068d8f259d841ace7436d2
         'Rector\\EarlyReturn\\Rector\\Return_\\PreparedValueToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Return_/PreparedValueToEarlyReturnRector.php',
         'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryAndToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryAndToEarlyReturnRector.php',
         'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryOrToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryOrToEarlyReturnRector.php',
+        'Rector\\EarlyReturn\\Rector\\StmtsAwareInterface\\ReturnEarlyIfVariableRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php',
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
         'Rector\\FamilyTree\\ValueObject\\PropertyType' => __DIR__ . '/../..' . '/packages/FamilyTree/ValueObject/PropertyType.php',
@@ -3418,9 +3419,9 @@ class ComposerStaticInitba155cf4ae068d8f259d841ace7436d2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitba155cf4ae068d8f259d841ace7436d2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitba155cf4ae068d8f259d841ace7436d2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitba155cf4ae068d8f259d841ace7436d2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit70cb0b7998b14f59b5ef2112d08f87e3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit70cb0b7998b14f59b5ef2112d08f87e3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit70cb0b7998b14f59b5ef2112d08f87e3::$classMap;
 
         }, null, ClassLoader::class);
     }

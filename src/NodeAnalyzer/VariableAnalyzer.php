@@ -6,6 +6,7 @@ namespace Rector\Core\NodeAnalyzer;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Global_;
 use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\StaticVar;
@@ -55,6 +56,9 @@ final class VariableAnalyzer
     public function isUsedByReference(Variable $variable) : bool
     {
         return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $subNode) use($variable) : bool {
+            if ($this->isParamRefrenced($subNode, $variable)) {
+                return \true;
+            }
             if (!$subNode instanceof Variable) {
                 return \false;
             }
@@ -82,5 +86,15 @@ final class VariableAnalyzer
         }
         $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         return $parentParentNode instanceof Static_;
+    }
+    private function isParamRefrenced(Node $node, Variable $variable) : bool
+    {
+        if (!$node instanceof Param) {
+            return \false;
+        }
+        if (!$this->nodeComparator->areNodesEqual($node->var, $variable)) {
+            return \false;
+        }
+        return $node->byRef;
     }
 }

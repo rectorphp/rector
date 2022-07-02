@@ -154,7 +154,7 @@ final class PropertyNaming
         }
         // is AbstractClass
         if (\strncmp($shortClassName, 'Abstract', \strlen('Abstract')) === 0) {
-            $shortClassName = Strings::substring($shortClassName, \strlen('Abstract'));
+            return Strings::substring($shortClassName, \strlen('Abstract'));
         }
         return $shortClassName;
     }

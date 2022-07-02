@@ -15,6 +15,7 @@ use Rector\EarlyReturn\Rector\If_\RemoveAlwaysElseRector;
 use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
+use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(ChangeNestedForeachIfsToEarlyContinueRector::class);
     $rectorConfig->rule(ChangeAndIfToEarlyReturnRector::class);
@@ -27,4 +28,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(ReturnAfterToEarlyOnBreakRector::class);
     $rectorConfig->rule(PreparedValueToEarlyReturnRector::class);
     $rectorConfig->rule(ReturnBinaryOrToEarlyReturnRector::class);
+    $rectorConfig->rule(ReturnEarlyIfVariableRector::class);
 };
