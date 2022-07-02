@@ -20,6 +20,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\StaticTypeMapper\PhpDoc\CustomPHPStanDetector;
 final class ClassMethodReturnTypeOverrideGuard
 {
     /**
@@ -56,7 +57,12 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\PhpDoc\CustomPHPStanDetector
+     */
+    private $customPHPStanDetector;
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, CustomPHPStanDetector $customPHPStanDetector)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -64,6 +70,7 @@ final class ClassMethodReturnTypeOverrideGuard
         $this->betterNodeFinder = $betterNodeFinder;
         $this->astResolver = $astResolver;
         $this->reflectionResolver = $reflectionResolver;
+        $this->customPHPStanDetector = $customPHPStanDetector;
     }
     public function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
@@ -91,8 +98,11 @@ final class ClassMethodReturnTypeOverrideGuard
         }
         return $this->hasClassMethodExprReturn($classMethod);
     }
-    public function shouldSkipClassMethodOldTypeWithNewType(Type $oldType, Type $newType) : bool
+    public function shouldSkipClassMethodOldTypeWithNewType(Type $oldType, Type $newType, Node $node) : bool
     {
+        if ($this->customPHPStanDetector->isCustomType($oldType, $node)) {
+            return \true;
+        }
         if ($oldType instanceof MixedType) {
             return \false;
         }

@@ -2730,6 +2730,7 @@ return array(
     'Rector\\StaticTypeMapper\\PhpDocParser\\IntersectionTypeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpDocParser/IntersectionTypeMapper.php',
     'Rector\\StaticTypeMapper\\PhpDocParser\\NullableTypeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpDocParser/NullableTypeMapper.php',
     'Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpDocParser/UnionTypeMapper.php',
+    'Rector\\StaticTypeMapper\\PhpDoc\\CustomPHPStanDetector' => $baseDir . '/packages/StaticTypeMapper/PhpDoc/CustomPHPStanDetector.php',
     'Rector\\StaticTypeMapper\\PhpDoc\\PhpDocTypeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpDoc/PhpDocTypeMapper.php',
     'Rector\\StaticTypeMapper\\PhpParser\\ExprNodeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpParser/ExprNodeMapper.php',
     'Rector\\StaticTypeMapper\\PhpParser\\FullyQualifiedNodeMapper' => $baseDir . '/packages/StaticTypeMapper/PhpParser/FullyQualifiedNodeMapper.php',

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0d899d84cc90436c7c9216a68cb755ef
+class ComposerStaticInitba155cf4ae068d8f259d841ace7436d2
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3037,6 +3037,7 @@ class ComposerStaticInit0d899d84cc90436c7c9216a68cb755ef
         'Rector\\StaticTypeMapper\\PhpDocParser\\IntersectionTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/IntersectionTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpDocParser\\NullableTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/NullableTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/UnionTypeMapper.php',
+        'Rector\\StaticTypeMapper\\PhpDoc\\CustomPHPStanDetector' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDoc/CustomPHPStanDetector.php',
         'Rector\\StaticTypeMapper\\PhpDoc\\PhpDocTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDoc/PhpDocTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\ExprNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/ExprNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\FullyQualifiedNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/FullyQualifiedNodeMapper.php',
@@ -3417,9 +3418,9 @@ class ComposerStaticInit0d899d84cc90436c7c9216a68cb755ef
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0d899d84cc90436c7c9216a68cb755ef::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0d899d84cc90436c7c9216a68cb755ef::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0d899d84cc90436c7c9216a68cb755ef::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitba155cf4ae068d8f259d841ace7436d2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitba155cf4ae068d8f259d841ace7436d2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitba155cf4ae068d8f259d841ace7436d2::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -147,7 +147,7 @@ CODE_SAMPLE
         // generalize false/true type to bool, as mostly default value but accepts both
         $inferredReturnType = $this->typeNormalizer->generalizeConstantBoolTypes($inferredReturnType);
         $currentReturnType = $phpDocInfo->getReturnType();
-        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType($currentReturnType, $inferredReturnType)) {
+        if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethodOldTypeWithNewType($currentReturnType, $inferredReturnType, $node)) {
             return null;
         }
         if ($this->shouldSkipType($inferredReturnType, $currentReturnType, $node, $phpDocInfo)) {
