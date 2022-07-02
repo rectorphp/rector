@@ -24,7 +24,7 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
         }
         if (!$scope instanceof Scope) {
             $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            $errorMessage = \sprintf('Scope not available on "%s" node with parent node of "%s", but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first', \get_class($node), $parent instanceof Node ? \get_class($parent) : null, static::class);
+            $errorMessage = \sprintf('Scope not available on "%s" node with parent node of "%s", but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first', \get_class($node), \get_class($parent), static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
         return $this->refactorWithScope($node, $scope);
