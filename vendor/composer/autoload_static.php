@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6ba007e97e3d58984bd9bd00d6e531bc
+class ComposerStaticInit34162b1978fedadb3d15ba4cdb4395e9
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2294,6 +2294,7 @@ class ComposerStaticInit6ba007e97e3d58984bd9bd00d6e531bc
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithContent.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithNodes' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithNodes.php',
+        'Rector\\Laravel\\NodeAnalyzer\\LumenRouteRegisteringMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeAnalyzer/LumenRouteRegisteringMethodAnalyzer.php',
         'Rector\\Laravel\\NodeFactory\\AppAssignFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/AppAssignFactory.php',
         'Rector\\Laravel\\NodeFactory\\ModelFactoryNodeFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/ModelFactoryNodeFactory.php',
         'Rector\\Laravel\\NodeFactory\\RouterRegisterNodeAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/RouterRegisterNodeAnalyzer.php',
@@ -2311,6 +2312,8 @@ class ComposerStaticInit6ba007e97e3d58984bd9bd00d6e531bc
         'Rector\\Laravel\\Rector\\FuncCall\\RemoveDumpDataDeadCodeRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/FuncCall/RemoveDumpDataDeadCodeRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\ChangeQueryWhereDateValueWithCarbonRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\FactoryApplyingStatesRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/FactoryApplyingStatesRector.php',
+        'Rector\\Laravel\\Rector\\MethodCall\\LumenRoutesStringActionToUsesArrayRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/LumenRoutesStringActionToUsesArrayRector.php',
+        'Rector\\Laravel\\Rector\\MethodCall\\LumenRoutesStringMiddlewareToArrayRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/LumenRoutesStringMiddlewareToArrayRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\RedirectBackToBackHelperRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RedirectBackToBackHelperRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\RedirectRouteToToRouteHelperRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RedirectRouteToToRouteHelperRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\RemoveAllOnDispatchingMethodsWithJobChainingRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RemoveAllOnDispatchingMethodsWithJobChainingRector.php',
@@ -2657,11 +2660,8 @@ class ComposerStaticInit6ba007e97e3d58984bd9bd00d6e531bc
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMessageFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMessageFactory.php',
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMessageRegExpFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMessageRegExpFactory.php',
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMethodCallFactory.php',
-        'Rector\\PHPUnit\\NodeFactory\\SetUpClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/SetUpClassMethodFactory.php',
         'Rector\\PHPUnit\\NodeManipulator\\ArgumentMover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/ArgumentMover.php',
         'Rector\\PHPUnit\\NodeManipulator\\ParamAndArgFromArrayResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/ParamAndArgFromArrayResolver.php',
-        'Rector\\PHPUnit\\NodeManipulator\\SetUpClassMethodNodeManipulator' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/SetUpClassMethodNodeManipulator.php',
-        'Rector\\PHPUnit\\NodeManipulator\\StmtManipulator' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/StmtManipulator.php',
         'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\ExceptionAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/ExceptionAnnotationRector.php',
@@ -3417,9 +3417,9 @@ class ComposerStaticInit6ba007e97e3d58984bd9bd00d6e531bc
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6ba007e97e3d58984bd9bd00d6e531bc::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6ba007e97e3d58984bd9bd00d6e531bc::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6ba007e97e3d58984bd9bd00d6e531bc::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit34162b1978fedadb3d15ba4cdb4395e9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit34162b1978fedadb3d15ba4cdb4395e9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit34162b1978fedadb3d15ba4cdb4395e9::$classMap;
 
         }, null, ClassLoader::class);
     }

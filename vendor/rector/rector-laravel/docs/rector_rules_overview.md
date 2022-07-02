@@ -1,4 +1,4 @@
-# 24 Rules Overview
+# 26 Rules Overview
 
 ## AddArgumentDefaultValueRector
 
@@ -290,6 +290,34 @@ Change `app()` func calls to facade calls
 +        return \Illuminate\Support\Facades\App::get('translator')->trans('value');
      }
  }
+```
+
+<br>
+
+## LumenRoutesStringActionToUsesArrayRector
+
+Changes action in rule definitions from string to array notation.
+
+- class: [`Rector\Laravel\Rector\MethodCall\LumenRoutesStringActionToUsesArrayRector`](../src/Rector/MethodCall/LumenRoutesStringActionToUsesArrayRector.php)
+
+```diff
+-$router->get('/user', 'UserController@get');
++$router->get('/user', ['uses => 'UserController@get']);
+```
+
+<br>
+
+## LumenRoutesStringMiddlewareToArrayRector
+
+Changes middlewares from rule definitions from string to array notation.
+
+- class: [`Rector\Laravel\Rector\MethodCall\LumenRoutesStringMiddlewareToArrayRector`](../src/Rector/MethodCall/LumenRoutesStringMiddlewareToArrayRector.php)
+
+```diff
+-$router->get('/user', ['middleware => 'test']);
+-$router->post('/user', ['middleware => 'test|authentication']);
++$router->get('/user', ['middleware => ['test']]);
++$router->post('/user', ['middleware => ['test', 'authentication']]);
 ```
 
 <br>

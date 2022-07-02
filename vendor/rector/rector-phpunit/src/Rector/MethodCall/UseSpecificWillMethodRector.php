@@ -20,7 +20,7 @@ final class UseSpecificWillMethodRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const NESTED_METHOD_TO_RENAME_MAP = ['returnArgument' => 'willReturnArgument', 'returnCallback' => 'willReturnCallback', 'returnSelf' => 'willReturnSelf', 'returnValue' => 'willReturn', 'returnValueMap' => 'willReturnMap', 'throwException' => 'willThrowException'];
+    private const NESTED_METHOD_TO_RENAME_MAP = ['returnArgument' => 'willReturnArgument', 'returnCallback' => 'willReturnCallback', 'returnSelf' => 'willReturnSelf', 'returnValue' => 'willReturn', 'returnValueMap' => 'willReturnMap', 'onConsecutiveCalls' => 'willReturnOnConsecutiveCalls', 'throwException' => 'willThrowException'];
     /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer

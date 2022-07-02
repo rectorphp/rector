@@ -8,11 +8,17 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator;
+use Rector\Core\ValueObject\MethodName;
+use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -30,13 +36,19 @@ final class AddMockConsoleOutputFalseToConsoleTestsRector extends AbstractRector
     private $propertyFetchAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator
+     * @var \Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator
      */
-    private $setUpClassMethodNodeManipulator;
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, SetUpClassMethodNodeManipulator $setUpClassMethodNodeManipulator)
+    private $setUpMethodDecorator;
+    /**
+     * @readonly
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
+     */
+    private $visibilityManipulator;
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, SetUpMethodDecorator $setUpMethodDecorator, VisibilityManipulator $visibilityManipulator)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->setUpClassMethodNodeManipulator = $setUpClassMethodNodeManipulator;
+        $this->setUpMethodDecorator = $setUpMethodDecorator;
+        $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -96,7 +108,16 @@ CODE_SAMPLE
             return null;
         }
         $assign = $this->createAssign();
-        $this->setUpClassMethodNodeManipulator->decorateOrCreate($node, [$assign]);
+        $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
+        if (!$setUpClassMethod instanceof ClassMethod) {
+            $setUpClassMethod = new ClassMethod(MethodName::SET_UP);
+            $setUpClassMethod->stmts = [new Expression(new StaticCall(new Name(ObjectReference::PARENT), MethodName::SET_UP)), new Expression($assign)];
+            $this->setUpMethodDecorator->decorate($setUpClassMethod);
+            $this->visibilityManipulator->makeProtected($setUpClassMethod);
+            $node->stmts = \array_merge([$setUpClassMethod], $node->stmts);
+        } else {
+            $setUpClassMethod->stmts = \array_merge((array) $setUpClassMethod->stmts, [new Expression($assign)]);
+        }
         return $node;
     }
     private function isTestingConsoleOutput(Class_ $class) : bool

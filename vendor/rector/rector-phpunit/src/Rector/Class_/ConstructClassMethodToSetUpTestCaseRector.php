@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -12,8 +13,9 @@ use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator;
+use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -23,11 +25,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConstructClassMethodToSetUpTestCaseRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\PHPUnit\NodeManipulator\SetUpClassMethodNodeManipulator
-     */
-    private $setUpClassMethodNodeManipulator;
     /**
      * @readonly
      * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
@@ -43,12 +40,23 @@ final class ConstructClassMethodToSetUpTestCaseRector extends AbstractRector
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(SetUpClassMethodNodeManipulator $setUpClassMethodNodeManipulator, StaticCallAnalyzer $staticCallAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ClassAnalyzer $classAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
+     */
+    private $visibilityManipulator;
+    /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator
+     */
+    private $setUpMethodDecorator;
+    public function __construct(StaticCallAnalyzer $staticCallAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, SetUpMethodDecorator $setUpMethodDecorator)
     {
-        $this->setUpClassMethodNodeManipulator = $setUpClassMethodNodeManipulator;
         $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->classAnalyzer = $classAnalyzer;
+        $this->visibilityManipulator = $visibilityManipulator;
+        $this->setUpMethodDecorator = $setUpMethodDecorator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -105,9 +113,19 @@ CODE_SAMPLE
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
-        $this->removeNode($constructClassMethod);
         $addedStmts = $this->resolveStmtsToAddToSetUp($constructClassMethod);
-        $this->setUpClassMethodNodeManipulator->decorateOrCreate($node, $addedStmts);
+        $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
+        if (!$setUpClassMethod instanceof ClassMethod) {
+            // no setUp() method yet, rename it to setUp :)
+            $constructClassMethod->name = new Identifier(MethodName::SET_UP);
+            $constructClassMethod->params = [];
+            $constructClassMethod->stmts = $addedStmts;
+            $this->setUpMethodDecorator->decorate($constructClassMethod);
+            $this->visibilityManipulator->makeProtected($constructClassMethod);
+        } else {
+            $this->removeNode($constructClassMethod);
+            $setUpClassMethod->stmts = \array_merge((array) $setUpClassMethod->stmts, $addedStmts);
+        }
         return $node;
     }
     /**
