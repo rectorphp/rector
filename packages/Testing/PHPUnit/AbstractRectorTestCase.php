@@ -56,8 +56,13 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         // speed up
         @\ini_set('memory_limit', '-1');
         // include local files
-        if (\file_exists(__DIR__ . '/../../../preload.php') && \file_exists(__DIR__ . '/../../../vendor')) {
-            require_once __DIR__ . '/../../../preload.php';
+        if (\file_exists(__DIR__ . '/../../../preload.php')) {
+            if (\file_exists(__DIR__ . '/../../../vendor')) {
+                require_once __DIR__ . '/../../../preload.php';
+                // test case in rector split package
+            } elseif (\file_exists(__DIR__ . '/../../../../../../vendor')) {
+                require_once __DIR__ . '/../../../preload-split-package.php';
+            }
         }
         if (\file_exists(__DIR__ . '/../../../vendor/scoper-autoload.php')) {
             require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
