@@ -56,7 +56,7 @@ final class VariableAnalyzer
     public function isUsedByReference(Variable $variable) : bool
     {
         return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $subNode) use($variable) : bool {
-            if ($this->isParamRefrenced($subNode, $variable)) {
+            if ($this->isParamReferenced($subNode, $variable)) {
                 return \true;
             }
             if (!$subNode instanceof Variable) {
@@ -87,7 +87,7 @@ final class VariableAnalyzer
         $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         return $parentParentNode instanceof Static_;
     }
-    private function isParamRefrenced(Node $node, Variable $variable) : bool
+    private function isParamReferenced(Node $node, Variable $variable) : bool
     {
         if (!$node instanceof Param) {
             return \false;

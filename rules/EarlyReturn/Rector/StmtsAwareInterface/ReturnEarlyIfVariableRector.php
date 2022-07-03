@@ -90,6 +90,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $if->stmts[0] = new Return_($assignedExpr);
+                $this->mirrorComments($if->stmts[0], $onlyIfStmt);
                 return $node;
             }
         }
