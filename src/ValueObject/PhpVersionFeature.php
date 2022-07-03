@@ -43,6 +43,10 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const SHORT_ARRAY = \Rector\Core\ValueObject\PhpVersion::PHP_54;
+    /**
+     * @var int
+     */
     public const DATE_TIME_INTERFACE = \Rector\Core\ValueObject\PhpVersion::PHP_55;
     /**
      * @see https://wiki.php.net/rfc/class_name_scalars

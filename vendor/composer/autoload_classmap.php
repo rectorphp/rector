@@ -2418,6 +2418,7 @@ return array(
     'Rector\\Php53\\Rector\\FuncCall\\DirNameFileConstantToDirConstantRector' => $baseDir . '/rules/Php53/Rector/FuncCall/DirNameFileConstantToDirConstantRector.php',
     'Rector\\Php53\\Rector\\Ternary\\TernaryToElvisRector' => $baseDir . '/rules/Php53/Rector/Ternary/TernaryToElvisRector.php',
     'Rector\\Php53\\Rector\\Variable\\ReplaceHttpServerVarsByServerRector' => $baseDir . '/rules/Php53/Rector/Variable/ReplaceHttpServerVarsByServerRector.php',
+    'Rector\\Php54\\Rector\\Array_\\ArrayToShortArrayRector' => $baseDir . '/rules/Php54/Rector/Array_/ArrayToShortArrayRector.php',
     'Rector\\Php54\\Rector\\Break_\\RemoveZeroBreakContinueRector' => $baseDir . '/rules/Php54/Rector/Break_/RemoveZeroBreakContinueRector.php',
     'Rector\\Php54\\Rector\\FuncCall\\RemoveReferenceFromCallRector' => $baseDir . '/rules/Php54/Rector/FuncCall/RemoveReferenceFromCallRector.php',
     'Rector\\Php55\\Rector\\Class_\\ClassConstantToSelfClassRector' => $baseDir . '/rules/Php55/Rector/Class_/ClassConstantToSelfClassRector.php',

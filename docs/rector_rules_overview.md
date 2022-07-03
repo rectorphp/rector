@@ -1,4 +1,4 @@
-# 411 Rules Overview
+# 412 Rules Overview
 
 <br>
 
@@ -32,7 +32,7 @@
 
 - [Php53](#php53) (3)
 
-- [Php54](#php54) (2)
+- [Php54](#php54) (3)
 
 - [Php55](#php55) (5)
 
@@ -4591,6 +4591,25 @@ Use ?: instead of ?, where useful
 <br>
 
 ## Php54
+
+### ArrayToShortArrayRector
+
+Array to short array
+
+- class: [`Rector\Php54\Rector\Array_\ArrayToShortArrayRector`](../rules/Php54/Rector/Array_/ArrayToShortArrayRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return array();
++        return [];
+     }
+ }
+```
+
+<br>
 
 ### RemoveReferenceFromCallRector
 
