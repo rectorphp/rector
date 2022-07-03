@@ -17,6 +17,7 @@ use PHPStan\Reflection\Php\PhpPropertyReflection;
 use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -36,10 +37,16 @@ final class DowngradeThisInClosureRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NamedVariableFactory $namedVariableFactory, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(NamedVariableFactory $namedVariableFactory, ReflectionResolver $reflectionResolver, NodesToAddCollector $nodesToAddCollector)
     {
         $this->namedVariableFactory = $namedVariableFactory;
         $this->reflectionResolver = $reflectionResolver;
+        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {

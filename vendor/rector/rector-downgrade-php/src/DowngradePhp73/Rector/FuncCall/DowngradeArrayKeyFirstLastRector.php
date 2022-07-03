@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,9 +30,15 @@ final class DowngradeArrayKeyFirstLastRector extends AbstractRector
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(VariableNaming $variableNaming)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(VariableNaming $variableNaming, NodesToAddCollector $nodesToAddCollector)
     {
         $this->variableNaming = $variableNaming;
+        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {

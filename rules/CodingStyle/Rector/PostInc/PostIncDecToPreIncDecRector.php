@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\PostInc;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\PostDec;
 use PhpParser\Node\Expr\PostInc;
 use PhpParser\Node\Expr\PreDec;
@@ -61,9 +59,6 @@ CODE_SAMPLE
         if ($this->isAnExpression($parentNode)) {
             return $this->processPrePost($node);
         }
-        if ($parentNode instanceof ArrayDimFetch && $this->nodeComparator->areNodesEqual($parentNode->dim, $node)) {
-            return $this->processPreArray($node, $parentNode);
-        }
         if (!$parentNode instanceof For_) {
             return null;
         }
@@ -92,19 +87,6 @@ CODE_SAMPLE
             return new PreInc($node->var);
         }
         return new PreDec($node->var);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node
-     */
-    private function processPreArray($node, ArrayDimFetch $arrayDimFetch) : ?Expr
-    {
-        $parentOfArrayDimFetch = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$this->isAnExpression($parentOfArrayDimFetch)) {
-            return null;
-        }
-        $arrayDimFetch->dim = $node->var;
-        $this->nodesToAddCollector->addNodeAfterNode($this->processPrePost($node), $arrayDimFetch);
-        return $arrayDimFetch->dim;
     }
     /**
      * @param \PhpParser\Node\Expr\PostInc|\PhpParser\Node\Expr\PostDec $node

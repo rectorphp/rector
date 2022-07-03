@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -31,9 +32,15 @@ final class DowngradeArbitraryExpressionsSupportRector extends AbstractRector
      * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
      */
     private $namedVariableFactory;
-    public function __construct(NamedVariableFactory $namedVariableFactory)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(NamedVariableFactory $namedVariableFactory, NodesToAddCollector $nodesToAddCollector)
     {
         $this->namedVariableFactory = $namedVariableFactory;
+        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {

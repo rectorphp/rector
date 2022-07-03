@@ -17,6 +17,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeManipulator\TokenManipulator;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,9 +33,15 @@ final class TokenGetAllToObjectRector extends AbstractRector implements MinPhpVe
      * @var \Rector\Php80\NodeManipulator\TokenManipulator
      */
     private $tokenManipulator;
-    public function __construct(TokenManipulator $tokenManipulator)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(TokenManipulator $tokenManipulator, NodesToAddCollector $nodesToAddCollector)
     {
         $this->tokenManipulator = $tokenManipulator;
+        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function provideMinPhpVersion() : int
     {

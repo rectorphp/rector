@@ -2018,11 +2018,11 @@ Add new line after statements to tidify code
 ```diff
  class SomeClass
  {
-     public function test()
+     public function first()
      {
      }
 +
-     public function test2()
+     public function second()
      {
      }
  }

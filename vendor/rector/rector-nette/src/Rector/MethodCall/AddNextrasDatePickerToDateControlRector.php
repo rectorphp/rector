@@ -15,6 +15,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,6 +23,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddNextrasDatePickerToDateControlRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(NodesToAddCollector $nodesToAddCollector)
+    {
+        $this->nodesToAddCollector = $nodesToAddCollector;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Nextras/Form upgrade of addDatePicker method call to DateControl assign', [new CodeSample(<<<'CODE_SAMPLE'

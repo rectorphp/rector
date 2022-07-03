@@ -25,6 +25,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer;
 use Rector\DowngradePhp72\NodeManipulator\BitwiseFlagCleaner;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -52,11 +53,17 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      * @var \Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer
      */
     private $regexFuncAnalyzer;
-    public function __construct(IfManipulator $ifManipulator, BitwiseFlagCleaner $bitwiseFlagCleaner, RegexFuncAnalyzer $regexFuncAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(IfManipulator $ifManipulator, BitwiseFlagCleaner $bitwiseFlagCleaner, RegexFuncAnalyzer $regexFuncAnalyzer, NodesToAddCollector $nodesToAddCollector)
     {
         $this->ifManipulator = $ifManipulator;
         $this->bitwiseFlagCleaner = $bitwiseFlagCleaner;
         $this->regexFuncAnalyzer = $regexFuncAnalyzer;
+        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     /**
      * @return array<class-string<Node>>

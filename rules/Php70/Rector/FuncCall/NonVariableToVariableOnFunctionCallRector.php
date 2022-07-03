@@ -34,6 +34,7 @@ use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNestingScope\ParentScopeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\ValueObject\VariableAssignPair;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -64,12 +65,18 @@ final class NonVariableToVariableOnFunctionCallRector extends AbstractRector imp
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(VariableNaming $variableNaming, ParentScopeFinder $parentScopeFinder, ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(VariableNaming $variableNaming, ParentScopeFinder $parentScopeFinder, ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, NodesToAddCollector $nodesToAddCollector)
     {
         $this->variableNaming = $variableNaming;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->reflectionResolver = $reflectionResolver;
         $this->argsAnalyzer = $argsAnalyzer;
+        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
