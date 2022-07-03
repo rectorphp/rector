@@ -51,8 +51,7 @@ final class ClosureNestedUsesDecorator
                 $parentOfParent = $this->betterNodeFinder->findParentType($parentOfParent, Closure::class);
             }
             $uses = \array_merge($parent->uses, $uses);
-            $uses = $this->cleanClosureUses($uses);
-            $parent->uses = $uses;
+            $parent->uses = $this->cleanClosureUses($uses);
             $parent = $this->betterNodeFinder->findParentType($parent, Closure::class);
         }
         return $anonymousFunctionNode;

@@ -70,8 +70,7 @@ final class PropertyFetchByMethodAnalyzer
                 if (!$this->isPropertyChanging($classMethod, $propertyName)) {
                     continue;
                 }
-                $classMethodName = $this->nodeNameResolver->getName($classMethod);
-                $propertyUsageByMethods[$propertyName][] = $classMethodName;
+                $propertyUsageByMethods[$propertyName][] = $this->nodeNameResolver->getName($classMethod);
             }
         }
         return $propertyUsageByMethods;

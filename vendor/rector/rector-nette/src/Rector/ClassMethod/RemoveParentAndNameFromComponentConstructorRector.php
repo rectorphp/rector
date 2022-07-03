@@ -133,7 +133,7 @@ CODE_SAMPLE
         if (!$this->staticCallAnalyzer->isParentCallNamed($staticCall, MethodName::CONSTRUCT)) {
             return null;
         }
-        foreach ($staticCall->args as $staticCallArg) {
+        foreach ($staticCall->args as $position => $staticCallArg) {
             if (!$staticCallArg->value instanceof Variable) {
                 continue;
             }
@@ -142,9 +142,9 @@ CODE_SAMPLE
             if (!$this->isNames($variable, [self::NAME, self::PARENT])) {
                 continue;
             }
-            $this->removeNode($staticCallArg);
+            unset($staticCall->args[$position]);
         }
-        if ($this->shouldRemoveEmptyCall($staticCall)) {
+        if ($staticCall->args === []) {
             $this->removeNode($staticCall);
             return null;
         }
@@ -171,7 +171,7 @@ CODE_SAMPLE
             if (!\in_array($parameterName, [self::PARENT, self::NAME], \true)) {
                 continue;
             }
-            $this->removeNode($arg);
+            unset($new->args[$position]);
         }
     }
     private function isInsideNetteComponentClass(Node $node) : bool
@@ -200,15 +200,5 @@ CODE_SAMPLE
                 $this->removeNode($param);
             }
         }
-    }
-    private function shouldRemoveEmptyCall(StaticCall $staticCall) : bool
-    {
-        foreach ($staticCall->args as $arg) {
-            if ($this->nodesToRemoveCollector->isNodeRemoved($arg)) {
-                continue;
-            }
-            return \false;
-        }
-        return \true;
     }
 }

@@ -110,8 +110,7 @@ CODE_SAMPLE
             $newTypes[] = $this->createObjectTypeFromNew($new);
         }
         $returnType = $this->typeFactory->createMixedPassedOrUnionType($newTypes);
-        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
-        $node->returnType = $returnTypeNode;
+        $node->returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
         return $node;
     }
     public function provideMinPhpVersion() : int

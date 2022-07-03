@@ -136,8 +136,7 @@ CODE_SAMPLE
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             /** @var PhpParserUnionType[] $returnedStrictTypes */
             $unwrappedTypes = $this->typeNodeUnwrapper->unwrapNullableUnionTypes($returnedStrictTypes);
-            $returnType = new PhpParserUnionType($unwrappedTypes);
-            $node->returnType = $returnType;
+            $node->returnType = new PhpParserUnionType($unwrappedTypes);
             return $node;
         }
         return null;

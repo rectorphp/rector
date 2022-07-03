@@ -103,8 +103,7 @@ CODE_SAMPLE
         if ($expectedArgOrParamOrder === null) {
             return null;
         }
-        $newParams = $this->argumentSorter->sortArgsByExpectedParamOrder($classMethod->params, $expectedArgOrParamOrder);
-        $classMethod->params = $newParams;
+        $classMethod->params = $this->argumentSorter->sortArgsByExpectedParamOrder($classMethod->params, $expectedArgOrParamOrder);
         return $classMethod;
     }
     private function refactorNew(New_ $new) : ?New_

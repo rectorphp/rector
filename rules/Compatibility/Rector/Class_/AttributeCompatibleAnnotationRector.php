@@ -157,8 +157,7 @@ CODE_SAMPLE
             if ($propertyType instanceof NullableType) {
                 $propertyType = $propertyType->type;
             }
-            $param = new Param(new Variable($propertyName), null, $propertyType, \false, \false, [], $property->flags);
-            $params[] = $param;
+            $params[] = new Param(new Variable($propertyName), null, $propertyType, \false, \false, [], $property->flags);
             $propertyPhpDocInfo = $requiredPropertyWithPhpDocInfo->getPhpDocInfo();
             // remove required
             $this->phpDocTagRemover->removeByName($propertyPhpDocInfo, 'Doctrine\\Common\\Annotations\\Annotation\\Required');

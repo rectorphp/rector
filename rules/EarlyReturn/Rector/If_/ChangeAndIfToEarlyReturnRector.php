@@ -129,8 +129,7 @@ CODE_SAMPLE
             $afterStmts = [];
             if (!$nextStmt instanceof Return_) {
                 $afterStmts[] = $stmt->stmts[0];
-                $newStmts = \array_merge($newStmts, $this->processReplaceIfs($stmt, $booleanAndConditions, new Return_(), $afterStmts));
-                $node->stmts = $newStmts;
+                $node->stmts = \array_merge($newStmts, $this->processReplaceIfs($stmt, $booleanAndConditions, new Return_(), $afterStmts));
                 return $node;
             }
             // remove next node
@@ -141,9 +140,8 @@ CODE_SAMPLE
                 $afterStmts[] = new Return_();
             }
             $changedStmts = $this->processReplaceIfs($stmt, $booleanAndConditions, $ifNextReturnClone, $afterStmts);
-            $changedStmts = \array_merge($newStmts, $changedStmts);
             // update stmts
-            $node->stmts = $changedStmts;
+            $node->stmts = \array_merge($newStmts, $changedStmts);
             return $node;
         }
         return null;

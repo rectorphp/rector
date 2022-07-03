@@ -127,8 +127,7 @@ CODE_SAMPLE
     }
     private function addAllowDynamicPropertiesAttribute(Class_ $class) : Class_
     {
-        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(self::ATTRIBUTE);
-        $class->attrGroups[] = $attributeGroup;
+        $class->attrGroups[] = $this->phpAttributeGroupFactory->createFromClass(self::ATTRIBUTE);
         return $class;
     }
     private function shouldSkip(Class_ $class) : bool

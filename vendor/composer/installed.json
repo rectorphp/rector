@@ -2202,12 +2202,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "45ba400e07e360010f0702260ac32e602ec05535"
+                "reference": "9489bdb38f8bea75bf7071f6313900363c5ae332"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/45ba400e07e360010f0702260ac32e602ec05535",
-                "reference": "45ba400e07e360010f0702260ac32e602ec05535",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/9489bdb38f8bea75bf7071f6313900363c5ae332",
+                "reference": "9489bdb38f8bea75bf7071f6313900363c5ae332",
                 "shasum": ""
             },
             "require": {
@@ -2239,7 +2239,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-01T09:37:34+00:00",
+            "time": "2022-07-03T11:55:16+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2269,7 +2269,7 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.13.1"
             },
             "install-path": "..\/rector\/rector-nette"
         },

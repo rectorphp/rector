@@ -144,8 +144,7 @@ final class ShortNameResolver
             if (\strpos($originalName->toString(), '\\') !== \false) {
                 return null;
             }
-            $fullyQualifiedName = $this->nodeNameResolver->getName($node);
-            $shortNamesToFullyQualifiedNames[$originalName->toString()] = $fullyQualifiedName;
+            $shortNamesToFullyQualifiedNames[$originalName->toString()] = $this->nodeNameResolver->getName($node);
             return null;
         });
         $docBlockShortNamesToFullyQualifiedNames = $this->resolveFromStmtsDocBlocks($stmts);

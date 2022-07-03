@@ -112,8 +112,7 @@ final class LocalPropertyAnalyzer
             if (!$parentFunctionLike instanceof ClassMethod) {
                 return null;
             }
-            $propertyFetchType = $this->resolvePropertyFetchType($node);
-            $fetchedLocalPropertyNameToTypes[$propertyName][] = $propertyFetchType;
+            $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->resolvePropertyFetchType($node);
             return null;
         });
         return $this->normalizeToSingleType($fetchedLocalPropertyNameToTypes);

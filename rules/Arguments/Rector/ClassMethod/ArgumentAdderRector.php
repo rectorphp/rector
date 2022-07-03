@@ -252,8 +252,7 @@ CODE_SAMPLE
         }
         $param = new Param(new Variable($argumentName), BuilderHelpers::normalizeValue($defaultValue));
         if ($type !== null) {
-            $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
-            $param->type = $typeNode;
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
         }
         $classMethod->params[$position] = $param;
         $this->haveArgumentsChanged = \true;
