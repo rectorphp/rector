@@ -32,7 +32,6 @@ use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
-use Rector\DeadCode\Rector\FunctionLike\RemoveOverriddenValuesRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
@@ -62,7 +61,6 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveEmptyClassMethodRector::class,
         RemoveDoubleAssignRector::class,
         SimplifyMirrorAssignRector::class,
-        RemoveOverriddenValuesRector::class,
         RemoveUnusedPrivatePropertyRector::class,
         RemoveUnusedPrivateClassConstantRector::class,
         RemoveUnusedPrivateMethodRector::class,

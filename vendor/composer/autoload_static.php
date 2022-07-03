@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4
+class ComposerStaticInit39c1e46a51a1dbf4e2612d6c7327c872
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1985,9 +1985,7 @@ class ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4
         'Rector\\DeadCode\\NodeAnalyzer\\JustPropertyFetchVariableAssignMatcher' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/JustPropertyFetchVariableAssignMatcher.php',
         'Rector\\DeadCode\\NodeAnalyzer\\UsedVariableNameAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/UsedVariableNameAnalyzer.php',
         'Rector\\DeadCode\\NodeCollector\\ModifiedVariableNamesCollector' => __DIR__ . '/../..' . '/rules/DeadCode/NodeCollector/ModifiedVariableNamesCollector.php',
-        'Rector\\DeadCode\\NodeCollector\\NodeByTypeAndPositionCollector' => __DIR__ . '/../..' . '/rules/DeadCode/NodeCollector/NodeByTypeAndPositionCollector.php',
         'Rector\\DeadCode\\NodeCollector\\UnusedParameterResolver' => __DIR__ . '/../..' . '/rules/DeadCode/NodeCollector/UnusedParameterResolver.php',
-        'Rector\\DeadCode\\NodeFinder\\VariableUseFinder' => __DIR__ . '/../..' . '/rules/DeadCode/NodeFinder/VariableUseFinder.php',
         'Rector\\DeadCode\\NodeManipulator\\ControllerClassMethodManipulator' => __DIR__ . '/../..' . '/rules/DeadCode/NodeManipulator/ControllerClassMethodManipulator.php',
         'Rector\\DeadCode\\NodeManipulator\\CountManipulator' => __DIR__ . '/../..' . '/rules/DeadCode/NodeManipulator/CountManipulator.php',
         'Rector\\DeadCode\\NodeManipulator\\LivingCodeManipulator' => __DIR__ . '/../..' . '/rules/DeadCode/NodeManipulator/LivingCodeManipulator.php',
@@ -2027,7 +2025,6 @@ class ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4
         'Rector\\DeadCode\\Rector\\Foreach_\\RemoveUnusedForeachKeyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Foreach_/RemoveUnusedForeachKeyRector.php',
         'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDeadReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveDeadReturnRector.php',
         'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveDuplicatedIfReturnRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveDuplicatedIfReturnRector.php',
-        'Rector\\DeadCode\\Rector\\FunctionLike\\RemoveOverriddenValuesRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/FunctionLike/RemoveOverriddenValuesRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveAlwaysTrueIfConditionRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveAlwaysTrueIfConditionRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveDeadInstanceOfRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveDeadInstanceOfRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveUnusedNonEmptyArrayBeforeForeachRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveUnusedNonEmptyArrayBeforeForeachRector.php',
@@ -2056,7 +2053,6 @@ class ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
         'Rector\\DeadCode\\ValueObject\\PropertyFetchToVariableAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/PropertyFetchToVariableAssign.php',
         'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
-        'Rector\\DeadCode\\ValueObject\\VariableNodeUse' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableNodeUse.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
         'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php',
         'Rector\\Defluent\\NodeAnalyzer\\SameClassMethodCallAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/SameClassMethodCallAnalyzer.php',
@@ -2530,7 +2526,6 @@ class ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4
         'Rector\\NodeNameResolver\\NodeNameResolver\\VariableNameResolver' => __DIR__ . '/../..' . '/packages/NodeNameResolver/NodeNameResolver/VariableNameResolver.php',
         'Rector\\NodeNameResolver\\Regex\\RegexPatternDetector' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Regex/RegexPatternDetector.php',
         'Rector\\NodeNestingScope\\ContextAnalyzer' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ContextAnalyzer.php',
-        'Rector\\NodeNestingScope\\FlowOfControlLocator' => __DIR__ . '/../..' . '/packages/NodeNestingScope/FlowOfControlLocator.php',
         'Rector\\NodeNestingScope\\NodeFinder\\ScopeAwareNodeFinder' => __DIR__ . '/../..' . '/packages/NodeNestingScope/NodeFinder/ScopeAwareNodeFinder.php',
         'Rector\\NodeNestingScope\\ParentScopeFinder' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ParentScopeFinder.php',
         'Rector\\NodeNestingScope\\ScopeNestingComparator' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ScopeNestingComparator.php',
@@ -3419,9 +3414,9 @@ class ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9f78686f83a3f168d1e9e492a018c1b4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit39c1e46a51a1dbf4e2612d6c7327c872::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit39c1e46a51a1dbf4e2612d6c7327c872::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit39c1e46a51a1dbf4e2612d6c7327c872::$classMap;
 
         }, null, ClassLoader::class);
     }
