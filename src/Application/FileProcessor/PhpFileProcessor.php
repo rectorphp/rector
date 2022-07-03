@@ -169,8 +169,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             return;
         }
         $smartFileInfo = $file->getSmartFileInfo();
-        $relativeFilePath = $smartFileInfo->getRelativeFilePathFromDirectory(\getcwd());
-        $message = $relativeFilePath;
+        $message = $smartFileInfo->getRelativeFilePathFromDirectory(\getcwd());
         $this->rectorOutputStyle->writeln($message);
     }
 }

@@ -93,8 +93,7 @@ CODE_SAMPLE
         if ($propertyToMethodCall->getNewGetMethod() !== '') {
             $methodCall = $this->nodeFactory->createMethodCall($propertyFetch->var, $propertyToMethodCall->getNewGetMethod());
             if ($propertyToMethodCall->getNewGetArguments() !== []) {
-                $args = $this->nodeFactory->createArgs($propertyToMethodCall->getNewGetArguments());
-                $methodCall->args = $args;
+                $methodCall->args = $this->nodeFactory->createArgs($propertyToMethodCall->getNewGetArguments());
             }
             return $methodCall;
         }
