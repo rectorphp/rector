@@ -1319,8 +1319,6 @@ return array(
     'Rector\\ChangesReporting\\ValueObjectFactory\\FileDiffFactory' => $baseDir . '/packages/ChangesReporting/ValueObjectFactory/FileDiffFactory.php',
     'Rector\\ChangesReporting\\ValueObject\\RectorWithLineChange' => $baseDir . '/packages/ChangesReporting/ValueObject/RectorWithLineChange.php',
     'Rector\\CodeQuality\\CompactConverter' => $baseDir . '/rules/CodeQuality/CompactConverter.php',
-    'Rector\\CodeQuality\\NodeAnalyzer\\ArrayCompacter' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ArrayCompacter.php',
-    'Rector\\CodeQuality\\NodeAnalyzer\\ArrayItemsAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ArrayItemsAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\ClassLikeAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ClassLikeAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\ConstructorPropertyDefaultExprResolver' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ConstructorPropertyDefaultExprResolver.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\ForAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ForAnalyzer.php',

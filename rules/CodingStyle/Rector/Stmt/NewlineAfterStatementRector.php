@@ -44,10 +44,10 @@ final class NewlineAfterStatementRector extends AbstractRector
         return new RuleDefinition('Add new line after statements to tidify code', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function test()
+    public function first()
     {
     }
-    public function test2()
+    public function second()
     {
     }
 }
@@ -55,11 +55,11 @@ CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function test()
+    public function first()
     {
     }
 
-    public function test2()
+    public function second()
     {
     }
 }
@@ -75,8 +75,9 @@ CODE_SAMPLE
     }
     /**
      * @param Stmt $node
+     * @return Stmt[]|null
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node) : ?array
     {
         if (!\in_array(\get_class($node), self::STMTS_TO_HAVE_NEXT_NEWLINE, \true)) {
             return null;
@@ -108,9 +109,7 @@ CODE_SAMPLE
                 return null;
             }
         }
-        // @todo refactor to direct return of array
-        $this->nodesToAddCollector->addNodeAfterNode(new Nop(), $node);
-        return $node;
+        return [$node, new Nop()];
     }
     /**
      * @param Comment[]|null $comments

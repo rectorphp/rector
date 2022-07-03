@@ -4,25 +4,22 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Stmt;
-use PHPStan\Analyser\Scope;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\MixedType;
 use Rector\CodeQuality\CompactConverter;
-use Rector\CodeQuality\NodeAnalyzer\ArrayCompacter;
-use Rector\CodeQuality\NodeAnalyzer\ArrayItemsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://stackoverflow.com/a/16319909/1348344
  * @changelog https://3v4l.org/8GJEs
+ *
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\CompactToVariablesRector\CompactToVariablesRectorTest
  */
 final class CompactToVariablesRector extends AbstractRector
@@ -32,21 +29,9 @@ final class CompactToVariablesRector extends AbstractRector
      * @var \Rector\CodeQuality\CompactConverter
      */
     private $compactConverter;
-    /**
-     * @readonly
-     * @var \Rector\CodeQuality\NodeAnalyzer\ArrayItemsAnalyzer
-     */
-    private $arrayItemsAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\CodeQuality\NodeAnalyzer\ArrayCompacter
-     */
-    private $arrayCompacter;
-    public function __construct(CompactConverter $compactConverter, ArrayItemsAnalyzer $arrayItemsAnalyzer, ArrayCompacter $arrayCompacter)
+    public function __construct(CompactConverter $compactConverter)
     {
         $this->compactConverter = $compactConverter;
-        $this->arrayItemsAnalyzer = $arrayItemsAnalyzer;
-        $this->arrayCompacter = $arrayCompacter;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -94,8 +79,7 @@ CODE_SAMPLE
         if ($this->compactConverter->hasAllArgumentsNamed($node)) {
             return $this->compactConverter->convertToArray($node);
         }
-        /** @var Arg $firstArg */
-        $firstArg = $node->args[0];
+        $firstArg = $node->getArgs()[0];
         $firstValue = $firstArg->value;
         $firstValueStaticType = $this->getType($firstValue);
         if (!$firstValueStaticType instanceof ConstantArrayType) {
@@ -104,49 +88,19 @@ CODE_SAMPLE
         if ($firstValueStaticType->getItemType() instanceof MixedType) {
             return null;
         }
-        return $this->refactorAssignArray($firstValue, $node);
+        return $this->refactorAssignArray($firstValueStaticType);
     }
-    private function refactorAssignedArray(Assign $assign, FuncCall $funcCall, Expr $expr) : ?Expr
+    private function refactorAssignArray(ConstantArrayType $constantArrayType) : ?Array_
     {
-        if (!$assign->expr instanceof Array_) {
-            return null;
-        }
-        $array = $assign->expr;
-        $assignScope = $assign->getAttribute(AttributeKey::SCOPE);
-        if (!$assignScope instanceof Scope) {
-            return null;
-        }
-        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
-        if (!$currentStmt instanceof Stmt) {
-            return null;
-        }
-        $isCompactOfUndefinedVariables = $this->arrayItemsAnalyzer->hasArrayExclusiveDefinedVariableNames($array, $assignScope);
-        if ($isCompactOfUndefinedVariables) {
-            $funcCallScope = $funcCall->getAttribute(AttributeKey::SCOPE);
-            if (!$funcCallScope instanceof Scope) {
+        $arrayItems = [];
+        foreach ($constantArrayType->getValueTypes() as $valueType) {
+            if (!$valueType instanceof ConstantStringType) {
                 return null;
             }
-            $isCompactOfDefinedVariables = $this->arrayItemsAnalyzer->hasArrayExclusiveUndefinedVariableNames($array, $funcCallScope);
-            if ($isCompactOfDefinedVariables) {
-                $this->arrayCompacter->compactStringToVariableArray($array);
-                return $expr;
-            }
+            $variableName = $valueType->getValue();
+            $variable = new Variable($variableName);
+            $arrayItems[] = new ArrayItem($variable, new String_($variableName));
         }
-        $this->removeNode($assign);
-        $this->arrayCompacter->compactStringToVariableArray($array);
-        /** @var Arg $firstArg */
-        $firstArg = $funcCall->args[0];
-        $assignVariable = $firstArg->value;
-        $preAssign = new Assign($assignVariable, $array);
-        $this->nodesToAddCollector->addNodeBeforeNode($preAssign, $currentStmt);
-        return $expr;
-    }
-    private function refactorAssignArray(Expr $expr, FuncCall $funcCall) : ?Expr
-    {
-        $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($expr);
-        if (!$previousAssign instanceof Assign) {
-            return null;
-        }
-        return $this->refactorAssignedArray($previousAssign, $funcCall, $expr);
+        return new Array_($arrayItems);
     }
 }

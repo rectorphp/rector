@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4bb373ad1f6850d6aeb06d893643ee00
+class ComposerStaticInitcdd6065f6f3d900461c5946dc02fec48
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1626,8 +1626,6 @@ class ComposerStaticInit4bb373ad1f6850d6aeb06d893643ee00
         'Rector\\ChangesReporting\\ValueObjectFactory\\FileDiffFactory' => __DIR__ . '/../..' . '/packages/ChangesReporting/ValueObjectFactory/FileDiffFactory.php',
         'Rector\\ChangesReporting\\ValueObject\\RectorWithLineChange' => __DIR__ . '/../..' . '/packages/ChangesReporting/ValueObject/RectorWithLineChange.php',
         'Rector\\CodeQuality\\CompactConverter' => __DIR__ . '/../..' . '/rules/CodeQuality/CompactConverter.php',
-        'Rector\\CodeQuality\\NodeAnalyzer\\ArrayCompacter' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ArrayCompacter.php',
-        'Rector\\CodeQuality\\NodeAnalyzer\\ArrayItemsAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ArrayItemsAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ClassLikeAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ClassLikeAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ConstructorPropertyDefaultExprResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ConstructorPropertyDefaultExprResolver.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ForAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ForAnalyzer.php',
@@ -3412,9 +3410,9 @@ class ComposerStaticInit4bb373ad1f6850d6aeb06d893643ee00
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4bb373ad1f6850d6aeb06d893643ee00::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4bb373ad1f6850d6aeb06d893643ee00::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4bb373ad1f6850d6aeb06d893643ee00::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcdd6065f6f3d900461c5946dc02fec48::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcdd6065f6f3d900461c5946dc02fec48::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcdd6065f6f3d900461c5946dc02fec48::$classMap;
 
         }, null, ClassLoader::class);
     }
