@@ -1,4 +1,4 @@
-# 412 Rules Overview
+# 411 Rules Overview
 
 <br>
 
@@ -20,7 +20,7 @@
 
 - [DogFood](#dogfood) (1)
 
-- [EarlyReturn](#earlyreturn) (12)
+- [EarlyReturn](#earlyreturn) (11)
 
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
@@ -68,7 +68,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (36)
+- [Transform](#transform) (35)
 
 - [TypeDeclaration](#typedeclaration) (29)
 
@@ -4105,35 +4105,6 @@ Split if statement, when if condition always break execution flow
 
 <br>
 
-### ReturnAfterToEarlyOnBreakRector
-
-Change return after foreach to early return in foreach on break
-
-- class: [`Rector\EarlyReturn\Rector\Foreach_\ReturnAfterToEarlyOnBreakRector`](../rules/EarlyReturn/Rector/Foreach_/ReturnAfterToEarlyOnBreakRector.php)
-
-```diff
- class SomeClass
- {
-     public function run(array $pathConstants, string $allowedPath)
-     {
--        $pathOK = false;
--
-         foreach ($pathConstants as $allowedPath) {
-             if ($dirPath == $allowedPath) {
--                $pathOK = true;
--                break;
-+                return true;
-             }
-         }
-
--        return $pathOK;
-+        return false;
-     }
- }
-```
-
-<br>
-
 ### ReturnBinaryAndToEarlyReturnRector
 
 Changes Single return of && to early returns
@@ -7942,46 +7913,6 @@ return static function (RectorConfig $rectorConfig): void {
 -    #[Column(type: "string")]
 +    #[Column(type: Types::STRING)]
      public $name;
- }
-```
-
-<br>
-
-### CallableInMethodCallToVariableRector
-
-Change a callable in method call to standalone variable assign
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector`](../rules/Transform/Rector/MethodCall/CallableInMethodCallToVariableRector.php)
-
-```php
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\MethodCall\CallableInMethodCallToVariableRector;
-use Rector\Transform\ValueObject\CallableInMethodCallToVariable;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        CallableInMethodCallToVariableRector::class,
-        [new CallableInMethodCallToVariable('Nette\Caching\Cache', 'save', 1)]
-    );
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
-         /** @var \Nette\Caching\Cache $cache */
--        $cache->save($key, function () use ($container) {
--            return 100;
--        });
-+        $result = 100;
-+        $cache->save($key, $result);
-     }
  }
 ```
 
