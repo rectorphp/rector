@@ -17,7 +17,7 @@
         "symplify\/phpstan-rules": "^11.0",
         "symplify\/easy-coding-standard": "^11.0",
         "symplify\/monorepo-builder": "^11.0",
-        "phpstan\/phpstan": "^1.7.10",
+        "phpstan\/phpstan": "^1.8",
         "phpstan\/phpstan-nette": "^1.0",
         "nette\/application": "^3.1",
         "nette\/di": "^3.0",

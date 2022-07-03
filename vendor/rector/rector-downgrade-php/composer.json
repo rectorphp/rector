@@ -8,7 +8,7 @@
     },
     "require-dev": {
         "phpstan\/extension-installer": "^1.1",
-        "phpstan\/phpstan": "^1.7.10",
+        "phpstan\/phpstan": "^1.8",
         "phpstan\/phpstan-strict-rules": "^1.2",
         "phpstan\/phpstan-webmozart-assert": "^1.1",
         "phpunit\/phpunit": "^9.5",

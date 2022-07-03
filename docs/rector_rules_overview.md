@@ -4541,11 +4541,11 @@ Use ?: instead of ?, where useful
 
 ## Php54
 
-### ArrayToShortArrayRector
+### LongArrayToShortArrayRector
 
-Array to short array
+Long array to short array
 
-- class: [`Rector\Php54\Rector\Array_\ArrayToShortArrayRector`](../rules/Php54/Rector/Array_/ArrayToShortArrayRector.php)
+- class: [`Rector\Php54\Rector\Array_\LongArrayToShortArrayRector`](../rules/Php54/Rector/Array_/LongArrayToShortArrayRector.php)
 
 ```diff
  class SomeClass

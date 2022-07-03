@@ -12,9 +12,9 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\Php54\Rector\Array_\ArrayToShortArrayRector\ArrayToShortArrayRectorTest
+ * @see \Rector\Tests\Php54\Rector\Array_\LongArrayToShortArrayRector\LongArrayToShortArrayRectorTest
  */
-final class ArrayToShortArrayRector extends AbstractRector implements MinPhpVersionInterface
+final class LongArrayToShortArrayRector extends AbstractRector implements MinPhpVersionInterface
 {
     public function provideMinPhpVersion() : int
     {
@@ -22,7 +22,7 @@ final class ArrayToShortArrayRector extends AbstractRector implements MinPhpVers
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Array to short array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Long array to short array', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()

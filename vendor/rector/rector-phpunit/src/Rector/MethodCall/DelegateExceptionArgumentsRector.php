@@ -7,10 +7,11 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\AssertCallFactory;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,16 +33,10 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(AssertCallFactory $assertCallFactory, TestsNodeAnalyzer $testsNodeAnalyzer, NodesToAddCollector $nodesToAddCollector)
+    public function __construct(AssertCallFactory $assertCallFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->assertCallFactory = $assertCallFactory;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -57,34 +52,56 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param MethodCall|StaticCall $node
+     * @param StmtsAwareInterface $node
      */
     public function refactor(Node $node) : ?Node
     {
-        $oldMethodNames = \array_keys(self::OLD_TO_NEW_METHOD);
-        if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethodNames)) {
+        $stmts = (array) $node->stmts;
+        if ($stmts === []) {
             return null;
         }
-        if (isset($node->args[1])) {
-            /** @var Identifier $identifierNode */
-            $identifierNode = $node->name;
-            $oldMethodName = $identifierNode->name;
-            $call = $this->assertCallFactory->createCallWithName($node, self::OLD_TO_NEW_METHOD[$oldMethodName]);
-            $call->args[] = $node->args[1];
-            $this->nodesToAddCollector->addNodeAfterNode($call, $node);
-            unset($node->args[1]);
-            // add exception code method call
-            if (isset($node->args[2])) {
-                $call = $this->assertCallFactory->createCallWithName($node, 'expectExceptionCode');
-                $call->args[] = $node->args[2];
-                $this->nodesToAddCollector->addNodeAfterNode($call, $node);
-                unset($node->args[2]);
+        $hasChanged = \false;
+        $oldMethodNames = \array_keys(self::OLD_TO_NEW_METHOD);
+        foreach ($stmts as $key => $stmt) {
+            if (!$stmt instanceof Expression) {
+                continue;
             }
+            if (!$stmt->expr instanceof StaticCall && !$stmt->expr instanceof MethodCall) {
+                continue;
+            }
+            $call = $stmt->expr;
+            if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($call, $oldMethodNames)) {
+                continue;
+            }
+            $extraStmts = [];
+            if (isset($call->args[1])) {
+                /** @var Identifier $identifierNode */
+                $identifierNode = $call->name;
+                $oldMethodName = $identifierNode->name;
+                $extraCall = $this->assertCallFactory->createCallWithName($call, self::OLD_TO_NEW_METHOD[$oldMethodName]);
+                $extraCall->args[] = $call->args[1];
+                $extraStmts[] = new Expression($extraCall);
+                unset($call->args[1]);
+                // add exception code method call
+                if (isset($call->args[2])) {
+                    $extraCall = $this->assertCallFactory->createCallWithName($call, 'expectExceptionCode');
+                    $extraCall->args[] = $call->args[2];
+                    $extraStmts[] = new Expression($extraCall);
+                    unset($call->args[2]);
+                }
+            }
+            $hasChanged = \true;
+            $call->name = new Identifier('expectException');
+            $extraStmts = \array_merge($extraStmts, [new Expression($call)]);
+            \array_splice($stmts, $key, 1, $extraStmts);
         }
-        $node->name = new Identifier('expectException');
-        return $node;
+        if ($hasChanged) {
+            $node->stmts = $stmts;
+            return $node;
+        }
+        return null;
     }
 }
