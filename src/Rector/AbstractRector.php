@@ -102,10 +102,6 @@ CODE_SAMPLE;
      */
     protected $nodeComparator;
     /**
-     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
-     */
-    protected $nodesToRemoveCollector;
-    /**
      * @var \Rector\Core\ValueObject\Application\File
      */
     protected $file;
@@ -125,6 +121,10 @@ CODE_SAMPLE;
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
      */
     protected $scopeFactory;
+    /**
+     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
     /**
      * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
      */

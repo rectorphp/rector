@@ -138,7 +138,7 @@ CODE_SAMPLE
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             if ($parentNode instanceof ClosureUse) {
                 // remove closure use which will be replaced by a property fetch
-                $this->nodesToRemoveCollector->addNodeToRemove($parentNode);
+                $this->removeNode($parentNode);
                 return null;
             }
             return $propertyFetch;
