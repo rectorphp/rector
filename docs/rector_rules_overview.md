@@ -1,4 +1,4 @@
-# 410 Rules Overview
+# 412 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (72)
+- [CodeQuality](#codequality) (73)
 
 - [CodingStyle](#codingstyle) (35)
 
@@ -20,7 +20,7 @@
 
 - [DogFood](#dogfood) (1)
 
-- [EarlyReturn](#earlyreturn) (11)
+- [EarlyReturn](#earlyreturn) (12)
 
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
@@ -1077,6 +1077,29 @@ Replace the Double not operator (!!) by type-casting to boolean
 ```diff
 -$bool = !!$var;
 +$bool = (bool) $var;
+```
+
+<br>
+
+### ReturnTypeFromStrictScalarReturnExprRector
+
+Change return type based on strict scalar returns - string, int, float or bool
+
+- class: [`Rector\CodeQuality\Rector\ClassMethod\ReturnTypeFromStrictScalarReturnExprRector`](../rules/CodeQuality/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function run($value)
++    public function run($value): string
+     {
+         if ($value) {
+             return 'yes';
+         }
+
+         return 'no';
+     }
+ }
 ```
 
 <br>
@@ -4149,6 +4172,29 @@ Changes Single return of || to early returns
 +            return true;
 +        }
 +        return (bool) $this->somethingElse();
+     }
+ }
+```
+
+<br>
+
+### ReturnEarlyIfVariableRector
+
+Replace if conditioned variable override with direct return
+
+- class: [`Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector`](../rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run($value)
+     {
+         if ($value === 50) {
+-            $value = 100;
++            return 100;
+         }
+
+         return $value;
      }
  }
 ```
