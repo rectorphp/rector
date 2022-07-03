@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://laravel.com/docs/5.7/upgrade
+ * @changelog https://laravel.com/docs/5.7/upgrade
  * @see \Rector\Laravel\Tests\Rector\StaticCall\Redirect301ToPermanentRedirectRector\Redirect301ToPermanentRedirectRectorTest
  */
 final class Redirect301ToPermanentRedirectRector extends AbstractRector

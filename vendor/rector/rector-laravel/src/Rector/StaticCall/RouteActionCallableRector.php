@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202207\Webmozart\Assert\Assert;
 /**
- * @see https://laravel.com/docs/8.x/upgrade#automatic-controller-namespace-prefixing
+ * @changelog https://laravel.com/docs/8.x/upgrade#automatic-controller-namespace-prefixing
  *
  * @see \Rector\Laravel\Tests\Rector\StaticCall\RouteActionCallableRector\RouteActionCallableRectorTest
  */

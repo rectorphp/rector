@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202207\Webmozart\Assert\Assert;
 /**
- * @see https://github.com/laravel/framework/pull/32856
+ * @changelog https://github.com/laravel/framework/pull/32856
  *
  * @see \Rector\Laravel\Tests\Rector\Class_\UnifyModelDatesWithCastsRector\UnifyModelDatesWithCastsRectorTest
  */

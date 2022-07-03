@@ -9,8 +9,8 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://laravel.com/docs/8.x/helpers#method-app
- * @see https://github.com/laravel/framework/blob/8.x/src/Illuminate/Foundation/helpers.php
+ * @changelog https://laravel.com/docs/8.x/helpers#method-app
+ * @changelog https://github.com/laravel/framework/blob/8.x/src/Illuminate/Foundation/helpers.php
  *
  * @see \Rector\Laravel\Tests\Rector\FuncCall\HelperFuncCallToFacadeClassRector\HelperFuncCallToFacadeClassRectorTest
  */

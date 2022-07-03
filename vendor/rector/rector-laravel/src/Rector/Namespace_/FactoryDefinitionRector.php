@@ -21,8 +21,8 @@ use Rector\Laravel\NodeFactory\ModelFactoryNodeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://laravel.com/docs/7.x/database-testing#writing-factories
- * @see https://laravel.com/docs/8.x/database-testing#defining-model-factories
+ * @changelog https://laravel.com/docs/7.x/database-testing#writing-factories
+ * @changelog https://laravel.com/docs/8.x/database-testing#defining-model-factories
  *
  * @see \Rector\Laravel\Tests\Rector\Namespace_\FactoryDefinitionRector\FactoryDefinitionRectorTest
  */

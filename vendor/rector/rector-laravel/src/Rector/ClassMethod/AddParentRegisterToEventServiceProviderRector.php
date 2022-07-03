@@ -13,7 +13,7 @@ use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://laravel.com/docs/8.x/upgrade#the-event-service-provider-class
+ * @changelog https://laravel.com/docs/8.x/upgrade#the-event-service-provider-class
  *
  * @see \Rector\Laravel\Tests\Rector\ClassMethod\AddParentRegisterToEventServiceProviderRector\AddParentRegisterToEventServiceProviderRectorTest
  */

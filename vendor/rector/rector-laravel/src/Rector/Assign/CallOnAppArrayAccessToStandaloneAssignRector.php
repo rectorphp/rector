@@ -13,6 +13,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Laravel\NodeFactory\AppAssignFactory;
 use Rector\Laravel\ValueObject\ServiceNameTypeAndVariableName;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,9 +30,15 @@ final class CallOnAppArrayAccessToStandaloneAssignRector extends AbstractRector
      * @var \Rector\Laravel\NodeFactory\AppAssignFactory
      */
     private $appAssignFactory;
-    public function __construct(AppAssignFactory $appAssignFactory)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(AppAssignFactory $appAssignFactory, NodesToAddCollector $nodesToAddCollector)
     {
         $this->appAssignFactory = $appAssignFactory;
+        $this->nodesToAddCollector = $nodesToAddCollector;
         $this->serviceNameTypeAndVariableNames[] = new ServiceNameTypeAndVariableName('validator', 'Illuminate\\Validation\\Factory', 'validationFactory');
     }
     /**

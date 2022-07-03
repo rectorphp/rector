@@ -1965,7 +1965,6 @@ return array(
     'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => $baseDir . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
     'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => $baseDir . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
     'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => $baseDir . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
-    'Rector\\EarlyReturn\\Rector\\Foreach_\\ReturnAfterToEarlyOnBreakRector' => $baseDir . '/rules/EarlyReturn/Rector/Foreach_/ReturnAfterToEarlyOnBreakRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeIfElseValueAssignToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeIfElseValueAssignToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeNestedIfsToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php',

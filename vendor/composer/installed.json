@@ -2135,12 +2135,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "7d3c7342ad89992c544fbd60193c90649b8edd60"
+                "reference": "ab8aaccb0ae2b6e3c1f8b8e56557af684f69fea0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/7d3c7342ad89992c544fbd60193c90649b8edd60",
-                "reference": "7d3c7342ad89992c544fbd60193c90649b8edd60",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/ab8aaccb0ae2b6e3c1f8b8e56557af684f69fea0",
+                "reference": "ab8aaccb0ae2b6e3c1f8b8e56557af684f69fea0",
                 "shasum": ""
             },
             "require": {
@@ -2164,7 +2164,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-02T07:33:20+00:00",
+            "time": "2022-07-03T18:49:55+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2202,12 +2202,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "9489bdb38f8bea75bf7071f6313900363c5ae332"
+                "reference": "003b954a5707bda6100014b33afd3674ea4a744b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/9489bdb38f8bea75bf7071f6313900363c5ae332",
-                "reference": "9489bdb38f8bea75bf7071f6313900363c5ae332",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/003b954a5707bda6100014b33afd3674ea4a744b",
+                "reference": "003b954a5707bda6100014b33afd3674ea4a744b",
                 "shasum": ""
             },
             "require": {
@@ -2239,7 +2239,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-03T11:55:16+00:00",
+            "time": "2022-07-03T18:43:51+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2269,7 +2269,7 @@
             "description": "Rector upgrades rules for Nette Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-nette\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/0.13.1"
+                "source": "https:\/\/github.com\/rectorphp\/rector-nette\/tree\/main"
             },
             "install-path": "..\/rector\/rector-nette"
         },
@@ -2347,12 +2347,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "97b53970d204083f6e2abaa0f1ffd071b660487f"
+                "reference": "ca42a8ea43abe8e975382c585ec9adbf293df01f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/97b53970d204083f6e2abaa0f1ffd071b660487f",
-                "reference": "97b53970d204083f6e2abaa0f1ffd071b660487f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/ca42a8ea43abe8e975382c585ec9adbf293df01f",
+                "reference": "ca42a8ea43abe8e975382c585ec9adbf293df01f",
                 "shasum": ""
             },
             "require": {
@@ -2377,7 +2377,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-01T22:33:06+00:00",
+            "time": "2022-07-03T19:13:24+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

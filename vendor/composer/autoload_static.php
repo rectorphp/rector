@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit07bac8f7205b1fa239a4e44e121247a2
+class ComposerStaticInit522b44807a3f3ba3c95e93316c058088
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2272,7 +2272,6 @@ class ComposerStaticInit07bac8f7205b1fa239a4e44e121247a2
         'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
         'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => __DIR__ . '/../..' . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
         'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',
-        'Rector\\EarlyReturn\\Rector\\Foreach_\\ReturnAfterToEarlyOnBreakRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Foreach_/ReturnAfterToEarlyOnBreakRector.php',
         'Rector\\EarlyReturn\\Rector\\If_\\ChangeAndIfToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/If_/ChangeAndIfToEarlyReturnRector.php',
         'Rector\\EarlyReturn\\Rector\\If_\\ChangeIfElseValueAssignToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/If_/ChangeIfElseValueAssignToEarlyReturnRector.php',
         'Rector\\EarlyReturn\\Rector\\If_\\ChangeNestedIfsToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php',
@@ -3416,9 +3415,9 @@ class ComposerStaticInit07bac8f7205b1fa239a4e44e121247a2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit07bac8f7205b1fa239a4e44e121247a2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit07bac8f7205b1fa239a4e44e121247a2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit07bac8f7205b1fa239a4e44e121247a2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit522b44807a3f3ba3c95e93316c058088::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit522b44807a3f3ba3c95e93316c058088::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit522b44807a3f3ba3c95e93316c058088::$classMap;
 
         }, null, ClassLoader::class);
     }
