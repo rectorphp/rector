@@ -3329,12 +3329,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "5711fe2c974b78e7bb90533b8b6b5d370c5eb7ba"
+                "reference": "6c5200275c8ec0eb261366587275e3a5547b407b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/5711fe2c974b78e7bb90533b8b6b5d370c5eb7ba",
-                "reference": "5711fe2c974b78e7bb90533b8b6b5d370c5eb7ba",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/6c5200275c8ec0eb261366587275e3a5547b407b",
+                "reference": "6c5200275c8ec0eb261366587275e3a5547b407b",
                 "shasum": ""
             },
             "require": {
@@ -3375,7 +3375,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^11.1"
             },
-            "time": "2022-07-04T13:10:46+00:00",
+            "time": "2022-07-04T15:03:21+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {

@@ -300,6 +300,9 @@ CODE_SAMPLE;
     }
     protected function mirrorComments(Node $newNode, Node $oldNode) : void
     {
+        if ($this->nodeComparator->areSameNode($newNode, $oldNode)) {
+            return;
+        }
         $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO));
         if (!$newNode instanceof Nop) {
             $newNode->setAttribute(AttributeKey::COMMENTS, $oldNode->getAttribute(AttributeKey::COMMENTS));
