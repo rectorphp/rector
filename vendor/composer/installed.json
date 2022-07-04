@@ -3984,12 +3984,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/smart-file-system.git",
-                "reference": "53742fd765a2d792fd607d77911aa949b0e0d5fd"
+                "reference": "418da802be5845c67abb9a1f60a3435efd43176c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/53742fd765a2d792fd607d77911aa949b0e0d5fd",
-                "reference": "53742fd765a2d792fd607d77911aa949b0e0d5fd",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/418da802be5845c67abb9a1f60a3435efd43176c",
+                "reference": "418da802be5845c67abb9a1f60a3435efd43176c",
                 "shasum": ""
             },
             "require": {
@@ -4025,7 +4025,7 @@
                 "nette\/finder": "^2.5",
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-06-29T14:14:58+00:00",
+            "time": "2022-07-04T16:59:44+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -4045,7 +4045,7 @@
             ],
             "description": "Sanitized FileInfo with safe getRealPath() and other handy methods",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/smart-file-system\/tree\/11.0.6"
+                "source": "https:\/\/github.com\/symplify\/smart-file-system\/tree\/main"
             },
             "funding": [
                 {

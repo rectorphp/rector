@@ -37,22 +37,10 @@ final class SmartFileSystem extends Filesystem
      *
      * @source https://github.com/nette/utils/blob/e7bd59f1dd860d25dbbb1ac720dddd0fa1388f4c/src/Utils/Html.php#L325-L331
      */
-    public function htmlToText(string $html) : string
+    private function htmlToText(string $html) : string
     {
         $content = \strip_tags($html);
         return \html_entity_decode($content, \ENT_QUOTES | \ENT_HTML5, 'UTF-8');
-    }
-    /**
-     * @param SmartFileInfo[] $fileInfos
-     * @return string[]
-     */
-    public function resolveFilePathsFromFileInfos(array $fileInfos) : array
-    {
-        $filePaths = [];
-        foreach ($fileInfos as $fileInfo) {
-            $filePaths[] = $fileInfo->getRelativeFilePathFromCwd();
-        }
-        return $filePaths;
     }
     /**
      * Returns the last PHP error as plain string.
