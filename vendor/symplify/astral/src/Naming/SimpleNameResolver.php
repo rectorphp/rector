@@ -105,14 +105,6 @@ final class SimpleNameResolver
         }
         return $this->resolveShortName($className);
     }
-    public function resolveShortNameFromScope(Scope $scope) : ?string
-    {
-        $className = $this->getClassNameFromScope($scope);
-        if ($className === null) {
-            return null;
-        }
-        return $this->resolveShortName($className);
-    }
     public function getClassNameFromScope(Scope $scope) : ?string
     {
         if ($scope->isInTrait()) {

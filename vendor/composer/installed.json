@@ -3329,12 +3329,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "3bbf5dab01ba741ba6cf94692f911c0bbb69369a"
+                "reference": "5711fe2c974b78e7bb90533b8b6b5d370c5eb7ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/3bbf5dab01ba741ba6cf94692f911c0bbb69369a",
-                "reference": "3bbf5dab01ba741ba6cf94692f911c0bbb69369a",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/5711fe2c974b78e7bb90533b8b6b5d370c5eb7ba",
+                "reference": "5711fe2c974b78e7bb90533b8b6b5d370c5eb7ba",
                 "shasum": ""
             },
             "require": {
@@ -3375,7 +3375,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^11.1"
             },
-            "time": "2022-06-30T11:01:30+00:00",
+            "time": "2022-07-04T13:10:46+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
@@ -3657,12 +3657,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/easy-testing.git",
-                "reference": "850adbcb12c4ebb633c1fa543a82ec8fb9b85949"
+                "reference": "4ebf1a01b182d575be27caf64ca3adb3cada847d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/850adbcb12c4ebb633c1fa543a82ec8fb9b85949",
-                "reference": "850adbcb12c4ebb633c1fa543a82ec8fb9b85949",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/4ebf1a01b182d575be27caf64ca3adb3cada847d",
+                "reference": "4ebf1a01b182d575be27caf64ca3adb3cada847d",
                 "shasum": ""
             },
             "require": {
@@ -3698,7 +3698,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-06-29T14:16:46+00:00",
+            "time": "2022-07-04T13:10:42+00:00",
             "default-branch": true,
             "bin": [
                 "bin\/easy-testing"

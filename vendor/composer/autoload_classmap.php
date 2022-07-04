@@ -1056,7 +1056,6 @@ return array(
     'RectorPrefix202207\\Symplify\\Astral\\NodeValue\\NodeValueResolver\\ConstFetchValueResolver' => $vendorDir . '/symplify/astral/src/NodeValue/NodeValueResolver/ConstFetchValueResolver.php',
     'RectorPrefix202207\\Symplify\\Astral\\NodeValue\\NodeValueResolver\\FuncCallValueResolver' => $vendorDir . '/symplify/astral/src/NodeValue/NodeValueResolver/FuncCallValueResolver.php',
     'RectorPrefix202207\\Symplify\\Astral\\NodeValue\\NodeValueResolver\\MagicConstValueResolver' => $vendorDir . '/symplify/astral/src/NodeValue/NodeValueResolver/MagicConstValueResolver.php',
-    'RectorPrefix202207\\Symplify\\Astral\\NodeValue\\UnionTypeValueResolver' => $vendorDir . '/symplify/astral/src/NodeValue/UnionTypeValueResolver.php',
     'RectorPrefix202207\\Symplify\\Astral\\NodeVisitor\\CallableNodeVisitor' => $vendorDir . '/symplify/astral/src/NodeVisitor/CallableNodeVisitor.php',
     'RectorPrefix202207\\Symplify\\Astral\\PhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => $vendorDir . '/symplify/astral/src/PhpDocParser/Contract/PhpDocNodeVisitorInterface.php',
     'RectorPrefix202207\\Symplify\\Astral\\PhpDocParser\\Exception\\InvalidTraverseException' => $vendorDir . '/symplify/astral/src/PhpDocParser/Exception/InvalidTraverseException.php',

@@ -26,21 +26,17 @@ final class ContainsTypeAnalyser
         return \false;
     }
     /**
-     * @param class-string[] $types
+     * @param class-string $type
      */
-    public function containsTypeExprTypes(Type $exprType, array $types) : bool
+    public function containsExprType(Expr $expr, Scope $scope, string $type) : bool
     {
-        foreach ($types as $type) {
-            if ($this->containsTypeExprType($exprType, $type)) {
-                return \true;
-            }
-        }
-        return \false;
+        $exprType = $scope->getType($expr);
+        return $this->containsTypeExprType($exprType, $type);
     }
     /**
      * @param class-string $type
      */
-    public function containsTypeExprType(Type $exprType, string $type) : bool
+    private function containsTypeExprType(Type $exprType, string $type) : bool
     {
         if ($exprType instanceof IntersectionType) {
             $intersectionedTypes = $exprType->getTypes();
@@ -51,14 +47,6 @@ final class ContainsTypeAnalyser
             }
         }
         return $this->isExprTypeOfType($exprType, $type);
-    }
-    /**
-     * @param class-string $type
-     */
-    public function containsExprType(Expr $expr, Scope $scope, string $type) : bool
-    {
-        $exprType = $scope->getType($expr);
-        return $this->containsTypeExprType($exprType, $type);
     }
     /**
      * @param class-string $class
