@@ -13,7 +13,7 @@ final class CpuCoreCountProvider
      * @see https://regex101.com/r/XMeAl4/1
      * @var string
      */
-    public const PROCESSOR_REGEX = '#^processor#m';
+    private const PROCESSOR_REGEX = '#^processor#m';
     /**
      * @var int
      */

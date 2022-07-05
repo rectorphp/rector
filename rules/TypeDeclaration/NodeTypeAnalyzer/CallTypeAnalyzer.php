@@ -36,7 +36,7 @@ final class CallTypeAnalyzer
         if (!$scope instanceof Scope) {
             return [];
         }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($methodReflection, $call->getArgs(), $scope);
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($methodReflection, $call, $scope);
         $parameterTypes = [];
         /** @var ParameterReflection $parameterReflection */
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {

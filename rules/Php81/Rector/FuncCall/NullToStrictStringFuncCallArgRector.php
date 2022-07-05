@@ -209,7 +209,7 @@ CODE_SAMPLE
         if (!$scope instanceof Scope) {
             return [];
         }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall->getArgs(), $scope);
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall, $scope);
         $functionName = $this->nodeNameResolver->getName($funcCall);
         $argNames = self::ARG_POSITION_NAME_NULL_TO_STRICT_STRING[$functionName];
         $positions = [];

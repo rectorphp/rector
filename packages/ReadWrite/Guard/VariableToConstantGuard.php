@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\ReadWrite\Guard;
 
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PHPStan\Analyser\Scope;
@@ -55,7 +56,11 @@ final class VariableToConstantGuard
         if (!$argScope instanceof Scope) {
             return \true;
         }
-        $referenceParametersPositions = $this->resolveFunctionReferencePositions($functionReflection, [$arg], $argScope);
+        $parentArg = $arg->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentArg instanceof CallLike) {
+            return \true;
+        }
+        $referenceParametersPositions = $this->resolveFunctionReferencePositions($functionReflection, $parentArg, $argScope);
         if ($referenceParametersPositions === []) {
             // no reference always only write
             return \true;
@@ -64,16 +69,15 @@ final class VariableToConstantGuard
         return !\in_array($argumentPosition, $referenceParametersPositions, \true);
     }
     /**
-     * @param Arg[] $args
      * @return int[]
      */
-    private function resolveFunctionReferencePositions(FunctionReflection $functionReflection, array $args, Scope $scope) : array
+    private function resolveFunctionReferencePositions(FunctionReflection $functionReflection, CallLike $callLike, Scope $scope) : array
     {
         if (isset($this->referencePositionsByFunctionName[$functionReflection->getName()])) {
             return $this->referencePositionsByFunctionName[$functionReflection->getName()];
         }
         $referencePositions = [];
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $args, $scope);
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $callLike, $scope);
         foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
             /** @var ParameterReflection $parameterReflection */
             if (!$parameterReflection->passedByReference()->yes()) {

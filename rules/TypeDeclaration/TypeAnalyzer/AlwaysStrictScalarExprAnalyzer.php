@@ -93,7 +93,7 @@ final class AlwaysStrictScalarExprAnalyzer
         if (!$scope instanceof Scope) {
             return null;
         }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall->getArgs(), $scope);
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall, $scope);
         return $parametersAcceptor->getReturnType();
     }
 }

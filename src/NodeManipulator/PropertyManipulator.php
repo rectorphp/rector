@@ -329,7 +329,7 @@ final class PropertyManipulator
         if (!$scope instanceof Scope) {
             return \false;
         }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionLikeReflection, $node->getArgs(), $scope);
+        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionLikeReflection, $node, $scope);
         foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
             if ($parameterReflection->passedByReference()->yes()) {
                 return \true;
