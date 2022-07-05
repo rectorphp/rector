@@ -136,6 +136,9 @@ CODE_SAMPLE
             if (!$subNode instanceof MethodCall) {
                 return \false;
             }
+            if ($subNode->isFirstClassCallable()) {
+                return \false;
+            }
             if (!$subNode->var instanceof Variable) {
                 return \false;
             }
