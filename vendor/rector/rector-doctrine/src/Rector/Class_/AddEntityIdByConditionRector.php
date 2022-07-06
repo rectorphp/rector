@@ -20,6 +20,7 @@ use RectorPrefix202207\Webmozart\Assert\Assert;
 final class AddEntityIdByConditionRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @api
      * @var string
      */
     public const DETECTED_TRAITS = 'detected_traits';

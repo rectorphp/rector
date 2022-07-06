@@ -61,7 +61,7 @@ final class ParamFactory
     /**
      * @param string[] $optionalParamNames
      */
-    public function createFromPropertyFetch(PropertyFetch $propertyFetch, array $optionalParamNames) : Param
+    private function createFromPropertyFetch(PropertyFetch $propertyFetch, array $optionalParamNames) : Param
     {
         $propertyName = $this->nodeNameResolver->getName($propertyFetch->name);
         if ($propertyName === null) {

@@ -29,6 +29,7 @@ final class AttrinationFinder
         $this->attributeFinder = $attributeFinder;
     }
     /**
+     * @api
      * @param class-string $name
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Param $node
      * @return \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode|\PhpParser\Node\Attribute|null

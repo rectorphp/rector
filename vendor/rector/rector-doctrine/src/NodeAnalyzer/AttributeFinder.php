@@ -44,22 +44,6 @@ final class AttributeFinder
         return $this->findArgByName($attribute, $argName);
     }
     /**
-     * @return \PhpParser\Node\Expr|null
-     */
-    public function findArgByName(Attribute $attribute, string $argName)
-    {
-        foreach ($attribute->args as $arg) {
-            if ($arg->name === null) {
-                continue;
-            }
-            if (!$this->nodeNameResolver->isName($arg->name, $argName)) {
-                continue;
-            }
-            return $arg->value;
-        }
-        return null;
-    }
-    /**
      * @param class-string $attributeClass
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Param $node
      */
@@ -89,6 +73,22 @@ final class AttributeFinder
             if ($attribute instanceof Attribute) {
                 return $attribute;
             }
+        }
+        return null;
+    }
+    /**
+     * @return \PhpParser\Node\Expr|null
+     */
+    private function findArgByName(Attribute $attribute, string $argName)
+    {
+        foreach ($attribute->args as $arg) {
+            if ($arg->name === null) {
+                continue;
+            }
+            if (!$this->nodeNameResolver->isName($arg->name, $argName)) {
+                continue;
+            }
+            return $arg->value;
         }
         return null;
     }
