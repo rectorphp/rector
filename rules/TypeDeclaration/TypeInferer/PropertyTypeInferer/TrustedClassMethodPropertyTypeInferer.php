@@ -24,7 +24,6 @@ use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -35,7 +34,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 use RectorPrefix202207\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-final class ConstructorPropertyTypeInferer
+final class TrustedClassMethodPropertyTypeInferer
 {
     /**
      * @readonly
@@ -106,13 +105,13 @@ final class ConstructorPropertyTypeInferer
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
         $this->typeComparator = $typeComparator;
     }
-    public function inferProperty(Property $property) : ?Type
+    public function inferProperty(Property $property, string $methodName) : ?Type
     {
         $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
         if (!$classLike instanceof ClassLike) {
             return null;
         }
-        $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        $classMethod = $classLike->getMethod($methodName);
         if (!$classMethod instanceof ClassMethod) {
             return null;
         }

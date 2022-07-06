@@ -1,4 +1,4 @@
-# 411 Rules Overview
+# 412 Rules Overview
 
 <br>
 
@@ -70,7 +70,7 @@
 
 - [Transform](#transform) (35)
 
-- [TypeDeclaration](#typedeclaration) (29)
+- [TypeDeclaration](#typedeclaration) (30)
 
 - [Visibility](#visibility) (3)
 
@@ -9777,6 +9777,29 @@ Complete property type based on getter strict types
      public function getName(): string|null
      {
          return $this->name;
+     }
+ }
+```
+
+<br>
+
+### TypedPropertyFromStrictSetUpRector
+
+Add strict typed property based on `setUp()` strict typed assigns in TestCase
+
+- class: [`Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictSetUpRector`](../rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeClass extends TestCase
+ {
+-    private $value;
++    private int $value;
+
+     public function setUp()
+     {
+         $this->value = 1000;
      }
  }
 ```

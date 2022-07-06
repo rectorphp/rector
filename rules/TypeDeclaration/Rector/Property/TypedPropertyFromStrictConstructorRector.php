@@ -11,23 +11,25 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer;
+use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\TrustedClassMethodPropertyTypeInferer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\TypedPropertyFromStrictConstructorRectorTest
  */
-final class TypedPropertyFromStrictConstructorRector extends AbstractRector
+final class TypedPropertyFromStrictConstructorRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\ConstructorPropertyTypeInferer
+     * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\TrustedClassMethodPropertyTypeInferer
      */
-    private $constructorPropertyTypeInferer;
+    private $trustedClassMethodPropertyTypeInferer;
     /**
      * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
@@ -48,9 +50,9 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(ConstructorPropertyTypeInferer $constructorPropertyTypeInferer, VarTagRemover $varTagRemover, PhpDocTypeChanger $phpDocTypeChanger, ConstructorAssignDetector $constructorAssignDetector, PhpVersionProvider $phpVersionProvider)
+    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer, VarTagRemover $varTagRemover, PhpDocTypeChanger $phpDocTypeChanger, ConstructorAssignDetector $constructorAssignDetector, PhpVersionProvider $phpVersionProvider)
     {
-        $this->constructorPropertyTypeInferer = $constructorPropertyTypeInferer;
+        $this->trustedClassMethodPropertyTypeInferer = $trustedClassMethodPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->constructorAssignDetector = $constructorAssignDetector;
@@ -97,11 +99,11 @@ CODE_SAMPLE
         if ($node->type !== null) {
             return null;
         }
-        $varType = $this->constructorPropertyTypeInferer->inferProperty($node);
-        if (!$varType instanceof Type) {
+        $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($node, MethodName::CONSTRUCT);
+        if (!$propertyType instanceof Type) {
             return null;
         }
-        if ($varType instanceof MixedType) {
+        if ($propertyType instanceof MixedType) {
             return null;
         }
         $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
@@ -110,16 +112,16 @@ CODE_SAMPLE
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
             return $node;
         }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($varType, TypeKind::PROPERTY);
+        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
         if (!$propertyTypeNode instanceof Node) {
             return null;
         }
         // public property can be anything
         if ($node->isPublic()) {
-            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $varType);
+            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
             return $node;
         }
         $node->type = $propertyTypeNode;
