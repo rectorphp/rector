@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcf7a9ee10b9d0ab9f5be42c9a1db419b
+class ComposerStaticInit273448b07d96eb4044df90c5599a04ff
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2115,12 +2115,14 @@ class ComposerStaticInitcf7a9ee10b9d0ab9f5be42c9a1db419b
         'Rector\\Doctrine\\Rector\\Property\\MakeEntityDateTimePropertyDateTimeInterfaceRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/MakeEntityDateTimePropertyDateTimeInterfaceRector.php',
         'Rector\\Doctrine\\Rector\\Property\\RemoveRedundantDefaultPropertyAnnotationValuesRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/RemoveRedundantDefaultPropertyAnnotationValuesRector.php',
         'Rector\\Doctrine\\Rector\\Property\\TypedPropertyFromColumnTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/TypedPropertyFromColumnTypeRector.php',
+        'Rector\\Doctrine\\Rector\\Property\\TypedPropertyFromDoctrineCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/TypedPropertyFromDoctrineCollectionRector.php',
         'Rector\\Doctrine\\Rector\\Property\\TypedPropertyFromToManyRelationTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/TypedPropertyFromToManyRelationTypeRector.php',
         'Rector\\Doctrine\\Rector\\Property\\TypedPropertyFromToOneRelationTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/TypedPropertyFromToOneRelationTypeRector.php',
         'Rector\\Doctrine\\Set\\DoctrineSetList' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeFactory.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeResolver.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionVarTagValueNodeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionVarTagValueNodeResolver.php',
+        'Rector\\Doctrine\\TypeAnalyzer\\DoctrineCollectionTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/DoctrineCollectionTypeAnalyzer.php',
         'Rector\\Doctrine\\TypeAnalyzer\\TypeFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/TypeFinder.php',
         'Rector\\Doctrine\\Type\\RepositoryTypeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Type/RepositoryTypeFactory.php',
         'Rector\\Doctrine\\ValueObject\\ArgName' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/ArgName.php',
@@ -3410,9 +3412,9 @@ class ComposerStaticInitcf7a9ee10b9d0ab9f5be42c9a1db419b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcf7a9ee10b9d0ab9f5be42c9a1db419b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcf7a9ee10b9d0ab9f5be42c9a1db419b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcf7a9ee10b9d0ab9f5be42c9a1db419b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit273448b07d96eb4044df90c5599a04ff::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit273448b07d96eb4044df90c5599a04ff::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit273448b07d96eb4044df90c5599a04ff::$classMap;
 
         }, null, ClassLoader::class);
     }

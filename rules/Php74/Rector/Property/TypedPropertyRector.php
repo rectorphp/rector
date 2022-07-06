@@ -20,7 +20,6 @@ use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
@@ -32,8 +31,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/typed_properties_v2#proposal
  *
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\TypedPropertyRectorTest
- * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ClassLikeTypesOnlyTest
- * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\DoctrineTypedPropertyRectorTest
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ImportedTest
  */
 final class TypedPropertyRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
@@ -65,11 +62,6 @@ final class TypedPropertyRector extends AbstractScopeAwareRector implements Allo
     private $vendorLockResolver;
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
-     */
-    private $doctrineTypeAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
@@ -93,11 +85,10 @@ final class TypedPropertyRector extends AbstractScopeAwareRector implements Allo
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
-    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, VendorLockResolver $vendorLockResolver, DoctrineTypeAnalyzer $doctrineTypeAnalyzer, VarTagRemover $varTagRemover, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ObjectTypeAnalyzer $objectTypeAnalyzer, MakePropertyTypedGuard $makePropertyTypedGuard, ConstructorAssignDetector $constructorAssignDetector)
+    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, VendorLockResolver $vendorLockResolver, VarTagRemover $varTagRemover, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ObjectTypeAnalyzer $objectTypeAnalyzer, MakePropertyTypedGuard $makePropertyTypedGuard, ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->vendorLockResolver = $vendorLockResolver;
-        $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->varTagRemover = $varTagRemover;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->objectTypeAnalyzer = $objectTypeAnalyzer;
@@ -161,7 +152,6 @@ CODE_SAMPLE
         $varDocType = $propertyType->getVarType();
         $propertyTypeNode = $propertyType->getPropertyTypeNode();
         $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($node, $varDocType);
-        $this->removeDefaultValueForDoctrineCollection($node, $varDocType);
         $this->addDefaultValueNullForNullableType($node, $varDocType);
         $node->type = $propertyTypeNode;
         return $node;
@@ -189,14 +179,6 @@ CODE_SAMPLE
             return \true;
         }
         return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
-    }
-    private function removeDefaultValueForDoctrineCollection(Property $property, Type $propertyType) : void
-    {
-        if (!$this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($propertyType)) {
-            return;
-        }
-        $onlyProperty = $property->props[0];
-        $onlyProperty->default = null;
     }
     private function addDefaultValueNullForNullableType(Property $property, Type $propertyType) : void
     {
