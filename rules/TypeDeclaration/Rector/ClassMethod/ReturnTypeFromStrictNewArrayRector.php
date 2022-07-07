@@ -25,6 +25,7 @@ use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -38,9 +39,15 @@ final class ReturnTypeFromStrictNewArrayRector extends AbstractRector implements
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, TypeComparator $typeComparator)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->typeComparator = $typeComparator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -116,15 +123,21 @@ CODE_SAMPLE
         // 4. add more precise type if suitable
         $exprType = $this->getType($onlyReturn->expr);
         if ($this->shouldAddReturnArrayDocType($exprType)) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-            $exprType = $this->narrowConstantArrayType($exprType);
-            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $exprType);
+            $this->changeReturnType($node, $exprType);
         }
         return $node;
     }
     public function provideMinPhpVersion() : int
     {
         return PhpVersion::PHP_70;
+    }
+    private function changeReturnType(Node $node, Type $exprType) : void
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $exprType = $this->narrowConstantArrayType($exprType);
+        if (!$this->typeComparator->isSubtype($phpDocInfo->getReturnType(), $exprType)) {
+            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $exprType);
+        }
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
