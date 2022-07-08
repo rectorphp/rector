@@ -146,6 +146,9 @@ CODE_SAMPLE
         if ($this->variableAnalyzer->isUsedByReference($nextAssign->expr)) {
             return \false;
         }
+        if ($this->variableAnalyzer->isStaticOrGlobal($currentAssign->var)) {
+            return \false;
+        }
         return !$this->exprUsedInNextNodeAnalyzer->isUsed($nextAssign->expr);
     }
     /**
