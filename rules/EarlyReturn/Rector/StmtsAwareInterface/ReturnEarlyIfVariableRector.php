@@ -117,6 +117,9 @@ CODE_SAMPLE
         if (!$assign->var instanceof Variable) {
             return null;
         }
+        if ($this->variableAnalyzer->isStaticOrGlobal($assign->var)) {
+            return null;
+        }
         if ($this->variableAnalyzer->isUsedByReference($assign->var)) {
             return null;
         }
