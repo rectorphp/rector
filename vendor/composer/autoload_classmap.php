@@ -2996,6 +2996,7 @@ return array(
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\AlwaysStrictReturnAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/AlwaysStrictReturnAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictBoolReturnTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictBoolReturnTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictNativeFunctionReturnTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictNativeFunctionReturnTypeAnalyzer.php',
+    'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictReturnNewAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictReturnNewAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictScalarReturnTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictScalarReturnTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\TypeNodeUnwrapper' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/TypeNodeUnwrapper.php',
     'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\CallTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeTypeAnalyzer/CallTypeAnalyzer.php',
