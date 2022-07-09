@@ -17,9 +17,9 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeFuncCallRector\ReturnTypeFromStrictNativeFuncCallRectorTest
+ * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector\ReturnTypeFromStrictNativeCallRectorTest
  */
-final class ReturnTypeFromStrictNativeFuncCallRector extends AbstractRector implements MinPhpVersionInterface
+final class ReturnTypeFromStrictNativeCallRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -38,7 +38,7 @@ final class ReturnTypeFromStrictNativeFuncCallRector extends AbstractRector impl
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add strict return type based native function return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add strict return type based native function or class method return', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -73,15 +73,15 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return null;
         }
-        $nativeFuncCalls = $this->strictNativeFunctionReturnTypeAnalyzer->matchAlwaysReturnNativeFuncCalls($node);
-        if ($nativeFuncCalls === null) {
+        $nativeCallLikes = $this->strictNativeFunctionReturnTypeAnalyzer->matchAlwaysReturnNativeCallLikes($node);
+        if ($nativeCallLikes === null) {
             return null;
         }
-        $funcCallTypes = [];
-        foreach ($nativeFuncCalls as $nativeFuncCall) {
-            $funcCallTypes[] = $this->getType($nativeFuncCall);
+        $callLikeTypes = [];
+        foreach ($nativeCallLikes as $nativeCallLike) {
+            $callLikeTypes[] = $this->getType($nativeCallLike);
         }
-        $returnType = $this->typeFactory->createMixedPassedOrUnionType($funcCallTypes);
+        $returnType = $this->typeFactory->createMixedPassedOrUnionType($callLikeTypes);
         if ($returnType instanceof MixedType) {
             return null;
         }

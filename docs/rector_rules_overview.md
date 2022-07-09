@@ -9620,11 +9620,11 @@ Add strict return type based on returned strict expr type
 
 <br>
 
-### ReturnTypeFromStrictNativeFuncCallRector
+### ReturnTypeFromStrictNativeCallRector
 
-Add strict return type based native function return
+Add strict return type based native function or class method return
 
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeFuncCallRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNativeFuncCallRector.php)
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNativeCallRector.php)
 
 ```diff
  final class SomeClass
