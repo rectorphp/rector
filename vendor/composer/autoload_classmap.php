@@ -3072,6 +3072,7 @@ return array(
     'Rector\\TypeDeclaration\\ValueObject\\AddParamTypeDeclaration' => $baseDir . '/rules/TypeDeclaration/ValueObject/AddParamTypeDeclaration.php',
     'Rector\\TypeDeclaration\\ValueObject\\AddPropertyTypeDeclaration' => $baseDir . '/rules/TypeDeclaration/ValueObject/AddPropertyTypeDeclaration.php',
     'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => $baseDir . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
+    'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => $baseDir . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
     'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => $baseDir . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
     'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => $baseDir . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
     'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => $baseDir . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',

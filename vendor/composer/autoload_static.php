@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf833c8a4a67a7cd48d0e4f56703bd04d
+class ComposerStaticInit560dc4a2f210f03f321b3c450c48fdbb
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -3379,6 +3379,7 @@ class ComposerStaticInitf833c8a4a67a7cd48d0e4f56703bd04d
         'Rector\\TypeDeclaration\\ValueObject\\AddParamTypeDeclaration' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AddParamTypeDeclaration.php',
         'Rector\\TypeDeclaration\\ValueObject\\AddPropertyTypeDeclaration' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AddPropertyTypeDeclaration.php',
         'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
+        'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
         'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',
@@ -3413,9 +3414,9 @@ class ComposerStaticInitf833c8a4a67a7cd48d0e4f56703bd04d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf833c8a4a67a7cd48d0e4f56703bd04d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf833c8a4a67a7cd48d0e4f56703bd04d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf833c8a4a67a7cd48d0e4f56703bd04d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit560dc4a2f210f03f321b3c450c48fdbb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit560dc4a2f210f03f321b3c450c48fdbb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit560dc4a2f210f03f321b3c450c48fdbb::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -9,12 +9,14 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Expr\Yield_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\TypeDeclaration\ValueObject\AssignToVariable;
 final class StrictReturnNewAnalyzer
 {
     /**
@@ -101,29 +103,44 @@ final class StrictReturnNewAnalyzer
         $createdVariablesToTypes = [];
         // what new is assigned to it?
         foreach ((array) $functionLike->stmts as $stmt) {
-            if (!$stmt instanceof Expression) {
+            $assignToVariable = $this->matchAssignToVariable($stmt);
+            if (!$assignToVariable instanceof AssignToVariable) {
                 continue;
             }
-            if (!$stmt->expr instanceof Assign) {
+            $assignedExpr = $assignToVariable->getAssignedExpr();
+            $variableName = $assignToVariable->getVariableName();
+            if (!$assignedExpr instanceof New_) {
+                // possible variable override by another type! - unset it
+                if (isset($createdVariablesToTypes[$variableName])) {
+                    unset($createdVariablesToTypes[$variableName]);
+                }
                 continue;
             }
-            $assign = $stmt->expr;
-            if (!$assign->expr instanceof New_) {
-                continue;
-            }
-            if (!$assign->var instanceof Variable) {
-                continue;
-            }
-            $variableName = $this->nodeNameResolver->getName($assign->var);
-            if (!\is_string($variableName)) {
-                continue;
-            }
-            $className = $this->nodeNameResolver->getName($assign->expr->class);
+            $className = $this->nodeNameResolver->getName($assignedExpr->class);
             if (!\is_string($className)) {
                 continue;
             }
             $createdVariablesToTypes[$variableName] = $className;
         }
         return $createdVariablesToTypes;
+    }
+    private function matchAssignToVariable(Stmt $stmt) : ?AssignToVariable
+    {
+        if (!$stmt instanceof Expression) {
+            return null;
+        }
+        if (!$stmt->expr instanceof Assign) {
+            return null;
+        }
+        $assign = $stmt->expr;
+        $assignedVar = $assign->var;
+        if (!$assignedVar instanceof Variable) {
+            return null;
+        }
+        $variableName = $this->nodeNameResolver->getName($assignedVar);
+        if (!\is_string($variableName)) {
+            return null;
+        }
+        return new AssignToVariable($assignedVar, $variableName, $assign->expr);
     }
 }
