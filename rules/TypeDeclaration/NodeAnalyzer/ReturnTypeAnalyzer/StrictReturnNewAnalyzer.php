@@ -14,8 +14,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\TypeDeclaration\ValueObject\AssignToVariable;
 final class StrictReturnNewAnalyzer
 {
@@ -29,10 +31,16 @@ final class StrictReturnNewAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -66,9 +74,20 @@ final class StrictReturnNewAnalyzer
         if (!$onlyReturn->expr instanceof Variable) {
             return null;
         }
+        $returnType = $this->nodeTypeResolver->getType($onlyReturn->expr);
+        if (!$returnType instanceof ObjectType) {
+            return null;
+        }
         $createdVariablesToTypes = $this->resolveCreatedVariablesToTypes($functionLike);
         $returnedVariableName = $this->nodeNameResolver->getName($onlyReturn->expr);
-        return $createdVariablesToTypes[$returnedVariableName] ?? null;
+        $className = $createdVariablesToTypes[$returnedVariableName] ?? null;
+        if (!\is_string($className)) {
+            return $className;
+        }
+        if ($returnType->getClassName() === $className) {
+            return $className;
+        }
+        return null;
     }
     /**
      * @param Return_[] $returns
