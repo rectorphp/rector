@@ -32,7 +32,7 @@ Single short classes are imported too:
 Do you want to keep those?
 
 ```php
-$parameters->set(Option::IMPORT_SHORT_CLASSES, false);
+$parameters->importShortClasses(false);
 ```
 
 <br>
