@@ -3,12 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Php74\Guard;
 
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 final class MakePropertyTypedGuard
 {
@@ -74,14 +76,16 @@ final class MakePropertyTypedGuard
         if ($property->isPrivate()) {
             return !$this->propertyAnalyzer->hasForbiddenType($property);
         }
-        return $this->isSafeProtectedProperty($property, $classReflection);
+        return $this->isSafeProtectedProperty($property);
     }
-    private function isSafeProtectedProperty(Property $property, ClassReflection $classReflection) : bool
+    private function isSafeProtectedProperty(Property $property) : bool
     {
         if (!$property->isProtected()) {
             return \false;
         }
-        if (!$classReflection->isFinal()) {
+        /** @var Class_ $class */
+        $class = $property->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$class->isFinal()) {
             return \false;
         }
         return $this->parentPropertyLookupGuard->isLegal($property);
