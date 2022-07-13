@@ -1426,6 +1426,7 @@ return array(
     'Rector\\CodingStyle\\NodeAnalyzer\\UseImportNameMatcher' => $baseDir . '/rules/CodingStyle/NodeAnalyzer/UseImportNameMatcher.php',
     'Rector\\CodingStyle\\NodeFactory\\ArrayCallableToMethodCallFactory' => $baseDir . '/rules/CodingStyle/NodeFactory/ArrayCallableToMethodCallFactory.php',
     'Rector\\CodingStyle\\Node\\NameImporter' => $baseDir . '/rules/CodingStyle/Node/NameImporter.php',
+    'Rector\\CodingStyle\\Rector\\ArrowFunction\\StaticArrowFunctionRector' => $baseDir . '/rules/CodingStyle/Rector/ArrowFunction/StaticArrowFunctionRector.php',
     'Rector\\CodingStyle\\Rector\\Assign\\PHPStormVarAnnotationRector' => $baseDir . '/rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php',
     'Rector\\CodingStyle\\Rector\\Assign\\SplitDoubleAssignRector' => $baseDir . '/rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php',
     'Rector\\CodingStyle\\Rector\\Catch_\\CatchExceptionNameMatchingTypeRector' => $baseDir . '/rules/CodingStyle/Rector/Catch_/CatchExceptionNameMatchingTypeRector.php',
