@@ -1,4 +1,4 @@
-# 412 Rules Overview
+# 414 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (73)
 
-- [CodingStyle](#codingstyle) (35)
+- [CodingStyle](#codingstyle) (37)
 
 - [Compatibility](#compatibility) (1)
 
@@ -2334,6 +2334,38 @@ Separate constant and properties to own lines
 +     * @var string
 +     */
 +    public $isIsThough;
+ }
+```
+
+<br>
+
+### StaticArrowFunctionRector
+
+Changes ArrowFunction to be static when possible
+
+- class: [`Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector`](../rules/CodingStyle/Rector/ArrowFunction/StaticArrowFunctionRector.php)
+
+```diff
+-fn (): string => 'test';
++static fn (): string => 'test';
+```
+
+<br>
+
+### StaticClosureRector
+
+Changes Closure to be static when possible
+
+- class: [`Rector\CodingStyle\Rector\Closure\StaticClosureRector`](../rules/CodingStyle/Rector/Closure/StaticClosureRector.php)
+
+```diff
+-function () {
++static function () {
+     if (rand(0, 1)) {
+         return 1;
+     }
+
+     return 2;
  }
 ```
 

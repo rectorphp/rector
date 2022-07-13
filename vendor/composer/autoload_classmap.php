@@ -1441,6 +1441,7 @@ return array(
     'Rector\\CodingStyle\\Rector\\ClassMethod\\ReturnArrayClassMethodToYieldRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/ReturnArrayClassMethodToYieldRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\UnSpreadOperatorRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/UnSpreadOperatorRector.php',
     'Rector\\CodingStyle\\Rector\\Class_\\AddArrayDefaultToArrayPropertyRector' => $baseDir . '/rules/CodingStyle/Rector/Class_/AddArrayDefaultToArrayPropertyRector.php',
+    'Rector\\CodingStyle\\Rector\\Closure\\StaticClosureRector' => $baseDir . '/rules/CodingStyle/Rector/Closure/StaticClosureRector.php',
     'Rector\\CodingStyle\\Rector\\Encapsed\\EncapsedStringsToSprintfRector' => $baseDir . '/rules/CodingStyle/Rector/Encapsed/EncapsedStringsToSprintfRector.php',
     'Rector\\CodingStyle\\Rector\\Encapsed\\WrapEncapsedVariableInCurlyBracesRector' => $baseDir . '/rules/CodingStyle/Rector/Encapsed/WrapEncapsedVariableInCurlyBracesRector.php',
     'Rector\\CodingStyle\\Rector\\FuncCall\\CallUserFuncArrayToVariadicRector' => $baseDir . '/rules/CodingStyle/Rector/FuncCall/CallUserFuncArrayToVariadicRector.php',
