@@ -107,7 +107,7 @@ CODE_SAMPLE
             }
             /** @var string $value - Should always be string at this point */
             $value = $this->valueResolver->getValue($arg->value);
-            $fullyQualified = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($value, $property);
+            $fullyQualified = $this->classAnnotationMatcher->resolveTagToKnownFullyQualifiedName($value, $property);
             if ($fullyQualified === $value) {
                 continue;
             }

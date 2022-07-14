@@ -47,21 +47,21 @@ final class BinaryOpManipulator
         }
         return new TwoNodeMatch($binaryOp->right, $binaryOp->left);
     }
-    public function inverseBinaryOp(BinaryOp $binaryOp) : ?BinaryOp
+    public function inverseBooleanOr(BooleanOr $booleanOr) : ?BinaryOp
     {
         // no nesting
-        if ($binaryOp->left instanceof BooleanOr) {
+        if ($booleanOr->left instanceof BooleanOr) {
             return null;
         }
-        if ($binaryOp->right instanceof BooleanOr) {
+        if ($booleanOr->right instanceof BooleanOr) {
             return null;
         }
-        $inversedNodeClass = $this->resolveInversedNodeClass($binaryOp);
+        $inversedNodeClass = $this->resolveInversedNodeClass($booleanOr);
         if ($inversedNodeClass === null) {
             return null;
         }
-        $firstInversedNode = $this->inverseNode($binaryOp->left);
-        $secondInversedNode = $this->inverseNode($binaryOp->right);
+        $firstInversedNode = $this->inverseNode($booleanOr->left);
+        $secondInversedNode = $this->inverseNode($booleanOr->right);
         return new $inversedNodeClass($firstInversedNode, $secondInversedNode);
     }
     public function invertCondition(BinaryOp $binaryOp) : ?BinaryOp

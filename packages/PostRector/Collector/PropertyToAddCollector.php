@@ -61,6 +61,9 @@ final class PropertyToAddCollector implements NodeCollectorInterface
         $this->constantsByClass[\spl_object_hash($class)][$constantName] = $classConst;
         $this->rectorChangeCollector->notifyNodeFileInfo($class);
     }
+    /**
+     * @api
+     */
     public function addPropertyWithoutConstructorToClass(string $propertyName, ?Type $propertyType, Class_ $class) : void
     {
         $this->propertiesWithoutConstructorByClass[\spl_object_hash($class)][$propertyName] = $propertyType;

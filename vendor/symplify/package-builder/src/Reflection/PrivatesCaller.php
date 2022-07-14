@@ -11,6 +11,7 @@ use ReflectionMethod;
 final class PrivatesCaller
 {
     /**
+     * @api
      * @param mixed[] $arguments
      * @param object|string $object
      * @return mixed
@@ -25,6 +26,7 @@ final class PrivatesCaller
         return $methodReflection->invokeArgs($object, $arguments);
     }
     /**
+     * @api
      * @param object|string $object
      * @param mixed $argument
      * @return mixed

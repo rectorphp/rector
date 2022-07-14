@@ -1923,12 +1923,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "d61cca45c838fe5908bbc88327b2bc35dbc9cc74"
+                "reference": "f8905476c03608c91e8d31da918dc696feaf408d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/d61cca45c838fe5908bbc88327b2bc35dbc9cc74",
-                "reference": "d61cca45c838fe5908bbc88327b2bc35dbc9cc74",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/f8905476c03608c91e8d31da918dc696feaf408d",
+                "reference": "f8905476c03608c91e8d31da918dc696feaf408d",
                 "shasum": ""
             },
             "require": {
@@ -1953,7 +1953,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-06T19:28:32+00:00",
+            "time": "2022-07-14T00:36:28+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -3329,12 +3329,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "8dbb484edac44f27000e1dc0f03cb3f71acb8142"
+                "reference": "4f84156609f6b7ff031bc3d4d3cd7ab91f2e9eb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/8dbb484edac44f27000e1dc0f03cb3f71acb8142",
-                "reference": "8dbb484edac44f27000e1dc0f03cb3f71acb8142",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/4f84156609f6b7ff031bc3d4d3cd7ab91f2e9eb4",
+                "reference": "4f84156609f6b7ff031bc3d4d3cd7ab91f2e9eb4",
                 "shasum": ""
             },
             "require": {
@@ -3342,7 +3342,7 @@
                 "nikic\/php-parser": "^4.14.0",
                 "php": ">=8.0",
                 "phpstan\/phpdoc-parser": "^1.6.3",
-                "phpstan\/phpstan": "^1.8",
+                "phpstan\/phpstan": "^1.8.1",
                 "symfony\/config": "^6.0",
                 "symfony\/dependency-injection": "^6.0",
                 "symplify\/package-builder": "^11.1",
@@ -3375,7 +3375,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^11.1"
             },
-            "time": "2022-07-05T11:51:02+00:00",
+            "time": "2022-07-14T10:58:37+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
@@ -3742,12 +3742,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/package-builder.git",
-                "reference": "8c7406c06e05dd11ccdbf66a7e43183aeedaa625"
+                "reference": "926bbe1189e807a54d3a21c22413f0579ae55f95"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/8c7406c06e05dd11ccdbf66a7e43183aeedaa625",
-                "reference": "8c7406c06e05dd11ccdbf66a7e43183aeedaa625",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/926bbe1189e807a54d3a21c22413f0579ae55f95",
+                "reference": "926bbe1189e807a54d3a21c22413f0579ae55f95",
                 "shasum": ""
             },
             "require": {
@@ -3785,7 +3785,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-07-05T11:51:17+00:00",
+            "time": "2022-07-14T10:58:32+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {

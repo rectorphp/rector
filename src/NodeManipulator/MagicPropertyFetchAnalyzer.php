@@ -10,7 +10,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -43,26 +43,23 @@ final class MagicPropertyFetchAnalyzer
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
-     */
-    public function isMagicOnType($expr, Type $type) : bool
+    public function isMagicOnType(PropertyFetch $propertyFetch, ObjectType $objectType) : bool
     {
-        $varNodeType = $this->nodeTypeResolver->getType($expr);
+        $varNodeType = $this->nodeTypeResolver->getType($propertyFetch);
         if ($varNodeType instanceof ErrorType) {
             return \true;
         }
         if ($varNodeType instanceof MixedType) {
             return \false;
         }
-        if ($varNodeType->isSuperTypeOf($type)->yes()) {
+        if ($varNodeType->isSuperTypeOf($objectType)->yes()) {
             return \false;
         }
-        $nodeName = $this->nodeNameResolver->getName($expr->name);
+        $nodeName = $this->nodeNameResolver->getName($propertyFetch->name);
         if ($nodeName === null) {
             return \false;
         }
-        return !$this->hasPublicProperty($expr, $nodeName);
+        return !$this->hasPublicProperty($propertyFetch, $nodeName);
     }
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr

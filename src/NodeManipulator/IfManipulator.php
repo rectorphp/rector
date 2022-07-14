@@ -235,10 +235,10 @@ final class IfManipulator
         }
         return !(bool) $if->elseifs;
     }
-    public function createIfNegation(Expr $expr, Stmt $stmt) : If_
+    public function createIfNegation(Expr $expr, Return_ $return) : If_
     {
         $expr = $this->conditionInverter->createInvertedCondition($expr);
-        return $this->createIfStmt($expr, $stmt);
+        return $this->createIfStmt($expr, $return);
     }
     public function createIfStmt(Expr $expr, Stmt $stmt) : If_
     {

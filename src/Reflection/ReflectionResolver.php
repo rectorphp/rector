@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -84,6 +83,9 @@ final class ReflectionResolver
     {
         $this->astResolver = $astResolver;
     }
+    /**
+     * @api
+     */
     public function resolveClassAndAnonymousClass(ClassLike $classLike) : ClassReflection
     {
         if ($classLike instanceof Class_ && $this->classAnalyzer->isAnonymousClass($classLike)) {
@@ -104,22 +106,12 @@ final class ReflectionResolver
         return $scope->getClassReflection();
     }
     /**
-     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    public function resolveClassReflectionSourceObject($node) : ?ClassReflection
+    public function resolveClassReflectionSourceObject($call) : ?ClassReflection
     {
-        if ($node instanceof New_ && $node->class instanceof FullyQualified) {
-            $className = $node->class->toString();
-            if ($this->reflectionProvider->hasClass($className)) {
-                return $this->reflectionProvider->getClass($className);
-            }
-            return null;
-        }
-        if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
-            return $this->resolveClassReflection($classMethod);
-        }
-        return null;
+        $classMethod = $this->astResolver->resolveClassMethodFromCall($call);
+        return $this->resolveClassReflection($classMethod);
     }
     /**
      * @param class-string $className

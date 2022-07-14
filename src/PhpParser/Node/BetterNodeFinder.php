@@ -142,9 +142,9 @@ final class BetterNodeFinder
     }
     /**
      * @param class-string<Node> $type
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node[] $nodes
      */
-    public function hasInstanceOfName($nodes, string $type, string $name) : bool
+    public function hasInstanceOfName(array $nodes, string $type, string $name) : bool
     {
         Assert::isAOf($type, Node::class);
         return (bool) $this->findInstanceOfName($nodes, $type, $name);
@@ -182,11 +182,13 @@ final class BetterNodeFinder
     }
     /**
      * @template T of Node
+     *
+     * @param Stmt[] $nodes
      * @param class-string<T> $type
-     * @param \PhpParser\Node|mixed[] $nodes
      */
-    public function findLastInstanceOf($nodes, string $type) : ?Node
+    public function findLastInstanceOf(array $nodes, string $type) : ?Node
     {
+        Assert::allIsAOf($nodes, Stmt::class);
         Assert::isAOf($type, Node::class);
         $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
         if ($foundInstances === []) {
@@ -261,6 +263,7 @@ final class BetterNodeFinder
     }
     /**
      * Only search in previous Node/Stmt
+     * @api
      *
      * @param callable(Node $node): bool $filter
      */
@@ -337,6 +340,7 @@ final class BetterNodeFinder
         return null;
     }
     /**
+     * @api
      * @return Expr[]
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
      */

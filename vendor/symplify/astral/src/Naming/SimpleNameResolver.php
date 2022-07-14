@@ -120,6 +120,9 @@ final class SimpleNameResolver
         }
         return $classReflection->getName();
     }
+    /**
+     * @api
+     */
     public function isNameMatch(Node $node, string $desiredNameRegex) : bool
     {
         $name = $this->getName($node);
