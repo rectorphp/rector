@@ -19,7 +19,6 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\PhpDoc\CustomPHPStanDetector;
 final class ClassMethodReturnTypeOverrideGuard
 {
@@ -93,7 +92,7 @@ final class ClassMethodReturnTypeOverrideGuard
         if ($classMethod->returnType instanceof Node) {
             return \true;
         }
-        if ($this->shouldSkipHasChildNoReturn($childrenClassReflections, $classMethod)) {
+        if ($this->shouldSkipHasChildHasReturnType($childrenClassReflections, $classMethod)) {
             return \true;
         }
         return $this->hasClassMethodExprReturn($classMethod);
@@ -115,20 +114,19 @@ final class ClassMethodReturnTypeOverrideGuard
     /**
      * @param ClassReflection[] $childrenClassReflections
      */
-    private function shouldSkipHasChildNoReturn(array $childrenClassReflections, ClassMethod $classMethod) : bool
+    private function shouldSkipHasChildHasReturnType(array $childrenClassReflections, ClassMethod $classMethod) : bool
     {
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         foreach ($childrenClassReflections as $childClassReflection) {
-            if (!$childClassReflection->hasMethod($methodName)) {
+            if (!$childClassReflection->hasNativeMethod($methodName)) {
                 continue;
             }
-            $methodReflection = $childClassReflection->getMethod($methodName, $scope);
+            $methodReflection = $childClassReflection->getNativeMethod($methodName);
             $method = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
             if (!$method instanceof ClassMethod) {
                 continue;
             }
-            if ($method->returnType === null) {
+            if ($method->returnType instanceof Node) {
                 return \true;
             }
         }

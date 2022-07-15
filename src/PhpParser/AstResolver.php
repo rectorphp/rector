@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\Function_;
@@ -137,15 +138,24 @@ final class AstResolver
         if ($nodes === null) {
             return null;
         }
-        $class = $this->betterNodeFinder->findFirstInstanceOf($nodes, Class_::class);
-        if (!$class instanceof Class_) {
-            // avoids looking for a class in a file where is not present
-            $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = null;
-            return null;
+        /** @var ClassLike[] $classLikes */
+        $classLikes = $this->betterNodeFinder->findInstanceOf($nodes, ClassLike::class);
+        $classLikeName = $classReflection->getName();
+        $methodReflectionName = $methodReflection->getName();
+        foreach ($classLikes as $classLike) {
+            if (!$this->nodeNameResolver->isName($classLike, $classLikeName)) {
+                continue;
+            }
+            $classMethod = $classLike->getMethod($methodReflectionName);
+            if (!$classMethod instanceof ClassMethod) {
+                continue;
+            }
+            $this->classMethodsByClassAndMethod[$classLikeName][$methodReflectionName] = $classMethod;
+            return $classMethod;
         }
-        $classMethod = $class->getMethod($methodReflection->getName());
-        $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()] = $classMethod;
-        return $classMethod;
+        // avoids looking for a class in a file where is not present
+        $this->classMethodsByClassAndMethod[$classLikeName][$methodReflectionName] = null;
+        return null;
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
