@@ -62,6 +62,8 @@ final class TypeNormalizer
         return $this->createArrayTypeFromNonConstantValueTypes($nonConstantValueTypes);
     }
     /**
+     * @api
+     *
      * Turn nested array union types to unique ones:
      * e.g. int[]|string[][]|bool[][]|string[][]
      * ↓

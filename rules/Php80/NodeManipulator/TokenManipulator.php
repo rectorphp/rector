@@ -81,9 +81,9 @@ final class TokenManipulator
     /**
      * @param Node[] $nodes
      */
-    public function refactorArrayToken(array $nodes, Expr $singleTokenExpr) : void
+    public function refactorArrayToken(array $nodes, Variable $singleTokenVariable) : void
     {
-        $this->replaceTokenDimFetchZeroWithGetTokenName($nodes, $singleTokenExpr);
+        $this->replaceTokenDimFetchZeroWithGetTokenName($nodes, $singleTokenVariable);
         // replace "$token[1]"; with "$token->value"
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) : ?PropertyFetch {
             if (!$node instanceof ArrayDimFetch) {
@@ -102,24 +102,24 @@ final class TokenManipulator
     /**
      * @param Node[] $nodes
      */
-    public function refactorNonArrayToken(array $nodes, Expr $singleTokenExpr) : void
+    public function refactorNonArrayToken(array $nodes, Variable $singleTokenVariable) : void
     {
         // replace "$content = $token;" → "$content = $token->text;"
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenExpr) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenVariable) {
             if (!$node instanceof Assign) {
                 return null;
             }
-            if (!$this->nodeComparator->areNodesEqual($node->expr, $singleTokenExpr)) {
+            if (!$this->nodeComparator->areNodesEqual($node->expr, $singleTokenVariable)) {
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getType($node->expr);
             if ($tokenStaticType instanceof ArrayType) {
                 return null;
             }
-            $node->expr = new PropertyFetch($singleTokenExpr, 'text');
+            $node->expr = new PropertyFetch($singleTokenVariable, 'text');
         });
         // replace "$name = null;" → "$name = $token->getTokenName();"
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenExpr) : ?Assign {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenVariable) : ?Assign {
             if (!$node instanceof Assign) {
                 return null;
             }
@@ -136,16 +136,16 @@ final class TokenManipulator
             if (!$this->valueResolver->isValue($node->expr, 'null')) {
                 return null;
             }
-            $node->expr = new MethodCall($singleTokenExpr, 'getTokenName');
+            $node->expr = new MethodCall($singleTokenVariable, 'getTokenName');
             return $node;
         });
     }
     /**
      * @param Node[] $nodes
      */
-    public function refactorTokenIsKind(array $nodes, Expr $singleTokenExpr) : void
+    public function refactorTokenIsKind(array $nodes, Variable $singleTokenVariable) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenExpr) : ?MethodCall {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenVariable) : ?MethodCall {
             if (!$node instanceof Identical) {
                 return null;
             }
@@ -158,7 +158,7 @@ final class TokenManipulator
             }
             $arrayDimFetch = $arrayDimFetchAndConstFetch->getArrayDimFetch();
             $constFetch = $arrayDimFetchAndConstFetch->getConstFetch();
-            if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $singleTokenExpr)) {
+            if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->var, $singleTokenVariable)) {
                 return null;
             }
             $constName = $this->nodeNameResolver->getName($constFetch);
@@ -204,9 +204,9 @@ final class TokenManipulator
      *
      * @param Node[] $nodes
      */
-    private function replaceTokenDimFetchZeroWithGetTokenName(array $nodes, Expr $singleTokenExpr) : void
+    private function replaceTokenDimFetchZeroWithGetTokenName(array $nodes, Variable $singleTokenVariable) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenExpr) : ?MethodCall {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenVariable) : ?MethodCall {
             if (!$node instanceof FuncCall) {
                 return null;
             }
@@ -232,7 +232,7 @@ final class TokenManipulator
             if (!$this->valueResolver->isValue($possibleTokenArray->dim, 0)) {
                 return null;
             }
-            if (!$this->nodeComparator->areNodesEqual($possibleTokenArray->var, $singleTokenExpr)) {
+            if (!$this->nodeComparator->areNodesEqual($possibleTokenArray->var, $singleTokenVariable)) {
                 return null;
             }
             // save token variable name for later
@@ -240,7 +240,7 @@ final class TokenManipulator
             if ($parentNode instanceof Assign) {
                 $this->assignedNameExpr = $parentNode->var;
             }
-            return new MethodCall($singleTokenExpr, 'getTokenName');
+            return new MethodCall($singleTokenVariable, 'getTokenName');
         });
     }
     private function isArrayDimFetchWithDimIntegerValue(ArrayDimFetch $arrayDimFetch, int $value) : bool

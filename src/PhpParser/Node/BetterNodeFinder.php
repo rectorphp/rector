@@ -150,9 +150,9 @@ final class BetterNodeFinder
         return (bool) $this->findInstanceOfName($nodes, $type, $name);
     }
     /**
-     * @param \PhpParser\Node|mixed[] $nodes
+     * @param Node[] $nodes
      */
-    public function hasVariableOfName($nodes, string $name) : bool
+    public function hasVariableOfName(array $nodes, string $name) : bool
     {
         return $this->findVariableOfName($nodes, $name) instanceof Node;
     }

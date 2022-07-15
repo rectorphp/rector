@@ -114,23 +114,17 @@ final class PropertyFetchAnalyzer
             return $parentClassLike === $classLike;
         });
     }
-    /**
-     * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
-     */
-    public function isPropertyToSelf($expr) : bool
+    public function isPropertyToSelf(PropertyFetch $propertyFetch) : bool
     {
-        if ($expr instanceof PropertyFetch && !$this->nodeNameResolver->isName($expr->var, self::THIS)) {
+        if (!$this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
             return \false;
         }
-        if ($expr instanceof StaticPropertyFetch && !$this->nodeNameResolver->isName($expr->class, ObjectReference::SELF)) {
-            return \false;
-        }
-        $class = $this->betterNodeFinder->findParentType($expr, Class_::class);
+        $class = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
         if (!$class instanceof Class_) {
             return \false;
         }
         foreach ($class->getProperties() as $property) {
-            if (!$this->nodeNameResolver->areNamesEqual($property->props[0], $expr)) {
+            if (!$this->nodeNameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
                 continue;
             }
             return \true;
@@ -148,18 +142,15 @@ final class PropertyFetchAnalyzer
      * Matches:
      * "$this->someValue = $<variableName>;"
      */
-    public function isVariableAssignToThisPropertyFetch(Node $node, string $variableName) : bool
+    public function isVariableAssignToThisPropertyFetch(Assign $assign, string $variableName) : bool
     {
-        if (!$node instanceof Assign) {
+        if (!$assign->expr instanceof Variable) {
             return \false;
         }
-        if (!$node->expr instanceof Variable) {
+        if (!$this->nodeNameResolver->isName($assign->expr, $variableName)) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($node->expr, $variableName)) {
-            return \false;
-        }
-        return $this->isLocalPropertyFetch($node->var);
+        return $this->isLocalPropertyFetch($assign->var);
     }
     public function isFilledViaMethodCallInConstructStmts(ClassLike $classLike, string $propertyName) : bool
     {

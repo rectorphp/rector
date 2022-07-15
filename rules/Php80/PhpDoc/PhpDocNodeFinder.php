@@ -8,6 +8,8 @@ use RectorPrefix202207\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocNodeFinder
 {
     /**
+     * @api
+     *
      * @template TNode as Node
      * @param class-string<TNode> $nodeType
      * @return TNode[]

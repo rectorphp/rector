@@ -23,6 +23,7 @@ final class VisibilityManipulator
         return (bool) ($node->flags & $visibility);
     }
     /**
+     * @api
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
      */
     public function makeStatic($node) : void
@@ -145,6 +146,7 @@ final class VisibilityManipulator
         $this->removeVisibilityFlag($node, Visibility::READONLY);
     }
     /**
+     * @api
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Param $node
      */
     private function addVisibilityFlag($node, int $visibility) : void

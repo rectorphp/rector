@@ -18,10 +18,7 @@ final class ConstantNaming
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\PropertyProperty|\PhpParser\Node\Expr\Variable $propertyProperty
-     */
-    public function createFromProperty($propertyProperty) : string
+    public function createFromProperty(PropertyProperty $propertyProperty) : string
     {
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($propertyProperty);

@@ -59,15 +59,14 @@ final class FuncCallStaticCallToMethodCallAnalyzer
         $this->propertyToAddCollector = $propertyToAddCollector;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable
      */
-    public function matchTypeProvidingExpr(Class_ $class, $functionLike, ObjectType $objectType)
+    public function matchTypeProvidingExpr(Class_ $class, ClassMethod $classMethod, ObjectType $objectType)
     {
-        $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($class, $functionLike, $objectType);
+        $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($class, $classMethod, $objectType);
         if ($expr !== null) {
             if ($expr instanceof Variable) {
-                $this->addClassMethodParamForVariable($expr, $objectType, $functionLike);
+                $this->addClassMethodParamForVariable($expr, $objectType, $classMethod);
             }
             return $expr;
         }

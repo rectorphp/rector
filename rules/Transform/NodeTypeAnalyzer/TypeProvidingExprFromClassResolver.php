@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
@@ -56,9 +55,8 @@ final class TypeProvidingExprFromClassResolver
     }
     /**
      * @return MethodCall|PropertyFetch|Variable|null
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
      */
-    public function resolveTypeProvidingExprFromClass(Class_ $class, $functionLike, ObjectType $objectType) : ?Expr
+    public function resolveTypeProvidingExprFromClass(Class_ $class, ClassMethod $classMethod, ObjectType $objectType) : ?Expr
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         // A. match a method
@@ -77,7 +75,7 @@ final class TypeProvidingExprFromClassResolver
             return $propertyFetch;
         }
         // C. param in constructor?
-        return $this->resolveConstructorParamProvidingType($functionLike, $objectType);
+        return $this->resolveConstructorParamProvidingType($classMethod, $objectType);
     }
     private function resolveMethodCallProvidingType(ClassReflection $classReflection, ObjectType $objectType) : ?MethodCall
     {
@@ -107,15 +105,9 @@ final class TypeProvidingExprFromClassResolver
         }
         return null;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     */
-    private function resolveConstructorParamProvidingType($functionLike, ObjectType $objectType) : ?Variable
+    private function resolveConstructorParamProvidingType(ClassMethod $classMethod, ObjectType $objectType) : ?Variable
     {
-        if (!$functionLike instanceof ClassMethod) {
-            return null;
-        }
-        if (!$this->nodeNameResolver->isName($functionLike, MethodName::CONSTRUCT)) {
+        if (!$this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
             return null;
         }
         $variableName = $this->propertyNaming->fqnToVariableName($objectType);

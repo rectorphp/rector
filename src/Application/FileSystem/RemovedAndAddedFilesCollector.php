@@ -55,6 +55,9 @@ final class RemovedAndAddedFilesCollector
         }
         return \false;
     }
+    /**
+     * @api
+     */
     public function addAddedFile(AddedFileInterface $addedFile) : void
     {
         $this->addedFiles[] = $addedFile;

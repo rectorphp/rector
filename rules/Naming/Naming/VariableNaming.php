@@ -79,6 +79,9 @@ final class VariableNaming
         }
         return $valueName;
     }
+    /**
+     * @api
+     */
     public function resolveFromFuncCallFirstArgumentWithSuffix(FuncCall $funcCall, string $suffix, string $fallbackName, ?Scope $scope) : string
     {
         $bareName = $this->resolveBareFuncCallArgumentName($funcCall, $fallbackName, $suffix);
