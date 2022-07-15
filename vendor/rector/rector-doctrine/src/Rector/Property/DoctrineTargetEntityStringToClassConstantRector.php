@@ -136,7 +136,10 @@ CODE_SAMPLE
             return null;
         }
         // resolve to FQN
-        $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntity, $property);
+        $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagToKnownFullyQualifiedName($targetEntity, $property);
+        if ($tagFullyQualifiedName === null) {
+            return null;
+        }
         if ($tagFullyQualifiedName === $targetEntity) {
             return null;
         }

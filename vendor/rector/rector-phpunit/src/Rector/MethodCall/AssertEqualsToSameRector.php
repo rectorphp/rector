@@ -6,6 +6,7 @@ namespace Rector\PHPUnit\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
@@ -31,7 +32,7 @@ final class AssertEqualsToSameRector extends AbstractRector
      *
      * @var array<class-string<Type>>
      */
-    private const SCALAR_TYPES = [FloatType::class, IntegerType::class, StringType::class];
+    private const SCALAR_TYPES = [FloatType::class, IntegerType::class, StringType::class, ConstantArrayType::class];
     /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
