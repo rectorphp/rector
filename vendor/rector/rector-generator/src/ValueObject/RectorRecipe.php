@@ -7,8 +7,10 @@ use RectorPrefix202207\Nette\Utils\Json;
 use RectorPrefix202207\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Node\ClassMethod;
 use Rector\RectorGenerator\Exception\ConfigurationException;
 use Rector\RectorGenerator\Exception\ShouldNotHappenException;
+use RectorPrefix202207\Webmozart\Assert\Assert;
 final class RectorRecipe
 {
     /**
@@ -188,6 +190,8 @@ final class RectorRecipe
     private function setNodeTypes(array $nodeTypes) : void
     {
         foreach ($nodeTypes as $nodeType) {
+            // avoid phpstan class method that is never traversed
+            Assert::isNotA($nodeType, ClassMethod::class);
             if (\is_a($nodeType, Node::class, \true)) {
                 continue;
             }

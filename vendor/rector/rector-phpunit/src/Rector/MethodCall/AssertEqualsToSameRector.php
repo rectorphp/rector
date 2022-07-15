@@ -4,8 +4,10 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Scalar\Encapsed;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -75,8 +77,8 @@ final class AssertEqualsToSameRector extends AbstractRector
         if (!isset($args[0])) {
             return null;
         }
-        $valueNodeType = $this->nodeTypeResolver->getType($args[0]->value);
-        if (!$this->isScalarType($valueNodeType)) {
+        $firstArgValue = $args[0]->value;
+        if (!$this->isScalarValue($firstArgValue)) {
             return null;
         }
         $hasChanged = $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
@@ -90,5 +92,13 @@ final class AssertEqualsToSameRector extends AbstractRector
             }
         }
         return \false;
+    }
+    private function isScalarValue(Expr $expr) : bool
+    {
+        if ($expr instanceof Encapsed) {
+            return \true;
+        }
+        $valueNodeType = $this->nodeTypeResolver->getType($expr);
+        return $this->isScalarType($valueNodeType);
     }
 }
