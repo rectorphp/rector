@@ -38,6 +38,7 @@ final class VisibilityManipulator
         $this->addVisibilityFlag($node, Visibility::ABSTRACT);
     }
     /**
+     * @api
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
     public function makeNonStatic($node) : void
@@ -100,6 +101,7 @@ final class VisibilityManipulator
         $this->replaceVisibilityFlag($node, Visibility::PUBLIC);
     }
     /**
+     * @api
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
      */
     public function makeProtected($node) : void

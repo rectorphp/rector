@@ -35,6 +35,7 @@ final class UseImportsResolver
         });
     }
     /**
+     * @api
      * @return Use_[]
      */
     public function resolveBareUsesForNode(Node $node) : array

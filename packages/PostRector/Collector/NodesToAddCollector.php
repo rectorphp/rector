@@ -71,6 +71,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
     /**
+     * @api
      * @param Node[] $addedNodes
      * @deprecated Return created nodes right in refactor() method to keep context instead.
      */

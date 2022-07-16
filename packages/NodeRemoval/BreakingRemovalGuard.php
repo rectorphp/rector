@@ -24,6 +24,9 @@ final class BreakingRemovalGuard
         }
         throw new ShouldNotHappenException(\sprintf('Node "%s" on line %d is child of "%s", so it cannot be removed as it would break PHP code. Change or remove the parent node instead.', \get_class($node), $node->getLine(), \get_class($parentNode)));
     }
+    /**
+     * @api
+     */
     public function isLegalNodeRemoval(Node $node) : bool
     {
         $parent = $node->getAttribute(AttributeKey::PARENT_NODE);

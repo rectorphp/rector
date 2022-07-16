@@ -96,7 +96,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         return \count($this->nodesToRemove);
     }
     /**
-     * @return Node[]
+     * @return array<int, Node>
      */
     public function getNodesToRemove() : array
     {

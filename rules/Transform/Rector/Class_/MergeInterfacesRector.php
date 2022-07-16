@@ -6,6 +6,7 @@ namespace Rector\Transform\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Interface_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -81,7 +82,9 @@ CODE_SAMPLE
     private function makeImplementsUnique(Class_ $class) : void
     {
         $alreadyAddedNames = [];
-        foreach ($class->implements as $key => $name) {
+        /** @var array<int, Interface_> $implements */
+        $implements = $class->implements;
+        foreach ($implements as $key => $name) {
             $fqnName = $this->getName($name);
             if (\in_array($fqnName, $alreadyAddedNames, \true)) {
                 $this->nodeRemover->removeImplements($class, $key);

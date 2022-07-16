@@ -140,11 +140,8 @@ final class TypeComparator
         }
         return $this->arrayTypeComparator->isSubtype($checkedType, $mainType);
     }
-    public function areTypesPossiblyIncluded(?Type $assumptionType, ?Type $exactType) : bool
+    public function areTypesPossiblyIncluded(Type $assumptionType, ?Type $exactType) : bool
     {
-        if (!$assumptionType instanceof Type) {
-            return \true;
-        }
         if (!$exactType instanceof Type) {
             return \true;
         }

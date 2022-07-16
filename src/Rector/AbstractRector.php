@@ -336,7 +336,7 @@ CODE_SAMPLE;
         if ($this->skipper->shouldSkipElementAndFileInfo($this, $smartFileInfo)) {
             return \true;
         }
-        $rectifiedNode = $this->rectifiedAnalyzer->verify($this, $node, $this->file);
+        $rectifiedNode = $this->rectifiedAnalyzer->verify(static::class, $node, $smartFileInfo);
         return $rectifiedNode instanceof RectifiedNode;
     }
     private function connectParentNodes(Node $node) : void

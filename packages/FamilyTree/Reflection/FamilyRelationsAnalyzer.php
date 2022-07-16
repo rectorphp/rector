@@ -88,12 +88,9 @@ final class FamilyRelationsAnalyzer
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $propertyTypeNode
      */
-    public function getPossibleUnionPropertyType(Property $property, Type $varType, ?Scope $scope, $propertyTypeNode) : PropertyType
+    public function getPossibleUnionPropertyType(Property $property, Type $varType, Scope $scope, $propertyTypeNode) : PropertyType
     {
         if ($varType instanceof UnionType) {
-            return new PropertyType($varType, $propertyTypeNode);
-        }
-        if (!$scope instanceof Scope) {
             return new PropertyType($varType, $propertyTypeNode);
         }
         $classReflection = $scope->getClassReflection();
@@ -122,6 +119,7 @@ final class FamilyRelationsAnalyzer
         return new PropertyType($varType, $propertyTypeNode);
     }
     /**
+     * @api
      * @return string[]
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Name $classOrName
      */

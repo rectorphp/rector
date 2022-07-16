@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Php80\NodeResolver;
 
-use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParameterReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
@@ -11,11 +10,10 @@ final class RequireOptionalParamResolver
 {
     /**
      * @return ParameterReflection[]
-     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
-    public function resolveFromReflection($functionLikeReflection) : array
+    public function resolveFromReflection(MethodReflection $methodReflection) : array
     {
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($functionLikeReflection->getVariants());
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
         $optionalParams = [];
         $requireParams = [];
         foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {

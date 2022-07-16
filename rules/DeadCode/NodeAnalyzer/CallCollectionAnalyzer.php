@@ -29,7 +29,7 @@ final class CallCollectionAnalyzer
     /**
      * @param StaticCall[]|MethodCall[] $calls
      */
-    public function isExists(array $calls, string $classMethodName, ?string $className) : bool
+    public function isExists(array $calls, string $classMethodName, string $className) : bool
     {
         foreach ($calls as $call) {
             $callerRoot = $call instanceof StaticCall ? $call->class : $call->var;
