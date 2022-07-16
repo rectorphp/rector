@@ -24,6 +24,7 @@ final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
      */
     private $newMethod;
     /**
+     * @readonly
      * @var mixed
      */
     private $arrayKey;
@@ -37,6 +38,8 @@ final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
         $this->newMethod = $newMethod;
         $this->arrayKey = $arrayKey;
         RectorAssert::className($class);
+        RectorAssert::methodName($oldMethod);
+        RectorAssert::methodName($newMethod);
     }
     public function getClass() : string
     {

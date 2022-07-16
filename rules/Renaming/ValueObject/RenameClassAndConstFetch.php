@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Renaming\ValueObject;
 
 use PHPStan\Type\ObjectType;
+use Rector\Core\Validation\RectorAssert;
 use Rector\Renaming\Contract\RenameClassConstFetchInterface;
 final class RenameClassAndConstFetch implements RenameClassConstFetchInterface
 {
@@ -33,6 +34,8 @@ final class RenameClassAndConstFetch implements RenameClassConstFetchInterface
         $this->oldConstant = $oldConstant;
         $this->newClass = $newClass;
         $this->newConstant = $newConstant;
+        RectorAssert::className($oldClass);
+        RectorAssert::className($newClass);
     }
     public function getOldObjectType() : ObjectType
     {
