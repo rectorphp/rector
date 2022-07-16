@@ -28,6 +28,8 @@ final class ReplaceParentCallByPropertyCall
         $this->method = $method;
         $this->property = $property;
         RectorAssert::className($class);
+        RectorAssert::methodName($method);
+        RectorAssert::propertyName($property);
     }
     public function getObjectType() : ObjectType
     {

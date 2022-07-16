@@ -28,6 +28,8 @@ final class PropertyAssignToMethodCall
         $this->oldPropertyName = $oldPropertyName;
         $this->newMethodName = $newMethodName;
         RectorAssert::className($class);
+        RectorAssert::propertyName($oldPropertyName);
+        RectorAssert::methodName($newMethodName);
     }
     public function getObjectType() : ObjectType
     {

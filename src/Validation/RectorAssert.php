@@ -17,14 +17,51 @@ final class RectorAssert
      */
     private const CLASS_NAME_REGEX = '#^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(\\\\[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)*$#';
     /**
+     * @see https://www.php.net/manual/en/language.variables.basics.php
+     * @see https://regex101.com/r/hFw17T/1
+     *
+     * @var string
+     */
+    private const PROPERTY_NAME_REGEX = '#^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*$#';
+    /**
+     * @see https://regex101.com/r/uh5B0S/1
+     * @see https://www.php.net/manual/en/functions.user-defined.php
+     *
+     * @var string
+     */
+    private const METHOD_NAME_REGEX = '#^[a-zA-Z_\\x80-\\xff][a-zA-Z0-9_\\x80-\\xff]*$#';
+    /**
+     * @see https://regex101.com/r/uh5B0S/1
+     * @see https://www.php.net/manual/en/functions.user-defined.php
+     *
+     * @var string
+     */
+    private const FUNCTION_NAME_REGEX = '#([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(\\\\[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]))?([a-zA-Z_\\x80-\\xff][a-zA-Z0-9_\\x80-\\xff]*)$#';
+    /**
      * Assert value is valid class name
      */
-    public static function className(string $className) : void
+    public static function className(string $name) : void
     {
-        if (StringUtils::isMatch($className, self::CLASS_NAME_REGEX)) {
+        self::elementName($name, self::CLASS_NAME_REGEX, 'class');
+    }
+    public static function propertyName(string $name) : void
+    {
+        self::elementName($name, self::PROPERTY_NAME_REGEX, 'property');
+    }
+    public static function methodName(string $name) : void
+    {
+        self::elementName($name, self::METHOD_NAME_REGEX, 'method');
+    }
+    public static function functionName(string $name) : void
+    {
+        self::elementName($name, self::FUNCTION_NAME_REGEX, 'function');
+    }
+    public static function elementName(string $name, string $regex, string $elementType) : void
+    {
+        if (StringUtils::isMatch($name, $regex)) {
             return;
         }
-        $errorMessage = $className . ' is not a valid class name';
+        $errorMessage = \sprintf('"%s" is not a valid %s name', $name, $elementType);
         throw new InvalidArgumentException($errorMessage);
     }
 }

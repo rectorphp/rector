@@ -21,6 +21,7 @@ final class StaticCallToNew
         $this->class = $class;
         $this->method = $method;
         RectorAssert::className($class);
+        RectorAssert::methodName($method);
     }
     public function getClass() : string
     {

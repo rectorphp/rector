@@ -37,6 +37,8 @@ final class MethodCallToAnotherMethodCallWithArguments
         $this->newMethod = $newMethod;
         $this->newArguments = $newArguments;
         RectorAssert::className($type);
+        RectorAssert::methodName($oldMethod);
+        RectorAssert::methodName($newMethod);
     }
     public function getObjectType() : ObjectType
     {

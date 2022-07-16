@@ -28,6 +28,8 @@ final class MethodCallToPropertyFetch
         $this->oldMethod = $oldMethod;
         $this->newProperty = $newProperty;
         RectorAssert::className($oldType);
+        RectorAssert::methodName($oldMethod);
+        RectorAssert::propertyName($newProperty);
     }
     public function getOldObjectType() : ObjectType
     {

@@ -34,6 +34,7 @@ final class ArgumentFuncCallToMethodCall implements ArgumentFuncCallToMethodCall
         $this->methodIfArgs = $methodIfArgs;
         $this->methodIfNoArgs = $methodIfNoArgs;
         RectorAssert::className($class);
+        RectorAssert::functionName($function);
     }
     public function getFunction() : string
     {

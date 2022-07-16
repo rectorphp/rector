@@ -13,6 +13,7 @@ final class NewArgToMethodCall
      */
     private $type;
     /**
+     * @readonly
      * @var mixed
      */
     private $value;
@@ -30,6 +31,7 @@ final class NewArgToMethodCall
         $this->value = $value;
         $this->methodCall = $methodCall;
         RectorAssert::className($type);
+        RectorAssert::className($methodCall);
     }
     public function getObjectType() : ObjectType
     {

@@ -28,6 +28,7 @@ final class ServiceGetterToConstructorInjection
         $this->oldMethod = $oldMethod;
         $this->serviceType = $serviceType;
         RectorAssert::className($oldType);
+        RectorAssert::methodName($oldMethod);
         RectorAssert::className($serviceType);
     }
     public function getOldObjectType() : ObjectType

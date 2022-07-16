@@ -40,6 +40,7 @@ final class ArrayFuncCallToMethodCall implements ArgumentFuncCallToMethodCallInt
         $this->arrayMethod = $arrayMethod;
         $this->nonArrayMethod = $nonArrayMethod;
         RectorAssert::className($class);
+        RectorAssert::functionName($function);
     }
     public function getFunction() : string
     {

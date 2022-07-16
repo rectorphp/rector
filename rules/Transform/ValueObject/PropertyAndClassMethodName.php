@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
+use Rector\Core\Validation\RectorAssert;
 final class PropertyAndClassMethodName
 {
     /**
@@ -19,6 +20,8 @@ final class PropertyAndClassMethodName
     {
         $this->propertyName = $propertyName;
         $this->classMethodName = $classMethodName;
+        RectorAssert::propertyName($propertyName);
+        RectorAssert::methodName($classMethodName);
     }
     public function getPropertyName() : string
     {

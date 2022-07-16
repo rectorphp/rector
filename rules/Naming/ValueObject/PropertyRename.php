@@ -6,6 +6,7 @@ namespace Rector\Naming\ValueObject;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\Core\Validation\RectorAssert;
 use Rector\Naming\Contract\RenamePropertyValueObjectInterface;
 final class PropertyRename implements RenamePropertyValueObjectInterface
 {
@@ -47,6 +48,9 @@ final class PropertyRename implements RenamePropertyValueObjectInterface
         $this->classLike = $classLike;
         $this->classLikeName = $classLikeName;
         $this->propertyProperty = $propertyProperty;
+        // name must be valid
+        RectorAssert::propertyName($currentName);
+        RectorAssert::propertyName($expectedName);
     }
     public function getProperty() : Property
     {

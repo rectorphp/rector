@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Transform\ValueObject;
 
+use Rector\Core\Validation\RectorAssert;
+use RectorPrefix202207\Webmozart\Assert\Assert;
 final class ParentClassToTraits
 {
     /**
@@ -22,6 +24,8 @@ final class ParentClassToTraits
     {
         $this->parentType = $parentType;
         $this->traitNames = $traitNames;
+        RectorAssert::className($parentType);
+        Assert::allString($traitNames);
     }
     public function getParentType() : string
     {

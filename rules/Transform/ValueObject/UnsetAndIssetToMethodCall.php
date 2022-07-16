@@ -28,6 +28,8 @@ final class UnsetAndIssetToMethodCall
         $this->issetMethodCall = $issetMethodCall;
         $this->unsedMethodCall = $unsedMethodCall;
         RectorAssert::className($type);
+        RectorAssert::methodName($issetMethodCall);
+        RectorAssert::methodName($unsedMethodCall);
     }
     public function getObjectType() : ObjectType
     {
