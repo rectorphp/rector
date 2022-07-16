@@ -14,7 +14,10 @@ final class NamespaceMatcher
         \krsort($oldToNewNamespace);
         /** @var string $oldNamespace */
         foreach ($oldToNewNamespace as $oldNamespace => $newNamespace) {
-            if (\strncmp($name, $oldNamespace, \strlen($oldNamespace)) === 0) {
+            if ($name === $oldNamespace) {
+                return new RenamedNamespace($name, $oldNamespace, $newNamespace);
+            }
+            if (\strncmp($name, $oldNamespace . '\\', \strlen($oldNamespace . '\\')) === 0) {
                 return new RenamedNamespace($name, $oldNamespace, $newNamespace);
             }
         }

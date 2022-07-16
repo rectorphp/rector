@@ -17,6 +17,17 @@ final class RectorAssert
      */
     private const CLASS_NAME_REGEX = '#^[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(\\\\[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*)*$#';
     /**
+     * @var string
+     */
+    private const NAMESPACE_REGEX = '#^' . self::NAKED_NAMESPACE_REGEX . '$#';
+    /**
+     * @see https://stackoverflow.com/a/60470526/1348344
+     * @see https://regex101.com/r/37aUWA/1
+     *
+     * @var string
+     */
+    private const NAKED_NAMESPACE_REGEX = '[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff\\\\]*[a-zA-Z0-9_\\x7f-\\xff]';
+    /**
      * @see https://www.php.net/manual/en/language.variables.basics.php
      * @see https://regex101.com/r/hFw17T/1
      *
@@ -36,10 +47,22 @@ final class RectorAssert
      *
      * @var string
      */
-    private const FUNCTION_NAME_REGEX = '#([a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]*(\\\\[a-zA-Z_\\x7f-\\xff][a-zA-Z0-9_\\x7f-\\xff]))?([a-zA-Z_\\x80-\\xff][a-zA-Z0-9_\\x80-\\xff]*)$#';
+    private const FUNCTION_NAME_REGEX = '#^(' . self::NAKED_NAMESPACE_REGEX . '\\\\)?([a-zA-Z_\\x80-\\xff][a-zA-Z0-9_\\x80-\\xff]*)$#';
     /**
-     * Assert value is valid class name
+     * @see https://www.php.net/manual/en/language.constants.php
+     * @see https://regex101.com/r/Fu6WHQ/1
+     *
+     * @var string
      */
+    private const CONSTANT_REGEX = '#^[a-zA-Z_\\x80-\\xff][a-zA-Z0-9_\\x80-\\xff]*$#';
+    public static function namespaceName(string $name) : void
+    {
+        self::elementName($name, self::NAMESPACE_REGEX, 'namespace');
+    }
+    public static function constantName(string $name) : void
+    {
+        self::elementName($name, self::CONSTANT_REGEX, 'constant');
+    }
     public static function className(string $name) : void
     {
         self::elementName($name, self::CLASS_NAME_REGEX, 'class');

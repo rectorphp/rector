@@ -459,8 +459,8 @@ final class NodeFactory
         return $classConst;
     }
     /**
-     * @param mixed $item
      * @param string|int|null $key
+     * @param mixed $item
      */
     private function createArrayItem($item, $key = null) : ArrayItem
     {
@@ -491,8 +491,8 @@ final class NodeFactory
         throw new NotImplementedYetException(\sprintf('Not implemented yet. Go to "%s()" and add check for "%s" node.', __METHOD__, (string) $nodeClass));
     }
     /**
-     * @param mixed $value
      * @return mixed|Error|Variable
+     * @param mixed $value
      */
     private function normalizeArgValue($value)
     {

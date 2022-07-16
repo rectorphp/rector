@@ -79,16 +79,8 @@ final class ValueResolver
     {
         return $this->getValue($expr) === $value;
     }
-    public function getStringValue(Expr $expr) : string
-    {
-        $resolvedValue = $this->getValue($expr);
-        if (!\is_string($resolvedValue)) {
-            throw new ShouldNotHappenException();
-        }
-        return $resolvedValue;
-    }
     /**
-     * @return mixed|null
+     * @return mixed
      */
     public function getValue(Expr $expr, bool $resolvedClassReference = \false)
     {
