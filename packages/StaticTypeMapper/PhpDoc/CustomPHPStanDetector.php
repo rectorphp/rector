@@ -22,6 +22,9 @@ final class CustomPHPStanDetector
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
+    /**
+     * @api
+     */
     public function isCustomType(Type $definedType, Node $node) : bool
     {
         if (!$definedType instanceof NonExistingObjectType) {

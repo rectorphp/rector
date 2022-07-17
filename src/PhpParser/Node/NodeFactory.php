@@ -444,6 +444,9 @@ final class NodeFactory
         }
         return $this->createBooleanAndFromNodes($newNodes);
     }
+    /**
+     * @api
+     */
     public function createClassConstant(string $name, Expr $expr, int $modifier) : ClassConst
     {
         $expr = BuilderHelpers::normalizeValue($expr);

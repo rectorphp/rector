@@ -108,6 +108,9 @@ final class PhpDocInfo
             $this->isSingleLine = \true;
         }
     }
+    /**
+     * @api
+     */
     public function addPhpDocTagNode(PhpDocChildNode $phpDocChildNode) : void
     {
         $this->phpDocNode->children[] = $phpDocChildNode;

@@ -329,7 +329,7 @@ CODE_SAMPLE;
         if ($this->nodesToRemoveCollector->isNodeRemoved($node)) {
             return \true;
         }
-        if ($this->exclusionManager->isNodeSkippedByRector($node, $this)) {
+        if ($this->exclusionManager->isNodeSkippedByRector($node, static::class)) {
             return \true;
         }
         $smartFileInfo = $this->file->getSmartFileInfo();

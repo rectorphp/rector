@@ -157,6 +157,7 @@ final class BetterNodeFinder
         return $this->findVariableOfName($nodes, $name) instanceof Node;
     }
     /**
+     * @api
      * @param \PhpParser\Node|mixed[] $nodes
      * @return Variable|null
      */
@@ -302,6 +303,7 @@ final class BetterNodeFinder
         return null;
     }
     /**
+     * @api
      * @template T of Node
      * @param array<class-string<T>> $types
      */

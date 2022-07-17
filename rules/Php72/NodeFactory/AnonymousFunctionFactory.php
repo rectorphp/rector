@@ -120,6 +120,7 @@ final class AnonymousFunctionFactory
         $this->inlineCodeParser = $inlineCodeParser;
     }
     /**
+     * @api
      * @param Param[] $params
      * @param Stmt[] $stmts
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType|null $returnTypeNode
