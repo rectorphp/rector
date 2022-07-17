@@ -20,8 +20,8 @@ final class CommentRemover
         $this->commentRemovingNodeTraverser = $commentRemovingNodeTraverser;
     }
     /**
-     * @return Node[]|null
      * @param mixed[]|\PhpParser\Node|null $node
+     * @return Node[]|null
      */
     public function removeFromNode($node)
     {

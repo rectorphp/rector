@@ -16,6 +16,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Broker\ClassAutoloadingException;
@@ -233,15 +234,16 @@ final class NodeTypeResolver
         $type = $scope->getNativeType($expr);
         return $this->accessoryNonEmptyStringTypeCorrector->correct($type);
     }
-    public function isNumberType(Node $node) : bool
+    public function isNumberType(Expr $expr) : bool
     {
-        $nodeType = $this->getType($node);
+        $nodeType = $this->getType($expr);
         if ($nodeType instanceof IntegerType) {
             return \true;
         }
         return $nodeType instanceof FloatType;
     }
     /**
+     * @api
      * @param class-string<Type> $desiredType
      */
     public function isNullableTypeOfSpecificType(Node $node, string $desiredType) : bool

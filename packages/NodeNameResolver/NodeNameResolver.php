@@ -87,6 +87,9 @@ final class NodeNameResolver
         }
         return \false;
     }
+    /**
+     * @api
+     */
     public function isCaseSensitiveName(Node $node, string $name) : bool
     {
         if ($name === '') {

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Caching\FileSystem;
 
-use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Dependency\DependencyResolver as PHPStanDependencyResolver;
@@ -34,10 +34,10 @@ final class DependencyResolver
     /**
      * @return string[]
      */
-    public function resolveDependencies(Node $node, MutatingScope $mutatingScope) : array
+    public function resolveDependencies(Stmt $stmt, MutatingScope $mutatingScope) : array
     {
         $analysedFileAbsolutesPaths = $this->privatesAccessor->getPrivateProperty($this->nodeScopeResolver, 'analysedFiles');
-        $nodeDependencies = $this->phpStanDependencyResolver->resolveDependencies($node, $mutatingScope);
+        $nodeDependencies = $this->phpStanDependencyResolver->resolveDependencies($stmt, $mutatingScope);
         return $nodeDependencies->getFileDependencies($mutatingScope->getFile(), $analysedFileAbsolutesPaths);
     }
 }

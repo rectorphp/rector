@@ -5,6 +5,7 @@ namespace Rector\NodeTypeResolver\NodeTypeCorrector;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
@@ -55,15 +56,15 @@ final class PregMatchTypeCorrector
      * Special case for "preg_match(), preg_match_all()" - with 3rd argument
      * @see https://github.com/rectorphp/rector/issues/786
      */
-    public function correct(Node $node, Type $originalType) : Type
+    public function correct(Expr $expr, Type $originalType) : Type
     {
-        if (!$node instanceof Variable) {
+        if (!$expr instanceof Variable) {
             return $originalType;
         }
         if ($originalType instanceof ArrayType) {
             return $originalType;
         }
-        $variableUsages = $this->getVariableUsages($node);
+        $variableUsages = $this->getVariableUsages($expr);
         foreach ($variableUsages as $variableUsage) {
             $possiblyArg = $variableUsage->getAttribute(AttributeKey::PARENT_NODE);
             if (!$possiblyArg instanceof Arg) {
@@ -82,7 +83,7 @@ final class PregMatchTypeCorrector
             /** @var Arg $thirdArg */
             $thirdArg = $funcCallNode->args[2];
             // are the same variables
-            if (!$this->nodeComparator->areNodesEqual($thirdArg->value, $node)) {
+            if (!$this->nodeComparator->areNodesEqual($thirdArg->value, $expr)) {
                 continue;
             }
             return new ArrayType(new MixedType(), new MixedType());

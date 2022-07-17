@@ -4,13 +4,13 @@ declare (strict_types=1);
 namespace Rector\DeadCode\TypeNodeAnalyzer;
 
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 final class MixedArrayTypeNodeAnalyzer
 {
-    public function hasMixedArrayType(UnionTypeNode $unionTypeNode) : bool
+    public function hasMixedArrayType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
     {
-        $types = $unionTypeNode->types;
+        $types = $bracketsAwareUnionTypeNode->types;
         foreach ($types as $type) {
             if ($type instanceof SpacingAwareArrayTypeNode) {
                 $typeNode = $type->type;

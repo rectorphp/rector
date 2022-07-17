@@ -51,10 +51,16 @@ final class ContextAnalyzer
         }
         return \false;
     }
+    /**
+     * @api
+     */
     public function isInSwitch(Node $node) : bool
     {
         return (bool) $this->betterNodeFinder->findParentType($node, Switch_::class);
     }
+    /**
+     * @api
+     */
     public function isInIf(Node $node) : bool
     {
         $breakNodes = \array_merge([If_::class], self::BREAK_NODES);

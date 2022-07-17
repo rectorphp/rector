@@ -22,6 +22,7 @@ final class ScopeAwareNodeFinder
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
+     * @api
      * Find node based on $callable or null, when the nesting scope is broken
      * @param callable(Node $node): bool $callable
      * @param array<class-string<Node>> $allowedTypes

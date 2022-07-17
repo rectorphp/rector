@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\DogFood\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
@@ -41,14 +40,11 @@ final class ContainerConfiguratorCallAnalyzer
         }
         return \is_a($serviceClass, RectorInterface::class, \true);
     }
-    public function isMethodCallNamed(Expr $expr, string $variableName, string $methodName) : bool
+    public function isMethodCallNamed(MethodCall $methodCall, string $variableName, string $methodName) : bool
     {
-        if (!$expr instanceof MethodCall) {
+        if (!$this->nodeNameResolver->isName($methodCall->var, $variableName)) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($expr->var, $variableName)) {
-            return \false;
-        }
-        return $this->nodeNameResolver->isName($expr->name, $methodName);
+        return $this->nodeNameResolver->isName($methodCall->name, $methodName);
     }
 }

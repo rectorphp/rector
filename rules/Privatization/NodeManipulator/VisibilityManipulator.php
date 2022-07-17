@@ -56,6 +56,7 @@ final class VisibilityManipulator
         $this->addVisibilityFlag($node, Visibility::FINAL);
     }
     /**
+     * @api
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod $node
      */
     public function makeNonFinal($node) : void

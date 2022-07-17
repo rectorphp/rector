@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Naming\Naming\UseImportsResolver;
@@ -72,9 +73,9 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         }
         return $objectTypes;
     }
-    public function hasImport(File $file, Node $node, FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
+    public function hasImport(File $file, Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
     {
-        $useImports = $this->getUseImportTypesByNode($file, $node);
+        $useImports = $this->getUseImportTypesByNode($file, $name);
         foreach ($useImports as $useImport) {
             if ($useImport->equals($fullyQualifiedObjectType)) {
                 return \true;

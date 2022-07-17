@@ -30,6 +30,9 @@ final class VariadicFunctionLikeDetector
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
     }
+    /**
+     * @api
+     */
     public function isVariadic(FunctionLike $functionLike) : bool
     {
         $isVariadic = \false;

@@ -115,6 +115,9 @@ final class PhpDocInfoFactory
         $this->phpDocInfosByObjectHash[$objectHash] = $phpDocInfo;
         return $phpDocInfo;
     }
+    /**
+     * @api
+     */
     public function createEmpty(Node $node) : \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
     {
         /** @see \Rector\BetterPhpDocParser\PhpDocParser\DoctrineAnnotationDecorator::decorate() */

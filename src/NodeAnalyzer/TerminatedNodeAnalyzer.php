@@ -39,10 +39,7 @@ final class TerminatedNodeAnalyzer
      * @var array<class-string<Node>>
      */
     private const ALLOWED_CONTINUE_CURRENT_STMTS = [InlineHTML::class, Nop::class];
-    /**
-     * @param \PhpParser\Node\Stmt\TryCatch|\PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node $node
-     */
-    public function isAlwaysTerminated($node, Node $currentStmt) : bool
+    public function isAlwaysTerminated(Stmt $node, Stmt $currentStmt) : bool
     {
         if (\in_array(\get_class($currentStmt), self::ALLOWED_CONTINUE_CURRENT_STMTS, \true)) {
             return \false;
@@ -72,7 +69,7 @@ final class TerminatedNodeAnalyzer
         }
         return \false;
     }
-    private function isTerminatedInLastStmtsSwitch(Switch_ $switch, Node $node) : bool
+    private function isTerminatedInLastStmtsSwitch(Switch_ $switch, Stmt $stmt) : bool
     {
         if ($switch->cases === []) {
             return \false;
@@ -85,42 +82,42 @@ final class TerminatedNodeAnalyzer
             if ($case->stmts === [] && isset($switch->cases[$key + 1])) {
                 continue;
             }
-            if (!$this->isTerminatedInLastStmts($case->stmts, $node)) {
+            if (!$this->isTerminatedInLastStmts($case->stmts, $stmt)) {
                 return \false;
             }
         }
         return $hasDefault;
     }
-    private function isTerminatedInLastStmtsTryCatch(TryCatch $tryCatch, Node $node) : bool
+    private function isTerminatedInLastStmtsTryCatch(TryCatch $tryCatch, Stmt $stmt) : bool
     {
-        if ($tryCatch->finally instanceof Finally_ && $this->isTerminatedInLastStmts($tryCatch->finally->stmts, $node)) {
+        if ($tryCatch->finally instanceof Finally_ && $this->isTerminatedInLastStmts($tryCatch->finally->stmts, $stmt)) {
             return \true;
         }
         foreach ($tryCatch->catches as $catch) {
-            if (!$this->isTerminatedInLastStmts($catch->stmts, $node)) {
+            if (!$this->isTerminatedInLastStmts($catch->stmts, $stmt)) {
                 return \false;
             }
         }
-        return $this->isTerminatedInLastStmts($tryCatch->stmts, $node);
+        return $this->isTerminatedInLastStmts($tryCatch->stmts, $stmt);
     }
-    private function isTerminatedInLastStmtsIf(If_ $if, Node $node) : bool
+    private function isTerminatedInLastStmtsIf(If_ $if, Stmt $stmt) : bool
     {
         // Without ElseIf_[] and Else_, after If_ is possibly executable
         if ($if->elseifs === [] && !$if->else instanceof Else_) {
             return \false;
         }
         foreach ($if->elseifs as $elseIf) {
-            if (!$this->isTerminatedInLastStmts($elseIf->stmts, $node)) {
+            if (!$this->isTerminatedInLastStmts($elseIf->stmts, $stmt)) {
                 return \false;
             }
         }
-        if (!$this->isTerminatedInLastStmts($if->stmts, $node)) {
+        if (!$this->isTerminatedInLastStmts($if->stmts, $stmt)) {
             return \false;
         }
         if (!$if->else instanceof Else_) {
             return \false;
         }
-        return $this->isTerminatedInLastStmts($if->else->stmts, $node);
+        return $this->isTerminatedInLastStmts($if->else->stmts, $stmt);
     }
     /**
      * @param Stmt[] $stmts

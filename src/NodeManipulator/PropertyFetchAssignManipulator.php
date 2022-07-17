@@ -79,10 +79,10 @@ final class PropertyFetchAssignManipulator
     /**
      * @return string[]
      */
-    public function getPropertyNamesOfAssignOfVariable(Node $node, string $paramName) : array
+    public function getPropertyNamesOfAssignOfVariable(ClassMethod $classMethod, string $paramName) : array
     {
         $propertyNames = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node, function (Node $node) use($paramName, &$propertyNames) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use($paramName, &$propertyNames) {
             if (!$node instanceof Assign) {
                 return null;
             }
