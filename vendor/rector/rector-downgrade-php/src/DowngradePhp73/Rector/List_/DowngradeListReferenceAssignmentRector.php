@@ -113,7 +113,7 @@ CODE_SAMPLE
      * @return List_|Array_|null
      * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
      */
-    public function removeStaleParams($node, int $rightSideRemovableParamsCount) : ?Node
+    private function removeStaleParams($node, int $rightSideRemovableParamsCount) : ?Node
     {
         $nodeItemsCount = \count($node->items);
         if ($rightSideRemovableParamsCount === $nodeItemsCount) {

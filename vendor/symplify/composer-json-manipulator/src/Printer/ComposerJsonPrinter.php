@@ -26,11 +26,12 @@ final class ComposerJsonPrinter
     /**
      * @param string|\Symplify\SmartFileSystem\SmartFileInfo $targetFile
      */
-    public function print(ComposerJson $composerJson, $targetFile) : string
+    public function print(ComposerJson $composerJson, $targetFile) : void
     {
         if (\is_string($targetFile)) {
-            return $this->jsonFileManager->printComposerJsonToFilePath($composerJson, $targetFile);
+            $this->jsonFileManager->printComposerJsonToFilePath($composerJson, $targetFile);
+            return;
         }
-        return $this->jsonFileManager->printJsonToFileInfo($composerJson->getJsonArray(), $targetFile);
+        $this->jsonFileManager->printJsonToFileInfo($composerJson->getJsonArray(), $targetFile);
     }
 }

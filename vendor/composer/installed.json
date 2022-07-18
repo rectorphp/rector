@@ -1991,12 +1991,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "97f49a2bb2262e89a56b27349cf789d96b9b1815"
+                "reference": "7ee4e58f8af4c6485fed261b0a0360a09b9c9d20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/97f49a2bb2262e89a56b27349cf789d96b9b1815",
-                "reference": "97f49a2bb2262e89a56b27349cf789d96b9b1815",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/7ee4e58f8af4c6485fed261b0a0360a09b9c9d20",
+                "reference": "7ee4e58f8af4c6485fed261b0a0360a09b9c9d20",
                 "shasum": ""
             },
             "require": {
@@ -2020,7 +2020,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-03T22:06:31+00:00",
+            "time": "2022-07-18T22:23:59+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -3329,12 +3329,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "4f84156609f6b7ff031bc3d4d3cd7ab91f2e9eb4"
+                "reference": "21e0a3e792a6304ab5eac3b6059ebd0f786e70a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/4f84156609f6b7ff031bc3d4d3cd7ab91f2e9eb4",
-                "reference": "4f84156609f6b7ff031bc3d4d3cd7ab91f2e9eb4",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/21e0a3e792a6304ab5eac3b6059ebd0f786e70a8",
+                "reference": "21e0a3e792a6304ab5eac3b6059ebd0f786e70a8",
                 "shasum": ""
             },
             "require": {
@@ -3375,7 +3375,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^11.1"
             },
-            "time": "2022-07-14T10:58:37+00:00",
+            "time": "2022-07-18T20:52:39+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
@@ -3501,12 +3501,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/composer-json-manipulator.git",
-                "reference": "d68c8393cb6d25a37c78ed0757c15a20c8b5f335"
+                "reference": "41b2a0a776459a1cfcb44c33fbc4e3d778935f8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/composer-json-manipulator\/zipball\/d68c8393cb6d25a37c78ed0757c15a20c8b5f335",
-                "reference": "d68c8393cb6d25a37c78ed0757c15a20c8b5f335",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/composer-json-manipulator\/zipball\/41b2a0a776459a1cfcb44c33fbc4e3d778935f8e",
+                "reference": "41b2a0a776459a1cfcb44c33fbc4e3d778935f8e",
                 "shasum": ""
             },
             "require": {
@@ -3543,7 +3543,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-07-05T11:51:06+00:00",
+            "time": "2022-07-18T20:42:11+00:00",
             "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
@@ -3742,12 +3742,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/package-builder.git",
-                "reference": "926bbe1189e807a54d3a21c22413f0579ae55f95"
+                "reference": "edd5f45e48f50dfee7639924e75ad85dc476c67b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/926bbe1189e807a54d3a21c22413f0579ae55f95",
-                "reference": "926bbe1189e807a54d3a21c22413f0579ae55f95",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/edd5f45e48f50dfee7639924e75ad85dc476c67b",
+                "reference": "edd5f45e48f50dfee7639924e75ad85dc476c67b",
                 "shasum": ""
             },
             "require": {
@@ -3785,7 +3785,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-07-14T10:58:32+00:00",
+            "time": "2022-07-18T17:39:56+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -3984,12 +3984,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/smart-file-system.git",
-                "reference": "6b39b4f1d9299c978a2d793db4e333155a9e74fc"
+                "reference": "1d3182282bc843dd93a30d49da486b91c91b3255"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/6b39b4f1d9299c978a2d793db4e333155a9e74fc",
-                "reference": "6b39b4f1d9299c978a2d793db4e333155a9e74fc",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/1d3182282bc843dd93a30d49da486b91c91b3255",
+                "reference": "1d3182282bc843dd93a30d49da486b91c91b3255",
                 "shasum": ""
             },
             "require": {
@@ -4025,7 +4025,7 @@
                 "nette\/finder": "^2.5",
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-07-05T11:49:50+00:00",
+            "time": "2022-07-18T20:42:44+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -4045,7 +4045,7 @@
             ],
             "description": "Sanitized FileInfo with safe getRealPath() and other handy methods",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/smart-file-system\/tree\/11.0.8"
+                "source": "https:\/\/github.com\/symplify\/smart-file-system\/tree\/main"
             },
             "funding": [
                 {

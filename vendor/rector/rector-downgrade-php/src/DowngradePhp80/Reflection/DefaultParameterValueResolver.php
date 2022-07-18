@@ -21,14 +21,14 @@ final class DefaultParameterValueResolver
      */
     public function resolveFromParameterReflection(ParameterReflection $parameterReflection)
     {
-        $defaultValue = $parameterReflection->getDefaultValue();
-        if (!$defaultValue instanceof Type) {
+        $defaultValueType = $parameterReflection->getDefaultValue();
+        if (!$defaultValueType instanceof Type) {
             return null;
         }
-        if (!$defaultValue instanceof ConstantType) {
+        if (!$defaultValueType instanceof ConstantType) {
             throw new ShouldNotHappenException();
         }
-        return $this->resolveValueFromType($defaultValue);
+        return $this->resolveValueFromType($defaultValueType);
     }
     /**
      * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr

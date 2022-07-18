@@ -109,8 +109,11 @@ CODE_SAMPLE
             return null;
         }
         if ($this->usePhpdoc) {
-            $this->changePhpDocToVoidIfNotNever($node);
-            return $node;
+            $hasChanged = $this->changePhpDocToVoidIfNotNever($node);
+            if ($hasChanged) {
+                return $node;
+            }
+            return null;
         }
         if ($node instanceof ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($node)) {
             return null;
@@ -134,13 +137,13 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node $node
      */
-    private function changePhpDocToVoidIfNotNever($node) : void
+    private function changePhpDocToVoidIfNotNever($node) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($phpDocInfo->getReturnType() instanceof NeverType) {
-            return;
+            return \false;
         }
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new VoidType());
+        return $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new VoidType());
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike

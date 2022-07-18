@@ -104,7 +104,6 @@ CODE_SAMPLE
         if ($expression->getComments() !== []) {
             $nop = new Nop();
             $nop->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
-            $this->phpDocInfoFactory->createFromNode($nop);
             return $nop;
         }
         $this->removeNode($expression);

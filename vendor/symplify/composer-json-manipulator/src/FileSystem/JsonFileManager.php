@@ -59,19 +59,24 @@ final class JsonFileManager
     /**
      * @param mixed[] $json
      */
-    public function printJsonToFileInfo(array $json, SmartFileInfo $smartFileInfo) : string
+    public function printJsonToFileInfoAndReturn(array $json, SmartFileInfo $smartFileInfo) : string
     {
         $jsonString = $this->encodeJsonToFileContent($json);
-        $this->smartFileSystem->dumpFile($smartFileInfo->getPathname(), $jsonString);
-        $realPath = $smartFileInfo->getRealPath();
-        unset($this->cachedJSONFiles[$realPath]);
+        $this->printJsonStringToSmartFileInfo($smartFileInfo, $jsonString);
         return $jsonString;
     }
-    public function printComposerJsonToFilePath(ComposerJson $composerJson, string $filePath) : string
+    /**
+     * @param mixed[] $json
+     */
+    public function printJsonToFileInfo(array $json, SmartFileInfo $smartFileInfo) : void
+    {
+        $jsonString = $this->encodeJsonToFileContent($json);
+        $this->printJsonStringToSmartFileInfo($smartFileInfo, $jsonString);
+    }
+    public function printComposerJsonToFilePath(ComposerJson $composerJson, string $filePath) : void
     {
         $jsonString = $this->encodeJsonToFileContent($composerJson->getJsonArray());
         $this->smartFileSystem->dumpFile($filePath, $jsonString);
-        return $jsonString;
     }
     /**
      * @param mixed[] $json
@@ -82,5 +87,11 @@ final class JsonFileManager
         $json = $this->jsonCleaner->removeEmptyKeysFromJsonArray($json);
         $jsonContent = Json::encode($json, Json::PRETTY) . StaticEolConfiguration::getEolChar();
         return $this->jsonInliner->inlineSections($jsonContent);
+    }
+    private function printJsonStringToSmartFileInfo(SmartFileInfo $smartFileInfo, string $jsonString) : void
+    {
+        $this->smartFileSystem->dumpFile($smartFileInfo->getPathname(), $jsonString);
+        $realPath = $smartFileInfo->getRealPath();
+        unset($this->cachedJSONFiles[$realPath]);
     }
 }

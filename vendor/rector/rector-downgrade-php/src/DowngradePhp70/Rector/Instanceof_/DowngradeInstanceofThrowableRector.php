@@ -95,8 +95,8 @@ CODE_SAMPLE
         if (!$hasVariableToFindInDisjunction) {
             return \false;
         }
-        $disjunctionTree = $this->binaryOpTreeRootLocator->findOperationRoot($instanceof, BooleanOr::class);
-        $disjuncts = $this->binaryOpConditionsCollector->findConditions($disjunctionTree, BooleanOr::class);
+        $disjunctionTreeExpr = $this->binaryOpTreeRootLocator->findOperationRoot($instanceof, BooleanOr::class);
+        $disjuncts = $this->binaryOpConditionsCollector->findConditions($disjunctionTreeExpr, BooleanOr::class);
         // If we transformed it ourselves, the second check can only be to the right
         // since it uses the assigned variable.
         if ($instanceof->expr instanceof Assign) {

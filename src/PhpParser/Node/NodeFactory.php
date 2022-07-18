@@ -251,25 +251,10 @@ final class NodeFactory
     {
         return new StaticCall(new Name(ObjectReference::PARENT), new Identifier(MethodName::CONSTRUCT), $this->createArgsFromParams($params));
     }
-    public function createProperty(string $name) : Property
-    {
-        $propertyBuilder = new PropertyBuilder($name);
-        $property = $propertyBuilder->getNode();
-        $this->phpDocInfoFactory->createFromNode($property);
-        return $property;
-    }
     public function createPrivateProperty(string $name) : Property
     {
         $propertyBuilder = new PropertyBuilder($name);
         $propertyBuilder->makePrivate();
-        $property = $propertyBuilder->getNode();
-        $this->phpDocInfoFactory->createFromNode($property);
-        return $property;
-    }
-    public function createPublicProperty(string $name) : Property
-    {
-        $propertyBuilder = new PropertyBuilder($name);
-        $propertyBuilder->makePublic();
         $property = $propertyBuilder->getNode();
         $this->phpDocInfoFactory->createFromNode($property);
         return $property;

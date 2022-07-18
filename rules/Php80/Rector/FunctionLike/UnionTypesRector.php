@@ -111,7 +111,7 @@ CODE_SAMPLE
         return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
     }
     /**
-     * @param ClassMethod | Function_ | Closure | ArrowFunction $node
+     * @param ClassMethod|Function_|Closure|ArrowFunction $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -122,9 +122,12 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->refactorParamTypes($node, $phpDocInfo);
         $this->refactorReturnType($node, $phpDocInfo);
-        $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
-        $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
-        if ($phpDocInfo->hasChanged()) {
+        $hasParamChanged = $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
+        if ($hasParamChanged) {
+            $this->hasChanged = \true;
+        }
+        $hasReturnChanged = $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
+        if ($hasReturnChanged) {
             $this->hasChanged = \true;
         }
         if ($this->hasChanged) {

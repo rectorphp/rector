@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Enum_;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -98,7 +97,7 @@ CODE_SAMPLE
             if (!$classLikeReflection->isEnum()) {
                 continue;
             }
-            $param->type = $this->resolveParamType($classLikeReflection);
+            $param->type = $this->enumAnalyzer->resolveType($classLikeReflection);
             $hasChanged = \true;
             $this->decorateParamDocType($classLikeReflection, $param, $phpDocInfo);
         }
@@ -106,10 +105,6 @@ CODE_SAMPLE
             return $node;
         }
         return null;
-    }
-    public function resolveParamType(ClassReflection $classReflection) : ?Identifier
-    {
-        return $this->enumAnalyzer->resolveType($classReflection);
     }
     private function decorateParamDocType(ClassReflection $classReflection, Param $param, PhpDocInfo $phpDocInfo) : void
     {

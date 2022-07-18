@@ -32,7 +32,7 @@ final class UnpackedArgList
     {
         return $this->args;
     }
-    public function addArg(Arg $arg) : void
+    private function addArg(Arg $arg) : void
     {
         $this->args[$this->pointer] = $this->args[$this->pointer] ?? new Arg(new Array_());
         if ($arg->unpack) {

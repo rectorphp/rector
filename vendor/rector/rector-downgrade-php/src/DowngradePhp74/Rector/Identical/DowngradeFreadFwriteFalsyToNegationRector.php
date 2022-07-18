@@ -44,11 +44,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $compareValue = $this->getCompareValue($node);
-        if (!$compareValue instanceof Expr) {
+        $compareExpr = $this->getCompareValue($node);
+        if (!$compareExpr instanceof Expr) {
             return null;
         }
-        if (!$this->valueResolver->isFalse($compareValue)) {
+        if (!$this->valueResolver->isFalse($compareExpr)) {
             return null;
         }
         return new BooleanNot($this->getFunction($node));

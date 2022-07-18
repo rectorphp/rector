@@ -52,8 +52,8 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $callback = $this->createCallback($node);
-        return $this->createClosureFromCallableCall($callback);
+        $callbackExpr = $this->createCallback($node);
+        return $this->createClosureFromCallableCall($callbackExpr);
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
@@ -67,8 +67,9 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @return \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr
      */
-    private function createCallback($node) : Expr
+    private function createCallback($node)
     {
         if ($node instanceof FuncCall) {
             return $node->name instanceof Name ? new String_($node->name->toString()) : $node->name;
@@ -83,7 +84,10 @@ CODE_SAMPLE
         $method = $node->name instanceof Identifier ? new String_($node->name->toString()) : $node->name;
         return $this->nodeFactory->createArray([$class, $method]);
     }
-    private function createClosureFromCallableCall(Expr $expr) : StaticCall
+    /**
+     * @param \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\Array_|\PhpParser\Node\Expr $expr
+     */
+    private function createClosureFromCallableCall($expr) : StaticCall
     {
         return new StaticCall(new FullyQualified('Closure'), 'fromCallable', [new Arg($expr)]);
     }

@@ -122,8 +122,8 @@ CODE_SAMPLE
         if (!$ternary->else instanceof Throw_) {
             return null;
         }
-        $inversedTernaryCond = $this->binaryOpManipulator->inverseNode($ternary->cond);
-        $if = $this->ifManipulator->createIfStmt($inversedTernaryCond, new Expression($ternary->else));
+        $inversedTernaryExpr = $this->binaryOpManipulator->inverseNode($ternary->cond);
+        $if = $this->ifManipulator->createIfStmt($inversedTernaryExpr, new Expression($ternary->else));
         if (!$assign instanceof Assign) {
             return $if;
         }

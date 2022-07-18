@@ -44,19 +44,13 @@ final class ObjectTypeSpecifier
      */
     private $typeWithClassTypeSpecifiers;
     /**
-     * @readonly
-     * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
-     */
-    private $nameScopeFactory;
-    /**
      * @param TypeWithClassTypeSpecifierInterface[] $typeWithClassTypeSpecifiers
      */
-    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, array $typeWithClassTypeSpecifiers, NameScopeFactory $nameScopeFactory)
+    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, array $typeWithClassTypeSpecifiers)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->useImportsResolver = $useImportsResolver;
         $this->typeWithClassTypeSpecifiers = $typeWithClassTypeSpecifiers;
-        $this->nameScopeFactory = $nameScopeFactory;
     }
     /**
      * @param \PHPStan\Analyser\Scope|null $scope
@@ -64,7 +58,7 @@ final class ObjectTypeSpecifier
      */
     public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, $scope)
     {
-        $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
+        //        $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
         // @todo reuse name scope
         if ($scope instanceof Scope) {
             foreach ($this->typeWithClassTypeSpecifiers as $typeWithClassTypeSpecifier) {
