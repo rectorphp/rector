@@ -22,6 +22,10 @@ use Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 use RectorPrefix202207\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+/**
+ * @deprecated
+ * @todo Split into many narrow-focused rules
+ */
 final class AssignToPropertyTypeInferer
 {
     /**

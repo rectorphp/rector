@@ -104,17 +104,17 @@ final class NonInformativeReturnTagRemover
         if (!$nullabledReturnType instanceof Type) {
             return;
         }
-        $nullabledReturnTagValueNode = $this->matchNullabledReturnTagValueNode($returnTagValueNode);
-        if (!$nullabledReturnTagValueNode instanceof TypeNode) {
+        $nullableTypeNode = $this->matchNullabledReturnTagValueNode($returnTagValueNode);
+        if (!$nullableTypeNode instanceof TypeNode) {
             return;
         }
         if (!$nullabledReturnType instanceof FullyQualifiedObjectType) {
             return;
         }
-        if (!$nullabledReturnTagValueNode instanceof IdentifierTypeNode) {
+        if (!$nullableTypeNode instanceof IdentifierTypeNode) {
             return;
         }
-        if (\substr_compare($nullabledReturnType->getClassName(), $nullabledReturnTagValueNode->name, -\strlen($nullabledReturnTagValueNode->name)) !== 0) {
+        if (\substr_compare($nullabledReturnType->getClassName(), $nullableTypeNode->name, -\strlen($nullableTypeNode->name)) !== 0) {
             return;
         }
         $phpDocInfo->removeByType(ReturnTagValueNode::class);

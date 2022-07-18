@@ -17,9 +17,7 @@ use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Error;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -53,7 +51,6 @@ use Rector\Core\NodeDecorator\PropertyTypeDecorator;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -92,11 +89,6 @@ final class NodeFactory
     private $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
@@ -110,13 +102,12 @@ final class NodeFactory
      * @var \Rector\Core\NodeDecorator\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
-    public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory, PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, NodeNameResolver $nodeNameResolver, PhpDocTypeChanger $phpDocTypeChanger, CurrentNodeProvider $currentNodeProvider, PropertyTypeDecorator $propertyTypeDecorator)
+    public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory, PhpVersionProvider $phpVersionProvider, StaticTypeMapper $staticTypeMapper, PhpDocTypeChanger $phpDocTypeChanger, CurrentNodeProvider $currentNodeProvider, PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->builderFactory = $builderFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
@@ -170,9 +161,6 @@ final class NodeFactory
      */
     public function createArgs(array $values) : array
     {
-        foreach ($values as $value) {
-            $this->normalizeArgValue($value);
-        }
         return $this->builderFactory->args($values);
     }
     /**
@@ -331,14 +319,6 @@ final class NodeFactory
         }
         return $previousConcat;
     }
-    public function createClosureFromClassMethod(ClassMethod $classMethod) : Closure
-    {
-        $classMethodName = $this->nodeNameResolver->getName($classMethod);
-        $args = $this->createArgs($classMethod->params);
-        $methodCall = new MethodCall(new Variable(self::THIS), $classMethodName, $args);
-        $return = new Return_($methodCall);
-        return new Closure(['params' => $classMethod->params, 'stmts' => [$return], 'returnType' => $classMethod->returnType]);
-    }
     /**
      * @param string[] $names
      * @return Use_[]
@@ -449,8 +429,8 @@ final class NodeFactory
      */
     public function createClassConstant(string $name, Expr $expr, int $modifier) : ClassConst
     {
-        $expr = BuilderHelpers::normalizeValue($expr);
-        $const = new Const_($name, $expr);
+        $normalizedExpr = BuilderHelpers::normalizeValue($expr);
+        $const = new Const_($name, $normalizedExpr);
         $classConst = new ClassConst([$const]);
         $classConst->flags |= $modifier;
         // add @var type by default
@@ -494,24 +474,14 @@ final class NodeFactory
         throw new NotImplementedYetException(\sprintf('Not implemented yet. Go to "%s()" and add check for "%s" node.', __METHOD__, (string) $nodeClass));
     }
     /**
-     * @return mixed|Error|Variable
-     * @param mixed $value
-     */
-    private function normalizeArgValue($value)
-    {
-        if ($value instanceof Param) {
-            return $value->var;
-        }
-        return $value;
-    }
-    /**
      * @param int|string|null $key
      */
     private function decorateArrayItemWithKey($key, ArrayItem $arrayItem) : void
     {
-        if ($key !== null) {
-            $arrayItem->key = BuilderHelpers::normalizeValue($key);
+        if ($key === null) {
+            return;
         }
+        $arrayItem->key = BuilderHelpers::normalizeValue($key);
     }
     /**
      * @param NotIdentical[]|BooleanAnd[] $exprs

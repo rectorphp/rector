@@ -9,13 +9,13 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\StringUtils;
 use Rector\Naming\RectorNamingInflector;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 /**
@@ -46,11 +46,6 @@ final class PropertyNaming
     private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
     /**
      * @readonly
-     * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
-     */
-    private $typeUnwrapper;
-    /**
-     * @readonly
      * @var \Rector\Naming\RectorNamingInflector
      */
     private $rectorNamingInflector;
@@ -59,9 +54,8 @@ final class PropertyNaming
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(TypeUnwrapper $typeUnwrapper, RectorNamingInflector $rectorNamingInflector, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(RectorNamingInflector $rectorNamingInflector, NodeTypeResolver $nodeTypeResolver)
     {
-        $this->typeUnwrapper = $typeUnwrapper;
         $this->rectorNamingInflector = $rectorNamingInflector;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
@@ -76,7 +70,7 @@ final class PropertyNaming
     }
     public function getExpectedNameFromType(Type $type) : ?ExpectedName
     {
-        $type = $this->typeUnwrapper->unwrapNullableType($type);
+        $type = TypeCombinator::removeNull($type);
         if (!$type instanceof TypeWithClassName) {
             return null;
         }

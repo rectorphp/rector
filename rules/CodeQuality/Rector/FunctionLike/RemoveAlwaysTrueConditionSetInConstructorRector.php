@@ -146,9 +146,8 @@ CODE_SAMPLE
             return new MixedType();
         }
         // set in constructor + changed in class
-        $propertyTypeFromConstructor = $this->resolvePropertyTypeAfterConstructor($classLike, $propertyName);
-        $resolvedTypes = [];
-        $resolvedTypes[] = $propertyTypeFromConstructor;
+        $propertyType = $this->resolvePropertyTypeAfterConstructor($classLike, $propertyName);
+        $resolvedTypes = [$propertyType];
         $defaultValue = $property->props[0]->default;
         if ($defaultValue !== null) {
             $resolvedTypes[] = $this->getType($defaultValue);

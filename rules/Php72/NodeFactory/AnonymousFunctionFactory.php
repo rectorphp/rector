@@ -145,23 +145,23 @@ final class AnonymousFunctionFactory
     }
     public function createFromPhpMethodReflection(PhpMethodReflection $phpMethodReflection, Expr $expr) : ?Closure
     {
-        /** @var FunctionVariantWithPhpDocs $functionVariantWithPhpDoc */
-        $functionVariantWithPhpDoc = ParametersAcceptorSelector::selectSingle($phpMethodReflection->getVariants());
-        $newParams = $this->createParams($phpMethodReflection, $functionVariantWithPhpDoc->getParameters());
+        /** @var FunctionVariantWithPhpDocs $parametersAcceptorWithPhpDocs */
+        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle($phpMethodReflection->getVariants());
+        $newParams = $this->createParams($phpMethodReflection, $parametersAcceptorWithPhpDocs->getParameters());
         $innerMethodCall = $this->createInnerMethodCall($phpMethodReflection, $expr, $newParams);
         if ($innerMethodCall === null) {
             return null;
         }
         $returnTypeNode = null;
-        if (!$functionVariantWithPhpDoc->getReturnType() instanceof MixedType) {
-            $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($functionVariantWithPhpDoc->getReturnType(), TypeKind::RETURN);
+        if (!$parametersAcceptorWithPhpDocs->getReturnType() instanceof MixedType) {
+            $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($parametersAcceptorWithPhpDocs->getReturnType(), TypeKind::RETURN);
         }
         $uses = [];
         if ($expr instanceof Variable && !$this->nodeNameResolver->isName($expr, 'this')) {
             $uses[] = new ClosureUse($expr);
         }
         // does method return something?
-        $stmts = $this->resolveStmts($functionVariantWithPhpDoc, $innerMethodCall);
+        $stmts = $this->resolveStmts($parametersAcceptorWithPhpDocs, $innerMethodCall);
         return new Closure(['params' => $newParams, 'returnType' => $returnTypeNode, 'uses' => $uses, 'stmts' => $stmts]);
     }
     public function createAnonymousFunctionFromExpr(Expr $expr) : ?Closure
@@ -195,25 +195,25 @@ final class AnonymousFunctionFactory
         return $anonymousFunction;
     }
     /**
-     * @param Param[] $paramNodes
+     * @param Param[] $params
      * @return string[]
      */
-    private function collectParamNames(array $paramNodes) : array
+    private function collectParamNames(array $params) : array
     {
         $paramNames = [];
-        foreach ($paramNodes as $paramNode) {
-            $paramNames[] = $this->nodeNameResolver->getName($paramNode);
+        foreach ($params as $param) {
+            $paramNames[] = $this->nodeNameResolver->getName($param);
         }
         return $paramNames;
     }
     /**
      * @param Node[] $nodes
-     * @param Param[] $paramNodes
+     * @param Param[] $params
      * @return array<string, Variable>
      */
-    private function createUseVariablesFromParams(array $nodes, array $paramNodes) : array
+    private function createUseVariablesFromParams(array $nodes, array $params) : array
     {
-        $paramNames = $this->collectParamNames($paramNodes);
+        $paramNames = $this->collectParamNames($params);
         /** @var Variable[] $variables */
         $variables = $this->betterNodeFinder->findInstanceOf($nodes, Variable::class);
         /** @var array<string, Variable> $filteredVariables */

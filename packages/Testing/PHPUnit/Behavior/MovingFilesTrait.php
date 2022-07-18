@@ -6,26 +6,15 @@ namespace Rector\Testing\PHPUnit\Behavior;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202207\Webmozart\Assert\Assert;
 /**
  * @property-read RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
  */
 trait MovingFilesTrait
 {
-    protected function assertFileWasNotChanged(SmartFileInfo $smartFileInfo) : void
-    {
-        $hasFileInfo = $this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo);
-        $this->assertFalse($hasFileInfo);
-    }
     protected function assertFileWasAdded(AddedFileWithContent $addedFileWithContent) : void
     {
         $this->assertFilesWereAdded([$addedFileWithContent]);
-    }
-    protected function assertFileWasRemoved(SmartFileInfo $smartFileInfo) : void
-    {
-        $isFileRemoved = $this->removedAndAddedFilesCollector->isFileRemoved($smartFileInfo);
-        $this->assertTrue($isFileRemoved);
     }
     /**
      * @param AddedFileWithContent[] $expectedAddedFileWithContents

@@ -28,6 +28,10 @@ use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
 use RectorPrefix202207\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+/**
+ * @deprecated
+ * @todo Split into many narrow-focused rules
+ */
 final class ReturnedNodesReturnTypeInfererTypeInferer implements ReturnTypeInfererInterface
 {
     /**

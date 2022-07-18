@@ -95,7 +95,7 @@ final class UselessIfCondBeforeForeachDetector
         $notIdentical = $if->cond;
         return $this->isMatchingNotBinaryOp($notIdentical, $foreachExpr);
     }
-    private function fromPreviousParam(Expr $expr) : ?Node
+    private function fromPreviousParam(Expr $expr) : ?Param
     {
         return $this->betterNodeFinder->findFirstPrevious($expr, function (Node $node) use($expr) : bool {
             if (!$node instanceof Param) {

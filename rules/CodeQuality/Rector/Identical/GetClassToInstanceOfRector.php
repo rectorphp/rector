@@ -64,15 +64,15 @@ final class GetClassToInstanceOfRector extends AbstractRector
         }
         /** @var ClassConstFetch|String_ $firstExpr */
         $firstExpr = $twoNodeMatch->getFirstExpr();
-        /** @var FuncCall $funcCall */
-        $funcCall = $twoNodeMatch->getSecondExpr();
-        if (!isset($funcCall->args[0])) {
+        /** @var FuncCall $secondExpr */
+        $secondExpr = $twoNodeMatch->getSecondExpr();
+        if (!isset($secondExpr->args[0])) {
             return null;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$secondExpr->args[0] instanceof Arg) {
             return null;
         }
-        $varNode = $funcCall->args[0]->value;
+        $varNode = $secondExpr->args[0]->value;
         if ($firstExpr instanceof String_) {
             $className = $this->valueResolver->getValue($firstExpr);
         } else {

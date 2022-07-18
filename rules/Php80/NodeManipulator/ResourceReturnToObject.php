@@ -119,7 +119,7 @@ final class ResourceReturnToObject
     private function resolveArgValueTypeFromPreviousAssign(FuncCall $funcCall, Expr $expr, array $collectionFunctionToReturnObject) : ?FullyQualifiedObjectType
     {
         $objectInstanceCheck = null;
-        $assign = $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $subNode) use(&$objectInstanceCheck, $expr, $collectionFunctionToReturnObject) : bool {
+        $foundNode = $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $subNode) use(&$objectInstanceCheck, $expr, $collectionFunctionToReturnObject) : bool {
             if (!$this->isAssignWithFuncCallExpr($subNode)) {
                 return \false;
             }
@@ -135,7 +135,7 @@ final class ResourceReturnToObject
             }
             return \false;
         });
-        if (!$assign instanceof Assign) {
+        if (!$foundNode instanceof Assign) {
             return null;
         }
         /** @var string $objectInstanceCheck */

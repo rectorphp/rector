@@ -38,6 +38,10 @@ use Rector\TypeDeclaration\Sorter\PriorityAwareSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use Rector\TypeDeclaration\TypeNormalizer;
 use RectorPrefix202207\Symplify\PackageBuilder\Parameter\ParameterProvider;
+/**
+ * @deprecated
+ * @todo Split into many narrow-focused rules
+ */
 final class ReturnTypeInferer
 {
     /**

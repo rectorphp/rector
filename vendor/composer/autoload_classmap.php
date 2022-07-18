@@ -1652,7 +1652,6 @@ return array(
     'Rector\\Core\\ValueObject\\Bootstrap\\BootstrapConfigs' => $baseDir . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
     'Rector\\Core\\ValueObject\\Configuration' => $baseDir . '/src/ValueObject/Configuration.php',
     'Rector\\Core\\ValueObject\\Error\\SystemError' => $baseDir . '/src/ValueObject/Error/SystemError.php',
-    'Rector\\Core\\ValueObject\\FrameworkName' => $baseDir . '/src/ValueObject/FrameworkName.php',
     'Rector\\Core\\ValueObject\\MethodName' => $baseDir . '/src/ValueObject/MethodName.php',
     'Rector\\Core\\ValueObject\\PhpVersion' => $baseDir . '/src/ValueObject/PhpVersion.php',
     'Rector\\Core\\ValueObject\\PhpVersionFeature' => $baseDir . '/src/ValueObject/PhpVersionFeature.php',

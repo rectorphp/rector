@@ -99,11 +99,11 @@ final class BetterPhpDocParser extends PhpDocParser
     public function parseTagValue(TokenIterator $tokenIterator, string $tag) : PhpDocTagValueNode
     {
         $startPosition = $tokenIterator->currentPosition();
-        $tagValueNode = parent::parseTagValue($tokenIterator, $tag);
+        $phpDocTagValueNode = parent::parseTagValue($tokenIterator, $tag);
         $endPosition = $tokenIterator->currentPosition();
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
-        $tagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-        return $tagValueNode;
+        $phpDocTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
+        return $phpDocTagValueNode;
     }
     /**
      * @return PhpDocTextNode|PhpDocTagNode

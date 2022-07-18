@@ -23,14 +23,14 @@ final class ConditionInverter
     {
         // inverse condition
         if ($expr instanceof BinaryOp) {
-            $inversedCondition = $this->binaryOpManipulator->invertCondition($expr);
-            if (!$inversedCondition instanceof BinaryOp) {
+            $binaryOp = $this->binaryOpManipulator->invertCondition($expr);
+            if (!$binaryOp instanceof BinaryOp) {
                 return new BooleanNot($expr);
             }
-            if ($inversedCondition instanceof BooleanAnd) {
+            if ($binaryOp instanceof BooleanAnd) {
                 return new BooleanNot($expr);
             }
-            return $inversedCondition;
+            return $binaryOp;
         }
         if ($expr instanceof BooleanNot) {
             return $expr->expr;

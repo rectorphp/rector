@@ -29,7 +29,10 @@ final class RegexMatcher
     {
         $this->valueResolver = $valueResolver;
     }
-    public function resolvePatternExpressionWithoutEIfFound(Expr $expr) : ?Expr
+    /**
+     * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Scalar\String_|null
+     */
+    public function resolvePatternExpressionWithoutEIfFound(Expr $expr)
     {
         if ($expr instanceof String_) {
             $pattern = $this->valueResolver->getValue($expr);
@@ -55,7 +58,7 @@ final class RegexMatcher
         $modifiersWithoutE = Strings::replace($modifiers, '#e#', '');
         return Strings::before($pattern, $delimiter, -1) . $delimiter . $modifiersWithoutE;
     }
-    private function matchConcat(Concat $concat) : ?Expr
+    private function matchConcat(Concat $concat) : ?Concat
     {
         $lastItem = $concat->right;
         if (!$lastItem instanceof String_) {

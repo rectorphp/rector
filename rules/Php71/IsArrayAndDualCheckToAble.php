@@ -36,37 +36,37 @@ final class IsArrayAndDualCheckToAble
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return null;
         }
-        /** @var Instanceof_ $instanceOf */
-        $instanceOf = $twoNodeMatch->getFirstExpr();
-        /** @var FuncCall $funcCall */
-        $funcCall = $twoNodeMatch->getSecondExpr();
-        $instanceOfClass = $instanceOf->class;
+        /** @var Instanceof_ $instanceofExpr */
+        $instanceofExpr = $twoNodeMatch->getFirstExpr();
+        /** @var FuncCall $funcCallExpr */
+        $funcCallExpr = $twoNodeMatch->getSecondExpr();
+        $instanceOfClass = $instanceofExpr->class;
         if ($instanceOfClass instanceof Expr) {
             return null;
         }
         if ((string) $instanceOfClass !== $type) {
             return null;
         }
-        if (!$this->nodeNameResolver->isName($funcCall, 'is_array')) {
+        if (!$this->nodeNameResolver->isName($funcCallExpr, 'is_array')) {
             return null;
         }
-        if (!isset($funcCall->args[0])) {
+        if (!isset($funcCallExpr->args[0])) {
             return null;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
+        if (!$funcCallExpr->args[0] instanceof Arg) {
             return null;
         }
         // both use same var
-        if (!$funcCall->args[0]->value instanceof Variable) {
+        if (!$funcCallExpr->args[0]->value instanceof Variable) {
             return null;
         }
         /** @var Variable $firstVarNode */
-        $firstVarNode = $funcCall->args[0]->value;
-        if (!$instanceOf->expr instanceof Variable) {
+        $firstVarNode = $funcCallExpr->args[0]->value;
+        if (!$instanceofExpr->expr instanceof Variable) {
             return null;
         }
         /** @var Variable $secondVarNode */
-        $secondVarNode = $instanceOf->expr;
+        $secondVarNode = $instanceofExpr->expr;
         // are they same variables
         if ($firstVarNode->name !== $secondVarNode->name) {
             return null;

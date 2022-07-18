@@ -35,8 +35,8 @@ final class ParameterDefaultsComparator
         }
         /** @var Expr $paramDefault */
         $paramDefault = $param->default;
-        $firstParameterValue = $this->defaultParameterValueResolver->resolveFromParameterReflection($parameterReflection);
-        return !$this->nodeComparator->areNodesEqual($paramDefault, $firstParameterValue);
+        $defaultValueExpr = $this->defaultParameterValueResolver->resolveFromParameterReflection($parameterReflection);
+        return !$this->nodeComparator->areNodesEqual($paramDefault, $defaultValueExpr);
     }
     private function isMutuallyExclusiveNull(ParameterReflection $parameterReflection, Param $param) : bool
     {

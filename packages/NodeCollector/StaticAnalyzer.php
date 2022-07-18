@@ -11,8 +11,8 @@ final class StaticAnalyzer
     public function isStaticMethod(ClassReflection $classReflection, string $methodName) : bool
     {
         if ($classReflection->hasNativeMethod($methodName)) {
-            $methodReflection = $classReflection->getNativeMethod($methodName);
-            if ($methodReflection->isStatic()) {
+            $extendedMethodReflection = $classReflection->getNativeMethod($methodName);
+            if ($extendedMethodReflection->isStatic()) {
                 return \true;
             }
         }

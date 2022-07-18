@@ -93,11 +93,11 @@ CODE_SAMPLE
         if ($this->shouldSkipAsPartOfOtherLoop($foreach)) {
             return \true;
         }
-        $previousDeclaration = $this->nodeUsageFinder->findPreviousForeachNodeUsage($foreach, $assignVariable);
-        if (!$previousDeclaration instanceof Node) {
+        $node = $this->nodeUsageFinder->findPreviousForeachNodeUsage($foreach, $assignVariable);
+        if (!$node instanceof Node) {
             return \true;
         }
-        $previousDeclarationParentNode = $previousDeclaration->getAttribute(AttributeKey::PARENT_NODE);
+        $previousDeclarationParentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (!$previousDeclarationParentNode instanceof Assign) {
             return \true;
         }

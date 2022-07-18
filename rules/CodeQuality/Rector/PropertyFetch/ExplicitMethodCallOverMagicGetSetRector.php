@@ -130,8 +130,8 @@ CODE_SAMPLE
         if ($propertyName === null) {
             return null;
         }
-        $property = $callerType->getProperty($propertyName, $scope);
-        $propertyType = $property->getReadableType();
+        $propertyReflection = $callerType->getProperty($propertyName, $scope);
+        $propertyType = $propertyReflection->getReadableType();
         $possibleGetterMethodNames = $this->resolvePossibleGetMethodNames($propertyName);
         foreach ($possibleGetterMethodNames as $possibleGetterMethodName) {
             if (!$callerType->hasMethod($possibleGetterMethodName)->yes()) {

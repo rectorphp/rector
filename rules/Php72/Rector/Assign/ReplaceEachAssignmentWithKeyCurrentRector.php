@@ -117,8 +117,8 @@ CODE_SAMPLE
      */
     private function createDimFetchAssignWithFuncCall(Expr $assignVariable, Expr $eachedVariable, $dimValue, string $functionName) : Assign
     {
-        $dim = BuilderHelpers::normalizeValue($dimValue);
-        $arrayDimFetch = new ArrayDimFetch($assignVariable, $dim);
+        $dimExpr = BuilderHelpers::normalizeValue($dimValue);
+        $arrayDimFetch = new ArrayDimFetch($assignVariable, $dimExpr);
         return new Assign($arrayDimFetch, $this->nodeFactory->createFuncCall($functionName, [new Arg($eachedVariable)]));
     }
 }

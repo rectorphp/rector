@@ -225,9 +225,9 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
             return new Name('bool');
         }
-        $compatibleObjectType = $this->processResolveCompatibleObjectCandidates($unionType);
-        if ($compatibleObjectType instanceof NullableType || $compatibleObjectType instanceof FullyQualified) {
-            return $compatibleObjectType;
+        $compatibleObjectTypeNode = $this->processResolveCompatibleObjectCandidates($unionType);
+        if ($compatibleObjectTypeNode instanceof NullableType || $compatibleObjectTypeNode instanceof FullyQualified) {
+            return $compatibleObjectTypeNode;
         }
         return $this->processResolveCompatibleStringCandidates($unionType);
     }

@@ -252,8 +252,8 @@ final class PureFunctionDetector
         if (!$hasFunction) {
             return \false;
         }
-        $function = $this->reflectionProvider->getFunction($name, $scope);
-        if (!$function instanceof NativeFunctionReflection) {
+        $functionReflection = $this->reflectionProvider->getFunction($name, $scope);
+        if (!$functionReflection instanceof NativeFunctionReflection) {
             return \false;
         }
         return !$this->nodeNameResolver->isNames($funcCall, self::IMPURE_FUNCTIONS);

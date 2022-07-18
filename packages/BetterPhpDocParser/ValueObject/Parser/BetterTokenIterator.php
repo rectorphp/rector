@@ -107,7 +107,7 @@ final class BetterTokenIterator extends TokenIterator
         return $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
     }
     /**
-     * @return mixed[]
+     * @return array<array{0: string, 1: int}>
      */
     public function getTokens() : array
     {
@@ -118,16 +118,11 @@ final class BetterTokenIterator extends TokenIterator
         return \count($this->getTokens());
     }
     /**
-     * @return mixed[]
+     * @return array<array{0: string, 1: int}>
      */
     public function partialTokens(int $start, int $end) : array
     {
-        $tokens = $this->getTokens();
-        $chunkTokens = [];
-        for ($i = $start; $i <= $end; ++$i) {
-            $chunkTokens[$i] = $tokens[$i];
-        }
-        return $chunkTokens;
+        return \array_slice($this->getTokens(), $start, $end);
     }
     public function containsTokenType(int $type) : bool
     {

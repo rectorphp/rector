@@ -222,9 +222,9 @@ final class ReflectionResolver
         }
         $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
         if ($scope instanceof Scope) {
-            $propertyRelfection = $classReflection->getProperty($propertyName, $scope);
-            if ($propertyRelfection instanceof PhpPropertyReflection) {
-                return $propertyRelfection;
+            $propertyReflection = $classReflection->getProperty($propertyName, $scope);
+            if ($propertyReflection instanceof PhpPropertyReflection) {
+                return $propertyReflection;
             }
             return null;
         }

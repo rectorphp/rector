@@ -89,7 +89,7 @@ final class FullyQualifyStmtsAnalyzer
         if (!$this->reflectionProvider->hasConstant($name, $scope)) {
             return \false;
         }
-        $constantReflection = $this->reflectionProvider->getConstant($name, $scope);
-        return $constantReflection instanceof RuntimeConstantReflection;
+        $globalConstantReflection = $this->reflectionProvider->getConstant($name, $scope);
+        return $globalConstantReflection instanceof RuntimeConstantReflection;
     }
 }
