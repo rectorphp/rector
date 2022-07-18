@@ -1,4 +1,4 @@
-# 414 Rules Overview
+# 413 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (73)
 
-- [CodingStyle](#codingstyle) (37)
+- [CodingStyle](#codingstyle) (36)
 
 - [Compatibility](#compatibility) (1)
 
@@ -2119,21 +2119,6 @@ return static function (RectorConfig $rectorConfig): void {
  class Someclass
  {
  }
-```
-
-<br>
-
-### PHPStormVarAnnotationRector
-
-Change various `@var` annotation formats to one PHPStorm understands
-
-- class: [`Rector\CodingStyle\Rector\Assign\PHPStormVarAnnotationRector`](../rules/CodingStyle/Rector/Assign/PHPStormVarAnnotationRector.php)
-
-```diff
--$config = 5;
--/** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
-+/** @var \Shopsys\FrameworkBundle\Model\Product\Filter\ProductFilterConfig $config */
-+$config = 5;
 ```
 
 <br>
