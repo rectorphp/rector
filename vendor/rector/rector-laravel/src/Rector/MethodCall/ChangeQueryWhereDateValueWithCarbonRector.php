@@ -73,16 +73,16 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $argValue = $this->matchWhereDateThirdArgValue($node);
-        if (!$argValue instanceof Expr) {
+        $expr = $this->matchWhereDateThirdArgValue($node);
+        if (!$expr instanceof Expr) {
             return null;
         }
         // is just made with static call?
-        if ($argValue instanceof StaticCall || $argValue instanceof MethodCall) {
+        if ($expr instanceof StaticCall || $expr instanceof MethodCall) {
             // now!
             // 1. extract assign
             $dateTimeVariable = new Variable('dateTime');
-            $assign = new Assign($dateTimeVariable, $argValue);
+            $assign = new Assign($dateTimeVariable, $expr);
             $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
             if (!$node->args[2] instanceof Arg) {
                 return null;
@@ -98,8 +98,8 @@ CODE_SAMPLE
             $this->nodesToAddCollector->addNodeAfterNode($whereTimeMethodCall, $node);
             return $node;
         }
-        if ($argValue instanceof Variable && $node->args[1] instanceof Arg) {
-            $dateTimeVariable = $argValue;
+        if ($expr instanceof Variable && $node->args[1] instanceof Arg) {
+            $dateTimeVariable = $expr;
             $this->changeCompareSignExpr($node->args[1]);
             // 2. add "whereTime()" time call
             $whereTimeMethodCall = $this->createWhereTimeMethodCall($node, $dateTimeVariable);

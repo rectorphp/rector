@@ -162,7 +162,7 @@ CODE_SAMPLE
             /** @var ParameterReflection $parameterReflection */
             $parameterNames[] = $parameterReflection->getName();
         }
-        foreach ($new->args as $position => $arg) {
+        foreach (\array_keys($new->args) as $position) {
             // is on position of $parent or $name?
             if (!isset($parameterNames[$position])) {
                 continue;
