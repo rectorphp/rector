@@ -106,12 +106,12 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
     }
     private function hasMagicIsset(Node $node) : bool
     {
-        $resolved = $this->nodeTypeResolver->getType($node);
-        if (!$resolved instanceof TypeWithClassName) {
+        $type = $this->nodeTypeResolver->getType($node);
+        if (!$type instanceof TypeWithClassName) {
             // object not found, skip
-            return $resolved instanceof ObjectWithoutClassType;
+            return $type instanceof ObjectWithoutClassType;
         }
-        $classReflection = $resolved->getClassReflection();
+        $classReflection = $type->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }

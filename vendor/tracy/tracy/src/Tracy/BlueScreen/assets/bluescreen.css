@@ -6,9 +6,16 @@
 	--tracy-space: 16px;
 }
 
-html, body {
+@media (max-width: 600px) {
+	:root {
+		--tracy-space: 8px;
+	}
+}
+
+html.tracy-bs-visible,
+html.tracy-bs-visible body {
 	display: block;
-	overflow: visible;
+	overflow: auto;
 }
 
 #tracy-bs {

@@ -7,6 +7,7 @@ class BlueScreen
 	static init(ajax) {
 		let blueScreen = document.getElementById('tracy-bs');
 
+		document.documentElement.classList.add('tracy-bs-visible');
 		if (navigator.platform.indexOf('Mac') > -1) {
 			blueScreen.classList.add('tracy-mac');
 		}
@@ -31,7 +32,10 @@ class BlueScreen
 		});
 
 		blueScreen.addEventListener('tracy-toggle', (e) => {
-			if (!e.target.matches('.tracy-dump *') && e.detail.originalEvent) {
+			if (e.target.matches('#tracy-bs-toggle')) { // blue screen toggle
+				document.documentElement.classList.toggle('tracy-bs-visible', !e.detail.collapsed);
+
+			} else if (!e.target.matches('.tracy-dump *') && e.detail.originalEvent) { // panel toggle
 				e.detail.relatedTarget.classList.toggle('tracy-panel-fadein', !e.detail.collapsed);
 			}
 		});

@@ -71,9 +71,9 @@ final class NeighbourClassLikePrinter
      */
     private function resolveDeclares($mainNode) : array
     {
-        $declare = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);
-        if ($declare instanceof Declare_) {
-            return [$declare];
+        $node = $this->betterNodeFinder->findFirstPreviousOfTypes($mainNode, [Declare_::class]);
+        if ($node instanceof Declare_) {
+            return [$node];
         }
         return [];
     }

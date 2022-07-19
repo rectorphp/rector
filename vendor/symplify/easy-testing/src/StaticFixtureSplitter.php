@@ -74,8 +74,8 @@ final class StaticFixtureSplitter
     private static function createTemporaryPathWithPrefix(SmartFileInfo $smartFileInfo, string $prefix) : string
     {
         $hash = Strings::substring(\md5($smartFileInfo->getRealPath()), -20);
-        $fileBaseName = $smartFileInfo->getBasename('.inc');
-        return self::getTemporaryPath() . \sprintf('/%s_%s_%s', $prefix, $hash, $fileBaseName);
+        $fileBasename = $smartFileInfo->getBasename('.inc');
+        return self::getTemporaryPath() . \sprintf('/%s_%s_%s', $prefix, $hash, $fileBasename);
     }
     /**
      * @param mixed $expected

@@ -21,7 +21,7 @@ final class SimpleNameResolver
      * @see https://regex101.com/r/ChpDsj/1
      * @var string
      */
-    private const ANONYMOUS_CLASS_REGEX = '#^AnonymousClass[\\w+]#';
+    public const ANONYMOUS_CLASS_REGEX = '#^AnonymousClass[\\w+]#';
     /**
      * @var NodeNameResolverInterface[]
      */

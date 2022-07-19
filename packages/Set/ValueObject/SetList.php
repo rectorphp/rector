@@ -12,10 +12,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const DEFLUENT = __DIR__ . '/../../../config/set/defluent.php';
-    /**
-     * @var string
-     */
     public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../config/set/action-injection-to-constructor-injection.php';
     /**
      * @var string
@@ -29,18 +25,6 @@ final class SetList implements SetListInterface
      * @var string
      */
     public const DEAD_CODE = __DIR__ . '/../../../config/set/dead-code.php';
-    /**
-     * @var string
-     */
-    public const FLYSYSTEM_20 = __DIR__ . '/../../../config/set/flysystem-20.php';
-    /**
-     * @var string
-     */
-    public const FRAMEWORK_EXTRA_BUNDLE_40 = __DIR__ . '/../../../config/set/framework-extra-bundle-40.php';
-    /**
-     * @var string
-     */
-    public const FRAMEWORK_EXTRA_BUNDLE_50 = __DIR__ . '/../../../config/set/framework-extra-bundle-50.php';
     /**
      * @var string
      */

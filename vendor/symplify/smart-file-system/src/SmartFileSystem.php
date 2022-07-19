@@ -19,18 +19,18 @@ final class SmartFileSystem extends Filesystem
     /**
      * @see https://github.com/symfony/filesystem/pull/4/files
      */
-    public function readFile(string $filename) : string
+    public function readFile(string $fileName) : string
     {
-        $source = @\file_get_contents($filename);
+        $source = @\file_get_contents($fileName);
         if (!$source) {
-            $message = \sprintf('Failed to read "%s" file: "%s"', $filename, $this->getLastError());
-            throw new IOException($message, 0, null, $filename);
+            $message = \sprintf('Failed to read "%s" file: "%s"', $fileName, $this->getLastError());
+            throw new IOException($message, 0, null, $fileName);
         }
         return $source;
     }
-    public function readFileToSmartFileInfo(string $filename) : SmartFileInfo
+    public function readFileToSmartFileInfo(string $fileName) : SmartFileInfo
     {
-        return new SmartFileInfo($filename);
+        return new SmartFileInfo($fileName);
     }
     /**
      * Converts given HTML code to plain text

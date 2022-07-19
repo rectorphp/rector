@@ -1854,12 +1854,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-cakephp.git",
-                "reference": "86ab8c377f4aedd015bfa91b8eb6c08237d5733a"
+                "reference": "ec9661647a2619b7939f8cbf1fd9dacc8333017c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/86ab8c377f4aedd015bfa91b8eb6c08237d5733a",
-                "reference": "86ab8c377f4aedd015bfa91b8eb6c08237d5733a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/ec9661647a2619b7939f8cbf1fd9dacc8333017c",
+                "reference": "ec9661647a2619b7939f8cbf1fd9dacc8333017c",
                 "shasum": ""
             },
             "require": {
@@ -1872,7 +1872,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.7",
+                "phpstan\/phpstan": "^1.8.1",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
@@ -1885,7 +1885,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-01T09:37:59+00:00",
+            "time": "2022-07-19T09:18:37+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1923,12 +1923,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "04125394e5ad08756843d2801ac8c9d68ae98cca"
+                "reference": "0e3ef75e7105fd88ef0c989c9b797c177764d6bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/04125394e5ad08756843d2801ac8c9d68ae98cca",
-                "reference": "04125394e5ad08756843d2801ac8c9d68ae98cca",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/0e3ef75e7105fd88ef0c989c9b797c177764d6bb",
+                "reference": "0e3ef75e7105fd88ef0c989c9b797c177764d6bb",
                 "shasum": ""
             },
             "require": {
@@ -1940,7 +1940,7 @@
             "require-dev": {
                 "doctrine\/orm": "^2.10",
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.7",
+                "phpstan\/phpstan": "^1.8.1",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
@@ -1953,7 +1953,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-19T06:53:19+00:00",
+            "time": "2022-07-19T09:19:44+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2280,12 +2280,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpoffice.git",
-                "reference": "d82661887258a84d57465d34f0960653c4018a5a"
+                "reference": "c7d2f5f6d6a8f96e3a8a690bcc3ed2496f27d494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/d82661887258a84d57465d34f0960653c4018a5a",
-                "reference": "d82661887258a84d57465d34f0960653c4018a5a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/c7d2f5f6d6a8f96e3a8a690bcc3ed2496f27d494",
+                "reference": "c7d2f5f6d6a8f96e3a8a690bcc3ed2496f27d494",
                 "shasum": ""
             },
             "require": {
@@ -2296,7 +2296,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.7.15",
+                "phpstan\/phpstan": "^1.8.1",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^9.5",
@@ -2309,7 +2309,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-01T09:37:48+00:00",
+            "time": "2022-07-19T09:38:45+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2347,12 +2347,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "b44203e491b69e5638fc439620b39549fa8c1bc6"
+                "reference": "d876ff24f19dcda4ed98e1e8def974f83d8b7b34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/b44203e491b69e5638fc439620b39549fa8c1bc6",
-                "reference": "b44203e491b69e5638fc439620b39549fa8c1bc6",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/d876ff24f19dcda4ed98e1e8def974f83d8b7b34",
+                "reference": "d876ff24f19dcda4ed98e1e8def974f83d8b7b34",
                 "shasum": ""
             },
             "require": {
@@ -2377,7 +2377,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-15T15:14:17+00:00",
+            "time": "2022-07-19T09:28:42+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2415,12 +2415,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "2053a16e0fa3f90f5840e4058992266cd9d6233c"
+                "reference": "02da3cb4fe710c18060bc5d2fcb32fb4097c7729"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/2053a16e0fa3f90f5840e4058992266cd9d6233c",
-                "reference": "2053a16e0fa3f90f5840e4058992266cd9d6233c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/02da3cb4fe710c18060bc5d2fcb32fb4097c7729",
+                "reference": "02da3cb4fe710c18060bc5d2fcb32fb4097c7729",
                 "shasum": ""
             },
             "require": {
@@ -2449,7 +2449,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-16T16:09:39+00:00",
+            "time": "2022-07-19T18:07:23+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -3329,12 +3329,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "21e0a3e792a6304ab5eac3b6059ebd0f786e70a8"
+                "reference": "021d88fab575e79fd1efd7709cd129265923a009"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/21e0a3e792a6304ab5eac3b6059ebd0f786e70a8",
-                "reference": "21e0a3e792a6304ab5eac3b6059ebd0f786e70a8",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/021d88fab575e79fd1efd7709cd129265923a009",
+                "reference": "021d88fab575e79fd1efd7709cd129265923a009",
                 "shasum": ""
             },
             "require": {
@@ -3375,7 +3375,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symplify\/easy-testing": "^11.1"
             },
-            "time": "2022-07-18T20:52:39+00:00",
+            "time": "2022-07-19T12:10:47+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
@@ -3657,12 +3657,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/easy-testing.git",
-                "reference": "ae96304acc0ff841ba111c338e9890175884c757"
+                "reference": "422739af1633d38486830845555f43fc0ab8a73a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/ae96304acc0ff841ba111c338e9890175884c757",
-                "reference": "ae96304acc0ff841ba111c338e9890175884c757",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/422739af1633d38486830845555f43fc0ab8a73a",
+                "reference": "422739af1633d38486830845555f43fc0ab8a73a",
                 "shasum": ""
             },
             "require": {
@@ -3698,7 +3698,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-07-05T11:51:11+00:00",
+            "time": "2022-07-19T10:51:13+00:00",
             "default-branch": true,
             "bin": [
                 "bin\/easy-testing"
@@ -3984,12 +3984,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/smart-file-system.git",
-                "reference": "1d3182282bc843dd93a30d49da486b91c91b3255"
+                "reference": "9a2266634495de04abdbcc0af8193715ab00d2a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/1d3182282bc843dd93a30d49da486b91c91b3255",
-                "reference": "1d3182282bc843dd93a30d49da486b91c91b3255",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/9a2266634495de04abdbcc0af8193715ab00d2a9",
+                "reference": "9a2266634495de04abdbcc0af8193715ab00d2a9",
                 "shasum": ""
             },
             "require": {
@@ -4025,7 +4025,7 @@
                 "nette\/finder": "^2.5",
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-07-18T20:42:44+00:00",
+            "time": "2022-07-19T10:51:31+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -4132,17 +4132,17 @@
         },
         {
             "name": "tracy\/tracy",
-            "version": "v2.9.3",
-            "version_normalized": "2.9.3.0",
+            "version": "v2.9.4",
+            "version_normalized": "2.9.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/tracy.git",
-                "reference": "3aadc88c00d7aca84ce2f07da236a703cc183d52"
+                "reference": "0ed605329b095f5f5fe2db2adc3d1ee80c917294"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/3aadc88c00d7aca84ce2f07da236a703cc183d52",
-                "reference": "3aadc88c00d7aca84ce2f07da236a703cc183d52",
+                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/0ed605329b095f5f5fe2db2adc3d1ee80c917294",
+                "reference": "0ed605329b095f5f5fe2db2adc3d1ee80c917294",
                 "shasum": ""
             },
             "require": {
@@ -4162,7 +4162,7 @@
                 "phpstan\/phpstan": "^1.0",
                 "psr\/log": "^1.0 || ^2.0 || ^3.0"
             },
-            "time": "2022-05-30T19:31:14+00:00",
+            "time": "2022-07-19T14:06:15+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -4203,7 +4203,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/tracy\/issues",
-                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.9.3"
+                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.9.4"
             },
             "install-path": "..\/tracy\/tracy"
         },
