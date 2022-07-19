@@ -70,14 +70,13 @@ final class ContextAnalyzer
         }
         return $previousNode instanceof If_;
     }
-    public function isHasAssignWithIndirectReturn(Node $node, If_ $if) : bool
+    public function hasAssignWithIndirectReturn(Node $node, If_ $if) : bool
     {
         foreach (ControlStructure::LOOP_NODES as $loopNode) {
             $loopObjectType = new ObjectType($loopNode);
             $parentType = $this->nodeTypeResolver->getType($node);
             $superType = $parentType->isSuperTypeOf($loopObjectType);
-            $isLoopType = $superType->yes();
-            if (!$isLoopType) {
+            if (!$superType->yes()) {
                 continue;
             }
             $next = $node->getAttribute(AttributeKey::NEXT_NODE);

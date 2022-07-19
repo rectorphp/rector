@@ -239,6 +239,6 @@ CODE_SAMPLE
         if ($parent instanceof If_) {
             return $this->isLastIfOrBeforeLastReturn($parent, $nextStmt);
         }
-        return !$this->contextAnalyzer->isHasAssignWithIndirectReturn($parent, $if);
+        return !$this->contextAnalyzer->hasAssignWithIndirectReturn($parent, $if);
     }
 }
