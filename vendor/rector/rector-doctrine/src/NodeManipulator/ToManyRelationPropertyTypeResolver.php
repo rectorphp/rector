@@ -57,11 +57,11 @@ final class ToManyRelationPropertyTypeResolver
         if ($doctrineAnnotationTagValueNode !== null) {
             return $this->processToManyRelation($property, $doctrineAnnotationTagValueNode);
         }
-        $targetEntity = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_MANY_ANNOTATION_CLASSES, 'targetEntity');
-        if (!$targetEntity instanceof Expr) {
+        $expr = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_MANY_ANNOTATION_CLASSES, 'targetEntity');
+        if (!$expr instanceof Expr) {
             return null;
         }
-        return $this->resolveTypeFromTargetEntity($targetEntity, $property);
+        return $this->resolveTypeFromTargetEntity($expr, $property);
     }
     /**
      * @return \PHPStan\Type\Type|null

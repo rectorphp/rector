@@ -112,9 +112,9 @@ CODE_SAMPLE
         if ($type !== 'datetime') {
             return null;
         }
-        $constructorAssign = $this->constructorAssignPropertyAnalyzer->resolveConstructorAssign($property);
+        $node = $this->constructorAssignPropertyAnalyzer->resolveConstructorAssign($property);
         // 0. already has default
-        if ($constructorAssign !== null) {
+        if ($node !== null) {
             return null;
         }
         // 1. remove default options from database level

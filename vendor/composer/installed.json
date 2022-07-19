@@ -1923,12 +1923,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "4539d7dcc5015d469f370f7e7c6d5a329e203237"
+                "reference": "04125394e5ad08756843d2801ac8c9d68ae98cca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/4539d7dcc5015d469f370f7e7c6d5a329e203237",
-                "reference": "4539d7dcc5015d469f370f7e7c6d5a329e203237",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/04125394e5ad08756843d2801ac8c9d68ae98cca",
+                "reference": "04125394e5ad08756843d2801ac8c9d68ae98cca",
                 "shasum": ""
             },
             "require": {
@@ -1953,7 +1953,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-15T12:52:50+00:00",
+            "time": "2022-07-19T06:53:19+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2135,12 +2135,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-laravel.git",
-                "reference": "425881a502cc218aabb132e1641f97f7f6704e44"
+                "reference": "819a67cea26229fa9bc13b76f2b5711f2c8ddfef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/425881a502cc218aabb132e1641f97f7f6704e44",
-                "reference": "425881a502cc218aabb132e1641f97f7f6704e44",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-laravel\/zipball\/819a67cea26229fa9bc13b76f2b5711f2c8ddfef",
+                "reference": "819a67cea26229fa9bc13b76f2b5711f2c8ddfef",
                 "shasum": ""
             },
             "require": {
@@ -2151,7 +2151,7 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.8",
+                "phpstan\/phpstan": "^1.8.2",
                 "phpstan\/phpstan-strict-rules": "^1.2",
                 "phpstan\/phpstan-webmozart-assert": "^1.1",
                 "phpunit\/phpunit": "^9.5",
@@ -2164,7 +2164,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-03T22:03:57+00:00",
+            "time": "2022-07-18T23:55:32+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

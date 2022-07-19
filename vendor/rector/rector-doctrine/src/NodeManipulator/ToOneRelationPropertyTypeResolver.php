@@ -65,11 +65,11 @@ final class ToOneRelationPropertyTypeResolver
         if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return $this->resolveFromDocBlock($phpDocInfo, $property, $doctrineAnnotationTagValueNode);
         }
-        $targetEntity = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_ONE_ANNOTATION_CLASSES, 'targetEntity');
-        if (!$targetEntity instanceof Expr) {
+        $expr = $this->attributeFinder->findAttributeByClassesArgByName($property, self::TO_ONE_ANNOTATION_CLASSES, 'targetEntity');
+        if (!$expr instanceof Expr) {
             return null;
         }
-        $targetEntityClass = $this->targetEntityResolver->resolveFromExpr($targetEntity);
+        $targetEntityClass = $this->targetEntityResolver->resolveFromExpr($expr);
         if ($targetEntityClass !== null) {
             $fullyQualifiedObjectType = new FullyQualifiedObjectType($targetEntityClass);
             // @todo resolve nullable value
