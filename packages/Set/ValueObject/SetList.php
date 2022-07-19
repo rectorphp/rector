@@ -112,10 +112,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const UNWRAP_COMPAT = __DIR__ . '/../../../config/set/unwrap-compat.php';
-    /**
-     * @var string
-     */
     public const EARLY_RETURN = __DIR__ . '/../../../config/set/early-return.php';
     /**
      * @var string

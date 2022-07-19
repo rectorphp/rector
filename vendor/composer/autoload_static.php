@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit465d20bff5269b973aad54552691f5f6
+class ComposerStaticInitf9108b5fc49468cd7aa425fa6979c934
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1972,7 +1972,6 @@ class ComposerStaticInit465d20bff5269b973aad54552691f5f6
         'Rector\\DeadCode\\ConditionEvaluator' => __DIR__ . '/../..' . '/rules/DeadCode/ConditionEvaluator.php',
         'Rector\\DeadCode\\ConditionResolver' => __DIR__ . '/../..' . '/rules/DeadCode/ConditionResolver.php',
         'Rector\\DeadCode\\Contract\\ConditionInterface' => __DIR__ . '/../..' . '/rules/DeadCode/Contract/ConditionInterface.php',
-        'Rector\\DeadCode\\FeatureSupport\\FunctionSupportResolver' => __DIR__ . '/../..' . '/rules/DeadCode/FeatureSupport/FunctionSupportResolver.php',
         'Rector\\DeadCode\\NodeAnalyzer\\CallCollectionAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/CallCollectionAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNextNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNextNodeAnalyzer.php',
         'Rector\\DeadCode\\NodeAnalyzer\\ExprUsedInNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/NodeAnalyzer/ExprUsedInNodeAnalyzer.php',
@@ -2025,7 +2024,6 @@ class ComposerStaticInit465d20bff5269b973aad54552691f5f6
         'Rector\\DeadCode\\Rector\\If_\\RemoveDeadInstanceOfRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveDeadInstanceOfRector.php',
         'Rector\\DeadCode\\Rector\\If_\\RemoveUnusedNonEmptyArrayBeforeForeachRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/RemoveUnusedNonEmptyArrayBeforeForeachRector.php',
         'Rector\\DeadCode\\Rector\\If_\\SimplifyIfElseWithSameContentRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/SimplifyIfElseWithSameContentRector.php',
-        'Rector\\DeadCode\\Rector\\If_\\UnwrapFutureCompatibleIfFunctionExistsRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/UnwrapFutureCompatibleIfFunctionExistsRector.php',
         'Rector\\DeadCode\\Rector\\If_\\UnwrapFutureCompatibleIfPhpVersionRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/If_/UnwrapFutureCompatibleIfPhpVersionRector.php',
         'Rector\\DeadCode\\Rector\\MethodCall\\RemoveEmptyMethodCallRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/MethodCall/RemoveEmptyMethodCallRector.php',
         'Rector\\DeadCode\\Rector\\Node\\RemoveNonExistingVarAnnotationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Node/RemoveNonExistingVarAnnotationRector.php',
@@ -3299,7 +3297,6 @@ class ComposerStaticInit465d20bff5269b973aad54552691f5f6
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictNativeFunctionReturnTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictNativeFunctionReturnTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictReturnNewAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictReturnNewAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictScalarReturnTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictScalarReturnTypeAnalyzer.php',
-        'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\CallTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/CallTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\DetailedTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/DetailedTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/PropertyTypeDecorator.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\TraitTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/TraitTypeAnalyzer.php',
@@ -3329,7 +3326,6 @@ class ComposerStaticInit465d20bff5269b973aad54552691f5f6
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/ParamTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\ReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/ReturnTypeDeclarationRector.php',
-        'Rector\\TypeDeclaration\\Rector\\MethodCall\\FormerNullableArgumentToScalarTypedRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/MethodCall/FormerNullableArgumentToScalarTypedRector.php',
         'Rector\\TypeDeclaration\\Rector\\Param\\ParamTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Param/ParamTypeFromStrictTypedPropertyRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\AddPropertyTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/AddPropertyTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\PropertyTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/PropertyTypeDeclarationRector.php',
@@ -3406,9 +3402,9 @@ class ComposerStaticInit465d20bff5269b973aad54552691f5f6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit465d20bff5269b973aad54552691f5f6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit465d20bff5269b973aad54552691f5f6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit465d20bff5269b973aad54552691f5f6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf9108b5fc49468cd7aa425fa6979c934::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf9108b5fc49468cd7aa425fa6979c934::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf9108b5fc49468cd7aa425fa6979c934::$classMap;
 
         }, null, ClassLoader::class);
     }
