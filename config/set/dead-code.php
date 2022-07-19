@@ -32,6 +32,7 @@ use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
+use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
@@ -39,7 +40,9 @@ use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
 use Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector;
 use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
+use Rector\DeadCode\Rector\Plus\RemoveDeadZeroAndOneOperationRector;
 use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
+use Rector\DeadCode\Rector\Property\RemoveUselessVarTagRector;
 use Rector\DeadCode\Rector\PropertyProperty\RemoveNullPropertyInitializationRector;
 use Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
@@ -95,9 +98,12 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveUselessParamTagRector::class,
         RemoveUselessReturnTagRector::class,
         RemoveNonExistingVarAnnotationRector::class,
+        RemoveUselessVarTagRector::class,
         RemoveUnusedPromotedPropertyRector::class,
         RemoveLastReturnRector::class,
         RemoveJustPropertyFetchForAssignRector::class,
         RemoveJustVariableAssignRector::class,
+        RemoveAlwaysTrueIfConditionRector::class,
+        RemoveDeadZeroAndOneOperationRector::class,
     ]);
 };
