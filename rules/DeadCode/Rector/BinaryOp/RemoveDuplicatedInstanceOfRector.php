@@ -83,14 +83,14 @@ CODE_SAMPLE
             return $parentNode instanceof BinaryOp;
         });
         $uniqueInstanceOfKeys = [];
-        foreach ($instanceOfs as $instanceOf) {
-            $uniqueKey = $this->instanceOfUniqueKeyResolver->resolve($instanceOf);
+        foreach ($instanceOfs as $instanceof) {
+            $uniqueKey = $this->instanceOfUniqueKeyResolver->resolve($instanceof);
             if ($uniqueKey === null) {
                 continue;
             }
             // already present before → duplicated
             if (\in_array($uniqueKey, $uniqueInstanceOfKeys, \true)) {
-                $duplicatedInstanceOfs[] = $instanceOf;
+                $duplicatedInstanceOfs[] = $instanceof;
             }
             $uniqueInstanceOfKeys[] = $uniqueKey;
         }

@@ -34,24 +34,24 @@ final class PhpFilesFinder
         $suffixRegexPattern = StaticNonPhpFileSuffixes::getSuffixRegexPattern();
         // filter out non-PHP files
         foreach ($phpFileInfos as $key => $phpFileInfo) {
-            $pathName = $phpFileInfo->getPathname();
+            $pathname = $phpFileInfo->getPathname();
             /**
              *  check .blade.php early so next .php check in next if can be skipped
              */
-            if (\substr_compare($pathName, '.blade.php', -\strlen('.blade.php')) === 0) {
+            if (\substr_compare($pathname, '.blade.php', -\strlen('.blade.php')) === 0) {
                 unset($phpFileInfos[$key]);
                 continue;
             }
             /**
              * obvious
              */
-            if (\substr_compare($pathName, '.php', -\strlen('.php')) === 0) {
+            if (\substr_compare($pathname, '.php', -\strlen('.php')) === 0) {
                 continue;
             }
             /**
              * only check with regex when needed
              */
-            if (StringUtils::isMatch($pathName, $suffixRegexPattern)) {
+            if (StringUtils::isMatch($pathname, $suffixRegexPattern)) {
                 unset($phpFileInfos[$key]);
             }
         }

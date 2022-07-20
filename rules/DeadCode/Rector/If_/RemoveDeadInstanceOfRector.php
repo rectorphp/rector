@@ -154,10 +154,10 @@ CODE_SAMPLE
             return \false;
         }
         $variable = $instanceof->expr;
-        $isReassign = (bool) $this->betterNodeFinder->findFirstPrevious($instanceof, function (Node $subNode) use($variable) : bool {
+        $isReAssign = (bool) $this->betterNodeFinder->findFirstPrevious($instanceof, function (Node $subNode) use($variable) : bool {
             return $subNode instanceof Assign && $this->nodeComparator->areNodesEqual($subNode->var, $variable);
         });
-        if ($isReassign) {
+        if ($isReAssign) {
             return \false;
         }
         $params = $functionLike->getParams();

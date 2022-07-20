@@ -160,8 +160,7 @@ final class ExactCompareFactory
             return new Identical($expr, $this->nodeFactory->createTrue());
         }
         if ($unionType instanceof TypeWithClassName) {
-            $instanceOf = new Instanceof_($expr, new FullyQualified($unionType->getClassName()));
-            return new BooleanNot($instanceOf);
+            return new BooleanNot(new Instanceof_($expr, new FullyQualified($unionType->getClassName())));
         }
         $toNullIdentical = new Identical($expr, $this->nodeFactory->createNull());
         if ($treatAsNonEmpty) {

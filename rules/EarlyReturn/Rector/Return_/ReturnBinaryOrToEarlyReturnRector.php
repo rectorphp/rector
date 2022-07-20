@@ -121,9 +121,9 @@ CODE_SAMPLE
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function collectLeftBooleanOrToIfs(BooleanOr $BooleanOr, Return_ $return, array $ifs) : array
+    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Return_ $return, array $ifs) : array
     {
-        $left = $BooleanOr->left;
+        $left = $booleanOr->left;
         if (!$left instanceof BooleanOr) {
             return [$this->ifManipulator->createIfStmt($left, new Return_($this->nodeFactory->createTrue()))];
         }

@@ -283,9 +283,9 @@ final class ApplicationFileProcessor
         $filePaths = [];
         foreach ($files as $file) {
             $smartFileInfo = $file->getSmartFileInfo();
-            $pathName = $smartFileInfo->getPathname();
-            if (\substr_compare($pathName, '.php', -\strlen('.php')) === 0) {
-                $filePaths[] = $pathName;
+            $pathname = $smartFileInfo->getPathname();
+            if (\substr_compare($pathname, '.php', -\strlen('.php')) === 0) {
+                $filePaths[] = $pathname;
             }
         }
         return $filePaths;

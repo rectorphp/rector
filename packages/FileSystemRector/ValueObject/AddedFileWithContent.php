@@ -27,11 +27,11 @@ final class AddedFileWithContent implements AddedFileInterface
     }
     public function getRealPath() : string
     {
-        $realpath = \realpath($this->filePath);
-        if ($realpath === \false) {
+        $realPath = \realpath($this->filePath);
+        if ($realPath === \false) {
             throw new ShouldNotHappenException();
         }
-        return $realpath;
+        return $realPath;
     }
     public function getFilePath() : string
     {
