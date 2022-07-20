@@ -50,6 +50,7 @@ final class EnumFactory
         $enum = new Enum_($shortClassName);
         $enum->namespacedName = $class->namespacedName;
         $constants = $class->getConstants();
+        $enum->stmts = $class->getTraitUses();
         if ($constants !== []) {
             $value = $this->valueResolver->getValue($constants[0]->consts[0]->value);
             $enum->scalarType = \is_string($value) ? new Identifier('string') : new Identifier('int');
