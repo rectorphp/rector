@@ -32,7 +32,7 @@ final class BreakingVariableRenameGuard
      * @var string
      * @see https://regex101.com/r/1pKLgf/1
      */
-    private const AT_NAMING_REGEX = '#[\\w+]At$#';
+    public const AT_NAMING_REGEX = '#[\\w+]At$#';
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
