@@ -18,6 +18,7 @@ final class BinaryOpTreeRootLocator
      *
      * This is useful in conjunction with BinaryOpConditionsCollector, which expects such tree.
      *
+     * @api
      * @param class-string<BinaryOp> $binaryOpClass
      */
     public function findOperationRoot(Expr $expr, string $binaryOpClass) : Expr
