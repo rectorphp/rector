@@ -29,7 +29,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $nullableBooleanType = new UnionType([new NullType(), new BooleanType()]);
     $nullableArrayType = new UnionType([new NullType(), $arrayType]);
     $commandType = new ObjectType('Symfony\\Component\\Console\\Command\\Command');
-    $routeCollectionType = new ObjectType('Symfony\\Component\\Routing\\RouteCollection\\RouteCollection');
+    $routeCollectionType = new ObjectType('Symfony\\Component\\Routing\\RouteCollection');
     $httpFoundationResponseType = new ObjectType('Symfony\\Component\\HttpFoundation\\Response');
     $browserKitResponseType = new ObjectType('Symfony\\Component\\BrowserKit\\Response');
     $typeGuessType = new ObjectType('Symfony\\Component\\Form\\Guess\\TypeGuess');
