@@ -17,7 +17,7 @@
     },
     "require-dev": {
         "symplify\/easy-testing": "^11.1",
-        "phpunit\/phpunit": "^9.5"
+        "phpunit\/phpunit": "^9.5.21"
     },
     "autoload": {
         "psr-4": {

@@ -9,8 +9,8 @@
         "symfony\/filesystem": "^6.0"
     },
     "require-dev": {
-        "nette\/finder": "^2.5",
-        "phpunit\/phpunit": "^9.5"
+        "nette\/finder": "^2.5.3",
+        "phpunit\/phpunit": "^9.5.21"
     },
     "autoload": {
         "psr-4": {

@@ -3329,12 +3329,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "021d88fab575e79fd1efd7709cd129265923a009"
+                "reference": "41af155f03a9afc053ea6dfcb7b913b23ae147e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/021d88fab575e79fd1efd7709cd129265923a009",
-                "reference": "021d88fab575e79fd1efd7709cd129265923a009",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/41af155f03a9afc053ea6dfcb7b913b23ae147e3",
+                "reference": "41af155f03a9afc053ea6dfcb7b913b23ae147e3",
                 "shasum": ""
             },
             "require": {
@@ -3372,10 +3372,10 @@
                 "symplify\/vendor-patches": "<11.0.8"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5",
+                "phpunit\/phpunit": "^9.5.21",
                 "symplify\/easy-testing": "^11.1"
             },
-            "time": "2022-07-19T12:10:47+00:00",
+            "time": "2022-07-21T11:41:12+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
@@ -3421,12 +3421,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/autowire-array-parameter.git",
-                "reference": "182d8a7f496cfd1a2584c1a568c5c04e663a4039"
+                "reference": "a5a658a6857701df90f70d62f00c3a09df1f9e8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/autowire-array-parameter\/zipball\/182d8a7f496cfd1a2584c1a568c5c04e663a4039",
-                "reference": "182d8a7f496cfd1a2584c1a568c5c04e663a4039",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/autowire-array-parameter\/zipball\/a5a658a6857701df90f70d62f00c3a09df1f9e8f",
+                "reference": "a5a658a6857701df90f70d62f00c3a09df1f9e8f",
                 "shasum": ""
             },
             "require": {
@@ -3458,9 +3458,9 @@
                 "symplify\/vendor-patches": "<11.0.8"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5"
+                "phpunit\/phpunit": "^9.5.21"
             },
-            "time": "2022-07-05T11:51:03+00:00",
+            "time": "2022-07-21T11:41:07+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -3501,12 +3501,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/composer-json-manipulator.git",
-                "reference": "41b2a0a776459a1cfcb44c33fbc4e3d778935f8e"
+                "reference": "a362564587a10933302b01aaf69d5e44471d0aaa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/composer-json-manipulator\/zipball\/41b2a0a776459a1cfcb44c33fbc4e3d778935f8e",
-                "reference": "41b2a0a776459a1cfcb44c33fbc4e3d778935f8e",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/composer-json-manipulator\/zipball\/a362564587a10933302b01aaf69d5e44471d0aaa",
+                "reference": "a362564587a10933302b01aaf69d5e44471d0aaa",
                 "shasum": ""
             },
             "require": {
@@ -3541,9 +3541,9 @@
                 "symplify\/vendor-patches": "<11.0.8"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5"
+                "phpunit\/phpunit": "^9.5.21"
             },
-            "time": "2022-07-18T20:42:11+00:00",
+            "time": "2022-07-21T11:41:06+00:00",
             "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
@@ -3657,12 +3657,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/easy-testing.git",
-                "reference": "422739af1633d38486830845555f43fc0ab8a73a"
+                "reference": "9bb2d7cbe0362ffd44557790d306754fffeb1bdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/422739af1633d38486830845555f43fc0ab8a73a",
-                "reference": "422739af1633d38486830845555f43fc0ab8a73a",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/9bb2d7cbe0362ffd44557790d306754fffeb1bdd",
+                "reference": "9bb2d7cbe0362ffd44557790d306754fffeb1bdd",
                 "shasum": ""
             },
             "require": {
@@ -3696,9 +3696,9 @@
                 "symplify\/vendor-patches": "<11.0.8"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5"
+                "phpunit\/phpunit": "^9.5.21"
             },
-            "time": "2022-07-19T10:51:13+00:00",
+            "time": "2022-07-21T11:41:07+00:00",
             "default-branch": true,
             "bin": [
                 "bin\/easy-testing"
@@ -3742,12 +3742,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/package-builder.git",
-                "reference": "edd5f45e48f50dfee7639924e75ad85dc476c67b"
+                "reference": "76a2b741f7c658ad8eacaf7d1b61c000bd7835ae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/edd5f45e48f50dfee7639924e75ad85dc476c67b",
-                "reference": "edd5f45e48f50dfee7639924e75ad85dc476c67b",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/76a2b741f7c658ad8eacaf7d1b61c000bd7835ae",
+                "reference": "76a2b741f7c658ad8eacaf7d1b61c000bd7835ae",
                 "shasum": ""
             },
             "require": {
@@ -3783,9 +3783,9 @@
                 "symplify\/vendor-patches": "<11.0.8"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5"
+                "phpunit\/phpunit": "^9.5.21"
             },
-            "time": "2022-07-18T17:39:56+00:00",
+            "time": "2022-07-21T11:41:07+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -3984,12 +3984,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/smart-file-system.git",
-                "reference": "9a2266634495de04abdbcc0af8193715ab00d2a9"
+                "reference": "bc70f946fbc31096d46ed12694f50f9dc3a74990"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/9a2266634495de04abdbcc0af8193715ab00d2a9",
-                "reference": "9a2266634495de04abdbcc0af8193715ab00d2a9",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/bc70f946fbc31096d46ed12694f50f9dc3a74990",
+                "reference": "bc70f946fbc31096d46ed12694f50f9dc3a74990",
                 "shasum": ""
             },
             "require": {
@@ -4022,10 +4022,10 @@
                 "symplify\/vendor-patches": "<11.0.8"
             },
             "require-dev": {
-                "nette\/finder": "^2.5",
-                "phpunit\/phpunit": "^9.5"
+                "nette\/finder": "^2.5.3",
+                "phpunit\/phpunit": "^9.5.21"
             },
-            "time": "2022-07-19T10:51:31+00:00",
+            "time": "2022-07-21T11:41:17+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
@@ -4066,12 +4066,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/symplify-kernel.git",
-                "reference": "79b6fbae579fbaba9e5e737b1f5b85b8cb7bfd4c"
+                "reference": "b419af041a0a99fad8764cba01cd3730a9a6e748"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/symplify-kernel\/zipball\/79b6fbae579fbaba9e5e737b1f5b85b8cb7bfd4c",
-                "reference": "79b6fbae579fbaba9e5e737b1f5b85b8cb7bfd4c",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/symplify-kernel\/zipball\/b419af041a0a99fad8764cba01cd3730a9a6e748",
+                "reference": "b419af041a0a99fad8764cba01cd3730a9a6e748",
                 "shasum": ""
             },
             "require": {
@@ -4104,9 +4104,9 @@
                 "symplify\/vendor-patches": "<11.0.8"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5"
+                "phpunit\/phpunit": "^9.5.21"
             },
-            "time": "2022-07-05T11:51:37+00:00",
+            "time": "2022-07-21T11:41:50+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {
