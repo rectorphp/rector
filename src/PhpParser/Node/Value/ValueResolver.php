@@ -250,7 +250,7 @@ final class ValueResolver
         if ($class === ObjectReference::SELF) {
             $classLike = $this->betterNodeFinder->findParentType($classConstFetch, ClassLike::class);
             if (!$classLike instanceof ClassLike) {
-                throw new ShouldNotHappenException();
+                throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "self" references is resolvable to a class name');
             }
             $class = (string) $this->nodeNameResolver->getName($classLike);
         }
