@@ -14,6 +14,8 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
+use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use RectorPrefix202207\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
@@ -43,13 +45,25 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, PathNormalizer $pathNormalizer, AstResolver $astResolver, ParamTypeInferer $paramTypeInferer, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    /**
+     * @readonly
+     * @var \Rector\StaticTypeMapper\StaticTypeMapper
+     */
+    private $staticTypeMapper;
+    public function __construct(NodeNameResolver $nodeNameResolver, PathNormalizer $pathNormalizer, AstResolver $astResolver, ParamTypeInferer $paramTypeInferer, ReflectionResolver $reflectionResolver, TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->pathNormalizer = $pathNormalizer;
         $this->astResolver = $astResolver;
         $this->paramTypeInferer = $paramTypeInferer;
         $this->reflectionResolver = $reflectionResolver;
+        $this->typeComparator = $typeComparator;
+        $this->staticTypeMapper = $staticTypeMapper;
     }
     public function isReturnTypeChangeAllowed(ClassMethod $classMethod) : bool
     {
@@ -138,5 +152,16 @@ final class ParentClassMethodTypeOverrideGuard
             return $parentClassReflection->getNativeMethod($methodName);
         }
         return null;
+    }
+    public function shouldSkipReturnTypeChange(ClassMethod $classMethod, Type $parentType) : bool
+    {
+        if ($classMethod->returnType === null) {
+            return \false;
+        }
+        $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
+        if ($this->typeComparator->isSubtype($currentReturnType, $parentType)) {
+            return \true;
+        }
+        return $this->typeComparator->areTypesEqual($currentReturnType, $parentType);
     }
 }

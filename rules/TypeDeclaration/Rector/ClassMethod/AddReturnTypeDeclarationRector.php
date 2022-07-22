@@ -15,9 +15,9 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
+use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202207\Webmozart\Assert\Assert;
@@ -36,18 +36,18 @@ final class AddReturnTypeDeclarationRector extends AbstractRector implements Con
     private $hasChanged = \false;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
-     */
-    private $typeComparator;
-    /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(TypeComparator $typeComparator, PhpVersionProvider $phpVersionProvider)
+    /**
+     * @readonly
+     * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
+     */
+    private $parentClassMethodTypeOverrideGuard;
+    public function __construct(PhpVersionProvider $phpVersionProvider, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
-        $this->typeComparator = $typeComparator;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -125,21 +125,10 @@ CODE_SAMPLE
             return;
         }
         // already set and sub type or equal → no change
-        if ($this->shouldSkipType($classMethod, $newType)) {
+        if ($this->parentClassMethodTypeOverrideGuard->shouldSkipReturnTypeChange($classMethod, $newType)) {
             return;
         }
         $classMethod->returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($newType, TypeKind::RETURN);
         $this->hasChanged = \true;
-    }
-    private function shouldSkipType(ClassMethod $classMethod, Type $newType) : bool
-    {
-        if ($classMethod->returnType === null) {
-            return \false;
-        }
-        $currentReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($classMethod->returnType);
-        if ($this->typeComparator->isSubtype($currentReturnType, $newType)) {
-            return \true;
-        }
-        return $this->typeComparator->areTypesEqual($currentReturnType, $newType);
     }
 }
