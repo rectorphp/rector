@@ -22,7 +22,7 @@ final class PropertyDocBlockManipulator
     {
         $functionLike = $paramRename->getFunctionLike();
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($functionLike);
-        $paramTagValueNode = $phpDocInfo->getParamTagValueNodeByName($paramRename->getCurrentName());
+        $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramRename->getCurrentName());
         if (!$paramTagValueNode instanceof ParamTagValueNode) {
             return;
         }

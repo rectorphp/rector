@@ -170,16 +170,6 @@ final class PhpDocInfo
     {
         return $this->phpDocNode->getParamTagValues();
     }
-    public function getParamTagValueNodeByName(string $parameterName) : ?ParamTagValueNode
-    {
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValueNode) {
-            if ($paramTagValueNode->parameterName !== '$' . $parameterName) {
-                continue;
-            }
-            return $paramTagValueNode;
-        }
-        return null;
-    }
     public function getVarType(string $tagName = '@var') : Type
     {
         return $this->getTypeOrMixed($this->getVarTagValueNode($tagName));

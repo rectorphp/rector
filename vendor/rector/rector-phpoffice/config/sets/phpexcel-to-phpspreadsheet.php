@@ -27,20 +27,7 @@ use Rector\Renaming\ValueObject\RenameStaticMethod;
 # see https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md
 # inspired https://github.com/PHPOffice/PhpSpreadsheet/blob/87f71e1930b497b36e3b9b1522117dfa87096d2b/src/PhpSpreadsheet/Helper/Migrator.php
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(ChangeIOFactoryArgumentRector::class);
-    $rectorConfig->rule(ChangeSearchLocationToRegisterReaderRector::class);
-    $rectorConfig->rule(CellStaticToCoordinateRector::class);
-    $rectorConfig->rule(ChangeDataTypeForValueRector::class);
-    $rectorConfig->rule(ChangePdfWriterRector::class);
-    $rectorConfig->rule(ChangeChartRendererRector::class);
-    $rectorConfig->rule(AddRemovedDefaultValuesRector::class);
-    $rectorConfig->rule(ChangeConditionalReturnedCellRector::class);
-    $rectorConfig->rule(ChangeConditionalGetConditionRector::class);
-    $rectorConfig->rule(ChangeConditionalSetConditionRector::class);
-    $rectorConfig->rule(RemoveSetTempDirOnExcelWriterRector::class);
-    $rectorConfig->rule(ChangeDuplicateStyleArrayToApplyFromArrayRector::class);
-    $rectorConfig->rule(GetDefaultStyleToGetParentRector::class);
-    $rectorConfig->rule(IncreaseColumnIndexRector::class);
+    $rectorConfig->rules([ChangeIOFactoryArgumentRector::class, ChangeSearchLocationToRegisterReaderRector::class, CellStaticToCoordinateRector::class, ChangeDataTypeForValueRector::class, ChangePdfWriterRector::class, ChangeChartRendererRector::class, AddRemovedDefaultValuesRector::class, ChangeConditionalReturnedCellRector::class, ChangeConditionalGetConditionRector::class, ChangeConditionalSetConditionRector::class, RemoveSetTempDirOnExcelWriterRector::class, ChangeDuplicateStyleArrayToApplyFromArrayRector::class, GetDefaultStyleToGetParentRector::class, IncreaseColumnIndexRector::class]);
     # beware! this can be run only once, since its circular change
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // https://github.com/PHPOffice/PhpSpreadsheet/blob/master/docs/topics/migration-from-PHPExcel.md#worksheetsetsharedstyle

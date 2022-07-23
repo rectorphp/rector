@@ -119,7 +119,7 @@ final class PropertyPromotionRenamer
     }
     private function renameParamDoc(PhpDocInfo $phpDocInfo, Param $param, string $paramVarName, string $desiredPropertyName) : void
     {
-        $paramTagValueNode = $phpDocInfo->getParamTagValueNodeByName($paramVarName);
+        $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramVarName);
         if (!$paramTagValueNode instanceof ParamTagValueNode) {
             return;
         }

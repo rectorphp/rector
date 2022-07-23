@@ -137,7 +137,7 @@ CODE_SAMPLE
             /** @var string $oldName */
             $oldName = $this->getName($param->var);
             $this->variableRenamer->renameVariableInFunctionLike($constructClassMethod, $oldName, $propertyName, null);
-            $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueNodeByName($paramName);
+            $paramTagValueNode = $classMethodPhpDocInfo->getParamTagValueByName($paramName);
             if (!$paramTagValueNode instanceof ParamTagValueNode) {
                 $this->decorateParamWithPropertyPhpDocInfo($constructClassMethod, $property, $param, $paramName);
             } elseif ($paramTagValueNode->parameterName !== '$' . $propertyName) {
