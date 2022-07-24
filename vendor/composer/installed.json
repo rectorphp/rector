@@ -3329,12 +3329,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "41af155f03a9afc053ea6dfcb7b913b23ae147e3"
+                "reference": "f067c3f0eed8feb114b106d1350d2ab089a589a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/41af155f03a9afc053ea6dfcb7b913b23ae147e3",
-                "reference": "41af155f03a9afc053ea6dfcb7b913b23ae147e3",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/f067c3f0eed8feb114b106d1350d2ab089a589a1",
+                "reference": "f067c3f0eed8feb114b106d1350d2ab089a589a1",
                 "shasum": ""
             },
             "require": {
@@ -3375,7 +3375,7 @@
                 "phpunit\/phpunit": "^9.5.21",
                 "symplify\/easy-testing": "^11.1"
             },
-            "time": "2022-07-21T11:41:12+00:00",
+            "time": "2022-07-23T20:06:40+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {
@@ -3501,12 +3501,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/composer-json-manipulator.git",
-                "reference": "a362564587a10933302b01aaf69d5e44471d0aaa"
+                "reference": "05b7fa14b312a300493307a3640339ae017f80e9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/composer-json-manipulator\/zipball\/a362564587a10933302b01aaf69d5e44471d0aaa",
-                "reference": "a362564587a10933302b01aaf69d5e44471d0aaa",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/composer-json-manipulator\/zipball\/05b7fa14b312a300493307a3640339ae017f80e9",
+                "reference": "05b7fa14b312a300493307a3640339ae017f80e9",
                 "shasum": ""
             },
             "require": {
@@ -3543,7 +3543,7 @@
             "require-dev": {
                 "phpunit\/phpunit": "^9.5.21"
             },
-            "time": "2022-07-21T11:41:06+00:00",
+            "time": "2022-07-23T20:06:46+00:00",
             "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
@@ -3984,12 +3984,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/smart-file-system.git",
-                "reference": "bc70f946fbc31096d46ed12694f50f9dc3a74990"
+                "reference": "1587dc4e25e228b54c536857044cd86fbc3493c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/bc70f946fbc31096d46ed12694f50f9dc3a74990",
-                "reference": "bc70f946fbc31096d46ed12694f50f9dc3a74990",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/1587dc4e25e228b54c536857044cd86fbc3493c0",
+                "reference": "1587dc4e25e228b54c536857044cd86fbc3493c0",
                 "shasum": ""
             },
             "require": {
@@ -4025,7 +4025,7 @@
                 "nette\/finder": "^2.5.3",
                 "phpunit\/phpunit": "^9.5.21"
             },
-            "time": "2022-07-21T11:41:17+00:00",
+            "time": "2022-07-23T20:07:13+00:00",
             "default-branch": true,
             "type": "library",
             "extra": {

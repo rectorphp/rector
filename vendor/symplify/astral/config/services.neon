@@ -5,7 +5,7 @@ services:
     - Symplify\SmartFileSystem\Finder\FinderSanitizer
 
     - Symplify\Astral\Reflection\ReflectionParser
-
+    - Symplify\Astral\TypeAwareNodeFinder
     - Symplify\Astral\PhpParser\SmartPhpParserFactory
     -
         type: Symplify\Astral\PhpParser\SmartPhpParser

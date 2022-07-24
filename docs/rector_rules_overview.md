@@ -1,4 +1,4 @@
-# 413 Rules Overview
+# 409 Rules Overview
 
 <br>
 
@@ -14,7 +14,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (50)
+- [DeadCode](#deadcode) (49)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -56,7 +56,7 @@
 
 - [PostRector](#postrector) (6)
 
-- [Privatization](#privatization) (10)
+- [Privatization](#privatization) (8)
 
 - [Removing](#removing) (6)
 
@@ -70,7 +70,7 @@
 
 - [Transform](#transform) (35)
 
-- [TypeDeclaration](#typedeclaration) (30)
+- [TypeDeclaration](#typedeclaration) (29)
 
 - [Visibility](#visibility) (3)
 
@@ -3758,30 +3758,6 @@ Change ternary of bool : false to && bool
 
 <br>
 
-### UnwrapFutureCompatibleIfFunctionExistsRector
-
-Remove functions exists if with else for always existing
-
-- class: [`Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfFunctionExistsRector`](../rules/DeadCode/Rector/If_/UnwrapFutureCompatibleIfFunctionExistsRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         // session locking trough other addons
--        if (function_exists('session_abort')) {
--            session_abort();
--        } else {
--            session_write_close();
--        }
-+        session_abort();
-     }
- }
-```
-
-<br>
-
 ### UnwrapFutureCompatibleIfPhpVersionRector
 
 Remove php version checks if they are passed
@@ -4275,15 +4251,15 @@ Renames value variable name in foreach loop to match expression variable
 ```diff
  class SomeClass
  {
- public function run()
- {
-     $array = [];
--    foreach ($variables as $property) {
--        $array[] = $property;
-+    foreach ($variables as $variable) {
-+        $array[] = $variable;
+     public function run()
+     {
+         $array = [];
+-        foreach ($variables as $property) {
+-            $array[] = $property;
++        foreach ($variables as $variable) {
++            $array[] = $variable;
+         }
      }
- }
  }
 ```
 
@@ -6688,28 +6664,6 @@ Change global `$variables` to private properties
 
 <br>
 
-### ChangeLocalPropertyToVariableRector
-
-Change local property used in single method to local variable
-
-- class: [`Rector\Privatization\Rector\Class_\ChangeLocalPropertyToVariableRector`](../rules/Privatization/Rector/Class_/ChangeLocalPropertyToVariableRector.php)
-
-```diff
- class SomeClass
- {
--    private $count;
-     public function run()
-     {
--        $this->count = 5;
--        return $this->count;
-+        $count = 5;
-+        return $count;
-     }
- }
-```
-
-<br>
-
 ### ChangeReadOnlyPropertyWithDefaultValueToConstantRector
 
 Change property with read only status with default value to constant
@@ -6851,32 +6805,6 @@ Privatize getter of local property to property
      private function getSome()
      {
          return $this->some;
-     }
- }
-```
-
-<br>
-
-### RepeatedLiteralToClassConstantRector
-
-Replace repeated strings with constant
-
-- class: [`Rector\Privatization\Rector\Class_\RepeatedLiteralToClassConstantRector`](../rules/Privatization/Rector/Class_/RepeatedLiteralToClassConstantRector.php)
-
-```diff
- class SomeClass
- {
-+    /**
-+     * @var string
-+     */
-+    private const REQUIRES = 'requires';
-     public function run($key, $items)
-     {
--        if ($key === 'requires') {
--            return $items['requires'];
-+        if ($key === self::REQUIRES) {
-+            return $items[self::REQUIRES];
-         }
      }
  }
 ```
@@ -9256,6 +9184,30 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
+### AddReturnTypeDeclarationBasedOnParentClassMethodRector
+
+Add missing return type declaration based on parent class method
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php)
+
+```diff
+ class A
+ {
+     public function execute(): int
+     {
+     }
+ }
+
+ class B extends A{
+-    public function execute()
++    public function execute(): int
+     {
+     }
+ }
+```
+
+<br>
+
 ### AddReturnTypeDeclarationRector
 
 Changes defined return typehint of method and class.
@@ -9343,29 +9295,6 @@ Add array shape exact types based on constant keys of array
      public function run(string $name)
      {
          return ['name' => $name];
-     }
- }
-```
-
-<br>
-
-### FormerNullableArgumentToScalarTypedRector
-
-Change null in argument, that is now not nullable anymore
-
-- class: [`Rector\TypeDeclaration\Rector\MethodCall\FormerNullableArgumentToScalarTypedRector`](../rules/TypeDeclaration/Rector/MethodCall/FormerNullableArgumentToScalarTypedRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        $this->setValue(null);
-+        $this->setValue('');
-     }
-
-     public function setValue(string $value)
-     {
      }
  }
 ```
@@ -9671,30 +9600,6 @@ Add strict return array type based on created empty array and returned
          $values = [];
 
          return $values;
-     }
- }
-```
-
-<br>
-
-### ReturnTypeFromStrictTypedCallRector
-
-Add return type from strict return type of call
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php)
-
-```diff
- final class SomeClass
- {
--    public function getData()
-+    public function getData(): int
-     {
-         return $this->getNumber();
-     }
-
-     private function getNumber(): int
-     {
-         return 1000;
      }
  }
 ```

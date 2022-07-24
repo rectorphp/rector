@@ -36,10 +36,10 @@ final class ClassMethodReturnTypeResolver
             return new MixedType();
         }
         $extendedMethodReflection = $classReflection->getMethod($methodName, $scope);
-        $functionVariant = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
-        if (!$functionVariant instanceof FunctionVariant) {
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
+        if (!$parametersAcceptor instanceof FunctionVariant) {
             return new MixedType();
         }
-        return $functionVariant->getReturnType();
+        return $parametersAcceptor->getReturnType();
     }
 }

@@ -1075,6 +1075,7 @@ return array(
     'RectorPrefix202207\\Symplify\\Astral\\StaticFactory\\SimpleNameResolverStaticFactory' => $vendorDir . '/symplify/astral/src/StaticFactory/SimpleNameResolverStaticFactory.php',
     'RectorPrefix202207\\Symplify\\Astral\\TypeAnalyzer\\ClassMethodReturnTypeResolver' => $vendorDir . '/symplify/astral/src/TypeAnalyzer/ClassMethodReturnTypeResolver.php',
     'RectorPrefix202207\\Symplify\\Astral\\TypeAnalyzer\\ContainsTypeAnalyser' => $vendorDir . '/symplify/astral/src/TypeAnalyzer/ContainsTypeAnalyser.php',
+    'RectorPrefix202207\\Symplify\\Astral\\TypeAwareNodeFinder' => $vendorDir . '/symplify/astral/src/TypeAwareNodeFinder.php',
     'RectorPrefix202207\\Symplify\\Astral\\ValueObject\\AstralConfig' => $vendorDir . '/symplify/astral/src/ValueObject/AstralConfig.php',
     'RectorPrefix202207\\Symplify\\Astral\\ValueObject\\AttributeKey' => $vendorDir . '/symplify/astral/src/ValueObject/AttributeKey.php',
     'RectorPrefix202207\\Symplify\\Astral\\ValueObject\\NodeBuilder\\ClassBuilder' => $vendorDir . '/symplify/astral/src/ValueObject/NodeBuilder/ClassBuilder.php',
