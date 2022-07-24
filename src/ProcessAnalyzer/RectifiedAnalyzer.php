@@ -50,8 +50,10 @@ final class RectifiedAnalyzer
         if ($this->shouldContinue($rectifiedNode, $rectorClass, $node, $originalNode)) {
             return null;
         }
-        // re-set to refill next
-        $this->previousFileWithNodes[$realPath] = null;
+        if ($this->previousFileWithNodes[$realPath]->getNode() === $node) {
+            // re-set to refill next
+            $this->previousFileWithNodes[$realPath] = null;
+        }
         return $rectifiedNode;
     }
     /**
