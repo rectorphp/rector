@@ -73,7 +73,7 @@ return static function (RectorConfig $rectorConfig) : void {
         new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'err', 'error'),
         new MethodCallRename('Symfony\\Component\\HttpKernel\\Log\\NullLogger', 'warn', 'warning'),
         // property access
-        new MethodCallRename('getPropertyAccessor', 'Symfony\\Component\\PropertyAccess\\PropertyAccess', 'createPropertyAccessor'),
+        new MethodCallRename('Symfony\\Component\\PropertyAccess\\PropertyAccess', 'getPropertyAccessor', 'createPropertyAccessor'),
         // translator
         new MethodCallRename('Symfony\\Component\\Translation\\Dumper\\FileDumper', 'format', 'formatCatalogue'),
         new MethodCallRename('Symfony\\Component\\Translation\\Translator', 'getMessages', 'getCatalogue'),

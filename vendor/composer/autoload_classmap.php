@@ -1777,6 +1777,7 @@ return array(
     'Rector\\Doctrine\\NodeManipulator\\PropertyTypeManipulator' => $vendorDir . '/rector/rector-doctrine/src/NodeManipulator/PropertyTypeManipulator.php',
     'Rector\\Doctrine\\NodeManipulator\\ToManyRelationPropertyTypeResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeManipulator/ToManyRelationPropertyTypeResolver.php',
     'Rector\\Doctrine\\NodeManipulator\\ToOneRelationPropertyTypeResolver' => $vendorDir . '/rector/rector-doctrine/src/NodeManipulator/ToOneRelationPropertyTypeResolver.php',
+    'Rector\\Doctrine\\PhpDocParser\\DoctrineClassAnnotationMatcher' => $vendorDir . '/rector/rector-doctrine/src/PhpDocParser/DoctrineClassAnnotationMatcher.php',
     'Rector\\Doctrine\\PhpDocParser\\DoctrineDocBlockResolver' => $vendorDir . '/rector/rector-doctrine/src/PhpDocParser/DoctrineDocBlockResolver.php',
     'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => $vendorDir . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
     'Rector\\Doctrine\\Rector\\ClassMethod\\MakeEntitySetterNullabilityInSyncWithPropertyRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/ClassMethod/MakeEntitySetterNullabilityInSyncWithPropertyRector.php',

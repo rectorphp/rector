@@ -14,9 +14,9 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
+use Rector\Doctrine\PhpDocParser\DoctrineClassAnnotationMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,17 +32,17 @@ final class DoctrineTargetEntityStringToClassConstantRector extends AbstractRect
     private const VALID_DOCTRINE_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany' => self::ATTRIBUTE_NAME__TARGET_ENTITY, 'Doctrine\\ORM\\Mapping\\ManyToOne' => self::ATTRIBUTE_NAME__TARGET_ENTITY, 'Doctrine\\ORM\\Mapping\\OneToOne' => self::ATTRIBUTE_NAME__TARGET_ENTITY, 'Doctrine\\ORM\\Mapping\\ManyToMany' => self::ATTRIBUTE_NAME__TARGET_ENTITY, 'Doctrine\\ORM\\Mapping\\Embedded' => self::ATTRIBUTE_NAME__CLASS];
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
+     * @var \Rector\Doctrine\PhpDocParser\DoctrineClassAnnotationMatcher
      */
-    private $classAnnotationMatcher;
+    private $doctrineClassAnnotationMatcher;
     /**
      * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;
-    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher, AttributeFinder $attributeFinder)
+    public function __construct(DoctrineClassAnnotationMatcher $doctrineClassAnnotationMatcher, AttributeFinder $attributeFinder)
     {
-        $this->classAnnotationMatcher = $classAnnotationMatcher;
+        $this->doctrineClassAnnotationMatcher = $doctrineClassAnnotationMatcher;
         $this->attributeFinder = $attributeFinder;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -82,20 +82,26 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if ($phpDocInfo !== null) {
             $property = $this->changeTypeInAnnotationTypes($node, $phpDocInfo);
-            $hasChanged = $property !== null || $phpDocInfo->hasChanged();
+            $annotationDetected = $property !== null || $phpDocInfo->hasChanged();
+            if ($annotationDetected) {
+                return $property;
+            }
         }
-        return $this->changeTypeInAttributeTypes($node, $hasChanged);
+        return $this->changeTypeInAttributeTypes($node);
     }
-    private function changeTypeInAttributeTypes(Property $property, bool $hasChanged) : ?Property
+    private function changeTypeInAttributeTypes(Property $property) : ?Property
     {
         $attribute = $this->attributeFinder->findAttributeByClasses($property, $this->getAttributeClasses());
         if (!$attribute instanceof Attribute) {
-            return $hasChanged ? $property : null;
+            return null;
         }
+        return $this->changeTypeInAttribute($attribute, $property);
+    }
+    private function changeTypeInAttribute(Attribute $attribute, Property $property) : ?Property
+    {
         $attributeName = $this->getAttributeName($attribute);
         foreach ($attribute->args as $arg) {
             $argName = $arg->name;
@@ -107,17 +113,18 @@ CODE_SAMPLE
             }
             /** @var string $value - Should always be string at this point */
             $value = $this->valueResolver->getValue($arg->value);
-            $fullyQualified = $this->classAnnotationMatcher->resolveTagToKnownFullyQualifiedName($value, $property);
+            $fullyQualified = $this->doctrineClassAnnotationMatcher->resolveExpectingDoctrineFQCN($value, $property);
             if ($fullyQualified === $value) {
                 continue;
             }
             if ($fullyQualified === null) {
                 continue;
             }
-            $arg->value = $this->nodeFactory->createClassConstFetch($fullyQualified, 'class');
+            $fullyQualifiedWithoutLeadingBackslash = \ltrim($fullyQualified, '\\');
+            $arg->value = $this->nodeFactory->createClassConstFetch($fullyQualifiedWithoutLeadingBackslash, 'class');
             return $property;
         }
-        return $hasChanged ? $property : null;
+        return null;
     }
     private function changeTypeInAnnotationTypes(Property $property, PhpDocInfo $phpDocInfo) : ?Property
     {
@@ -136,7 +143,7 @@ CODE_SAMPLE
             return null;
         }
         // resolve to FQN
-        $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagToKnownFullyQualifiedName($targetEntity, $property);
+        $tagFullyQualifiedName = $this->doctrineClassAnnotationMatcher->resolveExpectingDoctrineFQCN($targetEntity, $property);
         if ($tagFullyQualifiedName === null) {
             return null;
         }
@@ -144,7 +151,7 @@ CODE_SAMPLE
             return null;
         }
         $doctrineAnnotationTagValueNode->removeValue($key);
-        $doctrineAnnotationTagValueNode->values[$key] = '\\' . $tagFullyQualifiedName . '::class';
+        $doctrineAnnotationTagValueNode->values[$key] = '\\' . \ltrim($tagFullyQualifiedName, '\\') . '::class';
         return $property;
     }
     /**
