@@ -5975,7 +5975,7 @@ Change simple property init and assign to constructor promotion
 -
      public function __construct(
 -        float $someVariable = 0.0
-+        private float $someVariable = 0.0
++        public float $someVariable = 0.0
      ) {
 -        $this->someVariable = $someVariable;
      }

@@ -92,7 +92,7 @@ CODE_SAMPLE
 class SomeClass
 {
     public function __construct(
-        private float $someVariable = 0.0
+        public float $someVariable = 0.0
     ) {
     }
 }
