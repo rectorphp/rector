@@ -5,7 +5,7 @@ namespace Rector\CodingStyle\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Variable;
+use Rector\CodingStyle\Guard\StaticGuard;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -14,6 +14,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StaticClosureRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\CodingStyle\Guard\StaticGuard
+     */
+    private $staticGuard;
+    public function __construct(StaticGuard $staticGuard)
+    {
+        $this->staticGuard = $staticGuard;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Changes Closure to be static when possible', [new CodeSample(<<<'CODE_SAMPLE'
@@ -48,19 +57,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if (!$this->staticGuard->isLegal($node)) {
             return null;
         }
         $node->static = \true;
         return $node;
-    }
-    private function shouldSkip(Closure $closure) : bool
-    {
-        if ($closure->static) {
-            return \true;
-        }
-        return (bool) $this->betterNodeFinder->findFirst($closure->stmts, static function (Node $subNode) : bool {
-            return $subNode instanceof Variable && $subNode->name === 'this';
-        });
     }
 }

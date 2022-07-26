@@ -1422,6 +1422,7 @@ return array(
     'Rector\\CodingStyle\\ClassNameImport\\UsedImportsResolver' => $baseDir . '/rules/CodingStyle/ClassNameImport/UsedImportsResolver.php',
     'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => $baseDir . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
     'Rector\\CodingStyle\\Enum\\PreferenceSelfThis' => $baseDir . '/rules/CodingStyle/Enum/PreferenceSelfThis.php',
+    'Rector\\CodingStyle\\Guard\\StaticGuard' => $baseDir . '/rules/CodingStyle/Guard/StaticGuard.php',
     'Rector\\CodingStyle\\Naming\\ClassNaming' => $baseDir . '/rules/CodingStyle/Naming/ClassNaming.php',
     'Rector\\CodingStyle\\NodeAnalyzer\\SpreadVariablesCollector' => $baseDir . '/rules/CodingStyle/NodeAnalyzer/SpreadVariablesCollector.php',
     'Rector\\CodingStyle\\NodeAnalyzer\\UseImportNameMatcher' => $baseDir . '/rules/CodingStyle/NodeAnalyzer/UseImportNameMatcher.php',
