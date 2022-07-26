@@ -10,8 +10,10 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
@@ -247,12 +249,8 @@ final class ValueResolver
         if ($constant === null) {
             throw new ShouldNotHappenException();
         }
-        if ($class === ObjectReference::SELF) {
-            $classLike = $this->betterNodeFinder->findParentType($classConstFetch, ClassLike::class);
-            if (!$classLike instanceof ClassLike) {
-                throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "self" references is resolvable to a class name');
-            }
-            $class = (string) $this->nodeNameResolver->getName($classLike);
+        if (\in_array($class, [ObjectReference::SELF, ObjectReference::STATIC, ObjectReference::PARENT], \true)) {
+            $class = $this->resolveClassFromSelfStaticParent($classConstFetch, $class);
         }
         if ($constant === 'class') {
             return $class;
@@ -270,5 +268,22 @@ final class ValueResolver
         }
         // fallback to constant reference itself, to avoid fatal error
         return $classConstantReference;
+    }
+    private function resolveClassFromSelfStaticParent(ClassConstFetch $classConstFetch, string $class) : string
+    {
+        $classLike = $this->betterNodeFinder->findParentType($classConstFetch, ClassLike::class);
+        if (!$classLike instanceof ClassLike) {
+            throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "self" or "static" references is resolvable to a class name');
+        }
+        if ($class === ObjectReference::PARENT) {
+            if (!$classLike instanceof Class_) {
+                throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "parent" references is resolvable to lookup parent class');
+            }
+            if (!$classLike->extends instanceof FullyQualified) {
+                throw new ShouldNotHappenException();
+            }
+            return $classLike->extends->toString();
+        }
+        return (string) $this->nodeNameResolver->getName($classLike);
     }
 }
