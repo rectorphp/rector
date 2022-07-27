@@ -21,11 +21,10 @@ final class ParamTagRemover
     {
         $this->deadParamTagValueNodeAnalyzer = $deadParamTagValueNodeAnalyzer;
     }
-    public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike) : bool
+    public function removeParamTagsIfUseless(PhpDocInfo $phpDocInfo, FunctionLike $functionLike) : void
     {
-        $hasChanged = \false;
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (Node $docNode) use($functionLike, $phpDocInfo, &$hasChanged) : ?int {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function (Node $docNode) use($functionLike, $phpDocInfo) : ?int {
             if (!$docNode instanceof PhpDocTagNode) {
                 return null;
             }
@@ -40,9 +39,7 @@ final class ParamTagRemover
                 return null;
             }
             $phpDocInfo->markAsChanged();
-            $hasChanged = \true;
             return PhpDocNodeTraverser::NODE_REMOVE;
         });
-        return $hasChanged;
     }
 }

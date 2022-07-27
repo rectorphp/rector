@@ -17,6 +17,7 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
      */
     private $binaryClass;
     /**
+     * @readonly
      * @var mixed
      */
     private $expectedValue;

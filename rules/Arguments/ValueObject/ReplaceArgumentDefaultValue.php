@@ -28,10 +28,12 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
      */
     private $position;
     /**
+     * @readonly
      * @var mixed
      */
     private $valueBefore;
     /**
+     * @readonly
      * @var mixed
      */
     private $valueAfter;

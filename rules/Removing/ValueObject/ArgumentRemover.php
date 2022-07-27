@@ -23,6 +23,7 @@ final class ArgumentRemover
      */
     private $position;
     /**
+     * @readonly
      * @var mixed
      */
     private $value;

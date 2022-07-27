@@ -15,6 +15,7 @@ final class CacheItem
      */
     private $variableKey;
     /**
+     * @readonly
      * @var mixed
      */
     private $data;

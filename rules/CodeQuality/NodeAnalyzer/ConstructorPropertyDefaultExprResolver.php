@@ -39,7 +39,7 @@ final class ConstructorPropertyDefaultExprResolver
         $defaultPropertyExprAssigns = [];
         foreach ($stmts as $stmt) {
             if (!$stmt instanceof Expression) {
-                continue;
+                break;
             }
             $nestedStmt = $stmt->expr;
             if (!$nestedStmt instanceof Assign) {

@@ -104,8 +104,8 @@ final class ArgumentDefaultValueReplacer
         return new Arg($this->normalizeValue($value));
     }
     /**
-     * @param mixed $value
      * @return \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr
+     * @param mixed $value
      */
     private function normalizeValue($value)
     {

@@ -2538,6 +2538,7 @@ return array(
     'Rector\\Php80\\Rector\\FuncCall\\ClassOnObjectRector' => $baseDir . '/rules/Php80/Rector/FuncCall/ClassOnObjectRector.php',
     'Rector\\Php80\\Rector\\FuncCall\\Php8ResourceReturnToObjectRector' => $baseDir . '/rules/Php80/Rector/FuncCall/Php8ResourceReturnToObjectRector.php',
     'Rector\\Php80\\Rector\\FuncCall\\TokenGetAllToObjectRector' => $baseDir . '/rules/Php80/Rector/FuncCall/TokenGetAllToObjectRector.php',
+    'Rector\\Php80\\Rector\\FunctionLike\\MixedTypeRector' => $baseDir . '/rules/Php80/Rector/FunctionLike/MixedTypeRector.php',
     'Rector\\Php80\\Rector\\FunctionLike\\UnionTypesRector' => $baseDir . '/rules/Php80/Rector/FunctionLike/UnionTypesRector.php',
     'Rector\\Php80\\Rector\\Identical\\StrEndsWithRector' => $baseDir . '/rules/Php80/Rector/Identical/StrEndsWithRector.php',
     'Rector\\Php80\\Rector\\Identical\\StrStartsWithRector' => $baseDir . '/rules/Php80/Rector/Identical/StrStartsWithRector.php',

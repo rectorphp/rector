@@ -48,6 +48,9 @@ final class FileCacheStorage implements CacheStorageInterface
             return $cacheItem->getData();
         })($key, $variableKey);
     }
+    /**
+     * @param mixed $data
+     */
     public function save(string $key, string $variableKey, $data) : void
     {
         $cacheFilePaths = $this->getCacheFilePaths($key);

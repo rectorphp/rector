@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\CallableType;
@@ -14,6 +15,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -65,6 +67,9 @@ final class ClassMethodParamTypeCompleter
             // check default override
             $param = $classMethod->params[$position];
             if (!$this->isAcceptedByDefault($param, $argumentStaticType)) {
+                continue;
+            }
+            if ($param->type instanceof Name && $param->type->getAttribute(AttributeKey::VIRTUAL_NODE) === \true) {
                 continue;
             }
             // update parameter
