@@ -85,9 +85,9 @@ final class TemplateVariablesFactory
     private function createRuleConfiguration(array $configuration) : string
     {
         $arrayItems = [];
-        foreach ($configuration as $mainConfiguration) {
-            $mainConfiguration = BuilderHelpers::normalizeValue($mainConfiguration);
-            $arrayItems[] = new ArrayItem($mainConfiguration);
+        foreach ($configuration as $singleConfiguration) {
+            $singleConfiguration = BuilderHelpers::normalizeValue($singleConfiguration);
+            $arrayItems[] = new ArrayItem($singleConfiguration);
         }
         $array = new Array_($arrayItems);
         return $this->standard->prettyPrintExpr($array);
