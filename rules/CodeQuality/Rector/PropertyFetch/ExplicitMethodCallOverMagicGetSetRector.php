@@ -130,6 +130,9 @@ CODE_SAMPLE
         if ($propertyName === null) {
             return null;
         }
+        if (!$callerType->hasProperty($propertyName)->yes()) {
+            return null;
+        }
         $propertyReflection = $callerType->getProperty($propertyName, $scope);
         $propertyType = $propertyReflection->getReadableType();
         $possibleGetterMethodNames = $this->resolvePossibleGetMethodNames($propertyName);
