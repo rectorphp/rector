@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
@@ -16,6 +15,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use RectorPrefix202207\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeTypeResolverInterface<StaticCall|MethodCall>
@@ -79,14 +79,17 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
             $callerType = $this->nodeTypeResolver->getType($node->class);
         }
         foreach ($callerType->getReferencedClasses() as $referencedClass) {
-            $classMethodReturnType = $this->resolveClassMethodReturnType($referencedClass, $methodName, $scope);
+            $classMethodReturnType = $this->resolveClassMethodReturnType($referencedClass, $node, $methodName, $scope);
             if (!$classMethodReturnType instanceof MixedType) {
                 return $classMethodReturnType;
             }
         }
         return new MixedType();
     }
-    private function resolveClassMethodReturnType(string $referencedClass, string $methodName, Scope $scope) : Type
+    /**
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     */
+    private function resolveClassMethodReturnType(string $referencedClass, $node, string $methodName, Scope $scope) : Type
     {
         if (!$this->reflectionProvider->hasClass($referencedClass)) {
             return new MixedType();
@@ -98,7 +101,7 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
             }
             $methodReflection = $ancestorClassReflection->getMethod($methodName, $scope);
             if ($methodReflection instanceof PhpMethodReflection) {
-                $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+                $parametersAcceptorWithPhpDocs = ParametersAcceptorSelectorVariantsWrapper::select($methodReflection, $node, $scope);
                 return $parametersAcceptorWithPhpDocs->getReturnType();
             }
         }
