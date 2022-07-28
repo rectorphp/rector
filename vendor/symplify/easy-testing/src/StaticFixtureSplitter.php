@@ -32,15 +32,21 @@ final class StaticFixtureSplitter
         // no changes
         return new InputAndExpected($smartFileInfo->getContents(), $smartFileInfo->getContents());
     }
-    public static function splitFileInfoToLocalInputAndExpectedFileInfos(SmartFileInfo $smartFileInfo, bool $autoloadTestFixture = \false) : InputFileInfoAndExpectedFileInfo
+    public static function splitFileInfoToLocalInputAndExpectedFileInfos(SmartFileInfo $smartFileInfo, bool $autoloadTestFixture = \false, bool $preserveDirStructure = \false) : InputFileInfoAndExpectedFileInfo
     {
         $inputAndExpected = self::splitFileInfoToInputAndExpected($smartFileInfo);
-        $inputFileInfo = self::createTemporaryFileInfo($smartFileInfo, 'input', $inputAndExpected->getInput());
+        $prefix = '';
+        if ($preserveDirStructure) {
+            $dir = \explode('Fixture', $smartFileInfo->getRealPath(), 2);
+            $prefix = isset($dir[1]) ? \dirname($dir[1]) . '/' : '';
+            $prefix = \ltrim($prefix, '/\\');
+        }
+        $inputFileInfo = self::createTemporaryFileInfo($smartFileInfo, $prefix . 'input', $inputAndExpected->getInput());
         // some files needs to be autoload to enable reflection
         if ($autoloadTestFixture) {
             require_once $inputFileInfo->getRealPath();
         }
-        $expectedFileInfo = self::createTemporaryFileInfo($smartFileInfo, 'expected', $inputAndExpected->getExpected());
+        $expectedFileInfo = self::createTemporaryFileInfo($smartFileInfo, $prefix . 'expected', $inputAndExpected->getExpected());
         return new InputFileInfoAndExpectedFileInfo($inputFileInfo, $expectedFileInfo);
     }
     public static function getTemporaryPath() : string

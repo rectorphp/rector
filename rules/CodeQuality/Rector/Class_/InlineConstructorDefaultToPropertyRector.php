@@ -74,6 +74,9 @@ CODE_SAMPLE
             if (!$property instanceof Property) {
                 continue;
             }
+            if ($property->isReadonly()) {
+                continue;
+            }
             $propertyProperty = $property->props[0];
             $propertyProperty->default = $defaultPropertyExprAssign->getDefaultExpr();
             $hasChanged = \true;
