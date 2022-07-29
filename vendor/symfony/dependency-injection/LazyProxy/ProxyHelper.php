@@ -30,6 +30,10 @@ class ProxyHelper
         if (!$type) {
             return null;
         }
+        return self::getTypeHintForType($type, $r, $noBuiltin);
+    }
+    private static function getTypeHintForType(\ReflectionType $type, \ReflectionFunctionAbstract $r, bool $noBuiltin) : ?string
+    {
         $types = [];
         $glue = '|';
         if ($type instanceof \ReflectionUnionType) {
@@ -43,6 +47,14 @@ class ProxyHelper
             return null;
         }
         foreach ($reflectionTypes as $type) {
+            if ($type instanceof \ReflectionIntersectionType) {
+                $typeHint = self::getTypeHintForType($type, $r, $noBuiltin);
+                if (null === $typeHint) {
+                    return null;
+                }
+                $types[] = \sprintf('(%s)', $typeHint);
+                continue;
+            }
             if ($type->isBuiltin()) {
                 if (!$noBuiltin) {
                     $types[] = $type->getName();

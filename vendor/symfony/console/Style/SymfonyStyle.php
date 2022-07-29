@@ -391,16 +391,16 @@ class SymfonyStyle extends OutputStyle
         $chars = \substr(\str_replace(\PHP_EOL, "\n", $this->bufferedOutput->fetch()), -2);
         if (!isset($chars[0])) {
             $this->newLine();
-            //empty history, so we should start with a new line.
+            // empty history, so we should start with a new line.
             return;
         }
-        //Prepend new line for each non LF chars (This means no blank line was output before)
+        // Prepend new line for each non LF chars (This means no blank line was output before)
         $this->newLine(2 - \substr_count($chars, "\n"));
     }
     private function autoPrependText() : void
     {
         $fetched = $this->bufferedOutput->fetch();
-        //Prepend new line if last char isn't EOL:
+        // Prepend new line if last char isn't EOL:
         if (\substr_compare($fetched, "\n", -\strlen("\n")) !== 0) {
             $this->newLine();
         }

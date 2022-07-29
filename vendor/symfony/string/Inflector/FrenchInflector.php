@@ -81,7 +81,7 @@ final class FrenchInflector implements InflectorInterface
         ['/^Mes(dame|demoiselle)s$/', 'RectorPrefix202207\\Ma\\1'],
         ['/^mes(sieur|seigneur)s$/', 'RectorPrefix202207\\mon\\1'],
         ['/^Mes(sieur|seigneur)s$/', 'RectorPrefix202207\\Mon\\1'],
-        //Default rule
+        // Default rule
         ['/s$/i', ''],
     ];
     /**
