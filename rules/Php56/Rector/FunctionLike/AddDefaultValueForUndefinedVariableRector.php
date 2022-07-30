@@ -99,6 +99,9 @@ CODE_SAMPLE
             return null;
         }
         $variablesInitiation = $this->collectVariablesInitiation($undefinedVariableNames, $node->stmts);
+        if ($variablesInitiation === []) {
+            return null;
+        }
         $node->stmts = \array_merge($variablesInitiation, $node->stmts);
         return $node;
     }
