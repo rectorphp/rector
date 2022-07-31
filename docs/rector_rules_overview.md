@@ -1,4 +1,4 @@
-# 409 Rules Overview
+# 410 Rules Overview
 
 <br>
 
@@ -48,7 +48,7 @@
 
 - [Php74](#php74) (13)
 
-- [Php80](#php80) (17)
+- [Php80](#php80) (18)
 
 - [Php81](#php81) (11)
 
@@ -6052,6 +6052,27 @@ Change ternary type resolve to `get_debug_type()`
      {
 -        return is_object($value) ? get_class($value) : gettype($value);
 +        return get_debug_type($value);
+     }
+ }
+```
+
+<br>
+
+### MixedTypeRector
+
+Change mixed docs type to mixed typed
+
+- class: [`Rector\Php80\Rector\FunctionLike\MixedTypeRector`](../rules/Php80/Rector/FunctionLike/MixedTypeRector.php)
+
+```diff
+ class SomeClass
+ {
+-    /**
+-     * @param mixed $param
+-     */
+-    public function run($param)
++    public function run(mixed $param)
+     {
      }
  }
 ```
