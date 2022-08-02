@@ -8,7 +8,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\ValueObject\RectifiedNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * This service verify if the Node already rectified with same Rector rule before current Rector rule with condition
  *

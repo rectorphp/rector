@@ -2,7 +2,7 @@
 
 namespace Rector\Nette\NeonParser\Contract;
 
-use RectorPrefix202207\Nette\Neon\Node;
+use RectorPrefix202208\Nette\Neon\Node;
 interface NeonNodeVisitorInterface
 {
     /**

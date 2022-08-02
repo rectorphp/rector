@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Style;
 
-use RectorPrefix202207\Symfony\Component\Console\Application;
-use RectorPrefix202207\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202207\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202207\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202207\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix202208\Symfony\Component\Console\Application;
+use RectorPrefix202208\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202208\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202208\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 final class RectorConsoleOutputStyleFactory
 {
     /**

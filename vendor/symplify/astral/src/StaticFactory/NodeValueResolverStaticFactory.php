@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\Astral\StaticFactory;
+namespace RectorPrefix202208\Symplify\Astral\StaticFactory;
 
-use RectorPrefix202207\Symplify\Astral\NodeValue\NodeValueResolver;
-use RectorPrefix202207\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver;
+use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
 /**
  * @api
  */

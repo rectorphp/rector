@@ -8,7 +8,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\FunctionLike;
 use PhpParser\NodeTraverser;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202207\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix202208\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class VariadicFunctionLikeDetector
 {
     /**

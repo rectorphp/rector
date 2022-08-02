@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\Parser;
 
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202207\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class BetterTokenIterator extends TokenIterator
 {
     /**

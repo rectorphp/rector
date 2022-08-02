@@ -16,7 +16,7 @@ use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix202207\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
 final class MagicNetteFactoryInterfaceFormControlTypeResolver implements FormControlTypeResolverInterface
 {
     /**

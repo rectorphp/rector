@@ -10,7 +10,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
-use RectorPrefix202207\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRector implements ScopeAwarePhpRectorInterface
 {
     /**

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Latte\Parser;
 
-use RectorPrefix202207\Nette\Utils\Strings;
+use RectorPrefix202208\Nette\Utils\Strings;
 use PHPStan\BetterReflection\Reflection\ReflectionClass;
 use PHPStan\BetterReflection\Reflection\ReflectionNamedType;
 use PHPStan\BetterReflection\Reflector\Exception\IdentifierNotFound;

@@ -17,7 +17,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use RectorPrefix202207\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix202208\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**

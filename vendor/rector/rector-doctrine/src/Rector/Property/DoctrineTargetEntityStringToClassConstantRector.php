@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\Rector\Property;
 
-use RectorPrefix202207\Doctrine\ORM\Mapping\Embedded;
-use RectorPrefix202207\Doctrine\ORM\Mapping\ManyToMany;
-use RectorPrefix202207\Doctrine\ORM\Mapping\ManyToOne;
-use RectorPrefix202207\Doctrine\ORM\Mapping\OneToMany;
-use RectorPrefix202207\Doctrine\ORM\Mapping\OneToOne;
+use RectorPrefix202208\Doctrine\ORM\Mapping\Embedded;
+use RectorPrefix202208\Doctrine\ORM\Mapping\ManyToMany;
+use RectorPrefix202208\Doctrine\ORM\Mapping\ManyToOne;
+use RectorPrefix202208\Doctrine\ORM\Mapping\OneToMany;
+use RectorPrefix202208\Doctrine\ORM\Mapping\OneToOne;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Identifier;

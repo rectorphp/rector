@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207;
+namespace RectorPrefix202208;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Set\Contract\SetListInterface;
 use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface;
-use RectorPrefix202207\Symplify\EasyCI\Config\EasyCIConfig;
+use RectorPrefix202208\Symplify\EasyCI\Config\EasyCIConfig;
 return static function (EasyCIConfig $easyCIConfig) : void {
     $easyCIConfig->typesToSkip([SymfonyRoutesProviderInterface::class, SetListInterface::class, RectorInterface::class]);
 };

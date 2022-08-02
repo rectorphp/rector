@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser\Node;
 
-use RectorPrefix202207\Nette\Neon\Node;
-use RectorPrefix202207\Nette\Neon\Node\LiteralNode;
+use RectorPrefix202208\Nette\Neon\Node;
+use RectorPrefix202208\Nette\Neon\Node\LiteralNode;
 use Rector\Nette\NeonParser\Node\Service_\SetupMethodCall;
 /**
  * Metanode for easier subscribing

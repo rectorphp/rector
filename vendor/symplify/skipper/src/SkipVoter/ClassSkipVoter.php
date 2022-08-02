@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\Skipper\SkipVoter;
+namespace RectorPrefix202208\Symplify\Skipper\SkipVoter;
 
-use RectorPrefix202207\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202207\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use RectorPrefix202207\Symplify\Skipper\Contract\SkipVoterInterface;
-use RectorPrefix202207\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver;
-use RectorPrefix202207\Symplify\Skipper\Skipper\OnlySkipper;
-use RectorPrefix202207\Symplify\Skipper\Skipper\SkipSkipper;
-use RectorPrefix202207\Symplify\Skipper\ValueObject\Option;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix202208\Symplify\Skipper\Contract\SkipVoterInterface;
+use RectorPrefix202208\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolver;
+use RectorPrefix202208\Symplify\Skipper\Skipper\OnlySkipper;
+use RectorPrefix202208\Symplify\Skipper\Skipper\SkipSkipper;
+use RectorPrefix202208\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
 final class ClassSkipVoter implements SkipVoterInterface
 {
     /**

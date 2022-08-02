@@ -6,8 +6,8 @@ namespace Rector\Caching;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;
-use RectorPrefix202207\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 final class CacheFactory
 {
     /**

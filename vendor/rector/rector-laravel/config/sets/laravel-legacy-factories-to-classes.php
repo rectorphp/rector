@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207;
+namespace RectorPrefix202208;
 
 use Rector\Config\RectorConfig;
 use Rector\Laravel\Rector\FuncCall\FactoryFuncCallToStaticCallRector;

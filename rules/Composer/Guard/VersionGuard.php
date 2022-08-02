@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Composer\Guard;
 
-use RectorPrefix202207\Composer\Semver\VersionParser;
+use RectorPrefix202208\Composer\Semver\VersionParser;
 use Rector\Composer\Contract\VersionAwareInterface;
 final class VersionGuard
 {

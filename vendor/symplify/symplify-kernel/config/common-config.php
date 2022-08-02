@@ -1,19 +1,19 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207;
+namespace RectorPrefix202208;
 
-use RectorPrefix202207\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix202207\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix202207\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202207\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix202207\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix202207\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix202207\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix202207\Symplify\SmartFileSystem\Finder\SmartFinder;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileSystem;
-use function RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202208\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix202208\Symplify\SmartFileSystem\Finder\SmartFinder;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
+use function RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $containerConfigurator) : void {
     $services = $containerConfigurator->services();
     $services->defaults()->public()->autowire();

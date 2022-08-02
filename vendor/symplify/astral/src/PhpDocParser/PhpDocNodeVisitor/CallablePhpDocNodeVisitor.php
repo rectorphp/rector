@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
+namespace RectorPrefix202208\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 final class CallablePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor

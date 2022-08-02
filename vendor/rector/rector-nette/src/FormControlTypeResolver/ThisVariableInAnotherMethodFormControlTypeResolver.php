@@ -12,7 +12,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Contract\FormControlTypeResolverInterface;
 use Rector\Nette\NodeResolver\MethodNamesByInputNamesResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202207\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
 final class ThisVariableInAnotherMethodFormControlTypeResolver implements FormControlTypeResolverInterface
 {
     /**

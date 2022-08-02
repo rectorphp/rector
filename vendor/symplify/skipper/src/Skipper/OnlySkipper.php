@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\Skipper\Skipper;
+namespace RectorPrefix202208\Symplify\Skipper\Skipper;
 
-use RectorPrefix202207\Symplify\Skipper\Matcher\FileInfoMatcher;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202208\Symplify\Skipper\Matcher\FileInfoMatcher;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\Skipper\Tests\Skipper\Only\OnlySkipperTest
  */

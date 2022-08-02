@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Nette\Kdyby\NodeFactory;
 
-use RectorPrefix202207\Nette\Utils\Strings;
+use RectorPrefix202208\Nette\Utils\Strings;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
@@ -20,9 +20,9 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Nette\Kdyby\BlueprintFactory\VariableWithTypesFactory;
 use Rector\Nette\Kdyby\ValueObject\VariableWithType;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
-use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix202207\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
+use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
+use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
+use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
 /**
  * @todo decouple to generic object factory for better re-use, e.g. this is just value object pattern
  */

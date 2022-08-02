@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\Astral\NodeTraverser;
+namespace RectorPrefix202208\Symplify\Astral\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
-use RectorPrefix202207\Symplify\Astral\NodeVisitor\CallableNodeVisitor;
+use RectorPrefix202208\Symplify\Astral\NodeVisitor\CallableNodeVisitor;
 /**
  * @api
  */

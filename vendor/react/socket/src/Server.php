@@ -1,10 +1,10 @@
 <?php
 
-namespace RectorPrefix202207\React\Socket;
+namespace RectorPrefix202208\React\Socket;
 
-use RectorPrefix202207\Evenement\EventEmitter;
-use RectorPrefix202207\React\EventLoop\Loop;
-use RectorPrefix202207\React\EventLoop\LoopInterface;
+use RectorPrefix202208\Evenement\EventEmitter;
+use RectorPrefix202208\React\EventLoop\Loop;
+use RectorPrefix202208\React\EventLoop\LoopInterface;
 use Exception;
 /**
  * @deprecated 1.9.0 See `SocketServer` instead

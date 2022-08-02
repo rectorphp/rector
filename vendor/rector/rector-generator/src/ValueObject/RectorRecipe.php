@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\ValueObject;
 
-use RectorPrefix202207\Nette\Utils\Json;
-use RectorPrefix202207\Nette\Utils\Strings;
+use RectorPrefix202208\Nette\Utils\Json;
+use RectorPrefix202208\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PHPStan\Node\ClassMethod;
 use Rector\RectorGenerator\Exception\ConfigurationException;
 use Rector\RectorGenerator\Exception\ShouldNotHappenException;
-use RectorPrefix202207\Webmozart\Assert\Assert;
+use RectorPrefix202208\Webmozart\Assert\Assert;
 final class RectorRecipe
 {
     /**

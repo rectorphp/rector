@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\SmartFileSystem;
+namespace RectorPrefix202208\Symplify\SmartFileSystem;
 
-use RectorPrefix202207\Nette\Utils\Strings;
-use RectorPrefix202207\Symfony\Component\Finder\SplFileInfo;
-use RectorPrefix202207\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix202207\Symplify\EasyTesting\StaticFixtureSplitter;
-use RectorPrefix202207\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException;
-use RectorPrefix202207\Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202208\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202208\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
+use RectorPrefix202208\Symplify\EasyTesting\StaticFixtureSplitter;
+use RectorPrefix202208\Symplify\SmartFileSystem\Exception\DirectoryNotFoundException;
+use RectorPrefix202208\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 /**
  * @api
  * @see \Symplify\SmartFileSystem\Tests\SmartFileInfo\SmartFileInfoTest
@@ -128,4 +128,4 @@ final class SmartFileInfo extends SplFileInfo
  * @api
  * @see \Symplify\SmartFileSystem\Tests\SmartFileInfo\SmartFileInfoTest
  */
-\class_alias('RectorPrefix202207\\Symplify\\SmartFileSystem\\SmartFileInfo', 'Symplify\\SmartFileSystem\\SmartFileInfo', \false);
+\class_alias('RectorPrefix202208\\Symplify\\SmartFileSystem\\SmartFileInfo', 'Symplify\\SmartFileSystem\\SmartFileInfo', \false);

@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\EasyTesting;
+namespace RectorPrefix202208\Symplify\EasyTesting;
 
-use RectorPrefix202207\Nette\Utils\Strings;
-use RectorPrefix202207\Symplify\EasyTesting\ValueObject\IncorrectAndMissingSkips;
-use RectorPrefix202207\Symplify\EasyTesting\ValueObject\Prefix;
-use RectorPrefix202207\Symplify\EasyTesting\ValueObject\SplitLine;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202208\Symplify\EasyTesting\ValueObject\IncorrectAndMissingSkips;
+use RectorPrefix202208\Symplify\EasyTesting\ValueObject\Prefix;
+use RectorPrefix202208\Symplify\EasyTesting\ValueObject\SplitLine;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\EasyTesting\Tests\MissingSkipPrefixResolver\MissingSkipPrefixResolverTest
  */

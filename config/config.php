@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207;
+namespace RectorPrefix202208;
 
-use RectorPrefix202207\Composer\Semver\VersionParser;
-use RectorPrefix202207\Doctrine\Inflector\Inflector;
-use RectorPrefix202207\Doctrine\Inflector\Rules\English\InflectorFactory;
-use RectorPrefix202207\OndraM\CiDetector\CiDetector;
+use RectorPrefix202208\Composer\Semver\VersionParser;
+use RectorPrefix202208\Doctrine\Inflector\Inflector;
+use RectorPrefix202208\Doctrine\Inflector\Rules\English\InflectorFactory;
+use RectorPrefix202208\OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\Lexer;
 use PhpParser\NodeFinder;
@@ -38,20 +38,20 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 use Rector\PSR4\Composer\PSR4NamespaceMatcher;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\Utils\Command\MissingInSetCommand;
-use RectorPrefix202207\Symfony\Component\Console\Application;
-use function RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use RectorPrefix202207\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix202207\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
-use RectorPrefix202207\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202207\Symplify\PackageBuilder\Php\TypeChecker;
-use RectorPrefix202207\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix202207\Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use RectorPrefix202207\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix202207\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix202207\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix202207\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix202207\Symplify\SmartFileSystem\Json\JsonFileSystem;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202208\Symfony\Component\Console\Application;
+use function RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix202208\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
+use RectorPrefix202208\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
+use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix202208\Symplify\SmartFileSystem\Json\JsonFileSystem;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);

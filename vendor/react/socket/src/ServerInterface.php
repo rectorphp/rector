@@ -1,8 +1,8 @@
 <?php
 
-namespace RectorPrefix202207\React\Socket;
+namespace RectorPrefix202208\React\Socket;
 
-use RectorPrefix202207\Evenement\EventEmitterInterface;
+use RectorPrefix202208\Evenement\EventEmitterInterface;
 /**
  * The `ServerInterface` is responsible for providing an interface for accepting
  * incoming streaming connections, such as a normal TCP/IP connection.

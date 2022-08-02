@@ -5,12 +5,12 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202207\Tracy;
+namespace RectorPrefix202208\Tracy;
 
-use RectorPrefix202207\Ds;
-use RectorPrefix202207\Tracy\Dumper\Describer;
-use RectorPrefix202207\Tracy\Dumper\Exposer;
-use RectorPrefix202207\Tracy\Dumper\Renderer;
+use RectorPrefix202208\Ds;
+use RectorPrefix202208\Tracy\Dumper\Describer;
+use RectorPrefix202208\Tracy\Dumper\Exposer;
+use RectorPrefix202208\Tracy\Dumper\Renderer;
 /**
  * Dumps a variable.
  */

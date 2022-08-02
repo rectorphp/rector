@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\SmartFileSystem\Finder;
+namespace RectorPrefix202208\Symplify\SmartFileSystem\Finder;
 
-use RectorPrefix202207\Symfony\Component\Finder\Finder;
-use RectorPrefix202207\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202208\Symfony\Component\Finder\Finder;
+use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
  * @see \Symplify\SmartFileSystem\Tests\Finder\SmartFinder\SmartFinderTest

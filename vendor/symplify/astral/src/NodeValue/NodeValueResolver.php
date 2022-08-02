@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\Astral\NodeValue;
+namespace RectorPrefix202208\Symplify\Astral\NodeValue;
 
 use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
@@ -11,14 +11,14 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use RectorPrefix202207\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
-use RectorPrefix202207\Symplify\Astral\Exception\ShouldNotHappenException;
-use RectorPrefix202207\Symplify\Astral\Naming\SimpleNameResolver;
-use RectorPrefix202207\Symplify\Astral\NodeValue\NodeValueResolver\ClassConstFetchValueResolver;
-use RectorPrefix202207\Symplify\Astral\NodeValue\NodeValueResolver\ConstFetchValueResolver;
-use RectorPrefix202207\Symplify\Astral\NodeValue\NodeValueResolver\FuncCallValueResolver;
-use RectorPrefix202207\Symplify\Astral\NodeValue\NodeValueResolver\MagicConstValueResolver;
-use RectorPrefix202207\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix202208\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
+use RectorPrefix202208\Symplify\Astral\Exception\ShouldNotHappenException;
+use RectorPrefix202208\Symplify\Astral\Naming\SimpleNameResolver;
+use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver\ClassConstFetchValueResolver;
+use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver\ConstFetchValueResolver;
+use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver\FuncCallValueResolver;
+use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver\MagicConstValueResolver;
+use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
 /**
  * @see \Symplify\Astral\Tests\NodeValue\NodeValueResolverTest
  */

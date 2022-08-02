@@ -106,6 +106,21 @@ CODE_SAMPLE
         return $node;
     }
     /**
+     * @param Stmt[] $stmts
+     * @return Expression[]
+     */
+    private function collectEarlyExpressionStmts(array $stmts) : array
+    {
+        $expressionStmts = [];
+        foreach ($stmts as $stmt) {
+            if (!$stmt instanceof Expression) {
+                break;
+            }
+            $expressionStmts[] = $stmt;
+        }
+        return $expressionStmts;
+    }
+    /**
      * @param string[] $undefinedVariableNames
      * @param Stmt[] $stmts
      * @return Expression[]
@@ -113,12 +128,13 @@ CODE_SAMPLE
     private function collectVariablesInitiation(array $undefinedVariableNames, array $stmts) : array
     {
         $variablesInitiation = [];
+        $expressionStmts = $this->collectEarlyExpressionStmts($stmts);
         foreach ($undefinedVariableNames as $undefinedVariableName) {
             $value = $this->isArray($undefinedVariableName, $stmts) ? new Array_([]) : $this->nodeFactory->createNull();
             $assign = new Assign(new Variable($undefinedVariableName), $value);
             $expresssion = new Expression($assign);
-            foreach ($stmts as $stmt) {
-                if ($this->nodeComparator->areNodesEqual($expresssion, $stmt)) {
+            foreach ($expressionStmts as $expressionStmt) {
+                if ($this->nodeComparator->areNodesEqual($expresssion, $expressionStmt)) {
                     continue 2;
                 }
             }

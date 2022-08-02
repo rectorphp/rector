@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Nette\NeonParser\Services;
 
-use RectorPrefix202207\Nette\Neon\Node;
-use RectorPrefix202207\Nette\Neon\Node\ArrayItemNode;
-use RectorPrefix202207\Nette\Neon\Node\ArrayNode;
-use RectorPrefix202207\Nette\Neon\Node\EntityNode;
+use RectorPrefix202208\Nette\Neon\Node;
+use RectorPrefix202208\Nette\Neon\Node\ArrayItemNode;
+use RectorPrefix202208\Nette\Neon\Node\ArrayNode;
+use RectorPrefix202208\Nette\Neon\Node\EntityNode;
 final class ServiceTypeResolver
 {
     /**

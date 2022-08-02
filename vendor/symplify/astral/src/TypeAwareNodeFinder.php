@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\Astral;
+namespace RectorPrefix202208\Symplify\Astral;
 
 use PhpParser\Node;
 use PhpParser\NodeFinder;

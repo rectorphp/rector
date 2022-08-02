@@ -8,7 +8,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202207\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix202208\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ClassMethodParamVendorLockResolver
 {
     /**

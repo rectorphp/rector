@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202207\React\Stream;
+namespace RectorPrefix202208\React\Stream;
 
 final class Util
 {

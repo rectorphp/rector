@@ -8,21 +8,21 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202207\Symfony\Component\DependencyInjection\Extension;
+namespace RectorPrefix202208\Symfony\Component\DependencyInjection\Extension;
 
-use RectorPrefix202207\Symfony\Component\Config\Builder\ConfigBuilderGenerator;
-use RectorPrefix202207\Symfony\Component\Config\FileLocator;
-use RectorPrefix202207\Symfony\Component\Config\Loader\DelegatingLoader;
-use RectorPrefix202207\Symfony\Component\Config\Loader\LoaderResolver;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\ClosureLoader;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\IniFileLoader;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use RectorPrefix202207\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use RectorPrefix202208\Symfony\Component\Config\Builder\ConfigBuilderGenerator;
+use RectorPrefix202208\Symfony\Component\Config\FileLocator;
+use RectorPrefix202208\Symfony\Component\Config\Loader\DelegatingLoader;
+use RectorPrefix202208\Symfony\Component\Config\Loader\LoaderResolver;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\ClosureLoader;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\DirectoryLoader;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\IniFileLoader;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */

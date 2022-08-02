@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
-use RectorPrefix202207\Nette\Utils\Strings;
+use RectorPrefix202208\Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix202207\Symfony\Component\Console\Command\Command;
-use RectorPrefix202207\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202207\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202207\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202207\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202207\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202208\Symfony\Component\Console\Command\Command;
+use RectorPrefix202208\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202208\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202208\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 final class InitCommand extends Command
 {
     /**

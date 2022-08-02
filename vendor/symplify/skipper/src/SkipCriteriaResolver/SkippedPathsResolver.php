@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202207\Symplify\Skipper\SkipCriteriaResolver;
+namespace RectorPrefix202208\Symplify\Skipper\SkipCriteriaResolver;
 
-use RectorPrefix202207\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202207\Symplify\Skipper\ValueObject\Option;
-use RectorPrefix202207\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202208\Symplify\Skipper\ValueObject\Option;
+use RectorPrefix202208\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 /**
  * @see \Symplify\Skipper\Tests\SkipCriteriaResolver\SkippedPathsResolver\SkippedPathsResolverTest
  */
