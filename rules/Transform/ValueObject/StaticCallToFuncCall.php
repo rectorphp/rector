@@ -8,8 +8,8 @@ use Rector\Core\Validation\RectorAssert;
 final class StaticCallToFuncCall
 {
     /**
+     * @var class-string
      * @readonly
-     * @var string
      */
     private $class;
     /**
@@ -22,6 +22,9 @@ final class StaticCallToFuncCall
      * @var string
      */
     private $function;
+    /**
+     * @param class-string $class
+     */
     public function __construct(string $class, string $method, string $function)
     {
         $this->class = $class;

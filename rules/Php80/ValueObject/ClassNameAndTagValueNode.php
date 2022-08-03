@@ -9,8 +9,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 final class ClassNameAndTagValueNode
 {
     /**
+     * @var class-string
      * @readonly
-     * @var string
      */
     private $enumClass;
     /**
@@ -19,6 +19,7 @@ final class ClassNameAndTagValueNode
      */
     private $tagValueNode;
     /**
+     * @param class-string $enumClass
      * @param \PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode|\PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode $tagValueNode
      */
     public function __construct(string $enumClass, $tagValueNode)

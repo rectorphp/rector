@@ -8,8 +8,8 @@ use Rector\Core\Validation\RectorAssert;
 final class ChangeConstantVisibility
 {
     /**
+     * @var class-string
      * @readonly
-     * @var string
      */
     private $class;
     /**
@@ -22,6 +22,9 @@ final class ChangeConstantVisibility
      * @var int
      */
     private $visibility;
+    /**
+     * @param class-string $class
+     */
     public function __construct(string $class, string $constant, int $visibility)
     {
         $this->class = $class;

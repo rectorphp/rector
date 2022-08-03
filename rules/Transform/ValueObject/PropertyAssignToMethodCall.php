@@ -8,8 +8,8 @@ use Rector\Core\Validation\RectorAssert;
 final class PropertyAssignToMethodCall
 {
     /**
+     * @var class-string
      * @readonly
-     * @var string
      */
     private $class;
     /**
@@ -22,6 +22,9 @@ final class PropertyAssignToMethodCall
      * @var string
      */
     private $newMethodName;
+    /**
+     * @param class-string $class
+     */
     public function __construct(string $class, string $oldPropertyName, string $newMethodName)
     {
         $this->class = $class;

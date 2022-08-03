@@ -13,7 +13,7 @@ final class ArrayFuncCallToMethodCall implements ArgumentFuncCallToMethodCallInt
      */
     private $function;
     /**
-     * @var non-empty-string
+     * @var class-string
      * @readonly
      */
     private $class;
@@ -29,7 +29,7 @@ final class ArrayFuncCallToMethodCall implements ArgumentFuncCallToMethodCallInt
     private $nonArrayMethod;
     /**
      * @param non-empty-string $function
-     * @param non-empty-string $class
+     * @param class-string $class
      * @param non-empty-string $arrayMethod
      * @param non-empty-string $nonArrayMethod
      */

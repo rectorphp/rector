@@ -8,8 +8,8 @@ use Rector\Core\Validation\RectorAssert;
 final class ReplaceStringWithClassConstant
 {
     /**
+     * @var class-string
      * @readonly
-     * @var string
      */
     private $class;
     /**
@@ -33,6 +33,7 @@ final class ReplaceStringWithClassConstant
      */
     private $caseInsensitive = \false;
     /**
+     * @param class-string $class
      * @param class-string $classWithConstants
      */
     public function __construct(string $class, string $method, int $argPosition, string $classWithConstants, bool $caseInsensitive = \false)
