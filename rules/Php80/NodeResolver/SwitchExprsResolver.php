@@ -20,10 +20,11 @@ final class SwitchExprsResolver
      */
     public function resolve(Switch_ $switch) : array
     {
+        $newSwitch = clone $switch;
         $condAndExpr = [];
         $collectionEmptyCasesCond = [];
-        $this->moveDefaultCaseToLast($switch);
-        foreach ($switch->cases as $key => $case) {
+        $this->moveDefaultCaseToLast($newSwitch);
+        foreach ($newSwitch->cases as $key => $case) {
             \assert(\is_int($key));
             if (!$this->isValidCase($case)) {
                 return [];
@@ -32,7 +33,7 @@ final class SwitchExprsResolver
                 $collectionEmptyCasesCond[$key] = $case->cond;
             }
         }
-        foreach ($switch->cases as $key => $case) {
+        foreach ($newSwitch->cases as $key => $case) {
             if ($case->stmts === []) {
                 continue;
             }
@@ -80,6 +81,10 @@ final class SwitchExprsResolver
             }
             // not has next? default is at the end, no need move
             if (!isset($switch->cases[$key + 1])) {
+                return;
+            }
+            // current default has no stmt? keep as is as rely to next case
+            if ($case->stmts === []) {
                 return;
             }
             for ($loop = $key - 1; $loop >= 0; --$loop) {
