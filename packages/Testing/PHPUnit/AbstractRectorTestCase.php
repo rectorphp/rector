@@ -94,6 +94,13 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         return StaticFixtureFinder::yieldDirectoryExclusively($directory, $suffix);
     }
+    /**
+     * @return Iterator<string, array<int, SmartFileInfo>>
+     */
+    protected function yieldFilesWithPathnameFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
+    {
+        return StaticFixtureFinder::yieldDirectoryExclusivelyWithRelativePathname($directory, $suffix);
+    }
     protected function isWindows() : bool
     {
         return \strncasecmp(\PHP_OS, 'WIN', 3) === 0;

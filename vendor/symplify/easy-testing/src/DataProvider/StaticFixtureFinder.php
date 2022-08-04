@@ -33,7 +33,7 @@ final class StaticFixtureFinder
         return self::yieldFileInfos($fileInfos);
     }
     /**
-     * @return Iterator<string, array<int, SplFileInfo>>
+     * @return Iterator<string, array<int, SmartFileInfo>>
      */
     public static function yieldDirectoryWithRelativePathname(string $directory, string $suffix = '*.php.inc') : Iterator
     {
@@ -41,7 +41,7 @@ final class StaticFixtureFinder
         return self::yieldFileInfosWithRelativePathname($fileInfos);
     }
     /**
-     * @return Iterator<string, array<int, SplFileInfo>>
+     * @return Iterator<string, array<int, SmartFileInfo>>
      */
     public static function yieldDirectoryExclusivelyWithRelativePathname(string $directory, string $suffix = '*.php.inc') : Iterator
     {
@@ -64,7 +64,7 @@ final class StaticFixtureFinder
     }
     /**
      * @param SplFileInfo[] $fileInfos
-     * @return Iterator<string, array<int, SplFileInfo>>
+     * @return Iterator<string, array<int, SmartFileInfo>>
      */
     private static function yieldFileInfosWithRelativePathname(array $fileInfos) : Iterator
     {
