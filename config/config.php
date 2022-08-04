@@ -83,7 +83,7 @@ return static function (RectorConfig $rectorConfig) : void {
     ]);
     // psr-4
     $services->alias(PSR4AutoloadNamespaceMatcherInterface::class, PSR4NamespaceMatcher::class);
-    $services->load('Rector\\', __DIR__ . '/../rules')->exclude([__DIR__ . '/../rules/*/ValueObject/*', __DIR__ . '/../rules/*/Rector/*', __DIR__ . '/../rules/*/Contract/*', __DIR__ . '/../rules/*/Exception/*', __DIR__ . '/../rules/*/Enum/*', __DIR__ . '/../rules/DowngradePhp80/Reflection/SimplePhpParameterReflection.php']);
+    $services->load('Rector\\', __DIR__ . '/../rules')->exclude([__DIR__ . '/../rules/*/ValueObject/*', __DIR__ . '/../rules/*/Rector/*', __DIR__ . '/../rules/*/Contract/*', __DIR__ . '/../rules/*/Exception/*', __DIR__ . '/../rules/*/Enum/*']);
     // parallel
     $services->set(ParametersMerger::class);
     // use faster in-memory cache in CI.
