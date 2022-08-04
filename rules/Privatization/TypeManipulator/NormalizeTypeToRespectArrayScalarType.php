@@ -4,10 +4,11 @@ declare (strict_types=1);
 namespace Rector\Privatization\TypeManipulator;
 
 use PhpParser\Node;
-use PHPStan\Type\Accessory\NonEmptyArrayType;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -22,7 +23,10 @@ final class NormalizeTypeToRespectArrayScalarType
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    public function normalizeToArray(Type $type, ?Node $returnNode) : Type
+    /**
+     * @return \PHPStan\Type\ArrayType|\PHPStan\Type\UnionType|\PHPStan\Type\Type
+     */
+    public function normalizeToArray(Type $type, ?Node $returnNode)
     {
         if ($returnNode === null) {
             return $type;
@@ -49,11 +53,19 @@ final class NormalizeTypeToRespectArrayScalarType
         }
         $types = $itemType->getTypes();
         foreach ($types as $key => $itemTypeType) {
-            if ($itemTypeType instanceof NonEmptyArrayType) {
-                unset($types[$key]);
+            if ($itemTypeType instanceof ObjectType && $itemTypeType->getClassReflection() instanceof ClassReflection) {
+                continue;
             }
+            if ($itemTypeType instanceof ArrayType) {
+                continue;
+            }
+            unset($types[$key]);
         }
-        $arrayItemType = \count($types) === 1 ? \array_pop($types) : new IntersectionType($types);
+        if ($types === []) {
+            $arrayItemType = new MixedType();
+        } else {
+            $arrayItemType = \count($types) === 1 ? \array_pop($types) : new IntersectionType($types);
+        }
         return new ArrayType($arrayType->getKeyType(), $arrayItemType);
     }
     private function normalizeUnionType(UnionType $unionType) : UnionType
