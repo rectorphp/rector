@@ -51,8 +51,7 @@
         "symplify\/config-transformer": "<11.0.9",
         "symplify\/easy-ci": "<11.0.9",
         "symplify\/coding-standard": "<11.0.9",
-        "symplify\/easy-parallel": "<11.0.9",
-        "symplify\/neon-config-dumper": "<11.0.9"
+        "symplify\/easy-parallel": "<11.0.9"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

@@ -4,7 +4,10 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
@@ -87,13 +90,18 @@ CODE_SAMPLE
     }
     /**
      * @param If_ $node
+     * @return Stmt[]|Foreach_|null
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
         if (!$this->isUselessBeforeForeachCheck($node)) {
             return null;
         }
+        /** @var Foreach_ $stmt */
         $stmt = $node->stmts[0];
+        if ($node->cond instanceof Assign && $this->nodeComparator->areNodesEqual($node->cond->var, $stmt->expr)) {
+            return [new Expression($node->cond), $stmt];
+        }
         $ifComments = $node->getAttribute(AttributeKey::COMMENTS) ?? [];
         $stmtComments = $stmt->getAttribute(AttributeKey::COMMENTS) ?? [];
         $comments = \array_merge($ifComments, $stmtComments);
