@@ -1,4 +1,4 @@
-# 38 Rules Overview
+# 37 Rules Overview
 
 ## AddNextrasDatePickerToDateControlRector
 
@@ -16,36 +16,6 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
          $form = new Form();
 -        $form->addDatePicker('key', 'Label');
 +        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
-     }
- }
-```
-
-<br>
-
-## AnnotateMagicalControlArrayAccessRector
-
-Change magic `$this["some_component"]` to variable assign with `@var` annotation
-
-- class: [`Rector\Nette\Rector\ArrayDimFetch\AnnotateMagicalControlArrayAccessRector`](../src/Rector/ArrayDimFetch/AnnotateMagicalControlArrayAccessRector.php)
-
-```diff
- use Nette\Application\UI\Presenter;
- use Nette\Application\UI\Form;
-
- final class SomePresenter extends Presenter
- {
-     public function run()
-     {
--        if ($this['some_form']->isSubmitted()) {
-+        /** @var \Nette\Application\UI\Form $someForm */
-+        $someForm = $this['some_form'];
-+        if ($someForm->isSubmitted()) {
-         }
-     }
-
-     protected function createComponentSomeForm()
-     {
-         return new Form();
      }
  }
 ```
@@ -251,7 +221,10 @@ use Rector\Config\RectorConfig;
 use Rector\Nette\Rector\Class_\FormDataRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FormDataRector::class, [Rector\Nette\Rector\Class_\FormDataRector::FORM_DATA_CLASS_PARENT: '', Rector\Nette\Rector\Class_\FormDataRector::FORM_DATA_CLASS_TRAITS: []]);
+    $rectorConfig->ruleWithConfiguration(FormDataRector::class, [
+        FormDataRector::FORM_DATA_CLASS_PARENT => '',
+        FormDataRector::FORM_DATA_CLASS_TRAITS => [],
+    ]);
 };
 ```
 
@@ -855,7 +828,10 @@ use Rector\Config\RectorConfig;
 use Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(TemplateTypeBasedOnPresenterTemplateParametersRector::class, [Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_PARENT: '', Rector\Nette\Rector\Class_\TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_TRAITS: []]);
+    $rectorConfig->ruleWithConfiguration(TemplateTypeBasedOnPresenterTemplateParametersRector::class, [
+        TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_PARENT => '',
+        TemplateTypeBasedOnPresenterTemplateParametersRector::TEMPLATE_CLASS_TRAITS => [],
+    ]);
 };
 ```
 

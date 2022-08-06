@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\PhpDocParser;
 
-use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class DoctrineDocBlockResolver
@@ -24,9 +24,9 @@ final class DoctrineDocBlockResolver
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function isInDoctrineEntityClass(Node $node) : bool
+    public function isInDoctrineEntityClass(ClassMethod $classMethod) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
         if (!$class instanceof Class_) {
             return \false;
         }

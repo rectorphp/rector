@@ -87,7 +87,7 @@ CODE_SAMPLE
         foreach ($implements as $key => $name) {
             $fqnName = $this->getName($name);
             if (\in_array($fqnName, $alreadyAddedNames, \true)) {
-                $this->nodeRemover->removeImplements($class, $key);
+                unset($class->implements[$key]);
                 continue;
             }
             $alreadyAddedNames[] = $fqnName;

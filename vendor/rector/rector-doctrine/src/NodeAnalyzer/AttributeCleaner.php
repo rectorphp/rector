@@ -10,6 +10,9 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\NodeNameResolver\NodeNameResolver;
+/**
+ * @api
+ */
 final class AttributeCleaner
 {
     /**

@@ -87,6 +87,7 @@ CODE_SAMPLE;
      */
     protected $betterNodeFinder;
     /**
+     * @deprecated Use service directly or return changes nodes
      * @var \Rector\NodeRemoval\NodeRemover
      */
     protected $nodeRemover;

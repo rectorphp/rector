@@ -23,6 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends AbstractRector
 {
     /**
+     * @var bool
+     */
+    private $hasChanged = \false;
+    /**
      * @readonly
      * @var \Rector\Doctrine\NodeManipulator\ConstructorManipulator
      */
@@ -96,27 +100,32 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        $this->hasChanged = \false;
         foreach ($node->getProperties() as $property) {
             $this->refactorProperty($property, $node);
         }
+        if (!$this->hasChanged) {
+            return null;
+        }
         return $node;
     }
-    private function refactorProperty(Property $property, Class_ $class) : ?Property
+    private function refactorProperty(Property $property, Class_ $class) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\Column');
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return null;
+            return;
         }
         $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
         if ($type !== 'datetime') {
-            return null;
+            return;
         }
         $node = $this->constructorAssignPropertyAnalyzer->resolveConstructorAssign($property);
         // 0. already has default
         if ($node !== null) {
-            return null;
+            return;
         }
+        $this->hasChanged = \true;
         // 1. remove default options from database level
         $options = $doctrineAnnotationTagValueNode->getValue('options');
         if ($options instanceof CurlyListNode) {
@@ -131,7 +140,6 @@ CODE_SAMPLE
         // 3. remove default from property
         $onlyProperty = $property->props[0];
         $onlyProperty->default = null;
-        return $property;
     }
     private function refactorClass(Class_ $class, Property $property) : void
     {

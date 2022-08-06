@@ -27,7 +27,8 @@
         "rector\/phpstan-rules": "^0.5",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "phpstan\/phpstan-strict-rules": "^1.3",
-        "symplify\/vendor-patches": "^11.0"
+        "symplify\/vendor-patches": "^11.0",
+        "symplify\/easy-ci": "^11.0"
     },
     "autoload": {
         "psr-4": {

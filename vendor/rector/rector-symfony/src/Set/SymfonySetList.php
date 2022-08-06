@@ -13,6 +13,10 @@ final class SymfonySetList implements SetListInterface
     /**
      * @var string
      */
+    public const SYMFONY_25 = __DIR__ . '/../../config/sets/symfony/symfony25.php';
+    /**
+     * @var string
+     */
     public const SYMFONY_26 = __DIR__ . '/../../config/sets/symfony/symfony26.php';
     /**
      * @var string

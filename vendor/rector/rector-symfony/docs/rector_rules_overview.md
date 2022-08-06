@@ -1,4 +1,4 @@
-# 66 Rules Overview
+# 68 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -62,6 +62,24 @@ Collect routes from Symfony project router and add Route annotation to controlle
      {
      }
  }
+```
+
+<br>
+
+## AddViolationToBuildViolationRector
+
+Change `$context->addViolationAt` to `$context->buildViolation` on Validator ExecutionContext
+
+- class: [`Rector\Symfony\Rector\MethodCall\AddViolationToBuildViolationRector`](../src/Rector/MethodCall/AddViolationToBuildViolationRector.php)
+
+```diff
+-$context->addViolationAt('property', 'The value {{ value }} is invalid.', array(
+-    '{{ value }}' => $invalidValue,
+-));
++$context->buildViolation('The value {{ value }} is invalid.')
++    ->atPath('property')
++    ->setParameter('{{ value }}', $invalidValue)
++    ->addViolation();
 ```
 
 <br>
@@ -1330,6 +1348,25 @@ Change RouteCollectionBuilder to RoutingConfiguratorRector
 +        $routes->add('admin_dashboard', '/admin')
 +            ->controller('App\Controller\AdminController::dashboard')
 +    }}
+```
+
+<br>
+
+## ServiceSetStringNameToClassNameRector
+
+Change `$service->set()` string names to class-type-based names, to allow `$container->get()` by types in Symfony 2.8
+
+- class: [`Rector\Symfony\Rector\MethodCall\ServiceSetStringNameToClassNameRector`](../src/Rector/MethodCall/ServiceSetStringNameToClassNameRector.php)
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+
+-    $services->set('some_name', App\SomeClass::class);
++    $services->set('app\\someclass', App\SomeClass::class);
+ };
 ```
 
 <br>
