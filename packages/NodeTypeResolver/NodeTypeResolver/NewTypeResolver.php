@@ -12,12 +12,12 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\ObjectWithoutClassTypeWithParentTypes;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 /**
  * @implements NodeTypeResolverInterface<New_>
@@ -73,23 +73,19 @@ final class NewTypeResolver implements NodeTypeResolverInterface
         if (!$new->class instanceof Class_) {
             return new ObjectWithoutClassType();
         }
-        $types = [];
+        $directParentTypes = [];
         /** @var Class_ $class */
         $class = $new->class;
         if ($class->extends !== null) {
             $parentClass = (string) $class->extends;
-            $types[] = new FullyQualifiedObjectType($parentClass);
+            $directParentTypes[] = new FullyQualifiedObjectType($parentClass);
         }
         foreach ($class->implements as $implement) {
             $parentClass = (string) $implement;
-            $types[] = new FullyQualifiedObjectType($parentClass);
+            $directParentTypes[] = new FullyQualifiedObjectType($parentClass);
         }
-        if (\count($types) > 1) {
-            $unionType = new UnionType($types);
-            return new ObjectWithoutClassType($unionType);
-        }
-        if (\count($types) === 1) {
-            return new ObjectWithoutClassType($types[0]);
+        if ($directParentTypes !== []) {
+            return new ObjectWithoutClassTypeWithParentTypes($directParentTypes);
         }
         return new ObjectWithoutClassType();
     }
