@@ -2988,6 +2988,7 @@ return array(
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ControllerRenderMethodAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ControllerRenderMethodAnalyzer.php',
+    'Rector\\TypeDeclaration\\NodeAnalyzer\\PHPUnitDataProviderResolver' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/PHPUnitDataProviderResolver.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnFilter\\ExclusiveNativeCallLikeReturnMatcher' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnFilter/ExclusiveNativeCallLikeReturnMatcher.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\AlwaysStrictReturnAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/AlwaysStrictReturnAnalyzer.php',
     'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictBoolReturnTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictBoolReturnTypeAnalyzer.php',

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
@@ -21,6 +22,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\Privatization\TypeManipulator\NormalizeTypeToRespectArrayScalarType;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
+use Rector\TypeDeclaration\NodeAnalyzer\PHPUnitDataProviderResolver;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\IterableTypeAnalyzer;
@@ -79,7 +81,12 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
      * @var \Rector\TypeDeclaration\TypeAnalyzer\IterableTypeAnalyzer
      */
     private $iterableTypeAnalyzer;
-    public function __construct(ReturnTypeInferer $returnTypeInferer, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, AdvancedArrayAnalyzer $advancedArrayAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType, ReturnTagRemover $returnTagRemover, DetailedTypeAnalyzer $detailedTypeAnalyzer, TypeNormalizer $typeNormalizer, IterableTypeAnalyzer $iterableTypeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\PHPUnitDataProviderResolver
+     */
+    private $phpUnitDataProviderResolver;
+    public function __construct(ReturnTypeInferer $returnTypeInferer, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, AdvancedArrayAnalyzer $advancedArrayAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, NormalizeTypeToRespectArrayScalarType $normalizeTypeToRespectArrayScalarType, ReturnTagRemover $returnTagRemover, DetailedTypeAnalyzer $detailedTypeAnalyzer, TypeNormalizer $typeNormalizer, IterableTypeAnalyzer $iterableTypeAnalyzer, PHPUnitDataProviderResolver $phpUnitDataProviderResolver)
     {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
@@ -90,6 +97,7 @@ final class AddArrayReturnDocTypeRector extends AbstractRector
         $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
         $this->typeNormalizer = $typeNormalizer;
         $this->iterableTypeAnalyzer = $iterableTypeAnalyzer;
+        $this->phpUnitDataProviderResolver = $phpUnitDataProviderResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -138,6 +146,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($this->isDataProviderClassMethod($node)) {
+            return null;
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($this->shouldSkip($node, $phpDocInfo)) {
             return null;
@@ -252,5 +263,16 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function isDataProviderClassMethod(ClassMethod $classMethod) : bool
+    {
+        // should skip data provider, because complex structures
+        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
+        if (!$class instanceof Class_) {
+            return \false;
+        }
+        $dataProviderMethodNames = $this->phpUnitDataProviderResolver->resolveDataProviderMethodNames($class);
+        $classMethodName = $classMethod->name->toString();
+        return \in_array($classMethodName, $dataProviderMethodNames, \true);
     }
 }
