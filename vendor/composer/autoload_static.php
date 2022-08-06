@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit15b3e3f37c257ff0b0f8af72563cf505
+class ComposerStaticInitf98aa8c3d8a3ba79b44f6155b57e7db2
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2438,7 +2438,6 @@ class ComposerStaticInit15b3e3f37c257ff0b0f8af72563cf505
         'Rector\\Nette\\NodeFinder\\ParamFinder' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeFinder/ParamFinder.php',
         'Rector\\Nette\\Rector\\Assign\\ArrayAccessGetControlToGetComponentMethodCallRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Assign/ArrayAccessGetControlToGetComponentMethodCallRector.php',
         'Rector\\Nette\\Rector\\Assign\\ArrayAccessSetControlToAddComponentMethodCallRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Assign/ArrayAccessSetControlToAddComponentMethodCallRector.php',
-        'Rector\\Nette\\Rector\\Assign\\MakeGetComponentAssignAnnotatedRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Assign/MakeGetComponentAssignAnnotatedRector.php',
         'Rector\\Nette\\Rector\\ClassMethod\\MergeTemplateSetFileToTemplateRenderRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/MergeTemplateSetFileToTemplateRenderRector.php',
         'Rector\\Nette\\Rector\\ClassMethod\\RemoveParentAndNameFromComponentConstructorRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/RemoveParentAndNameFromComponentConstructorRector.php',
         'Rector\\Nette\\Rector\\ClassMethod\\RenderMethodParamToTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php',
@@ -3389,9 +3388,9 @@ class ComposerStaticInit15b3e3f37c257ff0b0f8af72563cf505
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit15b3e3f37c257ff0b0f8af72563cf505::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit15b3e3f37c257ff0b0f8af72563cf505::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit15b3e3f37c257ff0b0f8af72563cf505::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf98aa8c3d8a3ba79b44f6155b57e7db2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf98aa8c3d8a3ba79b44f6155b57e7db2::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf98aa8c3d8a3ba79b44f6155b57e7db2::$classMap;
 
         }, null, ClassLoader::class);
     }
