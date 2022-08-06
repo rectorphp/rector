@@ -9,8 +9,8 @@ use Rector\Renaming\Contract\RenameClassConstFetchInterface;
 final class RenameClassAndConstFetch implements RenameClassConstFetchInterface
 {
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $oldClass;
     /**
@@ -19,8 +19,8 @@ final class RenameClassAndConstFetch implements RenameClassConstFetchInterface
      */
     private $oldConstant;
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $newClass;
     /**
@@ -28,10 +28,6 @@ final class RenameClassAndConstFetch implements RenameClassConstFetchInterface
      * @var string
      */
     private $newConstant;
-    /**
-     * @param class-string $oldClass
-     * @param class-string $newClass
-     */
     public function __construct(string $oldClass, string $oldConstant, string $newClass, string $newConstant)
     {
         $this->oldClass = $oldClass;

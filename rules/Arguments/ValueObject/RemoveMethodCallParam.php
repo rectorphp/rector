@@ -7,8 +7,8 @@ use PHPStan\Type\ObjectType;
 final class RemoveMethodCallParam
 {
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $class;
     /**
@@ -21,9 +21,6 @@ final class RemoveMethodCallParam
      * @var int
      */
     private $paramPosition;
-    /**
-     * @param class-string $class
-     */
     public function __construct(string $class, string $methodName, int $paramPosition)
     {
         $this->class = $class;

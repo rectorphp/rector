@@ -13,8 +13,8 @@ final class NewToStaticCall
      */
     private $type;
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $staticCallClass;
     /**
@@ -22,9 +22,6 @@ final class NewToStaticCall
      * @var string
      */
     private $staticCallMethod;
-    /**
-     * @param class-string $staticCallClass
-     */
     public function __construct(string $type, string $staticCallClass, string $staticCallMethod)
     {
         $this->type = $type;

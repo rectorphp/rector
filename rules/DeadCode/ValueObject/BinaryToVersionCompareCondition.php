@@ -12,8 +12,8 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
      */
     private $versionCompareCondition;
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $binaryClass;
     /**
@@ -22,7 +22,6 @@ final class BinaryToVersionCompareCondition implements ConditionInterface
      */
     private $expectedValue;
     /**
-     * @param class-string $binaryClass
      * @param mixed $expectedValue
      */
     public function __construct(\Rector\DeadCode\ValueObject\VersionCompareCondition $versionCompareCondition, string $binaryClass, $expectedValue)

@@ -9,8 +9,8 @@ use Rector\Renaming\Contract\MethodCallRenameInterface;
 final class MethodCallRename implements MethodCallRenameInterface
 {
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $class;
     /**
@@ -23,9 +23,6 @@ final class MethodCallRename implements MethodCallRenameInterface
      * @var string
      */
     private $newMethod;
-    /**
-     * @param class-string $class
-     */
     public function __construct(string $class, string $oldMethod, string $newMethod)
     {
         $this->class = $class;

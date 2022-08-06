@@ -12,8 +12,8 @@ final class StringToClassConstant
      */
     private $string;
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $class;
     /**
@@ -21,9 +21,6 @@ final class StringToClassConstant
      * @var string
      */
     private $constant;
-    /**
-     * @param class-string $class
-     */
     public function __construct(string $string, string $class, string $constant)
     {
         $this->string = $string;

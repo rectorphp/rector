@@ -13,8 +13,8 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
      */
     public const ANY_VALUE_BEFORE = '*ANY_VALUE_BEFORE*';
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $class;
     /**
@@ -38,7 +38,6 @@ final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueIn
      */
     private $valueAfter;
     /**
-     * @param class-string $class
      * @param int<0, max> $position
      * @param mixed $valueBefore
      * @param mixed $valueAfter

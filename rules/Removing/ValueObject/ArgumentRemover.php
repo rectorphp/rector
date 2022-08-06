@@ -8,8 +8,8 @@ use Rector\Core\Validation\RectorAssert;
 final class ArgumentRemover
 {
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $class;
     /**
@@ -28,7 +28,6 @@ final class ArgumentRemover
      */
     private $value;
     /**
-     * @param class-string $class
      * @param mixed $value
      */
     public function __construct(string $class, string $method, int $position, $value)

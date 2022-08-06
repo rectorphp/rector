@@ -9,8 +9,8 @@ use Rector\Renaming\Contract\MethodCallRenameInterface;
 final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
 {
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $class;
     /**
@@ -29,7 +29,6 @@ final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
      */
     private $arrayKey;
     /**
-     * @param class-string $class
      * @param mixed $arrayKey
      */
     public function __construct(string $class, string $oldMethod, string $newMethod, $arrayKey)

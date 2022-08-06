@@ -13,8 +13,8 @@ final class ArgumentFuncCallToMethodCall implements ArgumentFuncCallToMethodCall
      */
     private $function;
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $class;
     /**
@@ -27,9 +27,6 @@ final class ArgumentFuncCallToMethodCall implements ArgumentFuncCallToMethodCall
      * @var string|null
      */
     private $methodIfNoArgs;
-    /**
-     * @param class-string $class
-     */
     public function __construct(string $function, string $class, ?string $methodIfArgs = null, ?string $methodIfNoArgs = null)
     {
         $this->function = $function;
