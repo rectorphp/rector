@@ -1,4 +1,4 @@
-# 37 Rules Overview
+# 33 Rules Overview
 
 ## AddNextrasDatePickerToDateControlRector
 
@@ -16,50 +16,6 @@ Nextras/Form upgrade of addDatePicker method call to DateControl assign
          $form = new Form();
 -        $form->addDatePicker('key', 'Label');
 +        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
-     }
- }
-```
-
-<br>
-
-## ArrayAccessGetControlToGetComponentMethodCallRector
-
-Change magic arrays access get, to explicit `$this->getComponent(...)` method
-
-- class: [`Rector\Nette\Rector\Assign\ArrayAccessGetControlToGetComponentMethodCallRector`](../src/Rector/Assign/ArrayAccessGetControlToGetComponentMethodCallRector.php)
-
-```diff
- use Nette\Application\UI\Presenter;
-
- class SomeClass extends Presenter
- {
-     public function some()
-     {
--        $someControl = $this['whatever'];
-+        $someControl = $this->getComponent('whatever');
-     }
- }
-```
-
-<br>
-
-## ArrayAccessSetControlToAddComponentMethodCallRector
-
-Change magic arrays access set, to explicit `$this->setComponent(...)` method
-
-- class: [`Rector\Nette\Rector\Assign\ArrayAccessSetControlToAddComponentMethodCallRector`](../src/Rector/Assign/ArrayAccessSetControlToAddComponentMethodCallRector.php)
-
-```diff
- use Nette\Application\UI\Control;
- use Nette\Application\UI\Presenter;
-
- class SomeClass extends Presenter
- {
-     public function some()
-     {
-         $someControl = new Control();
--        $this['whatever'] = $someControl;
-+        $this->addComponent($someControl, 'whatever');
      }
  }
 ```
@@ -336,40 +292,6 @@ Change magic `addClass()` etc. calls on Html to explicit methods
 -        $html->setClass('first');
 +        $html->appendAttribute('class', 'first');
      }
- }
-```
-
-<br>
-
-## MakeGetComponentAssignAnnotatedRector
-
-Add doc type for magic `$control->getComponent(...)` assign
-
-- class: [`Rector\Nette\Rector\Assign\MakeGetComponentAssignAnnotatedRector`](../src/Rector/Assign/MakeGetComponentAssignAnnotatedRector.php)
-
-```diff
- use Nette\Application\UI\Control;
-
- final class SomeClass
- {
-     public function run()
-     {
-         $externalControl = new ExternalControl();
-+        /** @var AnotherControl $anotherControl */
-         $anotherControl = $externalControl->getComponent('another');
-     }
- }
-
- final class ExternalControl extends Control
- {
-     public function createComponentAnother(): AnotherControl
-     {
-         return new AnotherControl();
-     }
- }
-
- final class AnotherControl extends Control
- {
  }
 ```
 
@@ -712,28 +634,6 @@ Change setClass with class and arguments to separated methods
 -            ->setClass('SomeClass', [1, 2]);
 +            ->setFactory('SomeClass', [1, 2]);
      }
- }
-```
-
-<br>
-
-## StartsWithFunctionToNetteUtilsStringsRector
-
-Use `Nette\Utils\Strings::startsWith()` over bare string-functions
-
-- class: [`Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector`](../src/Rector/Identical/StartsWithFunctionToNetteUtilsStringsRector.php)
-
-```diff
-+use Nette\Utils\Strings;
-+
- class SomeClass
- {
- public function start($needle)
- {
-     $content = 'Hi, my name is Tom';
--    $yes = substr($content, 0, strlen($needle)) === $needle;
-+    $yes = Strings::startsWith($content, $needle);
- }
  }
 ```
 

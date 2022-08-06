@@ -10,7 +10,6 @@ use Rector\Nette\Rector\FuncCall\PregFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\FuncCall\PregMatchFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\FuncCall\SubstrStrlenFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector;
-use Rector\Nette\Rector\Identical\StartsWithFunctionToNetteUtilsStringsRector;
 use Rector\Nette\Rector\LNumber\ReplaceTimeNumberWithDateTimeConstantRector;
 use Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector;
 use Rector\Transform\Rector\FuncCall\FuncCallToStaticCallRector;
@@ -20,7 +19,6 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->ruleWithConfiguration(FuncCallToStaticCallRector::class, [new FuncCallToStaticCall('file_get_contents', 'Nette\\Utils\\FileSystem', 'read'), new FuncCallToStaticCall('unlink', 'Nette\\Utils\\FileSystem', 'delete'), new FuncCallToStaticCall('rmdir', 'Nette\\Utils\\FileSystem', 'delete')]);
     $rectorConfig->rule(StrposToStringsContainsRector::class);
     $rectorConfig->rule(SubstrStrlenFunctionToNetteUtilsStringsRector::class);
-    $rectorConfig->rule(StartsWithFunctionToNetteUtilsStringsRector::class);
     $rectorConfig->rule(PregMatchFunctionToNetteUtilsStringsRector::class);
     $rectorConfig->rule(PregFunctionToNetteUtilsStringsRector::class);
     $rectorConfig->rule(EndsWithFunctionToNetteUtilsStringsRector::class);
