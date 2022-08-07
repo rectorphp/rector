@@ -2339,12 +2339,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "8e8149656ac7c675c9b156cf965abb9925cfdbfa"
+                "reference": "f88fb132d5a7b27482c33d5e3b668f1f4f02d951"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/8e8149656ac7c675c9b156cf965abb9925cfdbfa",
-                "reference": "8e8149656ac7c675c9b156cf965abb9925cfdbfa",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/f88fb132d5a7b27482c33d5e3b668f1f4f02d951",
+                "reference": "f88fb132d5a7b27482c33d5e3b668f1f4f02d951",
                 "shasum": ""
             },
             "require": {
@@ -2373,7 +2373,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-08-06T19:26:16+00:00",
+            "time": "2022-08-07T16:18:47+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -3253,12 +3253,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/astral.git",
-                "reference": "93943dee164859b80bc86acb2f786dcabcd34816"
+                "reference": "169b669a5ad25f12f00ed750e66580d9bf04606e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/93943dee164859b80bc86acb2f786dcabcd34816",
-                "reference": "93943dee164859b80bc86acb2f786dcabcd34816",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/astral\/zipball\/169b669a5ad25f12f00ed750e66580d9bf04606e",
+                "reference": "169b669a5ad25f12f00ed750e66580d9bf04606e",
                 "shasum": ""
             },
             "require": {
@@ -3298,7 +3298,7 @@
                 "phpunit\/phpunit": "^9.5.21",
                 "symplify\/easy-testing": "^11.1"
             },
-            "time": "2022-08-04T20:17:32+00:00",
+            "time": "2022-08-07T22:51:20+00:00",
             "default-branch": true,
             "type": "phpstan-extension",
             "extra": {

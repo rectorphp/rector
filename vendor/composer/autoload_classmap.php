@@ -1020,7 +1020,6 @@ return array(
     'RectorPrefix202208\\Symplify\\Astral\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => $vendorDir . '/symplify/astral/src/Contract/NodeValueResolver/NodeValueResolverInterface.php',
     'RectorPrefix202208\\Symplify\\Astral\\Exception\\ShouldNotHappenException' => $vendorDir . '/symplify/astral/src/Exception/ShouldNotHappenException.php',
     'RectorPrefix202208\\Symplify\\Astral\\Naming\\SimpleNameResolver' => $vendorDir . '/symplify/astral/src/Naming/SimpleNameResolver.php',
-    'RectorPrefix202208\\Symplify\\Astral\\NodeAnalyzer\\NetteTypeAnalyzer' => $vendorDir . '/symplify/astral/src/NodeAnalyzer/NetteTypeAnalyzer.php',
     'RectorPrefix202208\\Symplify\\Astral\\NodeNameResolver\\ArgNodeNameResolver' => $vendorDir . '/symplify/astral/src/NodeNameResolver/ArgNodeNameResolver.php',
     'RectorPrefix202208\\Symplify\\Astral\\NodeNameResolver\\AttributeNodeNameResolver' => $vendorDir . '/symplify/astral/src/NodeNameResolver/AttributeNodeNameResolver.php',
     'RectorPrefix202208\\Symplify\\Astral\\NodeNameResolver\\ClassLikeNodeNameResolver' => $vendorDir . '/symplify/astral/src/NodeNameResolver/ClassLikeNodeNameResolver.php',

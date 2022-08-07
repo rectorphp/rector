@@ -19,7 +19,6 @@ services:
     - Symplify\PackageBuilder\Php\TypeChecker
     - Symplify\SmartFileSystem\SmartFileSystem
 
-    - Symplify\Astral\NodeAnalyzer\NetteTypeAnalyzer
     - Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
 
     - Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser

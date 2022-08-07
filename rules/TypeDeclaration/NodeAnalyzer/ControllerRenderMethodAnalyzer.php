@@ -8,15 +8,10 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
-use RectorPrefix202208\Symplify\Astral\Naming\SimpleNameResolver;
 final class ControllerRenderMethodAnalyzer
 {
-    /**
-     * @readonly
-     * @var \Symplify\Astral\Naming\SimpleNameResolver
-     */
-    private $simpleNameResolver;
     /**
      * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
@@ -32,9 +27,8 @@ final class ControllerRenderMethodAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(SimpleNameResolver $simpleNameResolver, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
+    public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
     {
-        $this->simpleNameResolver = $simpleNameResolver;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
@@ -59,7 +53,13 @@ final class ControllerRenderMethodAnalyzer
         if (!$classMethod->isPublic()) {
             return \false;
         }
-        return $this->simpleNameResolver->isNames($classMethod->name, ['render*', 'handle*', 'action*']);
+        $classMethodName = $classMethod->name->toString();
+        foreach (['render', 'handle', 'action'] as $methodPrefix) {
+            if (\strncmp($classMethodName, $methodPrefix, \strlen($methodPrefix)) === 0) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function isSymfonyRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {
@@ -69,7 +69,11 @@ final class ControllerRenderMethodAnalyzer
         if (!$classMethod->isPublic()) {
             return \false;
         }
-        if ($this->simpleNameResolver->isNames($classMethod->name, ['__invoke', '*action'])) {
+        $classMethodName = $classMethod->name->toString();
+        if ($classMethodName === MethodName::INVOKE) {
+            return \true;
+        }
+        if (\substr_compare($classMethodName, 'action', -\strlen('action')) === 0) {
             return \true;
         }
         if ($this->phpAttributeAnalyzer->hasPhpAttribute($classMethod, 'Symfony\\Component\\Routing\\Annotation\\Route')) {
