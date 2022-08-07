@@ -8,7 +8,7 @@ Rector instantly upgrades and refactors the PHP code of your application.  It ca
 
 ### 1. Instant Upgrades
 
-Rector now supports upgrades from PHP 5.3 to 8.1 and major open-source projects like [Symfony](https://github.com/rectorphp/rector-symfony), [PHPUnit](https://github.com/rectorphp/rector-phpunit), [Nette](https://github.com/rectorphp/rector-nette), [Laravel](https://github.com/rectorphp/rector-laravel), [CakePHP](https://github.com/rectorphp/rector-cakephp) and [Doctrine](https://github.com/rectorphp/rector-doctrine). Do you want to **be constantly on the latest PHP and Framework without effort**?
+Rector now supports upgrades from PHP 5.3 to 8.1 and major open-source projects like [Symfony](https://github.com/rectorphp/rector-symfony), [PHPUnit](https://github.com/rectorphp/rector-phpunit), [Laravel](https://github.com/rectorphp/rector-laravel), [CakePHP](https://github.com/rectorphp/rector-cakephp) and [Doctrine](https://github.com/rectorphp/rector-doctrine). Do you want to **be constantly on the latest PHP and Framework without effort**?
 
 Use Rector to handle **instant upgrades** for you.
 
