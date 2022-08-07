@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit05f6966bbd0efcd58412a246bfc79a7c
+class ComposerStaticInit1863c32f22038906f632ac4bf6fa8eea
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1861,6 +1861,7 @@ class ComposerStaticInit05f6966bbd0efcd58412a246bfc79a7c
         'Rector\\Core\\Kernel\\RectorKernel' => __DIR__ . '/../..' . '/src/Kernel/RectorKernel.php',
         'Rector\\Core\\Logging\\CurrentRectorProvider' => __DIR__ . '/../..' . '/src/Logging/CurrentRectorProvider.php',
         'Rector\\Core\\NodeAnalyzer\\ArgsAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ArgsAnalyzer.php',
+        'Rector\\Core\\NodeAnalyzer\\BinaryOpAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/BinaryOpAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\CallAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/CallAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ClassAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ClassAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\CoalesceAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/CoalesceAnalyzer.php',
@@ -1959,6 +1960,7 @@ class ComposerStaticInit05f6966bbd0efcd58412a246bfc79a7c
         'Rector\\Core\\ValueObject\\Bootstrap\\BootstrapConfigs' => __DIR__ . '/../..' . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
         'Rector\\Core\\ValueObject\\Configuration' => __DIR__ . '/../..' . '/src/ValueObject/Configuration.php',
         'Rector\\Core\\ValueObject\\Error\\SystemError' => __DIR__ . '/../..' . '/src/ValueObject/Error/SystemError.php',
+        'Rector\\Core\\ValueObject\\FuncCallAndExpr' => __DIR__ . '/../..' . '/src/ValueObject/FuncCallAndExpr.php',
         'Rector\\Core\\ValueObject\\MethodName' => __DIR__ . '/../..' . '/src/ValueObject/MethodName.php',
         'Rector\\Core\\ValueObject\\PhpVersion' => __DIR__ . '/../..' . '/src/ValueObject/PhpVersion.php',
         'Rector\\Core\\ValueObject\\PhpVersionFeature' => __DIR__ . '/../..' . '/src/ValueObject/PhpVersionFeature.php',
@@ -3384,9 +3386,9 @@ class ComposerStaticInit05f6966bbd0efcd58412a246bfc79a7c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit05f6966bbd0efcd58412a246bfc79a7c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit05f6966bbd0efcd58412a246bfc79a7c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit05f6966bbd0efcd58412a246bfc79a7c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1863c32f22038906f632ac4bf6fa8eea::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1863c32f22038906f632ac4bf6fa8eea::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1863c32f22038906f632ac4bf6fa8eea::$classMap;
 
         }, null, ClassLoader::class);
     }
