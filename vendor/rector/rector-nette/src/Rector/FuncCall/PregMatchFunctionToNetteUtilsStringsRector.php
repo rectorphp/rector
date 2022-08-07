@@ -120,9 +120,10 @@ CODE_SAMPLE
             }
             return null;
         }
+        $args = $funcCall->getArgs();
         // assign
-        if (isset($funcCall->args[2])) {
-            return new Assign($funcCall->args[2]->value, $matchStaticCall);
+        if (isset($args[2])) {
+            return new Assign($args[2]->value, $matchStaticCall);
         }
         return $matchStaticCall;
     }
@@ -138,9 +139,10 @@ CODE_SAMPLE
     }
     private function createMatchStaticCall(FuncCall $funcCall, string $methodName) : StaticCall
     {
+        $originalArgs = $funcCall->getArgs();
         $args = [];
-        $args[] = $funcCall->args[1];
-        $args[] = $funcCall->args[0];
+        $args[] = $originalArgs[1];
+        $args[] = $originalArgs[0];
         $args = $this->pregMatchAllAnalyzer->compensateEnforcedFlag($methodName, $funcCall, $args);
         return $this->nodeFactory->createStaticCall('Nette\\Utils\\Strings', $methodName, $args);
     }

@@ -11,11 +11,12 @@ final class MethodCallArgMerger
 {
     public function mergeOrApendArray(MethodCall $methodCall, int $argumentPosition, Array_ $array) : void
     {
-        if (!isset($methodCall->args[$argumentPosition])) {
+        $methodCallArgs = $methodCall->getArgs();
+        if (!isset($methodCallArgs[$argumentPosition])) {
             $methodCall->args[$argumentPosition] = new Arg($array);
             return;
         }
-        $existingParameterArgValue = $methodCall->args[$argumentPosition]->value;
+        $existingParameterArgValue = $methodCallArgs[$argumentPosition]->value;
         if (!$existingParameterArgValue instanceof Array_) {
             // another parameters than array are not suported yet
             throw new NotImplementedYetException();

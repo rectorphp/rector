@@ -16,7 +16,7 @@ return array(
     'Rector\\RectorGenerator\\' => array($vendorDir . '/rector/rector-generator/src'),
     'Rector\\PHPUnit\\' => array($vendorDir . '/rector/rector-phpunit/src'),
     'Rector\\PHPOffice\\' => array($vendorDir . '/rector/rector-phpoffice/src'),
-    'Rector\\Nette\\' => array($vendorDir . '/rector/rector-nette/src', $vendorDir . '/rector/rector-nette/packages'),
+    'Rector\\Nette\\' => array($vendorDir . '/rector/rector-nette/src'),
     'Rector\\Laravel\\' => array($vendorDir . '/rector/rector-laravel/src'),
     'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src'),
     'Rector\\Core\\' => array($baseDir . '/src'),

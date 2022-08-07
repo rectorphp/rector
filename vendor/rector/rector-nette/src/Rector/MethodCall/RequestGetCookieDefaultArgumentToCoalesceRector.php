@@ -59,11 +59,12 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'getCookie')) {
             return null;
         }
+        $args = $node->getArgs();
         // no default value
-        if (!isset($node->args[1])) {
+        if (!isset($args[1])) {
             return null;
         }
-        $defaultValue = $node->args[1]->value;
+        $defaultValue = $args[1]->value;
         unset($node->args[1]);
         return new Coalesce($node, $defaultValue);
     }

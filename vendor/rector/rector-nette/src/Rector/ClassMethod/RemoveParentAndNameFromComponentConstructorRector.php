@@ -133,7 +133,7 @@ CODE_SAMPLE
         if (!$this->staticCallAnalyzer->isParentCallNamed($staticCall, MethodName::CONSTRUCT)) {
             return null;
         }
-        foreach ($staticCall->args as $position => $staticCallArg) {
+        foreach ($staticCall->getArgs() as $position => $staticCallArg) {
             if (!$staticCallArg->value instanceof Variable) {
                 continue;
             }

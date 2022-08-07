@@ -7,9 +7,7 @@ use Rector\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector;
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
-use Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector;
 use Rector\Nette\Rector\ClassMethod\RemoveParentAndNameFromComponentConstructorRector;
-use Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector;
 use Rector\Nette\Rector\MethodCall\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector;
 use Rector\Nette\Rector\MethodCall\MagicHtmlCallToAppendAttributeRector;
 use Rector\Nette\Rector\MethodCall\MergeDefaultsInGetConfigCompilerExtensionRector;
@@ -23,7 +21,6 @@ use Rector\Transform\Rector\StaticCall\StaticCallToMethodCallRector;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->sets([__DIR__ . '/nette-30/nette-30-composer.php', __DIR__ . '/nette-30/nette-30-dependency-injection.php', __DIR__ . '/nette-30/nette-30-return-types.php', __DIR__ . '/nette-30/nette-30-param-types.php']);
-    $rectorConfig->rule(AddNextrasDatePickerToDateControlRector::class);
     $rectorConfig->rule(MergeDefaultsInGetConfigCompilerExtensionRector::class);
     // Control class has remove __construct(), e.g. https://github.com/Pixidos/GPWebPay/pull/16/files#diff-fdc8251950f85c5467c63c249df05786
     $rectorConfig->rule(RemoveParentCallWithoutParentRector::class);
@@ -60,6 +57,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(MagicHtmlCallToAppendAttributeRector::class);
     $rectorConfig->rule(RequestGetCookieDefaultArgumentToCoalesceRector::class);
     $rectorConfig->rule(RemoveParentAndNameFromComponentConstructorRector::class);
-    $rectorConfig->rule(MoveFinalGetUserToCheckRequirementsClassMethodRector::class);
     $rectorConfig->rule(ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector::class);
 };

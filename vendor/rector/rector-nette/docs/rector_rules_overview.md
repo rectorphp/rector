@@ -1,26 +1,4 @@
-# 33 Rules Overview
-
-## AddNextrasDatePickerToDateControlRector
-
-Nextras/Form upgrade of addDatePicker method call to DateControl assign
-
-- class: [`Rector\Nette\Rector\MethodCall\AddNextrasDatePickerToDateControlRector`](../src/Rector/MethodCall/AddNextrasDatePickerToDateControlRector.php)
-
-```diff
- use Nette\Application\UI\Form;
-
- class SomeClass
- {
-     public function run()
-     {
-         $form = new Form();
--        $form->addDatePicker('key', 'Label');
-+        $form['key'] = new \Nextras\FormComponents\Controls\DateControl('Label');
-     }
- }
-```
-
-<br>
+# 22 Rules Overview
 
 ## BuilderExpandToHelperExpandRector
 
@@ -37,41 +15,6 @@ Change `containerBuilder->expand()` to static call with parameters
      {
 -        $value = $this->getContainerBuilder()->expand('%value');
 +        $value = \Nette\DI\Helpers::expand('%value', $this->getContainerBuilder()->parameters);
-     }
- }
-```
-
-<br>
-
-## ChangeNetteEventNamesInGetSubscribedEventsRector
-
-Change EventSubscriber from Kdyby to Contributte
-
-- class: [`Rector\Nette\Kdyby\Rector\ClassMethod\ChangeNetteEventNamesInGetSubscribedEventsRector`](../src/Kdyby/Rector/ClassMethod/ChangeNetteEventNamesInGetSubscribedEventsRector.php)
-
-```diff
-+use Contributte\Events\Extra\Event\Application\ShutdownEvent;
- use Kdyby\Events\Subscriber;
- use Nette\Application\Application;
--use Nette\Application\UI\Presenter;
-
- class GetApplesSubscriber implements Subscriber
- {
--    public function getSubscribedEvents()
-+    public static function getSubscribedEvents()
-     {
-         return [
--            Application::class . '::onShutdown',
-+            ShutdownEvent::class => 'onShutdown',
-         ];
-     }
-
--    public function onShutdown(Presenter $presenter)
-+    public function onShutdown(ShutdownEvent $shutdownEvent)
-     {
-+        $presenter = $shutdownEvent->getPresenter();
-         $presenterName = $presenter->getName();
-         // ...
      }
  }
 ```
@@ -116,50 +59,6 @@ convert `addUpload()` with 3rd argument true to `addMultiUpload()`
  $form = new Nette\Forms\Form();
 -$form->addUpload('...', '...', true);
 +$form->addMultiUpload('...', '...');
-```
-
-<br>
-
-## EndsWithFunctionToNetteUtilsStringsRector
-
-Use `Nette\Utils\Strings::endsWith()` over bare string-functions
-
-- class: [`Rector\Nette\Rector\Identical\EndsWithFunctionToNetteUtilsStringsRector`](../src/Rector/Identical/EndsWithFunctionToNetteUtilsStringsRector.php)
-
-```diff
-+use Nette\Utils\Strings;
-+
- class SomeClass
- {
-     public function end($needle)
-     {
-         $content = 'Hi, my name is Tom';
--
--        $yes = substr($content, -strlen($needle)) === $needle;
-+        $yes = Strings::endsWith($content, $needle);
-     }
- }
-```
-
-<br>
-
-## FilePutContentsToFileSystemWriteRector
-
-Change `file_put_contents()` to `FileSystem::write()`
-
-- class: [`Rector\Nette\Rector\FuncCall\FilePutContentsToFileSystemWriteRector`](../src/Rector/FuncCall/FilePutContentsToFileSystemWriteRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        file_put_contents('file.txt', 'content');
-+        \Nette\Utils\FileSystem::write('file.txt', 'content');
-
-         file_put_contents('file.txt', 'content_to_append', FILE_APPEND);
-     }
- }
 ```
 
 <br>
@@ -344,32 +243,6 @@ Change `$this->template->setFile()` `$this->template->render()`
 
 <br>
 
-## MoveFinalGetUserToCheckRequirementsClassMethodRector
-
-Presenter method `getUser()` is now final, move logic to `checkRequirements()`
-
-- class: [`Rector\Nette\Rector\Class_\MoveFinalGetUserToCheckRequirementsClassMethodRector`](../src/Rector/Class_/MoveFinalGetUserToCheckRequirementsClassMethodRector.php)
-
-```diff
- use Nette\Application\UI\Presenter;
-
- class SomeControl extends Presenter
- {
--    public function getUser()
-+    public function checkRequirements()
-     {
--        $user = parent::getUser();
-+        $user = $this->getUser();
-         $user->getStorage()->setNamespace('admin_session');
--        return $user;
-+
-+        parent::checkRequirements();
-     }
- }
-```
-
-<br>
-
 ## MoveInjectToExistingConstructorRector
 
 Move `@inject` properties to constructor, if there already is one
@@ -505,78 +378,6 @@ Renames method calls in LATTE templates
 
 <br>
 
-## RenameMethodNeonRector
-
-Renames method calls in NEON configs
-
-- class: [`Rector\Nette\Rector\Neon\RenameMethodNeonRector`](../src/Rector/Neon/RenameMethodNeonRector.php)
-
-```diff
- services:
-     -
-         class: SomeClass
-         setup:
--            - oldCall
-+            - newCall
-```
-
-<br>
-
-## RenderMethodParamToTypeDeclarationRector
-
-Move `@param` declarations on `render()` method in Nette components and presenter to strict type declarations
-
-- class: [`Rector\Nette\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector`](../src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php)
-
-```diff
- use Nette\Application\UI\Control;
-
- final class SomeControl extends Control
- {
--    /**
--     * @param string $name
--     */
--    public function render($name)
-+    public function render(string $name)
-     {
-     }
- }
-```
-
-<br>
-
-## ReplaceEventManagerWithEventSubscriberRector
-
-Change Kdyby EventManager to EventDispatcher
-
-- class: [`Rector\Nette\Kdyby\Rector\MethodCall\ReplaceEventManagerWithEventSubscriberRector`](../src/Kdyby/Rector/MethodCall/ReplaceEventManagerWithEventSubscriberRector.php)
-
-```diff
- use Kdyby\Events\EventManager;
-
- final class SomeClass
- {
-     /**
-      * @var EventManager
-      */
-     private $eventManager;
-
-     public function __construct(EventManager $eventManager)
-     {
-         $this->eventManager = eventManager;
-     }
-
-     public function run()
-     {
-         $key = '2000';
--        $this->eventManager->dispatchEvent(static::class . '::onCopy', new EventArgsList([$this, $key]));
-+        $this->eventManager->dispatch(new SomeClassCopyEvent($this, $key));
-     }
- }
-```
-
-<br>
-
 ## ReplaceTimeNumberWithDateTimeConstantRector
 
 Replace time numbers with `Nette\Utils\DateTime` constants
@@ -635,41 +436,6 @@ Change setClass with class and arguments to separated methods
 +            ->setFactory('SomeClass', [1, 2]);
      }
  }
-```
-
-<br>
-
-## StrposToStringsContainsRector
-
-Use `Nette\Utils\Strings` over bare string-functions
-
-- class: [`Rector\Nette\Rector\NotIdentical\StrposToStringsContainsRector`](../src/Rector/NotIdentical/StrposToStringsContainsRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $name = 'Hi, my name is Tom';
--        return strpos($name, 'Hi') !== false;
-+        return \Nette\Utils\Strings::contains($name, 'Hi');
-     }
- }
-```
-
-<br>
-
-## SubstrMinusToStringEndsWithRector
-
-Change substr function with minus to `Strings::endsWith()`
-
-- class: [`Rector\Nette\Rector\Identical\SubstrMinusToStringEndsWithRector`](../src/Rector/Identical/SubstrMinusToStringEndsWithRector.php)
-
-```diff
--substr($var, -4) !== 'Test';
--substr($var, -4) === 'Test';
-+! \Nette\Utils\Strings::endsWith($var, 'Test');
-+\Nette\Utils\Strings::endsWith($var, 'Test');
 ```
 
 <br>
@@ -788,31 +554,6 @@ Change `translate()` method call 2nd arg to variadic
      {
 +        $count = $parameters[0] ?? null;
          return [$message, $count];
-     }
- }
-```
-
-<br>
-
-## WrapTransParameterNameRector
-
-Adds %% to placeholder name of `trans()` method if missing
-
-- class: [`Rector\Nette\Kdyby\Rector\MethodCall\WrapTransParameterNameRector`](../src/Kdyby/Rector/MethodCall/WrapTransParameterNameRector.php)
-
-```diff
- use Symfony\Component\Translation\Translator;
-
- final class SomeController
- {
-     public function run()
-     {
-         $translator = new Translator('');
-         $translated = $translator->trans(
-             'Hello %name%',
--            ['name' => $name]
-+            ['%name%' => $name]
-         );
      }
  }
 ```

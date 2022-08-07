@@ -123,9 +123,10 @@ CODE_SAMPLE
             return null;
         }
         $currentFunctionName = $this->getName($funcCall);
+        $args = $funcCall->getArgs();
         // assign
-        if (isset($funcCall->args[2]) && $currentFunctionName !== 'preg_replace') {
-            return new Assign($funcCall->args[2]->value, $matchStaticCall);
+        if (isset($args[2]) && $currentFunctionName !== 'preg_replace') {
+            return new Assign($args[2]->value, $matchStaticCall);
         }
         return $matchStaticCall;
     }
@@ -158,12 +159,14 @@ CODE_SAMPLE
     private function processSplit(FuncCall $funcCall, StaticCall $matchStaticCall) : Expr
     {
         $this->compensateNetteUtilsSplitDelimCapture($matchStaticCall);
-        if (!isset($funcCall->args[2])) {
+        $funcCallArgs = $funcCall->getArgs();
+        if (!isset($funcCallArgs[2])) {
             return $matchStaticCall;
         }
-        if ($this->valueResolver->isValue($funcCall->args[2]->value, -1)) {
-            if (isset($funcCall->args[3])) {
-                $matchStaticCall->args[] = $funcCall->args[3];
+        $thirdArg = $funcCallArgs[2];
+        if ($this->valueResolver->isValue($thirdArg->value, -1)) {
+            if (isset($funcCallArgs[3])) {
+                $matchStaticCall->args[] = $funcCallArgs[3];
             }
             return $matchStaticCall;
         }
@@ -174,7 +177,8 @@ CODE_SAMPLE
      */
     private function compensateNetteUtilsSplitDelimCapture(StaticCall $staticCall) : void
     {
-        $patternValue = $this->valueResolver->getValue($staticCall->args[1]->value);
+        $args = $staticCall->getArgs();
+        $patternValue = $this->valueResolver->getValue($args[1]->value);
         if (!\is_string($patternValue)) {
             return;
         }

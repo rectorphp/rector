@@ -29,13 +29,5 @@ final class NetteSetList implements SetListInterface
     /**
      * @var string
      */
-    public const NETTE_STRICT = __DIR__ . '/../../config/sets/nette-strict.php';
-    /**
-     * @var string
-     */
-    public const NETTE_UTILS_CODE_QUALITY = __DIR__ . '/../../config/sets/nette-utils-code-quality.php';
-    /**
-     * @var string
-     */
     public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/nette/annotations-to-attributes.php';
 }

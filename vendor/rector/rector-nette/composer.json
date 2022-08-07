@@ -5,10 +5,7 @@
     "description": "Rector upgrades rules for Nette Framework",
     "require": {
         "php": ">=8.1",
-        "ext-xml": "*",
-        "nette\/neon": "^3.3.3",
-        "rector\/rector-phpunit": "^0.11",
-        "symfony\/string": "^6.1"
+        "rector\/rector-phpunit": "^0.11"
     },
     "require-dev": {
         "rector\/rector-src": "dev-main",
@@ -32,10 +29,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\Nette\\": [
-                "src",
-                "packages"
-            ]
+            "Rector\\Nette\\": "src"
         }
     },
     "autoload-dev": {
@@ -68,7 +62,7 @@
         }
     },
     "conflict": {
-        "rector\/rector": "<0.11"
+        "rector\/rector": "<0.12"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

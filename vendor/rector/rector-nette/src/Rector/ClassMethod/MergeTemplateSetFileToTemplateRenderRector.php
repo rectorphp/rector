@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Nette\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
@@ -77,11 +76,12 @@ CODE_SAMPLE
             if (!$this->isName($methodCall->name, 'render')) {
                 continue;
             }
-            if (isset($methodCall->args[0])) {
+            $methodCallArgs = $methodCall->getArgs();
+            if (isset($methodCallArgs[0])) {
                 continue;
             }
             $this->removeNode($setFileMethodCall);
-            $methodCall->args[0] = new Arg($setFileMethodCall->args[0]->value);
+            $methodCall->args[0] = $setFileMethodCall->getArgs()[0];
             return $node;
         }
         return null;

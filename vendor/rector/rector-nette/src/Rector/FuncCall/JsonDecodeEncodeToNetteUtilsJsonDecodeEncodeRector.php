@@ -79,7 +79,7 @@ CODE_SAMPLE
     }
     private function refactorJsonEncode(FuncCall $funcCall) : StaticCall
     {
-        $args = $funcCall->args;
+        $args = $funcCall->getArgs();
         if (isset($args[1])) {
             $secondArgumentValue = $args[1]->value;
             if ($this->isName($secondArgumentValue, 'JSON_PRETTY_PRINT')) {
@@ -91,7 +91,7 @@ CODE_SAMPLE
     }
     private function refactorJsonDecode(FuncCall $funcCall) : StaticCall
     {
-        $args = $funcCall->args;
+        $args = $funcCall->getArgs();
         if (isset($args[1])) {
             $secondArgumentValue = $args[1]->value;
             if ($this->valueResolver->isFalse($secondArgumentValue)) {

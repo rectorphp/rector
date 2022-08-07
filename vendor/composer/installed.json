@@ -439,77 +439,6 @@
             "install-path": "..\/evenement\/evenement"
         },
         {
-            "name": "nette\/neon",
-            "version": "v3.3.3",
-            "version_normalized": "3.3.3.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/nette\/neon.git",
-                "reference": "22e384da162fab42961d48eb06c06d3ad0c11b95"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/neon\/zipball\/22e384da162fab42961d48eb06c06d3ad0c11b95",
-                "reference": "22e384da162fab42961d48eb06c06d3ad0c11b95",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "php": ">=7.1"
-            },
-            "require-dev": {
-                "nette\/tester": "^2.0",
-                "phpstan\/phpstan": "^0.12",
-                "tracy\/tracy": "^2.7"
-            },
-            "time": "2022-03-10T02:04:26+00:00",
-            "bin": [
-                "bin\/neon-lint"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.3-dev"
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "classmap": [
-                    "src\/"
-                ]
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "BSD-3-Clause",
-                "GPL-2.0-only",
-                "GPL-3.0-only"
-            ],
-            "authors": [
-                {
-                    "name": "David Grudl",
-                    "homepage": "https:\/\/davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https:\/\/nette.org\/contributors"
-                }
-            ],
-            "description": "\ud83c\udf78 Nette NEON: encodes and decodes NEON file format.",
-            "homepage": "https:\/\/ne-on.org",
-            "keywords": [
-                "export",
-                "import",
-                "neon",
-                "nette",
-                "yaml"
-            ],
-            "support": {
-                "issues": "https:\/\/github.com\/nette\/neon\/issues",
-                "source": "https:\/\/github.com\/nette\/neon\/tree\/v3.3.3"
-            },
-            "install-path": "..\/nette\/neon"
-        },
-        {
             "name": "nette\/utils",
             "version": "v3.2.7",
             "version_normalized": "3.2.7.0",
@@ -1923,12 +1852,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "ea5a50c055449227910a9f8df5e7e8290ddd4f7c"
+                "reference": "3e935b49a44986f7fa28c1c74d9c8ce1ef700931"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/ea5a50c055449227910a9f8df5e7e8290ddd4f7c",
-                "reference": "ea5a50c055449227910a9f8df5e7e8290ddd4f7c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/3e935b49a44986f7fa28c1c74d9c8ce1ef700931",
+                "reference": "3e935b49a44986f7fa28c1c74d9c8ce1ef700931",
                 "shasum": ""
             },
             "require": {
@@ -1953,7 +1882,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-08-06T20:05:23+00:00",
+            "time": "2022-08-07T09:30:44+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2202,23 +2131,20 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-nette.git",
-                "reference": "0509d318cbadbe8d70157358d60a6418ed40c7b2"
+                "reference": "9c8bf10d44d96d6c828fb3d1d563cfa88f03b26a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/0509d318cbadbe8d70157358d60a6418ed40c7b2",
-                "reference": "0509d318cbadbe8d70157358d60a6418ed40c7b2",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-nette\/zipball\/9c8bf10d44d96d6c828fb3d1d563cfa88f03b26a",
+                "reference": "9c8bf10d44d96d6c828fb3d1d563cfa88f03b26a",
                 "shasum": ""
             },
             "require": {
-                "ext-xml": "*",
-                "nette\/neon": "^3.3.3",
                 "php": ">=8.1",
-                "rector\/rector-phpunit": "^0.11",
-                "symfony\/string": "^6.1"
+                "rector\/rector-phpunit": "^0.11"
             },
             "conflict": {
-                "rector\/rector": "<0.11"
+                "rector\/rector": "<0.12"
             },
             "require-dev": {
                 "nette\/application": "^3.1",
@@ -2240,7 +2166,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-08-06T23:12:06+00:00",
+            "time": "2022-08-07T12:19:31+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2257,10 +2183,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\Nette\\": [
-                        "src",
-                        "packages"
-                    ]
+                    "Rector\\Nette\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
