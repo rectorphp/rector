@@ -20,12 +20,10 @@
         }
     },
     "conflict": {
-        "phpstan/phpdoc-parser": "<1.6.2",
-        "rector/rector-prefixed": "*",
+        "phpstan/phpdoc-parser": "<1.6.4",
         "rector/rector-phpunit": "*",
         "rector/rector-symfony": "*",
         "rector/rector-doctrine": "*",
-        "rector/rector-nette": "*",
         "rector/rector-cakephp": "*",
         "rector/rector-laravel": "*",
         "rector/rector-phpoffice": "*"
