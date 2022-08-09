@@ -12,4 +12,6 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->skip([
         __DIR__ . '/vendor',
     ]);
+
+    $rectorConfig->sets([\Rector\Set\ValueObject\SetList::CODE_QUALITY]);
 };
