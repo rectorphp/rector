@@ -1951,6 +1951,7 @@ return array(
     'Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent' => $baseDir . '/packages/FileSystemRector/ValueObject/AddedFileWithContent.php',
     'Rector\\FileSystemRector\\ValueObject\\AddedFileWithNodes' => $baseDir . '/packages/FileSystemRector/ValueObject/AddedFileWithNodes.php',
     'Rector\\Laravel\\NodeAnalyzer\\LumenRouteRegisteringMethodAnalyzer' => $vendorDir . '/rector/rector-laravel/src/NodeAnalyzer/LumenRouteRegisteringMethodAnalyzer.php',
+    'Rector\\Laravel\\NodeAnalyzer\\StaticCallAnalyzer' => $vendorDir . '/rector/rector-laravel/src/NodeAnalyzer/StaticCallAnalyzer.php',
     'Rector\\Laravel\\NodeFactory\\AppAssignFactory' => $vendorDir . '/rector/rector-laravel/src/NodeFactory/AppAssignFactory.php',
     'Rector\\Laravel\\NodeFactory\\ModelFactoryNodeFactory' => $vendorDir . '/rector/rector-laravel/src/NodeFactory/ModelFactoryNodeFactory.php',
     'Rector\\Laravel\\NodeFactory\\RouterRegisterNodeAnalyzer' => $vendorDir . '/rector/rector-laravel/src/NodeFactory/RouterRegisterNodeAnalyzer.php',

@@ -22,6 +22,7 @@ final class AddArgumentDefaultValue
      */
     private $position;
     /**
+     * @readonly
      * @var mixed
      */
     private $defaultValue;

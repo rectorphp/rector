@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit41fa121b744436092d6f0a792b949afa
+class ComposerStaticInit88e7dc2be0aecd5a44e42e2daed224ef
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2252,6 +2252,7 @@ class ComposerStaticInit41fa121b744436092d6f0a792b949afa
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithContent.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithNodes' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithNodes.php',
         'Rector\\Laravel\\NodeAnalyzer\\LumenRouteRegisteringMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeAnalyzer/LumenRouteRegisteringMethodAnalyzer.php',
+        'Rector\\Laravel\\NodeAnalyzer\\StaticCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeAnalyzer/StaticCallAnalyzer.php',
         'Rector\\Laravel\\NodeFactory\\AppAssignFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/AppAssignFactory.php',
         'Rector\\Laravel\\NodeFactory\\ModelFactoryNodeFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/ModelFactoryNodeFactory.php',
         'Rector\\Laravel\\NodeFactory\\RouterRegisterNodeAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/RouterRegisterNodeAnalyzer.php',
@@ -3250,9 +3251,9 @@ class ComposerStaticInit41fa121b744436092d6f0a792b949afa
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit41fa121b744436092d6f0a792b949afa::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit41fa121b744436092d6f0a792b949afa::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit41fa121b744436092d6f0a792b949afa::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit88e7dc2be0aecd5a44e42e2daed224ef::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit88e7dc2be0aecd5a44e42e2daed224ef::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit88e7dc2be0aecd5a44e42e2daed224ef::$classMap;
 
         }, null, ClassLoader::class);
     }

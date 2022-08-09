@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
+use Rector\Laravel\NodeAnalyzer\StaticCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -25,7 +25,7 @@ final class AddParentRegisterToEventServiceProviderRector extends AbstractRector
     private const REGISTER = 'register';
     /**
      * @readonly
-     * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
+     * @var \Rector\Laravel\NodeAnalyzer\StaticCallAnalyzer
      */
     private $staticCallAnalyzer;
     public function __construct(StaticCallAnalyzer $staticCallAnalyzer)
