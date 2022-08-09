@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit428bba4eabdf26c6ab915326a9e8aa28
+class ComposerStaticInit41fa121b744436092d6f0a792b949afa
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -35,7 +35,6 @@ class ComposerStaticInit428bba4eabdf26c6ab915326a9e8aa28
             'Rector\\RectorGenerator\\' => 23,
             'Rector\\PHPUnit\\' => 15,
             'Rector\\PHPOffice\\' => 17,
-            'Rector\\Nette\\' => 13,
             'Rector\\Laravel\\' => 15,
             'Rector\\Doctrine\\' => 16,
             'Rector\\Core\\' => 12,
@@ -126,10 +125,6 @@ class ComposerStaticInit428bba4eabdf26c6ab915326a9e8aa28
         'Rector\\PHPOffice\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/rector-phpoffice/src',
-        ),
-        'Rector\\Nette\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rector/rector-nette/src',
         ),
         'Rector\\Laravel\\' => 
         array (
@@ -2346,57 +2341,6 @@ class ComposerStaticInit428bba4eabdf26c6ab915326a9e8aa28
         'Rector\\Naming\\ValueObject\\VariableAndCallAssign' => __DIR__ . '/../..' . '/rules/Naming/ValueObject/VariableAndCallAssign.php',
         'Rector\\Naming\\ValueObject\\VariableAndCallForeach' => __DIR__ . '/../..' . '/rules/Naming/ValueObject/VariableAndCallForeach.php',
         'Rector\\Naming\\VariableRenamer' => __DIR__ . '/../..' . '/rules/Naming/VariableRenamer.php',
-        'Rector\\Nette\\Contract\\Rector\\LatteRectorInterface' => __DIR__ . '/..' . '/rector/rector-nette/src/Contract/Rector/LatteRectorInterface.php',
-        'Rector\\Nette\\FileProcessor\\LatteFileProcessor' => __DIR__ . '/..' . '/rector/rector-nette/src/FileProcessor/LatteFileProcessor.php',
-        'Rector\\Nette\\Latte\\Parser\\TemplateTypeParser' => __DIR__ . '/..' . '/rector/rector-nette/src/Latte/Parser/TemplateTypeParser.php',
-        'Rector\\Nette\\Latte\\Parser\\VarTypeParser' => __DIR__ . '/..' . '/rector/rector-nette/src/Latte/Parser/VarTypeParser.php',
-        'Rector\\Nette\\NodeAnalyzer\\ConditionalTemplateAssignReplacer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/ConditionalTemplateAssignReplacer.php',
-        'Rector\\Nette\\NodeAnalyzer\\MethodCallArgMerger' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/MethodCallArgMerger.php',
-        'Rector\\Nette\\NodeAnalyzer\\NetteClassAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/NetteClassAnalyzer.php',
-        'Rector\\Nette\\NodeAnalyzer\\NetteInjectPropertyAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/NetteInjectPropertyAnalyzer.php',
-        'Rector\\Nette\\NodeAnalyzer\\PregMatchAllAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/PregMatchAllAnalyzer.php',
-        'Rector\\Nette\\NodeAnalyzer\\PropertyUsageAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/PropertyUsageAnalyzer.php',
-        'Rector\\Nette\\NodeAnalyzer\\RenderMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/RenderMethodAnalyzer.php',
-        'Rector\\Nette\\NodeAnalyzer\\ReturnAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/ReturnAnalyzer.php',
-        'Rector\\Nette\\NodeAnalyzer\\StaticCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/StaticCallAnalyzer.php',
-        'Rector\\Nette\\NodeAnalyzer\\TemplatePropertyAssignCollector' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/TemplatePropertyAssignCollector.php',
-        'Rector\\Nette\\NodeAnalyzer\\TemplatePropertyParametersReplacer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/TemplatePropertyParametersReplacer.php',
-        'Rector\\Nette\\NodeAnalyzer\\ThisTemplatePropertyFetchAnalyzer' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeAnalyzer/ThisTemplatePropertyFetchAnalyzer.php',
-        'Rector\\Nette\\NodeFactory\\ClassWithPublicPropertiesFactory' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeFactory/ClassWithPublicPropertiesFactory.php',
-        'Rector\\Nette\\NodeFactory\\RenderParameterArrayFactory' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeFactory/RenderParameterArrayFactory.php',
-        'Rector\\Nette\\NodeFinder\\FormFieldsFinder' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeFinder/FormFieldsFinder.php',
-        'Rector\\Nette\\NodeFinder\\FormOnSuccessCallbackFinder' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeFinder/FormOnSuccessCallbackFinder.php',
-        'Rector\\Nette\\NodeFinder\\FormOnSuccessCallbackValuesParamFinder' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeFinder/FormOnSuccessCallbackValuesParamFinder.php',
-        'Rector\\Nette\\NodeFinder\\FormVariableFinder' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeFinder/FormVariableFinder.php',
-        'Rector\\Nette\\NodeFinder\\ParamFinder' => __DIR__ . '/..' . '/rector/rector-nette/src/NodeFinder/ParamFinder.php',
-        'Rector\\Nette\\Rector\\ClassMethod\\MergeTemplateSetFileToTemplateRenderRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/MergeTemplateSetFileToTemplateRenderRector.php',
-        'Rector\\Nette\\Rector\\ClassMethod\\RemoveParentAndNameFromComponentConstructorRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/RemoveParentAndNameFromComponentConstructorRector.php',
-        'Rector\\Nette\\Rector\\ClassMethod\\TemplateMagicAssignToExplicitVariableArrayRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/TemplateMagicAssignToExplicitVariableArrayRector.php',
-        'Rector\\Nette\\Rector\\ClassMethod\\TranslateClassMethodToVariadicsRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/ClassMethod/TranslateClassMethodToVariadicsRector.php',
-        'Rector\\Nette\\Rector\\Class_\\FormDataRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Class_/FormDataRector.php',
-        'Rector\\Nette\\Rector\\Class_\\LatteVarTypesBasedOnPresenterTemplateParametersRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Class_/LatteVarTypesBasedOnPresenterTemplateParametersRector.php',
-        'Rector\\Nette\\Rector\\Class_\\MoveInjectToExistingConstructorRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Class_/MoveInjectToExistingConstructorRector.php',
-        'Rector\\Nette\\Rector\\Class_\\TemplateTypeBasedOnPresenterTemplateParametersRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Class_/TemplateTypeBasedOnPresenterTemplateParametersRector.php',
-        'Rector\\Nette\\Rector\\FuncCall\\JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/FuncCall/JsonDecodeEncodeToNetteUtilsJsonDecodeEncodeRector.php',
-        'Rector\\Nette\\Rector\\FuncCall\\PregFunctionToNetteUtilsStringsRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/FuncCall/PregFunctionToNetteUtilsStringsRector.php',
-        'Rector\\Nette\\Rector\\FuncCall\\PregMatchFunctionToNetteUtilsStringsRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/FuncCall/PregMatchFunctionToNetteUtilsStringsRector.php',
-        'Rector\\Nette\\Rector\\FuncCall\\SubstrStrlenFunctionToNetteUtilsStringsRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/FuncCall/SubstrStrlenFunctionToNetteUtilsStringsRector.php',
-        'Rector\\Nette\\Rector\\LNumber\\ReplaceTimeNumberWithDateTimeConstantRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/LNumber/ReplaceTimeNumberWithDateTimeConstantRector.php',
-        'Rector\\Nette\\Rector\\Latte\\RenameMethodLatteRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Latte/RenameMethodLatteRector.php',
-        'Rector\\Nette\\Rector\\MethodCall\\BuilderExpandToHelperExpandRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/MethodCall/BuilderExpandToHelperExpandRector.php',
-        'Rector\\Nette\\Rector\\MethodCall\\ContextGetByTypeToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/MethodCall/ContextGetByTypeToConstructorInjectionRector.php',
-        'Rector\\Nette\\Rector\\MethodCall\\ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/MethodCall/ConvertAddUploadWithThirdArgumentTrueToAddMultiUploadRector.php',
-        'Rector\\Nette\\Rector\\MethodCall\\MagicHtmlCallToAppendAttributeRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/MethodCall/MagicHtmlCallToAppendAttributeRector.php',
-        'Rector\\Nette\\Rector\\MethodCall\\MergeDefaultsInGetConfigCompilerExtensionRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/MethodCall/MergeDefaultsInGetConfigCompilerExtensionRector.php',
-        'Rector\\Nette\\Rector\\MethodCall\\RequestGetCookieDefaultArgumentToCoalesceRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/MethodCall/RequestGetCookieDefaultArgumentToCoalesceRector.php',
-        'Rector\\Nette\\Rector\\MethodCall\\SetClassWithArgumentToSetFactoryRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/MethodCall/SetClassWithArgumentToSetFactoryRector.php',
-        'Rector\\Nette\\Rector\\Property\\NetteInjectToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-nette/src/Rector/Property/NetteInjectToConstructorInjectionRector.php',
-        'Rector\\Nette\\Set\\NetteSetList' => __DIR__ . '/..' . '/rector/rector-nette/src/Set/NetteSetList.php',
-        'Rector\\Nette\\ValueObject\\AlwaysTemplateParameterAssign' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/AlwaysTemplateParameterAssign.php',
-        'Rector\\Nette\\ValueObject\\FormField' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/FormField.php',
-        'Rector\\Nette\\ValueObject\\LatteVariableType' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/LatteVariableType.php',
-        'Rector\\Nette\\ValueObject\\ParameterAssign' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/ParameterAssign.php',
-        'Rector\\Nette\\ValueObject\\TemplateParametersAssigns' => __DIR__ . '/..' . '/rector/rector-nette/src/ValueObject/TemplateParametersAssigns.php',
         'Rector\\NodeCollector\\BinaryOpConditionsCollector' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpConditionsCollector.php',
         'Rector\\NodeCollector\\BinaryOpTreeRootLocator' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpTreeRootLocator.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
@@ -3306,9 +3250,9 @@ class ComposerStaticInit428bba4eabdf26c6ab915326a9e8aa28
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit428bba4eabdf26c6ab915326a9e8aa28::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit428bba4eabdf26c6ab915326a9e8aa28::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit428bba4eabdf26c6ab915326a9e8aa28::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit41fa121b744436092d6f0a792b949afa::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit41fa121b744436092d6f0a792b949afa::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit41fa121b744436092d6f0a792b949afa::$classMap;
 
         }, null, ClassLoader::class);
     }

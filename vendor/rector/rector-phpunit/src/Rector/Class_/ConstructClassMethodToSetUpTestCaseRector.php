@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -12,7 +14,6 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\Nette\NodeAnalyzer\StaticCallAnalyzer;
 use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -25,11 +26,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConstructClassMethodToSetUpTestCaseRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\Nette\NodeAnalyzer\StaticCallAnalyzer
-     */
-    private $staticCallAnalyzer;
     /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
@@ -50,9 +46,8 @@ final class ConstructClassMethodToSetUpTestCaseRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator
      */
     private $setUpMethodDecorator;
-    public function __construct(StaticCallAnalyzer $staticCallAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, SetUpMethodDecorator $setUpMethodDecorator)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, SetUpMethodDecorator $setUpMethodDecorator)
     {
-        $this->staticCallAnalyzer = $staticCallAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
@@ -139,11 +134,27 @@ CODE_SAMPLE
             if ($constructorStmt instanceof Expression) {
                 $constructorStmt = clone $constructorStmt->expr;
             }
-            if (!$this->staticCallAnalyzer->isParentCallNamed($constructorStmt, MethodName::CONSTRUCT)) {
+            if (!$this->isParentCallNamed($constructorStmt, MethodName::CONSTRUCT)) {
                 continue;
             }
             unset($constructorStmts[$key]);
         }
         return $constructorStmts;
+    }
+    private function isParentCallNamed(Node $node, string $desiredMethodName) : bool
+    {
+        if (!$node instanceof StaticCall) {
+            return \false;
+        }
+        if ($node->class instanceof Expr) {
+            return \false;
+        }
+        if (!$this->nodeNameResolver->isName($node->class, 'parent')) {
+            return \false;
+        }
+        if ($node->name instanceof Expr) {
+            return \false;
+        }
+        return $this->nodeNameResolver->isName($node->name, $desiredMethodName);
     }
 }
