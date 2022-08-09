@@ -74,7 +74,7 @@ final class BetterNodeFinder
     {
         Assert::allIsAOf($types, Node::class);
         while ($currentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE)) {
-            /** @var \PhpParser\Node|null $currentNode */
+            /** @var Node|null $currentNode */
             if (!$currentNode instanceof Node) {
                 return null;
             }

@@ -87,7 +87,7 @@ final class ChangedNodeScopeRefresher
             $mutatingScope = $parentNode->getAttribute(AttributeKey::SCOPE);
         }
         if (!$mutatingScope instanceof MutatingScope) {
-            $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parentNode instanceof \PhpParser\Node ? \get_class($parentNode) : 'unknown parent');
+            $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parentNode instanceof Node ? \get_class($parentNode) : 'unknown parent');
             throw new ShouldNotHappenException($errorMessage);
         }
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes

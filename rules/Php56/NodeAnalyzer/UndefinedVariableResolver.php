@@ -170,8 +170,8 @@ final class UndefinedVariableResolver
         if (!$previousSwitch instanceof Switch_) {
             return \false;
         }
-        $parentSwitch = $previousSwitch->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentSwitch instanceof Case_;
+        $parentNode = $previousSwitch->getAttribute(AttributeKey::PARENT_NODE);
+        return $parentNode instanceof Case_;
     }
     private function isDifferentWithOriginalNodeOrNoScope(Variable $variable) : bool
     {

@@ -217,8 +217,8 @@ CODE_SAMPLE
         if (!$stmtsAware instanceof If_) {
             return \false;
         }
-        $nextParent = $stmtsAware->getAttribute(AttributeKey::NEXT_NODE);
-        return $nextParent instanceof Node;
+        $nextNode = $stmtsAware->getAttribute(AttributeKey::NEXT_NODE);
+        return $nextNode instanceof Node;
     }
     private function isNestedIfInLoop(If_ $if, StmtsAwareInterface $stmtsAware) : bool
     {

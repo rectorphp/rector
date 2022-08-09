@@ -115,11 +115,11 @@ CODE_SAMPLE
         if (!$parentNode instanceof Arg) {
             return \false;
         }
-        $parentParent = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentParent instanceof FuncCall) {
+        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentParentNode instanceof FuncCall) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($parentParent, 'is_a');
+        return $this->nodeNameResolver->isName($parentParentNode, 'is_a');
     }
     private function shouldSkip(string $classLikeName, String_ $string) : bool
     {

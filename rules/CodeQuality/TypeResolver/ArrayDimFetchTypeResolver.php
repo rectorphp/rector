@@ -36,9 +36,9 @@ final class ArrayDimFetchTypeResolver
     }
     private function resolveValueStaticType(ArrayDimFetch $arrayDimFetch) : Type
     {
-        $parentParent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentParent instanceof Assign) {
-            return $this->nodeTypeResolver->getType($parentParent->expr);
+        $parentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Assign) {
+            return $this->nodeTypeResolver->getType($parentNode->expr);
         }
         return new MixedType();
     }

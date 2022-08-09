@@ -120,11 +120,11 @@ CODE_SAMPLE
     private function processClassMethodReturnType(ClassMethod $classMethod, Type $parentType) : ?ClassMethod
     {
         if ($parentType instanceof MixedType) {
-            $class = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$class instanceof Class_) {
+            $parentNode = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof Class_) {
                 return null;
             }
-            $className = (string) $this->nodeNameResolver->getName($class);
+            $className = (string) $this->nodeNameResolver->getName($parentNode);
             $currentObjectType = new ObjectType($className);
             if (!$parentType->equals($currentObjectType) && $classMethod->returnType !== null) {
                 return null;

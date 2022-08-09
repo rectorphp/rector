@@ -6,6 +6,7 @@ namespace Rector\Php74\Guard;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\PropertyAnalyzer;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -83,9 +84,11 @@ final class MakePropertyTypedGuard
         if (!$property->isProtected()) {
             return \false;
         }
-        /** @var Class_ $class */
-        $class = $property->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$class->isFinal()) {
+        $parentNode = $property->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Class_) {
+            throw new ShouldNotHappenException();
+        }
+        if (!$parentNode->isFinal()) {
             return \false;
         }
         return $this->parentPropertyLookupGuard->isLegal($property);

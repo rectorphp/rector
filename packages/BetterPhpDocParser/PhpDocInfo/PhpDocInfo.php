@@ -187,14 +187,14 @@ final class PhpDocInfo
         return $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, $type);
     }
     /**
-     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $type
+     * @param class-string<Node> $type
      */
     public function hasByType(string $type) : bool
     {
         return $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, $type) !== [];
     }
     /**
-     * @param array<class-string<\PHPStan\PhpDocParser\Ast\Node>> $types
+     * @param array<class-string<Node>> $types
      */
     public function hasByTypes(array $types) : bool
     {
