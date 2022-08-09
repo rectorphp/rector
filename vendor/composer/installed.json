@@ -1852,12 +1852,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "d6ae1b14e6b54e3d0ae2f89842ea0f0c341384a9"
+                "reference": "9781e776f068243ffb025f3d1346723cee7a2143"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/d6ae1b14e6b54e3d0ae2f89842ea0f0c341384a9",
-                "reference": "d6ae1b14e6b54e3d0ae2f89842ea0f0c341384a9",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/9781e776f068243ffb025f3d1346723cee7a2143",
+                "reference": "9781e776f068243ffb025f3d1346723cee7a2143",
                 "shasum": ""
             },
             "require": {
@@ -1882,7 +1882,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-08-09T19:20:01+00:00",
+            "time": "2022-08-09T20:37:56+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1909,7 +1909,7 @@
             "description": "Rector upgrades rules for Doctrine",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-doctrine\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.11.42"
+                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.13.0"
             },
             "install-path": "..\/rector\/rector-doctrine"
         },
@@ -2130,12 +2130,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpoffice.git",
-                "reference": "ad7cfce089576330f59a5512768d7eb43a4bd55e"
+                "reference": "3638a6672dab07562bc4dd1bd0c18ced6763d0c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/ad7cfce089576330f59a5512768d7eb43a4bd55e",
-                "reference": "ad7cfce089576330f59a5512768d7eb43a4bd55e",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/3638a6672dab07562bc4dd1bd0c18ced6763d0c2",
+                "reference": "3638a6672dab07562bc4dd1bd0c18ced6763d0c2",
                 "shasum": ""
             },
             "require": {
@@ -2159,7 +2159,7 @@
                 "symplify\/rule-doc-generator": "^11.0.8",
                 "symplify\/vendor-patches": "^11.0.8"
             },
-            "time": "2022-07-22T19:01:00+00:00",
+            "time": "2022-08-09T20:40:27+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2186,7 +2186,7 @@
             "description": "Rector upgrades rules for PHP Office",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-phpoffice\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-phpoffice\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-phpoffice\/tree\/0.13.2"
             },
             "install-path": "..\/rector\/rector-phpoffice"
         },

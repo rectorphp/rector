@@ -126,8 +126,8 @@ final class IssetDimFetchCleaner
     }
     private function isRequiredIsset(Isset_ $isset, If_ $if) : bool
     {
-        $issetParent = $isset->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$issetParent instanceof BooleanNot) {
+        $parrentNode = $isset->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parrentNode instanceof BooleanNot) {
             return \false;
         }
         return $this->betterNodeFinder->hasInstancesOf($if->stmts, [Throw_::class, ThrowStmt::class]);
