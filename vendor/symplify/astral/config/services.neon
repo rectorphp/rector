@@ -1,8 +1,6 @@
 services:
     # mostly used shared services
-    - Symplify\PackageBuilder\Reflection\PrivatesAccessor
     - PhpParser\NodeFinder
-    - Symplify\SmartFileSystem\Finder\FinderSanitizer
 
     - Symplify\Astral\Reflection\ReflectionParser
     - Symplify\Astral\TypeAwareNodeFinder
@@ -11,15 +9,6 @@ services:
         type: Symplify\Astral\PhpParser\SmartPhpParser
         factory: ['@Symplify\Astral\PhpParser\SmartPhpParserFactory', 'create']
 
-    -
-        class: Symplify\Astral\Naming\SimpleNameResolver
-        factory: ['Symplify\Astral\StaticFactory\SimpleNameResolverStaticFactory', 'create']
-
     - Symplify\Astral\NodeValue\NodeValueResolver
-    - Symplify\PackageBuilder\Php\TypeChecker
-    - Symplify\SmartFileSystem\SmartFileSystem
-
     - Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
-
-    - Symplify\Astral\TypeAnalyzer\ContainsTypeAnalyser
     - Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver

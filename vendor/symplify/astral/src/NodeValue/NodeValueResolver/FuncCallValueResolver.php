@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use RectorPrefix202208\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
 use RectorPrefix202208\Symplify\Astral\Exception\ShouldNotHappenException;
-use RectorPrefix202208\Symplify\Astral\Naming\SimpleNameResolver;
 /**
  * @see \Symplify\Astral\Tests\NodeValue\NodeValueResolverTest
  *
@@ -22,16 +21,11 @@ final class FuncCallValueResolver implements NodeValueResolverInterface
      */
     private const EXCLUDED_FUNC_NAMES = ['pg_*'];
     /**
-     * @var \Symplify\Astral\Naming\SimpleNameResolver
-     */
-    private $simpleNameResolver;
-    /**
      * @var \PhpParser\ConstExprEvaluator
      */
     private $constExprEvaluator;
-    public function __construct(SimpleNameResolver $simpleNameResolver, ConstExprEvaluator $constExprEvaluator)
+    public function __construct(ConstExprEvaluator $constExprEvaluator)
     {
-        $this->simpleNameResolver = $simpleNameResolver;
         $this->constExprEvaluator = $constExprEvaluator;
     }
     public function getType() : string
@@ -44,7 +38,7 @@ final class FuncCallValueResolver implements NodeValueResolverInterface
      */
     public function resolve(Expr $expr, string $currentFilePath)
     {
-        if ($this->simpleNameResolver->isName($expr, 'getcwd')) {
+        if ($expr->name instanceof Name && $expr->name->toString() === 'getcwd') {
             return \dirname($currentFilePath);
         }
         $args = $expr->getArgs();

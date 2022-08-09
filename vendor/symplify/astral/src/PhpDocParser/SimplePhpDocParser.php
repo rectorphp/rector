@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use RectorPrefix202208\Symplify\Astral\PhpDocParser\ValueObject\Ast\PhpDoc\SimplePhpDocNode;
 /**
+ * @api
  * @see \Symplify\Astral\Tests\PhpDocParser\SimplePhpDocParser\SimplePhpDocParserTest
  */
 final class SimplePhpDocParser
@@ -35,6 +36,9 @@ final class SimplePhpDocParser
         }
         return $this->parseDocBlock($docComment->getText());
     }
+    /**
+     * @api
+     */
     public function parseDocBlock(string $docBlock) : SimplePhpDocNode
     {
         $tokens = $this->lexer->tokenize($docBlock);

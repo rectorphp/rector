@@ -4,12 +4,10 @@ See available [Nette rules](/docs/rector_rules_overview.md)
 
 ## Install
 
-This package is already part of [rector/rector](http://github.com/rectorphp/rector) package, so it works out of the box.
-
-All you need to do is install the main package, and you're good to go:
+This package is a Rector extension developed by community around Nette. To add it, install package as dependency:
 
 ```bash
-composer require rector/rector --dev
+composer require <todo>/rector-nette --dev
 ```
 
 ## Use Sets

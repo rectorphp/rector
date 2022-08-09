@@ -13,17 +13,22 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use RectorPrefix202208\Symplify\Astral\Contract\NodeValueResolver\NodeValueResolverInterface;
 use RectorPrefix202208\Symplify\Astral\Exception\ShouldNotHappenException;
-use RectorPrefix202208\Symplify\Astral\Naming\SimpleNameResolver;
 use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver\ClassConstFetchValueResolver;
 use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver\ConstFetchValueResolver;
 use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver\FuncCallValueResolver;
 use RectorPrefix202208\Symplify\Astral\NodeValue\NodeValueResolver\MagicConstValueResolver;
-use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
 /**
+ * @api
  * @see \Symplify\Astral\Tests\NodeValue\NodeValueResolverTest
+ *
+ * @deprecated Use $scope->getType() instead
  */
 final class NodeValueResolver
 {
+    /**
+     * @var array<class-string<Expr>>
+     */
+    private const UNRESOLVABLE_TYPES = [Variable::class, Cast::class, MethodCall::class, PropertyFetch::class, Instanceof_::class];
     /**
      * @var \PhpParser\ConstExprEvaluator
      */
@@ -36,22 +41,18 @@ final class NodeValueResolver
      * @var NodeValueResolverInterface[]
      */
     private $nodeValueResolvers = [];
-    /**
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
-     */
-    private $typeChecker;
-    public function __construct(SimpleNameResolver $simpleNameResolver, TypeChecker $typeChecker)
+    public function __construct()
     {
-        $this->typeChecker = $typeChecker;
         $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr) {
             return $this->resolveByNode($expr);
         });
-        $this->nodeValueResolvers[] = new ClassConstFetchValueResolver($simpleNameResolver);
-        $this->nodeValueResolvers[] = new ConstFetchValueResolver($simpleNameResolver);
+        $this->nodeValueResolvers[] = new ClassConstFetchValueResolver();
+        $this->nodeValueResolvers[] = new ConstFetchValueResolver();
         $this->nodeValueResolvers[] = new MagicConstValueResolver();
-        $this->nodeValueResolvers[] = new FuncCallValueResolver($simpleNameResolver, $this->constExprEvaluator);
+        $this->nodeValueResolvers[] = new FuncCallValueResolver($this->constExprEvaluator);
     }
     /**
+     * @deprecated Use Scope->getType() with constant types instead
      * @return mixed
      */
     public function resolve(Expr $expr, string $filePath)
@@ -77,8 +78,10 @@ final class NodeValueResolver
             }
         }
         // these values cannot be resolved in reliable way
-        if ($this->typeChecker->isInstanceOf($expr, [Variable::class, Cast::class, MethodCall::class, PropertyFetch::class, Instanceof_::class])) {
-            throw new ConstExprEvaluationException();
+        foreach (self::UNRESOLVABLE_TYPES as $unresolvableType) {
+            if (\is_a($expr, $unresolvableType, \true)) {
+                throw new ConstExprEvaluationException('The node "%s" value is not possible to resolve. Provide different one.');
+            }
         }
         return null;
     }

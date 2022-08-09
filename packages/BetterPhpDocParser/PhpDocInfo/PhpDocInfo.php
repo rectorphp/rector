@@ -31,7 +31,6 @@ use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix202208\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 /**
- * @template TNode as \PHPStan\PhpDocParser\Ast\Node
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
  */
 final class PhpDocInfo
@@ -179,6 +178,7 @@ final class PhpDocInfo
         return $this->getTypeOrMixed($this->getReturnTagValue());
     }
     /**
+     * @template TNode as \PHPStan\PhpDocParser\Ast\Node
      * @param class-string<TNode> $type
      * @return TNode[]
      */
@@ -187,14 +187,14 @@ final class PhpDocInfo
         return $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, $type);
     }
     /**
-     * @param class-string<TNode> $type
+     * @param class-string<\PHPStan\PhpDocParser\Ast\Node> $type
      */
     public function hasByType(string $type) : bool
     {
         return $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, $type) !== [];
     }
     /**
-     * @param array<class-string<TNode>> $types
+     * @param array<class-string<\PHPStan\PhpDocParser\Ast\Node>> $types
      */
     public function hasByTypes(array $types) : bool
     {
