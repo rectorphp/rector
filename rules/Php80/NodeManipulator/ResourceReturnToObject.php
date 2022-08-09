@@ -65,8 +65,8 @@ final class ResourceReturnToObject
      */
     private function processFuncCall(FuncCall $funcCall, array $collectionFunctionToReturnObject) : ?Instanceof_
     {
-        $parent = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof BinaryOp && !$parent instanceof BooleanOr) {
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof BinaryOp && !$parentNode instanceof BooleanOr) {
             return null;
         }
         if ($this->shouldSkip($funcCall)) {

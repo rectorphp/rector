@@ -123,11 +123,11 @@ final class PropertyFetchFinder
      */
     private function isInAnonymous(PropertyFetch $propertyFetch, $class, bool $hasTrait) : bool
     {
-        $parent = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
-        if (!$parent instanceof Class_) {
+        $parentNode = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
+        if (!$parentNode instanceof Class_) {
             return \false;
         }
-        return $parent !== $class && !$hasTrait;
+        return $parentNode !== $class && !$hasTrait;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class

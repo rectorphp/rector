@@ -65,10 +65,10 @@ final class UnionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor imp
             return $starAndEnd;
         }
         // unwrap with parent array type...
-        $parent = $unionTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
-        if (!$parent instanceof Node) {
+        $parentNode = $unionTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
+        if (!$parentNode instanceof Node) {
             return null;
         }
-        return $parent->getAttribute(PhpDocAttributeKey::START_AND_END);
+        return $parentNode->getAttribute(PhpDocAttributeKey::START_AND_END);
     }
 }

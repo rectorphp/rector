@@ -1,7 +1,4 @@
 services:
-    # mostly used shared services
-    - PhpParser\NodeFinder
-
     - Symplify\Astral\Reflection\ReflectionParser
     - Symplify\Astral\TypeAwareNodeFinder
     - Symplify\Astral\PhpParser\SmartPhpParserFactory

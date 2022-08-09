@@ -8,17 +8,14 @@ use PhpParser\Node\Expr\Assign;
 final class AlwaysTemplateParameterAssign
 {
     /**
-     * @readonly
      * @var \PhpParser\Node\Expr\Assign
      */
     private $assign;
     /**
-     * @readonly
      * @var string
      */
     private $parameterName;
     /**
-     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $assignedExpr;

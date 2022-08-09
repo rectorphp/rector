@@ -65,11 +65,11 @@ final class VariableAnalyzer
             if (!$this->nodeComparator->areNodesEqual($subNode, $variable)) {
                 return \false;
             }
-            $parent = $subNode->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parent instanceof ClosureUse) {
+            $parentNode = $subNode->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof ClosureUse) {
                 return \false;
             }
-            return $parent->byRef;
+            return $parentNode->byRef;
         });
     }
     private function isParentStaticOrGlobal(Variable $variable) : bool

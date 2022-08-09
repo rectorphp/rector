@@ -65,28 +65,28 @@ final class ReadWritePropertyAnalyzer
      */
     public function isRead($node) : bool
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Node) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Node) {
             throw new ShouldNotHappenException();
         }
         foreach ($this->parentNodeReadAnalyzers as $parentNodeReadAnalyzer) {
-            if ($parentNodeReadAnalyzer->isRead($node, $parent)) {
+            if ($parentNodeReadAnalyzer->isRead($node, $parentNode)) {
                 return \true;
             }
         }
-        if ($parent instanceof AssignOp) {
+        if ($parentNode instanceof AssignOp) {
             return \true;
         }
-        if (!$parent instanceof ArrayDimFetch) {
+        if (!$parentNode instanceof ArrayDimFetch) {
             return !$this->assignManipulator->isLeftPartOfAssign($node);
         }
-        if ($parent->dim === $node && $this->isNotInsideIssetUnset($parent)) {
-            return $this->isArrayDimFetchRead($parent);
+        if ($parentNode->dim === $node && $this->isNotInsideIssetUnset($parentNode)) {
+            return $this->isArrayDimFetchRead($parentNode);
         }
-        if ($this->assignManipulator->isLeftPartOfAssign($parent)) {
+        if ($this->assignManipulator->isLeftPartOfAssign($parentNode)) {
             return \false;
         }
-        return !$this->isArrayDimFetchInImpureFunction($parent, $node);
+        return !$this->isArrayDimFetchInImpureFunction($parentNode, $node);
     }
     private function isArrayDimFetchInImpureFunction(ArrayDimFetch $arrayDimFetch, Node $node) : bool
     {
@@ -108,8 +108,8 @@ final class ReadWritePropertyAnalyzer
     }
     private function isArrayDimFetchRead(ArrayDimFetch $arrayDimFetch) : bool
     {
-        $parentParent = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentParent instanceof Node) {
+        $parentParentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentParentNode instanceof Node) {
             throw new ShouldNotHappenException();
         }
         if (!$this->assignManipulator->isLeftPartOfAssign($arrayDimFetch)) {

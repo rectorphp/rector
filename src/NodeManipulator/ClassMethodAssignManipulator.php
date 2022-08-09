@@ -142,8 +142,8 @@ final class ClassMethodAssignManipulator
     private function filterOutMultiAssigns(array $readOnlyVariableAssigns) : array
     {
         return \array_filter($readOnlyVariableAssigns, static function (Assign $assign) : bool {
-            $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
-            return !$parent instanceof Assign;
+            $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+            return !$parentNode instanceof Assign;
         });
     }
     /**
@@ -192,8 +192,8 @@ final class ClassMethodAssignManipulator
             if ($this->nodeNameResolver->isName($variable, 'this')) {
                 continue;
             }
-            $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parent !== null && $this->isExplicitlyReferenced($parent)) {
+            $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode !== null && $this->isExplicitlyReferenced($parentNode)) {
                 $variableName = $this->nodeNameResolver->getName($variable);
                 if ($variableName === null) {
                     continue;
@@ -202,11 +202,11 @@ final class ClassMethodAssignManipulator
                 continue;
             }
             $argumentPosition = null;
-            if ($parent instanceof Arg) {
-                $argumentPosition = $parent->getAttribute(AttributeKey::ARGUMENT_POSITION);
-                $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Arg) {
+                $argumentPosition = $parentNode->getAttribute(AttributeKey::ARGUMENT_POSITION);
+                $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             }
-            if (!$parent instanceof Node) {
+            if (!$parentNode instanceof Node) {
                 continue;
             }
             if ($argumentPosition === null) {
@@ -216,7 +216,7 @@ final class ClassMethodAssignManipulator
             if ($variableName === null) {
                 continue;
             }
-            if (!$this->isCallOrConstructorWithReference($parent, $variable, $argumentPosition)) {
+            if (!$this->isCallOrConstructorWithReference($parentNode, $variable, $argumentPosition)) {
                 continue;
             }
             $referencedVariables[] = $variableName;

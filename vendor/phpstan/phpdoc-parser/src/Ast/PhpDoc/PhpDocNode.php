@@ -201,6 +201,24 @@ class PhpDocNode implements Node
             return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagValueNode;
         });
     }
+    /**
+     * @return AssertTagPropertyValueNode[]
+     */
+    public function getAssertPropertyTagValues(string $tagName = '@phpstan-assert') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagPropertyValueNode;
+        });
+    }
+    /**
+     * @return AssertTagMethodValueNode[]
+     */
+    public function getAssertMethodTagValues(string $tagName = '@phpstan-assert') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagMethodValueNode;
+        });
+    }
     public function __toString() : string
     {
         $children = array_map(static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode $child) : string {

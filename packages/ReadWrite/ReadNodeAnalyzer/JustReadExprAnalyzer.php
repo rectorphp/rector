@@ -14,21 +14,21 @@ final class JustReadExprAnalyzer
 {
     public function isReadContext(Expr $expr) : bool
     {
-        $parent = $expr->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Return_) {
+        $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Return_) {
             return \true;
         }
-        if ($parent instanceof Arg) {
+        if ($parentNode instanceof Arg) {
             return \true;
         }
-        if ($parent instanceof ArrayDimFetch) {
-            $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof ArrayDimFetch) {
+            $parentParent = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             if (!$parentParent instanceof Assign) {
                 return \true;
             }
-            return $parentParent->var !== $parent;
+            return $parentParent->var !== $parentNode;
         }
         // assume it's used by default
-        return !$parent instanceof Expression;
+        return !$parentNode instanceof Expression;
     }
 }

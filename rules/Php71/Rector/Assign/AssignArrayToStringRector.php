@@ -68,16 +68,16 @@ CODE_SAMPLE
         $exprUsages = $this->betterNodeFinder->findSameNamedExprs($assignedVar);
         // detect if is part of variable assign?
         foreach ($exprUsages as $exprUsage) {
-            $parent = $exprUsage->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parent instanceof ArrayDimFetch) {
+            $parentNode = $exprUsage->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof ArrayDimFetch) {
                 continue;
             }
-            $firstAssign = $this->betterNodeFinder->findParentType($parent, Assign::class);
+            $firstAssign = $this->betterNodeFinder->findParentType($parentNode, Assign::class);
             if (!$firstAssign instanceof Assign) {
                 continue;
             }
             // skip explicit assigns
-            if ($parent->dim !== null) {
+            if ($parentNode->dim !== null) {
                 continue;
             }
             $shouldRetype = \true;

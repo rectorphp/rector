@@ -118,9 +118,9 @@ CODE_SAMPLE
         if (!$this->nodeComparator->areNodesEqual($previousAssign->var, $variable)) {
             return null;
         }
-        /** @var Return_ $next */
-        $next = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if ($this->isNextReturnIncorrect($cond, $variable, $next)) {
+        /** @var Return_ $nextNode */
+        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if ($this->isNextReturnIncorrect($cond, $variable, $nextNode)) {
             return null;
         }
         $variableType = $this->assignVariableTypeResolver->resolve($previousAssign);
@@ -129,7 +129,7 @@ CODE_SAMPLE
         }
         $className = $class->toString();
         $types = $variableType->getTypes();
-        return $this->processSimplifyNullableReturn($variableType, $types, $className, $next, $previous, $previousAssign->expr);
+        return $this->processSimplifyNullableReturn($variableType, $types, $className, $nextNode, $previous, $previousAssign->expr);
     }
     /**
      * @param \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_ $expr
@@ -203,8 +203,8 @@ CODE_SAMPLE
         if (!$this->ifManipulator->isIfWithOnly($if, Return_::class)) {
             return \true;
         }
-        $next = $if->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$next instanceof Return_) {
+        $nextNode = $if->getAttribute(AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof Return_) {
             return \true;
         }
         $cond = $if->cond;

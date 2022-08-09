@@ -24,27 +24,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveInjectToExistingConstructorRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\PropertyUsageAnalyzer
      */
     private $propertyUsageAnalyzer;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
-     * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
     /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
@@ -123,7 +118,7 @@ CODE_SAMPLE
         foreach ($injectProperties as $injectProperty) {
             $this->removeInjectAnnotation($injectProperty);
             $this->changePropertyVisibility($injectProperty);
-            $propertyName = $this->nodeNameResolver->getName($injectProperty);
+            $propertyName = $injectProperty->props[0]->name->toString();
             $propertyType = $this->nodeTypeResolver->getType($injectProperty);
             $propertyMetadata = new PropertyMetadata($propertyName, $propertyType, $injectProperty->flags);
             $this->propertyToAddCollector->addPropertyToClass($node, $propertyMetadata);

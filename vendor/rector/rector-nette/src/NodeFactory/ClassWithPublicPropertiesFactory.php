@@ -3,13 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Nette\NodeFactory;
 
+use PhpParser\Builder\Class_ as ClassBuilder;
+use PhpParser\Builder\Property;
+use PhpParser\Builder\TraitUse;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
-use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\ClassBuilder;
-use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\NamespaceBuilder;
-use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
-use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\TraitUseBuilder;
 /**
  * @see \Rector\Nette\Tests\NodeFactory\ClassWithPublicPropertiesFactory\ClassWithPublicPropertiesFactoryTest
  */
@@ -29,14 +28,14 @@ final class ClassWithPublicPropertiesFactory
         $namespace = \implode('\\', $namespaceParts);
         $namespaceBuilder = null;
         if ($namespace !== '') {
-            $namespaceBuilder = new NamespaceBuilder($namespace);
+            $namespaceBuilder = new \PhpParser\Builder\Namespace_($namespace);
         }
         $classBuilder = new ClassBuilder($className);
         if ($parent !== null && $parent !== '') {
             $classBuilder->extend($this->fixFullyQualifiedName($parent));
         }
         foreach ($traits as $trait) {
-            $classBuilder->addStmt(new TraitUseBuilder($this->fixFullyQualifiedName($trait)));
+            $classBuilder->addStmt(new TraitUse($this->fixFullyQualifiedName($trait)));
         }
         foreach ($properties as $propertyName => $propertySettings) {
             $propertyType = $propertySettings['type'];
@@ -44,7 +43,7 @@ final class ClassWithPublicPropertiesFactory
             if ($nullable) {
                 $propertyType = new NullableType($propertyType);
             }
-            $propertyBuilder = new PropertyBuilder($propertyName);
+            $propertyBuilder = new Property($propertyName);
             $propertyBuilder->setType($propertyType);
             $classBuilder->addStmt($propertyBuilder);
         }

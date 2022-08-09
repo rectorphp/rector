@@ -12,12 +12,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ParamFinder
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

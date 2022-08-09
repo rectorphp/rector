@@ -83,11 +83,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof ClassMethod) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof ClassMethod) {
             return null;
         }
-        return $this->decorateParamWithType($parent, $node);
+        return $this->decorateParamWithType($parentNode, $node);
     }
     public function decorateParamWithType(ClassMethod $classMethod, Param $param) : ?Param
     {

@@ -30,7 +30,6 @@ final class PregMatchFunctionToNetteUtilsStringsRector extends AbstractRector
      */
     private const FUNCTION_NAME_TO_METHOD_NAME = ['preg_match' => 'match', 'preg_match_all' => 'matchAll'];
     /**
-     * @readonly
      * @var \Rector\Nette\NodeAnalyzer\PregMatchAllAnalyzer
      */
     private $pregMatchAllAnalyzer;

@@ -47,9 +47,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // skip typed properties
-        if ($parent instanceof Property && $parent->type !== null) {
+        if ($parentNode instanceof Property && $parentNode->type !== null) {
             return null;
         }
         $defaultValueNode = $node->default;

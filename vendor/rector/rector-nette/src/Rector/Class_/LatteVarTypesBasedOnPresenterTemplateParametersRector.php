@@ -23,7 +23,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LatteVarTypesBasedOnPresenterTemplateParametersRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;

@@ -29,14 +29,14 @@ final class BreakingRemovalGuard
      */
     public function isLegalNodeRemoval(Node $node) : bool
     {
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof If_ && $parent->cond === $node) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof If_ && $parentNode->cond === $node) {
             return \false;
         }
-        if ($parent instanceof BooleanNot) {
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof BooleanNot) {
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         }
-        if ($parent instanceof Assign) {
+        if ($parentNode instanceof Assign) {
             return \false;
         }
         if ($this->isIfCondition($node)) {

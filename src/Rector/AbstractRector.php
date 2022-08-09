@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
+use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -231,6 +232,7 @@ CODE_SAMPLE;
             $refactoredNode->setAttribute(AttributeKey::PARENT_NODE, $node->getAttribute(AttributeKey::PARENT_NODE));
             $this->connectParentNodes($refactoredNode);
         }
+        /** @var MutatingScope $currentScope */
         $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
         $this->changedNodeScopeRefresher->refresh($refactoredNode, $currentScope, $this->file->getSmartFileInfo());
         // is equals node type? return node early

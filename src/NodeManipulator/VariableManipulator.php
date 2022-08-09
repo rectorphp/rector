@@ -159,8 +159,8 @@ final class VariableManipulator
         }
         $variableUsages = $this->collectVariableUsages($classMethod, $assign->var, $assign);
         foreach ($variableUsages as $variableUsage) {
-            $parent = $variableUsage->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parent instanceof Arg && !$this->variableToConstantGuard->isReadArg($parent)) {
+            $parentNode = $variableUsage->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Arg && !$this->variableToConstantGuard->isReadArg($parentNode)) {
                 return \false;
             }
             if (!$this->assignManipulator->isLeftPartOfAssign($variableUsage)) {

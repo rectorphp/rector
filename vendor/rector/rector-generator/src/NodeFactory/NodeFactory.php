@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\RectorGenerator\NodeFactory;
 
+use PhpParser\Builder\Method;
 use PhpParser\BuilderHelpers;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
@@ -14,8 +15,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
-use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
 final class NodeFactory
 {
     /**
@@ -46,13 +45,13 @@ final class NodeFactory
     }
     public function createPublicMethod(string $methodName) : ClassMethod
     {
-        $methodBuilder = new MethodBuilder($methodName);
+        $methodBuilder = new Method($methodName);
         $methodBuilder->makePublic();
         return $methodBuilder->getNode();
     }
     public function createPrivateArrayProperty(string $propertyName) : Property
     {
-        $propertyBuilder = new PropertyBuilder($propertyName);
+        $propertyBuilder = new \PhpParser\Builder\Property($propertyName);
         $propertyBuilder->makePrivate();
         $docContent = <<<'CODE_SAMPLE'
 /**

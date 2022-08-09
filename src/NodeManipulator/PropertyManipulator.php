@@ -292,27 +292,27 @@ final class PropertyManipulator
      */
     private function isChangeableContext($propertyFetch) : bool
     {
-        $parent = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Node) {
+        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Node) {
             return \false;
         }
-        if ($this->typeChecker->isInstanceOf($parent, [PreInc::class, PreDec::class, PostInc::class, PostDec::class])) {
-            $parent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->typeChecker->isInstanceOf($parentNode, [PreInc::class, PreDec::class, PostInc::class, PostDec::class])) {
+            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         }
-        if (!$parent instanceof Node) {
+        if (!$parentNode instanceof Node) {
             return \false;
         }
-        if ($parent instanceof Arg) {
-            $readArg = $this->variableToConstantGuard->isReadArg($parent);
+        if ($parentNode instanceof Arg) {
+            $readArg = $this->variableToConstantGuard->isReadArg($parentNode);
             if (!$readArg) {
                 return \true;
             }
-            $caller = $parent->getAttribute(AttributeKey::PARENT_NODE);
+            $caller = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             if ($caller instanceof MethodCall || $caller instanceof StaticCall) {
                 return $this->isFoundByRefParam($caller);
             }
         }
-        if ($parent instanceof ArrayDimFetch) {
+        if ($parentNode instanceof ArrayDimFetch) {
             return !$this->readWritePropertyAnalyzer->isRead($propertyFetch);
         }
         return \false;

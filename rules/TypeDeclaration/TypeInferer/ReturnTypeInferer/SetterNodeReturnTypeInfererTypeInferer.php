@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassMemberAccessAnswerer;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\MixedType;
@@ -76,6 +77,7 @@ final class SetterNodeReturnTypeInfererTypeInferer implements ReturnTypeInfererI
             if (!$classReflection->hasProperty($returnedPropertyName)) {
                 continue;
             }
+            /** @var ClassMemberAccessAnswerer $scope */
             $propertyReflection = $classReflection->getProperty($returnedPropertyName, $scope);
             if (!$propertyReflection instanceof PhpPropertyReflection) {
                 continue;

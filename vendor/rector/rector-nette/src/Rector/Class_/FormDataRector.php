@@ -39,37 +39,30 @@ final class FormDataRector extends AbstractRector implements ConfigurableRectorI
      */
     private $formDataClassTraits = ['Nette\\SmartObject'];
     /**
-     * @readonly
      * @var \Rector\Nette\NodeFinder\FormVariableFinder
      */
     private $formVariableFinder;
     /**
-     * @readonly
      * @var \Rector\Nette\NodeFinder\FormFieldsFinder
      */
     private $formFieldsFinder;
     /**
-     * @readonly
      * @var \Rector\Nette\NodeFinder\FormOnSuccessCallbackFinder
      */
     private $formOnSuccessCallbackFinder;
     /**
-     * @readonly
      * @var \Rector\Nette\NodeFinder\FormOnSuccessCallbackValuesParamFinder
      */
     private $formOnSuccessCallbackValuesParamFinder;
     /**
-     * @readonly
      * @var \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory
      */
     private $classWithPublicPropertiesFactory;
     /**
-     * @readonly
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
     /**
-     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;

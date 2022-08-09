@@ -138,11 +138,11 @@ CODE_SAMPLE
         if (!$type instanceof BooleanType) {
             return \false;
         }
-        $next = $ifWithOnlyReturns[0]->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$next instanceof Return_) {
+        $nextNode = $ifWithOnlyReturns[0]->getAttribute(AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof Return_) {
             return \false;
         }
-        $expr = $next->expr;
+        $expr = $nextNode->expr;
         if (!$expr instanceof Expr) {
             return \false;
         }

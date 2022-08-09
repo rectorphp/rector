@@ -101,15 +101,15 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
             $node->uses[0]->name = new Name($newName);
             return $node;
         }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // already resolved above
-        if ($parent instanceof Namespace_) {
+        if ($parentNode instanceof Namespace_) {
             return null;
         }
-        if (!$parent instanceof UseUse) {
+        if (!$parentNode instanceof UseUse) {
             return $this->processFullyQualified($node, $renamedNamespaceValueObject);
         }
-        if ($parent->type !== Use_::TYPE_UNKNOWN) {
+        if ($parentNode->type !== Use_::TYPE_UNKNOWN) {
             return $this->processFullyQualified($node, $renamedNamespaceValueObject);
         }
         return null;

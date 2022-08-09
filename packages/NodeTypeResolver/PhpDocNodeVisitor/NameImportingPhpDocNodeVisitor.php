@@ -115,8 +115,8 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $phpParserNode, $fullyQualifiedObjectType)) {
             return null;
         }
-        $parent = $identifierTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
-        if ($parent instanceof TemplateTagValueNode) {
+        $parentNode = $identifierTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
+        if ($parentNode instanceof TemplateTagValueNode) {
             // might break
             return null;
         }

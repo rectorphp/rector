@@ -111,11 +111,11 @@ CODE_SAMPLE
     }
     private function isPartOfIsAFuncCall(String_ $string) : bool
     {
-        $parent = $string->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Arg) {
+        $parentNode = $string->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Arg) {
             return \false;
         }
-        $parentParent = $parent->getAttribute(AttributeKey::PARENT_NODE);
+        $parentParent = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         if (!$parentParent instanceof FuncCall) {
             return \false;
         }

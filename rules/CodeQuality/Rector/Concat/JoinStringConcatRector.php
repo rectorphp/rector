@@ -73,8 +73,8 @@ CODE_SAMPLE
     }
     private function isTopMostConcatNode(Concat $concat) : bool
     {
-        $parent = $concat->getAttribute(AttributeKey::PARENT_NODE);
-        return !$parent instanceof Concat;
+        $parentNode = $concat->getAttribute(AttributeKey::PARENT_NODE);
+        return !$parentNode instanceof Concat;
     }
     /**
      * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Scalar\String_

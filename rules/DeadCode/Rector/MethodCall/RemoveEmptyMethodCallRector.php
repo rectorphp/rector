@@ -99,17 +99,17 @@ CODE_SAMPLE
             return null;
         }
         // if->cond cannot removed, it has to be replaced with false, see https://3v4l.org/U9S9i
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof If_ && $parent->cond === $node) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof If_ && $parentNode->cond === $node) {
             return $this->nodeFactory->createFalse();
         }
-        if ($parent instanceof Assign) {
+        if ($parentNode instanceof Assign) {
             return $this->nodeFactory->createFalse();
         }
-        if ($parent instanceof ArrowFunction && $this->nodeComparator->areNodesEqual($parent->expr, $node)) {
-            return $this->processArrowFunction($parent, $node);
+        if ($parentNode instanceof ArrowFunction && $this->nodeComparator->areNodesEqual($parentNode->expr, $node)) {
+            return $this->processArrowFunction($parentNode, $node);
         }
-        if (!$parent instanceof Expression) {
+        if (!$parentNode instanceof Expression) {
             return null;
         }
         $this->removeNode($node);
@@ -124,11 +124,7 @@ CODE_SAMPLE
         if ($parentArg instanceof Arg) {
             return null;
         }
-        $scope = $methodCall->var->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            return null;
-        }
-        return $scope;
+        return $methodCall->var->getAttribute(AttributeKey::SCOPE);
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
@@ -169,8 +165,8 @@ CODE_SAMPLE
      */
     private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall)
     {
-        $parentOfParent = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentOfParent instanceof Expression) {
+        $parentParentNode = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentParentNode instanceof Expression) {
             $this->removeNode($arrowFunction);
             return $methodCall;
         }

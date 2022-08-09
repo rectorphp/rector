@@ -34,25 +34,25 @@ final class ClosureNestedUsesDecorator
     }
     public function applyNestedUses(Closure $anonymousFunctionNode, Variable $useVariable) : Closure
     {
-        $parent = $this->betterNodeFinder->findParentType($useVariable, Closure::class);
-        if (!$parent instanceof Closure) {
+        $parentNode = $this->betterNodeFinder->findParentType($useVariable, Closure::class);
+        if (!$parentNode instanceof Closure) {
             return $anonymousFunctionNode;
         }
-        $paramNames = $this->nodeNameResolver->getNames($parent->params);
+        $paramNames = $this->nodeNameResolver->getNames($parentNode->params);
         if ($this->nodeNameResolver->isNames($useVariable, $paramNames)) {
             return $anonymousFunctionNode;
         }
         $anonymousFunctionNode = clone $anonymousFunctionNode;
-        while ($parent instanceof Closure) {
-            $parentOfParent = $this->betterNodeFinder->findParentType($parent, Closure::class);
+        while ($parentNode instanceof Closure) {
+            $parentOfParent = $this->betterNodeFinder->findParentType($parentNode, Closure::class);
             $uses = [];
             while ($parentOfParent instanceof Closure) {
                 $uses = $this->collectUsesEqual($parentOfParent, $uses, $useVariable);
                 $parentOfParent = $this->betterNodeFinder->findParentType($parentOfParent, Closure::class);
             }
-            $uses = \array_merge($parent->uses, $uses);
-            $parent->uses = $this->cleanClosureUses($uses);
-            $parent = $this->betterNodeFinder->findParentType($parent, Closure::class);
+            $uses = \array_merge($parentNode->uses, $uses);
+            $parentNode->uses = $this->cleanClosureUses($uses);
+            $parentNode = $this->betterNodeFinder->findParentType($parentNode, Closure::class);
         }
         return $anonymousFunctionNode;
     }

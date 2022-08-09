@@ -14,12 +14,10 @@ use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 final class NetteInjectPropertyAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

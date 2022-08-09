@@ -39,12 +39,12 @@ final class CommentsMerger
      */
     public function keepParent(Node $newNode, Node $oldNode) : void
     {
-        $parent = $oldNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Node) {
+        $parentNode = $oldNode->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Node) {
             return;
         }
-        $phpDocInfo = $parent->getAttribute(AttributeKey::PHP_DOC_INFO);
-        $comments = $parent->getComments();
+        $phpDocInfo = $parentNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $comments = $parentNode->getComments();
         if ($phpDocInfo === null && $comments === []) {
             return;
         }

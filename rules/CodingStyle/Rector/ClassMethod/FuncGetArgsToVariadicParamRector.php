@@ -98,14 +98,14 @@ CODE_SAMPLE
      */
     private function removeOrChangeAssignToVariable($node, Assign $assign, string $variableName)
     {
-        $parent = $assign->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Expression) {
+        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Expression) {
             $this->removeNode($assign);
             return $this->applyVariadicParams($node, $variableName);
         }
         $variable = $assign->var;
         /** @var ClassMethod|Function_|Closure $functionLike */
-        $functionLike = $this->betterNodeFinder->findParentType($parent, FunctionLike::class);
+        $functionLike = $this->betterNodeFinder->findParentType($parentNode, FunctionLike::class);
         /** @var Stmt[] $stmts */
         $stmts = $functionLike->getStmts();
         $this->traverseNodesWithCallable($stmts, function (Node $node) use($assign, $variable) : ?Expr {

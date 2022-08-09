@@ -15,11 +15,9 @@ final class LatteFileProcessor implements FileProcessorInterface
 {
     /**
      * @var LatteRectorInterface[]
-     * @readonly
      */
     private $latteRectors;
     /**
-     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;

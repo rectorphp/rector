@@ -110,8 +110,8 @@ CODE_SAMPLE
         if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($classMethod, $calledMethodName)) {
             return null;
         }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Expression) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Expression) {
             return null;
         }
         $this->removeNode($node);
@@ -129,8 +129,8 @@ CODE_SAMPLE
     }
     private function processNoParentReflection(StaticCall $staticCall) : ?ConstFetch
     {
-        $parent = $staticCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Expression) {
+        $parentNode = $staticCall->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Expression) {
             return $this->nodeFactory->createNull();
         }
         $this->removeNode($staticCall);

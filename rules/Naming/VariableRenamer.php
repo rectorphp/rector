@@ -70,8 +70,8 @@ final class VariableRenamer
                 return null;
             }
             // skip param names
-            $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parent instanceof Param) {
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Param) {
                 return null;
             }
             // TODO: Remove in next PR (with above param check?),

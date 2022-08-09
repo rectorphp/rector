@@ -11,12 +11,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class NetteClassAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

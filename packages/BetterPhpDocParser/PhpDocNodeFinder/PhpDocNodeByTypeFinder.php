@@ -31,7 +31,7 @@ final class PhpDocNodeByTypeFinder
         return $foundNodes;
     }
     /**
-     * @param class-string[] $classes
+     * @param string[] $classes
      * @return DoctrineAnnotationTagValueNode[]
      */
     public function findDoctrineAnnotationsByClasses(PhpDocNode $phpDocNode, array $classes) : array

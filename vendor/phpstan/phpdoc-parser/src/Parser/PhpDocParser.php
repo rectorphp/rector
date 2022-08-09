@@ -7,6 +7,7 @@ use PHPStan\PhpDocParser\Ast;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\ShouldNotHappenException;
+use function array_key_exists;
 use function array_values;
 use function count;
 use function trim;
@@ -341,13 +342,47 @@ class PhpDocParser
         }
         return new Ast\PhpDoc\TypeAliasImportTagValueNode($importedAlias, new IdentifierTypeNode($importedFrom), $importedAs);
     }
-    private function parseAssertTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\AssertTagValueNode
+    /**
+     * @return Ast\PhpDoc\AssertTagValueNode|Ast\PhpDoc\AssertTagPropertyValueNode|Ast\PhpDoc\AssertTagMethodValueNode
+     */
+    private function parseAssertTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\PhpDocTagValueNode
     {
         $isNegated = $tokens->tryConsumeTokenType(Lexer::TOKEN_NEGATED);
         $type = $this->typeParser->parse($tokens);
-        $parameter = $this->parseRequiredVariableName($tokens);
+        $parameter = $this->parseAssertParameter($tokens);
         $description = $this->parseOptionalDescription($tokens);
-        return new Ast\PhpDoc\AssertTagValueNode($type, $parameter, $isNegated, $description);
+        if (array_key_exists('method', $parameter)) {
+            return new Ast\PhpDoc\AssertTagMethodValueNode($type, $parameter['parameter'], $parameter['method'], $isNegated, $description);
+        } elseif (array_key_exists('property', $parameter)) {
+            return new Ast\PhpDoc\AssertTagPropertyValueNode($type, $parameter['parameter'], $parameter['property'], $isNegated, $description);
+        }
+        return new Ast\PhpDoc\AssertTagValueNode($type, $parameter['parameter'], $isNegated, $description);
+    }
+    /**
+     * @return array{parameter: string}|array{parameter: string, property: string}|array{parameter: string, method: string}
+     */
+    private function parseAssertParameter(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : array
+    {
+        if ($tokens->isCurrentTokenType(Lexer::TOKEN_THIS_VARIABLE)) {
+            $parameter = '$this';
+            $requirePropertyOrMethod = \true;
+            $tokens->next();
+        } else {
+            $parameter = $tokens->currentTokenValue();
+            $requirePropertyOrMethod = \false;
+            $tokens->consumeTokenType(Lexer::TOKEN_VARIABLE);
+        }
+        if ($requirePropertyOrMethod || $tokens->isCurrentTokenType(Lexer::TOKEN_ARROW)) {
+            $tokens->consumeTokenType(Lexer::TOKEN_ARROW);
+            $propertyOrMethod = $tokens->currentTokenValue();
+            $tokens->consumeTokenType(Lexer::TOKEN_IDENTIFIER);
+            if ($tokens->tryConsumeTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
+                $tokens->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
+                return ['parameter' => $parameter, 'method' => $propertyOrMethod];
+            }
+            return ['parameter' => $parameter, 'property' => $propertyOrMethod];
+        }
+        return ['parameter' => $parameter];
     }
     private function parseOptionalVariableName(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : string
     {

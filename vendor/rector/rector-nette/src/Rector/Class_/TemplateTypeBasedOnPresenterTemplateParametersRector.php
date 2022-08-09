@@ -38,17 +38,14 @@ final class TemplateTypeBasedOnPresenterTemplateParametersRector extends Abstrac
      */
     private $templateClassTraits = [];
     /**
-     * @readonly
      * @var \Rector\Nette\NodeFactory\ClassWithPublicPropertiesFactory
      */
     private $classWithPublicPropertiesFactory;
     /**
-     * @readonly
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
     /**
-     * @readonly
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;

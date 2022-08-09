@@ -136,21 +136,21 @@ CODE_SAMPLE
         });
         /** @var TryCatch $tryCatch */
         $tryCatch = $catch->getAttribute(AttributeKey::PARENT_NODE);
-        $next = $tryCatch->getAttribute(AttributeKey::NEXT_NODE);
-        $this->replaceNextUsageVariable($tryCatch, $next, $oldVariableName, $newVariableName);
+        $nextNode = $tryCatch->getAttribute(AttributeKey::NEXT_NODE);
+        $this->replaceNextUsageVariable($tryCatch, $nextNode, $oldVariableName, $newVariableName);
     }
     private function replaceNextUsageVariable(Node $currentNode, ?Node $nextNode, string $oldVariableName, string $newVariableName) : void
     {
         if (!$nextNode instanceof Node) {
-            $parent = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parent instanceof Node) {
+            $parentNode = $currentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof Node) {
                 return;
             }
-            if ($parent instanceof FunctionLike) {
+            if ($parentNode instanceof FunctionLike) {
                 return;
             }
-            $nextNode = $parent->getAttribute(AttributeKey::NEXT_NODE);
-            $this->replaceNextUsageVariable($parent, $nextNode, $oldVariableName, $newVariableName);
+            $nextNode = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
+            $this->replaceNextUsageVariable($parentNode, $nextNode, $oldVariableName, $newVariableName);
             return;
         }
         /** @var Variable[] $variables */
@@ -174,8 +174,8 @@ CODE_SAMPLE
     private function processRenameVariable(array $variables, string $oldVariableName, string $newVariableName) : bool
     {
         foreach ($variables as $variable) {
-            $parent = $variable->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parent instanceof Assign && $this->nodeComparator->areNodesEqual($parent->var, $variable) && $this->nodeNameResolver->isName($parent->var, $oldVariableName) && !$this->nodeComparator->areNodesEqual($parent->expr, $variable)) {
+            $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($parentNode->var, $variable) && $this->nodeNameResolver->isName($parentNode->var, $oldVariableName) && !$this->nodeComparator->areNodesEqual($parentNode->expr, $variable)) {
                 return \false;
             }
             $variable->name = $newVariableName;

@@ -15,7 +15,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class FormVariableFinder
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

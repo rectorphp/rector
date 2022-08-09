@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\MutatingScope;
 use Rector\ChangesReporting\Collector\RectorChangeCollector;
 use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
@@ -65,7 +66,9 @@ final class NodesToAddCollector implements NodeCollectorInterface
             $message = \sprintf('Switch arguments in "%s()" method', __METHOD__);
             throw new ShouldNotHappenException($message);
         }
-        $this->changedNodeScopeRefresher->refresh($addedNode, $positionNode->getAttribute(AttributeKey::SCOPE));
+        /** @var MutatingScope|null $currentScope */
+        $currentScope = $positionNode->getAttribute(AttributeKey::SCOPE);
+        $this->changedNodeScopeRefresher->refresh($addedNode, $currentScope);
         $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddBefore[$position][] = $this->wrapToExpression($addedNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
@@ -94,7 +97,9 @@ final class NodesToAddCollector implements NodeCollectorInterface
             $message = \sprintf('Switch arguments in "%s()" method', __METHOD__);
             throw new ShouldNotHappenException($message);
         }
-        $this->changedNodeScopeRefresher->refresh($addedNode, $positionNode->getAttribute(AttributeKey::SCOPE));
+        /** @var MutatingScope|null $currentScope */
+        $currentScope = $positionNode->getAttribute(AttributeKey::SCOPE);
+        $this->changedNodeScopeRefresher->refresh($addedNode, $currentScope);
         $position = $this->resolveNearestStmtPosition($positionNode);
         $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
@@ -145,9 +150,9 @@ final class NodesToAddCollector implements NodeCollectorInterface
         if ($currentStmt instanceof Stmt) {
             return \spl_object_hash($currentStmt);
         }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parent instanceof Return_) {
-            return \spl_object_hash($parent);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Return_) {
+            return \spl_object_hash($parentNode);
         }
         $foundStmt = $this->betterNodeFinder->findParentType($node, Stmt::class);
         if (!$foundStmt instanceof Stmt) {

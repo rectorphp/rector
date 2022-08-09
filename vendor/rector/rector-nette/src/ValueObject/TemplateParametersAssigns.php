@@ -8,17 +8,14 @@ final class TemplateParametersAssigns
 {
     /**
      * @var AlwaysTemplateParameterAssign[]
-     * @readonly
      */
     private $templateParameterAssigns;
     /**
      * @var ParameterAssign[]
-     * @readonly
      */
     private $conditionalTemplateParameterAssign;
     /**
      * @var AlwaysTemplateParameterAssign[]
-     * @readonly
      */
     private $defaultChangeableTemplateParameterAssigns;
     /**

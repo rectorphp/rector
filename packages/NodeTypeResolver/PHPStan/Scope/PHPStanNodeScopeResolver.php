@@ -256,11 +256,11 @@ final class PHPStanNodeScopeResolver
         $originalStmt->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
         $originalStmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         $this->processNodes([$originalStmt], $smartFileInfo, $mutatingScope);
-        $next = $originalStmt->getAttribute(AttributeKey::NEXT_NODE);
-        while ($next instanceof Stmt) {
-            $next->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
-            $this->processNodes([$next], $smartFileInfo, $mutatingScope);
-            $next = $next->getAttribute(AttributeKey::NEXT_NODE);
+        $nextNode = $originalStmt->getAttribute(AttributeKey::NEXT_NODE);
+        while ($nextNode instanceof Stmt) {
+            $nextNode->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
+            $this->processNodes([$nextNode], $smartFileInfo, $mutatingScope);
+            $nextNode = $nextNode->getAttribute(AttributeKey::NEXT_NODE);
         }
     }
     private function processProperty(Property $property, MutatingScope $mutatingScope) : void

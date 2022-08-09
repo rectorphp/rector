@@ -11,7 +11,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ThisTemplatePropertyFetchAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

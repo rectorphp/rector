@@ -82,12 +82,12 @@ final class ChangedNodeScopeRefresher
         if ($this->scopeAnalyzer->isScopeResolvableFromFile($node, $mutatingScope)) {
             $mutatingScope = $this->scopeFactory->createFromFile($smartFileInfo);
         }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$mutatingScope instanceof MutatingScope && $node instanceof Expr && $parent instanceof Node) {
-            $mutatingScope = $parent->getAttribute(AttributeKey::SCOPE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$mutatingScope instanceof MutatingScope && $node instanceof Expr && $parentNode instanceof Node) {
+            $mutatingScope = $parentNode->getAttribute(AttributeKey::SCOPE);
         }
         if (!$mutatingScope instanceof MutatingScope) {
-            $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), \get_class($parent));
+            $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parentNode instanceof \PhpParser\Node ? \get_class($parentNode) : 'unknown parent');
             throw new ShouldNotHappenException($errorMessage);
         }
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes

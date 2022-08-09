@@ -15,9 +15,10 @@ final class TypeAwareNodeFinder
      * @var \PhpParser\NodeFinder
      */
     private $nodeFinder;
-    public function __construct(NodeFinder $nodeFinder)
+    public function __construct()
     {
-        $this->nodeFinder = $nodeFinder;
+        // to avoid duplicated services on inject
+        $this->nodeFinder = new NodeFinder();
     }
     /**
      * @template TNode as Node

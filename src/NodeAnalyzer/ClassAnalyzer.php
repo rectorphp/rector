@@ -30,8 +30,8 @@ final class ClassAnalyzer
         if (!$node instanceof Class_) {
             return \false;
         }
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof New_) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof New_) {
             return \false;
         }
         if ($node->isAnonymous()) {

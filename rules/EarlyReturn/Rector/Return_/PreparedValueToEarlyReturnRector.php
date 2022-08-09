@@ -179,19 +179,19 @@ CODE_SAMPLE
      */
     private function getIfsBefore(Return_ $return) : array
     {
-        $parent = $return->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof FunctionLike && !$parent instanceof If_) {
+        $parentNode = $return->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof FunctionLike && !$parentNode instanceof If_) {
             return [];
         }
-        if ($parent->stmts === []) {
+        if ($parentNode->stmts === []) {
             return [];
         }
-        \end($parent->stmts);
-        $firstItemPosition = \key($parent->stmts);
-        if ($parent->stmts[$firstItemPosition] !== $return) {
+        \end($parentNode->stmts);
+        $firstItemPosition = \key($parentNode->stmts);
+        if ($parentNode->stmts[$firstItemPosition] !== $return) {
             return [];
         }
-        return $this->collectIfs($parent->stmts, $return);
+        return $this->collectIfs($parentNode->stmts, $return);
     }
     /**
      * @param If_[] $stmts

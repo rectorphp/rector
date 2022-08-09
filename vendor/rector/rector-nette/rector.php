@@ -18,5 +18,11 @@ return static function (RectorConfig $rectorConfig) : void {
     ]);
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, ['Nette\\*', 'Symfony\\Component\\Translation\\TranslatorInterface', 'Symfony\\Contracts\\EventDispatcher\\Event', 'Kdyby\\Events\\Subscriber']);
     // needed for DEAD_CODE list, just in split package like this
-    $rectorConfig->sets([__DIR__ . '/config/config.php', LevelSetList::UP_TO_PHP_81, SetList::DEAD_CODE, SetList::CODE_QUALITY]);
+    $rectorConfig->sets([
+        __DIR__ . '/config/config.php',
+        // LevelSetList::UP_TO_PHP_80,
+        \Rector\Set\ValueObject\DowngradeLevelSetList::DOWN_TO_PHP_80,
+        SetList::DEAD_CODE,
+        SetList::CODE_QUALITY,
+    ]);
 };

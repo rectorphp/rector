@@ -45,7 +45,8 @@ class Lexer
     public const TOKEN_OPEN_CURLY_BRACKET = 31;
     public const TOKEN_CLOSE_CURLY_BRACKET = 32;
     public const TOKEN_NEGATED = 33;
-    public const TOKEN_LABELS = [self::TOKEN_REFERENCE => '\'&\'', self::TOKEN_UNION => '\'|\'', self::TOKEN_INTERSECTION => '\'&\'', self::TOKEN_NULLABLE => '\'?\'', self::TOKEN_NEGATED => '\'!\'', self::TOKEN_OPEN_PARENTHESES => '\'(\'', self::TOKEN_CLOSE_PARENTHESES => '\')\'', self::TOKEN_OPEN_ANGLE_BRACKET => '\'<\'', self::TOKEN_CLOSE_ANGLE_BRACKET => '\'>\'', self::TOKEN_OPEN_SQUARE_BRACKET => '\'[\'', self::TOKEN_CLOSE_SQUARE_BRACKET => '\']\'', self::TOKEN_OPEN_CURLY_BRACKET => '\'{\'', self::TOKEN_CLOSE_CURLY_BRACKET => '\'}\'', self::TOKEN_COMMA => '\',\'', self::TOKEN_COLON => '\':\'', self::TOKEN_VARIADIC => '\'...\'', self::TOKEN_DOUBLE_COLON => '\'::\'', self::TOKEN_DOUBLE_ARROW => '\'=>\'', self::TOKEN_EQUAL => '\'=\'', self::TOKEN_OPEN_PHPDOC => '\'/**\'', self::TOKEN_CLOSE_PHPDOC => '\'*/\'', self::TOKEN_PHPDOC_TAG => 'TOKEN_PHPDOC_TAG', self::TOKEN_PHPDOC_EOL => 'TOKEN_PHPDOC_EOL', self::TOKEN_FLOAT => 'TOKEN_FLOAT', self::TOKEN_INTEGER => 'TOKEN_INTEGER', self::TOKEN_SINGLE_QUOTED_STRING => 'TOKEN_SINGLE_QUOTED_STRING', self::TOKEN_DOUBLE_QUOTED_STRING => 'TOKEN_DOUBLE_QUOTED_STRING', self::TOKEN_IDENTIFIER => 'type', self::TOKEN_THIS_VARIABLE => '\'$this\'', self::TOKEN_VARIABLE => 'variable', self::TOKEN_HORIZONTAL_WS => 'TOKEN_HORIZONTAL_WS', self::TOKEN_OTHER => 'TOKEN_OTHER', self::TOKEN_END => 'TOKEN_END', self::TOKEN_WILDCARD => '*'];
+    public const TOKEN_ARROW = 34;
+    public const TOKEN_LABELS = [self::TOKEN_REFERENCE => '\'&\'', self::TOKEN_UNION => '\'|\'', self::TOKEN_INTERSECTION => '\'&\'', self::TOKEN_NULLABLE => '\'?\'', self::TOKEN_NEGATED => '\'!\'', self::TOKEN_OPEN_PARENTHESES => '\'(\'', self::TOKEN_CLOSE_PARENTHESES => '\')\'', self::TOKEN_OPEN_ANGLE_BRACKET => '\'<\'', self::TOKEN_CLOSE_ANGLE_BRACKET => '\'>\'', self::TOKEN_OPEN_SQUARE_BRACKET => '\'[\'', self::TOKEN_CLOSE_SQUARE_BRACKET => '\']\'', self::TOKEN_OPEN_CURLY_BRACKET => '\'{\'', self::TOKEN_CLOSE_CURLY_BRACKET => '\'}\'', self::TOKEN_COMMA => '\',\'', self::TOKEN_COLON => '\':\'', self::TOKEN_VARIADIC => '\'...\'', self::TOKEN_DOUBLE_COLON => '\'::\'', self::TOKEN_DOUBLE_ARROW => '\'=>\'', self::TOKEN_ARROW => '\'->\'', self::TOKEN_EQUAL => '\'=\'', self::TOKEN_OPEN_PHPDOC => '\'/**\'', self::TOKEN_CLOSE_PHPDOC => '\'*/\'', self::TOKEN_PHPDOC_TAG => 'TOKEN_PHPDOC_TAG', self::TOKEN_PHPDOC_EOL => 'TOKEN_PHPDOC_EOL', self::TOKEN_FLOAT => 'TOKEN_FLOAT', self::TOKEN_INTEGER => 'TOKEN_INTEGER', self::TOKEN_SINGLE_QUOTED_STRING => 'TOKEN_SINGLE_QUOTED_STRING', self::TOKEN_DOUBLE_QUOTED_STRING => 'TOKEN_DOUBLE_QUOTED_STRING', self::TOKEN_IDENTIFIER => 'type', self::TOKEN_THIS_VARIABLE => '\'$this\'', self::TOKEN_VARIABLE => 'variable', self::TOKEN_HORIZONTAL_WS => 'TOKEN_HORIZONTAL_WS', self::TOKEN_OTHER => 'TOKEN_OTHER', self::TOKEN_END => 'TOKEN_END', self::TOKEN_WILDCARD => '*'];
     public const VALUE_OFFSET = 0;
     public const TYPE_OFFSET = 1;
     /** @var string|null */
@@ -88,6 +89,7 @@ class Lexer
             self::TOKEN_VARIADIC => '\\.\\.\\.',
             self::TOKEN_DOUBLE_COLON => '::',
             self::TOKEN_DOUBLE_ARROW => '=>',
+            self::TOKEN_ARROW => '->',
             self::TOKEN_EQUAL => '=',
             self::TOKEN_COLON => ':',
             self::TOKEN_OPEN_PHPDOC => '/\\*\\*(?=\\s)\\x20?+',

@@ -6,17 +6,14 @@ namespace Rector\Nette\ValueObject;
 final class FormField
 {
     /**
-     * @readonly
      * @var string
      */
     private $name;
     /**
-     * @readonly
      * @var string
      */
     private $type;
     /**
-     * @readonly
      * @var bool
      */
     private $isRequired;

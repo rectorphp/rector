@@ -226,24 +226,18 @@ final class PhpDocInfo
         return $this->getTagsByName($name)[0] ?? null;
     }
     /**
-     * @param class-string[] $classes
+     * @param string[] $classes
      */
     public function getByAnnotationClasses(array $classes) : ?DoctrineAnnotationTagValueNode
     {
         $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClasses($this->phpDocNode, $classes);
         return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
-    /**
-     * @param class-string $class
-     */
     public function getByAnnotationClass(string $class) : ?DoctrineAnnotationTagValueNode
     {
         $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $class);
         return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
-    /**
-     * @param class-string $class
-     */
     public function hasByAnnotationClass(string $class) : bool
     {
         return $this->findByAnnotationClass($class) !== [];
@@ -269,9 +263,6 @@ final class PhpDocInfo
         }
         return null;
     }
-    /**
-     * @param class-string $desiredClass
-     */
     public function findOneByAnnotationClass(string $desiredClass) : ?DoctrineAnnotationTagValueNode
     {
         $foundTagValueNodes = $this->findByAnnotationClass($desiredClass);

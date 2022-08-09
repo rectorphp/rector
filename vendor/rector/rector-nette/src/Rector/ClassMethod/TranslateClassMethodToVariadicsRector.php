@@ -35,12 +35,10 @@ final class TranslateClassMethodToVariadicsRector extends AbstractRector
      */
     private const PARAMETERS = 'parameters';
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;

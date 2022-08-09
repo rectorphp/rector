@@ -98,7 +98,7 @@ final class ObjectTypeSpecifier
             return null;
         }
         $className = $objectType->getClassName();
-        $parent = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         foreach ($uses as $use) {
             $prefix = $this->useImportsResolver->resolvePrefix($use);
             foreach ($use->uses as $useUse) {
@@ -108,7 +108,7 @@ final class ObjectTypeSpecifier
                 $useName = $prefix . $useUse->name->toString();
                 $alias = $useUse->alias->toString();
                 $fullyQualifiedName = $prefix . $useUse->name->toString();
-                $processAliasedObject = $this->processAliasedObject($alias, $className, $useName, $parent, $fullyQualifiedName);
+                $processAliasedObject = $this->processAliasedObject($alias, $className, $useName, $parentNode, $fullyQualifiedName);
                 if ($processAliasedObject instanceof AliasedObjectType) {
                     return $processAliasedObject;
                 }

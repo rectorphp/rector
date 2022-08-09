@@ -232,13 +232,13 @@ CODE_SAMPLE
         if ($nextStmt instanceof Node) {
             return $nextStmt instanceof Return_;
         }
-        $parent = $if->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Node) {
+        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Node) {
             return \false;
         }
-        if ($parent instanceof If_) {
-            return $this->isLastIfOrBeforeLastReturn($parent, $nextStmt);
+        if ($parentNode instanceof If_) {
+            return $this->isLastIfOrBeforeLastReturn($parentNode, $nextStmt);
         }
-        return !$this->contextAnalyzer->hasAssignWithIndirectReturn($parent, $if);
+        return !$this->contextAnalyzer->hasAssignWithIndirectReturn($parentNode, $if);
     }
 }

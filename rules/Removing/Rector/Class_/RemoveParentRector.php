@@ -5,18 +5,18 @@ namespace Rector\Removing\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202208\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Removing\Rector\Class_\RemoveParentRector\RemoveParentRectorTest
  */
-final class RemoveParentRector extends AbstractRector implements ConfigurableRectorInterface
+final class RemoveParentRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
      * @var string[]
@@ -55,9 +55,8 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
         $parentClassReflection = $this->parentClassScopeResolver->resolveParentClassReflection($scope);
         if (!$parentClassReflection instanceof ClassReflection) {
             return null;

@@ -162,11 +162,11 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     }
     private function getFunctionLikePhpDocInfo(Param $param) : PhpDocInfo
     {
-        $parent = $param->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof FunctionLike) {
+        $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof FunctionLike) {
             throw new ShouldNotHappenException();
         }
-        return $this->phpDocInfoFactory->createFromNodeOrEmpty($parent);
+        return $this->phpDocInfoFactory->createFromNodeOrEmpty($parentNode);
     }
     /**
      * @return Type[]

@@ -107,11 +107,11 @@ CODE_SAMPLE
     }
     private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch) : bool
     {
-        $parent = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parent instanceof Assign) {
+        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Assign) {
             return \false;
         }
-        return $parent->var === $propertyFetch;
+        return $parentNode->var === $propertyFetch;
     }
     /**
      * @return \PhpParser\Node\Expr\MethodCall|null
