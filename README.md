@@ -131,6 +131,22 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
+## Empowered by Rector Community
+
+The Rector community is powerful thanks to active maintainers who take care of Rector sets for particular projects.
+
+Among there projects belong:
+
+* [palantirnet/drupal-rector](https://github.com/palantirnet/drupal-rector)
+* [craftcms/rector](https://github.com/craftcms/rector)
+* [FriendsOfShopware/shopware-rector](https://github.com/FriendsOfShopware/shopware-rector)
+* [sabbelasichon/typo3-rector](https://github.com/sabbelasichon/typo3-rector)
+* [sulu/sulu-rector](https://github.com/sulu/sulu-rector)
+* [efabrica-team/rector-nette](https://github.com/efabrica-team/rector-nette)
+* [Sylius/SyliusRector](https://github.com/Sylius/SyliusRector)
+
+<br>
+
 ## Support
 
 Rector is a tool that [we develop](https://getrector.org/) and share for free, so anyone can automate their refactoring. But not everyone has dozens of hours to understand complexity of abstract-syntax-tree in their own time. **That's why we provide commercial support - to save your time**.
