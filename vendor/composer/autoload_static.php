@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcf9debef211b55f4078227337a9383a8
+class ComposerStaticInit18d3aa3277e59cddf7025994207a8101
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1518,7 +1518,6 @@ class ComposerStaticInitcf9debef211b55f4078227337a9383a8
         'Rector\\BetterPhpDocParser\\PhpDocParser\\ClassAnnotationMatcher' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/ClassAnnotationMatcher.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\ConstExprClassNameDecorator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/ConstExprClassNameDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\DoctrineAnnotationDecorator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/DoctrineAnnotationDecorator.php',
-        'Rector\\BetterPhpDocParser\\PhpDocParser\\PhpDocFromTypeDeclarationDecorator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/PhpDocFromTypeDeclarationDecorator.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\ArrayParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php',
         'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\PlainValueParser' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php',
@@ -2697,6 +2696,7 @@ class ComposerStaticInitcf9debef211b55f4078227337a9383a8
         'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
         'Rector\\Php80\\ValueObject\\StrStartsWith' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/StrStartsWith.php',
+        'Rector\\Php81\\Enum\\AttributeName' => __DIR__ . '/../..' . '/rules/Php81/Enum/AttributeName.php',
         'Rector\\Php81\\NodeAnalyzer\\ComplexNewAnalyzer' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/ComplexNewAnalyzer.php',
         'Rector\\Php81\\NodeAnalyzer\\EnumConstListClassDetector' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/EnumConstListClassDetector.php',
         'Rector\\Php81\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/ClassFromEnumFactory.php',
@@ -3092,6 +3092,7 @@ class ComposerStaticInitcf9debef211b55f4078227337a9383a8
         'Rector\\Transform\\ValueObject\\ArgumentFuncCallToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ArgumentFuncCallToMethodCall.php',
         'Rector\\Transform\\ValueObject\\ArrayFuncCallToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ArrayFuncCallToMethodCall.php',
         'Rector\\Transform\\ValueObject\\AttributeKeyToClassConstFetch' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/AttributeKeyToClassConstFetch.php',
+        'Rector\\Transform\\ValueObject\\ClassMethodReference' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ClassMethodReference.php',
         'Rector\\Transform\\ValueObject\\DimFetchAssignToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/DimFetchAssignToMethodCall.php',
         'Rector\\Transform\\ValueObject\\FuncCallToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/FuncCallToMethodCall.php',
         'Rector\\Transform\\ValueObject\\FuncCallToStaticCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/FuncCallToStaticCall.php',
@@ -3249,9 +3250,9 @@ class ComposerStaticInitcf9debef211b55f4078227337a9383a8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcf9debef211b55f4078227337a9383a8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcf9debef211b55f4078227337a9383a8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcf9debef211b55f4078227337a9383a8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit18d3aa3277e59cddf7025994207a8101::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit18d3aa3277e59cddf7025994207a8101::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit18d3aa3277e59cddf7025994207a8101::$classMap;
 
         }, null, ClassLoader::class);
     }

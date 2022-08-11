@@ -8696,11 +8696,13 @@ Add #[\ReturnTypeWillChange] attribute to configured instanceof class with metho
 ```php
 use Rector\Config\RectorConfig;
 use Rector\Transform\Rector\ClassMethod\ReturnTypeWillChangeRector;
+use Rector\Transform\ValueObject\ClassMethodReference;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReturnTypeWillChangeRector::class, [
-        ArrayAccess::class => ['offsetGet'],
-    ]);
+    $rectorConfig->ruleWithConfiguration(
+        ReturnTypeWillChangeRector::class,
+        [new ClassMethodReference('ArrayAccess', 'offsetGet')]
+    );
 };
 ```
 
