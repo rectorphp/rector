@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -121,7 +122,7 @@ CODE_SAMPLE
     {
         if ($parentType instanceof MixedType) {
             $parentNode = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parentNode instanceof Class_) {
+            if (!$parentNode instanceof Class_ && !$parentNode instanceof Interface_) {
                 return null;
             }
             $className = (string) $this->nodeNameResolver->getName($parentNode);
