@@ -217,10 +217,7 @@ CODE_SAMPLE
         }
         return \false;
     }
-    /**
-     * @return null|\PhpParser\Node\Expr
-     */
-    private function refactorUsedVariable(Assign $assign)
+    private function refactorUsedVariable(Assign $assign) : ?\PhpParser\Node\Expr
     {
         $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof Expression) {

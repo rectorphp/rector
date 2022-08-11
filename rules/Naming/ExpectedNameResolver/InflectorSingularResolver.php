@@ -69,10 +69,7 @@ final class InflectorSingularResolver
         }
         return $currentName;
     }
-    /**
-     * @return string|null
-     */
-    private function resolveSingularizeMap(string $currentName)
+    private function resolveSingularizeMap(string $currentName) : ?string
     {
         foreach (self::SINGULARIZE_MAP as $plural => $singular) {
             if ($currentName === $plural) {

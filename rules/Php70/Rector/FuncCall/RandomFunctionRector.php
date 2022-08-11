@@ -35,9 +35,8 @@ final class RandomFunctionRector extends AbstractRector implements MinPhpVersion
     }
     /**
      * @param FuncCall $node
-     * @return \PhpParser\Node\Expr\FuncCall|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?\PhpParser\Node\Expr\FuncCall
     {
         foreach (self::OLD_TO_NEW_FUNCTION_NAMES as $oldFunctionName => $newFunctionName) {
             if ($this->isName($node, $oldFunctionName)) {

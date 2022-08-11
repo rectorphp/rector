@@ -124,10 +124,7 @@ final class ThisRenderFactory
         }
         return null;
     }
-    /**
-     * @return string|null
-     */
-    private function resolveTemplate(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    private function resolveTemplate(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?string
     {
         $templateParameter = $doctrineAnnotationTagValueNode->getValue('template');
         if (\is_string($templateParameter)) {

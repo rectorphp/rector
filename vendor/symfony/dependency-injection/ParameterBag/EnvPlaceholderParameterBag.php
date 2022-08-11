@@ -39,7 +39,6 @@ class EnvPlaceholderParameterBag extends ParameterBag
     private static $counter = 0;
     /**
      * {@inheritdoc}
-     * @return mixed[]|bool|string|int|float|null
      */
     public function get(string $name)
     {

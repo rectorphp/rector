@@ -149,7 +149,6 @@ abstract class BaseNode implements NodeInterface
     }
     /**
      * Retrieves the example configuration for this node.
-     * @return string|mixed[]|null
      */
     public function getExample()
     {

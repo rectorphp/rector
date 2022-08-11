@@ -24,10 +24,7 @@ final class ConstantNaming
         $propertyName = $this->nodeNameResolver->getName($propertyProperty);
         return $this->createUnderscoreUppercaseString($propertyName);
     }
-    /**
-     * @return string|null
-     */
-    public function createFromVariable(Variable $variable)
+    public function createFromVariable(Variable $variable) : ?string
     {
         $variableName = $this->nodeNameResolver->getName($variable);
         if ($variableName === null) {

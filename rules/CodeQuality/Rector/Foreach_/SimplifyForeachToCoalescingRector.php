@@ -112,10 +112,7 @@ CODE_SAMPLE
             return null;
         });
     }
-    /**
-     * @return \PhpParser\Node\Stmt\Return_|null
-     */
-    private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $return)
+    private function processForeachNodeWithReturnInside(Foreach_ $foreach, Return_ $return) : ?\PhpParser\Node\Stmt\Return_
     {
         if (!$this->nodeComparator->areNodesEqual($foreach->valueVar, $return->expr)) {
             return null;

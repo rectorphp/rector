@@ -77,7 +77,6 @@ class Question
     }
     /**
      * Returns the default answer.
-     * @return string|bool|int|float|null
      */
     public function getDefault()
     {

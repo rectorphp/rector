@@ -243,7 +243,6 @@ class YamlFileLoader extends FileLoader
     }
     /**
      * @throws InvalidArgumentException When tags are invalid
-     * @param mixed[]|string|null $service
      */
     private function parseDefinition(string $id, $service, string $file, array $defaults, bool $return = \false, bool $trackBindings = \true)
     {

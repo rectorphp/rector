@@ -205,10 +205,7 @@ CODE_SAMPLE
         }
         return !$this->valueResolver->isFalse($args[1]->value);
     }
-    /**
-     * @return null|\PhpParser\Node\Expr\MethodCall
-     */
-    private function refactorConfigureRuleMethodCall(MethodCall $methodCall)
+    private function refactorConfigureRuleMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         $caller = $methodCall->var;
         if (!$caller instanceof MethodCall) {

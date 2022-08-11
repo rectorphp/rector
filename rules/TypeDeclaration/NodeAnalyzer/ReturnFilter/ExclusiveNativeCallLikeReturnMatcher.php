@@ -26,7 +26,7 @@ final class ExclusiveNativeCallLikeReturnMatcher
      * @param Return_[] $returns
      * @return array<StaticCall|FuncCall|MethodCall>|null
      */
-    public function match(array $returns)
+    public function match(array $returns) : ?array
     {
         $callLikes = [];
         foreach ($returns as $return) {

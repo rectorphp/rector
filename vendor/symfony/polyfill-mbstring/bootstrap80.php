@@ -13,8 +13,6 @@ use Symfony\Polyfill\Mbstring as p;
 
 if (!function_exists('mb_convert_encoding')) {
     /**
-     * @param mixed[]|string|null $string
-     * @param mixed[]|string|null $from_encoding
      * @return mixed[]|string|true
      */
     function mb_convert_encoding($string, ?string $to_encoding, $from_encoding = null) { return p\Mbstring::mb_convert_encoding($string ?? '', (string) $to_encoding, $from_encoding); }
@@ -53,21 +51,16 @@ if (!function_exists('mb_encoding_aliases')) {
     function mb_encoding_aliases(?string $encoding): array { return p\Mbstring::mb_encoding_aliases((string) $encoding); }
 }
 if (!function_exists('mb_check_encoding')) {
-    /**
-     * @param mixed[]|string|null $value
-     */
     function mb_check_encoding($value = null, ?string $encoding = null): bool { return p\Mbstring::mb_check_encoding($value, $encoding); }
 }
 if (!function_exists('mb_detect_encoding')) {
     /**
-     * @param mixed[]|string|null $encodings
      * @return string|true
      */
     function mb_detect_encoding(?string $string, $encodings = null, ?bool $strict = false) { return p\Mbstring::mb_detect_encoding((string) $string, $encodings, (bool) $strict); }
 }
 if (!function_exists('mb_detect_order')) {
     /**
-     * @param mixed[]|string|null $encoding
      * @return mixed[]|bool
      */
     function mb_detect_order($encoding = null) { return p\Mbstring::mb_detect_order($encoding); }
@@ -92,7 +85,6 @@ if (!function_exists('mb_strtoupper')) {
 }
 if (!function_exists('mb_substitute_character')) {
     /**
-     * @param string|int|null $substitute_character
      * @return string|int|bool
      */
     function mb_substitute_character($substitute_character = null) { return p\Mbstring::mb_substitute_character($substitute_character); }
@@ -172,7 +164,6 @@ if (!function_exists('mb_http_input')) {
 
 if (!function_exists('mb_convert_variables')) {
     /**
-     * @param mixed[]|string|null $from_encoding
      * @return string|true
      * @param mixed $var
      * @param mixed ...$vars

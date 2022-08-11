@@ -23,13 +23,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\": "src",
-            "Rector\\Set\\": "packages\/Set"
+            "Rector\\": [
+                "src",
+                "rules"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Tests\\": "tests"
+            "Rector\\Tests\\": [
+                "tests",
+                "rules-tests"
+            ]
         },
         "classmap": [
             "stubs"
@@ -40,7 +45,7 @@
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
         "docs": [
-            "vendor\/bin\/rule-doc-generator generate src --output-file docs\/rector_rules_overview.md --ansi",
+            "vendor\/bin\/rule-doc-generator generate rules --output-file docs\/rector_rules_overview.md --ansi",
             "vendor\/bin\/ecs check-markdown docs\/rector_rules_overview.md --ansi --fix"
         ]
     },

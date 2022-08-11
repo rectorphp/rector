@@ -52,7 +52,6 @@ final class PHPStanStaticTypeMapper
     }
     /**
      * @param TypeKind::* $typeKind
-     * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
      */
     public function mapToPhpParserNode(Type $type, string $typeKind)
     {

@@ -136,10 +136,7 @@ CODE_SAMPLE
         }
         return $property;
     }
-    /**
-     * @return \PhpParser\Node\Param|null
-     */
-    private function refactorParam(Param $param)
+    private function refactorParam(Param $param) : ?\PhpParser\Node\Param
     {
         if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
             return null;

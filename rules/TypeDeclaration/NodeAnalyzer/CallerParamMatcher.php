@@ -38,7 +38,6 @@ final class CallerParamMatcher
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
-     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType
      */
     public function matchCallParamType($call, Param $param, Scope $scope)
     {
@@ -78,9 +77,8 @@ final class CallerParamMatcher
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
-     * @return int|null
      */
-    private function matchCallArgPosition($call, Param $param)
+    private function matchCallArgPosition($call, Param $param) : ?int
     {
         $paramName = $this->nodeNameResolver->getName($param);
         foreach ($call->args as $argPosition => $arg) {

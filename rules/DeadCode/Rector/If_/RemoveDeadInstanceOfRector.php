@@ -124,7 +124,7 @@ CODE_SAMPLE
     /**
      * @return Stmt[]|null
      */
-    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof)
+    private function processMayDeadInstanceOf(If_ $if, Instanceof_ $instanceof) : ?array
     {
         if (!$instanceof->class instanceof Name) {
             return null;

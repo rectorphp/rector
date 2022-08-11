@@ -70,7 +70,6 @@ final class ArrayCallableMethodMatcher
      * Returns ArrayCallableDynamicMethod object when unknown method of callable used, eg: [$this, $other]
      * @see https://github.com/rectorphp/rector-src/pull/908
      * @see https://github.com/rectorphp/rector-src/pull/909
-     * @return null|\Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod|\Rector\NodeCollector\ValueObject\ArrayCallable
      */
     public function match(Array_ $array)
     {

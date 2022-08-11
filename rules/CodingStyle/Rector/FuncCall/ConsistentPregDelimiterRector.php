@@ -171,9 +171,8 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall $node
-     * @return \PhpParser\Node|null
      */
-    private function refactorArgument($node, Arg $arg)
+    private function refactorArgument($node, Arg $arg) : ?\PhpParser\Node
     {
         if (!$arg->value instanceof String_) {
             return null;

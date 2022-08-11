@@ -60,9 +60,8 @@ CODE_SAMPLE
     }
     /**
      * @param Empty_|BooleanNot $node
-     * @return \PhpParser\Node\Expr|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?\PhpParser\Node\Expr
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
@@ -76,10 +75,7 @@ CODE_SAMPLE
         }
         return $this->refactorEmpty($node, $scope, $this->treatAsNonEmpty);
     }
-    /**
-     * @return \PhpParser\Node\Expr|null
-     */
-    private function refactorBooleanNot(BooleanNot $booleanNot, Scope $scope)
+    private function refactorBooleanNot(BooleanNot $booleanNot, Scope $scope) : ?\PhpParser\Node\Expr
     {
         if (!$booleanNot->expr instanceof Empty_) {
             return null;
@@ -88,10 +84,7 @@ CODE_SAMPLE
         $emptyExprType = $scope->getType($empty->expr);
         return $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr, $this->treatAsNonEmpty);
     }
-    /**
-     * @return \PhpParser\Node\Expr|null
-     */
-    private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty)
+    private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty) : ?\PhpParser\Node\Expr
     {
         $exprType = $scope->getType($empty->expr);
         return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);

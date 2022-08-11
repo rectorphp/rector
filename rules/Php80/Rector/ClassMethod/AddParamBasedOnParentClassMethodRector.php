@@ -184,9 +184,6 @@ CODE_SAMPLE
         }
         return $node;
     }
-    /**
-     * @return null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\ComplexType
-     */
     private function resolveParamType(Param $param)
     {
         if ($param->type === null) {

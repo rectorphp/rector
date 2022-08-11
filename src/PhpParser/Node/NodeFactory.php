@@ -430,7 +430,6 @@ final class NodeFactory
         return $classConst;
     }
     /**
-     * @param string|int|null $key
      * @param mixed $item
      */
     private function createArrayItem($item, $key = null) : ArrayItem
@@ -461,9 +460,6 @@ final class NodeFactory
         $nodeClass = \is_object($item) ? \get_class($item) : $item;
         throw new NotImplementedYetException(\sprintf('Not implemented yet. Go to "%s()" and add check for "%s" node.', __METHOD__, (string) $nodeClass));
     }
-    /**
-     * @param int|string|null $key
-     */
     private function decorateArrayItemWithKey($key, ArrayItem $arrayItem) : void
     {
         if ($key === null) {

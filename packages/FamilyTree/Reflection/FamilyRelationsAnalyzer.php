@@ -85,9 +85,6 @@ final class FamilyRelationsAnalyzer
         }
         return $childrenClassReflections;
     }
-    /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $propertyTypeNode
-     */
     public function getPossibleUnionPropertyType(Property $property, Type $varType, Scope $scope, $propertyTypeNode) : PropertyType
     {
         if ($varType instanceof UnionType) {

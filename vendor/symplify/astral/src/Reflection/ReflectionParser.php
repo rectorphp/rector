@@ -77,10 +77,7 @@ final class ReflectionParser
         }
         return $this->parseFilenameToClass($fileName);
     }
-    /**
-     * @return \PhpParser\Node\Stmt\ClassLike|null
-     */
-    private function parseFilenameToClass(string $fileName)
+    private function parseFilenameToClass(string $fileName) : ?\PhpParser\Node\Stmt\ClassLike
     {
         if (isset($this->classesByFilename[$fileName])) {
             return $this->classesByFilename[$fileName];

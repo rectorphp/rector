@@ -44,9 +44,8 @@ final class ArgumentAdder
     private $scope;
     /**
      * @param mixed|null $argumentDefaultValue
-     * @param \PHPStan\Type\Type|null $argumentType
      */
-    public function __construct(string $class, string $method, int $position, ?string $argumentName = null, $argumentDefaultValue = null, $argumentType = null, ?string $scope = null)
+    public function __construct(string $class, string $method, int $position, ?string $argumentName = null, $argumentDefaultValue = null, ?\PHPStan\Type\Type $argumentType = null, ?string $scope = null)
     {
         $this->class = $class;
         $this->method = $method;

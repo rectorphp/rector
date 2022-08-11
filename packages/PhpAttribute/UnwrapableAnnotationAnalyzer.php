@@ -43,10 +43,7 @@ final class UnwrapableAnnotationAnalyzer
         }
         return \true;
     }
-    /**
-     * @return \Rector\Php80\ValueObject\AnnotationToAttribute|null
-     */
-    private function matchAnnotationToAttribute(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    private function matchAnnotationToAttribute(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?\Rector\Php80\ValueObject\AnnotationToAttribute
     {
         foreach ($this->annotationsToAttributes as $annotationToAttribute) {
             if (!$doctrineAnnotationTagValueNode->hasClassName($annotationToAttribute->getTag())) {

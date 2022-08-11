@@ -105,10 +105,7 @@ final class ColumnPropertyTypeResolver
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $this->resolveFromPhpDocInfo($phpDocInfo, $isNullable);
     }
-    /**
-     * @return null|\PHPStan\Type\Type
-     */
-    private function resolveFromPhpDocInfo(PhpDocInfo $phpDocInfo, bool $isNullable)
+    private function resolveFromPhpDocInfo(PhpDocInfo $phpDocInfo, bool $isNullable) : ?\PHPStan\Type\Type
     {
         $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(self::COLUMN_CLASS);
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {

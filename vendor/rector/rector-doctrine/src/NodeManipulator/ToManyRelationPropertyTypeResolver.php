@@ -63,10 +63,7 @@ final class ToManyRelationPropertyTypeResolver
         }
         return $this->resolveTypeFromTargetEntity($expr, $property);
     }
-    /**
-     * @return \PHPStan\Type\Type|null
-     */
-    private function processToManyRelation(Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
+    private function processToManyRelation(Property $property, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : ?\PHPStan\Type\Type
     {
         $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
         if (!\is_string($targetEntity)) {

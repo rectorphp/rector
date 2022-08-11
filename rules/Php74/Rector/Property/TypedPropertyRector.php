@@ -160,9 +160,6 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
     }
-    /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $node
-     */
     private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, Property $property) : bool
     {
         if (!$node instanceof Node) {

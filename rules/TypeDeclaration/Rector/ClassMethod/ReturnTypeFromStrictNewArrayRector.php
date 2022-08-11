@@ -166,9 +166,8 @@ CODE_SAMPLE
     }
     /**
      * @param Stmt[] $stmts
-     * @return \PhpParser\Node\Expr\Variable|null
      */
-    private function matchArrayAssignedVariable(array $stmts)
+    private function matchArrayAssignedVariable(array $stmts) : ?\PhpParser\Node\Expr\Variable
     {
         foreach ($stmts as $stmt) {
             if (!$stmt instanceof Expression) {

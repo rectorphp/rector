@@ -104,10 +104,7 @@ CODE_SAMPLE
         }
         return $ifStmt->stmts;
     }
-    /**
-     * @return \PhpParser\Node\Stmt\If_|null
-     */
-    private function matchTruableIf(If_ $if)
+    private function matchTruableIf(If_ $if) : ?\PhpParser\Node\Stmt\If_
     {
         // just one if
         if ($if->elseifs !== []) {

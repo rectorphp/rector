@@ -68,7 +68,6 @@ class ArrayInput extends Input
     /**
      * {@inheritdoc}
      * @param string|mixed[] $values
-     * @param string|bool|int|float|mixed[]|null $default
      * @return mixed
      */
     public function getParameterOption($values, $default = \false, bool $onlyParams = \false)

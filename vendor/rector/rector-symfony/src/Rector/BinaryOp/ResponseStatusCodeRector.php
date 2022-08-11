@@ -97,10 +97,7 @@ CODE_SAMPLE
         }
         return $this->processBinaryOp($node);
     }
-    /**
-     * @return \PhpParser\Node\Expr\CallLike|null
-     */
-    private function processMethodCall(MethodCall $methodCall)
+    private function processMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\CallLike
     {
         if ($this->isName($methodCall->name, 'assert*')) {
             return $this->processAssertMethodCall($methodCall);
@@ -151,10 +148,7 @@ CODE_SAMPLE
         }
         return $this->nodeFactory->createClassConstFetch($this->responseObjectType->getClassName(), SymfonyResponseConstantMap::CODE_TO_CONST[$lNumber->value]);
     }
-    /**
-     * @return \PhpParser\Node\Expr\MethodCall|null
-     */
-    private function processAssertMethodCall(MethodCall $methodCall)
+    private function processAssertMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         $args = $methodCall->getArgs();
         if (!isset($args[1])) {
@@ -166,20 +160,14 @@ CODE_SAMPLE
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, 'Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
     }
-    /**
-     * @return \PhpParser\Node\Expr\MethodCall|null
-     */
-    private function processRedirectMethodCall(MethodCall $methodCall)
+    private function processRedirectMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->controllerAnalyzer->isController($methodCall->var)) {
             return null;
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 1, 'Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
     }
-    /**
-     * @return \PhpParser\Node\Expr\New_|null
-     */
-    private function processNew(New_ $new)
+    private function processNew(New_ $new) : ?\PhpParser\Node\Expr\New_
     {
         if (!$this->isObjectType($new->class, $this->responseObjectType)) {
             return null;

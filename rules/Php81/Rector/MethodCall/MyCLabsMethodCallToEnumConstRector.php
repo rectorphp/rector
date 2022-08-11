@@ -101,9 +101,6 @@ CODE_SAMPLE
         $enumConstFetch = $this->nodeFactory->createClassConstFetch($className, $enumCaseName);
         return new PropertyFetch($enumConstFetch, 'value');
     }
-    /**
-     * @return null|\PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Expr\PropertyFetch
-     */
     private function refactorMethodCall(MethodCall $methodCall, string $methodName)
     {
         if (!$this->isObjectType($methodCall->var, new ObjectType('MyCLabs\\Enum\\Enum'))) {

@@ -115,7 +115,6 @@ class InputArgument
     }
     /**
      * Returns the default value.
-     * @return string|bool|int|float|mixed[]|null
      */
     public function getDefault()
     {

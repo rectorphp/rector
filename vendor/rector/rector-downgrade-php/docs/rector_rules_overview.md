@@ -4,7 +4,7 @@
 
 Replace arrow functions with anonymous functions
 
-- class: [`Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector`](../src/DowngradePhp74/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector.php)
+- class: [`Rector\DowngradePhp74\Rector\ArrowFunction\ArrowFunctionToAnonymousFunctionRector`](../rules/DowngradePhp74/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector.php)
 
 ```diff
  class SomeClass
@@ -26,7 +26,7 @@ Replace arrow functions with anonymous functions
 
 Refactor __DIR__ to dirname(__FILE__)
 
-- class: [`Rector\DowngradePhp53\Rector\Dir\DirConstToFileConstRector`](../src/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php)
+- class: [`Rector\DowngradePhp53\Rector\Dir\DirConstToFileConstRector`](../rules/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php)
 
 ```diff
  final class SomeClass
@@ -45,7 +45,7 @@ Refactor __DIR__ to dirname(__FILE__)
 
 Remove "abstract" from private methods in traits and adds an empty function body
 
-- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeAbstractPrivateMethodInTraitRector`](../src/DowngradePhp80/Rector/ClassMethod/DowngradeAbstractPrivateMethodInTraitRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeAbstractPrivateMethodInTraitRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeAbstractPrivateMethodInTraitRector.php)
 
 ```diff
  trait SomeTrait
@@ -61,7 +61,7 @@ Remove "abstract" from private methods in traits and adds an empty function body
 
 Remove anonymous class
 
-- class: [`Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector`](../src/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php)
+- class: [`Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector`](../rules/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php)
 
 ```diff
 +class Anonymous
@@ -90,7 +90,7 @@ Remove anonymous class
 
 Downgrade arbitrary expression arguments to `empty()` and `isset()`
 
-- class: [`Rector\DowngradePhp55\Rector\Isset_\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector`](../src/DowngradePhp55/Rector/Isset_/DowngradeArbitraryExpressionArgsToEmptyAndIssetRector.php)
+- class: [`Rector\DowngradePhp55\Rector\Isset_\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector`](../rules/DowngradePhp55/Rector/Isset_/DowngradeArbitraryExpressionArgsToEmptyAndIssetRector.php)
 
 ```diff
 -if (isset(some_function())) {
@@ -105,7 +105,7 @@ Downgrade arbitrary expression arguments to `empty()` and `isset()`
 
 Replace arbitrary expressions used with new or instanceof.
 
-- class: [`Rector\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector`](../src/DowngradePhp80/Rector/New_/DowngradeArbitraryExpressionsSupportRector.php)
+- class: [`Rector\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector`](../rules/DowngradePhp80/Rector/New_/DowngradeArbitraryExpressionsSupportRector.php)
 
 ```diff
  function getObjectClassName() {
@@ -123,7 +123,7 @@ Replace arbitrary expressions used with new or instanceof.
 
 Replace argument unpacking by `call_user_func_array()`
 
-- class: [`Rector\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector`](../src/DowngradePhp56/Rector/CallLike/DowngradeArgumentUnpackingRector.php)
+- class: [`Rector\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector`](../rules/DowngradePhp56/Rector/CallLike/DowngradeArgumentUnpackingRector.php)
 
 ```diff
  class SomeClass
@@ -142,7 +142,7 @@ Replace argument unpacking by `call_user_func_array()`
 
 Unset nullable callback on array_filter
 
-- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeArrayFilterNullableCallbackRector`](../src/DowngradePhp80/Rector/FuncCall/DowngradeArrayFilterNullableCallbackRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeArrayFilterNullableCallbackRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeArrayFilterNullableCallbackRector.php)
 
 ```diff
  class SomeClass
@@ -162,7 +162,7 @@ Unset nullable callback on array_filter
 
 Replace use ARRAY_FILTER_USE_BOTH and ARRAY_FILTER_USE_KEY to loop to filter it
 
-- class: [`Rector\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector`](../src/DowngradePhp56/Rector/FuncCall/DowngradeArrayFilterUseConstantRector.php)
+- class: [`Rector\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector`](../rules/DowngradePhp56/Rector/FuncCall/DowngradeArrayFilterUseConstantRector.php)
 
 ```diff
  $arr = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
@@ -186,7 +186,7 @@ Replace use ARRAY_FILTER_USE_BOTH and ARRAY_FILTER_USE_KEY to loop to filter it
 
 Replace `array_is_list()` function
 
-- class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector`](../src/DowngradePhp81/Rector/FuncCall/DowngradeArrayIsListRector.php)
+- class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeArrayIsListRector`](../rules/DowngradePhp81/Rector/FuncCall/DowngradeArrayIsListRector.php)
 
 ```diff
 -array_is_list([1 => 'apple', 'orange']);
@@ -215,7 +215,7 @@ Replace `array_is_list()` function
 
 Downgrade `array_key_first()` and `array_key_last()` functions
 
-- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector`](../src/DowngradePhp73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php)
+- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeArrayKeyFirstLastRector`](../rules/DowngradePhp73/Rector/FuncCall/DowngradeArrayKeyFirstLastRector.php)
 
 ```diff
  class SomeClass
@@ -235,7 +235,7 @@ Downgrade `array_key_first()` and `array_key_last()` functions
 
 Add missing param to `array_merge` and `array_merge_recursive`
 
-- class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector`](../src/DowngradePhp74/Rector/FuncCall/DowngradeArrayMergeCallWithoutArgumentsRector.php)
+- class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector`](../rules/DowngradePhp74/Rector/FuncCall/DowngradeArrayMergeCallWithoutArgumentsRector.php)
 
 ```diff
  class SomeClass
@@ -256,7 +256,7 @@ Add missing param to `array_merge` and `array_merge_recursive`
 
 Replace array spread with array_merge function
 
-- class: [`Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector`](../src/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php)
+- class: [`Rector\DowngradePhp74\Rector\Array_\DowngradeArraySpreadRector`](../rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php)
 
 ```diff
  class SomeClass
@@ -283,7 +283,7 @@ Replace array spread with array_merge function
 
 Replace array spread with string key to array_merge function
 
-- class: [`Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector`](../src/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php)
+- class: [`Rector\DowngradePhp81\Rector\Array_\DowngradeArraySpreadStringKeyRector`](../rules/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php)
 
 ```diff
  $parts = ['a' => 'b'];
@@ -301,7 +301,7 @@ Refactor PHP attribute markers to annotations notation
 
 :wrench: **configure it!**
 
-- class: [`Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector`](../src/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector`](../rules/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php)
 
 ```php
 use Rector\Config\RectorConfig;
@@ -339,7 +339,7 @@ return static function (RectorConfig $rectorConfig): void {
 
 Downgrade binary notation for integers
 
-- class: [`Rector\DowngradePhp54\Rector\LNumber\DowngradeBinaryNotationRector`](../src/DowngradePhp54/Rector/LNumber/DowngradeBinaryNotationRector.php)
+- class: [`Rector\DowngradePhp54\Rector\LNumber\DowngradeBinaryNotationRector`](../rules/DowngradePhp54/Rector/LNumber/DowngradeBinaryNotationRector.php)
 
 ```diff
 -$a = 0b11111100101;
@@ -352,7 +352,7 @@ Downgrade binary notation for integers
 
 Replace `boolval()` by type casting to boolean
 
-- class: [`Rector\DowngradePhp55\Rector\FuncCall\DowngradeBoolvalRector`](../src/DowngradePhp55/Rector/FuncCall/DowngradeBoolvalRector.php)
+- class: [`Rector\DowngradePhp55\Rector\FuncCall\DowngradeBoolvalRector`](../rules/DowngradePhp55/Rector/FuncCall/DowngradeBoolvalRector.php)
 
 ```diff
 -$bool = boolval($value);
@@ -365,7 +365,7 @@ Replace `boolval()` by type casting to boolean
 
 Remove the "callable" param type, add a `@param` tag instead
 
-- class: [`Rector\DowngradePhp54\Rector\FunctionLike\DowngradeCallableTypeDeclarationRector`](../src/DowngradePhp54/Rector/FunctionLike/DowngradeCallableTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp54\Rector\FunctionLike\DowngradeCallableTypeDeclarationRector`](../rules/DowngradePhp54/Rector/FunctionLike/DowngradeCallableTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -386,7 +386,7 @@ Remove the "callable" param type, add a `@param` tag instead
 
 Make catch clauses catching `Throwable` also catch `Exception` to support exception hierarchies in PHP 5.
 
-- class: [`Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector`](../src/DowngradePhp70/Rector/TryCatch/DowngradeCatchThrowableRector.php)
+- class: [`Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector`](../rules/DowngradePhp70/Rector/TryCatch/DowngradeCatchThrowableRector.php)
 
 ```diff
  try {
@@ -404,7 +404,7 @@ Make catch clauses catching `Throwable` also catch `Exception` to support except
 
 Replace <class>::class constant by string class names
 
-- class: [`Rector\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector`](../src/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php)
+- class: [`Rector\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector`](../rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php)
 
 ```diff
  class AnotherClass
@@ -426,7 +426,7 @@ Replace <class>::class constant by string class names
 
 Downgrade class constant visibility
 
-- class: [`Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector`](../src/DowngradePhp71/Rector/ClassConst/DowngradeClassConstantVisibilityRector.php)
+- class: [`Rector\DowngradePhp71\Rector\ClassConst\DowngradeClassConstantVisibilityRector`](../rules/DowngradePhp71/Rector/ClassConst/DowngradeClassConstantVisibilityRector.php)
 
 ```diff
  class SomeClass
@@ -446,7 +446,7 @@ Downgrade class constant visibility
 
 Change `$object::class` to get_class($object)
 
-- class: [`Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector`](../src/DowngradePhp80/Rector/ClassConstFetch/DowngradeClassOnObjectToGetClassRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ClassConstFetch\DowngradeClassOnObjectToGetClassRector`](../rules/DowngradePhp80/Rector/ClassConstFetch/DowngradeClassOnObjectToGetClassRector.php)
 
 ```diff
  class SomeClass
@@ -465,7 +465,7 @@ Change `$object::class` to get_class($object)
 
 Replace `Closure::call()` by `Closure::bindTo()`
 
-- class: [`Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector`](../src/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php)
+- class: [`Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector`](../rules/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php)
 
 ```diff
 -$closure->call($newObj, ...$args);
@@ -478,7 +478,7 @@ Replace `Closure::call()` by `Closure::bindTo()`
 
 Converts `Closure::fromCallable()` to compatible alternative.
 
-- class: [`Rector\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector`](../src/DowngradePhp71/Rector/StaticCall/DowngradeClosureFromCallableRector.php)
+- class: [`Rector\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector`](../rules/DowngradePhp71/Rector/StaticCall/DowngradeClosureFromCallableRector.php)
 
 ```diff
 -\Closure::fromCallable('callable');
@@ -494,7 +494,7 @@ Converts `Closure::fromCallable()` to compatible alternative.
 
 Remove contravariant argument type declarations
 
-- class: [`Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector`](../src/DowngradePhp74/Rector/ClassMethod/DowngradeContravariantArgumentTypeRector.php)
+- class: [`Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeRector`](../rules/DowngradePhp74/Rector/ClassMethod/DowngradeContravariantArgumentTypeRector.php)
 
 ```diff
  class ParentType {}
@@ -525,7 +525,7 @@ Remove contravariant argument type declarations
 
 Make method return same type as parent
 
-- class: [`Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector`](../src/DowngradePhp74/Rector/ClassMethod/DowngradeCovariantReturnTypeRector.php)
+- class: [`Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector`](../rules/DowngradePhp74/Rector/ClassMethod/DowngradeCovariantReturnTypeRector.php)
 
 ```diff
  class ParentType {}
@@ -556,7 +556,7 @@ Make method return same type as parent
 
 Change array contant definition via define to const
 
-- class: [`Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector`](../src/DowngradePhp70/Rector/Expression/DowngradeDefineArrayConstantRector.php)
+- class: [`Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector`](../rules/DowngradePhp70/Rector/Expression/DowngradeDefineArrayConstantRector.php)
 
 ```diff
 -define('ANIMALS', [
@@ -574,7 +574,7 @@ Change array contant definition via define to const
 
 Add parentheses around non-dereferenceable expressions.
 
-- class: [`Rector\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector`](../src/DowngradePhp80/Rector/ArrayDimFetch/DowngradeDereferenceableOperationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector`](../rules/DowngradePhp80/Rector/ArrayDimFetch/DowngradeDereferenceableOperationRector.php)
 
 ```diff
  function getFirstChar(string $str, string $suffix = '')
@@ -590,7 +590,7 @@ Add parentheses around non-dereferenceable expressions.
 
 Replace the 2nd argument of `dirname()`
 
-- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector`](../src/DowngradePhp70/Rector/FuncCall/DowngradeDirnameLevelsRector.php)
+- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeDirnameLevelsRector.php)
 
 ```diff
 -return dirname($path, 2);
@@ -603,7 +603,7 @@ Replace the 2nd argument of `dirname()`
 
 Downgrade enum to constant list class
 
-- class: [`Rector\DowngradePhp80\Rector\Enum_\DowngradeEnumToConstantListClassRector`](../src/DowngradePhp80/Rector/Enum_/DowngradeEnumToConstantListClassRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Enum_\DowngradeEnumToConstantListClassRector`](../rules/DowngradePhp80/Rector/Enum_/DowngradeEnumToConstantListClassRector.php)
 
 ```diff
 -enum Direction
@@ -623,7 +623,7 @@ Downgrade enum to constant list class
 
 Remove exponential assignment operator **=
 
-- class: [`Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector`](../src/DowngradePhp56/Rector/Pow/DowngradeExponentialAssignmentOperatorRector.php)
+- class: [`Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector`](../rules/DowngradePhp56/Rector/Pow/DowngradeExponentialAssignmentOperatorRector.php)
 
 ```diff
 -$a **= 3;
@@ -636,7 +636,7 @@ Remove exponential assignment operator **=
 
 Changes ** (exp) operator to pow(val, val2)
 
-- class: [`Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialOperatorRector`](../src/DowngradePhp56/Rector/Pow/DowngradeExponentialOperatorRector.php)
+- class: [`Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialOperatorRector`](../rules/DowngradePhp56/Rector/Pow/DowngradeExponentialOperatorRector.php)
 
 ```diff
 -1**2;
@@ -649,7 +649,7 @@ Changes ** (exp) operator to pow(val, val2)
 
 Remove final from class constants
 
-- class: [`Rector\DowngradePhp81\Rector\ClassConst\DowngradeFinalizePublicClassConstantRector`](../src/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php)
+- class: [`Rector\DowngradePhp81\Rector\ClassConst\DowngradeFinalizePublicClassConstantRector`](../rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php)
 
 ```diff
  class SomeClass
@@ -665,7 +665,7 @@ Remove final from class constants
 
 Replace variadic placeholders usage by `Closure::fromCallable()`
 
-- class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeFirstClassCallableSyntaxRector`](../src/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php)
+- class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeFirstClassCallableSyntaxRector`](../rules/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php)
 
 ```diff
 -$cb = strlen(...);
@@ -678,7 +678,7 @@ Replace variadic placeholders usage by `Closure::fromCallable()`
 
 Remove indentation from heredoc/nowdoc
 
-- class: [`Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector`](../src/DowngradePhp73/Rector/String_/DowngradeFlexibleHeredocSyntaxRector.php)
+- class: [`Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector`](../rules/DowngradePhp73/Rector/String_/DowngradeFlexibleHeredocSyntaxRector.php)
 
 ```diff
  $query = <<<SQL
@@ -698,7 +698,7 @@ Remove indentation from heredoc/nowdoc
 
 Downgrade `list()` support in foreach constructs
 
-- class: [`Rector\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector`](../src/DowngradePhp55/Rector/Foreach_/DowngradeForeachListRector.php)
+- class: [`Rector\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector`](../rules/DowngradePhp55/Rector/Foreach_/DowngradeForeachListRector.php)
 
 ```diff
 -foreach ($array as $key => list($item1, $item2)) {
@@ -714,7 +714,7 @@ Downgrade `list()` support in foreach constructs
 
 Changes `fread()` or `fwrite()` compare to false to negation check
 
-- class: [`Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector`](../src/DowngradePhp74/Rector/Identical/DowngradeFreadFwriteFalsyToNegationRector.php)
+- class: [`Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector`](../rules/DowngradePhp74/Rector/Identical/DowngradeFreadFwriteFalsyToNegationRector.php)
 
 ```diff
 -fread($handle, $length) === false;
@@ -729,7 +729,7 @@ Changes `fread()` or `fwrite()` compare to false to negation check
 
 Downgrade indirect method call by array variable
 
-- class: [`Rector\DowngradePhp54\Rector\FuncCall\DowngradeIndirectCallByArrayRector`](../src/DowngradePhp54/Rector/FuncCall/DowngradeIndirectCallByArrayRector.php)
+- class: [`Rector\DowngradePhp54\Rector\FuncCall\DowngradeIndirectCallByArrayRector`](../rules/DowngradePhp54/Rector/FuncCall/DowngradeIndirectCallByArrayRector.php)
 
 ```diff
  class Hello {
@@ -749,7 +749,7 @@ Downgrade indirect method call by array variable
 
 Downgrade instance and method call/property access
 
-- class: [`Rector\DowngradePhp54\Rector\MethodCall\DowngradeInstanceMethodCallRector`](../src/DowngradePhp54/Rector/MethodCall/DowngradeInstanceMethodCallRector.php)
+- class: [`Rector\DowngradePhp54\Rector\MethodCall\DowngradeInstanceMethodCallRector`](../rules/DowngradePhp54/Rector/MethodCall/DowngradeInstanceMethodCallRector.php)
 
 ```diff
 -echo (new \ReflectionClass('\\stdClass'))->getName();
@@ -763,7 +763,7 @@ Downgrade instance and method call/property access
 
 Add `instanceof Exception` check as a fallback to `instanceof Throwable` to support exception hierarchies in PHP 5
 
-- class: [`Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector`](../src/DowngradePhp70/Rector/Instanceof_/DowngradeInstanceofThrowableRector.php)
+- class: [`Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector`](../rules/DowngradePhp70/Rector/Instanceof_/DowngradeInstanceofThrowableRector.php)
 
 ```diff
 -return $e instanceof \Throwable;
@@ -776,7 +776,7 @@ Add `instanceof Exception` check as a fallback to `instanceof Throwable` to supp
 
 Downgrade `is_countable()` to former version
 
-- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector`](../src/DowngradePhp73/Rector/FuncCall/DowngradeIsCountableRector.php)
+- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeIsCountableRector`](../rules/DowngradePhp73/Rector/FuncCall/DowngradeIsCountableRector.php)
 
 ```diff
  $items = [];
@@ -790,7 +790,7 @@ Downgrade `is_countable()` to former version
 
 Change is_iterable with array and Traversable object type check
 
-- class: [`Rector\DowngradePhp71\Rector\FuncCall\DowngradeIsIterableRector`](../src/DowngradePhp71/Rector/FuncCall/DowngradeIsIterableRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FuncCall\DowngradeIsIterableRector`](../rules/DowngradePhp71/Rector/FuncCall/DowngradeIsIterableRector.php)
 
 ```diff
  class SomeClass
@@ -809,7 +809,7 @@ Change is_iterable with array and Traversable object type check
 
 Remove the iterable pseudo type params and returns, add `@param` and `@return` tags instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector`](../src/DowngradePhp71/Rector/FunctionLike/DowngradeIterablePseudoTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeIterablePseudoTypeDeclarationRector`](../rules/DowngradePhp71/Rector/FunctionLike/DowngradeIterablePseudoTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -832,7 +832,7 @@ Remove the iterable pseudo type params and returns, add `@param` and `@return` t
 
 Downgrade `json_decode()` with null associative argument function
 
-- class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector`](../src/DowngradePhp72/Rector/FuncCall/DowngradeJsonDecodeNullAssociativeArgRector.php)
+- class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradeJsonDecodeNullAssociativeArgRector`](../rules/DowngradePhp72/Rector/FuncCall/DowngradeJsonDecodeNullAssociativeArgRector.php)
 
 ```diff
  function exactlyNull(string $json)
@@ -854,7 +854,7 @@ Downgrade `json_decode()` with null associative argument function
 
 Extract keys in list to its own variable assignment
 
-- class: [`Rector\DowngradePhp71\Rector\List_\DowngradeKeysInListRector`](../src/DowngradePhp71/Rector/List_/DowngradeKeysInListRector.php)
+- class: [`Rector\DowngradePhp71\Rector\List_\DowngradeKeysInListRector`](../rules/DowngradePhp71/Rector/List_/DowngradeKeysInListRector.php)
 
 ```diff
  class SomeClass
@@ -878,7 +878,7 @@ Extract keys in list to its own variable assignment
 
 Convert the list reference assignment to its equivalent PHP 7.2 code
 
-- class: [`Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector`](../src/DowngradePhp73/Rector/List_/DowngradeListReferenceAssignmentRector.php)
+- class: [`Rector\DowngradePhp73\Rector\List_\DowngradeListReferenceAssignmentRector`](../rules/DowngradePhp73/Rector/List_/DowngradeListReferenceAssignmentRector.php)
 
 ```diff
  class SomeClass
@@ -908,7 +908,7 @@ Convert the list reference assignment to its equivalent PHP 7.2 code
 
 Downgrade `match()` to `switch()`
 
-- class: [`Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector`](../src/DowngradePhp80/Rector/Expression/DowngradeMatchToSwitchRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector`](../rules/DowngradePhp80/Rector/Expression/DowngradeMatchToSwitchRector.php)
 
 ```diff
  class SomeClass
@@ -942,7 +942,7 @@ Downgrade `match()` to `switch()`
 
 Replace (clone `$obj)->call()` to object assign and call
 
-- class: [`Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector`](../src/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php)
+- class: [`Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector`](../rules/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php)
 
 ```diff
 -(clone $this)->execute();
@@ -956,7 +956,7 @@ Replace (clone `$obj)->call()` to object assign and call
 
 Remove the "mixed" param and return type, add a `@param` and `@return` tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector`](../src/DowngradePhp80/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeMixedTypeDeclarationRector`](../rules/DowngradePhp80/Rector/FunctionLike/DowngradeMixedTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -978,7 +978,7 @@ Remove the "mixed" param and return type, add a `@param` and `@return` tag inste
 
 Removes mixed type property type definition, adding `@var` annotations instead.
 
-- class: [`Rector\DowngradePhp80\Rector\Property\DowngradeMixedTypeTypedPropertyRector`](../src/DowngradePhp80/Rector/Property/DowngradeMixedTypeTypedPropertyRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Property\DowngradeMixedTypeTypedPropertyRector`](../rules/DowngradePhp80/Rector/Property/DowngradeMixedTypeTypedPropertyRector.php)
 
 ```diff
  class SomeClass
@@ -997,7 +997,7 @@ Removes mixed type property type definition, adding `@var` annotations instead.
 
 Remove named argument
 
-- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector`](../src/DowngradePhp80/Rector/MethodCall/DowngradeNamedArgumentRector.php)
+- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeNamedArgumentRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeNamedArgumentRector.php)
 
 ```diff
  class SomeClass
@@ -1020,7 +1020,7 @@ Remove named argument
 
 Downgrade negative string offset to strlen
 
-- class: [`Rector\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector`](../src/DowngradePhp71/Rector/String_/DowngradeNegativeStringOffsetToStrlenRector.php)
+- class: [`Rector\DowngradePhp71\Rector\String_\DowngradeNegativeStringOffsetToStrlenRector`](../rules/DowngradePhp71/Rector/String_/DowngradeNegativeStringOffsetToStrlenRector.php)
 
 ```diff
 -echo 'abcdef'[-2];
@@ -1037,7 +1037,7 @@ Downgrade negative string offset to strlen
 
 Remove "never" return type, add a `"@return` never" tag instead
 
-- class: [`Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNeverTypeDeclarationRector`](../src/DowngradePhp81/Rector/FunctionLike/DowngradeNeverTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNeverTypeDeclarationRector`](../rules/DowngradePhp81/Rector/FunctionLike/DowngradeNeverTypeDeclarationRector.php)
 
 ```diff
 -function someFunction(): never
@@ -1055,7 +1055,7 @@ Remove "never" return type, add a `"@return` never" tag instead
 
 Replace New in initializers
 
-- class: [`Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector`](../src/DowngradePhp81/Rector/FunctionLike/DowngradeNewInInitializerRector.php)
+- class: [`Rector\DowngradePhp81\Rector\FunctionLike\DowngradeNewInInitializerRector`](../rules/DowngradePhp81/Rector/FunctionLike/DowngradeNewInInitializerRector.php)
 
 ```diff
  class SomeClass
@@ -1075,7 +1075,7 @@ Replace New in initializers
 
 Downgrade catch () without variable to one
 
-- class: [`Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector`](../src/DowngradePhp80/Rector/Catch_/DowngradeNonCapturingCatchesRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Catch_\DowngradeNonCapturingCatchesRector`](../rules/DowngradePhp80/Rector/Catch_/DowngradeNonCapturingCatchesRector.php)
 
 ```diff
  class SomeClass
@@ -1098,7 +1098,7 @@ Downgrade catch () without variable to one
 
 Change null coalesce to isset ternary check
 
-- class: [`Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector`](../src/DowngradePhp70/Rector/Coalesce/DowngradeNullCoalesceRector.php)
+- class: [`Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector`](../rules/DowngradePhp70/Rector/Coalesce/DowngradeNullCoalesceRector.php)
 
 ```diff
 -$username = $_GET['user'] ?? 'nobody';
@@ -1111,7 +1111,7 @@ Change null coalesce to isset ternary check
 
 Remove null coalescing operator ??=
 
-- class: [`Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector`](../src/DowngradePhp74/Rector/Coalesce/DowngradeNullCoalescingOperatorRector.php)
+- class: [`Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector`](../rules/DowngradePhp74/Rector/Coalesce/DowngradeNullCoalescingOperatorRector.php)
 
 ```diff
  $array = [];
@@ -1125,7 +1125,7 @@ Remove null coalescing operator ??=
 
 Remove the nullable type params, add `@param` tags instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector`](../src/DowngradePhp71/Rector/FunctionLike/DowngradeNullableTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeNullableTypeDeclarationRector`](../rules/DowngradePhp71/Rector/FunctionLike/DowngradeNullableTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -1147,7 +1147,7 @@ Remove the nullable type params, add `@param` tags instead
 
 Change nullsafe operator to ternary operator rector
 
-- class: [`Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector`](../src/DowngradePhp80/Rector/NullsafeMethodCall/DowngradeNullsafeToTernaryOperatorRector.php)
+- class: [`Rector\DowngradePhp80\Rector\NullsafeMethodCall\DowngradeNullsafeToTernaryOperatorRector`](../rules/DowngradePhp80/Rector/NullsafeMethodCall/DowngradeNullsafeToTernaryOperatorRector.php)
 
 ```diff
 -$dateAsString = $booking->getStartDate()?->asDateTimeString();
@@ -1162,7 +1162,7 @@ Change nullsafe operator to ternary operator rector
 
 Downgrade number_format arg to fill 4th arg when only 3rd arg filled
 
-- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeNumberFormatNoFourthArgRector`](../src/DowngradePhp80/Rector/FuncCall/DowngradeNumberFormatNoFourthArgRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeNumberFormatNoFourthArgRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeNumberFormatNoFourthArgRector.php)
 
 ```diff
  class SomeClass
@@ -1181,7 +1181,7 @@ Downgrade number_format arg to fill 4th arg when only 3rd arg filled
 
 Remove "_" as thousands separator in numbers
 
-- class: [`Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector`](../src/DowngradePhp74/Rector/LNumber/DowngradeNumericLiteralSeparatorRector.php)
+- class: [`Rector\DowngradePhp74\Rector\LNumber\DowngradeNumericLiteralSeparatorRector`](../rules/DowngradePhp74/Rector/LNumber/DowngradeNumericLiteralSeparatorRector.php)
 
 ```diff
  class SomeClass
@@ -1202,7 +1202,7 @@ Remove "_" as thousands separator in numbers
 
 Remove the "object" param and return type, add a `@param` and `@return` tags instead
 
-- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector`](../src/DowngradePhp72/Rector/FunctionLike/DowngradeObjectTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp72\Rector\FunctionLike\DowngradeObjectTypeDeclarationRector`](../rules/DowngradePhp72/Rector/FunctionLike/DowngradeObjectTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -1226,7 +1226,7 @@ Change param type to match the lowest type in whole family tree
 
 :wrench: **configure it!**
 
-- class: [`Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector`](../src/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php)
+- class: [`Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector`](../rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php)
 
 ```php
 use Rector\Config\RectorConfig;
@@ -1266,7 +1266,7 @@ return static function (RectorConfig $rectorConfig): void {
 
 Remove "parent" return type, add a `"@return` parent" tag instead
 
-- class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector`](../src/DowngradePhp70/Rector/ClassMethod/DowngradeParentTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector`](../rules/DowngradePhp70/Rector/ClassMethod/DowngradeParentTypeDeclarationRector.php)
 
 ```diff
  class ParentClass
@@ -1292,7 +1292,7 @@ Remove "parent" return type, add a `"@return` parent" tag instead
 
 Remove Json constant that available only in php 7.1
 
-- class: [`Rector\DowngradePhp71\Rector\ConstFetch\DowngradePhp71JsonConstRector`](../src/DowngradePhp71/Rector/ConstFetch/DowngradePhp71JsonConstRector.php)
+- class: [`Rector\DowngradePhp71\Rector\ConstFetch\DowngradePhp71JsonConstRector`](../rules/DowngradePhp71/Rector/ConstFetch/DowngradePhp71JsonConstRector.php)
 
 ```diff
 -json_encode($content, JSON_UNESCAPED_LINE_TERMINATORS);
@@ -1305,7 +1305,7 @@ Remove Json constant that available only in php 7.1
 
 Remove Json constant that available only in php 7.2
 
-- class: [`Rector\DowngradePhp72\Rector\ConstFetch\DowngradePhp72JsonConstRector`](../src/DowngradePhp72/Rector/ConstFetch/DowngradePhp72JsonConstRector.php)
+- class: [`Rector\DowngradePhp72\Rector\ConstFetch\DowngradePhp72JsonConstRector`](../rules/DowngradePhp72/Rector/ConstFetch/DowngradePhp72JsonConstRector.php)
 
 ```diff
 -$inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_IGNORE);
@@ -1320,7 +1320,7 @@ Remove Json constant that available only in php 7.2
 
 Remove Json constant that available only in php 7.3
 
-- class: [`Rector\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRector`](../src/DowngradePhp73/Rector/ConstFetch/DowngradePhp73JsonConstRector.php)
+- class: [`Rector\DowngradePhp73\Rector\ConstFetch\DowngradePhp73JsonConstRector`](../rules/DowngradePhp73/Rector/ConstFetch/DowngradePhp73JsonConstRector.php)
 
 ```diff
 -json_encode($content, JSON_THROW_ON_ERROR);
@@ -1333,7 +1333,7 @@ Remove Json constant that available only in php 7.3
 
 change instanceof Object to is_resource
 
-- class: [`Rector\DowngradePhp80\Rector\Instanceof_\DowngradePhp80ResourceReturnToObjectRector`](../src/DowngradePhp80/Rector/Instanceof_/DowngradePhp80ResourceReturnToObjectRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Instanceof_\DowngradePhp80ResourceReturnToObjectRector`](../rules/DowngradePhp80/Rector/Instanceof_/DowngradePhp80ResourceReturnToObjectRector.php)
 
 ```diff
  class SomeClass
@@ -1352,7 +1352,7 @@ change instanceof Object to is_resource
 
 change instanceof Object to is_resource
 
-- class: [`Rector\DowngradePhp81\Rector\Instanceof_\DowngradePhp81ResourceReturnToObjectRector`](../src/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php)
+- class: [`Rector\DowngradePhp81\Rector\Instanceof_\DowngradePhp81ResourceReturnToObjectRector`](../rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php)
 
 ```diff
  class SomeClass
@@ -1371,7 +1371,7 @@ change instanceof Object to is_resource
 
 `"something()"` will be renamed to `"somethingElse()"`
 
-- class: [`Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector`](../src/DowngradePhp80/Rector/StaticCall/DowngradePhpTokenRector.php)
+- class: [`Rector\DowngradePhp80\Rector\StaticCall\DowngradePhpTokenRector`](../rules/DowngradePhp80/Rector/StaticCall/DowngradePhpTokenRector.php)
 
 ```diff
 -$tokens = \PhpToken::tokenize($code);
@@ -1392,7 +1392,7 @@ change instanceof Object to is_resource
 
 Downgrade single one | separated to multi catch exception
 
-- class: [`Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector`](../src/DowngradePhp71/Rector/TryCatch/DowngradePipeToMultiCatchExceptionRector.php)
+- class: [`Rector\DowngradePhp71\Rector\TryCatch\DowngradePipeToMultiCatchExceptionRector`](../rules/DowngradePhp71/Rector/TryCatch/DowngradePipeToMultiCatchExceptionRector.php)
 
 ```diff
  try {
@@ -1411,7 +1411,7 @@ Downgrade single one | separated to multi catch exception
 
 Remove PREG_UNMATCHED_AS_NULL from preg_match and set null value on empty string matched on each match
 
-- class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector`](../src/DowngradePhp72/Rector/FuncCall/DowngradePregUnmatchedAsNullConstantRector.php)
+- class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradePregUnmatchedAsNullConstantRector`](../rules/DowngradePhp72/Rector/FuncCall/DowngradePregUnmatchedAsNullConstantRector.php)
 
 ```diff
  class SomeClass
@@ -1435,7 +1435,7 @@ Remove PREG_UNMATCHED_AS_NULL from preg_match and set null value on empty string
 
 Downgrade previously implemented interface
 
-- class: [`Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector`](../src/DowngradePhp74/Rector/Interface_/DowngradePreviouslyImplementedInterfaceRector.php)
+- class: [`Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector`](../rules/DowngradePhp74/Rector/Interface_/DowngradePreviouslyImplementedInterfaceRector.php)
 
 ```diff
  interface ContainerExceptionInterface extends Throwable
@@ -1454,7 +1454,7 @@ Downgrade previously implemented interface
 
 Change constructor property promotion to property assign
 
-- class: [`Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector`](../src/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Class_\DowngradePropertyPromotionRector`](../rules/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php)
 
 ```diff
  class SomeClass
@@ -1475,7 +1475,7 @@ Change constructor property promotion to property assign
 
 Remove the intersection type params and returns, add `@param/@return` tags instead
 
-- class: [`Rector\DowngradePhp81\Rector\FunctionLike\DowngradePureIntersectionTypeRector`](../src/DowngradePhp81/Rector/FunctionLike/DowngradePureIntersectionTypeRector.php)
+- class: [`Rector\DowngradePhp81\Rector\FunctionLike\DowngradePureIntersectionTypeRector`](../rules/DowngradePhp81/Rector/FunctionLike/DowngradePureIntersectionTypeRector.php)
 
 ```diff
 -function someFunction(): Foo&Bar
@@ -1493,7 +1493,7 @@ Remove the intersection type params and returns, add `@param/@return` tags inste
 
 Remove "readonly" class type, decorate all properties to "readonly"
 
-- class: [`Rector\DowngradePhp82\Rector\Class_\DowngradeReadonlyClassRector`](../src/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php)
+- class: [`Rector\DowngradePhp82\Rector\Class_\DowngradeReadonlyClassRector`](../rules/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php)
 
 ```diff
 -final readonly class SomeClass
@@ -1515,7 +1515,7 @@ Remove "readonly" class type, decorate all properties to "readonly"
 
 Remove "readonly" property type, add a "@readonly" tag instead
 
-- class: [`Rector\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector`](../src/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php)
+- class: [`Rector\DowngradePhp81\Rector\Property\DowngradeReadonlyPropertyRector`](../rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php)
 
 ```diff
  class SomeClass
@@ -1539,7 +1539,7 @@ Remove "readonly" property type, add a "@readonly" tag instead
 
 Remove bool type hint on child of RecursiveDirectoryIterator hasChildren allowLinks parameter
 
-- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeRecursiveDirectoryIteratorHasChildrenRector`](../src/DowngradePhp80/Rector/ClassMethod/DowngradeRecursiveDirectoryIteratorHasChildrenRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeRecursiveDirectoryIteratorHasChildrenRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeRecursiveDirectoryIteratorHasChildrenRector.php)
 
 ```diff
  class RecursiveDirectoryIteratorChild extends \RecursiveDirectoryIterator
@@ -1558,7 +1558,7 @@ Remove bool type hint on child of RecursiveDirectoryIterator hasChildren allowLi
 
 Downgrade ReflectionClass->getConstants(ReflectionClassConstant::IS_*)
 
-- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionClassGetConstantsFilterRector`](../src/DowngradePhp80/Rector/MethodCall/DowngradeReflectionClassGetConstantsFilterRector.php)
+- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionClassGetConstantsFilterRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionClassGetConstantsFilterRector.php)
 
 ```diff
  $reflectionClass = new ReflectionClass('SomeClass');
@@ -1579,7 +1579,7 @@ Downgrade ReflectionClass->getConstants(ReflectionClassConstant::IS_*)
 
 Remove reflection `getAttributes()` class method code
 
-- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionGetAttributesRector`](../src/DowngradePhp80/Rector/MethodCall/DowngradeReflectionGetAttributesRector.php)
+- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionGetAttributesRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionGetAttributesRector.php)
 
 ```diff
  class SomeClass
@@ -1602,7 +1602,7 @@ Remove reflection `getAttributes()` class method code
 
 Downgrade reflection `$refleciton->getType()` method call
 
-- class: [`Rector\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector`](../src/DowngradePhp74/Rector/MethodCall/DowngradeReflectionGetTypeRector.php)
+- class: [`Rector\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector`](../rules/DowngradePhp74/Rector/MethodCall/DowngradeReflectionGetTypeRector.php)
 
 ```diff
  class SomeClass
@@ -1625,7 +1625,7 @@ Downgrade reflection `$refleciton->getType()` method call
 
 Downgrade `ReflectionProperty->getDefaultValue()`
 
-- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionPropertyGetDefaultValueRector`](../src/DowngradePhp80/Rector/MethodCall/DowngradeReflectionPropertyGetDefaultValueRector.php)
+- class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionPropertyGetDefaultValueRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionPropertyGetDefaultValueRector.php)
 
 ```diff
  class SomeClass
@@ -1644,7 +1644,7 @@ Downgrade `ReflectionProperty->getDefaultValue()`
 
 Remove the type params and return type, add `@param` and `@return` tags instead
 
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector`](../src/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector`](../rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -1666,7 +1666,7 @@ Remove the type params and return type, add `@param` and `@return` tags instead
 
 Remove "self" return type, add a `"@return` `$this"` tag instead
 
-- class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector`](../src/DowngradePhp70/Rector/ClassMethod/DowngradeSelfTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector`](../rules/DowngradePhp70/Rector/ClassMethod/DowngradeSelfTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -1688,7 +1688,7 @@ Remove "self" return type, add a `"@return` `$this"` tag instead
 
 Move array option of session_start($options) to before statement's `ini_set()`
 
-- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector`](../src/DowngradePhp70/Rector/FuncCall/DowngradeSessionStartArrayOptionsRector.php)
+- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeSessionStartArrayOptionsRector.php)
 
 ```diff
 -session_start([
@@ -1704,7 +1704,7 @@ Move array option of session_start($options) to before statement's `ini_set()`
 
 Change spaceship with check equal, and ternary to result 0, -1, 1
 
-- class: [`Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector`](../src/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php)
+- class: [`Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector`](../rules/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php)
 
 ```diff
 -return $a <=> $b;
@@ -1723,7 +1723,7 @@ Change spaceship with check equal, and ternary to result 0, -1, 1
 
 Remove static from closure
 
-- class: [`Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector`](../src/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php)
+- class: [`Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector`](../rules/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php)
 
 ```diff
  final class SomeClass
@@ -1744,7 +1744,7 @@ Remove static from closure
 
 Remove "static" return and param type, add a `"@param` `$this"` and `"@return` `$this"` tag instead
 
-- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector`](../src/DowngradePhp80/Rector/ClassMethod/DowngradeStaticTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeStaticTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -1766,7 +1766,7 @@ Remove "static" return and param type, add a `"@param` `$this"` and `"@return` `
 
 Replace `str_contains()` with `strpos()` !== false
 
-- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector`](../src/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrContainsRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeStrContainsRector.php)
 
 ```diff
  class SomeClass
@@ -1785,7 +1785,7 @@ Replace `str_contains()` with `strpos()` !== false
 
 Downgrade `str_ends_with()` to `strncmp()` version
 
-- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector`](../src/DowngradePhp80/Rector/FuncCall/DowngradeStrEndsWithRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrEndsWithRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeStrEndsWithRector.php)
 
 ```diff
 -str_ends_with($haystack, $needle);
@@ -1798,7 +1798,7 @@ Downgrade `str_ends_with()` to `strncmp()` version
 
 Downgrade `str_starts_with()` to `strncmp()` version
 
-- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector`](../src/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FuncCall\DowngradeStrStartsWithRector`](../rules/DowngradePhp80/Rector/FuncCall/DowngradeStrStartsWithRector.php)
 
 ```diff
 -str_starts_with($haystack, $needle);
@@ -1811,7 +1811,7 @@ Downgrade `str_starts_with()` to `strncmp()` version
 
 Downgrade `stream_isatty()` function
 
-- class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector`](../src/DowngradePhp72/Rector/FuncCall/DowngradeStreamIsattyRector.php)
+- class: [`Rector\DowngradePhp72\Rector\FuncCall\DowngradeStreamIsattyRector`](../rules/DowngradePhp72/Rector/FuncCall/DowngradeStreamIsattyRector.php)
 
 ```diff
  class SomeClass
@@ -1849,7 +1849,7 @@ Downgrade `stream_isatty()` function
 
 Remove the declare(strict_types=1)
 
-- class: [`Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector`](../src/DowngradePhp70/Rector/Declare_/DowngradeStrictTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector`](../rules/DowngradePhp70/Rector/Declare_/DowngradeStrictTypeDeclarationRector.php)
 
 ```diff
 -declare(strict_types=1);
@@ -1862,7 +1862,7 @@ Remove the declare(strict_types=1)
 
 Add "string" return on current `__toString()` method when parent method has string return on `__toString()` method
 
-- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStringReturnTypeOnToStringRector`](../src/DowngradePhp80/Rector/ClassMethod/DowngradeStringReturnTypeOnToStringRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStringReturnTypeOnToStringRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeStringReturnTypeOnToStringRector.php)
 
 ```diff
  abstract class ParentClass
@@ -1889,7 +1889,7 @@ Add "string" return on current `__toString()` method when parent method has stri
 
 Convert 2nd param to `strip_tags` from array to string
 
-- class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector`](../src/DowngradePhp74/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php)
+- class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector`](../rules/DowngradePhp74/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php)
 
 ```diff
  class SomeClass
@@ -1919,7 +1919,7 @@ Convert 2nd param to `strip_tags` from array to string
 
 Downgrade `$this->` inside Closure to use assigned `$self` = `$this` before Closure
 
-- class: [`Rector\DowngradePhp54\Rector\Closure\DowngradeThisInClosureRector`](../src/DowngradePhp54/Rector/Closure/DowngradeThisInClosureRector.php)
+- class: [`Rector\DowngradePhp54\Rector\Closure\DowngradeThisInClosureRector`](../rules/DowngradePhp54/Rector/Closure/DowngradeThisInClosureRector.php)
 
 ```diff
  class SomeClass
@@ -1946,7 +1946,7 @@ Downgrade `$this->` inside Closure to use assigned `$self` = `$this` before Clos
 
 Downgrade throw expression
 
-- class: [`Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector`](../src/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector`](../rules/DowngradePhp80/Rector/Expression/DowngradeThrowExprRector.php)
 
 ```diff
 -echo $variable ?? throw new RuntimeException();
@@ -1963,7 +1963,7 @@ Downgrade throw expression
 
 Replace `Throwable` type hints by PHPDoc tags
 
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector`](../src/DowngradePhp70/Rector/FunctionLike/DowngradeThrowableTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector`](../rules/DowngradePhp70/Rector/FunctionLike/DowngradeThrowableTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -1986,7 +1986,7 @@ Replace `Throwable` type hints by PHPDoc tags
 
 Remove trailing commas in function calls
 
-- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector`](../src/DowngradePhp73/Rector/FuncCall/DowngradeTrailingCommasInFunctionCallsRector.php)
+- class: [`Rector\DowngradePhp73\Rector\FuncCall\DowngradeTrailingCommasInFunctionCallsRector`](../rules/DowngradePhp73/Rector/FuncCall/DowngradeTrailingCommasInFunctionCallsRector.php)
 
 ```diff
  class SomeClass
@@ -2008,7 +2008,7 @@ Remove trailing commas in function calls
 
 Remove trailing commas in param or use list
 
-- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector`](../src/DowngradePhp80/Rector/ClassMethod/DowngradeTrailingCommasInParamUseRector.php)
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector`](../rules/DowngradePhp80/Rector/ClassMethod/DowngradeTrailingCommasInParamUseRector.php)
 
 ```diff
  class SomeClass
@@ -2038,7 +2038,7 @@ Remove trailing commas in param or use list
 
 Changes property type definition from type definitions to `@var` annotations.
 
-- class: [`Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector`](../src/DowngradePhp74/Rector/Property/DowngradeTypedPropertyRector.php)
+- class: [`Rector\DowngradePhp74\Rector\Property\DowngradeTypedPropertyRector`](../rules/DowngradePhp74/Rector/Property/DowngradeTypedPropertyRector.php)
 
 ```diff
  class SomeClass
@@ -2057,7 +2057,7 @@ Changes property type definition from type definitions to `@var` annotations.
 
 Downgrade calling a value that is not directly callable in PHP 5 (property, static property, closure, …) to call_user_func.
 
-- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeUncallableValueCallToCallUserFuncRector`](../src/DowngradePhp70/Rector/FuncCall/DowngradeUncallableValueCallToCallUserFuncRector.php)
+- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeUncallableValueCallToCallUserFuncRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeUncallableValueCallToCallUserFuncRector.php)
 
 ```diff
  final class Foo
@@ -2084,7 +2084,7 @@ Downgrade calling a value that is not directly callable in PHP 5 (property, stat
 
 Remove the union type params and returns, add `@param/@return` tags instead
 
-- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector`](../src/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp80\Rector\FunctionLike\DowngradeUnionTypeDeclarationRector`](../rules/DowngradePhp80/Rector/FunctionLike/DowngradeUnionTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -2107,7 +2107,7 @@ Remove the union type params and returns, add `@param/@return` tags instead
 
 Removes union type property type definition, adding `@var` annotations instead.
 
-- class: [`Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector`](../src/DowngradePhp80/Rector/Property/DowngradeUnionTypeTypedPropertyRector.php)
+- class: [`Rector\DowngradePhp80\Rector\Property\DowngradeUnionTypeTypedPropertyRector`](../rules/DowngradePhp80/Rector/Property/DowngradeUnionTypeTypedPropertyRector.php)
 
 ```diff
  class SomeClass
@@ -2126,7 +2126,7 @@ Removes union type property type definition, adding `@var` annotations instead.
 
 Remove parentheses around expressions allowed by Uniform variable syntax RFC where they are not necessary to prevent parse errors on PHP 5.
 
-- class: [`Rector\DowngradePhp70\Rector\Expr\DowngradeUnnecessarilyParenthesizedExpressionRector`](../src/DowngradePhp70/Rector/Expr/DowngradeUnnecessarilyParenthesizedExpressionRector.php)
+- class: [`Rector\DowngradePhp70\Rector\Expr\DowngradeUnnecessarilyParenthesizedExpressionRector`](../rules/DowngradePhp70/Rector/Expr/DowngradeUnnecessarilyParenthesizedExpressionRector.php)
 
 ```diff
 -($f)['foo'];
@@ -2149,7 +2149,7 @@ Remove parentheses around expressions allowed by Uniform variable syntax RFC whe
 
 Replace imports of functions and constants
 
-- class: [`Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector`](../src/DowngradePhp56/Rector/Use_/DowngradeUseFunctionRector.php)
+- class: [`Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector`](../rules/DowngradePhp56/Rector/Use_/DowngradeUseFunctionRector.php)
 
 ```diff
 -use function Foo\Bar\baz;
@@ -2164,7 +2164,7 @@ Replace imports of functions and constants
 
 Remove "void" return type, add a `"@return` void" tag instead
 
-- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector`](../src/DowngradePhp71/Rector/FunctionLike/DowngradeVoidTypeDeclarationRector.php)
+- class: [`Rector\DowngradePhp71\Rector\FunctionLike\DowngradeVoidTypeDeclarationRector`](../rules/DowngradePhp71/Rector/FunctionLike/DowngradeVoidTypeDeclarationRector.php)
 
 ```diff
  class SomeClass
@@ -2185,7 +2185,7 @@ Remove "void" return type, add a `"@return` void" tag instead
 
 Convert setcookie option array to arguments
 
-- class: [`Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector`](../src/DowngradePhp73/Rector/FuncCall/SetCookieOptionsArrayToArgumentsRector.php)
+- class: [`Rector\DowngradePhp73\Rector\FuncCall\SetCookieOptionsArrayToArgumentsRector`](../rules/DowngradePhp73/Rector/FuncCall/SetCookieOptionsArrayToArgumentsRector.php)
 
 ```diff
 -setcookie('name', $value, ['expires' => 360]);
@@ -2198,7 +2198,7 @@ Convert setcookie option array to arguments
 
 Replace short arrays by long arrays
 
-- class: [`Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector`](../src/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php)
+- class: [`Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector`](../rules/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php)
 
 ```diff
 -$a = [1, 2, 3];
@@ -2211,7 +2211,7 @@ Replace short arrays by long arrays
 
 Refactor grouped use imports to standalone lines
 
-- class: [`Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector`](../src/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php)
+- class: [`Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector`](../rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php)
 
 ```diff
 -use SomeNamespace\{
@@ -2228,7 +2228,7 @@ Refactor grouped use imports to standalone lines
 
 Downgrade Symmetric array destructuring to `list()` function
 
-- class: [`Rector\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector`](../src/DowngradePhp71/Rector/Array_/SymmetricArrayDestructuringToListRector.php)
+- class: [`Rector\DowngradePhp71\Rector\Array_\SymmetricArrayDestructuringToListRector`](../rules/DowngradePhp71/Rector/Array_/SymmetricArrayDestructuringToListRector.php)
 
 ```diff
 -[$id1, $name1] = $data;

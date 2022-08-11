@@ -61,9 +61,6 @@ final class VariableAndCallAssignMatcher
         }
         return new VariableAndCallAssign($assign->var, $call, $assign, $variableName, $functionLike);
     }
-    /**
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
-     */
     private function getFunctionLike(Assign $assign)
     {
         return $this->betterNodeFinder->findParentByTypes($assign, [Closure::class, ClassMethod::class, Function_::class]);

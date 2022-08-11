@@ -86,9 +86,8 @@ CODE_SAMPLE
     }
     /**
      * @param Property $node
-     * @return \PhpParser\Node\Stmt\Property|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?\PhpParser\Node\Stmt\Property
     {
         if ($node->type !== null) {
             return null;

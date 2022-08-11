@@ -71,10 +71,9 @@ final class ExprParameterReflectionTypeCorrector
     }
     /**
      * @param string|int $name
-     * @return \PhpParser\Node\Expr|null
      * @param mixed $item
      */
-    private function correctItemByParameterReflection($name, $item, ParameterReflection $parameterReflection)
+    private function correctItemByParameterReflection($name, $item, ParameterReflection $parameterReflection) : ?\PhpParser\Node\Expr
     {
         if (!$item instanceof Expr) {
             return null;

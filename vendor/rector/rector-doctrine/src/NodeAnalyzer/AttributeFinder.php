@@ -79,10 +79,7 @@ final class AttributeFinder
         }
         return null;
     }
-    /**
-     * @return \PhpParser\Node\Expr|null
-     */
-    private function findArgByName(Attribute $attribute, string $argName)
+    private function findArgByName(Attribute $attribute, string $argName) : ?\PhpParser\Node\Expr
     {
         foreach ($attribute->args as $arg) {
             if ($arg->name === null) {

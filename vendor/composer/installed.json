@@ -1920,12 +1920,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "7ee4e58f8af4c6485fed261b0a0360a09b9c9d20"
+                "reference": "076e341bf0aa86b3ac2312b14c9fd5115d332a6f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/7ee4e58f8af4c6485fed261b0a0360a09b9c9d20",
-                "reference": "7ee4e58f8af4c6485fed261b0a0360a09b9c9d20",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/076e341bf0aa86b3ac2312b14c9fd5115d332a6f",
+                "reference": "076e341bf0aa86b3ac2312b14c9fd5115d332a6f",
                 "shasum": ""
             },
             "require": {
@@ -1949,7 +1949,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-07-18T22:23:59+00:00",
+            "time": "2022-08-11T14:24:10+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1966,8 +1966,10 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\": "src",
-                    "Rector\\Set\\": "packages\/Set"
+                    "Rector\\": [
+                        "src",
+                        "rules"
+                    ]
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",

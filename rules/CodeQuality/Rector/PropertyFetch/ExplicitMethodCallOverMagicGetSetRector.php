@@ -113,10 +113,7 @@ CODE_SAMPLE
         }
         return $parentNode->var === $propertyFetch;
     }
-    /**
-     * @return \PhpParser\Node\Expr\MethodCall|null
-     */
-    private function refactorPropertyFetch(PropertyFetch $propertyFetch, Scope $scope)
+    private function refactorPropertyFetch(PropertyFetch $propertyFetch, Scope $scope) : ?\PhpParser\Node\Expr\MethodCall
     {
         $callerType = $this->getType($propertyFetch->var);
         if (!$callerType instanceof ObjectType) {
@@ -150,10 +147,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    /**
-     * @return \PhpParser\Node\Expr\MethodCall|null
-     */
-    private function refactorMagicSet(Expr $expr, PropertyFetch $propertyFetch, Scope $scope)
+    private function refactorMagicSet(Expr $expr, PropertyFetch $propertyFetch, Scope $scope) : ?\PhpParser\Node\Expr\MethodCall
     {
         $propertyCallerType = $this->getType($propertyFetch->var);
         if (!$propertyCallerType instanceof ObjectType) {

@@ -52,9 +52,8 @@ CODE_SAMPLE
     }
     /**
      * @param FuncCall $node
-     * @return \PhpParser\Node\Expr\FuncCall|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?\PhpParser\Node\Expr\FuncCall
     {
         $hasChanged = \false;
         foreach ($this->replacedArguments as $replacedArgument) {

@@ -43,10 +43,7 @@ final class CpuCoreCountProvider
         }
         return $coreCount;
     }
-    /**
-     * @return int|null
-     */
-    private function resolveFromProcCpuinfo()
+    private function resolveFromProcCpuinfo() : ?int
     {
         if (!\is_file('/proc/cpuinfo')) {
             return null;

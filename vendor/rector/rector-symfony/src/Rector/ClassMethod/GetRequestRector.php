@@ -185,10 +185,7 @@ CODE_SAMPLE
         }
         return $this->requestVariableAndParamName;
     }
-    /**
-     * @return null|\PhpParser\Node\Stmt\ClassMethod
-     */
-    private function refactorClassMethod(ClassMethod $classMethod)
+    private function refactorClassMethod(ClassMethod $classMethod) : ?\PhpParser\Node\Stmt\ClassMethod
     {
         $this->requestVariableAndParamName = $this->resolveUniqueName($classMethod, 'request');
         if (!$this->isActionWithGetRequestInBody($classMethod)) {

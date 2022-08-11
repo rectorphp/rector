@@ -104,7 +104,6 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
-     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
      */
     private function processAssertEqualsIgnoringCase($call)
     {
@@ -126,7 +125,6 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
     private function processAssertEqualsCanonicalizing($call)
     {
@@ -150,7 +148,6 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
     private function processAssertEqualsWithDelta($call)
     {

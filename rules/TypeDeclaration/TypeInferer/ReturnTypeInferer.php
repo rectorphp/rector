@@ -278,10 +278,7 @@ final class ReturnTypeInferer
         }
         return \false;
     }
-    /**
-     * @return \PHPStan\Type\UnionType|null
-     */
-    private function resolveUnionStaticTypes(UnionType $unionType, bool $isSupportedStaticReturnType)
+    private function resolveUnionStaticTypes(UnionType $unionType, bool $isSupportedStaticReturnType) : ?\PHPStan\Type\UnionType
     {
         $resolvedTypes = [];
         $hasStatic = \false;

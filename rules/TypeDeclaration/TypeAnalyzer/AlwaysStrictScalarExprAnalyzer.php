@@ -55,10 +55,7 @@ final class AlwaysStrictScalarExprAnalyzer
         }
         return null;
     }
-    /**
-     * @return \PHPStan\Type\Type|null
-     */
-    private function resolveTypeFromScalar(Scalar $scalar)
+    private function resolveTypeFromScalar(Scalar $scalar) : ?\PHPStan\Type\Type
     {
         if ($scalar instanceof String_) {
             return new StringType();

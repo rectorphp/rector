@@ -139,10 +139,7 @@ CODE_SAMPLE
         }
         return $assigns;
     }
-    /**
-     * @return \PhpParser\Node\Stmt\Class_|null
-     */
-    private function refactorClass(Class_ $class)
+    private function refactorClass(Class_ $class) : ?\PhpParser\Node\Stmt\Class_
     {
         $toManyPropertyNames = $this->resolveToManyPropertyNames($class);
         if ($toManyPropertyNames === []) {

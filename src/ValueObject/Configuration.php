@@ -64,11 +64,8 @@ final class Configuration
     /**
      * @param string[] $fileExtensions
      * @param string[] $paths
-     * @param string|null $parallelPort
-     * @param string|null $parallelIdentifier
-     * @param string|null $memoryLimit
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, $parallelPort = null, $parallelIdentifier = null, bool $isParallel = \false, $memoryLimit = null)
+    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null)
     {
         $this->isDryRun = $isDryRun;
         $this->showProgressBar = $showProgressBar;

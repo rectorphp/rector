@@ -53,10 +53,9 @@ final class ObjectTypeSpecifier
         $this->typeWithClassTypeSpecifiers = $typeWithClassTypeSpecifiers;
     }
     /**
-     * @param \PHPStan\Analyser\Scope|null $scope
      * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType
      */
-    public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, $scope)
+    public function narrowToFullyQualifiedOrAliasedObjectType(Node $node, ObjectType $objectType, ?\PHPStan\Analyser\Scope $scope)
     {
         //        $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
         // @todo reuse name scope
@@ -134,7 +133,6 @@ final class ObjectTypeSpecifier
     }
     /**
      * @param Use_[]|GroupUse[] $uses
-     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
      */
     private function matchShortenedObjectType(ObjectType $objectType, array $uses)
     {

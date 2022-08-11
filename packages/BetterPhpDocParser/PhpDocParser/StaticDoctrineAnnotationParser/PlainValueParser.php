@@ -113,10 +113,7 @@ final class PlainValueParser
         $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
         return new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationShortName, $values);
     }
-    /**
-     * @return \PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode|null
-     */
-    private function matchConstantValue(string $currentTokenValue)
+    private function matchConstantValue(string $currentTokenValue) : ?\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
     {
         if (\strtolower($currentTokenValue) === 'false') {
             return new ConstExprFalseNode();

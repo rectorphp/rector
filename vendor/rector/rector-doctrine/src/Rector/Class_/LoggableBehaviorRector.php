@@ -87,10 +87,7 @@ CODE_SAMPLE
         }
         return $this->refactorProperty($node);
     }
-    /**
-     * @return \PhpParser\Node\Stmt\Class_|null
-     */
-    private function refactorClass(Class_ $class)
+    private function refactorClass(Class_ $class) : ?\PhpParser\Node\Stmt\Class_
     {
         // change the node
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);

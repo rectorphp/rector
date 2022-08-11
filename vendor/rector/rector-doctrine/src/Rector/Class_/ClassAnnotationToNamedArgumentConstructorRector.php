@@ -184,10 +184,7 @@ CODE_SAMPLE
             $assign->expr = new Variable($assignToPropertyFetch->getPropertyName());
         }
     }
-    /**
-     * @return \PhpParser\Node\Stmt\Class_|null
-     */
-    private function decorateClassWithAssignClassMethod(Class_ $class)
+    private function decorateClassWithAssignClassMethod(Class_ $class) : ?\PhpParser\Node\Stmt\Class_
     {
         // complete public properties
         $constructClassMethod = $this->constructClassMethodFactory->createFromPublicClassProperties($class);

@@ -97,10 +97,7 @@ CODE_SAMPLE
         }
         return null;
     }
-    /**
-     * @return \PhpParser\Node\Expr|null
-     */
-    private function matchOnlyIfStmtReturnExpr(Stmt $onlyIfStmt, Variable $returnVariable)
+    private function matchOnlyIfStmtReturnExpr(Stmt $onlyIfStmt, Variable $returnVariable) : ?\PhpParser\Node\Expr
     {
         if (!$onlyIfStmt instanceof Expression) {
             return null;
@@ -129,10 +126,7 @@ CODE_SAMPLE
         // return directly
         return $assign->expr;
     }
-    /**
-     * @return \PhpParser\Node\Expr\Variable|null
-     */
-    private function matchNextStmtReturnVariable(StmtsAwareInterface $stmtsAware, int $key)
+    private function matchNextStmtReturnVariable(StmtsAwareInterface $stmtsAware, int $key) : ?\PhpParser\Node\Expr\Variable
     {
         $nextStmt = $stmtsAware->stmts[$key + 1] ?? null;
         // last item → stop

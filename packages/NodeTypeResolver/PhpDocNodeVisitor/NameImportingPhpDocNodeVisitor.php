@@ -193,10 +193,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         $doctrineAnnotationTagValueNode->identifierTypeNode = $shortentedIdentifierTypeNode;
         $doctrineAnnotationTagValueNode->markAsChanged();
     }
-    /**
-     * @return \Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode|null
-     */
-    private function enterSpacelessPhpDocTagNode(SpacelessPhpDocTagNode $spacelessPhpDocTagNode)
+    private function enterSpacelessPhpDocTagNode(SpacelessPhpDocTagNode $spacelessPhpDocTagNode) : ?\Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode
     {
         if (!$spacelessPhpDocTagNode->value instanceof DoctrineAnnotationTagValueNode) {
             return null;

@@ -146,10 +146,7 @@ final class IsClassMethodUsedAnalyzer
         }
         return \false;
     }
-    /**
-     * @param null|\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable
-     */
-    private function shouldSkipArrayCallable(Class_ $class, $arrayCallable) : bool
+    private function shouldSkipArrayCallable(Class_ $class, ?\Rector\NodeCollector\ValueObject\ArrayCallable $arrayCallable) : bool
     {
         if (!$arrayCallable instanceof ArrayCallable) {
             return \true;

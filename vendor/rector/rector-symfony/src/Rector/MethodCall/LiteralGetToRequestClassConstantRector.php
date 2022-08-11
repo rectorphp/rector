@@ -87,10 +87,7 @@ CODE_SAMPLE
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($node, 0, 'Symfony\\Component\\HttpFoundation\\Request', SymfonyRequestConstantMap::METHOD_TO_CONST);
     }
-    /**
-     * @return \PhpParser\Node\Expr\StaticCall|null
-     */
-    private function refactorStaticCall(StaticCall $staticCall)
+    private function refactorStaticCall(StaticCall $staticCall) : ?\PhpParser\Node\Expr\StaticCall
     {
         if (!$this->isObjectType($staticCall->class, new ObjectType('Symfony\\Component\\HttpFoundation\\Request'))) {
             return null;
@@ -100,10 +97,7 @@ CODE_SAMPLE
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($staticCall, 1, 'Symfony\\Component\\HttpFoundation\\Request', SymfonyRequestConstantMap::METHOD_TO_CONST);
     }
-    /**
-     * @return \PhpParser\Node\Expr\MethodCall|null
-     */
-    private function refactorClientMethodCall(MethodCall $methodCall)
+    private function refactorClientMethodCall(MethodCall $methodCall) : ?\PhpParser\Node\Expr\MethodCall
     {
         if (!$this->isName($methodCall->name, 'request')) {
             return null;

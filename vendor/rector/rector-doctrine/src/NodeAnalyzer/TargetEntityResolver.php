@@ -26,10 +26,7 @@ final class TargetEntityResolver
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    /**
-     * @return string|null
-     */
-    public function resolveFromExpr(Expr $targetEntityExpr)
+    public function resolveFromExpr(Expr $targetEntityExpr) : ?string
     {
         if ($targetEntityExpr instanceof ClassConstFetch) {
             $targetEntity = (string) $this->nodeNameResolver->getName($targetEntityExpr->class);
