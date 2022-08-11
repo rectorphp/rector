@@ -181,6 +181,7 @@ final class ReflectionResolver
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall $call
+     * @return \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection|null
      */
     public function resolveFunctionLikeReflectionFromCall($call)
     {
@@ -245,6 +246,9 @@ final class ReflectionResolver
         }
         return $classReflection->getNativeProperty($propertyName);
     }
+    /**
+     * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null
+     */
     private function resolveFunctionReflectionFromFuncCall(FuncCall $funcCall)
     {
         $scope = $funcCall->getAttribute(AttributeKey::SCOPE);

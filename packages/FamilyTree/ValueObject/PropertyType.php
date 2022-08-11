@@ -18,6 +18,9 @@ final class PropertyType
      * @var \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
      */
     private $propertyTypeNode;
+    /**
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $propertyTypeNode
+     */
     public function __construct(Type $varType, $propertyTypeNode)
     {
         $this->varType = $varType;
@@ -27,6 +30,9 @@ final class PropertyType
     {
         return $this->varType;
     }
+    /**
+     * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
+     */
     public function getPropertyTypeNode()
     {
         return $this->propertyTypeNode;

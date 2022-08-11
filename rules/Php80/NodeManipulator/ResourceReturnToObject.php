@@ -51,6 +51,7 @@ final class ResourceReturnToObject
     /**
      * @param array<string, string> $collectionFunctionToReturnObject
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr $node
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\BinaryOp\BooleanOr|\PhpParser\Node\Expr\Instanceof_|null
      */
     public function refactor($node, array $collectionFunctionToReturnObject)
     {

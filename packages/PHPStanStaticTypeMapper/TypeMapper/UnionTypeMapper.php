@@ -168,6 +168,9 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         return $unionTypeAnalysis->hasArray();
     }
+    /**
+     * @return \PhpParser\Node\Name|\PhpParser\Node\NullableType|null
+     */
     private function matchArrayTypes(UnionType $unionType)
     {
         $unionTypeAnalysis = $this->unionTypeAnalyzer->analyseForNullableAndIterable($unionType);
@@ -290,6 +293,9 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         return new PhpParserUnionType($phpParserUnionedTypes);
     }
+    /**
+     * @return \PHPStan\Type\UnionType|\PHPStan\Type\TypeWithClassName|null
+     */
     private function resolveCompatibleObjectCandidate(UnionType $unionType)
     {
         if ($this->doctrineTypeAnalyzer->isDoctrineCollectionWithIterableUnionType($unionType)) {

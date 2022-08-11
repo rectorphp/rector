@@ -90,6 +90,9 @@ CODE_SAMPLE
         $arguments = [$inArrayFuncCall->args[0], $arrayKeysFuncCall->args[0]];
         return new FuncCall(new Name('array_key_exists'), $arguments);
     }
+    /**
+     * @return null|\PhpParser\Node|\PhpParser\Node\FunctionLike
+     */
     private function findPreviousAssignToArrayKeys(FuncCall $funcCall, Expr $expr)
     {
         return $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $node) use($expr) : bool {

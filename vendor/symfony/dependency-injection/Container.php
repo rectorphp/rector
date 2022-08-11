@@ -113,6 +113,9 @@ class Container implements ContainerInterface, ResetInterface
     {
         return $this->parameterBag->has($name);
     }
+    /**
+     * @param mixed[]|bool|string|int|float|\UnitEnum|null $value
+     */
     public function setParameter(string $name, $value)
     {
         $this->parameterBag->set($name, $value);

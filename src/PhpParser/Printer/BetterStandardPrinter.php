@@ -111,7 +111,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         return $content;
     }
     /**
-     * @param Node|Node[]|null $node
+     * @param \PhpParser\Node|mixed[]|null $node
      */
     public function print($node) : string
     {

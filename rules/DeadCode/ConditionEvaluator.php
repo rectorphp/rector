@@ -23,6 +23,9 @@ final class ConditionEvaluator
     {
         $this->phpVersionProvider = $phpVersionProvider;
     }
+    /**
+     * @return bool|int|null
+     */
     public function evaluate(ConditionInterface $condition)
     {
         if ($condition instanceof VersionCompareCondition) {
@@ -33,6 +36,9 @@ final class ConditionEvaluator
         }
         return null;
     }
+    /**
+     * @return bool|int|null
+     */
     private function evaluateVersionCompareCondition(VersionCompareCondition $versionCompareCondition)
     {
         $compareSign = $versionCompareCondition->getCompareSign();

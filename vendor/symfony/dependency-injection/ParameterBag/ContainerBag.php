@@ -33,6 +33,7 @@ class ContainerBag extends FrozenParameterBag implements ContainerBagInterface
     }
     /**
      * {@inheritdoc}
+     * @return mixed[]|bool|string|int|float|\UnitEnum|null
      */
     public function get(string $name)
     {

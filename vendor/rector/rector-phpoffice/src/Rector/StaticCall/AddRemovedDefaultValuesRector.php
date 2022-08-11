@@ -56,6 +56,7 @@ CODE_SAMPLE
     }
     /**
      * @param StaticCall|MethodCall $node
+     * @return null|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall
      */
     public function refactor(Node $node)
     {

@@ -51,6 +51,7 @@ class ParameterBag implements ParameterBagInterface
     }
     /**
      * {@inheritdoc}
+     * @return mixed[]|bool|string|int|float|\UnitEnum|null
      */
     public function get(string $name)
     {
@@ -85,6 +86,7 @@ class ParameterBag implements ParameterBagInterface
     }
     /**
      * {@inheritdoc}
+     * @param mixed[]|bool|string|int|float|\UnitEnum|null $value
      */
     public function set(string $name, $value)
     {

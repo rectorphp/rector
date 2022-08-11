@@ -31,6 +31,9 @@ final class ArrayShapeTypeMapper
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
         $this->reflectionProvider = $reflectionProvider;
     }
+    /**
+     * @return \PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode|\PHPStan\Type\ArrayType|null
+     */
     public function mapConstantArrayType(ConstantArrayType $constantArrayType)
     {
         // empty array

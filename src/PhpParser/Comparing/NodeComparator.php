@@ -25,7 +25,7 @@ final class NodeComparator
     }
     /**
      * Removes all comments from both nodes
-     * @param Node|Node[]|null $node
+     * @param \PhpParser\Node|mixed[]|null $node
      */
     public function printWithoutComments($node) : string
     {
@@ -34,8 +34,8 @@ final class NodeComparator
         return \trim($content);
     }
     /**
-     * @param Node|Node[]|null $firstNode
-     * @param Node|Node[]|null $secondNode
+     * @param \PhpParser\Node|mixed[]|null $firstNode
+     * @param \PhpParser\Node|mixed[]|null $secondNode
      */
     public function areNodesEqual($firstNode, $secondNode) : bool
     {

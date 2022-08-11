@@ -36,6 +36,9 @@ final class ClassLikeAstResolver
         $this->smartPhpParser = $smartPhpParser;
         $this->betterNodeFinder = $betterNodeFinder;
     }
+    /**
+     * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
+     */
     public function resolveClassFromClassReflection(ClassReflection $classReflection, string $desiredClassName)
     {
         if ($classReflection->isBuiltin()) {

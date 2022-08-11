@@ -33,6 +33,7 @@ final class JsonConstCleaner
     /**
      * @param string[] $constants
      * @param \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr\BinaryOp\BitwiseOr $node
+     * @return \PhpParser\Node\Expr\ConstFetch|\PhpParser\Node\Expr|null
      */
     public function clean($node, array $constants)
     {

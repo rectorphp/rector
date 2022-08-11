@@ -47,6 +47,7 @@ class FrozenParameterBag extends ParameterBag
     }
     /**
      * {@inheritdoc}
+     * @param mixed[]|bool|string|int|float|\UnitEnum|null $value
      */
     public function set(string $name, $value)
     {

@@ -80,6 +80,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
      */
     private function applyVariadicParams($node, string $variableName)
     {
@@ -93,6 +94,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
      */
     private function removeOrChangeAssignToVariable($node, Assign $assign, string $variableName)
     {

@@ -107,6 +107,9 @@ trait PriorityTaggedServiceTrait
  */
 class PriorityTaggedServiceUtil
 {
+    /**
+     * @return string|int|null
+     */
     public static function getDefault(ContainerBuilder $container, string $serviceId, string $class, string $defaultMethod, string $tagName, ?string $indexAttribute, bool $checkTaggedItem)
     {
         if (!($r = $container->getReflectionClass($class)) || !$checkTaggedItem && !$r->hasMethod($defaultMethod)) {

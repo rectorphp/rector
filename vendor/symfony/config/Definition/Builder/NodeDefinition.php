@@ -82,6 +82,7 @@ abstract class NodeDefinition implements NodeParentInterface
     }
     /**
      * Returns the parent node.
+     * @return \Symfony\Component\Config\Definition\Builder\NodeParentInterface|\Symfony\Component\Config\Definition\Builder\NodeBuilder|\Symfony\Component\Config\Definition\Builder\NodeDefinition|\Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition|\Symfony\Component\Config\Definition\Builder\VariableNodeDefinition|null
      */
     public function end()
     {

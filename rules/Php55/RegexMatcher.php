@@ -29,6 +29,9 @@ final class RegexMatcher
     {
         $this->valueResolver = $valueResolver;
     }
+    /**
+     * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Scalar\String_|null
+     */
     public function resolvePatternExpressionWithoutEIfFound(Expr $expr)
     {
         if ($expr instanceof String_) {

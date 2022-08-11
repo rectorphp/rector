@@ -252,6 +252,9 @@ final class PhpDocFromTypeDeclarationDecorator
         if (!$type instanceof UnionType) {
             return \false;
         }
+        if (\count($type->getTypes()) !== 2) {
+            return \false;
+        }
         return TypeCombinator::containsNull($type);
     }
 }

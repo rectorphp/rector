@@ -53,6 +53,9 @@ final class ForeachMatcher
         }
         return new VariableAndCallForeach($foreach->valueVar, $call, $variableName, $functionLike);
     }
+    /**
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|null
+     */
     private function getFunctionLike(Foreach_ $foreach)
     {
         return $this->betterNodeFinder->findParentByTypes($foreach, [Closure::class, ClassMethod::class, Function_::class]);

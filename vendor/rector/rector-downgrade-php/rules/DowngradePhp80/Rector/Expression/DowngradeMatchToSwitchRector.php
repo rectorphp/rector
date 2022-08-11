@@ -118,6 +118,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @return \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|null
      */
     private function refactorInArrowFunction(ArrowFunction $arrowFunction, Match_ $match, $node)
     {

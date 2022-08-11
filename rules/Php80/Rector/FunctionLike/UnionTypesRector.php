@@ -235,6 +235,10 @@ CODE_SAMPLE
         }
         return $this->typeFactory->createMixedPassedOrUnionType($singleArrayTypes);
     }
+    /**
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType|null $type
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|\PhpParser\Node|null $phpParserUnionType
+     */
     private function shouldSkipParamTypeRefactor($type, $phpParserUnionType) : bool
     {
         if (!$phpParserUnionType instanceof PhpParserUnionType) {

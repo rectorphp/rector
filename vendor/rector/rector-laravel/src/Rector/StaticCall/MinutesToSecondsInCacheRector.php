@@ -96,6 +96,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @return \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|null
      */
     private function processArgumentOnPosition($node, Expr $argExpr, int $argumentPosition)
     {

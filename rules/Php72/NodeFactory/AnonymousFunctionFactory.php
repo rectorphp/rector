@@ -123,6 +123,7 @@ final class AnonymousFunctionFactory
      * @api
      * @param Param[] $params
      * @param Stmt[] $stmts
+     * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType|null $returnTypeNode
      */
     public function create(array $params, array $stmts, $returnTypeNode, bool $static = \false) : Closure
     {
@@ -261,6 +262,9 @@ final class AnonymousFunctionFactory
         }
         return $params;
     }
+    /**
+     * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
+     */
     private function resolveParamType(ParameterReflection $parameterReflection)
     {
         if ($parameterReflection->getType() instanceof MixedType) {
@@ -293,6 +297,7 @@ final class AnonymousFunctionFactory
     }
     /**
      * @param Param[] $params
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
      */
     private function createInnerMethodCall(PhpMethodReflection $phpMethodReflection, Expr $expr, array $params)
     {
@@ -312,6 +317,9 @@ final class AnonymousFunctionFactory
         $innerMethodCall->args = $this->nodeFactory->createArgsFromParams($params);
         return $innerMethodCall;
     }
+    /**
+     * @return null|\PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Expr
+     */
     private function normalizeClassConstFetchForStatic(Expr $expr)
     {
         if (!$expr instanceof ClassConstFetch) {
@@ -331,6 +339,9 @@ final class AnonymousFunctionFactory
         }
         return new FullyQualified($className);
     }
+    /**
+     * @return \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr|null
+     */
     private function resolveExpr(Expr $expr)
     {
         if (!$expr instanceof ClassConstFetch) {

@@ -140,6 +140,9 @@ CODE_SAMPLE
         }
         return $this->phpAttributeAnalyzer->hasPhpAttributes($classMethod, self::ALLOWED_ATTRIBUTES);
     }
+    /**
+     * @return null|\PhpParser\Node\Stmt|\PhpParser\Node\Expr
+     */
     private function matchClassMethodOnlyStmt(ClassMethod $classMethod)
     {
         $classMethodStmts = $classMethod->stmts;

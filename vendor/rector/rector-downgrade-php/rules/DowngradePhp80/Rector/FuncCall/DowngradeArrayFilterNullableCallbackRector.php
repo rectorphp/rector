@@ -78,6 +78,7 @@ CODE_SAMPLE
     }
     /**
      * @param FuncCall $node
+     * @return \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\Ternary|null
      */
     public function refactor(Node $node)
     {

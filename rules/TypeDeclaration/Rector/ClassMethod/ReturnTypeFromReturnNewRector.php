@@ -135,6 +135,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Expr\Closure $node
+     * @return null|\PhpParser\Node\Expr\ArrowFunction|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure
      */
     private function refactorDirectReturnNew($node)
     {

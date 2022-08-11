@@ -105,6 +105,9 @@ final class AstResolver
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->classLikeAstResolver = $classLikeAstResolver;
     }
+    /**
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
+     */
     public function resolveClassFromName(string $className)
     {
         if (!$this->reflectionProvider->hasClass($className)) {
@@ -113,6 +116,9 @@ final class AstResolver
         $classReflection = $this->reflectionProvider->getClass($className);
         return $this->resolveClassFromClassReflection($classReflection, $className);
     }
+    /**
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
+     */
     public function resolveClassFromObjectType(TypeWithClassName $typeWithClassName)
     {
         return $this->resolveClassFromName($typeWithClassName->getClassName());
@@ -153,6 +159,7 @@ final class AstResolver
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
     public function resolveClassMethodOrFunctionFromCall($call, Scope $scope)
     {
@@ -222,6 +229,9 @@ final class AstResolver
         }
         return $this->resolveClassMethod($callerStaticType->getClassName(), $methodName);
     }
+    /**
+     * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
+     */
     public function resolveClassFromClassReflection(ClassReflection $classReflection, string $className)
     {
         return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection, $className);
@@ -254,6 +264,9 @@ final class AstResolver
         }
         return $traits;
     }
+    /**
+     * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
+     */
     public function resolvePropertyFromPropertyReflection(PhpPropertyReflection $phpPropertyReflection)
     {
         $classReflection = $phpPropertyReflection->getDeclaringClass();

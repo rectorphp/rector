@@ -75,6 +75,7 @@ CODE_SAMPLE
     }
     /**
      * @param Enum_|ClassMethod $node
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|null
      */
     public function refactor(Node $node)
     {

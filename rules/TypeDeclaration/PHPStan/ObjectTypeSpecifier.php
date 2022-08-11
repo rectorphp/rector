@@ -133,6 +133,7 @@ final class ObjectTypeSpecifier
     }
     /**
      * @param Use_[]|GroupUse[] $uses
+     * @return \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType|null
      */
     private function matchShortenedObjectType(ObjectType $objectType, array $uses)
     {
