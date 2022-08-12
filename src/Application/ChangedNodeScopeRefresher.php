@@ -34,7 +34,6 @@ use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
@@ -56,17 +55,11 @@ final class ChangedNodeScopeRefresher
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
-     */
-    private $scopeFactory;
-    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, CurrentFileProvider $currentFileProvider, ScopeFactory $scopeFactory)
+    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, CurrentFileProvider $currentFileProvider)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->scopeAnalyzer = $scopeAnalyzer;
         $this->currentFileProvider = $currentFileProvider;
-        $this->scopeFactory = $scopeFactory;
     }
     public function refresh(Node $node, ?MutatingScope $mutatingScope, ?SmartFileInfo $smartFileInfo = null) : void
     {
@@ -79,15 +72,19 @@ final class ChangedNodeScopeRefresher
             $file = $this->currentFileProvider->getFile();
             $smartFileInfo = $file->getSmartFileInfo();
         }
-        if ($this->scopeAnalyzer->isScopeResolvableFromFile($node, $mutatingScope)) {
-            $mutatingScope = $this->scopeFactory->createFromFile($smartFileInfo);
-        }
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$mutatingScope instanceof MutatingScope && $node instanceof Expr && $parentNode instanceof Node) {
-            $mutatingScope = $parentNode->getAttribute(AttributeKey::SCOPE);
-        }
+        $mutatingScope = $this->scopeAnalyzer->resolveScope($node, $smartFileInfo, $mutatingScope);
         if (!$mutatingScope instanceof MutatingScope) {
-            $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), $parentNode instanceof Node ? \get_class($parentNode) : 'unknown parent');
+            /**
+             * @var Node $parentNode
+             *
+             * $parentNode is always a Node when $mutatingScope is null, as checked in previous
+             *
+             *      $this->scopeAnalyzer->resolveScope()
+             *
+             *  which verify if no parent and no scope, it resolve Scope from File
+             */
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            $errorMessage = \sprintf('Node "%s" with parent of "%s" is missing scope required for scope refresh.', \get_class($node), \get_class($parentNode));
             throw new ShouldNotHappenException($errorMessage);
         }
         // note from flight: when we traverse ClassMethod, the scope must be already in Class_, otherwise it crashes

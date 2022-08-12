@@ -10,12 +10,23 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PHPStan\Analyser\MutatingScope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
+use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
 final class ScopeAnalyzer
 {
     /**
      * @var array<class-string<Node>>
      */
     private const NO_SCOPE_NODES = [Name::class, Identifier::class, Param::class, Arg::class];
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
+     */
+    private $scopeFactory;
+    public function __construct(ScopeFactory $scopeFactory)
+    {
+        $this->scopeFactory = $scopeFactory;
+    }
     public function hasScope(Node $node) : bool
     {
         foreach (self::NO_SCOPE_NODES as $noScopeNode) {
@@ -25,15 +36,20 @@ final class ScopeAnalyzer
         }
         return \true;
     }
-    public function isScopeResolvableFromFile(Node $node, ?MutatingScope $mutatingScope) : bool
+    public function resolveScope(Node $node, SmartFileInfo $smartFileInfo, ?MutatingScope $mutatingScope = null) : ?MutatingScope
     {
         if ($mutatingScope instanceof MutatingScope) {
-            return \false;
+            return $mutatingScope;
         }
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof Node) {
-            return \true;
+            return $this->scopeFactory->createFromFile($smartFileInfo);
         }
-        return !$this->hasScope($parentNode);
+        if (!$this->hasScope($parentNode)) {
+            return $this->scopeFactory->createFromFile($smartFileInfo);
+        }
+        /** @var MutatingScope|null $parentScope */
+        $parentScope = $parentNode->getAttribute(AttributeKey::SCOPE);
+        return $parentScope;
     }
 }
