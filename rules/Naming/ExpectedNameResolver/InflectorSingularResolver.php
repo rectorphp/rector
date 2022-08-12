@@ -28,10 +28,6 @@ final class InflectorSingularResolver
     /**
      * @var string
      */
-    private const SINGLE = 'single';
-    /**
-     * @var string
-     */
     private const CAMELCASE = 'camelcase';
     /**
      * @readonly
@@ -52,16 +48,9 @@ final class InflectorSingularResolver
         if ($resolvedValue !== null) {
             return $resolvedValue;
         }
-        if (\strncmp($currentName, self::SINGLE, \strlen(self::SINGLE)) === 0) {
-            return $currentName;
-        }
         $singularValueVarName = $this->singularizeCamelParts($currentName);
         if (\in_array($singularValueVarName, ['', '_'], \true)) {
             return $currentName;
-        }
-        $singularValueVarName = $singularValueVarName === $currentName ? self::SINGLE . \ucfirst($singularValueVarName) : $singularValueVarName;
-        if (\strncmp($singularValueVarName, self::SINGLE, \strlen(self::SINGLE)) !== 0) {
-            return $singularValueVarName;
         }
         $length = \strlen($singularValueVarName);
         if ($length < 40) {
