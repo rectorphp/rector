@@ -5127,7 +5127,7 @@ Changes `count()` on null to safe ternary check
 ```diff
  $values = null;
 -$count = count($values);
-+count = $values === null ? 0 : count($values);
++$count = $values === null ? 0 : count($values);
 ```
 
 <br>

@@ -79,7 +79,7 @@ $count = count($values);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $values = null;
-count = $values === null ? 0 : count($values);
+$count = $values === null ? 0 : count($values);
 CODE_SAMPLE
 )]);
     }
