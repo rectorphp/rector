@@ -18,13 +18,14 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
@@ -37,7 +38,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\CountOnNullRectorTest
  */
-final class CountOnNullRector extends AbstractRector implements MinPhpVersionInterface
+final class CountOnNullRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -78,7 +79,7 @@ $count = count($values);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $values = null;
-$count = count((array) $values);
+count = $values === null ? 0 : count($values);
 CODE_SAMPLE
 )]);
     }
@@ -92,9 +93,9 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkip($node, $scope)) {
             return null;
         }
         /** @var Arg $arg0 */
@@ -146,7 +147,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(FuncCall $funcCall, Scope $scope) : bool
     {
         if (!$this->isName($funcCall, 'count')) {
             return \true;
@@ -171,6 +172,10 @@ CODE_SAMPLE
         }
         if (!$funcCall->args[0]->value instanceof Variable) {
             return \false;
+        }
+        $variableName = (string) $this->getName($funcCall->args[0]->value);
+        if (!$scope->hasVariableType($variableName)->yes()) {
+            return \true;
         }
         return $this->variableAnalyzer->isStaticOrGlobal($funcCall->args[0]->value);
     }

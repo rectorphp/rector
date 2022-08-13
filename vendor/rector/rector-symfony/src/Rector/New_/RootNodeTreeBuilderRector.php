@@ -80,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
         $nextExpression = $currentStmt->getAttribute(AttributeKey::NEXT_NODE);
-        if ($nextExpression === null) {
+        if (!$nextExpression instanceof Node) {
             return null;
         }
         return $this->betterNodeFinder->findFirst([$nextExpression], function (Node $node) : bool {

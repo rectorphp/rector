@@ -124,7 +124,7 @@ CODE_SAMPLE
         }
         // 1. single action method → only rename
         if (\count($actionClassMethods) === 1) {
-            return $this->refactorSingleAction($actionClassMethods[0], $node);
+            return $this->refactorSingleAction(\current($actionClassMethods), $node);
         }
         // 2. multiple action methods → split + rename current based on action name
         foreach ($actionClassMethods as $actionClassMethod) {
