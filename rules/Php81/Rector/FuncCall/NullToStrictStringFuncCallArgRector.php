@@ -144,6 +144,9 @@ CODE_SAMPLE
      */
     private function processNullToStrictStringOnNodePosition(FuncCall $funcCall, array $args, $position) : ?FuncCall
     {
+        if (!isset($args[$position])) {
+            return null;
+        }
         $argValue = $args[$position]->value;
         if ($argValue instanceof ConstFetch && $this->valueResolver->isNull($argValue)) {
             $args[$position]->value = new String_('');
@@ -154,10 +157,7 @@ CODE_SAMPLE
         if ($this->nodeTypeAnalyzer->isStringyType($type)) {
             return null;
         }
-        if (!$type instanceof MixedType) {
-            return null;
-        }
-        if ($argValue instanceof Encapsed) {
+        if (!$type instanceof MixedType || $argValue instanceof Encapsed) {
             return null;
         }
         if ($this->isAnErrorTypeFromParentScope($argValue)) {
