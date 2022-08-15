@@ -20,6 +20,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
@@ -175,6 +176,10 @@ CODE_SAMPLE
         }
         $variableName = (string) $this->getName($funcCall->args[0]->value);
         if (!$scope->hasVariableType($variableName)->yes()) {
+            return \true;
+        }
+        $nativeType = $scope->getNativeType($funcCall->args[0]->value);
+        if ($nativeType instanceof ErrorType) {
             return \true;
         }
         return $this->variableAnalyzer->isStaticOrGlobal($funcCall->args[0]->value);
