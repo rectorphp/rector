@@ -39,6 +39,7 @@ By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring
 - [Static Reflection and Autoload](/docs/static_reflection_and_autoload.md)
 - [How to Configure Rule](/docs/how_to_configure_rules.md)
 - [Auto Import Names](/docs/auto_import_names.md)
+- [How to Troubleshoot Parallel Issues](/docs/how_to_troubleshoot_parallel_issues.md)
 
 ### For Rule Developers and Contributors
 
