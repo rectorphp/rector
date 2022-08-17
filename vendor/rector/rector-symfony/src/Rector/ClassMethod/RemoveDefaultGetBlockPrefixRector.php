@@ -6,13 +6,13 @@ namespace Rector\Symfony\Rector\ClassMethod;
 use RectorPrefix202208\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\ObjectType;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use RectorPrefix202208\Symfony\Component\String\UnicodeString;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector\RemoveDefaultGetBlockPrefixRectorTest
  */
-final class RemoveDefaultGetBlockPrefixRector extends AbstractRector
+final class RemoveDefaultGetBlockPrefixRector extends AbstractScopeAwareRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
@@ -55,9 +55,9 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if (!$this->isObjectMethodNameMatch($node)) {
+        if (!$this->isObjectMethodNameMatch($node, $scope)) {
             return null;
         }
         $returnedExpr = $this->resolveOnlyStmtReturnExpr($node);
@@ -85,16 +85,21 @@ CODE_SAMPLE
         $this->removeNode($node);
         return null;
     }
-    private function isObjectMethodNameMatch(ClassMethod $classMethod) : bool
+    private function isObjectMethodNameMatch(ClassMethod $classMethod, Scope $scope) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$class instanceof Class_) {
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        if (!$this->isObjectType($classMethod, new ObjectType('Symfony\\Component\\Form\\AbstractType'))) {
+        // refactoring only direct inheritors, so allow override of custom children
+        $parentClassReflection = $classReflection->getParentClass();
+        if (!$parentClassReflection instanceof ClassReflection) {
             return \false;
         }
-        return $this->isName($classMethod->name, 'getBlockPrefix');
+        if ($parentClassReflection->getName() !== 'Symfony\\Component\\Form\\AbstractType') {
+            return \false;
+        }
+        return $classMethod->name->toString() === 'getBlockPrefix';
     }
     /**
      * return <$thisValue>;
