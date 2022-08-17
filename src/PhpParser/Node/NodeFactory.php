@@ -436,7 +436,7 @@ final class NodeFactory
     private function createArrayItem($item, $key = null) : ArrayItem
     {
         $arrayItem = null;
-        if ($item instanceof Variable || $item instanceof MethodCall || $item instanceof StaticCall || $item instanceof FuncCall || $item instanceof Concat || $item instanceof Scalar || $item instanceof Cast) {
+        if ($item instanceof Variable || $item instanceof MethodCall || $item instanceof StaticCall || $item instanceof FuncCall || $item instanceof Concat || $item instanceof Scalar || $item instanceof Cast || $item instanceof ConstFetch) {
             $arrayItem = new ArrayItem($item);
         } elseif ($item instanceof Identifier) {
             $string = new String_($item->toString());
