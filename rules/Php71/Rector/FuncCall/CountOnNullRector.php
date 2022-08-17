@@ -18,15 +18,13 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Trait_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\ErrorType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\Php\PhpVersionProvider;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer;
@@ -39,7 +37,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php71\Rector\FuncCall\CountOnNullRector\CountOnNullRectorTest
  */
-final class CountOnNullRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
+final class CountOnNullRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -94,9 +92,9 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
-        if ($this->shouldSkip($node, $scope)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
         /** @var Arg $arg0 */
@@ -148,7 +146,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function shouldSkip(FuncCall $funcCall, Scope $scope) : bool
+    private function shouldSkip(FuncCall $funcCall) : bool
     {
         if (!$this->isName($funcCall, 'count')) {
             return \true;
@@ -174,13 +172,12 @@ CODE_SAMPLE
         if (!$funcCall->args[0]->value instanceof Variable) {
             return \false;
         }
-        $variableName = (string) $this->getName($funcCall->args[0]->value);
-        if (!$scope->hasVariableType($variableName)->yes()) {
-            return \true;
-        }
-        $nativeType = $scope->getNativeType($funcCall->args[0]->value);
-        if ($nativeType instanceof ErrorType) {
-            return \true;
+        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Node) {
+            $originalParentNode = $parentNode->getAttribute(AttributeKey::ORIGINAL_NODE);
+            if (!$this->nodeComparator->areNodesEqual($parentNode, $originalParentNode)) {
+                return \true;
+            }
         }
         return $this->variableAnalyzer->isStaticOrGlobal($funcCall->args[0]->value);
     }
