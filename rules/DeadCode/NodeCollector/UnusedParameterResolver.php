@@ -18,7 +18,7 @@ final class UnusedParameterResolver
         $this->paramAnalyzer = $paramAnalyzer;
     }
     /**
-     * @return Param[]
+     * @return array<int, Param>
      */
     public function resolve(ClassMethod $classMethod) : array
     {

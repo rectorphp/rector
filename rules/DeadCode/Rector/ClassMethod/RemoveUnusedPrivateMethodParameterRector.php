@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -69,43 +69,54 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->shouldSkipClassMethod($classMethod)) {
+                continue;
+            }
+            $unusedParameters = $this->unusedParameterResolver->resolve($classMethod);
+            if ($unusedParameters === []) {
+                continue;
+            }
+            $unusedParameterPositions = \array_keys($unusedParameters);
+            foreach (\array_keys($classMethod->params) as $key) {
+                if (!\in_array($key, $unusedParameterPositions, \true)) {
+                    continue;
+                }
+                unset($classMethod->params[$key]);
+            }
+            // reset param keys
+            $classMethod->params = \array_values($classMethod->params);
+            $this->clearPhpDocInfo($classMethod, $unusedParameters);
+            $this->removeCallerArgs($node, $classMethod, $unusedParameters);
+            $hasChanged = \true;
         }
-        $unusedParameters = $this->unusedParameterResolver->resolve($node);
-        if ($unusedParameters === []) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        $this->nodeRemover->removeNodes($unusedParameters);
-        $this->clearPhpDocInfo($node, $unusedParameters);
-        $this->removeCallerArgs($node, $unusedParameters);
-        return $node;
+        return null;
     }
     /**
      * @param Param[] $unusedParameters
      */
-    private function removeCallerArgs(ClassMethod $classMethod, array $unusedParameters) : void
+    private function removeCallerArgs(Class_ $class, ClassMethod $classMethod, array $unusedParameters) : void
     {
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
-            return;
-        }
-        $methods = $classLike->getMethods();
-        if ($methods === []) {
+        $classMethods = $class->getMethods();
+        if ($classMethods === []) {
             return;
         }
         $methodName = $this->nodeNameResolver->getName($classMethod);
         $keysArg = \array_keys($unusedParameters);
-        foreach ($methods as $method) {
+        foreach ($classMethods as $classMethod) {
             /** @var MethodCall[] $callers */
-            $callers = $this->resolveCallers($method, $methodName);
+            $callers = $this->resolveCallers($classMethod, $methodName);
             if ($callers === []) {
                 continue;
             }
@@ -125,7 +136,8 @@ CODE_SAMPLE
                 unset($args[$key]);
             }
         }
-        $methodCall->args = $args;
+        // reset arg keys
+        $methodCall->args = \array_values($args);
     }
     /**
      * @return MethodCall[]
@@ -148,7 +160,7 @@ CODE_SAMPLE
             return $this->nodeNameResolver->isName($subNode->name, $methodName);
         });
     }
-    private function shouldSkip(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
         if (!$classMethod->isPrivate()) {
             return \true;
