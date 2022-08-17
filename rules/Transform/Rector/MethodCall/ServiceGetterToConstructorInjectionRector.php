@@ -123,34 +123,47 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [Class_::class];
     }
     /**
-     * @param MethodCall $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
+        if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
-        if ($this->classAnalyzer->isAnonymousClass($classLike)) {
+        // skip empty class
+        $classStmts = $node->stmts;
+        if ($classStmts === []) {
             return null;
         }
-        foreach ($this->methodCallToServices as $methodCallToService) {
-            if (!$this->isObjectType($node->var, $methodCallToService->getOldObjectType())) {
-                continue;
+        $hasChanged = \false;
+        $class = $node;
+        $this->traverseNodesWithCallable($classStmts, function (Node $node) use($class, &$hasChanged) : ?PropertyFetch {
+            if (!$node instanceof MethodCall) {
+                return null;
             }
-            if (!$this->isName($node->name, $methodCallToService->getOldMethod())) {
-                continue;
+            foreach ($this->methodCallToServices as $methodCallToService) {
+                if (!$this->isObjectType($node->var, $methodCallToService->getOldObjectType())) {
+                    continue;
+                }
+                if (!$this->isName($node->name, $methodCallToService->getOldMethod())) {
+                    continue;
+                }
+                $serviceObjectType = new ObjectType($methodCallToService->getServiceType());
+                $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
+                $propertyMetadata = new PropertyMetadata($propertyName, $serviceObjectType, Class_::MODIFIER_PRIVATE);
+                $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
+                $hasChanged = \true;
+                return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
             }
-            $serviceObjectType = new ObjectType($methodCallToService->getServiceType());
-            $propertyName = $this->propertyNaming->fqnToVariableName($serviceObjectType);
-            $propertyMetadata = new PropertyMetadata($propertyName, $serviceObjectType, Class_::MODIFIER_PRIVATE);
-            $this->propertyToAddCollector->addPropertyToClass($classLike, $propertyMetadata);
-            return new PropertyFetch(new Variable('this'), new Identifier($propertyName));
+            return null;
+        });
+        if ($hasChanged) {
+            return $node;
         }
-        return $node;
+        return null;
     }
     /**
      * @param mixed[] $configuration

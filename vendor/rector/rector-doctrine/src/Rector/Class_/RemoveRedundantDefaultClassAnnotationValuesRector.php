@@ -60,20 +60,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $this->refactorClassAnnotations($node);
-        return $node;
-    }
-    private function refactorClassAnnotations(Class_ $class) : void
-    {
-        $this->refactorEntityAnnotation($class);
-    }
-    private function refactorEntityAnnotation(Class_ $class) : void
-    {
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\Entity');
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return;
+            return null;
         }
-        $this->doctrineItemDefaultValueManipulator->remove($phpDocInfo, $doctrineAnnotationTagValueNode, 'readOnly', \false);
+        $hasChanged = $this->doctrineItemDefaultValueManipulator->clearDoctrineAnnotationTagValueNode($phpDocInfo, $doctrineAnnotationTagValueNode, 'readOnly', \false);
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
 }
