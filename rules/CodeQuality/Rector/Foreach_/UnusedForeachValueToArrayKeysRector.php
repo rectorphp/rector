@@ -73,7 +73,11 @@ CODE_SAMPLE
         }
         // special case of nested array items
         if ($node->valueVar instanceof Array_) {
-            $node->valueVar = $this->refactorArrayForeachValue($node->valueVar, $node);
+            $valueArray = $this->refactorArrayForeachValue($node->valueVar, $node);
+            if ($valueArray instanceof Array_) {
+                $node->valueVar = $valueArray;
+            }
+            // not sure what does this mean :)
             if ($node->valueVar->items !== []) {
                 return null;
             }
@@ -90,20 +94,47 @@ CODE_SAMPLE
         $this->removeForeachValueAndUseArrayKeys($node);
         return $node;
     }
-    private function refactorArrayForeachValue(Array_ $array, Foreach_ $foreach) : Array_
+    /**
+     * @param int[] $removedKeys
+     */
+    private function isArrayItemsRemovalWithoutChangingOrder(Array_ $array, array $removedKeys) : bool
     {
+        $hasRemovingStarted = \false;
+        foreach (\array_keys($array->items) as $key) {
+            if (\in_array($key, $removedKeys, \true)) {
+                $hasRemovingStarted = \true;
+            } elseif ($hasRemovingStarted) {
+                // we cannot remove the previous item, and not remove the next one, because that would change the order
+                return \false;
+            }
+        }
+        return \true;
+    }
+    private function refactorArrayForeachValue(Array_ $array, Foreach_ $foreach) : ?Array_
+    {
+        // only last items can be removed, without changing the order
+        $removedKeys = [];
         foreach ($array->items as $key => $arrayItem) {
             if (!$arrayItem instanceof ArrayItem) {
-                continue;
+                // only known values can be processes
+                return null;
             }
             $value = $arrayItem->value;
             if (!$value instanceof Variable) {
-                return $array;
+                // only variables can be processed
+                return null;
             }
             if ($this->isVariableUsedInForeach($value, $foreach)) {
                 continue;
             }
-            unset($array->items[$key]);
+            $removedKeys[] = $key;
+        }
+        if (!$this->isArrayItemsRemovalWithoutChangingOrder($array, $removedKeys)) {
+            return null;
+        }
+        // clear removed items
+        foreach ($removedKeys as $removedKey) {
+            unset($array->items[$removedKey]);
         }
         return $array;
     }
