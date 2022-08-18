@@ -7,7 +7,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
+use Rector\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 use Rector\PhpAttribute\UseAliasNameMatcher;
 use Rector\PhpAttribute\ValueObject\UseAliasMetadata;
 final class AttributeNameFactory
@@ -25,7 +25,7 @@ final class AttributeNameFactory
      * @param Use_[] $uses
      * @return \PhpParser\Node\Name\FullyQualified|\PhpParser\Node\Name
      */
-    public function create(AnnotationToAttribute $annotationToAttribute, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $uses)
+    public function create(AnnotationToAttributeInterface $annotationToAttribute, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, array $uses)
     {
         // A. attribute and class name are the same, so we re-use the short form to keep code compatible with previous one
         if ($annotationToAttribute->getAttributeClass() === $annotationToAttribute->getTag()) {

@@ -25,7 +25,7 @@ final class ContainerServiceProvider
         // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
         Assert::isInstanceOf($container, 'Symfony\\Component\\DependencyInjection\\Container');
         if (!$container->has($serviceName)) {
-            $errorMessage = \sprintf('Symfony container has no service "%s", maybe it is private', 'router');
+            $errorMessage = \sprintf('Symfony container has no service "%s", maybe it is private', $serviceName);
             throw new ShouldNotHappenException($errorMessage);
         }
         return $container->get($serviceName);

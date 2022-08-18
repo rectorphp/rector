@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1331843be6db35062946d8c6d6d20743
+class ComposerStaticInitb227991ae15ea73258297648166d904c
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2647,6 +2647,7 @@ class ComposerStaticInit1331843be6db35062946d8c6d6d20743
         'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
         'Rector\\Php74\\TypeAnalyzer\\ObjectTypeAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/TypeAnalyzer/ObjectTypeAnalyzer.php',
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
+        'Rector\\Php80\\Contract\\ValueObject\\AnnotationToAttributeInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/ValueObject/AnnotationToAttributeInterface.php',
         'Rector\\Php80\\Enum\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/Enum/MatchKind.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrposMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrposMatchAndRefactor.php',
@@ -2662,6 +2663,7 @@ class ComposerStaticInit1331843be6db35062946d8c6d6d20743
         'Rector\\Php80\\NodeFactory\\AttributeFlagFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/AttributeFlagFactory.php',
         'Rector\\Php80\\NodeFactory\\MatchArmsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchArmsFactory.php',
         'Rector\\Php80\\NodeFactory\\MatchFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchFactory.php',
+        'Rector\\Php80\\NodeFactory\\NestedAttrGroupsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/NestedAttrGroupsFactory.php',
         'Rector\\Php80\\NodeFactory\\StrStartsWithFuncCallFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/StrStartsWithFuncCallFactory.php',
         'Rector\\Php80\\NodeManipulator\\AttributeGroupNamedArgumentManipulator' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/AttributeGroupNamedArgumentManipulator.php',
         'Rector\\Php80\\NodeManipulator\\ResourceReturnToObject' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/ResourceReturnToObject.php',
@@ -2686,6 +2688,7 @@ class ComposerStaticInit1331843be6db35062946d8c6d6d20743
         'Rector\\Php80\\Rector\\Identical\\StrEndsWithRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Identical/StrEndsWithRector.php',
         'Rector\\Php80\\Rector\\Identical\\StrStartsWithRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Identical/StrStartsWithRector.php',
         'Rector\\Php80\\Rector\\NotIdentical\\StrContainsRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/NotIdentical/StrContainsRector.php',
+        'Rector\\Php80\\Rector\\Property\\NestedAnnotationToAttributeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Property/NestedAnnotationToAttributeRector.php',
         'Rector\\Php80\\Rector\\Switch_\\ChangeSwitchToMatchRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Switch_/ChangeSwitchToMatchRector.php',
         'Rector\\Php80\\Rector\\Ternary\\GetDebugTypeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Ternary/GetDebugTypeRector.php',
         'Rector\\Php80\\ValueObjectFactory\\StrStartsWithFactory' => __DIR__ . '/../..' . '/rules/Php80/ValueObjectFactory/StrStartsWithFactory.php',
@@ -2694,6 +2697,8 @@ class ComposerStaticInit1331843be6db35062946d8c6d6d20743
         'Rector\\Php80\\ValueObject\\ClassNameAndTagValueNode' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/ClassNameAndTagValueNode.php',
         'Rector\\Php80\\ValueObject\\CondAndExpr' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/CondAndExpr.php',
         'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
+        'Rector\\Php80\\ValueObject\\NestedAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/NestedAnnotationToAttribute.php',
+        'Rector\\Php80\\ValueObject\\NestedDoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/NestedDoctrineTagAndAnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
         'Rector\\Php80\\ValueObject\\StrStartsWith' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/StrStartsWith.php',
         'Rector\\Php81\\Enum\\AttributeName' => __DIR__ . '/../..' . '/rules/Php81/Enum/AttributeName.php',
@@ -2729,7 +2734,7 @@ class ComposerStaticInit1331843be6db35062946d8c6d6d20743
         'Rector\\PhpAttribute\\NodeFactory\\DoctrineAnnotationFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/DoctrineAnnotationFactory.php',
         'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/NamedArgsFactory.php',
         'Rector\\PhpAttribute\\NodeFactory\\PhpAttributeGroupFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/PhpAttributeGroupFactory.php',
-        'Rector\\PhpAttribute\\RemovableAnnotationAnalyzer' => __DIR__ . '/../..' . '/packages/PhpAttribute/RemovableAnnotationAnalyzer.php',
+        'Rector\\PhpAttribute\\NodeFactory\\PhpNestedAttributeGroupFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/PhpNestedAttributeGroupFactory.php',
         'Rector\\PhpAttribute\\UnwrapableAnnotationAnalyzer' => __DIR__ . '/../..' . '/packages/PhpAttribute/UnwrapableAnnotationAnalyzer.php',
         'Rector\\PhpAttribute\\UseAliasNameMatcher' => __DIR__ . '/../..' . '/packages/PhpAttribute/UseAliasNameMatcher.php',
         'Rector\\PhpAttribute\\ValueObject\\UseAliasMetadata' => __DIR__ . '/../..' . '/packages/PhpAttribute/ValueObject/UseAliasMetadata.php',
@@ -3250,9 +3255,9 @@ class ComposerStaticInit1331843be6db35062946d8c6d6d20743
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1331843be6db35062946d8c6d6d20743::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1331843be6db35062946d8c6d6d20743::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1331843be6db35062946d8c6d6d20743::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb227991ae15ea73258297648166d904c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb227991ae15ea73258297648166d904c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb227991ae15ea73258297648166d904c::$classMap;
 
         }, null, ClassLoader::class);
     }

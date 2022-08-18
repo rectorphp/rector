@@ -103,6 +103,8 @@ final class PhpAttributeGroupFactory
         return $this->namedArgsFactory->createFromValues($items);
     }
     /**
+     * @todo deprecated
+     *
      * @param mixed[] $items
      * @return mixed[]
      */

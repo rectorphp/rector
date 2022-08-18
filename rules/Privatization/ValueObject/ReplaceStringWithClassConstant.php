@@ -23,8 +23,8 @@ final class ReplaceStringWithClassConstant
      */
     private $argPosition;
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $classWithConstants;
     /**
@@ -32,9 +32,6 @@ final class ReplaceStringWithClassConstant
      * @var bool
      */
     private $caseInsensitive = \false;
-    /**
-     * @param class-string $classWithConstants
-     */
     public function __construct(string $class, string $method, int $argPosition, string $classWithConstants, bool $caseInsensitive = \false)
     {
         $this->class = $class;
@@ -43,6 +40,8 @@ final class ReplaceStringWithClassConstant
         $this->classWithConstants = $classWithConstants;
         $this->caseInsensitive = $caseInsensitive;
         RectorAssert::className($class);
+        RectorAssert::methodName($method);
+        RectorAssert::className($classWithConstants);
     }
     public function getObjectType() : ObjectType
     {

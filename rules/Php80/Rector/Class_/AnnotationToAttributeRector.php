@@ -29,7 +29,6 @@ use Rector\Php80\PhpDoc\PhpDocNodeFinder;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
-use Rector\PhpAttribute\RemovableAnnotationAnalyzer;
 use Rector\PhpAttribute\UnwrapableAnnotationAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use RectorPrefix202208\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
@@ -74,11 +73,6 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
     private $unwrapableAnnotationAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\RemovableAnnotationAnalyzer
-     */
-    private $removableAnnotationAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Php80\NodeManipulator\AttributeGroupNamedArgumentManipulator
      */
     private $attributeGroupNamedArgumentManipulator;
@@ -92,14 +86,13 @@ final class AnnotationToAttributeRector extends AbstractRector implements Config
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
-    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, PhpDocNodeFinder $phpDocNodeFinder, UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, RemovableAnnotationAnalyzer $removableAnnotationAnalyzer, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, PhpVersionProvider $phpVersionProvider, UseImportsResolver $useImportsResolver)
+    public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttrGroupsFactory $attrGroupsFactory, PhpDocTagRemover $phpDocTagRemover, PhpDocNodeFinder $phpDocNodeFinder, UnwrapableAnnotationAnalyzer $unwrapableAnnotationAnalyzer, AttributeGroupNamedArgumentManipulator $attributeGroupNamedArgumentManipulator, PhpVersionProvider $phpVersionProvider, UseImportsResolver $useImportsResolver)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
         $this->attrGroupsFactory = $attrGroupsFactory;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->phpDocNodeFinder = $phpDocNodeFinder;
         $this->unwrapableAnnotationAnalyzer = $unwrapableAnnotationAnalyzer;
-        $this->removableAnnotationAnalyzer = $removableAnnotationAnalyzer;
         $this->attributeGroupNamedArgumentManipulator = $attributeGroupNamedArgumentManipulator;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->useImportsResolver = $useImportsResolver;
@@ -169,7 +162,6 @@ CODE_SAMPLE
         Assert::allIsAOf($configuration, AnnotationToAttribute::class);
         $this->annotationsToAttributes = $configuration;
         $this->unwrapableAnnotationAnalyzer->configure($configuration);
-        $this->removableAnnotationAnalyzer->configure($configuration);
     }
     public function provideMinPhpVersion() : int
     {
@@ -242,11 +234,7 @@ CODE_SAMPLE
             if ($nestedDoctrineAnnotationTagValueNodes !== [] && $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NEW_INITIALIZERS) && $this->unwrapableAnnotationAnalyzer->areUnwrappable($nestedDoctrineAnnotationTagValueNodes)) {
                 $shouldInlinedNested = \true;
             }
-            if (!$this->removableAnnotationAnalyzer->isRemovable($doctrineTagValueNode)) {
-                $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute($doctrineTagValueNode, $annotationToAttribute);
-            } else {
-                $shouldInlinedNested = \true;
-            }
+            $doctrineTagAndAnnotationToAttributes[] = new DoctrineTagAndAnnotationToAttribute($doctrineTagValueNode, $annotationToAttribute);
             if ($shouldInlinedNested) {
                 // inline nested
                 foreach ($nestedDoctrineAnnotationTagValueNodes as $nestedDoctrineAnnotationTagValueNode) {

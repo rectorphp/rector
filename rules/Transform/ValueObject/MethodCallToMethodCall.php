@@ -7,8 +7,8 @@ use Rector\Core\Validation\RectorAssert;
 final class MethodCallToMethodCall
 {
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $oldType;
     /**
@@ -17,8 +17,8 @@ final class MethodCallToMethodCall
      */
     private $oldMethod;
     /**
-     * @var class-string
      * @readonly
+     * @var string
      */
     private $newType;
     /**
@@ -26,10 +26,6 @@ final class MethodCallToMethodCall
      * @var string
      */
     private $newMethod;
-    /**
-     * @param class-string $oldType
-     * @param class-string $newType
-     */
     public function __construct(string $oldType, string $oldMethod, string $newType, string $newMethod)
     {
         $this->oldType = $oldType;
