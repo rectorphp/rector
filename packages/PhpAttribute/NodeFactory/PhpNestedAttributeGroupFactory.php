@@ -116,11 +116,16 @@ final class PhpNestedAttributeGroupFactory
      */
     private function resolveAliasedAttributeName(string $originalIdentifier, string $nestedAttributeClass)
     {
+        /** @var string $shortDoctrineAttributeName */
+        $shortDoctrineAttributeName = Strings::after($nestedAttributeClass, '\\', -1);
         $matches = Strings::match($originalIdentifier, self::SHORT_ORM_ALIAS_REGEX);
         if ($matches !== null) {
             // or alias
-            $shortDoctrineAttributeName = Strings::after($nestedAttributeClass, '\\', -1);
             return new Name('ORM\\' . $shortDoctrineAttributeName);
+        }
+        // short alias
+        if (\strpos($originalIdentifier, '\\') === \false) {
+            return new Name($shortDoctrineAttributeName);
         }
         return new FullyQualified($nestedAttributeClass);
     }
