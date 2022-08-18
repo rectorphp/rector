@@ -14,10 +14,10 @@ return static function (RectorConfig $rectorConfig) : void {
         new NestedAnnotationToAttribute('Doctrine\\ORM\\Mapping\\JoinTable', ['joinColumns' => 'Doctrine\\ORM\\Mapping\\JoinColumn', 'inverseJoinColumns' => 'Doctrine\\ORM\\Mapping\\InverseJoinColumn']),
         /** @see https://www.doctrine-project.org/projects/doctrine-orm/en/latest/reference/annotations-reference.html#joincolumns */
         new NestedAnnotationToAttribute('Doctrine\\ORM\\Mapping\\JoinColumns', ['Doctrine\\ORM\\Mapping\\JoinColumn'], \true),
+        new NestedAnnotationToAttribute('Doctrine\\ORM\\Mapping\\Table', ['indexes' => 'Doctrine\\ORM\\Mapping\\Index', 'uniqueConstraints' => 'Doctrine\\ORM\\Mapping\\UniqueConstraint']),
     ]);
     $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [
         // class
-        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Table'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Entity'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Column'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\UniqueConstraint'),
@@ -57,5 +57,10 @@ return static function (RectorConfig $rectorConfig) : void {
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\PreUpdate'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\Cache'),
         new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\EntityListeners'),
+        // Overrides
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\AssociationOverrides'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\AssociationOverride'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\AttributeOverrides'),
+        new AnnotationToAttribute('Doctrine\\ORM\\Mapping\\AttributeOverride'),
     ]);
 };
