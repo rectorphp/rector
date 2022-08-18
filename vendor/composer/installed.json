@@ -2199,12 +2199,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "528d3135a2e565220a7e0b8fc85132e772693026"
+                "reference": "0e0e3991de473fc69dcb73ad6c28db3e3579f828"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/528d3135a2e565220a7e0b8fc85132e772693026",
-                "reference": "528d3135a2e565220a7e0b8fc85132e772693026",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/0e0e3991de473fc69dcb73ad6c28db3e3579f828",
+                "reference": "0e0e3991de473fc69dcb73ad6c28db3e3579f828",
                 "shasum": ""
             },
             "require": {
@@ -2229,7 +2229,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-08-09T19:43:15+00:00",
+            "time": "2022-08-18T12:51:44+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2256,7 +2256,7 @@
             "description": "Rector upgrades rules for PHPUnit",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-phpunit\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.13.4"
+                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/main"
             },
             "install-path": "..\/rector\/rector-phpunit"
         },
