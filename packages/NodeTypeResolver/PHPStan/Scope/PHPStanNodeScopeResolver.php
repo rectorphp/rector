@@ -130,6 +130,7 @@ final class PHPStanNodeScopeResolver
         $this->renamedClassesSourceLocator = $renamedClassesSourceLocator;
         $this->parentAttributeSourceLocator = $parentAttributeSourceLocator;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
     }
     /**
      * @param Stmt[] $stmts
@@ -209,7 +210,6 @@ final class PHPStanNodeScopeResolver
                 $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
         };
-        $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
         return $this->processNodesWithDependentFiles($smartFileInfo, $stmts, $scope, $nodeCallback);
     }
     private function processArrayItem(ArrayItem $arrayItem, MutatingScope $mutatingScope) : void
