@@ -7,9 +7,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
@@ -21,10 +19,6 @@ use Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
  */
 final class PhpAttributeGroupFactory
 {
-    /**
-     * @var array<string, string[]>>
-     */
-    private const UNWRAPPED_ANNOTATIONS = ['Doctrine\\ORM\\Mapping\\Table' => ['indexes', 'uniqueConstraints'], 'Doctrine\\ORM\\Mapping\\Entity' => ['uniqueConstraints']];
     /**
      * @readonly
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
@@ -99,35 +93,6 @@ final class PhpAttributeGroupFactory
         /** @var Expr[]|Expr\Array_ $items */
         $items = $this->annotationToAttributeMapper->map($items);
         $items = $this->exprParameterReflectionTypeCorrector->correctItemsByAttributeClass($items, $attributeClass);
-        $items = $this->removeUnwrappedItems($attributeClass, $items);
         return $this->namedArgsFactory->createFromValues($items);
-    }
-    /**
-     * @todo deprecated
-     *
-     * @param mixed[] $items
-     * @return mixed[]
-     */
-    private function removeUnwrappedItems(string $attributeClass, array $items) : array
-    {
-        // unshift annotations that can be extracted
-        $unwrappeColumns = self::UNWRAPPED_ANNOTATIONS[$attributeClass] ?? [];
-        if ($unwrappeColumns === []) {
-            return $items;
-        }
-        foreach ($items as $key => $item) {
-            if (!$item instanceof ArrayItem) {
-                continue;
-            }
-            if (!$item->key instanceof String_) {
-                continue;
-            }
-            $stringItemKey = $item->key;
-            if (!\in_array($stringItemKey->value, $unwrappeColumns, \true)) {
-                continue;
-            }
-            unset($items[$key]);
-        }
-        return $items;
     }
 }
