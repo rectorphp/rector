@@ -45,6 +45,9 @@ final class StringAnnotationToAttributeMapper implements AnnotationToAttributeMa
         } else {
             $kind = String_::KIND_SINGLE_QUOTED;
         }
+        if (\strncmp($value, '"', \strlen('"')) === 0 && \substr_compare($value, '"', -\strlen('"')) === 0) {
+            $value = \trim($value, '"');
+        }
         return new String_($value, [AttributeKey::KIND => $kind]);
     }
 }

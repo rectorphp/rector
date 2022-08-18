@@ -22,10 +22,6 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
      */
     protected $hasChanged = \false;
     /**
-     * @var mixed[]
-     */
-    private $originalValues = [];
-    /**
      * @var array<(string | int), mixed>
      */
     public $values = [];
@@ -45,7 +41,6 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         $this->values = $values;
         $this->originalContent = $originalContent;
         $this->silentKey = $silentKey;
-        $this->originalValues = $values;
     }
     public function removeValue(string $key) : void
     {
@@ -140,7 +135,11 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
             if (\is_int($key) && $this->silentKey !== null) {
                 $explicitKeysValues[$this->silentKey] = $valueWithoutQuotes;
             } else {
-                $explicitKeysValues[$this->removeQuotes($key)] = $valueWithoutQuotes;
+                // to keep constant keys strings if quoted
+                if (\is_string($key) && \strpos($key, '::') === \false) {
+                    $key = $this->removeQuotes($key);
+                }
+                $explicitKeysValues[$key] = $valueWithoutQuotes;
             }
         }
         return $explicitKeysValues;
@@ -148,13 +147,6 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
     public function markAsChanged() : void
     {
         $this->hasChanged = \true;
-    }
-    /**
-     * @return mixed[]
-     */
-    public function getOriginalValues() : array
-    {
-        return $this->originalValues;
     }
     /**
      * @param mixed|string $value
