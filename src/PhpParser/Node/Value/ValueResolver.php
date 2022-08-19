@@ -263,7 +263,7 @@ final class ValueResolver
             $classReflection = $this->reflectionProvider->getClass($class);
             if ($classReflection->hasConstant($constant)) {
                 $constantReflection = $classReflection->getConstant($constant);
-                return $constantReflection->getValue();
+                return $constantReflection->getValueExpr();
             }
         }
         // fallback to constant reference itself, to avoid fatal error
