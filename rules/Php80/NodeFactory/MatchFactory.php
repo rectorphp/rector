@@ -37,37 +37,30 @@ final class MatchFactory
      */
     public function createFromCondAndExprs(Expr $condExpr, array $condAndExprs, ?Stmt $nextStmt) : ?MatchResult
     {
+        $shouldRemoteNextStmt = \false;
+        // is default value missing? maybe it can be found in next stmt
+        if (!$this->matchSwitchAnalyzer->hasCondsAndExprDefaultValue($condAndExprs)) {
+            // 1. is followed by throws stmts?
+            if ($nextStmt instanceof ThrowsStmt) {
+                $throw = new Throw_($nextStmt->expr);
+                $condAndExprs[] = new CondAndExpr([], $throw, MatchKind::RETURN);
+                $shouldRemoteNextStmt = \true;
+            }
+            // 2. is followed by return expr
+            // implicit return default after switch
+            if ($nextStmt instanceof Return_ && $nextStmt->expr instanceof Expr) {
+                // @todo this should be improved
+                $expr = $this->resolveAssignVar($condAndExprs);
+                if ($expr instanceof ArrayDimFetch) {
+                    return null;
+                }
+                $shouldRemoteNextStmt = !$expr instanceof Expr;
+                $condAndExprs[] = new CondAndExpr([], $nextStmt->expr, MatchKind::RETURN);
+            }
+        }
         $matchArms = $this->matchArmsFactory->createFromCondAndExprs($condAndExprs);
         $match = new Match_($condExpr, $matchArms);
-        // implicit return default after switch
-        if ($nextStmt instanceof Return_ && $nextStmt->expr instanceof Expr) {
-            return $this->processImplicitReturnAfterSwitch($match, $condAndExprs, $nextStmt->expr);
-        }
-        if ($nextStmt instanceof ThrowsStmt) {
-            return $this->processImplicitThrowsAfterSwitch($match, $condAndExprs, $nextStmt->expr);
-        }
-        return new MatchResult($match, \false);
-    }
-    /**
-     * @param CondAndExpr[] $condAndExprs
-     */
-    private function processImplicitReturnAfterSwitch(Match_ $match, array $condAndExprs, Expr $returnExpr) : ?MatchResult
-    {
-        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
-            return new MatchResult($match, \false);
-        }
-        $expr = $this->resolveAssignVar($condAndExprs);
-        if ($expr instanceof ArrayDimFetch) {
-            return null;
-        }
-        $shouldRemoveNextStmt = \false;
-        if (!$expr instanceof Expr) {
-            $shouldRemoveNextStmt = \true;
-        }
-        $condAndExprs[] = new CondAndExpr([], $returnExpr, MatchKind::RETURN);
-        $matchArms = $this->matchArmsFactory->createFromCondAndExprs($condAndExprs);
-        $wrappedMatch = new Match_($match->cond, $matchArms);
-        return new MatchResult($wrappedMatch, $shouldRemoveNextStmt);
+        return new MatchResult($match, $shouldRemoteNextStmt);
     }
     /**
      * @param CondAndExpr[] $condAndExprs
@@ -82,19 +75,5 @@ final class MatchFactory
             return $expr->var;
         }
         return null;
-    }
-    /**
-     * @param CondAndExpr[] $condAndExprs
-     */
-    private function processImplicitThrowsAfterSwitch(Match_ $match, array $condAndExprs, Expr $throwExpr) : MatchResult
-    {
-        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
-            return new MatchResult($match, \false);
-        }
-        $throw = new Throw_($throwExpr);
-        $condAndExprs[] = new CondAndExpr([], $throw, MatchKind::RETURN);
-        $matchArms = $this->matchArmsFactory->createFromCondAndExprs($condAndExprs);
-        $wrappedMatch = new Match_($match->cond, $matchArms);
-        return new MatchResult($wrappedMatch, \true);
     }
 }

@@ -91,6 +91,18 @@ final class MatchSwitchAnalyzer
         $assignVariableNames = \array_unique($assignVariableNames);
         return \count($assignVariableNames) <= 1;
     }
+    /**
+     * @param CondAndExpr[] $condAndExprs
+     */
+    public function hasCondsAndExprDefaultValue(array $condAndExprs) : bool
+    {
+        foreach ($condAndExprs as $condAndExpr) {
+            if ($condAndExpr->getCondExprs() === null) {
+                return \true;
+            }
+        }
+        return \false;
+    }
     public function hasDefaultValue(Match_ $match) : bool
     {
         foreach ($match->arms as $matchArm) {
