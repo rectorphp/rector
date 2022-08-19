@@ -13,6 +13,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Rector\Php81\Enum\AttributeName;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -25,10 +26,6 @@ use RectorPrefix202208\Webmozart\Assert\Assert;
  */
 final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
-    /**
-     * @var string
-     */
-    private const ATTRIBUTE = 'AllowDynamicProperties';
     /**
      * @var array<array-key, string>
      */
@@ -116,18 +113,18 @@ CODE_SAMPLE
     }
     private function hasNeededAttributeAlready(Class_ $class) : bool
     {
-        $nodeHasAttribute = $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE);
+        $nodeHasAttribute = $this->phpAttributeAnalyzer->hasPhpAttribute($class, AttributeName::ALLOW_DYNAMIC_PROPERTIES);
         if ($nodeHasAttribute) {
             return \true;
         }
         if (!$class->extends instanceof FullyQualified) {
             return \false;
         }
-        return $this->phpAttributeAnalyzer->hasInheritedPhpAttribute($class, self::ATTRIBUTE);
+        return $this->phpAttributeAnalyzer->hasInheritedPhpAttribute($class, AttributeName::ALLOW_DYNAMIC_PROPERTIES);
     }
     private function addAllowDynamicPropertiesAttribute(Class_ $class) : Class_
     {
-        $class->attrGroups[] = $this->phpAttributeGroupFactory->createFromClass(self::ATTRIBUTE);
+        $class->attrGroups[] = $this->phpAttributeGroupFactory->createFromClass(AttributeName::ALLOW_DYNAMIC_PROPERTIES);
         return $class;
     }
     private function shouldSkip(Class_ $class) : bool

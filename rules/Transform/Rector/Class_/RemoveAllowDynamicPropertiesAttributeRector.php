@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+use Rector\Php81\Enum\AttributeName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202208\Webmozart\Assert\Assert;
@@ -18,10 +19,6 @@ use RectorPrefix202208\Webmozart\Assert\Assert;
  */
 final class RemoveAllowDynamicPropertiesAttributeRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface
 {
-    /**
-     * @var string
-     */
-    private const ATTRIBUTE = 'AllowDynamicProperties';
     /**
      * @var array<array-key, string>
      */
@@ -83,7 +80,7 @@ CODE_SAMPLE
         foreach ($class->attrGroups as $attrGroup) {
             $newAttrs = [];
             foreach ($attrGroup->attrs as $attribute) {
-                if (!$this->nodeNameResolver->isName($attribute, self::ATTRIBUTE)) {
+                if (!$this->nodeNameResolver->isName($attribute, AttributeName::ALLOW_DYNAMIC_PROPERTIES)) {
                     $newAttrs[] = $attribute;
                 }
             }
@@ -105,6 +102,6 @@ CODE_SAMPLE
                 }
             }
         }
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE);
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($class, AttributeName::ALLOW_DYNAMIC_PROPERTIES);
     }
 }

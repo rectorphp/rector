@@ -18,6 +18,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\NodeAnalyzer\AnnotationTargetResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeFactory\AttributeFlagFactory;
+use Rector\Php81\Enum\AttributeName;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
@@ -40,10 +41,6 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector impl
      * @var string
      */
     public const REMOVE_ANNOTATIONS = 'remove_annotations';
-    /**
-     * @var string
-     */
-    private const ATTRIBUTE = 'Attribute';
     /**
      * @var bool
      */
@@ -137,7 +134,7 @@ CODE_SAMPLE
             $this->phpDocTagRemover->removeByName($phpDocInfo, 'annotation');
             $this->phpDocTagRemover->removeByName($phpDocInfo, 'Annotation');
         }
-        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(self::ATTRIBUTE);
+        $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(AttributeName::ATTRIBUTE);
         $this->decorateTarget($phpDocInfo, $attributeGroup);
         foreach ($node->getProperties() as $property) {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
@@ -201,6 +198,6 @@ CODE_SAMPLE
             return \true;
         }
         // has attribute? skip it
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE);
+        return $this->phpAttributeAnalyzer->hasPhpAttribute($class, AttributeName::ATTRIBUTE);
     }
 }

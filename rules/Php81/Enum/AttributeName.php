@@ -11,4 +11,12 @@ final class AttributeName
      * @var string
      */
     public const RETURN_TYPE_WILL_CHANGE = 'ReturnTypeWillChange';
+    /**
+     * @var string
+     */
+    public const ATTRIBUTE = 'Attribute';
+    /**
+     * @var string
+     */
+    public const ALLOW_DYNAMIC_PROPERTIES = 'AllowDynamicProperties';
 }
