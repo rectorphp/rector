@@ -20,6 +20,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
@@ -154,7 +155,7 @@ final class PhpDocTypeChanger
     }
     public function isAllowed(TypeNode $typeNode) : bool
     {
-        if ($typeNode instanceof BracketsAwareUnionTypeNode) {
+        if ($typeNode instanceof BracketsAwareUnionTypeNode || $typeNode instanceof BracketsAwareIntersectionTypeNode) {
             foreach ($typeNode->types as $type) {
                 if ($this->isAllowed($type)) {
                     return \true;
