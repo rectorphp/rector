@@ -37,7 +37,7 @@ This rule's job is to add `final` to every class that has no children and is not
 
 Usually, the Rector diff output is long and contains many other errors related to other rules. It's a mess; we can't use that for a test fixture. We need to find **1 responsible line**.
 
-The best way is to copy the file to local code, e.g. `app/SomeFile.php` a put only the broken line there.
+The best way is to copy the file to local code, e.g. `app/SomeFile.php` and put only the broken line there.
 
 In our case, all we need is:
 
