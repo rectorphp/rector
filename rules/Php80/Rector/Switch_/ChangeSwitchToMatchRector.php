@@ -6,22 +6,20 @@ namespace Rector\Php80\Rector\Switch_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\MatchArm;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
+use Rector\Php80\NodeManipulator\AssignMatchTransformer;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
+use Rector\Php80\ValueObject\MatchAssignResult;
 use Rector\Php80\ValueObject\MatchResult;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -49,11 +47,17 @@ final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVe
      * @var \Rector\Php80\NodeFactory\MatchFactory
      */
     private $matchFactory;
-    public function __construct(SwitchExprsResolver $switchExprsResolver, MatchSwitchAnalyzer $matchSwitchAnalyzer, MatchFactory $matchFactory)
+    /**
+     * @readonly
+     * @var \Rector\Php80\NodeManipulator\AssignMatchTransformer
+     */
+    private $assignMatchTransformer;
+    public function __construct(SwitchExprsResolver $switchExprsResolver, MatchSwitchAnalyzer $matchSwitchAnalyzer, MatchFactory $matchFactory, AssignMatchTransformer $assignMatchTransformer)
     {
         $this->switchExprsResolver = $switchExprsResolver;
         $this->matchSwitchAnalyzer = $matchSwitchAnalyzer;
         $this->matchFactory = $matchFactory;
+        $this->assignMatchTransformer = $assignMatchTransformer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -132,9 +136,13 @@ CODE_SAMPLE
             $hasDefaultValue = $this->matchSwitchAnalyzer->hasDefaultValue($match);
             if ($assignVar instanceof Expr) {
                 $previousStmt = $node->stmts[$key - 1] ?? null;
-                $assign = $this->changeToAssign($match, $assignVar, $hasDefaultValue, $previousStmt, $nextStmt);
-                if (!$assign instanceof Assign) {
+                $assignResult = $this->assignMatchTransformer->unwrapMatchArmAssignsToAssign($match, $assignVar, $hasDefaultValue, $previousStmt, $nextStmt);
+                if (!$assignResult instanceof MatchAssignResult) {
                     continue;
+                }
+                $assign = $assignResult->getAssign();
+                if ($assignResult->isShouldRemovePreviousStmt()) {
+                    unset($node->stmts[$key - 1]);
                 }
                 $node->stmts[$key] = new Expression($assign);
                 $hasChanged = \true;
@@ -155,43 +163,6 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::MATCH_EXPRESSION;
     }
-    private function changeToAssign(Match_ $match, Expr $expr, bool $hasDefaultValue, ?Stmt $previousStmt, ?Stmt $nextStmt) : ?Assign
-    {
-        // containts next this expr?
-        if (!$hasDefaultValue && $this->isFollowedByReturnWithExprUsage($nextStmt, $expr)) {
-            return null;
-        }
-        // @todo extract?
-        $prevInitializedAssign = null;
-        if ($previousStmt instanceof Expression) {
-            $previousExpr = $previousStmt->expr;
-            if ($previousExpr instanceof Assign && $this->nodeComparator->areNodesEqual($previousExpr->var, $expr)) {
-                $prevInitializedAssign = $previousExpr;
-            }
-        }
-        $assign = new Assign($expr, $match);
-        if (!$prevInitializedAssign instanceof Assign) {
-            return $this->resolveCurrentAssign($hasDefaultValue, $assign);
-        }
-        if ($hasDefaultValue) {
-            $default = $match->arms[\count($match->arms) - 1]->body;
-            if ($this->nodeComparator->areNodesEqual($default, $prevInitializedAssign->var)) {
-                return $assign;
-            }
-        } else {
-            $lastArmPosition = \count($match->arms);
-            $match->arms[$lastArmPosition] = new MatchArm(null, $prevInitializedAssign->expr);
-        }
-        $node = $prevInitializedAssign->getAttribute(AttributeKey::PARENT_NODE);
-        if ($node instanceof Expression) {
-            $this->removeNode($node);
-        }
-        return $assign;
-    }
-    private function resolveCurrentAssign(bool $hasDefaultValue, Assign $assign) : ?Assign
-    {
-        return $hasDefaultValue ? $assign : null;
-    }
     /**
      * @param CondAndExpr[] $condAndExprs
      */
@@ -205,21 +176,5 @@ CODE_SAMPLE
             return $expr->var;
         }
         return null;
-    }
-    private function isFollowedByReturnWithExprUsage(?\PhpParser\Node\Stmt $nextStmt, Expr $expr) : bool
-    {
-        if (!$nextStmt instanceof Return_) {
-            return \false;
-        }
-        if (!$nextStmt->expr instanceof Expr) {
-            return \false;
-        }
-        $returnExprs = $this->betterNodeFinder->findInstanceOf($nextStmt, Expr::class);
-        foreach ($returnExprs as $returnExpr) {
-            if ($this->nodeComparator->areNodesEqual($expr, $returnExpr)) {
-                return \true;
-            }
-        }
-        return \false;
     }
 }
