@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitae68ab1a4f19e6758219b7e98a29a94f
+class ComposerStaticInit37acacf548ed5342093e9d3ba7cf411a
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2697,6 +2697,7 @@ class ComposerStaticInitae68ab1a4f19e6758219b7e98a29a94f
         'Rector\\Php80\\ValueObject\\ClassNameAndTagValueNode' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/ClassNameAndTagValueNode.php',
         'Rector\\Php80\\ValueObject\\CondAndExpr' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/CondAndExpr.php',
         'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
+        'Rector\\Php80\\ValueObject\\MatchResult' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/MatchResult.php',
         'Rector\\Php80\\ValueObject\\NestedAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/NestedAnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\NestedDoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/NestedDoctrineTagAndAnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
@@ -3253,9 +3254,9 @@ class ComposerStaticInitae68ab1a4f19e6758219b7e98a29a94f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitae68ab1a4f19e6758219b7e98a29a94f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitae68ab1a4f19e6758219b7e98a29a94f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitae68ab1a4f19e6758219b7e98a29a94f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit37acacf548ed5342093e9d3ba7cf411a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit37acacf548ed5342093e9d3ba7cf411a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit37acacf548ed5342093e9d3ba7cf411a::$classMap;
 
         }, null, ClassLoader::class);
     }

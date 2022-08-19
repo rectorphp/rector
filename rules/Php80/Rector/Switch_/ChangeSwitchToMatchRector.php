@@ -5,7 +5,6 @@ namespace Rector\Php80\Rector\Switch_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Throw_;
@@ -14,7 +13,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\Throw_ as ThrowsStmt;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -24,6 +22,7 @@ use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\NodeFactory\MatchFactory;
 use Rector\Php80\NodeResolver\SwitchExprsResolver;
 use Rector\Php80\ValueObject\CondAndExpr;
+use Rector\Php80\ValueObject\MatchResult;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -121,13 +120,14 @@ CODE_SAMPLE
                     continue 2;
                 }
             }
-            $match = $this->matchFactory->createFromCondAndExprs($stmt->cond, $condAndExprs);
-            // implicit return default after switch
-            $match = $this->processImplicitReturnAfterSwitch($match, $condAndExprs, $nextStmt);
-            if (!$match instanceof Match_) {
+            $matchResult = $this->matchFactory->createFromCondAndExprs($stmt->cond, $condAndExprs, $nextStmt);
+            if (!$matchResult instanceof MatchResult) {
                 continue;
             }
-            $match = $this->processImplicitThrowsAfterSwitch($stmt, $match, $condAndExprs, $nextStmt);
+            $match = $matchResult->getMatch();
+            if ($matchResult->shouldRemoveNextStmt()) {
+                unset($node->stmts[$key + 1]);
+            }
             $assignVar = $this->resolveAssignVar($condAndExprs);
             $hasDefaultValue = $this->matchSwitchAnalyzer->hasDefaultValue($match);
             if ($assignVar instanceof Expr) {
@@ -205,47 +205,6 @@ CODE_SAMPLE
             return $expr->var;
         }
         return null;
-    }
-    /**
-     * @param CondAndExpr[] $condAndExprs
-     */
-    private function processImplicitReturnAfterSwitch(Match_ $match, array $condAndExprs, ?Stmt $nextStmt) : ?Match_
-    {
-        if (!$nextStmt instanceof Return_) {
-            return $match;
-        }
-        $returnedExpr = $nextStmt->expr;
-        if (!$returnedExpr instanceof Expr) {
-            return $match;
-        }
-        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
-            return $match;
-        }
-        $assignVar = $this->resolveAssignVar($condAndExprs);
-        if ($assignVar instanceof ArrayDimFetch) {
-            return null;
-        }
-        if (!$assignVar instanceof Expr) {
-            $this->removeNode($nextStmt);
-        }
-        $condAndExprs[] = new CondAndExpr([], $returnedExpr, MatchKind::RETURN);
-        return $this->matchFactory->createFromCondAndExprs($match->cond, $condAndExprs);
-    }
-    /**
-     * @param CondAndExpr[] $condAndExprs
-     */
-    private function processImplicitThrowsAfterSwitch(Switch_ $switch, Match_ $match, array $condAndExprs, ?Stmt $nextStmt) : Match_
-    {
-        if (!$nextStmt instanceof ThrowsStmt) {
-            return $match;
-        }
-        if ($this->matchSwitchAnalyzer->hasDefaultValue($match)) {
-            return $match;
-        }
-        $this->removeNode($nextStmt);
-        $throw = new Throw_($nextStmt->expr);
-        $condAndExprs[] = new CondAndExpr([], $throw, MatchKind::RETURN);
-        return $this->matchFactory->createFromCondAndExprs($switch->cond, $condAndExprs);
     }
     private function isFollowedByReturnWithExprUsage(?\PhpParser\Node\Stmt $nextStmt, Expr $expr) : bool
     {

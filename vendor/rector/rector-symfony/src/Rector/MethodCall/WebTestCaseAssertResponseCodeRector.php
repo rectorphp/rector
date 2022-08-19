@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -70,10 +71,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, StaticCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param MethodCall|StaticCall $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -105,7 +106,11 @@ CODE_SAMPLE
         $firstArg = $args[0];
         return $this->valueResolver->isValue($firstArg->value, 'Location');
     }
-    private function processAssertResponseStatusCodeSame(MethodCall $methodCall) : ?MethodCall
+    /**
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $methodCall
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     */
+    private function processAssertResponseStatusCodeSame($methodCall)
     {
         if (!$this->isName($methodCall->name, 'assertSame')) {
             return null;
@@ -131,9 +136,16 @@ CODE_SAMPLE
         if ($statusCode === 200) {
             return null;
         }
+        if ($methodCall instanceof StaticCall) {
+            return $this->nodeFactory->createStaticCall('self', 'assertResponseStatusCodeSame', [$methodCall->args[0]]);
+        }
         return $this->nodeFactory->createLocalMethodCall('assertResponseStatusCodeSame', [$methodCall->args[0]]);
     }
-    private function processAssertResponseRedirects(MethodCall $methodCall) : ?MethodCall
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $methodCall
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     */
+    private function processAssertResponseRedirects($methodCall)
     {
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($methodCall, ['assertSame'])) {
             return null;
@@ -144,6 +156,9 @@ CODE_SAMPLE
             return null;
         }
         $expectedUrl = $args[0]->value;
+        if ($methodCall instanceof StaticCall) {
+            return $this->nodeFactory->createStaticCall('self', 'assertResponseRedirects', [$expectedUrl]);
+        }
         return $this->nodeFactory->createLocalMethodCall('assertResponseRedirects', [$expectedUrl]);
     }
 }

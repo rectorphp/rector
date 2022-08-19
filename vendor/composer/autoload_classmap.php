@@ -2400,6 +2400,7 @@ return array(
     'Rector\\Php80\\ValueObject\\ClassNameAndTagValueNode' => $baseDir . '/rules/Php80/ValueObject/ClassNameAndTagValueNode.php',
     'Rector\\Php80\\ValueObject\\CondAndExpr' => $baseDir . '/rules/Php80/ValueObject/CondAndExpr.php',
     'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => $baseDir . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
+    'Rector\\Php80\\ValueObject\\MatchResult' => $baseDir . '/rules/Php80/ValueObject/MatchResult.php',
     'Rector\\Php80\\ValueObject\\NestedAnnotationToAttribute' => $baseDir . '/rules/Php80/ValueObject/NestedAnnotationToAttribute.php',
     'Rector\\Php80\\ValueObject\\NestedDoctrineTagAndAnnotationToAttribute' => $baseDir . '/rules/Php80/ValueObject/NestedDoctrineTagAndAnnotationToAttribute.php',
     'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => $baseDir . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
