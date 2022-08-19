@@ -1224,6 +1224,7 @@ return array(
     'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser' => $baseDir . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\ArrayParser' => $baseDir . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/ArrayParser.php',
     'Rector\\BetterPhpDocParser\\PhpDocParser\\StaticDoctrineAnnotationParser\\PlainValueParser' => $baseDir . '/packages/BetterPhpDocParser/PhpDocParser/StaticDoctrineAnnotationParser/PlainValueParser.php',
+    'Rector\\BetterPhpDocParser\\PhpDoc\\ArrayItemNode' => $baseDir . '/packages/BetterPhpDocParser/PhpDoc/ArrayItemNode.php',
     'Rector\\BetterPhpDocParser\\PhpDoc\\DoctrineAnnotationTagValueNode' => $baseDir . '/packages/BetterPhpDocParser/PhpDoc/DoctrineAnnotationTagValueNode.php',
     'Rector\\BetterPhpDocParser\\PhpDoc\\SpacelessPhpDocTagNode' => $baseDir . '/packages/BetterPhpDocParser/PhpDoc/SpacelessPhpDocTagNode.php',
     'Rector\\BetterPhpDocParser\\Printer\\DocBlockInliner' => $baseDir . '/packages/BetterPhpDocParser/Printer/DocBlockInliner.php',
