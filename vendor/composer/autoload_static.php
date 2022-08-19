@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5f8e5a4b08a0268b87abee5b9efdf2b3
+class ComposerStaticInit236ae775483cc63b8aa6d40765321a66
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2666,7 +2666,6 @@ class ComposerStaticInit5f8e5a4b08a0268b87abee5b9efdf2b3
         'Rector\\Php80\\NodeFactory\\MatchFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchFactory.php',
         'Rector\\Php80\\NodeFactory\\NestedAttrGroupsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/NestedAttrGroupsFactory.php',
         'Rector\\Php80\\NodeFactory\\StrStartsWithFuncCallFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/StrStartsWithFuncCallFactory.php',
-        'Rector\\Php80\\NodeManipulator\\AssignMatchTransformer' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/AssignMatchTransformer.php',
         'Rector\\Php80\\NodeManipulator\\AttributeGroupNamedArgumentManipulator' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/AttributeGroupNamedArgumentManipulator.php',
         'Rector\\Php80\\NodeManipulator\\ResourceReturnToObject' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/ResourceReturnToObject.php',
         'Rector\\Php80\\NodeManipulator\\TokenManipulator' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/TokenManipulator.php',
@@ -2698,7 +2697,6 @@ class ComposerStaticInit5f8e5a4b08a0268b87abee5b9efdf2b3
         'Rector\\Php80\\ValueObject\\ClassNameAndTagValueNode' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/ClassNameAndTagValueNode.php',
         'Rector\\Php80\\ValueObject\\CondAndExpr' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/CondAndExpr.php',
         'Rector\\Php80\\ValueObject\\DoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/DoctrineTagAndAnnotationToAttribute.php',
-        'Rector\\Php80\\ValueObject\\MatchAssignResult' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/MatchAssignResult.php',
         'Rector\\Php80\\ValueObject\\MatchResult' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/MatchResult.php',
         'Rector\\Php80\\ValueObject\\NestedAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/NestedAnnotationToAttribute.php',
         'Rector\\Php80\\ValueObject\\NestedDoctrineTagAndAnnotationToAttribute' => __DIR__ . '/../..' . '/rules/Php80/ValueObject/NestedDoctrineTagAndAnnotationToAttribute.php',
@@ -3256,9 +3254,9 @@ class ComposerStaticInit5f8e5a4b08a0268b87abee5b9efdf2b3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5f8e5a4b08a0268b87abee5b9efdf2b3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5f8e5a4b08a0268b87abee5b9efdf2b3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5f8e5a4b08a0268b87abee5b9efdf2b3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit236ae775483cc63b8aa6d40765321a66::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit236ae775483cc63b8aa6d40765321a66::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit236ae775483cc63b8aa6d40765321a66::$classMap;
 
         }, null, ClassLoader::class);
     }

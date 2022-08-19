@@ -43,6 +43,18 @@ final class MatchSwitchAnalyzer
     /**
      * @param CondAndExpr[] $condAndExprs
      */
+    public function isReturnCondsAndExprs(array $condAndExprs) : bool
+    {
+        foreach ($condAndExprs as $condAndExpr) {
+            if ($condAndExpr->equalsMatchKind(MatchKind::RETURN)) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    /**
+     * @param CondAndExpr[] $condAndExprs
+     */
     public function shouldSkipSwitch(Switch_ $switch, array $condAndExprs, ?Stmt $nextStmt) : bool
     {
         if ($condAndExprs === []) {
