@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\MixedType;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
@@ -177,12 +178,8 @@ CODE_SAMPLE
         if ($this->shouldRemoveAnnotations) {
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $targetDoctrineAnnotationTagValueNode);
         }
-        $targets = $targetDoctrineAnnotationTagValueNode->getSilentValue();
-        if ($targets instanceof CurlyListNode) {
-            $targetValues = $targets->getValuesWithExplicitSilentAndWithoutQuotes();
-        } elseif (\is_string($targets)) {
-            $targetValues = [$targets];
-        } else {
+        $targetValues = $this->resolveTargetValues($targetDoctrineAnnotationTagValueNode);
+        if ($targetValues === []) {
             return;
         }
         $flagClassConstFetches = $this->annotationTargetResolver->resolveFlagClassConstFetches($targetValues);
@@ -199,5 +196,19 @@ CODE_SAMPLE
         }
         // has attribute? skip it
         return $this->phpAttributeAnalyzer->hasPhpAttribute($class, AttributeName::ATTRIBUTE);
+    }
+    /**
+     * @return ArrayItemNode[]
+     */
+    private function resolveTargetValues(DoctrineAnnotationTagValueNode $targetDoctrineAnnotationTagValueNode) : array
+    {
+        $silentTargetsArrayItemNode = $targetDoctrineAnnotationTagValueNode->getSilentValue();
+        if ($silentTargetsArrayItemNode instanceof ArrayItemNode) {
+            if ($silentTargetsArrayItemNode->value instanceof CurlyListNode) {
+                return $silentTargetsArrayItemNode->value->getValues();
+            }
+            return [$silentTargetsArrayItemNode];
+        }
+        return [];
     }
 }

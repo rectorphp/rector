@@ -3,9 +3,18 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeFactory\Annotations;
 
+use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 final class StringValueQuoteWrapper
 {
+    /**
+     * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser
+     */
+    private $arrayParser;
+    public function __construct(ArrayParser $arrayParser)
+    {
+        $this->arrayParser = $arrayParser;
+    }
     /**
      * @return mixed|CurlyListNode|string
      * @param mixed $value
@@ -34,6 +43,7 @@ final class StringValueQuoteWrapper
                 $value[$nestedKey] = '"' . $nestedValue . '"';
             }
         }
-        return new CurlyListNode($value);
+        $arrayItemNodes = $this->arrayParser->createArrayFromValues($value);
+        return new CurlyListNode($arrayItemNodes);
     }
 }

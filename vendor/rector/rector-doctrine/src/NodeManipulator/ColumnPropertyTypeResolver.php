@@ -13,6 +13,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -111,11 +112,14 @@ final class ColumnPropertyTypeResolver
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
-        $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
-        if (!\is_string($type)) {
+        $typeArrayItemNode = $doctrineAnnotationTagValueNode->getValue('type');
+        if (!$typeArrayItemNode instanceof ArrayItemNode) {
             return new MixedType();
         }
-        return $this->createPHPStanTypeFromDoctrineStringType($type, $isNullable);
+        if (!\is_string($typeArrayItemNode->value)) {
+            return null;
+        }
+        return $this->createPHPStanTypeFromDoctrineStringType($typeArrayItemNode->value, $isNullable);
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\Type

@@ -6,6 +6,7 @@ namespace Rector\Symfony\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
@@ -89,7 +90,7 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Method');
+        $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::SENSIO_METHOD);
         if (!$sensioDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
@@ -97,11 +98,16 @@ CODE_SAMPLE
         if (!$symfonyDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
-        $methods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
-        if ($methods === null) {
+        $sensioMethods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
+        if ($sensioMethods === null) {
             return null;
         }
-        $symfonyDoctrineAnnotationTagValueNode->changeValue('methods', $methods);
+        $symfonyMethodsArrayItemNode = $symfonyDoctrineAnnotationTagValueNode->getValue('methods');
+        // value is already filled, do not enter anythign
+        if ($symfonyMethodsArrayItemNode instanceof ArrayItemNode) {
+            return null;
+        }
+        $symfonyDoctrineAnnotationTagValueNode->values[] = new ArrayItemNode($sensioMethods, 'methods');
         $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
         $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
         return $node;
@@ -112,18 +118,12 @@ CODE_SAMPLE
     private function resolveMethods(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {
         $methodsParameter = $doctrineAnnotationTagValueNode->getValue('methods');
-        if (\is_array($methodsParameter)) {
-            return $methodsParameter;
+        if ($methodsParameter instanceof ArrayItemNode && $methodsParameter->value instanceof CurlyListNode) {
+            return $methodsParameter->value;
         }
-        if ($methodsParameter instanceof CurlyListNode) {
-            return $methodsParameter;
-        }
-        $silentValue = $doctrineAnnotationTagValueNode->getSilentValue();
-        if (\is_array($silentValue)) {
-            return $silentValue;
-        }
-        if ($silentValue instanceof CurlyListNode) {
-            return $silentValue;
+        $arrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
+        if ($arrayItemNode instanceof ArrayItemNode) {
+            return $arrayItemNode->value;
         }
         return null;
     }

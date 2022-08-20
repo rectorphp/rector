@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Rector\AbstractRector;
@@ -75,11 +76,18 @@ CODE_SAMPLE
         if (!$defaultValue instanceof Expr) {
             return null;
         }
-        $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
-        if (\in_array($type, ['bool', 'boolean'], \true)) {
+        $typeArrayItemNode = $doctrineAnnotationTagValueNode->getValue('type');
+        if (!$typeArrayItemNode instanceof ArrayItemNode) {
+            return null;
+        }
+        $typeValue = $typeArrayItemNode->value;
+        if (!\is_string($typeValue)) {
+            return null;
+        }
+        if (\in_array($typeValue, ['bool', 'boolean'], \true)) {
             return $this->refactorToBoolType($onlyProperty, $node);
         }
-        if (\in_array($type, ['int', 'integer', 'bigint', 'smallint'], \true)) {
+        if (\in_array($typeValue, ['int', 'integer', 'bigint', 'smallint'], \true)) {
             return $this->refactorToIntType($onlyProperty, $node);
         }
         return null;

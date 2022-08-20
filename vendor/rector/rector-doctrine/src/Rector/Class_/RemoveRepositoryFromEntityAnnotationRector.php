@@ -5,6 +5,7 @@ namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -56,11 +57,10 @@ CODE_SAMPLE
             return null;
         }
         $repositoryClass = $doctrineAnnotationTagValueNode->getValue('repositoryClass');
-        if (!\is_string($repositoryClass)) {
+        if (!$repositoryClass instanceof ArrayItemNode) {
             return null;
         }
         $doctrineAnnotationTagValueNode->removeValue('repositoryClass');
-        $phpDocInfo->markAsChanged();
         return $node;
     }
 }

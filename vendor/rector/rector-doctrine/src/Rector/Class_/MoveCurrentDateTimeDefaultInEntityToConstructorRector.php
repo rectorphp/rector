@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
@@ -116,8 +117,11 @@ CODE_SAMPLE
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return;
         }
-        $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
-        if ($type !== 'datetime') {
+        $typeArrayItemNode = $doctrineAnnotationTagValueNode->getValue('type');
+        if (!$typeArrayItemNode instanceof ArrayItemNode) {
+            return;
+        }
+        if ($typeArrayItemNode->value !== 'datetime') {
             return;
         }
         $node = $this->constructorAssignPropertyAnalyzer->resolveConstructorAssign($property);
@@ -127,11 +131,14 @@ CODE_SAMPLE
         }
         $this->hasChanged = \true;
         // 1. remove default options from database level
-        $options = $doctrineAnnotationTagValueNode->getValue('options');
-        if ($options instanceof CurlyListNode) {
-            $options->removeValue('default');
+        $optionsArrayItemNode = $doctrineAnnotationTagValueNode->getValue('options');
+        if ($optionsArrayItemNode instanceof ArrayItemNode) {
+            if (!$optionsArrayItemNode->value instanceof CurlyListNode) {
+                return;
+            }
+            $optionsArrayItemNode->value->removeValue('default');
             // if empty, remove it completely
-            if ($options->getValues() === []) {
+            if ($optionsArrayItemNode->value->getValues() === []) {
                 $doctrineAnnotationTagValueNode->removeValue('options');
             }
         }

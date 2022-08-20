@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node\Expr\ClassConstFetch;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\Core\PhpParser\Node\NodeFactory;
 final class AnnotationTargetResolver
 {
@@ -30,17 +31,19 @@ final class AnnotationTargetResolver
         $this->nodeFactory = $nodeFactory;
     }
     /**
-     * @param array<int|string, mixed> $targetValues
+     * @param ArrayItemNode[] $targetValues
      * @return ClassConstFetch[]
      */
     public function resolveFlagClassConstFetches(array $targetValues) : array
     {
         $classConstFetches = [];
-        foreach (self::TARGET_TO_CONSTANT_MAP as $target => $constant) {
-            if (!\in_array($target, $targetValues, \true)) {
-                continue;
+        foreach ($targetValues as $targetValue) {
+            foreach (self::TARGET_TO_CONSTANT_MAP as $target => $constant) {
+                if ($target !== $targetValue->value) {
+                    continue;
+                }
+                $classConstFetches[] = $this->nodeFactory->createClassConstFetch('Attribute', $constant);
             }
-            $classConstFetches[] = $this->nodeFactory->createClassConstFetch('Attribute', $constant);
         }
         return $classConstFetches;
     }

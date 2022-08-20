@@ -14,6 +14,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor;
@@ -194,8 +195,8 @@ final class PhpDocInfoPrinter
                 return $this->standardPrintPhpDocChildNode($phpDocChildNode);
             }
             if ($phpDocChildNode->value instanceof DoctrineAnnotationTagValueNode && $shouldReprintChildNode) {
-                $silentValue = $phpDocChildNode->value->getSilentValue();
-                if ($silentValue === null) {
+                $silentValueArrayItemNode = $phpDocChildNode->value->getSilentValue();
+                if (!$silentValueArrayItemNode instanceof ArrayItemNode) {
                     $printedNode = (string) $phpDocChildNode;
                     // remove extra space between tags
                     $printedNode = Strings::replace($printedNode, self::TAG_AND_SPACE_REGEX, '$1(');

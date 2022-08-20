@@ -43,7 +43,7 @@ final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttr
     public function map($value) : \PhpParser\Node\Expr
     {
         $arrayItems = [];
-        $valuesWithExplicitSilent = $value->getValuesWithExplicitSilentAndWithoutQuotes();
+        $valuesWithExplicitSilent = $value->getValues();
         $loop = -1;
         foreach ($valuesWithExplicitSilent as $key => $singleValue) {
             $valueExpr = $this->annotationToAttributeMapper->map($singleValue);
@@ -51,7 +51,6 @@ final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttr
             if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
-            Assert::isInstanceOf($valueExpr, Expr::class);
             if (!\is_int($key)) {
                 $keyExpr = $this->annotationToAttributeMapper->map($key);
                 Assert::isInstanceOf($keyExpr, Expr::class);

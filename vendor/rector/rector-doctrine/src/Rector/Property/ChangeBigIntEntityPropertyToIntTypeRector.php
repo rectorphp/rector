@@ -10,6 +10,7 @@ use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\StringType;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
@@ -83,8 +84,11 @@ CODE_SAMPLE
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
-        $type = $doctrineAnnotationTagValueNode->getValueWithoutQuotes('type');
-        if ($type !== 'bigint') {
+        $typeArrayItemNode = $doctrineAnnotationTagValueNode->getValue('type');
+        if (!$typeArrayItemNode instanceof ArrayItemNode) {
+            return null;
+        }
+        if ($typeArrayItemNode->value !== 'bigint') {
             return null;
         }
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();

@@ -9,6 +9,7 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Use_;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
@@ -77,7 +78,7 @@ final class PhpAttributeGroupFactory
      */
     public function create(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, AnnotationToAttribute $annotationToAttribute, array $uses) : AttributeGroup
     {
-        $values = $doctrineAnnotationTagValueNode->getValuesWithExplicitSilentAndWithoutQuotes();
+        $values = $doctrineAnnotationTagValueNode->getValuesWithSilentKey();
         $args = $this->createArgsFromItems($values, $annotationToAttribute->getAttributeClass());
         $args = $this->attributeArrayNameInliner->inlineArrayToArgs($args);
         $attributeName = $this->attributeNameFactory->create($annotationToAttribute, $doctrineAnnotationTagValueNode, $uses);
@@ -85,14 +86,15 @@ final class PhpAttributeGroupFactory
         return new AttributeGroup([$attribute]);
     }
     /**
-     * @param mixed[] $items
+     * @param ArrayItemNode[] $items
      * @return Arg[]
      */
     public function createArgsFromItems(array $items, string $attributeClass) : array
     {
-        /** @var Expr[]|Expr\Array_ $items */
-        $items = $this->annotationToAttributeMapper->map($items);
-        $items = $this->exprParameterReflectionTypeCorrector->correctItemsByAttributeClass($items, $attributeClass);
-        return $this->namedArgsFactory->createFromValues($items);
+        /** @var Expr[]|Expr\Array_ $mappedItems */
+        $mappedItems = $this->annotationToAttributeMapper->map($items);
+        $mappedItems = $this->exprParameterReflectionTypeCorrector->correctItemsByAttributeClass($mappedItems, $attributeClass);
+        // the key here should contain the named argument
+        return $this->namedArgsFactory->createFromValues($mappedItems);
     }
 }

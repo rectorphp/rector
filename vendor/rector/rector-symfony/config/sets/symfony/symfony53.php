@@ -10,6 +10,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
+use Rector\Symfony\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector;
 use Rector\Symfony\Set\SymfonySetList;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
@@ -48,4 +49,5 @@ return static function (RectorConfig $rectorConfig) : void {
         // @see https://github.com/symfony/symfony/pull/40536
         new RenameClassConstFetch('Symfony\\Component\\HttpKernel\\HttpKernelInterface', 'MASTER_REQUEST', 'MAIN_REQUEST'),
     ]);
+    $rectorConfig->rule(KernelTestCaseContainerPropertyDeprecationRector::class);
 };

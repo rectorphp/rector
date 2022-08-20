@@ -4,19 +4,14 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Doctrine\NodeFactory\SluggableClassMethodFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -34,13 +29,13 @@ final class SluggableBehaviorRector extends AbstractRector
     private $classInsertManipulator;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     * @var \Rector\Doctrine\NodeFactory\SluggableClassMethodFactory
      */
-    private $phpDocTypeChanger;
-    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger)
+    private $sluggableClassMethodFactory;
+    public function __construct(ClassInsertManipulator $classInsertManipulator, SluggableClassMethodFactory $sluggableClassMethodFactory)
     {
         $this->classInsertManipulator = $classInsertManipulator;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
+        $this->sluggableClassMethodFactory = $sluggableClassMethodFactory;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -124,23 +119,11 @@ CODE_SAMPLE
         }
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Sluggable\\SluggableTrait');
         $node->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\SluggableInterface');
-        if (!\is_array($slugFields)) {
-            throw new ShouldNotHappenException();
+        if (!$slugFields instanceof ArrayItemNode) {
+            return null;
         }
-        $this->addGetSluggableFieldsClassMethod($node, $slugFields);
+        $getSluggableClassMethod = $this->sluggableClassMethodFactory->createGetSluggableFields($slugFields);
+        $this->classInsertManipulator->addAsFirstMethod($node, $getSluggableClassMethod);
         return $node;
-    }
-    /**
-     * @param string[] $slugFields
-     */
-    private function addGetSluggableFieldsClassMethod(Class_ $class, array $slugFields) : void
-    {
-        $classMethod = $this->nodeFactory->createPublicMethod('getSluggableFields');
-        $classMethod->returnType = new Identifier('array');
-        $classMethod->stmts[] = new Return_($this->nodeFactory->createArray($slugFields));
-        $returnType = new ArrayType(new MixedType(), new StringType());
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnType);
-        $this->classInsertManipulator->addAsFirstMethod($class, $classMethod);
     }
 }

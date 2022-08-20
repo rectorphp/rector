@@ -64,7 +64,7 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
         $annotationShortName = $this->resolveAnnotationName($value);
         $values = $value->getValues();
         if ($values !== []) {
-            $argValues = $this->annotationToAttributeMapper->map($value->getValuesWithExplicitSilentAndWithoutQuotes());
+            $argValues = $this->annotationToAttributeMapper->map($value->getValues());
             if ($argValues instanceof Array_) {
                 // create named args
                 $args = $this->attributeArrayNameInliner->inlineArrayToArgs($argValues);

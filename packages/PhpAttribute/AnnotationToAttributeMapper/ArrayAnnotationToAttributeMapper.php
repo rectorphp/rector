@@ -47,17 +47,20 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
             if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
-            Assert::isInstanceOf($valueExpr, Expr::class);
             // remove value
             if ($this->isRemoveArrayPlaceholder($singleValue)) {
                 continue;
             }
-            $keyExpr = null;
-            if (!\is_int($key)) {
-                $keyExpr = $this->annotationToAttributeMapper->map($key);
-                Assert::isInstanceOf($keyExpr, Expr::class);
+            if ($valueExpr instanceof ArrayItem) {
+                $arrayItems[] = $valueExpr;
+            } else {
+                $keyExpr = null;
+                if (!\is_int($key)) {
+                    $keyExpr = $this->annotationToAttributeMapper->map($key);
+                    Assert::isInstanceOf($keyExpr, Expr::class);
+                }
+                $arrayItems[] = new ArrayItem($valueExpr, $keyExpr);
             }
-            $arrayItems[] = new ArrayItem($valueExpr, $keyExpr);
         }
         return new Array_($arrayItems);
     }

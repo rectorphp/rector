@@ -6,6 +6,7 @@ namespace Rector\Doctrine\NodeManipulator;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -56,7 +57,10 @@ final class NullabilityColumnPropertyTypeResolver
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return \true;
         }
-        $nullableValue = $doctrineAnnotationTagValueNode->getValue('nullable');
-        return $nullableValue === null || $nullableValue instanceof ConstExprTrueNode;
+        $nullableValueArrayItemNode = $doctrineAnnotationTagValueNode->getValue('nullable');
+        if (!$nullableValueArrayItemNode instanceof ArrayItemNode) {
+            return \true;
+        }
+        return $nullableValueArrayItemNode->value instanceof ConstExprTrueNode;
     }
 }

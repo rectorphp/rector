@@ -11,6 +11,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -79,15 +80,19 @@ final class ToOneRelationPropertyTypeResolver
     }
     private function processToOneRelation(Property $property, DoctrineAnnotationTagValueNode $toOneDoctrineAnnotationTagValueNode, ?DoctrineAnnotationTagValueNode $joinDoctrineAnnotationTagValueNode) : Type
     {
-        $targetEntity = $toOneDoctrineAnnotationTagValueNode->getValueWithoutQuotes('targetEntity');
-        if (!\is_string($targetEntity)) {
+        $targetEntity = $toOneDoctrineAnnotationTagValueNode->getValue('targetEntity');
+        if (!$targetEntity instanceof ArrayItemNode) {
             return new MixedType();
         }
-        if (\substr_compare($targetEntity, '::class', -\strlen('::class')) === 0) {
-            $targetEntity = Strings::before($targetEntity, '::class');
+        $targetEntityClass = $targetEntity->value;
+        if (!\is_string($targetEntityClass)) {
+            return new MixedType();
+        }
+        if (\substr_compare($targetEntityClass, '::class', -\strlen('::class')) === 0) {
+            $targetEntityClass = Strings::before($targetEntityClass, '::class');
         }
         // resolve to FQN
-        $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntity, $property);
+        $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntityClass, $property);
         if ($tagFullyQualifiedName === null) {
             return new MixedType();
         }

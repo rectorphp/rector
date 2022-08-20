@@ -12,6 +12,7 @@ use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Property;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
@@ -24,7 +25,13 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DoctrineTargetEntityStringToClassConstantRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
     private const ATTRIBUTE_NAME__TARGET_ENTITY = 'targetEntity';
+    /**
+     * @var string
+     */
     private const ATTRIBUTE_NAME__CLASS = 'class';
     /**
      * @var array<class-string<OneToMany|ManyToOne|OneToOne|ManyToMany|Embedded>, string>
@@ -73,6 +80,9 @@ final class SomeClass
 CODE_SAMPLE
 )]);
     }
+    /**
+     * @return array<class-string<Node>>
+     */
     public function getNodeTypes() : array
     {
         return [Property::class];
@@ -83,7 +93,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
-        if ($phpDocInfo !== null) {
+        if ($phpDocInfo instanceof PhpDocInfo) {
             $property = $this->changeTypeInAnnotationTypes($node, $phpDocInfo);
             $annotationDetected = $property !== null || $phpDocInfo->hasChanged();
             if ($annotationDetected) {
@@ -137,9 +147,12 @@ CODE_SAMPLE
     private function processDoctrineToMany(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, Property $property) : ?Property
     {
         $key = $doctrineAnnotationTagValueNode->hasClassName('Doctrine\\ORM\\Mapping\\Embedded') ? self::ATTRIBUTE_NAME__CLASS : self::ATTRIBUTE_NAME__TARGET_ENTITY;
-        /** @var ?string $targetEntity */
-        $targetEntity = $doctrineAnnotationTagValueNode->getValueWithoutQuotes($key);
-        if ($targetEntity === null) {
+        $targetEntityArrayItemNode = $doctrineAnnotationTagValueNode->getValue($key);
+        if (!$targetEntityArrayItemNode instanceof ArrayItemNode) {
+            return null;
+        }
+        $targetEntity = $targetEntityArrayItemNode->value;
+        if (!\is_string($targetEntity)) {
             return null;
         }
         // resolve to FQN
@@ -150,8 +163,14 @@ CODE_SAMPLE
         if ($tagFullyQualifiedName === $targetEntity) {
             return null;
         }
-        $doctrineAnnotationTagValueNode->removeValue($key);
-        $doctrineAnnotationTagValueNode->values[$key] = '\\' . \ltrim($tagFullyQualifiedName, '\\') . '::class';
+        $currentArrayItemNode = $doctrineAnnotationTagValueNode->getValue($key);
+        if (!$currentArrayItemNode instanceof ArrayItemNode) {
+            return null;
+        }
+        // no quotes needed, it's a constants
+        $currentArrayItemNode->kindValueQuoted = null;
+        $currentArrayItemNode->value = '\\' . \ltrim($tagFullyQualifiedName, '\\') . '::class';
+        $currentArrayItemNode->setAttribute('orig_node', null);
         return $property;
     }
     /**

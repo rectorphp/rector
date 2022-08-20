@@ -5,6 +5,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser;
@@ -33,7 +34,8 @@ final class StaticDoctrineAnnotationParser
     }
     /**
      * mimics: https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1024-L1041
-     * @return array<mixed, mixed>
+     *
+     * @return ArrayItemNode[]
      */
     public function resolveAnnotationMethodCall(BetterTokenIterator $tokenIterator) : array
     {
@@ -73,7 +75,8 @@ final class StaticDoctrineAnnotationParser
     }
     /**
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1051-L1079
-     * @return array<mixed>
+     *
+     * @return ArrayItemNode[]
      */
     private function resolveAnnotationValues(BetterTokenIterator $tokenIterator) : array
     {
@@ -100,7 +103,7 @@ final class StaticDoctrineAnnotationParser
                 $values[] = $nestedValues;
             }
         }
-        return $values;
+        return $this->arrayParser->createArrayFromValues($values);
     }
     /**
      * @return CurlyListNode|string|array<mixed>|ConstExprNode|DoctrineAnnotationTagValueNode

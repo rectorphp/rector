@@ -93,7 +93,7 @@ CODE_SAMPLE
         $classPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
         $hasLoggableAnnotation = \false;
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($classPhpDocInfo->getPhpDocNode(), '', function ($node) use(&$hasLoggableAnnotation) {
+        $phpDocNodeTraverser->traverseWithCallable($classPhpDocInfo->getPhpDocNode(), '', function ($node) use(&$hasLoggableAnnotation) : ?int {
             if (!$node instanceof SpacelessPhpDocTagNode) {
                 return null;
             }
@@ -122,7 +122,7 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $hasChanged = \false;
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use($phpDocInfo, &$hasChanged) {
+        $phpDocNodeTraverser->traverseWithCallable($phpDocInfo->getPhpDocNode(), '', function ($node) use($phpDocInfo, &$hasChanged) : ?int {
             if (!$node instanceof SpacelessPhpDocTagNode) {
                 return null;
             }
