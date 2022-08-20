@@ -16,6 +16,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\Application\File;
@@ -68,13 +69,19 @@ final class ShortNameResolver
      * @var \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher
      */
     private $useImportNameMatcher;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder, UseImportNameMatcher $useImportNameMatcher)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
+     */
+    private $classAnalyzer;
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder, UseImportNameMatcher $useImportNameMatcher, ClassAnalyzer $classAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportNameMatcher = $useImportNameMatcher;
+        $this->classAnalyzer = $classAnalyzer;
     }
     // Avoids circular reference
     /**
@@ -210,7 +217,7 @@ final class ShortNameResolver
         $shortNamesToFullyQualifiedNames = [];
         foreach ($shortNames as $shortName) {
             $stmtsMatchedName = $this->useImportNameMatcher->matchNameWithStmts($shortName, $stmts);
-            if ($reflectionClass instanceof ReflectionClass) {
+            if ($reflectionClass instanceof ReflectionClass && !$this->classAnalyzer->isAnonymousClassName($reflectionClass->getShortName())) {
                 $fullyQualifiedName = Reflection::expandClassName($shortName, $reflectionClass);
             } elseif (\is_string($stmtsMatchedName)) {
                 $fullyQualifiedName = $stmtsMatchedName;

@@ -25,6 +25,10 @@ final class ClassAnalyzer
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
+    public function isAnonymousClassName(string $className) : bool
+    {
+        return StringUtils::isMatch($className, self::ANONYMOUS_CLASS_REGEX);
+    }
     public function isAnonymousClass(Node $node) : bool
     {
         if (!$node instanceof Class_) {
