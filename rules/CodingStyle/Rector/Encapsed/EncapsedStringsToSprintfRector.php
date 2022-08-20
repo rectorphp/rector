@@ -72,6 +72,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($this->shouldSkip($node)) {
+            return null;
+        }
         $this->sprintfFormat = '';
         $this->argumentVariables = [];
         foreach ($node->parts as $part) {
@@ -82,6 +85,17 @@ CODE_SAMPLE
             }
         }
         return $this->createSprintfFuncCallOrConcat($this->sprintfFormat, $this->argumentVariables);
+    }
+    private function shouldSkip(Encapsed $encapsed) : bool
+    {
+        $parentNode = $encapsed->getAttribute(AttributeKey::PARENT_NODE);
+        if ($parentNode instanceof Arg) {
+            $node = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+            if ($node instanceof FuncCall && $this->isNames($node, ['_', 'dcgettext', 'dcngettext', 'dgettext', 'dngettext', 'gettext', 'ngettext'])) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function collectEncapsedStringPart(EncapsedStringPart $encapsedStringPart) : void
     {
