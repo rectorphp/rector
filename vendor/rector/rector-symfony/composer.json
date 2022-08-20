@@ -15,7 +15,7 @@
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "phpunit\/phpunit": "^9.5",
         "rector\/phpstan-rules": "^0.5.16",
-        "rector\/rector-src": "dev-main#b216950",
+        "rector\/rector-src": "dev-main",
         "symfony\/routing": "^6.1",
         "symfony\/security-core": "^6.1",
         "symfony\/security-http": "^6.1",

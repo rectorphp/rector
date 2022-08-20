@@ -10,6 +10,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
+use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 final class PhpDocClassRenamer
 {
     /**
@@ -59,7 +60,7 @@ final class PhpDocClassRenamer
             }
             $classNameArrayItemNode->value = $newClass;
             // trigger reprint
-            $classNameArrayItemNode->setAttribute('orig_node', null);
+            $classNameArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
             break;
         }
     }
@@ -91,7 +92,7 @@ final class PhpDocClassRenamer
                     continue;
                 }
                 $classNameArrayItemNode->value = Strings::replace($classNameArrayItemNode->value, '#\\b' . \preg_quote($oldClass, '#') . '\\b#', $newClass);
-                $classNameArrayItemNode->setAttribute('orig_node', null);
+                $classNameArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
             }
             $currentTypeArrayItemNode = $doctrineAnnotationTagValueNode->getValue('type');
             if (!$currentTypeArrayItemNode instanceof ArrayItemNode) {
@@ -120,7 +121,7 @@ final class PhpDocClassRenamer
                 continue;
             }
             $targetEntityArrayItemNode->value = $newClass;
-            $targetEntityArrayItemNode->setAttribute('orig_node', null);
+            $targetEntityArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
         }
     }
 }

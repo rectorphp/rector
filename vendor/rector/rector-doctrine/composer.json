@@ -11,16 +11,16 @@
         "rector\/phpstan-rules": "^0.5.15",
         "phpstan\/phpstan": "^1.8.2",
         "phpunit\/phpunit": "^9.5",
-        "symplify\/phpstan-rules": "^11.0",
-        "symplify\/phpstan-extensions": "^11.0",
+        "symplify\/phpstan-rules": "^11.1",
+        "symplify\/phpstan-extensions": "^11.1",
         "symplify\/easy-coding-standard": "^11.0",
-        "symplify\/rule-doc-generator": "^11.0",
+        "symplify\/rule-doc-generator": "^11.1",
         "rector\/rector-src": "dev-main",
         "doctrine\/orm": "^2.10",
-        "symplify\/monorepo-builder": "^11.0",
+        "symplify\/monorepo-builder": "^11.1",
         "phpstan\/phpstan-webmozart-assert": "^1.0",
         "phpstan\/phpstan-strict-rules": "^1.1",
-        "symplify\/vendor-patches": "^11.0"
+        "symplify\/vendor-patches": "^11.1"
     },
     "autoload": {
         "psr-4": {

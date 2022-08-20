@@ -102,7 +102,7 @@ CODE_SAMPLE
             }
             $slugFields = $doctrineAnnotationTagValueNode->getValue('fields');
             if ($slugFields instanceof CurlyListNode) {
-                $slugFields = $slugFields->getValuesWithExplicitSilentAndWithoutQuotes();
+                $slugFields = $slugFields->getValuesWithSilentKey();
             }
             $this->removeNode($property);
             $matchedProperty = $property;
