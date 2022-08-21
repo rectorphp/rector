@@ -1,4 +1,4 @@
-# 410 Rules Overview
+# 411 Rules Overview
 
 <br>
 
@@ -48,7 +48,7 @@
 
 - [Php74](#php74) (13)
 
-- [Php80](#php80) (18)
+- [Php80](#php80) (19)
 
 - [Php81](#php81) (11)
 
@@ -6074,6 +6074,54 @@ Change mixed docs type to mixed typed
 +    public function run(mixed $param)
      {
      }
+ }
+```
+
+<br>
+
+### NestedAnnotationToAttributeRector
+
+Changed nested annotations to attributes
+
+:wrench: **configure it!**
+
+- class: [`Rector\Php80\Rector\Property\NestedAnnotationToAttributeRector`](../rules/Php80/Rector/Property/NestedAnnotationToAttributeRector.php)
+
+```php
+use Rector\Config\RectorConfig;
+use Rector\Php80\Rector\Property\NestedAnnotationToAttributeRector;
+use Rector\Php80\ValueObject\NestedAnnotationToAttribute;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(
+        NestedAnnotationToAttributeRector::class,
+        [[
+            new NestedAnnotationToAttribute('Doctrine\ORM\Mapping\JoinTable', [
+                'Doctrine\ORM\Mapping\JoinColumn',
+                'Doctrine\ORM\Mapping\InverseJoinColumn',
+            ], false),
+        ]]
+    );
+};
+```
+
+↓
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ class SomeEntity
+ {
+-    /**
+-     * @ORM\JoinTable(name="join_table_name",
+-     *     joinColumns={@ORM\JoinColumn(name="origin_id")},
+-     *     inverseJoinColumns={@ORM\JoinColumn(name="target_id")}
+-     * )
+-     */
++    #[ORM\JoinTable(name: 'join_table_name')]
++    #[ORM\JoinColumn(name: 'origin_id')]
++    #[ORM\InverseJoinColumn(name: 'target_id')]
+     private $collection;
  }
 ```
 
