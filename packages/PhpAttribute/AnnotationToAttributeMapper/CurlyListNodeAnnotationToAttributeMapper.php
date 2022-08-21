@@ -11,6 +11,7 @@ use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202208\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<CurlyListNode>
  */
@@ -49,14 +50,19 @@ final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttr
             if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
                 continue;
             }
-            ++$loop;
-            $keyExpr = $loop !== $arrayItemNode->key && \is_numeric($arrayItemNode->key) ? new LNumber((int) $arrayItemNode->key) : null;
-            if ($valueExpr instanceof ArrayItem && $keyExpr instanceof LNumber) {
-                $valueExpr->key = $keyExpr;
+            Assert::isInstanceOf($valueExpr, ArrayItem::class);
+            if (!\is_numeric($arrayItemNode->key)) {
                 $arrayItems[] = $valueExpr;
-            } else {
-                $arrayItems[] = new ArrayItem($valueExpr, $keyExpr);
+                continue;
             }
+            ++$loop;
+            $arrayItemNodeKey = (int) $arrayItemNode->key;
+            if ($loop === $arrayItemNodeKey) {
+                $arrayItems[] = $valueExpr;
+                continue;
+            }
+            $valueExpr->key = new LNumber($arrayItemNodeKey);
+            $arrayItems[] = $valueExpr;
         }
         return new Array_($arrayItems);
     }
