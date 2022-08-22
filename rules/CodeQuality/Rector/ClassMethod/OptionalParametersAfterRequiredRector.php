@@ -6,6 +6,7 @@ namespace Rector\CodeQuality\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
@@ -78,10 +79,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, New_::class, MethodCall::class];
+        return [ClassMethod::class, New_::class, MethodCall::class, StaticCall::class];
     }
     /**
-     * @param ClassMethod|New_|MethodCall $node
+     * @param ClassMethod|New_|MethodCall|StaticCall $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -125,7 +126,11 @@ CODE_SAMPLE
         $new->args = $this->argumentSorter->sortArgsByExpectedParamOrder($new->getArgs(), $expectedArgOrParamOrder);
         return $new;
     }
-    private function refactorMethodCall(MethodCall $methodCall) : ?MethodCall
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $methodCall
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|null
+     */
+    private function refactorMethodCall($methodCall)
     {
         $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($methodCall);
         if (!$methodReflection instanceof MethodReflection) {
@@ -144,7 +149,7 @@ CODE_SAMPLE
     }
     /**
      * @return int[]|null
-     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall $node
      */
     private function resolveExpectedArgParamOrderIfDifferent(MethodReflection $methodReflection, $node) : ?array
     {
