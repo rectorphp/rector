@@ -5,6 +5,7 @@ namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -103,7 +104,7 @@ final class BreakingVariableRenameGuard
         return $this->isUsedInIfAndOtherBranches($variable, $currentName);
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $classMethod
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
      */
     public function shouldSkipParam(string $currentName, string $expectedName, $classMethod, Param $param) : bool
     {
@@ -131,7 +132,7 @@ final class BreakingVariableRenameGuard
         if ($this->isDateTimeAtNamingConvention($param)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->find((array) $classMethod->stmts, function (Node $node) use($expectedName) : bool {
+        return (bool) $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (Node $node) use($expectedName) : bool {
             if (!$node instanceof Variable) {
                 return \false;
             }

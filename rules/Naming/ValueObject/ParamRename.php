@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\ValueObject;
 
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -33,11 +34,11 @@ final class ParamRename implements RenameParamValueObjectInterface
     private $variable;
     /**
      * @readonly
-     * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
+     * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction
      */
     private $functionLike;
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     public function __construct(string $currentName, string $expectedName, Param $param, Variable $variable, $functionLike)
     {
@@ -56,7 +57,7 @@ final class ParamRename implements RenameParamValueObjectInterface
         return $this->expectedName;
     }
     /**
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure
+     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction
      */
     public function getFunctionLike()
     {

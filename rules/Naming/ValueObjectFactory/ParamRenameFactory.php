@@ -37,9 +37,6 @@ final class ParamRenameFactory
         if ($functionLike === null) {
             throw new ShouldNotHappenException("There shouldn't be a param outside of FunctionLike");
         }
-        if ($functionLike instanceof ArrowFunction) {
-            return null;
-        }
         $currentName = $this->nodeNameResolver->getName($param->var);
         if ($currentName === null) {
             return null;

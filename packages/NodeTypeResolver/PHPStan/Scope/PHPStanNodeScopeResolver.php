@@ -240,8 +240,8 @@ final class PHPStanNodeScopeResolver
     {
         foreach ($tryCatch->catches as $catch) {
             $varName = $catch->var instanceof Variable ? $this->nodeNameResolver->getName($catch->var) : null;
-            $type = TypeCombinator::union(...\array_map(static function (Name $class) : ObjectType {
-                return new ObjectType((string) $class);
+            $type = TypeCombinator::union(...\array_map(static function (Name $name) : ObjectType {
+                return new ObjectType((string) $name);
             }, $catch->types));
             $catchMutatingScope = $mutatingScope->enterCatchType($type, $varName);
             $this->processNodes($catch->stmts, $smartFileInfo, $catchMutatingScope);
