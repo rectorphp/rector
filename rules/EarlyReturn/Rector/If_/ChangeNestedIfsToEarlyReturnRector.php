@@ -87,9 +87,14 @@ CODE_SAMPLE
         if ($stmts === null) {
             return null;
         }
+        /** @var Stmt[] $previousStmts[] */
+        $previousStmts = [];
         foreach ($stmts as $key => $stmt) {
             $nextStmt = $stmts[$key + 1] ?? null;
             if (!$nextStmt instanceof Return_) {
+                if ($nextStmt instanceof Stmt) {
+                    $previousStmts[] = $stmt;
+                }
                 continue;
             }
             if (!$stmt instanceof If_) {
@@ -99,7 +104,7 @@ CODE_SAMPLE
             if ($nestedIfsWithOnlyReturn === []) {
                 continue;
             }
-            $node->stmts = $this->processNestedIfsWithOnlyReturn($nestedIfsWithOnlyReturn, $nextStmt);
+            $node->stmts = \array_merge($previousStmts, $this->processNestedIfsWithOnlyReturn($nestedIfsWithOnlyReturn, $nextStmt));
             return $node;
         }
         return null;
