@@ -53,6 +53,13 @@ final class ServiceMap
         }
         return $servicesWithTag;
     }
+    /**
+     * @return ServiceDefinition[]
+     */
+    public function getServices() : array
+    {
+        return $this->services;
+    }
     private function getService(string $id) : ?ServiceDefinition
     {
         return $this->services[$id] ?? null;

@@ -1356,7 +1356,7 @@ Change RouteCollectionBuilder to RoutingConfiguratorRector
 
 Change `$service->set()` string names to class-type-based names, to allow `$container->get()` by types in Symfony 2.8
 
-- class: [`Rector\Symfony\Rector\MethodCall\ServiceSetStringNameToClassNameRector`](../src/Rector/MethodCall/ServiceSetStringNameToClassNameRector.php)
+- class: [`Rector\Symfony\Rector\Closure\ServiceSetStringNameToClassNameRector`](../src/Rector/MethodCall/ServiceSetStringNameToClassNameRector.php)
 
 ```diff
  use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;

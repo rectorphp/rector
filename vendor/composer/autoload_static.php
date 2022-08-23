@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit056fb7a41d9848c9734584959af9dabf
+class ComposerStaticInit69e209859c8d2ffdd1c1988871642314
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2912,6 +2912,7 @@ class ComposerStaticInit056fb7a41d9848c9734584959af9dabf
         'Rector\\Symfony\\Contract\\EventReferenceToMethodNameInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/EventReferenceToMethodNameInterface.php',
         'Rector\\Symfony\\Contract\\Tag\\TagInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',
         'Rector\\Symfony\\DataProvider\\ServiceMapProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/ServiceMapProvider.php',
+        'Rector\\Symfony\\DataProvider\\ServiceNameToTypeUniqueProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/ServiceNameToTypeUniqueProvider.php',
         'Rector\\Symfony\\Enum\\SymfonyAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
         'Rector\\Symfony\\Exception\\InvalidConfigurationException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/InvalidConfigurationException.php',
         'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',
@@ -2933,6 +2934,7 @@ class ComposerStaticInit056fb7a41d9848c9734584959af9dabf
         'Rector\\Symfony\\NodeAnalyzer\\RouteRequiredParamNameToTypesResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/RouteRequiredParamNameToTypesResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\ServiceTypeMethodCallResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ServiceTypeMethodCallResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyControllerFilter' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyControllerFilter.php',
+        'Rector\\Symfony\\NodeAnalyzer\\SymfonyPhpClosureDetector' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyPhpClosureDetector.php',
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php',
         'Rector\\Symfony\\NodeFactory\\Annotations\\DoctrineAnnotationFromNewFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/Annotations/DoctrineAnnotationFromNewFactory.php',
         'Rector\\Symfony\\NodeFactory\\Annotations\\DoctrineAnnotationKeyToValuesResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/Annotations/DoctrineAnnotationKeyToValuesResolver.php',
@@ -2979,6 +2981,7 @@ class ComposerStaticInit056fb7a41d9848c9734584959af9dabf
         'Rector\\Symfony\\Rector\\Class_\\LogoutSuccessHandlerToLogoutEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php',
         'Rector\\Symfony\\Rector\\Class_\\MagicClosureTwigExtensionToNativeMethodsRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php',
         'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
+        'Rector\\Symfony\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
         'Rector\\Symfony\\Rector\\ConstFetch\\ConstraintUrlOptionRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ConstFetch/ConstraintUrlOptionRector.php',
         'Rector\\Symfony\\Rector\\FuncCall\\ReplaceServiceArgumentRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/FuncCall/ReplaceServiceArgumentRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\AddViolationToBuildViolationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/AddViolationToBuildViolationRector.php',
@@ -3002,7 +3005,6 @@ class ComposerStaticInit056fb7a41d9848c9734584959af9dabf
         'Rector\\Symfony\\Rector\\MethodCall\\ReadOnlyOptionToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ReadOnlyOptionToAttributeRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\RedirectToRouteRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/RedirectToRouteRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\ReflectionExtractorEnableMagicCallExtractorRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ReflectionExtractorEnableMagicCallExtractorRector.php',
-        'Rector\\Symfony\\Rector\\MethodCall\\ServiceSetStringNameToClassNameRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ServiceSetStringNameToClassNameRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\StringFormTypeToClassRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/StringFormTypeToClassRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\SwiftCreateMessageToNewEmailRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\SwiftSetBodyToHtmlPlainMethodCallRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php',
@@ -3256,9 +3258,9 @@ class ComposerStaticInit056fb7a41d9848c9734584959af9dabf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit056fb7a41d9848c9734584959af9dabf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit056fb7a41d9848c9734584959af9dabf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit056fb7a41d9848c9734584959af9dabf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit69e209859c8d2ffdd1c1988871642314::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit69e209859c8d2ffdd1c1988871642314::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit69e209859c8d2ffdd1c1988871642314::$classMap;
 
         }, null, ClassLoader::class);
     }
