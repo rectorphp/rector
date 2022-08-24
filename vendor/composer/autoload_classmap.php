@@ -1483,7 +1483,6 @@ return array(
     'Rector\\Core\\Console\\Output\\RectorOutputStyle' => $baseDir . '/src/Console/Output/RectorOutputStyle.php',
     'Rector\\Core\\Console\\Style\\RectorConsoleOutputStyle' => $baseDir . '/src/Console/Style/RectorConsoleOutputStyle.php',
     'Rector\\Core\\Console\\Style\\RectorConsoleOutputStyleFactory' => $baseDir . '/src/Console/Style/RectorConsoleOutputStyleFactory.php',
-    'Rector\\Core\\Contract\\Application\\FileDecoratorInterface' => $baseDir . '/src/Contract/Application/FileDecoratorInterface.php',
     'Rector\\Core\\Contract\\Console\\OutputStyleInterface' => $baseDir . '/src/Contract/Console/OutputStyleInterface.php',
     'Rector\\Core\\Contract\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverInterface' => $baseDir . '/src/Contract/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverInterface.php',
     'Rector\\Core\\Contract\\PhpParser\\NodePrinterInterface' => $baseDir . '/src/Contract/PhpParser/NodePrinterInterface.php',
