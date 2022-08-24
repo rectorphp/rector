@@ -19,6 +19,7 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
@@ -90,6 +91,9 @@ CODE_SAMPLE
         if (!$varTagValueNode instanceof VarTagValueNode) {
             return null;
         }
+        if ($this->isObjectShapePseudoType($varTagValueNode)) {
+            return null;
+        }
         $variableName = \ltrim($varTagValueNode->variableName, '$');
         if ($this->hasVariableName($node, $variableName)) {
             return null;
@@ -139,5 +143,22 @@ CODE_SAMPLE
             }
             return $this->isName($node, $variableName);
         });
+    }
+    /**
+     * This is a hack,
+     * that waits on phpdoc-parser to get merged - https://github.com/phpstan/phpdoc-parser/pull/145
+     */
+    private function isObjectShapePseudoType(VarTagValueNode $varTagValueNode) : bool
+    {
+        if (!$varTagValueNode->type instanceof IdentifierTypeNode) {
+            return \false;
+        }
+        if ($varTagValueNode->type->name !== 'object') {
+            return \false;
+        }
+        if (\strncmp($varTagValueNode->description, '{', \strlen('{')) !== 0) {
+            return \false;
+        }
+        return \strpos($varTagValueNode->description, '}') !== \false;
     }
 }
