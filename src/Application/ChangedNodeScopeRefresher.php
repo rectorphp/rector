@@ -21,7 +21,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
@@ -99,7 +98,7 @@ final class ChangedNodeScopeRefresher
     }
     private function reIndexNodeAttributes(Node $node) : void
     {
-        if (($node instanceof Namespace_ || $node instanceof ClassLike || $node instanceof StmtsAwareInterface) && $node->stmts !== null) {
+        if (($node instanceof ClassLike || $node instanceof StmtsAwareInterface) && $node->stmts !== null) {
             $node->stmts = \array_values($node->stmts);
         }
         if ($node instanceof FunctionLike) {

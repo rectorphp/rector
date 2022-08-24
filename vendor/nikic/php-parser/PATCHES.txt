@@ -57,3 +57,7 @@ Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/
 Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-elseif-php.patch
 
 
+14
+Source: https://raw.githubusercontent.com/rectorphp/vendor-patches/main/patches/nikic-php-parser-lib-phpparser-node-stmt-namespace-php.patch
+
+

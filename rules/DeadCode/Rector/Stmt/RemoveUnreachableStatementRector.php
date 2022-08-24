@@ -64,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
         $originalStmts = $node->stmts;
-        $cleanedStmts = $this->processCleanUpUnreachabelStmts($node->stmts);
+        $cleanedStmts = $this->processCleanUpUnreachabelStmts($node, $node->stmts);
         if ($cleanedStmts === $originalStmts) {
             return null;
         }
@@ -75,7 +75,7 @@ CODE_SAMPLE
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    private function processCleanUpUnreachabelStmts(array $stmts) : array
+    private function processCleanUpUnreachabelStmts(StmtsAwareInterface $stmtsAware, array $stmts) : array
     {
         foreach ($stmts as $key => $stmt) {
             if (!isset($stmts[$key - 1])) {
@@ -83,7 +83,7 @@ CODE_SAMPLE
             }
             $previousStmt = $stmts[$key - 1];
             // unset...
-            if ($this->terminatedNodeAnalyzer->isAlwaysTerminated($previousStmt, $stmt)) {
+            if ($this->terminatedNodeAnalyzer->isAlwaysTerminated($stmtsAware, $previousStmt, $stmt)) {
                 \array_splice($stmts, $key);
                 return $stmts;
             }

@@ -572,7 +572,8 @@
                     "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-foreach-php.patch",
                     "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-if-php.patch",
                     "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-case-php.patch",
-                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-elseif-php.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-elseif-php.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/nikic-php-parser-lib-phpparser-node-stmt-namespace-php.patch"
                 ]
             },
             "installation-source": "dist",

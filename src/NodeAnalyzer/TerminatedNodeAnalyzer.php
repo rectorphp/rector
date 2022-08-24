@@ -8,19 +8,24 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Goto_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Label;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 final class TerminatedNodeAnalyzer
 {
     /**
@@ -39,9 +44,12 @@ final class TerminatedNodeAnalyzer
      * @var array<class-string<Node>>
      */
     private const ALLOWED_CONTINUE_CURRENT_STMTS = [InlineHTML::class, Nop::class];
-    public function isAlwaysTerminated(Stmt $node, Stmt $currentStmt) : bool
+    public function isAlwaysTerminated(StmtsAwareInterface $stmtsAware, Stmt $node, Stmt $currentStmt) : bool
     {
         if (\in_array(\get_class($currentStmt), self::ALLOWED_CONTINUE_CURRENT_STMTS, \true)) {
+            return \false;
+        }
+        if (($stmtsAware instanceof FileWithoutNamespace || $stmtsAware instanceof Namespace_) && ($currentStmt instanceof ClassLike || $currentStmt instanceof Function_)) {
             return \false;
         }
         if (!\in_array(\get_class($node), self::TERMINABLE_NODES_BY_ITS_STMTS, \true)) {
