@@ -295,6 +295,10 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const DEPRECATE_MONEY_FORMAT = \Rector\Core\ValueObject\PhpVersion::PHP_74;
+    /**
+     * @var int
+     */
     public const ARRAY_KEY_EXISTS_TO_PROPERTY_EXISTS = \Rector\Core\ValueObject\PhpVersion::PHP_74;
     /**
      * @var int

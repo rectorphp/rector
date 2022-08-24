@@ -2342,6 +2342,7 @@ return array(
     'Rector\\Php74\\Rector\\FuncCall\\ArraySpreadInsteadOfArrayMergeRector' => $baseDir . '/rules/Php74/Rector/FuncCall/ArraySpreadInsteadOfArrayMergeRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\FilterVarToAddSlashesRector' => $baseDir . '/rules/Php74/Rector/FuncCall/FilterVarToAddSlashesRector.php',
     'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
+    'Rector\\Php74\\Rector\\FuncCall\\MoneyFormatToNumberFormatRector' => $baseDir . '/rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php',
     'Rector\\Php74\\Rector\\LNumber\\AddLiteralSeparatorToNumberRector' => $baseDir . '/rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php',
     'Rector\\Php74\\Rector\\MethodCall\\ChangeReflectionTypeToStringToGetNameRector' => $baseDir . '/rules/Php74/Rector/MethodCall/ChangeReflectionTypeToStringToGetNameRector.php',
     'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => $baseDir . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
