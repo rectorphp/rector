@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfdc07dfd50ab17bd407076e2580d3045
+class ComposerStaticInit9573f54051b0e77f6bfc7c4280ffdf3a
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2856,9 +2856,7 @@ class ComposerStaticInitfdc07dfd50ab17bd407076e2580d3045
         'Rector\\Restoration\\Rector\\ClassConstFetch\\MissingClassConstantReferenceToStringRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassConstFetch/MissingClassConstantReferenceToStringRector.php',
         'Rector\\Restoration\\Rector\\ClassLike\\UpdateFileNameByClassNameFileSystemRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector.php',
         'Rector\\Restoration\\Rector\\Class_\\RemoveFinalFromEntityRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Class_/RemoveFinalFromEntityRector.php',
-        'Rector\\Restoration\\Rector\\Namespace_\\CompleteImportForPartialAnnotationRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Namespace_/CompleteImportForPartialAnnotationRector.php',
         'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
-        'Rector\\Restoration\\ValueObject\\CompleteImportForPartialAnnotation' => __DIR__ . '/../..' . '/rules/Restoration/ValueObject/CompleteImportForPartialAnnotation.php',
         'Rector\\Set\\Contract\\SetListInterface' => __DIR__ . '/../..' . '/packages/Set/Contract/SetListInterface.php',
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
@@ -3257,9 +3255,9 @@ class ComposerStaticInitfdc07dfd50ab17bd407076e2580d3045
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfdc07dfd50ab17bd407076e2580d3045::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfdc07dfd50ab17bd407076e2580d3045::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfdc07dfd50ab17bd407076e2580d3045::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9573f54051b0e77f6bfc7c4280ffdf3a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9573f54051b0e77f6bfc7c4280ffdf3a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9573f54051b0e77f6bfc7c4280ffdf3a::$classMap;
 
         }, null, ClassLoader::class);
     }
