@@ -16,6 +16,8 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\EarlyReturn\NodeAnalyzer\IfAndAnalyzer;
+use Rector\EarlyReturn\NodeAnalyzer\SimpleScalarAnalyzer;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
 use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeNestingScope\ContextAnalyzer;
@@ -47,12 +49,24 @@ final class ChangeAndIfToEarlyReturnRector extends AbstractRector
      * @var \Rector\NodeCollector\BinaryOpConditionsCollector
      */
     private $binaryOpConditionsCollector;
-    public function __construct(IfManipulator $ifManipulator, InvertedIfFactory $invertedIfFactory, ContextAnalyzer $contextAnalyzer, BinaryOpConditionsCollector $binaryOpConditionsCollector)
+    /**
+     * @readonly
+     * @var \Rector\EarlyReturn\NodeAnalyzer\SimpleScalarAnalyzer
+     */
+    private $simpleScalarAnalyzer;
+    /**
+     * @readonly
+     * @var \Rector\EarlyReturn\NodeAnalyzer\IfAndAnalyzer
+     */
+    private $ifAndAnalyzer;
+    public function __construct(IfManipulator $ifManipulator, InvertedIfFactory $invertedIfFactory, ContextAnalyzer $contextAnalyzer, BinaryOpConditionsCollector $binaryOpConditionsCollector, SimpleScalarAnalyzer $simpleScalarAnalyzer, IfAndAnalyzer $ifAndAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->invertedIfFactory = $invertedIfFactory;
         $this->contextAnalyzer = $contextAnalyzer;
         $this->binaryOpConditionsCollector = $binaryOpConditionsCollector;
+        $this->simpleScalarAnalyzer = $simpleScalarAnalyzer;
+        $this->ifAndAnalyzer = $ifAndAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -74,11 +88,11 @@ class SomeClass
 {
     public function canDrive(Car $car)
     {
-        if (!$car->hasWheels) {
+        if (! $car->hasWheels) {
             return false;
         }
 
-        if (!$car->hasFuel) {
+        if (! $car->hasFuel) {
             return false;
         }
 
@@ -107,6 +121,7 @@ CODE_SAMPLE
         $newStmts = [];
         foreach ($stmts as $key => $stmt) {
             if (!$stmt instanceof If_) {
+                // keep natural original order
                 $newStmts[] = $stmt;
                 continue;
             }
@@ -116,7 +131,7 @@ CODE_SAMPLE
                 continue;
             }
             if ($nextStmt instanceof Return_) {
-                if ($this->isIfStmtExprUsedInNextReturn($stmt, $nextStmt)) {
+                if ($this->ifAndAnalyzer->isIfStmtExprUsedInNextReturn($stmt, $nextStmt)) {
                     continue;
                 }
                 if ($nextStmt->expr instanceof BooleanAnd) {
@@ -194,23 +209,15 @@ CODE_SAMPLE
         if ($this->isNestedIfInLoop($if, $stmtsAware)) {
             return \true;
         }
+        // is simple return? skip it
+        $onlyStmt = $if->stmts[0];
+        if ($onlyStmt instanceof Return_ && $onlyStmt->expr instanceof Expr && $this->simpleScalarAnalyzer->isSimpleScalar($onlyStmt->expr)) {
+            return \true;
+        }
+        if ($this->ifAndAnalyzer->isIfAndWithInstanceof($if->cond)) {
+            return \true;
+        }
         return !$this->isLastIfOrBeforeLastReturn($if, $nexStmt);
-    }
-    private function isIfStmtExprUsedInNextReturn(If_ $if, Return_ $return) : bool
-    {
-        if (!$return->expr instanceof Expr) {
-            return \false;
-        }
-        $ifExprs = $this->betterNodeFinder->findInstanceOf($if->stmts, Expr::class);
-        foreach ($ifExprs as $ifExpr) {
-            $isExprFoundInReturn = (bool) $this->betterNodeFinder->findFirst($return->expr, function (Node $node) use($ifExpr) : bool {
-                return $this->nodeComparator->areNodesEqual($node, $ifExpr);
-            });
-            if ($isExprFoundInReturn) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function isParentIfReturnsVoidOrParentIfHasNextNode(StmtsAwareInterface $stmtsAware) : bool
     {

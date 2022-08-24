@@ -233,16 +233,16 @@ final class IfManipulator
         if ($if->else !== null) {
             return \false;
         }
-        return !(bool) $if->elseifs;
+        return $if->elseifs === [];
     }
     public function createIfNegation(Expr $expr, Return_ $return) : If_
     {
         $expr = $this->conditionInverter->createInvertedCondition($expr);
         return $this->createIfStmt($expr, $return);
     }
-    public function createIfStmt(Expr $expr, Stmt $stmt) : If_
+    public function createIfStmt(Expr $condExpr, Stmt $stmt) : If_
     {
-        return new If_($expr, ['stmts' => [$stmt]]);
+        return new If_($condExpr, ['stmts' => [$stmt]]);
     }
     private function matchComparedAndReturnedNode(NotIdentical $notIdentical, Return_ $return) : ?Expr
     {

@@ -1930,6 +1930,8 @@ return array(
     'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
     'Rector\\DowngradePhp81\\Rector\\Property\\DowngradeReadonlyPropertyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php',
     'Rector\\DowngradePhp82\\Rector\\Class_\\DowngradeReadonlyClassRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php',
+    'Rector\\EarlyReturn\\NodeAnalyzer\\IfAndAnalyzer' => $baseDir . '/rules/EarlyReturn/NodeAnalyzer/IfAndAnalyzer.php',
+    'Rector\\EarlyReturn\\NodeAnalyzer\\SimpleScalarAnalyzer' => $baseDir . '/rules/EarlyReturn/NodeAnalyzer/SimpleScalarAnalyzer.php',
     'Rector\\EarlyReturn\\NodeFactory\\InvertedIfFactory' => $baseDir . '/rules/EarlyReturn/NodeFactory/InvertedIfFactory.php',
     'Rector\\EarlyReturn\\NodeTransformer\\ConditionInverter' => $baseDir . '/rules/EarlyReturn/NodeTransformer/ConditionInverter.php',
     'Rector\\EarlyReturn\\Rector\\Foreach_\\ChangeNestedForeachIfsToEarlyContinueRector' => $baseDir . '/rules/EarlyReturn/Rector/Foreach_/ChangeNestedForeachIfsToEarlyContinueRector.php',

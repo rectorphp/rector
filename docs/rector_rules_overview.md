@@ -3883,12 +3883,12 @@ Changes if && to early return
      {
 -        if ($car->hasWheels && $car->hasFuel) {
 -            return true;
-+        if (!$car->hasWheels) {
++        if (! $car->hasWheels) {
 +            return false;
          }
 
 -        return false;
-+        if (!$car->hasFuel) {
++        if (! $car->hasFuel) {
 +            return false;
 +        }
 +
