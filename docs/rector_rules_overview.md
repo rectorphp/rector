@@ -1,4 +1,4 @@
-# 409 Rules Overview
+# 408 Rules Overview
 
 <br>
 
@@ -14,7 +14,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (48)
+- [DeadCode](#deadcode) (47)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -3440,29 +3440,6 @@ Remove unused if check to non-empty array before foreach of the array
 
 <br>
 
-### RemoveUnusedParamInRequiredAutowireRector
-
-Remove unused parameter in required autowire method
-
-- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParamInRequiredAutowireRector`](../rules/DeadCode/Rector/ClassMethod/RemoveUnusedParamInRequiredAutowireRector.php)
-
-```diff
- use Symfony\Contracts\Service\Attribute\Required;
-
- final class SomeService
- {
-     private $visibilityManipulator;
-
-     #[Required]
--    public function autowire(VisibilityManipulator $visibilityManipulator)
-+    public function autowire()
-     {
-     }
- }
-```
-
-<br>
-
 ### RemoveUnusedPrivateClassConstantRector
 
 Remove unused class constants
@@ -3682,14 +3659,14 @@ Remove if/else if they have same content
 
 ### SimplifyMirrorAssignRector
 
-Removes unneeded $a = $a assigns
+Removes unneeded `$value` = `$value` assigns
 
 - class: [`Rector\DeadCode\Rector\Expression\SimplifyMirrorAssignRector`](../rules/DeadCode/Rector/Expression/SimplifyMirrorAssignRector.php)
 
 ```diff
  function run() {
--                $a = $a;
-             }
+-    $result = $result;
+ }
 ```
 
 <br>

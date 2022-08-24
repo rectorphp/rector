@@ -1665,7 +1665,6 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveLastReturnRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveLastReturnRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',
-    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedParamInRequiredAutowireRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedParamInRequiredAutowireRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodParameterRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodParameterRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPromotedPropertyRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPromotedPropertyRector.php',

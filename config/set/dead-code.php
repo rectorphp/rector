@@ -16,7 +16,6 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveLastReturnRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
-use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedParamInRequiredAutowireRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
@@ -89,7 +88,6 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveDeadInstanceOfRector::class,
         RemoveDeadLoopRector::class,
         RemoveUnusedPrivateMethodParameterRector::class,
-        RemoveUnusedParamInRequiredAutowireRector::class,
         // docblock
         RemoveUselessParamTagRector::class,
         RemoveUselessReturnTagRector::class,
