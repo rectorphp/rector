@@ -56,8 +56,8 @@ CODE_SAMPLE
         if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
-        $repositoryClass = $doctrineAnnotationTagValueNode->getValue('repositoryClass');
-        if (!$repositoryClass instanceof ArrayItemNode) {
+        $repositoryClassArrayItemNode = $doctrineAnnotationTagValueNode->getValue('repositoryClass');
+        if (!$repositoryClassArrayItemNode instanceof ArrayItemNode) {
             return null;
         }
         $doctrineAnnotationTagValueNode->removeValue('repositoryClass');

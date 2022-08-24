@@ -8,7 +8,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeFactory\SluggableClassMethodFactory;
@@ -92,7 +91,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $slugFields = [];
+        $slugFieldsArrayItemNode = [];
         $matchedProperty = null;
         foreach ($node->getProperties() as $property) {
             $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
@@ -100,10 +99,7 @@ CODE_SAMPLE
             if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
                 continue;
             }
-            $slugFields = $doctrineAnnotationTagValueNode->getValue('fields');
-            if ($slugFields instanceof CurlyListNode) {
-                $slugFields = $slugFields->getValuesWithSilentKey();
-            }
+            $slugFieldsArrayItemNode = $doctrineAnnotationTagValueNode->getValue('fields');
             $this->removeNode($property);
             $matchedProperty = $property;
         }
@@ -119,10 +115,10 @@ CODE_SAMPLE
         }
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Sluggable\\SluggableTrait');
         $node->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\SluggableInterface');
-        if (!$slugFields instanceof ArrayItemNode) {
+        if (!$slugFieldsArrayItemNode instanceof ArrayItemNode) {
             return null;
         }
-        $getSluggableClassMethod = $this->sluggableClassMethodFactory->createGetSluggableFields($slugFields);
+        $getSluggableClassMethod = $this->sluggableClassMethodFactory->createGetSluggableFields($slugFieldsArrayItemNode);
         $this->classInsertManipulator->addAsFirstMethod($node, $getSluggableClassMethod);
         return $node;
     }
