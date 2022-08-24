@@ -129,4 +129,9 @@ final class AttributeKey
      * @var string
      */
     public const COMMENT_CLOSURE_RETURN_MIRRORED = 'comment_closure_return_mirrored';
+    /**
+     * To pass PHP 8.0 attribute FQN names
+     * @var string
+     */
+    public const PHP_ATTRIBUTE_NAME = 'php_attribute_name';
 }

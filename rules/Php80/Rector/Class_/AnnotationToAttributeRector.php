@@ -130,7 +130,7 @@ CODE_SAMPLE
         if ($attributeGroups === []) {
             return null;
         }
-        $attributeGroups = $this->attributeGroupNamedArgumentManipulator->processSpecialClassTypes($attributeGroups);
+        $this->attributeGroupNamedArgumentManipulator->decorate($attributeGroups);
         $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
         return $node;
     }

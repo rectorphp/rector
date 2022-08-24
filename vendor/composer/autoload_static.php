@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit45f173ce5933808d50e80f4aa12b8e38
+class ComposerStaticInit0bf5a8d2faf2a4360c9c5747c0a3dc46
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2647,6 +2647,9 @@ class ComposerStaticInit45f173ce5933808d50e80f4aa12b8e38
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
         'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
         'Rector\\Php74\\TypeAnalyzer\\ObjectTypeAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/TypeAnalyzer/ObjectTypeAnalyzer.php',
+        'Rector\\Php80\\AttributeDecorator\\JMSAccessTypeAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/JMSAccessTypeAttributeDecorator.php',
+        'Rector\\Php80\\AttributeDecorator\\SensioParamConverterAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/SensioParamConverterAttributeDecorator.php',
+        'Rector\\Php80\\Contract\\AttributeDecoratorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/AttributeDecoratorInterface.php',
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
         'Rector\\Php80\\Contract\\ValueObject\\AnnotationToAttributeInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/ValueObject/AnnotationToAttributeInterface.php',
         'Rector\\Php80\\Enum\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/Enum/MatchKind.php',
@@ -3253,9 +3256,9 @@ class ComposerStaticInit45f173ce5933808d50e80f4aa12b8e38
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit45f173ce5933808d50e80f4aa12b8e38::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit45f173ce5933808d50e80f4aa12b8e38::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit45f173ce5933808d50e80f4aa12b8e38::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0bf5a8d2faf2a4360c9c5747c0a3dc46::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0bf5a8d2faf2a4360c9c5747c0a3dc46::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0bf5a8d2faf2a4360c9c5747c0a3dc46::$classMap;
 
         }, null, ClassLoader::class);
     }
