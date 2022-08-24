@@ -3266,24 +3266,24 @@
         },
         {
             "name": "symplify\/autowire-array-parameter",
-            "version": "11.1.5",
-            "version_normalized": "11.1.5.0",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/autowire-array-parameter.git",
-                "reference": "93efd2a2943d876da270fb09cc29332e29aef09f"
+                "reference": "4498424853e5e88a6217432325c58074a49b2076"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/autowire-array-parameter\/zipball\/93efd2a2943d876da270fb09cc29332e29aef09f",
-                "reference": "93efd2a2943d876da270fb09cc29332e29aef09f",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/autowire-array-parameter\/zipball\/4498424853e5e88a6217432325c58074a49b2076",
+                "reference": "4498424853e5e88a6217432325c58074a49b2076",
                 "shasum": ""
             },
             "require": {
                 "nette\/utils": "^3.2",
                 "php": ">=8.0",
                 "symfony\/dependency-injection": "^6.0",
-                "symplify\/package-builder": "^11.1.5"
+                "symplify\/package-builder": "^11.2"
             },
             "conflict": {
                 "symplify\/astral": "<11.1.5",
@@ -3307,9 +3307,10 @@
                 "symplify\/vendor-patches": "<11.1.5"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5.21"
+                "phpunit\/phpunit": "^9.5.23"
             },
-            "time": "2022-08-16T08:56:10+00:00",
+            "time": "2022-08-24T09:23:16+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3328,7 +3329,7 @@
             ],
             "description": "Autowire array parameters for your Symfony applications",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/autowire-array-parameter\/tree\/11.1.5"
+                "source": "https:\/\/github.com\/symplify\/autowire-array-parameter\/tree\/main"
             },
             "funding": [
                 {
@@ -3344,17 +3345,17 @@
         },
         {
             "name": "symplify\/composer-json-manipulator",
-            "version": "11.1.5",
-            "version_normalized": "11.1.5.0",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/composer-json-manipulator.git",
-                "reference": "3bcdeba972fc2c23c6d7bca35b4b358fd821ccd8"
+                "reference": "5af372a577cbc0fe53075d3ea4224982ba07ef46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/composer-json-manipulator\/zipball\/3bcdeba972fc2c23c6d7bca35b4b358fd821ccd8",
-                "reference": "3bcdeba972fc2c23c6d7bca35b4b358fd821ccd8",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/composer-json-manipulator\/zipball\/5af372a577cbc0fe53075d3ea4224982ba07ef46",
+                "reference": "5af372a577cbc0fe53075d3ea4224982ba07ef46",
                 "shasum": ""
             },
             "require": {
@@ -3363,9 +3364,9 @@
                 "symfony\/config": "^6.0",
                 "symfony\/dependency-injection": "^6.0",
                 "symfony\/filesystem": "^6.0",
-                "symplify\/package-builder": "^11.1.5",
-                "symplify\/smart-file-system": "^11.1.5",
-                "symplify\/symplify-kernel": "^11.1.5"
+                "symplify\/package-builder": "^11.2",
+                "symplify\/smart-file-system": "^11.2",
+                "symplify\/symplify-kernel": "^11.2"
             },
             "conflict": {
                 "symplify\/astral": "<11.1.5",
@@ -3388,9 +3389,10 @@
                 "symplify\/vendor-patches": "<11.1.5"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5.21"
+                "phpunit\/phpunit": "^9.5.23"
             },
-            "time": "2022-08-16T08:56:20+00:00",
+            "time": "2022-08-24T09:23:18+00:00",
+            "default-branch": true,
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
@@ -3409,7 +3411,7 @@
             ],
             "description": "Package to load, merge and save composer.json file(s)",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/composer-json-manipulator\/tree\/11.1.5"
+                "source": "https:\/\/github.com\/symplify\/composer-json-manipulator\/tree\/main"
             },
             "funding": [
                 {
@@ -3497,17 +3499,17 @@
         },
         {
             "name": "symplify\/easy-testing",
-            "version": "11.1.5",
-            "version_normalized": "11.1.5.0",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/easy-testing.git",
-                "reference": "8830b558de29dddf740d3cfc27643f6af160d033"
+                "reference": "87867113755e51f263e244a3694b5078b9ad2cae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/8830b558de29dddf740d3cfc27643f6af160d033",
-                "reference": "8830b558de29dddf740d3cfc27643f6af160d033",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/easy-testing\/zipball\/87867113755e51f263e244a3694b5078b9ad2cae",
+                "reference": "87867113755e51f263e244a3694b5078b9ad2cae",
                 "shasum": ""
             },
             "require": {
@@ -3516,9 +3518,9 @@
                 "symfony\/console": "^6.0",
                 "symfony\/dependency-injection": "^6.0",
                 "symfony\/finder": "^6.0",
-                "symplify\/package-builder": "^11.1.5",
-                "symplify\/smart-file-system": "^11.1.5",
-                "symplify\/symplify-kernel": "^11.1.5"
+                "symplify\/package-builder": "^11.2",
+                "symplify\/smart-file-system": "^11.2",
+                "symplify\/symplify-kernel": "^11.2"
             },
             "conflict": {
                 "symplify\/astral": "<11.1.5",
@@ -3540,9 +3542,10 @@
                 "symplify\/vendor-patches": "<11.1.5"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5.21"
+                "phpunit\/phpunit": "^9.5.23"
             },
-            "time": "2022-08-16T08:56:18+00:00",
+            "time": "2022-08-24T09:23:19+00:00",
+            "default-branch": true,
             "bin": [
                 "bin\/easy-testing"
             ],
@@ -3564,7 +3567,7 @@
             ],
             "description": "Testing made easy",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/easy-testing\/tree\/11.1.5"
+                "source": "https:\/\/github.com\/symplify\/easy-testing\/tree\/main"
             },
             "funding": [
                 {
@@ -3580,17 +3583,17 @@
         },
         {
             "name": "symplify\/package-builder",
-            "version": "11.1.5",
-            "version_normalized": "11.1.5.0",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/package-builder.git",
-                "reference": "77bda7d7a6d1ffaa1dc0432aafd821d3b51b47ff"
+                "reference": "c2474cabfafe9454299e94cb0eb5dad4f51c37f6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/77bda7d7a6d1ffaa1dc0432aafd821d3b51b47ff",
-                "reference": "77bda7d7a6d1ffaa1dc0432aafd821d3b51b47ff",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/package-builder\/zipball\/c2474cabfafe9454299e94cb0eb5dad4f51c37f6",
+                "reference": "c2474cabfafe9454299e94cb0eb5dad4f51c37f6",
                 "shasum": ""
             },
             "require": {
@@ -3601,8 +3604,8 @@
                 "symfony\/console": "^6.0",
                 "symfony\/dependency-injection": "^6.0",
                 "symfony\/finder": "^6.0",
-                "symplify\/easy-testing": "^11.1.5",
-                "symplify\/symplify-kernel": "^11.1.5"
+                "symplify\/easy-testing": "^11.2",
+                "symplify\/symplify-kernel": "^11.2"
             },
             "conflict": {
                 "symplify\/astral": "<11.1.5",
@@ -3625,9 +3628,10 @@
                 "symplify\/vendor-patches": "<11.1.5"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5.21"
+                "phpunit\/phpunit": "^9.5.23"
             },
-            "time": "2022-08-16T08:56:20+00:00",
+            "time": "2022-08-24T09:23:23+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3646,7 +3650,7 @@
             ],
             "description": "Dependency Injection, Console and Kernel toolkit for Symplify packages.",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/package-builder\/tree\/11.1.5"
+                "source": "https:\/\/github.com\/symplify\/package-builder\/tree\/main"
             },
             "funding": [
                 {
@@ -3662,8 +3666,8 @@
         },
         {
             "name": "symplify\/rule-doc-generator-contracts",
-            "version": "11.1.5",
-            "version_normalized": "11.1.5.0",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/rule-doc-generator-contracts.git",
@@ -3702,6 +3706,7 @@
                 "symplify\/vendor-patches": "<11.1.5"
             },
             "time": "2022-08-16T08:55:02+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3817,17 +3822,17 @@
         },
         {
             "name": "symplify\/smart-file-system",
-            "version": "11.1.5",
-            "version_normalized": "11.1.5.0",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/smart-file-system.git",
-                "reference": "fab027c8135cde323e803353815f6414677dbf66"
+                "reference": "820cadad467f72d512ec77d249ad91d1607f1c2d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/fab027c8135cde323e803353815f6414677dbf66",
-                "reference": "fab027c8135cde323e803353815f6414677dbf66",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/smart-file-system\/zipball\/820cadad467f72d512ec77d249ad91d1607f1c2d",
+                "reference": "820cadad467f72d512ec77d249ad91d1607f1c2d",
                 "shasum": ""
             },
             "require": {
@@ -3860,9 +3865,10 @@
             },
             "require-dev": {
                 "nette\/finder": "^2.5.3",
-                "phpunit\/phpunit": "^9.5.21"
+                "phpunit\/phpunit": "^9.5.23"
             },
-            "time": "2022-08-16T08:55:27+00:00",
+            "time": "2022-08-24T09:23:50+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3881,7 +3887,7 @@
             ],
             "description": "Sanitized FileInfo with safe getRealPath() and other handy methods",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/smart-file-system\/tree\/11.1.5"
+                "source": "https:\/\/github.com\/symplify\/smart-file-system\/tree\/main"
             },
             "funding": [
                 {
@@ -3897,27 +3903,27 @@
         },
         {
             "name": "symplify\/symplify-kernel",
-            "version": "11.1.5",
-            "version_normalized": "11.1.5.0",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symplify\/symplify-kernel.git",
-                "reference": "22b34ff41f9da044d58538781a8a524313d65d46"
+                "reference": "13750407bfc0f9d87661908330368a22bc473251"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symplify\/symplify-kernel\/zipball\/22b34ff41f9da044d58538781a8a524313d65d46",
-                "reference": "22b34ff41f9da044d58538781a8a524313d65d46",
+                "url": "https:\/\/api.github.com\/repos\/symplify\/symplify-kernel\/zipball\/13750407bfc0f9d87661908330368a22bc473251",
+                "reference": "13750407bfc0f9d87661908330368a22bc473251",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.0",
                 "symfony\/console": "^6.0",
                 "symfony\/dependency-injection": "^6.0",
-                "symplify\/autowire-array-parameter": "^11.1.5",
-                "symplify\/composer-json-manipulator": "^11.1.5",
-                "symplify\/package-builder": "^11.1.5",
-                "symplify\/smart-file-system": "^11.1.5",
+                "symplify\/autowire-array-parameter": "^11.2",
+                "symplify\/composer-json-manipulator": "^11.2",
+                "symplify\/package-builder": "^11.2",
+                "symplify\/smart-file-system": "^11.2",
                 "webmozart\/assert": "^1.10"
             },
             "conflict": {
@@ -3939,9 +3945,10 @@
                 "symplify\/vendor-patches": "<11.1.5"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.5.21"
+                "phpunit\/phpunit": "^9.5.23"
             },
-            "time": "2022-08-16T08:56:39+00:00",
+            "time": "2022-08-24T09:24:00+00:00",
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3960,7 +3967,7 @@
             ],
             "description": "Internal Kernel for Symplify packages",
             "support": {
-                "source": "https:\/\/github.com\/symplify\/symplify-kernel\/tree\/11.1.5"
+                "source": "https:\/\/github.com\/symplify\/symplify-kernel\/tree\/main"
             },
             "install-path": "..\/symplify\/symplify-kernel"
         },

@@ -1,4 +1,4 @@
-# 408 Rules Overview
+# 401 Rules Overview
 
 <br>
 
@@ -54,8 +54,6 @@
 
 - [Php82](#php82) (1)
 
-- [PostRector](#postrector) (6)
-
 - [Privatization](#privatization) (8)
 
 - [Removing](#removing) (6)
@@ -64,7 +62,7 @@
 
 - [Renaming](#renaming) (11)
 
-- [Restoration](#restoration) (5)
+- [Restoration](#restoration) (4)
 
 - [Strict](#strict) (5)
 
@@ -6523,123 +6521,6 @@ Decorate read-only class with `readonly` attribute
 
 <br>
 
-## PostRector
-
-### ClassRenamingPostRector
-
-Rename references for classes that were renamed during Rector run
-
-- class: [`Rector\PostRector\Rector\ClassRenamingPostRector`](../packages/PostRector/Rector/ClassRenamingPostRector.php)
-
-```diff
--function (OriginalClass $someClass)
-+function (RenamedClass $someClass)
- {
- }
-```
-
-<br>
-
-### NameImportingPostRector
-
-Imports fully qualified names
-
-- class: [`Rector\PostRector\Rector\NameImportingPostRector`](../packages/PostRector/Rector/NameImportingPostRector.php)
-
-```diff
-+use App\AnotherClass;
-+
- class SomeClass
- {
--    public function run(App\AnotherClass $anotherClass)
-+    public function run(AnotherClass $anotherClass)
-     {
-     }
- }
-```
-
-<br>
-
-### NodeAddingPostRector
-
-Add nodes on weird positions
-
-- class: [`Rector\PostRector\Rector\NodeAddingPostRector`](../packages/PostRector/Rector/NodeAddingPostRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
--        return 1;
-+        if ($value) {
-+            return 1;
-+        }
-     }
- }
-```
-
-<br>
-
-### NodeRemovingPostRector
-
-Remove nodes from weird positions
-
-- class: [`Rector\PostRector\Rector\NodeRemovingPostRector`](../packages/PostRector/Rector/NodeRemovingPostRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
--        if ($value) {
--            return 1;
--        }
-+        return 1;
-     }
- }
-```
-
-<br>
-
-### PropertyAddingPostRector
-
-Add dependency properties
-
-- class: [`Rector\PostRector\Rector\PropertyAddingPostRector`](../packages/PostRector/Rector/PropertyAddingPostRector.php)
-
-```diff
- class SomeClass
- {
-+    private $value;
-     public function run()
-     {
-         return $this->value;
-     }
- }
-```
-
-<br>
-
-### UseAddingPostRector
-
-Add unique use imports collected during Rector run
-
-- class: [`Rector\PostRector\Rector\UseAddingPostRector`](../packages/PostRector/Rector/UseAddingPostRector.php)
-
-```diff
-+use App\AnotherClass;
-+
- class SomeClass
- {
-     public function run(AnotherClass $anotherClass)
-     {
-     }
- }
-```
-
-<br>
-
 ## Privatization
 
 ### ChangeGlobalVariablesToPropertiesRector
@@ -7423,43 +7304,6 @@ return static function (RectorConfig $rectorConfig): void {
 <br>
 
 ## Restoration
-
-### CompleteImportForPartialAnnotationRector
-
-In case you have accidentally removed use imports but code still contains partial use statements, this will save you
-
-:wrench: **configure it!**
-
-- class: [`Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector`](../rules/Restoration/Rector/Namespace_/CompleteImportForPartialAnnotationRector.php)
-
-```php
-use Rector\Config\RectorConfig;
-use Rector\Restoration\Rector\Namespace_\CompleteImportForPartialAnnotationRector;
-use Rector\Restoration\ValueObject\CompleteImportForPartialAnnotation;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        CompleteImportForPartialAnnotationRector::class,
-        [new CompleteImportForPartialAnnotation('Doctrine\ORM\Mapping', 'ORM')]
-    );
-};
-```
-
-↓
-
-```diff
-+use Doctrine\ORM\Mapping as ORM;
-+
- class SomeClass
- {
-     /**
-      * @ORM\Id
-      */
-     public $id;
- }
-```
-
-<br>
 
 ### MakeTypedPropertyNullableIfCheckedRector
 
