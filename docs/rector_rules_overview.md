@@ -1,4 +1,4 @@
-# 411 Rules Overview
+# 410 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (73)
+- [CodeQuality](#codequality) (72)
 
 - [CodingStyle](#codingstyle) (36)
 
@@ -1322,29 +1322,6 @@ Changes compared to value and return of expr to direct return
 -}
 -
  return $value;
-```
-
-<br>
-
-### SimplifyIfIssetToNullCoalescingRector
-
-Simplify binary if to null coalesce
-
-- class: [`Rector\CodeQuality\Rector\If_\SimplifyIfIssetToNullCoalescingRector`](../rules/CodeQuality/Rector/If_/SimplifyIfIssetToNullCoalescingRector.php)
-
-```diff
- final class SomeController
- {
-     public function run($possibleStatieYamlFile)
-     {
--        if (isset($possibleStatieYamlFile['import'])) {
--            $possibleStatieYamlFile['import'] = array_merge($possibleStatieYamlFile['import'], $filesToImport);
--        } else {
--            $possibleStatieYamlFile['import'] = $filesToImport;
--        }
-+        $possibleStatieYamlFile['import'] = array_merge($possibleStatieYamlFile['import'] ?? [], $filesToImport);
-     }
- }
 ```
 
 <br>
