@@ -12,7 +12,6 @@ use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
-use Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveLastReturnRector;
@@ -66,7 +65,6 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveUnusedPrivatePropertyRector::class,
         RemoveUnusedPrivateClassConstantRector::class,
         RemoveUnusedPrivateMethodRector::class,
-        RemoveDeadConstructorRector::class,
         RemoveDeadReturnRector::class,
         RemoveDeadContinueRector::class,
         RemoveDeadIfForeachForRector::class,

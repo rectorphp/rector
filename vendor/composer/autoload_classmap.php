@@ -1661,7 +1661,6 @@ return array(
     'Rector\\DeadCode\\Rector\\Cast\\RecastingRemovalRector' => $baseDir . '/rules/DeadCode/Rector/Cast/RecastingRemovalRector.php',
     'Rector\\DeadCode\\Rector\\ClassConst\\RemoveUnusedPrivateClassConstantRector' => $baseDir . '/rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php',
     'Rector\\DeadCode\\Rector\\ClassLike\\RemoveAnnotationRector' => $baseDir . '/rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php',
-    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDeadConstructorRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveDeadConstructorRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveDelegatingParentCallRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveLastReturnRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveLastReturnRector.php',

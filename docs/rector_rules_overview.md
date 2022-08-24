@@ -1,4 +1,4 @@
-# 410 Rules Overview
+# 409 Rules Overview
 
 <br>
 
@@ -14,7 +14,7 @@
 
 - [Composer](#composer) (6)
 
-- [DeadCode](#deadcode) (49)
+- [DeadCode](#deadcode) (48)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -2852,23 +2852,6 @@ Remove dead condition above return
 -
          return 'yes';
      }
- }
-```
-
-<br>
-
-### RemoveDeadConstructorRector
-
-Remove empty constructor
-
-- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveDeadConstructorRector`](../rules/DeadCode/Rector/ClassMethod/RemoveDeadConstructorRector.php)
-
-```diff
- class SomeClass
- {
--    public function __construct()
--    {
--    }
  }
 ```
 
