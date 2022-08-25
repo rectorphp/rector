@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -85,6 +86,11 @@ CODE_SAMPLE
             // prevent !!
             if ($leftExpr instanceof BooleanNot) {
                 return $leftExpr->expr;
+            }
+            $leftExprType = $this->getType($leftExpr);
+            // keep as it is, readable enough
+            if ($leftExpr instanceof Variable && $leftExprType instanceof BooleanType) {
+                return null;
             }
             return new BooleanNot($leftExpr);
         }
