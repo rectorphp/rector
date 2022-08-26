@@ -70,7 +70,9 @@ final class RectifiedAnalyzer
      */
     private function shouldContinue(RectifiedNode $rectifiedNode, string $rectorClass, Node $node, ?Node $originalNode) : bool
     {
-        if ($rectifiedNode->getRectorClass() === $rectorClass && $rectifiedNode->getNode() === $node) {
+        $rectifiedNodeClass = $rectifiedNode->getRectorClass();
+        $rectifiedNodeNode = $rectifiedNode->getNode();
+        if ($rectifiedNodeClass === $rectorClass && $rectifiedNodeNode === $node) {
             /**
              * allow to revisit the Node with same Rector rule if Node is changed by other rule
              */
@@ -79,7 +81,26 @@ final class RectifiedAnalyzer
         if ($originalNode instanceof Node) {
             return \true;
         }
+        if ($this->isPreviousCreatedByRuleAttributeEquals($rectifiedNodeClass, $rectifiedNodeNode, $node)) {
+            return \true;
+        }
         $startTokenPos = $node->getStartTokenPos();
         return $startTokenPos < 0;
+    }
+    /**
+     * @param class-string<RectorInterface> $rectifiedNodeClass
+     */
+    private function isPreviousCreatedByRuleAttributeEquals(string $rectifiedNodeClass, Node $rectifiedNodeNode, Node $node) : bool
+    {
+        /** @var class-string<RectorInterface>[] $createdByRule */
+        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
+        if (\count($createdByRule) !== 1) {
+            return \false;
+        }
+        // different rule, allowed
+        if (\current($createdByRule) !== $rectifiedNodeClass) {
+            return \true;
+        }
+        return $rectifiedNodeNode === $node;
     }
 }
