@@ -4,7 +4,7 @@ namespace RectorPrefix202208\React\Socket;
 
 use RectorPrefix202208\React\Dns\Resolver\ResolverInterface;
 use RectorPrefix202208\React\Promise;
-use RectorPrefix202208\React\Promise\CancellablePromiseInterface;
+use RectorPrefix202208\React\Promise\PromiseInterface;
 final class DnsConnector implements ConnectorInterface
 {
     private $connector;
@@ -52,11 +52,11 @@ final class DnsConnector implements ConnectorInterface
                         $trace = $r->getValue($e);
                         // Exception trace arguments are not available on some PHP 7.4 installs
                         // @codeCoverageIgnoreStart
-                        foreach ($trace as &$one) {
+                        foreach ($trace as $ti => $one) {
                             if (isset($one['args'])) {
-                                foreach ($one['args'] as &$arg) {
+                                foreach ($one['args'] as $ai => $arg) {
                                     if ($arg instanceof \Closure) {
-                                        $arg = 'Object(' . \get_class($arg) . ')';
+                                        $trace[$ti]['args'][$ai] = 'Object(' . \get_class($arg) . ')';
                                     }
                                 }
                             }
@@ -76,7 +76,7 @@ final class DnsConnector implements ConnectorInterface
                 $reject(new \RuntimeException('Connection to ' . $uri . ' cancelled during DNS lookup (ECONNABORTED)', \defined('SOCKET_ECONNABORTED') ? \SOCKET_ECONNABORTED : 103));
             }
             // (try to) cancel pending DNS lookup / connection attempt
-            if ($promise instanceof CancellablePromiseInterface) {
+            if ($promise instanceof PromiseInterface && \method_exists($promise, 'cancel')) {
                 // overwrite callback arguments for PHP7+ only, so they do not show
                 // up in the Exception trace and do not cause a possible cyclic reference.
                 $_ = $reject = null;

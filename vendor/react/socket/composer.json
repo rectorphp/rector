@@ -36,14 +36,14 @@
         "evenement\/evenement": "^3.0 || ^2.0 || ^1.0",
         "react\/dns": "^1.8",
         "react\/event-loop": "^1.2",
-        "react\/promise": "^2.6.0 || ^1.2.1",
-        "react\/promise-timer": "^1.8",
+        "react\/promise": "^3 || ^2.6 || ^1.2.1",
+        "react\/promise-timer": "^1.9",
         "react\/stream": "^1.2"
     },
     "require-dev": {
-        "clue\/block-react": "^1.5",
         "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.35",
-        "react\/promise-stream": "^1.2"
+        "react\/async": "^4 || ^3 || ^2",
+        "react\/promise-stream": "^1.4"
     },
     "autoload": {
         "psr-4": {

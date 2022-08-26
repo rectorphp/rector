@@ -6,6 +6,10 @@ namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Name;
+use PhpParser\Node\Scalar\String_;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
@@ -20,6 +24,15 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
      */
     private $annotationToAttributeMapper;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(ValueResolver $valueResolver)
+    {
+        $this->valueResolver = $valueResolver;
+    }
     /**
      * Avoid circular reference
      * @required
@@ -52,7 +65,8 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
                 continue;
             }
             if ($valueExpr instanceof ArrayItem) {
-                $arrayItems[] = $valueExpr;
+                $valueExpr = $this->resolveValueExprWithSingleQuoteHandling($valueExpr);
+                $arrayItems[] = $this->resolveValueExprWithSingleQuoteHandling($valueExpr);
             } else {
                 $keyExpr = null;
                 if (!\is_int($key)) {
@@ -63,6 +77,14 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
             }
         }
         return new Array_($arrayItems);
+    }
+    private function resolveValueExprWithSingleQuoteHandling(ArrayItem $arrayItem) : ArrayItem
+    {
+        if ($arrayItem->key === null && $arrayItem->value instanceof ClassConstFetch && $arrayItem->value->class instanceof Name && \strpos((string) $arrayItem->value->class, "'") !== \false) {
+            $arrayItem->value = new String_($this->valueResolver->getValue($arrayItem->value));
+            return $arrayItem;
+        }
+        return $arrayItem;
     }
     /**
      * @param mixed $value

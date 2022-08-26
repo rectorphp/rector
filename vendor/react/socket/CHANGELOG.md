@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.12.0 (2022-08-25)
+
+*   Feature: Forward compatibility with react/promise 3.
+    (#214 by @WyriHaximus and @clue)
+
+*   Feature: Full support for PHP 8.2 release.
+    (#298 by @WyriHaximus)
+
+*   Feature: Avoid unneeded syscall on socket close.
+    (#292 by @clue)
+
+*   Feature / Fix: Improve error reporting when custom error handler is used.
+    (#290 by @clue)
+
+*   Fix: Fix invalid references in exception stack trace.
+    (#284 by @clue)
+
+*   Minor documentation improvements, update to use new reactphp/async package instead of clue/reactphp-block.
+    (#296 by @clue, #285 by @SimonFrings and #295 by @nhedger)
+
+*   Improve test suite, update macOS and HHVM environment, fix optional tests for `ENETUNREACH`.
+    (#288, #289 and #297 by @clue)
+
 ## 1.11.0 (2022-01-14)
 
 *   Feature: Full support for PHP 8.1 release.

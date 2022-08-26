@@ -94,7 +94,7 @@ class StreamEncryption
         $result = \stream_socket_enable_crypto($socket, $toggle, $method);
         \restore_error_handler();
         if (\true === $result) {
-            $deferred->resolve();
+            $deferred->resolve(null);
         } else {
             if (\false === $result) {
                 // overwrite callback arguments for PHP7+ only, so they do not show

@@ -82,14 +82,18 @@ final class FdServer extends EventEmitter implements ServerInterface
             throw new \InvalidArgumentException('Invalid FD number given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
         }
         $this->loop = $loop ?: Loop::get();
-        $this->master = @\fopen('php://fd/' . $fd, 'r+');
-        if (\false === $this->master) {
+        $errno = 0;
+        $errstr = '';
+        \set_error_handler(function ($_, $error) use(&$errno, &$errstr) {
             // Match errstr from PHP's warning message.
             // fopen(php://fd/3): Failed to open stream: Error duping file descriptor 3; possibly it doesn't exist: [9]: Bad file descriptor
-            $error = \error_get_last();
-            \preg_match('/\\[(\\d+)\\]: (.*)/', $error['message'], $m);
+            \preg_match('/\\[(\\d+)\\]: (.*)/', $error, $m);
             $errno = isset($m[1]) ? (int) $m[1] : 0;
-            $errstr = isset($m[2]) ? $m[2] : $error['message'];
+            $errstr = isset($m[2]) ? $m[2] : $error;
+        });
+        $this->master = \fopen('php://fd/' . $fd, 'r+');
+        \restore_error_handler();
+        if (\false === $this->master) {
             throw new \RuntimeException('Failed to listen on FD ' . $fd . ': ' . $errstr . SocketServer::errconst($errno), $errno);
         }
         $meta = \stream_get_meta_data($this->master);

@@ -102,13 +102,9 @@ class Connection extends EventEmitter implements ConnectionInterface
             return;
         }
         // Try to cleanly shut down socket and ignore any errors in case other
-        // side already closed. Shutting down may return to blocking mode on
-        // some legacy versions, so reset to non-blocking just in case before
-        // continuing to close the socket resource.
-        // Underlying Stream implementation will take care of closing file
-        // handle, so we otherwise keep this open here.
+        // side already closed. Underlying Stream implementation will take care
+        // of closing stream resource, so we otherwise keep this open here.
         @\stream_socket_shutdown($this->stream, \STREAM_SHUT_RDWR);
-        \stream_set_blocking($this->stream, \false);
     }
     public function getRemoteAddress()
     {
