@@ -97,6 +97,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isTestClassMethod($classMethod)) {
             return \true;
         }
+        if ($classMethod->isAbstract()) {
+            return \true;
+        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         if ($phpDocInfo->hasByNames(['doesNotPerformAssertions', 'expectedException'])) {
             return \true;
