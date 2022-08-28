@@ -211,7 +211,7 @@ abstract class AbstractString implements \JsonSerializable
     public function collapseWhitespace()
     {
         $str = clone $this;
-        $str->string = \trim(\preg_replace('/(?:\\s{2,}+|[^\\S ])/', ' ', $str->string));
+        $str->string = \trim(\preg_replace("/(?:[ \n\r\t\f]{2,}+|[\n\r\t\f])/", ' ', $str->string), " \n\r\t\f");
         return $str;
     }
     /**

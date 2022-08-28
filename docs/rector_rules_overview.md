@@ -46,7 +46,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (13)
+- [Php74](#php74) (14)
 
 - [Php80](#php80) (19)
 
@@ -66,7 +66,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (35)
+- [Transform](#transform) (34)
 
 - [TypeDeclaration](#typedeclaration) (29)
 
@@ -5698,6 +5698,20 @@ Change `mb_strrpos()` encoding argument position
 
 <br>
 
+### MoneyFormatToNumberFormatRector
+
+Change `money_format()` to equivalent `number_format()`
+
+- class: [`Rector\Php74\Rector\FuncCall\MoneyFormatToNumberFormatRector`](../rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php)
+
+```diff
+-$value = money_format('%i', $value);
++$roundedValue = round($value, 2, PHP_ROUND_HALF_ODD);
++$value = number_format($roundedValue, 2, '.', '');
+```
+
+<br>
+
 ### NullCoalescingOperatorRector
 
 Use null coalescing operator ??=
@@ -8543,75 +8557,6 @@ return static function (RectorConfig $rectorConfig): void {
 +    #[\ReturnTypeWillChange]
      public function offsetGet($offset)
      {
-     }
- }
-```
-
-<br>
-
-### ServiceGetterToConstructorInjectionRector
-
-Get service call to constructor injection
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector`](../rules/Transform/Rector/MethodCall/ServiceGetterToConstructorInjectionRector.php)
-
-```php
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\MethodCall\ServiceGetterToConstructorInjectionRector;
-use Rector\Transform\ValueObject\ServiceGetterToConstructorInjection;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        ServiceGetterToConstructorInjectionRector::class,
-        [new ServiceGetterToConstructorInjection('FirstService', 'getAnotherService', 'AnotherService')]
-    );
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     /**
-      * @var FirstService
-      */
-     private $firstService;
-
--    public function __construct(FirstService $firstService)
--    {
--        $this->firstService = $firstService;
--    }
--
--    public function run()
--    {
--        $anotherService = $this->firstService->getAnotherService();
--        $anotherService->run();
--    }
--}
--
--class FirstService
--{
-     /**
-      * @var AnotherService
-      */
-     private $anotherService;
-
--    public function __construct(AnotherService $anotherService)
-+    public function __construct(FirstService $firstService, AnotherService $anotherService)
-     {
-+        $this->firstService = $firstService;
-         $this->anotherService = $anotherService;
-     }
-
--    public function getAnotherService(): AnotherService
-+    public function run()
-     {
--         return $this->anotherService;
-+        $anotherService = $this->anotherService;
-+        $anotherService->run();
      }
  }
 ```

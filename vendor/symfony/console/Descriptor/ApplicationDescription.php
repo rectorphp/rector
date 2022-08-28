@@ -118,7 +118,7 @@ class ApplicationDescription
             $sortedCommands[self::GLOBAL_NAMESPACE] = $globalCommands;
         }
         if ($namespacedCommands) {
-            \ksort($namespacedCommands);
+            \ksort($namespacedCommands, \SORT_STRING);
             foreach ($namespacedCommands as $key => $commandsSet) {
                 \ksort($commandsSet);
                 $sortedCommands[$key] = $commandsSet;
