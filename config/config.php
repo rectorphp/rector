@@ -55,8 +55,6 @@ use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
 use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix202208\Symplify\SmartFileSystem\Json\JsonFileSystem;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);
