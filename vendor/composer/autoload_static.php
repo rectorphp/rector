@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930
+class ComposerStaticInit6fbd778a432c95223d21b3e7c10c4d3b
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2025,10 +2025,6 @@ class ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930
         'Rector\\Doctrine\\ValueObject\\DefaultAnnotationArgValue' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/DefaultAnnotationArgValue.php',
         'Rector\\Doctrine\\ValueObject\\PropertyNameAndPhpDocInfo' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/PropertyNameAndPhpDocInfo.php',
         'Rector\\Doctrine\\ValueObject\\PropertyNamesAndPhpDocInfos' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/PropertyNamesAndPhpDocInfos.php',
-        'Rector\\DogFood\\NodeAnalyzer\\ContainerConfiguratorCallAnalyzer' => __DIR__ . '/../..' . '/rules/DogFood/NodeAnalyzer/ContainerConfiguratorCallAnalyzer.php',
-        'Rector\\DogFood\\NodeManipulator\\ContainerConfiguratorEmptyAssignRemover' => __DIR__ . '/../..' . '/rules/DogFood/NodeManipulator/ContainerConfiguratorEmptyAssignRemover.php',
-        'Rector\\DogFood\\NodeManipulator\\ContainerConfiguratorImportsMerger' => __DIR__ . '/../..' . '/rules/DogFood/NodeManipulator/ContainerConfiguratorImportsMerger.php',
-        'Rector\\DogFood\\Rector\\Closure\\UpgradeRectorConfigRector' => __DIR__ . '/../..' . '/rules/DogFood/Rector/Closure/UpgradeRectorConfigRector.php',
         'Rector\\DowngradePhp53\\Rector\\Dir\\DirConstToFileConstRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php',
         'Rector\\DowngradePhp54\\Rector\\Array_\\ShortArrayToLongArrayRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php',
         'Rector\\DowngradePhp54\\Rector\\Closure\\DowngradeStaticClosureRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php',
@@ -2209,7 +2205,6 @@ class ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930
         'Rector\\Laravel\\Rector\\MethodCall\\LumenRoutesStringMiddlewareToArrayRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/LumenRoutesStringMiddlewareToArrayRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\RedirectBackToBackHelperRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RedirectBackToBackHelperRector.php',
         'Rector\\Laravel\\Rector\\MethodCall\\RedirectRouteToToRouteHelperRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RedirectRouteToToRouteHelperRector.php',
-        'Rector\\Laravel\\Rector\\MethodCall\\RemoveAllOnDispatchingMethodsWithJobChainingRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RemoveAllOnDispatchingMethodsWithJobChainingRector.php',
         'Rector\\Laravel\\Rector\\Namespace_\\FactoryDefinitionRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Namespace_/FactoryDefinitionRector.php',
         'Rector\\Laravel\\Rector\\New_\\AddGuardToLoginEventRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/New_/AddGuardToLoginEventRector.php',
         'Rector\\Laravel\\Rector\\PropertyFetch\\OptionalToNullsafeOperatorRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/PropertyFetch/OptionalToNullsafeOperatorRector.php',
@@ -2705,15 +2700,7 @@ class ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930
         'Rector\\PhpDocParser\\PhpParser\\SmartPhpParser' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpParser/SmartPhpParser.php',
         'Rector\\PhpDocParser\\PhpParser\\SmartPhpParserFactory' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpParser/SmartPhpParserFactory.php',
         'Rector\\PhpDocParser\\TypeAnalyzer\\ClassMethodReturnTypeResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/TypeAnalyzer/ClassMethodReturnTypeResolver.php',
-        'Rector\\PhpDocParser\\TypeAwareNodeFinder' => __DIR__ . '/../..' . '/packages/PhpDocParser/TypeAwareNodeFinder.php',
         'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/AttributeKey.php',
-        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\ClassBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/ClassBuilder.php',
-        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\MethodBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/MethodBuilder.php',
-        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\NamespaceBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/NamespaceBuilder.php',
-        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\ParamBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/ParamBuilder.php',
-        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\PropertyBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/PropertyBuilder.php',
-        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\TraitUseBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/TraitUseBuilder.php',
-        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\UseBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/UseBuilder.php',
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/packages/PostRector/Application/PostFileProcessor.php',
         'Rector\\PostRector\\Collector\\NodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToAddCollector.php',
         'Rector\\PostRector\\Collector\\NodesToRemoveCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToRemoveCollector.php',
@@ -3205,9 +3192,9 @@ class ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6fbd778a432c95223d21b3e7c10c4d3b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6fbd778a432c95223d21b3e7c10c4d3b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6fbd778a432c95223d21b3e7c10c4d3b::$classMap;
 
         }, null, ClassLoader::class);
     }

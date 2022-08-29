@@ -113,8 +113,4 @@ final class SetList implements SetListInterface
      * @var string
      */
     public const EARLY_RETURN = __DIR__ . '/../../../config/set/early-return.php';
-    /**
-     * @var string
-     */
-    public const RECTOR_CONFIG = __DIR__ . '/../../../config/set/rector-config.php';
 }

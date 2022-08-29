@@ -3,21 +3,21 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\NodeFactory;
 
+use PhpParser\Builder\Method;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\PhpDocParser\ValueObject\NodeBuilder\MethodBuilder;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 final class DataProviderClassMethodFactory
 {
     public function createFromRecipe(DataProviderClassMethodRecipe $dataProviderClassMethodRecipe) : ClassMethod
     {
-        $methodBuilder = new MethodBuilder($dataProviderClassMethodRecipe->getMethodName());
-        $methodBuilder->makePublic();
-        $classMethod = $methodBuilder->getNode();
+        $method = new Method($dataProviderClassMethodRecipe->getMethodName());
+        $method->makePublic();
+        $classMethod = $method->getNode();
         foreach ($dataProviderClassMethodRecipe->getArgs() as $arg) {
             $value = $arg->value;
             if (!$value instanceof Array_) {

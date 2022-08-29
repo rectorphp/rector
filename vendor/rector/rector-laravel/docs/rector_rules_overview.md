@@ -1,4 +1,4 @@
-# 26 Rules Overview
+# 25 Rules Overview
 
 ## AddArgumentDefaultValueRector
 
@@ -464,26 +464,6 @@ Replace `redirect()->route("home")` and `Redirect::route("home")` with `to_route
 +        return to_route('home')->with('error', 'Incorrect Details.')
      }
  }
-```
-
-<br>
-
-## RemoveAllOnDispatchingMethodsWithJobChainingRector
-
-Remove `allOnQueue()` and `allOnConnection()` methods used with job chaining, use the `onQueue()` and `onConnection()` methods instead.
-
-- class: [`Rector\Laravel\Rector\MethodCall\RemoveAllOnDispatchingMethodsWithJobChainingRector`](../src/Rector/MethodCall/RemoveAllOnDispatchingMethodsWithJobChainingRector.php)
-
-```diff
- Job::withChain([
-     new ChainJob(),
- ])
--    ->dispatch()
--    ->allOnConnection('redis')
--    ->allOnQueue('podcasts');
-+    ->onQueue('podcasts')
-+    ->onConnection('redis')
-+    ->dispatch();
 ```
 
 <br>

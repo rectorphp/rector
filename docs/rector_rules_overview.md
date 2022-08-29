@@ -1,4 +1,4 @@
-# 401 Rules Overview
+# 400 Rules Overview
 
 <br>
 
@@ -17,8 +17,6 @@
 - [DeadCode](#deadcode) (47)
 
 - [DependencyInjection](#dependencyinjection) (2)
-
-- [DogFood](#dogfood) (1)
 
 - [EarlyReturn](#earlyreturn) (11)
 
@@ -3769,36 +3767,6 @@ return static function (RectorConfig $rectorConfig): void {
 +        parent::__construct();
      }
  }
-```
-
-<br>
-
-## DogFood
-
-### UpgradeRectorConfigRector
-
-Upgrade rector.php config to use of RectorConfig
-
-- class: [`Rector\DogFood\Rector\Closure\UpgradeRectorConfigRector`](../rules/DogFood/Rector/Closure/UpgradeRectorConfigRector.php)
-
-```diff
--use Rector\Core\Configuration\Option;
- use Rector\Php74\Rector\Property\TypedPropertyRector;
--use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-+use Rector\Config\RectorConfig;
-
--return static function (ContainerConfigurator $containerConfigurator): void {
--    $parameters = $containerConfigurator->parameters();
--    $parameters->set(Option::PARALLEL, true);
--    $parameters->set(Option::AUTO_IMPORT_NAMES, true);
-+return static function (RectorConfig $rectorConfig): void {
-+    $rectorConfig->parallel();
-+    $rectorConfig->importNames();
-
--    $services = $containerConfigurator->services();
--    $services->set(TypedPropertyRector::class);
-+    $rectorConfig->rule(TypedPropertyRector::class);
- };
 ```
 
 <br>

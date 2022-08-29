@@ -20,7 +20,6 @@ use PHPStan\Type\StringType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
-use Rector\PhpDocParser\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -203,10 +202,10 @@ CODE_SAMPLE
     }
     private function createStaticProtectedPropertyWithDefault(string $name, Node $node) : Property
     {
-        $propertyBuilder = new PropertyBuilder($name);
-        $propertyBuilder->makeProtected();
-        $propertyBuilder->makeStatic();
-        $propertyBuilder->setDefault($node);
-        return $propertyBuilder->getNode();
+        $property = new \PhpParser\Builder\Property($name);
+        $property->makeProtected();
+        $property->makeStatic();
+        $property->setDefault($node);
+        return $property->getNode();
     }
 }

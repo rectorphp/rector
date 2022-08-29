@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\NodeFactory;
 
+use PhpParser\Builder\Method;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -14,7 +15,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpDocParser\ValueObject\NodeBuilder\MethodBuilder;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 final class ConstructClassMethodFactory
@@ -54,11 +54,11 @@ final class ConstructClassMethodFactory
             $params[] = $this->createParam($publicProperty, $propertyName);
             $assigns[] = $this->createAssign($propertyName);
         }
-        $methodBuilder = new MethodBuilder(MethodName::CONSTRUCT);
-        $methodBuilder->makePublic();
-        $methodBuilder->addParams($params);
-        $methodBuilder->addStmts($assigns);
-        return $methodBuilder->getNode();
+        $method = new Method(MethodName::CONSTRUCT);
+        $method->makePublic();
+        $method->addParams($params);
+        $method->addStmts($assigns);
+        return $method->getNode();
     }
     /**
      * @return Property[]
