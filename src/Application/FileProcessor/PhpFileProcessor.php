@@ -11,6 +11,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -63,7 +64,12 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FileDiffFileDecorator $fileDiffFileDecorator, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilePathHelper
+     */
+    private $filePathHelper;
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FileDiffFileDecorator $fileDiffFileDecorator, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
@@ -73,6 +79,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->currentFileProvider = $currentFileProvider;
         $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
+        $this->filePathHelper = $filePathHelper;
     }
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
@@ -147,7 +154,8 @@ final class PhpFileProcessor implements FileProcessorInterface
             if ($this->rectorOutputStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
                 throw $throwable;
             }
-            $systemError = new SystemError($throwable->getMessage(), $file->getRelativeFilePath(), $throwable->getLine());
+            $relativeFilePath = $this->filePathHelper->relativePath($file->getFilePath());
+            $systemError = new SystemError($throwable->getMessage(), $relativeFilePath, $throwable->getLine());
             return [$systemError];
         }
         return [];
@@ -168,8 +176,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         if (!$this->rectorOutputStyle->isVerbose()) {
             return;
         }
-        $smartFileInfo = $file->getSmartFileInfo();
-        $message = $smartFileInfo->getRelativeFilePathFromDirectory(\getcwd());
-        $this->rectorOutputStyle->writeln($message);
+        $relativeFilePath = $this->filePathHelper->relativePath($file->getFilePath());
+        $this->rectorOutputStyle->writeln($relativeFilePath);
     }
 }

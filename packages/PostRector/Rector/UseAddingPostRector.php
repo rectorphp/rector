@@ -75,8 +75,8 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         }
         $file = $this->currentFileProvider->getFile();
         $smartFileInfo = $file->getSmartFileInfo();
-        $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFileInfo($smartFileInfo);
-        $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFileInfo($smartFileInfo);
+        $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFilePath($smartFileInfo->getRealPath());
+        $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFilePath($smartFileInfo->getRealPath());
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         // nothing to import or remove
         if ($useImportTypes === [] && $functionUseImportTypes === [] && $oldToNewClasses === []) {

@@ -1497,6 +1497,7 @@ return array(
     'Rector\\Core\\Exception\\ShouldNotHappenException' => $baseDir . '/src/Exception/ShouldNotHappenException.php',
     'Rector\\Core\\Exception\\VersionException' => $baseDir . '/src/Exception/VersionException.php',
     'Rector\\Core\\Exclusion\\ExclusionManager' => $baseDir . '/src/Exclusion/ExclusionManager.php',
+    'Rector\\Core\\FileSystem\\FilePathHelper' => $baseDir . '/src/FileSystem/FilePathHelper.php',
     'Rector\\Core\\FileSystem\\FilesFinder' => $baseDir . '/src/FileSystem/FilesFinder.php',
     'Rector\\Core\\FileSystem\\FilesystemTweaker' => $baseDir . '/src/FileSystem/FilesystemTweaker.php',
     'Rector\\Core\\FileSystem\\PhpFilesFinder' => $baseDir . '/src/FileSystem/PhpFilesFinder.php',

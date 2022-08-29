@@ -146,7 +146,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     }
     private function processFileInfo(SmartFileInfo $fileInfo) : string
     {
-        $this->dynamicSourceLocatorProvider->setFileInfo($fileInfo);
+        $this->dynamicSourceLocatorProvider->setFilePath($fileInfo->getRealPath());
         // needed for PHPStan, because the analyzed file is just created in /temp - need for trait and similar deps
         /** @var NodeScopeResolver $nodeScopeResolver */
         $nodeScopeResolver = $this->getService(NodeScopeResolver::class);
