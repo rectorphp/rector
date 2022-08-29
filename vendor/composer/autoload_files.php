@@ -13,7 +13,5 @@ return array(
     '972fda704d680a3a53c68e34e193cb22' => $vendorDir . '/react/promise-timer/src/functions_include.php',
     '9b38cf48e83f5d8f60375221cd213eee' => $vendorDir . '/phpstan/phpstan/bootstrap.php',
     '2324d0e5cadd603331d27de142371f0b' => $vendorDir . '/symfony/contracts/Deprecation/function.php',
-    'd507e002f7fce7f0c6dbf1f22edcb902' => $vendorDir . '/tracy/tracy/src/Tracy/functions.php',
-    '30bca7fff093e8069bed7c55247e2bf8' => $baseDir . '/src/functions/node_helper.php',
     '4508688f3cab21375725e8d11ca194a2' => $baseDir . '/src/constants.php',
 );

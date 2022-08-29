@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcfe1354e6d4ec90d3ccf16310fc089ce
+class ComposerStaticInit36c5951c0a46e555e524e56f868d09d4
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -14,8 +14,6 @@ class ComposerStaticInitcfe1354e6d4ec90d3ccf16310fc089ce
         '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '2324d0e5cadd603331d27de142371f0b' => __DIR__ . '/..' . '/symfony/contracts/Deprecation/function.php',
-        'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
-        '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
     );
 
@@ -1459,21 +1457,6 @@ class ComposerStaticInitcfe1354e6d4ec90d3ccf16310fc089ce
         'RectorPrefix202208\\Symplify\\SymplifyKernel\\HttpKernel\\AbstractSymplifyKernel' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/HttpKernel/AbstractSymplifyKernel.php',
         'RectorPrefix202208\\Symplify\\SymplifyKernel\\ValueObject\\KernelBootAndApplicationRun' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/ValueObject/KernelBootAndApplicationRun.php',
         'RectorPrefix202208\\Symplify\\SymplifyKernel\\ValueObject\\SymplifyKernelConfig' => __DIR__ . '/..' . '/symplify/symplify-kernel/src/ValueObject/SymplifyKernelConfig.php',
-        'RectorPrefix202208\\Tracy\\BlueScreen' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/BlueScreen/BlueScreen.php',
-        'RectorPrefix202208\\Tracy\\Debugger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Debugger/Debugger.php',
-        'RectorPrefix202208\\Tracy\\DeferredContent' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Debugger/DeferredContent.php',
-        'RectorPrefix202208\\Tracy\\DevelopmentStrategy' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Debugger/DevelopmentStrategy.php',
-        'RectorPrefix202208\\Tracy\\Dumper' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Dumper.php',
-        'RectorPrefix202208\\Tracy\\Dumper\\Describer' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Describer.php',
-        'RectorPrefix202208\\Tracy\\Dumper\\Exposer' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Exposer.php',
-        'RectorPrefix202208\\Tracy\\Dumper\\Renderer' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Renderer.php',
-        'RectorPrefix202208\\Tracy\\Dumper\\Value' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Dumper/Value.php',
-        'RectorPrefix202208\\Tracy\\FireLogger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Logger/FireLogger.php',
-        'RectorPrefix202208\\Tracy\\Helpers' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Helpers.php',
-        'RectorPrefix202208\\Tracy\\ILogger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Logger/ILogger.php',
-        'RectorPrefix202208\\Tracy\\Logger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Logger/Logger.php',
-        'RectorPrefix202208\\Tracy\\OutputDebugger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/OutputDebugger/OutputDebugger.php',
-        'RectorPrefix202208\\Tracy\\ProductionStrategy' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Debugger/ProductionStrategy.php',
         'RectorPrefix202208\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix202208\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix202208\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
@@ -3256,9 +3239,9 @@ class ComposerStaticInitcfe1354e6d4ec90d3ccf16310fc089ce
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcfe1354e6d4ec90d3ccf16310fc089ce::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcfe1354e6d4ec90d3ccf16310fc089ce::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcfe1354e6d4ec90d3ccf16310fc089ce::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit36c5951c0a46e555e524e56f868d09d4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit36c5951c0a46e555e524e56f868d09d4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit36c5951c0a46e555e524e56f868d09d4::$classMap;
 
         }, null, ClassLoader::class);
     }

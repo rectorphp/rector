@@ -28,6 +28,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\Value\ValueResolverTest
+ * @todo make use of constant type of $scope->getType()
  */
 final class ValueResolver
 {
