@@ -17,10 +17,10 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
+use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix202208\Symplify\Astral\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor

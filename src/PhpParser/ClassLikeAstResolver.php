@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
-use RectorPrefix202208\Symplify\Astral\PhpParser\SmartPhpParser;
+use Rector\PhpDocParser\PhpParser\SmartPhpParser;
 final class ClassLikeAstResolver
 {
     /**
@@ -23,7 +23,7 @@ final class ClassLikeAstResolver
     private $classLikesByName = [];
     /**
      * @readonly
-     * @var \Symplify\Astral\PhpParser\SmartPhpParser
+     * @var \Rector\PhpDocParser\PhpParser\SmartPhpParser
      */
     private $smartPhpParser;
     /**

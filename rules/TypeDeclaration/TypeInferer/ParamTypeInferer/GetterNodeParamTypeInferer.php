@@ -17,8 +17,8 @@ use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use RectorPrefix202208\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
 {
     /**
@@ -43,7 +43,7 @@ final class GetterNodeParamTypeInferer implements ParamTypeInfererInterface
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**

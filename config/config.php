@@ -8,6 +8,7 @@ use RectorPrefix202208\Doctrine\Inflector\Inflector;
 use RectorPrefix202208\Doctrine\Inflector\Rules\English\InflectorFactory;
 use RectorPrefix202208\OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
+use PhpParser\ConstExprEvaluator;
 use PhpParser\Lexer;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitor\CloningVisitor;
@@ -18,6 +19,7 @@ use PHPStan\Dependency\DependencyResolver;
 use PHPStan\File\FileHelper;
 use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
+use PHPStan\PhpDocParser\Parser\ConstExprParser;
 use PHPStan\PhpDocParser\Parser\PhpDocParser;
 use PHPStan\PhpDocParser\Parser\TypeParser;
 use PHPStan\Reflection\ReflectionProvider;
@@ -35,12 +37,14 @@ use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\PhpDocParser\PhpParser\SmartPhpParser;
+use Rector\PhpDocParser\PhpParser\SmartPhpParserFactory;
 use Rector\PSR4\Composer\PSR4NamespaceMatcher;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\Utils\Command\MissingInSetCommand;
 use RectorPrefix202208\Symfony\Component\Console\Application;
 use function RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use RectorPrefix202208\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix202208\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
@@ -74,6 +78,10 @@ return static function (RectorConfig $rectorConfig) : void {
         __DIR__ . '/../packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
         __DIR__ . '/../packages/Testing/PHPUnit',
         __DIR__ . '/../packages/BetterPhpDocParser/PhpDoc',
+        __DIR__ . '/../packages/PhpDocParser/NodeVisitor',
+        __DIR__ . '/../packages/PhpDocParser/PhpParser/SmartPhpParser.php',
+        __DIR__ . '/../packages/PhpDocParser/ValueObject',
+        __DIR__ . '/../packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
         __DIR__ . '/../packages/PHPStanStaticTypeMapper/Enum',
         __DIR__ . '/../packages/Caching/Cache.php',
         __DIR__ . '/../packages/NodeTypeResolver/PhpDocNodeVisitor/UnderscoreRenamePhpDocNodeVisitor.php',
@@ -140,4 +148,13 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(TypeNodeResolver::class)->factory([service(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
     $services->set(DynamicSourceLocatorProvider::class)->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
     $services->set(MissingInSetCommand::class);
+    // phpdoc parser
+    $services->set(SmartPhpParser::class)->factory([service(SmartPhpParserFactory::class), 'create']);
+    $services->set(ConstExprEvaluator::class);
+    $services->set(NodeFinder::class);
+    // phpdoc parser
+    $services->set(PhpDocParser::class);
+    $services->set(\PHPStan\PhpDocParser\Lexer\Lexer::class);
+    $services->set(TypeParser::class);
+    $services->set(ConstExprParser::class);
 };

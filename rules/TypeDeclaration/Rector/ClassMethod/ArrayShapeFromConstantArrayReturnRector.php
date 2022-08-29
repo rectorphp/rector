@@ -19,8 +19,8 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpDocParser\TypeAnalyzer\ClassMethodReturnTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use RectorPrefix202208\Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -35,7 +35,7 @@ final class ArrayShapeFromConstantArrayReturnRector extends AbstractScopeAwareRe
     private const SKIPPED_CHAR_REGEX = '#\\W#u';
     /**
      * @readonly
-     * @var \Symplify\Astral\TypeAnalyzer\ClassMethodReturnTypeResolver
+     * @var \Rector\PhpDocParser\TypeAnalyzer\ClassMethodReturnTypeResolver
      */
     private $classMethodReturnTypeResolver;
     /**

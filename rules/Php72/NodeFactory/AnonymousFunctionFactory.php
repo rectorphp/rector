@@ -44,10 +44,10 @@ use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeManipulator\ClosureNestedUsesDecorator;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use ReflectionParameter;
-use RectorPrefix202208\Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class AnonymousFunctionFactory
 {
@@ -78,7 +78,7 @@ final class AnonymousFunctionFactory
     private $staticTypeMapper;
     /**
      * @readonly
-     * @var \Symplify\Astral\NodeTraverser\SimpleCallableNodeTraverser
+     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**

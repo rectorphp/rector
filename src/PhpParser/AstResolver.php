@@ -32,7 +32,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix202208\Symplify\Astral\PhpParser\SmartPhpParser;
+use Rector\PhpDocParser\PhpParser\SmartPhpParser;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * The nodes provided by this resolver is for read-only analysis only!
@@ -56,7 +56,7 @@ final class AstResolver
     private $functionsByName = [];
     /**
      * @readonly
-     * @var \Symplify\Astral\PhpParser\SmartPhpParser
+     * @var \Rector\PhpDocParser\PhpParser\SmartPhpParser
      */
     private $smartPhpParser;
     /**

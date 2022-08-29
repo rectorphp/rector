@@ -28,7 +28,6 @@ return array(
     'RectorPrefix202208\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
     'RectorPrefix202208\\Symplify\\ComposerJsonManipulator\\' => array($vendorDir . '/symplify/composer-json-manipulator/src'),
     'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\' => array($vendorDir . '/symplify/autowire-array-parameter/src'),
-    'RectorPrefix202208\\Symplify\\Astral\\' => array($vendorDir . '/symplify/astral/src'),
     'RectorPrefix202208\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
     'RectorPrefix202208\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix202208\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),

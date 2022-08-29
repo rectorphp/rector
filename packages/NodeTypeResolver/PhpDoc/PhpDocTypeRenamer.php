@@ -6,9 +6,9 @@ namespace Rector\NodeTypeResolver\PhpDoc;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\PhpDocNodeVisitor\UnderscoreRenamePhpDocNodeVisitor;
+use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix202208\Symplify\Astral\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocTypeRenamer
 {
     /**

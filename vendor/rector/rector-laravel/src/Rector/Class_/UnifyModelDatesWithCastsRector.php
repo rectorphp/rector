@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\PropertyBuilder;
+use Rector\PhpDocParser\ValueObject\NodeBuilder\PropertyBuilder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202208\Webmozart\Assert\Assert;

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5
+class ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -45,7 +45,6 @@ class ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5
             'RectorPrefix202208\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202208\\Symplify\\ComposerJsonManipulator\\' => 52,
             'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\' => 51,
-            'RectorPrefix202208\\Symplify\\Astral\\' => 35,
             'RectorPrefix202208\\Symfony\\Contracts\\' => 37,
             'RectorPrefix202208\\Symfony\\Component\\String\\' => 44,
             'RectorPrefix202208\\Symfony\\Component\\Finder\\' => 44,
@@ -172,10 +171,6 @@ class ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5
         'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src',
-        ),
-        'RectorPrefix202208\\Symplify\\Astral\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/astral/src',
         ),
         'RectorPrefix202208\\Symfony\\Contracts\\' => 
         array (
@@ -1308,40 +1303,6 @@ class ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5
         'RectorPrefix202208\\Symfony\\Contracts\\Translation\\TranslatableInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatableInterface.php',
         'RectorPrefix202208\\Symfony\\Contracts\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorInterface.php',
         'RectorPrefix202208\\Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorTrait.php',
-        'RectorPrefix202208\\Symplify\\Astral\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => __DIR__ . '/..' . '/symplify/astral/src/Contract/NodeValueResolver/NodeValueResolverInterface.php',
-        'RectorPrefix202208\\Symplify\\Astral\\Exception\\ShouldNotHappenException' => __DIR__ . '/..' . '/symplify/astral/src/Exception/ShouldNotHappenException.php',
-        'RectorPrefix202208\\Symplify\\Astral\\NodeTraverser\\SimpleCallableNodeTraverser' => __DIR__ . '/..' . '/symplify/astral/src/NodeTraverser/SimpleCallableNodeTraverser.php',
-        'RectorPrefix202208\\Symplify\\Astral\\NodeValue\\NodeValueResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeValue/NodeValueResolver.php',
-        'RectorPrefix202208\\Symplify\\Astral\\NodeValue\\NodeValueResolver\\ClassConstFetchValueResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeValue/NodeValueResolver/ClassConstFetchValueResolver.php',
-        'RectorPrefix202208\\Symplify\\Astral\\NodeValue\\NodeValueResolver\\ConstFetchValueResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeValue/NodeValueResolver/ConstFetchValueResolver.php',
-        'RectorPrefix202208\\Symplify\\Astral\\NodeValue\\NodeValueResolver\\FuncCallValueResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeValue/NodeValueResolver/FuncCallValueResolver.php',
-        'RectorPrefix202208\\Symplify\\Astral\\NodeValue\\NodeValueResolver\\MagicConstValueResolver' => __DIR__ . '/..' . '/symplify/astral/src/NodeValue/NodeValueResolver/MagicConstValueResolver.php',
-        'RectorPrefix202208\\Symplify\\Astral\\NodeVisitor\\CallableNodeVisitor' => __DIR__ . '/..' . '/symplify/astral/src/NodeVisitor/CallableNodeVisitor.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/Contract/PhpDocNodeVisitorInterface.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\Exception\\InvalidTraverseException' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/Exception/InvalidTraverseException.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\PhpDocNodeTraverser' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/PhpDocNodeTraverser.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\PhpDocNodeVisitor\\AbstractPhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/PhpDocNodeVisitor/AbstractPhpDocNodeVisitor.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\SimplePhpDocParser' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/SimplePhpDocParser.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\StaticFactory\\SimplePhpDocParserStaticFactory' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/StaticFactory/SimplePhpDocParserStaticFactory.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\ValueObject\\Ast\\PhpDoc\\SimplePhpDocNode' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/ValueObject/Ast/PhpDoc/SimplePhpDocNode.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => __DIR__ . '/..' . '/symplify/astral/src/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpParser\\SmartPhpParser' => __DIR__ . '/..' . '/symplify/astral/src/PhpParser/SmartPhpParser.php',
-        'RectorPrefix202208\\Symplify\\Astral\\PhpParser\\SmartPhpParserFactory' => __DIR__ . '/..' . '/symplify/astral/src/PhpParser/SmartPhpParserFactory.php',
-        'RectorPrefix202208\\Symplify\\Astral\\Reflection\\ReflectionParser' => __DIR__ . '/..' . '/symplify/astral/src/Reflection/ReflectionParser.php',
-        'RectorPrefix202208\\Symplify\\Astral\\TypeAnalyzer\\ClassMethodReturnTypeResolver' => __DIR__ . '/..' . '/symplify/astral/src/TypeAnalyzer/ClassMethodReturnTypeResolver.php',
-        'RectorPrefix202208\\Symplify\\Astral\\TypeAwareNodeFinder' => __DIR__ . '/..' . '/symplify/astral/src/TypeAwareNodeFinder.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\AstralConfig' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/AstralConfig.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\AttributeKey' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/AttributeKey.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\NodeBuilder\\ClassBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/ClassBuilder.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\NodeBuilder\\MethodBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/MethodBuilder.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\NodeBuilder\\NamespaceBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/NamespaceBuilder.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\NodeBuilder\\ParamBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/ParamBuilder.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\NodeBuilder\\PropertyBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/PropertyBuilder.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\NodeBuilder\\TraitUseBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/TraitUseBuilder.php',
-        'RectorPrefix202208\\Symplify\\Astral\\ValueObject\\NodeBuilder\\UseBuilder' => __DIR__ . '/..' . '/symplify/astral/src/ValueObject/NodeBuilder/UseBuilder.php',
         'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\DependencyInjection\\CompilerPass\\AutowireArrayParameterCompilerPass' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DependencyInjection/CompilerPass/AutowireArrayParameterCompilerPass.php',
         'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\DependencyInjection\\DefinitionFinder' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DependencyInjection/DefinitionFinder.php',
         'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\DocBlock\\ParamTypeDocBlockResolver' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DocBlock/ParamTypeDocBlockResolver.php',
@@ -2721,6 +2682,38 @@ class ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5
         'Rector\\PhpAttribute\\UseAliasNameMatcher' => __DIR__ . '/../..' . '/packages/PhpAttribute/UseAliasNameMatcher.php',
         'Rector\\PhpAttribute\\ValueObject\\UseAliasMetadata' => __DIR__ . '/../..' . '/packages/PhpAttribute/ValueObject/UseAliasMetadata.php',
         'Rector\\PhpDocDecorator\\PhpDocFromTypeDeclarationDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/PhpDocDecorator/PhpDocFromTypeDeclarationDecorator.php',
+        'Rector\\PhpDocParser\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => __DIR__ . '/../..' . '/packages/PhpDocParser/Contract/NodeValueResolver/NodeValueResolverInterface.php',
+        'Rector\\PhpDocParser\\Exception\\UnresolvableValueException' => __DIR__ . '/../..' . '/packages/PhpDocParser/Exception/UnresolvableValueException.php',
+        'Rector\\PhpDocParser\\NodeTraverser\\SimpleCallableNodeTraverser' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeTraverser/SimpleCallableNodeTraverser.php',
+        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver.php',
+        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\ClassConstFetchValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/ClassConstFetchValueResolver.php',
+        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\ConstFetchValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/ConstFetchValueResolver.php',
+        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\FuncCallValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/FuncCallValueResolver.php',
+        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\MagicConstValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/MagicConstValueResolver.php',
+        'Rector\\PhpDocParser\\NodeVisitor\\CallableNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeVisitor/CallableNodeVisitor.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/Contract/PhpDocNodeVisitorInterface.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\Exception\\InvalidTraverseException' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/Exception/InvalidTraverseException.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeTraverser' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeTraverser.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\AbstractPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/AbstractPhpDocNodeVisitor.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\SimplePhpDocParser' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/SimplePhpDocParser.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\StaticFactory\\SimplePhpDocParserStaticFactory' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/StaticFactory/SimplePhpDocParserStaticFactory.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\Ast\\PhpDoc\\SimplePhpDocNode' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/ValueObject/Ast/PhpDoc/SimplePhpDocNode.php',
+        'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
+        'Rector\\PhpDocParser\\PhpParser\\SmartPhpParser' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpParser/SmartPhpParser.php',
+        'Rector\\PhpDocParser\\PhpParser\\SmartPhpParserFactory' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpParser/SmartPhpParserFactory.php',
+        'Rector\\PhpDocParser\\TypeAnalyzer\\ClassMethodReturnTypeResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/TypeAnalyzer/ClassMethodReturnTypeResolver.php',
+        'Rector\\PhpDocParser\\TypeAwareNodeFinder' => __DIR__ . '/../..' . '/packages/PhpDocParser/TypeAwareNodeFinder.php',
+        'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/AttributeKey.php',
+        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\ClassBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/ClassBuilder.php',
+        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\MethodBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/MethodBuilder.php',
+        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\NamespaceBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/NamespaceBuilder.php',
+        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\ParamBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/ParamBuilder.php',
+        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\PropertyBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/PropertyBuilder.php',
+        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\TraitUseBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/TraitUseBuilder.php',
+        'Rector\\PhpDocParser\\ValueObject\\NodeBuilder\\UseBuilder' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/NodeBuilder/UseBuilder.php',
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/packages/PostRector/Application/PostFileProcessor.php',
         'Rector\\PostRector\\Collector\\NodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToAddCollector.php',
         'Rector\\PostRector\\Collector\\NodesToRemoveCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToRemoveCollector.php',
@@ -3212,9 +3205,9 @@ class ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitab21ab5cab660dfc5e1c57fc2f0a31d5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc882d4358abcd96633d7efdc3bcb1930::$classMap;
 
         }, null, ClassLoader::class);
     }

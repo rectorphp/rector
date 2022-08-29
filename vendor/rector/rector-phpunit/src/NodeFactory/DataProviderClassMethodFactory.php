@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\PhpDocParser\ValueObject\NodeBuilder\MethodBuilder;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
-use RectorPrefix202208\Symplify\Astral\ValueObject\NodeBuilder\MethodBuilder;
 final class DataProviderClassMethodFactory
 {
     public function createFromRecipe(DataProviderClassMethodRecipe $dataProviderClassMethodRecipe) : ClassMethod
