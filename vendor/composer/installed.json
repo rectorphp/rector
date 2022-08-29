@@ -2182,7 +2182,7 @@
             "description": "Rector upgrades rules for PHPUnit",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-phpunit\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-phpunit\/tree\/0.14.0"
             },
             "install-path": "..\/rector\/rector-phpunit"
         },

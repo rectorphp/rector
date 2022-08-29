@@ -167,11 +167,3 @@ vendor/bin/rector process src
 ```
 
 That's it!
-
-<br>
-
-## Generating a Rector Rule
-
-Do you want to save time with making rules and tests?
-
-Use [the `generate` command](https://github.com/rectorphp/rector-generator).
