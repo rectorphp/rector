@@ -8,7 +8,7 @@ use Rector\RectorGenerator\Enum\Packages;
 use Rector\RectorGenerator\Finder\TemplateFinder;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFileSystem
 {
     /**

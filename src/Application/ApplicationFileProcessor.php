@@ -23,7 +23,7 @@ use RectorPrefix202208\Symplify\EasyParallel\FileSystem\FilePathNormalizer;
 use RectorPrefix202208\Symplify\EasyParallel\ScheduleFactory;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 use RectorPrefix202208\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor

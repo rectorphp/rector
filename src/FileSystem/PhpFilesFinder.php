@@ -6,7 +6,7 @@ namespace Rector\Core\FileSystem;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class PhpFilesFinder
 {
     /**

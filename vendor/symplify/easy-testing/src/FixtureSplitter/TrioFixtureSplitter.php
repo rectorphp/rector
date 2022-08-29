@@ -6,7 +6,7 @@ namespace RectorPrefix202208\Symplify\EasyTesting\FixtureSplitter;
 use RectorPrefix202208\Nette\Utils\Strings;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\FixtureSplit\TrioContent;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\SplitLine;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202208\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 /**
  * @api

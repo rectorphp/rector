@@ -22,7 +22,7 @@ use RectorPrefix202208\Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use RectorPrefix202208\Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use RectorPrefix202208\Symplify\EasyTesting\StaticFixtureSplitter;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTestCase implements RectorTestInterface
 {
     use MovingFilesTrait;

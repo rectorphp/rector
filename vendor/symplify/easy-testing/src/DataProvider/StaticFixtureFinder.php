@@ -8,7 +8,7 @@ use RectorPrefix202208\Nette\Utils\Strings;
 use RectorPrefix202208\Symfony\Component\Finder\Finder;
 use RectorPrefix202208\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix202208\Symplify\SmartFileSystem\Exception\FileNotFoundException;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202208\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 /**
  * @api

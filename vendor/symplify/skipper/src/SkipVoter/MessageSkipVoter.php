@@ -6,7 +6,7 @@ namespace RectorPrefix202208\Symplify\Skipper\SkipVoter;
 use RectorPrefix202208\Symplify\Skipper\Contract\SkipVoterInterface;
 use RectorPrefix202208\Symplify\Skipper\Matcher\FileInfoMatcher;
 use RectorPrefix202208\Symplify\Skipper\SkipCriteriaResolver\SkippedMessagesResolver;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class MessageSkipVoter implements SkipVoterInterface
 {
     /**

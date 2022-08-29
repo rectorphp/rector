@@ -8,7 +8,7 @@ use Rector\RectorGenerator\Enum\Packages;
 use Rector\RectorGenerator\FileSystem\TemplateFileSystem;
 use Rector\RectorGenerator\TemplateFactory;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 final class FileGenerator
 {

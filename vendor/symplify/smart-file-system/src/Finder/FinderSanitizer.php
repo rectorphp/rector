@@ -7,7 +7,7 @@ use RectorPrefix202208\Nette\Utils\Finder as NetteFinder;
 use SplFileInfo;
 use RectorPrefix202208\Symfony\Component\Finder\Finder as SymfonyFinder;
 use RectorPrefix202208\Symfony\Component\Finder\SplFileInfo as SymfonySplFileInfo;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\SmartFileSystem\Tests\Finder\FinderSanitizer\FinderSanitizerTest
  */

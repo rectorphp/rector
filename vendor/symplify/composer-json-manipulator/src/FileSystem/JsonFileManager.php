@@ -8,7 +8,7 @@ use RectorPrefix202208\Symplify\ComposerJsonManipulator\Json\JsonCleaner;
 use RectorPrefix202208\Symplify\ComposerJsonManipulator\Json\JsonInliner;
 use RectorPrefix202208\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use RectorPrefix202208\Symplify\PackageBuilder\Configuration\StaticEolConfiguration;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see \Symplify\MonorepoBuilder\Tests\FileSystem\JsonFileManager\JsonFileManagerTest

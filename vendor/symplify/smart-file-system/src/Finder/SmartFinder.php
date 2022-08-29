@@ -5,7 +5,7 @@ namespace RectorPrefix202208\Symplify\SmartFileSystem\Finder;
 
 use RectorPrefix202208\Symfony\Component\Finder\Finder;
 use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
  * @see \Symplify\SmartFileSystem\Tests\Finder\SmartFinder\SmartFinderTest

@@ -7,7 +7,7 @@ use RectorPrefix202208\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Tests\PSR4\Composer\PSR4NamespaceMatcherTest
  */

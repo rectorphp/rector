@@ -8,7 +8,7 @@ use RectorPrefix202208\Symplify\EasyTesting\ValueObject\InputAndExpected;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpected;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\InputFileInfoAndExpectedFileInfo;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\SplitLine;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @api

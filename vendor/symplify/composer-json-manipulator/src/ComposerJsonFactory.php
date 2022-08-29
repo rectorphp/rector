@@ -7,7 +7,7 @@ use RectorPrefix202208\Nette\Utils\Json;
 use RectorPrefix202208\Symplify\ComposerJsonManipulator\FileSystem\JsonFileManager;
 use RectorPrefix202208\Symplify\ComposerJsonManipulator\ValueObject\ComposerJson;
 use RectorPrefix202208\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
  * @see \Symplify\ComposerJsonManipulator\Tests\ComposerJsonFactory\ComposerJsonFactoryTest

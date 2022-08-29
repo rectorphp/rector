@@ -11,7 +11,7 @@ use PhpParser\Node\Param;
 use PHPStan\Analyser\MutatingScope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class ScopeAnalyzer
 {
     /**

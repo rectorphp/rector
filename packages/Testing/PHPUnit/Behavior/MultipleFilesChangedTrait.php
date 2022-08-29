@@ -5,7 +5,7 @@ namespace Rector\Testing\PHPUnit\Behavior;
 
 use RectorPrefix202208\Nette\Utils\FileSystem;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 trait MultipleFilesChangedTrait
 {
     protected function doTestFileInfoWithAdditionalChanges(SmartFileInfo $fixtureFileInfo, bool $allowMatches = \true) : void

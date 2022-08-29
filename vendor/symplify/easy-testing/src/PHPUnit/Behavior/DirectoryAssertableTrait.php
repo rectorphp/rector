@@ -6,7 +6,7 @@ namespace RectorPrefix202208\Symplify\EasyTesting\PHPUnit\Behavior;
 use RectorPrefix202208\Symfony\Component\Finder\Finder;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\ExpectedAndOutputFileInfoPair;
 use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * Use only in "\PHPUnit\Framework\TestCase"
  *

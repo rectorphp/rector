@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix202208\Symplify\Skipper\Skipper;
 
 use RectorPrefix202208\Symplify\Skipper\Matcher\FileInfoMatcher;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\Skipper\Tests\Skipper\Only\OnlySkipperTest
  */

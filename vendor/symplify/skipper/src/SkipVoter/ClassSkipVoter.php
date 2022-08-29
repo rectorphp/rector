@@ -10,7 +10,7 @@ use RectorPrefix202208\Symplify\Skipper\SkipCriteriaResolver\SkippedClassResolve
 use RectorPrefix202208\Symplify\Skipper\Skipper\OnlySkipper;
 use RectorPrefix202208\Symplify\Skipper\Skipper\SkipSkipper;
 use RectorPrefix202208\Symplify\Skipper\ValueObject\Option;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class ClassSkipVoter implements SkipVoterInterface
 {
     /**

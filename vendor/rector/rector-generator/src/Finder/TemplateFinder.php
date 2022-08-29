@@ -6,7 +6,7 @@ namespace Rector\RectorGenerator\Finder;
 use Rector\RectorGenerator\ValueObject\RectorRecipe;
 use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class TemplateFinder
 {
     /**

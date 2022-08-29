@@ -18,7 +18,7 @@ use RectorPrefix202208\Symplify\EasyParallel\Enum\Action;
 use RectorPrefix202208\Symplify\EasyParallel\Enum\ReactCommand;
 use RectorPrefix202208\Symplify\EasyParallel\Enum\ReactEvent;
 use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Throwable;
 final class WorkerRunner
 {

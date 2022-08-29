@@ -10,7 +10,7 @@ use RectorPrefix202208\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix202208\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
 use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
  */

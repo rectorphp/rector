@@ -13,7 +13,7 @@ use RectorPrefix202208\Symfony\Component\Console\Command\Command;
 use RectorPrefix202208\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202208\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\RectorGenerator\Tests\RectorGenerator\GenerateCommandInteractiveModeTest
  */

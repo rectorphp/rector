@@ -14,7 +14,7 @@ use Rector\Parallel\ValueObject\Bridge;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202208\Symplify\ComposerJsonManipulator\ComposerJsonFactory;
 use RectorPrefix202208\Symplify\ComposerJsonManipulator\Printer\ComposerJsonPrinter;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class ComposerFileProcessor implements FileProcessorInterface
 {
     /**

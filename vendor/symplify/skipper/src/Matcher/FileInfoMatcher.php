@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix202208\Symplify\Skipper\Matcher;
 
 use RectorPrefix202208\Symplify\Skipper\FileSystem\FnMatchPathNormalizer;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoMatcher
 {
     /**

@@ -6,7 +6,7 @@ namespace RectorPrefix202208\Symplify\ComposerJsonManipulator\ValueObject;
 use RectorPrefix202208\Nette\Utils\Arrays;
 use RectorPrefix202208\Nette\Utils\Strings;
 use RectorPrefix202208\Symplify\ComposerJsonManipulator\Sorter\ComposerPackageSorter;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use RectorPrefix202208\Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
 /**
  * @api

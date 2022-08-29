@@ -7,7 +7,7 @@ use RectorPrefix202208\Nette\Utils\Strings;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\IncorrectAndMissingSkips;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\Prefix;
 use RectorPrefix202208\Symplify\EasyTesting\ValueObject\SplitLine;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileInfo;
+use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Symplify\EasyTesting\Tests\MissingSkipPrefixResolver\MissingSkipPrefixResolverTest
  */
