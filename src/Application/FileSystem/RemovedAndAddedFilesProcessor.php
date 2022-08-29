@@ -6,7 +6,7 @@ namespace Rector\Core\Application\FileSystem;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
 /**
  * Adds and removes scheduled file
  */
@@ -14,9 +14,9 @@ final class RemovedAndAddedFilesProcessor
 {
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $smartFileSystem;
+    private $filesystem;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter
@@ -32,9 +32,9 @@ final class RemovedAndAddedFilesProcessor
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
-    public function __construct(SmartFileSystem $smartFileSystem, NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle)
+    public function __construct(Filesystem $filesystem, NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle)
     {
-        $this->smartFileSystem = $smartFileSystem;
+        $this->filesystem = $filesystem;
         $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
@@ -56,7 +56,7 @@ final class RemovedAndAddedFilesProcessor
             } else {
                 $message = \sprintf('File "%s" was removed', $relativePath);
                 $this->rectorOutputStyle->warning($message);
-                $this->smartFileSystem->remove($removedFile->getPathname());
+                $this->filesystem->remove($removedFile->getPathname());
             }
         }
     }
@@ -67,7 +67,7 @@ final class RemovedAndAddedFilesProcessor
                 $message = \sprintf('File "%s" will be added', $addedFileWithContent->getFilePath());
                 $this->rectorOutputStyle->note($message);
             } else {
-                $this->smartFileSystem->dumpFile($addedFileWithContent->getFilePath(), $addedFileWithContent->getFileContent());
+                $this->filesystem->dumpFile($addedFileWithContent->getFilePath(), $addedFileWithContent->getFileContent());
                 $message = \sprintf('File "%s" was added', $addedFileWithContent->getFilePath());
                 $this->rectorOutputStyle->note($message);
             }
@@ -81,7 +81,7 @@ final class RemovedAndAddedFilesProcessor
                 $message = \sprintf('File "%s" will be added', $addedFileWithNode->getFilePath());
                 $this->rectorOutputStyle->note($message);
             } else {
-                $this->smartFileSystem->dumpFile($addedFileWithNode->getFilePath(), $fileContent);
+                $this->filesystem->dumpFile($addedFileWithNode->getFilePath(), $fileContent);
                 $message = \sprintf('File "%s" was added', $addedFileWithNode->getFilePath());
                 $this->rectorOutputStyle->note($message);
             }
@@ -95,8 +95,8 @@ final class RemovedAndAddedFilesProcessor
                 $message = \sprintf('File "%s" will be moved to "%s"', $movedFile->getFilePath(), $movedFile->getNewFilePath());
                 $this->rectorOutputStyle->note($message);
             } else {
-                $this->smartFileSystem->dumpFile($movedFile->getNewFilePath(), $fileContent);
-                $this->smartFileSystem->remove($movedFile->getFilePath());
+                $this->filesystem->dumpFile($movedFile->getNewFilePath(), $fileContent);
+                $this->filesystem->remove($movedFile->getFilePath());
                 $message = \sprintf('File "%s" was moved to "%s"', $movedFile->getFilePath(), $movedFile->getNewFilePath());
                 $this->rectorOutputStyle->note($message);
             }

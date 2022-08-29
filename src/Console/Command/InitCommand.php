@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
+use RectorPrefix202208\Nette\Utils\FileSystem;
 use RectorPrefix202208\Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Console\OutputStyleInterface;
@@ -12,7 +13,6 @@ use RectorPrefix202208\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202208\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202208\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 final class InitCommand extends Command
 {
     /**
@@ -21,9 +21,9 @@ final class InitCommand extends Command
     private const TEMPLATE_PATH = __DIR__ . '/../../../templates/rector.php.dist';
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $smartFileSystem;
+    private $filesystem;
     /**
      * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
@@ -39,9 +39,9 @@ final class InitCommand extends Command
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(SmartFileSystem $smartFileSystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, SymfonyStyle $symfonyStyle)
+    public function __construct(\RectorPrefix202208\Symfony\Component\Filesystem\Filesystem $filesystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, SymfonyStyle $symfonyStyle)
     {
-        $this->smartFileSystem = $smartFileSystem;
+        $this->filesystem = $filesystem;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->symfonyStyle = $symfonyStyle;
@@ -63,16 +63,16 @@ final class InitCommand extends Command
             \sleep(3);
         }
         $rectorRootFilePath = \getcwd() . '/rector.php';
-        $doesFileExist = $this->smartFileSystem->exists($rectorRootFilePath);
+        $doesFileExist = $this->filesystem->exists($rectorRootFilePath);
         if ($doesFileExist) {
             $this->rectorOutputStyle->warning('Config file "rector.php" already exists');
         } else {
-            $this->smartFileSystem->copy(self::TEMPLATE_PATH, $rectorRootFilePath);
+            $this->filesystem->copy(self::TEMPLATE_PATH, $rectorRootFilePath);
             $fullPHPVersion = (string) $this->phpVersionProvider->provide();
             $phpVersion = Strings::substring($fullPHPVersion, 0, 1) . Strings::substring($fullPHPVersion, 2, 1);
-            $fileContent = $this->smartFileSystem->readFile($rectorRootFilePath);
+            $fileContent = FileSystem::read($rectorRootFilePath);
             $fileContent = \str_replace('LevelSetList::UP_TO_PHP_XY', 'LevelSetList::UP_TO_PHP_' . $phpVersion, $fileContent);
-            $this->smartFileSystem->dumpFile($rectorRootFilePath, $fileContent);
+            $this->filesystem->dumpFile($rectorRootFilePath, $fileContent);
             $this->rectorOutputStyle->success('"rector.php" config file was added');
         }
         return Command::SUCCESS;

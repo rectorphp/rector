@@ -8,8 +8,8 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\ValueObject\Application\File;
+use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\FormatPerservingPrinterTest
  */
@@ -22,13 +22,13 @@ final class FormatPerservingPrinter
     private $betterStandardPrinter;
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $smartFileSystem;
-    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, SmartFileSystem $smartFileSystem)
+    private $filesystem;
+    public function __construct(\Rector\Core\PhpParser\Printer\BetterStandardPrinter $betterStandardPrinter, Filesystem $filesystem)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->smartFileSystem = $smartFileSystem;
+        $this->filesystem = $filesystem;
     }
     /**
      * @param Node[] $newStmts
@@ -38,8 +38,8 @@ final class FormatPerservingPrinter
     public function printToFile(SmartFileInfo $fileInfo, array $newStmts, array $oldStmts, array $oldTokens) : string
     {
         $newContent = $this->betterStandardPrinter->printFormatPreserving($newStmts, $oldStmts, $oldTokens);
-        $this->smartFileSystem->dumpFile($fileInfo->getRealPath(), $newContent);
-        $this->smartFileSystem->chmod($fileInfo->getRealPath(), $fileInfo->getPerms());
+        $this->filesystem->dumpFile($fileInfo->getRealPath(), $newContent);
+        $this->filesystem->chmod($fileInfo->getRealPath(), $fileInfo->getPerms());
         return $newContent;
     }
     public function printParsedStmstAndTokensToString(File $file) : string

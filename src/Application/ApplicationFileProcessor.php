@@ -17,6 +17,7 @@ use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
 use RectorPrefix202208\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202208\Symplify\EasyParallel\CpuCoreCountProvider;
 use RectorPrefix202208\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix202208\Symplify\EasyParallel\FileSystem\FilePathNormalizer;
@@ -24,7 +25,6 @@ use RectorPrefix202208\Symplify\EasyParallel\ScheduleFactory;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 use RectorPrefix202208\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
@@ -38,9 +38,9 @@ final class ApplicationFileProcessor
     private $systemErrors = [];
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $smartFileSystem;
+    private $filesystem;
     /**
      * @readonly
      * @var \Rector\Core\Application\FileDecorator\FileDiffFileDecorator
@@ -104,9 +104,9 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(SmartFileSystem $smartFileSystem, FileDiffFileDecorator $fileDiffFileDecorator, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ParametersMerger $parametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, FilePathNormalizer $filePathNormalizer, CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
+    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ParametersMerger $parametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, FilePathNormalizer $filePathNormalizer, CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
     {
-        $this->smartFileSystem = $smartFileSystem;
+        $this->filesystem = $filesystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->rectorOutputStyle = $rectorOutputStyle;
@@ -194,8 +194,8 @@ final class ApplicationFileProcessor
     private function printFile(File $file) : void
     {
         $smartFileInfo = $file->getSmartFileInfo();
-        $this->smartFileSystem->dumpFile($smartFileInfo->getPathname(), $file->getFileContent());
-        $this->smartFileSystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
+        $this->filesystem->dumpFile($smartFileInfo->getPathname(), $file->getFileContent());
+        $this->filesystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
     }
     /**
      * Inspired by @see https://github.com/phpstan/phpstan-src/blob/89af4e7db257750cdee5d4259ad312941b6b25e8/src/Analyser/Analyser.php#L134

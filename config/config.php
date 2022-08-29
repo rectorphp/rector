@@ -45,6 +45,7 @@ use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\Utils\Command\MissingInSetCommand;
 use RectorPrefix202208\Symfony\Component\Console\Application;
 use function RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202208\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
@@ -94,6 +95,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->load('Rector\\', __DIR__ . '/../rules')->exclude([__DIR__ . '/../rules/*/ValueObject/*', __DIR__ . '/../rules/*/Rector/*', __DIR__ . '/../rules/*/Contract/*', __DIR__ . '/../rules/*/Exception/*', __DIR__ . '/../rules/*/Enum/*']);
     // parallel
     $services->set(ParametersMerger::class);
+    $services->set(Filesystem::class);
     // use faster in-memory cache in CI.
     // CI always starts from scratch, therefore IO intensive caching is not worth it
     $ciDetector = new CiDetector();

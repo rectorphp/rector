@@ -6,8 +6,8 @@ namespace Rector\Caching;
 use Rector\Caching\ValueObject\Storage\FileCacheStorage;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Core\Configuration\Option;
+use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
 final class CacheFactory
 {
     /**
@@ -17,13 +17,13 @@ final class CacheFactory
     private $parameterProvider;
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\SmartFileSystem
+     * @var \Symfony\Component\Filesystem\Filesystem
      */
-    private $smartFileSystem;
-    public function __construct(ParameterProvider $parameterProvider, SmartFileSystem $smartFileSystem)
+    private $fileSystem;
+    public function __construct(ParameterProvider $parameterProvider, Filesystem $fileSystem)
     {
         $this->parameterProvider = $parameterProvider;
-        $this->smartFileSystem = $smartFileSystem;
+        $this->fileSystem = $fileSystem;
     }
     public function create() : \Rector\Caching\Cache
     {
@@ -34,10 +34,10 @@ final class CacheFactory
         }
         if ($cacheClass === FileCacheStorage::class) {
             // ensure cache directory exists
-            if (!$this->smartFileSystem->exists($cacheDirectory)) {
-                $this->smartFileSystem->mkdir($cacheDirectory);
+            if (!$this->fileSystem->exists($cacheDirectory)) {
+                $this->fileSystem->mkdir($cacheDirectory);
             }
-            $fileCacheStorage = new FileCacheStorage($cacheDirectory, $this->smartFileSystem);
+            $fileCacheStorage = new FileCacheStorage($cacheDirectory, $this->fileSystem);
             return new \Rector\Caching\Cache($fileCacheStorage);
         }
         return new \Rector\Caching\Cache(new MemoryCacheStorage());
