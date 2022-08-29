@@ -1985,81 +1985,6 @@
             "install-path": "..\/rector\/rector-downgrade-php"
         },
         {
-            "name": "rector\/rector-generator",
-            "version": "dev-main",
-            "version_normalized": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/rectorphp\/rector-generator.git",
-                "reference": "38440b9580b6b1d8859bfb72849753b241a1e39a"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-generator\/zipball\/38440b9580b6b1d8859bfb72849753b241a1e39a",
-                "reference": "38440b9580b6b1d8859bfb72849753b241a1e39a",
-                "shasum": ""
-            },
-            "require": {
-                "nette\/utils": "^3.2",
-                "nikic\/php-parser": "^4.14",
-                "php": ">=8.1",
-                "symfony\/console": "^6.0",
-                "symfony\/dependency-injection": "^6.0",
-                "symfony\/finder": "^6.0",
-                "symplify\/package-builder": "^11.0"
-            },
-            "require-dev": {
-                "php-parallel-lint\/php-parallel-lint": "^1.3",
-                "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpdoc-parser": "^1.6.4",
-                "phpstan\/phpstan-strict-rules": "^1.3",
-                "phpstan\/phpstan-webmozart-assert": "^1.0",
-                "phpunit\/phpunit": "^9.5",
-                "rector\/rector-src": "dev-main",
-                "symplify\/coding-standard": "^11.0",
-                "symplify\/easy-coding-standard": "^11.0",
-                "symplify\/easy-testing": "^11.0",
-                "symplify\/monorepo-builder": "^11.0",
-                "symplify\/phpstan-extensions": "^11.0",
-                "symplify\/phpstan-rules": "^11.0",
-                "symplify\/vendor-patches": "^11.0"
-            },
-            "time": "2022-08-09T10:09:42+00:00",
-            "default-branch": true,
-            "type": "rector-extension",
-            "extra": {
-                "enable-patching": true,
-                "rector": {
-                    "includes": [
-                        "config\/config.php"
-                    ]
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Rector\\RectorGenerator\\": "src"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Generate Rector rules from command line",
-            "homepage": "https:\/\/getrector.org",
-            "support": {
-                "issues": "https:\/\/github.com\/rectorphp\/rector-generator\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-generator\/tree\/0.6.10"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/github.com\/tomasvotruba",
-                    "type": "github"
-                }
-            ],
-            "install-path": "..\/rector\/rector-generator"
-        },
-        {
             "name": "rector\/rector-laravel",
             "version": "dev-main",
             "version_normalized": "dev-main",
@@ -2200,12 +2125,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "26e1dcbc5fa3d214af34f627d0d7013b8eba8eb5"
+                "reference": "24eb4fe75f34c096c29d3ad915e1d25b4770e6ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/26e1dcbc5fa3d214af34f627d0d7013b8eba8eb5",
-                "reference": "26e1dcbc5fa3d214af34f627d0d7013b8eba8eb5",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/24eb4fe75f34c096c29d3ad915e1d25b4770e6ba",
+                "reference": "24eb4fe75f34c096c29d3ad915e1d25b4770e6ba",
                 "shasum": ""
             },
             "require": {
@@ -2230,7 +2155,7 @@
                 "symplify\/rule-doc-generator": "^11.0",
                 "symplify\/vendor-patches": "^11.0"
             },
-            "time": "2022-08-26T08:56:19+00:00",
+            "time": "2022-08-29T18:12:57+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

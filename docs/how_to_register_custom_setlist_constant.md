@@ -4,13 +4,11 @@ You can have custom `SetList` class that has constants that pointed to your own 
 
 
 ```php
-<?php
-
 namespace App\Set\ValueObject;
 
 use Rector\Set\Contract\SetListInterface;
 
-class SetList implements SetListInterface
+final class SetList implements SetListInterface
 {
     public const MY_FRAMEWORK_20 = __DIR__ . '/../../../config/set/my-framework-20.php';
 }

@@ -47,7 +47,7 @@ By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring
 - [How Does Rector Work?](/docs/how_it_works.md)
 - [PHP Parser Nodes](https://github.com/rectorphp/php-parser-nodes-docs/)
 - [How to Work with Doc Block and Comments](/docs/how_to_work_with_doc_block_and_comments.md)
-- [How to Generate New Rector Rule](/docs/create_own_rule.md)
+- [How to Create Own Rector Rule](/docs/create_own_rule.md)
 
 See [the full documentation](/docs).
 

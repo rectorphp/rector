@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\PrettyPrinter\Standard;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -36,9 +36,9 @@ final class AssertCallAnalyzer
     private $astResolver;
     /**
      * @readonly
-     * @var \PhpParser\PrettyPrinter\Standard
+     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
-    private $printerStandard;
+    private $nodePrinter;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
@@ -54,10 +54,10 @@ final class AssertCallAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(AstResolver $astResolver, Standard $printerStandard, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(AstResolver $astResolver, NodePrinterInterface $nodePrinter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->astResolver = $astResolver;
-        $this->printerStandard = $printerStandard;
+        $this->nodePrinter = $nodePrinter;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -73,7 +73,7 @@ final class AssertCallAnalyzer
         if ($this->classMethodNestingLevel > self::MAX_NESTED_METHOD_CALL_LEVEL) {
             return \false;
         }
-        $cacheHash = \md5($this->printerStandard->prettyPrint([$classMethod]));
+        $cacheHash = \md5($this->nodePrinter->prettyPrint([$classMethod]));
         if (isset($this->containsAssertCallByClassMethod[$cacheHash])) {
             return $this->containsAssertCallByClassMethod[$cacheHash];
         }

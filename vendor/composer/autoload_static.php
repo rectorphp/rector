@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit83716a21ad55eb60ab18d8cb830f08a9
+class ComposerStaticInitcd1f1758a12d59a8465f8d671b277097
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -29,7 +29,6 @@ class ComposerStaticInit83716a21ad55eb60ab18d8cb830f08a9
             'Rector\\Utils\\' => 13,
             'Rector\\Symfony\\' => 15,
             'Rector\\RectorInstaller\\' => 23,
-            'Rector\\RectorGenerator\\' => 23,
             'Rector\\PHPUnit\\' => 15,
             'Rector\\PHPOffice\\' => 17,
             'Rector\\Laravel\\' => 15,
@@ -106,10 +105,6 @@ class ComposerStaticInit83716a21ad55eb60ab18d8cb830f08a9
         'Rector\\RectorInstaller\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/extension-installer/src',
-        ),
-        'Rector\\RectorGenerator\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rector/rector-generator/src',
         ),
         'Rector\\PHPUnit\\' => 
         array (
@@ -2774,29 +2769,6 @@ class ComposerStaticInit83716a21ad55eb60ab18d8cb830f08a9
         'Rector\\ReadWrite\\ReadNodeAnalyzer\\JustReadExprAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/JustReadExprAnalyzer.php',
         'Rector\\ReadWrite\\ReadNodeAnalyzer\\LocalPropertyFetchReadNodeAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/LocalPropertyFetchReadNodeAnalyzer.php',
         'Rector\\ReadWrite\\ReadNodeAnalyzer\\VariableReadNodeAnalyzer' => __DIR__ . '/../..' . '/packages/ReadWrite/ReadNodeAnalyzer/VariableReadNodeAnalyzer.php',
-        'Rector\\RectorGenerator\\Command\\GenerateCommand' => __DIR__ . '/..' . '/rector/rector-generator/src/Command/GenerateCommand.php',
-        'Rector\\RectorGenerator\\Command\\InitRecipeCommand' => __DIR__ . '/..' . '/rector/rector-generator/src/Command/InitRecipeCommand.php',
-        'Rector\\RectorGenerator\\Enum\\Packages' => __DIR__ . '/..' . '/rector/rector-generator/src/Enum/Packages.php',
-        'Rector\\RectorGenerator\\Exception\\ConfigurationException' => __DIR__ . '/..' . '/rector/rector-generator/src/Exception/ConfigurationException.php',
-        'Rector\\RectorGenerator\\Exception\\ShouldNotHappenException' => __DIR__ . '/..' . '/rector/rector-generator/src/Exception/ShouldNotHappenException.php',
-        'Rector\\RectorGenerator\\FileSystem\\ConfigFilesystem' => __DIR__ . '/..' . '/rector/rector-generator/src/FileSystem/ConfigFilesystem.php',
-        'Rector\\RectorGenerator\\FileSystem\\TemplateFileSystem' => __DIR__ . '/..' . '/rector/rector-generator/src/FileSystem/TemplateFileSystem.php',
-        'Rector\\RectorGenerator\\Finder\\TemplateFinder' => __DIR__ . '/..' . '/rector/rector-generator/src/Finder/TemplateFinder.php',
-        'Rector\\RectorGenerator\\Generator\\FileGenerator' => __DIR__ . '/..' . '/rector/rector-generator/src/Generator/FileGenerator.php',
-        'Rector\\RectorGenerator\\Generator\\RectorGenerator' => __DIR__ . '/..' . '/rector/rector-generator/src/Generator/RectorGenerator.php',
-        'Rector\\RectorGenerator\\Guard\\OverrideGuard' => __DIR__ . '/..' . '/rector/rector-generator/src/Guard/OverrideGuard.php',
-        'Rector\\RectorGenerator\\NodeFactory\\ConfigurationNodeFactory' => __DIR__ . '/..' . '/rector/rector-generator/src/NodeFactory/ConfigurationNodeFactory.php',
-        'Rector\\RectorGenerator\\NodeFactory\\ConfigureClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-generator/src/NodeFactory/ConfigureClassMethodFactory.php',
-        'Rector\\RectorGenerator\\NodeFactory\\NodeFactory' => __DIR__ . '/..' . '/rector/rector-generator/src/NodeFactory/NodeFactory.php',
-        'Rector\\RectorGenerator\\Provider\\RectorRecipeProvider' => __DIR__ . '/..' . '/rector/rector-generator/src/Provider/RectorRecipeProvider.php',
-        'Rector\\RectorGenerator\\TemplateFactory' => __DIR__ . '/..' . '/rector/rector-generator/src/TemplateFactory.php',
-        'Rector\\RectorGenerator\\TemplateInitializer' => __DIR__ . '/..' . '/rector/rector-generator/src/TemplateInitializer.php',
-        'Rector\\RectorGenerator\\TemplateVariablesFactory' => __DIR__ . '/..' . '/rector/rector-generator/src/TemplateVariablesFactory.php',
-        'Rector\\RectorGenerator\\ValueObject\\NamePattern' => __DIR__ . '/..' . '/rector/rector-generator/src/ValueObject/NamePattern.php',
-        'Rector\\RectorGenerator\\ValueObject\\Option' => __DIR__ . '/..' . '/rector/rector-generator/src/ValueObject/Option.php',
-        'Rector\\RectorGenerator\\ValueObject\\Placeholder' => __DIR__ . '/..' . '/rector/rector-generator/src/ValueObject/Placeholder.php',
-        'Rector\\RectorGenerator\\ValueObject\\RectorGeneratorConfig' => __DIR__ . '/..' . '/rector/rector-generator/src/ValueObject/RectorGeneratorConfig.php',
-        'Rector\\RectorGenerator\\ValueObject\\RectorRecipe' => __DIR__ . '/..' . '/rector/rector-generator/src/ValueObject/RectorRecipe.php',
         'Rector\\RectorInstaller\\Filesystem' => __DIR__ . '/..' . '/rector/extension-installer/src/Filesystem.php',
         'Rector\\RectorInstaller\\GeneratedConfig' => __DIR__ . '/..' . '/rector/extension-installer/src/GeneratedConfig.php',
         'Rector\\RectorInstaller\\LocalFilesystem' => __DIR__ . '/..' . '/rector/extension-installer/src/LocalFilesystem.php',
@@ -3240,9 +3212,9 @@ class ComposerStaticInit83716a21ad55eb60ab18d8cb830f08a9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit83716a21ad55eb60ab18d8cb830f08a9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit83716a21ad55eb60ab18d8cb830f08a9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit83716a21ad55eb60ab18d8cb830f08a9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcd1f1758a12d59a8465f8d671b277097::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcd1f1758a12d59a8465f8d671b277097::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcd1f1758a12d59a8465f8d671b277097::$classMap;
 
         }, null, ClassLoader::class);
     }
