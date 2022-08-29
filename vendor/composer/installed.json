@@ -1853,12 +1853,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "e3ad69fb3bf2445faa73ce98780cdb797bd91ea4"
+                "reference": "2eddc311bbdb20214dd629b17da3e751d7ca5ac7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/e3ad69fb3bf2445faa73ce98780cdb797bd91ea4",
-                "reference": "e3ad69fb3bf2445faa73ce98780cdb797bd91ea4",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/2eddc311bbdb20214dd629b17da3e751d7ca5ac7",
+                "reference": "2eddc311bbdb20214dd629b17da3e751d7ca5ac7",
                 "shasum": ""
             },
             "require": {
@@ -1883,7 +1883,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-08-24T09:39:28+00:00",
+            "time": "2022-08-29T08:10:38+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1910,7 +1910,7 @@
             "description": "Rector upgrades rules for Doctrine",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-doctrine\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.14.1"
+                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/main"
             },
             "install-path": "..\/rector\/rector-doctrine"
         },

@@ -4,9 +4,14 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\ComplexType;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
+use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\SetterClassMethodAnalyzer;
 use Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver;
@@ -46,6 +51,7 @@ class Product
 {
     /**
      * @ORM\ManyToOne(targetEntity="AnotherEntity")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $anotherEntity;
 
@@ -65,6 +71,7 @@ class Product
 {
     /**
      * @ORM\ManyToOne(targetEntity="AnotherEntity")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $anotherEntity;
 
@@ -97,13 +104,46 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if (!$phpDocInfo->hasByAnnotationClass('Doctrine\\ORM\\Mapping\\ManyToOne')) {
+        $manyToOneAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\ManyToOne');
+        if (!$manyToOneAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
         $param = $node->params[0];
-        /** @var NullableType $paramType */
         $paramType = $param->type;
-        $param->type = $paramType->type;
+        if (!$this->isJoinColumnNullable($phpDocInfo)) {
+            // remove nullable if has one
+            if (!$paramType instanceof NullableType) {
+                return null;
+            }
+            $param->type = $paramType->type;
+            return $node;
+        }
+        // already nullable, lets skip it
+        if ($paramType instanceof NullableType) {
+            return null;
+        }
+        // we skip complex type as multiple or nullable already
+        if ($paramType instanceof ComplexType) {
+            return null;
+        }
+        // no type at all, there is nothing we can do
+        if (!$paramType instanceof Node) {
+            return null;
+        }
+        $param->type = new NullableType($paramType);
         return $node;
+    }
+    private function isJoinColumnNullable(PhpDocInfo $phpDocInfo) : bool
+    {
+        $joinColumnDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\JoinColumn');
+        if (!$joinColumnDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+            // no join column means the join is nullable
+            return \true;
+        }
+        $arrayItemNode = $joinColumnDoctrineAnnotationTagValueNode->getValue('nullable');
+        if (!$arrayItemNode instanceof ArrayItemNode) {
+            return \true;
+        }
+        return !$arrayItemNode->value instanceof ConstExprFalseNode;
     }
 }
