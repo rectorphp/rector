@@ -23,4 +23,11 @@ spl_autoload_register(function (string $class): void {
             $composerAutoloader->loadClass($class);
         }
     }
+
+    if ($class === 'Symplify\SmartFileSystem\SmartFileInfo') {
+        $filePath = __DIR__ . '/vendor/symplify/smart-file-system/src/SmartFileInfo.php';
+        if (file_exists($filePath)) {
+            require_once $filePath;
+        }
+    }
 });
