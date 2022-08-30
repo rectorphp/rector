@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -109,6 +110,9 @@ CODE_SAMPLE
             return null;
         }
         $node->args[$position]->value = $this->nodeFactory->createArray([$this->nodeFactory->createClassConstReference($segments[0]), $segments[1]]);
+        if (\is_array($argValue)) {
+            return new MethodCall($node, 'name', [new Arg(new String_($argValue['as']))]);
+        }
         return $node;
     }
     /**
@@ -134,8 +138,8 @@ CODE_SAMPLE
         if (!$this->isActionString($action)) {
             return null;
         }
-        /** @var string $action */
-        $segments = \explode('@', $action);
+        /** @var string|array<string, string> $action */
+        $segments = \is_string($action) ? \explode('@', $action) : \explode('@', $action['uses']);
         if (\count($segments) !== 2) {
             return null;
         }
@@ -165,7 +169,12 @@ CODE_SAMPLE
     private function isActionString($action) : bool
     {
         if (!\is_string($action)) {
-            return \false;
+            if (!\is_array($action)) {
+                return \false;
+            }
+            $keys = \array_keys($action);
+            \sort($keys);
+            return $keys === ['as', 'uses'];
         }
         return \strpos($action, '@') !== \false;
     }

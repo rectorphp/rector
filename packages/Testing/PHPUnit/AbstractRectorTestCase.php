@@ -17,7 +17,6 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
-use Rector\Testing\PHPUnit\Behavior\MultipleFilesChangedTrait;
 use RectorPrefix202208\Symplify\EasyTesting\DataProvider\StaticFixtureFinder;
 use RectorPrefix202208\Symplify\EasyTesting\DataProvider\StaticFixtureUpdater;
 use RectorPrefix202208\Symplify\EasyTesting\StaticFixtureSplitter;
@@ -26,7 +25,6 @@ use Symplify\SmartFileSystem\SmartFileInfo;
 abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTestCase implements RectorTestInterface
 {
     use MovingFilesTrait;
-    use MultipleFilesChangedTrait;
     /**
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
