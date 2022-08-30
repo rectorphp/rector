@@ -9,7 +9,6 @@ use RectorPrefix202208\Symfony\Component\Finder\Finder;
 use RectorPrefix202208\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix202208\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
@@ -33,11 +32,6 @@ final class FilesFinder
     private $filesystemTweaker;
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\Finder\FinderSanitizer
-     */
-    private $finderSanitizer;
-    /**
-     * @readonly
      * @var \Symplify\SmartFileSystem\FileSystemFilter
      */
     private $fileSystemFilter;
@@ -51,10 +45,9 @@ final class FilesFinder
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;
-    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, FinderSanitizer $finderSanitizer, FileSystemFilter $fileSystemFilter, SkippedPathsResolver $skippedPathsResolver, UnchangedFilesFilter $unchangedFilesFilter)
+    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, FileSystemFilter $fileSystemFilter, SkippedPathsResolver $skippedPathsResolver, UnchangedFilesFilter $unchangedFilesFilter)
     {
         $this->filesystemTweaker = $filesystemTweaker;
-        $this->finderSanitizer = $finderSanitizer;
         $this->fileSystemFilter = $fileSystemFilter;
         $this->skippedPathsResolver = $skippedPathsResolver;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
@@ -88,7 +81,10 @@ final class FilesFinder
             $finder->name($suffixesPattern);
         }
         $this->addFilterWithExcludedPaths($finder);
-        $smartFileInfos = $this->finderSanitizer->sanitize($finder);
+        $smartFileInfos = [];
+        foreach ($finder as $fileInfo) {
+            $smartFileInfos[] = new SmartFileInfo($fileInfo->getRealPath());
+        }
         return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($smartFileInfos);
     }
     /**

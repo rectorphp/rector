@@ -5,7 +5,7 @@ namespace Rector\Core\Bootstrap;
 
 use Rector\Core\ValueObject\Bootstrap\BootstrapConfigs;
 use RectorPrefix202208\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202208\Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix202208\Webmozart\Assert\Assert;
 final class RectorConfigsResolver
 {
     public function provide() : BootstrapConfigs
@@ -37,10 +37,7 @@ final class RectorConfigsResolver
         if ($configFile === null) {
             return null;
         }
-        if (!\file_exists($configFile)) {
-            $message = \sprintf('File "%s" was not found', $configFile);
-            throw new FileNotFoundException($message);
-        }
+        Assert::fileExists($configFile);
         return \realpath($configFile);
     }
     private function resolveFromInputWithFallback(ArgvInput $argvInput, string $fallbackFile) : ?string
