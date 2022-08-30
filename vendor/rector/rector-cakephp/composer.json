@@ -21,7 +21,8 @@
         "phpstan\/phpstan-webmozart-assert": "^1.0",
         "phpstan\/phpstan-strict-rules": "^1.1",
         "symplify\/vendor-patches": "^11.1",
-        "symplify\/monorepo-builder": "^11.1"
+        "symplify\/monorepo-builder": "^11.1",
+        "rector\/rector-debugging": "dev-main"
     },
     "autoload": {
         "psr-4": {

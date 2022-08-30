@@ -21,7 +21,8 @@
         "symplify\/vendor-patches": "^11.0",
         "symplify\/monorepo-builder": "^11.0",
         "symplify\/easy-ci": "^11.0",
-        "rector\/rector-generator": "^0.6.10"
+        "rector\/rector-generator": "^0.6.10",
+        "rector\/rector-debugging": "dev-main"
     },
     "autoload": {
         "psr-4": {

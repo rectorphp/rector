@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\Service\ResetInterface;
 use Symplify\PackageBuilder\Contract\HttpKernel\ExtraConfigAwareKernelInterface;
 use Symplify\PackageBuilder\Exception\HttpKernel\MissingInterfaceException;
+use Symplify\PackageBuilder\Exception\MissingServiceException;
 use Symplify\SmartFileSystem\SmartFileInfo;
 use Symplify\SymplifyKernel\Contract\LightKernelInterface;
 use Symplify\SymplifyKernel\Exception\ShouldNotHappenException;
@@ -68,7 +69,7 @@ abstract class AbstractKernelTestCase extends TestCase
         $service = self::$container->get($type);
         if ($service === null) {
             $errorMessage = sprintf('Services "%s" was not found', $type);
-            throw new \Symplify\Astral\Exception\ShouldNotHappenException($errorMessage);
+            throw new MissingServiceException($errorMessage);
         }
 
         return $service;
