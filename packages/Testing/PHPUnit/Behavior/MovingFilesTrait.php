@@ -6,6 +6,7 @@ namespace Rector\Testing\PHPUnit\Behavior;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
+use Rector\Testing\Fixture\FixtureTempFileDumper;
 use RectorPrefix202208\Webmozart\Assert\Assert;
 /**
  * @property-read RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
@@ -34,8 +35,8 @@ trait MovingFilesTrait
              * to make work in all OSs, for example:
              * In MacOS, the realpath() of sys_get_temp_dir() pointed to /private/var/* which symlinked of /var/*
              */
-            [, $expectedFilePathWithContentFilePath] = \explode('_temp_fixture_easy_testing', $expectedFilePathWithContent->getFilePath());
-            [, $addedFilePathWithContentFilePath] = \explode('_temp_fixture_easy_testing', $addedFilePathWithContent->getFilePath());
+            [, $expectedFilePathWithContentFilePath] = \explode(FixtureTempFileDumper::TEMP_FIXTURE_DIRECTORY, $expectedFilePathWithContent->getFilePath());
+            [, $addedFilePathWithContentFilePath] = \explode(FixtureTempFileDumper::TEMP_FIXTURE_DIRECTORY, $addedFilePathWithContent->getFilePath());
             $this->assertSame($expectedFilePathWithContentFilePath, $addedFilePathWithContentFilePath);
             $this->assertSame($expectedFilePathWithContent->getFileContent(), $addedFilePathWithContent->getFileContent());
         }

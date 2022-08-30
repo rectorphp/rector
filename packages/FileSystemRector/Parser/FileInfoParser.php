@@ -8,7 +8,11 @@ use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
+use Rector\Testing\Fixture\FixtureTempFileDumper;
 use Symplify\SmartFileSystem\SmartFileInfo;
+/**
+ * Only for testing, @todo move to testing
+ */
 final class FileInfoParser
 {
     /**
@@ -34,9 +38,13 @@ final class FileInfoParser
     }
     /**
      * @return Stmt[]
+     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $smartFileInfo
      */
-    public function parseFileInfoToNodesAndDecorate(SmartFileInfo $smartFileInfo) : array
+    public function parseFileInfoToNodesAndDecorate($smartFileInfo) : array
     {
+        if (\is_string($smartFileInfo)) {
+            $smartFileInfo = FixtureTempFileDumper::dump($smartFileInfo);
+        }
         $stmts = $this->rectorParser->parseFile($smartFileInfo);
         $stmts = $this->fileWithoutNamespaceNodeTraverser->traverse($stmts);
         $file = new File($smartFileInfo, $smartFileInfo->getContents());

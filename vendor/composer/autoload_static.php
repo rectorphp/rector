@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitedf27f069b71e894f79831b06b417de6
+class ComposerStaticInitd0502117be6e6d45dc8ce25866585357
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2988,6 +2988,9 @@ class ComposerStaticInitedf27f069b71e894f79831b06b417de6
         'Rector\\Symfony\\ValueObject\\ValidatorAssert\\ClassMethodAndAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ValidatorAssert/ClassMethodAndAnnotation.php',
         'Rector\\Symfony\\ValueObject\\ValidatorAssert\\PropertyAndAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ValidatorAssert/PropertyAndAnnotation.php',
         'Rector\\Testing\\Contract\\RectorTestInterface' => __DIR__ . '/../..' . '/packages/Testing/Contract/RectorTestInterface.php',
+        'Rector\\Testing\\Fixture\\FixtureFileFinder' => __DIR__ . '/../..' . '/packages/Testing/Fixture/FixtureFileFinder.php',
+        'Rector\\Testing\\Fixture\\FixtureSplitter' => __DIR__ . '/../..' . '/packages/Testing/Fixture/FixtureSplitter.php',
+        'Rector\\Testing\\Fixture\\FixtureTempFileDumper' => __DIR__ . '/../..' . '/packages/Testing/Fixture/FixtureTempFileDumper.php',
         'Rector\\Testing\\PHPUnit\\AbstractRectorTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractRectorTestCase.php',
         'Rector\\Testing\\PHPUnit\\AbstractTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractTestCase.php',
         'Rector\\Testing\\PHPUnit\\Behavior\\MovingFilesTrait' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/Behavior/MovingFilesTrait.php',
@@ -3192,9 +3195,9 @@ class ComposerStaticInitedf27f069b71e894f79831b06b417de6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitedf27f069b71e894f79831b06b417de6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitedf27f069b71e894f79831b06b417de6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitedf27f069b71e894f79831b06b417de6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd0502117be6e6d45dc8ce25866585357::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd0502117be6e6d45dc8ce25866585357::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd0502117be6e6d45dc8ce25866585357::$classMap;
 
         }, null, ClassLoader::class);
     }
