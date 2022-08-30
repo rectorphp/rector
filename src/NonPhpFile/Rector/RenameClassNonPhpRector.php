@@ -71,7 +71,7 @@ CODE_SAMPLE
      */
     private function renameClasses(string $newContent, array $classRenames) : string
     {
-        $classRenames = $this->addDoubleSlahed($classRenames);
+        $classRenames = $this->addDoubleSlashed($classRenames);
         foreach ($classRenames as $oldClass => $newClass) {
             // the old class is without slashes, it can make mess as similar to a word in the text, so we have to be more strict about it
             $oldClassRegex = $this->createOldClassRegex($oldClass);
@@ -87,7 +87,7 @@ CODE_SAMPLE
      * @param array<string, string> $classRenames
      * @return array<string, string>
      */
-    private function addDoubleSlahed(array $classRenames) : array
+    private function addDoubleSlashed(array $classRenames) : array
     {
         foreach ($classRenames as $oldClass => $newClass) {
             // to prevent no slash override

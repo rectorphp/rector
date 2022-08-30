@@ -53,18 +53,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         // speed up
         @\ini_set('memory_limit', '-1');
-        // include local files
-        if (\file_exists(__DIR__ . '/../../../preload.php')) {
-            if (\file_exists(__DIR__ . '/../../../vendor')) {
-                require_once __DIR__ . '/../../../preload.php';
-                // test case in rector split package
-            } elseif (\file_exists(__DIR__ . '/../../../../../../vendor')) {
-                require_once __DIR__ . '/../../../preload-split-package.php';
-            }
-        }
-        if (\file_exists(__DIR__ . '/../../../vendor/scoper-autoload.php')) {
-            require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
-        }
+        $this->includePreloadFilesAndScoperAutoload();
         $configFile = $this->provideConfigFilePath();
         $this->bootFromConfigFiles([$configFile]);
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
@@ -115,6 +104,20 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         return \sys_get_temp_dir() . '/_temp_fixture_easy_testing';
     }
+    private function includePreloadFilesAndScoperAutoload() : void
+    {
+        if (\file_exists(__DIR__ . '/../../../preload.php')) {
+            if (\file_exists(__DIR__ . '/../../../vendor')) {
+                require_once __DIR__ . '/../../../preload.php';
+                // test case in rector split package
+            } elseif (\file_exists(__DIR__ . '/../../../../../../vendor')) {
+                require_once __DIR__ . '/../../../preload-split-package.php';
+            }
+        }
+        if (\file_exists(__DIR__ . '/../../../vendor/scoper-autoload.php')) {
+            require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
+        }
+    }
     private function doTestFileMatchesExpectedContent(SmartFileInfo $originalFileInfo, SmartFileInfo $expectedFileInfo, SmartFileInfo $fixtureFileInfo, bool $allowMatches = \true) : void
     {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
@@ -123,9 +126,8 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         if ($this->removedAndAddedFilesCollector->isFileRemoved($originalFileInfo)) {
             return;
         }
-        $relativeFilePathFromCwd = $fixtureFileInfo->getRelativeFilePathFromCwd();
         try {
-            $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent, $relativeFilePathFromCwd);
+            $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent);
         } catch (ExpectationFailedException $expectationFailedException) {
             if (!$allowMatches) {
                 throw $expectationFailedException;
@@ -135,7 +137,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             // make sure we don't get a diff in which every line is different (because of differences in EOL)
             $contents = $this->normalizeNewlines($contents);
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
-            $this->assertStringMatchesFormat($contents, $changedContent, $relativeFilePathFromCwd);
+            $this->assertStringMatchesFormat($contents, $changedContent);
         }
     }
     private function normalizeNewlines(string $string) : string

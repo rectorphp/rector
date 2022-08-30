@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use Symplify\SmartFileSystem\SmartFileInfo;
 final class InvalidNameNodeReporter
 {
     /**
@@ -27,10 +27,16 @@ final class InvalidNameNodeReporter
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
     private $nodePrinter;
-    public function __construct(CurrentFileProvider $currentFileProvider, NodePrinterInterface $nodePrinter)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilePathHelper
+     */
+    private $filePathHelper;
+    public function __construct(CurrentFileProvider $currentFileProvider, NodePrinterInterface $nodePrinter, FilePathHelper $filePathHelper)
     {
         $this->currentFileProvider = $currentFileProvider;
         $this->nodePrinter = $nodePrinter;
+        $this->filePathHelper = $filePathHelper;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
@@ -42,15 +48,17 @@ final class InvalidNameNodeReporter
         if ($file instanceof File) {
             $smartFileInfo = $file->getSmartFileInfo();
             $message .= \PHP_EOL . \PHP_EOL;
-            $message .= \sprintf('Caused in "%s" file on line %d on code "%s"', $smartFileInfo->getRelativeFilePathFromCwd(), $node->getStartLine(), $this->nodePrinter->print($node));
+            $relatilveFilePath = $this->filePathHelper->relativePath($smartFileInfo->getRealPath());
+            $message .= \sprintf('Caused in "%s" file on line %d on code "%s"', $relatilveFilePath, $node->getStartLine(), $this->nodePrinter->print($node));
         }
         $backtrace = \debug_backtrace();
         $rectorBacktrace = $this->matchRectorBacktraceCall($backtrace);
         if ($rectorBacktrace !== null) {
             // issues to find the file in prefixed
             if (\file_exists($rectorBacktrace[self::FILE])) {
-                $smartFileInfo = new SmartFileInfo($rectorBacktrace[self::FILE]);
-                $fileAndLine = $smartFileInfo->getRelativeFilePathFromCwd() . ':' . $rectorBacktrace['line'];
+                $filePath = $rectorBacktrace[self::FILE];
+                $relatilveFilePath = $this->filePathHelper->relativePath($filePath);
+                $fileAndLine = $relatilveFilePath . ':' . $rectorBacktrace['line'];
             } else {
                 $fileAndLine = $rectorBacktrace[self::FILE] . ':' . $rectorBacktrace['line'];
             }
