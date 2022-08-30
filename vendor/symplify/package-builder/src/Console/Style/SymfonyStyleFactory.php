@@ -8,7 +8,6 @@ use RectorPrefix202208\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix202208\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix202208\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202208\Symplify\EasyTesting\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 /**
  * @api
@@ -38,9 +37,16 @@ final class SymfonyStyleFactory
             $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_DEBUG);
         }
         // disable output for tests
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+        if ($this->isPHPUnitRun()) {
             $consoleOutput->setVerbosity(OutputInterface::VERBOSITY_QUIET);
         }
         return new SymfonyStyle($argvInput, $consoleOutput);
+    }
+    /**
+     * Never ever used static methods if not neccesary, this is just handy for tests + src to prevent duplication.
+     */
+    private function isPHPUnitRun() : bool
+    {
+        return \defined('RectorPrefix202208\\PHPUNIT_COMPOSER_INSTALL') || \defined('RectorPrefix202208\\__PHPUNIT_PHAR__');
     }
 }

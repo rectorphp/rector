@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd0502117be6e6d45dc8ce25866585357
+class ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -41,7 +41,6 @@ class ComposerStaticInitd0502117be6e6d45dc8ce25866585357
             'RectorPrefix202208\\Symplify\\SmartFileSystem\\' => 44,
             'RectorPrefix202208\\Symplify\\Skipper\\' => 36,
             'RectorPrefix202208\\Symplify\\PackageBuilder\\' => 43,
-            'RectorPrefix202208\\Symplify\\EasyTesting\\' => 40,
             'RectorPrefix202208\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202208\\Symplify\\ComposerJsonManipulator\\' => 52,
             'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\' => 51,
@@ -155,10 +154,6 @@ class ComposerStaticInitd0502117be6e6d45dc8ce25866585357
         'RectorPrefix202208\\Symplify\\PackageBuilder\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/package-builder/src',
-        ),
-        'RectorPrefix202208\\Symplify\\EasyTesting\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/easy-testing/src',
         ),
         'RectorPrefix202208\\Symplify\\EasyParallel\\' => 
         array (
@@ -1334,26 +1329,6 @@ class ComposerStaticInitd0502117be6e6d45dc8ce25866585357
         'RectorPrefix202208\\Symplify\\EasyParallel\\ValueObject\\ParallelProcess' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ParallelProcess.php',
         'RectorPrefix202208\\Symplify\\EasyParallel\\ValueObject\\ProcessPool' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ProcessPool.php',
         'RectorPrefix202208\\Symplify\\EasyParallel\\ValueObject\\Schedule' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/Schedule.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\Command\\ValidateFixtureSkipNamingCommand' => __DIR__ . '/..' . '/symplify/easy-testing/src/Command/ValidateFixtureSkipNamingCommand.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\DataProvider\\StaticFixtureFinder' => __DIR__ . '/..' . '/symplify/easy-testing/src/DataProvider/StaticFixtureFinder.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\DataProvider\\StaticFixtureUpdater' => __DIR__ . '/..' . '/symplify/easy-testing/src/DataProvider/StaticFixtureUpdater.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\Finder\\FixtureFinder' => __DIR__ . '/..' . '/symplify/easy-testing/src/Finder/FixtureFinder.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\FixtureSplitter\\TrioFixtureSplitter' => __DIR__ . '/..' . '/symplify/easy-testing/src/FixtureSplitter/TrioFixtureSplitter.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\Kernel\\EasyTestingKernel' => __DIR__ . '/..' . '/symplify/easy-testing/src/Kernel/EasyTestingKernel.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\MissplacedSkipPrefixResolver' => __DIR__ . '/..' . '/symplify/easy-testing/src/MissplacedSkipPrefixResolver.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\PHPUnit\\Behavior\\DirectoryAssertableTrait' => __DIR__ . '/..' . '/symplify/easy-testing/src/PHPUnit/Behavior/DirectoryAssertableTrait.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\PHPUnit\\StaticPHPUnitEnvironment' => __DIR__ . '/..' . '/symplify/easy-testing/src/PHPUnit/StaticPHPUnitEnvironment.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\StaticFixtureSplitter' => __DIR__ . '/..' . '/symplify/easy-testing/src/StaticFixtureSplitter.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\EasyTestingConfig' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/EasyTestingConfig.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\ExpectedAndOutputFileInfoPair' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/ExpectedAndOutputFileInfoPair.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\FixtureSplit\\TrioContent' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/FixtureSplit/TrioContent.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\IncorrectAndMissingSkips' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/IncorrectAndMissingSkips.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\InputAndExpected' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/InputAndExpected.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\InputFileInfoAndExpected' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/InputFileInfoAndExpected.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\InputFileInfoAndExpectedFileInfo' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/InputFileInfoAndExpectedFileInfo.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/Option.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\Prefix' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/Prefix.php',
-        'RectorPrefix202208\\Symplify\\EasyTesting\\ValueObject\\SplitLine' => __DIR__ . '/..' . '/symplify/easy-testing/src/ValueObject/SplitLine.php',
         'RectorPrefix202208\\Symplify\\PackageBuilder\\Composer\\VendorDirProvider' => __DIR__ . '/..' . '/symplify/package-builder/src/Composer/VendorDirProvider.php',
         'RectorPrefix202208\\Symplify\\PackageBuilder\\Configuration\\StaticEolConfiguration' => __DIR__ . '/..' . '/symplify/package-builder/src/Configuration/StaticEolConfiguration.php',
         'RectorPrefix202208\\Symplify\\PackageBuilder\\Console\\Command\\AbstractSymplifyCommand' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Command/AbstractSymplifyCommand.php',
@@ -3195,9 +3170,9 @@ class ComposerStaticInitd0502117be6e6d45dc8ce25866585357
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd0502117be6e6d45dc8ce25866585357::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd0502117be6e6d45dc8ce25866585357::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd0502117be6e6d45dc8ce25866585357::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505::$classMap;
 
         }, null, ClassLoader::class);
     }
