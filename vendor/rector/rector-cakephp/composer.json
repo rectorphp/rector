@@ -17,11 +17,10 @@
         "symplify\/easy-coding-standard": "^11.1",
         "symplify\/rule-doc-generator": "^11.1",
         "phpstan\/extension-installer": "^1.1",
-        "rector\/phpstan-rules": "^0.5.15",
+        "rector\/phpstan-rules": "^0.6",
         "phpstan\/phpstan-webmozart-assert": "^1.0",
         "phpstan\/phpstan-strict-rules": "^1.1",
         "symplify\/vendor-patches": "^11.1",
-        "symplify\/monorepo-builder": "^11.1",
         "rector\/rector-debugging": "dev-main"
     },
     "autoload": {
@@ -35,7 +34,6 @@
         }
     },
     "scripts": {
-        "release": "vendor\/bin\/monorepo-builder release patch --ansi",
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",

@@ -12,15 +12,15 @@
         "phpstan\/phpstan-strict-rules": "^1.2",
         "phpstan\/phpstan-webmozart-assert": "^1.1",
         "phpunit\/phpunit": "^9.5",
-        "rector\/phpstan-rules": "^0.5",
+        "rector\/phpstan-rules": "^0.6",
         "rector\/rector-debugging": "dev-main",
         "rector\/rector-src": "dev-main",
-        "symplify\/easy-ci": "^11.0",
-        "symplify\/easy-coding-standard": "^11.0",
-        "symplify\/phpstan-extensions": "^11.0",
-        "symplify\/phpstan-rules": "^11.0",
-        "symplify\/rule-doc-generator": "^11.0",
-        "symplify\/vendor-patches": "^11.0"
+        "symplify\/easy-ci": "^11.1",
+        "symplify\/easy-coding-standard": "^11.1",
+        "symplify\/phpstan-extensions": "^11.1",
+        "symplify\/phpstan-rules": "^11.1",
+        "symplify\/rule-doc-generator": "^11.1",
+        "symplify\/vendor-patches": "^11.1"
     },
     "autoload": {
         "psr-4": {

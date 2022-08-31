@@ -98,10 +98,6 @@ final class GetSubscribedEventsClassMethodFactory
         $eventsToMethodsArray = new Array_();
         foreach ($eventsToMethods as $eventName => $methodNamesWithPriorities) {
             $eventNameExpr = $this->eventReferenceFactory->createEventName($eventName, $eventNamesToClassConstants);
-            // just method name, without a priority
-            //            if (! is_array($methodNamesWithPriorities)) {
-            //                $methodNamesWithPriorities = [$methodNamesWithPriorities];
-            //            }
             if (\count($methodNamesWithPriorities) === 1) {
                 $this->createSingleMethod($methodNamesWithPriorities, $eventName, $eventNameExpr, $eventsToMethodsArray);
             } else {
