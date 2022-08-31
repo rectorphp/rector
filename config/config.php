@@ -44,9 +44,11 @@ use Rector\PSR4\Composer\PSR4NamespaceMatcher;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\Utils\Command\MissingInSetCommand;
 use RectorPrefix202208\Symfony\Component\Console\Application;
+use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
 use function RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202208\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
+use RectorPrefix202208\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
 use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
@@ -129,9 +131,9 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(Inflector::class)->factory([service(InflectorFactory::class), 'build']);
     $services->set(VersionParser::class);
     $services->set(TypeChecker::class);
-    // phpdoc parser
-    $services->set(\PHPStan\PhpDocParser\Lexer\Lexer::class);
-    $services->alias(PhpDocParser::class, BetterPhpDocParser::class);
+    // console
+    $services->set(SymfonyStyleFactory::class);
+    $services->set(SymfonyStyle::class)->factory([service(SymfonyStyleFactory::class), 'create']);
     // cache
     $services->set(DependencyResolver::class)->factory([service(PHPStanServicesFactory::class), 'createDependencyResolver']);
     $services->set(FileHelper::class)->factory([service(PHPStanServicesFactory::class), 'createFileHelper']);
@@ -152,6 +154,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(NodeFinder::class);
     // phpdoc parser
     $services->set(PhpDocParser::class);
+    $services->alias(PhpDocParser::class, BetterPhpDocParser::class);
     $services->set(\PHPStan\PhpDocParser\Lexer\Lexer::class);
     $services->set(TypeParser::class);
     $services->set(ConstExprParser::class);

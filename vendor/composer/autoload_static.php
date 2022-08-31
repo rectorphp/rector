@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit564d0a066287c77fcf92d397fb539a4b
+class ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1653,19 +1653,6 @@ class ComposerStaticInit564d0a066287c77fcf92d397fb539a4b
         'Rector\\Compatibility\\NodeFactory\\ConstructorClassMethodFactory' => __DIR__ . '/../..' . '/rules/Compatibility/NodeFactory/ConstructorClassMethodFactory.php',
         'Rector\\Compatibility\\Rector\\Class_\\AttributeCompatibleAnnotationRector' => __DIR__ . '/../..' . '/rules/Compatibility/Rector/Class_/AttributeCompatibleAnnotationRector.php',
         'Rector\\Compatibility\\ValueObject\\PropertyWithPhpDocInfo' => __DIR__ . '/../..' . '/rules/Compatibility/ValueObject/PropertyWithPhpDocInfo.php',
-        'Rector\\Composer\\Application\\FileProcessor\\ComposerFileProcessor' => __DIR__ . '/../..' . '/rules/Composer/Application/FileProcessor/ComposerFileProcessor.php',
-        'Rector\\Composer\\Contract\\Rector\\ComposerRectorInterface' => __DIR__ . '/../..' . '/rules/Composer/Contract/Rector/ComposerRectorInterface.php',
-        'Rector\\Composer\\Contract\\VersionAwareInterface' => __DIR__ . '/../..' . '/rules/Composer/Contract/VersionAwareInterface.php',
-        'Rector\\Composer\\Guard\\VersionGuard' => __DIR__ . '/../..' . '/rules/Composer/Guard/VersionGuard.php',
-        'Rector\\Composer\\Rector\\AddPackageToRequireComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/AddPackageToRequireComposerRector.php',
-        'Rector\\Composer\\Rector\\AddPackageToRequireDevComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/AddPackageToRequireDevComposerRector.php',
-        'Rector\\Composer\\Rector\\ChangePackageVersionComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/ChangePackageVersionComposerRector.php',
-        'Rector\\Composer\\Rector\\RemovePackageComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/RemovePackageComposerRector.php',
-        'Rector\\Composer\\Rector\\RenamePackageComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/RenamePackageComposerRector.php',
-        'Rector\\Composer\\Rector\\ReplacePackageAndVersionComposerRector' => __DIR__ . '/../..' . '/rules/Composer/Rector/ReplacePackageAndVersionComposerRector.php',
-        'Rector\\Composer\\ValueObject\\PackageAndVersion' => __DIR__ . '/../..' . '/rules/Composer/ValueObject/PackageAndVersion.php',
-        'Rector\\Composer\\ValueObject\\RenamePackage' => __DIR__ . '/../..' . '/rules/Composer/ValueObject/RenamePackage.php',
-        'Rector\\Composer\\ValueObject\\ReplacePackageAndVersion' => __DIR__ . '/../..' . '/rules/Composer/ValueObject/ReplacePackageAndVersion.php',
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/packages/Config/RectorConfig.php',
         'Rector\\Core\\Application\\ApplicationFileProcessor' => __DIR__ . '/../..' . '/src/Application/ApplicationFileProcessor.php',
         'Rector\\Core\\Application\\ChangedNodeScopeRefresher' => __DIR__ . '/../..' . '/src/Application/ChangedNodeScopeRefresher.php',
@@ -2671,8 +2658,6 @@ class ComposerStaticInit564d0a066287c77fcf92d397fb539a4b
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
-        'Rector\\PhpDocParser\\PhpDocParser\\SimplePhpDocParser' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/SimplePhpDocParser.php',
-        'Rector\\PhpDocParser\\PhpDocParser\\StaticFactory\\SimplePhpDocParserStaticFactory' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/StaticFactory/SimplePhpDocParserStaticFactory.php',
         'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\Ast\\PhpDoc\\SimplePhpDocNode' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/ValueObject/Ast/PhpDoc/SimplePhpDocNode.php',
         'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
         'Rector\\PhpDocParser\\PhpParser\\SmartPhpParser' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpParser/SmartPhpParser.php',
@@ -3173,9 +3158,9 @@ class ComposerStaticInit564d0a066287c77fcf92d397fb539a4b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit564d0a066287c77fcf92d397fb539a4b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit564d0a066287c77fcf92d397fb539a4b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit564d0a066287c77fcf92d397fb539a4b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946::$classMap;
 
         }, null, ClassLoader::class);
     }

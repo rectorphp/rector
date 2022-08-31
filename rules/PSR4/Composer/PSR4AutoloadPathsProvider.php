@@ -5,7 +5,6 @@ namespace Rector\PSR4\Composer;
 
 use RectorPrefix202208\Nette\Utils\FileSystem;
 use RectorPrefix202208\Nette\Utils\Json;
-use RectorPrefix202208\Symplify\ComposerJsonManipulator\ValueObject\ComposerJsonSection;
 final class PSR4AutoloadPathsProvider
 {
     /**
@@ -22,7 +21,7 @@ final class PSR4AutoloadPathsProvider
         }
         $fileContents = FileSystem::read($this->getComposerJsonPath());
         $composerJson = Json::decode($fileContents, Json::FORCE_ARRAY);
-        $psr4Autoloads = \array_merge($composerJson[ComposerJsonSection::AUTOLOAD]['psr-4'] ?? [], $composerJson[ComposerJsonSection::AUTOLOAD_DEV]['psr-4'] ?? []);
+        $psr4Autoloads = \array_merge($composerJson['autoload']['psr-4'] ?? [], $composerJson['autoload-dev']['psr-4'] ?? []);
         $this->cachedComposerJsonPSR4AutoloadPaths = $this->removeEmptyNamespaces($psr4Autoloads);
         return $this->cachedComposerJsonPSR4AutoloadPaths;
     }
