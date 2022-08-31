@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\New_;
@@ -18,6 +17,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\TypeDeclaration\ValueObject\AssignToVariable;
 final class StrictReturnNewAnalyzer
 {
@@ -36,11 +36,17 @@ final class StrictReturnNewAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
+     */
+    private $returnAnalyzer;
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ReturnAnalyzer $returnAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->returnAnalyzer = $returnAnalyzer;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -59,11 +65,11 @@ final class StrictReturnNewAnalyzer
             return null;
         }
         // is one statement depth 3?
-        if (!$this->areExclusiveExprReturns($returns)) {
+        if (!$this->returnAnalyzer->areExclusiveExprReturns($returns)) {
             return null;
         }
         // has root return?
-        if (!$this->hasClassMethodRootReturn($functionLike)) {
+        if (!$this->returnAnalyzer->hasClassMethodRootReturn($functionLike)) {
             return null;
         }
         if (\count($returns) !== 1) {
@@ -88,30 +94,6 @@ final class StrictReturnNewAnalyzer
             return $className;
         }
         return null;
-    }
-    /**
-     * @param Return_[] $returns
-     */
-    private function areExclusiveExprReturns(array $returns) : bool
-    {
-        foreach ($returns as $return) {
-            if (!$return->expr instanceof Expr) {
-                return \false;
-            }
-        }
-        return \true;
-    }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
-     */
-    private function hasClassMethodRootReturn($functionLike) : bool
-    {
-        foreach ((array) $functionLike->stmts as $stmt) {
-            if ($stmt instanceof Return_) {
-                return \true;
-            }
-        }
-        return \false;
     }
     /**
      * @return array<string, string>

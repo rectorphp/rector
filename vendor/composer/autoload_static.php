@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946
+class ComposerStaticInit3595c7d5f829a41f3682c309e93459b6
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2651,6 +2651,7 @@ class ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946
         'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\FuncCallValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/FuncCallValueResolver.php',
         'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\MagicConstValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/MagicConstValueResolver.php',
         'Rector\\PhpDocParser\\NodeVisitor\\CallableNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeVisitor/CallableNodeVisitor.php',
+        'Rector\\PhpDocParser\\PhpDocInfoAnalyzer' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocInfoAnalyzer.php',
         'Rector\\PhpDocParser\\PhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/Contract/PhpDocNodeVisitorInterface.php',
         'Rector\\PhpDocParser\\PhpDocParser\\Exception\\InvalidTraverseException' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/Exception/InvalidTraverseException.php',
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeTraverser' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeTraverser.php',
@@ -3045,6 +3046,8 @@ class ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ControllerRenderMethodAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ControllerRenderMethodAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\PHPUnitDataProviderResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/PHPUnitDataProviderResolver.php',
+        'Rector\\TypeDeclaration\\NodeAnalyzer\\ParamAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ParamAnalyzer.php',
+        'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnFilter\\ExclusiveNativeCallLikeReturnMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnFilter/ExclusiveNativeCallLikeReturnMatcher.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\AlwaysStrictReturnAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/AlwaysStrictReturnAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictBoolReturnTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictBoolReturnTypeAnalyzer.php',
@@ -3158,9 +3161,9 @@ class ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf3134b9ed12cab2fbd4484930fa12946::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3595c7d5f829a41f3682c309e93459b6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3595c7d5f829a41f3682c309e93459b6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3595c7d5f829a41f3682c309e93459b6::$classMap;
 
         }, null, ClassLoader::class);
     }

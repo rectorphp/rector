@@ -89,7 +89,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         return \strncasecmp(\PHP_OS, 'WIN', 3) === 0;
     }
-    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo)
+    protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo) : void
     {
         if (Strings::match($fixtureFileInfo->getContents(), FixtureSplitter::SPLIT_LINE_REGEX)) {
             // changed content
@@ -104,7 +104,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         $expectedFileInfo = FixtureTempFileDumper::dump($expectedFileContents, $fileSuffix);
         $this->originalTempFileInfo = $inputFileInfo;
         $this->doTestFileMatchesExpectedContent($inputFileInfo, $expectedFileInfo, $fixtureFileInfo);
-        //, $allowMatches);
     }
     protected function getFixtureTempDirectory() : string
     {
@@ -135,7 +134,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
         }
     }
-    private function doTestFileMatchesExpectedContent(SmartFileInfo $originalFileInfo, SmartFileInfo $expectedFileInfo, SmartFileInfo $fixtureFileInfo, bool $allowMatches = \true) : void
+    private function doTestFileMatchesExpectedContent(SmartFileInfo $originalFileInfo, SmartFileInfo $expectedFileInfo, SmartFileInfo $fixtureFileInfo) : void
     {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFileInfo->getRealPath()]);
         $changedContent = $this->processFileInfo($originalFileInfo);
@@ -145,10 +144,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         }
         try {
             $this->assertStringEqualsFile($expectedFileInfo->getRealPath(), $changedContent);
-        } catch (ExpectationFailedException $expectationFailedException) {
-            if (!$allowMatches) {
-                throw $expectationFailedException;
-            }
+        } catch (ExpectationFailedException $exception) {
             FixtureFileUpdater::updateFixtureContent($originalFileInfo, $changedContent, $fixtureFileInfo);
             $contents = $expectedFileInfo->getContents();
             // make sure we don't get a diff in which every line is different (because of differences in EOL)

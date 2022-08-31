@@ -17,6 +17,7 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
 use Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper;
+use Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -50,13 +51,19 @@ final class ParamAnnotationIncorrectNullableRector extends AbstractRector
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(TypeComparator $typeComparator, PhpDocNullableTypeHelper $phpDocNullableTypeHelper, PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, ParamPhpDocNodeFactory $paramPhpDocNodeFactory, PhpVersionProvider $phpVersionProvider)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer
+     */
+    private $paramAnalyzer;
+    public function __construct(TypeComparator $typeComparator, PhpDocNullableTypeHelper $phpDocNullableTypeHelper, PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, ParamPhpDocNodeFactory $paramPhpDocNodeFactory, PhpVersionProvider $phpVersionProvider, ParamAnalyzer $paramAnalyzer)
     {
         $this->typeComparator = $typeComparator;
         $this->phpDocNullableTypeHelper = $phpDocNullableTypeHelper;
         $this->phpDocNestedAnnotationGuard = $phpDocNestedAnnotationGuard;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->paramAnalyzer = $paramAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -115,20 +122,6 @@ CODE_SAMPLE
         $phpDocNode = $phpDocInfo->getPhpDocNode();
         return $this->updateParamTagsIfRequired($phpDocNode, $node, $phpDocInfo);
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
-     */
-    private function matchParamByName(string $desiredParamName, $node) : ?Param
-    {
-        foreach ($node->getParams() as $param) {
-            $paramName = $this->nodeNameResolver->getName($param);
-            if ('$' . $paramName !== $desiredParamName) {
-                continue;
-            }
-            return $param;
-        }
-        return null;
-    }
     private function wasUpdateOfParamTypeRequired(PhpDocInfo $phpDocInfo, Type $newType, Param $param, string $paramName) : bool
     {
         // better skip, could crash hard
@@ -163,7 +156,7 @@ CODE_SAMPLE
             if ($paramTagValueNode->type === null) {
                 continue;
             }
-            $param = $this->matchParamByName($paramTagValueNode->parameterName, $node);
+            $param = $this->paramAnalyzer->getParamByName($paramTagValueNode->parameterName, $node);
             if (!$param instanceof Param) {
                 continue;
             }

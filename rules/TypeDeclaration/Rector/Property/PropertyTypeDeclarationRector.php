@@ -9,11 +9,11 @@ use PhpParser\Node\UnionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\PhpDocParser\PhpDocInfoAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard;
 use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
@@ -44,12 +44,18 @@ final class PropertyTypeDeclarationRector extends AbstractRector
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger, PropertyTypeOverrideGuard $propertyTypeOverrideGuard, PhpVersionProvider $phpVersionProvider)
+    /**
+     * @readonly
+     * @var \Rector\PhpDocParser\PhpDocInfoAnalyzer
+     */
+    private $phpDocInfoAnalyzer;
+    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger, PropertyTypeOverrideGuard $propertyTypeOverrideGuard, PhpVersionProvider $phpVersionProvider, PhpDocInfoAnalyzer $phpDocInfoAnalyzer)
     {
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->propertyTypeOverrideGuard = $propertyTypeOverrideGuard;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->phpDocInfoAnalyzer = $phpDocInfoAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -102,7 +108,7 @@ CODE_SAMPLE
         if ($phpDocInfo->hasInheritDoc() && !$node->isPrivate()) {
             return null;
         }
-        if ($this->isVarDocAlreadySet($phpDocInfo)) {
+        if ($this->phpDocInfoAnalyzer->isVarDocAlreadySet($phpDocInfo)) {
             return null;
         }
         $type = $this->varDocPropertyTypeInferer->inferProperty($node);
@@ -118,16 +124,6 @@ CODE_SAMPLE
         }
         $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
         return $node;
-    }
-    private function isVarDocAlreadySet(PhpDocInfo $phpDocInfo) : bool
-    {
-        foreach (['@var', '@phpstan-var', '@psalm-var'] as $tagName) {
-            $varType = $phpDocInfo->getVarType($tagName);
-            if (!$varType instanceof MixedType) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function completeTypedProperty(Type $type, Property $property) : void
     {

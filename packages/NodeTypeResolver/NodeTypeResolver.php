@@ -258,9 +258,6 @@ final class NodeTypeResolver
         $bareType = TypeCombinator::removeNull($nodeType);
         return \is_a($bareType, $desiredType, \true);
     }
-    /**
-     * @return class-string
-     */
     public function getFullyQualifiedClassName(TypeWithClassName $typeWithClassName) : string
     {
         if ($typeWithClassName instanceof ShortenedObjectType) {
