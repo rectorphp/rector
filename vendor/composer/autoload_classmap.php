@@ -2686,6 +2686,7 @@ return array(
     'Rector\\Symfony\\ValueObject\\ValidatorAssert\\PropertyAndAnnotation' => $vendorDir . '/rector/rector-symfony/src/ValueObject/ValidatorAssert/PropertyAndAnnotation.php',
     'Rector\\Testing\\Contract\\RectorTestInterface' => $baseDir . '/packages/Testing/Contract/RectorTestInterface.php',
     'Rector\\Testing\\Fixture\\FixtureFileFinder' => $baseDir . '/packages/Testing/Fixture/FixtureFileFinder.php',
+    'Rector\\Testing\\Fixture\\FixtureFileUpdater' => $baseDir . '/packages/Testing/Fixture/FixtureFileUpdater.php',
     'Rector\\Testing\\Fixture\\FixtureSplitter' => $baseDir . '/packages/Testing/Fixture/FixtureSplitter.php',
     'Rector\\Testing\\Fixture\\FixtureTempFileDumper' => $baseDir . '/packages/Testing/Fixture/FixtureTempFileDumper.php',
     'Rector\\Testing\\PHPUnit\\AbstractRectorTestCase' => $baseDir . '/packages/Testing/PHPUnit/AbstractRectorTestCase.php',

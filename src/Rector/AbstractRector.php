@@ -238,7 +238,7 @@ CODE_SAMPLE;
             $refactoredNode->setAttribute(AttributeKey::PARENT_NODE, $node->getAttribute(AttributeKey::PARENT_NODE));
             $this->connectParentNodes($refactoredNode);
         }
-        /** @var MutatingScope $currentScope */
+        /** @var MutatingScope|null $currentScope */
         $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
         $this->changedNodeScopeRefresher->refresh($refactoredNode, $currentScope, $this->file->getSmartFileInfo());
         // is equals node type? return node early
