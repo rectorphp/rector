@@ -16,7 +16,6 @@ use RectorPrefix202208\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix202208\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use RectorPrefix202208\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use RectorPrefix202208\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
-use RectorPrefix202208\Symplify\Skipper\ValueObject\SkipperConfig;
 final class RectorKernel
 {
     /**
@@ -83,6 +82,6 @@ final class RectorKernel
      */
     private function createDefaultConfigFiles() : array
     {
-        return [__DIR__ . '/../../config/config.php', SkipperConfig::FILE_PATH, ConsoleColorDiffConfig::FILE_PATH];
+        return [__DIR__ . '/../../config/config.php', ConsoleColorDiffConfig::FILE_PATH];
     }
 }

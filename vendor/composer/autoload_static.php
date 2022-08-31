@@ -4,13 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb496a15bdfc18f074819e8d555e3628c
+class ComposerStaticInit0b84aa542f2b6aae334995f456d549cd
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '2324d0e5cadd603331d27de142371f0b' => __DIR__ . '/..' . '/symfony/contracts/Deprecation/function.php',
@@ -39,7 +39,6 @@ class ComposerStaticInitb496a15bdfc18f074819e8d555e3628c
             'RectorPrefix202208\\Webmozart\\Assert\\' => 36,
             'RectorPrefix202208\\Symplify\\SymplifyKernel\\' => 43,
             'RectorPrefix202208\\Symplify\\SmartFileSystem\\' => 44,
-            'RectorPrefix202208\\Symplify\\Skipper\\' => 36,
             'RectorPrefix202208\\Symplify\\PackageBuilder\\' => 43,
             'RectorPrefix202208\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\' => 51,
@@ -145,10 +144,6 @@ class ComposerStaticInitb496a15bdfc18f074819e8d555e3628c
         'RectorPrefix202208\\Symplify\\SmartFileSystem\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/smart-file-system/src',
-        ),
-        'RectorPrefix202208\\Symplify\\Skipper\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/skipper/src',
         ),
         'RectorPrefix202208\\Symplify\\PackageBuilder\\' => 
         array (
@@ -1338,22 +1333,6 @@ class ComposerStaticInitb496a15bdfc18f074819e8d555e3628c
         'RectorPrefix202208\\Symplify\\PackageBuilder\\ValueObject\\MethodName' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/MethodName.php',
         'RectorPrefix202208\\Symplify\\PackageBuilder\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/Option.php',
         'RectorPrefix202208\\Symplify\\PackageBuilder\\Yaml\\ParametersMerger' => __DIR__ . '/..' . '/symplify/package-builder/src/Yaml/ParametersMerger.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\Contract\\SkipVoterInterface' => __DIR__ . '/..' . '/symplify/skipper/src/Contract/SkipVoterInterface.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\FileSystem\\FnMatchPathNormalizer' => __DIR__ . '/..' . '/symplify/skipper/src/FileSystem/FnMatchPathNormalizer.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\Matcher\\FileInfoMatcher' => __DIR__ . '/..' . '/symplify/skipper/src/Matcher/FileInfoMatcher.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\SkipCriteriaResolver\\SkippedClassAndCodesResolver' => __DIR__ . '/..' . '/symplify/skipper/src/SkipCriteriaResolver/SkippedClassAndCodesResolver.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\SkipCriteriaResolver\\SkippedClassResolver' => __DIR__ . '/..' . '/symplify/skipper/src/SkipCriteriaResolver/SkippedClassResolver.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\SkipCriteriaResolver\\SkippedMessagesResolver' => __DIR__ . '/..' . '/symplify/skipper/src/SkipCriteriaResolver/SkippedMessagesResolver.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\SkipCriteriaResolver\\SkippedPathsResolver' => __DIR__ . '/..' . '/symplify/skipper/src/SkipCriteriaResolver/SkippedPathsResolver.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\SkipVoter\\ClassAndCodeSkipVoter' => __DIR__ . '/..' . '/symplify/skipper/src/SkipVoter/ClassAndCodeSkipVoter.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\SkipVoter\\ClassSkipVoter' => __DIR__ . '/..' . '/symplify/skipper/src/SkipVoter/ClassSkipVoter.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\SkipVoter\\MessageSkipVoter' => __DIR__ . '/..' . '/symplify/skipper/src/SkipVoter/MessageSkipVoter.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\SkipVoter\\PathSkipVoter' => __DIR__ . '/..' . '/symplify/skipper/src/SkipVoter/PathSkipVoter.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\Skipper\\OnlySkipper' => __DIR__ . '/..' . '/symplify/skipper/src/Skipper/OnlySkipper.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\Skipper\\SkipSkipper' => __DIR__ . '/..' . '/symplify/skipper/src/Skipper/SkipSkipper.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\Skipper\\Skipper' => __DIR__ . '/..' . '/symplify/skipper/src/Skipper/Skipper.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/skipper/src/ValueObject/Option.php',
-        'RectorPrefix202208\\Symplify\\Skipper\\ValueObject\\SkipperConfig' => __DIR__ . '/..' . '/symplify/skipper/src/ValueObject/SkipperConfig.php',
         'RectorPrefix202208\\Symplify\\SmartFileSystem\\Exception\\DirectoryNotFoundException' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Exception/DirectoryNotFoundException.php',
         'RectorPrefix202208\\Symplify\\SmartFileSystem\\Exception\\FileNotFoundException' => __DIR__ . '/..' . '/symplify/smart-file-system/src/Exception/FileNotFoundException.php',
         'RectorPrefix202208\\Symplify\\SmartFileSystem\\FileSystemFilter' => __DIR__ . '/..' . '/symplify/smart-file-system/src/FileSystemFilter.php',
@@ -2752,6 +2731,17 @@ class ComposerStaticInitb496a15bdfc18f074819e8d555e3628c
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
         'Rector\\Set\\ValueObject\\LevelSetList' => __DIR__ . '/../..' . '/packages/Set/ValueObject/LevelSetList.php',
         'Rector\\Set\\ValueObject\\SetList' => __DIR__ . '/../..' . '/packages/Set/ValueObject/SetList.php',
+        'Rector\\Skipper\\Contract\\SkipVoterInterface' => __DIR__ . '/../..' . '/packages/Skipper/Contract/SkipVoterInterface.php',
+        'Rector\\Skipper\\Enum\\AsteriskMatch' => __DIR__ . '/../..' . '/packages/Skipper/Enum/AsteriskMatch.php',
+        'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => __DIR__ . '/../..' . '/packages/Skipper/FileSystem/FnMatchPathNormalizer.php',
+        'Rector\\Skipper\\Fnmatcher' => __DIR__ . '/../..' . '/packages/Skipper/Fnmatcher.php',
+        'Rector\\Skipper\\Matcher\\FileInfoMatcher' => __DIR__ . '/../..' . '/packages/Skipper/Matcher/FileInfoMatcher.php',
+        'Rector\\Skipper\\SkipCriteriaResolver\\SkippedClassResolver' => __DIR__ . '/../..' . '/packages/Skipper/SkipCriteriaResolver/SkippedClassResolver.php',
+        'Rector\\Skipper\\SkipCriteriaResolver\\SkippedPathsResolver' => __DIR__ . '/../..' . '/packages/Skipper/SkipCriteriaResolver/SkippedPathsResolver.php',
+        'Rector\\Skipper\\SkipVoter\\ClassSkipVoter' => __DIR__ . '/../..' . '/packages/Skipper/SkipVoter/ClassSkipVoter.php',
+        'Rector\\Skipper\\SkipVoter\\PathSkipVoter' => __DIR__ . '/../..' . '/packages/Skipper/SkipVoter/PathSkipVoter.php',
+        'Rector\\Skipper\\Skipper\\SkipSkipper' => __DIR__ . '/../..' . '/packages/Skipper/Skipper/SkipSkipper.php',
+        'Rector\\Skipper\\Skipper\\Skipper' => __DIR__ . '/../..' . '/packages/Skipper/Skipper/Skipper.php',
         'Rector\\StaticTypeMapper\\Contract\\PhpDocParser\\PhpDocTypeMapperInterface' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/Contract/PhpDocParser/PhpDocTypeMapperInterface.php',
         'Rector\\StaticTypeMapper\\Contract\\PhpParser\\PhpParserNodeMapperInterface' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/Contract/PhpParser/PhpParserNodeMapperInterface.php',
         'Rector\\StaticTypeMapper\\Mapper\\PhpParserNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/Mapper/PhpParserNodeMapper.php',
@@ -3148,9 +3138,9 @@ class ComposerStaticInitb496a15bdfc18f074819e8d555e3628c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb496a15bdfc18f074819e8d555e3628c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb496a15bdfc18f074819e8d555e3628c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb496a15bdfc18f074819e8d555e3628c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0b84aa542f2b6aae334995f456d549cd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0b84aa542f2b6aae334995f456d549cd::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0b84aa542f2b6aae334995f456d549cd::$classMap;
 
         }, null, ClassLoader::class);
     }

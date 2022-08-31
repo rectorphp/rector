@@ -40,9 +40,9 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
+use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202208\Symplify\Skipper\Skipper\Skipper;
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     /**
@@ -126,7 +126,7 @@ CODE_SAMPLE;
      */
     private $currentNodeProvider;
     /**
-     * @var \Symplify\Skipper\Skipper\Skipper
+     * @var \Rector\Skipper\Skipper\Skipper
      */
     private $skipper;
     /**

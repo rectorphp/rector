@@ -100,7 +100,7 @@ final class SmartFileInfo extends SplFileInfo
             return \true;
         }
         // in case of relative compare
-        return \fnmatch('*/' . $this->normalizePath($string), $this->getNormalizedRealPath());
+        return \fnmatch('*/' . $normalizedPath, $this->getNormalizedRealPath());
     }
     public function getRealPath() : string
     {

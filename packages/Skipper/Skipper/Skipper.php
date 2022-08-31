@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208\Symplify\Skipper\Skipper;
+namespace Rector\Skipper\Skipper;
 
-use RectorPrefix202208\Symplify\Skipper\Contract\SkipVoterInterface;
+use Rector\Skipper\Contract\SkipVoterInterface;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
- * @see \Symplify\Skipper\Tests\Skipper\Skipper\SkipperTest
+ * @see \Rector\Tests\Skipper\Skipper\Skipper\SkipperTest
  */
 final class Skipper
 {
@@ -17,6 +17,7 @@ final class Skipper
     private const FILE_ELEMENT = 'file_elements';
     /**
      * @var SkipVoterInterface[]
+     * @readonly
      */
     private $skipVoters;
     /**
@@ -40,13 +41,16 @@ final class Skipper
     }
     /**
      * @param string|object $element
+     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $smartFileInfo
      */
-    public function shouldSkipElementAndFileInfo($element, SmartFileInfo $smartFileInfo) : bool
+    public function shouldSkipElementAndFileInfo($element, $smartFileInfo) : bool
     {
         foreach ($this->skipVoters as $skipVoter) {
-            if ($skipVoter->match($element)) {
-                return $skipVoter->shouldSkip($element, $smartFileInfo);
+            if (!$skipVoter->match($element)) {
+                continue;
             }
+            //            dump(get_class($skipVoter));
+            return $skipVoter->shouldSkip($element, $smartFileInfo);
         }
         return \false;
     }

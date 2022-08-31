@@ -10,7 +10,7 @@ use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix202208\Symplify\Skipper\Skipper\Skipper;
+use Rector\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
     /**
@@ -19,7 +19,7 @@ final class PostFileProcessor
     private $postRectors = [];
     /**
      * @readonly
-     * @var \Symplify\Skipper\Skipper\Skipper
+     * @var \Rector\Skipper\Skipper\Skipper
      */
     private $skipper;
     /**

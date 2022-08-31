@@ -36,7 +36,6 @@
         "symplify\/phpstan-extensions": "<11.1.6",
         "symplify\/rule-doc-generator": "<11.1.6",
         "symplify\/vendor-patches": "<11.1.6",
-        "symplify\/skipper": "<11.1.6",
         "symplify\/smart-file-system": "<11.1.6",
         "symplify\/symfony-static-dumper": "<11.1.6",
         "symplify\/symplify-kernel": "<11.1.6",

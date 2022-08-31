@@ -51,12 +51,14 @@ use RectorPrefix202208\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
 use RectorPrefix202208\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix202208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
 use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemGuard;
 use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix202208\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);
@@ -158,4 +160,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(\PHPStan\PhpDocParser\Lexer\Lexer::class);
     $services->set(TypeParser::class);
     $services->set(ConstExprParser::class);
+    // skipper
+    $services->set(ClassLikeExistenceChecker::class);
+    $services->set(PathNormalizer::class);
 };

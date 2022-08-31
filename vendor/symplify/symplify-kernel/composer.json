@@ -38,7 +38,6 @@
         "symplify\/phpstan-extensions": "<11.1.6",
         "symplify\/rule-doc-generator": "<11.1.6",
         "symplify\/vendor-patches": "<11.1.6",
-        "symplify\/skipper": "<11.1.6",
         "symplify\/symfony-static-dumper": "<11.1.6",
         "symplify\/monorepo-builder": "<11.1.6",
         "symplify\/config-transformer": "<11.1.6",

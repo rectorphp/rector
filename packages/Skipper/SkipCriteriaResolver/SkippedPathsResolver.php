@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208\Symplify\Skipper\SkipCriteriaResolver;
+namespace Rector\Skipper\SkipCriteriaResolver;
 
+use Rector\Core\Configuration\Option;
 use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202208\Symplify\Skipper\ValueObject\Option;
 use RectorPrefix202208\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 /**
- * @see \Symplify\Skipper\Tests\SkipCriteriaResolver\SkippedPathsResolver\SkippedPathsResolverTest
+ * @see \Rector\Tests\Skipper\SkipCriteriaResolver\SkippedPathsResolver\SkippedPathsResolverTest
  */
 final class SkippedPathsResolver
 {
@@ -16,10 +16,12 @@ final class SkippedPathsResolver
      */
     private $skippedPaths = [];
     /**
+     * @readonly
      * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
      */
     private $pathNormalizer;
@@ -45,7 +47,7 @@ final class SkippedPathsResolver
                 $this->skippedPaths[] = $this->pathNormalizer->normalizePath($value);
                 continue;
             }
-            if (\strpos($value, '*') !== \false) {
+            if (\strpos((string) $value, '*') !== \false) {
                 $this->skippedPaths[] = $this->pathNormalizer->normalizePath($value);
                 continue;
             }
