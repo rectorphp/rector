@@ -25,6 +25,7 @@ return array(
     'RectorPrefix202208\\Symplify\\Skipper\\' => array($vendorDir . '/symplify/skipper/src'),
     'RectorPrefix202208\\Symplify\\PackageBuilder\\' => array($vendorDir . '/symplify/package-builder/src'),
     'RectorPrefix202208\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
+    'RectorPrefix202208\\Symplify\\ComposerJsonManipulator\\' => array($vendorDir . '/symplify/composer-json-manipulator/src'),
     'RectorPrefix202208\\Symplify\\AutowireArrayParameter\\' => array($vendorDir . '/symplify/autowire-array-parameter/src'),
     'RectorPrefix202208\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
     'RectorPrefix202208\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),

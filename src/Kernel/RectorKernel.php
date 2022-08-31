@@ -11,14 +11,13 @@ use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCal
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
 use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix202208\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202208\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202208\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix202208\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use RectorPrefix202208\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use RectorPrefix202208\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
 use RectorPrefix202208\Symplify\Skipper\ValueObject\SkipperConfig;
-use RectorPrefix202208\Symplify\SymplifyKernel\ContainerBuilderFactory;
-use RectorPrefix202208\Symplify\SymplifyKernel\Contract\LightKernelInterface;
-final class RectorKernel implements LightKernelInterface
+final class RectorKernel
 {
     /**
      * @readonly
@@ -33,17 +32,21 @@ final class RectorKernel implements LightKernelInterface
     {
         $this->configureCallValuesCollector = new ConfigureCallValuesCollector();
     }
+    public function create() : ContainerInterface
+    {
+        return $this->createFromConfigs([]);
+    }
     /**
      * @param string[] $configFiles
      */
-    public function createFromConfigs(array $configFiles) : \RectorPrefix202208\Psr\Container\ContainerInterface
+    public function createFromConfigs(array $configFiles) : ContainerBuilder
     {
         $defaultConfigFiles = $this->createDefaultConfigFiles();
         $configFiles = \array_merge($defaultConfigFiles, $configFiles);
         $compilerPasses = $this->createCompilerPasses();
         $configureCallMergingLoaderFactory = new ConfigureCallMergingLoaderFactory($this->configureCallValuesCollector);
-        $containerBuilderFactory = new ContainerBuilderFactory($configureCallMergingLoaderFactory);
-        $containerBuilder = $containerBuilderFactory->create($configFiles, $compilerPasses, []);
+        $containerBuilderFactory = new \Rector\Core\Kernel\ContainerBuilderFactory($configureCallMergingLoaderFactory);
+        $containerBuilder = $containerBuilderFactory->create($configFiles, $compilerPasses);
         // @see https://symfony.com/blog/new-in-symfony-4-4-dependency-injection-improvements-part-1
         $containerBuilder->setParameter('container.dumper.inline_factories', \true);
         // to fix reincluding files again
@@ -52,7 +55,7 @@ final class RectorKernel implements LightKernelInterface
         $this->container = $containerBuilder;
         return $containerBuilder;
     }
-    public function getContainer() : \RectorPrefix202208\Psr\Container\ContainerInterface
+    public function getContainer() : ContainerInterface
     {
         if ($this->container === null) {
             throw new ShouldNotHappenException();

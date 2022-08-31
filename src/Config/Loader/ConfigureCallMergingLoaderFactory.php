@@ -11,8 +11,7 @@ use RectorPrefix202208\Symfony\Component\Config\Loader\GlobFileLoader;
 use RectorPrefix202208\Symfony\Component\Config\Loader\LoaderInterface;
 use RectorPrefix202208\Symfony\Component\Config\Loader\LoaderResolver;
 use RectorPrefix202208\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202208\Symplify\SymplifyKernel\Contract\Config\LoaderFactoryInterface;
-final class ConfigureCallMergingLoaderFactory implements LoaderFactoryInterface
+final class ConfigureCallMergingLoaderFactory
 {
     /**
      * @readonly
