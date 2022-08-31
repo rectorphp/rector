@@ -1,4 +1,4 @@
-# 400 Rules Overview
+# 401 Rules Overview
 
 <br>
 
@@ -44,7 +44,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (14)
+- [Php74](#php74) (15)
 
 - [Php80](#php80) (19)
 
@@ -5690,6 +5690,19 @@ Use null coalescing operator ??=
  $array = [];
 -$array['user_id'] = $array['user_id'] ?? 'value';
 +$array['user_id'] ??= 'value';
+```
+
+<br>
+
+### ParenthesizeNestedTernaryRector
+
+Add parentheses to nested ternary
+
+- class: [`Rector\Php74\Rector\Ternary\ParenthesizeNestedTernaryRector`](../rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php)
+
+```diff
+-$value = $a ? $b : $a ?: null;
++$value = ($a ? $b : $a) ?: null;
 ```
 
 <br>

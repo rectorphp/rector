@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505
+class ComposerStaticInitc1cc5cd24cd4152a38120c2b0c19c808
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -2556,7 +2556,9 @@ class ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505
         'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
         'Rector\\Php74\\Rector\\Property\\TypedPropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/TypedPropertyRector.php',
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
+        'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',
         'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
+        'Rector\\Php74\\Tokenizer\\ParenthesizedNestedTernaryAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/ParenthesizedNestedTernaryAnalyzer.php',
         'Rector\\Php74\\TypeAnalyzer\\ObjectTypeAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/TypeAnalyzer/ObjectTypeAnalyzer.php',
         'Rector\\Php80\\AttributeDecorator\\JMSAccessTypeAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/JMSAccessTypeAttributeDecorator.php',
         'Rector\\Php80\\AttributeDecorator\\SensioParamConverterAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/SensioParamConverterAttributeDecorator.php',
@@ -3170,9 +3172,9 @@ class ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9925dc93bdd89dc64690fe2737f1c505::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc1cc5cd24cd4152a38120c2b0c19c808::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc1cc5cd24cd4152a38120c2b0c19c808::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc1cc5cd24cd4152a38120c2b0c19c808::$classMap;
 
         }, null, ClassLoader::class);
     }

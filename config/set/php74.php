@@ -18,6 +18,7 @@ use Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector;
 use Rector\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector;
 use Rector\Php74\Rector\Property\TypedPropertyRector;
 use Rector\Php74\Rector\StaticCall\ExportToReflectionFunctionRector;
+use Rector\Php74\Rector\Ternary\ParenthesizeNestedTernaryRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(TypedPropertyRector::class);
@@ -42,4 +43,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(RestoreDefaultNullToNullableTypePropertyRector::class);
     $rectorConfig->rule(CurlyToSquareBracketArrayStringRector::class);
     $rectorConfig->rule(MoneyFormatToNumberFormatRector::class);
+    $rectorConfig->rule(ParenthesizeNestedTernaryRector::class);
 };
