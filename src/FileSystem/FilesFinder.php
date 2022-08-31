@@ -8,7 +8,6 @@ use Rector\Core\Util\StringUtils;
 use RectorPrefix202208\Symfony\Component\Finder\Finder;
 use RectorPrefix202208\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix202208\Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
-use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
 use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
@@ -32,11 +31,6 @@ final class FilesFinder
     private $filesystemTweaker;
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\FileSystemFilter
-     */
-    private $fileSystemFilter;
-    /**
-     * @readonly
      * @var \Symplify\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
@@ -45,12 +39,17 @@ final class FilesFinder
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;
-    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, FileSystemFilter $fileSystemFilter, SkippedPathsResolver $skippedPathsResolver, UnchangedFilesFilter $unchangedFilesFilter)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FileAndDirectoryFilter
+     */
+    private $fileAndDirectoryFilter;
+    public function __construct(\Rector\Core\FileSystem\FilesystemTweaker $filesystemTweaker, SkippedPathsResolver $skippedPathsResolver, UnchangedFilesFilter $unchangedFilesFilter, \Rector\Core\FileSystem\FileAndDirectoryFilter $fileAndDirectoryFilter)
     {
         $this->filesystemTweaker = $filesystemTweaker;
-        $this->fileSystemFilter = $fileSystemFilter;
         $this->skippedPathsResolver = $skippedPathsResolver;
         $this->unchangedFilesFilter = $unchangedFilesFilter;
+        $this->fileAndDirectoryFilter = $fileAndDirectoryFilter;
     }
     /**
      * @param string[] $source
@@ -60,8 +59,8 @@ final class FilesFinder
     public function findInDirectoriesAndFiles(array $source, array $suffixes = []) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
-        $filePaths = $this->fileSystemFilter->filterFiles($filesAndDirectories);
-        $directories = $this->fileSystemFilter->filterDirectories($filesAndDirectories);
+        $filePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
+        $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $smartFileInfos = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
         return \array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
     }
