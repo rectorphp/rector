@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\FileSystem;
 
-use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202208\Webmozart\Assert\Assert;
+use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202209\Webmozart\Assert\Assert;
 final class FilePathHelper
 {
     /**
@@ -18,6 +18,9 @@ final class FilePathHelper
     }
     public function relativePath(string $fileRealPath) : string
     {
+        if (!$this->filesystem->isAbsolutePath($fileRealPath)) {
+            return $fileRealPath;
+        }
         return $this->relativeFilePathFromDirectory($fileRealPath, \getcwd());
     }
     /**

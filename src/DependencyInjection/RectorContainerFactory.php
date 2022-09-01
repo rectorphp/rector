@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection;
 
-use RectorPrefix202208\Nette\Utils\FileSystem;
-use RectorPrefix202208\Psr\Container\ContainerInterface;
+use RectorPrefix202209\Nette\Utils\FileSystem;
+use RectorPrefix202209\Psr\Container\ContainerInterface;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Exception\DeprecatedException;

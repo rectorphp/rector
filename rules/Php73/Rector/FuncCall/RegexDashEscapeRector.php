@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php73\Rector\FuncCall;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;

@@ -4,14 +4,24 @@ declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
 use Iterator;
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202208\Symfony\Component\Finder\Finder;
-use RectorPrefix202208\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202209\Symfony\Component\Finder\Finder;
+use RectorPrefix202209\Symfony\Component\Finder\SplFileInfo;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix202208\Symplify\SmartFileSystem\Exception\FileNotFoundException;
+use RectorPrefix202209\Symplify\SmartFileSystem\Exception\FileNotFoundException;
 final class FixtureFileFinder
 {
+    /**
+     * @return Iterator<array<int, string>>
+     */
+    public static function yieldFilePathsFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
+    {
+        $fileInfos = self::findFilesInDirectory($directory, $suffix);
+        foreach ($fileInfos as $fileInfo) {
+            (yield [$fileInfo->getRealPath()]);
+        }
+    }
     /**
      * @return Iterator<array<int, SmartFileInfo>>
      */

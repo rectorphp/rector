@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202208\Symfony\Component\Config\Definition;
+namespace RectorPrefix202209\Symfony\Component\Config\Definition;
 
-use RectorPrefix202208\Symfony\Component\Config\Definition\Exception\Exception;
-use RectorPrefix202208\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
-use RectorPrefix202208\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix202208\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
-use RectorPrefix202208\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
+use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\Exception;
+use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\ForbiddenOverwriteException;
+use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
 /**
  * The base node class.
  *

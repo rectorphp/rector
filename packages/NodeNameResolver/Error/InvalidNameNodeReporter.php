@@ -46,9 +46,9 @@ final class InvalidNameNodeReporter
         $message = \sprintf('Pick more specific node than "%s", e.g. "$node->name"', \get_class($node));
         $file = $this->currentFileProvider->getFile();
         if ($file instanceof File) {
-            $smartFileInfo = $file->getSmartFileInfo();
+            //            $smartFileInfo = $file->getFilePath(); // getSmartFileInfo();
             $message .= \PHP_EOL . \PHP_EOL;
-            $relatilveFilePath = $this->filePathHelper->relativePath($smartFileInfo->getRealPath());
+            $relatilveFilePath = $this->filePathHelper->relativePath($file->getFilePath());
             $message .= \sprintf('Caused in "%s" file on line %d on code "%s"', $relatilveFilePath, $node->getStartLine(), $this->nodePrinter->print($node));
         }
         $backtrace = \debug_backtrace();

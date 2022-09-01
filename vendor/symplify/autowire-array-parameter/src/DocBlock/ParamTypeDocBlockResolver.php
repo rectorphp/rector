@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208\Symplify\AutowireArrayParameter\DocBlock;
+namespace RectorPrefix202209\Symplify\AutowireArrayParameter\DocBlock;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 /**
  * @see \Symplify\AutowireArrayParameter\Tests\DocBlock\ParamTypeDocBlockResolverTest
  */

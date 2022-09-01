@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Skipper\SkipCriteriaResolver;
 
 use Rector\Core\Configuration\Option;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202208\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202209\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 /**
  * @see \Rector\Tests\Skipper\SkipCriteriaResolver\SkippedPathsResolver\SkippedPathsResolverTest
  */

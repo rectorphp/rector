@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202208\React\Dns\Query;
+namespace RectorPrefix202209\React\Dns\Query;
 
 interface ExecutorInterface
 {

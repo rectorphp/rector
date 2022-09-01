@@ -9,7 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202209\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<ArrayItemNode>
  */

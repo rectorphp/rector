@@ -19,8 +19,7 @@ use Rector\Laravel\NodeFactory\RouterRegisterNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix202208\Webmozart\Assert\Assert;
+use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * @changelog https://laravel.com/docs/8.x/upgrade#automatic-controller-namespace-prefixing
  *
@@ -144,7 +143,7 @@ CODE_SAMPLE
             return null;
         }
         [$controller, $method] = $segments;
-        $namespace = $this->getNamespace($this->file->getSmartFileInfo());
+        $namespace = $this->getNamespace($this->file->getFilePath());
         if (\strncmp($controller, '\\', \strlen('\\')) !== 0) {
             $controller = $namespace . '\\' . $controller;
         }
@@ -178,9 +177,8 @@ CODE_SAMPLE
         }
         return \strpos($action, '@') !== \false;
     }
-    private function getNamespace(SmartFileInfo $fileInfo) : string
+    private function getNamespace(string $filePath) : string
     {
-        $realpath = $fileInfo->getRealPath();
-        return $this->routes[$realpath] ?? $this->namespace;
+        return $this->routes[$filePath] ?? $this->namespace;
     }
 }

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\NodeManipulator;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\New_;
@@ -34,7 +34,7 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ClassRenamer
 {
     /**

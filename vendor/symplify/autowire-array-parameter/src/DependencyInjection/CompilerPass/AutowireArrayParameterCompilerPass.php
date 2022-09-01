@@ -1,20 +1,20 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass;
+namespace RectorPrefix202209\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use ReflectionClass;
 use ReflectionMethod;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202208\Symplify\AutowireArrayParameter\DependencyInjection\DefinitionFinder;
-use RectorPrefix202208\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver;
-use RectorPrefix202208\Symplify\AutowireArrayParameter\Skipper\ParameterSkipper;
-use RectorPrefix202208\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver;
-use RectorPrefix202208\Symplify\PackageBuilder\ValueObject\MethodName;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202209\Symplify\AutowireArrayParameter\DependencyInjection\DefinitionFinder;
+use RectorPrefix202209\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver;
+use RectorPrefix202209\Symplify\AutowireArrayParameter\Skipper\ParameterSkipper;
+use RectorPrefix202209\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver;
+use RectorPrefix202209\Symplify\PackageBuilder\ValueObject\MethodName;
 /**
  * @inspiration https://github.com/nette/di/pull/178
  * @see \Symplify\AutowireArrayParameter\Tests\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPassTest
@@ -33,7 +33,7 @@ final class AutowireArrayParameterCompilerPass implements CompilerPassInterface
      * @var string[]
      * @noRector
      */
-    private $excludedFatalClasses = ['RectorPrefix202208\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix202208\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix202208\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix202208\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix202208\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix202208\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix202208\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix202208\\Sonata\\Twig\\Extension\\TemplateExtension', 'RectorPrefix202208\\Symfony\\Component\\HttpKernel\\KernelInterface'];
+    private $excludedFatalClasses = ['RectorPrefix202209\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix202209\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix202209\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix202209\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix202209\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix202209\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix202209\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix202209\\Sonata\\Twig\\Extension\\TemplateExtension', 'RectorPrefix202209\\Symfony\\Component\\HttpKernel\\KernelInterface'];
     /**
      * @var \Symplify\AutowireArrayParameter\DependencyInjection\DefinitionFinder
      */

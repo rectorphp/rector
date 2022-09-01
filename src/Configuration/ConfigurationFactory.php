@@ -6,8 +6,8 @@ namespace Rector\Core\Configuration;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix202208\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202209\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class ConfigurationFactory
 {
     /**

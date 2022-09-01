@@ -3,13 +3,13 @@
 declare (strict_types=1);
 namespace Rector\Testing\TestingParser;
 
+use RectorPrefix202209\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\Core\Configuration\Option;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * @api
  */
@@ -38,9 +38,8 @@ final class TestingParser
     }
     public function parseFilePathToFile(string $filePath) : File
     {
-        $smartFileInfo = new SmartFileInfo($filePath);
-        $file = new File($smartFileInfo, $smartFileInfo->getContents());
-        $stmts = $this->rectorParser->parseFile($smartFileInfo);
+        $file = new File($filePath, FileSystem::read($filePath));
+        $stmts = $this->rectorParser->parseFile($filePath);
         $file->hydrateStmtsAndTokens($stmts, $stmts, []);
         return $file;
     }
@@ -51,10 +50,9 @@ final class TestingParser
     {
         // autoload file
         require_once $filePath;
-        $smartFileInfo = new SmartFileInfo($filePath);
         $this->parameterProvider->changeParameter(Option::SOURCE, [$filePath]);
-        $nodes = $this->rectorParser->parseFile($smartFileInfo);
-        $file = new File($smartFileInfo, $smartFileInfo->getContents());
+        $nodes = $this->rectorParser->parseFile($filePath);
+        $file = new File($filePath, FileSystem::read($filePath));
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $nodes);
     }
 }

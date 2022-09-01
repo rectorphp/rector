@@ -7,9 +7,8 @@ use Rector\Caching\UnchangedFilesFilter;
 use Rector\Core\Util\StringUtils;
 use Rector\Skipper\Enum\AsteriskMatch;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
-use RectorPrefix202208\Symfony\Component\Finder\Finder;
-use RectorPrefix202208\Symfony\Component\Finder\SplFileInfo;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202209\Symfony\Component\Finder\Finder;
+use RectorPrefix202209\Symfony\Component\Finder\SplFileInfo;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
  */
@@ -45,20 +44,20 @@ final class FilesFinder
     /**
      * @param string[] $source
      * @param string[] $suffixes
-     * @return SmartFileInfo[]
+     * @return string[]
      */
     public function findInDirectoriesAndFiles(array $source, array $suffixes = []) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         $filePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
-        $smartFileInfos = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
-        return \array_merge($smartFileInfos, $this->findInDirectories($directories, $suffixes));
+        $currentAndDependentFilePaths = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
+        return \array_merge($currentAndDependentFilePaths, $this->findInDirectories($directories, $suffixes));
     }
     /**
      * @param string[] $directories
      * @param string[] $suffixes
-     * @return SmartFileInfo[]
+     * @return string[]
      */
     private function findInDirectories(array $directories, array $suffixes) : array
     {
@@ -71,11 +70,11 @@ final class FilesFinder
             $finder->name($suffixesPattern);
         }
         $this->addFilterWithExcludedPaths($finder);
-        $smartFileInfos = [];
+        $filePaths = [];
         foreach ($finder as $fileInfo) {
-            $smartFileInfos[] = new SmartFileInfo($fileInfo->getRealPath());
+            $filePaths[] = $fileInfo->getRealPath();
         }
-        return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($smartFileInfos);
+        return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
     }
     /**
      * @param string[] $suffixes

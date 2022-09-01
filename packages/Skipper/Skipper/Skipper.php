@@ -39,6 +39,10 @@ final class Skipper
     {
         return $this->shouldSkipElementAndFileInfo(self::FILE_ELEMENT, $smartFileInfo);
     }
+    public function shouldSkipFilePath(string $filePath) : bool
+    {
+        return $this->shouldSkipElementAndFileInfo(self::FILE_ELEMENT, $filePath);
+    }
     /**
      * @param string|object $element
      * @param \Symplify\SmartFileSystem\SmartFileInfo|string $smartFileInfo

@@ -17,7 +17,7 @@
         "rector\/rector-debugging": "dev-main",
         "rector\/phpstan-rules": "^0.6",
         "rector\/rector-generator": "^0.6",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-main#946f5b1",
         "symfony\/routing": "^6.1",
         "symfony\/security-core": "^6.1",
         "symfony\/security-http": "^6.1",

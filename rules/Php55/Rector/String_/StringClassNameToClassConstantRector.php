@@ -15,10 +15,10 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202208\Webmozart\Assert\Assert;
+use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/class_name_scalars https://github.com/symfony/symfony/blob/2.8/UPGRADE-2.8.md#form
  *

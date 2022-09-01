@@ -48,8 +48,8 @@ final class FileProcessor
     public function parseFileInfoToLocalCache(File $file) : void
     {
         // store tokens by absolute path, so we don't have to print them right now
-        $smartFileInfo = $file->getSmartFileInfo();
-        $stmtsAndTokens = $this->rectorParser->parseFileToStmtsAndTokens($smartFileInfo);
+        //        $smartFileInfo = $file->getSmartFileInfo();
+        $stmtsAndTokens = $this->rectorParser->parseFileToStmtsAndTokens($file->getFilePath());
         $oldStmts = $stmtsAndTokens->getStmts();
         $oldTokens = $stmtsAndTokens->getTokens();
         $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $oldStmts);

@@ -10,12 +10,12 @@ use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202208\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use RectorPrefix202208\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
-use RectorPrefix202208\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202209\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
+use RectorPrefix202209\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
+use RectorPrefix202209\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
 final class RectorKernel
 {
     /**

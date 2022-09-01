@@ -22,7 +22,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
-use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

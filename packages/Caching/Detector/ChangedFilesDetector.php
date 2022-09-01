@@ -3,11 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Caching\Detector;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
 use Rector\Caching\Enum\CacheKey;
-use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * Inspired by https://github.com/symplify/symplify/pull/90/files#diff-72041b2e1029a08930e13d79d298ef11
  *
@@ -33,23 +32,23 @@ final class ChangedFilesDetector
     /**
      * @param string[] $dependentFiles
      */
-    public function addFileWithDependencies(SmartFileInfo $smartFileInfo, array $dependentFiles) : void
+    public function addFileWithDependencies(string $filePath, array $dependentFiles) : void
     {
-        $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
-        $hash = $this->hashFile($smartFileInfo);
-        $this->cache->save($fileInfoCacheKey, CacheKey::FILE_HASH_KEY, $hash);
-        $this->cache->save($fileInfoCacheKey . '_files', CacheKey::DEPENDENT_FILES_KEY, $dependentFiles);
+        $filePathCacheKey = $this->getFilePathCacheKey($filePath);
+        $hash = $this->hashFile($filePath);
+        $this->cache->save($filePathCacheKey, CacheKey::FILE_HASH_KEY, $hash);
+        $this->cache->save($filePathCacheKey . '_files', CacheKey::DEPENDENT_FILES_KEY, $dependentFiles);
     }
-    public function hasFileChanged(SmartFileInfo $smartFileInfo) : bool
+    public function hasFileChanged(string $filePath) : bool
     {
-        $currentFileHash = $this->hashFile($smartFileInfo);
-        $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
+        $currentFileHash = $this->hashFile($filePath);
+        $fileInfoCacheKey = $this->getFilePathCacheKey($filePath);
         $cachedValue = $this->cache->load($fileInfoCacheKey, CacheKey::FILE_HASH_KEY);
         return $currentFileHash !== $cachedValue;
     }
-    public function invalidateFile(SmartFileInfo $smartFileInfo) : void
+    public function invalidateFile(string $filePath) : void
     {
-        $fileInfoCacheKey = $this->getFileInfoCacheKey($smartFileInfo);
+        $fileInfoCacheKey = $this->getFilePathCacheKey($filePath);
         $this->cache->clean($fileInfoCacheKey);
     }
     public function clear() : void
@@ -57,24 +56,24 @@ final class ChangedFilesDetector
         $this->cache->clear();
     }
     /**
-     * @return SmartFileInfo[]
+     * @return string[]
      */
-    public function getDependentFileInfos(SmartFileInfo $fileInfo) : array
+    public function getDependentFilePaths(string $filePath) : array
     {
-        $fileInfoCacheKey = $this->getFileInfoCacheKey($fileInfo);
+        $fileInfoCacheKey = $this->getFilePathCacheKey($filePath);
         $cacheValue = $this->cache->load($fileInfoCacheKey . '_files', CacheKey::DEPENDENT_FILES_KEY);
         if ($cacheValue === null) {
             return [];
         }
-        $dependentFileInfos = [];
+        $existingDependentFiles = [];
         $dependentFiles = $cacheValue;
         foreach ($dependentFiles as $dependentFile) {
             if (!\file_exists($dependentFile)) {
                 continue;
             }
-            $dependentFileInfos[] = new SmartFileInfo($dependentFile);
+            $existingDependentFiles[] = $dependentFile;
         }
-        return $dependentFileInfos;
+        return $existingDependentFiles;
     }
     /**
      * @api
@@ -85,13 +84,13 @@ final class ChangedFilesDetector
         $configHash = $this->fileHashComputer->compute($filePath);
         $this->storeConfigurationDataHash($filePath, $configHash);
     }
-    private function getFileInfoCacheKey(SmartFileInfo $smartFileInfo) : string
+    private function getFilePathCacheKey(string $filePath) : string
     {
-        return \sha1($smartFileInfo->getRealPath());
+        return \sha1($filePath);
     }
-    private function hashFile(SmartFileInfo $smartFileInfo) : string
+    private function hashFile(string $filePath) : string
     {
-        return (string) \sha1_file($smartFileInfo->getRealPath());
+        return (string) \sha1_file($filePath);
     }
     private function storeConfigurationDataHash(string $filePath, string $configurationHash) : void
     {

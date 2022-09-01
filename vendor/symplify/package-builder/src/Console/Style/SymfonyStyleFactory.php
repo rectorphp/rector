@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208\Symplify\PackageBuilder\Console\Style;
+namespace RectorPrefix202209\Symplify\PackageBuilder\Console\Style;
 
-use RectorPrefix202208\Symfony\Component\Console\Application;
-use RectorPrefix202208\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202208\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202208\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix202209\Symfony\Component\Console\Application;
+use RectorPrefix202209\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202209\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202209\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202209\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 /**
  * @api
  */
@@ -47,6 +47,6 @@ final class SymfonyStyleFactory
      */
     private function isPHPUnitRun() : bool
     {
-        return \defined('RectorPrefix202208\\PHPUNIT_COMPOSER_INSTALL') || \defined('RectorPrefix202208\\__PHPUNIT_PHAR__');
+        return \defined('RectorPrefix202209\\PHPUNIT_COMPOSER_INSTALL') || \defined('RectorPrefix202209\\__PHPUNIT_PHAR__');
     }
 }

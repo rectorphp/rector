@@ -6,7 +6,7 @@ namespace Rector\Skipper\SkipVoter;
 use Rector\Skipper\Contract\SkipVoterInterface;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Skipper\Skipper\SkipSkipper;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\SmartFileSystem\SmartFileInfo;
 final class ClassSkipVoter implements SkipVoterInterface
 {

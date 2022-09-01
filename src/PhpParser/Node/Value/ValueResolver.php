@@ -235,14 +235,21 @@ final class ValueResolver
     private function resolveDirConstant() : string
     {
         $file = $this->currentFileProvider->getFile();
-        $smartFileInfo = $file->getSmartFileInfo();
-        return $smartFileInfo->getPath();
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+            throw new ShouldNotHappenException();
+        }
+        return \dirname($file->getFilePath());
     }
     private function resolveFileConstant(File $file) : string
     {
         $file = $this->currentFileProvider->getFile();
-        $smartFileInfo = $file->getSmartFileInfo();
-        return $smartFileInfo->getPathname();
+        if (!$file instanceof \Rector\Core\ValueObject\Application\File) {
+            throw new ShouldNotHappenException();
+        }
+        return $file->getFilePath();
+        //
+        //        $smartFileInfo = $file->getSmartFileInfo();
+        //        return $smartFileInfo->getPathname();
     }
     /**
      * @return string|mixed

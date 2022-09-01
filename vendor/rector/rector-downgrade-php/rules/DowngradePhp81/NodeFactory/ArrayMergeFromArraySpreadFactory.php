@@ -155,8 +155,7 @@ final class ArrayMergeFromArraySpreadFactory
         // depending on their position.
         // The number can't be at the end of the var name, or it would
         // conflict with the counter (for if that name is already taken)
-        $smartFileInfo = $file->getSmartFileInfo();
-        $realPath = $smartFileInfo->getRealPath();
+        $realPath = $file->getFilePath();
         $position = $this->lastPositionCurrentFile[$realPath] ?? $position;
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($array, $mutatingScope, 'item' . $position . 'Unpacked');
         if ($this->shouldIncrement) {

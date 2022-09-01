@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix202209\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix202208\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

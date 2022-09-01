@@ -9,10 +9,10 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Core\PhpParser\Printer\NeighbourClassLikePrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PSR4\FileInfoAnalyzer\FileInfoDeletionAnalyzer;
 use Rector\PSR4\NodeManipulator\NamespaceManipulator;
-use Rector\Symfony\Printer\NeighbourClassLikePrinter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,7 +32,7 @@ final class MultipleClassFileToPsr4ClassesRector extends AbstractRector
     private $fileInfoDeletionAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Symfony\Printer\NeighbourClassLikePrinter
+     * @var \Rector\Core\PhpParser\Printer\NeighbourClassLikePrinter
      */
     private $neighbourClassLikePrinter;
     /**
@@ -109,9 +109,8 @@ CODE_SAMPLE
         if ($nodeToReturn !== null) {
             return $nodeToReturn;
         }
-        $smartFileInfo = $this->file->getSmartFileInfo();
         // 2. nothing to return - remove the file
-        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+        $this->removedAndAddedFilesCollector->removeFile($this->file->getFilePath());
         return null;
     }
     private function hasAtLeastTwoClassLikes(Node $node) : bool
@@ -157,8 +156,8 @@ CODE_SAMPLE
      */
     private function printNewNodes(ClassLike $classLike, $mainNode) : void
     {
-        $smartFileInfo = $this->file->getSmartFileInfo();
-        $this->neighbourClassLikePrinter->printClassLike($classLike, $mainNode, $smartFileInfo, $this->file);
+        $filePath = $this->file->getFilePath();
+        $this->neighbourClassLikePrinter->printClassLike($classLike, $mainNode, $filePath, $this->file);
     }
     /**
      * @return ClassLike[]

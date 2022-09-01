@@ -10,7 +10,7 @@ use Rector\Core\Contract\Rector\ScopeAwarePhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ScopeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202209\Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRector implements ScopeAwarePhpRectorInterface
 {
     /**
@@ -33,10 +33,9 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
         /** @var MutatingScope|null $scope */
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof MutatingScope) {
-            $smartFileInfo = $this->file->getSmartFileInfo();
-            $scope = $this->scopeAnalyzer->resolveScope($node, $smartFileInfo);
+            $scope = $this->scopeAnalyzer->resolveScope($node, $this->file->getFilePath());
             if ($scope instanceof MutatingScope) {
-                $this->changedNodeScopeRefresher->refresh($node, $scope, $smartFileInfo);
+                $this->changedNodeScopeRefresher->refresh($node, $scope, $this->file->getFilePath());
             }
         }
         if (!$scope instanceof Scope) {

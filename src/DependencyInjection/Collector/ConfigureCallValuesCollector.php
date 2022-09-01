@@ -6,10 +6,10 @@ namespace Rector\Core\DependencyInjection\Collector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use ReflectionClass;
 use ReflectionClassConstant;
-use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202208\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202208\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix202209\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202209\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ConfigureCallValuesCollector
 {
     /**

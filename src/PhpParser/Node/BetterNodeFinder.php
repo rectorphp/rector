@@ -25,8 +25,8 @@ use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
-use RectorPrefix202208\Webmozart\Assert\Assert;
+use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
  */

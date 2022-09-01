@@ -12,7 +12,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202208\Webmozart\Assert\Assert;
+use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * @changelog https://laravel.com/docs/7.x/database-testing#creating-models
  * @changelog https://laravel.com/docs/8.x/database-testing#applying-states

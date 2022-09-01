@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Caching;
 
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Symplify\SmartFileSystem\SmartFileInfo;
 final class UnchangedFilesFilter
 {
     /**
@@ -17,23 +16,20 @@ final class UnchangedFilesFilter
         $this->changedFilesDetector = $changedFilesDetector;
     }
     /**
-     * @param SmartFileInfo[]|string[] $fileInfos
-     * @return SmartFileInfo[]
+     * @param string[] $filePaths
+     * @return string[]
      */
-    public function filterAndJoinWithDependentFileInfos(array $fileInfos) : array
+    public function filterAndJoinWithDependentFileInfos(array $filePaths) : array
     {
         $changedFileInfos = [];
         $dependentFileInfos = [];
-        foreach ($fileInfos as $fileInfo) {
-            if (\is_string($fileInfo)) {
-                $fileInfo = new SmartFileInfo($fileInfo);
-            }
-            if (!$this->changedFilesDetector->hasFileChanged($fileInfo)) {
+        foreach ($filePaths as $filePath) {
+            if (!$this->changedFilesDetector->hasFileChanged($filePath)) {
                 continue;
             }
-            $changedFileInfos[] = $fileInfo;
-            $this->changedFilesDetector->invalidateFile($fileInfo);
-            $dependentFileInfos = \array_merge($dependentFileInfos, $this->changedFilesDetector->getDependentFileInfos($fileInfo));
+            $changedFileInfos[] = $filePath;
+            $this->changedFilesDetector->invalidateFile($filePath);
+            $dependentFileInfos = \array_merge($dependentFileInfos, $this->changedFilesDetector->getDependentFilePaths($filePath));
         }
         // add dependent files
         $dependentFileInfos = \array_merge($dependentFileInfos, $changedFileInfos);

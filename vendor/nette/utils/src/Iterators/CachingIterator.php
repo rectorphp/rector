@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202208\Nette\Iterators;
+namespace RectorPrefix202209\Nette\Iterators;
 
-use RectorPrefix202208\Nette;
+use RectorPrefix202209\Nette;
 /**
  * Smarter caching iterator.
  *

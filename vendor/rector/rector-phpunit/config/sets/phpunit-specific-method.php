@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208;
+namespace RectorPrefix202209;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector;

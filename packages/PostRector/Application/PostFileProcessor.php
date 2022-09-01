@@ -81,7 +81,6 @@ final class PostFileProcessor
         if (!$file instanceof File) {
             return \false;
         }
-        $smartFileInfo = $file->getSmartFileInfo();
-        return $this->skipper->shouldSkipElementAndFileInfo($postRector, $smartFileInfo);
+        return $this->skipper->shouldSkipElementAndFileInfo($postRector, $file->getFilePath());
     }
 }

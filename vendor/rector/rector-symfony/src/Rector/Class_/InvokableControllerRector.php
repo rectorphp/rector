@@ -134,11 +134,10 @@ CODE_SAMPLE
             if (!$parentNamespace instanceof Node) {
                 throw new ShouldNotHappenException('Missing parent namespace or without namespace node');
             }
-            $this->neighbourClassLikePrinter->printClassLike($invokableControllerClass, $parentNamespace, $this->file->getSmartFileInfo(), $this->file);
+            $this->neighbourClassLikePrinter->printClassLike($invokableControllerClass, $parentNamespace, $this->file->getFilePath(), $this->file);
         }
         // remove original file
-        $smartFileInfo = $this->file->getSmartFileInfo();
-        $this->removedAndAddedFilesCollector->removeFile($smartFileInfo);
+        $this->removedAndAddedFilesCollector->removeFile($this->file->getFilePath());
         return null;
     }
     private function refactorSingleAction(ClassMethod $actionClassMethod, Class_ $class) : Class_

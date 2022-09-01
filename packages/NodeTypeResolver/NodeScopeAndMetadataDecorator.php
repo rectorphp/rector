@@ -45,8 +45,7 @@ final class NodeScopeAndMetadataDecorator
      */
     public function decorateNodesFromFile(File $file, array $stmts) : array
     {
-        $smartFileInfo = $file->getSmartFileInfo();
-        $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo);
+        $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $file->getFilePath());
         $nodeTraverser = new NodeTraverser();
         // needed also for format preserving printing
         $nodeTraverser->addVisitor($this->cloningVisitor);

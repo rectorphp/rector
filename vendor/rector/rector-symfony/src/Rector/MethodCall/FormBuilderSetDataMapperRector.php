@@ -89,13 +89,15 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'setDataMapper')) {
             return null;
         }
-        $argumentValue = $node->getArgs()[0]->value;
+        $args = $node->getArgs();
+        $firstArg = $args[0];
+        $argumentValue = $firstArg->value;
         if ($this->isObjectType($argumentValue, $this->dataMapperInterface) || $this->isObjectType($argumentValue, $this->dataMapperObjectType)) {
             return null;
         }
         $propertyPathAccessor = new New_(new FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataAccessor\\PropertyPathAccessor'));
         $newArgumentValue = new New_(new FullyQualified(self::DATAMAPPER_CLASS), [new Arg($propertyPathAccessor)]);
-        $node->getArgs()[0]->value = $newArgumentValue;
+        $firstArg->value = $newArgumentValue;
         return $node;
     }
 }

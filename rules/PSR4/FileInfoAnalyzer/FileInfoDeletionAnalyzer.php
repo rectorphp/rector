@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PSR4\FileInfoAnalyzer;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\ValueObject\Application\File;
@@ -33,8 +33,10 @@ final class FileInfoDeletionAnalyzer
     public function isClassLikeAndFileInfoMatch(File $file, ClassLike $classLike) : bool
     {
         $className = (string) $this->nodeNameResolver->getName($classLike);
-        $smartFileInfo = $file->getSmartFileInfo();
-        $baseFileName = $this->clearNameFromTestingPrefix($smartFileInfo->getBasenameWithoutSuffix());
+        $filePath = $file->getFilePath();
+        // getSmartFileInfo();
+        $basename = \pathinfo($filePath, \PATHINFO_BASENAME);
+        $baseFileName = $this->clearNameFromTestingPrefix($basename);
         $classShortName = $this->classNaming->getShortName($className);
         return $baseFileName === $classShortName;
     }

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208\Symplify\PackageBuilder\Composer;
+namespace RectorPrefix202209\Symplify\PackageBuilder\Composer;
 
-use RectorPrefix202208\Composer\Autoload\ClassLoader;
+use RectorPrefix202209\Composer\Autoload\ClassLoader;
 use ReflectionClass;
 /**
  * @api

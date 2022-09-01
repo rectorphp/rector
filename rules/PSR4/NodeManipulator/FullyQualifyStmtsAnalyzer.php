@@ -17,7 +17,7 @@ use Rector\Core\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 final class FullyQualifyStmtsAnalyzer
 {
     /**

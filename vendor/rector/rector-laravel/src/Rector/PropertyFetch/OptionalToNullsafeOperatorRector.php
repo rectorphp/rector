@@ -20,10 +20,10 @@ use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202208\Webmozart\Assert\Assert;
+use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * @changelog https://github.com/laravel/laravel/pull/5670
  * @changelog https://github.com/laravel/framework/pull/38868

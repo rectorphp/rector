@@ -13,8 +13,8 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202208\Webmozart\Assert\Assert;
+use RectorPrefix202209\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<mixed[]>
  */

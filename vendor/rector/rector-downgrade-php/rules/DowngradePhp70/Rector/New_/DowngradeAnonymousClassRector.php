@@ -125,7 +125,7 @@ CODE_SAMPLE
     }
     private function createAnonymousClassName() : string
     {
-        $smartFileInfo = $this->file->getSmartFileInfo();
-        return self::ANONYMOUS_CLASS_PREFIX . \md5($smartFileInfo->getRealPath()) . '__' . \count($this->classes);
+        $filePathHash = \md5($this->file->getFilePath());
+        return self::ANONYMOUS_CLASS_PREFIX . $filePathHash . '__' . \count($this->classes);
     }
 }

@@ -18,11 +18,10 @@ use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use RectorPrefix202208\Symfony\Component\Console\Application;
-use RectorPrefix202208\Symfony\Component\Console\Command\Command;
-use RectorPrefix202208\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202208\Symfony\Component\Console\Output\OutputInterface;
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202209\Symfony\Component\Console\Application;
+use RectorPrefix202209\Symfony\Component\Console\Command\Command;
+use RectorPrefix202209\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202209\Symfony\Component\Console\Output\OutputInterface;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
@@ -146,16 +145,15 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     }
     private function invalidateCacheForChangedAndErroredFiles(ProcessResult $processResult) : void
     {
-        foreach ($processResult->getChangedFileInfos() as $changedFileInfo) {
-            $this->changedFilesDetector->invalidateFile($changedFileInfo);
+        foreach ($processResult->getChangedFilePaths() as $changedFilePath) {
+            $this->changedFilesDetector->invalidateFile($changedFilePath);
         }
         foreach ($processResult->getErrors() as $systemError) {
             $errorFile = $systemError->getFile();
             if (!\is_string($errorFile)) {
                 continue;
             }
-            $errorFileInfo = new SmartFileInfo($errorFile);
-            $this->changedFilesDetector->invalidateFile($errorFileInfo);
+            $this->changedFilesDetector->invalidateFile($errorFile);
         }
     }
     private function resolveReturnCode(ProcessResult $processResult, Configuration $configuration) : int

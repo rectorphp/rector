@@ -7,7 +7,6 @@ use PhpParser\Lexer;
 use PhpParser\Node\Stmt;
 use PHPStan\Parser\Parser;
 use Rector\Core\PhpParser\ValueObject\StmtsAndTokens;
-use Symplify\SmartFileSystem\SmartFileInfo;
 final class RectorParser
 {
     /**
@@ -28,13 +27,13 @@ final class RectorParser
     /**
      * @return Stmt[]
      */
-    public function parseFile(SmartFileInfo $smartFileInfo) : array
+    public function parseFile(string $filePath) : array
     {
-        return $this->parser->parseFile($smartFileInfo->getRealPath());
+        return $this->parser->parseFile($filePath);
     }
-    public function parseFileToStmtsAndTokens(SmartFileInfo $smartFileInfo) : StmtsAndTokens
+    public function parseFileToStmtsAndTokens(string $filePath) : StmtsAndTokens
     {
-        $stmts = $this->parseFile($smartFileInfo);
+        $stmts = $this->parseFile($filePath);
         $tokens = $this->lexer->getTokens();
         return new StmtsAndTokens($stmts, $tokens);
     }

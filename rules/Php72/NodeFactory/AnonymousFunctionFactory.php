@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
@@ -48,7 +48,7 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use ReflectionParameter;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class AnonymousFunctionFactory
 {
     /**

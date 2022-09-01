@@ -16,16 +16,15 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202208\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202208\Symplify\EasyParallel\CpuCoreCountProvider;
-use RectorPrefix202208\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-use RectorPrefix202208\Symplify\EasyParallel\FileSystem\FilePathNormalizer;
-use RectorPrefix202208\Symplify\EasyParallel\ScheduleFactory;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix202208\Webmozart\Assert\Assert;
+use RectorPrefix202209\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202209\Symplify\EasyParallel\CpuCoreCountProvider;
+use RectorPrefix202209\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+//use Symplify\EasyParallel\FileSystem\FilePathNormalizer;
+use RectorPrefix202209\Symplify\EasyParallel\ScheduleFactory;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix202209\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
     /**
@@ -88,11 +87,6 @@ final class ApplicationFileProcessor
     private $scheduleFactory;
     /**
      * @readonly
-     * @var \Symplify\EasyParallel\FileSystem\FilePathNormalizer
-     */
-    private $filePathNormalizer;
-    /**
-     * @readonly
      * @var \Symplify\EasyParallel\CpuCoreCountProvider
      */
     private $cpuCoreCountProvider;
@@ -104,7 +98,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ParametersMerger $parametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, FilePathNormalizer $filePathNormalizer, CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
+    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ParametersMerger $parametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
     {
         $this->filesystem = $filesystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
@@ -116,7 +110,7 @@ final class ApplicationFileProcessor
         $this->parallelFileProcessor = $parallelFileProcessor;
         $this->parameterProvider = $parameterProvider;
         $this->scheduleFactory = $scheduleFactory;
-        $this->filePathNormalizer = $filePathNormalizer;
+        //        private readonly FilePathNormalizer $filePathNormalizer,
         $this->cpuCoreCountProvider = $cpuCoreCountProvider;
         $this->fileProcessors = $fileProcessors;
     }
@@ -193,9 +187,11 @@ final class ApplicationFileProcessor
     }
     private function printFile(File $file) : void
     {
-        $smartFileInfo = $file->getSmartFileInfo();
-        $this->filesystem->dumpFile($smartFileInfo->getPathname(), $file->getFileContent());
-        $this->filesystem->chmod($smartFileInfo->getRealPath(), $smartFileInfo->getPerms());
+        $filePath = $file->getFilePath();
+        //        $smartFileInfo = $file->getFilePath() getSmartFileInfo();
+        $this->filesystem->dumpFile($filePath, $file->getFileContent());
+        // @todo how to keep original chmod rights?
+        // $this->filesystem->chmod($filePath, $smartFileInfo->getPerms());
     }
     /**
      * Inspired by @see https://github.com/phpstan/phpstan-src/blob/89af4e7db257750cdee5d4259ad312941b6b25e8/src/Analyser/Analyser.php#L134
@@ -221,13 +217,14 @@ final class ApplicationFileProcessor
         \restore_error_handler();
     }
     /**
-     * @param SmartFileInfo[] $fileInfos
+     * @param string[] $filePaths
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    private function runParallel(array $fileInfos, Configuration $configuration, InputInterface $input) : array
+    private function runParallel(array $filePaths, Configuration $configuration, InputInterface $input) : array
     {
+        // @todo possibly relative paths?
         // must be a string, otherwise the serialization returns empty arrays
-        $filePaths = $this->filePathNormalizer->resolveFilePathsFromFileInfos($fileInfos);
+        // $filePaths // = $this->filePathNormalizer->resolveFilePathsFromFileInfos($filePaths);
         $schedule = $this->scheduleFactory->create($this->cpuCoreCountProvider->provide(), $this->parameterProvider->provideIntParameter(Option::PARALLEL_JOB_SIZE), $this->parameterProvider->provideIntParameter(Option::PARALLEL_MAX_NUMBER_OF_PROCESSES), $filePaths);
         // for progress bar
         $isProgressBarStarted = \false;
@@ -280,14 +277,15 @@ final class ApplicationFileProcessor
     private function resolvePhpFilePaths(array $files) : array
     {
         Assert::allIsAOf($files, File::class);
-        $filePaths = [];
+        $phpFilePaths = [];
         foreach ($files as $file) {
-            $smartFileInfo = $file->getSmartFileInfo();
-            $pathname = $smartFileInfo->getPathname();
-            if (\substr_compare($pathname, '.php', -\strlen('.php')) === 0) {
-                $filePaths[] = $pathname;
+            $filePath = $file->getFilePath();
+            //            $smartFileInfo = $file->getSmartFileInfo();
+            //            $pathname = $smartFileInfo->getPathname();
+            if (\substr_compare($filePath, '.php', -\strlen('.php')) === 0) {
+                $phpFilePaths[] = $filePath;
             }
         }
-        return $filePaths;
+        return $phpFilePaths;
     }
 }

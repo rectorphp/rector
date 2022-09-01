@@ -3,23 +3,21 @@
 declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
+use RectorPrefix202209\Nette\Utils\FileSystem;
 use Symplify\SmartFileSystem\SmartFileInfo;
-use RectorPrefix202208\Symplify\SmartFileSystem\SmartFileSystem;
-/**
- * @api
- */
+use RectorPrefix202209\Symplify\SmartFileSystem\SmartFileSystem;
 final class FixtureFileUpdater
 {
     /**
      * @param \Symplify\SmartFileSystem\SmartFileInfo|string $originalFileInfo
      */
-    public static function updateFixtureContent($originalFileInfo, string $changedContent, SmartFileInfo $fixtureFileInfo) : void
+    public static function updateFixtureContent($originalFileInfo, string $changedContent, string $fixtureFilepath) : void
     {
         if (!\getenv('UPDATE_TESTS') && !\getenv('UT')) {
             return;
         }
         $newOriginalContent = self::resolveNewFixtureContent($originalFileInfo, $changedContent);
-        self::getSmartFileSystem()->dumpFile($fixtureFileInfo->getRealPath(), $newOriginalContent);
+        FileSystem::write($fixtureFilepath, $newOriginalContent);
     }
     public static function updateExpectedFixtureContent(string $newOriginalContent, SmartFileInfo $expectedFixtureFileInfo) : void
     {

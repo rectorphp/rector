@@ -24,7 +24,7 @@ use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

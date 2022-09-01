@@ -11,7 +11,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Symplify\SmartFileSystem\SmartFileInfo;
 final class BundleClassResolver
 {
     /**
@@ -70,8 +69,7 @@ final class BundleClassResolver
     }
     private function resolveClassNameFromFilePath(string $filePath) : ?string
     {
-        $fileInfo = new SmartFileInfo($filePath);
-        $nodes = $this->rectorParser->parseFile($fileInfo);
+        $nodes = $this->rectorParser->parseFile($filePath);
         $this->addFullyQualifiedNamesToNodes($nodes);
         $classLike = $this->betterNodeFinder->findFirstNonAnonymousClass($nodes);
         if (!$classLike instanceof ClassLike) {

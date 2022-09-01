@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202208\Symfony\Component\Config\Loader;
+namespace RectorPrefix202209\Symfony\Component\Config\Loader;
 
-use RectorPrefix202208\Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
-use RectorPrefix202208\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
-use RectorPrefix202208\Symfony\Component\Config\Exception\LoaderLoadException;
-use RectorPrefix202208\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix202208\Symfony\Component\Config\Resource\FileExistenceResource;
-use RectorPrefix202208\Symfony\Component\Config\Resource\GlobResource;
+use RectorPrefix202209\Symfony\Component\Config\Exception\FileLoaderImportCircularReferenceException;
+use RectorPrefix202209\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
+use RectorPrefix202209\Symfony\Component\Config\Exception\LoaderLoadException;
+use RectorPrefix202209\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix202209\Symfony\Component\Config\Resource\FileExistenceResource;
+use RectorPrefix202209\Symfony\Component\Config\Resource\GlobResource;
 /**
  * FileLoader is the abstract class used by all built-in loaders that are file based.
  *

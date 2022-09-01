@@ -42,7 +42,7 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202209\Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     /**
@@ -240,7 +240,7 @@ CODE_SAMPLE;
         }
         /** @var MutatingScope|null $currentScope */
         $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
-        $this->changedNodeScopeRefresher->refresh($refactoredNode, $currentScope, $this->file->getSmartFileInfo());
+        $this->changedNodeScopeRefresher->refresh($refactoredNode, $currentScope, $this->file->getFilePath());
         // is equals node type? return node early
         if (\get_class($originalNode) === \get_class($refactoredNode)) {
             return $refactoredNode;
@@ -341,11 +341,12 @@ CODE_SAMPLE;
         if ($this->exclusionManager->isNodeSkippedByRector($node, static::class)) {
             return \true;
         }
-        $smartFileInfo = $this->file->getSmartFileInfo();
-        if ($this->skipper->shouldSkipElementAndFileInfo($this, $smartFileInfo)) {
+        $filePath = $this->file->getFilePath();
+        // getSmartFileInfo();
+        if ($this->skipper->shouldSkipElementAndFileInfo($this, $filePath)) {
             return \true;
         }
-        $rectifiedNode = $this->rectifiedAnalyzer->verify(static::class, $node, $smartFileInfo);
+        $rectifiedNode = $this->rectifiedAnalyzer->verify(static::class, $node, $this->file->getFilePath());
         return $rectifiedNode instanceof RectifiedNode;
     }
     private function connectParentNodes(Node $node) : void

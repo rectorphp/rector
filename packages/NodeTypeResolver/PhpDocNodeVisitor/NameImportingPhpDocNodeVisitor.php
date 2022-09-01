@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use PhpParser\Node as PhpParserNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
@@ -21,8 +21,8 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**

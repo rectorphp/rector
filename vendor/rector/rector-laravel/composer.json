@@ -7,7 +7,7 @@
         "php": ">=8.1"
     },
     "require-dev": {
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-main#ef56c1d",
         "phpunit\/phpunit": "^9.5",
         "phpstan\/phpstan": "^1.8.2",
         "symplify\/phpstan-rules": "^11.0",

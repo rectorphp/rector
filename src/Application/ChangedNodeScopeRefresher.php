@@ -32,7 +32,6 @@ use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
  */
@@ -59,18 +58,18 @@ final class ChangedNodeScopeRefresher
         $this->scopeAnalyzer = $scopeAnalyzer;
         $this->currentFileProvider = $currentFileProvider;
     }
-    public function refresh(Node $node, ?MutatingScope $mutatingScope, ?SmartFileInfo $smartFileInfo = null) : void
+    public function refresh(Node $node, ?MutatingScope $mutatingScope, ?string $filePath = null) : void
     {
         // nothing to refresh
         if (!$this->scopeAnalyzer->hasScope($node)) {
             return;
         }
-        if (!$smartFileInfo instanceof SmartFileInfo) {
+        if (!\is_string($filePath)) {
             /** @var File $file */
             $file = $this->currentFileProvider->getFile();
-            $smartFileInfo = $file->getSmartFileInfo();
+            $filePath = $file->getFilePath();
         }
-        $mutatingScope = $this->scopeAnalyzer->resolveScope($node, $smartFileInfo, $mutatingScope);
+        $mutatingScope = $this->scopeAnalyzer->resolveScope($node, $filePath, $mutatingScope);
         if (!$mutatingScope instanceof MutatingScope) {
             /**
              * @var Node $parentNode
@@ -94,7 +93,7 @@ final class ChangedNodeScopeRefresher
         }
         $this->reIndexNodeAttributes($node);
         $stmts = $this->resolveStmts($node);
-        $this->phpStanNodeScopeResolver->processNodes($stmts, $smartFileInfo, $mutatingScope);
+        $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
     }
     private function reIndexNodeAttributes(Node $node) : void
     {

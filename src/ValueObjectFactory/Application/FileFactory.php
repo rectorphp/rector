@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObjectFactory\Application;
 
+use RectorPrefix202209\Nette\Utils\FileSystem;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
-use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @see \Rector\Core\ValueObject\Application\File
  */
@@ -40,7 +40,7 @@ final class FileFactory
     }
     /**
      * @param string[] $paths
-     * @return SmartFileInfo[]
+     * @return string[]
      */
     public function createFileInfosFromPaths(array $paths, Configuration $configuration) : array
     {
@@ -56,10 +56,10 @@ final class FileFactory
      */
     public function createFromPaths(array $paths, Configuration $configuration) : array
     {
-        $fileInfos = $this->createFileInfosFromPaths($paths, $configuration);
+        $filePaths = $this->createFileInfosFromPaths($paths, $configuration);
         $files = [];
-        foreach ($fileInfos as $fileInfo) {
-            $files[] = new File($fileInfo, $fileInfo->getContents());
+        foreach ($filePaths as $filePath) {
+            $files[] = new File($filePath, FileSystem::read($filePath));
         }
         return $files;
     }

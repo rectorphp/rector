@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
@@ -25,7 +25,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use RectorPrefix202208\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202209\Symfony\Contracts\Service\Attribute\Required;
 final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInterface
 {
     /**

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CakePHP\Naming;
 
-use RectorPrefix202208\Nette\Utils\Strings;
+use RectorPrefix202209\Nette\Utils\Strings;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\CakePHP\ImplicitNameResolver;
 use Rector\Core\Util\StringUtils;

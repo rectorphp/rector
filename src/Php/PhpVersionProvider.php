@@ -10,7 +10,7 @@ use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use ReflectionClass;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * @see \Rector\Core\Tests\Php\PhpVersionProviderTest
  */

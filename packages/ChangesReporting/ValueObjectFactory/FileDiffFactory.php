@@ -7,7 +7,7 @@ use Rector\Core\Differ\DefaultDiffer;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix202208\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
+use RectorPrefix202209\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
 final class FileDiffFactory
 {
     /**

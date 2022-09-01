@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208;
+namespace RectorPrefix202209;
 
-use RectorPrefix202208\Composer\Semver\VersionParser;
-use RectorPrefix202208\Doctrine\Inflector\Inflector;
-use RectorPrefix202208\Doctrine\Inflector\Rules\English\InflectorFactory;
-use RectorPrefix202208\OndraM\CiDetector\CiDetector;
+use RectorPrefix202209\Composer\Semver\VersionParser;
+use RectorPrefix202209\Doctrine\Inflector\Inflector;
+use RectorPrefix202209\Doctrine\Inflector\Rules\English\InflectorFactory;
+use RectorPrefix202209\OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Lexer;
@@ -43,22 +43,22 @@ use Rector\PhpDocParser\PhpParser\SmartPhpParserFactory;
 use Rector\PSR4\Composer\PSR4NamespaceMatcher;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\Utils\Command\MissingInSetCommand;
-use RectorPrefix202208\Symfony\Component\Console\Application;
-use RectorPrefix202208\Symfony\Component\Console\Style\SymfonyStyle;
-use function RectorPrefix202208\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202208\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
-use RectorPrefix202208\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix202208\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202208\Symplify\PackageBuilder\Php\TypeChecker;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix202208\Symplify\PackageBuilder\Reflection\PrivatesCaller;
-use RectorPrefix202208\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix202208\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix202208\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix202208\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use RectorPrefix202209\Symfony\Component\Console\Application;
+use RectorPrefix202209\Symfony\Component\Console\Style\SymfonyStyle;
+use function RectorPrefix202209\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202209\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
+use RectorPrefix202209\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
+use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
+use RectorPrefix202209\Symplify\SmartFileSystem\FileSystemFilter;
+use RectorPrefix202209\Symplify\SmartFileSystem\FileSystemGuard;
+use RectorPrefix202209\Symplify\SmartFileSystem\Finder\FinderSanitizer;
+use RectorPrefix202209\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);
@@ -107,7 +107,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $extensionConfigResolver = new ExtensionConfigResolver();
     $extensionConfigFiles = $extensionConfigResolver->provide();
     foreach ($extensionConfigFiles as $extensionConfigFile) {
-        $rectorConfig->import($extensionConfigFile->getRealPath());
+        $rectorConfig->import($extensionConfigFile);
     }
     // require only in dev
     $rectorConfig->import(__DIR__ . '/../utils/compiler/config/config.php', null, 'not_found');

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202208;
+namespace RectorPrefix202209;
 
 use Rector\CakePHP\Rector\MethodCall\ModalToGetSetRector;
 use Rector\CakePHP\Rector\Property\ChangeSnakedFixtureNameToPascalRector;

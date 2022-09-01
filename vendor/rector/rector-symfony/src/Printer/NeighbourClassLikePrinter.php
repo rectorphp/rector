@@ -12,7 +12,6 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\ValueObject\Application\File;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @todo re-use in https://github.com/rectorphp/rector-src/blob/main/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php
  *
@@ -45,7 +44,7 @@ final class NeighbourClassLikePrinter
     /**
      * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $mainNode
      */
-    public function printClassLike(ClassLike $classLike, $mainNode, SmartFileInfo $smartFileInfo, ?File $file = null) : void
+    public function printClassLike(ClassLike $classLike, $mainNode, string $filePath, ?File $file = null) : void
     {
         $declares = $this->resolveDeclares($mainNode);
         if ($mainNode instanceof FileWithoutNamespace) {
@@ -55,14 +54,14 @@ final class NeighbourClassLikePrinter
             $mainNode->stmts = [$classLike];
             $nodesToPrint = \array_merge($declares, [$mainNode]);
         }
-        $fileDestination = $this->createClassLikeFileDestination($classLike, $smartFileInfo);
+        $fileDestination = $this->createClassLikeFileDestination($classLike, $filePath);
         $printedFileContent = $this->betterStandardPrinter->prettyPrintFile($nodesToPrint);
         $addedFileWithContent = new AddedFileWithContent($fileDestination, $printedFileContent);
         $this->removedAndAddedFilesCollector->addAddedFile($addedFileWithContent);
     }
-    private function createClassLikeFileDestination(ClassLike $classLike, SmartFileInfo $smartFileInfo) : string
+    private function createClassLikeFileDestination(ClassLike $classLike, string $filePath) : string
     {
-        $currentDirectory = \dirname($smartFileInfo->getRealPath());
+        $currentDirectory = \dirname($filePath);
         return $currentDirectory . \DIRECTORY_SEPARATOR . $classLike->name . '.php';
     }
     /**

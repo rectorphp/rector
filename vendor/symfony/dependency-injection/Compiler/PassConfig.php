@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202208\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202209\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202208\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202209\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * Compiler Pass Configuration.
  *

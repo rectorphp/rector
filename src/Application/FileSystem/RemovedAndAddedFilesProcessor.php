@@ -4,9 +4,10 @@ declare (strict_types=1);
 namespace Rector\Core\Application\FileSystem;
 
 use Rector\Core\Contract\Console\OutputStyleInterface;
+use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix202208\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
 /**
  * Adds and removes scheduled file
  */
@@ -32,12 +33,18 @@ final class RemovedAndAddedFilesProcessor
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
-    public function __construct(Filesystem $filesystem, NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilePathHelper
+     */
+    private $filePathHelper;
+    public function __construct(Filesystem $filesystem, NodesWithFileDestinationPrinter $nodesWithFileDestinationPrinter, \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FilePathHelper $filePathHelper)
     {
         $this->filesystem = $filesystem;
         $this->nodesWithFileDestinationPrinter = $nodesWithFileDestinationPrinter;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
+        $this->filePathHelper = $filePathHelper;
     }
     public function run(Configuration $configuration) : void
     {
@@ -48,15 +55,17 @@ final class RemovedAndAddedFilesProcessor
     }
     private function processDeletedFiles(Configuration $configuration) : void
     {
-        foreach ($this->removedAndAddedFilesCollector->getRemovedFiles() as $removedFile) {
-            $relativePath = $removedFile->getRelativeFilePathFromDirectory(\getcwd());
+        foreach ($this->removedAndAddedFilesCollector->getRemovedFiles() as $removedFilePath) {
+            $removedFileRelativePath = $this->filePathHelper->relativePath($removedFilePath);
+            // @todo file helper
+            //            $removedFileRelativePath = $removedFile->getRelativeFilePathFromDirectory(getcwd());
             if ($configuration->isDryRun()) {
-                $message = \sprintf('File "%s" will be removed', $relativePath);
+                $message = \sprintf('File "%s" will be removed', $removedFileRelativePath);
                 $this->rectorOutputStyle->warning($message);
             } else {
-                $message = \sprintf('File "%s" was removed', $relativePath);
+                $message = \sprintf('File "%s" was removed', $removedFileRelativePath);
                 $this->rectorOutputStyle->warning($message);
-                $this->filesystem->remove($removedFile->getPathname());
+                $this->filesystem->remove($removedFilePath);
             }
         }
     }
