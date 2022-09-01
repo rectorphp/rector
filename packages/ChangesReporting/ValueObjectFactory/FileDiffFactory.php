@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\ChangesReporting\ValueObjectFactory;
 
+use Rector\Core\Console\Formatter\ConsoleDiffer;
 use Rector\Core\Differ\DefaultDiffer;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Reporting\FileDiff;
-use RectorPrefix202209\Symplify\PackageBuilder\Console\Output\ConsoleDiffer;
 final class FileDiffFactory
 {
     /**
@@ -17,7 +17,7 @@ final class FileDiffFactory
     private $defaultDiffer;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Console\Output\ConsoleDiffer
+     * @var \Rector\Core\Console\Formatter\ConsoleDiffer
      */
     private $consoleDiffer;
     /**

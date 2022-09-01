@@ -14,7 +14,6 @@ use RectorPrefix202209\Symfony\Component\DependencyInjection\Compiler\CompilerPa
 use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix202209\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use RectorPrefix202209\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
 final class RectorKernel
 {
     /**
@@ -81,6 +80,6 @@ final class RectorKernel
      */
     private function createDefaultConfigFiles() : array
     {
-        return [__DIR__ . '/../../config/config.php', ConsoleColorDiffConfig::FILE_PATH];
+        return [__DIR__ . '/../../config/config.php'];
     }
 }
