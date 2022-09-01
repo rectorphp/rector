@@ -78,10 +78,10 @@ final class RemovedAndAddedFilesCollector
             return $addedFile instanceof AddedFileWithNodes;
         });
     }
-    //    public function getAffectedFilesCount(): int
-    //    {
-    //        return count($this->addedFiles) + count($this->removedFilePaths);
-    //    }
+    public function getAffectedFilesCount() : int
+    {
+        return \count($this->addedFiles) + \count($this->removedFilePaths);
+    }
     public function getAddedFileCount() : int
     {
         return \count($this->addedFiles);
