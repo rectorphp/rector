@@ -3,17 +3,12 @@
 declare (strict_types=1);
 namespace Rector\Skipper\SkipVoter;
 
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Skipper\Contract\SkipVoterInterface;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Skipper\Skipper\SkipSkipper;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 final class ClassSkipVoter implements SkipVoterInterface
 {
-    /**
-     * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
-     */
-    private $classLikeExistenceChecker;
     /**
      * @readonly
      * @var \Rector\Skipper\Skipper\SkipSkipper
@@ -24,11 +19,16 @@ final class ClassSkipVoter implements SkipVoterInterface
      * @var \Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
     private $skippedClassResolver;
-    public function __construct(ClassLikeExistenceChecker $classLikeExistenceChecker, SkipSkipper $skipSkipper, SkippedClassResolver $skippedClassResolver)
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(SkipSkipper $skipSkipper, SkippedClassResolver $skippedClassResolver, ReflectionProvider $reflectionProvider)
     {
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
         $this->skipSkipper = $skipSkipper;
         $this->skippedClassResolver = $skippedClassResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @param string|object $element
@@ -38,7 +38,7 @@ final class ClassSkipVoter implements SkipVoterInterface
         if (\is_object($element)) {
             return \true;
         }
-        return $this->classLikeExistenceChecker->doesClassLikeExist($element);
+        return $this->reflectionProvider->hasClass($element);
     }
     /**
      * @param string|object $element

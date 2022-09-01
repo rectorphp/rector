@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Core\Autoloading;
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use RectorPrefix202209\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
@@ -15,7 +15,7 @@ final class AdditionalAutoloader
 {
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**

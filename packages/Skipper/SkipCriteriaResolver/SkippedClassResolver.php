@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Skipper\SkipCriteriaResolver;
 
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
-use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
+use Rector\Core\Configuration\Parameter\ParameterProvider;
 final class SkippedClassResolver
 {
     /**
@@ -14,18 +14,18 @@ final class SkippedClassResolver
     private $skippedClasses = [];
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $classLikeExistenceChecker;
-    public function __construct(ParameterProvider $parameterProvider, ClassLikeExistenceChecker $classLikeExistenceChecker)
+    private $reflectionProvider;
+    public function __construct(ParameterProvider $parameterProvider, ReflectionProvider $reflectionProvider)
     {
         $this->parameterProvider = $parameterProvider;
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @return array<string, string[]|null>
@@ -45,7 +45,7 @@ final class SkippedClassResolver
             if (!\is_string($key)) {
                 continue;
             }
-            if (!$this->classLikeExistenceChecker->doesClassLikeExist($key)) {
+            if (!$this->reflectionProvider->hasClass($key)) {
                 continue;
             }
             $this->skippedClasses[$key] = $value;

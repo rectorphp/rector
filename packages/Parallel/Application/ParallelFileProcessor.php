@@ -10,6 +10,7 @@ use RectorPrefix202209\React\EventLoop\StreamSelectLoop;
 use RectorPrefix202209\React\Socket\ConnectionInterface;
 use RectorPrefix202209\React\Socket\TcpServer;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
@@ -25,7 +26,6 @@ use RectorPrefix202209\Symplify\EasyParallel\Enum\ReactEvent;
 use RectorPrefix202209\Symplify\EasyParallel\ValueObject\ParallelProcess;
 use RectorPrefix202209\Symplify\EasyParallel\ValueObject\ProcessPool;
 use RectorPrefix202209\Symplify\EasyParallel\ValueObject\Schedule;
-use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use Throwable;
 /**
  * Inspired from @see
@@ -50,7 +50,7 @@ final class ParallelFileProcessor
     private $workerCommandLineFactory;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     public function __construct(WorkerCommandLineFactory $workerCommandLineFactory, ParameterProvider $parameterProvider)

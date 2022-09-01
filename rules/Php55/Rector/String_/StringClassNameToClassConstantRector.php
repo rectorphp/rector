@@ -10,12 +10,12 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202209\Webmozart\Assert\Assert;
@@ -36,12 +36,12 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
     ];
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker
+     * @var \PHPStan\Reflection\ReflectionProvider
      */
-    private $classLikeExistenceChecker;
-    public function __construct(ClassLikeExistenceChecker $classLikeExistenceChecker)
+    private $reflectionProvider;
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
-        $this->classLikeExistenceChecker = $classLikeExistenceChecker;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -123,7 +123,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(string $classLikeName, String_ $string) : bool
     {
-        if (!$this->classLikeExistenceChecker->doesClassLikeInsensitiveExists($classLikeName)) {
+        if (!$this->reflectionProvider->hasClass($classLikeName)) {
             return \true;
         }
         foreach ($this->classesToSkip as $classToSkip) {

@@ -6,10 +6,10 @@ namespace Rector\Testing\TestingParser;
 use RectorPrefix202209\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 /**
  * @api
  */
@@ -17,7 +17,7 @@ final class TestingParser
 {
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**

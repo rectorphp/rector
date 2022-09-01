@@ -7,6 +7,7 @@ use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -20,9 +21,7 @@ use RectorPrefix202209\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202209\Symplify\EasyParallel\CpuCoreCountProvider;
 use RectorPrefix202209\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-//use Symplify\EasyParallel\FileSystem\FilePathNormalizer;
 use RectorPrefix202209\Symplify\EasyParallel\ScheduleFactory;
-use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
 use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix202209\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
@@ -77,7 +76,7 @@ final class ApplicationFileProcessor
     private $parallelFileProcessor;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Parameter\ParameterProvider
+     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
@@ -110,7 +109,6 @@ final class ApplicationFileProcessor
         $this->parallelFileProcessor = $parallelFileProcessor;
         $this->parameterProvider = $parameterProvider;
         $this->scheduleFactory = $scheduleFactory;
-        //        private readonly FilePathNormalizer $filePathNormalizer,
         $this->cpuCoreCountProvider = $cpuCoreCountProvider;
         $this->fileProcessors = $fileProcessors;
     }
