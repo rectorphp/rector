@@ -3,13 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\Collector;
 
+use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Util\ArrayParametersMerger;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 use ReflectionClass;
 use ReflectionClassConstant;
 use RectorPrefix202209\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202209\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202209\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
 final class ConfigureCallValuesCollector
 {
     /**
@@ -18,9 +19,9 @@ final class ConfigureCallValuesCollector
     private $configureCallValuesByRectorClass = [];
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
+     * @var \Rector\Core\Util\ArrayParametersMerger
      */
-    private $parametersMerger;
+    private $arrayParametersMerger;
     /**
      * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
@@ -28,8 +29,8 @@ final class ConfigureCallValuesCollector
     private $symfonyStyle;
     public function __construct()
     {
-        $this->parametersMerger = new ParametersMerger();
-        $symfonyStyleFactory = new SymfonyStyleFactory();
+        $this->arrayParametersMerger = new ArrayParametersMerger();
+        $symfonyStyleFactory = new SymfonyStyleFactory(new PrivatesAccessor());
         $this->symfonyStyle = $symfonyStyleFactory->create();
     }
     /**
@@ -94,7 +95,7 @@ final class ConfigureCallValuesCollector
             if (!isset($this->configureCallValuesByRectorClass[$rectorClass])) {
                 $this->configureCallValuesByRectorClass[$rectorClass] = $configureValue;
             } else {
-                $mergedParameters = $this->parametersMerger->merge($this->configureCallValuesByRectorClass[$rectorClass], $configureValue);
+                $mergedParameters = $this->arrayParametersMerger->merge($this->configureCallValuesByRectorClass[$rectorClass], $configureValue);
                 $this->configureCallValuesByRectorClass[$rectorClass] = $mergedParameters;
             }
         }

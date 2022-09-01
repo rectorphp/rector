@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit86cbfc3673ea2a34d4a9839fb42e2f38
+class ComposerStaticInitf9386b3167e6f436551675dcefff7647
 {
     public static $files = array (
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
@@ -1647,6 +1647,7 @@ class ComposerStaticInit86cbfc3673ea2a34d4a9839fb42e2f38
         'Rector\\Core\\Console\\Output\\RectorOutputStyle' => __DIR__ . '/../..' . '/src/Console/Output/RectorOutputStyle.php',
         'Rector\\Core\\Console\\Style\\RectorConsoleOutputStyle' => __DIR__ . '/../..' . '/src/Console/Style/RectorConsoleOutputStyle.php',
         'Rector\\Core\\Console\\Style\\RectorConsoleOutputStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/RectorConsoleOutputStyleFactory.php',
+        'Rector\\Core\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/../..' . '/src/Console/Style/SymfonyStyleFactory.php',
         'Rector\\Core\\Contract\\Console\\OutputStyleInterface' => __DIR__ . '/../..' . '/src/Contract/Console/OutputStyleInterface.php',
         'Rector\\Core\\Contract\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverInterface' => __DIR__ . '/../..' . '/src/Contract/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverInterface.php',
         'Rector\\Core\\Contract\\PhpParser\\NodePrinterInterface' => __DIR__ . '/../..' . '/src/Contract/PhpParser/NodePrinterInterface.php',
@@ -1673,6 +1674,8 @@ class ComposerStaticInit86cbfc3673ea2a34d4a9839fb42e2f38
         'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => __DIR__ . '/../..' . '/src/Exception/Configuration/InvalidConfigurationException.php',
         'Rector\\Core\\Exception\\DeprecatedException' => __DIR__ . '/../..' . '/src/Exception/DeprecatedException.php',
         'Rector\\Core\\Exception\\NotImplementedYetException' => __DIR__ . '/../..' . '/src/Exception/NotImplementedYetException.php',
+        'Rector\\Core\\Exception\\Reflection\\InvalidPrivatePropertyTypeException' => __DIR__ . '/../..' . '/src/Exception/Reflection/InvalidPrivatePropertyTypeException.php',
+        'Rector\\Core\\Exception\\Reflection\\MissingPrivatePropertyException' => __DIR__ . '/../..' . '/src/Exception/Reflection/MissingPrivatePropertyException.php',
         'Rector\\Core\\Exception\\ShouldNotHappenException' => __DIR__ . '/../..' . '/src/Exception/ShouldNotHappenException.php',
         'Rector\\Core\\Exception\\VersionException' => __DIR__ . '/../..' . '/src/Exception/VersionException.php',
         'Rector\\Core\\Exclusion\\ExclusionManager' => __DIR__ . '/../..' . '/src/Exclusion/ExclusionManager.php',
@@ -1772,6 +1775,7 @@ class ComposerStaticInit86cbfc3673ea2a34d4a9839fb42e2f38
         'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => __DIR__ . '/../..' . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
         'Rector\\Core\\StaticReflection\\SourceLocator\\ParentAttributeSourceLocator' => __DIR__ . '/../..' . '/src/StaticReflection/SourceLocator/ParentAttributeSourceLocator.php',
         'Rector\\Core\\StaticReflection\\SourceLocator\\RenamedClassesSourceLocator' => __DIR__ . '/../..' . '/src/StaticReflection/SourceLocator/RenamedClassesSourceLocator.php',
+        'Rector\\Core\\Util\\ArrayParametersMerger' => __DIR__ . '/../..' . '/src/Util/ArrayParametersMerger.php',
         'Rector\\Core\\Util\\MemoryLimiter' => __DIR__ . '/../..' . '/src/Util/MemoryLimiter.php',
         'Rector\\Core\\Util\\MultiInstanceofChecker' => __DIR__ . '/../..' . '/src/Util/MultiInstanceofChecker.php',
         'Rector\\Core\\Util\\PhpVersionFactory' => __DIR__ . '/../..' . '/src/Util/PhpVersionFactory.php',
@@ -3144,9 +3148,9 @@ class ComposerStaticInit86cbfc3673ea2a34d4a9839fb42e2f38
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit86cbfc3673ea2a34d4a9839fb42e2f38::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit86cbfc3673ea2a34d4a9839fb42e2f38::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit86cbfc3673ea2a34d4a9839fb42e2f38::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf9386b3167e6f436551675dcefff7647::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf9386b3167e6f436551675dcefff7647::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf9386b3167e6f436551675dcefff7647::$classMap;
 
         }, null, ClassLoader::class);
     }

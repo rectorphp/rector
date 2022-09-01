@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Core\Util\Reflection;
 
+use Rector\Core\Exception\Reflection\InvalidPrivatePropertyTypeException;
+use Rector\Core\Exception\Reflection\MissingPrivatePropertyException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
-use RectorPrefix202209\Symplify\PackageBuilder\Exception\InvalidPrivatePropertyTypeException;
-use RectorPrefix202209\Symplify\PackageBuilder\Exception\MissingPrivatePropertyException;
 /**
  * @see \Rector\Core\Tests\Util\Reflection\PrivatesAccessorTest
  */

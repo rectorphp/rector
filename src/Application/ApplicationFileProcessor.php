@@ -10,6 +10,7 @@ use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
+use Rector\Core\Util\ArrayParametersMerger;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
@@ -22,7 +23,6 @@ use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202209\Symplify\EasyParallel\CpuCoreCountProvider;
 use RectorPrefix202209\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix202209\Symplify\EasyParallel\ScheduleFactory;
-use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use RectorPrefix202209\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
@@ -66,9 +66,9 @@ final class ApplicationFileProcessor
     private $nodeScopeResolver;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
+     * @var \Rector\Core\Util\ArrayParametersMerger
      */
-    private $parametersMerger;
+    private $arrayParametersMerger;
     /**
      * @readonly
      * @var \Rector\Parallel\Application\ParallelFileProcessor
@@ -97,7 +97,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ParametersMerger $parametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
+    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, array $fileProcessors = [])
     {
         $this->filesystem = $filesystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
@@ -105,7 +105,7 @@ final class ApplicationFileProcessor
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->fileFactory = $fileFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;
-        $this->parametersMerger = $parametersMerger;
+        $this->arrayParametersMerger = $arrayParametersMerger;
         $this->parallelFileProcessor = $parallelFileProcessor;
         $this->parameterProvider = $parameterProvider;
         $this->scheduleFactory = $scheduleFactory;
@@ -158,7 +158,7 @@ final class ApplicationFileProcessor
                     continue;
                 }
                 $result = $fileProcessor->process($file, $configuration);
-                $systemErrorsAndFileDiffs = $this->parametersMerger->merge($systemErrorsAndFileDiffs, $result);
+                $systemErrorsAndFileDiffs = $this->arrayParametersMerger->merge($systemErrorsAndFileDiffs, $result);
             }
             // progress bar +1
             if ($shouldShowProgressBar) {

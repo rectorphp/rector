@@ -11,6 +11,7 @@ use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
+use Rector\Core\Util\ArrayParametersMerger;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
@@ -18,7 +19,6 @@ use Rector\Parallel\ValueObject\Bridge;
 use RectorPrefix202209\Symplify\EasyParallel\Enum\Action;
 use RectorPrefix202209\Symplify\EasyParallel\Enum\ReactCommand;
 use RectorPrefix202209\Symplify\EasyParallel\Enum\ReactEvent;
-use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
 use Throwable;
 final class WorkerRunner
 {
@@ -28,9 +28,9 @@ final class WorkerRunner
     private const RESULT = 'result';
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Yaml\ParametersMerger
+     * @var \Rector\Core\Util\ArrayParametersMerger
      */
-    private $parametersMerger;
+    private $arrayParametersMerger;
     /**
      * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
@@ -56,9 +56,9 @@ final class WorkerRunner
      * @var \Rector\Core\Console\Style\RectorConsoleOutputStyle
      */
     private $rectorConsoleOutputStyle;
-    public function __construct(ParametersMerger $parametersMerger, CurrentFileProvider $currentFileProvider, PhpFileProcessor $phpFileProcessor, NodeScopeResolver $nodeScopeResolver, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle)
+    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, PhpFileProcessor $phpFileProcessor, NodeScopeResolver $nodeScopeResolver, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle)
     {
-        $this->parametersMerger = $parametersMerger;
+        $this->arrayParametersMerger = $arrayParametersMerger;
         $this->currentFileProvider = $currentFileProvider;
         $this->phpFileProcessor = $phpFileProcessor;
         $this->nodeScopeResolver = $nodeScopeResolver;
@@ -96,7 +96,7 @@ final class WorkerRunner
                         continue;
                     }
                     $currentErrorsAndFileDiffs = $this->phpFileProcessor->process($file, $configuration);
-                    $errorAndFileDiffs = $this->parametersMerger->merge($errorAndFileDiffs, $currentErrorsAndFileDiffs);
+                    $errorAndFileDiffs = $this->arrayParametersMerger->merge($errorAndFileDiffs, $currentErrorsAndFileDiffs);
                 } catch (Throwable $throwable) {
                     ++$systemErrorsCount;
                     $systemErrors = $this->collectSystemErrors($systemErrors, $throwable, $filePath);

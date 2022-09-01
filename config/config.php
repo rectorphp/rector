@@ -34,6 +34,7 @@ use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
+use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
@@ -49,8 +50,6 @@ use RectorPrefix202209\Symfony\Component\Console\Style\SymfonyStyle;
 use function RectorPrefix202209\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202209\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
-use RectorPrefix202209\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
-use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);
@@ -87,8 +86,6 @@ return static function (RectorConfig $rectorConfig) : void {
     // psr-4
     $services->alias(PSR4AutoloadNamespaceMatcherInterface::class, PSR4NamespaceMatcher::class);
     $services->load('Rector\\', __DIR__ . '/../rules')->exclude([__DIR__ . '/../rules/*/ValueObject/*', __DIR__ . '/../rules/*/Rector/*', __DIR__ . '/../rules/*/Contract/*', __DIR__ . '/../rules/*/Exception/*', __DIR__ . '/../rules/*/Enum/*']);
-    // parallel
-    $services->set(ParametersMerger::class);
     $services->set(Filesystem::class);
     // use faster in-memory cache in CI.
     // CI always starts from scratch, therefore IO intensive caching is not worth it
