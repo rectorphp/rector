@@ -188,7 +188,6 @@ final class ApplicationFileProcessor
     private function printFile(File $file) : void
     {
         $filePath = $file->getFilePath();
-        //        $smartFileInfo = $file->getFilePath() getSmartFileInfo();
         $this->filesystem->dumpFile($filePath, $file->getFileContent());
         // @todo how to keep original chmod rights?
         // $this->filesystem->chmod($filePath, $smartFileInfo->getPerms());
@@ -280,8 +279,6 @@ final class ApplicationFileProcessor
         $phpFilePaths = [];
         foreach ($files as $file) {
             $filePath = $file->getFilePath();
-            //            $smartFileInfo = $file->getSmartFileInfo();
-            //            $pathname = $smartFileInfo->getPathname();
             if (\substr_compare($filePath, '.php', -\strlen('.php')) === 0) {
                 $phpFilePaths[] = $filePath;
             }

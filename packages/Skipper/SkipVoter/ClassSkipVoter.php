@@ -7,7 +7,6 @@ use Rector\Skipper\Contract\SkipVoterInterface;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Skipper\Skipper\SkipSkipper;
 use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use Symplify\SmartFileSystem\SmartFileInfo;
 final class ClassSkipVoter implements SkipVoterInterface
 {
     /**
@@ -43,11 +42,10 @@ final class ClassSkipVoter implements SkipVoterInterface
     }
     /**
      * @param string|object $element
-     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $file
      */
-    public function shouldSkip($element, $file) : bool
+    public function shouldSkip($element, string $filePath) : bool
     {
         $skippedClasses = $this->skippedClassResolver->resolve();
-        return $this->skipSkipper->doesMatchSkip($element, $file, $skippedClasses);
+        return $this->skipSkipper->doesMatchSkip($element, $filePath, $skippedClasses);
     }
 }

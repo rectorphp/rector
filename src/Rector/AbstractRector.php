@@ -342,8 +342,7 @@ CODE_SAMPLE;
             return \true;
         }
         $filePath = $this->file->getFilePath();
-        // getSmartFileInfo();
-        if ($this->skipper->shouldSkipElementAndFileInfo($this, $filePath)) {
+        if ($this->skipper->shouldSkipElementAndFilePath($this, $filePath)) {
             return \true;
         }
         $rectifiedNode = $this->rectifiedAnalyzer->verify(static::class, $node, $this->file->getFilePath());

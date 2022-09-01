@@ -247,9 +247,6 @@ final class ValueResolver
             throw new ShouldNotHappenException();
         }
         return $file->getFilePath();
-        //
-        //        $smartFileInfo = $file->getSmartFileInfo();
-        //        return $smartFileInfo->getPathname();
     }
     /**
      * @return string|mixed

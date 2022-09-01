@@ -313,7 +313,6 @@ final class AstResolver
         if ($stmts === []) {
             return null;
         }
-        //$smartFileInfo = new SmartFileInfo($fileName);
         $file = new File($fileName, FileSystem::read($fileName));
         return $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $stmts);
     }

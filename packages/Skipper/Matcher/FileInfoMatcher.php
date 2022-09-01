@@ -5,7 +5,6 @@ namespace Rector\Skipper\Matcher;
 
 use Rector\Skipper\FileSystem\FnMatchPathNormalizer;
 use Rector\Skipper\Fnmatcher;
-use Symplify\SmartFileSystem\SmartFileInfo;
 final class FileInfoMatcher
 {
     /**
@@ -25,12 +24,11 @@ final class FileInfoMatcher
     }
     /**
      * @param string[] $filePatterns
-     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $file
      */
-    public function doesFileInfoMatchPatterns($file, array $filePatterns) : bool
+    public function doesFileInfoMatchPatterns(string $filePath, array $filePatterns) : bool
     {
         foreach ($filePatterns as $filePattern) {
-            if ($this->doesFileMatchPattern($file, $filePattern)) {
+            if ($this->doesFileMatchPattern($filePath, $filePattern)) {
                 return \true;
             }
         }
@@ -38,11 +36,9 @@ final class FileInfoMatcher
     }
     /**
      * Supports both relative and absolute $file path. They differ for PHP-CS-Fixer and PHP_CodeSniffer.
-     * @param \Symplify\SmartFileSystem\SmartFileInfo|string $file
      */
-    private function doesFileMatchPattern($file, string $ignoredPath) : bool
+    private function doesFileMatchPattern(string $filePath, string $ignoredPath) : bool
     {
-        $filePath = $file instanceof SmartFileInfo ? $file->getRealPath() : $file;
         // in ecs.php, the path can be absolute
         if ($filePath === $ignoredPath) {
             return \true;

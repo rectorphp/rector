@@ -163,7 +163,6 @@ final class PhpFileProcessor implements FileProcessorInterface
     private function printFile(File $file, Configuration $configuration) : void
     {
         $filePath = $file->getFilePath();
-        // getSmartFileInfo();
         if ($this->removedAndAddedFilesCollector->isFileRemoved($filePath)) {
             // skip, because this file exists no more
             return;

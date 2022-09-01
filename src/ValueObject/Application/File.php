@@ -59,7 +59,6 @@ final class File
     public function getFilePath() : string
     {
         return $this->filepath;
-        // smartFileInfo->getRealPath();
     }
     public function getFileContent() : string
     {

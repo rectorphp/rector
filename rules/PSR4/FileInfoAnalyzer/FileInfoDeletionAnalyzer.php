@@ -34,7 +34,6 @@ final class FileInfoDeletionAnalyzer
     {
         $className = (string) $this->nodeNameResolver->getName($classLike);
         $filePath = $file->getFilePath();
-        // getSmartFileInfo();
         $basename = \pathinfo($filePath, \PATHINFO_BASENAME);
         $baseFileName = $this->clearNameFromTestingPrefix($basename);
         $classShortName = $this->classNaming->getShortName($className);

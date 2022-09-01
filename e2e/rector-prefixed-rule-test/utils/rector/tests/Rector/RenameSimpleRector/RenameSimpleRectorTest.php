@@ -6,7 +6,6 @@ namespace Utils\Rector\Tests\Rector\RenameSimpleRector;
 
 use Iterator;
 use Rector\Testing\PHPUnit\AbstractRectorTestCase;
-use Symplify\SmartFileSystem\SmartFileInfo;
 
 final class RenameSimpleRectorTest extends AbstractRectorTestCase
 {

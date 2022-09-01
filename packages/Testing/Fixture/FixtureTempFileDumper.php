@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
 use RectorPrefix202209\Nette\Utils\FileSystem;
-use Symplify\SmartFileSystem\SmartFileInfo;
 final class FixtureTempFileDumper
 {
     /**

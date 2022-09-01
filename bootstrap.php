@@ -24,6 +24,7 @@ spl_autoload_register(function (string $class): void {
         }
     }
 
+    // @deprecated, to be removed
     if ($class === 'Symplify\SmartFileSystem\SmartFileInfo') {
         $filePath = __DIR__ . '/vendor/symplify/smart-file-system/src/SmartFileInfo.php';
         if (file_exists($filePath)) {
