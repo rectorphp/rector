@@ -10,6 +10,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
@@ -17,7 +18,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
-use RectorPrefix202209\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**
@@ -25,11 +25,6 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
-     */
-    private $pathNormalizer;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
@@ -55,15 +50,20 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    public function __construct(NodeNameResolver $nodeNameResolver, PathNormalizer $pathNormalizer, AstResolver $astResolver, ParamTypeInferer $paramTypeInferer, ReflectionResolver $reflectionResolver, TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilePathHelper
+     */
+    private $filePathHelper;
+    public function __construct(NodeNameResolver $nodeNameResolver, AstResolver $astResolver, ParamTypeInferer $paramTypeInferer, ReflectionResolver $reflectionResolver, TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper, FilePathHelper $filePathHelper)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->pathNormalizer = $pathNormalizer;
         $this->astResolver = $astResolver;
         $this->paramTypeInferer = $paramTypeInferer;
         $this->reflectionResolver = $reflectionResolver;
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
+        $this->filePathHelper = $filePathHelper;
     }
     public function isReturnTypeChangeAllowed(ClassMethod $classMethod) : bool
     {
@@ -103,10 +103,10 @@ final class ParentClassMethodTypeOverrideGuard
         /** @var string $currentFileName */
         $currentFileName = $currentClassReflection->getFileName();
         // child (current)
-        $normalizedCurrentFileName = $this->pathNormalizer->normalizePath($currentFileName);
+        $normalizedCurrentFileName = $this->filePathHelper->normalizePathAndSchema($currentFileName);
         $isCurrentInVendor = \strpos($normalizedCurrentFileName, '/vendor/') !== \false;
         // parent
-        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
+        $normalizedFileName = $this->filePathHelper->normalizePathAndSchema($fileName);
         $isParentInVendor = \strpos($normalizedFileName, '/vendor/') !== \false;
         return $isCurrentInVendor && $isParentInVendor || !$isCurrentInVendor && !$isParentInVendor;
     }

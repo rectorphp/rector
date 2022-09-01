@@ -4,17 +4,17 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Reflection;
 
 use PHPStan\Reflection\MethodReflection;
-use RectorPrefix202209\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
+use Rector\Core\FileSystem\FilePathHelper;
 final class VendorLocationDetector
 {
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
+     * @var \Rector\Core\FileSystem\FilePathHelper
      */
-    private $pathNormalizer;
-    public function __construct(PathNormalizer $pathNormalizer)
+    private $filePathHelper;
+    public function __construct(FilePathHelper $filePathHelper)
     {
-        $this->pathNormalizer = $pathNormalizer;
+        $this->filePathHelper = $filePathHelper;
     }
     public function detectMethodReflection(MethodReflection $methodReflection) : bool
     {
@@ -24,7 +24,7 @@ final class VendorLocationDetector
         if ($fileName === null) {
             return \false;
         }
-        $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
+        $normalizedFileName = $this->filePathHelper->normalizePathAndSchema($fileName);
         return \strpos($normalizedFileName, '/vendor/') !== \false;
     }
 }

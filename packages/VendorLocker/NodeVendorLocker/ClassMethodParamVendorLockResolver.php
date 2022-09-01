@@ -5,10 +5,10 @@ namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202209\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 final class ClassMethodParamVendorLockResolver
 {
     /**
@@ -16,11 +16,6 @@ final class ClassMethodParamVendorLockResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
-     */
-    private $pathNormalizer;
     /**
      * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
@@ -31,12 +26,17 @@ final class ClassMethodParamVendorLockResolver
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, PathNormalizer $pathNormalizer, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilePathHelper
+     */
+    private $filePathHelper;
+    public function __construct(NodeNameResolver $nodeNameResolver, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReflectionResolver $reflectionResolver, FilePathHelper $filePathHelper)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->pathNormalizer = $pathNormalizer;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
+        $this->filePathHelper = $filePathHelper;
     }
     /**
      * Includes non-vendor classes
@@ -121,7 +121,7 @@ final class ClassMethodParamVendorLockResolver
             if ($filePathPartName === '') {
                 return \true;
             }
-            $normalizedFileName = $this->pathNormalizer->normalizePath($fileName);
+            $normalizedFileName = $this->filePathHelper->normalizePathAndSchema($fileName);
             if (\strpos($normalizedFileName, $filePathPartName) !== \false) {
                 return \true;
             }

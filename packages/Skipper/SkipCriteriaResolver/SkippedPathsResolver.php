@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Skipper\SkipCriteriaResolver;
 
 use Rector\Core\Configuration\Option;
+use Rector\Core\FileSystem\FilePathHelper;
 use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202209\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 /**
  * @see \Rector\Tests\Skipper\SkipCriteriaResolver\SkippedPathsResolver\SkippedPathsResolverTest
  */
@@ -22,13 +22,13 @@ final class SkippedPathsResolver
     private $parameterProvider;
     /**
      * @readonly
-     * @var \Symplify\SmartFileSystem\Normalizer\PathNormalizer
+     * @var \Rector\Core\FileSystem\FilePathHelper
      */
-    private $pathNormalizer;
-    public function __construct(ParameterProvider $parameterProvider, PathNormalizer $pathNormalizer)
+    private $filePathHelper;
+    public function __construct(ParameterProvider $parameterProvider, FilePathHelper $filePathHelper)
     {
         $this->parameterProvider = $parameterProvider;
-        $this->pathNormalizer = $pathNormalizer;
+        $this->filePathHelper = $filePathHelper;
     }
     /**
      * @return string[]
@@ -44,12 +44,11 @@ final class SkippedPathsResolver
                 continue;
             }
             if (\file_exists($value)) {
-                $this->skippedPaths[] = $this->pathNormalizer->normalizePath($value);
+                $this->skippedPaths[] = $this->filePathHelper->normalizePathAndSchema($value);
                 continue;
             }
             if (\strpos((string) $value, '*') !== \false) {
-                $this->skippedPaths[] = $this->pathNormalizer->normalizePath($value);
-                continue;
+                $this->skippedPaths[] = $this->filePathHelper->normalizePathAndSchema($value);
             }
         }
         return $this->skippedPaths;

@@ -55,10 +55,6 @@ use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChec
 use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
-use RectorPrefix202209\Symplify\SmartFileSystem\FileSystemFilter;
-use RectorPrefix202209\Symplify\SmartFileSystem\FileSystemGuard;
-use RectorPrefix202209\Symplify\SmartFileSystem\Finder\FinderSanitizer;
-use RectorPrefix202209\Symplify\SmartFileSystem\Normalizer\PathNormalizer;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);
@@ -123,11 +119,8 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(Parser::class)->factory([service(PHPStanServicesFactory::class), 'createPHPStanParser']);
     $services->set(Lexer::class)->factory([service(PHPStanServicesFactory::class), 'createEmulativeLexer']);
     // symplify/package-builder
-    $services->set(FileSystemGuard::class);
     $services->set(PrivatesAccessor::class);
     $services->set(PrivatesCaller::class);
-    $services->set(FinderSanitizer::class);
-    $services->set(FileSystemFilter::class);
     $services->set(ParameterProvider::class)->arg('$container', service('service_container'));
     $services->set(InflectorFactory::class);
     $services->set(Inflector::class)->factory([service(InflectorFactory::class), 'build']);
@@ -162,5 +155,4 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(ConstExprParser::class);
     // skipper
     $services->set(ClassLikeExistenceChecker::class);
-    $services->set(PathNormalizer::class);
 };
