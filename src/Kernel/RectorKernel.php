@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\Kernel;
 
 use Rector\Core\Config\Loader\ConfigureCallMergingLoaderFactory;
-use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
+use Rector\Core\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
@@ -14,7 +14,6 @@ use RectorPrefix202209\Symfony\Component\DependencyInjection\Compiler\CompilerPa
 use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix202209\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use RectorPrefix202209\Symplify\PackageBuilder\DependencyInjection\CompilerPass\AutowireInterfacesCompilerPass;
 use RectorPrefix202209\Symplify\PackageBuilder\ValueObject\ConsoleColorDiffConfig;
 final class RectorKernel
 {
@@ -70,7 +69,7 @@ final class RectorKernel
             // must run before AutowireArrayParameterCompilerPass, as the autowired array cannot contain removed services
             new RemoveSkippedRectorsCompilerPass(),
             // autowire Rectors by default (mainly for tests)
-            new AutowireInterfacesCompilerPass([RectorInterface::class]),
+            new AutowireRectorCompilerPass(),
             new MakeRectorsPublicCompilerPass(),
             // add all merged arguments of Rector services
             new MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector),
