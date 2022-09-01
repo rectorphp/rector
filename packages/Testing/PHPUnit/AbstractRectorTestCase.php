@@ -114,6 +114,9 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         $this->originalTempFilePath = $inputFilePath;
         $this->doTestFileMatchesExpectedContent($inputFilePath, $expectedFilePath, $fixtureFilePath);
     }
+    /**
+     * @deprecated Use doTestFile() with file path instead
+     */
     protected function doTestFileInfo(SmartFileInfo $fixtureFileInfo) : void
     {
         $fixtureFileRealPath = $fixtureFileInfo->getRealPath();
