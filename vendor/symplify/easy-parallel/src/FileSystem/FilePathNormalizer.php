@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202209\Symplify\EasyParallel\FileSystem;
 
-use Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202209\Symplify\SmartFileSystem\SmartFileInfo;
 final class FilePathNormalizer
 {
     /**

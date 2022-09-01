@@ -77,7 +77,6 @@ interface SomeInterface
 {
     public function test(array $input);
 }
-
 final class SomeClass implements SomeInterface
 {
     public function test($input)
@@ -93,7 +92,6 @@ interface SomeInterface
      */
     public function test($input);
 }
-
 final class SomeClass implements SomeInterface
 {
     public function test($input)

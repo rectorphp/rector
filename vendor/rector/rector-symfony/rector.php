@@ -18,7 +18,7 @@ return static function (RectorConfig $rectorConfig) : void {
         '*/Source/*',
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
-        StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
+        StringClassNameToClassConstantRector::class,
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive
             __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',

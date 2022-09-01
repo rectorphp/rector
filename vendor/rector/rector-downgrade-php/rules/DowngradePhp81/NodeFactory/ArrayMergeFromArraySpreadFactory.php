@@ -155,11 +155,11 @@ final class ArrayMergeFromArraySpreadFactory
         // depending on their position.
         // The number can't be at the end of the var name, or it would
         // conflict with the counter (for if that name is already taken)
-        $realPath = $file->getFilePath();
-        $position = $this->lastPositionCurrentFile[$realPath] ?? $position;
+        $filePath = $file->getFilePath();
+        $position = $this->lastPositionCurrentFile[$filePath] ?? $position;
         $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($array, $mutatingScope, 'item' . $position . 'Unpacked');
         if ($this->shouldIncrement) {
-            $this->lastPositionCurrentFile[$realPath] = ++$position;
+            $this->lastPositionCurrentFile[$filePath] = ++$position;
         }
         // Assign the value to the variable, and replace the element with the variable
         $newVariable = new Variable($variableName);
