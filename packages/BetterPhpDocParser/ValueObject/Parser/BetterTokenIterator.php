@@ -5,7 +5,7 @@ namespace Rector\BetterPhpDocParser\ValueObject\Parser;
 
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 final class BetterTokenIterator extends TokenIterator
 {
     /**
@@ -18,7 +18,7 @@ final class BetterTokenIterator extends TokenIterator
     private const INDEX = 'index';
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**

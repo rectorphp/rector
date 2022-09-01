@@ -7,7 +7,7 @@ use PhpParser\Node\Stmt;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Dependency\DependencyResolver as PHPStanDependencyResolver;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 final class DependencyResolver
 {
     /**
@@ -22,7 +22,7 @@ final class DependencyResolver
     private $phpStanDependencyResolver;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(NodeScopeResolver $nodeScopeResolver, PHPStanDependencyResolver $phpStanDependencyResolver, PrivatesAccessor $privatesAccessor)

@@ -21,8 +21,8 @@ use PhpParser\Node\Stmt\While_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
-use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -38,18 +38,18 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
     private const NODES_TO_MATCH = [Assign::class, AssignRef::class, Foreach_::class, Static_::class, Echo_::class, Return_::class, Expression::class, Throw_::class, If_::class, While_::class, Switch_::class, Nop::class];
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
-     */
-    private $typeChecker;
-    /**
-     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;
-    public function __construct(TypeChecker $typeChecker, ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Util\MultiInstanceofChecker
+     */
+    private $multiInstanceofChecker;
+    public function __construct(ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer, MultiInstanceofChecker $multiInstanceofChecker)
     {
-        $this->typeChecker = $typeChecker;
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
+        $this->multiInstanceofChecker = $multiInstanceofChecker;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -128,10 +128,10 @@ CODE_SAMPLE
     private function shouldSkip(Node $node) : bool
     {
         if (!$node instanceof Nop) {
-            return !$this->typeChecker->isInstanceOf($node, self::NODES_TO_MATCH);
+            return !$this->multiInstanceofChecker->isInstanceOf($node, self::NODES_TO_MATCH);
         }
         if (\count($node->getComments()) <= 1) {
-            return !$this->typeChecker->isInstanceOf($node, self::NODES_TO_MATCH);
+            return !$this->multiInstanceofChecker->isInstanceOf($node, self::NODES_TO_MATCH);
         }
         return \true;
     }

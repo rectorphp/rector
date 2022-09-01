@@ -6,7 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 final class TokenIteratorFactory
 {
     /**
@@ -20,7 +20,7 @@ final class TokenIteratorFactory
     private $lexer;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(Lexer $lexer, PrivatesAccessor $privatesAccessor)

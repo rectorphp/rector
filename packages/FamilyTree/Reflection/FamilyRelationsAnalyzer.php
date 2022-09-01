@@ -23,11 +23,11 @@ use PHPStan\Type\UnionType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\FamilyTree\ValueObject\PropertyType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 final class FamilyRelationsAnalyzer
 {
     /**
@@ -37,7 +37,7 @@ final class FamilyRelationsAnalyzer
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**

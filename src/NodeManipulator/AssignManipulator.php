@@ -21,9 +21,9 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
 final class AssignManipulator
 {
     /**
@@ -52,16 +52,16 @@ final class AssignManipulator
     private $propertyFetchAnalyzer;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     * @var \Rector\Core\Util\MultiInstanceofChecker
      */
-    private $typeChecker;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer, TypeChecker $typeChecker)
+    private $multiInstanceofChecker;
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer, MultiInstanceofChecker $multiInstanceofChecker)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->typeChecker = $typeChecker;
+        $this->multiInstanceofChecker = $multiInstanceofChecker;
     }
     /**
      * Matches:
@@ -83,7 +83,7 @@ final class AssignManipulator
         if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($parentNode->var, $node)) {
             return \true;
         }
-        if ($parentNode !== null && $this->typeChecker->isInstanceOf($parentNode, self::MODIFYING_NODE_TYPES)) {
+        if ($parentNode !== null && $this->multiInstanceofChecker->isInstanceOf($parentNode, self::MODIFYING_NODE_TYPES)) {
             return \true;
         }
         // traverse up to array dim fetches

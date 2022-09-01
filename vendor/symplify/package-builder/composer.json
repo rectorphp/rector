@@ -9,10 +9,10 @@
         "symfony\/config": "^6.0",
         "symfony\/console": "^6.0",
         "symfony\/dependency-injection": "^6.0",
-        "symfony\/finder": "^6.0",
-        "symplify\/symplify-kernel": "^11.2"
+        "symfony\/finder": "^6.0"
     },
     "require-dev": {
+        "symplify\/symplify-kernel": "^11.2",
         "phpunit\/phpunit": "^9.5.23"
     },
     "autoload": {

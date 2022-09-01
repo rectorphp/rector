@@ -21,7 +21,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
@@ -44,19 +44,19 @@ final class BetterPhpDocParser extends PhpDocParser
     private $phpDocNodeDecorators;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
-    private $privatesCaller;
+    private $privatesAccessor;
     /**
      * @param PhpDocNodeDecoratorInterface[] $phpDocNodeDecorators
      */
-    public function __construct(TypeParser $typeParser, ConstExprParser $constExprParser, CurrentNodeProvider $currentNodeProvider, TokenIteratorFactory $tokenIteratorFactory, array $phpDocNodeDecorators, PrivatesCaller $privatesCaller = null)
+    public function __construct(TypeParser $typeParser, ConstExprParser $constExprParser, CurrentNodeProvider $currentNodeProvider, TokenIteratorFactory $tokenIteratorFactory, array $phpDocNodeDecorators, PrivatesAccessor $privatesAccessor = null)
     {
-        $privatesCaller = $privatesCaller ?? new PrivatesCaller();
+        $privatesAccessor = $privatesAccessor ?? new PrivatesAccessor();
         $this->currentNodeProvider = $currentNodeProvider;
         $this->tokenIteratorFactory = $tokenIteratorFactory;
         $this->phpDocNodeDecorators = $phpDocNodeDecorators;
-        $this->privatesCaller = $privatesCaller;
+        $this->privatesAccessor = $privatesAccessor;
         parent::__construct($typeParser, $constExprParser);
     }
     public function parse(TokenIterator $tokenIterator) : PhpDocNode
@@ -113,7 +113,7 @@ final class BetterPhpDocParser extends PhpDocParser
         $betterTokenIterator = $this->tokenIteratorFactory->createFromTokenIterator($tokenIterator);
         $startPosition = $betterTokenIterator->currentPosition();
         /** @var PhpDocChildNode $phpDocNode */
-        $phpDocNode = $this->privatesCaller->callPrivateMethod($this, 'parseChild', [$betterTokenIterator]);
+        $phpDocNode = $this->privatesAccessor->callPrivateMethod($this, 'parseChild', [$betterTokenIterator]);
         $endPosition = $betterTokenIterator->currentPosition();
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
         $phpDocNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);

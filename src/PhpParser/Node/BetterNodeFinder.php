@@ -23,9 +23,9 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeFinder;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
 use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
@@ -44,11 +44,6 @@ final class BetterNodeFinder
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
-     */
-    private $typeChecker;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
@@ -57,13 +52,18 @@ final class BetterNodeFinder
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, TypeChecker $typeChecker, NodeComparator $nodeComparator, ClassAnalyzer $classAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Util\MultiInstanceofChecker
+     */
+    private $multiInstanceofChecker;
+    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, ClassAnalyzer $classAnalyzer, MultiInstanceofChecker $multiInstanceofChecker)
     {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->typeChecker = $typeChecker;
         $this->nodeComparator = $nodeComparator;
         $this->classAnalyzer = $classAnalyzer;
+        $this->multiInstanceofChecker = $multiInstanceofChecker;
     }
     /**
      * @template TNode of \PhpParser\Node
@@ -294,7 +294,7 @@ final class BetterNodeFinder
     public function findFirstPreviousOfTypes(Node $mainNode, array $types) : ?Node
     {
         return $this->findFirstPrevious($mainNode, function (Node $node) use($types) : bool {
-            return $this->typeChecker->isInstanceOf($node, $types);
+            return $this->multiInstanceofChecker->isInstanceOf($node, $types);
         });
     }
     /**

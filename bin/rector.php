@@ -11,9 +11,9 @@ use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
 use Rector\Core\DependencyInjection\RectorContainerFactory;
 use Rector\Core\Kernel\RectorKernel;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202209\Symfony\Component\Console\Command\Command;
 use RectorPrefix202209\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 // @ intentionally: continue anyway
 @\ini_set('memory_limit', '-1');
 // Performance boost
@@ -117,7 +117,7 @@ try {
         echo Json::encode(['fatal_errors' => [$throwable->getMessage()]]);
     } else {
         // report fatal errors in console format
-        $rectorConsoleOutputStyleFactory = new RectorConsoleOutputStyleFactory(new PrivatesCaller());
+        $rectorConsoleOutputStyleFactory = new RectorConsoleOutputStyleFactory(new PrivatesAccessor());
         $rectorConsoleOutputStyle = $rectorConsoleOutputStyleFactory->create();
         $rectorConsoleOutputStyle->error($throwable->getMessage());
     }

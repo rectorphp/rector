@@ -18,9 +18,9 @@ use PhpParser\Node\Scalar;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202209\Webmozart\Assert\Assert;
@@ -46,18 +46,17 @@ final class OptionalToNullsafeOperatorRector extends AbstractRector implements M
      */
     private $excludeMethods = [];
     /**
-     * @readonly
-     * @var \Symplify\PackageBuilder\Php\TypeChecker
+     * @var \Rector\Core\Util\MultiInstanceofChecker
      */
-    private $typeChecker;
+    private $multiInstanceofChecker;
     /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(TypeChecker $typeChecker, ArgsAnalyzer $argsAnalyzer)
+    public function __construct(MultiInstanceofChecker $multiInstanceofChecker, ArgsAnalyzer $argsAnalyzer)
     {
-        $this->typeChecker = $typeChecker;
+        $this->multiInstanceofChecker = $multiInstanceofChecker;
         $this->argsAnalyzer = $argsAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -108,7 +107,7 @@ CODE_SAMPLE
         /** @var Arg $firstArg */
         $firstArg = $node->var->args[0];
         // skip if the first arg cannot be used as variable directly
-        if ($this->typeChecker->isInstanceOf($firstArg->value, self::SKIP_VALUE_TYPES)) {
+        if ($this->multiInstanceofChecker->isInstanceOf($firstArg->value, self::SKIP_VALUE_TYPES)) {
             return null;
         }
         if ($node instanceof PropertyFetch) {

@@ -13,9 +13,9 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
 use PHPStan\Type\UnionType;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\TypeDeclaration\ValueObject\NestedArrayType;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 /**
  * @see \Rector\Tests\TypeDeclaration\TypeNormalizerTest
  */
@@ -32,7 +32,7 @@ final class TypeNormalizer
     private $typeFactory;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     public function __construct(TypeFactory $typeFactory, PrivatesAccessor $privatesAccessor)

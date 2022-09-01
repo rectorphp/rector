@@ -50,10 +50,7 @@ use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202209\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
 use RectorPrefix202209\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 use RectorPrefix202209\Symplify\PackageBuilder\Parameter\ParameterProvider;
-use RectorPrefix202209\Symplify\PackageBuilder\Php\TypeChecker;
 use RectorPrefix202209\Symplify\PackageBuilder\Reflection\ClassLikeExistenceChecker;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use RectorPrefix202209\Symplify\PackageBuilder\Yaml\ParametersMerger;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
@@ -118,14 +115,10 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(RectorConsoleOutputStyle::class)->factory([service(RectorConsoleOutputStyleFactory::class), 'create']);
     $services->set(Parser::class)->factory([service(PHPStanServicesFactory::class), 'createPHPStanParser']);
     $services->set(Lexer::class)->factory([service(PHPStanServicesFactory::class), 'createEmulativeLexer']);
-    // symplify/package-builder
-    $services->set(PrivatesAccessor::class);
-    $services->set(PrivatesCaller::class);
     $services->set(ParameterProvider::class)->arg('$container', service('service_container'));
     $services->set(InflectorFactory::class);
     $services->set(Inflector::class)->factory([service(InflectorFactory::class), 'build']);
     $services->set(VersionParser::class);
-    $services->set(TypeChecker::class);
     // console
     $services->set(SymfonyStyleFactory::class);
     $services->set(SymfonyStyle::class)->factory([service(SymfonyStyleFactory::class), 'create']);

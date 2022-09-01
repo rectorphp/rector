@@ -46,11 +46,11 @@ use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesAccessor;
 use RectorPrefix202209\Webmozart\Assert\Assert;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -99,7 +99,7 @@ final class PHPStanNodeScopeResolver
     private $scopeFactory;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesAccessor
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**

@@ -20,11 +20,11 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
-use RectorPrefix202209\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -41,11 +41,6 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
     private $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Symplify\PackageBuilder\Reflection\PrivatesCaller
-     */
-    private $privatesCaller;
-    /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
@@ -54,12 +49,17 @@ final class DowngradeCovariantReturnTypeRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, PrivatesCaller $privatesCaller, ReturnTagRemover $returnTagRemover, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
+     */
+    private $privatesAccessor;
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ReturnTagRemover $returnTagRemover, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->privatesCaller = $privatesCaller;
         $this->returnTagRemover = $returnTagRemover;
         $this->reflectionResolver = $reflectionResolver;
+        $this->privatesAccessor = $privatesAccessor;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -195,7 +195,7 @@ CODE_SAMPLE
                 continue;
             }
             /** @var Type $parentReturnType */
-            $parentReturnType = $this->privatesCaller->callPrivateMethod($parameterMethodReflection, 'getReturnType', []);
+            $parentReturnType = $this->privatesAccessor->callPrivateMethod($parameterMethodReflection, 'getReturnType', []);
             // skip "parent" reference if correct
             if ($returnType instanceof ParentStaticType && $parentReturnType->accepts($returnType, \true)->yes()) {
                 continue;
