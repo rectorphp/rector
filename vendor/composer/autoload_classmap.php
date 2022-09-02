@@ -2213,6 +2213,7 @@ return array(
     'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => $baseDir . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
     'Rector\\Php74\\Tokenizer\\ParenthesizedNestedTernaryAnalyzer' => $baseDir . '/rules/Php74/Tokenizer/ParenthesizedNestedTernaryAnalyzer.php',
     'Rector\\Php74\\TypeAnalyzer\\ObjectTypeAnalyzer' => $baseDir . '/rules/Php74/TypeAnalyzer/ObjectTypeAnalyzer.php',
+    'Rector\\Php80\\AttributeDecorator\\JMSAccesorOrderAttributeDecorator' => $baseDir . '/rules/Php80/AttributeDecorator/JMSAccesorOrderAttributeDecorator.php',
     'Rector\\Php80\\AttributeDecorator\\JMSAccessTypeAttributeDecorator' => $baseDir . '/rules/Php80/AttributeDecorator/JMSAccessTypeAttributeDecorator.php',
     'Rector\\Php80\\AttributeDecorator\\SensioParamConverterAttributeDecorator' => $baseDir . '/rules/Php80/AttributeDecorator/SensioParamConverterAttributeDecorator.php',
     'Rector\\Php80\\Contract\\AttributeDecoratorInterface' => $baseDir . '/rules/Php80/Contract/AttributeDecoratorInterface.php',
