@@ -42,13 +42,19 @@ final class ForeachAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodeComparator $nodeComparator, \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer $forAnalyzer, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\CodeQuality\NodeAnalyzer\VariableNameUsedNextAnalyzer
+     */
+    private $variableNameUsedNextAnalyzer;
+    public function __construct(NodeComparator $nodeComparator, \Rector\CodeQuality\NodeAnalyzer\ForAnalyzer $forAnalyzer, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder, \Rector\CodeQuality\NodeAnalyzer\VariableNameUsedNextAnalyzer $variableNameUsedNextAnalyzer)
     {
         $this->nodeComparator = $nodeComparator;
         $this->forAnalyzer = $forAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->variableNameUsedNextAnalyzer = $variableNameUsedNextAnalyzer;
     }
     /**
      * Matches$
@@ -116,11 +122,9 @@ final class ForeachAnalyzer
         if ($isUsedInStmts) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstNext($foreach, function (Node $node) use($singularValueVarName) : bool {
-            if (!$node instanceof Variable) {
-                return \false;
-            }
-            return $this->nodeNameResolver->isName($node, $singularValueVarName);
-        });
+        if ($this->variableNameUsedNextAnalyzer->isValueVarUsedNext($foreach, $singularValueVarName)) {
+            return \true;
+        }
+        return $this->variableNameUsedNextAnalyzer->isValueVarUsedNext($foreach, (string) $this->nodeNameResolver->getName($foreach->valueVar));
     }
 }

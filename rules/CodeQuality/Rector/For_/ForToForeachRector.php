@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\CodeQuality\NodeAnalyzer\ForAnalyzer;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
+use Rector\CodeQuality\NodeAnalyzer\VariableNameUsedNextAnalyzer;
 use Rector\CodeQuality\NodeFactory\ForeachFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -64,12 +65,18 @@ final class ForToForeachRector extends AbstractRector
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(Inflector $inflector, ForAnalyzer $forAnalyzer, ForeachFactory $foreachFactory, ForeachAnalyzer $foreachAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\CodeQuality\NodeAnalyzer\VariableNameUsedNextAnalyzer
+     */
+    private $variableNameUsedNextAnalyzer;
+    public function __construct(Inflector $inflector, ForAnalyzer $forAnalyzer, ForeachFactory $foreachFactory, ForeachAnalyzer $foreachAnalyzer, VariableNameUsedNextAnalyzer $variableNameUsedNextAnalyzer)
     {
         $this->inflector = $inflector;
         $this->forAnalyzer = $forAnalyzer;
         $this->foreachFactory = $foreachFactory;
         $this->foreachAnalyzer = $foreachAnalyzer;
+        $this->variableNameUsedNextAnalyzer = $variableNameUsedNextAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -153,13 +160,13 @@ CODE_SAMPLE
         if ($iteratedVariableSingle === $iteratedVariable) {
             $iteratedVariableSingle = 'single' . \ucfirst($iteratedVariableSingle);
         }
-        if (!$this->forAnalyzer->isValueVarUsedNext($for, $iteratedVariableSingle)) {
+        if (!$this->variableNameUsedNextAnalyzer->isValueVarUsedNext($for, $iteratedVariableSingle)) {
             return $this->createForeachFromForWithIteratedVariableSingle($for, $iteratedVariableSingle);
         }
         if ($iteratedVariableSingle === $originalVariableSingle) {
             return null;
         }
-        if (!$this->forAnalyzer->isValueVarUsedNext($for, $originalVariableSingle)) {
+        if (!$this->variableNameUsedNextAnalyzer->isValueVarUsedNext($for, $originalVariableSingle)) {
             return $this->createForeachFromForWithIteratedVariableSingle($for, $originalVariableSingle);
         }
         return null;

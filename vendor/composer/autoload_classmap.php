@@ -1154,6 +1154,7 @@ return array(
     'Rector\\CodeQuality\\NodeAnalyzer\\LocalPropertyAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/LocalPropertyAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\ReturnAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/ReturnAnalyzer.php',
     'Rector\\CodeQuality\\NodeAnalyzer\\VariableDimFetchAssignResolver' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/VariableDimFetchAssignResolver.php',
+    'Rector\\CodeQuality\\NodeAnalyzer\\VariableNameUsedNextAnalyzer' => $baseDir . '/rules/CodeQuality/NodeAnalyzer/VariableNameUsedNextAnalyzer.php',
     'Rector\\CodeQuality\\NodeFactory\\ArrayFilterFactory' => $baseDir . '/rules/CodeQuality/NodeFactory/ArrayFilterFactory.php',
     'Rector\\CodeQuality\\NodeFactory\\ForeachFactory' => $baseDir . '/rules/CodeQuality/NodeFactory/ForeachFactory.php',
     'Rector\\CodeQuality\\NodeFactory\\MissingPropertiesFactory' => $baseDir . '/rules/CodeQuality/NodeFactory/MissingPropertiesFactory.php',
