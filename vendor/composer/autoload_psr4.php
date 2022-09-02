@@ -20,7 +20,6 @@ return array(
     'Rector\\CakePHP\\' => array($vendorDir . '/rector/rector-cakephp/src'),
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules', $vendorDir . '/rector/rector-downgrade-php/src', $vendorDir . '/rector/rector-downgrade-php/rules'),
     'RectorPrefix202209\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
-    'RectorPrefix202209\\Symplify\\PackageBuilder\\' => array($vendorDir . '/symplify/package-builder/src'),
     'RectorPrefix202209\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
     'RectorPrefix202209\\Symplify\\AutowireArrayParameter\\' => array($vendorDir . '/symplify/autowire-array-parameter/src'),
     'RectorPrefix202209\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),

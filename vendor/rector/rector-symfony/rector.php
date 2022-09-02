@@ -18,7 +18,7 @@ return static function (RectorConfig $rectorConfig) : void {
         '*/Source/*',
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
-        StringClassNameToClassConstantRector::class,
+        StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
         \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive
             __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
@@ -27,6 +27,8 @@ return static function (RectorConfig $rectorConfig) : void {
         ReturnNeverTypeRector::class => ['*/tests/*'],
     ]);
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
+        'Error',
+        'Exception',
         'Symfony\\*',
         'Twig_*',
         'Twig*',

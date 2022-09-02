@@ -78,18 +78,19 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         \gc_collect_cycles();
     }
     /**
-     * @deprecated Use \Rector\Testing\PHPUnit\AbstractRectorTestCase::yieldFilePathsFromDirectory() instead
+     * @return Iterator<<string>>
      */
     protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
     {
         return FixtureFileFinder::yieldDirectory($directory, $suffix);
     }
     /**
-     * @return Iterator<<string>>
+     * @api
+     * @deprecated BC alias for yieldFilesFromDirectory()
      */
     protected function yieldFilePathsFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
     {
-        return FixtureFileFinder::yieldFilePathsFromDirectory($directory, $suffix);
+        return $this->yieldFilesFromDirectory($directory, $suffix);
     }
     protected function isWindows() : bool
     {

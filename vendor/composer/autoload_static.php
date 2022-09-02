@@ -4,14 +4,14 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit87a6e44dbf0d392dab5e12e5d31e3cdf
+class ComposerStaticInitb7a113089e4ddeef65b82e292dc4be93
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '2324d0e5cadd603331d27de142371f0b' => __DIR__ . '/..' . '/symfony/contracts/Deprecation/function.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
@@ -37,7 +37,6 @@ class ComposerStaticInit87a6e44dbf0d392dab5e12e5d31e3cdf
             'Rector\\CakePHP\\' => 15,
             'Rector\\' => 7,
             'RectorPrefix202209\\Webmozart\\Assert\\' => 36,
-            'RectorPrefix202209\\Symplify\\PackageBuilder\\' => 43,
             'RectorPrefix202209\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202209\\Symplify\\AutowireArrayParameter\\' => 51,
             'RectorPrefix202209\\Symfony\\Contracts\\' => 37,
@@ -134,10 +133,6 @@ class ComposerStaticInit87a6e44dbf0d392dab5e12e5d31e3cdf
         'RectorPrefix202209\\Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
-        ),
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/package-builder/src',
         ),
         'RectorPrefix202209\\Symplify\\EasyParallel\\' => 
         array (
@@ -1299,30 +1294,6 @@ class ComposerStaticInit87a6e44dbf0d392dab5e12e5d31e3cdf
         'RectorPrefix202209\\Symplify\\EasyParallel\\ValueObject\\ParallelProcess' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ParallelProcess.php',
         'RectorPrefix202209\\Symplify\\EasyParallel\\ValueObject\\ProcessPool' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ProcessPool.php',
         'RectorPrefix202209\\Symplify\\EasyParallel\\ValueObject\\Schedule' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/Schedule.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Composer\\VendorDirProvider' => __DIR__ . '/..' . '/symplify/package-builder/src/Composer/VendorDirProvider.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Configuration\\StaticEolConfiguration' => __DIR__ . '/..' . '/symplify/package-builder/src/Configuration/StaticEolConfiguration.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Console\\Command\\AbstractSymplifyCommand' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Command/AbstractSymplifyCommand.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Console\\Formatter\\ColorConsoleDiffFormatter' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Formatter/ColorConsoleDiffFormatter.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Console\\Input\\StaticInputDetector' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Input/StaticInputDetector.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Console\\Output\\ConsoleDiffer' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Output/ConsoleDiffer.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Console\\Style\\SymfonyStyleFactory' => __DIR__ . '/..' . '/symplify/package-builder/src/Console/Style/SymfonyStyleFactory.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\DependencyInjection\\CompilerPass\\AutowireInterfacesCompilerPass' => __DIR__ . '/..' . '/symplify/package-builder/src/DependencyInjection/CompilerPass/AutowireInterfacesCompilerPass.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\DependencyInjection\\FileLoader\\ParameterMergingPhpFileLoader' => __DIR__ . '/..' . '/symplify/package-builder/src/DependencyInjection/FileLoader/ParameterMergingPhpFileLoader.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Diff\\Output\\CompleteUnifiedDiffOutputBuilderFactory' => __DIR__ . '/..' . '/symplify/package-builder/src/Diff/Output/CompleteUnifiedDiffOutputBuilderFactory.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Exception\\HttpKernel\\MissingInterfaceException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/HttpKernel/MissingInterfaceException.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Exception\\InvalidPrivatePropertyTypeException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/InvalidPrivatePropertyTypeException.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Exception\\MissingPrivatePropertyException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/MissingPrivatePropertyException.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Exception\\MissingServiceException' => __DIR__ . '/..' . '/symplify/package-builder/src/Exception/MissingServiceException.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Parameter\\ParameterProvider' => __DIR__ . '/..' . '/symplify/package-builder/src/Parameter/ParameterProvider.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Php\\TypeChecker' => __DIR__ . '/..' . '/symplify/package-builder/src/Php/TypeChecker.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Reflection\\ClassLikeExistenceChecker' => __DIR__ . '/..' . '/symplify/package-builder/src/Reflection/ClassLikeExistenceChecker.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Reflection\\PrivatesAccessor' => __DIR__ . '/..' . '/symplify/package-builder/src/Reflection/PrivatesAccessor.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Reflection\\PrivatesCaller' => __DIR__ . '/..' . '/symplify/package-builder/src/Reflection/PrivatesCaller.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Strings\\StringFormatConverter' => __DIR__ . '/..' . '/symplify/package-builder/src/Strings/StringFormatConverter.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\ValueObject\\ConsoleColorDiffConfig' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/ConsoleColorDiffConfig.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\ValueObject\\MethodName' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/MethodName.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\ValueObject\\Option' => __DIR__ . '/..' . '/symplify/package-builder/src/ValueObject/Option.php',
-        'RectorPrefix202209\\Symplify\\PackageBuilder\\Yaml\\ParametersMerger' => __DIR__ . '/..' . '/symplify/package-builder/src/Yaml/ParametersMerger.php',
         'RectorPrefix202209\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix202209\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix202209\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
@@ -3122,9 +3093,9 @@ class ComposerStaticInit87a6e44dbf0d392dab5e12e5d31e3cdf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit87a6e44dbf0d392dab5e12e5d31e3cdf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit87a6e44dbf0d392dab5e12e5d31e3cdf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit87a6e44dbf0d392dab5e12e5d31e3cdf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb7a113089e4ddeef65b82e292dc4be93::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb7a113089e4ddeef65b82e292dc4be93::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb7a113089e4ddeef65b82e292dc4be93::$classMap;
 
         }, null, ClassLoader::class);
     }

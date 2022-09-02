@@ -11,20 +11,12 @@ final class FixtureFileFinder
     /**
      * @return Iterator<array<int, string>>
      */
-    public static function yieldFilePathsFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
-    {
-        $fileInfos = self::findFilesInDirectory($directory, $suffix);
-        foreach ($fileInfos as $fileInfo) {
-            (yield [$fileInfo->getRealPath()]);
-        }
-    }
-    /**
-     * @return SplFileInfo[]
-     */
-    private static function findFilesInDirectory(string $directory, string $suffix) : array
+    public static function yieldDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
     {
         $finder = (new Finder())->in($directory)->files()->name($suffix);
         $fileInfos = \iterator_to_array($finder);
-        return \array_values($fileInfos);
+        foreach ($fileInfos as $fileInfo) {
+            (yield [$fileInfo->getRealPath()]);
+        }
     }
 }
