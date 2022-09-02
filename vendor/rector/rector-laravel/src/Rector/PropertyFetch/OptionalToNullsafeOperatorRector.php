@@ -46,6 +46,7 @@ final class OptionalToNullsafeOperatorRector extends AbstractRector implements M
      */
     private $excludeMethods = [];
     /**
+     * @readonly
      * @var \Rector\Core\Util\MultiInstanceofChecker
      */
     private $multiInstanceofChecker;
