@@ -126,6 +126,10 @@ CODE_SAMPLE
         if (!$this->reflectionProvider->hasClass($classLikeName)) {
             return \true;
         }
+        $classReflection = $this->reflectionProvider->getClass($classLikeName);
+        if ($classReflection->getName() !== $classLikeName) {
+            return \true;
+        }
         // possibly string
         if (\ctype_lower($classLikeName[0])) {
             return \true;
