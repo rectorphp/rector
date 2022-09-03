@@ -15,6 +15,7 @@ use PhpParser\Node\Scalar;
 use PhpParser\Node\Scalar\Encapsed;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeManipulator\ArrayManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -95,7 +96,17 @@ final class ExprAnalyzer
             return \true;
         }
         if ($expr instanceof ClassConstFetch) {
-            return $expr->class instanceof Name && $expr->name instanceof Identifier;
+            if (!$expr->class instanceof Name) {
+                return \false;
+            }
+            if (!$expr->name instanceof Identifier) {
+                return \false;
+            }
+            if ($expr->name->toString() !== 'class') {
+                return \true;
+            }
+            // static::class cannot be used for compile-time class name resolution
+            return $expr->class->toString() !== ObjectReference::STATIC;
         }
         return \false;
     }
