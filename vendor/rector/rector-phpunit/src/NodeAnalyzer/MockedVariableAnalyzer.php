@@ -8,8 +8,10 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -51,12 +53,26 @@ final class MockedVariableAnalyzer
             if ($variableType instanceof MixedType) {
                 return null;
             }
+            if ($this->isIntersectionTypeWithMockObject($variableType)) {
+                $doesContainMock = \true;
+            }
             if ($variableType->isSuperTypeOf(new ObjectType('PHPUnit\\Framework\\MockObject\\MockObject'))->yes()) {
                 $doesContainMock = \true;
             }
             return null;
         });
         return $doesContainMock;
+    }
+    private function isIntersectionTypeWithMockObject(Type $variableType) : bool
+    {
+        if ($variableType instanceof IntersectionType) {
+            foreach ($variableType->getTypes() as $variableTypeType) {
+                if ($variableTypeType->isSuperTypeOf(new ObjectType('PHPUnit\\Framework\\MockObject\\MockObject'))->yes()) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
     private function isMockeryStaticCall(Node $node) : bool
     {
