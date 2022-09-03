@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -49,7 +50,7 @@ final class SimplifyArraySearchRector extends AbstractRector
             }
             return $this->nodeNameResolver->isName($node, 'array_search');
         }, function (Node $node) : bool {
-            return $this->valueResolver->isFalse($node);
+            return $node instanceof Expr && $this->valueResolver->isFalse($node);
         });
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return null;

@@ -5,7 +5,6 @@ namespace Rector\Core\PhpParser\Node\Value;
 
 use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -131,27 +130,21 @@ final class ValueResolver
         }
         return \false;
     }
-    public function isFalse(Node $node) : bool
+    public function isFalse(Expr $expr) : bool
     {
-        return $this->constFetchAnalyzer->isFalse($node);
+        return $this->constFetchAnalyzer->isFalse($expr);
     }
-    public function isTrueOrFalse(Node $node) : bool
+    public function isTrueOrFalse(Expr $expr) : bool
     {
-        return $this->constFetchAnalyzer->isTrueOrFalse($node);
+        return $this->constFetchAnalyzer->isTrueOrFalse($expr);
     }
-    public function isTrue(Node $node) : bool
+    public function isTrue(Expr $expr) : bool
     {
-        return $this->constFetchAnalyzer->isTrue($node);
+        return $this->constFetchAnalyzer->isTrue($expr);
     }
-    public function isNull(Node $node) : bool
+    public function isNull(Expr $expr) : bool
     {
-        return $this->constFetchAnalyzer->isNull($node);
-    }
-    public function isValueEqual(Expr $firstExpr, Expr $secondExpr) : bool
-    {
-        $firstValue = $this->getValue($firstExpr);
-        $secondValue = $this->getValue($secondExpr);
-        return $firstValue === $secondValue;
+        return $this->constFetchAnalyzer->isNull($expr);
     }
     /**
      * @param Expr[]|null[] $nodes

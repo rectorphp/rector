@@ -1,4 +1,4 @@
-# 401 Rules Overview
+# 394 Rules Overview
 
 <br>
 
@@ -11,8 +11,6 @@
 - [CodingStyle](#codingstyle) (36)
 
 - [Compatibility](#compatibility) (1)
-
-- [Composer](#composer) (6)
 
 - [DeadCode](#deadcode) (47)
 
@@ -54,7 +52,7 @@
 
 - [Privatization](#privatization) (8)
 
-- [Removing](#removing) (6)
+- [Removing](#removing) (5)
 
 - [RemovingStatic](#removingstatic) (1)
 
@@ -2516,205 +2514,6 @@ Change annotation to attribute compatible form, see https://tomasvotruba.com/blo
 +        public array $enum
 +    ) {
 +    }
- }
-```
-
-<br>
-
-## Composer
-
-### AddPackageToRequireComposerRector
-
-Add package to "require" in `composer.json`
-
-:wrench: **configure it!**
-
-- class: [`Rector\Composer\Rector\AddPackageToRequireComposerRector`](../rules/Composer/Rector/AddPackageToRequireComposerRector.php)
-
-```php
-use Rector\Composer\Rector\AddPackageToRequireComposerRector;
-use Rector\Composer\ValueObject\PackageAndVersion;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        AddPackageToRequireComposerRector::class,
-        [new PackageAndVersion('symfony/console', '^3.4')]
-    );
-};
-```
-
-↓
-
-```diff
- {
-+    "require": {
-+        "symfony/console": "^3.4"
-+    }
- }
-```
-
-<br>
-
-### AddPackageToRequireDevComposerRector
-
-Add package to "require-dev" in `composer.json`
-
-:wrench: **configure it!**
-
-- class: [`Rector\Composer\Rector\AddPackageToRequireDevComposerRector`](../rules/Composer/Rector/AddPackageToRequireDevComposerRector.php)
-
-```php
-use Rector\Composer\Rector\AddPackageToRequireDevComposerRector;
-use Rector\Composer\ValueObject\PackageAndVersion;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        AddPackageToRequireDevComposerRector::class,
-        [new PackageAndVersion('symfony/console', '^3.4')]
-    );
-};
-```
-
-↓
-
-```diff
- {
-+    "require-dev": {
-+        "symfony/console": "^3.4"
-+    }
- }
-```
-
-<br>
-
-### ChangePackageVersionComposerRector
-
-Change package version `composer.json`
-
-:wrench: **configure it!**
-
-- class: [`Rector\Composer\Rector\ChangePackageVersionComposerRector`](../rules/Composer/Rector/ChangePackageVersionComposerRector.php)
-
-```php
-use Rector\Composer\Rector\ChangePackageVersionComposerRector;
-use Rector\Composer\ValueObject\PackageAndVersion;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        ChangePackageVersionComposerRector::class,
-        [new PackageAndVersion('symfony/console', '^4.4')]
-    );
-};
-```
-
-↓
-
-```diff
- {
-     "require": {
--        "symfony/console": "^3.4"
-+        "symfony/console": "^4.4"
-     }
- }
-```
-
-<br>
-
-### RemovePackageComposerRector
-
-Remove package from "require" and "require-dev" in `composer.json`
-
-:wrench: **configure it!**
-
-- class: [`Rector\Composer\Rector\RemovePackageComposerRector`](../rules/Composer/Rector/RemovePackageComposerRector.php)
-
-```php
-use Rector\Composer\Rector\RemovePackageComposerRector;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemovePackageComposerRector::class, ['symfony/console']);
-};
-```
-
-↓
-
-```diff
- {
--    "require": {
--        "symfony/console": "^3.4"
--    }
- }
-```
-
-<br>
-
-### RenamePackageComposerRector
-
-Change package name in `composer.json`
-
-:wrench: **configure it!**
-
-- class: [`Rector\Composer\Rector\RenamePackageComposerRector`](../rules/Composer/Rector/RenamePackageComposerRector.php)
-
-```php
-use Rector\Composer\Rector\RenamePackageComposerRector;
-use Rector\Composer\ValueObject\RenamePackage;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        RenamePackageComposerRector::class,
-        [new RenamePackage('rector/rector', 'rector/rector-src')]
-    );
-};
-```
-
-↓
-
-```diff
- {
-     "require": {
--        "rector/rector": "dev-main"
-+        "rector/rector-src": "dev-main"
-     }
- }
-```
-
-<br>
-
-### ReplacePackageAndVersionComposerRector
-
-Change package name and version `composer.json`
-
-:wrench: **configure it!**
-
-- class: [`Rector\Composer\Rector\ReplacePackageAndVersionComposerRector`](../rules/Composer/Rector/ReplacePackageAndVersionComposerRector.php)
-
-```php
-use Rector\Composer\Rector\ReplacePackageAndVersionComposerRector;
-use Rector\Composer\ValueObject\ReplacePackageAndVersion;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        ReplacePackageAndVersionComposerRector::class,
-        [new ReplacePackageAndVersion('symfony/console', 'symfony/http-kernel', '^4.4')]
-    );
-};
-```
-
-↓
-
-```diff
- {
-     "require-dev": {
--        "symfony/console": "^3.4"
-+        "symfony/http-kernel": "^4.4"
-     }
  }
 ```
 
@@ -6789,36 +6588,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-### RemoveFuncCallRector
-
-Remove ini_get by configuration
-
-:wrench: **configure it!**
-
-- class: [`Rector\Removing\Rector\FuncCall\RemoveFuncCallRector`](../rules/Removing/Rector/FuncCall/RemoveFuncCallRector.php)
-
-```php
-use Rector\Config\RectorConfig;
-use Rector\Removing\Rector\FuncCall\RemoveFuncCallRector;
-use Rector\Removing\ValueObject\RemoveFuncCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        RemoveFuncCallRector::class,
-        [new RemoveFuncCall('ini_get', [['y2k_compliance']])]
-    );
-};
-```
-
-↓
-
-```diff
--ini_get('y2k_compliance');
- ini_get('keep_me');
-```
-
-<br>
-
 ### RemoveInterfacesRector
 
 Removes interfaces usage from class.
@@ -8590,12 +8359,7 @@ use Rector\Transform\ValueObject\StaticCallToMethodCall;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(
         StaticCallToMethodCallRector::class,
-        [new StaticCallToMethodCall(
-            'Nette\Utils\FileSystem',
-            'write',
-            'Symplify\SmartFileSystem\SmartFileSystem',
-            'dumpFile'
-        )]
+        [new StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'App\Custom\SmartFileSystem', 'dumpFile')]
     );
 };
 ```
@@ -8604,7 +8368,7 @@ return static function (RectorConfig $rectorConfig): void {
 
 ```diff
 -use Nette\Utils\FileSystem;
-+use Symplify\SmartFileSystem\SmartFileSystem;
++use App\Custom\SmartFileSystem;
 
  class SomeClass
  {

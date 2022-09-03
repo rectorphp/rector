@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -71,7 +72,7 @@ final class SimplifyConditionsRector extends AbstractRector
         $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($identical, static function (Node $node) : bool {
             return $node instanceof Identical || $node instanceof NotIdentical;
         }, function (Node $node) : bool {
-            return $this->valueResolver->isTrueOrFalse($node);
+            return $node instanceof Expr && $this->valueResolver->isTrueOrFalse($node);
         });
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return $twoNodeMatch;

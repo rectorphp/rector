@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ConstFetch;
 /**
  * Read-only utils for ClassConstAnalyzer Node:
@@ -11,24 +12,24 @@ use PhpParser\Node\Expr\ConstFetch;
  */
 final class ConstFetchAnalyzer
 {
-    public function isTrueOrFalse(Node $node) : bool
+    public function isTrueOrFalse(Expr $expr) : bool
     {
-        if ($this->isTrue($node)) {
+        if ($this->isTrue($expr)) {
             return \true;
         }
-        return $this->isFalse($node);
+        return $this->isFalse($expr);
     }
-    public function isFalse(Node $node) : bool
+    public function isFalse(Expr $expr) : bool
     {
-        return $this->isConstantWithLowercasedName($node, 'false');
+        return $this->isConstantWithLowercasedName($expr, 'false');
     }
-    public function isTrue(Node $node) : bool
+    public function isTrue(Expr $expr) : bool
     {
-        return $this->isConstantWithLowercasedName($node, 'true');
+        return $this->isConstantWithLowercasedName($expr, 'true');
     }
-    public function isNull(Node $node) : bool
+    public function isNull(Expr $expr) : bool
     {
-        return $this->isConstantWithLowercasedName($node, 'null');
+        return $this->isConstantWithLowercasedName($expr, 'null');
     }
     private function isConstantWithLowercasedName(Node $node, string $name) : bool
     {

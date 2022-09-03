@@ -11,7 +11,6 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
-use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\TranslatablePropertyCollectorAndRemover;
 use Rector\Doctrine\NodeFactory\TranslationClassNodeFactory;
@@ -37,11 +36,6 @@ final class TranslationBehaviorRector extends AbstractRector
     private $classInsertManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassManipulator
-     */
-    private $classManipulator;
-    /**
-     * @readonly
      * @var \Rector\Doctrine\NodeFactory\TranslationClassNodeFactory
      */
     private $translationClassNodeFactory;
@@ -55,10 +49,9 @@ final class TranslationBehaviorRector extends AbstractRector
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     private $removedAndAddedFilesCollector;
-    public function __construct(ClassInsertManipulator $classInsertManipulator, ClassManipulator $classManipulator, TranslationClassNodeFactory $translationClassNodeFactory, TranslatablePropertyCollectorAndRemover $translatablePropertyCollectorAndRemover, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
+    public function __construct(ClassInsertManipulator $classInsertManipulator, TranslationClassNodeFactory $translationClassNodeFactory, TranslatablePropertyCollectorAndRemover $translatablePropertyCollectorAndRemover, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->classInsertManipulator = $classInsertManipulator;
-        $this->classManipulator = $classManipulator;
         $this->translationClassNodeFactory = $translationClassNodeFactory;
         $this->translatablePropertyCollectorAndRemover = $translatablePropertyCollectorAndRemover;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
@@ -147,7 +140,7 @@ CODE_SAMPLE
         if (!$this->hasImplements($node)) {
             return null;
         }
-        $this->classManipulator->removeInterface($node, 'Gedmo\\Translatable\\Translatable');
+        $this->removeClassInterface($node);
         $this->classInsertManipulator->addAsFirstTrait($node, 'Knp\\DoctrineBehaviors\\Model\\Translatable\\TranslatableTrait');
         $node->implements[] = new FullyQualified('Knp\\DoctrineBehaviors\\Contract\\Entity\\TranslatableInterface');
         $propertyNamesAndPhpDocInfos = $this->translatablePropertyCollectorAndRemover->processClass($node);
@@ -202,5 +195,14 @@ CODE_SAMPLE
             }
         }
         return \false;
+    }
+    private function removeClassInterface(Class_ $class) : void
+    {
+        foreach ($class->implements as $key => $implement) {
+            if (!$this->isName($implement, 'Gedmo\\Translatable\\Translatable')) {
+                continue;
+            }
+            unset($class->implements[$key]);
+        }
     }
 }

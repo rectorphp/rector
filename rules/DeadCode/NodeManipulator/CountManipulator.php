@@ -30,23 +30,23 @@ final class CountManipulator
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
     }
-    public function isCounterHigherThanOne(Expr $node, Expr $expr) : bool
+    public function isCounterHigherThanOne(Expr $firstExpr, Expr $secondExpr) : bool
     {
         // e.g. count($values) > 0
-        if ($node instanceof Greater) {
-            return $this->isGreater($node, $expr);
+        if ($firstExpr instanceof Greater) {
+            return $this->isGreater($firstExpr, $secondExpr);
         }
         // e.g. count($values) >= 1
-        if ($node instanceof GreaterOrEqual) {
-            return $this->isGreaterOrEqual($node, $expr);
+        if ($firstExpr instanceof GreaterOrEqual) {
+            return $this->isGreaterOrEqual($firstExpr, $secondExpr);
         }
         // e.g. 0 < count($values)
-        if ($node instanceof Smaller) {
-            return $this->isSmaller($node, $expr);
+        if ($firstExpr instanceof Smaller) {
+            return $this->isSmaller($firstExpr, $secondExpr);
         }
         // e.g. 1 <= count($values)
-        if ($node instanceof SmallerOrEqual) {
-            return $this->isSmallerOrEqual($node, $expr);
+        if ($firstExpr instanceof SmallerOrEqual) {
+            return $this->isSmallerOrEqual($firstExpr, $secondExpr);
         }
         return \false;
     }
