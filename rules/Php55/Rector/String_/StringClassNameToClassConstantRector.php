@@ -5,6 +5,7 @@ namespace Rector\Php55\Rector\String_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name\FullyQualified;
@@ -95,6 +96,12 @@ CODE_SAMPLE
             return null;
         }
         $fullyQualified = new FullyQualified($classLikeName);
+        if ($classLikeName !== $node->value) {
+            $preSlashCount = \strlen($node->value) - \strlen($classLikeName);
+            $preSlash = \str_repeat('\\', $preSlashCount);
+            $string = new String_($preSlash);
+            return new Concat($string, new ClassConstFetch($fullyQualified, 'class'));
+        }
         return new ClassConstFetch($fullyQualified, 'class');
     }
     /**
