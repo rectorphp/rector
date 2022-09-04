@@ -1,4 +1,4 @@
-# How To Persist Cache Between CI Runs
+# How to Persist Cache Between CI Runs
 While parsing your application code, Rector generates objects representing that code. It caches these objects for later reuse, so it doesn't have to parse the entire application again, by detecting which files have changed since the last Rector run.
 
 When running Rector in a Continuous Integration (CI) system such as [GitHub Actions](https://github.com/features/actions), the default implementation [uses an in-memory cache](https://github.com/rectorphp/rector/blob/1d28ca109ca536e8034c3c756ee61c65e6e63c8a/config/config.php#L89-L94). This means the next job that runs, will have to parse all code from scratch.
@@ -19,7 +19,7 @@ return static function (RectorConfig $rectorConfig): void {
 
 Note that this caches relative to the repository directory, so it's the same directory on build as on development (and other environments). The actual path, when not specified, may vary per (runner) OS.
 
-## Debugging the cache locally
+## Debugging the Cache Locally
 Generate the cache on your development machine, by running the command:
 ```bash
 vendor/bin/rector process --dry-run --config=rector.php
