@@ -28,7 +28,7 @@ abstract class KeywordEmulator extends \PhpParser\Lexer\TokenEmulator\TokenEmula
     }
     /**
      * @param mixed[] $tokens
-     * @return mixed[]|null
+     * @return array|string|null
      */
     private function getPreviousNonSpaceToken(array $tokens, int $start)
     {

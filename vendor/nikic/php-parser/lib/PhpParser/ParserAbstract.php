@@ -557,7 +557,7 @@ abstract class ParserAbstract implements \PhpParser\Parser
     }
     protected function handleBuiltinTypes(Name $name)
     {
-        $builtinTypes = ['bool' => \true, 'int' => \true, 'float' => \true, 'string' => \true, 'iterable' => \true, 'void' => \true, 'object' => \true, 'null' => \true, 'false' => \true, 'mixed' => \true, 'never' => \true];
+        $builtinTypes = ['bool' => \true, 'int' => \true, 'float' => \true, 'string' => \true, 'iterable' => \true, 'void' => \true, 'object' => \true, 'null' => \true, 'false' => \true, 'mixed' => \true, 'never' => \true, 'true' => \true];
         if (!$name->isUnqualified()) {
             return $name;
         }

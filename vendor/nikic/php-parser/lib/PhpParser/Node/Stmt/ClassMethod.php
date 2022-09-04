@@ -22,7 +22,7 @@ class ClassMethod extends Node\Stmt implements FunctionLike, StmtsAwareInterface
     public $stmts;
     /** @var Node\AttributeGroup[] PHP attribute groups */
     public $attrGroups;
-    private static $magicNames = ['__construct' => \true, '__destruct' => \true, '__call' => \true, '__callstatic' => \true, '__get' => \true, '__set' => \true, '__isset' => \true, '__unset' => \true, '__sleep' => \true, '__wakeup' => \true, '__tostring' => \true, '__set_state' => \true, '__clone' => \true, '__invoke' => \true, '__debuginfo' => \true];
+    private static $magicNames = ['__construct' => \true, '__destruct' => \true, '__call' => \true, '__callstatic' => \true, '__get' => \true, '__set' => \true, '__isset' => \true, '__unset' => \true, '__sleep' => \true, '__wakeup' => \true, '__tostring' => \true, '__set_state' => \true, '__clone' => \true, '__invoke' => \true, '__debuginfo' => \true, '__serialize' => \true, '__unserialize' => \true];
     /**
      * Constructs a class method node.
      *
