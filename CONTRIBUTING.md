@@ -47,3 +47,6 @@ Do you want to **contribute a failing test**? [This tutorial will show you how](
     ```
 
 We would be happy to accept PRs that follow these guidelines.
+
+## Repository layout
+Documentation goes into `build/target-repository/docs`.
