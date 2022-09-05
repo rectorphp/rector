@@ -105,7 +105,11 @@ CODE_SAMPLE
                 $literalSeparatedNumber .= '.0';
             }
         }
-        $node->value = $literalSeparatedNumber;
+        // this cannot be integer directly to $node->value, as PHPStan sees it as error type
+        // @see https://github.com/rectorphp/rector/issues/7454
+        $node->setAttribute(AttributeKey::RAW_VALUE, $literalSeparatedNumber);
+        $node->setAttribute(AttributeKey::REPRINT_RAW_VALUE, \true);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         return $node;
     }
     public function provideMinPhpVersion() : int
