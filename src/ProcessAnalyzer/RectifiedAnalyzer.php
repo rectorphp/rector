@@ -92,8 +92,9 @@ final class RectifiedAnalyzer
     {
         /** @var class-string<RectorInterface>[] $createdByRule */
         $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-        if (\count($createdByRule) !== 1) {
-            return \false;
+        $countCreatedByRule = \count($createdByRule);
+        if ($countCreatedByRule !== 1) {
+            return $countCreatedByRule !== 0;
         }
         // different rule, allowed
         if (\current($createdByRule) !== $rectifiedNodeClass) {
