@@ -1922,12 +1922,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "3be7de4a8ada64769c1b3d1b07d099d597316aca"
+                "reference": "d75c674779ffbbb96e2b02074b1e2877dc37781d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/3be7de4a8ada64769c1b3d1b07d099d597316aca",
-                "reference": "3be7de4a8ada64769c1b3d1b07d099d597316aca",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/d75c674779ffbbb96e2b02074b1e2877dc37781d",
+                "reference": "d75c674779ffbbb96e2b02074b1e2877dc37781d",
                 "shasum": ""
             },
             "require": {
@@ -1944,7 +1944,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-debugging": "dev-main",
-                "rector\/rector-src": "dev-main#12f2056",
+                "rector\/rector-src": "dev-main",
                 "symplify\/easy-ci": "^11.1",
                 "symplify\/easy-coding-standard": "^11.1",
                 "symplify\/phpstan-extensions": "^11.1",
@@ -1952,7 +1952,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-09-05T23:42:01+00:00",
+            "time": "2022-09-06T11:58:38+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
