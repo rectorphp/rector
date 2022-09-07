@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ArrayType;
@@ -100,7 +99,7 @@ CODE_SAMPLE
         /** @var Foreach_ $stmt */
         $stmt = $node->stmts[0];
         if ($node->cond instanceof Assign) {
-            return [new Expression($node->cond), $stmt];
+            return null;
         }
         $ifComments = $node->getAttribute(AttributeKey::COMMENTS) ?? [];
         $stmtComments = $stmt->getAttribute(AttributeKey::COMMENTS) ?? [];

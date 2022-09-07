@@ -54,6 +54,8 @@ class Inflectible
         (yield new Transformation(new Pattern('(f)eet$'), '\\1oot'));
         (yield new Transformation(new Pattern('(n)ews$'), 'RectorPrefix202209\\1\\2ews'));
         (yield new Transformation(new Pattern('eaus$'), 'eau'));
+        (yield new Transformation(new Pattern('^tights$'), 'tights'));
+        (yield new Transformation(new Pattern('^shorts$'), 'shorts'));
         (yield new Transformation(new Pattern('s$'), ''));
     }
     /**
@@ -95,6 +97,7 @@ class Inflectible
         (yield new Substitution(new Word('atlas'), new Word('atlases')));
         (yield new Substitution(new Word('axe'), new Word('axes')));
         (yield new Substitution(new Word('beef'), new Word('beefs')));
+        (yield new Substitution(new Word('blouse'), new Word('blouses')));
         (yield new Substitution(new Word('brother'), new Word('brothers')));
         (yield new Substitution(new Word('cafe'), new Word('cafes')));
         (yield new Substitution(new Word('chateau'), new Word('chateaux')));
