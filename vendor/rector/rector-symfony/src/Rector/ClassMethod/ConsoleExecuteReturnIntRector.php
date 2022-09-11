@@ -17,6 +17,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,6 +28,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ConsoleExecuteReturnIntRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer
+     */
+    private $terminatedNodeAnalyzer;
+    public function __construct(TerminatedNodeAnalyzer $terminatedNodeAnalyzer)
+    {
+        $this->terminatedNodeAnalyzer = $terminatedNodeAnalyzer;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Returns int from Command::execute command', [new CodeSample(<<<'CODE_SAMPLE'
@@ -132,7 +142,14 @@ CODE_SAMPLE
         if ($hasReturn) {
             return;
         }
-        $classMethod->stmts[] = new Return_(new LNumber(0));
+        $stmts = (array) $classMethod->stmts;
+        \end($stmts);
+        $lastKey = \key($stmts);
+        $return = new Return_(new LNumber(0));
+        if ($lastKey !== null && (isset($classMethod->stmts[$lastKey]) && $this->terminatedNodeAnalyzer->isAlwaysTerminated($classMethod, $classMethod->stmts[$lastKey], $return))) {
+            return;
+        }
+        $classMethod->stmts[] = $return;
     }
     private function isReturnWithExprIntEquals(Node $parentNode, Node $node) : bool
     {
