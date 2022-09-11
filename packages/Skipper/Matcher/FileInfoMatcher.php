@@ -5,6 +5,7 @@ namespace Rector\Skipper\Matcher;
 
 use Rector\Skipper\FileSystem\FnMatchPathNormalizer;
 use Rector\Skipper\Fnmatcher;
+use Rector\Skipper\RealpathMatcher;
 final class FileInfoMatcher
 {
     /**
@@ -17,10 +18,16 @@ final class FileInfoMatcher
      * @var \Rector\Skipper\Fnmatcher
      */
     private $fnmatcher;
-    public function __construct(FnMatchPathNormalizer $fnMatchPathNormalizer, Fnmatcher $fnmatcher)
+    /**
+     * @readonly
+     * @var \Rector\Skipper\RealpathMatcher
+     */
+    private $realpathMatcher;
+    public function __construct(FnMatchPathNormalizer $fnMatchPathNormalizer, Fnmatcher $fnmatcher, RealpathMatcher $realpathMatcher)
     {
         $this->fnMatchPathNormalizer = $fnMatchPathNormalizer;
         $this->fnmatcher = $fnmatcher;
+        $this->realpathMatcher = $realpathMatcher;
     }
     /**
      * @param string[] $filePatterns
@@ -53,6 +60,9 @@ final class FileInfoMatcher
         if (\substr_compare($filePath, $ignoredPath, -\strlen($ignoredPath)) === 0) {
             return \true;
         }
-        return $this->fnmatcher->match($ignoredPath, $filePath);
+        if ($this->fnmatcher->match($ignoredPath, $filePath)) {
+            return \true;
+        }
+        return $this->realpathMatcher->match($ignoredPath, $filePath);
     }
 }

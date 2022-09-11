@@ -1225,17 +1225,17 @@
         },
         {
             "name": "react\/dns",
-            "version": "v1.9.0",
-            "version_normalized": "1.9.0.0",
+            "version": "v1.10.0",
+            "version_normalized": "1.10.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/dns.git",
-                "reference": "6d38296756fa644e6cb1bfe95eff0f9a4ed6edcb"
+                "reference": "a5427e7dfa47713e438016905605819d101f238c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/dns\/zipball\/6d38296756fa644e6cb1bfe95eff0f9a4ed6edcb",
-                "reference": "6d38296756fa644e6cb1bfe95eff0f9a4ed6edcb",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/dns\/zipball\/a5427e7dfa47713e438016905605819d101f238c",
+                "reference": "a5427e7dfa47713e438016905605819d101f238c",
                 "shasum": ""
             },
             "require": {
@@ -1243,13 +1243,13 @@
                 "react\/cache": "^1.0 || ^0.6 || ^0.5",
                 "react\/event-loop": "^1.2",
                 "react\/promise": "^3.0 || ^2.7 || ^1.2.1",
-                "react\/promise-timer": "^1.8"
+                "react\/promise-timer": "^1.9"
             },
             "require-dev": {
-                "clue\/block-react": "^1.2",
-                "phpunit\/phpunit": "^9.3 || ^4.8.35"
+                "phpunit\/phpunit": "^9.3 || ^4.8.35",
+                "react\/async": "^4 || ^3 || ^2"
             },
-            "time": "2021-12-20T08:46:54+00:00",
+            "time": "2022-09-08T12:22:46+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1292,7 +1292,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/dns\/issues",
-                "source": "https:\/\/github.com\/reactphp\/dns\/tree\/v1.9.0"
+                "source": "https:\/\/github.com\/reactphp\/dns\/tree\/v1.10.0"
             },
             "funding": [
                 {

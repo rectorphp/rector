@@ -35,11 +35,11 @@
         "react\/cache": "^1.0 || ^0.6 || ^0.5",
         "react\/event-loop": "^1.2",
         "react\/promise": "^3.0 || ^2.7 || ^1.2.1",
-        "react\/promise-timer": "^1.8"
+        "react\/promise-timer": "^1.9"
     },
     "require-dev": {
-        "clue\/block-react": "^1.2",
-        "phpunit\/phpunit": "^9.3 || ^4.8.35"
+        "phpunit\/phpunit": "^9.3 || ^4.8.35",
+        "react\/async": "^4 || ^3 || ^2"
     },
     "autoload": {
         "psr-4": {

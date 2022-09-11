@@ -2436,6 +2436,7 @@ return array(
     'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => $baseDir . '/packages/Skipper/FileSystem/FnMatchPathNormalizer.php',
     'Rector\\Skipper\\Fnmatcher' => $baseDir . '/packages/Skipper/Fnmatcher.php',
     'Rector\\Skipper\\Matcher\\FileInfoMatcher' => $baseDir . '/packages/Skipper/Matcher/FileInfoMatcher.php',
+    'Rector\\Skipper\\RealpathMatcher' => $baseDir . '/packages/Skipper/RealpathMatcher.php',
     'Rector\\Skipper\\SkipCriteriaResolver\\SkippedClassResolver' => $baseDir . '/packages/Skipper/SkipCriteriaResolver/SkippedClassResolver.php',
     'Rector\\Skipper\\SkipCriteriaResolver\\SkippedPathsResolver' => $baseDir . '/packages/Skipper/SkipCriteriaResolver/SkippedPathsResolver.php',
     'Rector\\Skipper\\SkipVoter\\ClassSkipVoter' => $baseDir . '/packages/Skipper/SkipVoter/ClassSkipVoter.php',

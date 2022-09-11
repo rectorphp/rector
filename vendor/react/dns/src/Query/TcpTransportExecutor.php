@@ -215,11 +215,19 @@ class TcpTransportExecutor implements ExecutorInterface
             $this->readPending = \true;
             $this->loop->addReadStream($this->socket, array($this, 'handleRead'));
         }
-        $written = @\fwrite($this->socket, $this->writeBuffer);
+        $errno = 0;
+        $errstr = '';
+        \set_error_handler(function ($_, $error) use(&$errno, &$errstr) {
+            // Match errstr from PHP's warning message.
+            // fwrite(): Send of 327712 bytes failed with errno=32 Broken pipe
+            \preg_match('/errno=(\\d+) (.+)/', $error, $m);
+            $errno = isset($m[1]) ? (int) $m[1] : 0;
+            $errstr = isset($m[2]) ? $m[2] : $error;
+        });
+        $written = \fwrite($this->socket, $this->writeBuffer);
+        \restore_error_handler();
         if ($written === \false || $written === 0) {
-            $error = \error_get_last();
-            \preg_match('/errno=(\\d+) (.+)/', $error['message'], $m);
-            $this->closeError('Unable to send query to DNS server ' . $this->nameserver . ' (' . (isset($m[2]) ? $m[2] : $error['message']) . ')', isset($m[1]) ? (int) $m[1] : 0);
+            $this->closeError('Unable to send query to DNS server ' . $this->nameserver . ' (' . $errstr . ')', $errno);
             return;
         }
         if (isset($this->writeBuffer[$written])) {

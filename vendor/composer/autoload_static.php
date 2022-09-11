@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd1b8e60390512bbd8e181e0929a62fa4
+class ComposerStaticInit98e9b293f18091f1ab5c89ae86f8dd9c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2691,6 +2691,7 @@ class ComposerStaticInitd1b8e60390512bbd8e181e0929a62fa4
         'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => __DIR__ . '/../..' . '/packages/Skipper/FileSystem/FnMatchPathNormalizer.php',
         'Rector\\Skipper\\Fnmatcher' => __DIR__ . '/../..' . '/packages/Skipper/Fnmatcher.php',
         'Rector\\Skipper\\Matcher\\FileInfoMatcher' => __DIR__ . '/../..' . '/packages/Skipper/Matcher/FileInfoMatcher.php',
+        'Rector\\Skipper\\RealpathMatcher' => __DIR__ . '/../..' . '/packages/Skipper/RealpathMatcher.php',
         'Rector\\Skipper\\SkipCriteriaResolver\\SkippedClassResolver' => __DIR__ . '/../..' . '/packages/Skipper/SkipCriteriaResolver/SkippedClassResolver.php',
         'Rector\\Skipper\\SkipCriteriaResolver\\SkippedPathsResolver' => __DIR__ . '/../..' . '/packages/Skipper/SkipCriteriaResolver/SkippedPathsResolver.php',
         'Rector\\Skipper\\SkipVoter\\ClassSkipVoter' => __DIR__ . '/../..' . '/packages/Skipper/SkipVoter/ClassSkipVoter.php',
@@ -3093,9 +3094,9 @@ class ComposerStaticInitd1b8e60390512bbd8e181e0929a62fa4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd1b8e60390512bbd8e181e0929a62fa4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd1b8e60390512bbd8e181e0929a62fa4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd1b8e60390512bbd8e181e0929a62fa4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit98e9b293f18091f1ab5c89ae86f8dd9c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit98e9b293f18091f1ab5c89ae86f8dd9c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit98e9b293f18091f1ab5c89ae86f8dd9c::$classMap;
 
         }, null, ClassLoader::class);
     }

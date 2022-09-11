@@ -227,6 +227,9 @@ CODE_SAMPLE
     private function shouldSkip(FuncCall $funcCall) : bool
     {
         $functionNames = \array_keys(self::ARG_POSITION_NAME_NULL_TO_STRICT_STRING);
-        return !$this->nodeNameResolver->isNames($funcCall, $functionNames) || $funcCall->isFirstClassCallable();
+        if (!$this->nodeNameResolver->isNames($funcCall, $functionNames)) {
+            return \true;
+        }
+        return $funcCall->isFirstClassCallable();
     }
 }
