@@ -18,4 +18,8 @@ final class SensiolabsSetList implements SetListInterface
      * @var string
      */
     public const FRAMEWORK_EXTRA_61 = __DIR__ . '/../../config/sets/sensiolabs/framework-extra-61.php';
+    /**
+     * @var string
+     */
+    public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/sensiolabs/annotations-to-attributes.php';
 }

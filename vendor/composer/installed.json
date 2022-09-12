@@ -2197,12 +2197,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "30aa79327098fc221866a64be45308c077484355"
+                "reference": "137e52b4a7b17dc9753ed4ce6aa00d4569d7dc80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/30aa79327098fc221866a64be45308c077484355",
-                "reference": "30aa79327098fc221866a64be45308c077484355",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/137e52b4a7b17dc9753ed4ce6aa00d4569d7dc80",
+                "reference": "137e52b4a7b17dc9753ed4ce6aa00d4569d7dc80",
                 "shasum": ""
             },
             "require": {
@@ -2233,7 +2233,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-09-11T14:00:14+00:00",
+            "time": "2022-09-12T07:21:22+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
