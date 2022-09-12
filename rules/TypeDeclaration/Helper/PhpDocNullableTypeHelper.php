@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\Helper;
 
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Param;
+use PHPStan\Type\ClosureType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -72,6 +73,63 @@ final class PhpDocNullableTypeHelper
         }
         return $cleanNullableMixed;
     }
+    /**
+     * @param array<Type> $updatedDocTypes
+     *
+     * @return array<Type>
+     */
+    private function appendOrPrependNullTypeIfAppropriate(bool $isPhpParserTypeContainingNullType, bool $isPhpDocTypeContainingClosureType, array $updatedDocTypes) : array
+    {
+        if (!$isPhpParserTypeContainingNullType) {
+            return $updatedDocTypes;
+        }
+        if ($isPhpDocTypeContainingClosureType) {
+            \array_unshift($updatedDocTypes, new NullType());
+        } else {
+            $updatedDocTypes[] = new NullType();
+        }
+        return $updatedDocTypes;
+    }
+    private function hasClosureType(Type $phpDocType) : bool
+    {
+        if ($phpDocType instanceof ClosureType) {
+            return \true;
+        }
+        if ($phpDocType instanceof UnionType) {
+            foreach ($phpDocType->getTypes() as $subType) {
+                if ($subType instanceof ClosureType) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
+    }
+    private function hasNullType(Type $phpDocType) : bool
+    {
+        $isPhpDocTypeContainingNullType = \false;
+        if ($phpDocType instanceof UnionType) {
+            return TypeCombinator::containsNull($phpDocType);
+        }
+        return $isPhpDocTypeContainingNullType;
+    }
+    /**
+     * @return Type[]
+     */
+    private function resolveUpdatedDocTypes(Type $phpDocType) : array
+    {
+        $updatedDocTypes = [];
+        if ($phpDocType instanceof UnionType) {
+            foreach ($phpDocType->getTypes() as $subType) {
+                if ($subType instanceof NullType) {
+                    continue;
+                }
+                $updatedDocTypes[] = $subType;
+            }
+        } else {
+            $updatedDocTypes[] = $phpDocType;
+        }
+        return $updatedDocTypes;
+    }
     private function cleanNullableMixed(UnionType $unionType) : Type
     {
         if (!TypeCombinator::containsNull($unionType)) {
@@ -105,26 +163,13 @@ final class PhpDocNullableTypeHelper
     }
     private function resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserTypeNullInfo(Type $phpDocType, bool $isPhpParserTypeContainingNullType) : ?Type
     {
-        /** @var array<(NullType | UnionType)> $updatedDocTypes */
-        $updatedDocTypes = [];
-        $phpDocTypeContainsNullType = \false;
-        if ($phpDocType instanceof UnionType) {
-            $phpDocTypeContainsNullType = TypeCombinator::containsNull($phpDocType);
-            foreach ($phpDocType->getTypes() as $subType) {
-                if ($subType instanceof NullType) {
-                    continue;
-                }
-                $updatedDocTypes[] = $subType;
-            }
-        } else {
-            $updatedDocTypes[] = $phpDocType;
-        }
-        if (!$this->isItRequiredToRemoveOrAddNullTypeToUnion($phpDocTypeContainsNullType, $isPhpParserTypeContainingNullType)) {
+        $isPhpDocTypeContainingNullType = $this->hasNullType($phpDocType);
+        $isPhpDocTypeContainingClosureType = $this->hasClosureType($phpDocType);
+        $updatedDocTypes = $this->resolveUpdatedDocTypes($phpDocType);
+        if (!$this->isItRequiredToRemoveOrAddNullTypeToUnion($isPhpDocTypeContainingNullType, $isPhpParserTypeContainingNullType)) {
             return null;
         }
-        if ($isPhpParserTypeContainingNullType) {
-            $updatedDocTypes[] = new NullType();
-        }
+        $updatedDocTypes = $this->appendOrPrependNullTypeIfAppropriate($isPhpParserTypeContainingNullType, $isPhpDocTypeContainingClosureType, $updatedDocTypes);
         return $this->composeUpdatedPhpDocType($updatedDocTypes);
     }
 }
