@@ -14,21 +14,21 @@ use RectorPrefix202209\Nette;
 final class Reflection
 {
     use Nette\StaticClass;
-    private const BUILTIN_TYPES = ['string' => 1, 'int' => 1, 'float' => 1, 'bool' => 1, 'array' => 1, 'object' => 1, 'callable' => 1, 'iterable' => 1, 'void' => 1, 'null' => 1, 'mixed' => 1, 'false' => 1, 'never' => 1];
-    private const CLASS_KEYWORDS = ['self' => 1, 'parent' => 1, 'static' => 1];
+    private const BuiltinTypes = ['string' => 1, 'int' => 1, 'float' => 1, 'bool' => 1, 'array' => 1, 'object' => 1, 'callable' => 1, 'iterable' => 1, 'void' => 1, 'null' => 1, 'mixed' => 1, 'false' => 1, 'never' => 1];
+    private const ClassKeywords = ['self' => 1, 'parent' => 1, 'static' => 1];
     /**
      * Determines if type is PHP built-in type. Otherwise, it is the class name.
      */
     public static function isBuiltinType(string $type) : bool
     {
-        return isset(self::BUILTIN_TYPES[\strtolower($type)]);
+        return isset(self::BuiltinTypes[\strtolower($type)]);
     }
     /**
      * Determines if type is special class name self/parent/static.
      */
     public static function isClassKeyword(string $name) : bool
     {
-        return isset(self::CLASS_KEYWORDS[\strtolower($name)]);
+        return isset(self::ClassKeywords[\strtolower($name)]);
     }
     /**
      * Returns the type of return value of given function or method and normalizes `self`, `static`, and `parent` to actual class names.
@@ -195,7 +195,7 @@ final class Reflection
         $lower = \strtolower($name);
         if (empty($name)) {
             throw new Nette\InvalidArgumentException('Class name must not be empty.');
-        } elseif (isset(self::BUILTIN_TYPES[$lower])) {
+        } elseif (isset(self::BuiltinTypes[$lower])) {
             return $lower;
         } elseif ($lower === 'self' || $lower === 'static') {
             return $context->name;

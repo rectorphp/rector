@@ -10,4 +10,9 @@
 	<!-- bug in FunctionSpacingSniff -->
 	<exclude-pattern>./tests/Utils/Reflection.getDeclaringMethod.alias.phpt</exclude-pattern>
 	<exclude-pattern>./tests/Utils/Reflection.getDeclaringMethod.insteadof.phpt</exclude-pattern>
+
+	<!-- use function in Arrays.php, Callback.php, Html.php, Strings.php -->
+	<rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine.MultipleUsesPerLine">
+		<severity>0</severity>
+	</rule>
 </ruleset>

@@ -14,14 +14,14 @@ use RectorPrefix202209\Nette;
 class Floats
 {
     use Nette\StaticClass;
-    private const EPSILON = 1.0E-10;
+    private const Epsilon = 1.0E-10;
     public static function isZero(float $value) : bool
     {
-        return \abs($value) < self::EPSILON;
+        return \abs($value) < self::Epsilon;
     }
     public static function isInteger(float $value) : bool
     {
-        return \abs(\round($value) - $value) < self::EPSILON;
+        return \abs(\round($value) - $value) < self::Epsilon;
     }
     /**
      * Compare two floats. If $a < $b it returns -1, if they are equal it returns 0 and if $a > $b it returns 1
@@ -35,7 +35,7 @@ class Floats
             return 0;
         }
         $diff = \abs($a - $b);
-        if ($diff < self::EPSILON || $diff / \max(\abs($a), \abs($b)) < self::EPSILON) {
+        if ($diff < self::Epsilon || $diff / \max(\abs($a), \abs($b)) < self::Epsilon) {
             return 0;
         }
         return $a < $b ? -1 : 1;
