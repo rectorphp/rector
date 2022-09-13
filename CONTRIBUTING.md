@@ -30,23 +30,10 @@ Do you want to **contribute a failing test**? [This tutorial will show you how](
 
 ## Preparing Pull Request
 
-3 steps will make your pull-request easy to merge:
-
 - **1 feature per pull-request**
 - **new features need tests**
-- CI must pass... you can mimic it locally by running
 
-    ```bash
-    composer complete-check
-    ```
-
-- Do you need to fix coding standards?
-
-    ```bash
-    composer fix-cs
-    ```
-
-We would be happy to accept PRs that follow these guidelines.
+We would be happy to accept PRs that follow our guidelines.
 
 ## Repository layout
 Documentation goes into `build/target-repository/docs`.
