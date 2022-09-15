@@ -9,6 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+use Rector\PhpAttribute\Enum\DocTagNodeState;
 use RectorPrefix202209\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements AnnotationToAttributeMapperInterface<ArrayItemNode>
@@ -40,6 +41,9 @@ final class ArrayItemNodeAnnotationToAttributeMapper implements AnnotationToAttr
     public function map($arrayItemNode) : Expr
     {
         $valueExpr = $this->annotationToAttributeMapper->map($arrayItemNode->value);
+        if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
+            return new ArrayItem(new String_($valueExpr), null);
+        }
         if ($arrayItemNode->key !== null) {
             switch ($arrayItemNode->kindKeyQuoted) {
                 case String_::KIND_SINGLE_QUOTED:
