@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.6.5 (2022-09-16)
+
+*   Feature: Full support for PHP 8.1 and PHP 8.2 release.
+    (#91 by @SimonFrings and #99 by @WyriHaximus)
+
+*   Feature / Fix: Improve error reporting when custom error handler is used.
+    (#94 by @clue)
+
+*   Minor documentation improvements.
+    (#92 by @SimonFrings and #95 by @nhedger)
+
+*   Improve test suite, skip failing tests on bugged versions and fix legacy HHVM build.
+    (#96 and #98 by @clue and #93 by @SimonFrings)
+
 ## 0.6.4 (2021-10-12)
 
 *   Feature / Fix: Skip sigchild check if `phpinfo()` has been disabled.

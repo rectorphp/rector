@@ -180,10 +180,17 @@ class Process extends EventEmitter
             $options['bypass_shell'] = \true;
             $options['suppress_errors'] = \true;
         }
+        $errstr = '';
+        \set_error_handler(function ($_, $error) use(&$errstr) {
+            // Match errstr from PHP's warning message.
+            // proc_open(/dev/does-not-exist): Failed to open stream: No such file or directory
+            $errstr = $error;
+        });
+        $pipes = array();
         $this->process = @\proc_open($cmd, $fdSpec, $pipes, $this->cwd, $this->env, $options);
+        \restore_error_handler();
         if (!\is_resource($this->process)) {
-            $error = \error_get_last();
-            throw new \RuntimeException('Unable to launch a new process: ' . $error['message']);
+            throw new \RuntimeException('Unable to launch a new process: ' . $errstr);
         }
         // count open process pipes and await close event for each to drain buffers before detecting exit
         $that = $this;

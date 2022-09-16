@@ -31,6 +31,17 @@ final class VisibilityManipulator
         $this->addVisibilityFlag($node, Visibility::STATIC);
     }
     /**
+     * @api
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     */
+    public function makeNonStatic($node) : void
+    {
+        if (!$node->isStatic()) {
+            return;
+        }
+        $node->flags -= Class_::MODIFIER_STATIC;
+    }
+    /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Class_ $node
      */
     public function makeAbstract($node) : void
@@ -41,12 +52,12 @@ final class VisibilityManipulator
      * @api
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
      */
-    public function makeNonStatic($node) : void
+    public function makeNonAbstract($node) : void
     {
-        if (!$node->isStatic()) {
+        if (!$node instanceof ClassMethod || !$node->isAbstract()) {
             return;
         }
-        $node->flags -= Class_::MODIFIER_STATIC;
+        $node->flags -= Class_::MODIFIER_ABSTRACT;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\ClassConst $node
@@ -77,6 +88,7 @@ final class VisibilityManipulator
             return;
         }
         if ($node->isPublic()) {
+            $node->flags |= Class_::MODIFIER_PUBLIC;
             $node->flags -= Class_::MODIFIER_PUBLIC;
         }
         if ($node->isProtected()) {
