@@ -12,6 +12,7 @@ return array(
     'Rector\\Utils\\' => array($baseDir . '/utils'),
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
+    'Rector\\PhpParser\\' => array($vendorDir . '/rector/rector-php-parser/src'),
     'Rector\\PHPUnit\\' => array($vendorDir . '/rector/rector-phpunit/src'),
     'Rector\\PHPOffice\\' => array($vendorDir . '/rector/rector-phpoffice/src'),
     'Rector\\Laravel\\' => array($vendorDir . '/rector/rector-laravel/src'),

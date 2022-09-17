@@ -25,7 +25,8 @@
         "rector/rector-doctrine": "*",
         "rector/rector-cakephp": "*",
         "rector/rector-laravel": "*",
-        "rector/rector-phpoffice": "*"
+        "rector/rector-phpoffice": "*",
+        "rector/rector-php-parser": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
