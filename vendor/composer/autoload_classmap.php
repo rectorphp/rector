@@ -2742,6 +2742,7 @@ return array(
     'Rector\\TypeDeclaration\\PhpDocParser\\NonInformativeReturnTagRemover' => $baseDir . '/rules/TypeDeclaration/PhpDocParser/NonInformativeReturnTagRemover.php',
     'Rector\\TypeDeclaration\\PhpDocParser\\ParamPhpDocNodeFactory' => $baseDir . '/rules/TypeDeclaration/PhpDocParser/ParamPhpDocNodeFactory.php',
     'Rector\\TypeDeclaration\\PhpParserTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/PhpParserTypeAnalyzer.php',
+    'Rector\\TypeDeclaration\\Rector\\ArrowFunction\\AddArrowFunctionReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ArrowFunction/AddArrowFunctionReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayParamDocTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddArrayParamDocTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayReturnDocTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddArrayReturnDocTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',
