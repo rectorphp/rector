@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
@@ -15,6 +16,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Naming\Naming\AliasNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -40,9 +42,15 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\AliasNameResolver
+     */
+    private $aliasNameResolver;
+    public function __construct(ReflectionProvider $reflectionProvider, AliasNameResolver $aliasNameResolver)
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->aliasNameResolver = $aliasNameResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -96,13 +104,17 @@ CODE_SAMPLE
             return null;
         }
         $fullyQualified = new FullyQualified($classLikeName);
+        $name = clone $fullyQualified;
+        $name->setAttribute(AttributeKey::PARENT_NODE, $node->getAttribute(AttributeKey::PARENT_NODE));
+        $aliasName = $this->aliasNameResolver->resolveByName($name);
+        $fullyQualifiedOrAliasName = \is_string($aliasName) ? new Name($aliasName) : $fullyQualified;
         if ($classLikeName !== $node->value) {
             $preSlashCount = \strlen($node->value) - \strlen($classLikeName);
             $preSlash = \str_repeat('\\', $preSlashCount);
             $string = new String_($preSlash);
-            return new Concat($string, new ClassConstFetch($fullyQualified, 'class'));
+            return new Concat($string, new ClassConstFetch($fullyQualifiedOrAliasName, 'class'));
         }
-        return new ClassConstFetch($fullyQualified, 'class');
+        return new ClassConstFetch($fullyQualifiedOrAliasName, 'class');
     }
     /**
      * @param mixed[] $configuration

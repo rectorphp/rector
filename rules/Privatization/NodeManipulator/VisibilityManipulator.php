@@ -50,11 +50,11 @@ final class VisibilityManipulator
     }
     /**
      * @api
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Class_ $node
      */
     public function makeNonAbstract($node) : void
     {
-        if (!$node instanceof ClassMethod || !$node->isAbstract()) {
+        if (!$node->isAbstract()) {
             return;
         }
         $node->flags -= Class_::MODIFIER_ABSTRACT;
