@@ -1,4 +1,4 @@
-# 394 Rules Overview
+# 395 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (29)
+- [TypeDeclaration](#typedeclaration) (30)
 
 - [Visibility](#visibility) (3)
 
@@ -8608,6 +8608,19 @@ Adds `@return` annotation to array parameters inferred from the rest of the code
          return $this->values;
      }
  }
+```
+
+<br>
+
+### AddArrowFunctionReturnTypeRector
+
+Add known return type to arrow function
+
+- class: [`Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector`](../rules/TypeDeclaration/Rector/ArrowFunction/AddArrowFunctionReturnTypeRector.php)
+
+```diff
+-fn () => [];
++fn (): array => [];
 ```
 
 <br>
