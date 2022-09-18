@@ -4,8 +4,10 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Use_;
+use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
@@ -15,6 +17,8 @@ use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
+use Rector\Naming\Naming\AliasNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -60,7 +64,12 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(ParameterProvider $parameterProvider, NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter, ClassNameImportSkipper $classNameImportSkipper, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\Naming\Naming\AliasNameResolver
+     */
+    private $aliasNameResolver;
+    public function __construct(ParameterProvider $parameterProvider, NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter, ClassNameImportSkipper $classNameImportSkipper, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, BetterNodeFinder $betterNodeFinder, AliasNameResolver $aliasNameResolver)
     {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
@@ -70,6 +79,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->reflectionProvider = $reflectionProvider;
         $this->currentFileProvider = $currentFileProvider;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->aliasNameResolver = $aliasNameResolver;
     }
     public function enterNode(Node $node) : ?Node
     {
@@ -128,9 +138,32 @@ CODE_SAMPLE
         /** @var Use_[] $currentUses */
         $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), Use_::class);
         if ($this->shouldImportName($name, $currentUses)) {
+            $aliasName = $this->aliasNameResolver->resolveByName($name);
+            $node = $name->getAttribute(AttributeKey::PARENT_NODE);
+            if (\is_string($aliasName) && !$node instanceof UseUse && !$this->hasOtherSameUseStatementWithoutAlias($name, $currentUses)) {
+                return new Name($aliasName);
+            }
             return $this->nameImporter->importName($name, $file, $currentUses);
         }
         return null;
+    }
+    /**
+     * @param Use_[] $currentUses
+     */
+    private function hasOtherSameUseStatementWithoutAlias(Name $name, array $currentUses) : bool
+    {
+        $currentName = $name->toString();
+        foreach ($currentUses as $currentUse) {
+            foreach ($currentUse->uses as $useUse) {
+                if ($useUse->alias instanceof Identifier) {
+                    continue;
+                }
+                if ($useUse->name->toString() === $currentName) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
     }
     /**
      * @param Use_[] $currentUses

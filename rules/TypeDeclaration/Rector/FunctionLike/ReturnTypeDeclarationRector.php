@@ -170,7 +170,7 @@ CODE_SAMPLE
         if ($node->returnType !== null && $this->shouldSkipExistingReturnType($node, $inferedType)) {
             return null;
         }
-        /** @var Name|NullableType|PhpParserUnionType $inferredReturnNode */
+        /** @var Name|NullableType|PhpParserUnionType|IntersectionType $inferredReturnNode */
         $this->addReturnType($node, $inferredReturnNode);
         $this->nonInformativeReturnTagRemover->removeReturnTagIfNotUseful($node);
         return $node;
@@ -212,7 +212,7 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\IntersectionType $inferredReturnNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\NullableType|PhpParserUnionType|\PhpParser\Node\IntersectionType $inferredReturnNode
      */
     private function addReturnType($functionLike, $inferredReturnNode) : void
     {
