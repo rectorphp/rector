@@ -68,8 +68,12 @@ CODE_SAMPLE
         }
         /** @var PropertyProperty $onlyProperty */
         $onlyProperty = $node->props[0];
-        $isPropretyNullChecked = $this->isPropertyNullChecked($onlyProperty);
-        if (!$isPropretyNullChecked) {
+        //Skip properties with default values
+        if ($onlyProperty->default instanceof Node\Expr) {
+            return null;
+        }
+        $isPropertyNullChecked = $this->isPropertyNullChecked($onlyProperty);
+        if (!$isPropertyNullChecked) {
             return null;
         }
         if ($node->type instanceof ComplexType) {
