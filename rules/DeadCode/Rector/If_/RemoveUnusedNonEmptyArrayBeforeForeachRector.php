@@ -9,10 +9,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DeadCode\NodeManipulator\CountManipulator;
 use Rector\DeadCode\UselessIfCondBeforeForeachDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -21,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector\RemoveUnusedNonEmptyArrayBeforeForeachRectorTest
  */
-final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractRector
+final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -91,9 +92,9 @@ CODE_SAMPLE
      * @param If_ $node
      * @return Stmt[]|Foreach_|null
      */
-    public function refactor(Node $node)
+    public function refactorWithScope(Node $node, Scope $scope)
     {
-        if (!$this->isUselessBeforeForeachCheck($node)) {
+        if (!$this->isUselessBeforeForeachCheck($node, $scope)) {
             return null;
         }
         /** @var Foreach_ $stmt */
@@ -107,7 +108,7 @@ CODE_SAMPLE
         $stmt->setAttribute(AttributeKey::COMMENTS, $comments);
         return $stmt;
     }
-    private function isUselessBeforeForeachCheck(If_ $if) : bool
+    private function isUselessBeforeForeachCheck(If_ $if, Scope $scope) : bool
     {
         if (!$this->ifManipulator->isIfWithOnly($if, Foreach_::class)) {
             return \false;
@@ -124,7 +125,7 @@ CODE_SAMPLE
         if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotIdenticalEmptyArray($if, $foreachExpr)) {
             return \true;
         }
-        if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotEmpty($if, $foreachExpr)) {
+        if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotEmpty($if, $foreachExpr, $scope)) {
             return \true;
         }
         // we know it's an array
