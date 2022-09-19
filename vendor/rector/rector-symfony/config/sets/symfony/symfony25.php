@@ -5,6 +5,7 @@ namespace RectorPrefix202209;
 
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\MethodCall\AddViolationToBuildViolationRector;
+use Rector\Symfony\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(AddViolationToBuildViolationRector::class);
+    $rectorConfig->rules([AddViolationToBuildViolationRector::class, MaxLengthSymfonyFormOptionToAttrRector::class]);
 };
