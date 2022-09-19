@@ -5,6 +5,7 @@ namespace Rector\Restoration\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
@@ -69,7 +70,7 @@ CODE_SAMPLE
         /** @var PropertyProperty $onlyProperty */
         $onlyProperty = $node->props[0];
         //Skip properties with default values
-        if ($onlyProperty->default instanceof Node\Expr) {
+        if ($onlyProperty->default instanceof Expr) {
             return null;
         }
         $isPropertyNullChecked = $this->isPropertyNullChecked($onlyProperty);

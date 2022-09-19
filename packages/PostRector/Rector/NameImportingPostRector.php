@@ -4,20 +4,20 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Naming\Naming\AliasNameResolver;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -61,15 +61,15 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
     private $currentFileProvider;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\Naming\Naming\UseImportsResolver
      */
-    private $betterNodeFinder;
+    private $useImportsResolver;
     /**
      * @readonly
      * @var \Rector\Naming\Naming\AliasNameResolver
      */
     private $aliasNameResolver;
-    public function __construct(ParameterProvider $parameterProvider, NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter, ClassNameImportSkipper $classNameImportSkipper, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, BetterNodeFinder $betterNodeFinder, AliasNameResolver $aliasNameResolver)
+    public function __construct(ParameterProvider $parameterProvider, NameImporter $nameImporter, DocBlockNameImporter $docBlockNameImporter, ClassNameImportSkipper $classNameImportSkipper, PhpDocInfoFactory $phpDocInfoFactory, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, UseImportsResolver $useImportsResolver, AliasNameResolver $aliasNameResolver)
     {
         $this->parameterProvider = $parameterProvider;
         $this->nameImporter = $nameImporter;
@@ -78,7 +78,7 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionProvider = $reflectionProvider;
         $this->currentFileProvider = $currentFileProvider;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->useImportsResolver = $useImportsResolver;
         $this->aliasNameResolver = $aliasNameResolver;
     }
     public function enterNode(Node $node) : ?Node
@@ -134,39 +134,31 @@ CODE_SAMPLE
         if ($name->isSpecialClassName()) {
             return $name;
         }
-        // @todo test if old stmts or new stmts! or both? :)
-        /** @var Use_[] $currentUses */
-        $currentUses = $this->betterNodeFinder->findInstanceOf($file->getNewStmts(), Use_::class);
+        /** @var Use_[]|GroupUse[] $currentUses */
+        $currentUses = $this->useImportsResolver->resolveForNode($name);
         if ($this->shouldImportName($name, $currentUses)) {
-            $aliasName = $this->aliasNameResolver->resolveByName($name);
-            $node = $name->getAttribute(AttributeKey::PARENT_NODE);
-            if (\is_string($aliasName) && !$node instanceof UseUse && !$this->hasOtherSameUseStatementWithoutAlias($name, $currentUses)) {
-                return new Name($aliasName);
+            $alias = $this->resolveAlias($name);
+            if ($alias instanceof Name) {
+                return $alias;
             }
             return $this->nameImporter->importName($name, $file, $currentUses);
         }
         return null;
     }
-    /**
-     * @param Use_[] $currentUses
-     */
-    private function hasOtherSameUseStatementWithoutAlias(Name $name, array $currentUses) : bool
+    private function resolveAlias(Name $name) : ?Name
     {
-        $currentName = $name->toString();
-        foreach ($currentUses as $currentUse) {
-            foreach ($currentUse->uses as $useUse) {
-                if ($useUse->alias instanceof Identifier) {
-                    continue;
-                }
-                if ($useUse->name->toString() === $currentName) {
-                    return \true;
-                }
-            }
+        $originalName = $name->getAttribute(AttributeKey::ORIGINAL_NAME);
+        if (!$originalName instanceof FullyQualified) {
+            return null;
         }
-        return \false;
+        $aliasName = $this->aliasNameResolver->resolveByName($name);
+        if (!\is_string($aliasName)) {
+            return null;
+        }
+        return new Name($aliasName);
     }
     /**
-     * @param Use_[] $currentUses
+     * @param Use_[]|GroupUse[] $currentUses
      */
     private function shouldImportName(Name $name, array $currentUses) : bool
     {
