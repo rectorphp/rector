@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0404daecbbc8f726aee20d6aaa0aed34
+class ComposerStaticInit70d98016e613e94e6a2b16f79f741f22
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1449,9 +1449,11 @@ class ComposerStaticInit0404daecbbc8f726aee20d6aaa0aed34
         'Rector\\CodeQuality\\Rector\\FuncCall\\AddPregQuoteDelimiterRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/AddPregQuoteDelimiterRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\ArrayKeysAndInArrayToArrayKeyExistsRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\ArrayMergeOfNonArraysToSimpleArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/ArrayMergeOfNonArraysToSimpleArrayRector.php',
+        'Rector\\CodeQuality\\Rector\\FuncCall\\BoolvalToTypeCastRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/BoolvalToTypeCastRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\CallUserFuncWithArrowFunctionToInlineRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/CallUserFuncWithArrowFunctionToInlineRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\ChangeArrayPushToArrayAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/ChangeArrayPushToArrayAssignRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\CompactToVariablesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/CompactToVariablesRector.php',
+        'Rector\\CodeQuality\\Rector\\FuncCall\\FloatvalToTypeCastRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/FloatvalToTypeCastRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\InlineIsAInstanceOfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/InlineIsAInstanceOfRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\IntvalToTypeCastRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/IntvalToTypeCastRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\IsAWithStringWithThirdArgumentRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/IsAWithStringWithThirdArgumentRector.php',
@@ -1462,6 +1464,7 @@ class ComposerStaticInit0404daecbbc8f726aee20d6aaa0aed34
         'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyRegexPatternRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SimplifyRegexPatternRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\SimplifyStrposLowerRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SimplifyStrposLowerRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\SingleInArrayToCompareRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/SingleInArrayToCompareRector.php',
+        'Rector\\CodeQuality\\Rector\\FuncCall\\StrvalToTypeCastRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/StrvalToTypeCastRector.php',
         'Rector\\CodeQuality\\Rector\\FuncCall\\UnwrapSprintfOneArgumentRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FuncCall/UnwrapSprintfOneArgumentRector.php',
         'Rector\\CodeQuality\\Rector\\FunctionLike\\RemoveAlwaysTrueConditionSetInConstructorRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FunctionLike/RemoveAlwaysTrueConditionSetInConstructorRector.php',
         'Rector\\CodeQuality\\Rector\\FunctionLike\\SimplifyUselessVariableRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/FunctionLike/SimplifyUselessVariableRector.php',
@@ -3103,9 +3106,9 @@ class ComposerStaticInit0404daecbbc8f726aee20d6aaa0aed34
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0404daecbbc8f726aee20d6aaa0aed34::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0404daecbbc8f726aee20d6aaa0aed34::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0404daecbbc8f726aee20d6aaa0aed34::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit70d98016e613e94e6a2b16f79f741f22::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit70d98016e613e94e6a2b16f79f741f22::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit70d98016e613e94e6a2b16f79f741f22::$classMap;
 
         }, null, ClassLoader::class);
     }
