@@ -209,6 +209,7 @@ CODE_SAMPLE;
         // for PHP doc info factory and change notifier
         $this->currentNodeProvider->setNode($node);
         $this->printDebugCurrentFileAndRule();
+        $this->changedNodeScopeRefresher->reIndexNodeAttributes($node);
         $refactoredNode = $this->refactor($node);
         // nothing to change → continue
         if ($refactoredNode === null) {

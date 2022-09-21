@@ -91,11 +91,10 @@ final class ChangedNodeScopeRefresher
             $attributeGroup = new AttributeGroup([$node]);
             $node = new Property(0, [], [], null, [$attributeGroup]);
         }
-        $this->reIndexNodeAttributes($node);
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
     }
-    private function reIndexNodeAttributes(Node $node) : void
+    public function reIndexNodeAttributes(Node $node) : void
     {
         if (($node instanceof ClassLike || $node instanceof StmtsAwareInterface) && $node->stmts !== null) {
             $node->stmts = \array_values($node->stmts);
