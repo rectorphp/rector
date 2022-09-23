@@ -140,6 +140,13 @@ final class UnionTypeMapper implements TypeMapperInterface
             // use first unioned type in case of unioned object types
             return $this->matchTypeForUnionedObjectTypes($type, $typeKind);
         }
+        return $this->mapNullabledType($nullabledType, $typeKind);
+    }
+    /** 
+     * @param TypeKind::* $typeKind
+     */
+    private function mapNullabledType(Type $nullabledType, string $typeKind) : ?Node
+    {
         // void cannot be nullable
         if ($nullabledType instanceof VoidType) {
             return null;
@@ -152,7 +159,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $nullabledTypeNode;
         }
         /** @var Name $nullabledTypeNode */
-        if (!$this->nodeNameResolver->isName($nullabledTypeNode, 'false')) {
+        if (!$this->nodeNameResolver->isNames($nullabledTypeNode, ['false', 'mixed'])) {
             return new NullableType($nullabledTypeNode);
         }
         return null;
