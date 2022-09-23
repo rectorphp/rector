@@ -31,6 +31,10 @@ final class PropertyNaming
      */
     private const EXCLUDED_CLASSES = ['#Closure#', '#^Spl#', '#FileInfo#', '#^std#', '#Iterator#', '#SimpleXML#'];
     /**
+     * @var array<string, string>
+     */
+    private const CONTEXT_AWARE_NAMES_BY_TYPE = ['Twig\\Environment' => 'twigEnvironment'];
+    /**
      * @var string
      */
     private const INTERFACE = 'Interface';
@@ -70,19 +74,8 @@ final class PropertyNaming
     }
     public function getExpectedNameFromType(Type $type) : ?ExpectedName
     {
-        $type = TypeCombinator::removeNull($type);
-        if (!$type instanceof TypeWithClassName) {
-            return null;
-        }
-        if ($type instanceof SelfObjectType) {
-            return null;
-        }
-        if ($type instanceof StaticType) {
-            return null;
-        }
-        $className = $type instanceof AliasedObjectType ? $type->getClassName() : $this->nodeTypeResolver->getFullyQualifiedClassName($type);
-        // generic types are usually mix of parent type and specific type - various way to handle it
-        if ($type instanceof GenericObjectType) {
+        $className = $this->resolveClassNameFromType($type);
+        if (!\is_string($className)) {
             return null;
         }
         foreach (self::EXCLUDED_CLASSES as $excludedClass) {
@@ -90,15 +83,14 @@ final class PropertyNaming
                 return null;
             }
         }
-        $shortClassName = $this->resolveShortClassName($className);
-        $shortClassName = $this->removePrefixesAndSuffixes($shortClassName);
-        // if all is upper-cased, it should be lower-cased
-        if ($shortClassName === \strtoupper($shortClassName)) {
-            $shortClassName = \strtolower($shortClassName);
+        // special cases to keep context
+        foreach (self::CONTEXT_AWARE_NAMES_BY_TYPE as $specialType => $contextAwareName) {
+            if ($className === $specialType) {
+                return new ExpectedName($contextAwareName, $contextAwareName);
+            }
         }
-        // remove "_"
-        $shortClassName = Strings::replace($shortClassName, '#_#', '');
-        $shortClassName = $this->normalizeUpperCase($shortClassName);
+        $shortClassName = $this->resolveShortClassName($className);
+        $shortClassName = $this->normalizeShortClassName($shortClassName);
         // prolong too short generic names with one namespace up
         $originalName = $this->prolongIfTooShort($shortClassName, $className);
         return new ExpectedName($originalName, $this->rectorNamingInflector->singularize($originalName));
@@ -232,5 +224,34 @@ final class PropertyNaming
             return \true;
         }
         return \ctype_digit($char);
+    }
+    private function normalizeShortClassName(string $shortClassName) : string
+    {
+        $shortClassName = $this->removePrefixesAndSuffixes($shortClassName);
+        // if all is upper-cased, it should be lower-cased
+        if ($shortClassName === \strtoupper($shortClassName)) {
+            $shortClassName = \strtolower($shortClassName);
+        }
+        // remove "_"
+        $shortClassName = Strings::replace($shortClassName, '#_#', '');
+        return $this->normalizeUpperCase($shortClassName);
+    }
+    private function resolveClassNameFromType(Type $type) : ?string
+    {
+        $type = TypeCombinator::removeNull($type);
+        if (!$type instanceof TypeWithClassName) {
+            return null;
+        }
+        if ($type instanceof SelfObjectType) {
+            return null;
+        }
+        if ($type instanceof StaticType) {
+            return null;
+        }
+        // generic types are usually mix of parent type and specific type - various way to handle it
+        if ($type instanceof GenericObjectType) {
+            return null;
+        }
+        return $type instanceof AliasedObjectType ? $type->getClassName() : $this->nodeTypeResolver->getFullyQualifiedClassName($type);
     }
 }
