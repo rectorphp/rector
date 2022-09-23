@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
-use PhpParser\Node\Param;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Param;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ParamAnalyzer
 {
