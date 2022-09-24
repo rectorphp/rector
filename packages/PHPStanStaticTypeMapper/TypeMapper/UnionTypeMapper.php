@@ -142,7 +142,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         return $this->mapNullabledType($nullabledType, $typeKind);
     }
-    /** 
+    /**
      * @param TypeKind::* $typeKind
      */
     private function mapNullabledType(Type $nullabledType, string $typeKind) : ?Node

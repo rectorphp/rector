@@ -53,7 +53,7 @@ final class AlwaysStrictScalarExprAnalyzer
         }
         if ($expr instanceof FuncCall) {
             $returnType = $this->resolveFuncCallType($expr);
-            if ($returnType === null) {
+            if (!$returnType instanceof Type) {
                 return null;
             }
             if (!$this->isScalarType($returnType)) {
@@ -74,10 +74,7 @@ final class AlwaysStrictScalarExprAnalyzer
         if ($type instanceof IntegerType) {
             return \true;
         }
-        if ($type instanceof BooleanType) {
-            return \true;
-        }
-        return \false;
+        return $type instanceof BooleanType;
     }
     private function resolveTypeFromScalar(Scalar $scalar) : ?\PHPStan\Type\Type
     {
