@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
@@ -145,25 +146,75 @@ CODE_SAMPLE
         /** @var Use_[]|GroupUse[] $currentUses */
         $currentUses = $this->useImportsResolver->resolveForNode($name);
         if ($this->shouldImportName($name, $currentUses)) {
-            $alias = $this->resolveAlias($name);
-            if ($alias instanceof Name) {
-                return $alias;
+            $nameInUse = $this->resolveNameInUse($name, $currentUses);
+            if ($nameInUse instanceof FullyQualified) {
+                return null;
+            }
+            if ($nameInUse instanceof Name) {
+                return $nameInUse;
             }
             return $this->nameImporter->importName($name, $file, $currentUses);
         }
         return null;
     }
-    private function resolveAlias(Name $name) : ?Name
+    /**
+     * @param Use_[]|GroupUse[] $currentUses
+     * @return null|\PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified
+     */
+    private function resolveNameInUse(Name $name, array $currentUses)
     {
         $originalName = $name->getAttribute(AttributeKey::ORIGINAL_NAME);
         if (!$originalName instanceof FullyQualified) {
             return null;
         }
         $aliasName = $this->aliasNameResolver->resolveByName($name);
-        if (!\is_string($aliasName)) {
-            return null;
+        if (\is_string($aliasName)) {
+            return new Name($aliasName);
         }
-        return new Name($aliasName);
+        $isShortFullyQualifiedName = \substr_count($name->toCodeString(), '\\') === 1;
+        if (!$isShortFullyQualifiedName) {
+            return $this->resolveLongNameInUseName($name, $currentUses);
+        }
+        return $this->resolveConflictedShortNameInUse($name, $currentUses);
+    }
+    /**
+     * @param Use_[]|GroupUse[] $currentUses
+     */
+    private function resolveLongNameInUseName(Name $name, array $currentUses) : ?Name
+    {
+        $lastName = $name->getLast();
+        foreach ($currentUses as $currentUse) {
+            foreach ($currentUse->uses as $useUse) {
+                if ($useUse->name->getLast() !== $lastName) {
+                    continue;
+                }
+                if ($useUse->alias instanceof Identifier && $useUse->alias->toString() !== $lastName) {
+                    return new Name($lastName);
+                }
+            }
+        }
+        return null;
+    }
+    /**
+     * @param Use_[]|GroupUse[] $currentUses
+     */
+    private function resolveConflictedShortNameInUse(Name $name, array $currentUses) : ?FullyQualified
+    {
+        $currentName = $name->toString();
+        foreach ($currentUses as $currentUse) {
+            $prefix = $this->useImportsResolver->resolvePrefix($currentUse);
+            foreach ($currentUse->uses as $useUse) {
+                $useName = $prefix . $name->toString();
+                $lastUseName = $name->getLast();
+                if (!$useUse->alias instanceof Identifier && $useName !== $currentName && $lastUseName === $currentName) {
+                    return new FullyQualified($currentName);
+                }
+                if ($useUse->alias instanceof Identifier && $useUse->alias->toString() === $currentName) {
+                    return new FullyQualified($currentName);
+                }
+            }
+        }
+        return null;
     }
     /**
      * @param Use_[]|GroupUse[] $currentUses
