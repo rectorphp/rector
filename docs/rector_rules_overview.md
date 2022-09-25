@@ -1,4 +1,4 @@
-# 395 Rules Overview
+# 398 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (72)
+- [CodeQuality](#codequality) (75)
 
 - [CodingStyle](#codingstyle) (36)
 
@@ -385,6 +385,25 @@ Negated identical boolean compare to not identical compare (does not apply to no
 
 <br>
 
+### BoolvalToTypeCastRector
+
+Change `boolval()` to faster and readable (bool) `$value`
+
+- class: [`Rector\CodeQuality\Rector\FuncCall\BoolvalToTypeCastRector`](../rules/CodeQuality/Rector/FuncCall/BoolvalToTypeCastRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        return boolval($value);
++        return (bool) $value;
+     }
+ }
+```
+
+<br>
+
 ### CallUserFuncWithArrowFunctionToInlineRector
 
 Refactor `call_user_func()` with arrow function to direct call
@@ -668,6 +687,27 @@ Flip type control to use exclusive type
 +        if (! $phpDocInfo instanceof PhpDocInfo) {
              return;
          }
+     }
+ }
+```
+
+<br>
+
+### FloatvalToTypeCastRector
+
+Change `floatval()` and `doubleval()` to faster and readable (float) `$value`
+
+- class: [`Rector\CodeQuality\Rector\FuncCall\FloatvalToTypeCastRector`](../rules/CodeQuality/Rector/FuncCall/FloatvalToTypeCastRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        $a = floatval($value);
+-        $b = doubleval($value);
++        $a = (float) $value;
++        $b = (float) $value;
      }
  }
 ```
@@ -1533,6 +1573,25 @@ Changes strlen comparison to 0 to direct empty string compare
      {
 -        $empty = strlen($value) === 0;
 +        $empty = $value === '';
+     }
+ }
+```
+
+<br>
+
+### StrvalToTypeCastRector
+
+Change `strval()` to faster and readable (string) `$value`
+
+- class: [`Rector\CodeQuality\Rector\FuncCall\StrvalToTypeCastRector`](../rules/CodeQuality/Rector/FuncCall/StrvalToTypeCastRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run($value)
+     {
+-        return strval($value);
++        return (string) $value;
      }
  }
 ```
