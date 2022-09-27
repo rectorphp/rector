@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_ as ThrowsStmt;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\ValueObject\CondAndExpr;
@@ -27,10 +28,16 @@ final class MatchFactory
      * @var \Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer
      */
     private $matchSwitchAnalyzer;
-    public function __construct(\Rector\Php80\NodeFactory\MatchArmsFactory $matchArmsFactory, MatchSwitchAnalyzer $matchSwitchAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    public function __construct(\Rector\Php80\NodeFactory\MatchArmsFactory $matchArmsFactory, MatchSwitchAnalyzer $matchSwitchAnalyzer, NodeComparator $nodeComparator)
     {
         $this->matchArmsFactory = $matchArmsFactory;
         $this->matchSwitchAnalyzer = $matchSwitchAnalyzer;
+        $this->nodeComparator = $nodeComparator;
     }
     /**
      * @param CondAndExpr[] $condAndExprs
@@ -52,6 +59,9 @@ final class MatchFactory
                 // @todo this should be improved
                 $expr = $this->resolveAssignVar($condAndExprs);
                 if ($expr instanceof ArrayDimFetch) {
+                    return null;
+                }
+                if ($expr instanceof Expr && !$this->nodeComparator->areNodesEqual($nextStmt->expr, $expr)) {
                     return null;
                 }
                 $shouldRemoteNextStmt = !$expr instanceof Expr;
