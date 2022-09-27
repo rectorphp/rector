@@ -2061,12 +2061,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-php-parser.git",
-                "reference": "8d6cbe9cb66130011f41050d65e7cf53cae6cc05"
+                "reference": "9c21f5f57464fc5af8765a1007eced8f7f62677c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-php-parser\/zipball\/8d6cbe9cb66130011f41050d65e7cf53cae6cc05",
-                "reference": "8d6cbe9cb66130011f41050d65e7cf53cae6cc05",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-php-parser\/zipball\/9c21f5f57464fc5af8765a1007eced8f7f62677c",
+                "reference": "9c21f5f57464fc5af8765a1007eced8f7f62677c",
                 "shasum": ""
             },
             "require": {
@@ -2083,6 +2083,7 @@
                 "phpunit\/phpunit": "^9.5.21",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-debugging": "dev-main",
+                "rector\/rector-generator": "^0.6.13",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-coding-standard": "^11.1",
                 "symplify\/phpstan-extensions": "^11.1",
@@ -2090,7 +2091,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-09-17T07:18:28+00:00",
+            "time": "2022-09-26T00:05:09+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2117,7 +2118,7 @@
             "description": "Rector upgrades rules for PHP-Parser",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-php-parser\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-php-parser\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-php-parser\/tree\/0.14.0"
             },
             "install-path": "..\/rector\/rector-php-parser"
         },

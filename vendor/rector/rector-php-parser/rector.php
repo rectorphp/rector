@@ -12,5 +12,6 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->importNames();
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
     $rectorConfig->skip([StringClassNameToClassConstantRector::class => [__DIR__ . '/config']]);
+    $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, ['PhpParser\\PhpVersion', 'PhpParser\\ParserFactory']);
     $rectorConfig->parallel();
 };
