@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\AssignOp\Div as AssignDiv;
 use PhpParser\Node\Expr\AssignOp\Minus as AssignMinus;
 use PhpParser\Node\Expr\AssignOp\Mul as AssignMul;
 use PhpParser\Node\Expr\AssignOp\Plus as AssignPlus;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\BinaryOp\Mul;
@@ -103,11 +104,21 @@ CODE_SAMPLE
         }
         return null;
     }
+    private function areNumberType(BinaryOp $binaryOp) : bool
+    {
+        if (!$this->nodeTypeResolver->isNumberType($binaryOp->left)) {
+            return \false;
+        }
+        return $this->nodeTypeResolver->isNumberType($binaryOp->right);
+    }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Plus|\PhpParser\Node\Expr\BinaryOp\Minus $binaryOp
      */
     private function processBinaryPlusAndMinus($binaryOp) : ?Expr
     {
+        if (!$this->areNumberType($binaryOp)) {
+            return null;
+        }
         if ($this->valueResolver->isValue($binaryOp->left, 0) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
             if ($binaryOp instanceof Minus) {
                 return new UnaryMinus($binaryOp->right);
@@ -117,9 +128,6 @@ CODE_SAMPLE
         if (!$this->valueResolver->isValue($binaryOp->right, 0)) {
             return null;
         }
-        if (!$this->nodeTypeResolver->isNumberType($binaryOp->left)) {
-            return null;
-        }
         return $binaryOp->left;
     }
     /**
@@ -127,13 +135,13 @@ CODE_SAMPLE
      */
     private function processBinaryMulAndDiv($binaryOp) : ?Expr
     {
+        if (!$this->areNumberType($binaryOp)) {
+            return null;
+        }
         if ($binaryOp instanceof Mul && $this->valueResolver->isValue($binaryOp->left, 1) && $this->nodeTypeResolver->isNumberType($binaryOp->right)) {
             return $binaryOp->right;
         }
         if (!$this->valueResolver->isValue($binaryOp->right, 1)) {
-            return null;
-        }
-        if (!$this->nodeTypeResolver->isNumberType($binaryOp->left)) {
             return null;
         }
         return $binaryOp->left;

@@ -5,6 +5,7 @@ namespace Rector\PhpDocParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use Rector\PhpDocParser\NodeVisitor\CallableNodeVisitor;
 /**
  * @api
@@ -29,6 +30,7 @@ final class SimpleCallableNodeTraverser
         $nodeTraverser = new NodeTraverser();
         $callableNodeVisitor = new CallableNodeVisitor($callable);
         $nodeTraverser->addVisitor($callableNodeVisitor);
+        $nodeTraverser->addVisitor(new ParentConnectingVisitor());
         $nodeTraverser->traverse($nodes);
     }
 }
