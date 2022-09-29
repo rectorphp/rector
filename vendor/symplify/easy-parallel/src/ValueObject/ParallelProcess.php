@@ -113,7 +113,6 @@ final class ParallelProcess
             $pipe->close();
         }
         $this->encoder->end();
-        $this->process->terminate();
     }
     public function bindConnection(Decoder $decoder, Encoder $encoder) : void
     {
