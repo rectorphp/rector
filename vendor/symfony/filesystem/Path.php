@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Symfony\Component\Filesystem;
+namespace RectorPrefix202210\Symfony\Component\Filesystem;
 
-use RectorPrefix202209\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
-use RectorPrefix202209\Symfony\Component\Filesystem\Exception\RuntimeException;
+use RectorPrefix202210\Symfony\Component\Filesystem\Exception\InvalidArgumentException;
+use RectorPrefix202210\Symfony\Component\Filesystem\Exception\RuntimeException;
 /**
  * Contains utility methods for handling path strings.
  *
@@ -624,7 +624,7 @@ final class Path
         return \strncmp($ofPath . '/', \rtrim($basePath, '/') . '/', \strlen(\rtrim($basePath, '/') . '/')) === 0;
     }
     /**
-     * @return non-empty-string[]
+     * @return string[]
      */
     private static function findCanonicalParts(string $root, string $pathWithoutRoot) : array
     {

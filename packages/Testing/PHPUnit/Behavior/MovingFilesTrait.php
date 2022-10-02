@@ -7,7 +7,7 @@ use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
 use Rector\Testing\Fixture\FixtureTempFileDumper;
-use RectorPrefix202209\Webmozart\Assert\Assert;
+use RectorPrefix202210\Webmozart\Assert\Assert;
 /**
  * @property-read RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
  */

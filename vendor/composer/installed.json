@@ -28,7 +28,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Clue\\React\\NDJson\\": "src\/"
+                    "RectorPrefix202210\\Clue\\React\\NDJson\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -100,7 +100,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Composer\\Pcre\\": "src"
+                    "RectorPrefix202210\\Composer\\Pcre\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -173,7 +173,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Composer\\Semver\\": "src"
+                    "RectorPrefix202210\\Composer\\Semver\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -255,7 +255,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Composer\\XdebugHandler\\": "src"
+                    "RectorPrefix202210\\Composer\\XdebugHandler\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -325,7 +325,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Doctrine\\Inflector\\": "lib\/Doctrine\/Inflector"
+                    "RectorPrefix202210\\Doctrine\\Inflector\\": "lib\/Doctrine\/Inflector"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -414,7 +414,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Evenement\\": "src\/Evenement\/"
+                    "RectorPrefix202210\\Evenement\\": "src\/Evenement\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -634,7 +634,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\OndraM\\CiDetector\\": "src\/"
+                    "RectorPrefix202210\\OndraM\\CiDetector\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -876,7 +876,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Psr\\Cache\\": "src\/"
+                    "RectorPrefix202210\\Psr\\Cache\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -928,7 +928,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Psr\\Container\\": "src\/"
+                    "RectorPrefix202210\\Psr\\Container\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -984,7 +984,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Psr\\EventDispatcher\\": "src\/"
+                    "RectorPrefix202210\\Psr\\EventDispatcher\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1037,7 +1037,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Psr\\Log\\": "src"
+                    "RectorPrefix202210\\Psr\\Log\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1089,7 +1089,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\React\\Cache\\": "src\/"
+                    "RectorPrefix202210\\React\\Cache\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1172,7 +1172,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\React\\ChildProcess\\": "src"
+                    "RectorPrefix202210\\React\\ChildProcess\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1254,7 +1254,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\React\\Dns\\": "src"
+                    "RectorPrefix202210\\React\\Dns\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1337,7 +1337,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\React\\EventLoop\\": "src"
+                    "RectorPrefix202210\\React\\EventLoop\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1416,7 +1416,7 @@
                     "src\/functions_include.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix202209\\React\\Promise\\": "src\/"
+                    "RectorPrefix202210\\React\\Promise\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1497,7 +1497,7 @@
                     "src\/functions_include.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix202209\\React\\Promise\\Timer\\": "src\/"
+                    "RectorPrefix202210\\React\\Promise\\Timer\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1586,7 +1586,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\React\\Socket\\": "src"
+                    "RectorPrefix202210\\React\\Socket\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1668,7 +1668,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\React\\Stream\\": "src"
+                    "RectorPrefix202210\\React\\Stream\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -2440,7 +2440,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Symfony\\Component\\Config\\": ""
+                    "RectorPrefix202210\\Symfony\\Component\\Config\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -2483,17 +2483,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.1.4",
-            "version_normalized": "6.1.4.0",
+            "version": "v6.1.5",
+            "version_normalized": "6.1.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "7fccea8728aa2d431a6725b02b3ce759049fc84d"
+                "reference": "17524a64ebcfab68d237bbed247e9a9917747096"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/7fccea8728aa2d431a6725b02b3ce759049fc84d",
-                "reference": "7fccea8728aa2d431a6725b02b3ce759049fc84d",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/17524a64ebcfab68d237bbed247e9a9917747096",
+                "reference": "17524a64ebcfab68d237bbed247e9a9917747096",
                 "shasum": ""
             },
             "require": {
@@ -2528,12 +2528,12 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2022-08-26T10:32:31+00:00",
+            "time": "2022-09-03T14:24:42+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Symfony\\Component\\Console\\": ""
+                    "RectorPrefix202210\\Symfony\\Component\\Console\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -2562,7 +2562,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.4"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.5"
             },
             "funding": [
                 {
@@ -2635,7 +2635,7 @@
                     "Deprecation\/function.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix202209\\Symfony\\Contracts\\": ""
+                    "RectorPrefix202210\\Symfony\\Contracts\\": ""
                 },
                 "exclude-from-classmap": [
                     "**\/Tests\/"
@@ -2686,17 +2686,17 @@
         },
         {
             "name": "symfony\/dependency-injection",
-            "version": "v6.1.3",
-            "version_normalized": "6.1.3.0",
+            "version": "v6.1.5",
+            "version_normalized": "6.1.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "079e336a1880f457b219aecc3d41bef2f1093b0b"
+                "reference": "b9c797c9d56afc290d4265854bafd01b4e379240"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/079e336a1880f457b219aecc3d41bef2f1093b0b",
-                "reference": "079e336a1880f457b219aecc3d41bef2f1093b0b",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/b9c797c9d56afc290d4265854bafd01b4e379240",
+                "reference": "b9c797c9d56afc290d4265854bafd01b4e379240",
                 "shasum": ""
             },
             "require": {
@@ -2728,7 +2728,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2022-07-20T13:46:29+00:00",
+            "time": "2022-09-28T16:00:52+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2739,7 +2739,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Symfony\\Component\\DependencyInjection\\": ""
+                    "RectorPrefix202210\\Symfony\\Component\\DependencyInjection\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -2762,7 +2762,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v6.1.3"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v6.1.5"
             },
             "funding": [
                 {
@@ -2782,17 +2782,17 @@
         },
         {
             "name": "symfony\/filesystem",
-            "version": "v6.1.4",
-            "version_normalized": "6.1.4.0",
+            "version": "v6.1.5",
+            "version_normalized": "6.1.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/filesystem.git",
-                "reference": "3f39c04d2630c34019907b02f85672dac99f8659"
+                "reference": "4d216a2beef096edf040a070117c39ca2abce307"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/3f39c04d2630c34019907b02f85672dac99f8659",
-                "reference": "3f39c04d2630c34019907b02f85672dac99f8659",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/filesystem\/zipball\/4d216a2beef096edf040a070117c39ca2abce307",
+                "reference": "4d216a2beef096edf040a070117c39ca2abce307",
                 "shasum": ""
             },
             "require": {
@@ -2800,12 +2800,12 @@
                 "symfony\/polyfill-ctype": "~1.8",
                 "symfony\/polyfill-mbstring": "~1.8"
             },
-            "time": "2022-08-02T16:17:38+00:00",
+            "time": "2022-09-21T20:29:40+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Symfony\\Component\\Filesystem\\": ""
+                    "RectorPrefix202210\\Symfony\\Component\\Filesystem\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -2828,7 +2828,7 @@
             "description": "Provides basic utilities for the filesystem",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.1.4"
+                "source": "https:\/\/github.com\/symfony\/filesystem\/tree\/v6.1.5"
             },
             "funding": [
                 {
@@ -2872,7 +2872,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Symfony\\Component\\Finder\\": ""
+                    "RectorPrefix202210\\Symfony\\Component\\Finder\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -3088,17 +3088,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v6.1.4",
-            "version_normalized": "6.1.4.0",
+            "version": "v6.1.5",
+            "version_normalized": "6.1.5.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "290972cad7b364e3befaa74ba0ec729800fb161c"
+                "reference": "17c08b068176996a1d7db8d00ffae3c248267016"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/290972cad7b364e3befaa74ba0ec729800fb161c",
-                "reference": "290972cad7b364e3befaa74ba0ec729800fb161c",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/17c08b068176996a1d7db8d00ffae3c248267016",
+                "reference": "17c08b068176996a1d7db8d00ffae3c248267016",
                 "shasum": ""
             },
             "require": {
@@ -3117,7 +3117,7 @@
                 "symfony\/translation-contracts": "^2.0|^3.0",
                 "symfony\/var-exporter": "^5.4|^6.0"
             },
-            "time": "2022-08-12T18:05:43+00:00",
+            "time": "2022-09-02T08:05:20+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -3125,7 +3125,7 @@
                     "Resources\/functions.php"
                 ],
                 "psr-4": {
-                    "RectorPrefix202209\\Symfony\\Component\\String\\": ""
+                    "RectorPrefix202210\\Symfony\\Component\\String\\": ""
                 },
                 "exclude-from-classmap": [
                     "\/Tests\/"
@@ -3156,7 +3156,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.4"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.5"
             },
             "funding": [
                 {
@@ -3229,7 +3229,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Symplify\\AutowireArrayParameter\\": "src"
+                    "RectorPrefix202210\\Symplify\\AutowireArrayParameter\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -3309,7 +3309,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Symplify\\EasyParallel\\": "src"
+                    "RectorPrefix202210\\Symplify\\EasyParallel\\": "src"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -3431,7 +3431,7 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202209\\Webmozart\\Assert\\": "src\/"
+                    "RectorPrefix202210\\Webmozart\\Assert\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",

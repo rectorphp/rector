@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\Mapper;
 
-use RectorPrefix202209\Nette\Utils\Strings;
+use RectorPrefix202210\Nette\Utils\Strings;
 use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;

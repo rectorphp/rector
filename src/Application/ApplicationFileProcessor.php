@@ -18,12 +18,12 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\Parallel\Application\ParallelFileProcessor;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202209\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202209\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202209\Symplify\EasyParallel\CpuCoreCountProvider;
-use RectorPrefix202209\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-use RectorPrefix202209\Symplify\EasyParallel\ScheduleFactory;
-use RectorPrefix202209\Webmozart\Assert\Assert;
+use RectorPrefix202210\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202210\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202210\Symplify\EasyParallel\CpuCoreCountProvider;
+use RectorPrefix202210\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix202210\Symplify\EasyParallel\ScheduleFactory;
+use RectorPrefix202210\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
     /**

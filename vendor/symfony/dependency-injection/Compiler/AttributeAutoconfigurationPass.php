@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202210\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202209\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Exception\RuntimeException;
 /**
  * @author Alexander M. Turek <me@derrabus.de>
  */

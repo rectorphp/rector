@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Symfony\Component\Config\Loader;
+namespace RectorPrefix202210\Symfony\Component\Config\Loader;
 
-use RectorPrefix202209\Symfony\Component\Config\Exception\LoaderLoadException;
+use RectorPrefix202210\Symfony\Component\Config\Exception\LoaderLoadException;
 /**
  * DelegatingLoader delegates loading to other loaders using a loader resolver.
  *

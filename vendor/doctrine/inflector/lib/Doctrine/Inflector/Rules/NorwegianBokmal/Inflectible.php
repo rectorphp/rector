@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202209\Doctrine\Inflector\Rules\NorwegianBokmal;
+namespace RectorPrefix202210\Doctrine\Inflector\Rules\NorwegianBokmal;
 
-use RectorPrefix202209\Doctrine\Inflector\Rules\Pattern;
-use RectorPrefix202209\Doctrine\Inflector\Rules\Substitution;
-use RectorPrefix202209\Doctrine\Inflector\Rules\Transformation;
-use RectorPrefix202209\Doctrine\Inflector\Rules\Word;
+use RectorPrefix202210\Doctrine\Inflector\Rules\Pattern;
+use RectorPrefix202210\Doctrine\Inflector\Rules\Substitution;
+use RectorPrefix202210\Doctrine\Inflector\Rules\Transformation;
+use RectorPrefix202210\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
     /**

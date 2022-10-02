@@ -5,8 +5,8 @@ namespace Rector\Core\DependencyInjection\Loader\Configurator;
 
 use Rector\Core\Configuration\ValueObjectInliner;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
+use RectorPrefix202210\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
 /**
  * @api
  * Same as Symfony service configurator, with extra "configure()" method for easier DX

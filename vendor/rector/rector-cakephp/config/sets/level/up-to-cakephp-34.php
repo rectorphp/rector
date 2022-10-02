@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202209;
+namespace RectorPrefix202210;
 
 use Rector\CakePHP\Set\CakePHPSetList;
 use Rector\Config\RectorConfig;

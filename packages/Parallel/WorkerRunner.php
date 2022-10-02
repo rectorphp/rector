@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Parallel;
 
-use RectorPrefix202209\Clue\React\NDJson\Decoder;
-use RectorPrefix202209\Clue\React\NDJson\Encoder;
-use RectorPrefix202209\Nette\Utils\FileSystem;
+use RectorPrefix202210\Clue\React\NDJson\Decoder;
+use RectorPrefix202210\Clue\React\NDJson\Encoder;
+use RectorPrefix202210\Nette\Utils\FileSystem;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
@@ -16,9 +16,9 @@ use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202209\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202209\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202209\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix202210\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix202210\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix202210\Symplify\EasyParallel\Enum\ReactEvent;
 use Throwable;
 final class WorkerRunner
 {

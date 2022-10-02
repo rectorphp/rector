@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Symfony\Contracts\HttpClient\Test;
+namespace RectorPrefix202210\Symfony\Contracts\HttpClient\Test;
 
 use PHPUnit\Framework\TestCase;
-use RectorPrefix202209\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use RectorPrefix202209\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
-use RectorPrefix202209\Symfony\Contracts\HttpClient\Exception\TimeoutExceptionInterface;
-use RectorPrefix202209\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use RectorPrefix202209\Symfony\Contracts\HttpClient\HttpClientInterface;
+use RectorPrefix202210\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
+use RectorPrefix202210\Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
+use RectorPrefix202210\Symfony\Contracts\HttpClient\Exception\TimeoutExceptionInterface;
+use RectorPrefix202210\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use RectorPrefix202210\Symfony\Contracts\HttpClient\HttpClientInterface;
 /**
  * A reference test suite for HttpClientInterface implementations.
  */

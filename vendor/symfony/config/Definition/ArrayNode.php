@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Symfony\Component\Config\Definition;
+namespace RectorPrefix202210\Symfony\Component\Config\Definition;
 
-use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
-use RectorPrefix202209\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
+use RectorPrefix202210\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix202210\Symfony\Component\Config\Definition\Exception\InvalidTypeException;
+use RectorPrefix202210\Symfony\Component\Config\Definition\Exception\UnsetKeyException;
 /**
  * Represents an Array node in the config tree.
  *
@@ -214,7 +214,7 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
             }
             if ($child->isDeprecated()) {
                 $deprecation = $child->getDeprecation($name, $this->getPath());
-                \RectorPrefix202209\trigger_deprecation($deprecation['package'], $deprecation['version'], $deprecation['message']);
+                \RectorPrefix202210\trigger_deprecation($deprecation['package'], $deprecation['version'], $deprecation['message']);
             }
             try {
                 $value[$name] = $child->finalize($value[$name]);

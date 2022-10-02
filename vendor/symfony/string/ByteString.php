@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Symfony\Component\String;
+namespace RectorPrefix202210\Symfony\Component\String;
 
-use RectorPrefix202209\Symfony\Component\String\Exception\ExceptionInterface;
-use RectorPrefix202209\Symfony\Component\String\Exception\InvalidArgumentException;
-use RectorPrefix202209\Symfony\Component\String\Exception\RuntimeException;
+use RectorPrefix202210\Symfony\Component\String\Exception\ExceptionInterface;
+use RectorPrefix202210\Symfony\Component\String\Exception\InvalidArgumentException;
+use RectorPrefix202210\Symfony\Component\String\Exception\RuntimeException;
 /**
  * Represents a binary-safe string of bytes.
  *
@@ -95,7 +95,9 @@ class ByteString extends AbstractString
     public function camel()
     {
         $str = clone $this;
-        $str->string = \lcfirst(\str_replace(' ', '', \ucwords(\preg_replace('/[^a-zA-Z0-9\\x7f-\\xff]++/', ' ', $this->string))));
+        $parts = \explode(' ', \trim(\ucwords(\preg_replace('/[^a-zA-Z0-9\\x7f-\\xff]++/', ' ', $this->string))));
+        $parts[0] = 1 !== \strlen($parts[0]) && \ctype_upper($parts[0]) ? $parts[0] : \lcfirst($parts[0]);
+        $str->string = \implode('', $parts);
         return $str;
     }
     public function chunk(int $length = 1) : array

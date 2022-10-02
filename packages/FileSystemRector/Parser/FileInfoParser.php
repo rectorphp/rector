@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\FileSystemRector\Parser;
 
-use RectorPrefix202209\Nette\Utils\FileSystem;
+use RectorPrefix202210\Nette\Utils\FileSystem;
 use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;

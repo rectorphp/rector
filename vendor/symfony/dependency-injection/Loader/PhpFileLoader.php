@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix202210\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix202209\Symfony\Component\Config\Builder\ConfigBuilderGenerator;
-use RectorPrefix202209\Symfony\Component\Config\Builder\ConfigBuilderGeneratorInterface;
-use RectorPrefix202209\Symfony\Component\Config\Builder\ConfigBuilderInterface;
-use RectorPrefix202209\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Attribute\When;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202210\Symfony\Component\Config\Builder\ConfigBuilderGenerator;
+use RectorPrefix202210\Symfony\Component\Config\Builder\ConfigBuilderGeneratorInterface;
+use RectorPrefix202210\Symfony\Component\Config\Builder\ConfigBuilderInterface;
+use RectorPrefix202210\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Attribute\When;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 /**
  * PhpFileLoader loads service definitions from a PHP file.
  *

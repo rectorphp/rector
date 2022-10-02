@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202209\Nette\Utils;
+namespace RectorPrefix202210\Nette\Utils;
 
-use RectorPrefix202209\Nette;
-use RectorPrefix202209\Nette\MemberAccessException;
+use RectorPrefix202210\Nette;
+use RectorPrefix202210\Nette\MemberAccessException;
 /**
  * Nette\SmartObject helpers.
  */

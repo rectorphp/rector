@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Helper;
 
-use RectorPrefix202209\Nette\Utils\Strings;
+use RectorPrefix202210\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;

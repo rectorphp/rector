@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
+use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
@@ -42,7 +43,7 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix202209\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202210\Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     /**
@@ -225,20 +226,19 @@ CODE_SAMPLE;
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
         $rectorWithLineChange = new RectorWithLineChange(\get_class($this), $originalNode->getLine());
         $this->file->addRectorClassWithLine($rectorWithLineChange);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         if (\is_array($refactoredNode)) {
             $originalNodeHash = \spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
             \reset($refactoredNode);
             $firstNodeKey = \key($refactoredNode);
             $this->mirrorComments($refactoredNode[$firstNodeKey], $originalNode);
+            $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
+            $this->connectNodes($refactoredNode);
             // will be replaced in leaveNode() the original node must be passed
             return $originalNode;
         }
-        if ($node->hasAttribute(AttributeKey::PARENT_NODE)) {
-            // update parents relations - must run before connectParentNodes()
-            $refactoredNode->setAttribute(AttributeKey::PARENT_NODE, $node->getAttribute(AttributeKey::PARENT_NODE));
-            $this->connectParentNodes($refactoredNode);
-        }
+        $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
         /** @var MutatingScope|null $currentScope */
         $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
         $this->changedNodeScopeRefresher->refresh($refactoredNode, $currentScope, $this->file->getFilePath());
@@ -349,11 +349,31 @@ CODE_SAMPLE;
         $rectifiedNode = $this->rectifiedAnalyzer->verify(static::class, $node, $this->file->getFilePath());
         return $rectifiedNode instanceof RectifiedNode;
     }
-    private function connectParentNodes(Node $node) : void
+    /**
+     * @param mixed[]|\PhpParser\Node $node
+     */
+    private function updateAndconnectParentNodes($node, ?Node $parentNode) : void
     {
+        if (!$parentNode instanceof Node) {
+            return;
+        }
+        $nodes = $node instanceof Node ? [$node] : $node;
+        foreach ($nodes as $node) {
+            // update parents relations - must run before addVisitor(new ParentConnectingVisitor())
+            $node->setAttribute(AttributeKey::PARENT_NODE, $parentNode);
+        }
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new ParentConnectingVisitor());
-        $nodeTraverser->traverse([$node]);
+        $nodeTraverser->traverse($nodes);
+    }
+    /**
+     * @param Node[] $nodes
+     */
+    private function connectNodes(array $nodes) : void
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new NodeConnectingVisitor());
+        $nodeTraverser->traverse($nodes);
     }
     private function printDebugCurrentFileAndRule() : void
     {

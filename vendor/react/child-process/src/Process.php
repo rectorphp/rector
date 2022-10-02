@@ -1,16 +1,16 @@
 <?php
 
-namespace RectorPrefix202209\React\ChildProcess;
+namespace RectorPrefix202210\React\ChildProcess;
 
-use RectorPrefix202209\Evenement\EventEmitter;
-use RectorPrefix202209\React\EventLoop\Loop;
-use RectorPrefix202209\React\EventLoop\LoopInterface;
-use RectorPrefix202209\React\Stream\ReadableResourceStream;
-use RectorPrefix202209\React\Stream\ReadableStreamInterface;
-use RectorPrefix202209\React\Stream\WritableResourceStream;
-use RectorPrefix202209\React\Stream\WritableStreamInterface;
-use RectorPrefix202209\React\Stream\DuplexResourceStream;
-use RectorPrefix202209\React\Stream\DuplexStreamInterface;
+use RectorPrefix202210\Evenement\EventEmitter;
+use RectorPrefix202210\React\EventLoop\Loop;
+use RectorPrefix202210\React\EventLoop\LoopInterface;
+use RectorPrefix202210\React\Stream\ReadableResourceStream;
+use RectorPrefix202210\React\Stream\ReadableStreamInterface;
+use RectorPrefix202210\React\Stream\WritableResourceStream;
+use RectorPrefix202210\React\Stream\WritableStreamInterface;
+use RectorPrefix202210\React\Stream\DuplexResourceStream;
+use RectorPrefix202210\React\Stream\DuplexStreamInterface;
 /**
  * Process component.
  *

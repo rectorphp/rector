@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
-use RectorPrefix202209\Nette\Utils\Strings;
+use RectorPrefix202210\Nette\Utils\Strings;
 use const PHP_EOL;
 use PhpParser\Node;
 use PhpParser\Node\Arg;

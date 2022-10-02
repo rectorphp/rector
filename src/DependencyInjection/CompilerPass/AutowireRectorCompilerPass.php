@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\CompilerPass;
 
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\ContainerBuilder;
 final class AutowireRectorCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $containerBuilder) : void

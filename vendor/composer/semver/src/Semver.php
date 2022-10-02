@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Composer\Semver;
+namespace RectorPrefix202210\Composer\Semver;
 
-use RectorPrefix202209\Composer\Semver\Constraint\Constraint;
+use RectorPrefix202210\Composer\Semver\Constraint\Constraint;
 class Semver
 {
     const SORT_ASC = 1;

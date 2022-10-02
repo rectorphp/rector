@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PSR4\FileInfoAnalyzer;
 
-use RectorPrefix202209\Nette\Utils\Strings;
+use RectorPrefix202210\Nette\Utils\Strings;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\ValueObject\Application\File;

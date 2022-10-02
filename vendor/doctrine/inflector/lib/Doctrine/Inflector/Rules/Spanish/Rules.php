@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202209\Doctrine\Inflector\Rules\Spanish;
+namespace RectorPrefix202210\Doctrine\Inflector\Rules\Spanish;
 
-use RectorPrefix202209\Doctrine\Inflector\Rules\Patterns;
-use RectorPrefix202209\Doctrine\Inflector\Rules\Ruleset;
-use RectorPrefix202209\Doctrine\Inflector\Rules\Substitutions;
-use RectorPrefix202209\Doctrine\Inflector\Rules\Transformations;
+use RectorPrefix202210\Doctrine\Inflector\Rules\Patterns;
+use RectorPrefix202210\Doctrine\Inflector\Rules\Ruleset;
+use RectorPrefix202210\Doctrine\Inflector\Rules\Substitutions;
+use RectorPrefix202210\Doctrine\Inflector\Rules\Transformations;
 final class Rules
 {
     public static function getSingularRuleset() : Ruleset

@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view
  * the LICENSE file that was distributed with this source code.
  */
-namespace RectorPrefix202209\Composer\Semver\Constraint;
+namespace RectorPrefix202210\Composer\Semver\Constraint;
 
 /**
  * Blackhole of constraints, nothing escapes it

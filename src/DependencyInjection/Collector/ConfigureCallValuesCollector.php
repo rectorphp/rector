@@ -9,8 +9,8 @@ use Rector\Core\Util\ArrayParametersMerger;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
 use ReflectionClass;
 use ReflectionClassConstant;
-use RectorPrefix202209\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202209\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202210\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202210\Symfony\Component\DependencyInjection\Definition;
 final class ConfigureCallValuesCollector
 {
     /**

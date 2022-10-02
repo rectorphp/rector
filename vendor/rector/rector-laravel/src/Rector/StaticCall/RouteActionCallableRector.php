@@ -19,7 +19,7 @@ use Rector\Laravel\NodeFactory\RouterRegisterNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202209\Webmozart\Assert\Assert;
+use RectorPrefix202210\Webmozart\Assert\Assert;
 /**
  * @changelog https://laravel.com/docs/8.x/upgrade#automatic-controller-namespace-prefixing
  *
