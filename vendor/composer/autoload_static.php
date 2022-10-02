@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8c105ebdf649d4804f7b9f7486b63f67
+class ComposerStaticInit807a379ce54da5bf6f2d3cb3c62683cc
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -35,7 +35,6 @@ class ComposerStaticInit8c105ebdf649d4804f7b9f7486b63f67
             'Rector\\Laravel\\' => 15,
             'Rector\\Doctrine\\' => 16,
             'Rector\\Core\\' => 12,
-            'Rector\\CakePHP\\' => 15,
             'Rector\\' => 7,
             'RectorPrefix202210\\Webmozart\\Assert\\' => 36,
             'RectorPrefix202210\\Symplify\\EasyParallel\\' => 41,
@@ -123,10 +122,6 @@ class ComposerStaticInit8c105ebdf649d4804f7b9f7486b63f67
         'Rector\\Core\\' => 
         array (
             0 => __DIR__ . '/../..' . '/src',
-        ),
-        'Rector\\CakePHP\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rector/rector-cakephp/src',
         ),
         'Rector\\' => 
         array (
@@ -1380,22 +1375,6 @@ class ComposerStaticInit8c105ebdf649d4804f7b9f7486b63f67
         'Rector\\Caching\\ValueObject\\CacheItem' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/CacheItem.php',
         'Rector\\Caching\\ValueObject\\Storage\\FileCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/FileCacheStorage.php',
         'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => __DIR__ . '/../..' . '/packages/Caching/ValueObject/Storage/MemoryCacheStorage.php',
-        'Rector\\CakePHP\\ImplicitNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ImplicitNameResolver.php',
-        'Rector\\CakePHP\\Naming\\CakePHPFullyQualifiedClassNameResolver' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Naming/CakePHPFullyQualifiedClassNameResolver.php',
-        'Rector\\CakePHP\\Rector\\MethodCall\\ArrayToFluentCallRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/ArrayToFluentCallRector.php',
-        'Rector\\CakePHP\\Rector\\MethodCall\\ModalToGetSetRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/ModalToGetSetRector.php',
-        'Rector\\CakePHP\\Rector\\MethodCall\\RemoveIntermediaryMethodRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/RemoveIntermediaryMethodRector.php',
-        'Rector\\CakePHP\\Rector\\MethodCall\\RenameMethodCallBasedOnParameterRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/MethodCall/RenameMethodCallBasedOnParameterRector.php',
-        'Rector\\CakePHP\\Rector\\Namespace_\\AppUsesStaticCallToUseStatementRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/Namespace_/AppUsesStaticCallToUseStatementRector.php',
-        'Rector\\CakePHP\\Rector\\Property\\ChangeSnakedFixtureNameToPascalRector' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Rector/Property/ChangeSnakedFixtureNameToPascalRector.php',
-        'Rector\\CakePHP\\Set\\CakePHPLevelSetList' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Set/CakePHPLevelSetList.php',
-        'Rector\\CakePHP\\Set\\CakePHPSetList' => __DIR__ . '/..' . '/rector/rector-cakephp/src/Set/CakePHPSetList.php',
-        'Rector\\CakePHP\\ValueObject\\ArrayItemsAndFluentClass' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/ArrayItemsAndFluentClass.php',
-        'Rector\\CakePHP\\ValueObject\\ArrayToFluentCall' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/ArrayToFluentCall.php',
-        'Rector\\CakePHP\\ValueObject\\FactoryMethod' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/FactoryMethod.php',
-        'Rector\\CakePHP\\ValueObject\\ModalToGetSet' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/ModalToGetSet.php',
-        'Rector\\CakePHP\\ValueObject\\RemoveIntermediaryMethod' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/RemoveIntermediaryMethod.php',
-        'Rector\\CakePHP\\ValueObject\\RenameMethodCallBasedOnParameter' => __DIR__ . '/..' . '/rector/rector-cakephp/src/ValueObject/RenameMethodCallBasedOnParameter.php',
         'Rector\\ChangesReporting\\Annotation\\AnnotationExtractor' => __DIR__ . '/../..' . '/packages/ChangesReporting/Annotation/AnnotationExtractor.php',
         'Rector\\ChangesReporting\\Annotation\\RectorsChangelogResolver' => __DIR__ . '/../..' . '/packages/ChangesReporting/Annotation/RectorsChangelogResolver.php',
         'Rector\\ChangesReporting\\Collector\\AffectedFilesCollector' => __DIR__ . '/../..' . '/packages/ChangesReporting/Collector/AffectedFilesCollector.php',
@@ -3108,9 +3087,9 @@ class ComposerStaticInit8c105ebdf649d4804f7b9f7486b63f67
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8c105ebdf649d4804f7b9f7486b63f67::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8c105ebdf649d4804f7b9f7486b63f67::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8c105ebdf649d4804f7b9f7486b63f67::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit807a379ce54da5bf6f2d3cb3c62683cc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit807a379ce54da5bf6f2d3cb3c62683cc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit807a379ce54da5bf6f2d3cb3c62683cc::$classMap;
 
         }, null, ClassLoader::class);
     }

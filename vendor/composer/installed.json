@@ -1778,75 +1778,6 @@
             "install-path": "..\/rector\/extension-installer"
         },
         {
-            "name": "rector\/rector-cakephp",
-            "version": "dev-main",
-            "version_normalized": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/rectorphp\/rector-cakephp.git",
-                "reference": "a489bf049d6672d9ecdc03280f3f0f29c810cdd4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-cakephp\/zipball\/a489bf049d6672d9ecdc03280f3f0f29c810cdd4",
-                "reference": "a489bf049d6672d9ecdc03280f3f0f29c810cdd4",
-                "shasum": ""
-            },
-            "require": {
-                "ext-xml": "*",
-                "php": ">=8.1",
-                "symfony\/string": "^6.0"
-            },
-            "conflict": {
-                "rector\/rector": "<0.11"
-            },
-            "require-dev": {
-                "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.8.1",
-                "phpstan\/phpstan-strict-rules": "^1.1",
-                "phpstan\/phpstan-webmozart-assert": "^1.0",
-                "phpunit\/phpunit": "^9.5",
-                "rector\/phpstan-rules": "^0.6",
-                "rector\/rector-debugging": "dev-main",
-                "rector\/rector-src": "dev-main",
-                "symplify\/easy-coding-standard": "^11.1",
-                "symplify\/phpstan-extensions": "^11.1",
-                "symplify\/phpstan-rules": "^11.1",
-                "symplify\/rule-doc-generator": "^11.1",
-                "symplify\/vendor-patches": "^11.1"
-            },
-            "time": "2022-09-02T10:52:15+00:00",
-            "default-branch": true,
-            "type": "rector-extension",
-            "extra": {
-                "enable-patching": true,
-                "branch-alias": {
-                    "dev-main": "0.11-dev"
-                },
-                "rector": {
-                    "includes": [
-                        "config\/config.php"
-                    ]
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Rector\\CakePHP\\": "src"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Rector upgrades rules for CakePHP",
-            "support": {
-                "issues": "https:\/\/github.com\/rectorphp\/rector-cakephp\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-cakephp\/tree\/main"
-            },
-            "install-path": "..\/rector\/rector-cakephp"
-        },
-        {
             "name": "rector\/rector-doctrine",
             "version": "dev-main",
             "version_normalized": "dev-main",
@@ -2265,12 +2196,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "421857f269c7e9cadb611d33d904673bc1842b5f"
+                "reference": "2f75ef4da76feb5ae15bbecf28f7d13ca9f74a67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/421857f269c7e9cadb611d33d904673bc1842b5f",
-                "reference": "421857f269c7e9cadb611d33d904673bc1842b5f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/2f75ef4da76feb5ae15bbecf28f7d13ca9f74a67",
+                "reference": "2f75ef4da76feb5ae15bbecf28f7d13ca9f74a67",
                 "shasum": ""
             },
             "require": {
@@ -2301,7 +2232,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-09-19T21:03:30+00:00",
+            "time": "2022-10-02T20:26:31+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

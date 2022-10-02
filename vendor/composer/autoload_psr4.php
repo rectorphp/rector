@@ -18,7 +18,6 @@ return array(
     'Rector\\Laravel\\' => array($vendorDir . '/rector/rector-laravel/src'),
     'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src'),
     'Rector\\Core\\' => array($baseDir . '/src'),
-    'Rector\\CakePHP\\' => array($vendorDir . '/rector/rector-cakephp/src'),
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules', $vendorDir . '/rector/rector-downgrade-php/src', $vendorDir . '/rector/rector-downgrade-php/rules'),
     'RectorPrefix202210\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'RectorPrefix202210\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
