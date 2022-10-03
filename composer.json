@@ -26,7 +26,7 @@
         "rector/rector-laravel": "*",
         "rector/rector-phpoffice": "*",
         "rector/rector-php-parser": "*",
-        "rectorphp/rector-downgrade-php": "*"
+        "rector/rector-downgrade-php": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
