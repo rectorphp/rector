@@ -23,10 +23,10 @@
         "rector/rector-phpunit": "*",
         "rector/rector-symfony": "*",
         "rector/rector-doctrine": "*",
-        "rector/rector-cakephp": "*",
         "rector/rector-laravel": "*",
         "rector/rector-phpoffice": "*",
-        "rector/rector-php-parser": "*"
+        "rector/rector-php-parser": "*",
+        "rectorphp/rector-downgrade-php": "*"
     },
     "minimum-stability": "dev",
     "prefer-stable": true
