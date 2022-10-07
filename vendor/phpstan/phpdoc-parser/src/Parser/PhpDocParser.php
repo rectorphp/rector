@@ -173,6 +173,12 @@ class PhpDocParser
                 case '@psalm-assert-if-false':
                     $tagValue = $this->parseAssertTagValue($tokens);
                     break;
+                case '@phpstan-this-out':
+                case '@phpstan-self-out':
+                case '@psalm-this-out':
+                case '@psalm-self-out':
+                    $tagValue = $this->parseSelfOutTagValue($tokens);
+                    break;
                 default:
                     $tagValue = new Ast\PhpDoc\GenericTagValueNode($this->parseOptionalDescription($tokens));
                     break;
@@ -383,6 +389,12 @@ class PhpDocParser
             return ['parameter' => $parameter, 'property' => $propertyOrMethod];
         }
         return ['parameter' => $parameter];
+    }
+    private function parseSelfOutTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\SelfOutTagValueNode
+    {
+        $type = $this->typeParser->parse($tokens);
+        $description = $this->parseOptionalDescription($tokens);
+        return new Ast\PhpDoc\SelfOutTagValueNode($type, $description);
     }
     private function parseOptionalVariableName(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : string
     {

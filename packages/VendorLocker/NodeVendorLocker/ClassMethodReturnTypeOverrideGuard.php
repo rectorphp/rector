@@ -14,12 +14,14 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VoidType;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\PhpDoc\CustomPHPStanDetector;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 final class ClassMethodReturnTypeOverrideGuard
 {
     /**
@@ -61,7 +63,12 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var \Rector\StaticTypeMapper\PhpDoc\CustomPHPStanDetector
      */
     private $customPHPStanDetector;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, CustomPHPStanDetector $customPHPStanDetector)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, CustomPHPStanDetector $customPHPStanDetector, ReturnTypeInferer $returnTypeInferer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -70,6 +77,7 @@ final class ClassMethodReturnTypeOverrideGuard
         $this->astResolver = $astResolver;
         $this->reflectionResolver = $reflectionResolver;
         $this->customPHPStanDetector = $customPHPStanDetector;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
     public function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
@@ -116,6 +124,7 @@ final class ClassMethodReturnTypeOverrideGuard
      */
     private function shouldSkipHasChildHasReturnType(array $childrenClassReflections, ClassMethod $classMethod) : bool
     {
+        $returnType = $this->returnTypeInferer->inferFunctionLike($classMethod);
         $methodName = $this->nodeNameResolver->getName($classMethod);
         foreach ($childrenClassReflections as $childClassReflection) {
             if (!$childClassReflection->hasNativeMethod($methodName)) {
@@ -127,6 +136,10 @@ final class ClassMethodReturnTypeOverrideGuard
                 continue;
             }
             if ($method->returnType instanceof Node) {
+                return \true;
+            }
+            $childReturnType = $this->returnTypeInferer->inferFunctionLike($method);
+            if ($returnType instanceof VoidType && !$childReturnType instanceof VoidType) {
                 return \true;
             }
         }

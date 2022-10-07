@@ -685,17 +685,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.8.0",
-            "version_normalized": "1.8.0.0",
+            "version": "1.9.0",
+            "version_normalized": "1.9.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "8dd908dd6156e974b9a0f8bb4cd5ad0707830f04"
+                "reference": "5f7eb9724b0ae386b922f34b62b3b55fee3b26cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/8dd908dd6156e974b9a0f8bb4cd5ad0707830f04",
-                "reference": "8dd908dd6156e974b9a0f8bb4cd5ad0707830f04",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/5f7eb9724b0ae386b922f34b62b3b55fee3b26cd",
+                "reference": "5f7eb9724b0ae386b922f34b62b3b55fee3b26cd",
                 "shasum": ""
             },
             "require": {
@@ -710,7 +710,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2022-09-04T18:59:06+00:00",
+            "time": "2022-10-06T11:32:36+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -727,23 +727,23 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.8.0"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.9.0"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.8.7",
-            "version_normalized": "1.8.7.0",
+            "version": "1.8.8",
+            "version_normalized": "1.8.8.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "536ff0ed719b5679e9f09c17aeaee9b31969cb8e"
+                "reference": "08310ce271984587e2a4cda94e1ac66510a6ea07"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/536ff0ed719b5679e9f09c17aeaee9b31969cb8e",
-                "reference": "536ff0ed719b5679e9f09c17aeaee9b31969cb8e",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/08310ce271984587e2a4cda94e1ac66510a6ea07",
+                "reference": "08310ce271984587e2a4cda94e1ac66510a6ea07",
                 "shasum": ""
             },
             "require": {
@@ -752,7 +752,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-10-04T14:09:33+00:00",
+            "time": "2022-10-06T12:51:57+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -775,7 +775,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.8.7"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.8.8"
             },
             "funding": [
                 {

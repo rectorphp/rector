@@ -219,6 +219,15 @@ class PhpDocNode implements Node
             return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagMethodValueNode;
         });
     }
+    /**
+     * @return SelfOutTagValueNode[]
+     */
+    public function getSelfOutTypeTagValues(string $tagName = '@phpstan-this-out') : array
+    {
+        return array_filter(array_column($this->getTagsByName($tagName), 'value'), static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode $value) : bool {
+            return $value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\SelfOutTagValueNode;
+        });
+    }
     public function __toString() : string
     {
         $children = array_map(static function (\PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode $child) : string {
