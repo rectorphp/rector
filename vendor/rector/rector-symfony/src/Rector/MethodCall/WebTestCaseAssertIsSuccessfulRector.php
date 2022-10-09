@@ -80,7 +80,7 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if (!$this->valueResolver->isValue($args[0]->value, 200)) {
+        if ($this->valueResolver->getValue($args[0]->value, \true) !== 200) {
             return null;
         }
         $secondArg = $args[1]->value;
