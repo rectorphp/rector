@@ -314,7 +314,7 @@ final class PropertyManipulator
         if ($parentNode instanceof ArrayDimFetch) {
             return !$this->readWritePropertyAnalyzer->isRead($propertyFetch);
         }
-        return \false;
+        return $parentNode instanceof Unset_;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
