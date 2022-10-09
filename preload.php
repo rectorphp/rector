@@ -285,6 +285,7 @@ require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagNo
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTextNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/PropertyTagValueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/ReturnTagValueNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/SelfOutTagValueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/TemplateTagValueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/ThrowsTagValueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/PhpDoc/TypeAliasImportTagValueNode.php';
