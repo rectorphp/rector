@@ -685,17 +685,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.9.0",
-            "version_normalized": "1.9.0.0",
+            "version": "1.10.0",
+            "version_normalized": "1.10.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "5f7eb9724b0ae386b922f34b62b3b55fee3b26cd"
+                "reference": "87fa2d526e56737a2ae8fa201a61b15efae59b8a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/5f7eb9724b0ae386b922f34b62b3b55fee3b26cd",
-                "reference": "5f7eb9724b0ae386b922f34b62b3b55fee3b26cd",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/87fa2d526e56737a2ae8fa201a61b15efae59b8a",
+                "reference": "87fa2d526e56737a2ae8fa201a61b15efae59b8a",
                 "shasum": ""
             },
             "require": {
@@ -710,7 +710,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2022-10-06T11:32:36+00:00",
+            "time": "2022-10-12T19:19:18+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -727,7 +727,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.9.0"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.10.0"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
@@ -2127,12 +2127,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "963c24df5d7c459b4fb9b82f2e7c59644f66b306"
+                "reference": "5568edaff83ae5ece8eec7bc8e6bfa61e1074d8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/963c24df5d7c459b4fb9b82f2e7c59644f66b306",
-                "reference": "963c24df5d7c459b4fb9b82f2e7c59644f66b306",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/5568edaff83ae5ece8eec7bc8e6bfa61e1074d8f",
+                "reference": "5568edaff83ae5ece8eec7bc8e6bfa61e1074d8f",
                 "shasum": ""
             },
             "require": {
@@ -2158,7 +2158,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-09-21T17:56:12+00:00",
+            "time": "2022-10-09T18:39:43+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2196,12 +2196,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "947b1bac3f5a996599424fd70e7d346227705f00"
+                "reference": "39f8c399f0c686afa2643f2a351993050fff8c4e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/947b1bac3f5a996599424fd70e7d346227705f00",
-                "reference": "947b1bac3f5a996599424fd70e7d346227705f00",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/39f8c399f0c686afa2643f2a351993050fff8c4e",
+                "reference": "39f8c399f0c686afa2643f2a351993050fff8c4e",
                 "shasum": ""
             },
             "require": {
@@ -2232,7 +2232,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-10-09T07:56:31+00:00",
+            "time": "2022-10-10T18:26:15+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2414,17 +2414,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.1.5",
-            "version_normalized": "6.1.5.0",
+            "version": "v6.1.6",
+            "version_normalized": "6.1.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "17524a64ebcfab68d237bbed247e9a9917747096"
+                "reference": "7fa3b9cf17363468795e539231a5c91b02b608fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/17524a64ebcfab68d237bbed247e9a9917747096",
-                "reference": "17524a64ebcfab68d237bbed247e9a9917747096",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/7fa3b9cf17363468795e539231a5c91b02b608fc",
+                "reference": "7fa3b9cf17363468795e539231a5c91b02b608fc",
                 "shasum": ""
             },
             "require": {
@@ -2459,7 +2459,7 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2022-09-03T14:24:42+00:00",
+            "time": "2022-10-07T08:04:03+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2493,7 +2493,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.5"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.6"
             },
             "funding": [
                 {
@@ -3019,17 +3019,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v6.1.5",
-            "version_normalized": "6.1.5.0",
+            "version": "v6.1.6",
+            "version_normalized": "6.1.6.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "17c08b068176996a1d7db8d00ffae3c248267016"
+                "reference": "7e7e0ff180d4c5a6636eaad57b65092014b61864"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/17c08b068176996a1d7db8d00ffae3c248267016",
-                "reference": "17c08b068176996a1d7db8d00ffae3c248267016",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/7e7e0ff180d4c5a6636eaad57b65092014b61864",
+                "reference": "7e7e0ff180d4c5a6636eaad57b65092014b61864",
                 "shasum": ""
             },
             "require": {
@@ -3048,7 +3048,7 @@
                 "symfony\/translation-contracts": "^2.0|^3.0",
                 "symfony\/var-exporter": "^5.4|^6.0"
             },
-            "time": "2022-09-02T08:05:20+00:00",
+            "time": "2022-10-10T09:34:31+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -3087,7 +3087,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.5"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.6"
             },
             "funding": [
                 {

@@ -113,6 +113,8 @@ abstract class Helper implements HelperInterface
         $string = $formatter->format($string ?? '');
         // remove already formatted characters
         $string = \preg_replace("/\x1b\\[[^m]*m/", '', $string ?? '');
+        // remove terminal hyperlinks
+        $string = \preg_replace('/\\033]8;[^;]*;[^\\033]*\\033\\\\/', '', $string ?? '');
         $formatter->setDecorated($isDecorated);
         return $string;
     }

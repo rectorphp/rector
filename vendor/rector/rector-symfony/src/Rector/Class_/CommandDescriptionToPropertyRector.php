@@ -139,7 +139,7 @@ CODE_SAMPLE
                 }
             }
         } else {
-            $class->stmts = \array_merge($class->stmts, [$defaultDescriptionProperty]);
+            $class->stmts = \array_merge([$defaultDescriptionProperty], $class->stmts);
         }
         return $class;
     }

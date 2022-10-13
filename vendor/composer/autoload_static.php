@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf3314a8d7ded35702d1dab21d9ced1e5
+class ComposerStaticInite0901a27c49417dbd79530c719100c95
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -286,6 +286,7 @@ class ComposerStaticInitf3314a8d7ded35702d1dab21d9ced1e5
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\MethodTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/MethodTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\MethodTagValueParameterNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/MethodTagValueParameterNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\MixinTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/MixinTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamOutTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamOutTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocChildNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocNode.php',
@@ -2312,6 +2313,7 @@ class ComposerStaticInitf3314a8d7ded35702d1dab21d9ced1e5
         'Rector\\PHPUnit\\Rector\\Class_\\AddSeeTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/AddSeeTestAnnotationRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ArrayArgumentToDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ArrayArgumentToDataProviderRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
+        'Rector\\PHPUnit\\Rector\\Class_\\ProphecyPHPDocRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ProphecyPHPDocRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\RemoveDataProviderTestPrefixRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/RemoveDataProviderTestPrefixRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\TestListenerToHooksRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/TestListenerToHooksRector.php',
         'Rector\\PHPUnit\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
@@ -3088,9 +3090,9 @@ class ComposerStaticInitf3314a8d7ded35702d1dab21d9ced1e5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf3314a8d7ded35702d1dab21d9ced1e5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf3314a8d7ded35702d1dab21d9ced1e5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf3314a8d7ded35702d1dab21d9ced1e5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite0901a27c49417dbd79530c719100c95::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite0901a27c49417dbd79530c719100c95::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite0901a27c49417dbd79530c719100c95::$classMap;
 
         }, null, ClassLoader::class);
     }
