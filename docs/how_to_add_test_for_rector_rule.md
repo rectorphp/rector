@@ -7,7 +7,7 @@ When using Rector to update your own code, you will typically be using release r
 - Fork https://github.com/rectorphp/rector-src
 - Clone it locally
 - Install dependencies by executing `composer install`
-- Tests your installation by executing `composer fix-cs` and `composer phpstan`
+- Tests your installation by executing `composer check-platform-reqs`
 - Create a new branch for your test
 - Add your test as described below. Note that the rector binary is located at `bin/rector` instead of the typical `vendor/bin/rector`
 - Push the branch
