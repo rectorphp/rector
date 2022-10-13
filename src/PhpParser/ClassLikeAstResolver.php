@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\ValueObject\Application\File;
+use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\PhpParser\SmartPhpParser;
 final class ClassLikeAstResolver
 {
@@ -31,46 +31,52 @@ final class ClassLikeAstResolver
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(SmartPhpParser $smartPhpParser, BetterNodeFinder $betterNodeFinder)
+    /**
+     * @readonly
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    public function __construct(SmartPhpParser $smartPhpParser, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->smartPhpParser = $smartPhpParser;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
-    public function resolveClassFromClassReflection(ClassReflection $classReflection, string $desiredClassName)
+    public function resolveClassFromClassReflection(ClassReflection $classReflection)
     {
         if ($classReflection->isBuiltin()) {
             return null;
         }
-        if (isset($this->classLikesByName[$classReflection->getName()])) {
-            return $this->classLikesByName[$classReflection->getName()];
+        $className = $classReflection->getName();
+        if (isset($this->classLikesByName[$className])) {
+            return $this->classLikesByName[$className];
         }
         $fileName = $classReflection->getFileName();
         // probably internal class
         if ($fileName === null) {
             // avoid parsing falsy-file again
-            $this->classLikesByName[$classReflection->getName()] = null;
+            $this->classLikesByName[$className] = null;
             return null;
         }
         $stmts = $this->smartPhpParser->parseFile($fileName);
         if ($stmts === []) {
             // avoid parsing falsy-file again
-            $this->classLikesByName[$classReflection->getName()] = null;
+            $this->classLikesByName[$className] = null;
             return null;
         }
         /** @var array<Class_|Trait_|Interface_|Enum_> $classLikes */
         $classLikes = $this->betterNodeFinder->findInstanceOf($stmts, ClassLike::class);
-        $reflectionClassName = $classReflection->getName();
         foreach ($classLikes as $classLike) {
-            if ($reflectionClassName !== $desiredClassName) {
+            if (!$this->nodeNameResolver->isName($classLike, $className)) {
                 continue;
             }
-            $this->classLikesByName[$classReflection->getName()] = $classLike;
+            $this->classLikesByName[$className] = $classLike;
             return $classLike;
         }
-        $this->classLikesByName[$classReflection->getName()] = null;
+        $this->classLikesByName[$className] = null;
         return null;
     }
 }

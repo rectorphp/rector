@@ -17,5 +17,6 @@ return static function (RectorConfig $rectorConfig) : void {
         // int and string literals to const fetches
         ResponseStatusCodeRector::class,
         LiteralGetToRequestClassConstantRector::class,
+        \Rector\Symfony\Rector\ClassMethod\RemoveUnusedRequestParamRector::class,
     ]);
 };

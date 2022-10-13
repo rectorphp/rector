@@ -114,7 +114,7 @@ final class AstResolver
             return null;
         }
         $classReflection = $this->reflectionProvider->getClass($className);
-        return $this->resolveClassFromClassReflection($classReflection, $className);
+        return $this->resolveClassFromClassReflection($classReflection);
     }
     /**
      * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
@@ -232,9 +232,9 @@ final class AstResolver
     /**
      * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
-    public function resolveClassFromClassReflection(ClassReflection $classReflection, string $className)
+    public function resolveClassFromClassReflection(ClassReflection $classReflection)
     {
-        return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection, $className);
+        return $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection);
     }
     /**
      * @return Trait_[]

@@ -48,7 +48,7 @@ final class ParentAttributeSourceLocator implements SourceLocator
         $identifierName = $identifier->getName();
         if ($identifierName === 'Symfony\\Component\\DependencyInjection\\Attribute\\Autoconfigure' && $this->reflectionProvider->hasClass($identifierName)) {
             $classReflection = $this->reflectionProvider->getClass($identifierName);
-            $class = $this->astResolver->resolveClassFromClassReflection($classReflection, $identifierName);
+            $class = $this->astResolver->resolveClassFromClassReflection($classReflection);
             if ($class === null) {
                 return null;
             }

@@ -2537,6 +2537,7 @@ return array(
     'Rector\\Symfony\\Rector\\ClassMethod\\ParamTypeFromRouteRequiredRegexRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/ParamTypeFromRouteRequiredRegexRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\RemoveDefaultGetBlockPrefixRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\RemoveServiceFromSensioRouteRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php',
+    'Rector\\Symfony\\Rector\\ClassMethod\\RemoveUnusedRequestParamRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveUnusedRequestParamRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\RenderMethodParamToTypeDeclarationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\ReplaceSensioRouteAnnotationWithSymfonyRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\ResponseReturnTypeControllerActionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php',
