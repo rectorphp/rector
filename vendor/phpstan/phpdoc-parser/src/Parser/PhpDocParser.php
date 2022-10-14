@@ -311,8 +311,13 @@ class PhpDocParser
         } else {
             $bound = null;
         }
+        if ($tokens->tryConsumeTokenValue('=')) {
+            $default = $this->typeParser->parse($tokens);
+        } else {
+            $default = null;
+        }
         $description = $this->parseOptionalDescription($tokens);
-        return new Ast\PhpDoc\TemplateTagValueNode($name, $bound, $description);
+        return new Ast\PhpDoc\TemplateTagValueNode($name, $bound, $description, $default);
     }
     private function parseExtendsTagValue(string $tagName, \PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\PhpDocTagValueNode
     {
