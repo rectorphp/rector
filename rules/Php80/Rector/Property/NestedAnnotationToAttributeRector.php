@@ -16,9 +16,13 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\Naming\Naming\UseImportsResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeFactory\NestedAttrGroupsFactory;
+use Rector\Php80\ValueObject\AnnotationPropertyToAttributeClass;
 use Rector\Php80\ValueObject\NestedAnnotationToAttribute;
 use Rector\Php80\ValueObject\NestedDoctrineTagAndAnnotationToAttribute;
+use Rector\PostRector\Collector\UseNodesToAddCollector;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -49,11 +53,17 @@ final class NestedAnnotationToAttributeRector extends AbstractRector implements 
      * @var \Rector\Php80\NodeFactory\NestedAttrGroupsFactory
      */
     private $nestedAttrGroupsFactory;
-    public function __construct(UseImportsResolver $useImportsResolver, PhpDocTagRemover $phpDocTagRemover, NestedAttrGroupsFactory $nestedAttrGroupsFactory)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\UseNodesToAddCollector
+     */
+    private $useNodesToAddCollector;
+    public function __construct(UseImportsResolver $useImportsResolver, PhpDocTagRemover $phpDocTagRemover, NestedAttrGroupsFactory $nestedAttrGroupsFactory, UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->useImportsResolver = $useImportsResolver;
         $this->phpDocTagRemover = $phpDocTagRemover;
         $this->nestedAttrGroupsFactory = $nestedAttrGroupsFactory;
+        $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -82,7 +92,7 @@ class SomeEntity
     private $collection;
 }
 CODE_SAMPLE
-, [[new NestedAnnotationToAttribute('Doctrine\\ORM\\Mapping\\JoinTable', ['joinColumns' => 'Doctrine\\ORM\\Mapping\\JoinColumn', 'inverseJoinColumns' => 'Doctrine\\ORM\\Mapping\\InverseJoinColumn'])]])]);
+, [[new NestedAnnotationToAttribute('Doctrine\\ORM\\Mapping\\JoinTable', [new AnnotationPropertyToAttributeClass('Doctrine\\ORM\\Mapping\\JoinColumn', 'joinColumns'), new AnnotationPropertyToAttributeClass('Doctrine\\ORM\\Mapping\\InverseJoinColumn', 'inverseJoinColumns')])]])]);
     }
     /**
      * @return array<class-string<Node>>
@@ -106,6 +116,7 @@ CODE_SAMPLE
             return null;
         }
         $node->attrGroups = $attributeGroups;
+        $this->completeExtraUseImports($attributeGroups);
         return $node;
     }
     /**
@@ -157,5 +168,20 @@ CODE_SAMPLE
             return $nestedAnnotationToAttribute;
         }
         return null;
+    }
+    /**
+     * @param AttributeGroup[] $attributeGroups
+     */
+    private function completeExtraUseImports(array $attributeGroups) : void
+    {
+        foreach ($attributeGroups as $attributeGroup) {
+            foreach ($attributeGroup->attrs as $attr) {
+                $namespacedAttrName = $attr->name->getAttribute(AttributeKey::EXTRA_USE_IMPORT);
+                if (!\is_string($namespacedAttrName)) {
+                    continue;
+                }
+                $this->useNodesToAddCollector->addUseImport(new FullyQualifiedObjectType($namespacedAttrName));
+            }
+        }
     }
 }

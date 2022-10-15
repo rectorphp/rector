@@ -5897,16 +5897,21 @@ Changed nested annotations to attributes
 ```php
 use Rector\Config\RectorConfig;
 use Rector\Php80\Rector\Property\NestedAnnotationToAttributeRector;
+use Rector\Php80\ValueObject\AnnotationPropertyToAttributeClass;
 use Rector\Php80\ValueObject\NestedAnnotationToAttribute;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(
         NestedAnnotationToAttributeRector::class,
         [[
-            new NestedAnnotationToAttribute('Doctrine\ORM\Mapping\JoinTable', [
-                'Doctrine\ORM\Mapping\JoinColumn',
-                'Doctrine\ORM\Mapping\InverseJoinColumn',
-            ], false),
+            new NestedAnnotationToAttribute([
+                new AnnotationPropertyToAttributeClass('Doctrine\ORM\Mapping\JoinColumn', 'joinColumns', false),
+                new AnnotationPropertyToAttributeClass(
+                    'Doctrine\ORM\Mapping\InverseJoinColumn',
+                    'inverseJoinColumns',
+                    false
+                ),
+            ], 'Doctrine\ORM\Mapping\JoinTable', false),
         ]]
     );
 };

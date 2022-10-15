@@ -45,7 +45,7 @@ final class AttributeNameFactory
             }
             return new Name($useAliasMetadata->getShortAttributeName());
         }
-        // 3. the class is not aliased and is compeltelly new... return the FQN version
+        // 3. the class is not aliased and is completely new... return the FQN version
         return new FullyQualified($annotationToAttribute->getAttributeClass());
     }
 }
