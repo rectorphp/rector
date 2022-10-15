@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\LNumber;
@@ -396,6 +397,13 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
             return (string) $lNumber->getAttribute(AttributeKey::RAW_VALUE);
         }
         return parent::pScalar_LNumber($lNumber);
+    }
+    /**
+     * Keep attributes on newlines
+     */
+    protected function pParam(Param $param) : string
+    {
+        return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $lNumber

@@ -5,6 +5,7 @@ namespace Rector\Php80\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
@@ -99,10 +100,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class, Class_::class];
+        return [Property::class, Class_::class, Param::class];
     }
     /**
-     * @param Property|Class_ $node
+     * @param Property|Class_|Param $node
      */
     public function refactor(Node $node) : ?Node
     {
