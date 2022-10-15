@@ -1,4 +1,4 @@
-# 398 Rules Overview
+# 399 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (75)
+- [CodeQuality](#codequality) (76)
 
 - [CodingStyle](#codingstyle) (36)
 
@@ -1474,6 +1474,25 @@ Simplify tautology ternary to value
 ```diff
 -$value = ($fullyQualifiedTypeHint !== $typeHint) ? $fullyQualifiedTypeHint : $typeHint;
 +$value = $fullyQualifiedTypeHint;
+```
+
+<br>
+
+### SimplifyUselessLastVariableAssignRector
+
+Removes the latest useless variable assigns before a variable will return.
+
+- class: [`Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessLastVariableAssignRector`](../rules/CodeQuality/Rector/FunctionLike/SimplifyUselessLastVariableAssignRector.php)
+
+```diff
+ function ($b) {
+-    $a = true;
+     if ($b === 1) {
+         return $b;
+     }
+-    return $a;
++    return true;
+ };
 ```
 
 <br>
