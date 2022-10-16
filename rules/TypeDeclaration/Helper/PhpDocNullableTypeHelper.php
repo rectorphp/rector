@@ -106,11 +106,10 @@ final class PhpDocNullableTypeHelper
     }
     private function hasNullType(Type $phpDocType) : bool
     {
-        $isPhpDocTypeContainingNullType = \false;
         if ($phpDocType instanceof UnionType) {
             return TypeCombinator::containsNull($phpDocType);
         }
-        return $isPhpDocTypeContainingNullType;
+        return \false;
     }
     /**
      * @return Type[]
