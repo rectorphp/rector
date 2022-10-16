@@ -46,7 +46,6 @@ return static function (RectorConfig $rectorConfig) : void {
         new MethodCallRename('Symfony\\Component\\ClassLoader\\UniversalClassLoader\\UniversalClassLoader', 'getPrefixFallbacks', 'getFallbackDirs'),
         // form
         new MethodCallRename('Symfony\\Component\\Form\\AbstractType', 'getName', 'getBlockPrefix'),
-        new MethodCallRename('Symfony\\Component\\Form\\AbstractType', 'setDefaultOptions', 'configureOptions'),
         new MethodCallRename('Symfony\\Component\\Form\\FormTypeInterface', 'getName', 'getBlockPrefix'),
         new MethodCallRename('Symfony\\Component\\Form\\FormTypeInterface', 'setDefaultOptions', 'configureOptions'),
         new MethodCallRename('Symfony\\Component\\Form\\ResolvedFormTypeInterface', 'getName', 'getBlockPrefix'),
