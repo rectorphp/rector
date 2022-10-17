@@ -29,7 +29,7 @@ final class SmartPhpParserFactory
     private function createNativePhpParser() : Parser
     {
         $parserFactory = new ParserFactory();
-        $lexerEmulative = new Emulative();
+        $lexerEmulative = new Emulative(['usedAttributes' => ['comments', 'startLine', 'endLine', 'startTokenPos', 'endTokenPos']]);
         return $parserFactory->create(ParserFactory::PREFER_PHP7, $lexerEmulative);
     }
     private function createPHPStanParser(Parser $parser) : CachedParser
