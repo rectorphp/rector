@@ -47,7 +47,7 @@ final class EnumFactory
     public function createFromClass(Class_ $class) : Enum_
     {
         $shortClassName = $this->nodeNameResolver->getShortName($class);
-        $enum = new Enum_($shortClassName);
+        $enum = new Enum_($shortClassName, [], ['startLine' => $class->getStartLine(), 'endLine' => $class->getEndLine()]);
         $enum->namespacedName = $class->namespacedName;
         $constants = $class->getConstants();
         $enum->stmts = $class->getTraitUses();
@@ -64,7 +64,7 @@ final class EnumFactory
     public function createFromSpatieClass(Class_ $class) : Enum_
     {
         $shortClassName = $this->nodeNameResolver->getShortName($class);
-        $enum = new Enum_($shortClassName);
+        $enum = new Enum_($shortClassName, [], ['startLine' => $class->getStartLine(), 'endLine' => $class->getEndLine()]);
         $enum->namespacedName = $class->namespacedName;
         // constant to cases
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($class);
