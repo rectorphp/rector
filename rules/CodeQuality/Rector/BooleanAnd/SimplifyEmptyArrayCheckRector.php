@@ -57,7 +57,7 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
         $firstArgValue = $isArrayExpr->args[0]->value;
         /** @var Empty_ $emptyOrNotIdenticalNode */
         $emptyOrNotIdenticalNode = $twoNodeMatch->getSecondExpr();
-        if ($emptyOrNotIdenticalNode->expr instanceof FuncCall) {
+        if ($emptyOrNotIdenticalNode->expr instanceof FuncCall && $this->nodeComparator->areNodesEqual($emptyOrNotIdenticalNode->expr->args[0]->value, $firstArgValue)) {
             return new Identical($emptyOrNotIdenticalNode->expr, new Array_());
         }
         if (!$this->nodeComparator->areNodesEqual($emptyOrNotIdenticalNode->expr, $firstArgValue)) {
