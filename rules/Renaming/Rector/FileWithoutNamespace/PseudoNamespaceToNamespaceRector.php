@@ -9,7 +9,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
@@ -164,7 +164,7 @@ CODE_SAMPLE
     private function processIdentifier(Identifier $identifier) : ?Identifier
     {
         $parentNode = $identifier->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Class_) {
+        if (!$parentNode instanceof ClassLike) {
             return null;
         }
         $name = $this->getName($identifier);

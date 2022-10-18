@@ -733,17 +733,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.8.9",
-            "version_normalized": "1.8.9.0",
+            "version": "1.8.10",
+            "version_normalized": "1.8.10.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "3a72d9d9f2528fbd50c2d8fcf155fd9f74ade3f2"
+                "reference": "0c4459dc42c568b818b3f25186589f3acddc1823"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/3a72d9d9f2528fbd50c2d8fcf155fd9f74ade3f2",
-                "reference": "3a72d9d9f2528fbd50c2d8fcf155fd9f74ade3f2",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/0c4459dc42c568b818b3f25186589f3acddc1823",
+                "reference": "0c4459dc42c568b818b3f25186589f3acddc1823",
                 "shasum": ""
             },
             "require": {
@@ -752,7 +752,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2022-10-13T13:40:18+00:00",
+            "time": "2022-10-17T14:23:35+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -775,7 +775,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.8.9"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.8.10"
             },
             "funding": [
                 {
