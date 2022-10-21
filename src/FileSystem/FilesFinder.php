@@ -72,7 +72,13 @@ final class FilesFinder
         $this->addFilterWithExcludedPaths($finder);
         $filePaths = [];
         foreach ($finder as $fileInfo) {
-            $filePaths[] = $fileInfo->getRealPath();
+            // getRealPath() function will return false when it checks broken symlinks.
+            // So we should check if this file exists or we got broken symlink
+            /** @var string|false $path */
+            $path = $fileInfo->getRealPath();
+            if ($path !== \false) {
+                $filePaths[] = $path;
+            }
         }
         return $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
     }

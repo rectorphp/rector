@@ -9,9 +9,7 @@ use RectorPrefix202210\Doctrine\Inflector\Rules\Transformation;
 use RectorPrefix202210\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
-    /**
-     * @return Transformation[]
-     */
+    /** @return Transformation[] */
     public static function getSingular() : iterable
     {
         (yield new Transformation(new Pattern('/^(g|)ases$/i'), '\\1ás'));
@@ -31,9 +29,7 @@ class Inflectible
         (yield new Transformation(new Pattern('/^(á|gá)s$/i'), '\\1s'));
         (yield new Transformation(new Pattern('/([^ê])s$/i'), '\\1'));
     }
-    /**
-     * @return Transformation[]
-     */
+    /** @return Transformation[] */
     public static function getPlural() : iterable
     {
         (yield new Transformation(new Pattern('/^(alem|c|p)ao$/i'), '\\1aes'));
@@ -54,9 +50,7 @@ class Inflectible
         (yield new Transformation(new Pattern('/(s)$/i'), '\\1'));
         (yield new Transformation(new Pattern('/$/'), 's'));
     }
-    /**
-     * @return Substitution[]
-     */
+    /** @return Substitution[] */
     public static function getIrregular() : iterable
     {
         (yield new Substitution(new Word('abdomen'), new Word('abdomens')));

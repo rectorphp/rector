@@ -9,9 +9,7 @@ use RectorPrefix202210\Doctrine\Inflector\Rules\Transformation;
 use RectorPrefix202210\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
-    /**
-     * @return Transformation[]
-     */
+    /** @return Transformation[] */
     public static function getSingular() : iterable
     {
         (yield new Transformation(new Pattern('/ereses$/'), 'erés'));
@@ -20,9 +18,7 @@ class Inflectible
         (yield new Transformation(new Pattern('/es$/'), ''));
         (yield new Transformation(new Pattern('/s$/'), ''));
     }
-    /**
-     * @return Transformation[]
-     */
+    /** @return Transformation[] */
     public static function getPlural() : iterable
     {
         (yield new Transformation(new Pattern('/ú([sn])$/i'), 'RectorPrefix202210\\u\\1es'));
@@ -35,9 +31,7 @@ class Inflectible
         (yield new Transformation(new Pattern('/([^aeéiou])$/i'), '\\1es'));
         (yield new Transformation(new Pattern('/$/'), 's'));
     }
-    /**
-     * @return Substitution[]
-     */
+    /** @return Substitution[] */
     public static function getIrregular() : iterable
     {
         (yield new Substitution(new Word('el'), new Word('los')));

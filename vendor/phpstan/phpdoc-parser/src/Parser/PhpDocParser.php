@@ -364,15 +364,16 @@ class PhpDocParser
     private function parseAssertTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\PhpDocTagValueNode
     {
         $isNegated = $tokens->tryConsumeTokenType(Lexer::TOKEN_NEGATED);
+        $isEquality = $tokens->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
         $type = $this->typeParser->parse($tokens);
         $parameter = $this->parseAssertParameter($tokens);
         $description = $this->parseOptionalDescription($tokens);
         if (array_key_exists('method', $parameter)) {
-            return new Ast\PhpDoc\AssertTagMethodValueNode($type, $parameter['parameter'], $parameter['method'], $isNegated, $description);
+            return new Ast\PhpDoc\AssertTagMethodValueNode($type, $parameter['parameter'], $parameter['method'], $isNegated, $description, $isEquality);
         } elseif (array_key_exists('property', $parameter)) {
-            return new Ast\PhpDoc\AssertTagPropertyValueNode($type, $parameter['parameter'], $parameter['property'], $isNegated, $description);
+            return new Ast\PhpDoc\AssertTagPropertyValueNode($type, $parameter['parameter'], $parameter['property'], $isNegated, $description, $isEquality);
         }
-        return new Ast\PhpDoc\AssertTagValueNode($type, $parameter['parameter'], $isNegated, $description);
+        return new Ast\PhpDoc\AssertTagValueNode($type, $parameter['parameter'], $isNegated, $description, $isEquality);
     }
     /**
      * @return array{parameter: string}|array{parameter: string, property: string}|array{parameter: string, method: string}

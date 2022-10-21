@@ -9,9 +9,7 @@ use RectorPrefix202210\Doctrine\Inflector\Rules\Transformation;
 use RectorPrefix202210\Doctrine\Inflector\Rules\Word;
 class Inflectible
 {
-    /**
-     * @return Transformation[]
-     */
+    /** @return Transformation[] */
     public static function getSingular() : iterable
     {
         (yield new Transformation(new Pattern('(s)tatuses$'), 'RectorPrefix202210\\1\\2tatus'));
@@ -58,9 +56,7 @@ class Inflectible
         (yield new Transformation(new Pattern('^shorts$'), 'shorts'));
         (yield new Transformation(new Pattern('s$'), ''));
     }
-    /**
-     * @return Transformation[]
-     */
+    /** @return Transformation[] */
     public static function getPlural() : iterable
     {
         (yield new Transformation(new Pattern('(s)tatus$'), 'RectorPrefix202210\\1\\2tatuses'));
@@ -89,9 +85,7 @@ class Inflectible
         (yield new Transformation(new Pattern('^$'), ''));
         (yield new Transformation(new Pattern('$'), 's'));
     }
-    /**
-     * @return Substitution[]
-     */
+    /** @return Substitution[] */
     public static function getIrregular() : iterable
     {
         (yield new Substitution(new Word('atlas'), new Word('atlases')));
@@ -150,6 +144,7 @@ class Inflectible
         (yield new Substitution(new Word('runner-up'), new Word('runners-up')));
         (yield new Substitution(new Word('safe'), new Word('safes')));
         (yield new Substitution(new Word('sex'), new Word('sexes')));
+        (yield new Substitution(new Word('sieve'), new Word('sieves')));
         (yield new Substitution(new Word('soliloquy'), new Word('soliloquies')));
         (yield new Substitution(new Word('son-in-law'), new Word('sons-in-law')));
         (yield new Substitution(new Word('syllabus'), new Word('syllabi')));
