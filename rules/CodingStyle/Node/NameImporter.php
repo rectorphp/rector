@@ -74,9 +74,6 @@ final class NameImporter
         if ($this->shouldSkipName($name)) {
             return null;
         }
-        if ($this->classNameImportSkipper->isShortNameInUseStatement($name, $uses)) {
-            return null;
-        }
         $staticType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($name);
         if (!$staticType instanceof FullyQualifiedObjectType) {
             return null;

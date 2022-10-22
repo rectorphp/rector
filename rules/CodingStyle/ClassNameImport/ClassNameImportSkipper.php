@@ -49,17 +49,6 @@ final class ClassNameImportSkipper
         return \false;
     }
     /**
-     * @param Use_[]|GroupUse[] $existingUses
-     */
-    public function isShortNameInUseStatement(Name $name, array $existingUses) : bool
-    {
-        $longName = $name->toString();
-        if (\strpos($longName, '\\') !== \false) {
-            return \false;
-        }
-        return $this->isFoundInUse($name, $existingUses);
-    }
-    /**
      * @param Use_[]|GroupUse[] $uses
      */
     public function isAlreadyImported(Name $name, array $uses) : bool
