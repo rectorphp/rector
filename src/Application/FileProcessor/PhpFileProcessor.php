@@ -94,6 +94,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
             return $systemErrorsAndFileDiffs;
         }
+        $this->currentFileProvider->setFile($file);
         // 2. change nodes with Rectors
         do {
             $file->changeHasChanged(\false);
@@ -103,7 +104,6 @@ final class PhpFileProcessor implements FileProcessorInterface
             // this is needed for new tokens added in "afterTraverse()"
             $file->changeNewStmts($newStmts);
             // 4. print to file or string
-            $this->currentFileProvider->setFile($file);
             // important to detect if file has changed
             $this->printFile($file, $configuration);
         } while ($file->hasChanged());
