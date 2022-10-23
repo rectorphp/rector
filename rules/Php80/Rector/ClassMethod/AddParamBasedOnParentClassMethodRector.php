@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\ClassMethod;
 
+use PhpParser\Comment;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
@@ -180,7 +181,11 @@ CODE_SAMPLE
             }
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
             $paramType = $this->resolveParamType($parentClassMethodParam);
-            $node->params[$key] = new Param(new Variable($paramName), $paramDefault, $paramType, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags, $parentClassMethodParam->attrGroups);
+            $node->params[$key] = new Param(new Variable($paramName), $paramDefault, $paramType, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags);
+            if ($parentClassMethodParam->attrGroups !== []) {
+                $attrGroupsAsComment = $this->nodePrinter->print($parentClassMethodParam->attrGroups);
+                $node->params[$key]->setAttribute(AttributeKey::COMMENTS, [new Comment($attrGroupsAsComment)]);
+            }
         }
         return $node;
     }
