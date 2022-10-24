@@ -1,4 +1,4 @@
-# 70 Rules Overview
+# 71 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -246,6 +246,29 @@ Change type in CollectionType from alias string to class reference
 +            'type' => \Symfony\Component\Form\Extension\Core\Type\ChoiceType::class,
          ]);
      }
+ }
+```
+
+<br>
+
+## CommandDescriptionToPropertyRector
+
+Moves Command description setter to defaultDescription property
+
+-
+class: [`Rector\Symfony\Rector\Class_\CommandDescriptionToPropertyRector`](../src/Rector/Class_/CommandDescriptionToPropertyRector.php)
+
+```diff
+ use Symfony\Component\Console\Command\Command;
+
+ final class SunshineCommand extends Command
+ {
+    protected static $defaultName = 'sunshine';
++   protected static $defaultDescription = 'sunshine description';
+    public function configure()
+    {
+-        $this->setDescription('sunshine description');
+    }
  }
 ```
 
