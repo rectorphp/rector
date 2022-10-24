@@ -79,27 +79,21 @@ final class RectifiedAnalyzer
         if ($originalNode instanceof Node) {
             return \true;
         }
-        if ($this->isPreviousCreatedByRuleAttributeEquals($rectifiedNodeClass, $rectifiedNodeNode, $node)) {
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentNode instanceof Node) {
             return \true;
         }
+        $parentOriginalNode = $parentNode->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if ($parentOriginalNode instanceof Node) {
+            return \true;
+        }
+        /**
+         * Start token pos must be < 0 to continue, as the node and parent node just re-printed
+         *
+         * - Node's original node is null
+         * - Parent Node's original node is null
+         */
         $startTokenPos = $node->getStartTokenPos();
         return $startTokenPos < 0;
-    }
-    /**
-     * @param class-string<RectorInterface> $rectifiedNodeClass
-     */
-    private function isPreviousCreatedByRuleAttributeEquals(string $rectifiedNodeClass, Node $rectifiedNodeNode, Node $node) : bool
-    {
-        /** @var class-string<RectorInterface>[] $createdByRule */
-        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-        $countCreatedByRule = \count($createdByRule);
-        if ($countCreatedByRule !== 1) {
-            return $countCreatedByRule !== 0;
-        }
-        // different rule, allowed
-        if (\current($createdByRule) !== $rectifiedNodeClass) {
-            return \true;
-        }
-        return $rectifiedNodeNode === $node;
     }
 }
