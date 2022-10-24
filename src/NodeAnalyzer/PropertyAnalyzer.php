@@ -10,6 +10,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 final class PropertyAnalyzer
 {
     /**
@@ -27,7 +28,7 @@ final class PropertyAnalyzer
         if ($propertyType instanceof NullType) {
             return \true;
         }
-        if ($this->isCallableType($propertyType)) {
+        if ($this->isForbiddenType($propertyType)) {
             return \true;
         }
         if (!$propertyType instanceof UnionType) {
@@ -35,11 +36,18 @@ final class PropertyAnalyzer
         }
         $types = $propertyType->getTypes();
         foreach ($types as $type) {
-            if ($this->isCallableType($type)) {
+            if ($this->isForbiddenType($type)) {
                 return \true;
             }
         }
         return \false;
+    }
+    private function isForbiddenType(Type $type) : bool
+    {
+        if ($type instanceof NonExistingObjectType) {
+            return \true;
+        }
+        return $this->isCallableType($type);
     }
     private function isCallableType(Type $type) : bool
     {

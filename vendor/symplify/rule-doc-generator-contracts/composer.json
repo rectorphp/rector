@@ -3,7 +3,7 @@
     "description": "Contracts for production code of RuleDocGenerator",
     "license": "MIT",
     "require": {
-        "php": ">=8.0",
+        "php": ">=8.1",
         "nette\/utils": "^3.2"
     },
     "autoload": {
@@ -17,24 +17,24 @@
         }
     },
     "conflict": {
-        "symplify\/composer-json-manipulator": "<11.1.10",
-        "symplify\/easy-coding-standard": "<11.1.10",
-        "symplify\/phpstan-rules": "<11.1.10",
-        "symplify\/easy-testing": "<11.1.10",
-        "symplify\/php-config-printer": "<11.1.10",
-        "symplify\/autowire-array-parameter": "<11.1.10",
-        "symplify\/package-builder": "<11.1.10",
-        "symplify\/phpstan-extensions": "<11.1.10",
-        "symplify\/rule-doc-generator": "<11.1.10",
-        "symplify\/vendor-patches": "<11.1.10",
-        "symplify\/smart-file-system": "<11.1.10",
-        "symplify\/symfony-static-dumper": "<11.1.10",
-        "symplify\/symplify-kernel": "<11.1.10",
-        "symplify\/monorepo-builder": "<11.1.10",
-        "symplify\/config-transformer": "<11.1.10",
-        "symplify\/easy-ci": "<11.1.10",
-        "symplify\/coding-standard": "<11.1.10",
-        "symplify\/easy-parallel": "<11.1.10"
+        "symplify\/composer-json-manipulator": "<11.1.11",
+        "symplify\/easy-coding-standard": "<11.1.11",
+        "symplify\/phpstan-rules": "<11.1.11",
+        "symplify\/easy-testing": "<11.1.11",
+        "symplify\/php-config-printer": "<11.1.11",
+        "symplify\/autowire-array-parameter": "<11.1.11",
+        "symplify\/package-builder": "<11.1.11",
+        "symplify\/phpstan-extensions": "<11.1.11",
+        "symplify\/rule-doc-generator": "<11.1.11",
+        "symplify\/vendor-patches": "<11.1.11",
+        "symplify\/smart-file-system": "<11.1.11",
+        "symplify\/symfony-static-dumper": "<11.1.11",
+        "symplify\/symplify-kernel": "<11.1.11",
+        "symplify\/monorepo-builder": "<11.1.11",
+        "symplify\/config-transformer": "<11.1.11",
+        "symplify\/easy-ci": "<11.1.11",
+        "symplify\/coding-standard": "<11.1.11",
+        "symplify\/easy-parallel": "<11.1.11"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

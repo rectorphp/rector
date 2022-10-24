@@ -196,18 +196,21 @@ CODE_SAMPLE
         } else {
             $type = $param->type;
         }
+        if ($this->isCallableTypeIdentifier($type)) {
+            return \true;
+        }
         if (!$type instanceof UnionType) {
             return \false;
         }
         foreach ($type->types as $type) {
-            if (!$type instanceof Identifier) {
-                continue;
+            if ($this->isCallableTypeIdentifier($type)) {
+                return \true;
             }
-            if (!$this->isName($type, 'callable')) {
-                continue;
-            }
-            return \true;
         }
         return \false;
+    }
+    private function isCallableTypeIdentifier(?Node $node) : bool
+    {
+        return $node instanceof Identifier && $this->isName($node, 'callable');
     }
 }
