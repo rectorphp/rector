@@ -1,4 +1,4 @@
-# 28 Rules Overview
+# 30 Rules Overview
 
 ## AddEntityIdByConditionRector
 
@@ -204,6 +204,27 @@ Change default value types to match Doctrine annotation type
       */
 -    private $isOld = '0';
 +    private $isOld = false;
+ }
+```
+
+## DoctrineTargetEntityStringToClassConstantRector
+
+Convert targetEntities defined as String to <class>::class Constants in Doctrine Entities.
+
+- class: [`Rector\Doctrine\Rector\Property\DoctrineTargetEntityStringToClassConstantRector`](../src/Rector/Property/DoctrineTargetEntityStringToClassConstantRector.php)
+
+```diff
+final class SomeClass
+{
+     /**
+-     * @ORM\OneToMany(targetEntity="AnotherClass")
++     * @ORM\OneToMany(targetEntity=\MyNamespace\Source\AnotherClass::class)
+      */
+     private readonly ?Collection $items;
+
+-    #[ORM\ManyToOne(targetEntity: "AnotherClass")]
++    #[ORM\ManyToOne(targetEntity: \MyNamespace\Source\AnotherClass::class)]
+     private readonly ?Collection $items2;
  }
 ```
 
@@ -851,6 +872,27 @@ Complete `@var` annotations or types based on @ORM\Column
       */
 -    private $name;
 +    private string|null $name = null;
+ }
+```
+
+<br>
+
+## TypedPropertyFromToOneRelationTypeRector
+
+Complete `@var` annotations or types based on @ORM\*toOne annotations or attributes
+
+- class: [`Rector\Doctrine\Rector\Property\TypedPropertyFromToOneRelationTypeRector`](../src/Rector/Property/TypedPropertyFromToOneRelationTypeRector.php)
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+ class SimpleColumn
+ {
+     /**
+      * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
+      */
+-    private $company;
++    private ?\App\Company\Entity\Company $company = null;
  }
 ```
 
