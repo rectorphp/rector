@@ -1,4 +1,4 @@
-# 39 Rules Overview
+# 42 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -438,6 +438,35 @@ Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to `setUp
 
 <br>
 
+## CreateMockToAnonymousClassRector
+
+Change `$this->createMock()` with methods to direct anonymous class.
+
+- class: [`Rector\PHPUnit\Rector\ClassMethod\CreateMockToAnonymousClassRector`](../src/Rector/ClassMethod/CreateMockToAnonymousClassRector.php)
+
+```diff
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
+{
+    public function test()
+    {
+-       $someMockObject = $this->createMock(SomeClass::class);
+-
+-       $someMockObject->method('someMethod')
+-           ->willReturn(100);
++       $someMockObject = new class extends SomeClass {
++           public function someMethod()
++           {
++               return 100;
++           }
+        };
+    }
+}
+```
+
+<br>
+
 ## CreateMockToCreateStubRector
 
 Replaces `createMock()` with `createStub()` when relevant
@@ -567,6 +596,30 @@ Turns getMock*() methods to `createMock()`
 ```diff
 -$this->getMockWithoutInvokingTheOriginalConstructor("Class");
 +$this->createMock("Class");
+```
+
+<br>
+
+## ProphecyPHPDocRector
+
+Add correct `@var` to ObjectProphecy instances based on `$this->prophesize()` call.`
+
+- class: [`Rector\PHPUnit\Rector\Class_\ProphecyPHPDocRector`](../src/Rector/Class_/ProphecyPHPDocRector.php)
+
+```diff
+class HelloTest extends TestCase
+{
+    /**
+-    * @var SomeClass
++    * @var ObjectProphecy<SomeClass>
+     */
+    private $propesizedObject;
+
+    public function setUp(): void
+    {
+        $this->propesizedObject = $this->prophesize(SomeClass::class);
+    }
+}
 ```
 
 <br>
@@ -896,6 +949,29 @@ Changes `->will($this->xxx())` to one specific method
 +            ->willReturnValue('translated max {{ max }}!');
      }
  }
+```
+
+<br>
+
+## UseSpecificWithMethodRector
+
+Changes `->with()` to more specific method
+
+- class: [`Rector\PHPUnit\Rector\MethodCall\UseSpecificWithMethodRector`](../src/Rector/MethodCall/UseSpecificWithMethodRector.php)
+
+```diff
+  class SomeClass extends PHPUnit\Framework\TestCase
+  {
+      public function test()
+      {
+          $translator = $this->createMock('SomeClass');
+
+          $translator->expects($this->any())
+              ->method('trans')
+-             ->with($this->equalTo('old max {{ max }}!'));
++             ->with('old max {{ max }}!');
+      }
+  }
 ```
 
 <br>
