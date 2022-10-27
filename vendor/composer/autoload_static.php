@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2e654942ae56138f7908bab73a36df2b
+class ComposerStaticInitc793b2903aefa0a9aada52e902460e8f
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -32,7 +32,6 @@ class ComposerStaticInit2e654942ae56138f7908bab73a36df2b
             'Rector\\PhpParser\\' => 17,
             'Rector\\PHPUnit\\' => 15,
             'Rector\\PHPOffice\\' => 17,
-            'Rector\\Laravel\\' => 15,
             'Rector\\Doctrine\\' => 16,
             'Rector\\Core\\' => 12,
             'Rector\\' => 7,
@@ -110,10 +109,6 @@ class ComposerStaticInit2e654942ae56138f7908bab73a36df2b
         'Rector\\PHPOffice\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/rector-phpoffice/src',
-        ),
-        'Rector\\Laravel\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rector/rector-laravel/src',
         ),
         'Rector\\Doctrine\\' => 
         array (
@@ -2043,41 +2038,6 @@ class ComposerStaticInit2e654942ae56138f7908bab73a36df2b
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithContent.php',
         'Rector\\FileSystemRector\\ValueObject\\AddedFileWithNodes' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithNodes.php',
-        'Rector\\Laravel\\NodeAnalyzer\\LumenRouteRegisteringMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeAnalyzer/LumenRouteRegisteringMethodAnalyzer.php',
-        'Rector\\Laravel\\NodeAnalyzer\\StaticCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeAnalyzer/StaticCallAnalyzer.php',
-        'Rector\\Laravel\\NodeFactory\\AppAssignFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/AppAssignFactory.php',
-        'Rector\\Laravel\\NodeFactory\\ModelFactoryNodeFactory' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/ModelFactoryNodeFactory.php',
-        'Rector\\Laravel\\NodeFactory\\RouterRegisterNodeAnalyzer' => __DIR__ . '/..' . '/rector/rector-laravel/src/NodeFactory/RouterRegisterNodeAnalyzer.php',
-        'Rector\\Laravel\\Rector\\Assign\\CallOnAppArrayAccessToStandaloneAssignRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Assign/CallOnAppArrayAccessToStandaloneAssignRector.php',
-        'Rector\\Laravel\\Rector\\ClassMethod\\AddArgumentDefaultValueRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/ClassMethod/AddArgumentDefaultValueRector.php',
-        'Rector\\Laravel\\Rector\\ClassMethod\\AddGenericReturnTypeToRelationsRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/ClassMethod/AddGenericReturnTypeToRelationsRector.php',
-        'Rector\\Laravel\\Rector\\ClassMethod\\AddParentBootToModelClassMethodRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/ClassMethod/AddParentBootToModelClassMethodRector.php',
-        'Rector\\Laravel\\Rector\\ClassMethod\\AddParentRegisterToEventServiceProviderRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/ClassMethod/AddParentRegisterToEventServiceProviderRector.php',
-        'Rector\\Laravel\\Rector\\Class_\\AddMockConsoleOutputFalseToConsoleTestsRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Class_/AddMockConsoleOutputFalseToConsoleTestsRector.php',
-        'Rector\\Laravel\\Rector\\Class_\\AnonymousMigrationsRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Class_/AnonymousMigrationsRector.php',
-        'Rector\\Laravel\\Rector\\Class_\\PropertyDeferToDeferrableProviderToRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Class_/PropertyDeferToDeferrableProviderToRector.php',
-        'Rector\\Laravel\\Rector\\Class_\\UnifyModelDatesWithCastsRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Class_/UnifyModelDatesWithCastsRector.php',
-        'Rector\\Laravel\\Rector\\FuncCall\\FactoryFuncCallToStaticCallRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/FuncCall/FactoryFuncCallToStaticCallRector.php',
-        'Rector\\Laravel\\Rector\\FuncCall\\HelperFuncCallToFacadeClassRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/FuncCall/HelperFuncCallToFacadeClassRector.php',
-        'Rector\\Laravel\\Rector\\FuncCall\\RemoveDumpDataDeadCodeRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/FuncCall/RemoveDumpDataDeadCodeRector.php',
-        'Rector\\Laravel\\Rector\\MethodCall\\ChangeQueryWhereDateValueWithCarbonRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/ChangeQueryWhereDateValueWithCarbonRector.php',
-        'Rector\\Laravel\\Rector\\MethodCall\\FactoryApplyingStatesRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/FactoryApplyingStatesRector.php',
-        'Rector\\Laravel\\Rector\\MethodCall\\LumenRoutesStringActionToUsesArrayRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/LumenRoutesStringActionToUsesArrayRector.php',
-        'Rector\\Laravel\\Rector\\MethodCall\\LumenRoutesStringMiddlewareToArrayRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/LumenRoutesStringMiddlewareToArrayRector.php',
-        'Rector\\Laravel\\Rector\\MethodCall\\RedirectBackToBackHelperRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RedirectBackToBackHelperRector.php',
-        'Rector\\Laravel\\Rector\\MethodCall\\RedirectRouteToToRouteHelperRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/MethodCall/RedirectRouteToToRouteHelperRector.php',
-        'Rector\\Laravel\\Rector\\Namespace_\\FactoryDefinitionRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/Namespace_/FactoryDefinitionRector.php',
-        'Rector\\Laravel\\Rector\\New_\\AddGuardToLoginEventRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/New_/AddGuardToLoginEventRector.php',
-        'Rector\\Laravel\\Rector\\PropertyFetch\\OptionalToNullsafeOperatorRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/PropertyFetch/OptionalToNullsafeOperatorRector.php',
-        'Rector\\Laravel\\Rector\\StaticCall\\MinutesToSecondsInCacheRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/StaticCall/MinutesToSecondsInCacheRector.php',
-        'Rector\\Laravel\\Rector\\StaticCall\\Redirect301ToPermanentRedirectRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/StaticCall/Redirect301ToPermanentRedirectRector.php',
-        'Rector\\Laravel\\Rector\\StaticCall\\RequestStaticValidateToInjectRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/StaticCall/RequestStaticValidateToInjectRector.php',
-        'Rector\\Laravel\\Rector\\StaticCall\\RouteActionCallableRector' => __DIR__ . '/..' . '/rector/rector-laravel/src/Rector/StaticCall/RouteActionCallableRector.php',
-        'Rector\\Laravel\\Set\\LaravelLevelSetList' => __DIR__ . '/..' . '/rector/rector-laravel/src/Set/LaravelLevelSetList.php',
-        'Rector\\Laravel\\Set\\LaravelSetList' => __DIR__ . '/..' . '/rector/rector-laravel/src/Set/LaravelSetList.php',
-        'Rector\\Laravel\\ValueObject\\AddArgumentDefaultValue' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/AddArgumentDefaultValue.php',
-        'Rector\\Laravel\\ValueObject\\ServiceNameTypeAndVariableName' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/ServiceNameTypeAndVariableName.php',
-        'Rector\\Laravel\\ValueObject\\TypeToTimeMethodAndPosition' => __DIR__ . '/..' . '/rector/rector-laravel/src/ValueObject/TypeToTimeMethodAndPosition.php',
         'Rector\\MysqlToMysqli\\Rector\\Assign\\MysqlAssignToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/Assign/MysqlAssignToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlFuncCallToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlFuncCallToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlPConnectToMysqliConnectRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php',
@@ -3081,9 +3041,9 @@ class ComposerStaticInit2e654942ae56138f7908bab73a36df2b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2e654942ae56138f7908bab73a36df2b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2e654942ae56138f7908bab73a36df2b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2e654942ae56138f7908bab73a36df2b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc793b2903aefa0a9aada52e902460e8f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc793b2903aefa0a9aada52e902460e8f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc793b2903aefa0a9aada52e902460e8f::$classMap;
 
         }, null, ClassLoader::class);
     }

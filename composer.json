@@ -23,7 +23,6 @@
         "rector/rector-phpunit": "*",
         "rector/rector-symfony": "*",
         "rector/rector-doctrine": "*",
-        "rector/rector-laravel": "*",
         "rector/rector-phpoffice": "*",
         "rector/rector-php-parser": "*",
         "rector/rector-downgrade-php": "*"
