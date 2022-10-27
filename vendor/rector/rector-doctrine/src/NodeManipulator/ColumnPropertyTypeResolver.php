@@ -121,10 +121,7 @@ final class ColumnPropertyTypeResolver
         }
         return $this->createPHPStanTypeFromDoctrineStringType($typeArrayItemNode->value, $isNullable);
     }
-    /**
-     * @return \PHPStan\Type\MixedType|\PHPStan\Type\Type
-     */
-    private function createPHPStanTypeFromDoctrineStringType(string $type, bool $isNullable)
+    private function createPHPStanTypeFromDoctrineStringType(string $type, bool $isNullable) : Type
     {
         $scalarType = $this->doctrineTypeToScalarType[$type] ?? null;
         if (!$scalarType instanceof Type) {

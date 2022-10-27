@@ -1,4 +1,4 @@
-# 111 Rules Overview
+# 112 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -595,6 +595,26 @@ Replace the 2nd argument of `dirname()`
 ```diff
 -return dirname($path, 2);
 +return dirname(dirname($path));
+```
+
+<br>
+
+## DowngradeEnumExistsRector
+
+Replace `enum_exists()` function
+
+-
+class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeEnumExistsRector`](../rules/DowngradePhp81/Rector/FuncCall/DowngradeEnumExistsRector.php)
+
+```diff
+-enum_exists('SomeEnum', true);
++$enumExists = function (string $enum, bool $autoload = true) : bool {
++    if (function_exists('enum_exists')) {
++        return enum_exists($enum, $autoload);
++    }
++    return $autoload && class_exists($enum) && false;
++};
++$enumExists('SomeEnum', true);
 ```
 
 <br>

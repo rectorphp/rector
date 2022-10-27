@@ -34,7 +34,7 @@ final class EnumAnalyzer
     }
     public function resolveType(ClassReflection $classReflection) : ?Identifier
     {
-        $class = $this->astResolver->resolveClassFromClassReflection($classReflection, $classReflection->getName());
+        $class = $this->astResolver->resolveClassFromClassReflection($classReflection);
         if (!$class instanceof Enum_) {
             throw new ShouldNotHappenException();
         }
