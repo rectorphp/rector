@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc793b2903aefa0a9aada52e902460e8f
+class ComposerStaticInit98ae6f54e9a394b892c328c6cc59d05a
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -321,11 +321,17 @@ class ComposerStaticInitc793b2903aefa0a9aada52e902460e8f
         'PHPStan\\PhpDocParser\\Parser\\TokenIterator' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TokenIterator.php',
         'PHPStan\\PhpDocParser\\Parser\\TypeParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TypeParser.php',
         'PHPStan\\PhpDoc\\PHPUnit\\MockObjectTypeNodeResolverExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/PhpDoc/PHPUnit/MockObjectTypeNodeResolverExtension.php',
+        'PHPStan\\Rules\\PHPUnit\\AnnotationHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AnnotationHelper.php',
         'PHPStan\\Rules\\PHPUnit\\AssertRuleHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AssertRuleHelper.php',
         'PHPStan\\Rules\\PHPUnit\\AssertSameBooleanExpectedRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AssertSameBooleanExpectedRule.php',
         'PHPStan\\Rules\\PHPUnit\\AssertSameNullExpectedRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AssertSameNullExpectedRule.php',
         'PHPStan\\Rules\\PHPUnit\\AssertSameWithCountRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AssertSameWithCountRule.php',
+        'PHPStan\\Rules\\PHPUnit\\ClassCoversExistsRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ClassCoversExistsRule.php',
+        'PHPStan\\Rules\\PHPUnit\\ClassMethodCoversExistsRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ClassMethodCoversExistsRule.php',
+        'PHPStan\\Rules\\PHPUnit\\CoversHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/CoversHelper.php',
         'PHPStan\\Rules\\PHPUnit\\MockMethodCallRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/MockMethodCallRule.php',
+        'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInClassAnnotationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInClassAnnotationRule.php',
+        'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInMethodAnnotationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInMethodAnnotationRule.php',
         'PHPStan\\Rules\\PHPUnit\\ShouldCallParentMethodsRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ShouldCallParentMethodsRule.php',
         'PHPStan\\Type\\PHPUnit\\Assert\\AssertFunctionTypeSpecifyingExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/Assert/AssertFunctionTypeSpecifyingExtension.php',
         'PHPStan\\Type\\PHPUnit\\Assert\\AssertMethodTypeSpecifyingExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/Assert/AssertMethodTypeSpecifyingExtension.php',
@@ -3041,9 +3047,9 @@ class ComposerStaticInitc793b2903aefa0a9aada52e902460e8f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc793b2903aefa0a9aada52e902460e8f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc793b2903aefa0a9aada52e902460e8f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc793b2903aefa0a9aada52e902460e8f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit98ae6f54e9a394b892c328c6cc59d05a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit98ae6f54e9a394b892c328c6cc59d05a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit98ae6f54e9a394b892c328c6cc59d05a::$classMap;
 
         }, null, ClassLoader::class);
     }
