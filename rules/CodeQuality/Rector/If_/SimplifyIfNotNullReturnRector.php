@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -55,7 +56,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Stmt
     {
         $expr = $this->ifManipulator->matchIfNotNullReturnValue($node);
-        if ($expr !== null) {
+        if ($expr instanceof Expr) {
             $insideIfNode = $node->stmts[0];
             $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
             if (!$nextNode instanceof Return_) {
