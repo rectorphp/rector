@@ -795,17 +795,17 @@
         },
         {
             "name": "phpstan\/phpstan-phpunit",
-            "version": "1.2.1",
-            "version_normalized": "1.2.1.0",
+            "version": "1.2.2",
+            "version_normalized": "1.2.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan-phpunit.git",
-                "reference": "09b5c9ab38d4d601bcff04b4c9240832b86f5dda"
+                "reference": "dea1f87344c6964c607d9076dee42d891f3923f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/09b5c9ab38d4d601bcff04b4c9240832b86f5dda",
-                "reference": "09b5c9ab38d4d601bcff04b4c9240832b86f5dda",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/dea1f87344c6964c607d9076dee42d891f3923f0",
+                "reference": "dea1f87344c6964c607d9076dee42d891f3923f0",
                 "shasum": ""
             },
             "require": {
@@ -821,7 +821,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.0",
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2022-10-26T19:38:49+00:00",
+            "time": "2022-10-28T10:23:07+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "phpstan": {
@@ -844,7 +844,7 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/1.2.1"
+                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/1.2.2"
             },
             "install-path": "..\/phpstan\/phpstan-phpunit"
         },
@@ -2128,12 +2128,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "644c5a4238b7dc002852900fbf6323bd2fbbd183"
+                "reference": "5f0c972b3cdeff3acfc1a17c9dbed1674023d2ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/644c5a4238b7dc002852900fbf6323bd2fbbd183",
-                "reference": "644c5a4238b7dc002852900fbf6323bd2fbbd183",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5f0c972b3cdeff3acfc1a17c9dbed1674023d2ac",
+                "reference": "5f0c972b3cdeff3acfc1a17c9dbed1674023d2ac",
                 "shasum": ""
             },
             "require": {
@@ -2164,7 +2164,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-10-25T09:28:10+00:00",
+            "time": "2022-10-29T10:44:28+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2346,17 +2346,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.1.6",
-            "version_normalized": "6.1.6.0",
+            "version": "v6.1.7",
+            "version_normalized": "6.1.7.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "7fa3b9cf17363468795e539231a5c91b02b608fc"
+                "reference": "a1282bd0c096e0bdb8800b104177e2ce404d8815"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/7fa3b9cf17363468795e539231a5c91b02b608fc",
-                "reference": "7fa3b9cf17363468795e539231a5c91b02b608fc",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/a1282bd0c096e0bdb8800b104177e2ce404d8815",
+                "reference": "a1282bd0c096e0bdb8800b104177e2ce404d8815",
                 "shasum": ""
             },
             "require": {
@@ -2391,7 +2391,7 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2022-10-07T08:04:03+00:00",
+            "time": "2022-10-26T21:42:49+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2425,7 +2425,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.6"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.7"
             },
             "funding": [
                 {
@@ -2951,17 +2951,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v6.1.6",
-            "version_normalized": "6.1.6.0",
+            "version": "v6.1.7",
+            "version_normalized": "6.1.7.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "7e7e0ff180d4c5a6636eaad57b65092014b61864"
+                "reference": "823f143370880efcbdfa2dbca946b3358c4707e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/7e7e0ff180d4c5a6636eaad57b65092014b61864",
-                "reference": "7e7e0ff180d4c5a6636eaad57b65092014b61864",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/823f143370880efcbdfa2dbca946b3358c4707e5",
+                "reference": "823f143370880efcbdfa2dbca946b3358c4707e5",
                 "shasum": ""
             },
             "require": {
@@ -3019,7 +3019,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.6"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.7"
             },
             "funding": [
                 {

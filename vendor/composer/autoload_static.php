@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3e77fd98660aed01aa501e8309ba9490
+class ComposerStaticInitebb455d7d17656555c4fac8d9342a38c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2205,6 +2205,7 @@ class ComposerStaticInit3e77fd98660aed01aa501e8309ba9490
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\BoolUnionTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/BoolUnionTypeAnalyzer.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeAnalyzer.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeAnalyzer\\UnionTypeCommonTypeNarrower' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeAnalyzer/UnionTypeCommonTypeNarrower.php',
+        'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryLiteralStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryLiteralStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonEmptyStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonEmptyStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonFalsyStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonFalsyStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNumericStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNumericStringTypeMapper.php',
@@ -2215,6 +2216,7 @@ class ComposerStaticInit3e77fd98660aed01aa501e8309ba9490
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClassStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ClassStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ClosureTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\FloatTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/FloatTypeMapper.php',
+        'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\GenericClassStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/GenericClassStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\HasMethodTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/HasMethodTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\HasOffsetTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/HasOffsetTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\HasOffsetValueTypeTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/HasOffsetValueTypeTypeMapper.php',
@@ -2741,6 +2743,7 @@ class ComposerStaticInit3e77fd98660aed01aa501e8309ba9490
         'Rector\\Symfony\\Rector\\ClassConstFetch\\ConsoleExceptionToErrorEventConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\ActionSuffixRemoverRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ActionSuffixRemoverRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\AddRouteAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
+        'Rector\\Symfony\\Rector\\ClassMethod\\CommandConstantReturnCodeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/CommandConstantReturnCodeRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\ConsoleExecuteReturnIntRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ConsoleExecuteReturnIntRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\FormTypeGetParentRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/FormTypeGetParentRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\GetRequestRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/GetRequestRector.php',
@@ -2814,6 +2817,7 @@ class ComposerStaticInit3e77fd98660aed01aa501e8309ba9490
         'Rector\\Symfony\\Set\\SwiftmailerSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SwiftmailerSetList.php',
         'Rector\\Symfony\\Set\\SymfonyLevelSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonyLevelSetList.php',
         'Rector\\Symfony\\Set\\SymfonySetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SymfonySetList.php',
+        'Rector\\Symfony\\Set\\TwigLevelSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/TwigLevelSetList.php',
         'Rector\\Symfony\\Set\\TwigSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/TwigSetList.php',
         'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
         'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',
@@ -2821,6 +2825,7 @@ class ComposerStaticInit3e77fd98660aed01aa501e8309ba9490
         'Rector\\Symfony\\TypeAnalyzer\\JMSDITypeResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/JMSDITypeResolver.php',
         'Rector\\Symfony\\TypeDeclaration\\ReturnTypeDeclarationUpdater' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeDeclaration/ReturnTypeDeclarationUpdater.php',
         'Rector\\Symfony\\ValueObjectFactory\\ServiceMapFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObjectFactory/ServiceMapFactory.php',
+        'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyCommandConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyCommandConstantMap.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyRequestConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyRequestConstantMap.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyResponseConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyResponseConstantMap.php',
         'Rector\\Symfony\\ValueObject\\EventNameToClassAndConstant' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventNameToClassAndConstant.php',
@@ -3047,9 +3052,9 @@ class ComposerStaticInit3e77fd98660aed01aa501e8309ba9490
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3e77fd98660aed01aa501e8309ba9490::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3e77fd98660aed01aa501e8309ba9490::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3e77fd98660aed01aa501e8309ba9490::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitebb455d7d17656555c4fac8d9342a38c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitebb455d7d17656555c4fac8d9342a38c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitebb455d7d17656555c4fac8d9342a38c::$classMap;
 
         }, null, ClassLoader::class);
     }

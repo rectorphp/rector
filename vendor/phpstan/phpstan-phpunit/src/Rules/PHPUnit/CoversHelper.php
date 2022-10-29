@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace PHPStan\Rules\PHPUnit;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Reflection\ReflectionProvider;
@@ -51,21 +52,27 @@ class CoversHelper
     {
         $errors = [];
         $covers = (string) $phpDocTag->value;
-        if (strpos($covers, '::') !== \false) {
+        $isMethod = strpos($covers, '::') !== \false;
+        $fullName = $covers;
+        if ($isMethod) {
             [$className, $method] = explode('::', $covers);
         } else {
             $className = $covers;
         }
         if ($className === '' && $node instanceof Node\Stmt\ClassMethod && $coversDefaultClass !== null) {
             $className = (string) $coversDefaultClass->value;
+            $fullName = $className . $covers;
         }
         if ($this->reflectionProvider->hasClass($className)) {
             $class = $this->reflectionProvider->getClass($className);
             if (isset($method) && $method !== '' && !$class->hasMethod($method)) {
-                $errors[] = RuleErrorBuilder::message(sprintf('@covers value %s references an invalid method.', $covers))->build();
+                $errors[] = RuleErrorBuilder::message(sprintf('@covers value %s references an invalid method.', $fullName))->build();
             }
         } else {
-            $errors[] = RuleErrorBuilder::message(sprintf('@covers value %s references an invalid class.', $covers))->build();
+            if (!isset($method) && $this->reflectionProvider->hasFunction(new Name($covers, []), null)) {
+                return $errors;
+            }
+            $errors[] = RuleErrorBuilder::message(sprintf('@covers value %s references an invalid %s.', $fullName, $isMethod ? 'method' : 'class or function'))->build();
         }
         return $errors;
     }

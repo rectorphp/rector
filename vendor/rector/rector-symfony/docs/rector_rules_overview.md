@@ -251,6 +251,28 @@ Change type in CollectionType from alias string to class reference
 
 <br>
 
+## CommandConstantReturnCodeRector
+
+Changes int return from execute to use Symfony Command constants.
+
+-
+class: [`Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector`](../src/Rector/ClassMethod/CommandConstantReturnCodeRector.php)
+
+```diff
+ use Symfony\Component\Console\Command\Command;
+
+ class SomeCommand extends Command
+ {
+     protected function execute(InputInterface $input, OutputInterface $output): int
+     {
+-         return 0;
++         return Command::SUCCESS;
+     }
+ }
+```
+
+<br>
+
 ## CommandDescriptionToPropertyRector
 
 Moves Command description setter to defaultDescription property

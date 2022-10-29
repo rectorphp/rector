@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
@@ -102,8 +103,11 @@ CODE_SAMPLE
         if ($sensioMethods === null) {
             return null;
         }
+        if (\is_string($sensioMethods)) {
+            $sensioMethods = new CurlyListNode([new ArrayItemNode($sensioMethods, null, String_::KIND_DOUBLE_QUOTED)]);
+        }
         $symfonyMethodsArrayItemNode = $symfonyDoctrineAnnotationTagValueNode->getValue('methods');
-        // value is already filled, do not enter anythign
+        // value is already filled, do not enter anything
         if ($symfonyMethodsArrayItemNode instanceof ArrayItemNode) {
             return null;
         }
@@ -113,7 +117,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @return string[]|null|CurlyListNode
+     * @return string|string[]|null|CurlyListNode
      */
     private function resolveMethods(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode)
     {

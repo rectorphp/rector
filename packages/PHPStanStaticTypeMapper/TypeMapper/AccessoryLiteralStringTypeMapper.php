@@ -7,15 +7,15 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\Accessory\AccessoryNonFalsyStringType;
+use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use PHPStan\Type\Type;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 /**
- * @implements TypeMapperInterface<AccessoryNonFalsyStringType>
+ * @implements TypeMapperInterface<AccessoryLiteralStringType>
  */
-final class AccessoryNonFalsyStringTypeMapper implements TypeMapperInterface
+final class AccessoryLiteralStringTypeMapper implements TypeMapperInterface
 {
     /**
      * @readonly
@@ -31,17 +31,17 @@ final class AccessoryNonFalsyStringTypeMapper implements TypeMapperInterface
      */
     public function getNodeClass() : string
     {
-        return AccessoryNonFalsyStringType::class;
+        return AccessoryLiteralStringType::class;
     }
     /**
-     * @param AccessoryNonFalsyStringType $type
+     * @param AccessoryLiteralStringType $type
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
-        return new IdentifierTypeNode('non-falsy-string');
+        return new IdentifierTypeNode('literal-string');
     }
     /**
-     * @param AccessoryNonFalsyStringType $type
+     * @param AccessoryLiteralStringType $type
      */
     public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
