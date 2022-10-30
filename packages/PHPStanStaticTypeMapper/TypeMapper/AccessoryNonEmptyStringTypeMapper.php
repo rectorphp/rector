@@ -38,7 +38,7 @@ final class AccessoryNonEmptyStringTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
-        return new IdentifierTypeNode('non-empty-string');
+        return new IdentifierTypeNode('string');
     }
     /**
      * @param AccessoryNonEmptyStringType $type

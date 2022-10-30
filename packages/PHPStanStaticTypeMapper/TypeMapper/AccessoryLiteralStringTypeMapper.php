@@ -38,7 +38,7 @@ final class AccessoryLiteralStringTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
     {
-        return new IdentifierTypeNode('literal-string');
+        return new IdentifierTypeNode('string');
     }
     /**
      * @param AccessoryLiteralStringType $type
