@@ -1,4 +1,4 @@
-# 399 Rules Overview
+# 400 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (76)
+- [CodeQuality](#codequality) (77)
 
 - [CodingStyle](#codingstyle) (36)
 
@@ -1634,6 +1634,27 @@ Switch negated ternary condition rector
 +        return $upper
 +            ? strtoupper($name)
 +            : $name;
+     }
+ }
+```
+
+<br>
+
+### TernaryEmptyArrayArrayDimFetchToCoalesceRector
+
+Change ternary empty on array property with array dim fetch to coalesce operator
+
+- class: [`Rector\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector`](../rules/CodeQuality/Rector/Ternary/TernaryEmptyArrayArrayDimFetchToCoalesceRector.php)
+
+```diff
+ final class SomeClass
+ {
+     private array $items = [];
+
+     public function run()
+     {
+-        return ! empty($this->items) ? $this->items[0] : 'default';
++        return $this->items[0] ?? 'default';
      }
  }
 ```
