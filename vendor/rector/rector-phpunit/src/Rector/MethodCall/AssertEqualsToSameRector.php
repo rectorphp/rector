@@ -81,8 +81,28 @@ final class AssertEqualsToSameRector extends AbstractRector
         if (!$this->isScalarValue($firstArgValue)) {
             return null;
         }
+        if ($this->shouldSkipConstantArrayType($firstArgValue)) {
+            return null;
+        }
         $hasChanged = $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
         return $hasChanged ? $node : null;
+    }
+    private function shouldSkipConstantArrayType(Expr $expr) : bool
+    {
+        $type = $this->getType($expr);
+        if (!$type instanceof ConstantArrayType) {
+            return \false;
+        }
+        // empty array
+        if ($type->getValueTypes() === []) {
+            return \false;
+        }
+        /**
+         * Non empty array, but value cannot be retrieved via ValueResolver, then there is possibly an dynamic value
+         * inside
+         */
+        $value = $this->valueResolver->getValue($expr);
+        return $value === [];
     }
     private function isScalarType(Type $valueNodeType) : bool
     {

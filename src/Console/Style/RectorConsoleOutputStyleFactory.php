@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Core\Console\Style;
 
 use Rector\Core\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202210\Symfony\Component\Console\Application;
-use RectorPrefix202210\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202210\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202210\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202211\Symfony\Component\Console\Application;
+use RectorPrefix202211\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202211\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202211\Symfony\Component\Console\Output\OutputInterface;
 final class RectorConsoleOutputStyleFactory
 {
     /**

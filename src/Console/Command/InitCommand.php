@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
-use RectorPrefix202210\Nette\Utils\FileSystem;
-use RectorPrefix202210\Nette\Utils\Strings;
+use RectorPrefix202211\Nette\Utils\FileSystem;
+use RectorPrefix202211\Nette\Utils\Strings;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix202210\Symfony\Component\Console\Command\Command;
-use RectorPrefix202210\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202210\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202210\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202210\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202211\Symfony\Component\Console\Command\Command;
+use RectorPrefix202211\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202211\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202211\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202211\Symfony\Component\Console\Style\SymfonyStyle;
 final class InitCommand extends Command
 {
     /**
@@ -39,7 +39,7 @@ final class InitCommand extends Command
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(\RectorPrefix202210\Symfony\Component\Filesystem\Filesystem $filesystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, SymfonyStyle $symfonyStyle)
+    public function __construct(\RectorPrefix202211\Symfony\Component\Filesystem\Filesystem $filesystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, SymfonyStyle $symfonyStyle)
     {
         $this->filesystem = $filesystem;
         $this->rectorOutputStyle = $rectorOutputStyle;

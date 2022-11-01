@@ -5,9 +5,9 @@ namespace Rector\Core\DependencyInjection\Loader;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
-use RectorPrefix202210\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix202210\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202210\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix202211\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix202211\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202211\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 /**
  * @property-read ContainerBuilder $container
  */

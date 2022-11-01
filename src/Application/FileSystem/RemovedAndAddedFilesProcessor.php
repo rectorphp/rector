@@ -7,7 +7,7 @@ use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix202210\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202211\Symfony\Component\Filesystem\Filesystem;
 /**
  * Adds and removes scheduled file
  */

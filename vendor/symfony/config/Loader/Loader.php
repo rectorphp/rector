@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202210\Symfony\Component\Config\Loader;
+namespace RectorPrefix202211\Symfony\Component\Config\Loader;
 
-use RectorPrefix202210\Symfony\Component\Config\Exception\LoaderLoadException;
+use RectorPrefix202211\Symfony\Component\Config\Exception\LoaderLoadException;
 /**
  * Loader is the abstract class used by all built-in loaders.
  *

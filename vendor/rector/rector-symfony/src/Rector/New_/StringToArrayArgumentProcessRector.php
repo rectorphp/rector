@@ -17,8 +17,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
-use RectorPrefix202210\Symfony\Component\Console\Input\StringInput;
-use RectorPrefix202210\Symplify\PackageBuilder\Reflection\PrivatesCaller;
+use RectorPrefix202211\Symfony\Component\Console\Input\StringInput;
+use RectorPrefix202211\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

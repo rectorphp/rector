@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202210\Nette\Utils;
+namespace RectorPrefix202211\Nette\Utils;
 
-use RectorPrefix202210\Nette;
+use RectorPrefix202211\Nette;
 use function is_array, is_object, strlen;
 /**
  * String tools library.

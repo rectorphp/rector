@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202210\Symplify\AutowireArrayParameter\Skipper;
+namespace RectorPrefix202211\Symplify\AutowireArrayParameter\Skipper;
 
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
-use RectorPrefix202210\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202210\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver;
+use RectorPrefix202211\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202211\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver;
 final class ParameterSkipper
 {
     /**
@@ -15,7 +15,7 @@ final class ParameterSkipper
      *
      * @var string[]
      */
-    private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['RectorPrefix202210\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix202210\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix202210\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix202210\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix202210\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix202210\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix202210\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix202210\\Sonata\\Twig\\Extension\\TemplateExtension'];
+    private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['RectorPrefix202211\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix202211\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix202211\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix202211\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix202211\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix202211\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix202211\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix202211\\Sonata\\Twig\\Extension\\TemplateExtension'];
     /**
      * @var string[]
      */

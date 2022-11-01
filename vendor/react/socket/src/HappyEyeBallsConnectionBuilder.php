@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix202210\React\Socket;
+namespace RectorPrefix202211\React\Socket;
 
-use RectorPrefix202210\React\Dns\Model\Message;
-use RectorPrefix202210\React\Dns\Resolver\ResolverInterface;
-use RectorPrefix202210\React\EventLoop\LoopInterface;
-use RectorPrefix202210\React\EventLoop\TimerInterface;
-use RectorPrefix202210\React\Promise;
-use RectorPrefix202210\React\Promise\PromiseInterface;
+use RectorPrefix202211\React\Dns\Model\Message;
+use RectorPrefix202211\React\Dns\Resolver\ResolverInterface;
+use RectorPrefix202211\React\EventLoop\LoopInterface;
+use RectorPrefix202211\React\EventLoop\TimerInterface;
+use RectorPrefix202211\React\Promise;
+use RectorPrefix202211\React\Promise\PromiseInterface;
 /**
  * @internal
  */

@@ -8,13 +8,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202210\Symfony\Component\Console\Command;
+namespace RectorPrefix202211\Symfony\Component\Console\Command;
 
-use RectorPrefix202210\Symfony\Component\Console\Exception\LogicException;
-use RectorPrefix202210\Symfony\Component\Lock\LockFactory;
-use RectorPrefix202210\Symfony\Component\Lock\LockInterface;
-use RectorPrefix202210\Symfony\Component\Lock\Store\FlockStore;
-use RectorPrefix202210\Symfony\Component\Lock\Store\SemaphoreStore;
+use RectorPrefix202211\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202211\Symfony\Component\Lock\LockFactory;
+use RectorPrefix202211\Symfony\Component\Lock\LockInterface;
+use RectorPrefix202211\Symfony\Component\Lock\Store\FlockStore;
+use RectorPrefix202211\Symfony\Component\Lock\Store\SemaphoreStore;
 /**
  * Basic lock feature for commands.
  *

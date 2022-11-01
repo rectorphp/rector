@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202210\Symfony\Component\Config\Definition;
+namespace RectorPrefix202211\Symfony\Component\Config\Definition;
 
-use RectorPrefix202210\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use RectorPrefix202211\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 /**
  * This node represents a numeric value in the config tree.
  *
