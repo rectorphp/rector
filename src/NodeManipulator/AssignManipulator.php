@@ -5,7 +5,9 @@ namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\FuncCall;
@@ -86,6 +88,9 @@ final class AssignManipulator
         if ($parentNode !== null && $this->multiInstanceofChecker->isInstanceOf($parentNode, self::MODIFYING_NODE_TYPES)) {
             return \true;
         }
+        if ($this->isOnArrayDestructuring($parentNode)) {
+            return \true;
+        }
         // traverse up to array dim fetches
         if ($parentNode instanceof ArrayDimFetch) {
             $previousParent = $parentNode;
@@ -123,5 +128,17 @@ final class AssignManipulator
             }
             return $this->isLeftPartOfAssign($node);
         });
+    }
+    private function isOnArrayDestructuring(?Node $parentNode) : bool
+    {
+        if (!$parentNode instanceof ArrayItem) {
+            return \false;
+        }
+        $parentArrayItem = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentArrayItem instanceof Array_) {
+            return \false;
+        }
+        $node = $parentArrayItem->getAttribute(AttributeKey::PARENT_NODE);
+        return $node instanceof Assign && $node->var === $parentArrayItem;
     }
 }
