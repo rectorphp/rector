@@ -848,12 +848,12 @@ Move property default from constructor to property default
  final class SomeClass
  {
 -    private $name;
--
--    public function __construct()
--    {
--        $this->name = 'John';
--    }
 +    private $name = 'John';
+
+     public function __construct()
+     {
+-        $this->name = 'John';
+     }
  }
 ```
 
