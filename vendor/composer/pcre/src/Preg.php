@@ -19,14 +19,14 @@ class Preg
     /**
      * @param non-empty-string   $pattern
      * @param array<string|null> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      * @return 0|1
+     *
+     * @param-out array<int|string, string|null> $matches
      */
     public static function match(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0) : int
     {
-        if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
-            throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the type of $matches, use matchWithOffsets() instead');
-        }
+        self::checkOffsetCapture($flags, 'matchWithOffsets');
         $result = \preg_match($pattern, $subject, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset);
         if ($result === \false) {
             throw PcreException::fromFunction('preg_match', $pattern);
@@ -38,10 +38,10 @@ class Preg
      *
      * @param non-empty-string   $pattern
      * @param array<int|string, array{string|null, int}> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_OFFSET_CAPTURE are always set, no other flags are supported
      * @return 0|1
      *
-     * @phpstan-param array<int|string, array{string|null, int<-1, max>}> $matches
+     * @param-out array<int|string, array{string|null, int<-1, max>}> $matches
      */
     public static function matchWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : int
     {
@@ -54,19 +54,20 @@ class Preg
     /**
      * @param non-empty-string   $pattern
      * @param array<int|string, list<string|null>> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_SET_ORDER> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      * @return 0|positive-int
+     *
+     * @param-out array<int|string, list<string|null>> $matches
      */
     public static function matchAll(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0) : int
     {
-        if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
-            throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the type of $matches, use matchAllWithOffsets() instead');
-        }
+        self::checkOffsetCapture($flags, 'matchAllWithOffsets');
         if (($flags & \PREG_SET_ORDER) !== 0) {
             throw new \InvalidArgumentException('PREG_SET_ORDER is not supported as it changes the type of $matches');
         }
         $result = \preg_match_all($pattern, $subject, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset);
-        if ($result === \false || $result === null) {
+        if (!\is_int($result)) {
+            // PHP < 8 may return null, 8+ returns int|false
             throw PcreException::fromFunction('preg_match_all', $pattern);
         }
         return $result;
@@ -76,7 +77,7 @@ class Preg
      *
      * @param non-empty-string   $pattern
      * @param array<int|string, list<array{string|null, int}>> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
      * @return 0|positive-int
      *
      * @phpstan-param array<int|string, list<array{string|null, int<-1, max>}>> $matches
@@ -84,7 +85,8 @@ class Preg
     public static function matchAllWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : int
     {
         $result = \preg_match_all($pattern, $subject, $matches, $flags | \PREG_UNMATCHED_AS_NULL | \PREG_OFFSET_CAPTURE, $offset);
-        if ($result === \false || $result === null) {
+        if (!\is_int($result)) {
+            // PHP < 8 may return null, 8+ returns int|false
             throw PcreException::fromFunction('preg_match_all', $pattern);
         }
         return $result;
@@ -94,6 +96,8 @@ class Preg
      * @param string|string[] $replacement
      * @param string $subject
      * @param int             $count Set by method
+     *
+     * @param-out int<0, max> $count
      */
     public static function replace($pattern, $replacement, $subject, int $limit = -1, int &$count = null) : string
     {
@@ -111,9 +115,12 @@ class Preg
     }
     /**
      * @param string|string[] $pattern
+     * @param callable(array<int|string, string|null>): string $replacement
      * @param string $subject
      * @param int             $count Set by method
-     * @param int             $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
+     *
+     * @param-out int<0, max> $count
      */
     public static function replaceCallback($pattern, callable $replacement, $subject, int $limit = -1, int &$count = null, int $flags = 0) : string
     {
@@ -130,10 +137,12 @@ class Preg
         return $result;
     }
     /**
-     * @param array<string, callable> $pattern
+     * @param array<string, callable(array<int|string, string|null>): string> $pattern
      * @param string $subject
      * @param int    $count Set by method
-     * @param int    $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
+     *
+     * @param-out int<0, max> $count
      */
     public static function replaceCallbackArray(array $pattern, $subject, int $limit = -1, int &$count = null, int $flags = 0) : string
     {
@@ -151,7 +160,7 @@ class Preg
         return $result;
     }
     /**
-     * @param int    $flags PREG_SPLIT_NO_EMPTY or PREG_SPLIT_DELIM_CAPTURE
+     * @param int-mask<PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_OFFSET_CAPTURE> $flags PREG_SPLIT_NO_EMPTY or PREG_SPLIT_DELIM_CAPTURE
      * @return list<string>
      */
     public static function split(string $pattern, string $subject, int $limit = -1, int $flags = 0) : array
@@ -166,7 +175,7 @@ class Preg
         return $result;
     }
     /**
-     * @param int    $flags PREG_SPLIT_NO_EMPTY or PREG_SPLIT_DELIM_CAPTURE, PREG_SPLIT_OFFSET_CAPTURE is always set
+     * @param int-mask<PREG_SPLIT_NO_EMPTY|PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_OFFSET_CAPTURE> $flags PREG_SPLIT_NO_EMPTY or PREG_SPLIT_DELIM_CAPTURE, PREG_SPLIT_OFFSET_CAPTURE is always set
      * @return list<array{string, int}>
      * @phpstan-return list<array{string, int<0, max>}>
      */
@@ -182,7 +191,7 @@ class Preg
      * @template T of string|\Stringable
      * @param string   $pattern
      * @param array<T> $array
-     * @param int      $flags PREG_GREP_INVERT
+     * @param int-mask<PREG_GREP_INVERT> $flags PREG_GREP_INVERT
      * @return array<T>
      */
     public static function grep(string $pattern, array $array, int $flags = 0) : array
@@ -196,7 +205,9 @@ class Preg
     /**
      * @param non-empty-string   $pattern
      * @param array<string|null> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     *
+     * @param-out array<int|string, string|null> $matches
      */
     public static function isMatch(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0) : bool
     {
@@ -205,7 +216,9 @@ class Preg
     /**
      * @param non-empty-string   $pattern
      * @param array<int|string, list<string|null>> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     *
+     * @param-out array<int|string, list<string|null>> $matches
      */
     public static function isMatchAll(string $pattern, string $subject, ?array &$matches = null, int $flags = 0, int $offset = 0) : bool
     {
@@ -216,9 +229,9 @@ class Preg
      *
      * @param non-empty-string   $pattern
      * @param array<int|string, array{string|null, int}> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      *
-     * @phpstan-param array<int|string, array{string|null, int<-1, max>}> $matches
+     * @param-out array<int|string, array{string|null, int<-1, max>}> $matches
      */
     public static function isMatchWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : bool
     {
@@ -229,12 +242,18 @@ class Preg
      *
      * @param non-empty-string   $pattern
      * @param array<int|string, list<array{string|null, int}>> $matches Set by method
-     * @param int      $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      *
-     * @phpstan-param array<int|string, list<array{string|null, int<-1, max>}>> $matches
+     * @param-out array<int|string, list<array{string|null, int<-1, max>}>> $matches
      */
     public static function isMatchAllWithOffsets(string $pattern, string $subject, ?array &$matches, int $flags = 0, int $offset = 0) : bool
     {
         return (bool) static::matchAllWithOffsets($pattern, $subject, $matches, $flags, $offset);
+    }
+    private static function checkOffsetCapture(int $flags, string $useFunctionName) : void
+    {
+        if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
+            throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the type of $matches, use ' . $useFunctionName . '() instead');
+        }
     }
 }

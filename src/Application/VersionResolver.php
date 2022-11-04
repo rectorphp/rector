@@ -17,12 +17,12 @@ final class VersionResolver
      * @api
      * @var string
      */
-    public const PACKAGE_VERSION = '7dae36df19a081561ca342751d9727eff503106b';
+    public const PACKAGE_VERSION = 'a5051ff31121d95ac2ccf7db351ea486024a0b3f';
     /**
      * @api
      * @var string
      */
-    public const RELEASE_DATE = '2022-11-02 15:41:41';
+    public const RELEASE_DATE = '2022-11-04 08:08:17';
     /**
      * @var int
      */
@@ -44,7 +44,7 @@ final class VersionResolver
         if ($commitHashResultCode !== 0) {
             throw new VersionException('Ensure to run compile from composer git repository clone and that git binary is available.');
         }
-        $version = \trim((string) $commitHashExecOutput[0]);
+        $version = \trim($commitHashExecOutput[0]);
         return \trim($version, '"');
     }
     public static function resolverReleaseDateTime() : DateTime
@@ -53,6 +53,6 @@ final class VersionResolver
         if ($resultCode !== self::SUCCESS_CODE) {
             throw new VersionException('You must ensure to run compile from composer git repository clone and that git binary is available.');
         }
-        return new DateTime(\trim((string) $output[0]));
+        return new DateTime(\trim($output[0]));
     }
 }

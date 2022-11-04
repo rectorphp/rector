@@ -50,11 +50,11 @@ final class ConstantArrayTypeToCallReflectionResolver implements TypeToCallRefle
             return null;
         }
         $constantArrayType = $constantArrayTypeAndMethod->getType();
-        $methodReflection = $constantArrayType->getMethod($constantArrayTypeAndMethod->getMethod(), $scope);
-        if (!$scope->canCallMethod($methodReflection)) {
+        $extendedMethodReflection = $constantArrayType->getMethod($constantArrayTypeAndMethod->getMethod(), $scope);
+        if (!$scope->canCallMethod($extendedMethodReflection)) {
             return null;
         }
-        return $methodReflection;
+        return $extendedMethodReflection;
     }
     /**
      * @see https://github.com/phpstan/phpstan-src/blob/b1fd47bda2a7a7d25091197b125c0adf82af6757/src/Type/Constant/ConstantArrayType.php#L209

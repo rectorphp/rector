@@ -21,13 +21,11 @@ class Regex
     }
     /**
      * @param non-empty-string $pattern
-     * @param int    $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      */
     public static function match(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchResult
     {
-        if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
-            throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the return type, use matchWithOffsets() instead');
-        }
+        self::checkOffsetCapture($flags);
         $count = Preg::match($pattern, $subject, $matches, $flags, $offset);
         return new MatchResult($count, $matches);
     }
@@ -35,7 +33,7 @@ class Regex
      * Runs preg_match with PREG_OFFSET_CAPTURE
      *
      * @param non-empty-string $pattern
-     * @param int    $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
      */
     public static function matchWithOffsets(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchWithOffsetsResult
     {
@@ -44,13 +42,11 @@ class Regex
     }
     /**
      * @param non-empty-string $pattern
-     * @param int    $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_SET_ORDER> $flags PREG_UNMATCHED_AS_NULL is always set, no other flags are supported
      */
     public static function matchAll(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchAllResult
     {
-        if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
-            throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the return type, use matchAllWithOffsets() instead');
-        }
+        self::checkOffsetCapture($flags);
         if (($flags & \PREG_SET_ORDER) !== 0) {
             throw new \InvalidArgumentException('PREG_SET_ORDER is not supported as it changes the return type');
         }
@@ -61,7 +57,7 @@ class Regex
      * Runs preg_match_all with PREG_OFFSET_CAPTURE
      *
      * @param non-empty-string $pattern
-     * @param int    $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_UNMATCHED_AS_NULL and PREG_MATCH_OFFSET are always set, no other flags are supported
      */
     public static function matchAllWithOffsets(string $pattern, string $subject, int $flags = 0, int $offset = 0) : MatchAllWithOffsetsResult
     {
@@ -80,8 +76,9 @@ class Regex
     }
     /**
      * @param string|string[] $pattern
+     * @param callable(array<int|string, string|null>): string $replacement
      * @param string          $subject
-     * @param int             $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
      */
     public static function replaceCallback($pattern, callable $replacement, $subject, int $limit = -1, int $flags = 0) : ReplaceResult
     {
@@ -89,13 +86,19 @@ class Regex
         return new ReplaceResult($count, $result);
     }
     /**
-     * @param array<string, callable> $pattern
+     * @param array<string, callable(array<int|string, string|null>): string> $pattern
      * @param string $subject
-     * @param int    $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
+     * @param int-mask<PREG_UNMATCHED_AS_NULL|PREG_OFFSET_CAPTURE> $flags PREG_OFFSET_CAPTURE is supported, PREG_UNMATCHED_AS_NULL is always set
      */
     public static function replaceCallbackArray(array $pattern, $subject, int $limit = -1, int $flags = 0) : ReplaceResult
     {
         $result = Preg::replaceCallbackArray($pattern, $subject, $limit, $count, $flags);
         return new ReplaceResult($count, $result);
+    }
+    private static function checkOffsetCapture(int $flags) : void
+    {
+        if (($flags & \PREG_OFFSET_CAPTURE) !== 0) {
+            throw new \InvalidArgumentException('PREG_OFFSET_CAPTURE is not supported as it changes the return type, use matchWithOffsets() instead');
+        }
     }
 }
