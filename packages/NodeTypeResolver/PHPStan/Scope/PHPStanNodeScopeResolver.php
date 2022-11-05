@@ -43,6 +43,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\StaticReflection\SourceLocator\ParentAttributeSourceLocator;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
@@ -182,6 +183,9 @@ final class PHPStanNodeScopeResolver
                 // decorate value as well
                 $node->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
+            if ($node instanceof StmtsAwareInterface) {
+                $this->processStmtsAwareInterface($node, $mutatingScope);
+            }
             if ($node instanceof Trait_) {
                 $traitName = $this->resolveClassName($node);
                 $traitReflectionClass = $this->reflectionProvider->getClass($traitName);
@@ -210,6 +214,15 @@ final class PHPStanNodeScopeResolver
             }
         };
         return $this->processNodesWithDependentFiles($filePath, $stmts, $scope, $nodeCallback);
+    }
+    private function processStmtsAwareInterface(StmtsAwareInterface $stmtsAware, MutatingScope $mutatingScope) : void
+    {
+        if ($stmtsAware->stmts === null) {
+            return;
+        }
+        foreach ($stmtsAware->stmts as $stmt) {
+            $stmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
     }
     private function processArrayItem(ArrayItem $arrayItem, MutatingScope $mutatingScope) : void
     {
