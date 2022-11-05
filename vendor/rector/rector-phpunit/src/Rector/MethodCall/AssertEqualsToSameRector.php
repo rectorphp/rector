@@ -93,16 +93,25 @@ final class AssertEqualsToSameRector extends AbstractRector
         if (!$type instanceof ConstantArrayType) {
             return \false;
         }
+        return $this->hasNonScalarType($type);
+    }
+    private function hasNonScalarType(ConstantArrayType $constantArrayType) : bool
+    {
+        $valueTypes = $constantArrayType->getValueTypes();
         // empty array
-        if ($type->getValueTypes() === []) {
+        if ($valueTypes === []) {
             return \false;
         }
-        /**
-         * Non empty array, but value cannot be retrieved via ValueResolver, then there is possibly an dynamic value
-         * inside
-         */
-        $value = $this->valueResolver->getValue($expr);
-        return $value === [];
+        foreach ($valueTypes as $valueType) {
+            if ($valueType instanceof ConstantArrayType && $this->hasNonScalarType($valueType)) {
+                return \true;
+            }
+            // non-scalar type can be an object or mixed, which should be skipped
+            if (!$this->isScalarType($valueType)) {
+                return \true;
+            }
+        }
+        return \false;
     }
     private function isScalarType(Type $valueNodeType) : bool
     {

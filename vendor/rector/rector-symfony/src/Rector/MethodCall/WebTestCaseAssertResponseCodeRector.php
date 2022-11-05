@@ -129,9 +129,6 @@ CODE_SAMPLE
             return null;
         }
         $statusCode = $this->valueResolver->getValue($args[0]->value, \true);
-        if ($statusCode === null) {
-            return null;
-        }
         // handled by another method
         if ($statusCode === 200) {
             return null;
