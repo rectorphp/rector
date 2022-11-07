@@ -45,6 +45,9 @@ final class RegexMatcher
             if (\strpos($modifiers, 'e') === \false) {
                 return null;
             }
+            if (\in_array($pattern[\strlen($pattern) - 1], [')', '}', ']', '>'], \true)) {
+                return null;
+            }
             $patternWithoutE = $this->createPatternWithoutE($pattern, $delimiter, $modifiers);
             return new String_($patternWithoutE);
         }
