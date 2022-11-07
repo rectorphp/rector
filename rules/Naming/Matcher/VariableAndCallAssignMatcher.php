@@ -53,7 +53,7 @@ final class VariableAndCallAssignMatcher
         if (!$functionLike instanceof FunctionLike) {
             return null;
         }
-        $isVariableFoundInCallArgs = (bool) $this->betterNodeFinder->findFirst($call->getArgs(), function (Node $subNode) use($variableName) : bool {
+        $isVariableFoundInCallArgs = (bool) $this->betterNodeFinder->findFirst($call->isFirstClassCallable() ? [] : $call->getArgs(), function (Node $subNode) use($variableName) : bool {
             return $subNode instanceof Variable && $this->nodeNameResolver->isName($subNode, $variableName);
         });
         if ($isVariableFoundInCallArgs) {

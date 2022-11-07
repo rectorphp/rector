@@ -17,6 +17,9 @@ final class ParametersAcceptorSelectorVariantsWrapper
     public static function select($reflection, CallLike $callLike, Scope $scope) : ParametersAcceptor
     {
         $variants = $reflection->getVariants();
+        if ($callLike->isFirstClassCallable()) {
+            return ParametersAcceptorSelector::selectSingle($variants);
+        }
         return \count($variants) > 1 ? ParametersAcceptorSelector::selectFromArgs($scope, $callLike->getArgs(), $variants) : ParametersAcceptorSelector::selectSingle($variants);
     }
 }

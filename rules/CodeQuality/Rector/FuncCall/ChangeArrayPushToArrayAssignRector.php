@@ -51,6 +51,9 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, 'array_push')) {
             return null;
         }
+        if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
         if ($this->hasArraySpread($funcCall)) {
             return null;
         }

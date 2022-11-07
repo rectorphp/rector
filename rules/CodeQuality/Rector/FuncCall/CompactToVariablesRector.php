@@ -79,6 +79,9 @@ CODE_SAMPLE
         if ($this->compactConverter->hasAllArgumentsNamed($node)) {
             return $this->compactConverter->convertToArray($node);
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArg = $node->getArgs()[0];
         $firstValue = $firstArg->value;
         $firstValueStaticType = $this->getType($firstValue);

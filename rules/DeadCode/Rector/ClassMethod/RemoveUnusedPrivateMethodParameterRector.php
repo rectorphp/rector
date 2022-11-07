@@ -130,6 +130,9 @@ CODE_SAMPLE
      */
     private function cleanupArgs(MethodCall $methodCall, array $keysArg) : void
     {
+        if ($methodCall->isFirstClassCallable()) {
+            return;
+        }
         $args = $methodCall->getArgs();
         foreach (\array_keys($args) as $key) {
             if (\in_array($key, $keysArg, \true)) {

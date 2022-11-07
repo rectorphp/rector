@@ -58,6 +58,9 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'is_a')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $args = $node->getArgs();
         $firstArgValue = $args[0]->value;
         if (!$this->isFirstObjectType($firstArgValue)) {

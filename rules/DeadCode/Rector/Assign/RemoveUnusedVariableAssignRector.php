@@ -196,6 +196,9 @@ CODE_SAMPLE
         if (!$expr instanceof CallLike) {
             return $this->isUsedInPreviousAssign($assign, $expr);
         }
+        if ($expr->isFirstClassCallable()) {
+            return \false;
+        }
         foreach ($expr->getArgs() as $arg) {
             $variable = $arg->value;
             if ($this->isUsedInPreviousAssign($assign, $variable)) {

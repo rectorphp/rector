@@ -50,6 +50,9 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($node, 'in_array')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $args = $node->getArgs();
         $secondArg = $args[1];
         $arrayVariable = $secondArg->value;
