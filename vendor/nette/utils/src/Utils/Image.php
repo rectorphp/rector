@@ -540,7 +540,7 @@ class Image
                 break;
             case self::AVIF:
                 $quality = $quality === null ? 30 : \max(0, \min(100, $quality));
-                $success = @imageavif($this->image, $file, $quality);
+                $success = @\imageavif($this->image, $file, $quality);
                 // @ is escalated to exception
                 break;
             case self::BMP:
