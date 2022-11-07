@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Foreach_;
 final class ForeachManipulator
 {
     /**
-     * @param callable(Node $node, Foreach_ $foreach=): ?Node $callable
+     * @param callable(Node $node, Foreach_ $foreach): ?Node $callable
      */
     public function matchOnlyStmt(Foreach_ $foreach, callable $callable) : ?Node
     {
