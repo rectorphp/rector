@@ -5,8 +5,10 @@ namespace Rector\Php80\Rector\Ternary;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Identifier;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -63,15 +65,9 @@ CODE_SAMPLE
         if (!$this->areValuesIdentical($node)) {
             return null;
         }
-        /** @var FuncCall $funcCall */
-        $funcCall = $node->if;
-        if (!isset($funcCall->args[0])) {
-            return null;
-        }
-        if (!$funcCall->args[0] instanceof Arg) {
-            return null;
-        }
-        $firstExpr = $funcCall->args[0]->value;
+        /** @var FuncCall|ClassConstFetch $getClassFuncCallOrClassConstFetchClass */
+        $getClassFuncCallOrClassConstFetchClass = $node->if;
+        $firstExpr = $getClassFuncCallOrClassConstFetchClass instanceof FuncCall ? $getClassFuncCallOrClassConstFetchClass->args[0]->value : $getClassFuncCallOrClassConstFetchClass->class;
         return $this->nodeFactory->createFuncCall('get_debug_type', [$firstExpr]);
     }
     private function shouldSkip(Ternary $ternary) : bool
@@ -79,11 +75,20 @@ CODE_SAMPLE
         if (!$ternary->cond instanceof FuncCall) {
             return \true;
         }
+        if ($ternary->cond->isFirstClassCallable()) {
+            return \true;
+        }
+        if (!isset($ternary->cond->args[0])) {
+            return \true;
+        }
         if (!$this->nodeNameResolver->isName($ternary->cond, 'is_object')) {
             return \true;
         }
         if (!$ternary->if instanceof FuncCall) {
-            return \true;
+            if (!$ternary->if instanceof ClassConstFetch) {
+                return \true;
+            }
+            return $this->shouldSkipClassConstFetch($ternary->if);
         }
         if (!$this->nodeNameResolver->isName($ternary->if, 'get_class')) {
             return \true;
@@ -91,22 +96,29 @@ CODE_SAMPLE
         if (!$ternary->else instanceof FuncCall) {
             return \true;
         }
+        if ($ternary->else->isFirstClassCallable()) {
+            return \true;
+        }
         return !$this->nodeNameResolver->isName($ternary->else, 'gettype');
+    }
+    private function shouldSkipClassConstFetch(ClassConstFetch $classConstFetch) : bool
+    {
+        if (!$classConstFetch->name instanceof Identifier) {
+            return \true;
+        }
+        return $classConstFetch->name->toString() !== 'class';
     }
     private function areValuesIdentical(Ternary $ternary) : bool
     {
         /** @var FuncCall $isObjectFuncCall */
         $isObjectFuncCall = $ternary->cond;
-        if (!$isObjectFuncCall->args[0] instanceof Arg) {
-            return \false;
-        }
         $firstExpr = $isObjectFuncCall->args[0]->value;
-        /** @var FuncCall $getClassFuncCall */
-        $getClassFuncCall = $ternary->if;
-        if (!$getClassFuncCall->args[0] instanceof Arg) {
+        /** @var FuncCall|ClassConstFetch $getClassFuncCallOrClassConstFetchClass */
+        $getClassFuncCallOrClassConstFetchClass = $ternary->if;
+        if ($getClassFuncCallOrClassConstFetchClass instanceof FuncCall && !$getClassFuncCallOrClassConstFetchClass->args[0] instanceof Arg) {
             return \false;
         }
-        $secondExpr = $getClassFuncCall->args[0]->value;
+        $secondExpr = $getClassFuncCallOrClassConstFetchClass instanceof FuncCall ? $getClassFuncCallOrClassConstFetchClass->args[0]->value : $getClassFuncCallOrClassConstFetchClass->class;
         /** @var FuncCall $gettypeFuncCall */
         $gettypeFuncCall = $ternary->else;
         if (!$gettypeFuncCall->args[0] instanceof Arg) {
