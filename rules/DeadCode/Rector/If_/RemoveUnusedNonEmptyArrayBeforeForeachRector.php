@@ -11,6 +11,7 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractScopeAwareRector;
@@ -44,12 +45,18 @@ final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractScopeAw
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
-    public function __construct(CountManipulator $countManipulator, IfManipulator $ifManipulator, UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector, ReservedKeywordAnalyzer $reservedKeywordAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+    public function __construct(CountManipulator $countManipulator, IfManipulator $ifManipulator, UselessIfCondBeforeForeachDetector $uselessIfCondBeforeForeachDetector, ReservedKeywordAnalyzer $reservedKeywordAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->countManipulator = $countManipulator;
         $this->ifManipulator = $ifManipulator;
         $this->uselessIfCondBeforeForeachDetector = $uselessIfCondBeforeForeachDetector;
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -99,9 +106,6 @@ CODE_SAMPLE
         }
         /** @var Foreach_ $stmt */
         $stmt = $node->stmts[0];
-        if ($node->cond instanceof Assign) {
-            return null;
-        }
         $ifComments = $node->getAttribute(AttributeKey::COMMENTS) ?? [];
         $stmtComments = $stmt->getAttribute(AttributeKey::COMMENTS) ?? [];
         $comments = \array_merge($ifComments, $stmtComments);
@@ -122,15 +126,13 @@ CODE_SAMPLE
                 return \false;
             }
         }
+        if (($if->cond instanceof Variable || $this->propertyFetchAnalyzer->isPropertyFetch($if->cond)) && $this->nodeComparator->areNodesEqual($if->cond, $foreachExpr)) {
+            return $scope->getType($if->cond) instanceof ArrayType;
+        }
         if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotIdenticalEmptyArray($if, $foreachExpr)) {
             return \true;
         }
         if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotEmpty($if, $foreachExpr, $scope)) {
-            return \true;
-        }
-        // we know it's an array
-        $condType = $this->getType($if->cond);
-        if ($condType instanceof ArrayType) {
             return \true;
         }
         return $this->countManipulator->isCounterHigherThanOne($if->cond, $foreachExpr);
