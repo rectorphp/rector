@@ -73,7 +73,7 @@ final class Mbstring
     private static $internalEncoding = 'UTF-8';
     public static function mb_convert_encoding($s, $toEncoding, $fromEncoding = null)
     {
-        if (\is_array($fromEncoding) || $fromEncoding !== null && \false !== \strpos($fromEncoding, ',')) {
+        if (\is_array($fromEncoding) || null !== $fromEncoding && \false !== \strpos($fromEncoding, ',')) {
             $fromEncoding = self::mb_detect_encoding($s, $fromEncoding);
         } else {
             $fromEncoding = self::getEncoding($fromEncoding);
