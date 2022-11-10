@@ -127,25 +127,6 @@ CODE_SAMPLE
         $arrayItemNodes = [];
         $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getPath(), 'path', String_::KIND_DOUBLE_QUOTED);
         $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getName(), 'name', String_::KIND_DOUBLE_QUOTED);
-        $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
-        if ($defaultsWithoutController !== []) {
-            $defaultsWithoutControllerCurlyList = $this->createCurlyQuoted($defaultsWithoutController);
-            $arrayItemNodes[] = new ArrayItemNode($defaultsWithoutControllerCurlyList, 'defaults');
-        }
-        if ($symfonyRouteMetadata->getHost() !== '') {
-            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getHost(), 'host', String_::KIND_DOUBLE_QUOTED);
-        }
-        if ($symfonyRouteMetadata->getSchemes() !== []) {
-            $schemesArrayItemNodes = $this->createCurlyQuoted($symfonyRouteMetadata->getSchemes());
-            $arrayItemNodes[] = new ArrayItemNode($schemesArrayItemNodes, 'schemes');
-        }
-        if ($symfonyRouteMetadata->getMethods() !== []) {
-            $methodsCurlyList = $this->createCurlyQuoted($symfonyRouteMetadata->getMethods());
-            $arrayItemNodes[] = new ArrayItemNode($methodsCurlyList, 'methods');
-        }
-        if ($symfonyRouteMetadata->getCondition() !== '') {
-            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getCondition(), 'condition', String_::KIND_DOUBLE_QUOTED);
-        }
         if ($symfonyRouteMetadata->getRequirements() !== []) {
             $requriementsCurlyList = $this->createCurlyQuoted($symfonyRouteMetadata->getRequirements());
             $arrayItemNodes[] = new ArrayItemNode($requriementsCurlyList, 'requirements');
@@ -154,6 +135,25 @@ CODE_SAMPLE
         if ($optionsWithoutDefaultCompilerClass !== []) {
             $optionsCurlyQuoted = $this->createCurlyQuoted($optionsWithoutDefaultCompilerClass);
             $arrayItemNodes[] = new ArrayItemNode($optionsCurlyQuoted, 'options');
+        }
+        $defaultsWithoutController = $symfonyRouteMetadata->getDefaultsWithoutController();
+        if ($defaultsWithoutController !== []) {
+            $defaultsWithoutControllerCurlyList = $this->createCurlyQuoted($defaultsWithoutController);
+            $arrayItemNodes[] = new ArrayItemNode($defaultsWithoutControllerCurlyList, 'defaults');
+        }
+        if ($symfonyRouteMetadata->getHost() !== '') {
+            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getHost(), 'host', String_::KIND_DOUBLE_QUOTED);
+        }
+        if ($symfonyRouteMetadata->getMethods() !== []) {
+            $methodsCurlyList = $this->createCurlyQuoted($symfonyRouteMetadata->getMethods());
+            $arrayItemNodes[] = new ArrayItemNode($methodsCurlyList, 'methods');
+        }
+        if ($symfonyRouteMetadata->getSchemes() !== []) {
+            $schemesArrayItemNodes = $this->createCurlyQuoted($symfonyRouteMetadata->getSchemes());
+            $arrayItemNodes[] = new ArrayItemNode($schemesArrayItemNodes, 'schemes');
+        }
+        if ($symfonyRouteMetadata->getCondition() !== '') {
+            $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getCondition(), 'condition', String_::KIND_DOUBLE_QUOTED);
         }
         return $arrayItemNodes;
     }
