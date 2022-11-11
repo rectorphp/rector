@@ -126,7 +126,7 @@ CODE_SAMPLE
      * $<some> = 1000;
      * $this->value = $<some>;
      *
-     * + not used $<some> bellow, so removal will not break it
+     * + not used $<some> below, so removal will not break it
      */
     private function areTwoVariablesCrossAssign(Assign $currentAssign, Assign $nextAssign) : bool
     {
