@@ -216,7 +216,10 @@ CODE_SAMPLE;
         // for PHP doc info factory and change notifier
         $this->currentNodeProvider->setNode($node);
         $this->printDebugCurrentFileAndRule();
-        $this->changedNodeScopeRefresher->reIndexNodeAttributes($node);
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if ($originalNode instanceof Node) {
+            $this->changedNodeScopeRefresher->reIndexNodeAttributes($node);
+        }
         $refactoredNode = $this->refactor($node);
         // nothing to change → continue
         if ($refactoredNode === null) {
@@ -226,8 +229,7 @@ CODE_SAMPLE;
             $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
-        /** @var Node $originalNode */
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
+        $originalNode = $originalNode ?? $node;
         /** @var Node[]|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
         $rectorWithLineChange = new RectorWithLineChange(\get_class($this), $originalNode->getLine());
