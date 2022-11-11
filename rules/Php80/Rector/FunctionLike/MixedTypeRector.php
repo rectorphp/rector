@@ -133,6 +133,9 @@ CODE_SAMPLE
             }
             $this->hasChanged = \true;
             $param->type = new Identifier('mixed');
+            if ($param->flags !== 0) {
+                $param->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+            }
         }
     }
 }
