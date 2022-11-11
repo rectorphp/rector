@@ -5,14 +5,12 @@ namespace Rector\Core\Console\Command;
 
 use RectorPrefix202211\Nette\Utils\FileSystem;
 use RectorPrefix202211\Nette\Utils\Strings;
-use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Console\OutputStyleInterface;
+use Rector\Core\FileSystem\InitFilePathsResolver;
 use Rector\Core\Php\PhpVersionProvider;
 use RectorPrefix202211\Symfony\Component\Console\Command\Command;
 use RectorPrefix202211\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202211\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202211\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202211\Symfony\Component\Console\Style\SymfonyStyle;
 final class InitCommand extends Command
 {
     /**
@@ -36,45 +34,56 @@ final class InitCommand extends Command
     private $phpVersionProvider;
     /**
      * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     * @var \Rector\Core\FileSystem\InitFilePathsResolver
      */
-    private $symfonyStyle;
-    public function __construct(\RectorPrefix202211\Symfony\Component\Filesystem\Filesystem $filesystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, SymfonyStyle $symfonyStyle)
+    private $initFilePathsResolver;
+    public function __construct(\RectorPrefix202211\Symfony\Component\Filesystem\Filesystem $filesystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, InitFilePathsResolver $initFilePathsResolver)
     {
         $this->filesystem = $filesystem;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->symfonyStyle = $symfonyStyle;
+        $this->initFilePathsResolver = $initFilePathsResolver;
         parent::__construct();
+    }
+    protected function execute(InputInterface $input, OutputInterface $output) : int
+    {
+        $projectDirectory = \getcwd();
+        $rectorRootFilePath = $projectDirectory . '/rector.php';
+        $doesFileExist = $this->filesystem->exists($rectorRootFilePath);
+        if ($doesFileExist) {
+            $this->rectorOutputStyle->note('Config file "rector.php" already exists');
+        } else {
+            $rectorPhpTemplateContents = FileSystem::read(self::TEMPLATE_PATH);
+            $rectorPhpTemplateContents = $this->replacePhpLevelContents($rectorPhpTemplateContents);
+            $rectorPhpTemplateContents = $this->replacePathsContents($rectorPhpTemplateContents, $projectDirectory);
+            $this->filesystem->dumpFile($rectorRootFilePath, $rectorPhpTemplateContents);
+            $this->rectorOutputStyle->success('"rector.php" config file was added');
+        }
+        return Command::SUCCESS;
     }
     protected function configure() : void
     {
         $this->setName('init');
         $this->setDescription('Generate rector.php configuration file');
-        // deprecated
-        $this->addOption(Option::TEMPLATE_TYPE, null, InputOption::VALUE_OPTIONAL, 'A template type like default, nette, doctrine etc.');
     }
-    protected function execute(InputInterface $input, OutputInterface $output) : int
+    private function replacePhpLevelContents(string $rectorPhpTemplateContents) : string
     {
-        $templateType = (string) $input->getOption(Option::TEMPLATE_TYPE);
-        if ($templateType !== '') {
-            // notice warning
-            $this->symfonyStyle->warning('The option "--type" is deprecated. Custom config should be part of project documentation instead.');
-            \sleep(3);
+        $fullPHPVersion = (string) $this->phpVersionProvider->provide();
+        $phpVersion = Strings::substring($fullPHPVersion, 0, 1) . Strings::substring($fullPHPVersion, 2, 1);
+        return \str_replace('LevelSetList::UP_TO_PHP_XY', 'LevelSetList::UP_TO_PHP_' . $phpVersion, $rectorPhpTemplateContents);
+    }
+    private function replacePathsContents(string $rectorPhpTemplateContents, string $projectDirectory) : string
+    {
+        $projectPhpDirectories = $this->initFilePathsResolver->resolve($projectDirectory);
+        // fallback to default 'src' in case of empty one
+        if ($projectPhpDirectories === []) {
+            $projectPhpDirectories[] = 'src';
         }
-        $rectorRootFilePath = \getcwd() . '/rector.php';
-        $doesFileExist = $this->filesystem->exists($rectorRootFilePath);
-        if ($doesFileExist) {
-            $this->rectorOutputStyle->warning('Config file "rector.php" already exists');
-        } else {
-            $this->filesystem->copy(self::TEMPLATE_PATH, $rectorRootFilePath);
-            $fullPHPVersion = (string) $this->phpVersionProvider->provide();
-            $phpVersion = Strings::substring($fullPHPVersion, 0, 1) . Strings::substring($fullPHPVersion, 2, 1);
-            $fileContent = FileSystem::read($rectorRootFilePath);
-            $fileContent = \str_replace('LevelSetList::UP_TO_PHP_XY', 'LevelSetList::UP_TO_PHP_' . $phpVersion, $fileContent);
-            $this->filesystem->dumpFile($rectorRootFilePath, $fileContent);
-            $this->rectorOutputStyle->success('"rector.php" config file was added');
+        $projectPhpDirectoriesContents = '';
+        foreach ($projectPhpDirectories as $projectPhpDirectory) {
+            $projectPhpDirectoriesContents .= "        __DIR__ . '/" . $projectPhpDirectory . "'," . \PHP_EOL;
         }
-        return Command::SUCCESS;
+        $projectPhpDirectoriesContents = \rtrim($projectPhpDirectoriesContents);
+        return \str_replace('__PATHS__', $projectPhpDirectoriesContents, $rectorPhpTemplateContents);
     }
 }

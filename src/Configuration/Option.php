@@ -135,11 +135,6 @@ final class Option
      */
     public const NO_DIFFS = 'no-diffs';
     /**
-     * @deprecated This know-how should be mentioned in framework-specific documentation of the package instead.
-     * @var string
-     */
-    public const TEMPLATE_TYPE = 'template-type';
-    /**
      * @var string
      */
     public const AUTOLOAD_FILE_SHORT = 'a';
