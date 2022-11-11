@@ -9,6 +9,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
@@ -250,12 +251,26 @@ CODE_SAMPLE;
             // will be replaced in leaveNode() the original node must be passed
             return $originalNode;
         }
-        $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
-        $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
         // is equals node type? return node early
         if (\get_class($originalNode) === \get_class($refactoredNode)) {
+            /**
+             * 1. Expression and Return_ are special
+             *
+             * Eg:
+             *  - Expression on Assign with ArrowFunction changed to Closure
+             *  - Return_ on ArrowFunction usage, Return_ is created dynamically on getStmts()
+             *
+             * 2. When returned refactored Node doesn't has origNode yet,
+             *    it means returned with New Node instead of re-use existing Node
+             */
+            if ($refactoredNode instanceof Expression || $refactoredNode instanceof Return_ || !$refactoredNode->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
+                $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
+            }
+            $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
             return $refactoredNode;
         }
+        $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
+        $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
         // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
         $originalNodeHash = \spl_object_hash($originalNode);
         $refactoredNode = $originalNode instanceof Stmt && $refactoredNode instanceof Expr ? new Expression($refactoredNode) : $refactoredNode;
