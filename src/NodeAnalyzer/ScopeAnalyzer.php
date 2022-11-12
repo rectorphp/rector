@@ -67,6 +67,13 @@ final class ScopeAnalyzer
         if ($node instanceof FileWithoutNamespace || $node instanceof Namespace_) {
             return $this->scopeFactory->createFromFile($filePath);
         }
+        /**
+         * Node and parent Node doesn't has Scope, and parent Node Start token pos is < 0,
+         * it means the node and parent node just re-printed, the Scope need to be resolved from file
+         */
+        if ($parentNode->getStartTokenPos() < 0) {
+            return $this->scopeFactory->createFromFile($filePath);
+        }
         return null;
     }
 }
