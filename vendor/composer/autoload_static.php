@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4594c8e2703b501da961a76ccb4f8a22
+class ComposerStaticInit1eea657efd12a3c39090bb64a356de82
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2813,6 +2813,7 @@ class ComposerStaticInit4594c8e2703b501da961a76ccb4f8a22
         'Rector\\Symfony\\Rector\\StaticCall\\ParseFileRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticCall/ParseFileRector.php',
         'Rector\\Symfony\\Rector\\StaticCall\\ProcessBuilderInstanceRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticCall/ProcessBuilderInstanceRector.php',
         'Rector\\Symfony\\Rector\\StaticPropertyFetch\\KernelTestCaseContainerPropertyDeprecationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticPropertyFetch/KernelTestCaseContainerPropertyDeprecationRector.php',
+        'Rector\\Symfony\\Set\\FOSRestSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/FOSRestSetList.php',
         'Rector\\Symfony\\Set\\JMSSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/JMSSetList.php',
         'Rector\\Symfony\\Set\\SensiolabsSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SensiolabsSetList.php',
         'Rector\\Symfony\\Set\\SwiftmailerSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SwiftmailerSetList.php',
@@ -3053,9 +3054,9 @@ class ComposerStaticInit4594c8e2703b501da961a76ccb4f8a22
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4594c8e2703b501da961a76ccb4f8a22::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4594c8e2703b501da961a76ccb4f8a22::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4594c8e2703b501da961a76ccb4f8a22::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1eea657efd12a3c39090bb64a356de82::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1eea657efd12a3c39090bb64a356de82::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1eea657efd12a3c39090bb64a356de82::$classMap;
 
         }, null, ClassLoader::class);
     }

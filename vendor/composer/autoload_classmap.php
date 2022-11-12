@@ -2563,6 +2563,7 @@ return array(
     'Rector\\Symfony\\Rector\\StaticCall\\ParseFileRector' => $vendorDir . '/rector/rector-symfony/src/Rector/StaticCall/ParseFileRector.php',
     'Rector\\Symfony\\Rector\\StaticCall\\ProcessBuilderInstanceRector' => $vendorDir . '/rector/rector-symfony/src/Rector/StaticCall/ProcessBuilderInstanceRector.php',
     'Rector\\Symfony\\Rector\\StaticPropertyFetch\\KernelTestCaseContainerPropertyDeprecationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/StaticPropertyFetch/KernelTestCaseContainerPropertyDeprecationRector.php',
+    'Rector\\Symfony\\Set\\FOSRestSetList' => $vendorDir . '/rector/rector-symfony/src/Set/FOSRestSetList.php',
     'Rector\\Symfony\\Set\\JMSSetList' => $vendorDir . '/rector/rector-symfony/src/Set/JMSSetList.php',
     'Rector\\Symfony\\Set\\SensiolabsSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SensiolabsSetList.php',
     'Rector\\Symfony\\Set\\SwiftmailerSetList' => $vendorDir . '/rector/rector-symfony/src/Set/SwiftmailerSetList.php',
