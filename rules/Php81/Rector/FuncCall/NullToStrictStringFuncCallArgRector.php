@@ -25,7 +25,6 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
-use Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -48,16 +47,10 @@ final class NullToStrictStringFuncCallArgRector extends AbstractRector implement
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\Php73\NodeTypeAnalyzer\NodeTypeAnalyzer
-     */
-    private $nodeTypeAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer, NodeTypeAnalyzer $nodeTypeAnalyzer)
+    public function __construct(ReflectionResolver $reflectionResolver, ArgsAnalyzer $argsAnalyzer)
     {
         $this->reflectionResolver = $reflectionResolver;
         $this->argsAnalyzer = $argsAnalyzer;
-        $this->nodeTypeAnalyzer = $nodeTypeAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -154,7 +147,7 @@ CODE_SAMPLE
             return $funcCall;
         }
         $type = $this->nodeTypeResolver->getType($argValue);
-        if ($this->nodeTypeAnalyzer->isStringyType($type)) {
+        if ($type->isString()->yes()) {
             return null;
         }
         if (!$type instanceof MixedType || $argValue instanceof Encapsed) {
