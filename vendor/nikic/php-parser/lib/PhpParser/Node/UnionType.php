@@ -5,7 +5,7 @@ namespace PhpParser\Node;
 
 class UnionType extends \PhpParser\Node\ComplexType
 {
-    /** @var (Identifier|Name)[] Types */
+    /** @var (Identifier|Name|IntersectionType)[] Types */
     public $types;
     /**
      * Constructs a union type.
