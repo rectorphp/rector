@@ -18,6 +18,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -134,7 +135,7 @@ CODE_SAMPLE
             $this->hasChanged = \true;
             $param->type = new Identifier('mixed');
             if ($param->flags !== 0) {
-                $param->setAttribute(\Rector\NodeTypeResolver\Node\AttributeKey::ORIGINAL_NODE, null);
+                $param->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             }
         }
     }

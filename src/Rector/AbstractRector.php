@@ -260,10 +260,10 @@ CODE_SAMPLE;
              *  - Expression on Assign with ArrowFunction changed to Closure
              *  - Return_ on ArrowFunction usage, Return_ is created dynamically on getStmts()
              *
-             * 2. When returned refactored Node doesn't has origNode yet,
+             * 2. When returned refactored Node doesn't has parent yet,
              *    it means returned with New Node instead of re-use existing Node
              */
-            if ($refactoredNode instanceof Expression || $refactoredNode instanceof Return_ || !$refactoredNode->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
+            if ($refactoredNode instanceof Expression || $refactoredNode instanceof Return_ || !$refactoredNode->hasAttribute(AttributeKey::PARENT_NODE)) {
                 $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
             }
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
