@@ -30,7 +30,7 @@ final class InitFilePathsResolver
     private function hasDirectoryFileInfoPhpFiles(SplFileInfo $rootDirectoryFileInfo) : bool
     {
         // is directory with PHP files?
-        $phpFilesFinder = Finder::create()->files()->in($rootDirectoryFileInfo->getPathname())->name('*.php');
-        return \count($phpFilesFinder) !== 0;
+        $phpFilesCount = Finder::create()->files()->in($rootDirectoryFileInfo->getPathname())->name('*.php')->count();
+        return $phpFilesCount !== 0;
     }
 }
