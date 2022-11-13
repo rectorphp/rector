@@ -211,7 +211,7 @@ return static function (RectorConfig $rectorConfig): void {
 
 ### SwapFuncCallArgumentsRector
 
-Swap arguments in function calls
+Reorder arguments in function calls
 
 :wrench: **configure it!**
 
@@ -225,7 +225,7 @@ use Rector\Config\RectorConfig;
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(
         SwapFuncCallArgumentsRector::class,
-        [new SwapFuncCallArguments('some_function', [1, 0])]
+        [new SwapFuncCallArguments('some_function', [2, 1, 0])]
     );
 };
 ```
@@ -235,10 +235,10 @@ return static function (RectorConfig $rectorConfig): void {
 ```diff
  final class SomeClass
  {
-     public function run($one, $two)
+     public function run()
      {
--        return some_function($one, $two);
-+        return some_function($two, $one);
+-        return some_function('one', 'two', 'three');
++        return some_function('three', 'two', 'one');
      }
  }
 ```
