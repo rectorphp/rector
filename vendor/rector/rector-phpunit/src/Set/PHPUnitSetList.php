@@ -58,4 +58,8 @@ final class PHPUnitSetList implements SetListInterface
      * @var string
      */
     public const PHPUNIT_YIELD_DATA_PROVIDER = __DIR__ . '/../../config/sets/phpunit-yield-data-provider.php';
+    /**
+     * @var string
+     */
+    public const ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/annotations-to-attributes.php';
 }
