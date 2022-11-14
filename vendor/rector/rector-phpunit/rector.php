@@ -27,6 +27,8 @@ return static function (RectorConfig $rectorConfig) : void {
         SetList::CODING_STYLE,
         SetList::EARLY_RETURN,
         SetList::NAMING,
+        SetList::TYPE_DECLARATION,
+        SetList::PRIVATIZATION,
     ]);
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
         // keep unprefixed to protected from downgrade

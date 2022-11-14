@@ -1784,12 +1784,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "17bdb82a53af4f58dfb4c00634e8942e653bfaef"
+                "reference": "bf394eec1e4612ceae5b6ee3c574e37f81f422b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/17bdb82a53af4f58dfb4c00634e8942e653bfaef",
-                "reference": "17bdb82a53af4f58dfb4c00634e8942e653bfaef",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/bf394eec1e4612ceae5b6ee3c574e37f81f422b7",
+                "reference": "bf394eec1e4612ceae5b6ee3c574e37f81f422b7",
                 "shasum": ""
             },
             "require": {
@@ -1815,7 +1815,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-10-26T10:28:39+00:00",
+            "time": "2022-11-14T14:41:41+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1924,12 +1924,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-php-parser.git",
-                "reference": "9c21f5f57464fc5af8765a1007eced8f7f62677c"
+                "reference": "9ea5f622c1ed47addb197ded25a6bac39c39c596"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-php-parser\/zipball\/9c21f5f57464fc5af8765a1007eced8f7f62677c",
-                "reference": "9c21f5f57464fc5af8765a1007eced8f7f62677c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-php-parser\/zipball\/9ea5f622c1ed47addb197ded25a6bac39c39c596",
+                "reference": "9ea5f622c1ed47addb197ded25a6bac39c39c596",
                 "shasum": ""
             },
             "require": {
@@ -1954,7 +1954,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-09-26T00:05:09+00:00",
+            "time": "2022-11-14T14:42:43+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1981,76 +1981,9 @@
             "description": "Rector upgrades rules for PHP-Parser",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-php-parser\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-php-parser\/tree\/0.14.0"
+                "source": "https:\/\/github.com\/rectorphp\/rector-php-parser\/tree\/main"
             },
             "install-path": "..\/rector\/rector-php-parser"
-        },
-        {
-            "name": "rector\/rector-phpoffice",
-            "version": "dev-main",
-            "version_normalized": "dev-main",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/rectorphp\/rector-phpoffice.git",
-                "reference": "294de0ce80a9eb2c1b2d0d8e2762032dba0044e0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpoffice\/zipball\/294de0ce80a9eb2c1b2d0d8e2762032dba0044e0",
-                "reference": "294de0ce80a9eb2c1b2d0d8e2762032dba0044e0",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1"
-            },
-            "conflict": {
-                "rector\/rector": "<0.12"
-            },
-            "require-dev": {
-                "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.8.2",
-                "phpstan\/phpstan-strict-rules": "^1.3",
-                "phpstan\/phpstan-webmozart-assert": "^1.2",
-                "phpunit\/phpunit": "^9.5.21",
-                "rector\/phpstan-rules": "^0.6",
-                "rector\/rector-debugging": "dev-main",
-                "rector\/rector-src": "dev-main",
-                "symplify\/easy-coding-standard": "^11.1",
-                "symplify\/phpstan-extensions": "^11.1",
-                "symplify\/phpstan-rules": "^11.1",
-                "symplify\/rule-doc-generator": "^11.1",
-                "symplify\/vendor-patches": "^11.1"
-            },
-            "time": "2022-09-02T10:42:26+00:00",
-            "default-branch": true,
-            "type": "rector-extension",
-            "extra": {
-                "enable-patching": true,
-                "branch-alias": {
-                    "dev-main": "0.11-dev"
-                },
-                "rector": {
-                    "includes": [
-                        "config\/config.php"
-                    ]
-                }
-            },
-            "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "Rector\\PHPOffice\\": "src"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Rector upgrades rules for PHP Office",
-            "support": {
-                "issues": "https:\/\/github.com\/rectorphp\/rector-phpoffice\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-phpoffice\/tree\/main"
-            },
-            "install-path": "..\/rector\/rector-phpoffice"
         },
         {
             "name": "rector\/rector-phpunit",
@@ -2059,12 +1992,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "e572a473079d5ff39a7c6f5b11ef925896121017"
+                "reference": "769064fc1622bb6e31da6d6802b1bcdaea08e007"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/e572a473079d5ff39a7c6f5b11ef925896121017",
-                "reference": "e572a473079d5ff39a7c6f5b11ef925896121017",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/769064fc1622bb6e31da6d6802b1bcdaea08e007",
+                "reference": "769064fc1622bb6e31da6d6802b1bcdaea08e007",
                 "shasum": ""
             },
             "require": {
@@ -2090,7 +2023,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-11-14T13:59:10+00:00",
+            "time": "2022-11-14T14:37:39+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2128,12 +2061,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "8b6330201a4254dbc222075637d145b2475a1079"
+                "reference": "695c960e7713438ef1077bebcbc6d298a95020d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/8b6330201a4254dbc222075637d145b2475a1079",
-                "reference": "8b6330201a4254dbc222075637d145b2475a1079",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/695c960e7713438ef1077bebcbc6d298a95020d1",
+                "reference": "695c960e7713438ef1077bebcbc6d298a95020d1",
                 "shasum": ""
             },
             "require": {
@@ -2164,7 +2097,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-11-12T17:52:04+00:00",
+            "time": "2022-11-14T14:41:53+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

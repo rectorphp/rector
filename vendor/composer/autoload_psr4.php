@@ -14,7 +14,6 @@ return array(
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
     'Rector\\PhpParser\\' => array($vendorDir . '/rector/rector-php-parser/src'),
     'Rector\\PHPUnit\\' => array($vendorDir . '/rector/rector-phpunit/src'),
-    'Rector\\PHPOffice\\' => array($vendorDir . '/rector/rector-phpoffice/src'),
     'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src'),
     'Rector\\Core\\' => array($baseDir . '/src'),
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules', $vendorDir . '/rector/rector-downgrade-php/src', $vendorDir . '/rector/rector-downgrade-php/rules'),

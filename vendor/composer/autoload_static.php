@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2b04441d1fb4ab60085e1ed0db63132c
+class ComposerStaticInite26fff598c3684250a355946b3fd7251
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -31,7 +31,6 @@ class ComposerStaticInit2b04441d1fb4ab60085e1ed0db63132c
             'Rector\\RectorInstaller\\' => 23,
             'Rector\\PhpParser\\' => 17,
             'Rector\\PHPUnit\\' => 15,
-            'Rector\\PHPOffice\\' => 17,
             'Rector\\Doctrine\\' => 16,
             'Rector\\Core\\' => 12,
             'Rector\\' => 7,
@@ -105,10 +104,6 @@ class ComposerStaticInit2b04441d1fb4ab60085e1ed0db63132c
         'Rector\\PHPUnit\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/rector-phpunit/src',
-        ),
-        'Rector\\PHPOffice\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rector/rector-phpoffice/src',
         ),
         'Rector\\Doctrine\\' => 
         array (
@@ -2183,23 +2178,6 @@ class ComposerStaticInit2b04441d1fb4ab60085e1ed0db63132c
         'Rector\\NodeTypeResolver\\TypeComparator\\ScalarTypeComparator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeComparator/ScalarTypeComparator.php',
         'Rector\\NodeTypeResolver\\TypeComparator\\TypeComparator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeComparator/TypeComparator.php',
         'Rector\\NodeTypeResolver\\ValueObject\\OldToNewType' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/ValueObject/OldToNewType.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalGetConditionRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalGetConditionRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalReturnedCellRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalReturnedCellRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeConditionalSetConditionRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeConditionalSetConditionRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\ChangeDuplicateStyleArrayToApplyFromArrayRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/ChangeDuplicateStyleArrayToApplyFromArrayRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\GetDefaultStyleToGetParentRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/GetDefaultStyleToGetParentRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\IncreaseColumnIndexRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/IncreaseColumnIndexRector.php',
-        'Rector\\PHPOffice\\Rector\\MethodCall\\RemoveSetTempDirOnExcelWriterRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/MethodCall/RemoveSetTempDirOnExcelWriterRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\AddRemovedDefaultValuesRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/AddRemovedDefaultValuesRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\CellStaticToCoordinateRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/CellStaticToCoordinateRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeChartRendererRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangeChartRendererRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeDataTypeForValueRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangeDataTypeForValueRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeIOFactoryArgumentRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangeIOFactoryArgumentRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangePdfWriterRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangePdfWriterRector.php',
-        'Rector\\PHPOffice\\Rector\\StaticCall\\ChangeSearchLocationToRegisterReaderRector' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Rector/StaticCall/ChangeSearchLocationToRegisterReaderRector.php',
-        'Rector\\PHPOffice\\Set\\PHPOfficeSetList' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/Set/PHPOfficeSetList.php',
-        'Rector\\PHPOffice\\ValueObject\\ConditionalSetValue' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/ValueObject/ConditionalSetValue.php',
-        'Rector\\PHPOffice\\ValueObject\\PHPExcelMethodDefaultValues' => __DIR__ . '/..' . '/rector/rector-phpoffice/src/ValueObject/PHPExcelMethodDefaultValues.php',
         'Rector\\PHPStanStaticTypeMapper\\Contract\\TypeMapperInterface' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Contract/TypeMapperInterface.php',
         'Rector\\PHPStanStaticTypeMapper\\DoctrineTypeAnalyzer' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/DoctrineTypeAnalyzer.php',
         'Rector\\PHPStanStaticTypeMapper\\Enum\\TypeKind' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Enum/TypeKind.php',
@@ -3054,9 +3032,9 @@ class ComposerStaticInit2b04441d1fb4ab60085e1ed0db63132c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2b04441d1fb4ab60085e1ed0db63132c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2b04441d1fb4ab60085e1ed0db63132c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2b04441d1fb4ab60085e1ed0db63132c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite26fff598c3684250a355946b3fd7251::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite26fff598c3684250a355946b3fd7251::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite26fff598c3684250a355946b3fd7251::$classMap;
 
         }, null, ClassLoader::class);
     }
