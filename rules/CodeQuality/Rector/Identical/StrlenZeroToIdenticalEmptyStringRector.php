@@ -87,7 +87,7 @@ CODE_SAMPLE
         $variable = $firstArg->value;
         // Needs string cast if variable type is not string
         // see https://github.com/rectorphp/rector/issues/6700
-        $isStringType = $this->nodeTypeResolver->getNativeType($variable) instanceof StringType;
+        $isStringType = $this->nodeTypeResolver->getNativeType($variable)->isString()->yes();
         if (!$isStringType) {
             return new Identical(new Expr\Cast\String_($variable), new String_(''));
         }

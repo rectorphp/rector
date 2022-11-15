@@ -106,7 +106,7 @@ CODE_SAMPLE
             return null;
         }
         $returnType = $this->returnTypeInferer->inferFunctionLike($toStringClassMethod);
-        if (!$returnType instanceof StringType) {
+        if (!$returnType->isString()->yes()) {
             $this->processNotStringType($toStringClassMethod);
         }
         // add interface
@@ -140,7 +140,7 @@ CODE_SAMPLE
                 return null;
             }
             $type = $this->nodeTypeResolver->getType($subNode->expr);
-            if ($type instanceof StringType) {
+            if ($type->isString()->yes()) {
                 return null;
             }
             $subNode->expr = new CastString_($subNode->expr);

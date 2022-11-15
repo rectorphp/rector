@@ -40,7 +40,7 @@ final class ExactCompareFactory
      */
     public function createIdenticalFalsyCompare(Type $exprType, Expr $expr, bool $treatAsNonEmpty)
     {
-        if ($exprType instanceof StringType) {
+        if ($exprType->isString()->yes()) {
             return new Identical($expr, new String_(''));
         }
         if ($exprType instanceof IntegerType) {
@@ -65,7 +65,7 @@ final class ExactCompareFactory
      */
     public function createNotIdenticalFalsyCompare(Type $exprType, Expr $expr, bool $treatAsNotEmpty)
     {
-        if ($exprType instanceof StringType) {
+        if ($exprType->isString()->yes()) {
             return new NotIdentical($expr, new String_(''));
         }
         if ($exprType instanceof IntegerType) {

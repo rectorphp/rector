@@ -210,7 +210,7 @@ final class ReturnTypeInferer
         if ($countTypes !== 2) {
             return $unionType;
         }
-        if (!($types[0] instanceof IntegerType && $types[1] instanceof StringType)) {
+        if (!($types[0] instanceof IntegerType && $types[1]->isString()->yes())) {
             return $unionType;
         }
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);

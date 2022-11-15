@@ -88,7 +88,7 @@ CODE_SAMPLE
         $secondArg = $node->args[1];
         $valueArgument = $secondArg->value;
         $valueType = $this->getType($valueArgument);
-        if (!$valueType instanceof StringType) {
+        if (!$valueType->isString()->yes()) {
             return null;
         }
         return $valueArgument;

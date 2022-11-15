@@ -128,7 +128,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(Type $conditionStaticType, BinaryOp $binaryOp, ?Node $nextNode) : bool
     {
-        return $conditionStaticType instanceof StringType && $binaryOp instanceof BooleanOr && !$nextNode instanceof Node;
+        return $conditionStaticType->isString()->yes() && $binaryOp instanceof BooleanOr && !$nextNode instanceof Node;
     }
     private function resolveNewConditionNode(Expr $expr, bool $isNegated) : ?BinaryOp
     {
