@@ -71,7 +71,7 @@ final class PropertyTypeDecorator
     private function isDocBlockRequired(UnionType $unionType) : bool
     {
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof ArrayType) {
+            if ($unionedType->isArray()->yes()) {
                 $describedArray = $unionedType->describe(VerbosityLevel::value());
                 if ($describedArray !== 'array') {
                     return \true;

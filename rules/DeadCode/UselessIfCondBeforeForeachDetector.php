@@ -61,7 +61,7 @@ final class UselessIfCondBeforeForeachDetector
         }
         // is array though?
         $arrayType = $scope->getType($empty->expr);
-        if (!$arrayType instanceof ArrayType) {
+        if (!$arrayType->isArray()->yes()) {
             return \false;
         }
         $previousParam = $this->fromPreviousParam($foreachExpr);

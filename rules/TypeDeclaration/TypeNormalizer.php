@@ -166,7 +166,7 @@ final class TypeNormalizer
     private function collectNestedArrayTypeFromUnionType(UnionType $unionType, int $arrayNesting) : void
     {
         foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof ArrayType) {
+            if ($unionedType->isArray()->yes()) {
                 ++$arrayNesting;
                 $this->normalizeArrayOfUnionToUnionArray($unionedType, $arrayNesting);
             } else {

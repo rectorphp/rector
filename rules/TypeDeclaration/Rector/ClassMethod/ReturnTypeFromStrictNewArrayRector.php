@@ -116,7 +116,7 @@ CODE_SAMPLE
             return null;
         }
         $returnType = $this->nodeTypeResolver->getType($onlyReturn->expr);
-        if (!$returnType instanceof ArrayType) {
+        if (!$returnType->isArray()->yes()) {
             return null;
         }
         if (!$this->nodeNameResolver->areNamesEqual($onlyReturn->expr, $variable)) {
@@ -193,7 +193,7 @@ CODE_SAMPLE
             // sign of empty array, keep empty
             return !$exprType->getItemType() instanceof NeverType;
         }
-        return $exprType instanceof ArrayType;
+        return $exprType->isArray()->yes();
     }
     private function narrowConstantArrayType(Type $type) : Type
     {

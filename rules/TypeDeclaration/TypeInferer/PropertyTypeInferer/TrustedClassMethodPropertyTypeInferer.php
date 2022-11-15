@@ -164,7 +164,7 @@ final class TrustedClassMethodPropertyTypeInferer
         }
         $types = [];
         // it's an array - annotation → make type more precise, if possible
-        if ($type instanceof ArrayType || $param->variadic) {
+        if ($type->isArray()->yes() || $param->variadic) {
             $types[] = $this->getResolveParamStaticTypeAsPHPStanType($classMethod, $propertyName);
         } else {
             $types[] = $type;

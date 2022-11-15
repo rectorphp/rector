@@ -108,7 +108,7 @@ CODE_SAMPLE
     }
     private function isArray(Expr $expr) : bool
     {
-        return $this->getType($expr) instanceof ArrayType;
+        return $this->getType($expr)->isArray()->yes();
     }
     private function processIdenticalOrNotIdentical(Node $node, FuncCall $funcCall, Expr $expr) : ?Expr
     {

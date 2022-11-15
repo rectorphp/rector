@@ -64,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
         $emptyExprType = $this->getType($negagedExpr->expr);
-        if (!$emptyExprType instanceof ArrayType) {
+        if (!$emptyExprType->isArray()->yes()) {
             return null;
         }
         if (!$node->if instanceof ArrayDimFetch) {

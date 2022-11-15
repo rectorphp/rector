@@ -82,7 +82,7 @@ CODE_SAMPLE
         }
         // is array?
         foreach ($staticType->getTypes() as $subType) {
-            if ($subType instanceof ArrayType) {
+            if ($subType->isArray()->yes()) {
                 return \false;
             }
         }

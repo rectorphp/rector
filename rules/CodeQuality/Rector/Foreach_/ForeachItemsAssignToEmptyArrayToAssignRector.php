@@ -106,7 +106,7 @@ CODE_SAMPLE
             return \true;
         }
         $type = $scope->getType($foreach->expr);
-        return !$type instanceof ArrayType;
+        return !$type->isArray()->yes();
     }
     private function shouldSkipAsPartOfOtherLoop(Foreach_ $foreach) : bool
     {

@@ -159,7 +159,7 @@ CODE_SAMPLE
     private function resolveCount(bool $isNegated, FuncCall $funcCall)
     {
         $countedType = $this->getType($funcCall->args[0]->value);
-        if ($countedType instanceof ArrayType) {
+        if ($countedType->isArray()->yes()) {
             return null;
         }
         $lNumber = new LNumber(0);

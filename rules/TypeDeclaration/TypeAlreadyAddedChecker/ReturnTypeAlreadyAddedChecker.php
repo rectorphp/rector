@@ -147,7 +147,7 @@ final class ReturnTypeAlreadyAddedChecker
     }
     private function isArrayIterableOrIteratorType(Type $type) : bool
     {
-        if ($type instanceof ArrayType) {
+        if ($type->isArray()->yes()) {
             return \true;
         }
         if ($type instanceof IterableType) {

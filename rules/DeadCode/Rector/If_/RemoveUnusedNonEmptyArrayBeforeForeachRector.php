@@ -126,7 +126,7 @@ CODE_SAMPLE
             }
         }
         if (($if->cond instanceof Variable || $this->propertyFetchAnalyzer->isPropertyFetch($if->cond)) && $this->nodeComparator->areNodesEqual($if->cond, $foreachExpr)) {
-            return $scope->getType($if->cond) instanceof ArrayType;
+            return $scope->getType($if->cond)->isArray()->yes();
         }
         if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotIdenticalEmptyArray($if, $foreachExpr)) {
             return \true;

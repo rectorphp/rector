@@ -26,7 +26,7 @@ final class IterableTypeAnalyzer
         if ($this->isUnionOfIterableTypes($type)) {
             return \true;
         }
-        if ($type instanceof ArrayType) {
+        if ($type->isArray()->yes()) {
             return \true;
         }
         if ($type instanceof IterableType) {

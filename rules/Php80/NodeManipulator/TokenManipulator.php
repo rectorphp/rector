@@ -93,7 +93,7 @@ final class TokenManipulator
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getType($node->var);
-            if (!$tokenStaticType instanceof ArrayType) {
+            if (!$tokenStaticType->isArray()->yes()) {
                 return null;
             }
             return new PropertyFetch($node->var, 'text');
@@ -113,7 +113,7 @@ final class TokenManipulator
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getType($node->expr);
-            if ($tokenStaticType instanceof ArrayType) {
+            if ($tokenStaticType->isArray()->yes()) {
                 return null;
             }
             $node->expr = new PropertyFetch($singleTokenVariable, 'text');
@@ -124,7 +124,7 @@ final class TokenManipulator
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getType($node->expr);
-            if ($tokenStaticType instanceof ArrayType) {
+            if ($tokenStaticType->isArray()->yes()) {
                 return null;
             }
             if ($this->assignedNameExpr === null) {
@@ -223,7 +223,7 @@ final class TokenManipulator
                 return null;
             }
             $tokenStaticType = $this->nodeTypeResolver->getType($possibleTokenArray->var);
-            if (!$tokenStaticType instanceof ArrayType) {
+            if (!$tokenStaticType->isArray()->yes()) {
                 return null;
             }
             if ($possibleTokenArray->dim === null) {

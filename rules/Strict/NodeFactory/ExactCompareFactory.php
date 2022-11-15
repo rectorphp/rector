@@ -49,7 +49,7 @@ final class ExactCompareFactory
         if ($exprType instanceof BooleanType) {
             return new Identical($expr, $this->nodeFactory->createFalse());
         }
-        if ($exprType instanceof ArrayType) {
+        if ($exprType->isArray()->yes()) {
             return new Identical($expr, new Array_([]));
         }
         if ($exprType instanceof NullType) {
@@ -71,7 +71,7 @@ final class ExactCompareFactory
         if ($exprType instanceof IntegerType) {
             return new NotIdentical($expr, new LNumber(0));
         }
-        if ($exprType instanceof ArrayType) {
+        if ($exprType->isArray()->yes()) {
             return new NotIdentical($expr, new Array_([]));
         }
         if (!$exprType instanceof UnionType) {
