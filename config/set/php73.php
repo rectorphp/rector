@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace RectorPrefix202211;
 
 use Rector\Config\RectorConfig;
-use Rector\Php52\Rector\Switch_\ContinueToBreakInSwitchRector;
 use Rector\Php73\Rector\BooleanOr\IsCountableRector;
 use Rector\Php73\Rector\ConstFetch\SensitiveConstantNameRector;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
@@ -41,6 +40,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(StringifyStrNeedlesRector::class);
     $rectorConfig->rule(JsonThrowOnErrorRector::class);
     $rectorConfig->rule(RegexDashEscapeRector::class);
-    $rectorConfig->rule(ContinueToBreakInSwitchRector::class);
     $rectorConfig->rule(SetCookieRector::class);
 };
