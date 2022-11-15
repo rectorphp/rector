@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Ternary;
-use PHPStan\Type\ArrayType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;

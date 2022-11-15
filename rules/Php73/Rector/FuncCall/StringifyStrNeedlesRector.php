@@ -8,7 +8,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\Encapsed;
-use PHPStan\Type\StringType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;

@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\ArrayType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

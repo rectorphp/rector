@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;

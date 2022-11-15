@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\TypeAnalyzer;
 
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;

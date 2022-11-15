@@ -63,7 +63,7 @@ final class MatchSwitchAnalyzer
         if (!$this->switchAnalyzer->hasEachCaseBreak($switch)) {
             return \true;
         }
-        if ($this->switchAnalyzer->hasDifferentTypeCases($switch->cases)) {
+        if ($this->switchAnalyzer->hasDifferentTypeCases($switch->cases, $switch->cond)) {
             return \true;
         }
         if (!$this->switchAnalyzer->hasEachCaseSingleStmt($switch)) {

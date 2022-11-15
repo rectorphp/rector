@@ -9,7 +9,6 @@ use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeUtils;
 use PHPStan\Type\VoidType;

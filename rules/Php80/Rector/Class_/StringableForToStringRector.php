@@ -12,7 +12,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Type\StringType;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;

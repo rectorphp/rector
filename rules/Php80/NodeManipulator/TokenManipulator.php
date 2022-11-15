@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\ArrayType;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;

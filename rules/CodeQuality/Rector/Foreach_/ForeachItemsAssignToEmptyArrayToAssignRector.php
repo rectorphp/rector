@@ -8,7 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\ArrayType;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;

@@ -14,7 +14,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\ArrayType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;

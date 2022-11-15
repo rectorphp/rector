@@ -18,7 +18,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\BenevolentUnionType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;

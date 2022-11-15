@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\UnionType as PhpParserUnionType;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;

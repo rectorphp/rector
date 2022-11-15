@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;

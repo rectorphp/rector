@@ -12,7 +12,6 @@ use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
@@ -58,7 +57,16 @@ final class StaticTypeAnalyzer
         if ($type instanceof NullType) {
             return \true;
         }
-        return $type instanceof BooleanType || $type->isString()->yes() || $type instanceof IntegerType || $type instanceof FloatType;
+        if ($type instanceof BooleanType) {
+            return \true;
+        }
+        if ($type->isString()->yes()) {
+            return \true;
+        }
+        if ($type instanceof IntegerType) {
+            return \true;
+        }
+        return $type instanceof FloatType;
     }
     private function isAlwaysTruableUnionType(Type $type) : bool
     {

@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
