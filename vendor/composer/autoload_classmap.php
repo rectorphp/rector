@@ -1168,6 +1168,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => $baseDir . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
     'Rector\\CodeQuality\\Rector\\Concat\\JoinStringConcatRector' => $baseDir . '/rules/CodeQuality/Rector/Concat/JoinStringConcatRector.php',
     'Rector\\CodeQuality\\Rector\\Do_\\DoWhileBreakFalseToIfElseRector' => $baseDir . '/rules/CodeQuality/Rector/Do_/DoWhileBreakFalseToIfElseRector.php',
+    'Rector\\CodeQuality\\Rector\\Empty_\\SimplifyEmptyCheckOnEmptyArrayRector' => $baseDir . '/rules/CodeQuality/Rector/Empty_/SimplifyEmptyCheckOnEmptyArrayRector.php',
     'Rector\\CodeQuality\\Rector\\Equal\\UseIdenticalOverEqualWithSameTypeRector' => $baseDir . '/rules/CodeQuality/Rector/Equal/UseIdenticalOverEqualWithSameTypeRector.php',
     'Rector\\CodeQuality\\Rector\\Expression\\InlineIfToExplicitIfRector' => $baseDir . '/rules/CodeQuality/Rector/Expression/InlineIfToExplicitIfRector.php',
     'Rector\\CodeQuality\\Rector\\Expression\\TernaryFalseExpressionToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Expression/TernaryFalseExpressionToIfRector.php',

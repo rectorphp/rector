@@ -1,4 +1,4 @@
-# 400 Rules Overview
+# 401 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (77)
+- [CodeQuality](#codequality) (78)
 
 - [CodingStyle](#codingstyle) (36)
 
@@ -1264,6 +1264,19 @@ Simplify `is_array` and `empty` functions combination into a simple identical ch
 ```diff
 -is_array($values) && empty($values)
 +$values === []
+```
+
+<br>
+
+### SimplifyEmptyCheckOnEmptyArrayRector
+
+Simplify `empty` functions calls on empty arrays
+
+- class: [`Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector`](../rules/CodeQuality/Rector/Empty_/SimplifyEmptyCheckOnEmptyArrayRector.php)
+
+```diff
+-$array = []; if(empty($values))
++$array = []; if([] === $values)
 ```
 
 <br>
