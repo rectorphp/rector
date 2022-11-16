@@ -6,6 +6,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
@@ -162,6 +163,12 @@ final class PHPStanNodeScopeResolver
             if ($node instanceof Foreach_) {
                 // decorate value as well
                 $node->valueVar->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                if ($node->valueVar instanceof Array_) {
+                    $this->processArray($node->valueVar, $mutatingScope);
+                }
+            }
+            if ($node instanceof Array_) {
+                $this->processArray($node, $mutatingScope);
             }
             if ($node instanceof Property) {
                 $this->processProperty($node, $mutatingScope);
@@ -210,6 +217,14 @@ final class PHPStanNodeScopeResolver
             }
         };
         return $this->processNodesWithDependentFiles($filePath, $stmts, $scope, $nodeCallback);
+    }
+    private function processArray(Array_ $array, MutatingScope $mutatingScope) : void
+    {
+        foreach ($array->items as $arrayItem) {
+            if ($arrayItem instanceof ArrayItem) {
+                $arrayItem->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+        }
     }
     private function processArrayItem(ArrayItem $arrayItem, MutatingScope $mutatingScope) : void
     {
