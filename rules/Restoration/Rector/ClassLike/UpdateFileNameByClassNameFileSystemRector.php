@@ -58,7 +58,7 @@ CODE_SAMPLE
         }
         $classShortName = $this->nodeNameResolver->getShortName($className);
         $filePath = $this->file->getFilePath();
-        $basename = \pathinfo($filePath, \PATHINFO_BASENAME);
+        $basename = \pathinfo($filePath, \PATHINFO_FILENAME);
         if ($classShortName === $basename) {
             return null;
         }
