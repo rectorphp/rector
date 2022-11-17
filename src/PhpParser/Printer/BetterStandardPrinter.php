@@ -24,7 +24,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Nop;
-use PhpParser\Node\Stmt\TraitUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
@@ -301,24 +300,6 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         }
         // this approach is chosen, to keep changes in parent pStmt_ClassMethod() updated
         return Strings::replace($content, self::REPLACE_COLON_WITH_SPACE_REGEX, '$1: ');
-    }
-    /**
-     * Clean class and trait from empty "use x;" for traits causing invalid code
-     */
-    protected function pStmt_Class(Class_ $class) : string
-    {
-        $shouldReindex = \false;
-        foreach ($class->stmts as $key => $stmt) {
-            // remove empty ones
-            if ($stmt instanceof TraitUse && $stmt->traits === []) {
-                unset($class->stmts[$key]);
-                $shouldReindex = \true;
-            }
-        }
-        if ($shouldReindex) {
-            $class->stmts = \array_values($class->stmts);
-        }
-        return parent::pStmt_Class($class);
     }
     /**
      * It remove all spaces extra to parent

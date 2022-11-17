@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Trait_;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202211\Webmozart\Assert\Assert;
@@ -17,10 +16,6 @@ use RectorPrefix202211\Webmozart\Assert\Assert;
  */
 final class RemoveTraitUseRector extends AbstractRector implements ConfigurableRectorInterface
 {
-    /**
-     * @var bool
-     */
-    private $classHasChanged = \false;
     /**
      * @var string[]
      */
@@ -52,19 +47,17 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $this->classHasChanged = \false;
+        $classHasChanged = \false;
         foreach ($node->getTraitUses() as $traitUse) {
             foreach ($traitUse->traits as $trait) {
                 if (!$this->isNames($trait, $this->traitsToRemove)) {
                     continue;
                 }
                 $this->removeNode($traitUse);
-                $this->classHasChanged = \true;
+                $classHasChanged = \true;
             }
         }
-        // invoke re-print
-        if ($this->classHasChanged) {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        if ($classHasChanged) {
             return $node;
         }
         return null;

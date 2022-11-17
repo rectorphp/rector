@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcf51f0b01cfda16e7ca58972956089b5
+class ComposerStaticInitf3d946c54bdbd2e959f0f6c3f35bf397
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -587,13 +587,16 @@ class ComposerStaticInitcf51f0b01cfda16e7ca58972956089b5
         'RectorPrefix202211\\Clue\\React\\NDJson\\Decoder' => __DIR__ . '/..' . '/clue/ndjson-react/src/Decoder.php',
         'RectorPrefix202211\\Clue\\React\\NDJson\\Encoder' => __DIR__ . '/..' . '/clue/ndjson-react/src/Encoder.php',
         'RectorPrefix202211\\Composer\\Pcre\\MatchAllResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchAllResult.php',
+        'RectorPrefix202211\\Composer\\Pcre\\MatchAllStrictGroupsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchAllStrictGroupsResult.php',
         'RectorPrefix202211\\Composer\\Pcre\\MatchAllWithOffsetsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchAllWithOffsetsResult.php',
         'RectorPrefix202211\\Composer\\Pcre\\MatchResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchResult.php',
+        'RectorPrefix202211\\Composer\\Pcre\\MatchStrictGroupsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchStrictGroupsResult.php',
         'RectorPrefix202211\\Composer\\Pcre\\MatchWithOffsetsResult' => __DIR__ . '/..' . '/composer/pcre/src/MatchWithOffsetsResult.php',
         'RectorPrefix202211\\Composer\\Pcre\\PcreException' => __DIR__ . '/..' . '/composer/pcre/src/PcreException.php',
         'RectorPrefix202211\\Composer\\Pcre\\Preg' => __DIR__ . '/..' . '/composer/pcre/src/Preg.php',
         'RectorPrefix202211\\Composer\\Pcre\\Regex' => __DIR__ . '/..' . '/composer/pcre/src/Regex.php',
         'RectorPrefix202211\\Composer\\Pcre\\ReplaceResult' => __DIR__ . '/..' . '/composer/pcre/src/ReplaceResult.php',
+        'RectorPrefix202211\\Composer\\Pcre\\UnexpectedNullMatchException' => __DIR__ . '/..' . '/composer/pcre/src/UnexpectedNullMatchException.php',
         'RectorPrefix202211\\Composer\\Semver\\Comparator' => __DIR__ . '/..' . '/composer/semver/src/Comparator.php',
         'RectorPrefix202211\\Composer\\Semver\\CompilingMatcher' => __DIR__ . '/..' . '/composer/semver/src/CompilingMatcher.php',
         'RectorPrefix202211\\Composer\\Semver\\Constraint\\Bound' => __DIR__ . '/..' . '/composer/semver/src/Constraint/Bound.php',
@@ -3033,9 +3036,9 @@ class ComposerStaticInitcf51f0b01cfda16e7ca58972956089b5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcf51f0b01cfda16e7ca58972956089b5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcf51f0b01cfda16e7ca58972956089b5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcf51f0b01cfda16e7ca58972956089b5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf3d946c54bdbd2e959f0f6c3f35bf397::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf3d946c54bdbd2e959f0f6c3f35bf397::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf3d946c54bdbd2e959f0f6c3f35bf397::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Empty_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\Empty_;
@@ -44,7 +45,7 @@ final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractScopeAwareRecto
         }
         return new Identical($node->expr, new Array_());
     }
-    private function isAllowedExpr(Node\Expr $expr) : bool
+    private function isAllowedExpr(Expr $expr) : bool
     {
         if ($expr instanceof Variable) {
             return \true;
@@ -52,9 +53,6 @@ final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractScopeAwareRecto
         if ($expr instanceof PropertyFetch) {
             return \true;
         }
-        if ($expr instanceof StaticPropertyFetch) {
-            return \true;
-        }
-        return \false;
+        return $expr instanceof StaticPropertyFetch;
     }
 }
