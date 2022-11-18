@@ -32,10 +32,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const MONOLOG_20 = __DIR__ . '/../../../config/set/monolog20.php';
-    /**
-     * @var string
-     */
     public const MYSQL_TO_MYSQLI = __DIR__ . '/../../../config/set/mysql-to-mysqli.php';
     /**
      * @var string
