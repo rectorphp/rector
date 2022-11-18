@@ -5,8 +5,7 @@ namespace Rector\Renaming\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use Rector\Core\Validation\RectorAssert;
-use Rector\Renaming\Contract\MethodCallRenameInterface;
-final class MethodCallRename implements MethodCallRenameInterface
+final class MethodCallRename
 {
     /**
      * @readonly

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb562367493f9c4431da92e6a3a23d973
+class ComposerStaticInit9b2c989c5b251fa527a9c379f687a500
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2585,7 +2585,6 @@ class ComposerStaticInitb562367493f9c4431da92e6a3a23d973
         'Rector\\Removing\\ValueObject\\ArgumentRemover' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/ArgumentRemover.php',
         'Rector\\Removing\\ValueObject\\RemoveFuncCallArg' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/RemoveFuncCallArg.php',
         'Rector\\Renaming\\Collector\\MethodCallRenameCollector' => __DIR__ . '/../..' . '/rules/Renaming/Collector/MethodCallRenameCollector.php',
-        'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
         'Rector\\Renaming\\Contract\\RenameAnnotationInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameAnnotationInterface.php',
         'Rector\\Renaming\\Contract\\RenameClassConstFetchInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameClassConstFetchInterface.php',
         'Rector\\Renaming\\NodeManipulator\\ClassRenamer' => __DIR__ . '/../..' . '/rules/Renaming/NodeManipulator/ClassRenamer.php',
@@ -2602,7 +2601,6 @@ class ComposerStaticInitb562367493f9c4431da92e6a3a23d973
         'Rector\\Renaming\\Rector\\StaticCall\\RenameStaticMethodRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/StaticCall/RenameStaticMethodRector.php',
         'Rector\\Renaming\\Rector\\String_\\RenameStringRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/String_/RenameStringRector.php',
         'Rector\\Renaming\\ValueObject\\MethodCallRename' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/MethodCallRename.php',
-        'Rector\\Renaming\\ValueObject\\MethodCallRenameWithArrayKey' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/MethodCallRenameWithArrayKey.php',
         'Rector\\Renaming\\ValueObject\\PseudoNamespaceToNamespace' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/PseudoNamespaceToNamespace.php',
         'Rector\\Renaming\\ValueObject\\RenameAnnotation' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameAnnotation.php',
         'Rector\\Renaming\\ValueObject\\RenameAnnotationByType' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameAnnotationByType.php',
@@ -3036,9 +3034,9 @@ class ComposerStaticInitb562367493f9c4431da92e6a3a23d973
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb562367493f9c4431da92e6a3a23d973::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb562367493f9c4431da92e6a3a23d973::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb562367493f9c4431da92e6a3a23d973::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9b2c989c5b251fa527a9c379f687a500::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9b2c989c5b251fa527a9c379f687a500::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9b2c989c5b251fa527a9c379f687a500::$classMap;
 
         }, null, ClassLoader::class);
     }

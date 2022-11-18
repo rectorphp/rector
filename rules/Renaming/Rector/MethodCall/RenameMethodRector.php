@@ -3,9 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\Rector\MethodCall;
 
-use PhpParser\BuilderHelpers;
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -19,9 +17,7 @@ use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Renaming\Collector\MethodCallRenameCollector;
-use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202211\Webmozart\Assert\Assert;
@@ -31,7 +27,7 @@ use RectorPrefix202211\Webmozart\Assert\Assert;
 final class RenameMethodRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
-     * @var MethodCallRenameInterface[]
+     * @var MethodCallRename[]
      */
     private $methodCallRenames = [];
     /**
@@ -100,9 +96,6 @@ CODE_SAMPLE
                 continue;
             }
             $node->name = new Identifier($methodCallRename->getNewMethod());
-            if ($methodCallRename instanceof MethodCallRenameWithArrayKey && !$node instanceof ClassMethod) {
-                return new ArrayDimFetch($node, BuilderHelpers::normalizeValue($methodCallRename->getArrayKey()));
-            }
             return $node;
         }
         return null;
@@ -112,14 +105,14 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
-        Assert::allIsAOf($configuration, MethodCallRenameInterface::class);
+        Assert::allIsAOf($configuration, MethodCallRename::class);
         $this->methodCallRenames = $configuration;
         $this->methodCallRenameCollector->addMethodCallRenames($configuration);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
      */
-    private function shouldSkipClassMethod($node, MethodCallRenameInterface $methodCallRename) : bool
+    private function shouldSkipClassMethod($node, MethodCallRename $methodCallRename) : bool
     {
         if (!$node instanceof ClassMethod) {
             $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($node);
@@ -142,7 +135,7 @@ CODE_SAMPLE
         }
         return $this->shouldSkipForAlreadyExistingClassMethod($node, $methodCallRename);
     }
-    private function shouldSkipForAlreadyExistingClassMethod(ClassMethod $classMethod, MethodCallRenameInterface $methodCallRename) : bool
+    private function shouldSkipForAlreadyExistingClassMethod(ClassMethod $classMethod, MethodCallRename $methodCallRename) : bool
     {
         $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
         if (!$classLike instanceof ClassLike) {
@@ -153,7 +146,7 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function shouldKeepForParentInterface(MethodCallRenameInterface $methodCallRename, $node, ?ClassReflection $classReflection) : bool
+    private function shouldKeepForParentInterface(MethodCallRename $methodCallRename, $node, ?ClassReflection $classReflection) : bool
     {
         if (!$node instanceof ClassMethod) {
             return \false;
