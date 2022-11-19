@@ -1853,12 +1853,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "da1013feacd1f27dbd414734fd2768d9258a5f7b"
+                "reference": "d5a52d643513c66fc23270aa4748a564508ccc1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/da1013feacd1f27dbd414734fd2768d9258a5f7b",
-                "reference": "da1013feacd1f27dbd414734fd2768d9258a5f7b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/d5a52d643513c66fc23270aa4748a564508ccc1d",
+                "reference": "d5a52d643513c66fc23270aa4748a564508ccc1d",
                 "shasum": ""
             },
             "require": {
@@ -1883,7 +1883,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-10-26T11:10:13+00:00",
+            "time": "2022-11-19T11:55:01+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1913,7 +1913,7 @@
             "description": "Rector downgrade PHP rules",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/tree\/0.14.0"
+                "source": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/tree\/main"
             },
             "install-path": "..\/rector\/rector-downgrade-php"
         },
@@ -2061,12 +2061,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "0a9fcc8a01a30eb3f0d9c34fcd927750ae501b68"
+                "reference": "b901b9305adf1720c066fcf08a67fdec705359ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/0a9fcc8a01a30eb3f0d9c34fcd927750ae501b68",
-                "reference": "0a9fcc8a01a30eb3f0d9c34fcd927750ae501b68",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b901b9305adf1720c066fcf08a67fdec705359ad",
+                "reference": "b901b9305adf1720c066fcf08a67fdec705359ad",
                 "shasum": ""
             },
             "require": {
@@ -2097,7 +2097,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-11-19T11:42:30+00:00",
+            "time": "2022-11-19T11:51:56+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
