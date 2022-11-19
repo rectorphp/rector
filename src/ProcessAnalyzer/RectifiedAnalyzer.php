@@ -36,7 +36,7 @@ final class RectifiedAnalyzer
     public function verify(string $rectorClass, Node $node, string $filePath) : ?RectifiedNode
     {
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($this->hasCreatedByRule($rectorClass, $node, $originalNode)) {
+        if ($this->hasConsecutiveCreatedByRule($rectorClass, $node, $originalNode)) {
             return new RectifiedNode($rectorClass, $node);
         }
         if (!isset($this->previousFileWithNodes[$filePath])) {
@@ -57,19 +57,16 @@ final class RectifiedAnalyzer
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    private function hasCreatedByRule(string $rectorClass, Node $node, ?Node $originalNode) : bool
+    private function hasConsecutiveCreatedByRule(string $rectorClass, Node $node, ?Node $originalNode) : bool
     {
-        if (!$originalNode instanceof Node) {
-            $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-            \end($createdByRule);
-            $lastRectorRuleKey = \key($createdByRule);
-            if ($lastRectorRuleKey === null) {
-                return \false;
-            }
-            return $createdByRule[$lastRectorRuleKey] === $rectorClass;
+        $createdByRuleNode = $originalNode ?? $node;
+        $createdByRule = $createdByRuleNode->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
+        \end($createdByRule);
+        $lastRectorRuleKey = \key($createdByRule);
+        if ($lastRectorRuleKey === null) {
+            return \false;
         }
-        $createdByRule = $originalNode->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-        return \in_array($rectorClass, $createdByRule, \true);
+        return $createdByRule[$lastRectorRuleKey] === $rectorClass;
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
