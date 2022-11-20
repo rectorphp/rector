@@ -1489,7 +1489,6 @@ return array(
     'Rector\\Core\\ValueObject\\PhpVersion' => $baseDir . '/src/ValueObject/PhpVersion.php',
     'Rector\\Core\\ValueObject\\PhpVersionFeature' => $baseDir . '/src/ValueObject/PhpVersionFeature.php',
     'Rector\\Core\\ValueObject\\ProcessResult' => $baseDir . '/src/ValueObject/ProcessResult.php',
-    'Rector\\Core\\ValueObject\\RectifiedNode' => $baseDir . '/src/ValueObject/RectifiedNode.php',
     'Rector\\Core\\ValueObject\\Reporting\\FileDiff' => $baseDir . '/src/ValueObject/Reporting/FileDiff.php',
     'Rector\\Core\\ValueObject\\SprintfStringAndArgs' => $baseDir . '/src/ValueObject/SprintfStringAndArgs.php',
     'Rector\\Core\\ValueObject\\StaticNonPhpFileSuffixes' => $baseDir . '/src/ValueObject/StaticNonPhpFileSuffixes.php',

@@ -685,17 +685,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.13.0",
-            "version_normalized": "1.13.0.0",
+            "version": "1.13.1",
+            "version_normalized": "1.13.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "33aefcdab42900e36366d0feab6206e2dd68f947"
+                "reference": "aac44118344d197e6d5f7c6cee91885f0a89acdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/33aefcdab42900e36366d0feab6206e2dd68f947",
-                "reference": "33aefcdab42900e36366d0feab6206e2dd68f947",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/aac44118344d197e6d5f7c6cee91885f0a89acdd",
+                "reference": "aac44118344d197e6d5f7c6cee91885f0a89acdd",
                 "shasum": ""
             },
             "require": {
@@ -710,7 +710,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2022-10-21T09:57:39+00:00",
+            "time": "2022-11-20T08:52:26+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -727,7 +727,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.13.0"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.13.1"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
@@ -2061,12 +2061,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "b901b9305adf1720c066fcf08a67fdec705359ad"
+                "reference": "0773d62885281748f7778cd3d9f1806062dfea69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b901b9305adf1720c066fcf08a67fdec705359ad",
-                "reference": "b901b9305adf1720c066fcf08a67fdec705359ad",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/0773d62885281748f7778cd3d9f1806062dfea69",
+                "reference": "0773d62885281748f7778cd3d9f1806062dfea69",
                 "shasum": ""
             },
             "require": {
@@ -2097,7 +2097,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-11-19T11:51:56+00:00",
+            "time": "2022-11-19T12:13:06+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

@@ -17,8 +17,8 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202211\Symfony\Component\Console\Input\StringInput;
-use RectorPrefix202211\Symplify\PackageBuilder\Reflection\PrivatesCaller;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -132,8 +132,8 @@ CODE_SAMPLE
      */
     private function splitProcessCommandToItems(string $process) : array
     {
-        $privatesCaller = new \Rector\Core\Util\Reflection\PrivatesAccessor();
-        return $privatesCaller->callPrivateMethod(new StringInput(''), 'tokenize', [$process]);
+        $privatesAccessor = new PrivatesAccessor();
+        return $privatesAccessor->callPrivateMethod(new StringInput(''), 'tokenize', [$process]);
     }
     private function processPreviousAssign(Node $node, Expr $firstArgumentExpr) : void
     {

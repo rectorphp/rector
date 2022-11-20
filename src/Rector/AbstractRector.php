@@ -35,7 +35,6 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
-use Rector\Core\ValueObject\RectifiedNode;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -230,7 +229,7 @@ CODE_SAMPLE;
             throw new ShouldNotHappenException($errorMessage);
         }
         $originalNode = $originalNode ?? $node;
-        /** @var Node[]|Node $refactoredNode */
+        /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
         $rectorWithLineChange = new RectorWithLineChange(\get_class($this), $originalNode->getLine());
         $this->file->addRectorClassWithLine($rectorWithLineChange);
@@ -241,17 +240,17 @@ CODE_SAMPLE;
         if (\is_array($refactoredNode)) {
             $originalNodeHash = \spl_object_hash($originalNode);
             $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
-            \reset($refactoredNode);
-            $firstNodeKey = \key($refactoredNode);
-            $this->mirrorComments($refactoredNode[$firstNodeKey], $originalNode);
+            $firstNode = \current($refactoredNode);
+            $this->mirrorComments($firstNode, $originalNode);
             $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
-            $this->connectNodes($refactoredNode);
+            $this->connectNodes($refactoredNode, $node);
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
             // will be replaced in leaveNode() the original node must be passed
             return $originalNode;
         }
         $refactoredNode = $originalNode instanceof Stmt && $refactoredNode instanceof Expr ? new Expression($refactoredNode) : $refactoredNode;
         $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
+        $this->connectNodes([$refactoredNode], $node);
         $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
         // is equals node type? return node early
         if (\get_class($originalNode) === \get_class($refactoredNode)) {
@@ -371,8 +370,7 @@ CODE_SAMPLE;
         if ($this->skipper->shouldSkipElementAndFilePath($this, $filePath)) {
             return \true;
         }
-        $rectifiedNode = $this->rectifiedAnalyzer->verify(static::class, $node, $this->file->getFilePath());
-        return $rectifiedNode instanceof RectifiedNode;
+        return $this->rectifiedAnalyzer->hasRectified(static::class, $node);
     }
     /**
      * @param mixed[]|\PhpParser\Node $node
@@ -392,10 +390,24 @@ CODE_SAMPLE;
         $nodeTraverser->traverse($nodes);
     }
     /**
-     * @param Node[] $nodes
+     * @param non-empty-array<Node> $nodes
      */
-    private function connectNodes(array $nodes) : void
+    private function connectNodes(array $nodes, Node $node) : void
     {
+        $firstNode = \current($nodes);
+        $firstNodePreviousNode = $firstNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if (!$firstNodePreviousNode instanceof Node && $node->hasAttribute(AttributeKey::PREVIOUS_NODE)) {
+            /** @var Node $previousNode */
+            $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
+            $nodes = \array_merge([$previousNode], \is_array($nodes) ? $nodes : \iterator_to_array($nodes));
+        }
+        $lastNode = \end($nodes);
+        $lastNodeNextNode = $lastNode->getAttribute(AttributeKey::NEXT_NODE);
+        if (!$lastNodeNextNode instanceof Node && $node->hasAttribute(AttributeKey::NEXT_NODE)) {
+            /** @var Node $nextNode */
+            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+            $nodes = \array_merge(\is_array($nodes) ? $nodes : \iterator_to_array($nodes), [$nextNode]);
+        }
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NodeConnectingVisitor());
         $nodeTraverser->traverse($nodes);
