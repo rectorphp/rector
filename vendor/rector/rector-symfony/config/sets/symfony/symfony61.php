@@ -13,5 +13,8 @@ return static function (RectorConfig $rectorConfig) : void {
         // @see https://github.com/symfony/symfony/pull/43982
         'Symfony\\Component\\Serializer\\Normalizer\\ContextAwareDenormalizerInterface' => 'Symfony\\Component\\Serializer\\Normalizer\\DenormalizerInterface',
         'Symfony\\Component\\Serializer\\Normalizer\\ContextAwareNormalizerInterface' => 'Symfony\\Component\\Serializer\\Normalizer\\NormalizerInterface',
+        // @see https://github.com/symfony/symfony/pull/45623
+        'Symfony\\Component\\Validator\\Constraints\\ExpressionLanguageSyntax' => 'Symfony\\Component\\Validator\\Constraints\\ExpressionSyntax',
+        'Symfony\\Component\\Validator\\Constraints\\ExpressionLanguageSyntaxValidator' => 'Symfony\\Component\\Validator\\Constraints\\ExpressionSyntaxValidator',
     ]);
 };
