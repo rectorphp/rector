@@ -2530,6 +2530,7 @@ return array(
     'Rector\\Symfony\\Rector\\MethodCall\\ReadOnlyOptionToAttributeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ReadOnlyOptionToAttributeRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\RedirectToRouteRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/RedirectToRouteRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ReflectionExtractorEnableMagicCallExtractorRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ReflectionExtractorEnableMagicCallExtractorRector.php',
+    'Rector\\Symfony\\Rector\\MethodCall\\SimplifyFormRenderingRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/SimplifyFormRenderingRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\StringFormTypeToClassRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/StringFormTypeToClassRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\SwiftCreateMessageToNewEmailRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\SwiftSetBodyToHtmlPlainMethodCallRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php',

@@ -1,4 +1,4 @@
-# 72 Rules Overview
+# 74 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -255,19 +255,17 @@ Change type in CollectionType from alias string to class reference
 
 Changes int return from execute to use Symfony Command constants.
 
--
-class: [`Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector`](../src/Rector/ClassMethod/CommandConstantReturnCodeRector.php)
+- class: [`Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector`](../src/Rector/ClassMethod/CommandConstantReturnCodeRector.php)
 
 ```diff
- use Symfony\Component\Console\Command\Command;
-
  class SomeCommand extends Command
  {
      protected function execute(InputInterface $input, OutputInterface $output): int
      {
--         return 0;
-+         return Command::SUCCESS;
+-        return 0;
++        return Command::SUCCESS;
      }
+
  }
 ```
 
@@ -275,22 +273,21 @@ class: [`Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector`](../
 
 ## CommandDescriptionToPropertyRector
 
-Moves Command description setter to defaultDescription property
+Symfony Command description setters are moved to properties
 
--
-class: [`Rector\Symfony\Rector\Class_\CommandDescriptionToPropertyRector`](../src/Rector/Class_/CommandDescriptionToPropertyRector.php)
+- class: [`Rector\Symfony\Rector\Class_\CommandDescriptionToPropertyRector`](../src/Rector/Class_/CommandDescriptionToPropertyRector.php)
 
 ```diff
- use Symfony\Component\Console\Command\Command;
+ use Symfony\Component\Console\Command\Command
 
  final class SunshineCommand extends Command
  {
-    protected static $defaultName = 'sunshine';
-+   protected static $defaultDescription = 'sunshine description';
-    public function configure()
-    {
+     protected static $defaultName = 'sunshine';
++    protected static $defaultDescription = 'sunshine description';
+     public function configure()
+     {
 -        $this->setDescription('sunshine description');
-    }
+     }
  }
 ```
 
@@ -1259,21 +1256,21 @@ Remove service from Sensio `@Route`
 
 ## RemoveUnusedRequestParamRector
 
-Remove unused $request parameter from controller action
+Remove unused `$request` parameter from controller action
 
 - class: [`Rector\Symfony\Rector\ClassMethod\RemoveUnusedRequestParamRector`](../src/Rector/ClassMethod/RemoveUnusedRequestParamRector.php)
 
 ```diff
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+ use Symfony\Component\HttpFoundation\Request;
+ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-final class SomeController extends Controller
-{
+ final class SomeController extends Controller
+ {
 -    public function run(Request $request, int $id)
 +    public function run(int $id)
-    {
-        echo $id;
-    }
+     {
+         echo $id;
+     }
  }
 ```
 
@@ -1499,6 +1496,27 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
 -            'is_mobile' => new Twig_Filter_Method($this, 'isMobile'),
 +             new Twig_SimpleFilter('is_mobile', [$this, 'isMobile']),
          ];
+     }
+ }
+```
+
+<br>
+
+## SimplifyFormRenderingRector
+
+Symplify form rendering by not calling `->createView()` on `render` function
+
+- class: [`Rector\Symfony\Rector\MethodCall\SimplifyFormRenderingRector`](../src/Rector/MethodCall/SimplifyFormRenderingRector.php)
+
+```diff
+ class ReplaceFormCreateViewFunctionCall extends AbstractController
+ {
+     public function form(): Response
+     {
+         return $this->render('form.html.twig', [
+-            'form' => $form->createView(),
++            'form' => $form,
+         ]);
      }
  }
 ```

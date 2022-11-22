@@ -16,13 +16,13 @@ use PHPStan\Type\UnionType;
 use Rector\Config\RectorConfig;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
-# see https://symfony.com/blog/symfony-type-declarations-return-types-and-phpunit-compatibility
+# @see https://symfony.com/blog/symfony-type-declarations-return-types-and-phpunit-compatibility
 return static function (RectorConfig $rectorConfig) : void {
     $arrayType = new ArrayType(new MixedType(), new MixedType());
     $iterableType = new IterableType(new MixedType(), new MixedType());
     $nullableStringType = new UnionType([new StringType(), new NullType()]);
     $rectorConfig->ruleWithConfiguration(AddParamTypeDeclarationRector::class, [
-        // see https://github.com/symfony/symfony/issues/32179
+        // @see https://github.com/symfony/symfony/issues/32179
         new AddParamTypeDeclaration('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface', 'addListener', 0, new StringType()),
         new AddParamTypeDeclaration('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface', 'addListener', 2, new IntegerType()),
         new AddParamTypeDeclaration('Symfony\\Component\\EventDispatcher\\EventDispatcherInterface', 'removeListener', 0, new StringType()),
