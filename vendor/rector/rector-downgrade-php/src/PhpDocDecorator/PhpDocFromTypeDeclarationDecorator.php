@@ -16,6 +16,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\Type\ObjectType;
+use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
@@ -30,6 +31,7 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
 use Rector\ValueObject\ClassMethodWillChangeReturnType;
 /**
  * @see https://wiki.php.net/rfc/internal_method_return_types#proposal
@@ -218,6 +220,9 @@ final class PhpDocFromTypeDeclarationDecorator
     private function isTypeMatch($typeNode, Type $requireType) : bool
     {
         $returnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);
+        if ($returnType instanceof SelfStaticType) {
+            $returnType = new ThisType($returnType->getClassReflection());
+        }
         // cover nullable union types
         if ($returnType instanceof UnionType) {
             $returnType = TypeCombinator::removeNull($returnType);

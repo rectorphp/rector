@@ -27,6 +27,7 @@ use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
+use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
 /**
  * @implements PhpParserNodeMapperInterface<Name>
  */
@@ -87,7 +88,7 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         return \in_array($name, $oldToNewClasses, \true);
     }
     /**
-     * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\PHPStan\Type\ObjectWithoutClassType
+     * @return \PHPStan\Type\MixedType|\PHPStan\Type\StaticType|\Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType|\PHPStan\Type\ObjectWithoutClassType
      */
     private function createClassReferenceType(Name $name, string $reference)
     {
@@ -99,6 +100,9 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
         $classReflection = $this->reflectionProvider->getClass($className);
         if ($reference === ObjectReference::STATIC) {
             return new StaticType($classReflection);
+        }
+        if ($reference === ObjectReference::SELF) {
+            return new SelfStaticType($classReflection);
         }
         if ($reference === ObjectReference::PARENT) {
             $parentClassReflection = $classReflection->getParentClass();
