@@ -1328,6 +1328,7 @@ return array(
     'Rector\\Core\\Configuration\\ValueObjectInliner' => $baseDir . '/src/Configuration/ValueObjectInliner.php',
     'Rector\\Core\\Console\\Command\\AbstractProcessCommand' => $baseDir . '/src/Console/Command/AbstractProcessCommand.php',
     'Rector\\Core\\Console\\Command\\InitCommand' => $baseDir . '/src/Console/Command/InitCommand.php',
+    'Rector\\Core\\Console\\Command\\ListRulesCommand' => $baseDir . '/src/Console/Command/ListRulesCommand.php',
     'Rector\\Core\\Console\\Command\\ProcessCommand' => $baseDir . '/src/Console/Command/ProcessCommand.php',
     'Rector\\Core\\Console\\Command\\WorkerCommand' => $baseDir . '/src/Console/Command/WorkerCommand.php',
     'Rector\\Core\\Console\\ConsoleApplication' => $baseDir . '/src/Console/ConsoleApplication.php',
