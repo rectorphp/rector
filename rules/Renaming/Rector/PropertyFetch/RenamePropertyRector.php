@@ -27,6 +27,10 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
      * @var RenameProperty[]
      */
     private $renamedProperties = [];
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Replaces defined old properties by new ones.', [new ConfiguredCodeSample('$someObject->someOldProperty;', '$someObject->someNewProperty;', [new RenameProperty('SomeClass', 'someOldProperty', 'someNewProperty')])]);
@@ -44,7 +48,13 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     public function refactor(Node $node) : ?Node
     {
         if ($node instanceof ClassLike) {
-            return $this->processFromClassLike($node);
+            foreach ($this->renamedProperties as $renamedProperty) {
+                $this->renameProperty($node, $renamedProperty);
+            }
+            if ($this->hasChanged) {
+                return $node;
+            }
+            return null;
         }
         return $this->processFromPropertyFetch($node);
     }
@@ -55,13 +65,6 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     {
         Assert::allIsAOf($configuration, RenameProperty::class);
         $this->renamedProperties = $configuration;
-    }
-    private function processFromClassLike(ClassLike $classLike) : ClassLike
-    {
-        foreach ($this->renamedProperties as $renamedProperty) {
-            $this->renameProperty($classLike, $renamedProperty);
-        }
-        return $classLike;
     }
     private function renameProperty(ClassLike $classLike, RenameProperty $renameProperty) : void
     {
@@ -83,6 +86,7 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
         if ($targetNewProperty instanceof Property) {
             return;
         }
+        $this->hasChanged = \true;
         $property->props[0]->name = new VarLikeIdentifier($newProperty);
     }
     private function processFromPropertyFetch(PropertyFetch $propertyFetch) : ?PropertyFetch

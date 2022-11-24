@@ -24,6 +24,10 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
      * @var ArgumentRemover[]
      */
     private $removedArguments = [];
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Removes defined arguments in defined methods and their calls.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -45,10 +49,11 @@ CODE_SAMPLE
     }
     /**
      * @param MethodCall|StaticCall|ClassMethod $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
      */
     public function refactor(Node $node)
     {
+        $this->hasChanged = \false;
         foreach ($this->removedArguments as $removedArgument) {
             if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $removedArgument->getObjectType())) {
                 continue;
@@ -58,7 +63,10 @@ CODE_SAMPLE
             }
             $this->processPosition($node, $removedArgument);
         }
-        return $node;
+        if ($this->hasChanged) {
+            return $node;
+        }
+        return null;
     }
     /**
      * @param mixed[] $configuration
@@ -94,6 +102,7 @@ CODE_SAMPLE
             return;
         }
         if ($this->isArgumentValueMatch($node->args[$argumentRemover->getPosition()], $match)) {
+            $this->hasChanged = \true;
             $this->nodeRemover->removeArg($node, $argumentRemover->getPosition());
         }
     }

@@ -69,7 +69,7 @@ CODE_SAMPLE
             }
             return $this->wrap($node, $typeMethodWrap->isArrayWrap());
         }
-        return $node;
+        return null;
     }
     /**
      * @param mixed[] $configuration
