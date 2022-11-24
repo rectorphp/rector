@@ -47,7 +47,7 @@ final class ListRulesCommand extends Command
         $outputFormat = $input->getOption(Option::OUTPUT_FORMAT);
         if ($outputFormat === 'json') {
             $data = ['rectors' => $rectorClasses];
-            echo Json::encode($data, Json::PRETTY);
+            echo Json::encode($data, Json::PRETTY) . \PHP_EOL;
             return Command::SUCCESS;
         }
         $this->rectorOutputStyle->title('Loaded Rector rules');
