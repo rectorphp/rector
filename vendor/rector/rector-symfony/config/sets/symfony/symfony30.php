@@ -115,9 +115,6 @@ return static function (RectorConfig $rectorConfig) : void {
         'Symfony\\Bridge\\Monolog\\Logger' => 'Psr\\Log\\LoggerInterface',
         # security
         'Symfony\\Component\\Security\\Core\\Authorization\\Voter\\AbstractVoter' => 'Symfony\\Component\\Security\\Core\\Authorization\\Voter\\Voter',
-        # translator
-        # partial with class rename
-        'Symfony\\Component\\Translation\\Translator' => 'Symfony\\Component\\Translation\\TranslatorBagInterface',
         # twig
         'Symfony\\Bundle\\TwigBundle\\TwigDefaultEscapingStrategy' => 'Twig_FileExtensionEscapingStrategy',
         # validator
