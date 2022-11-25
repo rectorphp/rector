@@ -47,7 +47,7 @@ class SomeCommand extends Command
 {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        return Symfony\Component\Console\Command\Command::SUCCESS;
+        return \Symfony\Component\Console\Command\Command::SUCCESS;
     }
 
 }
@@ -100,6 +100,6 @@ CODE_SAMPLE
         if (!isset(SymfonyCommandConstantMap::RETURN_TO_CONST[$lNumber->value])) {
             return null;
         }
-        return $this->nodeFactory->createShortClassConstFetch('Symfony\\Component\\Console\\Command\\Command', SymfonyCommandConstantMap::RETURN_TO_CONST[$lNumber->value]);
+        return $this->nodeFactory->createClassConstFetch('Symfony\\Component\\Console\\Command\\Command', SymfonyCommandConstantMap::RETURN_TO_CONST[$lNumber->value]);
     }
 }
