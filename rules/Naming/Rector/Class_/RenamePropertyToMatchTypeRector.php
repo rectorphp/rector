@@ -97,11 +97,14 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $this->refactorClassProperties($node);
-        $this->propertyPromotionRenamer->renamePropertyPromotion($node);
-        if (!$this->hasChanged) {
-            return null;
+        $hasPromotedPropertyChanged = $this->propertyPromotionRenamer->renamePropertyPromotion($node);
+        if ($this->hasChanged) {
+            return $node;
         }
-        return $node;
+        if ($hasPromotedPropertyChanged) {
+            return $node;
+        }
+        return null;
     }
     private function refactorClassProperties(ClassLike $classLike) : void
     {

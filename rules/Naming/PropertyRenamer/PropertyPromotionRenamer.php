@@ -76,14 +76,15 @@ final class PropertyPromotionRenamer
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
      */
-    public function renamePropertyPromotion($classLike) : void
+    public function renamePropertyPromotion($classLike) : bool
     {
+        $hasChanged = \false;
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
-            return;
+            return \false;
         }
         $constructClassMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
-            return;
+            return \false;
         }
         // resolve possible and existing param names
         $blockingParamNames = $this->resolveBlockingParamNames($constructClassMethod);
@@ -104,7 +105,9 @@ final class PropertyPromotionRenamer
                 continue;
             }
             $this->renameParamVarNameAndVariableUsage($classLike, $constructClassMethod, $desiredPropertyName, $param);
+            $hasChanged = \true;
         }
+        return $hasChanged;
     }
     private function renameParamVarNameAndVariableUsage(ClassLike $classLike, ClassMethod $classMethod, string $desiredPropertyName, Param $param) : void
     {
