@@ -1,4 +1,4 @@
-# 401 Rules Overview
+# 402 Rules Overview
 
 <br>
 
@@ -44,7 +44,7 @@
 
 - [Php74](#php74) (15)
 
-- [Php80](#php80) (19)
+- [Php80](#php80) (20)
 
 - [Php81](#php81) (11)
 
@@ -5797,6 +5797,25 @@ Change get_class($object) to faster `$object::class`
      {
 -        return get_class($object);
 +        return $object::class;
+     }
+ }
+```
+
+<br>
+
+### ClassOnThisVariableObjectRector
+
+Change `$this::class` to static::class or self::class depends on class modifier
+
+- class: [`Rector\Php80\Rector\ClassConstFetch\ClassOnThisVariableObjectRector`](../rules/Php80/Rector/ClassConstFetch/ClassOnThisVariableObjectRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        return $this::class;
++        return static::class;
      }
  }
 ```
