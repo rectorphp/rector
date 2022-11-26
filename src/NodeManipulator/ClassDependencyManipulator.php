@@ -172,10 +172,10 @@ final class ClassDependencyManipulator
             $constructClassMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
             $constructClassMethod->params[] = $param;
             $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
+            /** @var Scope $scope */
+            $scope = $class->getAttribute(AttributeKey::SCOPE);
+            $this->dependencyClassMethodDecorator->decorateConstructorWithParentDependencies($class, $constructClassMethod, $scope);
         }
-        /** @var Scope $scope */
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        $this->dependencyClassMethodDecorator->decorateConstructorWithParentDependencies($class, $constructClassMethod, $scope);
     }
     private function hasClassParentClassMethod(Class_ $class, string $methodName) : bool
     {
