@@ -122,6 +122,9 @@ CODE_SAMPLE
         }
         $hasChanged = \false;
         foreach ($node->getParams() as $param) {
+            if ($param->type instanceof Node) {
+                continue;
+            }
             $paramTypeDeclaration = $this->inferParam($param, $dataProviderPhpDocTagNode);
             if ($paramTypeDeclaration instanceof MixedType) {
                 continue;
