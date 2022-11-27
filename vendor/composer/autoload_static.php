@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc3009166ca3594b36327097967176e69
+class ComposerStaticInitd188a1b0ebfa55c965020711b53facfb
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2943,6 +2943,7 @@ class ComposerStaticInitc3009166ca3594b36327097967176e69
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayParamDocTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddArrayParamDocTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayReturnDocTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddArrayReturnDocTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeBasedOnPHPUnitDataProviderRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeBasedOnPHPUnitDataProviderRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationBasedOnParentClassMethodRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationBasedOnParentClassMethodRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/AddReturnTypeDeclarationRector.php',
@@ -2981,8 +2982,6 @@ class ComposerStaticInitc3009166ca3594b36327097967176e69
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\FunctionLikeDocParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/FunctionLikeDocParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\GetterNodeParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/GetterNodeParamTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\KnownArrayParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/KnownArrayParamTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PHPUnitDataProviderParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/PHPUnitDataProviderParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PropertyNodeParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/PropertyNodeParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\SplFixedArrayParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/SplFixedArrayParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\AllAssignNodePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/AllAssignNodePropertyTypeInferer.php',
@@ -3038,9 +3037,9 @@ class ComposerStaticInitc3009166ca3594b36327097967176e69
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc3009166ca3594b36327097967176e69::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc3009166ca3594b36327097967176e69::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc3009166ca3594b36327097967176e69::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd188a1b0ebfa55c965020711b53facfb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd188a1b0ebfa55c965020711b53facfb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd188a1b0ebfa55c965020711b53facfb::$classMap;
 
         }, null, ClassLoader::class);
     }

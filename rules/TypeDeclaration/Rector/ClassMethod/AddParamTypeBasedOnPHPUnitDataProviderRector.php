@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
+namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use RectorPrefix202211\Nette\Utils\Strings;
+use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -18,30 +18,28 @@ use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
-use RectorPrefix202211\Symfony\Contracts\Service\Attribute\Required;
-final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInterface
+use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector\AddParamTypeBasedOnPHPUnitDataProviderRectorTest
+ */
+final class AddParamTypeBasedOnPHPUnitDataProviderRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const ERROR_MESSAGE = 'Adds param type declaration based on PHPUnit provider return type declaration';
     /**
      * @see https://regex101.com/r/hW09Vt/1
      * @var string
      */
     private const METHOD_NAME_REGEX = '#^(?<method_name>\\w+)(\\(\\))?#';
-    /**
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
@@ -49,26 +47,96 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
     private $typeFactory;
     /**
      * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $phpDocInfoFactory;
-    public function __construct(BetterNodeFinder $betterNodeFinder, TypeFactory $typeFactory, PhpDocInfoFactory $phpDocInfoFactory)
+    private $testsNodeAnalyzer;
+    public function __construct(TypeFactory $typeFactory, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->typeFactory = $typeFactory;
-        $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
-    // Prevents circular reference
+    public function getRuleDefinition() : RuleDefinition
+    {
+        return new RuleDefinition(self::ERROR_MESSAGE, [new CodeSample(<<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase
+
+final class SomeTest extends TestCase
+{
     /**
-     * @required
+     * @dataProvider provideData()
      */
-    public function autowire(NodeTypeResolver $nodeTypeResolver) : void
+    public function test($value)
     {
-        $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function inferParam(Param $param) : Type
+
+    public function provideData()
     {
-        $dataProviderClassMethod = $this->resolveDataProviderClassMethod($param);
+        yield ['name'];
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase
+
+final class SomeTest extends TestCase
+{
+    /**
+     * @dataProvider provideData()
+     */
+    public function test(string $value)
+    {
+    }
+
+    public function provideData()
+    {
+        yield ['name'];
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes() : array
+    {
+        return [ClassMethod::class];
+    }
+    /**
+     * @param ClassMethod $node
+     */
+    public function refactor(Node $node) : ?ClassMethod
+    {
+        if (!$node->isPublic()) {
+            return null;
+        }
+        if ($node->getParams() === []) {
+            return null;
+        }
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
+        }
+        $dataProviderPhpDocTagNode = $this->resolveDataProviderPhpDocTagNode($node);
+        if (!$dataProviderPhpDocTagNode instanceof PhpDocTagNode) {
+            return null;
+        }
+        $hasChanged = \false;
+        foreach ($node->getParams() as $param) {
+            $paramTypeDeclaration = $this->inferParam($param, $dataProviderPhpDocTagNode);
+            if ($paramTypeDeclaration instanceof MixedType) {
+                continue;
+            }
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramTypeDeclaration, TypeKind::PARAM);
+            $hasChanged = \true;
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    private function inferParam(Param $param, PhpDocTagNode $dataProviderPhpDocTagNode) : Type
+    {
+        $dataProviderClassMethod = $this->resolveDataProviderClassMethod($param, $dataProviderPhpDocTagNode);
         if (!$dataProviderClassMethod instanceof ClassMethod) {
             return new MixedType();
         }
@@ -85,21 +153,16 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         $yields = $this->betterNodeFinder->findInstanceOf((array) $dataProviderClassMethod->stmts, Yield_::class);
         return $this->resolveYieldStaticArrayTypeByParameterPosition($yields, $parameterPosition);
     }
-    private function resolveDataProviderClassMethod(Param $param) : ?ClassMethod
+    private function resolveDataProviderClassMethod(Param $param, PhpDocTagNode $dataProviderPhpDocTagNode) : ?ClassMethod
     {
-        $phpDocInfo = $this->getFunctionLikePhpDocInfo($param);
-        $phpDocTagNode = $phpDocInfo->getByName('@dataProvider');
-        if (!$phpDocTagNode instanceof PhpDocTagNode) {
-            return null;
-        }
         $class = $this->betterNodeFinder->findParentType($param, Class_::class);
         if (!$class instanceof Class_) {
             return null;
         }
-        if (!$phpDocTagNode->value instanceof GenericTagValueNode) {
+        if (!$dataProviderPhpDocTagNode->value instanceof GenericTagValueNode) {
             return null;
         }
-        $content = $phpDocTagNode->value->value;
+        $content = $dataProviderPhpDocTagNode->value->value;
         $match = Strings::match($content, self::METHOD_NAME_REGEX);
         if ($match === null) {
             return null;
@@ -160,14 +223,6 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
         }
         return $arrayTypes;
     }
-    private function getFunctionLikePhpDocInfo(Param $param) : PhpDocInfo
-    {
-        $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof FunctionLike) {
-            throw new ShouldNotHappenException();
-        }
-        return $this->phpDocInfoFactory->createFromNodeOrEmpty($parentNode);
-    }
     /**
      * @return Type[]
      */
@@ -189,5 +244,13 @@ final class PHPUnitDataProviderParamTypeInferer implements ParamTypeInfererInter
             }
         }
         return $paramOnPositionTypes;
+    }
+    private function resolveDataProviderPhpDocTagNode(ClassMethod $classMethod) : ?PhpDocTagNode
+    {
+        $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNode($classMethod);
+        if (!$classMethodPhpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+        return $classMethodPhpDocInfo->getByName('@dataProvider');
     }
 }

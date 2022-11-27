@@ -1,4 +1,4 @@
-# 402 Rules Overview
+# 403 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (30)
+- [TypeDeclaration](#typedeclaration) (31)
 
 - [Visibility](#visibility) (3)
 
@@ -8799,6 +8799,34 @@ Change private method param type to strict type, based on passed strict types
 -    private function resolve($value)
 +    private function resolve(int $value)
      {
+     }
+ }
+```
+
+<br>
+
+### AddParamTypeBasedOnPHPUnitDataProviderRector
+
+Adds param type declaration based on PHPUnit provider return type declaration
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeBasedOnPHPUnitDataProviderRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase
+
+ final class SomeTest extends TestCase
+ {
+     /**
+      * @dataProvider provideData()
+      */
+-    public function test($value)
++    public function test(string $value)
+     {
+     }
+
+     public function provideData()
+     {
+         yield ['name'];
      }
  }
 ```
