@@ -1,4 +1,4 @@
-# 404 Rules Overview
+# 405 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (32)
+- [TypeDeclaration](#typedeclaration) (33)
 
 - [Visibility](#visibility) (3)
 
@@ -8863,6 +8863,27 @@ return static function (RectorConfig $rectorConfig): void {
 -    public function process($name)
 +    public function process(string $name)
      {
+     }
+ }
+```
+
+<br>
+
+### AddParamTypeFromPropertyTypeRector
+
+Adds param type declaration based on property type the value is assigned to PHPUnit provider return type declaration
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeFromPropertyTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeFromPropertyTypeRector.php)
+
+```diff
+ final class SomeClass
+ {
+     private string $name;
+
+-    public function setName($name)
++    public function setName(string $name)
+     {
+         $this->name = $name;
      }
  }
 ```
