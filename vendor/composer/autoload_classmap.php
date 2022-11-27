@@ -2737,7 +2737,6 @@ return array(
     'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\FunctionLikeDocParamTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/FunctionLikeDocParamTypeInferer.php',
-    'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\GetterNodeParamTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/GetterNodeParamTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PropertyNodeParamTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/PropertyNodeParamTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\AllAssignNodePropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/AllAssignNodePropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DefaultValuePropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DefaultValuePropertyTypeInferer.php',

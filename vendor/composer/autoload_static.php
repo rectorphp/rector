@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit25a1a9bd5d0643f831b71cb5792932ea
+class ComposerStaticInit1b581d572b6ffaec063166a5f972b3a4
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2982,7 +2982,6 @@ class ComposerStaticInit25a1a9bd5d0643f831b71cb5792932ea
         'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\FunctionLikeDocParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/FunctionLikeDocParamTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\GetterNodeParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/GetterNodeParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PropertyNodeParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/PropertyNodeParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\AllAssignNodePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/AllAssignNodePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DefaultValuePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DefaultValuePropertyTypeInferer.php',
@@ -3037,9 +3036,9 @@ class ComposerStaticInit25a1a9bd5d0643f831b71cb5792932ea
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit25a1a9bd5d0643f831b71cb5792932ea::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit25a1a9bd5d0643f831b71cb5792932ea::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit25a1a9bd5d0643f831b71cb5792932ea::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1b581d572b6ffaec063166a5f972b3a4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1b581d572b6ffaec063166a5f972b3a4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1b581d572b6ffaec063166a5f972b3a4::$classMap;
 
         }, null, ClassLoader::class);
     }
