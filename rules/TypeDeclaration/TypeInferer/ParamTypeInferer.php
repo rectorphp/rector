@@ -8,8 +8,8 @@ use PhpParser\Node\Param;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\TypeDeclaration\Contract\TypeInferer\ParamTypeInfererInterface;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
+use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer\FunctionLikeDocParamTypeInferer;
 final class ParamTypeInferer
 {
     /**
@@ -18,40 +18,34 @@ final class ParamTypeInferer
      */
     private $genericClassStringTypeNormalizer;
     /**
-     * @var ParamTypeInfererInterface[]
      * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer\FunctionLikeDocParamTypeInferer
      */
-    private $paramTypeInferers;
+    private $functionLikeDocParamTypeInferer;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    /**
-     * @param ParamTypeInfererInterface[] $paramTypeInferers
-     */
-    public function __construct(GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, array $paramTypeInferers, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, FunctionLikeDocParamTypeInferer $functionLikeDocParamTypeInferer, NodeTypeResolver $nodeTypeResolver)
     {
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
-        $this->paramTypeInferers = $paramTypeInferers;
+        $this->functionLikeDocParamTypeInferer = $functionLikeDocParamTypeInferer;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
     public function inferParam(Param $param) : Type
     {
-        foreach ($this->paramTypeInferers as $paramTypeInferer) {
-            $paramType = $paramTypeInferer->inferParam($param);
-            if ($paramType instanceof MixedType) {
-                continue;
-            }
-            $inferedType = $this->genericClassStringTypeNormalizer->normalize($paramType);
-            if ($param->default instanceof Node) {
-                $paramDefaultType = $this->nodeTypeResolver->getType($param->default);
-                if (!$paramDefaultType instanceof $inferedType) {
-                    return new MixedType();
-                }
-            }
-            return $inferedType;
+        $paramType = $this->functionLikeDocParamTypeInferer->inferParam($param);
+        if ($paramType instanceof MixedType) {
+            return new MixedType();
         }
-        return new MixedType();
+        $inferedType = $this->genericClassStringTypeNormalizer->normalize($paramType);
+        if ($param->default instanceof Node) {
+            $paramDefaultType = $this->nodeTypeResolver->getType($param->default);
+            if (!$paramDefaultType instanceof $inferedType) {
+                return new MixedType();
+            }
+        }
+        return $inferedType;
     }
 }

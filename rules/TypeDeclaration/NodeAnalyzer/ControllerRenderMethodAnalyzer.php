@@ -33,33 +33,16 @@ final class ControllerRenderMethodAnalyzer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
     }
+    /**
+     * @api
+     */
     public function isRenderMethod(ClassMethod $classMethod) : bool
     {
-        // nette one?
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        if ($this->isNetteRenderMethod($classReflection, $classMethod)) {
-            return \true;
-        }
         return $this->isSymfonyRenderMethod($classReflection, $classMethod);
-    }
-    private function isNetteRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
-    {
-        if (!$classReflection->isSubclassOf('Nette\\Application\\UI\\Control')) {
-            return \false;
-        }
-        if (!$classMethod->isPublic()) {
-            return \false;
-        }
-        $classMethodName = $classMethod->name->toString();
-        foreach (['render', 'handle', 'action'] as $methodPrefix) {
-            if (\strncmp($classMethodName, $methodPrefix, \strlen($methodPrefix)) === 0) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function isSymfonyRenderMethod(ClassReflection $classReflection, ClassMethod $classMethod) : bool
     {

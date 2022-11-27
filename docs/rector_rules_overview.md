@@ -9152,30 +9152,13 @@ Change `@param` types to type declarations if not a BC-break
 - class: [`Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector`](../rules/TypeDeclaration/Rector/FunctionLike/ParamTypeDeclarationRector.php)
 
 ```diff
- abstract class VendorParentClass
+ final class SomeClass
  {
-     /**
-      * @param int $number
-      */
-     public function keep($number)
-     {
-     }
- }
-
- final class ChildClass extends VendorParentClass
- {
-     /**
-      * @param int $number
-      */
-     public function keep($number)
-     {
-     }
-
 -    /**
 -     * @param int $number
 -     */
--    public function change($number)
-+    public function change(int $number)
+-    public function run($number)
++    public function run(int $number)
      {
      }
  }

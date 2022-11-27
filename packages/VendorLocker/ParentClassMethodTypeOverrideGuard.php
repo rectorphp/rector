@@ -11,13 +11,11 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\Core\FileSystem\FilePathHelper;
-use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 final class ParentClassMethodTypeOverrideGuard
 {
     /**
@@ -25,16 +23,6 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
-     */
-    private $astResolver;
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
-     */
-    private $paramTypeInferer;
     /**
      * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
@@ -55,11 +43,9 @@ final class ParentClassMethodTypeOverrideGuard
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;
-    public function __construct(NodeNameResolver $nodeNameResolver, AstResolver $astResolver, ParamTypeInferer $paramTypeInferer, ReflectionResolver $reflectionResolver, TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper, FilePathHelper $filePathHelper)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, TypeComparator $typeComparator, StaticTypeMapper $staticTypeMapper, FilePathHelper $filePathHelper)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->astResolver = $astResolver;
-        $this->paramTypeInferer = $paramTypeInferer;
         $this->reflectionResolver = $reflectionResolver;
         $this->typeComparator = $typeComparator;
         $this->staticTypeMapper = $staticTypeMapper;
@@ -113,28 +99,6 @@ final class ParentClassMethodTypeOverrideGuard
     public function hasParentClassMethod(ClassMethod $classMethod) : bool
     {
         return $this->getParentClassMethod($classMethod) instanceof MethodReflection;
-    }
-    public function hasParentClassMethodDifferentType(ClassMethod $classMethod, int $position, Type $currentType) : bool
-    {
-        if ($classMethod->isPrivate()) {
-            return \false;
-        }
-        $methodReflection = $this->getParentClassMethod($classMethod);
-        if (!$methodReflection instanceof MethodReflection) {
-            return \false;
-        }
-        $classMethod = $this->astResolver->resolveClassMethodFromMethodReflection($methodReflection);
-        if (!$classMethod instanceof ClassMethod) {
-            return \false;
-        }
-        if ($classMethod->isPrivate()) {
-            return \false;
-        }
-        if (!isset($classMethod->params[$position])) {
-            return \false;
-        }
-        $inferedType = $this->paramTypeInferer->inferParam($classMethod->params[$position]);
-        return \get_class($inferedType) !== \get_class($currentType);
     }
     public function getParentClassMethod(ClassMethod $classMethod) : ?MethodReflection
     {

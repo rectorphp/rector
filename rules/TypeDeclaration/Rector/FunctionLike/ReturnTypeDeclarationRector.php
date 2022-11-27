@@ -28,7 +28,7 @@ use Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInfererTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
-use Rector\VendorLocker\VendorLockResolver;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,6 +36,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://wiki.php.net/rfc/scalar_type_hints_v5
  *
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector\ReturnTypeDeclarationRectorTest
+ *
+ * @deprecated Moving doc types to type declarations is dangerous. Use specific strict types instead.
+ * This rule will be split info many small ones.
  */
 final class ReturnTypeDeclarationRector extends AbstractRector implements MinPhpVersionInterface
 {
@@ -61,11 +64,6 @@ final class ReturnTypeDeclarationRector extends AbstractRector implements MinPhp
     private $classMethodReturnTypeOverrideGuard;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\VendorLockResolver
-     */
-    private $vendorLockResolver;
-    /**
-     * @readonly
      * @var \Rector\TypeDeclaration\PhpParserTypeAnalyzer
      */
     private $phpParserTypeAnalyzer;
@@ -79,16 +77,21 @@ final class ReturnTypeDeclarationRector extends AbstractRector implements MinPhp
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(ReturnTypeInferer $returnTypeInferer, ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker, NonInformativeReturnTagRemover $nonInformativeReturnTagRemover, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, VendorLockResolver $vendorLockResolver, PhpParserTypeAnalyzer $phpParserTypeAnalyzer, ObjectTypeComparator $objectTypeComparator, PhpVersionProvider $phpVersionProvider)
+    /**
+     * @readonly
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver
+     */
+    private $classMethodReturnVendorLockResolver;
+    public function __construct(ReturnTypeInferer $returnTypeInferer, ReturnTypeAlreadyAddedChecker $returnTypeAlreadyAddedChecker, NonInformativeReturnTagRemover $nonInformativeReturnTagRemover, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, PhpParserTypeAnalyzer $phpParserTypeAnalyzer, ObjectTypeComparator $objectTypeComparator, PhpVersionProvider $phpVersionProvider, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver)
     {
         $this->returnTypeInferer = $returnTypeInferer;
         $this->returnTypeAlreadyAddedChecker = $returnTypeAlreadyAddedChecker;
         $this->nonInformativeReturnTagRemover = $nonInformativeReturnTagRemover;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
-        $this->vendorLockResolver = $vendorLockResolver;
         $this->phpParserTypeAnalyzer = $phpParserTypeAnalyzer;
         $this->objectTypeComparator = $objectTypeComparator;
         $this->phpVersionProvider = $phpVersionProvider;
+        $this->classMethodReturnVendorLockResolver = $classMethodReturnVendorLockResolver;
     }
     /**
      * @return array<class-string<Node>>
@@ -180,7 +183,7 @@ CODE_SAMPLE
         if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod)) {
             return \true;
         }
-        return $this->vendorLockResolver->isReturnChangeVendorLockedIn($classMethod);
+        return $this->classMethodReturnVendorLockResolver->isVendorLocked($classMethod);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
@@ -201,7 +204,7 @@ CODE_SAMPLE
         if ($functionLike->returnType === null) {
             return \false;
         }
-        if ($functionLike instanceof ClassMethod && $this->vendorLockResolver->isReturnChangeVendorLockedIn($functionLike)) {
+        if ($functionLike instanceof ClassMethod && $this->classMethodReturnVendorLockResolver->isVendorLocked($functionLike)) {
             return \true;
         }
         $currentType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);

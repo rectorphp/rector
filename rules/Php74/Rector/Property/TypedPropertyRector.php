@@ -23,7 +23,7 @@ use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
-use Rector\VendorLocker\VendorLockResolver;
+use Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,6 +32,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\TypedPropertyRectorTest
  * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ImportedTest
+ *
+ * @deprecated Moving doc types to type declarations is dangerous. Use specific strict types instead.
+ * This rule will be split info many small ones.
  */
 final class TypedPropertyRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
@@ -57,11 +60,6 @@ final class TypedPropertyRector extends AbstractScopeAwareRector implements Allo
     private $varDocPropertyTypeInferer;
     /**
      * @readonly
-     * @var \Rector\VendorLocker\VendorLockResolver
-     */
-    private $vendorLockResolver;
-    /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
@@ -85,15 +83,20 @@ final class TypedPropertyRector extends AbstractScopeAwareRector implements Allo
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
-    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, VendorLockResolver $vendorLockResolver, VarTagRemover $varTagRemover, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ObjectTypeAnalyzer $objectTypeAnalyzer, MakePropertyTypedGuard $makePropertyTypedGuard, ConstructorAssignDetector $constructorAssignDetector)
+    /**
+     * @readonly
+     * @var \Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver
+     */
+    private $propertyTypeVendorLockResolver;
+    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, VarTagRemover $varTagRemover, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ObjectTypeAnalyzer $objectTypeAnalyzer, MakePropertyTypedGuard $makePropertyTypedGuard, ConstructorAssignDetector $constructorAssignDetector, PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver)
     {
         $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
-        $this->vendorLockResolver = $vendorLockResolver;
         $this->varTagRemover = $varTagRemover;
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->objectTypeAnalyzer = $objectTypeAnalyzer;
         $this->makePropertyTypedGuard = $makePropertyTypedGuard;
         $this->constructorAssignDetector = $constructorAssignDetector;
+        $this->propertyTypeVendorLockResolver = $propertyTypeVendorLockResolver;
     }
     public function configure(array $configuration) : void
     {
@@ -173,12 +176,12 @@ CODE_SAMPLE
         }
         // false positive
         if (!$node instanceof Name) {
-            return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
+            return $this->propertyTypeVendorLockResolver->isVendorLocked($property);
         }
         if ($this->isName($node, 'mixed')) {
             return \true;
         }
-        return $this->vendorLockResolver->isPropertyTypeChangeVendorLockedIn($property);
+        return $this->propertyTypeVendorLockResolver->isVendorLocked($property);
     }
     private function addDefaultValueNullForNullableType(Property $property, Type $propertyType) : void
     {

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9a055792afbc031cf4fb8034f35e29e2
+class ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2907,7 +2907,6 @@ class ComposerStaticInit9a055792afbc031cf4fb8034f35e29e2
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\PropertyDefaultAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/PropertyDefaultAssignDetector.php',
         'Rector\\TypeDeclaration\\Contract\\PHPStan\\TypeWithClassTypeSpecifierInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/PHPStan/TypeWithClassTypeSpecifierInterface.php',
         'Rector\\TypeDeclaration\\Contract\\PriorityAwareInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/PriorityAwareInterface.php',
-        'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ParamTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ParamTypeInfererInterface.php',
         'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ReturnTypeInfererInterface.php',
         'Rector\\TypeDeclaration\\Exception\\ConflictingPriorityException' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Exception/ConflictingPriorityException.php',
         'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
@@ -2932,7 +2931,6 @@ class ComposerStaticInit9a055792afbc031cf4fb8034f35e29e2
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnTypeAnalyzer\\StrictScalarReturnTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnTypeAnalyzer/StrictScalarReturnTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\DetailedTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/DetailedTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/PropertyTypeDecorator.php',
-        'Rector\\TypeDeclaration\\NodeTypeAnalyzer\\TraitTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeTypeAnalyzer/TraitTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/ObjectTypeSpecifier.php',
         'Rector\\TypeDeclaration\\PHPStan\\TypeSpecifier\\SameNamespacedTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/TypeSpecifier/SameNamespacedTypeSpecifier.php',
         'Rector\\TypeDeclaration\\PHPStan\\TypeSpecifier\\SelfStaticParentTypeSpecifier' => __DIR__ . '/../..' . '/rules/TypeDeclaration/PHPStan/TypeSpecifier/SelfStaticParentTypeSpecifier.php',
@@ -3008,7 +3006,6 @@ class ComposerStaticInit9a055792afbc031cf4fb8034f35e29e2
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\PropertyTypeVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/PropertyTypeVendorLockResolver.php',
         'Rector\\VendorLocker\\ParentClassMethodTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/ParentClassMethodTypeOverrideGuard.php',
-        'Rector\\VendorLocker\\VendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/VendorLockResolver.php',
         'Rector\\VersionBonding\\Contract\\MinPhpVersionInterface' => __DIR__ . '/../..' . '/packages/VersionBonding/Contract/MinPhpVersionInterface.php',
         'Rector\\VersionBonding\\PhpVersionedFilter' => __DIR__ . '/../..' . '/packages/VersionBonding/PhpVersionedFilter.php',
         'Rector\\Visibility\\Rector\\ClassConst\\ChangeConstantVisibilityRector' => __DIR__ . '/../..' . '/rules/Visibility/Rector/ClassConst/ChangeConstantVisibilityRector.php',
@@ -3036,9 +3033,9 @@ class ComposerStaticInit9a055792afbc031cf4fb8034f35e29e2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9a055792afbc031cf4fb8034f35e29e2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9a055792afbc031cf4fb8034f35e29e2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9a055792afbc031cf4fb8034f35e29e2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143::$classMap;
 
         }, null, ClassLoader::class);
     }
