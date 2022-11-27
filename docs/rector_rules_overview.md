@@ -1,4 +1,4 @@
-# 403 Rules Overview
+# 404 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (31)
+- [TypeDeclaration](#typedeclaration) (32)
 
 - [Visibility](#visibility) (3)
 
@@ -8862,6 +8862,29 @@ return static function (RectorConfig $rectorConfig): void {
  {
 -    public function process($name)
 +    public function process(string $name)
+     {
+     }
+ }
+```
+
+<br>
+
+### AddParamTypeSplFixedArrayRector
+
+Add exact fixed array type in known cases
+
+- class: [`Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector`](../rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php)
+
+```diff
++use PhpCsFixer\Tokenizer\Token;
+ use PhpCsFixer\Tokenizer\Tokens;
+
+ class SomeClass
+ {
++    /**
++     * @param Tokens<Token>
++     */
+     public function run(Tokens $tokens)
      {
      }
  }

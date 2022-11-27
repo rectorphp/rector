@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd188a1b0ebfa55c965020711b53facfb
+class ComposerStaticInit2e612febddb637cfcb0d9394c970d0b9
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2960,6 +2960,7 @@ class ComposerStaticInitd188a1b0ebfa55c965020711b53facfb
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictNewArrayRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNewArrayRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php',
+        'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/ParamTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\ReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/ReturnTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\Param\\ParamTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Param/ParamTypeFromStrictTypedPropertyRector.php',
@@ -2983,7 +2984,6 @@ class ComposerStaticInitd188a1b0ebfa55c965020711b53facfb
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\FunctionLikeDocParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/FunctionLikeDocParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\GetterNodeParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/GetterNodeParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\PropertyNodeParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/PropertyNodeParamTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\SplFixedArrayParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/SplFixedArrayParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\AllAssignNodePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/AllAssignNodePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DefaultValuePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DefaultValuePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterTypeDeclarationPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterTypeDeclarationPropertyTypeInferer.php',
@@ -3037,9 +3037,9 @@ class ComposerStaticInitd188a1b0ebfa55c965020711b53facfb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd188a1b0ebfa55c965020711b53facfb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd188a1b0ebfa55c965020711b53facfb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd188a1b0ebfa55c965020711b53facfb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2e612febddb637cfcb0d9394c970d0b9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2e612febddb637cfcb0d9394c970d0b9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2e612febddb637cfcb0d9394c970d0b9::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -9,6 +9,7 @@ use Rector\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeBasedOnPHPUnitDataProviderRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnRector;
@@ -22,6 +23,7 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRect
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNewArrayRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedPropertyRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\AddParamTypeSplFixedArrayRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\Rector\Param\ParamTypeFromStrictTypedPropertyRector;
