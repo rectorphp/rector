@@ -33,9 +33,8 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\TypeDeclaration\Contract\TypeInferer\ReturnTypeInfererInterface;
-use Rector\TypeDeclaration\Sorter\PriorityAwareSorter;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInfererTypeInferer;
 use Rector\TypeDeclaration\TypeNormalizer;
 /**
  * @deprecated
@@ -44,14 +43,15 @@ use Rector\TypeDeclaration\TypeNormalizer;
 final class ReturnTypeInferer
 {
     /**
-     * @var ReturnTypeInfererInterface[]
-     */
-    private $returnTypeInferers = [];
-    /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeNormalizer
      */
     private $typeNormalizer;
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnedNodesReturnTypeInfererTypeInferer
+     */
+    private $returnedNodesReturnTypeInfererTypeInferer;
     /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer
@@ -87,12 +87,10 @@ final class ReturnTypeInferer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @param ReturnTypeInfererInterface[] $returnTypeInferers
-     */
-    public function __construct(array $returnTypeInferers, TypeNormalizer $typeNormalizer, PriorityAwareSorter $priorityAwareSorter, GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, PhpVersionProvider $phpVersionProvider, ParameterProvider $parameterProvider, BetterNodeFinder $betterNodeFinder, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(TypeNormalizer $typeNormalizer, ReturnedNodesReturnTypeInfererTypeInferer $returnedNodesReturnTypeInfererTypeInferer, GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, PhpVersionProvider $phpVersionProvider, ParameterProvider $parameterProvider, BetterNodeFinder $betterNodeFinder, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
     {
         $this->typeNormalizer = $typeNormalizer;
+        $this->returnedNodesReturnTypeInfererTypeInferer = $returnedNodesReturnTypeInfererTypeInferer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->parameterProvider = $parameterProvider;
@@ -100,7 +98,6 @@ final class ReturnTypeInferer
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->returnTypeInferers = $priorityAwareSorter->sort($returnTypeInferers);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
@@ -112,29 +109,26 @@ final class ReturnTypeInferer
         if ($this->isAutoImportWithFullyQualifiedReturn($isAutoImport, $functionLike)) {
             return new MixedType();
         }
-        foreach ($this->returnTypeInferers as $returnTypeInferer) {
-            $originalType = $returnTypeInferer->inferFunctionLike($functionLike);
-            if ($originalType instanceof MixedType) {
-                continue;
-            }
-            $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
-            // in case of void, check return type of children methods
-            if ($type instanceof MixedType) {
-                continue;
-            }
-            $type = $this->verifyStaticType($type, $isSupportedStaticReturnType);
-            if (!$type instanceof Type) {
-                continue;
-            }
-            $type = $this->verifyThisType($type, $functionLike);
-            if (!$type instanceof Type) {
-                continue;
-            }
-            // normalize ConstStringType to ClassStringType
-            $resolvedType = $this->genericClassStringTypeNormalizer->normalize($type);
-            return $this->resolveTypeWithVoidHandling($functionLike, $resolvedType);
+        $originalType = $this->returnedNodesReturnTypeInfererTypeInferer->inferFunctionLike($functionLike);
+        if ($originalType instanceof MixedType) {
+            return new MixedType();
         }
-        return new MixedType();
+        $type = $this->typeNormalizer->normalizeArrayTypeAndArrayNever($originalType);
+        // in case of void, check return type of children methods
+        if ($type instanceof MixedType) {
+            return new MixedType();
+        }
+        $type = $this->verifyStaticType($type, $isSupportedStaticReturnType);
+        if (!$type instanceof Type) {
+            return new MixedType();
+        }
+        $type = $this->verifyThisType($type, $functionLike);
+        if (!$type instanceof Type) {
+            return new MixedType();
+        }
+        // normalize ConstStringType to ClassStringType
+        $resolvedType = $this->genericClassStringTypeNormalizer->normalize($type);
+        return $this->resolveTypeWithVoidHandling($functionLike, $resolvedType);
     }
     public function verifyStaticType(Type $type, bool $isSupportedStaticReturnType) : ?Type
     {

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c
+class ComposerStaticInitcdcf77b3388cbeab2cfc8d24a0fddc50
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2905,9 +2905,6 @@ class ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\NullTypeAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/NullTypeAssignDetector.php',
         'Rector\\TypeDeclaration\\AlreadyAssignDetector\\PropertyDefaultAssignDetector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/AlreadyAssignDetector/PropertyDefaultAssignDetector.php',
         'Rector\\TypeDeclaration\\Contract\\PHPStan\\TypeWithClassTypeSpecifierInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/PHPStan/TypeWithClassTypeSpecifierInterface.php',
-        'Rector\\TypeDeclaration\\Contract\\PriorityAwareInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/PriorityAwareInterface.php',
-        'Rector\\TypeDeclaration\\Contract\\TypeInferer\\ReturnTypeInfererInterface' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Contract/TypeInferer/ReturnTypeInfererInterface.php',
-        'Rector\\TypeDeclaration\\Exception\\ConflictingPriorityException' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Exception/ConflictingPriorityException.php',
         'Rector\\TypeDeclaration\\FunctionLikeReturnTypeResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/FunctionLikeReturnTypeResolver.php',
         'Rector\\TypeDeclaration\\Guard\\PhpDocNestedAnnotationGuard' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Guard/PhpDocNestedAnnotationGuard.php',
         'Rector\\TypeDeclaration\\Guard\\PropertyTypeOverrideGuard' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Guard/PropertyTypeOverrideGuard.php',
@@ -2969,7 +2966,6 @@ class ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\VarAnnotationIncorrectNullableRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php',
-        'Rector\\TypeDeclaration\\Sorter\\PriorityAwareSorter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Sorter/PriorityAwareSorter.php',
         'Rector\\TypeDeclaration\\TypeAlreadyAddedChecker\\ReturnTypeAlreadyAddedChecker' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAlreadyAddedChecker/ReturnTypeAlreadyAddedChecker.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
@@ -3026,9 +3022,9 @@ class ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcdcf77b3388cbeab2cfc8d24a0fddc50::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcdcf77b3388cbeab2cfc8d24a0fddc50::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcdcf77b3388cbeab2cfc8d24a0fddc50::$classMap;
 
         }, null, ClassLoader::class);
     }
