@@ -4,54 +4,12 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\CallableType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover;
-use Rector\TypeDeclaration\TypeInferer\ParamTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-/**
- * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector\AddArrayParamDocTypeRectorTest
- */
 final class AddArrayParamDocTypeRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\ParamTypeInferer
-     */
-    private $paramTypeInferer;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-    /**
-     * @readonly
-     * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
-     */
-    private $paramTagRemover;
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
-     */
-    private $paramAnalyzer;
-    public function __construct(ParamTypeInferer $paramTypeInferer, PhpDocTypeChanger $phpDocTypeChanger, ParamTagRemover $paramTagRemover, ParamAnalyzer $paramAnalyzer)
-    {
-        $this->paramTypeInferer = $paramTypeInferer;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->paramTagRemover = $paramTagRemover;
-        $this->paramAnalyzer = $paramAnalyzer;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Adds @param annotation to array parameters inferred from the rest of the code', [new CodeSample(<<<'CODE_SAMPLE'
@@ -99,60 +57,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->getParams() === []) {
-            return null;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        foreach ($node->getParams() as $param) {
-            if ($this->shouldSkipParam($param)) {
-                continue;
-            }
-            $paramType = $this->paramTypeInferer->inferParam($param);
-            if ($paramType instanceof MixedType) {
-                continue;
-            }
-            if ($paramType instanceof CallableType) {
-                continue;
-            }
-            if ($this->paramAnalyzer->isNullable($param) && !$paramType instanceof UnionType) {
-                $paramType = new UnionType([$paramType, new NullType()]);
-            }
-            $paramName = $this->getName($param);
-            $this->phpDocTypeChanger->changeParamType($phpDocInfo, $paramType, $param, $paramName);
-        }
-        if ($phpDocInfo->hasChanged()) {
-            $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
-            return $node;
-        }
+        \trigger_error('The AddArrayParamDocTypeRector rule is deprecated, as it works with doc block types that are not reliable and might infer incorrect types');
+        \sleep(3);
         return null;
-    }
-    private function shouldSkipParam(Param $param) : bool
-    {
-        // type missing at all
-        if ($param->type === null) {
-            return \true;
-        }
-        // not an array type
-        $paramType = $this->nodeTypeResolver->getType($param->type);
-        // weird case for maybe interface
-        if ($paramType->isIterable()->maybe() && $paramType instanceof ObjectType) {
-            return \true;
-        }
-        $isArrayable = $paramType->isIterable()->yes() || $paramType->isArray()->yes() || ($paramType->isIterable()->maybe() || $paramType->isArray()->maybe());
-        if (!$isArrayable) {
-            return \true;
-        }
-        return $this->isArrayExplicitMixed($paramType);
-    }
-    private function isArrayExplicitMixed(Type $type) : bool
-    {
-        if (!$type instanceof ArrayType) {
-            return \false;
-        }
-        $iterableValueType = $type->getIterableValueType();
-        if (!$iterableValueType instanceof MixedType) {
-            return \false;
-        }
-        return $iterableValueType->isExplicitMixed();
     }
 }

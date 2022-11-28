@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143
+class ComposerStaticInitdeabdb668d51c2a3139a808880e68bd4
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2736,7 +2736,6 @@ class ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143
         'Rector\\Symfony\\Rector\\ClassMethod\\RemoveDefaultGetBlockPrefixRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\RemoveServiceFromSensioRouteRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\RemoveUnusedRequestParamRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveUnusedRequestParamRector.php',
-        'Rector\\Symfony\\Rector\\ClassMethod\\RenderMethodParamToTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\ReplaceSensioRouteAnnotationWithSymfonyRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\ResponseReturnTypeControllerActionRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\RouteCollectionBuilderToRoutingConfiguratorRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RouteCollectionBuilderToRoutingConfiguratorRector.php',
@@ -2919,7 +2918,6 @@ class ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143
         'Rector\\TypeDeclaration\\NodeAnalyzer\\CallerParamMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/CallerParamMatcher.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
-        'Rector\\TypeDeclaration\\NodeAnalyzer\\ControllerRenderMethodAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ControllerRenderMethodAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\PHPUnitDataProviderResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/PHPUnitDataProviderResolver.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ParamAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ParamAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnAnalyzer.php',
@@ -2979,8 +2977,6 @@ class ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143
         'Rector\\TypeDeclaration\\TypeAnalyzer\\IterableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/IterableTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\ObjectTypeComparator' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/ObjectTypeComparator.php',
         'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\ParamTypeInferer\\FunctionLikeDocParamTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ParamTypeInferer/FunctionLikeDocParamTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\AllAssignNodePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/AllAssignNodePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DefaultValuePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DefaultValuePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterTypeDeclarationPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterTypeDeclarationPropertyTypeInferer.php',
@@ -3033,9 +3029,9 @@ class ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit52de9b4294aee6ed7dc3a6bd6f0e5143::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdeabdb668d51c2a3139a808880e68bd4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdeabdb668d51c2a3139a808880e68bd4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdeabdb668d51c2a3139a808880e68bd4::$classMap;
 
         }, null, ClassLoader::class);
     }

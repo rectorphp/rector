@@ -135,7 +135,7 @@ CODE_SAMPLE
         $propertyStaticTypes = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod, function (Node $node) use($paramName, &$propertyStaticTypes) : ?int {
             if ($node instanceof Class_ || $node instanceof Function_) {
-                // skip anonymous class and closures
+                // skip anonymous classes and inner function
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof Assign) {
