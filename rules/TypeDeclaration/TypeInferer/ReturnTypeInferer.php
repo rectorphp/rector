@@ -107,23 +107,12 @@ final class ReturnTypeInferer
      */
     public function inferFunctionLike($functionLike) : Type
     {
-        return $this->inferFunctionLikeWithExcludedInferers($functionLike, []);
-    }
-    /**
-     * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
-     */
-    public function inferFunctionLikeWithExcludedInferers($functionLike, array $excludedInferers) : Type
-    {
         $isSupportedStaticReturnType = $this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE);
         $isAutoImport = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
         if ($this->isAutoImportWithFullyQualifiedReturn($isAutoImport, $functionLike)) {
             return new MixedType();
         }
         foreach ($this->returnTypeInferers as $returnTypeInferer) {
-            if ($this->shouldSkipExcludedTypeInferer($returnTypeInferer, $excludedInferers)) {
-                continue;
-            }
             $originalType = $returnTypeInferer->inferFunctionLike($functionLike);
             if ($originalType instanceof MixedType) {
                 continue;
@@ -264,18 +253,6 @@ final class ReturnTypeInferer
             return \false;
         }
         return $type->getClassName() === ObjectReference::STATIC;
-    }
-    /**
-     * @param array<class-string<ReturnTypeInfererInterface>> $excludedInferers
-     */
-    private function shouldSkipExcludedTypeInferer(ReturnTypeInfererInterface $returnTypeInferer, array $excludedInferers) : bool
-    {
-        foreach ($excludedInferers as $excludedInferer) {
-            if (\is_a($returnTypeInferer, $excludedInferer)) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function resolveUnionStaticTypes(UnionType $unionType, bool $isSupportedStaticReturnType) : ?\PHPStan\Type\UnionType
     {

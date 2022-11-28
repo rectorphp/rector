@@ -26,7 +26,6 @@ use Rector\TypeDeclaration\PhpParserTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAlreadyAddedChecker\ReturnTypeAlreadyAddedChecker;
 use Rector\TypeDeclaration\TypeAnalyzer\ObjectTypeComparator;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInfererTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -134,7 +133,7 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod && $this->shouldSkipClassMethod($node)) {
             return null;
         }
-        $inferedReturnType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers($node, [ReturnTypeDeclarationReturnTypeInfererTypeInferer::class]);
+        $inferedReturnType = $this->returnTypeInferer->inferFunctionLike($node);
         if ($inferedReturnType instanceof MixedType || $inferedReturnType instanceof NonExistingObjectType) {
             return null;
         }

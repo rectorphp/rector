@@ -2738,7 +2738,6 @@ return array(
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterTypeDeclarationPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterTypeDeclarationPropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\TrustedClassMethodPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/TrustedClassMethodPropertyTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer.php',
-    'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnTypeDeclarationReturnTypeInfererTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer/ReturnTypeDeclarationReturnTypeInfererTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnedNodesReturnTypeInfererTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInfererTypeInferer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\SilentVoidResolver' => $baseDir . '/rules/TypeDeclaration/TypeInferer/SilentVoidResolver.php',
     'Rector\\TypeDeclaration\\TypeInferer\\SplArrayFixedTypeNarrower' => $baseDir . '/rules/TypeDeclaration/TypeInferer/SplArrayFixedTypeNarrower.php',

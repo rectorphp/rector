@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7d40897215713b66997208ae9db966ae
+class ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2983,7 +2983,6 @@ class ComposerStaticInit7d40897215713b66997208ae9db966ae
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterTypeDeclarationPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterTypeDeclarationPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\TrustedClassMethodPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/TrustedClassMethodPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnTypeDeclarationReturnTypeInfererTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer/ReturnTypeDeclarationReturnTypeInfererTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnedNodesReturnTypeInfererTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInfererTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\SilentVoidResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/SilentVoidResolver.php',
         'Rector\\TypeDeclaration\\TypeInferer\\SplArrayFixedTypeNarrower' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/SplArrayFixedTypeNarrower.php',
@@ -3027,9 +3026,9 @@ class ComposerStaticInit7d40897215713b66997208ae9db966ae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7d40897215713b66997208ae9db966ae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7d40897215713b66997208ae9db966ae::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7d40897215713b66997208ae9db966ae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf9d7dd9e3f930d3620242b64c548337c::$classMap;
 
         }, null, ClassLoader::class);
     }

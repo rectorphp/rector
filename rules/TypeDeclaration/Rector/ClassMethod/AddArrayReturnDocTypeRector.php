@@ -31,7 +31,6 @@ use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\AdvancedArrayAnalyzer;
 use Rector\TypeDeclaration\TypeAnalyzer\IterableTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
-use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer\ReturnTypeDeclarationReturnTypeInfererTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -157,7 +156,7 @@ CODE_SAMPLE
         if ($this->shouldSkip($node, $phpDocInfo)) {
             return null;
         }
-        $inferredReturnType = $this->returnTypeInferer->inferFunctionLikeWithExcludedInferers($node, [ReturnTypeDeclarationReturnTypeInfererTypeInferer::class]);
+        $inferredReturnType = $this->returnTypeInferer->inferFunctionLike($node);
         $inferredReturnType = $this->normalizeTypeToRespectArrayScalarType->normalizeToArray($inferredReturnType, $node->returnType);
         // generalize false/true type to bool, as mostly default value but accepts both
         $inferredReturnType = $this->typeNormalizer->generalizeConstantBoolTypes($inferredReturnType);
