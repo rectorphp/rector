@@ -106,13 +106,13 @@ CODE_SAMPLE
         }
         // filter out variable usages that are part of nested property fetch, or change variable
         $variableUsages = $this->filterOutReferencedVariableUsages($variableUsages);
-        if ($this->isOverridenWithConcatAssign($variableUsages)) {
+        if ($variableUsages === []) {
+            return null;
+        }
+        if ($this->isOverridenWithAssign($variableUsages)) {
             return null;
         }
         if (!$variableToPropertyAssign instanceof PropertyFetchToVariableAssign) {
-            return null;
-        }
-        if ($variableUsages === []) {
             return null;
         }
         /** @var int $currentStmtKey */
@@ -212,14 +212,15 @@ CODE_SAMPLE
     /**
      * @param Variable[] $variables
      */
-    private function isOverridenWithConcatAssign(array $variables) : bool
+    private function isOverridenWithAssign(array $variables) : bool
     {
         foreach ($variables as $variable) {
             $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parentNode instanceof Concat) {
-                continue;
+            if ($parentNode instanceof Concat && $parentNode->var === $variable) {
+                return \true;
             }
-            if ($parentNode->var === $variable) {
+            // variable is overriden
+            if ($parentNode instanceof Assign && $parentNode->var === $variable) {
                 return \true;
             }
         }
