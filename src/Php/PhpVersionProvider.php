@@ -87,9 +87,10 @@ final class PhpVersionProvider
         $this->throwInvalidTypeException($phpVersionFeatures);
     }
     /**
+     * @return never
      * @param mixed $phpVersionFeatures
      */
-    private function throwInvalidTypeException($phpVersionFeatures) : void
+    private function throwInvalidTypeException($phpVersionFeatures)
     {
         $errorMessage = \sprintf('Parameter "%s::%s" must be int, "%s" given.%sUse constant from "%s" to provide it, e.g. "%s::%s"', Option::class, 'PHP_VERSION_FEATURES', (string) $phpVersionFeatures, \PHP_EOL, PhpVersion::class, PhpVersion::class, 'PHP_80');
         throw new InvalidConfigurationException($errorMessage);

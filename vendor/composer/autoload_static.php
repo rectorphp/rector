@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit831ceb98372a007e65852de0c9535277
+class ComposerStaticInit7d40897215713b66997208ae9db966ae
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2958,6 +2958,7 @@ class ComposerStaticInit831ceb98372a007e65852de0c9535277
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',
+        'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddReturnTypeDeclarationFromYieldsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddReturnTypeDeclarationFromYieldsRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\ParamTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/ParamTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\ReturnTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/ReturnTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\Param\\ParamTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Param/ParamTypeFromStrictTypedPropertyRector.php',
@@ -2984,7 +2985,6 @@ class ComposerStaticInit831ceb98372a007e65852de0c9535277
         'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnTypeDeclarationReturnTypeInfererTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer/ReturnTypeDeclarationReturnTypeInfererTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnedNodesReturnTypeInfererTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInfererTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\YieldNodesReturnTypeInfererTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer/YieldNodesReturnTypeInfererTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\SilentVoidResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/SilentVoidResolver.php',
         'Rector\\TypeDeclaration\\TypeInferer\\SplArrayFixedTypeNarrower' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/SplArrayFixedTypeNarrower.php',
         'Rector\\TypeDeclaration\\TypeInferer\\VarDocPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/VarDocPropertyTypeInferer.php',
@@ -3027,9 +3027,9 @@ class ComposerStaticInit831ceb98372a007e65852de0c9535277
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit831ceb98372a007e65852de0c9535277::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit831ceb98372a007e65852de0c9535277::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit831ceb98372a007e65852de0c9535277::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7d40897215713b66997208ae9db966ae::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7d40897215713b66997208ae9db966ae::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7d40897215713b66997208ae9db966ae::$classMap;
 
         }, null, ClassLoader::class);
     }
