@@ -116,7 +116,7 @@ CODE_SAMPLE
         if ($attributeGroups === []) {
             return null;
         }
-        $node->attrGroups = $attributeGroups;
+        $node->attrGroups = \array_merge($node->attrGroups, $attributeGroups);
         $this->completeExtraUseImports($attributeGroups);
         return $node;
     }
