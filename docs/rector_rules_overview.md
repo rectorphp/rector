@@ -1,4 +1,4 @@
-# 405 Rules Overview
+# 406 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (33)
+- [TypeDeclaration](#typedeclaration) (34)
 
 - [Visibility](#visibility) (3)
 
@@ -8965,6 +8965,28 @@ Add missing return type declaration based on parent class method
 -    public function execute()
 +    public function execute(): int
      {
+     }
+ }
+```
+
+<br>
+
+### AddReturnTypeDeclarationFromYieldsRector
+
+Add return type declarations from yields
+
+- class: [`Rector\TypeDeclaration\Rector\FunctionLike\AddReturnTypeDeclarationFromYieldsRector`](../rules/TypeDeclaration/Rector/FunctionLike/AddReturnTypeDeclarationFromYieldsRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function provide()
++    /**
++     * @return Iterator<int>
++     */
++    public function provide(): Iterator
+     {
+         yield 1;
      }
  }
 ```
