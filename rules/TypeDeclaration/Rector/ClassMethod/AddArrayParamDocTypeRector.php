@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
+use RectorPrefix202211\Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -13,6 +14,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class AddArrayParamDocTypeRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     */
+    private $symfonyStyle;
+    public function __construct(SymfonyStyle $symfonyStyle)
+    {
+        $this->symfonyStyle = $symfonyStyle;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Adds @param annotation to array parameters inferred from the rest of the code', [new CodeSample(<<<'CODE_SAMPLE'
@@ -60,8 +70,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        \trigger_error('The AddArrayParamDocTypeRector rule is deprecated, as it works with doc block types that are not reliable and might infer incorrect types', \E_USER_ERROR);
-        \sleep(3);
+        $this->symfonyStyle->error('The AddArrayParamDocTypeRector rule is deprecated, as it works with doc block types that are not reliable and might infer incorrect types');
+        \sleep(5);
         return null;
     }
 }

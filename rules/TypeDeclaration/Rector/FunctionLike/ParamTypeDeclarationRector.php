@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
+use RectorPrefix202211\Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -15,6 +16,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ParamTypeDeclarationRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
+     */
+    private $symfonyStyle;
+    public function __construct(SymfonyStyle $symfonyStyle)
+    {
+        $this->symfonyStyle = $symfonyStyle;
+    }
     /**
      * @return array<class-string<Node>>
      */
@@ -51,8 +61,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        \trigger_error('Use specific rules to infer params instead. This rule will was split info many small ones.', \E_USER_ERROR);
-        \sleep(3);
+        $this->symfonyStyle->error('Use specific rules to infer params instead. This rule will was split info many small ones.');
+        \sleep(5);
         return null;
     }
 }
