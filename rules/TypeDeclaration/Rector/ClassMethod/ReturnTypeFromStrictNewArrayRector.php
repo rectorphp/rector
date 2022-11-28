@@ -26,6 +26,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -44,10 +45,16 @@ final class ReturnTypeFromStrictNewArrayRector extends AbstractRector implements
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, TypeComparator $typeComparator)
+    /**
+     * @readonly
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
+     */
+    private $classMethodReturnTypeOverrideGuard;
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, TypeComparator $typeComparator, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->typeComparator = $typeComparator;
+        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -87,7 +94,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->returnType !== null) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
         // 1. is variable instantiated with array
@@ -134,6 +141,16 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersion::PHP_70;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function shouldSkip($node) : bool
+    {
+        if ($node->returnType !== null) {
+            return \true;
+        }
+        return $node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node);
     }
     private function changeReturnType(Node $node, Type $exprType) : void
     {

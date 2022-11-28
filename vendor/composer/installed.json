@@ -2278,17 +2278,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.1.7",
-            "version_normalized": "6.1.7.0",
+            "version": "v6.1.8",
+            "version_normalized": "6.1.8.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "a1282bd0c096e0bdb8800b104177e2ce404d8815"
+                "reference": "a71863ea74f444d93c768deb3e314e1f750cf20d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/a1282bd0c096e0bdb8800b104177e2ce404d8815",
-                "reference": "a1282bd0c096e0bdb8800b104177e2ce404d8815",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/a71863ea74f444d93c768deb3e314e1f750cf20d",
+                "reference": "a71863ea74f444d93c768deb3e314e1f750cf20d",
                 "shasum": ""
             },
             "require": {
@@ -2323,7 +2323,7 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2022-10-26T21:42:49+00:00",
+            "time": "2022-11-25T18:59:16+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2357,7 +2357,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.7"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.8"
             },
             "funding": [
                 {
@@ -2481,17 +2481,17 @@
         },
         {
             "name": "symfony\/dependency-injection",
-            "version": "v6.1.5",
-            "version_normalized": "6.1.5.0",
+            "version": "v6.1.8",
+            "version_normalized": "6.1.8.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "b9c797c9d56afc290d4265854bafd01b4e379240"
+                "reference": "11e33ed84db0ced77511a23b35168db127909f0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/b9c797c9d56afc290d4265854bafd01b4e379240",
-                "reference": "b9c797c9d56afc290d4265854bafd01b4e379240",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/11e33ed84db0ced77511a23b35168db127909f0e",
+                "reference": "11e33ed84db0ced77511a23b35168db127909f0e",
                 "shasum": ""
             },
             "require": {
@@ -2523,7 +2523,7 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2022-09-28T16:00:52+00:00",
+            "time": "2022-11-25T07:34:52+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
@@ -2557,7 +2557,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v6.1.5"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v6.1.8"
             },
             "funding": [
                 {

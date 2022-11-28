@@ -11,7 +11,7 @@
 namespace RectorPrefix202211\Symfony\Component\Console\Exception;
 
 /**
- * Represents an incorrect option name typed in the console.
+ * Represents an incorrect option name or value typed in the console.
  *
  * @author Jérôme Tamarelle <jerome@tamarelle.net>
  */

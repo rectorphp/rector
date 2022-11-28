@@ -873,9 +873,6 @@ class Application implements ResetInterface
                         });
                     }
                 }
-                foreach ($commandSignals as $signal) {
-                    $this->signalRegistry->register($signal, [$command, 'handleSignal']);
-                }
             }
             if (null !== $this->dispatcher) {
                 foreach ($this->signalsToDispatchEvent as $signal) {
@@ -890,6 +887,9 @@ class Application implements ResetInterface
                         }
                     });
                 }
+            }
+            foreach ($commandSignals as $signal) {
+                $this->signalRegistry->register($signal, [$command, 'handleSignal']);
             }
         }
         if (null === $this->dispatcher) {
