@@ -133,15 +133,15 @@ CODE_SAMPLE
         if ($statusCode === 200) {
             return null;
         }
-        $newArguments = [$methodCall->args[0]];
-        // When we had a second argument we want to add it to the new assert.
+        $newArgs = [$methodCall->args[0]];
+        // When we had a custom message argument we want to add it to the new assert.
         if (isset($args[2])) {
-            $newArguments[] = $this->valueResolver->getValue($args[2]->value, \true);
+            $newArgs[] = $this->valueResolver->getValue($args[2]->value, \true);
         }
         if ($methodCall instanceof StaticCall) {
-            return $this->nodeFactory->createStaticCall('self', 'assertResponseStatusCodeSame', $newArguments);
+            return $this->nodeFactory->createStaticCall('self', 'assertResponseStatusCodeSame', $newArgs);
         }
-        return $this->nodeFactory->createLocalMethodCall('assertResponseStatusCodeSame', $newArguments);
+        return $this->nodeFactory->createLocalMethodCall('assertResponseStatusCodeSame', $newArgs);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $methodCall
@@ -157,10 +157,14 @@ CODE_SAMPLE
         if (!$this->isGetLocationMethodCall($firstArgValue)) {
             return null;
         }
-        $expectedUrl = $args[0]->value;
-        if ($methodCall instanceof StaticCall) {
-            return $this->nodeFactory->createStaticCall('self', 'assertResponseRedirects', [$expectedUrl]);
+        $newArgs = [$methodCall->args[0]];
+        // When we had a custom message argument we want to add it to the new assert.
+        if (isset($args[2])) {
+            $newArgs[] = $this->valueResolver->getValue($args[2]->value, \true);
         }
-        return $this->nodeFactory->createLocalMethodCall('assertResponseRedirects', [$expectedUrl]);
+        if ($methodCall instanceof StaticCall) {
+            return $this->nodeFactory->createStaticCall('self', 'assertResponseRedirects', $newArgs);
+        }
+        return $this->nodeFactory->createLocalMethodCall('assertResponseRedirects', $newArgs);
     }
 }

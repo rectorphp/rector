@@ -2684,7 +2684,6 @@ return array(
     'Rector\\TypeDeclaration\\PHPStan\\ObjectTypeSpecifier' => $baseDir . '/rules/TypeDeclaration/PHPStan/ObjectTypeSpecifier.php',
     'Rector\\TypeDeclaration\\PHPStan\\TypeSpecifier\\SameNamespacedTypeSpecifier' => $baseDir . '/rules/TypeDeclaration/PHPStan/TypeSpecifier/SameNamespacedTypeSpecifier.php',
     'Rector\\TypeDeclaration\\PHPStan\\TypeSpecifier\\SelfStaticParentTypeSpecifier' => $baseDir . '/rules/TypeDeclaration/PHPStan/TypeSpecifier/SelfStaticParentTypeSpecifier.php',
-    'Rector\\TypeDeclaration\\PhpDocParser\\NonInformativeReturnTagRemover' => $baseDir . '/rules/TypeDeclaration/PhpDocParser/NonInformativeReturnTagRemover.php',
     'Rector\\TypeDeclaration\\PhpDocParser\\ParamPhpDocNodeFactory' => $baseDir . '/rules/TypeDeclaration/PhpDocParser/ParamPhpDocNodeFactory.php',
     'Rector\\TypeDeclaration\\Rector\\ArrowFunction\\AddArrowFunctionReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ArrowFunction/AddArrowFunctionReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddArrayParamDocTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddArrayParamDocTypeRector.php',
