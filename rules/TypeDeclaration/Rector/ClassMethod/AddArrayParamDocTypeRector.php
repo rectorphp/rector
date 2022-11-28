@@ -60,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        \trigger_error('The AddArrayParamDocTypeRector rule is deprecated, as it works with doc block types that are not reliable and might infer incorrect types', \E_ERROR);
+        \trigger_error('The AddArrayParamDocTypeRector rule is deprecated, as it works with doc block types that are not reliable and might infer incorrect types', \E_USER_ERROR);
         \sleep(3);
         return null;
     }

@@ -51,7 +51,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        \trigger_error('Use specific rules to infer params instead. This rule will was split info many small ones.', \E_ERROR);
+        \trigger_error('Use specific rules to infer params instead. This rule will was split info many small ones.', \E_USER_ERROR);
         \sleep(3);
         return null;
     }
