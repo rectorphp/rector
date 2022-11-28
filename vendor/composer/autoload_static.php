@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit594639c7fba911d25c5aabf5e986766e
+class ComposerStaticInit5f9183588b6db777ff4245abd84de731
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2039,7 +2039,6 @@ class ComposerStaticInit594639c7fba911d25c5aabf5e986766e
         'Rector\\EarlyReturn\\Rector\\StmtsAwareInterface\\ReturnEarlyIfVariableRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php',
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
-        'Rector\\FamilyTree\\ValueObject\\PropertyType' => __DIR__ . '/../..' . '/packages/FamilyTree/ValueObject/PropertyType.php',
         'Rector\\FileSystemRector\\Contract\\AddedFileInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/AddedFileInterface.php',
         'Rector\\FileSystemRector\\Contract\\FileWithNodesInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/FileWithNodesInterface.php',
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
@@ -2399,7 +2398,6 @@ class ComposerStaticInit594639c7fba911d25c5aabf5e986766e
         'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',
         'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
         'Rector\\Php74\\Tokenizer\\ParenthesizedNestedTernaryAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/ParenthesizedNestedTernaryAnalyzer.php',
-        'Rector\\Php74\\TypeAnalyzer\\ObjectTypeAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/TypeAnalyzer/ObjectTypeAnalyzer.php',
         'Rector\\Php80\\AttributeDecorator\\JMSAccesorOrderAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/JMSAccesorOrderAttributeDecorator.php',
         'Rector\\Php80\\AttributeDecorator\\JMSAccessTypeAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/JMSAccessTypeAttributeDecorator.php',
         'Rector\\Php80\\AttributeDecorator\\SensioParamConverterAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/SensioParamConverterAttributeDecorator.php',
@@ -2971,14 +2969,12 @@ class ComposerStaticInit594639c7fba911d25c5aabf5e986766e
         'Rector\\TypeDeclaration\\TypeAnalyzer\\IterableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/IterableTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\AllAssignNodePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/AllAssignNodePropertyTypeInferer.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\DefaultValuePropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/DefaultValuePropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\GetterTypeDeclarationPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/GetterTypeDeclarationPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\PropertyTypeInferer\\TrustedClassMethodPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/PropertyTypeInferer/TrustedClassMethodPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\ReturnTypeInferer\\ReturnedNodesReturnTypeInfererTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/ReturnTypeInferer/ReturnedNodesReturnTypeInfererTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\SilentVoidResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/SilentVoidResolver.php',
         'Rector\\TypeDeclaration\\TypeInferer\\SplArrayFixedTypeNarrower' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/SplArrayFixedTypeNarrower.php',
-        'Rector\\TypeDeclaration\\TypeInferer\\VarDocPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/VarDocPropertyTypeInferer.php',
         'Rector\\TypeDeclaration\\TypeNormalizer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeNormalizer.php',
         'Rector\\TypeDeclaration\\ValueObject\\AddParamTypeDeclaration' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AddParamTypeDeclaration.php',
         'Rector\\TypeDeclaration\\ValueObject\\AddPropertyTypeDeclaration' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AddPropertyTypeDeclaration.php',
@@ -2989,7 +2985,6 @@ class ComposerStaticInit594639c7fba911d25c5aabf5e986766e
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnVendorLockResolver.php',
-        'Rector\\VendorLocker\\NodeVendorLocker\\PropertyTypeVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/PropertyTypeVendorLockResolver.php',
         'Rector\\VendorLocker\\ParentClassMethodTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/ParentClassMethodTypeOverrideGuard.php',
         'Rector\\VersionBonding\\Contract\\MinPhpVersionInterface' => __DIR__ . '/../..' . '/packages/VersionBonding/Contract/MinPhpVersionInterface.php',
         'Rector\\VersionBonding\\PhpVersionedFilter' => __DIR__ . '/../..' . '/packages/VersionBonding/PhpVersionedFilter.php',
@@ -3018,9 +3013,9 @@ class ComposerStaticInit594639c7fba911d25c5aabf5e986766e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit594639c7fba911d25c5aabf5e986766e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit594639c7fba911d25c5aabf5e986766e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit594639c7fba911d25c5aabf5e986766e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5f9183588b6db777ff4245abd84de731::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5f9183588b6db777ff4245abd84de731::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5f9183588b6db777ff4245abd84de731::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -12,20 +12,12 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\Generic\TemplateType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
-use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
 final class PromotedPropertyCandidateResolver
 {
     /**
@@ -45,38 +37,14 @@ final class PromotedPropertyCandidateResolver
     private $nodeComparator;
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer
-     */
-    private $varDocPropertyTypeInferer;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
-     */
-    private $typeComparator;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
-     */
-    private $typeFactory;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, VarDocPropertyTypeInferer $varDocPropertyTypeInferer, NodeTypeResolver $nodeTypeResolver, TypeComparator $typeComparator, TypeFactory $typeFactory, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
-        $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->typeComparator = $typeComparator;
-        $this->typeFactory = $typeFactory;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
     /**
@@ -132,7 +100,7 @@ final class PromotedPropertyCandidateResolver
             if (!$matchedParam instanceof Param) {
                 continue;
             }
-            if ($this->shouldSkipParam($matchedParam, $property, $assignedExpr, $firstParamAsVariable)) {
+            if ($this->shouldSkipParam($matchedParam, $assignedExpr, $firstParamAsVariable)) {
                 continue;
             }
             return new PropertyPromotionCandidate($property, $assign, $matchedParam);
@@ -182,60 +150,15 @@ final class PromotedPropertyCandidateResolver
         }
         return $firstVariablePosition < $variable->getStartTokenPos();
     }
-    private function hasConflictingParamType(Param $param, Type $propertyType) : bool
-    {
-        if ($param->type === null) {
-            return \false;
-        }
-        $matchedParamType = $this->nodeTypeResolver->getType($param);
-        if ($param->default !== null) {
-            $defaultValueType = $this->nodeTypeResolver->getType($param->default);
-            $matchedParamType = $this->typeFactory->createMixedPassedOrUnionType([$matchedParamType, $defaultValueType]);
-        }
-        if (!$propertyType instanceof UnionType) {
-            return \false;
-        }
-        if ($this->typeComparator->areTypesEqual($propertyType, $matchedParamType)) {
-            return \false;
-        }
-        // different types, check not has mixed and not has templated generic types
-        if (!$this->hasMixedType($propertyType)) {
-            return \false;
-        }
-        return !$this->hasTemplatedGenericType($propertyType);
-    }
-    private function hasTemplatedGenericType(UnionType $unionType) : bool
-    {
-        foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof TemplateType) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    private function hasMixedType(UnionType $unionType) : bool
-    {
-        foreach ($unionType->getTypes() as $type) {
-            if ($type instanceof MixedType) {
-                return \true;
-            }
-        }
-        return \false;
-    }
     /**
      * @param int[] $firstParamAsVariable
      */
-    private function shouldSkipParam(Param $matchedParam, Property $property, Variable $assignedVariable, array $firstParamAsVariable) : bool
+    private function shouldSkipParam(Param $matchedParam, Variable $assignedVariable, array $firstParamAsVariable) : bool
     {
         // already promoted
         if ($matchedParam->flags !== 0) {
             return \true;
         }
-        if ($this->isParamUsedBeforeAssign($assignedVariable, $firstParamAsVariable)) {
-            return \true;
-        }
-        // @todo unknown type, not suitable?
-        $propertyType = $this->varDocPropertyTypeInferer->inferProperty($property);
-        return $this->hasConflictingParamType($matchedParam, $propertyType);
+        return $this->isParamUsedBeforeAssign($assignedVariable, $firstParamAsVariable);
     }
 }

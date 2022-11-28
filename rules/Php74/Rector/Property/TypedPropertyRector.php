@@ -4,39 +4,19 @@ declare (strict_types=1);
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
-use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
-use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
-use Rector\Php74\Guard\MakePropertyTypedGuard;
-use Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
-use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
-use Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use RectorPrefix202211\Symfony\Component\Console\Style\SymfonyStyle;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @changelog https://wiki.php.net/rfc/typed_properties_v2#proposal
- *
- * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\TypedPropertyRectorTest
- * @see \Rector\Tests\Php74\Rector\Property\TypedPropertyRector\ImportedTest
- *
  * @deprecated Moving doc types to type declarations is dangerous. Use specific strict types instead.
  * This rule will be split info many small ones.
  */
-final class TypedPropertyRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
+final class TypedPropertyRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
      * @api
@@ -44,67 +24,17 @@ final class TypedPropertyRector extends AbstractScopeAwareRector implements Allo
      */
     public const INLINE_PUBLIC = 'inline_public';
     /**
-     * Default to false, which only apply changes:
-     *
-     *  – private modifier property
-     *  - protected modifier property on final class without extends or has extends but property and/or its usage only in current class
-     *
-     * Set to true will allow change other modifiers as well as far as not forbidden, eg: callable type, null type, etc.
-     * @var bool
-     */
-    private $inlinePublic = \false;
-    /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $varDocPropertyTypeInferer;
-    /**
-     * @readonly
-     * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
-     */
-    private $varTagRemover;
-    /**
-     * @readonly
-     * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
-     */
-    private $familyRelationsAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\Php74\TypeAnalyzer\ObjectTypeAnalyzer
-     */
-    private $objectTypeAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\Php74\Guard\MakePropertyTypedGuard
-     */
-    private $makePropertyTypedGuard;
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
-     */
-    private $constructorAssignDetector;
-    /**
-     * @readonly
-     * @var \Rector\VendorLocker\NodeVendorLocker\PropertyTypeVendorLockResolver
-     */
-    private $propertyTypeVendorLockResolver;
-    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, VarTagRemover $varTagRemover, FamilyRelationsAnalyzer $familyRelationsAnalyzer, ObjectTypeAnalyzer $objectTypeAnalyzer, MakePropertyTypedGuard $makePropertyTypedGuard, ConstructorAssignDetector $constructorAssignDetector, PropertyTypeVendorLockResolver $propertyTypeVendorLockResolver)
+    private $symfonyStyle;
+    public function __construct(SymfonyStyle $symfonyStyle)
     {
-        $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
-        $this->varTagRemover = $varTagRemover;
-        $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
-        $this->objectTypeAnalyzer = $objectTypeAnalyzer;
-        $this->makePropertyTypedGuard = $makePropertyTypedGuard;
-        $this->constructorAssignDetector = $constructorAssignDetector;
-        $this->propertyTypeVendorLockResolver = $propertyTypeVendorLockResolver;
-    }
-    public function configure(array $configuration) : void
-    {
-        $this->inlinePublic = $configuration[self::INLINE_PUBLIC] ?? (bool) \current($configuration);
+        $this->symfonyStyle = $symfonyStyle;
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes property type by `@var` annotations or default value.', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes property type by `@var` annotations or default value.', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -123,7 +53,7 @@ final class SomeClass
     private bool $isDone = false;
 }
 CODE_SAMPLE
-, [self::INLINE_PUBLIC => \false])]);
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -137,70 +67,12 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if (!$this->makePropertyTypedGuard->isLegal($node, $this->inlinePublic)) {
-            return null;
-        }
-        $resolvedPropertyType = $this->varDocPropertyTypeInferer->inferProperty($node);
-        if ($resolvedPropertyType instanceof MixedType) {
-            return null;
-        }
-        if ($this->objectTypeAnalyzer->isSpecial($resolvedPropertyType)) {
-            return null;
-        }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedPropertyType, TypeKind::PROPERTY);
-        if ($this->isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($propertyTypeNode, $node)) {
-            return null;
-        }
-        $propertyType = $this->familyRelationsAnalyzer->getPossibleUnionPropertyType($node, $resolvedPropertyType, $scope, $propertyTypeNode);
-        $varDocType = $propertyType->getVarType();
-        $propertyTypeNode = $propertyType->getPropertyTypeNode();
-        $this->varTagRemover->removeVarPhpTagValueNodeIfNotComment($node, $varDocType);
-        $this->addDefaultValueNullForNullableType($node, $varDocType);
-        $node->type = $propertyTypeNode;
-        return $node;
+        $this->symfonyStyle->error('The TypedPropertyRector rule is deprecated, as it works with doc block types that are not reliable and adds invalid  types');
+        \sleep(5);
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
-    }
-    /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null $node
-     */
-    private function isNullOrNonClassLikeTypeOrMixedOrVendorLockedIn($node, Property $property) : bool
-    {
-        if (!$node instanceof Node) {
-            return \true;
-        }
-        if ($node instanceof NullableType && $this->isName($node->type, 'mixed')) {
-            return \true;
-        }
-        // false positive
-        if (!$node instanceof Name) {
-            return $this->propertyTypeVendorLockResolver->isVendorLocked($property);
-        }
-        if ($this->isName($node, 'mixed')) {
-            return \true;
-        }
-        return $this->propertyTypeVendorLockResolver->isVendorLocked($property);
-    }
-    private function addDefaultValueNullForNullableType(Property $property, Type $propertyType) : void
-    {
-        if (!TypeCombinator::containsNull($propertyType)) {
-            return;
-        }
-        $onlyProperty = $property->props[0];
-        // skip is already has value
-        if ($onlyProperty->default !== null) {
-            return;
-        }
-        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
-            return;
-        }
-        $propertyName = $this->nodeNameResolver->getName($property);
-        if ($this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName)) {
-            return;
-        }
-        $onlyProperty->default = $this->nodeFactory->createNull();
     }
 }

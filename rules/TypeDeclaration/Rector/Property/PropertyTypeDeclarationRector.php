@@ -5,23 +5,12 @@ namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\UnionType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\PhpDocParser\PhpDocInfoAnalyzer;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard;
-use Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer;
+use RectorPrefix202211\Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector\PropertyTypeDeclarationRectorTest
- *
  * @deprecated This rule move doctypes to strict type declarations and often breaks the code.
  * Instead use specific rules that handle exact type declarations.
  */
@@ -29,36 +18,12 @@ final class PropertyTypeDeclarationRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\TypeDeclaration\TypeInferer\VarDocPropertyTypeInferer
+     * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
-    private $varDocPropertyTypeInferer;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
-     */
-    private $phpDocTypeChanger;
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard
-     */
-    private $propertyTypeOverrideGuard;
-    /**
-     * @readonly
-     * @var \Rector\Core\Php\PhpVersionProvider
-     */
-    private $phpVersionProvider;
-    /**
-     * @readonly
-     * @var \Rector\PhpDocParser\PhpDocInfoAnalyzer
-     */
-    private $phpDocInfoAnalyzer;
-    public function __construct(VarDocPropertyTypeInferer $varDocPropertyTypeInferer, PhpDocTypeChanger $phpDocTypeChanger, PropertyTypeOverrideGuard $propertyTypeOverrideGuard, PhpVersionProvider $phpVersionProvider, PhpDocInfoAnalyzer $phpDocInfoAnalyzer)
+    private $symfonyStyle;
+    public function __construct(SymfonyStyle $symfonyStyle)
     {
-        $this->varDocPropertyTypeInferer = $varDocPropertyTypeInferer;
-        $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->propertyTypeOverrideGuard = $propertyTypeOverrideGuard;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->phpDocInfoAnalyzer = $phpDocInfoAnalyzer;
+        $this->symfonyStyle = $symfonyStyle;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -101,48 +66,8 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (\count($node->props) !== 1) {
-            return null;
-        }
-        if ($node->type !== null) {
-            return null;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if ($phpDocInfo->hasInheritDoc() && !$node->isPrivate()) {
-            return null;
-        }
-        if ($this->phpDocInfoAnalyzer->isVarDocAlreadySet($phpDocInfo)) {
-            return null;
-        }
-        $type = $this->varDocPropertyTypeInferer->inferProperty($node);
-        if ($type instanceof MixedType) {
-            return null;
-        }
-        if (!$node->isPrivate() && $type instanceof NullType) {
-            return null;
-        }
-        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES) && $this->propertyTypeOverrideGuard->isLegal($node)) {
-            $this->completeTypedProperty($type, $node);
-            return $node;
-        }
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-        return $node;
-    }
-    private function completeTypedProperty(Type $type, Property $property) : void
-    {
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PROPERTY);
-        if ($propertyTypeNode === null) {
-            return;
-        }
-        if ($propertyTypeNode instanceof UnionType) {
-            if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
-                $property->type = $propertyTypeNode;
-                return;
-            }
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $type);
-            return;
-        }
-        $property->type = $propertyTypeNode;
+        $this->symfonyStyle->error('The PropertyTypeDeclaration rule is deprecated, as it works with doc block types that are not reliable and adds invalid  types');
+        \sleep(5);
+        return null;
     }
 }
