@@ -62,7 +62,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $this->symfonyStyle->error('This rule will was split info many small ones as breaking types based on falsy docblocks. Use specific rules to infer return instead.');
+        $this->symfonyStyle->error('This rule was split info many small ones as breaking types based on falsy docblocks. Use specific rules to infer return instead.');
         \sleep(5);
         return null;
     }

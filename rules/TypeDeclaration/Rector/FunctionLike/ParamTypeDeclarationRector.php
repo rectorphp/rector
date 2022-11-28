@@ -61,7 +61,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $this->symfonyStyle->error('Use specific rules to infer params instead. This rule will was split info many small ones.');
+        $this->symfonyStyle->error('Use specific rules to infer params instead. This rule was split info many small ones.');
         \sleep(5);
         return null;
     }
