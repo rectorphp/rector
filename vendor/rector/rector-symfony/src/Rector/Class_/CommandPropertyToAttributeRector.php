@@ -6,13 +6,20 @@ namespace Rector\Symfony\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\AttributeGroup;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -91,37 +98,32 @@ CODE_SAMPLE
         if (!$this->reflectionProvider->hasClass(self::ATTRIBUTE)) {
             return null;
         }
-        if ($this->phpAttributeAnalyzer->hasPhpAttribute($node, self::ATTRIBUTE)) {
-            return null;
-        }
-        $defaultName = null;
-        $property = $node->getProperty('defaultName');
-        if ($property instanceof Property) {
-            $defaultName = $this->getValueFromProperty($property);
-            if ($defaultName !== null) {
-                $this->removeNode($property);
-            }
-        }
+        $defaultName = $this->resolveDefaultName($node);
         if ($defaultName === null) {
             return null;
         }
-        $defaultDescription = null;
-        $property = $node->getProperty('defaultDescription');
-        if ($property instanceof Property) {
-            $defaultDescription = $this->getValueFromProperty($property);
-            if ($defaultDescription !== null) {
-                $this->removeNode($property);
-            }
-        }
-        $node->attrGroups[] = $this->createAttributeGroup($defaultName, $defaultDescription);
+        $defaultDescription = $this->resolveDefaultDescription($node);
+        $array = $this->resolveAliases($node);
+        $constFetch = $this->resolveHidden($node);
+        $node->attrGroups[] = $this->createAttributeGroup($defaultName, $defaultDescription, $array, $constFetch);
         return $node;
     }
-    private function createAttributeGroup(string $defaultName, ?string $defaultDescription) : AttributeGroup
+    private function createAttributeGroup(string $defaultName, ?string $defaultDescription, ?Array_ $array, ?ConstFetch $constFetch) : AttributeGroup
     {
         $attributeGroup = $this->phpAttributeGroupFactory->createFromClass(self::ATTRIBUTE);
         $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultName));
         if ($defaultDescription !== null) {
             $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultDescription));
+        } elseif ($array !== null || $constFetch !== null) {
+            $attributeGroup->attrs[0]->args[] = new Arg($this->nodeFactory->createNull());
+        }
+        if ($array !== null) {
+            $attributeGroup->attrs[0]->args[] = new Arg($array);
+        } elseif ($constFetch !== null) {
+            $attributeGroup->attrs[0]->args[] = new Arg(new Array_());
+        }
+        if ($constFetch !== null) {
+            $attributeGroup->attrs[0]->args[] = new Arg($constFetch);
         }
         return $attributeGroup;
     }
@@ -135,5 +137,131 @@ CODE_SAMPLE
             return $propertyProperty->default->value;
         }
         return null;
+    }
+    private function resolveDefaultName(Class_ $class) : ?string
+    {
+        $defaultName = null;
+        $property = $class->getProperty('defaultName');
+        // Get DefaultName from property
+        if ($property instanceof Property) {
+            $defaultName = $this->getValueFromProperty($property);
+            if ($defaultName !== null) {
+                $this->removeNode($property);
+            }
+        }
+        // Get DefaultName from attribute
+        if ($defaultName === null && $this->phpAttributeAnalyzer->hasPhpAttribute($class, self::ATTRIBUTE)) {
+            $defaultName = $this->getDefaultNameFromAttribute($class);
+        }
+        return $defaultName;
+    }
+    private function getDefaultNameFromAttribute(Class_ $class) : ?string
+    {
+        $defaultName = null;
+        foreach ($class->attrGroups as $attrGroup) {
+            foreach ($attrGroup->attrs as $attribute) {
+                if (!$this->nodeNameResolver->isName($attribute->name, self::ATTRIBUTE)) {
+                    continue;
+                }
+                $arg = $attribute->args[0];
+                if (!$arg->value instanceof String_) {
+                    continue;
+                }
+                $defaultName = $arg->value->value;
+                $this->removeNode($attrGroup);
+            }
+        }
+        return $defaultName;
+    }
+    private function resolveDefaultDescription(Class_ $class) : ?string
+    {
+        $defaultDescription = null;
+        $property = $class->getProperty('defaultDescription');
+        if ($property instanceof Property) {
+            $defaultDescription = $this->getValueFromProperty($property);
+            if ($defaultDescription !== null) {
+                $this->removeNode($property);
+            }
+        }
+        return $defaultDescription;
+    }
+    private function resolveAliases(Class_ $class) : ?Array_
+    {
+        $commandAliases = null;
+        $classMethod = $class->getMethod('configure');
+        if (!$classMethod instanceof ClassMethod) {
+            return null;
+        }
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$commandAliases) {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+                return null;
+            }
+            if (!$this->isName($node->name, 'setAliases')) {
+                return null;
+            }
+            /** @var Arg $arg */
+            $arg = $node->args[0];
+            if (!$arg->value instanceof Array_) {
+                return null;
+            }
+            $commandAliases = $arg->value;
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof MethodCall) {
+                $parentNode->var = $node->var;
+            } else {
+                $this->removeNode($node);
+            }
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+        return $commandAliases;
+    }
+    private function resolveHidden(Class_ $class) : ?ConstFetch
+    {
+        $commandHidden = null;
+        $classMethod = $class->getMethod('configure');
+        if (!$classMethod instanceof ClassMethod) {
+            return null;
+        }
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$commandHidden) {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+                return null;
+            }
+            if (!$this->isName($node->name, 'setHidden')) {
+                return null;
+            }
+            $commandHidden = $this->getCommandHiddenValue($node);
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof MethodCall) {
+                $parentNode->var = $node->var;
+            } else {
+                $this->removeNode($node);
+            }
+            return NodeTraverser::STOP_TRAVERSAL;
+        });
+        return $commandHidden;
+    }
+    private function getCommandHiddenValue(MethodCall $methodCall) : ?ConstFetch
+    {
+        if (!isset($methodCall->args[0])) {
+            return new ConstFetch(new Name('true'));
+        }
+        /** @var Arg $arg */
+        $arg = $methodCall->args[0];
+        if (!$arg->value instanceof ConstFetch) {
+            return null;
+        }
+        return $arg->value;
     }
 }

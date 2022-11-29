@@ -4,10 +4,13 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\StringType;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
@@ -94,8 +97,15 @@ CODE_SAMPLE
     private function resolveCommandDescriptionFromSetDescription(Class_ $class) : ?Node
     {
         $commandDescription = null;
-        $this->traverseNodesWithCallable($class->stmts, function (Node $node) use(&$commandDescription) {
+        $classMethod = $class->getMethod('configure');
+        if (!$classMethod instanceof ClassMethod) {
+            return null;
+        }
+        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$commandDescription) {
             if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if ($node->isFirstClassCallable()) {
                 return null;
             }
             if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
@@ -104,16 +114,18 @@ CODE_SAMPLE
             if (!$this->isName($node->name, 'setDescription')) {
                 return null;
             }
-            $commandDescription = $node->getArgs()[0]->value;
-            $commandDescriptionStaticType = $this->getType($commandDescription);
-            if (!$commandDescriptionStaticType instanceof StringType) {
+            /** @var Arg $arg */
+            $arg = $node->getArgs()[0];
+            if (!$this->getType($arg->value) instanceof StringType) {
                 return null;
             }
+            $commandDescription = $arg->value;
             // is chain call? → remove by variable nulling
             if ($node->var instanceof MethodCall) {
                 return $node->var;
             }
             $this->removeNode($node);
+            return NodeTraverser::STOP_TRAVERSAL;
         });
         return $commandDescription;
     }
