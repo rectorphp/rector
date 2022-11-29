@@ -5,8 +5,7 @@ namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\Type;
+use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -64,36 +63,39 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [Class_::class];
     }
     /**
-     * @param Property $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        // type is already set
-        if ($node->type !== null) {
+        $setUpClassMethod = $node->getMethod(MethodName::SET_UP);
+        if (!$setUpClassMethod instanceof ClassMethod) {
             return null;
         }
-        // is not private? we cannot be sure about other usage
-        if (!$node->isPrivate()) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getProperties() as $property) {
+            // type is already set
+            if ($property->type !== null) {
+                continue;
+            }
+            // is not private? we cannot be sure about other usage
+            if (!$property->isPrivate()) {
+                continue;
+            }
+            $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($property, $setUpClassMethod);
+            $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
+            if (!$propertyTypeNode instanceof Node) {
+                continue;
+            }
+            $property->type = $propertyTypeNode;
+            $hasChanged = \true;
         }
-        $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($node, MethodName::SET_UP);
-        if (!$propertyType instanceof Type) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        // skip unless a class type; we cannot be sure about traits
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
-        $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
-        if (!$propertyTypeNode instanceof Node) {
-            return null;
-        }
-        $node->type = $propertyTypeNode;
-        return $node;
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
