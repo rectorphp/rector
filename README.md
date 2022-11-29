@@ -20,18 +20,6 @@ Add Rector to your CI and let it **continuously refactor your code** and keep th
 
 <br>
 
-## Read a First Book About Rector
-
-Are you curious, how Rector works internally, how to create your own rules and test them and why Rector was born? In May 2021 we've released the very first book: *Rector - The Power of Automated Refactoring*.
-
-<a href="https://leanpub.com/rector-the-power-of-automated-refactoring">
-<img src="https://github.com/rectorphp/the-power-of-automated-refactoring-feedback/raw/main/images/book_title.png">
-</a>
-
-By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring) you directly support maintainers who are working on Rector.
-
-<br>
-
 ## Documentation
 
 - [Explore Rector Rules](/docs/rector_rules_overview.md)
@@ -51,6 +39,13 @@ By [buying a book](https://leanpub.com/rector-the-power-of-automated-refactoring
 - [How to Persist Cache Between CI Runs](/docs/how_to_persist_cache_between_ci_runs.md)
 
 See [the full documentation](/docs).
+
+<br>
+
+## Learn Faster with a Book
+
+Are you curious, how Rector works internally, how to create your own rules and test them and why Rector was born?
+Read [Rector - The Power of Automated Refactoring](https://leanpub.com/rector-the-power-of-automated-refactoring) that will take you step by step through the Rector setup and how to create your own rules.
 
 <br>
 
