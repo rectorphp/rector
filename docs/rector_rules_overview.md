@@ -1,4 +1,4 @@
-# 406 Rules Overview
+# 409 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (34)
+- [TypeDeclaration](#typedeclaration) (37)
 
 - [Visibility](#visibility) (3)
 
@@ -5659,22 +5659,7 @@ Add null default to properties with PHP 7.4 property nullable type
 
 Changes property type by `@var` annotations or default value.
 
-:wrench: **configure it!**
-
 - class: [`Rector\Php74\Rector\Property\TypedPropertyRector`](../rules/Php74/Rector/Property/TypedPropertyRector.php)
-
-```php
-use Rector\Config\RectorConfig;
-use Rector\Php74\Rector\Property\TypedPropertyRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(TypedPropertyRector::class, [
-        TypedPropertyRector::INLINE_PUBLIC => false,
-    ]);
-};
-```
-
-↓
 
 ```diff
  final class SomeClass
@@ -5826,7 +5811,22 @@ Change `$this::class` to static::class or self::class depends on class modifier
 
 Change simple property init and assign to constructor promotion
 
+:wrench: **configure it!**
+
 - class: [`Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector`](../rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php)
+
+```php
+use Rector\Config\RectorConfig;
+use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ClassPropertyAssignToConstructorPromotionRector::class, [
+        ClassPropertyAssignToConstructorPromotionRector::INLINE_PUBLIC => false,
+    ]);
+};
+```
+
+↓
 
 ```diff
  class SomeClass
@@ -9296,6 +9296,25 @@ Change `@return` types and type from static analysis to type declarations if not
 
 <br>
 
+### ReturnTypeFromReturnDirectArrayRector
+
+Add return type from return direct array
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnDirectArrayRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromReturnDirectArrayRector.php)
+
+```diff
+ final class AddReturnArray
+ {
+-    public function getArray()
++    public function getArray(): array
+     {
+         return [1, 2, 3];
+     }
+ }
+```
+
+<br>
+
 ### ReturnTypeFromReturnNewRector
 
 Add return type to function like with return new
@@ -9328,6 +9347,27 @@ Add strict return type based on returned strict expr type
 +    public function run(): bool
      {
          return $this->first() && $this->somethingElse();
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictConstantReturnRector
+
+Add strict type declaration based on returned constants
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturnRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictConstantReturnRector.php)
+
+```diff
+ class SomeClass
+ {
+     public const NAME = 'name';
+
+-    public function run()
++    public function run(): string
+     {
+         return self::NAME;
      }
  }
 ```
@@ -9368,6 +9408,30 @@ Add strict return array type based on created empty array and returned
          $values = [];
 
          return $values;
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictTypedCallRector
+
+Add return type from strict return type of call
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function getData()
++    public function getData(): int
+     {
+         return $this->getNumber();
+     }
+
+     private function getNumber(): int
+     {
+         return 1000;
      }
  }
 ```

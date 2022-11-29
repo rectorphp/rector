@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0a47a55ab3e76f4b719a1305ae1e8fe2
+class ComposerStaticInitd3ff6a7d8cba5f5a6ce5595d57e0fdfb
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2380,6 +2380,7 @@ class ComposerStaticInit0a47a55ab3e76f4b719a1305ae1e8fe2
         'Rector\\Php73\\Rector\\FuncCall\\StringifyStrNeedlesRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/FuncCall/StringifyStrNeedlesRector.php',
         'Rector\\Php73\\Rector\\String_\\SensitiveHereNowDocRector' => __DIR__ . '/../..' . '/rules/Php73/Rector/String_/SensitiveHereNowDocRector.php',
         'Rector\\Php74\\Guard\\MakePropertyTypedGuard' => __DIR__ . '/../..' . '/rules/Php74/Guard/MakePropertyTypedGuard.php',
+        'Rector\\Php74\\Guard\\PropertyTypeChangeGuard' => __DIR__ . '/../..' . '/rules/Php74/Guard/PropertyTypeChangeGuard.php',
         'Rector\\Php74\\NodeAnalyzer\\ClosureArrowFunctionAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/NodeAnalyzer/ClosureArrowFunctionAnalyzer.php',
         'Rector\\Php74\\Rector\\ArrayDimFetch\\CurlyToSquareBracketArrayStringRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/ArrayDimFetch/CurlyToSquareBracketArrayStringRector.php',
         'Rector\\Php74\\Rector\\Assign\\NullCoalescingOperatorRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Assign/NullCoalescingOperatorRector.php',
@@ -2405,6 +2406,7 @@ class ComposerStaticInit0a47a55ab3e76f4b719a1305ae1e8fe2
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
         'Rector\\Php80\\Contract\\ValueObject\\AnnotationToAttributeInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/ValueObject/AnnotationToAttributeInterface.php',
         'Rector\\Php80\\Enum\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/Enum/MatchKind.php',
+        'Rector\\Php80\\Guard\\MakePropertyPromotionGuard' => __DIR__ . '/../..' . '/rules/Php80/Guard/MakePropertyPromotionGuard.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrposMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrposMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\SubstrMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/SubstrMatchAndRefactor.php',
@@ -3019,9 +3021,9 @@ class ComposerStaticInit0a47a55ab3e76f4b719a1305ae1e8fe2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0a47a55ab3e76f4b719a1305ae1e8fe2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0a47a55ab3e76f4b719a1305ae1e8fe2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0a47a55ab3e76f4b719a1305ae1e8fe2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd3ff6a7d8cba5f5a6ce5595d57e0fdfb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd3ff6a7d8cba5f5a6ce5595d57e0fdfb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd3ff6a7d8cba5f5a6ce5595d57e0fdfb::$classMap;
 
         }, null, ClassLoader::class);
     }
