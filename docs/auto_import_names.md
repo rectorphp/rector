@@ -35,17 +35,6 @@ Do you want to keep those?
 $rectorConfig->importShortClasses(false);
 ```
 
-<br>
-
-If you have set `Option::AUTO_IMPORT_NAMES` to `true`, rector is applying this to every analyzed file, even if no real change by a rector was applied to the file.
-
-The reason is that a so-called post-rector is responsible for this, namely the `NameImportingPostRector`.
-If you like to apply the Option::AUTO_IMPORT_NAMES only for real changed files, you can configure this.
-
-```php
-$parameters->set(Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY, true);
-```
-
 ## How to Remove Unused Imports?
 
 To remove imports, use [ECS](https://github.com/symplify/easy-coding-standard) with [`NoUnusedImportsFixer`](https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/2.18/doc/rules/import/no_unused_imports.rst) rule:

@@ -93,9 +93,6 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if (!$file instanceof File) {
             return null;
         }
-        if (!$this->shouldApply($file)) {
-            return null;
-        }
         if ($node instanceof Name) {
             return $this->processNodeName($node, $file);
         }
@@ -231,12 +228,5 @@ CODE_SAMPLE
             return \true;
         }
         return $this->reflectionProvider->hasFunction(new Name($name->getLast()), null);
-    }
-    private function shouldApply(File $file) : bool
-    {
-        if (!$this->parameterProvider->provideBoolParameter(Option::APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY)) {
-            return \true;
-        }
-        return $file->hasContentChanged();
     }
 }
