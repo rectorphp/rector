@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244
+class ComposerStaticInitb2266d226b1a4614f3aeebb3fef265c3
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2555,7 +2555,6 @@ class ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244
         'Rector\\Privatization\\Rector\\Property\\ChangeReadOnlyPropertyWithDefaultValueToConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/ChangeReadOnlyPropertyWithDefaultValueToConstantRector.php',
         'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
         'Rector\\Privatization\\Reflection\\ClassConstantsResolver' => __DIR__ . '/../..' . '/rules/Privatization/Reflection/ClassConstantsResolver.php',
-        'Rector\\Privatization\\TypeManipulator\\NormalizeTypeToRespectArrayScalarType' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/NormalizeTypeToRespectArrayScalarType.php',
         'Rector\\Privatization\\TypeManipulator\\TypeNormalizer' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/TypeNormalizer.php',
         'Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant' => __DIR__ . '/../..' . '/rules/Privatization/ValueObject/ReplaceStringWithClassConstant.php',
         'Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard' => __DIR__ . '/../..' . '/rules/Privatization/VisibilityGuard/ClassMethodVisibilityGuard.php',
@@ -2642,7 +2641,6 @@ class ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244
         'Rector\\StaticTypeMapper\\PhpDocParser\\IntersectionTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/IntersectionTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpDocParser\\NullableTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/NullableTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpDocParser\\UnionTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDocParser/UnionTypeMapper.php',
-        'Rector\\StaticTypeMapper\\PhpDoc\\CustomPHPStanDetector' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDoc/CustomPHPStanDetector.php',
         'Rector\\StaticTypeMapper\\PhpDoc\\PhpDocTypeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpDoc/PhpDocTypeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\ExprNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/ExprNodeMapper.php',
         'Rector\\StaticTypeMapper\\PhpParser\\FullyQualifiedNodeMapper' => __DIR__ . '/../..' . '/packages/StaticTypeMapper/PhpParser/FullyQualifiedNodeMapper.php',
@@ -2915,7 +2913,6 @@ class ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244
         'Rector\\TypeDeclaration\\NodeAnalyzer\\CallerParamMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/CallerParamMatcher.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodAndPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodAndPropertyAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ClassMethodParamTypeCompleter' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ClassMethodParamTypeCompleter.php',
-        'Rector\\TypeDeclaration\\NodeAnalyzer\\PHPUnitDataProviderResolver' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/PHPUnitDataProviderResolver.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ParamAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ParamAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnAnalyzer.php',
         'Rector\\TypeDeclaration\\NodeAnalyzer\\ReturnFilter\\ExclusiveNativeCallLikeReturnMatcher' => __DIR__ . '/../..' . '/rules/TypeDeclaration/NodeAnalyzer/ReturnFilter/ExclusiveNativeCallLikeReturnMatcher.php',
@@ -2968,11 +2965,9 @@ class ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\VarAnnotationIncorrectNullableRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php',
-        'Rector\\TypeDeclaration\\TypeAnalyzer\\AdvancedArrayAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AdvancedArrayAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
-        'Rector\\TypeDeclaration\\TypeAnalyzer\\IterableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/IterableTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\ReturnStrictTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/ReturnStrictTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\StrictReturnClassConstReturnTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/StrictReturnClassConstReturnTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
@@ -3021,9 +3016,9 @@ class ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6c3c1d31f8651b2b098ab75e9acec244::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb2266d226b1a4614f3aeebb3fef265c3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb2266d226b1a4614f3aeebb3fef265c3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb2266d226b1a4614f3aeebb3fef265c3::$classMap;
 
         }, null, ClassLoader::class);
     }

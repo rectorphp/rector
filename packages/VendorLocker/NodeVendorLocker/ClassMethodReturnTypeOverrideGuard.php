@@ -9,18 +9,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Generic\GenericClassStringType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\StaticTypeMapper\PhpDoc\CustomPHPStanDetector;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 final class ClassMethodReturnTypeOverrideGuard
 {
@@ -60,15 +54,10 @@ final class ClassMethodReturnTypeOverrideGuard
     private $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\StaticTypeMapper\PhpDoc\CustomPHPStanDetector
-     */
-    private $customPHPStanDetector;
-    /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, CustomPHPStanDetector $customPHPStanDetector, ReturnTypeInferer $returnTypeInferer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -76,7 +65,6 @@ final class ClassMethodReturnTypeOverrideGuard
         $this->betterNodeFinder = $betterNodeFinder;
         $this->astResolver = $astResolver;
         $this->reflectionResolver = $reflectionResolver;
-        $this->customPHPStanDetector = $customPHPStanDetector;
         $this->returnTypeInferer = $returnTypeInferer;
     }
     public function shouldSkipClassMethod(ClassMethod $classMethod) : bool
@@ -104,20 +92,6 @@ final class ClassMethodReturnTypeOverrideGuard
             return \true;
         }
         return $this->hasClassMethodExprReturn($classMethod);
-    }
-    public function shouldSkipClassMethodOldTypeWithNewType(Type $oldType, Type $newType, ClassMethod $classMethod) : bool
-    {
-        if ($this->customPHPStanDetector->isCustomType($oldType, $classMethod)) {
-            return \true;
-        }
-        if ($oldType instanceof MixedType) {
-            return \false;
-        }
-        // new generic string type is more advanced than old array type
-        if ($this->isFirstArrayTypeMoreAdvanced($oldType, $newType)) {
-            return \false;
-        }
-        return $oldType->isSuperTypeOf($newType)->yes();
     }
     /**
      * @param ClassReflection[] $childrenClassReflections
@@ -171,18 +145,5 @@ final class ClassMethodReturnTypeOverrideGuard
             }
             return $node->expr instanceof Expr;
         });
-    }
-    private function isFirstArrayTypeMoreAdvanced(Type $oldType, Type $newType) : bool
-    {
-        if (!$oldType instanceof ArrayType) {
-            return \false;
-        }
-        if (!$newType instanceof ArrayType) {
-            return \false;
-        }
-        if (!$oldType->getItemType() instanceof StringType) {
-            return \false;
-        }
-        return $newType->getItemType() instanceof GenericClassStringType;
     }
 }
