@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
@@ -58,12 +57,7 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector impl
      * @var \Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard
      */
     private $propertyTypeOverrideGuard;
-    /**
-     * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer, VarTagRemover $varTagRemover, PhpDocTypeChanger $phpDocTypeChanger, ConstructorAssignDetector $constructorAssignDetector, PhpVersionProvider $phpVersionProvider, PropertyTypeOverrideGuard $propertyTypeOverrideGuard, ReflectionProvider $reflectionProvider)
+    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer, VarTagRemover $varTagRemover, PhpDocTypeChanger $phpDocTypeChanger, ConstructorAssignDetector $constructorAssignDetector, PhpVersionProvider $phpVersionProvider, PropertyTypeOverrideGuard $propertyTypeOverrideGuard)
     {
         $this->trustedClassMethodPropertyTypeInferer = $trustedClassMethodPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
@@ -71,7 +65,6 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector impl
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->propertyTypeOverrideGuard = $propertyTypeOverrideGuard;
-        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -117,9 +110,6 @@ CODE_SAMPLE
             return null;
         }
         foreach ($node->getProperties() as $property) {
-            if ($this->shouldSkipProperty($property, $node)) {
-                continue;
-            }
             $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($property, $constructClassMethod);
             if ($propertyType instanceof MixedType) {
                 continue;
@@ -158,35 +148,6 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::TYPED_PROPERTIES;
-    }
-    /**
-     * @return string[]
-     */
-    private function resolveTraitPropertyNames(Class_ $class) : array
-    {
-        $traitPropertyNames = [];
-        foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitName) {
-                $traitNameString = $this->getName($traitName);
-                if (!$this->reflectionProvider->hasClass($traitNameString)) {
-                    continue;
-                }
-                $traitClassReflection = $this->reflectionProvider->getClass($traitNameString);
-                $nativeReflection = $traitClassReflection->getNativeReflection();
-                foreach ($nativeReflection->getProperties() as $property) {
-                    $traitPropertyNames[] = $property->getName();
-                }
-            }
-        }
-        return $traitPropertyNames;
-    }
-    private function shouldSkipProperty(Property $property, Class_ $class) : bool
-    {
-        if ($property->type !== null) {
-            return \true;
-        }
-        $traitPropertyNames = $this->resolveTraitPropertyNames($class);
-        return $this->isNames($property, $traitPropertyNames);
     }
     private function isVarDocPreffered(Property $property) : bool
     {
