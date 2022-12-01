@@ -60,7 +60,7 @@ final class MyFirstRector extends AbstractRector
     }
 
     /**
-     * This method helps other to understand the rule and to generate documentation.
+     * This method helps others to understand the rule and to generate documentation.
      */
     public function getRuleDefinition(): RuleDefinition
     {
