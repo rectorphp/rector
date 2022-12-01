@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Caching\Detector;
 
-use RectorPrefix202211\Nette\Utils\Strings;
+use RectorPrefix202212\Nette\Utils\Strings;
 use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
 use Rector\Caching\Enum\CacheKey;

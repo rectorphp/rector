@@ -36,7 +36,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202211\\Symfony\\Component\\Config\\": ""
+            "RectorPrefix202212\\Symfony\\Component\\Config\\": ""
         },
         "exclude-from-classmap": [
             "\/Tests\/"

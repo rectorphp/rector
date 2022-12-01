@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202211\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202212\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202211\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202211\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202211\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use RectorPrefix202211\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
 /**
  * Checks that all references are pointing to a valid service.
  *

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202211\Nette\Iterators;
+namespace RectorPrefix202212\Nette\Iterators;
 
 /**
  * Applies the callback to the elements of the inner iterator.

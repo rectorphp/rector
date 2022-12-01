@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
-use RectorPrefix202211\Nette\Utils\FileSystem;
+use RectorPrefix202212\Nette\Utils\FileSystem;
 final class FixtureFileUpdater
 {
     public static function updateFixtureContent(string $originalFilePath, string $changedContent, string $fixtureFilepath) : void

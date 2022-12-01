@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202211\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202212\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202211\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
-use RectorPrefix202211\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202211\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202211\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
 /**
  * Propagate "container.hot_path" tags to referenced services.
  *

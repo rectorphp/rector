@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202211\Nette\Utils;
+namespace RectorPrefix202212\Nette\Utils;
 
-use RectorPrefix202211\Nette;
+use RectorPrefix202212\Nette;
 /**
  * Basic manipulation with images. Supported types are JPEG, PNG, GIF, WEBP, AVIF and BMP.
  *

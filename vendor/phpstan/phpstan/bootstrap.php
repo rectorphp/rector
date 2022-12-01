@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace PHPStan;
 
-use RectorPrefix202211\Composer\Autoload\ClassLoader;
+use RectorPrefix202212\Composer\Autoload\ClassLoader;
 final class PharAutoloader
 {
     /** @var ClassLoader */
     private static $composerAutoloader;
     public static final function loadClass(string $class) : void
     {
-        if (!\extension_loaded('phar') || \defined('RectorPrefix202211\\__PHPSTAN_RUNNING__')) {
+        if (!\extension_loaded('phar') || \defined('RectorPrefix202212\\__PHPSTAN_RUNNING__')) {
             return;
         }
         if (\strpos($class, '_PHPStan_') === 0) {

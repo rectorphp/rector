@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202211\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix202212\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix202211\Symfony\Component\Config\Definition\BaseNode;
-use RectorPrefix202211\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
-use RectorPrefix202211\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix202212\Symfony\Component\Config\Definition\BaseNode;
+use RectorPrefix202212\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
+use RectorPrefix202212\Symfony\Component\Config\Definition\NodeInterface;
 /**
  * This class provides a fluent interface for defining a node.
  *

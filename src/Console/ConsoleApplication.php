@@ -3,16 +3,16 @@
 declare (strict_types=1);
 namespace Rector\Core\Console;
 
-use RectorPrefix202211\Composer\XdebugHandler\XdebugHandler;
+use RectorPrefix202212\Composer\XdebugHandler\XdebugHandler;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
-use RectorPrefix202211\Symfony\Component\Console\Application;
-use RectorPrefix202211\Symfony\Component\Console\Command\Command;
-use RectorPrefix202211\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202211\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202211\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202211\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202212\Symfony\Component\Console\Application;
+use RectorPrefix202212\Symfony\Component\Console\Command\Command;
+use RectorPrefix202212\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202212\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202212\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202212\Symfony\Component\Console\Output\OutputInterface;
 final class ConsoleApplication extends Application
 {
     /**

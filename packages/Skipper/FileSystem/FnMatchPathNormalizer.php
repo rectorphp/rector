@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Skipper\FileSystem;
 
-use RectorPrefix202211\Nette\Utils\Strings;
+use RectorPrefix202212\Nette\Utils\Strings;
 use Rector\Skipper\Enum\AsteriskMatch;
 /**
  * @see \Rector\Tests\Skipper\FileSystem\FnMatchPathNormalizerTest

@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202211\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202212\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202211\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix202211\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202211\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

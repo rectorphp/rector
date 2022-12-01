@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202211\Nette\Utils;
+namespace RectorPrefix202212\Nette\Utils;
 
-use RectorPrefix202211\Nette;
-use RectorPrefix202211\Nette\HtmlStringable;
+use RectorPrefix202212\Nette;
+use RectorPrefix202212\Nette\HtmlStringable;
 use function is_array, is_float, is_object, is_string;
 /**
  * HTML helper.

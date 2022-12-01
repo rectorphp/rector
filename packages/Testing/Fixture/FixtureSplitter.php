@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
-use RectorPrefix202211\Nette\Utils\FileSystem;
-use RectorPrefix202211\Nette\Utils\Strings;
-use RectorPrefix202211\Webmozart\Assert\Assert;
+use RectorPrefix202212\Nette\Utils\FileSystem;
+use RectorPrefix202212\Nette\Utils\Strings;
+use RectorPrefix202212\Webmozart\Assert\Assert;
 final class FixtureSplitter
 {
     /**

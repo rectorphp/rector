@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202211\Symfony\Component\Filesystem\Exception;
+namespace RectorPrefix202212\Symfony\Component\Filesystem\Exception;
 
 /**
  * Exception class thrown when a filesystem operation failure happens.
@@ -28,9 +28,6 @@ class IOException extends \RuntimeException implements IOExceptionInterface
         $this->path = $path;
         parent::__construct($message, $code, $previous);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getPath() : ?string
     {
         return $this->path;

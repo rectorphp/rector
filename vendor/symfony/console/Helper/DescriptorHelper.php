@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202211\Symfony\Component\Console\Helper;
+namespace RectorPrefix202212\Symfony\Component\Console\Helper;
 
-use RectorPrefix202211\Symfony\Component\Console\Descriptor\DescriptorInterface;
-use RectorPrefix202211\Symfony\Component\Console\Descriptor\JsonDescriptor;
-use RectorPrefix202211\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
-use RectorPrefix202211\Symfony\Component\Console\Descriptor\TextDescriptor;
-use RectorPrefix202211\Symfony\Component\Console\Descriptor\XmlDescriptor;
-use RectorPrefix202211\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202211\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202212\Symfony\Component\Console\Descriptor\DescriptorInterface;
+use RectorPrefix202212\Symfony\Component\Console\Descriptor\JsonDescriptor;
+use RectorPrefix202212\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
+use RectorPrefix202212\Symfony\Component\Console\Descriptor\TextDescriptor;
+use RectorPrefix202212\Symfony\Component\Console\Descriptor\XmlDescriptor;
+use RectorPrefix202212\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202212\Symfony\Component\Console\Output\OutputInterface;
 /**
  * This class adds helper method to describe objects in various formats.
  *

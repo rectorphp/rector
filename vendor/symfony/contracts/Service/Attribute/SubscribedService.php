@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202211\Symfony\Contracts\Service\Attribute;
+namespace RectorPrefix202212\Symfony\Contracts\Service\Attribute;
 
-use RectorPrefix202211\Symfony\Contracts\Service\ServiceSubscriberTrait;
+use RectorPrefix202212\Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
  * Use with {@see ServiceSubscriberTrait} to mark a method's return type
  * as a subscribed service.
