@@ -34,8 +34,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         $this->normalizeKeys = $normalizeKeys;
     }
     /**
-     * {@inheritdoc}
-     *
      * Namely, you mostly have foo_bar in YAML while you have foo-bar in XML.
      * After running this method, all keys are normalized to foo_bar.
      *
@@ -133,22 +131,15 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
     {
         return $this->ignoreExtraKeys;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setName(string $name)
     {
         $this->name = $name;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefaultValue() : bool
     {
         return $this->addIfNotSet;
     }
     /**
-     * {@inheritdoc}
      * @return mixed
      */
     public function getDefaultValue()
@@ -182,8 +173,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         $this->children[$name] = $node;
     }
     /**
-     * {@inheritdoc}
-     *
      * @throws UnsetKeyException
      * @throws InvalidConfigurationException if the node doesn't have enough children
      * @param mixed $value
@@ -225,7 +214,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         return $value;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      */
     protected function validateType($value)
@@ -240,8 +228,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         }
     }
     /**
-     * {@inheritdoc}
-     *
      * @throws InvalidConfigurationException
      * @param mixed $value
      * @return mixed
@@ -307,8 +293,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         return $value;
     }
     /**
-     * {@inheritdoc}
-     *
      * @throws InvalidConfigurationException
      * @throws \RuntimeException
      * @param mixed $leftSide
@@ -347,9 +331,6 @@ class ArrayNode extends BaseNode implements PrototypeNodeInterface
         }
         return $leftSide;
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function allowPlaceholders() : bool
     {
         return \false;

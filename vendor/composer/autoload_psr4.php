@@ -21,6 +21,7 @@ return array(
     'RectorPrefix202212\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
     'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\' => array($vendorDir . '/symplify/autowire-array-parameter/src'),
     'RectorPrefix202212\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
+    'RectorPrefix202212\\Symfony\\Component\\VarExporter\\' => array($vendorDir . '/symfony/var-exporter'),
     'RectorPrefix202212\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix202212\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'RectorPrefix202212\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),

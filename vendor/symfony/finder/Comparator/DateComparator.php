@@ -28,7 +28,7 @@ class DateComparator extends Comparator
             throw new \InvalidArgumentException(\sprintf('Don\'t understand "%s" as a date test.', $test));
         }
         try {
-            $date = new \DateTime($matches[2]);
+            $date = new \DateTimeImmutable($matches[2]);
             $target = $date->format('U');
         } catch (\Exception $exception) {
             throw new \InvalidArgumentException(\sprintf('"%s" is not a valid date.', $matches[2]));

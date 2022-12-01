@@ -22,7 +22,6 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
 class DefinitionErrorExceptionPass extends AbstractRecursivePass
 {
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

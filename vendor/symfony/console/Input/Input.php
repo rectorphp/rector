@@ -39,9 +39,6 @@ abstract class Input implements InputInterface, StreamableInputInterface
             $this->validate();
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     public function bind(InputDefinition $definition)
     {
         $this->arguments = [];
@@ -53,9 +50,6 @@ abstract class Input implements InputInterface, StreamableInputInterface
      * Processes command line arguments.
      */
     protected abstract function parse();
-    /**
-     * {@inheritdoc}
-     */
     public function validate()
     {
         $definition = $this->definition;
@@ -67,29 +61,19 @@ abstract class Input implements InputInterface, StreamableInputInterface
             throw new RuntimeException(\sprintf('Not enough arguments (missing: "%s").', \implode(', ', $missingArguments)));
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isInteractive() : bool
     {
         return $this->interactive;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setInteractive(bool $interactive)
     {
         $this->interactive = $interactive;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getArguments() : array
     {
         return \array_merge($this->definition->getArgumentDefaults(), $this->arguments);
     }
     /**
-     * {@inheritdoc}
      * @return mixed
      */
     public function getArgument(string $name)
@@ -100,7 +84,6 @@ abstract class Input implements InputInterface, StreamableInputInterface
         return $this->arguments[$name] ?? $this->definition->getArgument($name)->getDefault();
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      */
     public function setArgument(string $name, $value)
@@ -110,22 +93,15 @@ abstract class Input implements InputInterface, StreamableInputInterface
         }
         $this->arguments[$name] = $value;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function hasArgument(string $name) : bool
     {
         return $this->definition->hasArgument($name);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getOptions() : array
     {
         return \array_merge($this->definition->getOptionDefaults(), $this->options);
     }
     /**
-     * {@inheritdoc}
      * @return mixed
      */
     public function getOption(string $name)
@@ -142,7 +118,6 @@ abstract class Input implements InputInterface, StreamableInputInterface
         return \array_key_exists($name, $this->options) ? $this->options[$name] : $this->definition->getOption($name)->getDefault();
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      */
     public function setOption(string $name, $value)
@@ -155,9 +130,6 @@ abstract class Input implements InputInterface, StreamableInputInterface
         }
         $this->options[$name] = $value;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function hasOption(string $name) : bool
     {
         return $this->definition->hasOption($name) || $this->definition->hasNegation($name);
@@ -169,16 +141,10 @@ abstract class Input implements InputInterface, StreamableInputInterface
     {
         return \preg_match('{^[\\w-]+$}', $token) ? $token : \escapeshellarg($token);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setStream($stream)
     {
         $this->stream = $stream;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getStream()
     {
         return $this->stream;

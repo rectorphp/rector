@@ -10,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\AccessoryLiteralStringType;
 use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Accessory\HasMethodType;
+use PHPStan\Type\ConditionalType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -47,6 +48,9 @@ final class PHPStanStaticTypeMapper
         }
         if ($type instanceof AccessoryLiteralStringType) {
             return new IdentifierTypeNode('string');
+        }
+        if ($type instanceof ConditionalType) {
+            return new IdentifierTypeNode('mixed');
         }
         throw new NotImplementedYetException(__METHOD__ . ' for ' . \get_class($type));
     }

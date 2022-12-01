@@ -19,9 +19,6 @@ use RectorPrefix202212\Symfony\Component\Config\Definition\Exception\InvalidDefi
  */
 class BooleanNodeDefinition extends ScalarNodeDefinition
 {
-    /**
-     * {@inheritdoc}
-     */
     public function __construct(?string $name, NodeParentInterface $parent = null)
     {
         parent::__construct($name, $parent);
@@ -35,8 +32,6 @@ class BooleanNodeDefinition extends ScalarNodeDefinition
         return new BooleanNode($this->name, $this->parent, $this->pathSeparator);
     }
     /**
-     * {@inheritdoc}
-     *
      * @throws InvalidDefinitionException
      * @return $this
      */

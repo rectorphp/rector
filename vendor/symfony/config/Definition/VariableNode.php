@@ -32,15 +32,11 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
         $this->defaultValueSet = \true;
         $this->defaultValue = $value;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefaultValue() : bool
     {
         return $this->defaultValueSet;
     }
     /**
-     * {@inheritdoc}
      * @return mixed
      */
     public function getDefaultValue()
@@ -57,22 +53,17 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
     {
         $this->allowEmptyValue = $boolean;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setName(string $name)
     {
         $this->name = $name;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      */
     protected function validateType($value)
     {
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */
@@ -99,7 +90,6 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
         return $value;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */
@@ -108,7 +98,6 @@ class VariableNode extends BaseNode implements PrototypeNodeInterface
         return $value;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $leftSide
      * @param mixed $rightSide
      * @return mixed

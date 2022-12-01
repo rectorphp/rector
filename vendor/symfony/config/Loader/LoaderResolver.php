@@ -34,7 +34,6 @@ class LoaderResolver implements LoaderResolverInterface
         }
     }
     /**
-     * {@inheritdoc}
      * @return \Symfony\Component\Config\Loader\LoaderInterface|true
      * @param mixed $resource
      */

@@ -23,9 +23,6 @@ use RectorPrefix202212\Symfony\Component\Console\Output\OutputInterface;
  */
 class ListCommand extends Command
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function configure()
     {
         $this->setName('list')->setDefinition([new InputArgument('namespace', InputArgument::OPTIONAL, 'The namespace name', null, function () {
@@ -51,9 +48,6 @@ It's also possible to get raw list of commands (useful for embedding command run
 EOF
 );
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $helper = new DescriptorHelper();

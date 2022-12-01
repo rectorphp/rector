@@ -49,9 +49,6 @@ class FileResource implements SelfCheckingResourceInterface
     {
         return $this->resource;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isFresh(int $timestamp) : bool
     {
         return \false !== ($filemtime = @\filemtime($this->resource)) && $filemtime <= $timestamp;

@@ -177,6 +177,9 @@ class InputOption
      */
     public function setDefault($default = null)
     {
+        if (1 > \func_num_args()) {
+            \RectorPrefix202212\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+        }
         if (self::VALUE_NONE === (self::VALUE_NONE & $this->mode) && null !== $default) {
             throw new LogicException('Cannot set a default value when using InputOption::VALUE_NONE mode.');
         }

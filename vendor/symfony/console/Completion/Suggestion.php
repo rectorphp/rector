@@ -18,16 +18,27 @@ namespace RectorPrefix202212\Symfony\Component\Console\Completion;
 class Suggestion
 {
     /**
+     * @readonly
      * @var string
      */
     private $value;
-    public function __construct(string $value)
+    /**
+     * @readonly
+     * @var string
+     */
+    private $description = '';
+    public function __construct(string $value, string $description = '')
     {
         $this->value = $value;
+        $this->description = $description;
     }
     public function getValue() : string
     {
         return $this->value;
+    }
+    public function getDescription() : string
+    {
+        return $this->description;
     }
     public function __toString() : string
     {

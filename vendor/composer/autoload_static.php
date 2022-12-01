@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita806b829d393c0a5e11675def42b2d90
+class ComposerStaticInit2013c4036af687539af844c049a07fba
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -38,6 +38,7 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
             'RectorPrefix202212\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\' => 51,
             'RectorPrefix202212\\Symfony\\Contracts\\' => 37,
+            'RectorPrefix202212\\Symfony\\Component\\VarExporter\\' => 49,
             'RectorPrefix202212\\Symfony\\Component\\String\\' => 44,
             'RectorPrefix202212\\Symfony\\Component\\Finder\\' => 44,
             'RectorPrefix202212\\Symfony\\Component\\Filesystem\\' => 48,
@@ -135,6 +136,10 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
         'RectorPrefix202212\\Symfony\\Contracts\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/contracts',
+        ),
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/var-exporter',
         ),
         'RectorPrefix202212\\Symfony\\Component\\String\\' => 
         array (
@@ -904,6 +909,7 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
         'RectorPrefix202212\\Symfony\\Component\\Config\\FileLocator' => __DIR__ . '/..' . '/symfony/config/FileLocator.php',
         'RectorPrefix202212\\Symfony\\Component\\Config\\FileLocatorInterface' => __DIR__ . '/..' . '/symfony/config/FileLocatorInterface.php',
         'RectorPrefix202212\\Symfony\\Component\\Config\\Loader\\DelegatingLoader' => __DIR__ . '/..' . '/symfony/config/Loader/DelegatingLoader.php',
+        'RectorPrefix202212\\Symfony\\Component\\Config\\Loader\\DirectoryAwareLoaderInterface' => __DIR__ . '/..' . '/symfony/config/Loader/DirectoryAwareLoaderInterface.php',
         'RectorPrefix202212\\Symfony\\Component\\Config\\Loader\\FileLoader' => __DIR__ . '/..' . '/symfony/config/Loader/FileLoader.php',
         'RectorPrefix202212\\Symfony\\Component\\Config\\Loader\\GlobFileLoader' => __DIR__ . '/..' . '/symfony/config/Loader/GlobFileLoader.php',
         'RectorPrefix202212\\Symfony\\Component\\Config\\Loader\\Loader' => __DIR__ . '/..' . '/symfony/config/Loader/Loader.php',
@@ -947,6 +953,7 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
         'RectorPrefix202212\\Symfony\\Component\\Console\\Completion\\Output\\BashCompletionOutput' => __DIR__ . '/..' . '/symfony/console/Completion/Output/BashCompletionOutput.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Completion\\Output\\CompletionOutputInterface' => __DIR__ . '/..' . '/symfony/console/Completion/Output/CompletionOutputInterface.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Completion\\Output\\FishCompletionOutput' => __DIR__ . '/..' . '/symfony/console/Completion/Output/FishCompletionOutput.php',
+        'RectorPrefix202212\\Symfony\\Component\\Console\\Completion\\Output\\ZshCompletionOutput' => __DIR__ . '/..' . '/symfony/console/Completion/Output/ZshCompletionOutput.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Completion\\Suggestion' => __DIR__ . '/..' . '/symfony/console/Completion/Suggestion.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\ConsoleEvents' => __DIR__ . '/..' . '/symfony/console/ConsoleEvents.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Cursor' => __DIR__ . '/..' . '/symfony/console/Cursor.php',
@@ -982,6 +989,7 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
         'RectorPrefix202212\\Symfony\\Component\\Console\\Helper\\HelperInterface' => __DIR__ . '/..' . '/symfony/console/Helper/HelperInterface.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Helper\\HelperSet' => __DIR__ . '/..' . '/symfony/console/Helper/HelperSet.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Helper\\InputAwareHelper' => __DIR__ . '/..' . '/symfony/console/Helper/InputAwareHelper.php',
+        'RectorPrefix202212\\Symfony\\Component\\Console\\Helper\\OutputWrapper' => __DIR__ . '/..' . '/symfony/console/Helper/OutputWrapper.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Helper\\ProcessHelper' => __DIR__ . '/..' . '/symfony/console/Helper/ProcessHelper.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Helper\\ProgressBar' => __DIR__ . '/..' . '/symfony/console/Helper/ProgressBar.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Helper\\ProgressIndicator' => __DIR__ . '/..' . '/symfony/console/Helper/ProgressIndicator.php',
@@ -1004,6 +1012,7 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
         'RectorPrefix202212\\Symfony\\Component\\Console\\Input\\StreamableInputInterface' => __DIR__ . '/..' . '/symfony/console/Input/StreamableInputInterface.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Input\\StringInput' => __DIR__ . '/..' . '/symfony/console/Input/StringInput.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Logger\\ConsoleLogger' => __DIR__ . '/..' . '/symfony/console/Logger/ConsoleLogger.php',
+        'RectorPrefix202212\\Symfony\\Component\\Console\\Output\\AnsiColorMode' => __DIR__ . '/..' . '/symfony/console/Output/AnsiColorMode.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Output\\BufferedOutput' => __DIR__ . '/..' . '/symfony/console/Output/BufferedOutput.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Output\\ConsoleOutput' => __DIR__ . '/..' . '/symfony/console/Output/ConsoleOutput.php',
         'RectorPrefix202212\\Symfony\\Component\\Console\\Output\\ConsoleOutputInterface' => __DIR__ . '/..' . '/symfony/console/Output/ConsoleOutputInterface.php',
@@ -1136,8 +1145,10 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
         'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\Extension\\ExtensionTrait' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/ExtensionTrait.php',
         'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\Extension\\PrependExtensionInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/Extension/PrependExtensionInterface.php',
         'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\LazyProxy\\Instantiator\\InstantiatorInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/Instantiator/InstantiatorInterface.php',
+        'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\LazyProxy\\Instantiator\\LazyServiceInstantiator' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/Instantiator/LazyServiceInstantiator.php',
         'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\LazyProxy\\Instantiator\\RealServiceInstantiator' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/Instantiator/RealServiceInstantiator.php',
         'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\LazyProxy\\PhpDumper\\DumperInterface' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/PhpDumper/DumperInterface.php',
+        'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\LazyProxy\\PhpDumper\\LazyServiceDumper' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/PhpDumper/LazyServiceDumper.php',
         'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\LazyProxy\\PhpDumper\\NullDumper' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/PhpDumper/NullDumper.php',
         'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\LazyProxy\\ProxyHelper' => __DIR__ . '/..' . '/symfony/dependency-injection/LazyProxy/ProxyHelper.php',
         'RectorPrefix202212\\Symfony\\Component\\DependencyInjection\\Loader\\ClosureLoader' => __DIR__ . '/..' . '/symfony/dependency-injection/Loader/ClosureLoader.php',
@@ -1239,6 +1250,24 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
         'RectorPrefix202212\\Symfony\\Component\\String\\Slugger\\AsciiSlugger' => __DIR__ . '/..' . '/symfony/string/Slugger/AsciiSlugger.php',
         'RectorPrefix202212\\Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
         'RectorPrefix202212\\Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Exception\\ClassNotFoundException' => __DIR__ . '/..' . '/symfony/var-exporter/Exception/ClassNotFoundException.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/var-exporter/Exception/ExceptionInterface.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Exception\\LogicException' => __DIR__ . '/..' . '/symfony/var-exporter/Exception/LogicException.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Exception\\NotInstantiableTypeException' => __DIR__ . '/..' . '/symfony/var-exporter/Exception/NotInstantiableTypeException.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Hydrator' => __DIR__ . '/..' . '/symfony/var-exporter/Hydrator.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Instantiator' => __DIR__ . '/..' . '/symfony/var-exporter/Instantiator.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Internal\\Exporter' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Exporter.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Internal\\Hydrator' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Hydrator.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Internal\\LazyObjectRegistry' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/LazyObjectRegistry.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Internal\\LazyObjectState' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/LazyObjectState.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Internal\\Reference' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Reference.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Internal\\Registry' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Registry.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\Internal\\Values' => __DIR__ . '/..' . '/symfony/var-exporter/Internal/Values.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\LazyGhostTrait' => __DIR__ . '/..' . '/symfony/var-exporter/LazyGhostTrait.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\LazyObjectInterface' => __DIR__ . '/..' . '/symfony/var-exporter/LazyObjectInterface.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\LazyProxyTrait' => __DIR__ . '/..' . '/symfony/var-exporter/LazyProxyTrait.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\ProxyHelper' => __DIR__ . '/..' . '/symfony/var-exporter/ProxyHelper.php',
+        'RectorPrefix202212\\Symfony\\Component\\VarExporter\\VarExporter' => __DIR__ . '/..' . '/symfony/var-exporter/VarExporter.php',
         'RectorPrefix202212\\Symfony\\Contracts\\Cache\\CacheInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/CacheInterface.php',
         'RectorPrefix202212\\Symfony\\Contracts\\Cache\\CacheTrait' => __DIR__ . '/..' . '/symfony/contracts/Cache/CacheTrait.php',
         'RectorPrefix202212\\Symfony\\Contracts\\Cache\\CallbackInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/CallbackInterface.php',
@@ -1983,6 +2012,7 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
         'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeStaticTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/ClassMethod/DowngradeStaticTypeDeclarationRector.php',
         'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeStringReturnTypeOnToStringRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/ClassMethod/DowngradeStringReturnTypeOnToStringRector.php',
         'Rector\\DowngradePhp80\\Rector\\ClassMethod\\DowngradeTrailingCommasInParamUseRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/ClassMethod/DowngradeTrailingCommasInParamUseRector.php',
+        'Rector\\DowngradePhp80\\Rector\\ClassMethod\\RemoveReturnTypeDeclarationFromCloneRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/ClassMethod/RemoveReturnTypeDeclarationFromCloneRector.php',
         'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradeAttributeToAnnotationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php',
         'Rector\\DowngradePhp80\\Rector\\Class_\\DowngradePropertyPromotionRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Class_/DowngradePropertyPromotionRector.php',
         'Rector\\DowngradePhp80\\Rector\\Enum_\\DowngradeEnumToConstantListClassRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp80/Rector/Enum_/DowngradeEnumToConstantListClassRector.php',
@@ -3016,9 +3046,9 @@ class ComposerStaticInita806b829d393c0a5e11675def42b2d90
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita806b829d393c0a5e11675def42b2d90::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita806b829d393c0a5e11675def42b2d90::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita806b829d393c0a5e11675def42b2d90::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2013c4036af687539af844c049a07fba::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2013c4036af687539af844c049a07fba::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2013c4036af687539af844c049a07fba::$classMap;
 
         }, null, ClassLoader::class);
     }

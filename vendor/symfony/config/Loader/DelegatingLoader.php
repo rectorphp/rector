@@ -26,7 +26,6 @@ class DelegatingLoader extends Loader
         $this->resolver = $resolver;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
      */
@@ -38,7 +37,6 @@ class DelegatingLoader extends Loader
         return $loader->load($resource, $type);
     }
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      */
     public function supports($resource, string $type = null) : bool

@@ -47,6 +47,9 @@ final class DumpCompletionCommand extends Command
             case 'fish':
                 [$rcFile, $completionFile] = ['~/.config/fish/config.fish', "/etc/fish/completions/{$commandName}.fish"];
                 break;
+            case 'zsh':
+                [$rcFile, $completionFile] = ['~/.zshrc', '$fpath[1]/' . $commandName];
+                break;
             default:
                 [$rcFile, $completionFile] = ['~/.bashrc', "/etc/bash_completion.d/{$commandName}"];
                 break;
@@ -102,7 +105,7 @@ EOH
             }
             return self::INVALID;
         }
-        $output->write(\str_replace(['{{ COMMAND_NAME }}', '{{ VERSION }}'], [$commandName, $this->getApplication()->getVersion()], \file_get_contents($completionFile)));
+        $output->write(\str_replace(['{{ COMMAND_NAME }}', '{{ VERSION }}'], [$commandName, CompleteCommand::COMPLETION_API_VERSION], \file_get_contents($completionFile)));
         return self::SUCCESS;
     }
     private static function guessShell() : string

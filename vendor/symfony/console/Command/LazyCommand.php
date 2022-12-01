@@ -14,6 +14,7 @@ use RectorPrefix202212\Symfony\Component\Console\Application;
 use RectorPrefix202212\Symfony\Component\Console\Completion\CompletionInput;
 use RectorPrefix202212\Symfony\Component\Console\Completion\CompletionSuggestions;
 use RectorPrefix202212\Symfony\Component\Console\Completion\Suggestion;
+use RectorPrefix202212\Symfony\Component\Console\Helper\HelperInterface;
 use RectorPrefix202212\Symfony\Component\Console\Helper\HelperSet;
 use RectorPrefix202212\Symfony\Component\Console\Input\InputDefinition;
 use RectorPrefix202212\Symfony\Component\Console\Input\InputInterface;
@@ -43,6 +44,9 @@ final class LazyCommand extends Command
     }
     public function setApplication(Application $application = null) : void
     {
+        if (1 > \func_num_args()) {
+            \RectorPrefix202212\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+        }
         if ($this->command instanceof parent) {
             $this->command->setApplication($application);
         }
@@ -100,8 +104,6 @@ final class LazyCommand extends Command
         return $this->getCommand()->getNativeDefinition();
     }
     /**
-     * {@inheritdoc}
-     *
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      * @param mixed $default
      * @return $this
@@ -113,8 +115,6 @@ final class LazyCommand extends Command
         return $this;
     }
     /**
-     * {@inheritdoc}
-     *
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      * @param string|mixed[] $shortcut
      * @param mixed $default
@@ -166,10 +166,7 @@ final class LazyCommand extends Command
     {
         return $this->getCommand()->getUsages();
     }
-    /**
-     * @return mixed
-     */
-    public function getHelper(string $name)
+    public function getHelper(string $name) : HelperInterface
     {
         return $this->getCommand()->getHelper($name);
     }

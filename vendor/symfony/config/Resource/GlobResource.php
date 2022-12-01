@@ -82,9 +82,6 @@ class GlobResource implements \IteratorAggregate, SelfCheckingResourceInterface
     {
         return 'glob.' . $this->prefix . (int) $this->recursive . $this->pattern . (int) $this->forExclusion . \implode("\x00", $this->excludedPrefixes);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isFresh(int $timestamp) : bool
     {
         $hash = $this->computeHash();

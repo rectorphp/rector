@@ -46,78 +46,47 @@ abstract class Output implements OutputInterface
         $this->formatter = $formatter ?? new OutputFormatter();
         $this->formatter->setDecorated($decorated);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setFormatter(OutputFormatterInterface $formatter)
     {
         $this->formatter = $formatter;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getFormatter() : OutputFormatterInterface
     {
         return $this->formatter;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setDecorated(bool $decorated)
     {
         $this->formatter->setDecorated($decorated);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isDecorated() : bool
     {
         return $this->formatter->isDecorated();
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setVerbosity(int $level)
     {
         $this->verbosity = $level;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getVerbosity() : int
     {
         return $this->verbosity;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isQuiet() : bool
     {
         return self::VERBOSITY_QUIET === $this->verbosity;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isVerbose() : bool
     {
         return self::VERBOSITY_VERBOSE <= $this->verbosity;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isVeryVerbose() : bool
     {
         return self::VERBOSITY_VERY_VERBOSE <= $this->verbosity;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isDebug() : bool
     {
         return self::VERBOSITY_DEBUG <= $this->verbosity;
     }
     /**
-     * {@inheritdoc}
      * @param string|mixed[] $messages
      */
     public function writeln($messages, int $options = self::OUTPUT_NORMAL)
@@ -125,7 +94,6 @@ abstract class Output implements OutputInterface
         $this->write($messages, \true, $options);
     }
     /**
-     * {@inheritdoc}
      * @param string|mixed[] $messages
      */
     public function write($messages, bool $newline = \false, int $options = self::OUTPUT_NORMAL)

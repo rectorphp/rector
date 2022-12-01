@@ -49,7 +49,11 @@ class PrototypeConfigurator extends AbstractServiceConfigurator
      * @var bool
      */
     private $allowParent;
-    public function __construct(ServicesConfigurator $parent, PhpFileLoader $loader, Definition $defaults, string $namespace, string $resource, bool $allowParent)
+    /**
+     * @var string|null
+     */
+    private $path;
+    public function __construct(ServicesConfigurator $parent, PhpFileLoader $loader, Definition $defaults, string $namespace, string $resource, bool $allowParent, string $path = null)
     {
         $definition = new Definition();
         if (!$defaults->isPublic() || !$defaults->isPrivate()) {
@@ -63,13 +67,14 @@ class PrototypeConfigurator extends AbstractServiceConfigurator
         $this->loader = $loader;
         $this->resource = $resource;
         $this->allowParent = $allowParent;
+        $this->path = $path;
         parent::__construct($parent, $definition, $namespace, $defaults->getTags());
     }
     public function __destruct()
     {
         parent::__destruct();
         if (isset($this->loader)) {
-            $this->loader->registerClasses($this->definition, $this->id, $this->resource, $this->excludes);
+            $this->loader->registerClasses($this->definition, $this->id, $this->resource, $this->excludes, $this->path);
         }
         unset($this->loader);
     }

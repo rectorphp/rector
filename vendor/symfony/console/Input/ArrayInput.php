@@ -32,9 +32,6 @@ class ArrayInput extends Input
         $this->parameters = $parameters;
         parent::__construct($definition);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getFirstArgument() : ?string
     {
         foreach ($this->parameters as $param => $value) {
@@ -46,7 +43,6 @@ class ArrayInput extends Input
         return null;
     }
     /**
-     * {@inheritdoc}
      * @param string|mixed[] $values
      */
     public function hasParameterOption($values, bool $onlyParams = \false) : bool
@@ -66,7 +62,6 @@ class ArrayInput extends Input
         return \false;
     }
     /**
-     * {@inheritdoc}
      * @param string|mixed[] $values
      * @param string|bool|int|float|mixed[]|null $default
      * @return mixed
@@ -110,9 +105,6 @@ class ArrayInput extends Input
         }
         return \implode(' ', $params);
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function parse()
     {
         foreach ($this->parameters as $key => $value) {

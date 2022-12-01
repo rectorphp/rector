@@ -39,7 +39,6 @@ class DefinitionFileLoader extends FileLoader
         parent::__construct($locator);
     }
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
      */
@@ -61,7 +60,6 @@ class DefinitionFileLoader extends FileLoader
         return null;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      */
     public function supports($resource, string $type = null) : bool

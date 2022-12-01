@@ -108,10 +108,10 @@ abstract class AbstractUnicodeString extends AbstractString
                     $s = \preg_replace("/([AUO])̈(?=\\p{Ll})/u", '$1e', $s);
                     $s = \str_replace(["ä", "ö", "ü", "Ä", "Ö", "Ü"], ['ae', 'oe', 'ue', 'AE', 'OE', 'UE'], $s);
                 } elseif (\function_exists('transliterator_transliterate')) {
-                    if (null === ($transliterator = self::$transliterators[$rule] ?? (self::$transliterators[$rule] = \Transliterator::create($rule)))) {
+                    if (null === ($transliterator = self::$transliterators[$rule] = self::$transliterators[$rule] ?? \Transliterator::create($rule))) {
                         if ('any-latin/bgn' === $rule) {
                             $rule = 'any-latin';
-                            $transliterator = self::$transliterators[$rule] ?? (self::$transliterators[$rule] = \Transliterator::create($rule));
+                            $transliterator = self::$transliterators[$rule] = self::$transliterators[$rule] ?? \Transliterator::create($rule);
                         }
                         if (null === $transliterator) {
                             throw new InvalidArgumentException(\sprintf('Unknown transliteration rule "%s".', $rule));
@@ -208,13 +208,7 @@ abstract class AbstractUnicodeString extends AbstractString
         });
         try {
             if (\false === $match($regexp . 'u', $this->string, $matches, $flags | \PREG_UNMATCHED_AS_NULL, $offset)) {
-                $lastError = \preg_last_error();
-                foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
-                    if ($lastError === $v && \substr_compare($k, '_ERROR', -\strlen('_ERROR')) === 0) {
-                        throw new RuntimeException('Matching failed with ' . $k . '.');
-                    }
-                }
-                throw new RuntimeException('Matching failed with unknown error code.');
+                throw new RuntimeException('Matching failed with error: ' . \preg_last_error_msg());
             }
         } finally {
             \restore_error_handler();
@@ -495,9 +489,7 @@ abstract class AbstractUnicodeString extends AbstractString
             if (32 > $codePoint || 0x7f <= $codePoint && 0xa0 > $codePoint) {
                 return -1;
             }
-            if (null === self::$tableZero) {
-                self::$tableZero = (require __DIR__ . '/Resources/data/wcswidth_table_zero.php');
-            }
+            self::$tableZero = self::$tableZero ?? (require __DIR__ . '/Resources/data/wcswidth_table_zero.php');
             if ($codePoint >= self::$tableZero[0][0] && $codePoint <= self::$tableZero[$ubound = \count(self::$tableZero) - 1][1]) {
                 $lbound = 0;
                 while ($ubound >= $lbound) {
@@ -511,9 +503,7 @@ abstract class AbstractUnicodeString extends AbstractString
                     }
                 }
             }
-            if (null === self::$tableWide) {
-                self::$tableWide = (require __DIR__ . '/Resources/data/wcswidth_table_wide.php');
-            }
+            self::$tableWide = self::$tableWide ?? (require __DIR__ . '/Resources/data/wcswidth_table_wide.php');
             if ($codePoint >= self::$tableWide[0][0] && $codePoint <= self::$tableWide[$ubound = \count(self::$tableWide) - 1][1]) {
                 $lbound = 0;
                 while ($ubound >= $lbound) {

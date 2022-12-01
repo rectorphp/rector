@@ -421,13 +421,7 @@ abstract class AbstractString implements \JsonSerializable
         });
         try {
             if (\false === ($chunks = \preg_split($delimiter, $this->string, $limit, $flags))) {
-                $lastError = \preg_last_error();
-                foreach (\get_defined_constants(\true)['pcre'] as $k => $v) {
-                    if ($lastError === $v && \substr_compare($k, '_ERROR', -\strlen('_ERROR')) === 0) {
-                        throw new RuntimeException('Splitting failed with ' . $k . '.');
-                    }
-                }
-                throw new RuntimeException('Splitting failed with unknown error code.');
+                throw new RuntimeException('Splitting failed with error: ' . \preg_last_error_msg());
             }
         } finally {
             \restore_error_handler();

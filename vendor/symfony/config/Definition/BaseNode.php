@@ -34,6 +34,7 @@ abstract class BaseNode implements NodeInterface
     protected $name;
     protected $parent;
     protected $normalizationClosures = [];
+    protected $normalizedTypes = [];
     protected $finalValidationClosures = [];
     protected $allowOverwrite = \true;
     protected $required = \false;
@@ -202,6 +203,24 @@ abstract class BaseNode implements NodeInterface
         $this->normalizationClosures = $closures;
     }
     /**
+     * Sets the list of types supported by normalization.
+     *
+     * see ExprBuilder::TYPE_* constants.
+     */
+    public function setNormalizedTypes(array $types)
+    {
+        $this->normalizedTypes = $types;
+    }
+    /**
+     * Gets the list of types supported by normalization.
+     *
+     * see ExprBuilder::TYPE_* constants.
+     */
+    public function getNormalizedTypes() : array
+    {
+        return $this->normalizedTypes;
+    }
+    /**
      * Sets the closures used for final validation.
      *
      * @param \Closure[] $closures An array of Closures used for final validation
@@ -210,9 +229,6 @@ abstract class BaseNode implements NodeInterface
     {
         $this->finalValidationClosures = $closures;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function isRequired() : bool
     {
         return $this->required;
@@ -232,16 +248,10 @@ abstract class BaseNode implements NodeInterface
     {
         return ['package' => $this->deprecation['package'], 'version' => $this->deprecation['version'], 'message' => \strtr($this->deprecation['message'], ['%node%' => $node, '%path%' => $path])];
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getName() : string
     {
         return $this->name;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getPath() : string
     {
         if (null !== $this->parent) {
@@ -250,7 +260,6 @@ abstract class BaseNode implements NodeInterface
         return $this->name;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $leftSide
      * @param mixed $rightSide
      * @return mixed
@@ -287,7 +296,6 @@ abstract class BaseNode implements NodeInterface
         return $this->mergeValues($leftSide, $rightSide);
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */
@@ -338,7 +346,6 @@ abstract class BaseNode implements NodeInterface
         return $this->parent;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

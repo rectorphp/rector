@@ -82,9 +82,6 @@ class DebugFormatterHelper extends Helper
     {
         return \sprintf('<bg=%s> </>', self::COLORS[$this->started[$id]['border']]);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getName() : string
     {
         return 'debug_formatter';

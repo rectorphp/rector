@@ -18,7 +18,6 @@ namespace RectorPrefix202212\Symfony\Component\DependencyInjection\Loader;
 class GlobFileLoader extends FileLoader
 {
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
      */
@@ -31,7 +30,6 @@ class GlobFileLoader extends FileLoader
         return null;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      */
     public function supports($resource, string $type = null) : bool

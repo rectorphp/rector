@@ -58,9 +58,6 @@ class ArgvInput extends Input
     {
         $this->tokens = $tokens;
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function parse()
     {
         $parseOptions = \true;
@@ -237,9 +234,6 @@ class ArgvInput extends Input
             $this->options[$name] = $value;
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getFirstArgument() : ?string
     {
         $isOption = \false;
@@ -267,7 +261,6 @@ class ArgvInput extends Input
         return null;
     }
     /**
-     * {@inheritdoc}
      * @param string|mixed[] $values
      */
     public function hasParameterOption($values, bool $onlyParams = \false) : bool
@@ -290,7 +283,6 @@ class ArgvInput extends Input
         return \false;
     }
     /**
-     * {@inheritdoc}
      * @param string|mixed[] $values
      * @param string|bool|int|float|mixed[]|null $default
      * @return mixed

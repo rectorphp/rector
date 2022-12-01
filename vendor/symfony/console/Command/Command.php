@@ -18,6 +18,7 @@ use RectorPrefix202212\Symfony\Component\Console\Completion\Suggestion;
 use RectorPrefix202212\Symfony\Component\Console\Exception\ExceptionInterface;
 use RectorPrefix202212\Symfony\Component\Console\Exception\InvalidArgumentException;
 use RectorPrefix202212\Symfony\Component\Console\Exception\LogicException;
+use RectorPrefix202212\Symfony\Component\Console\Helper\HelperInterface;
 use RectorPrefix202212\Symfony\Component\Console\Helper\HelperSet;
 use RectorPrefix202212\Symfony\Component\Console\Input\InputArgument;
 use RectorPrefix202212\Symfony\Component\Console\Input\InputDefinition;
@@ -164,6 +165,9 @@ class Command
     }
     public function setApplication(Application $application = null)
     {
+        if (1 > \func_num_args()) {
+            \RectorPrefix202212\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+        }
         $this->application = $application;
         if ($application) {
             $this->setHelperSet($application->getHelperSet());
@@ -427,9 +431,9 @@ class Command
      * @param $default The default value (for InputArgument::OPTIONAL mode only)
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      *
-     * @throws InvalidArgumentException When argument mode is not valid
-     *
      * @return $this
+     *
+     * @throws InvalidArgumentException When argument mode is not valid
      * @param mixed $default
      */
     public function addArgument(string $name, int $mode = null, string $description = '', $default = null)
@@ -450,9 +454,9 @@ class Command
      * @param $default  The default value (must be null for InputOption::VALUE_NONE)
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      *
-     * @throws InvalidArgumentException If option mode is invalid or incompatible
-     *
      * @return $this
+     *
+     * @throws InvalidArgumentException If option mode is invalid or incompatible
      * @param string|mixed[] $shortcut
      * @param mixed $default
      */
@@ -629,9 +633,10 @@ class Command
     /**
      * Gets a helper instance by name.
      *
+     * @return HelperInterface
+     *
      * @throws LogicException           if no HelperSet is defined
      * @throws InvalidArgumentException if the helper is not defined
-     * @return mixed
      */
     public function getHelper(string $name)
     {

@@ -10,8 +10,14 @@
  */
 namespace RectorPrefix202212\Symfony\Component\Console;
 
+use RectorPrefix202212\Symfony\Component\Console\Output\AnsiColorMode;
 class Terminal
 {
+    public const DEFAULT_COLOR_MODE = AnsiColorMode::Ansi4;
+    /**
+     * @var \Symfony\Component\Console\Output\AnsiColorMode|null
+     */
+    private static $colorMode;
     /**
      * @var int|null
      */
@@ -24,6 +30,50 @@ class Terminal
      * @var bool|null
      */
     private static $stty;
+    /**
+     * About Ansi color types: https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
+     * For more information about true color support with terminals https://github.com/termstandard/colors/.
+     */
+    public static function getColorMode() : AnsiColorMode
+    {
+        // Use Cache from previous run (or user forced mode)
+        if (null !== self::$colorMode) {
+            return self::$colorMode;
+        }
+        // Try with $COLORTERM first
+        if (\is_string($colorterm = \getenv('COLORTERM'))) {
+            $colorterm = \strtolower($colorterm);
+            if (\strpos($colorterm, 'truecolor') !== \false) {
+                self::setColorMode(AnsiColorMode::Ansi24);
+                return self::$colorMode;
+            }
+            if (\strpos($colorterm, '256color') !== \false) {
+                self::setColorMode(AnsiColorMode::Ansi8);
+                return self::$colorMode;
+            }
+        }
+        // Try with $TERM
+        if (\is_string($term = \getenv('TERM'))) {
+            $term = \strtolower($term);
+            if (\strpos($term, 'truecolor') !== \false) {
+                self::setColorMode(AnsiColorMode::Ansi24);
+                return self::$colorMode;
+            }
+            if (\strpos($term, '256color') !== \false) {
+                self::setColorMode(AnsiColorMode::Ansi8);
+                return self::$colorMode;
+            }
+        }
+        self::setColorMode(self::DEFAULT_COLOR_MODE);
+        return self::$colorMode;
+    }
+    /**
+     * Force a terminal color mode rendering.
+     */
+    public static function setColorMode(?AnsiColorMode $colorMode) : void
+    {
+        self::$colorMode = $colorMode;
+    }
     /**
      * Gets the terminal width.
      */
@@ -101,11 +151,11 @@ class Terminal
     private static function initDimensionsUsingStty()
     {
         if ($sttyString = self::getSttyColumns()) {
-            if (\preg_match('/rows.(\\d+);.columns.(\\d+);/i', $sttyString, $matches)) {
+            if (\preg_match('/rows.(\\d+);.columns.(\\d+);/is', $sttyString, $matches)) {
                 // extract [w, h] from "rows h; columns w;"
                 self::$width = (int) $matches[2];
                 self::$height = (int) $matches[1];
-            } elseif (\preg_match('/;.(\\d+).rows;.(\\d+).columns/i', $sttyString, $matches)) {
+            } elseif (\preg_match('/;.(\\d+).rows;.(\\d+).columns/is', $sttyString, $matches)) {
                 // extract [w, h] from "; h rows; w columns"
                 self::$width = (int) $matches[2];
                 self::$height = (int) $matches[1];
@@ -130,9 +180,12 @@ class Terminal
      */
     private static function getSttyColumns() : ?string
     {
-        return self::readFromProcess('stty -a | grep columns');
+        return self::readFromProcess(['stty', '-a']);
     }
-    private static function readFromProcess(string $command) : ?string
+    /**
+     * @param string|mixed[] $command
+     */
+    private static function readFromProcess($command) : ?string
     {
         if (!\function_exists('proc_open')) {
             return null;

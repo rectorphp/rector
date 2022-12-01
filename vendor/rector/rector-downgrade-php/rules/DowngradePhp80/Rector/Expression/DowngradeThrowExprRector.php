@@ -3,16 +3,21 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
@@ -21,6 +26,7 @@ use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
 use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -45,11 +51,17 @@ final class DowngradeThrowExprRector extends AbstractRector
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
-    public function __construct(IfManipulator $ifManipulator, CoalesceAnalyzer $coalesceAnalyzer, BinaryOpManipulator $binaryOpManipulator)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToAddCollector
+     */
+    private $nodesToAddCollector;
+    public function __construct(IfManipulator $ifManipulator, CoalesceAnalyzer $coalesceAnalyzer, BinaryOpManipulator $binaryOpManipulator, NodesToAddCollector $nodesToAddCollector)
     {
         $this->ifManipulator = $ifManipulator;
         $this->coalesceAnalyzer = $coalesceAnalyzer;
         $this->binaryOpManipulator = $binaryOpManipulator;
+        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -70,14 +82,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class, Return_::class];
+        return [Expression::class, Return_::class, Coalesce::class];
     }
     /**
-     * @param Expression|Return_ $node
+     * @param Expression|Return_|Coalesce $node
      * @return Node|Node[]|null
      */
     public function refactor(Node $node)
     {
+        if ($node instanceof Coalesce) {
+            return $this->refactorDirectCoalesce($node);
+        }
         if ($node instanceof Return_) {
             return $this->refactorReturn($node);
         }
@@ -172,11 +187,19 @@ CODE_SAMPLE
             $if = $this->createIf($coalesce, $coalesce->right);
             return [$if, new Return_($coalesce->left)];
         }
+        if ($return->expr instanceof Throw_) {
+            return [new Expression($return->expr)];
+        }
         return null;
     }
     private function createIf(Coalesce $coalesce, Throw_ $throw) : If_
     {
-        $booleanNot = new BooleanNot(new Isset_([$coalesce->left]));
+        $conditionalExpr = $coalesce->left;
+        if ($conditionalExpr instanceof Variable || $conditionalExpr instanceof ArrayDimFetch || $conditionalExpr instanceof PropertyFetch) {
+            $booleanNot = new BooleanNot(new Isset_([$conditionalExpr]));
+        } else {
+            $booleanNot = new NotIdentical($conditionalExpr, new ConstFetch(new Name('null')));
+        }
         return new If_($booleanNot, ['stmts' => [new Expression($throw)]]);
     }
     /**
@@ -188,5 +211,17 @@ CODE_SAMPLE
             return new BooleanNot(new Isset_([$coalesce->left]));
         }
         return new Identical($coalesce->left, $this->nodeFactory->createNull());
+    }
+    private function refactorDirectCoalesce(Coalesce $coalesce) : ?Expr
+    {
+        if (!$coalesce->right instanceof Throw_) {
+            return null;
+        }
+        // add condition if above
+        $throwExpr = $coalesce->right;
+        $throw = new Stmt\Throw_($throwExpr->expr);
+        $if = new If_(new Identical($coalesce->left, new ConstFetch(new Name('null'))), ['stmts' => [$throw]]);
+        $this->nodesToAddCollector->addNodeBeforeNode($if, $coalesce);
+        return $coalesce->left;
     }
 }

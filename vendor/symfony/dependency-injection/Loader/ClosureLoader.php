@@ -31,7 +31,6 @@ class ClosureLoader extends Loader
         parent::__construct($env);
     }
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
      */
@@ -40,7 +39,6 @@ class ClosureLoader extends Loader
         return $resource($this->container, $this->env);
     }
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      */
     public function supports($resource, string $type = null) : bool

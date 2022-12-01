@@ -15,44 +15,32 @@ namespace RectorPrefix202212\Symfony\Component\Console\Formatter;
  */
 final class NullOutputFormatterStyle implements OutputFormatterStyleInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function apply(string $text) : string
     {
         return $text;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setBackground(string $color = null) : void
     {
+        if (1 > \func_num_args()) {
+            \RectorPrefix202212\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+        }
         // do nothing
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setForeground(string $color = null) : void
     {
+        if (1 > \func_num_args()) {
+            \RectorPrefix202212\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+        }
         // do nothing
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setOption(string $option) : void
     {
         // do nothing
     }
-    /**
-     * {@inheritdoc}
-     */
     public function setOptions(array $options) : void
     {
         // do nothing
     }
-    /**
-     * {@inheritdoc}
-     */
     public function unsetOption(string $option) : void
     {
         // do nothing

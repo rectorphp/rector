@@ -26,9 +26,6 @@ use RectorPrefix202212\Symfony\Component\Console\Output\OutputInterface;
  */
 class MarkdownDescriptor extends Descriptor
 {
-    /**
-     * {@inheritdoc}
-     */
     public function describe(OutputInterface $output, object $object, array $options = [])
     {
         $decorated = $output->isDecorated();
@@ -36,23 +33,14 @@ class MarkdownDescriptor extends Descriptor
         parent::describe($output, $object, $options);
         $output->setDecorated($decorated);
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function write(string $content, bool $decorated = \true)
     {
         parent::write($content, $decorated);
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeInputArgument(InputArgument $argument, array $options = [])
     {
         $this->write('#### `' . ($argument->getName() ?: '<none>') . "`\n\n" . ($argument->getDescription() ? \preg_replace('/\\s*[\\r\\n]\\s*/', "\n", $argument->getDescription()) . "\n\n" : '') . '* Is required: ' . ($argument->isRequired() ? 'yes' : 'no') . "\n" . '* Is array: ' . ($argument->isArray() ? 'yes' : 'no') . "\n" . '* Default: `' . \str_replace("\n", '', \var_export($argument->getDefault(), \true)) . '`');
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeInputOption(InputOption $option, array $options = [])
     {
         $name = '--' . $option->getName();
@@ -64,9 +52,6 @@ class MarkdownDescriptor extends Descriptor
         }
         $this->write('#### `' . $name . '`' . "\n\n" . ($option->getDescription() ? \preg_replace('/\\s*[\\r\\n]\\s*/', "\n", $option->getDescription()) . "\n\n" : '') . '* Accept value: ' . ($option->acceptValue() ? 'yes' : 'no') . "\n" . '* Is value required: ' . ($option->isValueRequired() ? 'yes' : 'no') . "\n" . '* Is multiple: ' . ($option->isArray() ? 'yes' : 'no') . "\n" . '* Is negatable: ' . ($option->isNegatable() ? 'yes' : 'no') . "\n" . '* Default: `' . \str_replace("\n", '', \var_export($option->getDefault(), \true)) . '`');
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeInputDefinition(InputDefinition $definition, array $options = [])
     {
         if ($showArguments = \count($definition->getArguments()) > 0) {
@@ -91,9 +76,6 @@ class MarkdownDescriptor extends Descriptor
             }
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeCommand(Command $command, array $options = [])
     {
         if ($options['short'] ?? \false) {
@@ -116,9 +98,6 @@ class MarkdownDescriptor extends Descriptor
             $this->describeInputDefinition($definition);
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeApplication(Application $application, array $options = [])
     {
         $describedNamespace = $options['namespace'] ?? null;

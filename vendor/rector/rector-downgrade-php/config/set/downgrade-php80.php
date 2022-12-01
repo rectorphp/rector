@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace RectorPrefix202212;
 
+use Rector\DowngradePhp80\Rector\ClassMethod\RemoveReturnTypeDeclarationFromCloneRector;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
 use Rector\DowngradePhp80\Rector\ArrayDimFetch\DowngradeDereferenceableOperationRector;
@@ -76,4 +77,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(DowngradeNumberFormatNoFourthArgRector::class);
     $rectorConfig->rule(DowngradeStringReturnTypeOnToStringRector::class);
     $rectorConfig->rule(DowngradeMixedTypeTypedPropertyRector::class);
+    $rectorConfig->rule(RemoveReturnTypeDeclarationFromCloneRector::class);
 };

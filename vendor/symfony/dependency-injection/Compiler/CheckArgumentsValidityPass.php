@@ -29,7 +29,6 @@ class CheckArgumentsValidityPass extends AbstractRecursivePass
         $this->throwExceptions = $throwExceptions;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

@@ -18,9 +18,6 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\InvalidAr
  */
 class ResolveClassPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         foreach ($container->getDefinitions() as $id => $definition) {

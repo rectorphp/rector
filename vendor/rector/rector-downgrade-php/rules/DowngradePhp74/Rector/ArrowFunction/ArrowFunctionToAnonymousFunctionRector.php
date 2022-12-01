@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Throw_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -66,6 +67,19 @@ CODE_SAMPLE
     public function refactor(Node $node) : Closure
     {
         $stmts = [new Return_($node->expr)];
-        return $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType, $node->static);
+        $anonymousFunctionFactory = $this->anonymousFunctionFactory->create($node->params, $stmts, $node->returnType, $node->static);
+        // downgrade "return throw"
+        $this->traverseNodesWithCallable($anonymousFunctionFactory, static function (Node $node) : ?Throw_ {
+            if (!$node instanceof Return_) {
+                return null;
+            }
+            if (!$node->expr instanceof Node\Expr\Throw_) {
+                return null;
+            }
+            $throw = $node->expr;
+            // throw expr to throw stmts
+            return new Throw_($throw->expr);
+        });
+        return $anonymousFunctionFactory;
     }
 }

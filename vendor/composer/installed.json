@@ -1849,12 +1849,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "4a0952896de3c5bccaf46dc2c7c35ceee2a8c0e1"
+                "reference": "5a6a365b6688dbd11424ff8801f393e37235fc84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/4a0952896de3c5bccaf46dc2c7c35ceee2a8c0e1",
-                "reference": "4a0952896de3c5bccaf46dc2c7c35ceee2a8c0e1",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/5a6a365b6688dbd11424ff8801f393e37235fc84",
+                "reference": "5a6a365b6688dbd11424ff8801f393e37235fc84",
                 "shasum": ""
             },
             "require": {
@@ -1871,6 +1871,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-debugging": "dev-main",
+                "rector\/rector-generator": "^0.6.14",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-ci": "^11.1",
                 "symplify\/easy-coding-standard": "^11.1",
@@ -1879,7 +1880,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-11-23T10:25:55+00:00",
+            "time": "2022-12-01T16:51:06+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2194,17 +2195,17 @@
         },
         {
             "name": "symfony\/config",
-            "version": "v6.1.3",
-            "version_normalized": "6.1.3.0",
+            "version": "v6.2.0",
+            "version_normalized": "6.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/config.git",
-                "reference": "a0645dc585d378b73c01115dd7ab9348f7d40c85"
+                "reference": "ebf27792246165a2a0b6b69ec9c620cac8c5a2f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/config\/zipball\/a0645dc585d378b73c01115dd7ab9348f7d40c85",
-                "reference": "a0645dc585d378b73c01115dd7ab9348f7d40c85",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/config\/zipball\/ebf27792246165a2a0b6b69ec9c620cac8c5a2f0",
+                "reference": "ebf27792246165a2a0b6b69ec9c620cac8c5a2f0",
                 "shasum": ""
             },
             "require": {
@@ -2226,7 +2227,7 @@
             "suggest": {
                 "symfony\/yaml": "To use the yaml reference dumper"
             },
-            "time": "2022-07-20T15:00:40+00:00",
+            "time": "2022-11-02T09:08:04+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2254,7 +2255,7 @@
             "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/config\/tree\/v6.1.3"
+                "source": "https:\/\/github.com\/symfony\/config\/tree\/v6.2.0"
             },
             "funding": [
                 {
@@ -2274,17 +2275,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.1.8",
-            "version_normalized": "6.1.8.0",
+            "version": "v6.2.0",
+            "version_normalized": "6.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "a71863ea74f444d93c768deb3e314e1f750cf20d"
+                "reference": "75d4749d9620a8fa21a2d2847800a84b5c4e7682"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/a71863ea74f444d93c768deb3e314e1f750cf20d",
-                "reference": "a71863ea74f444d93c768deb3e314e1f750cf20d",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/75d4749d9620a8fa21a2d2847800a84b5c4e7682",
+                "reference": "75d4749d9620a8fa21a2d2847800a84b5c4e7682",
                 "shasum": ""
             },
             "require": {
@@ -2319,7 +2320,7 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2022-11-25T18:59:16+00:00",
+            "time": "2022-11-29T16:44:51+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2353,7 +2354,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.1.8"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.2.0"
             },
             "funding": [
                 {
@@ -2477,30 +2478,31 @@
         },
         {
             "name": "symfony\/dependency-injection",
-            "version": "v6.1.8",
-            "version_normalized": "6.1.8.0",
+            "version": "v6.2.0",
+            "version_normalized": "6.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/dependency-injection.git",
-                "reference": "11e33ed84db0ced77511a23b35168db127909f0e"
+                "reference": "bb328032f400961be5db5aed87fac9742b506f80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/11e33ed84db0ced77511a23b35168db127909f0e",
-                "reference": "11e33ed84db0ced77511a23b35168db127909f0e",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/dependency-injection\/zipball\/bb328032f400961be5db5aed87fac9742b506f80",
+                "reference": "bb328032f400961be5db5aed87fac9742b506f80",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1",
                 "psr\/container": "^1.1|^2.0",
                 "symfony\/deprecation-contracts": "^2.1|^3",
-                "symfony\/service-contracts": "^1.1.6|^2.0|^3.0"
+                "symfony\/service-contracts": "^1.1.6|^2.0|^3.0",
+                "symfony\/var-exporter": "^6.2"
             },
             "conflict": {
                 "ext-psr": "<1.1|>=2",
                 "symfony\/config": "<6.1",
                 "symfony\/finder": "<5.4",
-                "symfony\/proxy-manager-bridge": "<5.4",
+                "symfony\/proxy-manager-bridge": "<6.2",
                 "symfony\/yaml": "<5.4"
             },
             "provide": {
@@ -2519,12 +2521,12 @@
                 "symfony\/proxy-manager-bridge": "Generate service proxies to lazy load them",
                 "symfony\/yaml": ""
             },
-            "time": "2022-11-25T07:34:52+00:00",
+            "time": "2022-11-25T07:37:13+00:00",
             "type": "library",
             "extra": {
                 "patches_applied": [
-                    "https:\/\/raw.githubusercontent.com\/symplify\/vendor-patch-files\/main\/patches\/generic-php-config-loader.patch",
-                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/symfony-dependency-injection.patch"
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/symfony-dependency-injection.patch",
+                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/symfony-dependency-injection-loader-phpfileloader-php.patch"
                 ]
             },
             "installation-source": "dist",
@@ -2553,7 +2555,7 @@
             "description": "Allows you to standardize and centralize the way objects are constructed in your application",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v6.1.8"
+                "source": "https:\/\/github.com\/symfony\/dependency-injection\/tree\/v6.2.0"
             },
             "funding": [
                 {
@@ -2639,17 +2641,17 @@
         },
         {
             "name": "symfony\/finder",
-            "version": "v6.1.3",
-            "version_normalized": "6.1.3.0",
+            "version": "v6.2.0",
+            "version_normalized": "6.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/finder.git",
-                "reference": "39696bff2c2970b3779a5cac7bf9f0b88fc2b709"
+                "reference": "eb2355f69519e4ef33f1835bca4c935f5d42e570"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/39696bff2c2970b3779a5cac7bf9f0b88fc2b709",
-                "reference": "39696bff2c2970b3779a5cac7bf9f0b88fc2b709",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/eb2355f69519e4ef33f1835bca4c935f5d42e570",
+                "reference": "eb2355f69519e4ef33f1835bca4c935f5d42e570",
                 "shasum": ""
             },
             "require": {
@@ -2658,7 +2660,7 @@
             "require-dev": {
                 "symfony\/filesystem": "^6.0"
             },
-            "time": "2022-07-29T07:42:06+00:00",
+            "time": "2022-10-09T08:55:40+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2686,7 +2688,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.1.3"
+                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.2.0"
             },
             "funding": [
                 {
@@ -2879,17 +2881,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v6.1.7",
-            "version_normalized": "6.1.7.0",
+            "version": "v6.2.0",
+            "version_normalized": "6.2.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "823f143370880efcbdfa2dbca946b3358c4707e5"
+                "reference": "145702685e0d12f81d755c71127bfff7582fdd36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/823f143370880efcbdfa2dbca946b3358c4707e5",
-                "reference": "823f143370880efcbdfa2dbca946b3358c4707e5",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/145702685e0d12f81d755c71127bfff7582fdd36",
+                "reference": "145702685e0d12f81d755c71127bfff7582fdd36",
                 "shasum": ""
             },
             "require": {
@@ -2905,10 +2907,11 @@
             "require-dev": {
                 "symfony\/error-handler": "^5.4|^6.0",
                 "symfony\/http-client": "^5.4|^6.0",
+                "symfony\/intl": "^6.2",
                 "symfony\/translation-contracts": "^2.0|^3.0",
                 "symfony\/var-exporter": "^5.4|^6.0"
             },
-            "time": "2022-10-10T09:34:31+00:00",
+            "time": "2022-11-30T17:13:47+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2947,7 +2950,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.1.7"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.2.0"
             },
             "funding": [
                 {
@@ -2964,6 +2967,83 @@
                 }
             ],
             "install-path": "..\/symfony\/string"
+        },
+        {
+            "name": "symfony\/var-exporter",
+            "version": "v6.2.0",
+            "version_normalized": "6.2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/symfony\/var-exporter.git",
+                "reference": "0437f26ca0c648071cc15ddacd26152cc65f4cd6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/var-exporter\/zipball\/0437f26ca0c648071cc15ddacd26152cc65f4cd6",
+                "reference": "0437f26ca0c648071cc15ddacd26152cc65f4cd6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "require-dev": {
+                "symfony\/var-dumper": "^5.4|^6.0"
+            },
+            "time": "2022-11-25T08:33:31+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix202212\\Symfony\\Component\\VarExporter\\": ""
+                },
+                "exclude-from-classmap": [
+                    "\/Tests\/"
+                ]
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https:\/\/symfony.com\/contributors"
+                }
+            ],
+            "description": "Allows exporting any serializable PHP data structure to plain PHP code",
+            "homepage": "https:\/\/symfony.com",
+            "keywords": [
+                "clone",
+                "construct",
+                "export",
+                "hydrate",
+                "instantiate",
+                "lazy loading",
+                "proxy",
+                "serialize"
+            ],
+            "support": {
+                "source": "https:\/\/github.com\/symfony\/var-exporter\/tree\/v6.2.0"
+            },
+            "funding": [
+                {
+                    "url": "https:\/\/symfony.com\/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https:\/\/github.com\/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "..\/symfony\/var-exporter"
         },
         {
             "name": "symplify\/autowire-array-parameter",

@@ -39,8 +39,6 @@ class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
         $this->throwOnResolveException = $throwOnResolveException;
     }
     /**
-     * {@inheritdoc}
-     *
      * @throws ParameterNotFoundException
      */
     public function process(ContainerBuilder $container)

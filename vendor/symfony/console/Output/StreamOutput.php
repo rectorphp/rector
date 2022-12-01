@@ -42,9 +42,7 @@ class StreamOutput extends Output
             throw new InvalidArgumentException('The StreamOutput class needs a stream as its first argument.');
         }
         $this->stream = $stream;
-        if (null === $decorated) {
-            $decorated = $this->hasColorSupport();
-        }
+        $decorated = $decorated ?? $this->hasColorSupport();
         parent::__construct($verbosity, $decorated, $formatter);
     }
     /**
@@ -56,9 +54,6 @@ class StreamOutput extends Output
     {
         return $this->stream;
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function doWrite(string $message, bool $newline)
     {
         if ($newline) {

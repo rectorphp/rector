@@ -53,8 +53,6 @@ abstract class NumericNodeDefinition extends ScalarNodeDefinition
         return $this;
     }
     /**
-     * {@inheritdoc}
-     *
      * @throws InvalidDefinitionException
      * @return $this
      */

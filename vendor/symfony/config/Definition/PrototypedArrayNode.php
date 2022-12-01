@@ -82,9 +82,6 @@ class PrototypedArrayNode extends ArrayNode
     {
         $this->defaultValue = $value;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function hasDefaultValue() : bool
     {
         return \true;
@@ -103,8 +100,6 @@ class PrototypedArrayNode extends ArrayNode
         }
     }
     /**
-     * {@inheritdoc}
-     *
      * The default value could be either explicited or derived from the prototype
      * default value.
      * @return mixed
@@ -145,7 +140,6 @@ class PrototypedArrayNode extends ArrayNode
         throw new Exception('A prototyped array node cannot have concrete children.');
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */
@@ -170,8 +164,6 @@ class PrototypedArrayNode extends ArrayNode
         return $value;
     }
     /**
-     * {@inheritdoc}
-     *
      * @throws DuplicateKeyException
      * @param mixed $value
      * @return mixed
@@ -246,7 +238,6 @@ class PrototypedArrayNode extends ArrayNode
         return $normalized;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $leftSide
      * @param mixed $rightSide
      * @return mixed

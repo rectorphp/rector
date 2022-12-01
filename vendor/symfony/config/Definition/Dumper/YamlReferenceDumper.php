@@ -140,7 +140,7 @@ class YamlReferenceDumper
             $this->writeLine('');
             $message = \count($example) > 1 ? 'Examples' : 'Example';
             $this->writeLine('# ' . $message . ':', $depth * 4 + 4);
-            $this->writeArray(\array_map([Inline::class, 'dump'], $example), $depth + 1);
+            $this->writeArray(\array_map(\Closure::fromCallable([Inline::class, 'dump']), $example), $depth + 1);
         }
         if ($children) {
             foreach ($children as $childNode) {

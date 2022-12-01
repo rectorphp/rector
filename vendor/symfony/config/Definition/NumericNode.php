@@ -31,7 +31,6 @@ class NumericNode extends ScalarNode
         $this->max = $max;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */
@@ -53,7 +52,6 @@ class NumericNode extends ScalarNode
         return $value;
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      */
     protected function isValueEmpty($value) : bool

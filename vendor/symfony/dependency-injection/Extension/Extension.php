@@ -28,16 +28,10 @@ abstract class Extension implements ExtensionInterface, ConfigurationExtensionIn
      * @var mixed[]
      */
     private $processedConfigs = [];
-    /**
-     * {@inheritdoc}
-     */
     public function getXsdValidationBasePath()
     {
         return \false;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getNamespace()
     {
         return 'http://example.org/schema/dic/' . $this->getAlias();
@@ -69,9 +63,6 @@ abstract class Extension implements ExtensionInterface, ConfigurationExtensionIn
         $classBaseName = \substr(\strrchr($className, '\\'), 1, -9);
         return Container::underscore($classBaseName);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
         $class = static::class;

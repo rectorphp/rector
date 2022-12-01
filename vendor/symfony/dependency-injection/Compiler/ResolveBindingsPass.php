@@ -18,9 +18,9 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix202212\Symfony\Component\VarExporter\ProxyHelper;
 /**
  * @author Guilhem Niot <guilhem.niot@gmail.com>
  */
@@ -38,9 +38,6 @@ class ResolveBindingsPass extends AbstractRecursivePass
      * @var mixed[]
      */
     private $errorMessages = [];
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $this->usedBindings = $container->getRemovedBindingIds();
@@ -87,7 +84,6 @@ class ResolveBindingsPass extends AbstractRecursivePass
         }
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */
@@ -162,9 +158,9 @@ class ResolveBindingsPass extends AbstractRecursivePass
                 if (\array_key_exists($key, $arguments) && '' !== $arguments[$key]) {
                     continue;
                 }
-                $typeHint = ProxyHelper::getTypeHint($reflectionMethod, $parameter);
+                $typeHint = \ltrim(ProxyHelper::exportType($parameter) ?? '', '?');
                 $name = Target::parseName($parameter);
-                if ($typeHint && \array_key_exists($k = \ltrim($typeHint, '\\') . ' $' . $name, $bindings)) {
+                if ($typeHint && \array_key_exists($k = \preg_replace('/(^|[(|&])\\\\/', '\\1', $typeHint) . ' $' . $name, $bindings)) {
                     $arguments[$key] = $this->getBindingValue($bindings[$k]);
                     continue;
                 }

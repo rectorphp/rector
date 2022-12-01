@@ -178,4 +178,14 @@ class EnvConfigurator extends ParamConfigurator
         \array_unshift($this->stack, 'require');
         return $this;
     }
+    /**
+     * @param class-string<\BackedEnum> $backedEnumClassName
+     *
+     * @return $this
+     */
+    public function enum(string $backedEnumClassName)
+    {
+        \array_unshift($this->stack, 'enum', $backedEnumClassName);
+        return $this;
+    }
 }

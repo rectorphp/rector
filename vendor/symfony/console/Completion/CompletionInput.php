@@ -56,9 +56,6 @@ final class CompletionInput extends ArgvInput
         $input->currentIndex = $currentIndex;
         return $input;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function bind(InputDefinition $definition) : void
     {
         parent::bind($definition);

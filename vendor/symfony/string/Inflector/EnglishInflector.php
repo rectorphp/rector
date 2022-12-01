@@ -247,9 +247,6 @@ final class EnglishInflector implements InflectorInterface
         // species
         'seiceps',
     ];
-    /**
-     * {@inheritdoc}
-     */
     public function singularize(string $plural) : array
     {
         $pluralRev = \strrev($plural);
@@ -311,9 +308,6 @@ final class EnglishInflector implements InflectorInterface
         // Assume that plural and singular is identical
         return [$plural];
     }
-    /**
-     * {@inheritdoc}
-     */
     public function pluralize(string $singular) : array
     {
         $singularRev = \strrev($singular);

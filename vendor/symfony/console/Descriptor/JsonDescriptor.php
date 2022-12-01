@@ -24,16 +24,10 @@ use RectorPrefix202212\Symfony\Component\Console\Input\InputOption;
  */
 class JsonDescriptor extends Descriptor
 {
-    /**
-     * {@inheritdoc}
-     */
     protected function describeInputArgument(InputArgument $argument, array $options = [])
     {
         $this->writeData($this->getInputArgumentData($argument), $options);
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeInputOption(InputOption $option, array $options = [])
     {
         $this->writeData($this->getInputOptionData($option), $options);
@@ -41,23 +35,14 @@ class JsonDescriptor extends Descriptor
             $this->writeData($this->getInputOptionData($option, \true), $options);
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeInputDefinition(InputDefinition $definition, array $options = [])
     {
         $this->writeData($this->getInputDefinitionData($definition), $options);
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeCommand(Command $command, array $options = [])
     {
         $this->writeData($this->getCommandData($command, $options['short'] ?? \false), $options);
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function describeApplication(Application $application, array $options = [])
     {
         $describedNamespace = $options['namespace'] ?? null;

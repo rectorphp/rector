@@ -19,7 +19,6 @@ use RectorPrefix202212\Symfony\Component\Config\Definition\Exception\InvalidType
 class FloatNode extends NumericNode
 {
     /**
-     * {@inheritdoc}
      * @param mixed $value
      */
     protected function validateType($value)
@@ -37,9 +36,6 @@ class FloatNode extends NumericNode
             throw $ex;
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function getValidPlaceholderTypes() : array
     {
         return ['float'];

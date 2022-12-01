@@ -66,12 +66,8 @@ class ProgressIndicator
     public function __construct(OutputInterface $output, string $format = null, int $indicatorChangeInterval = 100, array $indicatorValues = null)
     {
         $this->output = $output;
-        if (null === $format) {
-            $format = $this->determineBestFormat();
-        }
-        if (null === $indicatorValues) {
-            $indicatorValues = ['-', '\\', '|', '/'];
-        }
+        $format = $format ?? $this->determineBestFormat();
+        $indicatorValues = $indicatorValues ?? ['-', '\\', '|', '/'];
         $indicatorValues = \array_values($indicatorValues);
         if (2 > \count($indicatorValues)) {
             throw new InvalidArgumentException('Must have at least 2 indicator value characters.');

@@ -20,7 +20,6 @@ class ResolveTaggedIteratorArgumentPass extends AbstractRecursivePass
 {
     use PriorityTaggedServiceTrait;
     /**
-     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

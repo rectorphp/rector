@@ -38,9 +38,6 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
         $this->file = $file;
         $this->resourceCheckers = $resourceCheckers;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getPath() : string
     {
         return $this->file;
@@ -119,7 +116,7 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
                 // discard chmod failure (some filesystem may not support it)
             }
         }
-        if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOLEAN)) {
+        if (\function_exists('opcache_invalidate') && \filter_var(\ini_get('opcache.enable'), \FILTER_VALIDATE_BOOL)) {
             @\opcache_invalidate($this->file, \true);
         }
     }

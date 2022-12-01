@@ -27,9 +27,6 @@ class HelpCommand extends Command
      * @var \Symfony\Component\Console\Command\Command
      */
     private $command;
-    /**
-     * {@inheritdoc}
-     */
     protected function configure()
     {
         $this->ignoreValidationErrors();
@@ -54,9 +51,6 @@ EOF
     {
         $this->command = $command;
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $this->command = $this->command ?? $this->getApplication()->find($input->getArgument('command_name'));

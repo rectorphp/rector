@@ -60,9 +60,6 @@ class DescriptorHelper extends Helper
         $this->descriptors[$format] = $descriptor;
         return $this;
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getName() : string
     {
         return 'descriptor';

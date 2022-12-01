@@ -77,9 +77,6 @@ class QuestionHelper extends Helper
             return $fallbackOutput;
         }
     }
-    /**
-     * {@inheritdoc}
-     */
     public function getName() : string
     {
         return 'question';
@@ -128,6 +125,8 @@ class QuestionHelper extends Helper
             $ret = $question->isTrimmable() ? \trim($autocomplete) : $autocomplete;
         }
         if ($output instanceof ConsoleSectionOutput) {
+            $output->addContent('');
+            // add EOL to the question
             $output->addContent($ret);
         }
         $ret = \strlen($ret) > 0 ? $ret : $question->getDefault();
@@ -361,6 +360,10 @@ class QuestionHelper extends Helper
             throw new RuntimeException('Unable to hide the response.');
         }
         $value = \fgets($inputStream, 4096);
+        if (4095 === \strlen($value)) {
+            $errOutput = $output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output;
+            $errOutput->warning('The value was possibly truncated by your shell or terminal emulator');
+        }
         if (self::$stty && Terminal::hasSttyAvailable()) {
             \shell_exec('stty ' . $sttyMode);
         }

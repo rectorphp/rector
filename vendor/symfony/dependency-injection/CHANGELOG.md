@@ -1,6 +1,20 @@
 CHANGELOG
 =========
 
+6.2
+---
+
+ * Use lazy-loading ghost objects and virtual proxies out of the box
+ * Add arguments `&$asGhostObject` and `$id` to LazyProxy's `DumperInterface` to allow using ghost objects for lazy loading services
+ * Add `enum` env var processor
+ * Add `shuffle` env var processor
+ * Allow #[When] to be extended
+ * Change the signature of `ContainerAwareInterface::setContainer()` to `setContainer(?ContainerInterface)`
+ * Deprecate calling `ContainerAwareTrait::setContainer()` without arguments
+ * Deprecate using numeric parameter names
+ * Add support for tagged iterators/locators `exclude` option to the xml and yaml loaders/dumpers
+ * Allow injecting `string $env` into php config closures
+
 6.1
 ---
 

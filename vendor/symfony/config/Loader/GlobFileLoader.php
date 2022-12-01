@@ -18,7 +18,6 @@ namespace RectorPrefix202212\Symfony\Component\Config\Loader;
 class GlobFileLoader extends FileLoader
 {
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
      */
@@ -27,7 +26,6 @@ class GlobFileLoader extends FileLoader
         return $this->import($resource);
     }
     /**
-     * {@inheritdoc}
      * @param mixed $resource
      */
     public function supports($resource, string $type = null) : bool

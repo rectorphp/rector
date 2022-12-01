@@ -11,7 +11,7 @@
 namespace RectorPrefix202212\Symfony\Component\DependencyInjection;
 
 use RectorPrefix202212\Psr\Container\ContainerInterface as PsrContainerInterface;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 /**
@@ -43,7 +43,7 @@ interface ContainerInterface extends PsrContainerInterface
     /**
      * @return array|bool|string|int|float|\UnitEnum|null
      *
-     * @throws InvalidArgumentException if the parameter is not defined
+     * @throws ParameterNotFoundException if the parameter is not defined
      */
     public function getParameter(string $name);
     public function hasParameter(string $name) : bool;

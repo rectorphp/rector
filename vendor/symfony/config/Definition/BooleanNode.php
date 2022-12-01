@@ -19,7 +19,6 @@ use RectorPrefix202212\Symfony\Component\Config\Definition\Exception\InvalidType
 class BooleanNode extends ScalarNode
 {
     /**
-     * {@inheritdoc}
      * @param mixed $value
      */
     protected function validateType($value)
@@ -34,7 +33,6 @@ class BooleanNode extends ScalarNode
         }
     }
     /**
-     * {@inheritdoc}
      * @param mixed $value
      */
     protected function isValueEmpty($value) : bool
@@ -42,9 +40,6 @@ class BooleanNode extends ScalarNode
         // a boolean value cannot be empty
         return \false;
     }
-    /**
-     * {@inheritdoc}
-     */
     protected function getValidPlaceholderTypes() : array
     {
         return ['bool'];
