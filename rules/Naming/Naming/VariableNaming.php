@@ -19,7 +19,6 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -111,27 +110,27 @@ final class VariableNaming
     }
     private function resolveBareFromNode(Node $node) : ?string
     {
-        $node = $this->unwrapNode($node);
+        $unwrappedNode = $this->unwrapNode($node);
+        if (!$unwrappedNode instanceof Node) {
+            return null;
+        }
         foreach ($this->assignVariableNameResolvers as $assignVariableNameResolver) {
-            if ($assignVariableNameResolver->match($node)) {
-                return $assignVariableNameResolver->resolve($node);
+            if ($assignVariableNameResolver->match($unwrappedNode)) {
+                return $assignVariableNameResolver->resolve($unwrappedNode);
             }
         }
-        if ($node !== null && ($node instanceof MethodCall || $node instanceof NullsafeMethodCall || $node instanceof StaticCall)) {
-            return $this->resolveFromMethodCall($node);
+        if ($unwrappedNode instanceof MethodCall || $unwrappedNode instanceof NullsafeMethodCall || $unwrappedNode instanceof StaticCall) {
+            return $this->resolveFromMethodCall($unwrappedNode);
         }
-        if ($node instanceof FuncCall) {
-            return $this->resolveFromNode($node->name);
+        if ($unwrappedNode instanceof FuncCall) {
+            return $this->resolveFromNode($unwrappedNode->name);
         }
-        if (!$node instanceof Node) {
-            throw new NotImplementedYetException();
-        }
-        $paramName = $this->nodeNameResolver->getName($node);
+        $paramName = $this->nodeNameResolver->getName($unwrappedNode);
         if ($paramName !== null) {
             return $paramName;
         }
-        if ($node instanceof String_) {
-            return $node->value;
+        if ($unwrappedNode instanceof String_) {
+            return $unwrappedNode->value;
         }
         return null;
     }
