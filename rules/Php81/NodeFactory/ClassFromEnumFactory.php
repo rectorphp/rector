@@ -26,15 +26,16 @@ final class ClassFromEnumFactory
     public function createFromEnum(Enum_ $enum) : Class_
     {
         $shortClassName = $this->nodeNameResolver->getShortName($enum);
-        $classConsts = [];
+        $classStmts = [];
         foreach ($enum->stmts as $stmt) {
             if (!$stmt instanceof EnumCase) {
+                $classStmts[] = $stmt;
                 continue;
             }
             $constValue = $this->createConstValue($stmt);
-            $classConsts[] = new ClassConst([new Const_($stmt->name, $constValue)], Visibility::PUBLIC);
+            $classStmts[] = new ClassConst([new Const_($stmt->name, $constValue)], Visibility::PUBLIC);
         }
-        $class = new Class_($shortClassName, ['stmts' => $classConsts]);
+        $class = new Class_($shortClassName, ['stmts' => $classStmts]);
         $class->namespacedName = $enum->namespacedName;
         return $class;
     }
