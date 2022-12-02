@@ -16,6 +16,7 @@ use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeRecursiveDirectoryIterator
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStaticTypeDeclarationRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeStringReturnTypeOnToStringRector;
 use Rector\DowngradePhp80\Rector\ClassMethod\DowngradeTrailingCommasInParamUseRector;
+use Rector\DowngradePhp80\Rector\Enum_\DowngradeEnumToConstantListClassRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector;
 use Rector\DowngradePhp80\Rector\Expression\DowngradeThrowExprRector;
 use Rector\DowngradePhp80\Rector\FuncCall\DowngradeArrayFilterNullableCallbackRector;
@@ -78,4 +79,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(DowngradeStringReturnTypeOnToStringRector::class);
     $rectorConfig->rule(DowngradeMixedTypeTypedPropertyRector::class);
     $rectorConfig->rule(RemoveReturnTypeDeclarationFromCloneRector::class);
+    $rectorConfig->rule(DowngradeEnumToConstantListClassRector::class);
 };
