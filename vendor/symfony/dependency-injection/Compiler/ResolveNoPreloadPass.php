@@ -25,6 +25,9 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
      * @var mixed[]
      */
     private $resolvedIds = [];
+    /**
+     * {@inheritdoc}
+     */
     public function process(ContainerBuilder $container)
     {
         $this->container = $container;
@@ -54,6 +57,7 @@ class ResolveNoPreloadPass extends AbstractRecursivePass
         }
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

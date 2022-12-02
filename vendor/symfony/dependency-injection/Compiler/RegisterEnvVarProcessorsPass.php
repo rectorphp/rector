@@ -23,7 +23,7 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
  */
 class RegisterEnvVarProcessorsPass implements CompilerPassInterface
 {
-    private const ALLOWED_TYPES = ['array', 'bool', 'float', 'int', 'string', \BackedEnum::class];
+    private const ALLOWED_TYPES = ['array', 'bool', 'float', 'int', 'string'];
     public function process(ContainerBuilder $container)
     {
         $bag = $container->getParameterBag();

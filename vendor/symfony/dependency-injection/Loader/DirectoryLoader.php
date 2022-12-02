@@ -18,6 +18,7 @@ namespace RectorPrefix202212\Symfony\Component\DependencyInjection\Loader;
 class DirectoryLoader extends FileLoader
 {
     /**
+     * {@inheritdoc}
      * @param mixed $file
      * @return mixed
      */
@@ -39,6 +40,7 @@ class DirectoryLoader extends FileLoader
         return null;
     }
     /**
+     * {@inheritdoc}
      * @param mixed $resource
      */
     public function supports($resource, string $type = null) : bool

@@ -132,7 +132,7 @@ class ServicesConfigurator extends AbstractConfigurator
      */
     public final function load(string $namespace, string $resource) : PrototypeConfigurator
     {
-        return new PrototypeConfigurator($this, $this->loader, $this->defaults, $namespace, $resource, \true, $this->path);
+        return new PrototypeConfigurator($this, $this->loader, $this->defaults, $namespace, $resource, \true);
     }
     /**
      * Gets an already defined service definition.

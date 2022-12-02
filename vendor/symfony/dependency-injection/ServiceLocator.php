@@ -36,6 +36,7 @@ class ServiceLocator implements ServiceProviderInterface, \Countable
      */
     private $container;
     /**
+     * {@inheritdoc}
      * @return mixed
      */
     public function get(string $id)

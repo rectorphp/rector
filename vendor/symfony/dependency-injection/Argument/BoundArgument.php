@@ -56,10 +56,16 @@ final class BoundArgument implements ArgumentInterface
         $this->type = $type;
         $this->file = $file;
     }
+    /**
+     * {@inheritdoc}
+     */
     public function getValues() : array
     {
         return [$this->value, $this->identifier, $this->used, $this->type, $this->file];
     }
+    /**
+     * {@inheritdoc}
+     */
     public function setValues(array $values)
     {
         if (5 === \count($values)) {

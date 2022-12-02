@@ -22,25 +22,31 @@ class EnvVarProcessor implements EnvVarProcessorInterface
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     private $container;
-    /** @var \Traversable<EnvVarLoaderInterface> */
+    /**
+     * @var \Traversable
+     */
     private $loaders;
     /**
      * @var mixed[]
      */
     private $loadedVars = [];
     /**
-     * @param \Traversable<EnvVarLoaderInterface>|null $loaders
+     * @param EnvVarLoaderInterface[] $loaders
      */
     public function __construct(ContainerInterface $container, \Traversable $loaders = null)
     {
         $this->container = $container;
         $this->loaders = $loaders ?? new \ArrayIterator();
     }
+    /**
+     * {@inheritdoc}
+     */
     public static function getProvidedTypes() : array
     {
-        return ['base64' => 'string', 'bool' => 'bool', 'not' => 'bool', 'const' => 'bool|int|float|string|array', 'csv' => 'array', 'file' => 'string', 'float' => 'float', 'int' => 'int', 'json' => 'array', 'key' => 'bool|int|float|string|array', 'url' => 'array', 'query_string' => 'array', 'resolve' => 'string', 'default' => 'bool|int|float|string|array', 'string' => 'string', 'trim' => 'string', 'require' => 'bool|int|float|string|array', 'enum' => \BackedEnum::class, 'shuffle' => 'array'];
+        return ['base64' => 'string', 'bool' => 'bool', 'not' => 'bool', 'const' => 'bool|int|float|string|array', 'csv' => 'array', 'file' => 'string', 'float' => 'float', 'int' => 'int', 'json' => 'array', 'key' => 'bool|int|float|string|array', 'url' => 'array', 'query_string' => 'array', 'resolve' => 'string', 'default' => 'bool|int|float|string|array', 'string' => 'string', 'trim' => 'string', 'require' => 'bool|int|float|string|array'];
     }
     /**
+     * {@inheritdoc}
      * @return mixed
      */
     public function getEnv(string $prefix, string $name, \Closure $getEnv)
@@ -60,24 +66,6 @@ class EnvVarProcessor implements EnvVarProcessorInterface
                 throw new EnvNotFoundException(\sprintf('Key "%s" not found in %s (resolved from "%s").', $key, \json_encode($array), $next));
             }
             return $array[$key];
-        }
-        if ('enum' === $prefix) {
-            if (\false === $i) {
-                throw new RuntimeException(\sprintf('Invalid env "enum:%s": a "%s" class-string should be provided.', $name, \BackedEnum::class));
-            }
-            $next = \substr($name, $i + 1);
-            $backedEnumClassName = \substr($name, 0, $i);
-            $backedEnumValue = $getEnv($next);
-            if (!\is_string($backedEnumValue) && !\is_int($backedEnumValue)) {
-                throw new RuntimeException(\sprintf('Resolved value of "%s" did not result in a string or int value.', $next));
-            }
-            if (!\is_subclass_of($backedEnumClassName, \BackedEnum::class)) {
-                throw new RuntimeException(\sprintf('"%s" is not a "%s".', $backedEnumClassName, \BackedEnum::class));
-            }
-            if ($backedEnumClassName::tryFrom($backedEnumValue) !== null) {
-                throw new RuntimeException(\sprintf('Enum value "%s" is not backed by "%s".', $backedEnumValue, $backedEnumClassName));
-            }
-            return $backedEnumClassName::tryFrom($backedEnumValue);
         }
         if ('default' === $prefix) {
             if (\false === $i) {
@@ -163,12 +151,6 @@ class EnvVarProcessor implements EnvVarProcessorInterface
             }
             return null;
         }
-        if ('shuffle' === $prefix) {
-            if (!\is_array($env)) {
-                throw new RuntimeException(\sprintf('Env var "%s" cannot be shuffled, expected array, got "%s".', $name, \get_debug_type($env)));
-            }
-            return $env;
-        }
         if (!\is_scalar($env)) {
             throw new RuntimeException(\sprintf('Non-scalar env var "%s" cannot be cast to "%s".', $name, $prefix));
         }
@@ -176,7 +158,7 @@ class EnvVarProcessor implements EnvVarProcessorInterface
             return (string) $env;
         }
         if (\in_array($prefix, ['bool', 'not'], \true)) {
-            $env = (bool) ((\filter_var($env, \FILTER_VALIDATE_BOOL) ?: \filter_var($env, \FILTER_VALIDATE_INT)) ?: \filter_var($env, \FILTER_VALIDATE_FLOAT));
+            $env = (bool) ((\filter_var($env, \FILTER_VALIDATE_BOOLEAN) ?: \filter_var($env, \FILTER_VALIDATE_INT)) ?: \filter_var($env, \FILTER_VALIDATE_FLOAT));
             return 'not' === $prefix ? !$env : $env;
         }
         if ('int' === $prefix) {

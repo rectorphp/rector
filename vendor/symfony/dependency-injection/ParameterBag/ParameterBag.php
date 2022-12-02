@@ -26,21 +26,31 @@ class ParameterBag implements ParameterBagInterface
     {
         $this->add($parameters);
     }
+    /**
+     * {@inheritdoc}
+     */
     public function clear()
     {
         $this->parameters = [];
     }
+    /**
+     * {@inheritdoc}
+     */
     public function add(array $parameters)
     {
         foreach ($parameters as $key => $value) {
             $this->set($key, $value);
         }
     }
+    /**
+     * {@inheritdoc}
+     */
     public function all() : array
     {
         return $this->parameters;
     }
     /**
+     * {@inheritdoc}
      * @return mixed[]|bool|string|int|float|\UnitEnum|null
      */
     public function get(string $name)
@@ -75,25 +85,30 @@ class ParameterBag implements ParameterBagInterface
         return $this->parameters[$name];
     }
     /**
+     * {@inheritdoc}
      * @param mixed[]|bool|string|int|float|\UnitEnum|null $value
      */
     public function set(string $name, $value)
     {
-        if (\is_numeric($name)) {
-            \RectorPrefix202212\trigger_deprecation('symfony/dependency-injection', '6.2', \sprintf('Using numeric parameter name "%s" is deprecated and will throw as of 7.0.', $name));
-            // uncomment the following line in 7.0
-            // throw new InvalidArgumentException(sprintf('The parameter name "%s" cannot be numeric.', $name));
-        }
         $this->parameters[$name] = $value;
     }
+    /**
+     * {@inheritdoc}
+     */
     public function has(string $name) : bool
     {
         return \array_key_exists($name, $this->parameters);
     }
+    /**
+     * {@inheritdoc}
+     */
     public function remove(string $name)
     {
         unset($this->parameters[$name]);
     }
+    /**
+     * {@inheritdoc}
+     */
     public function resolve()
     {
         if ($this->resolved) {
@@ -115,27 +130,20 @@ class ParameterBag implements ParameterBagInterface
     /**
      * Replaces parameter placeholders (%name%) by their values.
      *
-     * @template TValue of array<array|scalar>|scalar
-     *
-     * @param mixed $value
-     * @param array  $resolving An array of keys that are being resolved (used internally to detect circular references)
-     *
-     * @return mixed
+     * @param array $resolving An array of keys that are being resolved (used internally to detect circular references)
      *
      * @throws ParameterNotFoundException          if a placeholder references a parameter that does not exist
      * @throws ParameterCircularReferenceException if a circular reference if detected
      * @throws RuntimeException                    when a given parameter has a type problem
+     * @param mixed $value
+     * @return mixed
      */
     public function resolveValue($value, array $resolving = [])
     {
         if (\is_array($value)) {
             $args = [];
-            foreach ($value as $key => $v) {
-                $resolvedKey = \is_string($key) ? $this->resolveValue($key, $resolving) : $key;
-                if (!\is_scalar($resolvedKey) && !$resolvedKey instanceof \Stringable) {
-                    throw new RuntimeException(\sprintf('Array keys must be a scalar-value, but found key "%s" to resolve to type "%s".', $key, \get_debug_type($resolvedKey)));
-                }
-                $args[$resolvedKey] = $this->resolveValue($v, $resolving);
+            foreach ($value as $k => $v) {
+                $args[\is_string($k) ? $this->resolveValue($k, $resolving) : $k] = $this->resolveValue($v, $resolving);
             }
             return $args;
         }
@@ -190,6 +198,7 @@ class ParameterBag implements ParameterBagInterface
         return $this->resolved;
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */
@@ -208,6 +217,7 @@ class ParameterBag implements ParameterBagInterface
         return $value;
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

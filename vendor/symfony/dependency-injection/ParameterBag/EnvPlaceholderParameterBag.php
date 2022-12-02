@@ -38,6 +38,7 @@ class EnvPlaceholderParameterBag extends ParameterBag
      */
     private static $counter = 0;
     /**
+     * {@inheritdoc}
      * @return mixed[]|bool|string|int|float|\UnitEnum|null
      */
     public function get(string $name)
@@ -56,7 +57,7 @@ class EnvPlaceholderParameterBag extends ParameterBag
                     // return first result
                 }
             }
-            if (!\preg_match('/^(?:[-.\\w\\\\]*+:)*+\\w++$/', $env)) {
+            if (!\preg_match('/^(?:[-.\\w]*+:)*+\\w++$/', $env)) {
                 throw new InvalidArgumentException(\sprintf('Invalid %s name: only "word" characters are allowed.', $name));
             }
             if ($this->has($name) && null !== ($defaultValue = parent::get($name)) && !\is_string($defaultValue)) {
@@ -134,6 +135,9 @@ class EnvPlaceholderParameterBag extends ParameterBag
     {
         return $this->providedTypes;
     }
+    /**
+     * {@inheritdoc}
+     */
     public function resolve()
     {
         if ($this->resolved) {

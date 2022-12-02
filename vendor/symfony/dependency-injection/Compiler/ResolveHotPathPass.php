@@ -25,6 +25,9 @@ class ResolveHotPathPass extends AbstractRecursivePass
      * @var mixed[]
      */
     private $resolvedIds = [];
+    /**
+     * {@inheritdoc}
+     */
     public function process(ContainerBuilder $container)
     {
         try {
@@ -35,6 +38,7 @@ class ResolveHotPathPass extends AbstractRecursivePass
         }
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

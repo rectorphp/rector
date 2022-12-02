@@ -116,6 +116,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
         }
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

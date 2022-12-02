@@ -21,8 +21,6 @@ interface ExtensionInterface
     /**
      * Loads a specific configuration.
      *
-     * @param array<array<mixed>> $configs
-     *
      * @throws \InvalidArgumentException When provided tag is not defined in this extension
      */
     public function load(array $configs, ContainerBuilder $container);

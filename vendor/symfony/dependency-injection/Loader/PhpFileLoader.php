@@ -42,6 +42,7 @@ class PhpFileLoader extends FileLoader
         $this->generator = $generator;
     }
     /**
+     * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
      */
@@ -63,9 +64,6 @@ class PhpFileLoader extends FileLoader
                 // generic solution
                 $reflectionFunction = new \ReflectionFunction($callback);
                 $containerConfiguratorClass = $reflectionFunction->getParameters()[0]->getType()->getName();
-                // generic solution
-                $reflectionFunction = new \ReflectionFunction($callback);
-                $containerConfiguratorClass = $reflectionFunction->getParameters()[0]->getType()->getName();
                 $this->executeCallback($callback, new $containerConfiguratorClass($this->container, $this, $this->instanceof, $path, $resource, $this->env), $path);
             }
         } finally {
@@ -75,6 +73,7 @@ class PhpFileLoader extends FileLoader
         return null;
     }
     /**
+     * {@inheritdoc}
      * @param mixed $resource
      */
     public function supports($resource, string $type = null) : bool
@@ -97,7 +96,7 @@ class PhpFileLoader extends FileLoader
         $configBuilders = [];
         $r = new \ReflectionFunction($callback);
         $attribute = null;
-        foreach (\method_exists($r, 'getAttributes') ? $r->getAttributes(When::class, \ReflectionAttribute::IS_INSTANCEOF) : [] as $attribute) {
+        foreach (\method_exists($r, 'getAttributes') ? $r->getAttributes(When::class) : [] as $attribute) {
             if ($this->env === $attribute->newInstance()->env) {
                 $attribute = null;
                 break;
@@ -116,9 +115,6 @@ class PhpFileLoader extends FileLoader
                 $arguments[] = $containerConfigurator;
             } else {
                 switch ($type) {
-                    case ContainerConfigurator::class:
-                        $arguments[] = $containerConfigurator;
-                        break;
                     case ContainerBuilder::class:
                         $arguments[] = $this->container;
                         break;
@@ -126,12 +122,6 @@ class PhpFileLoader extends FileLoader
                     case self::class:
                         $arguments[] = $this;
                         break;
-                    case 'string':
-                        if (null !== $this->env && 'env' === $parameter->getName()) {
-                            $arguments[] = $this->env;
-                            break;
-                        }
-                    // no break
                     default:
                         try {
                             $configBuilder = $this->configBuilder($type);
@@ -166,7 +156,7 @@ class PhpFileLoader extends FileLoader
         if (\class_exists($namespace) && \is_subclass_of($namespace, ConfigBuilderInterface::class)) {
             return new $namespace();
         }
-        // If it does not start with Symfony\Config\ we don't know how to handle this
+        // If it does not start with Symfony\Config\ we dont know how to handle this
         if (\strncmp($namespace, 'Symfony\\Config\\', \strlen('Symfony\\Config\\')) !== 0) {
             throw new InvalidArgumentException(\sprintf('Could not find or generate class "%s".', $namespace));
         }

@@ -23,6 +23,9 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Loader\YamlFileLoad
 final class RegisterAutoconfigureAttributesPass implements CompilerPassInterface
 {
     private static $registerForAutoconfiguration;
+    /**
+     * {@inheritdoc}
+     */
     public function process(ContainerBuilder $container)
     {
         foreach ($container->getDefinitions() as $id => $definition) {

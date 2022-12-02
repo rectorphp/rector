@@ -23,22 +23,22 @@ class Autowire
 {
     /**
      * @readonly
-     * @var string|mixed[]|\Symfony\Component\ExpressionLanguage\Expression|\Symfony\Component\DependencyInjection\Reference
+     * @var string|\Symfony\Component\ExpressionLanguage\Expression|\Symfony\Component\DependencyInjection\Reference
      */
     public $value;
     /**
      * Use only ONE of the following.
      *
-     * @param string|mixed[] $value Parameter value (ie "%kernel.project_dir%/some/path")
+     * @param string|null $value      Parameter value (ie "%kernel.project_dir%/some/path")
      * @param string|null $service    Service ID (ie "some.service")
      * @param string|null $expression Expression (ie 'service("some.service").someMethod()')
      */
-    public function __construct($value = null, string $service = null, string $expression = null)
+    public function __construct(string $value = null, string $service = null, string $expression = null)
     {
         if (!($service xor $expression xor null !== $value)) {
             throw new LogicException('#[Autowire] attribute must declare exactly one of $service, $expression, or $value.');
         }
-        if (\is_string($value) && \strncmp($value, '@', \strlen('@')) === 0) {
+        if (null !== $value && \strncmp($value, '@', \strlen('@')) === 0) {
             switch (\true) {
                 case \strncmp($value, '@@', \strlen('@@')) === 0:
                     $value = \substr($value, 1);

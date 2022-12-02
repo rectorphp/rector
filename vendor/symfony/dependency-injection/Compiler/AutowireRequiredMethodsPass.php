@@ -20,6 +20,7 @@ use RectorPrefix202212\Symfony\Contracts\Service\Attribute\Required;
 class AutowireRequiredMethodsPass extends AbstractRecursivePass
 {
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

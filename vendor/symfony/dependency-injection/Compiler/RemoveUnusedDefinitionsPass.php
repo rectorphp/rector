@@ -68,6 +68,7 @@ class RemoveUnusedDefinitionsPass extends AbstractRecursivePass
         }
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

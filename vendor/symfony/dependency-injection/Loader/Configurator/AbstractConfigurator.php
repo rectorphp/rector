@@ -48,7 +48,7 @@ abstract class AbstractConfigurator
     /**
      * Checks that a value is valid, optionally replacing Definition and Reference configurators by their configure value.
      *
-     * @param bool $allowServices whether Definition and Reference are allowed; by default, only scalars, arrays and enum are
+     * @param bool $allowServices whether Definition and Reference are allowed; by default, only scalars and arrays are
      *
      * @return mixed the value, optionally cast to a Definition/Reference
      * @param mixed $value
@@ -82,7 +82,6 @@ abstract class AbstractConfigurator
         switch (\true) {
             case null === $value:
             case \is_scalar($value):
-            case $value instanceof \UnitEnum:
                 return $value;
             case $value instanceof ArgumentInterface:
             case $value instanceof Definition:

@@ -64,6 +64,7 @@ final class CheckTypeDeclarationsPass extends AbstractRecursivePass
         $this->skippedIds = $skippedIds;
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

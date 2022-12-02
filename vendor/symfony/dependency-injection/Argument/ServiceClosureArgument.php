@@ -29,10 +29,16 @@ class ServiceClosureArgument implements ArgumentInterface
     {
         $this->values = [$value];
     }
+    /**
+     * {@inheritdoc}
+     */
     public function getValues() : array
     {
         return $this->values;
     }
+    /**
+     * {@inheritdoc}
+     */
     public function setValues(array $values)
     {
         if ([0] !== \array_keys($values)) {

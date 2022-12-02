@@ -20,6 +20,9 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
  */
 class ResolveReferencesToAliasesPass extends AbstractRecursivePass
 {
+    /**
+     * {@inheritdoc}
+     */
     public function process(ContainerBuilder $container)
     {
         parent::process($container);
@@ -32,6 +35,7 @@ class ResolveReferencesToAliasesPass extends AbstractRecursivePass
         }
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */

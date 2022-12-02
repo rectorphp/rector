@@ -95,7 +95,7 @@ CODE_SAMPLE
             $node->args[0] = new Arg($variable);
         }
         $implode = $this->nodeFactory->createFuncCall('implode', [new String_(' '), $variable]);
-        $this->nodesToAddCollector->addNodeBeforeNode(new If_($this->nodeFactory->createFuncCall('is_array', [$args[0]->value]), ['stmts' => [new Expression(new Assign($variable, $implode))]]), $currentStmt);
+        $this->nodesToAddCollector->addNodeBeforeNode(new If_($this->nodeFactory->createFuncCall('is_array', [$variable]), ['stmts' => [new Expression(new Assign($variable, $implode))]]), $currentStmt);
         return $node;
     }
 }

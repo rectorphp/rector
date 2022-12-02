@@ -15,7 +15,6 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Argument\ServiceLoc
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\EnvNotFoundException;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\ParameterCircularReferenceException;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
@@ -104,7 +103,7 @@ class Container implements ContainerInterface, ResetInterface
      *
      * @return array|bool|string|int|float|\UnitEnum|null
      *
-     * @throws ParameterNotFoundException if the parameter is not defined
+     * @throws InvalidArgumentException if the parameter is not defined
      */
     public function getParameter(string $name)
     {
@@ -244,6 +243,9 @@ class Container implements ContainerInterface, ResetInterface
         }
         return isset($this->services[$id]);
     }
+    /**
+     * {@inheritdoc}
+     */
     public function reset()
     {
         $services = $this->services + $this->privates;

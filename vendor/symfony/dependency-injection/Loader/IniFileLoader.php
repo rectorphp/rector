@@ -20,6 +20,7 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\InvalidAr
 class IniFileLoader extends FileLoader
 {
     /**
+     * {@inheritdoc}
      * @param mixed $resource
      * @return mixed
      */
@@ -36,11 +37,7 @@ class IniFileLoader extends FileLoader
         $result = \parse_ini_file($path, \true, \INI_SCANNER_RAW);
         if (isset($result['parameters']) && \is_array($result['parameters'])) {
             foreach ($result['parameters'] as $key => $value) {
-                if (\is_array($value)) {
-                    $this->container->setParameter($key, \array_map(\Closure::fromCallable([$this, 'phpize']), $value));
-                } else {
-                    $this->container->setParameter($key, $this->phpize($value));
-                }
+                $this->container->setParameter($key, $this->phpize($value));
             }
         }
         if ($this->env && \is_array($result['parameters@' . $this->env] ?? null)) {
@@ -51,6 +48,7 @@ class IniFileLoader extends FileLoader
         return null;
     }
     /**
+     * {@inheritdoc}
      * @param mixed $resource
      */
     public function supports($resource, string $type = null) : bool

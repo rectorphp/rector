@@ -20,15 +20,24 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Definition;
  */
 class NullDumper implements DumperInterface
 {
-    public function isProxyCandidate(Definition $definition, bool &$asGhostObject = null, string $id = null) : bool
+    /**
+     * {@inheritdoc}
+     */
+    public function isProxyCandidate(Definition $definition) : bool
     {
-        return $asGhostObject = \false;
+        return \false;
     }
+    /**
+     * {@inheritdoc}
+     */
     public function getProxyFactoryCode(Definition $definition, string $id, string $factoryCode) : string
     {
         return '';
     }
-    public function getProxyCode(Definition $definition, string $id = null) : string
+    /**
+     * {@inheritdoc}
+     */
+    public function getProxyCode(Definition $definition) : string
     {
         return '';
     }

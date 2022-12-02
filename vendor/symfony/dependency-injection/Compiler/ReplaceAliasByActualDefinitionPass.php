@@ -80,6 +80,7 @@ class ReplaceAliasByActualDefinitionPass extends AbstractRecursivePass
         $this->replacements = [];
     }
     /**
+     * {@inheritdoc}
      * @param mixed $value
      * @return mixed
      */
