@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Type;
+use Rector\Core\Contract\Rector\DeprecatedRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use RectorPrefix202212\Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -14,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @deprecated This rule move doctypes to strict type declarations and often breaks the code.
  * Instead use specific rules that handle exact type declarations.
  */
-final class PropertyTypeDeclarationRector extends AbstractRector
+final class PropertyTypeDeclarationRector extends AbstractRector implements DeprecatedRectorInterface
 {
     /**
      * @readonly

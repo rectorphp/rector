@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
+use PhpToken;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -49,7 +50,7 @@ final class TokenGetAllToObjectRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Convert `token_get_all` to `PhpToken::tokenize`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert `token_get_all` to `' . PhpToken::class . '::tokenize`', [new CodeSample(<<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()

@@ -10,6 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -53,6 +54,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        $stringKind = $node->getAttribute(AttributeKey::KIND);
+        if (\in_array($stringKind, [String_::KIND_HEREDOC, String_::KIND_NOWDOC], \true)) {
+            return null;
+        }
         $classNames = $this->getExistingClasses($node);
         if ($classNames === []) {
             return $node;

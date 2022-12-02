@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use Rector\Core\Contract\Rector\DeprecatedRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use RectorPrefix202212\Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -14,7 +15,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @deprecated Moving doc types to type declarations is dangerous. Use specific strict type inferers instead.
  * Use specific rules to infer params instead. This rule will be split info many small ones.
  */
-final class ParamTypeDeclarationRector extends AbstractRector
+final class ParamTypeDeclarationRector extends AbstractRector implements DeprecatedRectorInterface
 {
     /**
      * @readonly
