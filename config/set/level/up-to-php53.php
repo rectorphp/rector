@@ -5,10 +5,9 @@ namespace RectorPrefix202212;
 
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->sets([SetList::PHP_54, LevelSetList::UP_TO_PHP_53]);
+    $rectorConfig->sets([SetList::PHP_53, SetList::PHP_52]);
     // parameter must be defined after import, to override imported param version
-    $rectorConfig->phpVersion(PhpVersion::PHP_54);
+    $rectorConfig->phpVersion(PhpVersion::PHP_53);
 };
