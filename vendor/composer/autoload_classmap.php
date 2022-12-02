@@ -1745,6 +1745,7 @@ return array(
     'Rector\\DowngradePhp74\\Rector\\ClassMethod\\DowngradeCovariantReturnTypeRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/ClassMethod/DowngradeCovariantReturnTypeRector.php',
     'Rector\\DowngradePhp74\\Rector\\Coalesce\\DowngradeNullCoalescingOperatorRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/Coalesce/DowngradeNullCoalescingOperatorRector.php',
     'Rector\\DowngradePhp74\\Rector\\FuncCall\\DowngradeArrayMergeCallWithoutArgumentsRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/FuncCall/DowngradeArrayMergeCallWithoutArgumentsRector.php',
+    'Rector\\DowngradePhp74\\Rector\\FuncCall\\DowngradeProcOpenArrayCommandArgRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/FuncCall/DowngradeProcOpenArrayCommandArgRector.php',
     'Rector\\DowngradePhp74\\Rector\\FuncCall\\DowngradeStripTagsCallWithArrayRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php',
     'Rector\\DowngradePhp74\\Rector\\Identical\\DowngradeFreadFwriteFalsyToNegationRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/Identical/DowngradeFreadFwriteFalsyToNegationRector.php',
     'Rector\\DowngradePhp74\\Rector\\Interface_\\DowngradePreviouslyImplementedInterfaceRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/Interface_/DowngradePreviouslyImplementedInterfaceRector.php',

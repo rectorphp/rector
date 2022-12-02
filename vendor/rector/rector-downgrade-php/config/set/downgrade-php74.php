@@ -11,6 +11,7 @@ use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeContravariantArgumentTypeR
 use Rector\DowngradePhp74\Rector\ClassMethod\DowngradeCovariantReturnTypeRector;
 use Rector\DowngradePhp74\Rector\Coalesce\DowngradeNullCoalescingOperatorRector;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeArrayMergeCallWithoutArgumentsRector;
+use Rector\DowngradePhp74\Rector\FuncCall\DowngradeProcOpenArrayCommandArgRector;
 use Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector;
 use Rector\DowngradePhp74\Rector\Identical\DowngradeFreadFwriteFalsyToNegationRector;
 use Rector\DowngradePhp74\Rector\Interface_\DowngradePreviouslyImplementedInterfaceRector;
@@ -31,4 +32,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(DowngradeFreadFwriteFalsyToNegationRector::class);
     $rectorConfig->rule(DowngradePreviouslyImplementedInterfaceRector::class);
     $rectorConfig->rule(DowngradeReflectionGetTypeRector::class);
+    $rectorConfig->rule(DowngradeProcOpenArrayCommandArgRector::class);
 };

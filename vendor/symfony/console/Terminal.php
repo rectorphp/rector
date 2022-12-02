@@ -191,6 +191,9 @@ class Terminal
             return null;
         }
         $descriptorspec = [1 => ['pipe', 'w'], 2 => ['pipe', 'w']];
+        if (\is_array($command)) {
+            $command = \implode(' ', $command);
+        }
         $process = \proc_open($command, $descriptorspec, $pipes, null, null, ['suppress_errors' => \true]);
         if (!\is_resource($process)) {
             return null;
