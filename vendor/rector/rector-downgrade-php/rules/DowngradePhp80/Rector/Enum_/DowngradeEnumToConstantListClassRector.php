@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Enum_;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -12,6 +14,7 @@ use PhpParser\Node\Stmt\Enum_;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
+use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -85,11 +88,18 @@ CODE_SAMPLE
         $hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         foreach ($node->params as $param) {
-            if (!$param->type instanceof Name) {
+            if ($param->type instanceof Name) {
+                $paramType = $param->type;
+                $isNullable = \false;
+            } elseif ($param->type instanceof NullableType) {
+                $paramType = $param->type->type;
+                $isNullable = \true;
+            } else {
                 continue;
             }
             // is enum type?
-            $typeName = $this->getName($param->type);
+            /** @var string $typeName */
+            $typeName = $this->getName($paramType);
             if (!$this->reflectionProvider->hasClass($typeName)) {
                 continue;
             }
@@ -97,21 +107,32 @@ CODE_SAMPLE
             if (!$classLikeReflection->isEnum()) {
                 continue;
             }
-            $param->type = $this->enumAnalyzer->resolveType($classLikeReflection);
+            $this->refactorParamType($classLikeReflection, $isNullable, $param);
             $hasChanged = \true;
-            $this->decorateParamDocType($classLikeReflection, $param, $phpDocInfo);
+            $this->decorateParamDocType($classLikeReflection, $param, $phpDocInfo, $isNullable);
         }
         if ($hasChanged) {
             return $node;
         }
         return null;
     }
-    private function decorateParamDocType(ClassReflection $classReflection, Param $param, PhpDocInfo $phpDocInfo) : void
+    private function decorateParamDocType(ClassReflection $classReflection, Param $param, PhpDocInfo $phpDocInfo, bool $isNullable) : void
     {
         $constFetchNode = new ConstFetchNode('\\' . $classReflection->getName(), '*');
         $constTypeNode = new ConstTypeNode($constFetchNode);
         $paramName = '$' . $this->getName($param);
-        $paramTagValueNode = new ParamTagValueNode($constTypeNode, \false, $paramName, '');
+        $paramTypeNode = $isNullable ? new NullableTypeNode($constTypeNode) : $constTypeNode;
+        $paramTagValueNode = new ParamTagValueNode($paramTypeNode, \false, $paramName, '');
         $phpDocInfo->addTagValueNode($paramTagValueNode);
+    }
+    private function refactorParamType(ClassReflection $classReflection, bool $isNullable, Param $param) : void
+    {
+        $identifier = $this->enumAnalyzer->resolveType($classReflection);
+        if ($identifier instanceof Identifier) {
+            $param->type = $isNullable ? new NullableType($identifier) : new Name($identifier->name);
+        } else {
+            // remove type as ambiguous
+            $param->type = null;
+        }
     }
 }
