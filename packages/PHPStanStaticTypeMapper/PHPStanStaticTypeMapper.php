@@ -40,14 +40,11 @@ final class PHPStanStaticTypeMapper
             }
             return $typeMapper->mapToPHPStanPhpDocTypeNode($type, $typeKind);
         }
-        if ($type instanceof AccessoryNumericStringType) {
+        if ($type->isString()->yes()) {
             return new IdentifierTypeNode('string');
         }
         if ($type instanceof HasMethodType) {
             return new IdentifierTypeNode('object');
-        }
-        if ($type instanceof AccessoryLiteralStringType) {
-            return new IdentifierTypeNode('string');
         }
         if ($type instanceof ConditionalType) {
             return new IdentifierTypeNode('mixed');
