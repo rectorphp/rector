@@ -7,8 +7,6 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\Accessory\AccessoryLiteralStringType;
-use PHPStan\Type\Accessory\AccessoryNumericStringType;
 use PHPStan\Type\Accessory\HasMethodType;
 use PHPStan\Type\ConditionalType;
 use PHPStan\Type\Type;

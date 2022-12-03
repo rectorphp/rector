@@ -21,6 +21,11 @@ final class RegexMatcher
      */
     private const LETTER_SUFFIX_REGEX = '#(?<modifiers>\\w+)$#';
     /**
+     * @var string[]
+     * @see https://www.php.net/manual/en/reference.pcre.pattern.modifiers.php
+     */
+    private const ALL_MODIFIERS_VALUES = ['i', 'm', 's', 'x', 'e', 'A', 'D', 'S', 'U', 'X', 'J', 'u'];
+    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
@@ -40,12 +45,26 @@ final class RegexMatcher
                 return null;
             }
             $delimiter = $pattern[0];
-            /** @var string $modifiers */
-            $modifiers = Strings::after($pattern, $delimiter, -1);
-            if (\strpos($modifiers, 'e') === \false) {
-                return null;
+            switch ($delimiter) {
+                case '(':
+                    $delimiter = ')';
+                    break;
+                case '{':
+                    $delimiter = '}';
+                    break;
+                case '[':
+                    $delimiter = ']';
+                    break;
+                case '<':
+                    $delimiter = '>';
+                    break;
+                default:
+                    $delimiter = $delimiter;
+                    break;
             }
-            if (\in_array($pattern[\strlen($pattern) - 1], [')', '}', ']', '>'], \true)) {
+            /** @var string $modifiers */
+            $modifiers = $this->resolveModifiers((string) Strings::after($pattern, $delimiter, -1));
+            if (\strpos($modifiers, 'e') === \false) {
                 return null;
             }
             $patternWithoutE = $this->createPatternWithoutE($pattern, $delimiter, $modifiers);
@@ -55,6 +74,18 @@ final class RegexMatcher
             return $this->matchConcat($expr);
         }
         return null;
+    }
+    private function resolveModifiers(string $modifiersCandidate) : string
+    {
+        $modifiers = '';
+        for ($modifierIndex = 0; $modifierIndex < \strlen($modifiersCandidate); ++$modifierIndex) {
+            if (!\in_array($modifiersCandidate[$modifierIndex], self::ALL_MODIFIERS_VALUES, \true)) {
+                $modifiers = '';
+                continue;
+            }
+            $modifiers .= $modifiersCandidate[$modifierIndex];
+        }
+        return $modifiers;
     }
     private function createPatternWithoutE(string $pattern, string $delimiter, string $modifiers) : string
     {

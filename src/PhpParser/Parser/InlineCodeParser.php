@@ -11,6 +11,7 @@ use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 final class InlineCodeParser
@@ -60,11 +61,17 @@ final class InlineCodeParser
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
      */
     private $simplePhpParser;
-    public function __construct(NodePrinterInterface $nodePrinter, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
+     */
+    private $valueResolver;
+    public function __construct(NodePrinterInterface $nodePrinter, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver)
     {
         $this->nodePrinter = $nodePrinter;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->simplePhpParser = $simplePhpParser;
+        $this->valueResolver = $valueResolver;
     }
     /**
      * @return Stmt[]
@@ -93,11 +100,18 @@ final class InlineCodeParser
         }
         if ($expr instanceof Encapsed) {
             // remove "
-            $expr = \trim($this->nodePrinter->print($expr), '""');
+            $printedExpr = \trim($this->nodePrinter->print($expr), '""');
+            /**
+             * Encapsed "$eval_links" is printed as {$eval_links} → use its value when possible
+             */
+            if (\strncmp($printedExpr, '{', \strlen('{')) === 0 && \substr_compare($printedExpr, '}', -\strlen('}')) === 0 && \count($expr->parts) === 1) {
+                $currentPart = \current($expr->parts);
+                $printedExpr = (string) $this->valueResolver->getValue($currentPart);
+            }
             // use \$ → $
-            $expr = Strings::replace($expr, self::PRESLASHED_DOLLAR_REGEX, '$');
+            $printedExpr = Strings::replace($printedExpr, self::PRESLASHED_DOLLAR_REGEX, '$');
             // use \'{$...}\' → $...
-            return Strings::replace($expr, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
+            return Strings::replace($printedExpr, self::CURLY_BRACKET_WRAPPER_REGEX, '$1');
         }
         if ($expr instanceof Concat) {
             $string = $this->stringify($expr->left) . $this->stringify($expr->right);
