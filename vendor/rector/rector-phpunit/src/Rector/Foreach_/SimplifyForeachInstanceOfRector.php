@@ -33,7 +33,10 @@ foreach ($foos as $foo) {
     $this->assertInstanceOf(SplFileInfo::class, $foo);
 }
 CODE_SAMPLE
-, '$this->assertContainsOnlyInstancesOf(\\SplFileInfo::class, $foos);')]);
+, <<<'CODE_SAMPLE'
+$this->assertContainsOnlyInstancesOf(\SplFileInfo::class, $foos);
+CODE_SAMPLE
+)]);
     }
     /**
      * @return array<class-string<Node>>

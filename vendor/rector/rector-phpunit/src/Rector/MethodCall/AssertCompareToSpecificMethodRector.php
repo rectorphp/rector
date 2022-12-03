@@ -43,7 +43,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Turns vague php-only method in PHPUnit TestCase to more specific', [new CodeSample('$this->assertSame(10, count($anything), "message");', '$this->assertCount(10, $anything, "message");'), new CodeSample('$this->assertNotEquals(get_class($value), stdClass::class);', '$this->assertNotInstanceOf(stdClass::class, $value);')]);
+        return new RuleDefinition('Turns vague php-only method in PHPUnit TestCase to more specific', [new CodeSample('$this->assertSame(10, count($anything), "message");', '$this->assertCount(10, $anything, "message");'), new CodeSample('$this->assertNotEquals(get_class($value), SomeInstance::class);', '$this->assertNotInstanceOf(SomeInstance::class, $value);')]);
     }
     /**
      * @return array<class-string<Node>>

@@ -48,8 +48,8 @@ final class ExpectExceptionMethodCallFactory
         if (!$phpDocTagNode->value instanceof GenericTagValueNode) {
             throw new ShouldNotHappenException();
         }
-        $node = $this->createExpectedExpr($phpDocTagNode, $phpDocTagNode->value);
-        return $this->nodeFactory->createMethodCall('this', $methodName, [new Arg($node)]);
+        $expr = $this->createExpectedExpr($phpDocTagNode, $phpDocTagNode->value);
+        return $this->nodeFactory->createMethodCall('this', $methodName, [new Arg($expr)]);
     }
     private function createExpectedExpr(PhpDocTagNode $phpDocTagNode, GenericTagValueNode $genericTagValueNode) : Expr
     {

@@ -40,8 +40,11 @@ final class DelegateExceptionArgumentsRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.', [new CodeSample('$this->setExpectedException(Exception::class, "Message", "CODE");', <<<'CODE_SAMPLE'
-$this->setExpectedException(Exception::class);
+        return new RuleDefinition('Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.', [new CodeSample(<<<'CODE_SAMPLE'
+$this->setExpectedException(SomeException::class, "Message", "CODE");
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+$this->setExpectedException(SomeException::class);
 $this->expectExceptionMessage('Message');
 $this->expectExceptionCode('CODE');
 CODE_SAMPLE
