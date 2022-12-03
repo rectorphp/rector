@@ -160,9 +160,9 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
      */
     protected function indent() : void
     {
-        $multiplier = $this->tabOrSpaceIndentCharacter === ' ' ? 4 : 1;
-        $this->indentLevel += $multiplier;
-        $this->nl .= \str_repeat($this->tabOrSpaceIndentCharacter, $multiplier);
+        $indentSize = $this->rectorConfigProvider->getIndentSize();
+        $this->indentLevel += $indentSize;
+        $this->nl .= \str_repeat($this->tabOrSpaceIndentCharacter, $indentSize);
     }
     /**
      * This allows to use both spaces and tabs vs. original space-only
