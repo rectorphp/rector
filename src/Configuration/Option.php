@@ -140,12 +140,6 @@ final class Option
     public const AUTOLOAD_FILE_SHORT = 'a';
     /**
      * @var string
-     * @deprecated
-     * @api
-     */
-    public const APPLY_AUTO_IMPORT_NAMES_ON_CHANGED_FILES_ONLY = 'apply_auto_import_names_on_changed_files_only';
-    /**
-     * @var string
      */
     public const PARALLEL_IDENTIFIER = 'identifier';
     /**
