@@ -59,7 +59,8 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->autoloadPaths([]);
     $rectorConfig->bootstrapFiles([]);
     $rectorConfig->parallel(120, 16, 20);
-    $rectorConfig->disableImportNames();
+    // to avoid autoimporting out of the box
+    $rectorConfig->importNames(\false);
     $rectorConfig->importShortClasses();
     $rectorConfig->indent(' ', 4);
     $rectorConfig->fileExtensions(['php']);

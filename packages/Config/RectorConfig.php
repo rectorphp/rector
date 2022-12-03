@@ -71,14 +71,6 @@ final class RectorConfig extends ContainerConfigurator
         $parameters->set(Option::IMPORT_SHORT_CLASSES, $importShortClasses);
     }
     /**
-     * @deprecated Use @see \Rector\Config\RectorConfig::importNames(false) instead
-     */
-    public function disableImportNames() : void
-    {
-        $parameters = $this->parameters();
-        $parameters->set(Option::AUTO_IMPORT_NAMES, \false);
-    }
-    /**
      * Set PHPStan custom config to load extensions and custom configuration to Rector.
      * By default, the "phpstan.neon" path is used.
      */
