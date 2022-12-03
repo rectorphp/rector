@@ -60,7 +60,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->bootstrapFiles([]);
     $rectorConfig->parallel(120, 16, 20);
     // to avoid autoimporting out of the box
-    $rectorConfig->importNames(\false);
+    $rectorConfig->importNames(\false, \false);
     $rectorConfig->importShortClasses();
     $rectorConfig->indent(' ', 4);
     $rectorConfig->fileExtensions(['php']);
