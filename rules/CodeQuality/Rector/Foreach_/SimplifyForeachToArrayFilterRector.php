@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
@@ -18,6 +17,8 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\UnionType;
 use Rector\CodeQuality\NodeFactory\ArrayFilterFactory;
 use Rector\Core\Rector\AbstractRector;
+use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
+use Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -30,9 +31,21 @@ final class SimplifyForeachToArrayFilterRector extends AbstractRector
      * @var \Rector\CodeQuality\NodeFactory\ArrayFilterFactory
      */
     private $arrayFilterFactory;
-    public function __construct(ArrayFilterFactory $arrayFilterFactory)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
+     */
+    private $exprUsedInNodeAnalyzer;
+    /**
+     * @readonly
+     * @var \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer
+     */
+    private $readExprAnalyzer;
+    public function __construct(ArrayFilterFactory $arrayFilterFactory, ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer, ReadExprAnalyzer $readExprAnalyzer)
     {
         $this->arrayFilterFactory = $arrayFilterFactory;
+        $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
+        $this->readExprAnalyzer = $readExprAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -74,6 +87,10 @@ CODE_SAMPLE
         /** @var If_ $ifNode */
         $ifNode = $node->stmts[0];
         $condExpr = $ifNode->cond;
+        $foreachKeyVar = $node->keyVar;
+        if ($foreachKeyVar !== null && $this->shouldSkipForeachKeyUsage($ifNode, $foreachKeyVar)) {
+            return null;
+        }
         if ($condExpr instanceof FuncCall) {
             return $this->refactorFuncCall($ifNode, $condExpr, $node, $foreachValueVar);
         }
@@ -98,6 +115,23 @@ CODE_SAMPLE
             return \true;
         }
         return $ifNode->elseifs !== [];
+    }
+    private function shouldSkipForeachKeyUsage(If_ $if, Expr $expr) : bool
+    {
+        if (!$expr instanceof Variable) {
+            return \false;
+        }
+        /** @var Variable[] $keyVarUsage */
+        $keyVarUsage = $this->betterNodeFinder->find($if, function (Node $node) use($expr) : bool {
+            return $this->exprUsedInNodeAnalyzer->isUsed($node, $expr);
+        });
+        $keyVarUsageCount = \count($keyVarUsage);
+        if ($keyVarUsageCount === 1) {
+            /** @var Variable $currentVarUsage */
+            $currentVarUsage = \current($keyVarUsage);
+            return !$this->readExprAnalyzer->isExprRead($currentVarUsage);
+        }
+        return $keyVarUsageCount !== 0;
     }
     private function isArrayDimFetchInForLoop(Foreach_ $foreach, ArrayDimFetch $arrayDimFetch) : bool
     {
