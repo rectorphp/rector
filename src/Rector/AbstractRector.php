@@ -24,7 +24,6 @@ use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Exclusion\ExclusionManager;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
@@ -115,10 +114,6 @@ CODE_SAMPLE;
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @var \Rector\Core\Exclusion\ExclusionManager
-     */
-    private $exclusionManager;
-    /**
      * @var \Rector\Core\Logging\CurrentRectorProvider
      */
     private $currentRectorProvider;
@@ -161,7 +156,7 @@ CODE_SAMPLE;
     /**
      * @required
      */
-    public function autowire(NodesToRemoveCollector $nodesToRemoveCollector, NodeRemover $nodeRemover, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, ExclusionManager $exclusionManager, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, RectorOutputStyle $rectorOutputStyle, FilePathHelper $filePathHelper, DocBlockUpdater $docBlockUpdater) : void
+    public function autowire(NodesToRemoveCollector $nodesToRemoveCollector, NodeRemover $nodeRemover, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, RectorOutputStyle $rectorOutputStyle, FilePathHelper $filePathHelper, DocBlockUpdater $docBlockUpdater) : void
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeRemover = $nodeRemover;
@@ -170,7 +165,6 @@ CODE_SAMPLE;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeFactory = $nodeFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->exclusionManager = $exclusionManager;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->currentRectorProvider = $currentRectorProvider;
         $this->currentNodeProvider = $currentNodeProvider;
@@ -361,9 +355,6 @@ CODE_SAMPLE;
     private function shouldSkipCurrentNode(Node $node) : bool
     {
         if ($this->nodesToRemoveCollector->isNodeRemoved($node)) {
-            return \true;
-        }
-        if ($this->exclusionManager->isNodeSkippedByRector($node, static::class)) {
             return \true;
         }
         $filePath = $this->file->getFilePath();

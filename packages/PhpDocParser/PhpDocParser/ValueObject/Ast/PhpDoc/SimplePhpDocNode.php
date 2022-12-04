@@ -7,10 +7,9 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 /**
- * @noRector final on purpose, so it can be extended by 3rd party
  * @api
  */
-class SimplePhpDocNode extends PhpDocNode
+final class SimplePhpDocNode extends PhpDocNode
 {
     public function getParam(string $desiredParamName) : ?ParamTagValueNode
     {

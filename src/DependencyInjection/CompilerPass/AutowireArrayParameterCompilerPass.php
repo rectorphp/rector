@@ -1,22 +1,22 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202212\Symplify\AutowireArrayParameter\DependencyInjection\CompilerPass;
+namespace Rector\Core\DependencyInjection\CompilerPass;
 
 use RectorPrefix202212\Nette\Utils\Strings;
+use Rector\Core\DependencyInjection\DefinitionFinder;
+use Rector\Core\DependencyInjection\DocBlock\ParamTypeDocBlockResolver;
+use Rector\Core\DependencyInjection\Skipper\ParameterSkipper;
+use Rector\Core\DependencyInjection\TypeResolver\ParameterTypeResolver;
 use ReflectionClass;
 use ReflectionMethod;
+use RectorPrefix202212\Symfony\Component\Config\Loader\LoaderInterface;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202212\Symplify\AutowireArrayParameter\DependencyInjection\DefinitionFinder;
-use RectorPrefix202212\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver;
-use RectorPrefix202212\Symplify\AutowireArrayParameter\Skipper\ParameterSkipper;
-use RectorPrefix202212\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver;
 /**
  * @inspiration https://github.com/nette/di/pull/178
- * @see \Symplify\AutowireArrayParameter\Tests\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPassTest
  */
 final class AutowireArrayParameterCompilerPass implements CompilerPassInterface
 {
@@ -29,21 +29,22 @@ final class AutowireArrayParameterCompilerPass implements CompilerPassInterface
     /**
      * Classes that create circular dependencies
      *
-     * @var string[]
-     * @noRector \Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector
-     * @noRector \Rector\Php55\Rector\String_\StringClassNameToClassConstantRector
+     * @var class-string<LoaderInterface>[]|string[]
      */
-    private $excludedFatalClasses = ['RectorPrefix202212\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix202212\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix202212\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix202212\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix202212\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix202212\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix202212\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix202212\\Sonata\\Twig\\Extension\\TemplateExtension', 'RectorPrefix202212\\Symfony\\Component\\HttpKernel\\KernelInterface'];
+    private const EXCLUDED_FATAL_CLASSES = ['Symfony\\Component\\Form\\FormExtensionInterface', 'Symfony\\Component\\Asset\\PackageInterface', 'Symfony\\Component\\Config\\Loader\\LoaderInterface', 'Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'Sonata\\Doctrine\\Adapter\\AdapterChain', 'Sonata\\Twig\\Extension\\TemplateExtension', 'Symfony\\Component\\HttpKernel\\KernelInterface'];
     /**
-     * @var \Symplify\AutowireArrayParameter\DependencyInjection\DefinitionFinder
+     * @readonly
+     * @var \Rector\Core\DependencyInjection\DefinitionFinder
      */
     private $definitionFinder;
     /**
-     * @var \Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
+     * @readonly
+     * @var \Rector\Core\DependencyInjection\TypeResolver\ParameterTypeResolver
      */
     private $parameterTypeResolver;
     /**
-     * @var \Symplify\AutowireArrayParameter\Skipper\ParameterSkipper
+     * @readonly
+     * @var \Rector\Core\DependencyInjection\Skipper\ParameterSkipper
      */
     private $parameterSkipper;
     /**
@@ -86,7 +87,7 @@ final class AutowireArrayParameterCompilerPass implements CompilerPassInterface
         if (Strings::match($resolvedClassName, $excludedNamespacePattern)) {
             return \true;
         }
-        if (\in_array($resolvedClassName, $this->excludedFatalClasses, \true)) {
+        if (\in_array($resolvedClassName, self::EXCLUDED_FATAL_CLASSES, \true)) {
             return \true;
         }
         if ($definition->getFactory()) {

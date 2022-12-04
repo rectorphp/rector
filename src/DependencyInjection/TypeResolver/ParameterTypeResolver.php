@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202212\Symplify\AutowireArrayParameter\TypeResolver;
+namespace Rector\Core\DependencyInjection\TypeResolver;
 
 use RectorPrefix202212\Nette\Utils\Reflection;
+use Rector\Core\DependencyInjection\DocBlock\ParamTypeDocBlockResolver;
 use ReflectionMethod;
-use RectorPrefix202212\Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver;
 final class ParameterTypeResolver
 {
     /**
@@ -13,7 +13,8 @@ final class ParameterTypeResolver
      */
     private $resolvedParameterTypesCached = [];
     /**
-     * @var \Symplify\AutowireArrayParameter\DocBlock\ParamTypeDocBlockResolver
+     * @readonly
+     * @var \Rector\Core\DependencyInjection\DocBlock\ParamTypeDocBlockResolver
      */
     private $paramTypeDocBlockResolver;
     public function __construct(ParamTypeDocBlockResolver $paramTypeDocBlockResolver)

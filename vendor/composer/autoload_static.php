@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitef9a533724006031add2916a3c9c8c2e
+class ComposerStaticInita4f22922e85306bbfc938da51fec6447
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -36,7 +36,6 @@ class ComposerStaticInitef9a533724006031add2916a3c9c8c2e
             'Rector\\' => 7,
             'RectorPrefix202212\\Webmozart\\Assert\\' => 36,
             'RectorPrefix202212\\Symplify\\EasyParallel\\' => 41,
-            'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\' => 51,
             'RectorPrefix202212\\Symfony\\Contracts\\' => 37,
             'RectorPrefix202212\\Symfony\\Component\\String\\' => 44,
             'RectorPrefix202212\\Symfony\\Component\\Finder\\' => 44,
@@ -127,10 +126,6 @@ class ComposerStaticInitef9a533724006031add2916a3c9c8c2e
         'RectorPrefix202212\\Symplify\\EasyParallel\\' => 
         array (
             0 => __DIR__ . '/..' . '/symplify/easy-parallel/src',
-        ),
-        'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src',
         ),
         'RectorPrefix202212\\Symfony\\Contracts\\' => 
         array (
@@ -1278,12 +1273,6 @@ class ComposerStaticInitef9a533724006031add2916a3c9c8c2e
         'RectorPrefix202212\\Symfony\\Contracts\\Translation\\TranslatableInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatableInterface.php',
         'RectorPrefix202212\\Symfony\\Contracts\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorInterface.php',
         'RectorPrefix202212\\Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorTrait.php',
-        'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\DependencyInjection\\CompilerPass\\AutowireArrayParameterCompilerPass' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DependencyInjection/CompilerPass/AutowireArrayParameterCompilerPass.php',
-        'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\DependencyInjection\\DefinitionFinder' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DependencyInjection/DefinitionFinder.php',
-        'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\DocBlock\\ParamTypeDocBlockResolver' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/DocBlock/ParamTypeDocBlockResolver.php',
-        'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\Exception\\DependencyInjection\\DefinitionForTypeNotFoundException' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/Exception/DependencyInjection/DefinitionForTypeNotFoundException.php',
-        'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\Skipper\\ParameterSkipper' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/Skipper/ParameterSkipper.php',
-        'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\TypeResolver\\ParameterTypeResolver' => __DIR__ . '/..' . '/symplify/autowire-array-parameter/src/TypeResolver/ParameterTypeResolver.php',
         'RectorPrefix202212\\Symplify\\EasyParallel\\CommandLine\\WorkerCommandLineFactory' => __DIR__ . '/..' . '/symplify/easy-parallel/src/CommandLine/WorkerCommandLineFactory.php',
         'RectorPrefix202212\\Symplify\\EasyParallel\\Contract\\SerializableInterface' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Contract/SerializableInterface.php',
         'RectorPrefix202212\\Symplify\\EasyParallel\\CpuCoreCountProvider' => __DIR__ . '/..' . '/symplify/easy-parallel/src/CpuCoreCountProvider.php',
@@ -1603,13 +1592,19 @@ class ComposerStaticInitef9a533724006031add2916a3c9c8c2e
         'Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwarePhpRectorInterface.php',
         'Rector\\Core\\Contract\\Template\\TemplateResolverInterface' => __DIR__ . '/../..' . '/src/Contract/Template/TemplateResolverInterface.php',
         'Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector' => __DIR__ . '/../..' . '/src/DependencyInjection/Collector/ConfigureCallValuesCollector.php',
+        'Rector\\Core\\DependencyInjection\\CompilerPass\\AutowireArrayParameterCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/AutowireArrayParameterCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\AutowireRectorCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/AutowireRectorCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\MakeRectorsPublicCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/MakeRectorsPublicCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\MergeImportedRectorConfigureCallValuesCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/MergeImportedRectorConfigureCallValuesCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\RemoveSkippedRectorsCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/RemoveSkippedRectorsCompilerPass.php',
+        'Rector\\Core\\DependencyInjection\\DefinitionFinder' => __DIR__ . '/../..' . '/src/DependencyInjection/DefinitionFinder.php',
+        'Rector\\Core\\DependencyInjection\\DocBlock\\ParamTypeDocBlockResolver' => __DIR__ . '/../..' . '/src/DependencyInjection/DocBlock/ParamTypeDocBlockResolver.php',
+        'Rector\\Core\\DependencyInjection\\Exception\\DefinitionForTypeNotFoundException' => __DIR__ . '/../..' . '/src/DependencyInjection/Exception/DefinitionForTypeNotFoundException.php',
         'Rector\\Core\\DependencyInjection\\Loader\\ConfigurableCallValuesCollectingPhpFileLoader' => __DIR__ . '/../..' . '/src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php',
         'Rector\\Core\\DependencyInjection\\Loader\\Configurator\\RectorServiceConfigurator' => __DIR__ . '/../..' . '/src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php',
         'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/RectorContainerFactory.php',
+        'Rector\\Core\\DependencyInjection\\Skipper\\ParameterSkipper' => __DIR__ . '/../..' . '/src/DependencyInjection/Skipper/ParameterSkipper.php',
+        'Rector\\Core\\DependencyInjection\\TypeResolver\\ParameterTypeResolver' => __DIR__ . '/../..' . '/src/DependencyInjection/TypeResolver/ParameterTypeResolver.php',
         'Rector\\Core\\Differ\\DefaultDiffer' => __DIR__ . '/../..' . '/src/Differ/DefaultDiffer.php',
         'Rector\\Core\\Enum\\ObjectReference' => __DIR__ . '/../..' . '/src/Enum/ObjectReference.php',
         'Rector\\Core\\Error\\ExceptionCorrector' => __DIR__ . '/../..' . '/src/Error/ExceptionCorrector.php',
@@ -1621,7 +1616,6 @@ class ComposerStaticInitef9a533724006031add2916a3c9c8c2e
         'Rector\\Core\\Exception\\Reflection\\MissingPrivatePropertyException' => __DIR__ . '/../..' . '/src/Exception/Reflection/MissingPrivatePropertyException.php',
         'Rector\\Core\\Exception\\ShouldNotHappenException' => __DIR__ . '/../..' . '/src/Exception/ShouldNotHappenException.php',
         'Rector\\Core\\Exception\\VersionException' => __DIR__ . '/../..' . '/src/Exception/VersionException.php',
-        'Rector\\Core\\Exclusion\\ExclusionManager' => __DIR__ . '/../..' . '/src/Exclusion/ExclusionManager.php',
         'Rector\\Core\\FileSystem\\FileAndDirectoryFilter' => __DIR__ . '/../..' . '/src/FileSystem/FileAndDirectoryFilter.php',
         'Rector\\Core\\FileSystem\\FilePathHelper' => __DIR__ . '/../..' . '/src/FileSystem/FilePathHelper.php',
         'Rector\\Core\\FileSystem\\FilesFinder' => __DIR__ . '/../..' . '/src/FileSystem/FilesFinder.php',
@@ -3023,9 +3017,9 @@ class ComposerStaticInitef9a533724006031add2916a3c9c8c2e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitef9a533724006031add2916a3c9c8c2e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitef9a533724006031add2916a3c9c8c2e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitef9a533724006031add2916a3c9c8c2e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita4f22922e85306bbfc938da51fec6447::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita4f22922e85306bbfc938da51fec6447::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita4f22922e85306bbfc938da51fec6447::$classMap;
 
         }, null, ClassLoader::class);
     }

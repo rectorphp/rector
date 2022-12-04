@@ -16,7 +16,9 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\UnionType;
 use Rector\CodeQuality\NodeFactory\ArrayFilterFactory;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer;
 use Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -41,11 +43,17 @@ final class SimplifyForeachToArrayFilterRector extends AbstractRector
      * @var \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer
      */
     private $readExprAnalyzer;
-    public function __construct(ArrayFilterFactory $arrayFilterFactory, ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer, ReadExprAnalyzer $readExprAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(ArrayFilterFactory $arrayFilterFactory, ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer, ReadExprAnalyzer $readExprAnalyzer, PhpVersionProvider $phpVersionProvider)
     {
         $this->arrayFilterFactory = $arrayFilterFactory;
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
         $this->readExprAnalyzer = $readExprAnalyzer;
+        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -211,12 +219,32 @@ CODE_SAMPLE
             return null;
         }
         // the keyvar must be variable in array dim fetch
-        if (!$foreach->keyVar instanceof Expr) {
+        $keyVar = $foreach->keyVar;
+        if (!$keyVar instanceof Variable) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($arrayDimFetch->dim, $foreach->keyVar)) {
             return null;
         }
-        return $this->arrayFilterFactory->createWithClosure($assign->var, $variable, $condExpr, $foreach);
+        return $this->arrayFilterFactory->createWithClosure($assign->var, $variable, $condExpr, $foreach, $this->getUsedVariablesForClosure($keyVar, $variable, $condExpr));
+    }
+    /**
+     * @return Variable[]
+     */
+    private function getUsedVariablesForClosure(Variable $keyVar, Variable $valueVar, Expr $condExpr) : array
+    {
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ARROW_FUNCTION)) {
+            return [];
+        }
+        /** @var Variable[] $filteredVariables */
+        $filteredVariables = $this->betterNodeFinder->find($condExpr, function (Node $node) use($keyVar, $valueVar) : bool {
+            return $node instanceof Variable && !$this->nodeComparator->areNodesEqual($keyVar, $node) && !$this->nodeComparator->areNodesEqual($valueVar, $node) && !$this->nodeNameResolver->isName($node, 'this');
+        });
+        $uniqueVariables = [];
+        foreach ($filteredVariables as $filteredVariable) {
+            $variableName = $this->nodeNameResolver->getName($filteredVariable);
+            $uniqueVariables[$variableName] = $filteredVariable;
+        }
+        return \array_values($uniqueVariables);
     }
 }

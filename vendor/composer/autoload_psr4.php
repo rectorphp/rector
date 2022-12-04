@@ -19,7 +19,6 @@ return array(
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules', $vendorDir . '/rector/rector-downgrade-php/src', $vendorDir . '/rector/rector-downgrade-php/rules'),
     'RectorPrefix202212\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'RectorPrefix202212\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
-    'RectorPrefix202212\\Symplify\\AutowireArrayParameter\\' => array($vendorDir . '/symplify/autowire-array-parameter/src'),
     'RectorPrefix202212\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
     'RectorPrefix202212\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
     'RectorPrefix202212\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),

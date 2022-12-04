@@ -1,33 +1,35 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202212\Symplify\AutowireArrayParameter\Skipper;
+namespace Rector\Core\DependencyInjection\Skipper;
 
+use Rector\Core\DependencyInjection\TypeResolver\ParameterTypeResolver;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
+use RectorPrefix202212\Symfony\Component\Config\Loader\LoaderInterface;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202212\Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver;
 final class ParameterSkipper
 {
     /**
      * Classes that create circular dependencies
      *
-     * @var string[]
+     * @var class-string<LoaderInterface>[]|string[]
      */
-    private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['RectorPrefix202212\\Symfony\\Component\\Form\\FormExtensionInterface', 'RectorPrefix202212\\Symfony\\Component\\Asset\\PackageInterface', 'RectorPrefix202212\\Symfony\\Component\\Config\\Loader\\LoaderInterface', 'RectorPrefix202212\\Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'RectorPrefix202212\\EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'RectorPrefix202212\\Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'RectorPrefix202212\\Sonata\\Doctrine\\Adapter\\AdapterChain', 'RectorPrefix202212\\Sonata\\Twig\\Extension\\TemplateExtension'];
+    private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['Symfony\\Component\\Form\\FormExtensionInterface', 'Symfony\\Component\\Asset\\PackageInterface', 'Symfony\\Component\\Config\\Loader\\LoaderInterface', 'Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'Sonata\\Doctrine\\Adapter\\AdapterChain', 'Sonata\\Twig\\Extension\\TemplateExtension'];
     /**
      * @var string[]
      */
     private $excludedFatalClasses = [];
     /**
-     * @var \Symplify\AutowireArrayParameter\TypeResolver\ParameterTypeResolver
+     * @readonly
+     * @var \Rector\Core\DependencyInjection\TypeResolver\ParameterTypeResolver
      */
     private $parameterTypeResolver;
     /**
      * @param string[] $excludedFatalClasses
      */
-    public function __construct(ParameterTypeResolver $parameterTypeResolver, array $excludedFatalClasses)
+    public function __construct(ParameterTypeResolver $parameterTypeResolver, array $excludedFatalClasses = [])
     {
         $this->parameterTypeResolver = $parameterTypeResolver;
         $this->excludedFatalClasses = \array_merge(self::DEFAULT_EXCLUDED_FATAL_CLASSES, $excludedFatalClasses);
