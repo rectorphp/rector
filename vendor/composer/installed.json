@@ -1849,12 +1849,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "d441dba05b3850868d231c0681b5beb9287907d3"
+                "reference": "b16d96b5fe76a1b93b9b0e61bb7b80e724597d2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/d441dba05b3850868d231c0681b5beb9287907d3",
-                "reference": "d441dba05b3850868d231c0681b5beb9287907d3",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b16d96b5fe76a1b93b9b0e61bb7b80e724597d2f",
+                "reference": "b16d96b5fe76a1b93b9b0e61bb7b80e724597d2f",
                 "shasum": ""
             },
             "require": {
@@ -1880,7 +1880,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-12-02T13:43:11+00:00",
+            "time": "2022-12-04T13:35:50+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2058,12 +2058,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "caa1373939a8ad1c037eda59bab3d53e62e2359f"
+                "reference": "d789b9089de7b8bab1900214deebef1c62366379"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/caa1373939a8ad1c037eda59bab3d53e62e2359f",
-                "reference": "caa1373939a8ad1c037eda59bab3d53e62e2359f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d789b9089de7b8bab1900214deebef1c62366379",
+                "reference": "d789b9089de7b8bab1900214deebef1c62366379",
                 "shasum": ""
             },
             "require": {
@@ -2093,7 +2093,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-11-29T10:10:24+00:00",
+            "time": "2022-12-04T14:02:18+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

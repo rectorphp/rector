@@ -17,6 +17,7 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
 /**
  * @inspiration https://github.com/nette/di/pull/178
+ * @see \Rector\Core\Tests\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPassTest
  */
 final class AutowireArrayParameterCompilerPass implements CompilerPassInterface
 {

@@ -36,7 +36,7 @@ final class EnumAnalyzer
     {
         $class = $this->astResolver->resolveClassFromClassReflection($classReflection);
         if (!$class instanceof Enum_) {
-            throw new ShouldNotHappenException();
+            return null;
         }
         $scalarType = $class->scalarType;
         if ($scalarType instanceof Identifier) {

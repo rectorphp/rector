@@ -9,6 +9,7 @@ use RectorPrefix202212\Symfony\Component\DependencyInjection\Definition;
 use Throwable;
 /**
  * @api
+ * @see \Rector\Core\Tests\DependencyInjection\DefinitionFinderTest
  */
 final class DefinitionFinder
 {
