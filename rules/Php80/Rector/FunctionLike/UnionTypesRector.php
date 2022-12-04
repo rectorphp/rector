@@ -121,8 +121,8 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->refactorParamTypes($node, $phpDocInfo);
         $this->refactorReturnType($node, $phpDocInfo);
-        $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
-        if ($phpDocInfo->hasChanged()) {
+        $hasChanged = $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);
+        if ($hasChanged) {
             $this->hasChanged = \true;
         }
         $hasReturnChanged = $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $node);
