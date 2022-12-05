@@ -94,6 +94,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         $this->insertionMap['Stmt_Function->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Expr_ArrowFunction->returnType'] = [')', \false, ': ', null];
+        $this->tabOrSpaceIndentCharacter = $this->rectorConfigProvider->getIndentChar();
     }
     /**
      * @param Node[] $stmts
@@ -103,7 +104,6 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     public function printFormatPreserving(array $stmts, array $origStmts, array $origTokens) : string
     {
         $newStmts = $this->resolveNewStmts($stmts);
-        $this->tabOrSpaceIndentCharacter = $this->rectorConfigProvider->getIndentChar();
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         // add new line in case of added stmts
         if (\count($stmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
