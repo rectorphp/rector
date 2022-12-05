@@ -1849,12 +1849,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "b16d96b5fe76a1b93b9b0e61bb7b80e724597d2f"
+                "reference": "ddad9972a6c261e693d04e13f04b63a39e8bff9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b16d96b5fe76a1b93b9b0e61bb7b80e724597d2f",
-                "reference": "b16d96b5fe76a1b93b9b0e61bb7b80e724597d2f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/ddad9972a6c261e693d04e13f04b63a39e8bff9d",
+                "reference": "ddad9972a6c261e693d04e13f04b63a39e8bff9d",
                 "shasum": ""
             },
             "require": {
@@ -1864,10 +1864,11 @@
                 "rector\/rector": "<0.13"
             },
             "require-dev": {
-                "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.8",
-                "phpstan\/phpstan-strict-rules": "^1.2",
-                "phpstan\/phpstan-webmozart-assert": "^1.1",
+                "phpstan\/extension-installer": "^1.2",
+                "phpstan\/phpdoc-parser": "1.13.1 as 1.14",
+                "phpstan\/phpstan": "^1.9",
+                "phpstan\/phpstan-strict-rules": "^1.4",
+                "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^9.5",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-debugging": "dev-main",
@@ -1880,7 +1881,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-12-04T13:35:50+00:00",
+            "time": "2022-12-05T10:25:44+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

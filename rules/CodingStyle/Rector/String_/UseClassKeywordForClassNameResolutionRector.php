@@ -59,8 +59,9 @@ CODE_SAMPLE
             return null;
         }
         $classNames = $this->getExistingClasses($node);
+        $classNames = $this->filterOurShortClasses($classNames);
         if ($classNames === []) {
-            return $node;
+            return null;
         }
         $parts = $this->getParts($node, $classNames);
         if ($parts === []) {
@@ -116,5 +117,15 @@ CODE_SAMPLE
             }
         }
         return $exprsToConcat;
+    }
+    /**
+     * @param string[] $classNames
+     * @return string[]
+     */
+    private function filterOurShortClasses(array $classNames) : array
+    {
+        return \array_filter($classNames, static function (string $className) : bool {
+            return \strpos($className, '\\') !== \false;
+        });
     }
 }
