@@ -238,41 +238,20 @@ class TypeParser
     {
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_ANGLE_BRACKET);
         $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        $genericTypes = [];
-        $variances = [];
-        [$genericTypes[], $variances[]] = $this->parseGenericTypeArgument($tokens);
+        $genericTypes = [$this->parse($tokens)];
         $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         while ($tokens->tryConsumeTokenType(Lexer::TOKEN_COMMA)) {
             $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
             if ($tokens->tryConsumeTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET)) {
                 // trailing comma case
-                return new Ast\Type\GenericTypeNode($baseType, $genericTypes, $variances);
+                return new Ast\Type\GenericTypeNode($baseType, $genericTypes);
             }
-            [$genericTypes[], $variances[]] = $this->parseGenericTypeArgument($tokens);
+            $genericTypes[] = $this->parse($tokens);
             $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         }
         $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         $tokens->consumeTokenType(Lexer::TOKEN_CLOSE_ANGLE_BRACKET);
-        return new Ast\Type\GenericTypeNode($baseType, $genericTypes, $variances);
-    }
-    /**
-     * @phpstan-impure
-     * @return array{Ast\Type\TypeNode, Ast\Type\GenericTypeNode::VARIANCE_*}
-     */
-    public function parseGenericTypeArgument(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : array
-    {
-        if ($tokens->tryConsumeTokenType(Lexer::TOKEN_WILDCARD)) {
-            return [new Ast\Type\IdentifierTypeNode('mixed'), Ast\Type\GenericTypeNode::VARIANCE_BIVARIANT];
-        }
-        if ($tokens->tryConsumeTokenValue('contravariant')) {
-            $variance = Ast\Type\GenericTypeNode::VARIANCE_CONTRAVARIANT;
-        } elseif ($tokens->tryConsumeTokenValue('covariant')) {
-            $variance = Ast\Type\GenericTypeNode::VARIANCE_COVARIANT;
-        } else {
-            $variance = Ast\Type\GenericTypeNode::VARIANCE_INVARIANT;
-        }
-        $type = $this->parse($tokens);
-        return [$type, $variance];
+        return new Ast\Type\GenericTypeNode($baseType, $genericTypes);
     }
     /** @phpstan-impure */
     private function parseCallable(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\IdentifierTypeNode $identifier) : Ast\Type\TypeNode
