@@ -9,8 +9,8 @@
         "symfony\/string": "^6.1"
     },
     "require-dev": {
-        "phpstan\/extension-installer": "^1.2",
         "phpstan\/phpstan": "^1.9.2",
+        "phpstan\/extension-installer": "^1.2",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "phpunit\/phpunit": "^9.5",
         "rector\/rector-debugging": "dev-main",
