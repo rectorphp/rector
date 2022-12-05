@@ -1,4 +1,4 @@
-# 409 Rules Overview
+# 411 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (78)
 
-- [CodingStyle](#codingstyle) (36)
+- [CodingStyle](#codingstyle) (38)
 
 - [Compatibility](#compatibility) (1)
 
@@ -2379,6 +2379,23 @@ Split multiple inline assigns to each own lines default value, to prevent undefi
 
 <br>
 
+### SplitGroupedClassConstantsRector
+
+Separate class constant to own lines
+
+- class: [`Rector\CodingStyle\Rector\ClassConst\SplitGroupedClassConstantsRector`](../rules/CodingStyle/Rector/ClassConst/SplitGroupedClassConstantsRector.php)
+
+```diff
+ class SomeClass
+ {
+-    const HI = true, HELLO = 'true';
++    const HI = true;
++    const HELLO = 'true';
+ }
+```
+
+<br>
+
 ### SplitGroupedConstantsAndPropertiesRector
 
 Separate constant and properties to own lines
@@ -2392,6 +2409,30 @@ Separate constant and properties to own lines
 +    const HI = true;
 +    const AHOJ = 'true';
 
+     /**
+      * @var string
+      */
+-    public $isIt, $isIsThough;
++    public $isIt;
++
++    /**
++     * @var string
++     */
++    public $isIsThough;
+ }
+```
+
+<br>
+
+### SplitGroupedPropertiesRector
+
+Separate grouped properties to own lines
+
+- class: [`Rector\CodingStyle\Rector\Property\SplitGroupedPropertiesRector`](../rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php)
+
+```diff
+ class SomeClass
+ {
      /**
       * @var string
       */

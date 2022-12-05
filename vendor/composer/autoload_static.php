@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9d9e1a4e913a4c96e7e1382c0903b08d
+class ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1499,6 +1499,7 @@ class ComposerStaticInit9d9e1a4e913a4c96e7e1382c0903b08d
         'Rector\\CodingStyle\\Rector\\Assign\\SplitDoubleAssignRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Assign/SplitDoubleAssignRector.php',
         'Rector\\CodingStyle\\Rector\\Catch_\\CatchExceptionNameMatchingTypeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Catch_/CatchExceptionNameMatchingTypeRector.php',
         'Rector\\CodingStyle\\Rector\\ClassConst\\RemoveFinalFromConstRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/RemoveFinalFromConstRector.php',
+        'Rector\\CodingStyle\\Rector\\ClassConst\\SplitGroupedClassConstantsRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/SplitGroupedClassConstantsRector.php',
         'Rector\\CodingStyle\\Rector\\ClassConst\\SplitGroupedConstantsAndPropertiesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/SplitGroupedConstantsAndPropertiesRector.php',
         'Rector\\CodingStyle\\Rector\\ClassConst\\VarConstantCommentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/VarConstantCommentRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\FuncGetArgsToVariadicParamRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/FuncGetArgsToVariadicParamRector.php',
@@ -1525,6 +1526,7 @@ class ComposerStaticInit9d9e1a4e913a4c96e7e1382c0903b08d
         'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\AddFalseDefaultToBoolPropertyRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/AddFalseDefaultToBoolPropertyRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\InlineSimplePropertyAnnotationRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/InlineSimplePropertyAnnotationRector.php',
+        'Rector\\CodingStyle\\Rector\\Property\\SplitGroupedPropertiesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php',
         'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',
         'Rector\\CodingStyle\\Rector\\String_\\SymplifyQuoteEscapeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/String_/SymplifyQuoteEscapeRector.php',
         'Rector\\CodingStyle\\Rector\\String_\\UseClassKeywordForClassNameResolutionRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/String_/UseClassKeywordForClassNameResolutionRector.php',
@@ -3017,9 +3019,9 @@ class ComposerStaticInit9d9e1a4e913a4c96e7e1382c0903b08d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9d9e1a4e913a4c96e7e1382c0903b08d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9d9e1a4e913a4c96e7e1382c0903b08d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9d9e1a4e913a4c96e7e1382c0903b08d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513::$classMap;
 
         }, null, ClassLoader::class);
     }
