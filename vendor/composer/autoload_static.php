@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513
+class ComposerStaticInit18e07a90b8778f48b3b664108320cf95
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1311,6 +1311,7 @@ class ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513
         'Rector\\BetterPhpDocParser\\Contract\\BasePhpDocNodeVisitorInterface' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Contract/BasePhpDocNodeVisitorInterface.php',
         'Rector\\BetterPhpDocParser\\Contract\\PhpDocParser\\PhpDocNodeDecoratorInterface' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Contract/PhpDocParser/PhpDocNodeDecoratorInterface.php',
         'Rector\\BetterPhpDocParser\\DataProvider\\CurrentTokenIteratorProvider' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/DataProvider/CurrentTokenIteratorProvider.php',
+        'Rector\\BetterPhpDocParser\\Guard\\NewPhpDocFromPHPStanTypeGuard' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Guard/NewPhpDocFromPHPStanTypeGuard.php',
         'Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
         'Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfoFactory' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfoFactory.php',
         'Rector\\BetterPhpDocParser\\PhpDocInfo\\TokenIteratorFactory' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocInfo/TokenIteratorFactory.php',
@@ -3019,9 +3020,9 @@ class ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5442c2ac1f5d4a84208fc38da4ce6513::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit18e07a90b8778f48b3b664108320cf95::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit18e07a90b8778f48b3b664108320cf95::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit18e07a90b8778f48b3b664108320cf95::$classMap;
 
         }, null, ClassLoader::class);
     }

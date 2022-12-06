@@ -1071,6 +1071,7 @@ return array(
     'Rector\\BetterPhpDocParser\\Contract\\BasePhpDocNodeVisitorInterface' => $baseDir . '/packages/BetterPhpDocParser/Contract/BasePhpDocNodeVisitorInterface.php',
     'Rector\\BetterPhpDocParser\\Contract\\PhpDocParser\\PhpDocNodeDecoratorInterface' => $baseDir . '/packages/BetterPhpDocParser/Contract/PhpDocParser/PhpDocNodeDecoratorInterface.php',
     'Rector\\BetterPhpDocParser\\DataProvider\\CurrentTokenIteratorProvider' => $baseDir . '/packages/BetterPhpDocParser/DataProvider/CurrentTokenIteratorProvider.php',
+    'Rector\\BetterPhpDocParser\\Guard\\NewPhpDocFromPHPStanTypeGuard' => $baseDir . '/packages/BetterPhpDocParser/Guard/NewPhpDocFromPHPStanTypeGuard.php',
     'Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfo' => $baseDir . '/packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfo.php',
     'Rector\\BetterPhpDocParser\\PhpDocInfo\\PhpDocInfoFactory' => $baseDir . '/packages/BetterPhpDocParser/PhpDocInfo/PhpDocInfoFactory.php',
     'Rector\\BetterPhpDocParser\\PhpDocInfo\\TokenIteratorFactory' => $baseDir . '/packages/BetterPhpDocParser/PhpDocInfo/TokenIteratorFactory.php',

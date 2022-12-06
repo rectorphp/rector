@@ -18,6 +18,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
+use Rector\BetterPhpDocParser\Guard\NewPhpDocFromPHPStanTypeGuard;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
@@ -70,7 +71,12 @@ final class PhpDocTypeChanger
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(StaticTypeMapper $staticTypeMapper, TypeComparator $typeComparator, ParamPhpDocNodeFactory $paramPhpDocNodeFactory, NodeNameResolver $nodeNameResolver, CommentsMerger $commentsMerger, PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\Guard\NewPhpDocFromPHPStanTypeGuard
+     */
+    private $newPhpDocFromPHPStanTypeGuard;
+    public function __construct(StaticTypeMapper $staticTypeMapper, TypeComparator $typeComparator, ParamPhpDocNodeFactory $paramPhpDocNodeFactory, NodeNameResolver $nodeNameResolver, CommentsMerger $commentsMerger, PhpDocInfoFactory $phpDocInfoFactory, NewPhpDocFromPHPStanTypeGuard $newPhpDocFromPHPStanTypeGuard)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->typeComparator = $typeComparator;
@@ -78,6 +84,7 @@ final class PhpDocTypeChanger
         $this->nodeNameResolver = $nodeNameResolver;
         $this->commentsMerger = $commentsMerger;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->newPhpDocFromPHPStanTypeGuard = $newPhpDocFromPHPStanTypeGuard;
     }
     public function changeVarType(PhpDocInfo $phpDocInfo, Type $newType) : void
     {
@@ -91,6 +98,9 @@ final class PhpDocTypeChanger
         }
         // prevent existing type override by mixed
         if (!$phpDocInfo->getVarType() instanceof MixedType && $newType instanceof ConstantArrayType && $newType->getItemType() instanceof NeverType) {
+            return;
+        }
+        if (!$this->newPhpDocFromPHPStanTypeGuard->isLegal($newType)) {
             return;
         }
         // override existing type
@@ -116,6 +126,9 @@ final class PhpDocTypeChanger
         if ($this->typeComparator->areTypesEqual($phpDocInfo->getReturnType(), $newType)) {
             return \false;
         }
+        if (!$this->newPhpDocFromPHPStanTypeGuard->isLegal($newType)) {
+            return \false;
+        }
         // override existing type
         $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, TypeKind::RETURN);
         $currentReturnTagValueNode = $phpDocInfo->getReturnTagValue();
@@ -134,6 +147,9 @@ final class PhpDocTypeChanger
     {
         // better skip, could crash hard
         if ($phpDocInfo->hasInvalidTag('@param')) {
+            return;
+        }
+        if (!$this->newPhpDocFromPHPStanTypeGuard->isLegal($newType)) {
             return;
         }
         $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, TypeKind::PARAM);
