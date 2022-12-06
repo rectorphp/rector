@@ -10,6 +10,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Php\PhpVersionProvider;
@@ -138,16 +139,16 @@ CODE_SAMPLE
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, TypeKind::PROPERTY);
         if ($typeNode === null) {
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $inferredType);
-            return $node;
+            return $this->processChangedPhpDocInfo($phpDocInfo, $node);
         }
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $inferredType);
-            return $node;
+            return $this->processChangedPhpDocInfo($phpDocInfo, $node);
         }
         // non-private property can be anything with not inline public configured
         if (!$node->isPrivate() && !$this->inlinePublic) {
             $this->phpDocTypeChanger->changeVarType($phpDocInfo, $inferredType);
-            return $node;
+            return $this->processChangedPhpDocInfo($phpDocInfo, $node);
         }
         if ($inferredType instanceof UnionType) {
             $this->propertyTypeDecorator->decoratePropertyUnionType($inferredType, $typeNode, $node, $phpDocInfo);
@@ -156,6 +157,13 @@ CODE_SAMPLE
         }
         $this->varTagRemover->removeVarTagIfUseless($phpDocInfo, $node);
         return $node;
+    }
+    private function processChangedPhpDocInfo(PhpDocInfo $phpDocInfo, Node $node) : ?Node
+    {
+        if ($phpDocInfo->hasChanged()) {
+            return $node;
+        }
+        return null;
     }
     private function decorateTypeWithNullableIfDefaultPropertyNull(Property $property, Type $inferredType) : Type
     {

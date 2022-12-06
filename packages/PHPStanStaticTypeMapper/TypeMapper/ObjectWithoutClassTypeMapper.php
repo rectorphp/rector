@@ -12,6 +12,7 @@ use PHPStan\Type\Generic\TemplateObjectWithoutClassType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\EmptyGenericTypeNode;
+use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\PHPStan\ObjectWithoutClassTypeWithParentTypes;
@@ -49,6 +50,14 @@ final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
         if ($type instanceof TemplateObjectWithoutClassType) {
             $attributeAwareIdentifierTypeNode = new IdentifierTypeNode($type->getName());
             return new EmptyGenericTypeNode($attributeAwareIdentifierTypeNode);
+        }
+        // special case for anonymous classes that implement another type
+        if ($type instanceof ObjectWithoutClassTypeWithParentTypes) {
+            $parentTypes = $type->getParentTypes();
+            if (\count($parentTypes) === 1) {
+                $parentType = $parentTypes[0];
+                return new FullyQualifiedIdentifierTypeNode($parentType->getClassName());
+            }
         }
         return new IdentifierTypeNode('object');
     }
