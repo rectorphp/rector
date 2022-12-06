@@ -46,12 +46,14 @@ final class PropertyTypeDecorator
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType $typeNode
      */
-    public function decoratePropertyUnionType(UnionType $unionType, $typeNode, Property $property, PhpDocInfo $phpDocInfo) : void
+    public function decoratePropertyUnionType(UnionType $unionType, $typeNode, Property $property, PhpDocInfo $phpDocInfo, bool $changeVarTypeFallback = \true) : void
     {
         if (!$this->unionTypeAnalyzer->isNullable($unionType)) {
             if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
                 $property->type = $typeNode;
-            } else {
+                return;
+            }
+            if ($changeVarTypeFallback) {
                 $this->phpDocTypeChanger->changeVarType($phpDocInfo, $unionType);
             }
             return;
@@ -63,9 +65,13 @@ final class PropertyTypeDecorator
             $propertyProperty->default = $this->nodeFactory->createNull();
         }
         // has array with defined type? add docs
-        if ($this->isDocBlockRequired($unionType)) {
-            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $unionType);
+        if (!$this->isDocBlockRequired($unionType)) {
+            return;
         }
+        if (!$changeVarTypeFallback) {
+            return;
+        }
+        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $unionType);
     }
     private function isDocBlockRequired(UnionType $unionType) : bool
     {
