@@ -55,6 +55,8 @@ services:
 		class: PHPStan\Rules\PHPUnit\CoversHelper
 	-
 		class: PHPStan\Rules\PHPUnit\AnnotationHelper
+	-
+		class: PHPStan\Rules\PHPUnit\DataProviderHelper
 
 conditionalTags:
 	PHPStan\PhpDoc\PHPUnit\MockObjectTypeNodeResolverExtension:

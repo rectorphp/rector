@@ -79,6 +79,8 @@ return array(
     'PHPStan\\Rules\\PHPUnit\\ClassCoversExistsRule' => $vendorDir . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ClassCoversExistsRule.php',
     'PHPStan\\Rules\\PHPUnit\\ClassMethodCoversExistsRule' => $vendorDir . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ClassMethodCoversExistsRule.php',
     'PHPStan\\Rules\\PHPUnit\\CoversHelper' => $vendorDir . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/CoversHelper.php',
+    'PHPStan\\Rules\\PHPUnit\\DataProviderDeclarationRule' => $vendorDir . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderDeclarationRule.php',
+    'PHPStan\\Rules\\PHPUnit\\DataProviderHelper' => $vendorDir . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderHelper.php',
     'PHPStan\\Rules\\PHPUnit\\MockMethodCallRule' => $vendorDir . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/MockMethodCallRule.php',
     'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInClassAnnotationRule' => $vendorDir . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInClassAnnotationRule.php',
     'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInMethodAnnotationRule' => $vendorDir . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInMethodAnnotationRule.php',

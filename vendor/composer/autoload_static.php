@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdd1c9fbc0381d38245b3815a3cf777f9
+class ComposerStaticInitfa4f15722bdd75bff874936242e27b3b
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -319,6 +319,8 @@ class ComposerStaticInitdd1c9fbc0381d38245b3815a3cf777f9
         'PHPStan\\Rules\\PHPUnit\\ClassCoversExistsRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ClassCoversExistsRule.php',
         'PHPStan\\Rules\\PHPUnit\\ClassMethodCoversExistsRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ClassMethodCoversExistsRule.php',
         'PHPStan\\Rules\\PHPUnit\\CoversHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/CoversHelper.php',
+        'PHPStan\\Rules\\PHPUnit\\DataProviderDeclarationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderDeclarationRule.php',
+        'PHPStan\\Rules\\PHPUnit\\DataProviderHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderHelper.php',
         'PHPStan\\Rules\\PHPUnit\\MockMethodCallRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/MockMethodCallRule.php',
         'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInClassAnnotationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInClassAnnotationRule.php',
         'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInMethodAnnotationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInMethodAnnotationRule.php',
@@ -3018,9 +3020,9 @@ class ComposerStaticInitdd1c9fbc0381d38245b3815a3cf777f9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdd1c9fbc0381d38245b3815a3cf777f9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdd1c9fbc0381d38245b3815a3cf777f9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdd1c9fbc0381d38245b3815a3cf777f9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfa4f15722bdd75bff874936242e27b3b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfa4f15722bdd75bff874936242e27b3b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfa4f15722bdd75bff874936242e27b3b::$classMap;
 
         }, null, ClassLoader::class);
     }
