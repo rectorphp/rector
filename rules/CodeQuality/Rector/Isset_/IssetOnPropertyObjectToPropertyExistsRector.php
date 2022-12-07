@@ -99,6 +99,9 @@ CODE_SAMPLE
             }
             $propertyFetchVarType = $this->getType($issetVar->var);
             if ($propertyFetchVarType instanceof TypeWithClassName) {
+                if ($propertyFetchVarType->getClassName() === 'stdClass') {
+                    continue;
+                }
                 if (!$this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {
                     continue;
                 }
@@ -108,8 +111,6 @@ CODE_SAMPLE
                 } else {
                     $newNodes[] = $this->createNotIdenticalToNull($issetVar);
                 }
-            } else {
-                $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($issetVar->var, $propertyFetchName, $issetVar);
             }
         }
         return $this->nodeFactory->createReturnBooleanAnd($newNodes);
