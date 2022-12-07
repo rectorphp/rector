@@ -22,16 +22,10 @@ use RectorPrefix202212\Psr\Log\LoggerInterface;
  */
 trait CacheTrait
 {
-    /**
-     * {@inheritdoc}
-     */
     public function get(string $key, callable $callback, float $beta = null, array &$metadata = null) : mixed
     {
         return $this->doGet($this, $key, $callback, $beta, $metadata);
     }
-    /**
-     * {@inheritdoc}
-     */
     public function delete(string $key) : bool
     {
         return $this->deleteItem($key);

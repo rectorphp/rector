@@ -796,7 +796,7 @@ abstract class HttpClientTestCase extends TestCase
         $client = $this->getHttpClient(__FUNCTION__);
         $client2 = $client->withOptions(['base_uri' => 'http://localhost:8057/']);
         $this->assertNotSame($client, $client2);
-        $this->assertSame(\get_class($client), \get_class($client2));
+        $this->assertSame($client::class, $client2::class);
         $response = $client2->request('GET', '/');
         $this->assertSame(200, $response->getStatusCode());
     }

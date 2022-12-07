@@ -23,9 +23,6 @@ trait ServiceSubscriberTrait
 {
     /** @var ContainerInterface */
     protected $container;
-    /**
-     * {@inheritdoc}
-     */
     public static function getSubscribedServices() : array
     {
         $services = \method_exists(\get_parent_class(self::class) ?: '', __FUNCTION__) ? parent::getSubscribedServices() : [];
@@ -42,11 +39,16 @@ trait ServiceSubscriberTrait
             if (!($returnType = $method->getReturnType())) {
                 throw new \LogicException(\sprintf('Cannot use "%s" on methods without a return type in "%s::%s()".', SubscribedService::class, $method->name, self::class));
             }
-            $serviceId = $returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType;
-            if ($returnType->allowsNull()) {
-                $serviceId = '?' . $serviceId;
+            /* @var SubscribedService $attribute */
+            $attribute = $attribute->newInstance();
+            $attribute->key = $attribute->key ?? self::class . '::' . $method->name;
+            $attribute->type = $attribute->type ?? ($returnType instanceof \ReflectionNamedType ? $returnType->getName() : (string) $returnType);
+            $attribute->nullable = $returnType->allowsNull();
+            if ($attribute->attributes) {
+                $services[] = $attribute;
+            } else {
+                $services[$attribute->key] = ($attribute->nullable ? '?' : '') . $attribute->type;
             }
-            $services[$attribute->newInstance()->key ?? self::class . '::' . $method->name] = $serviceId;
         }
         return $services;
     }

@@ -10,8 +10,13 @@
  */
 namespace RectorPrefix202212\Symfony\Contracts\Service\Attribute;
 
+use RectorPrefix202212\Symfony\Contracts\Service\ServiceSubscriberInterface;
 use RectorPrefix202212\Symfony\Contracts\Service\ServiceSubscriberTrait;
 /**
+ * For use as the return value for {@see ServiceSubscriberInterface}.
+ *
+ * @example new SubscribedService('http_client', HttpClientInterface::class, false, new Target('githubApi'))
+ *
  * Use with {@see ServiceSubscriberTrait} to mark a method's return type
  * as a subscribed service.
  *
@@ -20,16 +25,31 @@ use RectorPrefix202212\Symfony\Contracts\Service\ServiceSubscriberTrait;
 #[\Attribute(\Attribute::TARGET_METHOD)]
 final class SubscribedService
 {
+    /** @var object[] */
+    public $attributes;
     /**
      * @var string|null
      */
     public $key;
     /**
-     * @param string|null $key The key to use for the service
-     *                         If null, use "ClassName::methodName"
+     * @var class-string|null
      */
-    public function __construct(?string $key = null)
+    public $type;
+    /**
+     * @var bool
+     */
+    public $nullable = \false;
+    /**
+     * @param string|null       $key        The key to use for the service
+     * @param class-string|null $type       The service class
+     * @param bool              $nullable   Whether the service is optional
+     * @param object|object[]   $attributes One or more dependency injection attributes to use
+     */
+    public function __construct(?string $key = null, ?string $type = null, bool $nullable = \false, $attributes = [])
     {
         $this->key = $key;
+        $this->type = $type;
+        $this->nullable = $nullable;
+        $this->attributes = \is_array($attributes) ? $attributes : [$attributes];
     }
 }
