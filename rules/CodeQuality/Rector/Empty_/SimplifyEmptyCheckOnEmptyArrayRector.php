@@ -7,6 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -40,28 +42,31 @@ final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractScopeAwareRecto
      */
     public function getNodeTypes() : array
     {
-        return [Empty_::class];
+        return [Empty_::class, BooleanNot::class];
     }
     /**
-     * @param Empty_ $node $node
+     * @param Empty_|BooleanNot $node $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if (!$this->isAllowedExpr($node->expr)) {
+        if ($node instanceof BooleanNot) {
+            if ($node->expr instanceof Empty_ && $this->isAllowedExpr($node->expr->expr, $scope)) {
+                return new NotIdentical($node->expr->expr, new Array_());
+            }
             return null;
         }
-        if (!$scope->getType($node->expr) instanceof ArrayType) {
-            return null;
-        }
-        if ($this->exprAnalyzer->isNonTypedFromParam($node->expr)) {
+        if (!$this->isAllowedExpr($node->expr, $scope)) {
             return null;
         }
         return new Identical($node->expr, new Array_());
     }
-    private function isAllowedExpr(Expr $expr) : bool
+    private function isAllowedExpr(Expr $expr, Scope $scope) : bool
     {
+        if (!$scope->getType($expr) instanceof ArrayType) {
+            return \false;
+        }
         if ($expr instanceof Variable) {
-            return \true;
+            return !$this->exprAnalyzer->isNonTypedFromParam($expr);
         }
         if ($expr instanceof PropertyFetch) {
             return \true;
