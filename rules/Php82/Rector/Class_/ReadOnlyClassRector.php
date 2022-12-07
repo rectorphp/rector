@@ -8,8 +8,10 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Core\ValueObject\Visibility;
@@ -41,11 +43,17 @@ final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionI
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
-    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionResolver $reflectionResolver)
     {
         $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -150,6 +158,16 @@ CODE_SAMPLE
         }
         if (!$class->isFinal()) {
             return \true;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (!$classReflection instanceof ClassReflection) {
+            return \true;
+        }
+        $parents = $classReflection->getParents();
+        foreach ($parents as $parent) {
+            if (!$parent->isReadOnly()) {
+                return \true;
+            }
         }
         return $this->phpAttributeAnalyzer->hasPhpAttribute($class, AttributeName::ALLOW_DYNAMIC_PROPERTIES);
     }
