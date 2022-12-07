@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,9 +28,15 @@ final class ReturnTypeFromReturnDirectArrayRector extends AbstractRector impleme
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
-    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer)
     {
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -72,6 +79,10 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->hasReturnArray($node)) {
+            return null;
+        }
+        $type = $this->returnTypeInferer->inferFunctionLike($node);
+        if (!$type->isArray()->yes()) {
             return null;
         }
         $node->returnType = new Identifier('array');

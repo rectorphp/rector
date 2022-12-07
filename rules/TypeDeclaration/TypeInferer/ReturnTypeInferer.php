@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
@@ -90,7 +91,7 @@ final class ReturnTypeInferer
         $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     public function inferFunctionLike($functionLike) : Type
     {
@@ -144,11 +145,14 @@ final class ReturnTypeInferer
         return new MixedType();
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
     private function resolveTypeWithVoidHandling($functionLike, Type $resolvedType) : Type
     {
         if ($resolvedType instanceof VoidType) {
+            if ($functionLike instanceof ArrowFunction) {
+                return new MixedType();
+            }
             $hasReturnValue = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, static function (Node $subNode) : bool {
                 if (!$subNode instanceof Return_) {
                     return \false;
@@ -168,7 +172,7 @@ final class ReturnTypeInferer
         return $resolvedType;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      * @return \PHPStan\Type\UnionType|\PHPStan\Type\IntegerType
      */
     private function resolveBenevolentUnionTypeInteger($functionLike, UnionType $unionType)
@@ -181,10 +185,15 @@ final class ReturnTypeInferer
         if (!($types[0] instanceof IntegerType && $types[1]->isString()->yes())) {
             return $unionType;
         }
-        $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
-        $returnsWithExpr = \array_filter($returns, static function (Return_ $return) : bool {
-            return $return->expr instanceof Expr;
-        });
+        if (!$functionLike instanceof ArrowFunction) {
+            $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Return_::class);
+            $returnsWithExpr = \array_filter($returns, static function (Return_ $return) : bool {
+                return $return->expr instanceof Expr;
+            });
+        } else {
+            $returns = $functionLike->getStmts();
+            $returnsWithExpr = $returns;
+        }
         if ($returns !== $returnsWithExpr) {
             return $unionType;
         }
