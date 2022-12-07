@@ -24,6 +24,7 @@ use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\Guard\MakePropertyPromotionGuard;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -81,7 +82,12 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      * @var \Rector\Php80\Guard\MakePropertyPromotionGuard
      */
     private $makePropertyPromotionGuard;
-    public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, VarTagRemover $varTagRemover, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, MakePropertyPromotionGuard $makePropertyPromotionGuard)
+    /**
+     * @readonly
+     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
+     */
+    private $phpAttributeAnalyzer;
+    public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, VarTagRemover $varTagRemover, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, MakePropertyPromotionGuard $makePropertyPromotionGuard, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;
         $this->variableRenamer = $variableRenamer;
@@ -89,6 +95,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
         $this->paramAnalyzer = $paramAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->makePropertyPromotionGuard = $makePropertyPromotionGuard;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -207,6 +214,9 @@ CODE_SAMPLE
     private function shouldSkipParam(Param $param) : bool
     {
         if ($param->variadic) {
+            return \true;
+        }
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($param, 'SensitiveParameter')) {
             return \true;
         }
         if ($this->paramAnalyzer->isNullable($param)) {
