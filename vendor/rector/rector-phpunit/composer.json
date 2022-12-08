@@ -9,7 +9,7 @@
     "require-dev": {
         "rector\/rector-src": "dev-main",
         "phpunit\/phpunit": "^9.5",
-        "phpstan\/phpstan": "^1.8",
+        "phpstan\/phpstan": "^1.9.2",
         "symplify\/phpstan-rules": "^11.1",
         "symplify\/phpstan-extensions": "^11.1",
         "symplify\/easy-coding-standard": "^11.1",

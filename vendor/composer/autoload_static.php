@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit79248adaa56d100c6027d1f1e9835a31
+class ComposerStaticInit0a75c686bee35d8a18937bc2ee382502
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2230,7 +2230,6 @@ class ComposerStaticInit79248adaa56d100c6027d1f1e9835a31
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
         'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
         'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
-        'Rector\\PHPUnit\\Naming\\TestClassNameResolverInterface' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Naming/TestClassNameResolverInterface.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\AssertCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/AssertCallAnalyzer.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\IdentifierManipulator' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/IdentifierManipulator.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\MockedVariableAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/MockedVariableAnalyzer.php',
@@ -2244,8 +2243,10 @@ class ComposerStaticInit79248adaa56d100c6027d1f1e9835a31
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMessageFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMessageFactory.php',
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMessageRegExpFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMessageRegExpFactory.php',
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMethodCallFactory.php',
+        'Rector\\PHPUnit\\NodeFinder\\DataProviderClassMethodFinder' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFinder/DataProviderClassMethodFinder.php',
         'Rector\\PHPUnit\\NodeManipulator\\ArgumentMover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/ArgumentMover.php',
         'Rector\\PHPUnit\\NodeManipulator\\ParamAndArgFromArrayResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/ParamAndArgFromArrayResolver.php',
+        'Rector\\PHPUnit\\PhpDoc\\DataProviderMethodRenamer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/DataProviderMethodRenamer.php',
         'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\CreateMockToAnonymousClassRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/CreateMockToAnonymousClassRector.php',
@@ -2255,10 +2256,13 @@ class ComposerStaticInit79248adaa56d100c6027d1f1e9835a31
         'Rector\\PHPUnit\\Rector\\ClassMethod\\TryCatchToExpectExceptionRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\AddProphecyTraitRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/AddProphecyTraitRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\AddSeeTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/AddSeeTestAnnotationRector.php',
+        'Rector\\PHPUnit\\Rector\\Class_\\AnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/AnnotationWithValueToAttributeRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ArrayArgumentToDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ArrayArgumentToDataProviderRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
+        'Rector\\PHPUnit\\Rector\\Class_\\CoversAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/CoversAnnotationWithValueToAttributeRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ProphecyPHPDocRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ProphecyPHPDocRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\RemoveDataProviderTestPrefixRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/RemoveDataProviderTestPrefixRector.php',
+        'Rector\\PHPUnit\\Rector\\Class_\\StaticDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/StaticDataProviderClassMethodRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\TestListenerToHooksRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/TestListenerToHooksRector.php',
         'Rector\\PHPUnit\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\AssertCompareToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertCompareToSpecificMethodRector.php',
@@ -2291,6 +2295,7 @@ class ComposerStaticInit79248adaa56d100c6027d1f1e9835a31
         'Rector\\PHPUnit\\Rector\\StaticCall\\GetMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/StaticCall/GetMockRector.php',
         'Rector\\PHPUnit\\Set\\PHPUnitLevelSetList' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Set/PHPUnitLevelSetList.php',
         'Rector\\PHPUnit\\Set\\PHPUnitSetList' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Set/PHPUnitSetList.php',
+        'Rector\\PHPUnit\\ValueObject\\AnnotationWithValueToAttribute' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/AnnotationWithValueToAttribute.php',
         'Rector\\PHPUnit\\ValueObject\\ArrayArgumentToDataProvider' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ArrayArgumentToDataProvider.php',
         'Rector\\PHPUnit\\ValueObject\\BinaryOpWithAssertMethod' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/BinaryOpWithAssertMethod.php',
         'Rector\\PHPUnit\\ValueObject\\ConstantWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ConstantWithAssertMethods.php',
@@ -3020,9 +3025,9 @@ class ComposerStaticInit79248adaa56d100c6027d1f1e9835a31
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit79248adaa56d100c6027d1f1e9835a31::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit79248adaa56d100c6027d1f1e9835a31::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit79248adaa56d100c6027d1f1e9835a31::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0a75c686bee35d8a18937bc2ee382502::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0a75c686bee35d8a18937bc2ee382502::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0a75c686bee35d8a18937bc2ee382502::$classMap;
 
         }, null, ClassLoader::class);
     }
