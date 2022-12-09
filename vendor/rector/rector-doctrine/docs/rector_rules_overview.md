@@ -1,4 +1,4 @@
-# 30 Rules Overview
+# 23 Rules Overview
 
 ## AddEntityIdByConditionRector
 
@@ -9,11 +9,15 @@ Add entity id with annotations when meets condition
 - class: [`Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector`](../src/Rector/Class_/AddEntityIdByConditionRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddEntityIdByConditionRector::class, [Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector::DETECTED_TRAITS: ['Knp\DoctrineBehaviors\Model\Translatable\Translation', 'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait']]);
+    $rectorConfig->ruleWithConfiguration(AddEntityIdByConditionRector::class, [AddEntityIdByConditionRector::DETECTED_TRAITS => ['Knp\DoctrineBehaviors\Model\Translatable\Translation', 'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait']]);
 };
 ```
 
@@ -37,59 +41,6 @@ return static function (RectorConfig $rectorConfig): void {
 +    {
 +        return $this->id;
 +    }
- }
-```
-
-<br>
-
-## BlameableBehaviorRector
-
-Change Blameable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
-
-- class: [`Rector\Doctrine\Rector\Class_\BlameableBehaviorRector`](../src/Rector/Class_/BlameableBehaviorRector.php)
-
-```diff
--use Gedmo\Mapping\Annotation as Gedmo;
- use Doctrine\ORM\Mapping as ORM;
-+use Knp\DoctrineBehaviors\Contract\Entity\BlameableInterface;
-+use Knp\DoctrineBehaviors\Model\Blameable\BlameableTrait;
-
- /**
-  * @ORM\Entity
-  */
--class SomeClass
-+class SomeClass implements BlameableInterface
- {
--    /**
--     * @Gedmo\Blameable(on="create")
--     */
--    private $createdBy;
--
--    /**
--     * @Gedmo\Blameable(on="update")
--     */
--    private $updatedBy;
--
--    /**
--     * @Gedmo\Blameable(on="change", field={"title", "body"})
--     */
--    private $contentChangedBy;
--
--    public function getCreatedBy()
--    {
--        return $this->createdBy;
--    }
--
--    public function getUpdatedBy()
--    {
--        return $this->updatedBy;
--    }
--
--    public function getContentChangedBy()
--    {
--        return $this->contentChangedBy;
--    }
-+    use BlameableTrait;
  }
 ```
 
@@ -207,6 +158,8 @@ Change default value types to match Doctrine annotation type
  }
 ```
 
+<br>
+
 ## DoctrineTargetEntityStringToClassConstantRector
 
 Convert targetEntities defined as String to <class>::class Constants in Doctrine Entities.
@@ -214,8 +167,8 @@ Convert targetEntities defined as String to <class>::class Constants in Doctrine
 - class: [`Rector\Doctrine\Rector\Property\DoctrineTargetEntityStringToClassConstantRector`](../src/Rector/Property/DoctrineTargetEntityStringToClassConstantRector.php)
 
 ```diff
-final class SomeClass
-{
+ final class SomeClass
+ {
      /**
 -     * @ORM\OneToMany(targetEntity="AnotherClass")
 +     * @ORM\OneToMany(targetEntity=\MyNamespace\Source\AnotherClass::class)
@@ -239,11 +192,15 @@ Replaces doctrine alias with class.
 - class: [`Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector`](../src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES: ['App' => 'App\Entity']]);
+    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => ['App' => 'App\Entity']]);
 };
 ```
 
@@ -311,37 +268,6 @@ Initialize collection property in Entity constructor
 
 <br>
 
-## LoggableBehaviorRector
-
-Change Loggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
-
-- class: [`Rector\Doctrine\Rector\Class_\LoggableBehaviorRector`](../src/Rector/Class_/LoggableBehaviorRector.php)
-
-```diff
--use Gedmo\Mapping\Annotation as Gedmo;
- use Doctrine\ORM\Mapping as ORM;
-+use Knp\DoctrineBehaviors\Model\Loggable\LoggableTrait;
-+use Knp\DoctrineBehaviors\Contract\Entity\LoggableInterface;
-
- /**
-  * @ORM\Entity
-- * @Gedmo\Loggable
-  */
--class SomeClass
-+class SomeClass implements LoggableInterface
- {
-+    use LoggableTrait;
-+
-     /**
--     * @Gedmo\Versioned
-      * @ORM\Column(name="title", type="string", length=8)
-      */
-     private $title;
- }
-```
-
-<br>
-
 ## MakeEntityDateTimePropertyDateTimeInterfaceRector
 
 Make maker bundle generate DateTime property accept DateTimeInterface too
@@ -387,6 +313,7 @@ Make nullability in setter class method with respect to property
  {
      /**
       * @ORM\ManyToOne(targetEntity="AnotherEntity")
+      * @ORM\JoinColumn(nullable=false)
       */
      private $anotherEntity;
 
@@ -619,243 +546,6 @@ Change ServiceEntityRepository to dependency injection, with repository property
 
 <br>
 
-## SluggableBehaviorRector
-
-Change Sluggable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
-
-- class: [`Rector\Doctrine\Rector\Class_\SluggableBehaviorRector`](../src/Rector/Class_/SluggableBehaviorRector.php)
-
-```diff
- use Gedmo\Mapping\Annotation as Gedmo;
-+use Knp\DoctrineBehaviors\Model\Sluggable\SluggableTrait;
-+use Knp\DoctrineBehaviors\Contract\Entity\SluggableInterface;
-
--class SomeClass
-+class SomeClass implements SluggableInterface
- {
-+    use SluggableTrait;
-+
-     /**
--     * @Gedmo\Slug(fields={"name"})
-+     * @return string[]
-      */
--    private $slug;
--
--    public function getSlug(): ?string
-+    public function getSluggableFields(): array
-     {
--        return $this->slug;
--    }
--
--    public function setSlug(?string $slug): void
--    {
--        $this->slug = $slug;
-+        return ['name'];
-     }
- }
-```
-
-<br>
-
-## SoftDeletableBehaviorRector
-
-Change SoftDeletable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
-
-- class: [`Rector\Doctrine\Rector\Class_\SoftDeletableBehaviorRector`](../src/Rector/Class_/SoftDeletableBehaviorRector.php)
-
-```diff
--use Gedmo\Mapping\Annotation as Gedmo;
-+use Knp\DoctrineBehaviors\Contract\Entity\SoftDeletableInterface;
-+use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletableTrait;
-
--/**
-- * @Gedmo\SoftDeleteable(fieldName="deletedAt", timeAware=false, hardDelete=true)
-- */
--class SomeClass
-+class SomeClass implements SoftDeletableInterface
- {
--    /**
--     * @ORM\Column(name="deletedAt", type="datetime", nullable=true)
--     */
--    private $deletedAt;
--
--    public function getDeletedAt()
--    {
--        return $this->deletedAt;
--    }
--
--    public function setDeletedAt($deletedAt)
--    {
--        $this->deletedAt = $deletedAt;
--    }
-+    use SoftDeletableTrait;
- }
-```
-
-<br>
-
-## TimestampableBehaviorRector
-
-Change Timestampable from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
-
-- class: [`Rector\Doctrine\Rector\Class_\TimestampableBehaviorRector`](../src/Rector/Class_/TimestampableBehaviorRector.php)
-
-```diff
--use Gedmo\Timestampable\Traits\TimestampableEntity;
-+use Knp\DoctrineBehaviors\Model\Timestampable\TimestampableTrait;
-+use Knp\DoctrineBehaviors\Contract\Entity\TimestampableInterface;
-
--class SomeClass
-+class SomeClass implements TimestampableInterface
- {
--    use TimestampableEntity;
-+    use TimestampableTrait;
- }
-```
-
-<br>
-
-## TranslationBehaviorRector
-
-Change Translation from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
-
-- class: [`Rector\Doctrine\Rector\Class_\TranslationBehaviorRector`](../src/Rector/Class_/TranslationBehaviorRector.php)
-
-```diff
--use Gedmo\Mapping\Annotation as Gedmo;
--use Doctrine\ORM\Mapping as ORM;
--use Gedmo\Translatable\Translatable;
-+use Knp\DoctrineBehaviors\Model\Translatable\TranslatableTrait;
-+use Knp\DoctrineBehaviors\Contract\Entity\TranslatableInterface;
-
--/**
-- * @ORM\Table
-- */
--class Article implements Translatable
-+class SomeClass implements TranslatableInterface
- {
-+    use TranslatableTrait;
-+}
-+
-+
-+use Knp\DoctrineBehaviors\Contract\Entity\TranslationInterface;
-+use Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait;
-+
-+class SomeClassTranslation implements TranslationInterface
-+{
-+    use TranslationTrait;
-+
-     /**
--     * @Gedmo\Translatable
-      * @ORM\Column(length=128)
-      */
-     private $title;
--
--    /**
--     * @Gedmo\Locale
--     */
--    private $locale;
--
--    public function setTitle($title)
--    {
--        $this->title = $title;
--    }
--
--    public function getTitle()
--    {
--        return $this->title;
--    }
--
--    public function setTranslatableLocale($locale)
--    {
--        $this->locale = $locale;
--    }
- }
-```
-
-<br>
-
-## TreeBehaviorRector
-
-Change Tree from gedmo/doctrine-extensions to knplabs/doctrine-behaviors
-
-- class: [`Rector\Doctrine\Rector\Class_\TreeBehaviorRector`](../src/Rector/Class_/TreeBehaviorRector.php)
-
-```diff
--use Doctrine\Common\Collections\Collection;
--use Gedmo\Mapping\Annotation as Gedmo;
-+use Knp\DoctrineBehaviors\Contract\Entity\TreeNodeInterface;
-+use Knp\DoctrineBehaviors\Model\Tree\TreeNodeTrait;
-
--/**
-- * @Gedmo\Tree(type="nested")
-- */
--class SomeClass
-+class SomeClass implements TreeNodeInterface
- {
--    /**
--     * @Gedmo\TreeLeft
--     * @ORM\Column(name="lft", type="integer")
--     * @var int
--     */
--    private $lft;
--
--    /**
--     * @Gedmo\TreeRight
--     * @ORM\Column(name="rgt", type="integer")
--     * @var int
--     */
--    private $rgt;
--
--    /**
--     * @Gedmo\TreeLevel
--     * @ORM\Column(name="lvl", type="integer")
--     * @var int
--     */
--    private $lvl;
--
--    /**
--     * @Gedmo\TreeRoot
--     * @ORM\ManyToOne(targetEntity="Category")
--     * @ORM\JoinColumn(name="tree_root", referencedColumnName="id", onDelete="CASCADE")
--     * @var Category
--     */
--    private $root;
--
--    /**
--     * @Gedmo\TreeParent
--     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
--     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
--     * @var Category
--     */
--    private $parent;
--
--    /**
--     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
--     * @var Category[]|Collection
--     */
--    private $children;
--
--    public function getRoot(): self
--    {
--        return $this->root;
--    }
--
--    public function setParent(self $category): void
--    {
--        $this->parent = $category;
--    }
--
--    public function getParent(): self
--    {
--        return $this->parent;
--    }
-+    use TreeNodeTrait;
- }
-```
-
-<br>
-
 ## TypedPropertyFromColumnTypeRector
 
 Complete `@var` annotations or types based on @ORM\Column
@@ -877,22 +567,27 @@ Complete `@var` annotations or types based on @ORM\Column
 
 <br>
 
-## TypedPropertyFromToOneRelationTypeRector
+## TypedPropertyFromDoctrineCollectionRector
 
-Complete `@var` annotations or types based on @ORM\*toOne annotations or attributes
+Add typed property based on Doctrine collection
 
-- class: [`Rector\Doctrine\Rector\Property\TypedPropertyFromToOneRelationTypeRector`](../src/Rector/Property/TypedPropertyFromToOneRelationTypeRector.php)
+- class: [`Rector\Doctrine\Rector\Property\TypedPropertyFromDoctrineCollectionRector`](../src/Rector/Property/TypedPropertyFromDoctrineCollectionRector.php)
 
 ```diff
  use Doctrine\ORM\Mapping as ORM;
+ use App\Entity\TrainingTerm;
 
- class SimpleColumn
+ /**
+  * @ORM\Entity
+  */
+ class DoctrineCollection
  {
      /**
-      * @ORM\OneToOne(targetEntity="App\Company\Entity\Company")
+      * @ORM\OneToMany(targetEntity="App\Entity\TrainingTerm", mappedBy="training")
+      * @var TrainingTerm[]|Collection
       */
--    private $company;
-+    private ?\App\Company\Entity\Company $company = null;
+-    private $trainingTerms;
++    private \Doctrine\Common\Collections\Collection $trainingTerms;
  }
 ```
 
