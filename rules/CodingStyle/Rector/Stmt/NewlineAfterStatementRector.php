@@ -109,8 +109,8 @@ CODE_SAMPLE
                 return null;
             }
         }
-        // skip same line that cause infinite loop
-        if ($rangeLine === 0) {
+        // skip same line or < 0 that cause infinite loop or crash
+        if ($rangeLine <= 0) {
             return null;
         }
         return [$node, new Nop()];
