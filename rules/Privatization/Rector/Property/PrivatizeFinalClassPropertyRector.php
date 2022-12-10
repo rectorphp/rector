@@ -6,6 +6,8 @@ namespace Rector\Privatization\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\TraitUse;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -26,10 +28,16 @@ final class PrivatizeFinalClassPropertyRector extends AbstractRector
      * @var \Rector\Privatization\Guard\ParentPropertyLookupGuard
      */
     private $parentPropertyLookupGuard;
-    public function __construct(VisibilityManipulator $visibilityManipulator, ParentPropertyLookupGuard $parentPropertyLookupGuard)
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(VisibilityManipulator $visibilityManipulator, ParentPropertyLookupGuard $parentPropertyLookupGuard, ReflectionProvider $reflectionProvider)
     {
         $this->visibilityManipulator = $visibilityManipulator;
         $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -52,34 +60,68 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class];
+        return [Class_::class];
     }
     /**
-     * @param Property $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
+        if (!$node->isFinal()) {
             return null;
         }
-        if (!$classLike->isFinal()) {
-            return null;
+        $traitPropertyNames = $this->resolveTraitPropertyNames($node);
+        $hasChanged = \false;
+        foreach ($node->getProperties() as $property) {
+            if ($this->shouldSkipProperty($property, $traitPropertyNames)) {
+                continue;
+            }
+            if (!$this->parentPropertyLookupGuard->isLegal($property)) {
+                continue;
+            }
+            $this->visibilityManipulator->makePrivate($property);
+            $hasChanged = \true;
         }
-        if ($this->shouldSkipProperty($node)) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        if (!$this->parentPropertyLookupGuard->isLegal($node)) {
-            return null;
-        }
-        $this->visibilityManipulator->makePrivate($node);
-        return $node;
+        return null;
     }
-    private function shouldSkipProperty(Property $property) : bool
+    /**
+     * @return string[]
+     */
+    private function resolveTraitPropertyNames(Class_ $class) : array
+    {
+        $traitPropertyNames = [];
+        foreach ($class->stmts as $classStmt) {
+            if (!$classStmt instanceof TraitUse) {
+                continue;
+            }
+            foreach ($classStmt->traits as $trait) {
+                $traitName = $this->getName($trait);
+                if (!$this->reflectionProvider->hasClass($traitName)) {
+                    continue;
+                }
+                $traitReflection = $this->reflectionProvider->getClass($traitName);
+                $nativeTraitReflection = $traitReflection->getNativeReflection();
+                foreach ($nativeTraitReflection->getProperties() as $propertyReflection) {
+                    $traitPropertyNames[] = $propertyReflection->getName();
+                }
+            }
+        }
+        return $traitPropertyNames;
+    }
+    /**
+     * @param string[] $traitPropertyNames
+     */
+    private function shouldSkipProperty(Property $property, array $traitPropertyNames) : bool
     {
         if (\count($property->props) !== 1) {
             return \true;
         }
-        return !$property->isProtected();
+        if (!$property->isProtected()) {
+            return \true;
+        }
+        return $this->isNames($property, $traitPropertyNames);
     }
 }
