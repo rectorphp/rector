@@ -2010,6 +2010,7 @@ return array(
     'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => $vendorDir . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\CreateMockToAnonymousClassRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/CreateMockToAnonymousClassRector.php',
+    'Rector\\PHPUnit\\Rector\\ClassMethod\\DependsAnnotationWithValueToAttributeRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/DependsAnnotationWithValueToAttributeRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\ExceptionAnnotationRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/ExceptionAnnotationRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
