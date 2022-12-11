@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
+use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -44,13 +45,19 @@ final class ParentPropertyLookupGuard
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, AstResolver $astResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     */
+    private $propertyManipulator;
+    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, AstResolver $astResolver, PropertyManipulator $propertyManipulator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionResolver = $reflectionResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->astResolver = $astResolver;
+        $this->propertyManipulator = $propertyManipulator;
     }
     public function isLegal(Property $property) : bool
     {
@@ -58,14 +65,17 @@ final class ParentPropertyLookupGuard
         if (!$class instanceof Class_) {
             return \false;
         }
-        if ($class->extends === null) {
-            return \true;
-        }
         $classReflection = $this->reflectionResolver->resolveClassReflection($property);
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($property);
+        if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
+            return \false;
+        }
+        if ($class->extends === null) {
+            return \true;
+        }
         $className = $classReflection->getName();
         $parents = $classReflection->getParents();
         // parent class not autoloaded
