@@ -106,7 +106,7 @@ CODE_SAMPLE
                 continue;
             }
             $match = $matchResult->getMatch();
-            if ($matchResult->shouldRemoveNextStmt()) {
+            if ($matchResult->shouldRemoveNextStmt() && $isReturn) {
                 unset($node->stmts[$key + 1]);
             }
             $assignVar = $this->resolveAssignVar($condAndExprs);
