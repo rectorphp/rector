@@ -109,7 +109,7 @@ CODE_SAMPLE
     private function refactorClassProperties(ClassLike $classLike) : void
     {
         foreach ($classLike->getProperties() as $property) {
-            $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property);
+            $expectedPropertyName = $this->matchPropertyTypeExpectedNameResolver->resolve($property, $classLike);
             if ($expectedPropertyName === null) {
                 continue;
             }

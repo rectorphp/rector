@@ -98,7 +98,7 @@ final class PhpDocInfoFactory
         $this->currentNodeProvider->setNode($node);
         $docComment = $node->getDocComment();
         if (!$docComment instanceof Doc) {
-            if ($node->getComments() !== []) {
+            if ($node->getComments() === []) {
                 return null;
             }
             // create empty node
