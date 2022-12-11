@@ -92,15 +92,21 @@ CODE_SAMPLE
             return null;
         }
         $foreachedExpr = \count($listNode->items) === 1 ? $this->nodeFactory->createFuncCall('array_keys', [$eachFuncCall->args[0]]) : $eachFuncCall->args[0]->value;
-        /** @var ArrayItem $arrayItem */
         $arrayItem = \array_pop($listNode->items);
+        $isTrailingCommaLast = \false;
+        if (!$arrayItem instanceof ArrayItem) {
+            $foreachedExpr = $this->nodeFactory->createFuncCall('array_keys', [$eachFuncCall->args[0]]);
+            /** @var ArrayItem $arrayItem */
+            $arrayItem = \current($listNode->items);
+            $isTrailingCommaLast = \true;
+        }
         $foreach = new Foreach_($foreachedExpr, $arrayItem, ['stmts' => $node->stmts]);
         $this->mirrorComments($foreach, $node);
         // is key included? add it to foreach
         if ($listNode->items !== []) {
             /** @var ArrayItem|null $keyItem */
             $keyItem = \array_pop($listNode->items);
-            if ($keyItem !== null) {
+            if ($keyItem !== null && !$isTrailingCommaLast) {
                 $foreach->keyVar = $keyItem->value;
             }
         }
