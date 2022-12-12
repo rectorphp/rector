@@ -1162,6 +1162,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\BooleanNot\\ReplaceMultipleBooleanNotRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/ReplaceMultipleBooleanNotRector.php',
     'Rector\\CodeQuality\\Rector\\BooleanNot\\SimplifyDeMorganBinaryRector' => $baseDir . '/rules/CodeQuality/Rector/BooleanNot/SimplifyDeMorganBinaryRector.php',
     'Rector\\CodeQuality\\Rector\\Catch_\\ThrowWithPreviousExceptionRector' => $baseDir . '/rules/CodeQuality/Rector/Catch_/ThrowWithPreviousExceptionRector.php',
+    'Rector\\CodeQuality\\Rector\\ClassConstFetch\\ConvertStaticPrivateConstantToSelfRector' => $baseDir . '/rules/CodeQuality/Rector/ClassConstFetch/ConvertStaticPrivateConstantToSelfRector.php',
     'Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/InlineArrayReturnAssignRector.php',
     'Rector\\CodeQuality\\Rector\\ClassMethod\\NarrowUnionTypeDocRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/NarrowUnionTypeDocRector.php',
     'Rector\\CodeQuality\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => $baseDir . '/rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',

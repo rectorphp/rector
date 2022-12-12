@@ -1,4 +1,4 @@
-# 411 Rules Overview
+# 412 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (78)
+- [CodeQuality](#codequality) (79)
 
 - [CodingStyle](#codingstyle) (38)
 
@@ -588,6 +588,25 @@ Change multiple null compares to ?? queue
 -
 -        return null;
 +        return $this->orderItem ?? $this->orderItemUnit;
+     }
+ }
+```
+
+<br>
+
+### ConvertStaticPrivateConstantToSelfRector
+
+Replaces static::* access to private constants with self::* on final classes
+
+- class: [`Rector\CodeQuality\Rector\ClassConstFetch\ConvertStaticPrivateConstantToSelfRector`](../rules/CodeQuality/Rector/ClassConstFetch/ConvertStaticPrivateConstantToSelfRector.php)
+
+```diff
+ final class Foo {
+     private const BAR = 'bar';
+     public function run()
+     {
+-        $bar = static::BAR;
++        $bar = self::BAR;
      }
  }
 ```
