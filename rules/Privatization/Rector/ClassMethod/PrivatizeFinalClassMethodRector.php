@@ -4,10 +4,12 @@ declare (strict_types=1);
 namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -74,10 +76,11 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        if (!$classReflection->isClass()) {
+        $class = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$class instanceof Class_) {
             return null;
         }
-        if (!$classReflection->isFinal()) {
+        if (!$class->isFinal()) {
             return null;
         }
         if ($this->shouldSkipClassMethod($node)) {

@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PHPStan\Reflection\ClassReflection;
@@ -16,6 +17,7 @@ use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnVendorLockResolver;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -170,6 +172,10 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        return $classReflection->isFinal();
+        $node = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$node instanceof Class_) {
+            return \false;
+        }
+        return $node->isFinal();
     }
 }
