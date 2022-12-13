@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0946be413470b7468a3c282fe54e525c
+class ComposerStaticInit72e493973b590195b10f494e81373454
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -321,6 +321,7 @@ class ComposerStaticInit0946be413470b7468a3c282fe54e525c
         'PHPStan\\Rules\\PHPUnit\\CoversHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/CoversHelper.php',
         'PHPStan\\Rules\\PHPUnit\\DataProviderDeclarationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderDeclarationRule.php',
         'PHPStan\\Rules\\PHPUnit\\DataProviderHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderHelper.php',
+        'PHPStan\\Rules\\PHPUnit\\DataProviderHelperFactory' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderHelperFactory.php',
         'PHPStan\\Rules\\PHPUnit\\MockMethodCallRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/MockMethodCallRule.php',
         'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInClassAnnotationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInClassAnnotationRule.php',
         'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInMethodAnnotationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInMethodAnnotationRule.php',
@@ -3027,9 +3028,9 @@ class ComposerStaticInit0946be413470b7468a3c282fe54e525c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0946be413470b7468a3c282fe54e525c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0946be413470b7468a3c282fe54e525c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0946be413470b7468a3c282fe54e525c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit72e493973b590195b10f494e81373454::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit72e493973b590195b10f494e81373454::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit72e493973b590195b10f494e81373454::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -24,9 +24,12 @@ class DataProviderHelper
      * @var ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    /** @var bool */
+    private $phpunit10OrNewer;
+    public function __construct(ReflectionProvider $reflectionProvider, bool $phpunit10OrNewer)
     {
         $this->reflectionProvider = $reflectionProvider;
+        $this->phpunit10OrNewer = $phpunit10OrNewer;
     }
     /**
      * @return array<PhpDocTagNode>
@@ -71,8 +74,8 @@ class DataProviderHelper
         if (!$dataProviderMethodReflection->isPublic()) {
             $errors[] = RuleErrorBuilder::message(sprintf('@dataProvider %s related method must be public.', $dataProviderValue))->build();
         }
-        if ($deprecationRulesInstalled && !$dataProviderMethodReflection->isStatic()) {
-            $errors[] = RuleErrorBuilder::message(sprintf('@dataProvider %s related method must be static.', $dataProviderValue))->build();
+        if ($deprecationRulesInstalled && $this->phpunit10OrNewer && !$dataProviderMethodReflection->isStatic()) {
+            $errors[] = RuleErrorBuilder::message(sprintf('@dataProvider %s related method must be static in PHPUnit 10 and newer.', $dataProviderValue))->build();
         }
         return $errors;
     }
