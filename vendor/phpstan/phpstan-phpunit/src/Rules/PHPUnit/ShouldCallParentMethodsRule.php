@@ -76,7 +76,7 @@ class ShouldCallParentMethodsRule implements Rule
             if (!$stmt->expr->name instanceof Node\Identifier) {
                 continue;
             }
-            if (strtolower($stmt->expr->name->name) === $methodName) {
+            if ($stmt->expr->name->toLowerString() === $methodName) {
                 return \true;
             }
         }

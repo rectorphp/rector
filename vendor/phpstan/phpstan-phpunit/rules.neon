@@ -12,6 +12,7 @@ services:
 		class: PHPStan\Rules\PHPUnit\DataProviderDeclarationRule
 		arguments:
 			checkFunctionNameCase: %checkFunctionNameCase%
+			deprecationRulesInstalled: %deprecationRulesInstalled%
 	- class: PHPStan\Rules\PHPUnit\NoMissingSpaceInClassAnnotationRule
 	- class: PHPStan\Rules\PHPUnit\NoMissingSpaceInMethodAnnotationRule
 

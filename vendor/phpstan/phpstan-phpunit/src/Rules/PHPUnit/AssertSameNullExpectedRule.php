@@ -11,7 +11,6 @@ use PhpParser\NodeAbstract;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use function count;
-use function strtolower;
 /**
  * @implements Rule<NodeAbstract>
  */
@@ -31,7 +30,7 @@ class AssertSameNullExpectedRule implements Rule
         if (count($node->getArgs()) < 2) {
             return [];
         }
-        if (!$node->name instanceof Node\Identifier || strtolower($node->name->name) !== 'assertsame') {
+        if (!$node->name instanceof Node\Identifier || $node->name->toLowerString() !== 'assertsame') {
             return [];
         }
         $expectedArgumentValue = $node->getArgs()[0]->value;

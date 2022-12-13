@@ -5,7 +5,9 @@ namespace Rector\CodeQuality\Rector\ClassConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -43,7 +45,7 @@ CODE_SAMPLE
         return [ClassConstFetch::class];
     }
     /**
-     * @param \PhpParser\Node\Expr\ClassConstFetch $node
+     * @param ClassConstFetch $node
      */
     public function refactor(Node $node) : ?ClassConstFetch
     {
@@ -56,24 +58,24 @@ CODE_SAMPLE
         $node->class = new Name('self');
         return $node;
     }
-    private function isUsingStatic(ClassConstFetch $node) : bool
+    private function isUsingStatic(ClassConstFetch $classConstFetch) : bool
     {
-        if (!$node->class instanceof Name) {
+        if (!$classConstFetch->class instanceof Name) {
             return \false;
         }
-        return $node->class->toString() === 'static';
+        return $classConstFetch->class->toString() === 'static';
     }
-    private function isPrivateConstant(ClassConstFetch $node) : bool
+    private function isPrivateConstant(ClassConstFetch $classConstFetch) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($node, Node\Stmt\Class_::class);
-        if (!$class instanceof Node\Stmt\Class_) {
+        $class = $this->betterNodeFinder->findParentType($classConstFetch, Class_::class);
+        if (!$class instanceof Class_) {
             return \false;
         }
         if (!$class->isFinal()) {
             return \false;
         }
-        $constantName = $node->name;
-        if (!$constantName instanceof Node\Identifier) {
+        $constantName = $classConstFetch->name;
+        if (!$constantName instanceof Identifier) {
             return \false;
         }
         foreach ($class->getConstants() as $classConst) {

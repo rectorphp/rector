@@ -231,14 +231,15 @@ CODE_SAMPLE;
         /** @var MutatingScope|null $currentScope */
         $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
         $filePath = $this->file->getFilePath();
+        // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+        $originalNodeHash = \spl_object_hash($originalNode);
         if (\is_array($refactoredNode)) {
-            $originalNodeHash = \spl_object_hash($originalNode);
-            $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
             $firstNode = \current($refactoredNode);
             $this->mirrorComments($firstNode, $originalNode);
             $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
             $this->connectNodes($refactoredNode, $node);
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
+            $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
             // will be replaced in leaveNode() the original node must be passed
             return $originalNode;
         }
@@ -246,12 +247,6 @@ CODE_SAMPLE;
         $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
         $this->connectNodes([$refactoredNode], $node);
         $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
-        // is equals node type? return node early
-        if (\get_class($originalNode) === \get_class($refactoredNode)) {
-            return $refactoredNode;
-        }
-        // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
-        $originalNodeHash = \spl_object_hash($originalNode);
         $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
         return $refactoredNode;
     }
