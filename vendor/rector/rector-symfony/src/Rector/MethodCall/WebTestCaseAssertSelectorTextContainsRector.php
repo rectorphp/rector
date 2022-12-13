@@ -5,9 +5,9 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -104,10 +104,22 @@ CODE_SAMPLE
         $newArgs = [$nestedMethodCall->args[0], $args[0]];
         // When we had a custom message argument we want to add it to the new assert.
         if (isset($args[2])) {
-            $newArgs[] = new Arg(new String_($this->valueResolver->getValue($args[2]->value, \true)));
+            if ($args[2]->value instanceof FuncCall) {
+                $newArgs[] = $args[2]->value;
+            } else {
+                $newArgs[] = new Arg(new String_($this->valueResolver->getValue($args[2]->value, \true)));
+            }
         }
-        $node->name = new Identifier('assertSelectorTextContains');
-        $node->args = $newArgs;
-        return $node;
+        return $this->replaceFunctionCall($node, $newArgs);
+    }
+    /**
+     * @param Node[] $newArgs
+     */
+    private function replaceFunctionCall(Node $node, array $newArgs) : Node
+    {
+        if ($node instanceof StaticCall) {
+            return $this->nodeFactory->createStaticCall('self', 'assertSelectorTextContains', $newArgs);
+        }
+        return $this->nodeFactory->createLocalMethodCall('assertSelectorTextContains', $newArgs);
     }
 }

@@ -5,6 +5,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
@@ -81,7 +82,6 @@ CODE_SAMPLE
         if (!$this->symfonyTestCaseAnalyzer->isInWebTestCase($node)) {
             return null;
         }
-        // assertResponseStatusCodeSame
         $newMethodCall = $this->processAssertResponseStatusCodeSame($node);
         if ($newMethodCall !== null) {
             return $newMethodCall;
@@ -136,7 +136,11 @@ CODE_SAMPLE
         $newArgs = [$methodCall->args[0]];
         // When we had a custom message argument we want to add it to the new assert.
         if (isset($args[2])) {
-            $newArgs[] = $this->valueResolver->getValue($args[2]->value, \true);
+            if ($args[2]->value instanceof FuncCall) {
+                $newArgs[] = $args[2]->value;
+            } else {
+                $newArgs[] = $this->valueResolver->getValue($args[2]->value, \true);
+            }
         }
         if ($methodCall instanceof StaticCall) {
             return $this->nodeFactory->createStaticCall('self', 'assertResponseStatusCodeSame', $newArgs);
@@ -161,7 +165,11 @@ CODE_SAMPLE
         if (isset($args[2])) {
             // When we had a $message argument we want to add it to the new assert together with $expectedCode null.
             $newArgs[] = null;
-            $newArgs[] = $this->valueResolver->getValue($args[2]->value, \true);
+            if ($args[2]->value instanceof FuncCall) {
+                $newArgs[] = $args[2]->value;
+            } else {
+                $newArgs[] = $this->valueResolver->getValue($args[2]->value, \true);
+            }
         }
         if ($methodCall instanceof StaticCall) {
             return $this->nodeFactory->createStaticCall('self', 'assertResponseRedirects', $newArgs);
