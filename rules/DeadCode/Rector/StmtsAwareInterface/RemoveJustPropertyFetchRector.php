@@ -21,6 +21,7 @@ use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\ValueObject\PropertyFetchToVariableAssign;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer;
 use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,9 +35,15 @@ final class RemoveJustPropertyFetchRector extends AbstractRector
      * @var \Rector\ReadWrite\NodeFinder\NodeUsageFinder
      */
     private $nodeUsageFinder;
-    public function __construct(NodeUsageFinder $nodeUsageFinder)
+    /**
+     * @readonly
+     * @var \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer
+     */
+    private $readExprAnalyzer;
+    public function __construct(NodeUsageFinder $nodeUsageFinder, ReadExprAnalyzer $readExprAnalyzer)
     {
         $this->nodeUsageFinder = $nodeUsageFinder;
+        $this->readExprAnalyzer = $readExprAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -98,6 +105,9 @@ CODE_SAMPLE
             $followingStmts = \array_slice($stmts, $key + 1);
             if ($this->isFollowingStatementStaticClosure($followingStmts)) {
                 // can not replace usages in anonymous static functions
+                continue;
+            }
+            if (!$this->readExprAnalyzer->isExprRead($variableToPropertyAssign->getVariable())) {
                 continue;
             }
             $variableUsages = $this->nodeUsageFinder->findVariableUsages($followingStmts, $variableToPropertyAssign->getVariable());
