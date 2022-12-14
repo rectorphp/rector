@@ -487,4 +487,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const DEPRECATE_NULL_ARG_IN_STRING_FUNCTION = \Rector\Core\ValueObject\PhpVersion::PHP_81;
+    /**
+     * @see https://wiki.php.net/rfc/remove_utf8_decode_and_utf8_encode
+     * @var int
+     */
+    public const DEPRECATE_UTF8_DECODE_ENCODE_FUNCTION = \Rector\Core\ValueObject\PhpVersion::PHP_82;
 }

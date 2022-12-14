@@ -2250,6 +2250,7 @@ return array(
     'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => $baseDir . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
     'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => $baseDir . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
     'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => $baseDir . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
+    'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => $baseDir . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
     'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => $baseDir . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',
