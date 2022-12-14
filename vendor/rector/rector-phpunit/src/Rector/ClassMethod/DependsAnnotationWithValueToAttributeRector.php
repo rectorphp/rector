@@ -104,13 +104,19 @@ CODE_SAMPLE
         if (!$currentClass instanceof Class_) {
             return null;
         }
+        $currentMethodName = $this->getName($node);
         foreach ($desiredTagValueNodes as $desiredTagValueNode) {
             if (!$desiredTagValueNode->value instanceof GenericTagValueNode) {
                 continue;
             }
-            $attributeValue = $desiredTagValueNode->value->value;
-            $classMethod = $currentClass->getMethod($attributeValue);
-            if (!$classMethod instanceof ClassMethod) {
+            $originalAttributeValue = $desiredTagValueNode->value->value;
+            // process depends other ClassMethod
+            $attributeValue = $this->resolveDependsClassMethod($currentClass, $currentMethodName, $originalAttributeValue);
+            if (!\is_string($attributeValue)) {
+                // other: depends other Class_
+                $attributeValue = $this->resolveDependsClass($originalAttributeValue);
+            }
+            if (!\is_string($attributeValue)) {
                 continue;
             }
             $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\\Framework\\Attributes\\Depends', [$attributeValue]);
@@ -122,5 +128,24 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    private function resolveDependsClass(string $attributeValue) : ?string
+    {
+        if (\substr_compare($attributeValue, '::class', -\strlen('::class')) !== 0) {
+            return null;
+        }
+        $className = \substr($attributeValue, 0, -7);
+        return $className . '::class';
+    }
+    private function resolveDependsClassMethod(Class_ $currentClass, string $currentMethodName, string $attributeValue) : ?string
+    {
+        if ($currentMethodName === $attributeValue) {
+            return null;
+        }
+        $classMethod = $currentClass->getMethod($attributeValue);
+        if (!$classMethod instanceof ClassMethod) {
+            return null;
+        }
+        return $attributeValue;
     }
 }
