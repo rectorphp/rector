@@ -12,7 +12,7 @@ use RectorPrefix202212\Symfony\Component\Console\Style\SymfonyStyle;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @deprecated Use SplitGroupedConstantsRector and SplitGroupedPropertiesRector instead
+ * @deprecated Use SplitGroupedClassConstantsRector and SplitGroupedPropertiesRector instead
  */
 final class SplitGroupedConstantsAndPropertiesRector extends AbstractRector implements DeprecatedRectorInterface
 {
@@ -70,7 +70,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?array
     {
-        $this->symfonyStyle->error('The "SplitGroupedConstantsAndPropertiesRector" rule is deprecated. Use "SplitGroupedConstantsRector" and "SplitGroupedPropertiesRector" instead');
+        $this->symfonyStyle->error('The "SplitGroupedConstantsAndPropertiesRector" rule is deprecated. Use "SplitGroupedClassConstantsRector" and "SplitGroupedPropertiesRector" instead');
         \sleep(5);
         return null;
     }
