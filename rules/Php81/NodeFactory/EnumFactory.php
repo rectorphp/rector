@@ -4,12 +4,14 @@ declare (strict_types=1);
 namespace Rector\Php81\NodeFactory;
 
 use PhpParser\BuilderFactory;
-use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Enum_;
 use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Return_;
@@ -117,20 +119,39 @@ final class EnumFactory
     private function generateMappingFromClass(Class_ $class) : array
     {
         $classMethod = $class->getMethod('values');
-        if ($classMethod === null) {
+        if (!$classMethod instanceof ClassMethod) {
             return [];
         }
+        /** @var Return_[] $returns */
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
+        /** @var array<int|string, mixed> $mapping */
         $mapping = [];
-        foreach ($returns as $returnStmt) {
-            if (!$returnStmt->expr instanceof Expr\Array_) {
+        foreach ($returns as $return) {
+            if (!$return->expr instanceof Array_) {
                 continue;
             }
-            foreach ($returnStmt->expr->items as $item) {
-                if ($item instanceof Expr\ArrayItem && ($item->key instanceof LNumber || $item->key instanceof String_) && ($item->value instanceof LNumber || $item->value instanceof String_)) {
-                    $mapping[$item->key->value] = $item->value->value;
-                }
+            $mapping = $this->collectMappings($return->expr->items, $mapping);
+        }
+        return $mapping;
+    }
+    /**
+     * @param null[]|ArrayItem[] $items
+     * @param array<int|string, mixed> $mapping
+     * @return array<int|string, mixed>
+     */
+    private function collectMappings(array $items, array $mapping) : array
+    {
+        foreach ($items as $item) {
+            if (!$item instanceof ArrayItem) {
+                continue;
             }
+            if (!$item->key instanceof LNumber && !$item->key instanceof String_) {
+                continue;
+            }
+            if (!$item->value instanceof LNumber && !$item->value instanceof String_) {
+                continue;
+            }
+            $mapping[$item->key->value] = $item->value->value;
         }
         return $mapping;
     }
@@ -139,9 +160,10 @@ final class EnumFactory
      */
     private function getIdentifierTypeFromMappings(array $mapping) : string
     {
-        $valueTypes = \array_map(static function ($value) : string {
+        $callableGetType = static function ($value) : string {
             return \gettype($value);
-        }, $mapping);
+        };
+        $valueTypes = \array_map($callableGetType, $mapping);
         $uniqueValueTypes = \array_unique($valueTypes);
         if (\count($uniqueValueTypes) === 1) {
             $identifierType = \reset($uniqueValueTypes);

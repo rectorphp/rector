@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit57288704ab80d1fa10d9d662af03a4d5
+class ComposerStaticInite416a44bd4d5723a790830e2163f3aee
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1765,6 +1765,7 @@ class ComposerStaticInit57288704ab80d1fa10d9d662af03a4d5
         'Rector\\DeadCode\\PhpDoc\\DeadParamTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/DeadParamTagValueNodeAnalyzer.php',
         'Rector\\DeadCode\\PhpDoc\\DeadReturnTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/DeadReturnTagValueNodeAnalyzer.php',
         'Rector\\DeadCode\\PhpDoc\\DeadVarTagValueNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/DeadVarTagValueNodeAnalyzer.php',
+        'Rector\\DeadCode\\PhpDoc\\Guard\\StandaloneTypeRemovalGuard' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/Guard/StandaloneTypeRemovalGuard.php',
         'Rector\\DeadCode\\PhpDoc\\TagRemover\\ParamTagRemover' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/TagRemover/ParamTagRemover.php',
         'Rector\\DeadCode\\PhpDoc\\TagRemover\\ReturnTagRemover' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/TagRemover/ReturnTagRemover.php',
         'Rector\\DeadCode\\PhpDoc\\TagRemover\\VarTagRemover' => __DIR__ . '/../..' . '/rules/DeadCode/PhpDoc/TagRemover/VarTagRemover.php',
@@ -3029,9 +3030,9 @@ class ComposerStaticInit57288704ab80d1fa10d9d662af03a4d5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit57288704ab80d1fa10d9d662af03a4d5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit57288704ab80d1fa10d9d662af03a4d5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit57288704ab80d1fa10d9d662af03a4d5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite416a44bd4d5723a790830e2163f3aee::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite416a44bd4d5723a790830e2163f3aee::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite416a44bd4d5723a790830e2163f3aee::$classMap;
 
         }, null, ClassLoader::class);
     }

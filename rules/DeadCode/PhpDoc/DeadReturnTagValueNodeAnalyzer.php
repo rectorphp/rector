@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\PhpDoc;
 
+use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Trait_;
@@ -12,6 +13,7 @@ use PHPStan\PhpDocParser\Ast\Type\ThisTypeNode;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\DeadCode\PhpDoc\Guard\StandaloneTypeRemovalGuard;
 use Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer;
 use Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -37,12 +39,18 @@ final class DeadReturnTagValueNodeAnalyzer
      * @var \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer
      */
     private $mixedArrayTypeNodeAnalyzer;
-    public function __construct(TypeComparator $typeComparator, BetterNodeFinder $betterNodeFinder, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\PhpDoc\Guard\StandaloneTypeRemovalGuard
+     */
+    private $standaloneTypeRemovalGuard;
+    public function __construct(TypeComparator $typeComparator, BetterNodeFinder $betterNodeFinder, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard)
     {
         $this->typeComparator = $typeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->genericTypeNodeAnalyzer = $genericTypeNodeAnalyzer;
         $this->mixedArrayTypeNodeAnalyzer = $mixedArrayTypeNodeAnalyzer;
+        $this->standaloneTypeRemovalGuard = $standaloneTypeRemovalGuard;
     }
     public function isDead(ReturnTagValueNode $returnTagValueNode, FunctionLike $functionLike) : bool
     {
@@ -61,7 +69,7 @@ final class DeadReturnTagValueNodeAnalyzer
             return \false;
         }
         if (!$returnTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
-            return $returnTagValueNode->description === '';
+            return $this->isIdentiferRemovalAllowed($returnTagValueNode, $returnType);
         }
         if ($this->genericTypeNodeAnalyzer->hasGenericType($returnTagValueNode->type)) {
             return \false;
@@ -73,6 +81,13 @@ final class DeadReturnTagValueNodeAnalyzer
             return \false;
         }
         return $returnTagValueNode->description === '';
+    }
+    private function isIdentiferRemovalAllowed(ReturnTagValueNode $returnTagValueNode, Node $node) : bool
+    {
+        if ($returnTagValueNode->description === '') {
+            return $this->standaloneTypeRemovalGuard->isLegal($returnTagValueNode->type, $node);
+        }
+        return \false;
     }
     private function hasTruePseudoType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode) : bool
     {
