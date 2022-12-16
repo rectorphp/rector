@@ -23,7 +23,7 @@ final class ParallelProcess
     /**
      * @var \React\ChildProcess\Process
      */
-    public $process;
+    private $process;
     /**
      * @var \Clue\React\NDJson\Encoder
      */

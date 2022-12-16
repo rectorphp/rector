@@ -39,6 +39,7 @@ return array(
     'RectorPrefix202212\\Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
     'RectorPrefix202212\\Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
     'RectorPrefix202212\\OndraM\\CiDetector\\' => array($vendorDir . '/ondram/ci-detector/src'),
+    'RectorPrefix202212\\Fidry\\CpuCoreCounter\\' => array($vendorDir . '/fidry/cpu-core-counter/src'),
     'RectorPrefix202212\\Evenement\\' => array($vendorDir . '/evenement/evenement/src/Evenement'),
     'RectorPrefix202212\\Doctrine\\Inflector\\' => array($vendorDir . '/doctrine/inflector/lib/Doctrine/Inflector'),
     'RectorPrefix202212\\Composer\\XdebugHandler\\' => array($vendorDir . '/composer/xdebug-handler/src'),
