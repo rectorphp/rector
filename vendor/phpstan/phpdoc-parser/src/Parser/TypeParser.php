@@ -375,24 +375,24 @@ class TypeParser
     private function parseArrayShape(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\Type\TypeNode $type) : Ast\Type\ArrayShapeNode
     {
         $tokens->consumeTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET);
-        if ($tokens->tryConsumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
-            return new Ast\Type\ArrayShapeNode([]);
-        }
-        $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        $items = [$this->parseArrayShapeItem($tokens)];
-        $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        while ($tokens->tryConsumeTokenType(Lexer::TOKEN_COMMA)) {
+        $items = [];
+        $sealed = \true;
+        do {
             $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
             if ($tokens->tryConsumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
-                // trailing comma case
                 return new Ast\Type\ArrayShapeNode($items);
+            }
+            if ($tokens->tryConsumeTokenType(Lexer::TOKEN_VARIADIC)) {
+                $sealed = \false;
+                $tokens->tryConsumeTokenType(Lexer::TOKEN_COMMA);
+                break;
             }
             $items[] = $this->parseArrayShapeItem($tokens);
             $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        }
+        } while ($tokens->tryConsumeTokenType(Lexer::TOKEN_COMMA));
         $tokens->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
         $tokens->consumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
-        return new Ast\Type\ArrayShapeNode($items);
+        return new Ast\Type\ArrayShapeNode($items, $sealed);
     }
     /** @phpstan-impure */
     private function parseArrayShapeItem(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\ArrayShapeItemNode

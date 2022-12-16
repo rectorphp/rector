@@ -10,12 +10,19 @@ class ArrayShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     use NodeAttributes;
     /** @var ArrayShapeItemNode[] */
     public $items;
-    public function __construct(array $items)
+    /** @var bool */
+    public $sealed;
+    public function __construct(array $items, bool $sealed = \true)
     {
         $this->items = $items;
+        $this->sealed = $sealed;
     }
     public function __toString() : string
     {
-        return 'array{' . implode(', ', $this->items) . '}';
+        $items = $this->items;
+        if (!$this->sealed) {
+            $items[] = '...';
+        }
+        return 'array{' . implode(', ', $items) . '}';
     }
 }
