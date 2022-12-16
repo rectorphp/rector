@@ -87,7 +87,7 @@ final class EnumFactory
             $identifierType = $this->getIdentifierTypeFromMappings($mapping);
             $enum->scalarType = new Identifier($identifierType);
             foreach ($docBlockMethods as $docBlockMethod) {
-                $enum->stmts[] = $this->createEnumCaseFromDocComment($docBlockMethod, $mapping);
+                $enum->stmts[] = $this->createEnumCaseFromDocComment($docBlockMethod, $class, $mapping);
             }
         }
         return $enum;
@@ -95,7 +95,7 @@ final class EnumFactory
     private function createEnumCaseFromConst(ClassConst $classConst) : EnumCase
     {
         $constConst = $classConst->consts[0];
-        $enumCase = new EnumCase($constConst->name, $constConst->value);
+        $enumCase = new EnumCase($constConst->name, $constConst->value, [], ['startLine' => $constConst->getStartLine(), 'endLine' => $constConst->getEndLine()]);
         // mirror comments
         $enumCase->setAttribute(AttributeKey::PHP_DOC_INFO, $classConst->getAttribute(AttributeKey::PHP_DOC_INFO));
         $enumCase->setAttribute(AttributeKey::COMMENTS, $classConst->getAttribute(AttributeKey::COMMENTS));
@@ -104,14 +104,14 @@ final class EnumFactory
     /**
      * @param array<int|string, mixed> $mapping
      */
-    private function createEnumCaseFromDocComment(PhpDocTagNode $phpDocTagNode, array $mapping = []) : EnumCase
+    private function createEnumCaseFromDocComment(PhpDocTagNode $phpDocTagNode, Class_ $class, array $mapping = []) : EnumCase
     {
         /** @var MethodTagValueNode $nodeValue */
         $nodeValue = $phpDocTagNode->value;
         $enumValue = $mapping[$nodeValue->methodName] ?? $nodeValue->methodName;
         $enumName = \strtoupper($nodeValue->methodName);
         $enumExpr = $this->builderFactory->val($enumValue);
-        return new EnumCase($enumName, $enumExpr);
+        return new EnumCase($enumName, $enumExpr, [], ['startLine' => $class->getStartLine(), 'endLine' => $class->getEndLine()]);
     }
     /**
      * @return array<int|string, mixed>
