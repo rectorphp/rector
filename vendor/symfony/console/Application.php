@@ -307,6 +307,7 @@ class Application implements ResetInterface
                         $helper->describe($output instanceof ConsoleOutputInterface ? $output->getErrorOutput() : $output, $this, ['format' => 'txt', 'raw_text' => \false, 'namespace' => $namespace, 'short' => \false]);
                         return isset($event) ? $event->getExitCode() : 1;
                     }
+                    throw $e;
                 } catch (NamespaceNotFoundException $exception) {
                     throw $e;
                 }

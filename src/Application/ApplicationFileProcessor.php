@@ -127,7 +127,7 @@ final class ApplicationFileProcessor
             $systemErrorsAndFileDiffs = $this->runParallel($fileInfos, $configuration, $input);
         } else {
             // 1. collect all files from files+dirs provided paths
-            $files = $this->fileFactory->createFromPaths($configuration->getPaths(), $configuration);
+            $files = $this->fileFactory->createFromPaths($fileInfos);
             // 2. PHPStan has to know about all files too
             $this->configurePHPStanNodeScopeResolver($files);
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);

@@ -440,17 +440,17 @@
         },
         {
             "name": "fidry\/cpu-core-counter",
-            "version": "0.4.0",
-            "version_normalized": "0.4.0.0",
+            "version": "0.4.1",
+            "version_normalized": "0.4.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/theofidry\/cpu-core-counter.git",
-                "reference": "666cb04a02f2801f3b19955fc23c824f9018bf64"
+                "reference": "79261cc280aded96d098e1b0e0ba0c4881b432c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/theofidry\/cpu-core-counter\/zipball\/666cb04a02f2801f3b19955fc23c824f9018bf64",
-                "reference": "666cb04a02f2801f3b19955fc23c824f9018bf64",
+                "url": "https:\/\/api.github.com\/repos\/theofidry\/cpu-core-counter\/zipball\/79261cc280aded96d098e1b0e0ba0c4881b432c2",
+                "reference": "79261cc280aded96d098e1b0e0ba0c4881b432c2",
                 "shasum": ""
             },
             "require": {
@@ -467,7 +467,7 @@
                 "theofidry\/php-cs-fixer-config": "^1.0",
                 "webmozarts\/strict-phpunit": "^7.5"
             },
-            "time": "2022-12-10T21:26:31+00:00",
+            "time": "2022-12-16T22:01:02+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -492,7 +492,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/theofidry\/cpu-core-counter\/issues",
-                "source": "https:\/\/github.com\/theofidry\/cpu-core-counter\/tree\/0.4.0"
+                "source": "https:\/\/github.com\/theofidry\/cpu-core-counter\/tree\/0.4.1"
             },
             "funding": [
                 {
@@ -1844,12 +1844,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "61634310cf2be58e39647a51b0fe727b38d7874b"
+                "reference": "0a8e8d9cc82356668cf03e10fb82f58d389db1c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/61634310cf2be58e39647a51b0fe727b38d7874b",
-                "reference": "61634310cf2be58e39647a51b0fe727b38d7874b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/0a8e8d9cc82356668cf03e10fb82f58d389db1c9",
+                "reference": "0a8e8d9cc82356668cf03e10fb82f58d389db1c9",
                 "shasum": ""
             },
             "require": {
@@ -1875,7 +1875,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-12-09T08:25:11+00:00",
+            "time": "2022-12-17T08:26:52+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2339,17 +2339,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.2.1",
-            "version_normalized": "6.2.1.0",
+            "version": "v6.2.2",
+            "version_normalized": "6.2.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "58f6cef5dc5f641b7bbdbf8b32b44cc926c35f3f"
+                "reference": "5a9bd5c543f00157c55face973c149957467db31"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/58f6cef5dc5f641b7bbdbf8b32b44cc926c35f3f",
-                "reference": "58f6cef5dc5f641b7bbdbf8b32b44cc926c35f3f",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/5a9bd5c543f00157c55face973c149957467db31",
+                "reference": "5a9bd5c543f00157c55face973c149957467db31",
                 "shasum": ""
             },
             "require": {
@@ -2384,7 +2384,7 @@
                 "symfony\/lock": "",
                 "symfony\/process": ""
             },
-            "time": "2022-12-01T13:44:20+00:00",
+            "time": "2022-12-16T15:08:36+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2418,7 +2418,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.2.1"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.2.2"
             },
             "funding": [
                 {
@@ -2944,17 +2944,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v6.2.0",
-            "version_normalized": "6.2.0.0",
+            "version": "v6.2.2",
+            "version_normalized": "6.2.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "145702685e0d12f81d755c71127bfff7582fdd36"
+                "reference": "863219fd713fa41cbcd285a79723f94672faff4d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/145702685e0d12f81d755c71127bfff7582fdd36",
-                "reference": "145702685e0d12f81d755c71127bfff7582fdd36",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/863219fd713fa41cbcd285a79723f94672faff4d",
+                "reference": "863219fd713fa41cbcd285a79723f94672faff4d",
                 "shasum": ""
             },
             "require": {
@@ -2974,7 +2974,7 @@
                 "symfony\/translation-contracts": "^2.0|^3.0",
                 "symfony\/var-exporter": "^5.4|^6.0"
             },
-            "time": "2022-11-30T17:13:47+00:00",
+            "time": "2022-12-14T16:11:27+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -3013,7 +3013,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.2.0"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.2.2"
             },
             "funding": [
                 {

@@ -6,11 +6,13 @@ namespace Rector\Doctrine\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeAnalyzer\ConstructorAssignPropertyAnalyzer;
 use Rector\Doctrine\NodeFactory\ValueAssignFactory;
 use Rector\Doctrine\NodeManipulator\ConstructorManipulator;
@@ -129,7 +131,6 @@ CODE_SAMPLE
         if ($node !== null) {
             return;
         }
-        $this->hasChanged = \true;
         // 1. remove default options from database level
         $optionsArrayItemNode = $doctrineAnnotationTagValueNode->getValue('options');
         if ($optionsArrayItemNode instanceof ArrayItemNode) {
@@ -141,12 +142,24 @@ CODE_SAMPLE
             if ($optionsArrayItemNode->value->getValues() === []) {
                 $doctrineAnnotationTagValueNode->removeValue('options');
             }
+            $this->hasChanged = \true;
         }
-        $phpDocInfo->markAsChanged();
+        if ($this->hasChanged) {
+            $phpDocInfo->markAsChanged();
+        }
+        $this->refactorClassWithRemovalDefault($class, $property);
+    }
+    private function refactorClassWithRemovalDefault(Class_ $class, Property $property) : void
+    {
         $this->refactorClass($class, $property);
+        $classMethod = $class->getMethod(MethodName::CONSTRUCT);
+        if (!$classMethod instanceof ClassMethod && $property->type instanceof Node) {
+            return;
+        }
         // 3. remove default from property
         $onlyProperty = $property->props[0];
         $onlyProperty->default = null;
+        $this->hasChanged = \true;
     }
     private function refactorClass(Class_ $class, Property $property) : void
     {

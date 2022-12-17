@@ -117,7 +117,7 @@ class LazyString implements \JsonSerializable
             $method = $callback[1];
         } elseif ($callback instanceof \Closure) {
             $r = new \ReflectionFunction($callback);
-            if (\strpos($r->name, '{closure}') !== \false || !($class = $r->getClosureScopeClass())) {
+            if (\strpos($r->name, '{closure}') !== \false || !($class = \PHP_VERSION_ID >= 80111 ? $r->getClosureCalledClass() : $r->getClosureScopeClass())) {
                 return $r->name;
             }
             $class = $class->name;
