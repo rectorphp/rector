@@ -112,14 +112,16 @@ CODE_SAMPLE
             $originalAttributeValue = $desiredTagValueNode->value->value;
             // process depends other ClassMethod
             $attributeValue = $this->resolveDependsClassMethod($currentClass, $currentMethodName, $originalAttributeValue);
+            $attributeName = 'PHPUnit\\Framework\\Attributes\\Depends';
             if (!\is_string($attributeValue)) {
                 // other: depends other Class_
                 $attributeValue = $this->resolveDependsClass($originalAttributeValue);
+                $attributeName = 'PHPUnit\\Framework\\Attributes\\DependsOnClass';
             }
             if (!\is_string($attributeValue)) {
                 continue;
             }
-            $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\\Framework\\Attributes\\Depends', [$attributeValue]);
+            $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems($attributeName, [$attributeValue]);
             $node->attrGroups[] = $attributeGroup;
             // cleanup
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
