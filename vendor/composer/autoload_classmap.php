@@ -2381,6 +2381,7 @@ return array(
     'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => $baseDir . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
     'Rector\\Renaming\\Contract\\RenameAnnotationInterface' => $baseDir . '/rules/Renaming/Contract/RenameAnnotationInterface.php',
     'Rector\\Renaming\\Contract\\RenameClassConstFetchInterface' => $baseDir . '/rules/Renaming/Contract/RenameClassConstFetchInterface.php',
+    'Rector\\Renaming\\Helper\\RenameClassCallbackHandler' => $baseDir . '/rules/Renaming/Helper/RenameClassCallbackHandler.php',
     'Rector\\Renaming\\NodeManipulator\\ClassRenamer' => $baseDir . '/rules/Renaming/NodeManipulator/ClassRenamer.php',
     'Rector\\Renaming\\NodeManipulator\\SwitchManipulator' => $baseDir . '/rules/Renaming/NodeManipulator/SwitchManipulator.php',
     'Rector\\Renaming\\Rector\\ClassConstFetch\\RenameClassConstFetchRector' => $baseDir . '/rules/Renaming/Rector/ClassConstFetch/RenameClassConstFetchRector.php',

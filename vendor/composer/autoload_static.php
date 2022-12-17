@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0d6fc333f230d1e8c971a3f46575eec4
+class ComposerStaticInite0f7a49cde01988aabc4ed685fc054f4
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2626,6 +2626,7 @@ class ComposerStaticInit0d6fc333f230d1e8c971a3f46575eec4
         'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
         'Rector\\Renaming\\Contract\\RenameAnnotationInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameAnnotationInterface.php',
         'Rector\\Renaming\\Contract\\RenameClassConstFetchInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameClassConstFetchInterface.php',
+        'Rector\\Renaming\\Helper\\RenameClassCallbackHandler' => __DIR__ . '/../..' . '/rules/Renaming/Helper/RenameClassCallbackHandler.php',
         'Rector\\Renaming\\NodeManipulator\\ClassRenamer' => __DIR__ . '/../..' . '/rules/Renaming/NodeManipulator/ClassRenamer.php',
         'Rector\\Renaming\\NodeManipulator\\SwitchManipulator' => __DIR__ . '/../..' . '/rules/Renaming/NodeManipulator/SwitchManipulator.php',
         'Rector\\Renaming\\Rector\\ClassConstFetch\\RenameClassConstFetchRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/ClassConstFetch/RenameClassConstFetchRector.php',
@@ -3054,9 +3055,9 @@ class ComposerStaticInit0d6fc333f230d1e8c971a3f46575eec4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0d6fc333f230d1e8c971a3f46575eec4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0d6fc333f230d1e8c971a3f46575eec4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0d6fc333f230d1e8c971a3f46575eec4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite0f7a49cde01988aabc4ed685fc054f4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite0f7a49cde01988aabc4ed685fc054f4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite0f7a49cde01988aabc4ed685fc054f4::$classMap;
 
         }, null, ClassLoader::class);
     }

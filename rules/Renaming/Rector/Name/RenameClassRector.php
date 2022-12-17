@@ -17,6 +17,8 @@ use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Renaming\Helper\RenameClassCallbackHandler;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,6 +28,10 @@ use RectorPrefix202212\Webmozart\Assert\Assert;
  */
 final class RenameClassRector extends AbstractRector implements ConfigurableRectorInterface
 {
+    /**
+     * @var string
+     */
+    public const CALLBACKS = '#callbacks#';
     /**
      * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
@@ -41,11 +47,17 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ClassRenamer $classRenamer, RectorConfigProvider $rectorConfigProvider)
+    /**
+     * @readonly
+     * @var \Rector\Renaming\Helper\RenameClassCallbackHandler
+     */
+    private $renameClassCallbackHandler;
+    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ClassRenamer $classRenamer, RectorConfigProvider $rectorConfigProvider, RenameClassCallbackHandler $renameClassCallbackHandler)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->classRenamer = $classRenamer;
         $this->rectorConfigProvider = $rectorConfigProvider;
+        $this->renameClassCallbackHandler = $renameClassCallbackHandler;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -88,7 +100,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
-        if ($oldToNewClasses === []) {
+        if ($oldToNewClasses === [] && !$this->renameClassCallbackHandler->hasOldToNewClassCallbacks()) {
             return null;
         }
         if (!$node instanceof Use_) {
@@ -104,6 +116,14 @@ CODE_SAMPLE
      */
     public function configure(array $configuration) : void
     {
+        $oldToNewClassCallbacks = $configuration[self::CALLBACKS] ?? [];
+        Assert::isArray($oldToNewClassCallbacks);
+        if ($oldToNewClassCallbacks !== []) {
+            Assert::allIsCallable($oldToNewClassCallbacks);
+            /** @var array<callable(ClassLike, NodeNameResolver): ?string> $oldToNewClassCallbacks */
+            $this->renameClassCallbackHandler->addOldToNewClassCallbacks($oldToNewClassCallbacks);
+            unset($configuration[self::CALLBACKS]);
+        }
         Assert::allString($configuration);
         Assert::allString(\array_keys($configuration));
         $this->addOldToNewClasses($configuration);
