@@ -84,6 +84,9 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
         if ($node->isFirstClassCallable()) {
             return null;
         }
+        if ($this->shouldSkipFunctionReflection($functionLikeReflection)) {
+            return null;
+        }
         $numberOfArguments = \count($node->getRawArgs());
         if ($numberOfArguments <= $maximumAllowedParameterCount) {
             return null;
@@ -92,6 +95,19 @@ final class RemoveExtraParametersRector extends AbstractRector implements MinPhp
             unset($node->args[$i]);
         }
         return $node;
+    }
+    /**
+     * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $reflection
+     */
+    private function shouldSkipFunctionReflection($reflection) : bool
+    {
+        if ($reflection instanceof FunctionReflection) {
+            $fileName = (string) $reflection->getFileName();
+            if (\strpos($fileName, 'phpstan.phar') !== \false) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
