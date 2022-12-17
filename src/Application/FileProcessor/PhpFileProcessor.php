@@ -94,11 +94,10 @@ final class PhpFileProcessor implements FileProcessorInterface
             $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
             return $systemErrorsAndFileDiffs;
         }
-        $this->currentFileProvider->setFile($file);
         // 2. change nodes with Rectors
         do {
             $file->changeHasChanged(\false);
-            $this->refactorNodesWithRectors($file, $configuration);
+            $this->fileProcessor->refactor($file, $configuration);
             // 3. apply post rectors
             $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
             // this is needed for new tokens added in "afterTraverse()"
@@ -126,11 +125,6 @@ final class PhpFileProcessor implements FileProcessorInterface
     public function getSupportedFileExtensions() : array
     {
         return ['php'];
-    }
-    private function refactorNodesWithRectors(File $file, Configuration $configuration) : void
-    {
-        $this->currentFileProvider->setFile($file);
-        $this->fileProcessor->refactor($file, $configuration);
     }
     /**
      * @return SystemError[]
