@@ -165,7 +165,7 @@ CODE_SAMPLE
         if ($this->isAnErrorTypeFromParentScope($argValue)) {
             return null;
         }
-        if ($this->shouldSkipTrait($argValue, $isTrait)) {
+        if ($this->shouldSkipTrait($argValue, $type, $isTrait)) {
             return null;
         }
         if ($this->isCastedReassign($argValue)) {
@@ -175,12 +175,18 @@ CODE_SAMPLE
         $funcCall->args = $args;
         return $funcCall;
     }
-    private function shouldSkipTrait(Expr $expr, bool $isTrait) : bool
+    private function shouldSkipTrait(Expr $expr, MixedType $mixedType, bool $isTrait) : bool
     {
-        if (!$expr instanceof MethodCall) {
-            return $isTrait && $this->propertyFetchAnalyzer->isLocalPropertyFetch($expr);
+        if (!$isTrait) {
+            return \false;
         }
-        return $isTrait;
+        if ($mixedType->isExplicitMixed()) {
+            return \false;
+        }
+        if (!$expr instanceof MethodCall) {
+            return $this->propertyFetchAnalyzer->isLocalPropertyFetch($expr);
+        }
+        return \true;
     }
     private function isCastedReassign(Expr $expr) : bool
     {
