@@ -1,4 +1,4 @@
-# 412 Rules Overview
+# 413 Rules Overview
 
 <br>
 
@@ -48,7 +48,7 @@
 
 - [Php81](#php81) (11)
 
-- [Php82](#php82) (1)
+- [Php82](#php82) (2)
 
 - [Privatization](#privatization) (8)
 
@@ -596,9 +596,24 @@ Change multiple null compares to ?? queue
 
 ### ConvertStaticPrivateConstantToSelfRector
 
-Replaces static::* access to private constants with self::* on final classes
+Replaces static::* access to private constants with self::*
+
+:wrench: **configure it!**
 
 - class: [`Rector\CodeQuality\Rector\ClassConstFetch\ConvertStaticPrivateConstantToSelfRector`](../rules/CodeQuality/Rector/ClassConstFetch/ConvertStaticPrivateConstantToSelfRector.php)
+
+```php
+use Rector\CodeQuality\Rector\ClassConstFetch\ConvertStaticPrivateConstantToSelfRector;
+use Rector\Config\RectorConfig;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(ConvertStaticPrivateConstantToSelfRector::class, [
+        ConvertStaticPrivateConstantToSelfRector::ENABLE_FOR_NON_FINAL_CLASSES => false,
+    ]);
+};
+```
+
+↓
 
 ```diff
  final class Foo {
@@ -6507,6 +6522,21 @@ Decorate read-only class with `readonly` attribute
      ) {
      }
  }
+```
+
+<br>
+
+### Utf8DecodeEncodeToMbConvertEncodingRector
+
+Change deprecated utf8_decode and utf8_encode to mb_convert_encoding
+
+- class: [`Rector\Php82\Rector\FuncCall\Utf8DecodeEncodeToMbConvertEncodingRector`](../rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php)
+
+```diff
+-utf8_decode($value);
+-utf8_encode($value);
++mb_convert_encoding($value, 'ISO-8859-1');
++mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
 ```
 
 <br>
