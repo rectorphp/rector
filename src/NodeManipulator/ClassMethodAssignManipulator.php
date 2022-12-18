@@ -5,6 +5,7 @@ namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
@@ -13,6 +14,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
+use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
@@ -95,6 +97,7 @@ final class ClassMethodAssignManipulator
         $readOnlyVariableAssigns = $this->filterOutReferencedVariables($readOnlyVariableAssigns, $classMethod);
         $readOnlyVariableAssigns = $this->filterOutMultiAssigns($readOnlyVariableAssigns);
         $readOnlyVariableAssigns = $this->filterOutForeachVariables($readOnlyVariableAssigns);
+        $readOnlyVariableAssigns = $this->filterOutUsedByEncapsed($readOnlyVariableAssigns);
         /**
          * Remove unused variable assign is task of RemoveUnusedVariableAssignRector
          * so no need to move to constant early
@@ -111,6 +114,25 @@ final class ClassMethodAssignManipulator
         $classMethod->stmts[] = new Expression($assign);
         $classMethodHash = \spl_object_hash($classMethod);
         $this->alreadyAddedClassMethodNames[$classMethodHash][] = $name;
+    }
+    /**
+     * @param Assign[] $readOnlyVariableAssigns
+     * @return Assign[]
+     */
+    private function filterOutUsedByEncapsed(array $readOnlyVariableAssigns) : array
+    {
+        $callable = function (Assign $readOnlyVariableAssign) : bool {
+            $variable = $readOnlyVariableAssign->var;
+            return !(bool) $this->betterNodeFinder->findFirstNext($readOnlyVariableAssign, function (Node $node) use($variable) : bool {
+                if (!$node instanceof Encapsed) {
+                    return \false;
+                }
+                return (bool) \array_filter($node->parts, function (Expr $expr) use($variable) : bool {
+                    return $this->nodeComparator->areNodesEqual($expr, $variable);
+                });
+            });
+        };
+        return \array_filter($readOnlyVariableAssigns, $callable);
     }
     /**
      * @param Assign[] $readOnlyVariableAssigns

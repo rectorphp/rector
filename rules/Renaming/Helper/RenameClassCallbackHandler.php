@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Renaming\Helper;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Reflection\ReflectionProvider;
@@ -61,17 +62,17 @@ final class RenameClassCallbackHandler extends NodeVisitorAbstract
     /**
      * @return array<string, string>
      */
-    public function handleClassLike(ClassLike $node) : array
+    public function handleClassLike(ClassLike $classLike) : array
     {
         $oldToNewClasses = [];
-        $className = $node->name;
-        if ($className === null) {
+        $className = $classLike->name;
+        if (!$className instanceof Identifier) {
             return [];
         }
         foreach ($this->oldToNewClassCallbacks as $oldToNewClassCallback) {
-            $newClassName = $oldToNewClassCallback($node, $this->nodeNameResolver, $this->reflectionProvider);
+            $newClassName = $oldToNewClassCallback($classLike, $this->nodeNameResolver, $this->reflectionProvider);
             if ($newClassName !== null) {
-                $fullyQualifiedClassName = (string) $this->nodeNameResolver->getName($node);
+                $fullyQualifiedClassName = (string) $this->nodeNameResolver->getName($classLike);
                 $this->renamedClassesDataCollector->addOldToNewClass($fullyQualifiedClassName, $newClassName);
                 $oldToNewClasses[$fullyQualifiedClassName] = $newClassName;
             }
