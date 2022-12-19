@@ -114,6 +114,7 @@ final class WorkerRunner
                     $systemErrors = $this->collectSystemErrors($systemErrors, $throwable, $filePath);
                 }
             }
+            $this->removedAndAddedFilesProcessor->run($configuration);
             /**
              * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA
              */
@@ -134,7 +135,6 @@ final class WorkerRunner
             $currentErrorsAndFileDiffs = $fileProcessor->process($file, $configuration);
             $errorAndFileDiffs = $this->arrayParametersMerger->merge($errorAndFileDiffs, $currentErrorsAndFileDiffs);
         }
-        $this->removedAndAddedFilesProcessor->run($configuration);
         return $errorAndFileDiffs;
     }
     /**
