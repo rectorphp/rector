@@ -16,10 +16,12 @@ return static function (RectorConfig $rectorConfig) : void {
         /**
          * Currently handle:
          *      - @depends Methodname
+         *      - @depends Classname::class
+         *      - @depends clone MethodName
          *
          * Todo:
          *      - @depends Class::MethodName
-         *      - @depends clone, !clone, shallowClone, !shallowClone
+         *      - @depends !clone, shallowClone, !shallowClone
          */
         DependsAnnotationWithValueToAttributeRector::class,
     ]);
