@@ -17,6 +17,6 @@ return static function (RectorConfig $rectorConfig) : void {
         '*/Source/*',
         '*/Fixture/*',
     ]);
-    $rectorConfig->sets([LevelSetList::UP_TO_PHP_81, SetList::DEAD_CODE, SetList::CODE_QUALITY, SetList::NAMING, SetList::TYPE_DECLARATION, SetList::TYPE_DECLARATION_STRICT, SetList::PRIVATIZATION]);
+    $rectorConfig->sets([LevelSetList::UP_TO_PHP_81, SetList::DEAD_CODE, SetList::CODE_QUALITY, SetList::NAMING, SetList::TYPE_DECLARATION, SetList::PRIVATIZATION]);
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, ['Doctrine\\*', 'Gedmo\\*', 'Knp\\*', 'DateTime', 'DateTimeInterface']);
 };

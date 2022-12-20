@@ -263,7 +263,7 @@ final class AnonymousFunctionFactory
         return $params;
     }
     /**
-     * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|null
+     * @return \PhpParser\Node\Name|\PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|null
      */
     private function resolveParamType(ParameterReflection $parameterReflection)
     {

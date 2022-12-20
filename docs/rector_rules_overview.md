@@ -1,4 +1,4 @@
-# 413 Rules Overview
+# 414 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (37)
+- [TypeDeclaration](#typedeclaration) (38)
 
 - [Visibility](#visibility) (3)
 
@@ -711,17 +711,11 @@ Flip type control to use exclusive type
 - class: [`Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector`](../rules/CodeQuality/Rector/Identical/FlipTypeControlToUseExclusiveTypeRector.php)
 
 ```diff
- class SomeClass
- {
-     public function __construct(array $values)
-     {
--        /** @var PhpDocInfo|null $phpDocInfo */
-         $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
--        if ($phpDocInfo === null) {
-+        if (! $phpDocInfo instanceof PhpDocInfo) {
-             return;
-         }
-     }
+-/** @var PhpDocInfo|null $phpDocInfo */
+ $phpDocInfo = $functionLike->getAttribute(AttributeKey::PHP_DOC_INFO);
+-if ($phpDocInfo === null) {
++if (! $phpDocInfo instanceof PhpDocInfo) {
+     return;
  }
 ```
 
@@ -9170,6 +9164,33 @@ Add array shape exact types based on constant keys of array
      public function run(string $name)
      {
          return ['name' => $name];
+     }
+ }
+```
+
+<br>
+
+### FalseReturnClassMethodToNullableRector
+
+Change class method that returns false as invalid state, to nullable
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\FalseReturnClassMethodToNullableRector`](../rules/TypeDeclaration/Rector/ClassMethod/FalseReturnClassMethodToNullableRector.php)
+
+```diff
+ class SomeClass
+ {
+-    /**
+-     * @return false|int
+-     */
+-    public function run(int $number)
++    public function run(int $number): ?int
+     {
+         if ($number === 10) {
+-            return false;
++            return null;
+         }
+
+         return $number;
      }
  }
 ```

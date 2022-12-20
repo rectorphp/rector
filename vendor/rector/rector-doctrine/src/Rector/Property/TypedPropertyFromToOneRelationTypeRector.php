@@ -5,6 +5,7 @@ namespace Rector\Doctrine\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\MixedType;
@@ -107,7 +108,7 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType $typeNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|\PhpParser\Node\Identifier $typeNode
      */
     private function completePropertyTypeOrVarDoc(Type $propertyType, $typeNode, Property $property) : void
     {

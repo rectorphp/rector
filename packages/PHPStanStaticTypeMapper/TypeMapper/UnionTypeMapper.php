@@ -13,9 +13,7 @@ use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType as PhpParserUnionType;
 use PhpParser\NodeAbstract;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantBooleanType;
-use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\IntersectionType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
@@ -39,6 +37,7 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
+use function RectorPrefix202212\Symfony\Component\String\b;
 use RectorPrefix202212\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements TypeMapperInterface<UnionType>
@@ -132,7 +131,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES) && $this->isFalseBoolUnion($type)) {
             // return new Bool
-            return new Name('bool');
+            return new Identifier('bool');
         }
         // special case for nullable
         $nullabledType = $this->matchTypeForNullableUnionType($type);
@@ -241,7 +240,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     }
     /**
      * @param TypeKind::* $typeKind
-     * @return Name|FullyQualified|PhpParserUnionType|NullableType|null
+     * @return Name|FullyQualified|ComplexType|Identifier|null
      */
     private function matchTypeForUnionedObjectTypes(UnionType $unionType, string $typeKind) : ?Node
     {
@@ -250,35 +249,29 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $phpParserUnionType;
         }
         if ($phpParserUnionType !== null) {
-            if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
-                // maybe all one type?
-                if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
-                    return new Name('bool');
-                }
-                return null;
-            }
-            if ($this->hasObjectAndStaticType($phpParserUnionType)) {
-                return null;
-            }
-            return $phpParserUnionType;
+            return $this->narrowBoolType($unionType, $phpParserUnionType);
         }
         if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
-            return new Name('bool');
+            return new Identifier('bool');
         }
         $compatibleObjectTypeNode = $this->processResolveCompatibleObjectCandidates($unionType);
         if ($compatibleObjectTypeNode instanceof NullableType || $compatibleObjectTypeNode instanceof FullyQualified) {
             return $compatibleObjectTypeNode;
         }
-        return $this->processResolveCompatibleStringCandidates($unionType);
+        $integerIdentifier = $this->narrowIntegerType($unionType);
+        if ($integerIdentifier instanceof Identifier) {
+            return $integerIdentifier;
+        }
+        return $this->narrowStringTypes($unionType);
     }
-    private function processResolveCompatibleStringCandidates(UnionType $unionType) : ?Name
+    private function narrowStringTypes(UnionType $unionType) : ?Identifier
     {
-        foreach ($unionType->getTypes() as $type) {
-            if (!\in_array(\get_class($type), [ClassStringType::class, GenericClassStringType::class], \true)) {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if (!$unionedType->isString()->yes()) {
                 return null;
             }
         }
-        return new Name('string');
+        return new Identifier('string');
     }
     private function processResolveCompatibleObjectCandidates(UnionType $unionType) : ?Node
     {
@@ -391,5 +384,31 @@ final class UnionTypeMapper implements TypeMapperInterface
             return \false;
         }
         return \true;
+    }
+    private function narrowIntegerType(UnionType $unionType) : ?Identifier
+    {
+        foreach ($unionType->getTypes() as $unionedType) {
+            if (!$unionedType->isInteger()->yes()) {
+                return null;
+            }
+        }
+        return new Identifier('int');
+    }
+    /**
+     * @return PhpParserUnionType|null|\PhpParser\Node\Identifier
+     */
+    private function narrowBoolType(UnionType $unionType, PhpParserUnionType $phpParserUnionType)
+    {
+        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
+            // maybe all one type
+            if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
+                return new Identifier('bool');
+            }
+            return null;
+        }
+        if ($this->hasObjectAndStaticType($phpParserUnionType)) {
+            return null;
+        }
+        return $phpParserUnionType;
     }
 }

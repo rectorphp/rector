@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\BooleanType;
@@ -57,9 +57,9 @@ final class BooleanTypeMapper implements TypeMapperInterface
             return null;
         }
         if ($this->isFalseBooleanTypeWithUnion($type)) {
-            return new Name('false');
+            return new Identifier('false');
         }
-        return new Name('bool');
+        return new Identifier('bool');
     }
     private function isFalseBooleanTypeWithUnion(Type $type) : bool
     {

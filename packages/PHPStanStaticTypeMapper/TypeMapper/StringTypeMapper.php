@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\StringType;
@@ -45,6 +45,6 @@ final class StringTypeMapper implements TypeMapperInterface
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
             return null;
         }
-        return new Name('string');
+        return new Identifier('string');
     }
 }

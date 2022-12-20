@@ -5,6 +5,7 @@ namespace Rector\StaticTypeMapper;
 
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -78,7 +79,7 @@ final class StaticTypeMapper
     }
     /**
      * @param TypeKind::* $typeKind
-     * @return Name|ComplexType|null
+     * @return Name|ComplexType|Identifier|null
      */
     public function mapPHPStanTypeToPhpParserNode(Type $phpStanType, string $typeKind) : ?Node
     {

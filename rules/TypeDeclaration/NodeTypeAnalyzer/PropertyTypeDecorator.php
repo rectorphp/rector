@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
 
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\UnionType;
@@ -44,7 +45,7 @@ final class PropertyTypeDecorator
         $this->nodeFactory = $nodeFactory;
     }
     /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType $typeNode
+     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|\PhpParser\Node\Identifier $typeNode
      */
     public function decoratePropertyUnionType(UnionType $unionType, $typeNode, Property $property, PhpDocInfo $phpDocInfo, bool $changeVarTypeFallback = \true) : void
     {
