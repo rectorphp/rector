@@ -11,8 +11,10 @@ use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
@@ -118,6 +120,10 @@ CODE_SAMPLE
             // skip nested scope
             if ($node instanceof FunctionLike) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+            }
+            if ($node instanceof Stmt && !$node instanceof Expression) {
+                $yieldNodes = [];
+                return NodeTraverser::STOP_TRAVERSAL;
             }
             if (!$node instanceof Yield_ && !$node instanceof YieldFrom) {
                 return null;
