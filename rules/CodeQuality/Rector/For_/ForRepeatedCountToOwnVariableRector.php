@@ -82,7 +82,7 @@ CODE_SAMPLE
             $variableName = $this->variableNaming->resolveFromFuncCallFirstArgumentWithSuffix($node, 'Count', 'itemsCount', $scope);
             return new Variable($variableName);
         });
-        if ($countInCond === null) {
+        if (!$countInCond instanceof FuncCall) {
             return null;
         }
         if ($variableName === null) {

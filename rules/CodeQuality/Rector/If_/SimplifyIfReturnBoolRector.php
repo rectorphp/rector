@@ -91,7 +91,7 @@ CODE_SAMPLE
         } else {
             return null;
         }
-        if ($newReturnNode === null) {
+        if (!$newReturnNode instanceof Return_) {
             return null;
         }
         $this->commentsMerger->keepComments($newReturnNode, [$node, $ifInnerNode, $nextNode, $newReturnNode]);

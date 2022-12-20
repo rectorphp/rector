@@ -1,4 +1,4 @@
-# 414 Rules Overview
+# 415 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (38)
+- [TypeDeclaration](#typedeclaration) (39)
 
 - [Visibility](#visibility) (3)
 
@@ -9164,6 +9164,29 @@ Add array shape exact types based on constant keys of array
      public function run(string $name)
      {
          return ['name' => $name];
+     }
+ }
+```
+
+<br>
+
+### EmptyOnNullableObjectToInstanceOfRector
+
+Change `empty()` on nullable object to instanceof check
+
+- class: [`Rector\TypeDeclaration\Rector\Empty_\EmptyOnNullableObjectToInstanceOfRector`](../rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run(?AnotherObject $anotherObject)
+     {
+-        if (empty($anotherObject)) {
++        if (! $anotherObject instanceof AnotherObject) {
+             return false;
+         }
+
+         return true;
      }
  }
 ```

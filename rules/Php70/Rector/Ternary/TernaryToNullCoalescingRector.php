@@ -49,7 +49,7 @@ final class TernaryToNullCoalescingRector extends AbstractRector implements MinP
             // not a match
             return null;
         }
-        if ($checkedNode === null) {
+        if (!$checkedNode instanceof Expr) {
             return null;
         }
         if (!$fallbackNode instanceof Expr) {
