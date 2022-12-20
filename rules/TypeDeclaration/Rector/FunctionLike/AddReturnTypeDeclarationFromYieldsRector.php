@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\FunctionLike;
@@ -76,10 +77,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Function_::class, ClassMethod::class];
+        return [Function_::class, ClassMethod::class, Closure::class];
     }
     /**
-     * @param Function_|ClassMethod $node
+     * @param Function_|ClassMethod|Closure $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -159,7 +160,7 @@ CODE_SAMPLE
     }
     /**
      * @param array<Yield_|YieldFrom> $yieldNodes
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      * @return \Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedGenericObjectType
      */
     private function resolveYieldType(array $yieldNodes, $functionLike)
@@ -173,7 +174,7 @@ CODE_SAMPLE
         return new FullyQualifiedGenericObjectType($className, [$yieldedTypes]);
     }
     /**
-     * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod $functionLike
+     * @param \PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function resolveClassName($functionLike) : string
     {
