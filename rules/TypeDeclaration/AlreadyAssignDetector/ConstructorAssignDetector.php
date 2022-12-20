@@ -13,8 +13,10 @@ use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 final class ConstructorAssignDetector
@@ -48,13 +50,19 @@ final class ConstructorAssignDetector
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
+     */
+    private $nodesToRemoveCollector;
+    public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, NodesToRemoveCollector $nodesToRemoveCollector)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
     public function isPropertyAssigned(ClassLike $classLike, string $propertyName) : bool
     {
@@ -75,6 +83,10 @@ final class ConstructorAssignDetector
                 $isFirstLevelStatement = $assign->getAttribute(self::IS_FIRST_LEVEL_STATEMENT);
                 // cannot be nested
                 if ($isFirstLevelStatement !== \true) {
+                    return null;
+                }
+                $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
+                if ($parentNode instanceof Expression && $this->nodesToRemoveCollector->isNodeRemoved($parentNode)) {
                     return null;
                 }
                 $isAssignedInConstructor = \true;
