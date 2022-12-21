@@ -169,8 +169,7 @@ CODE_SAMPLE
         if ($onlyNode instanceof Expression) {
             $onlyNode = $onlyNode->expr;
         }
-        /** @var Expr|null $onlyNode */
-        if ($onlyNode === null) {
+        if (!$onlyNode instanceof Expr) {
             return;
         }
         if (!$onlyNode instanceof StaticCall) {

@@ -27,7 +27,7 @@ return static function (RectorConfig $rectorConfig) : void {
         // @see https://github.com/symfony/symfony/pull/47363
         'Symfony\\Component\\HttpKernel\\Controller\\ArgumentValueResolverInterface' => 'Symfony\\Component\\HttpKernel\\Controller\\ValueResolverInterface',
         // @see https://github.com/symfony/symfony/pull/46094
-        'Symfony\\Component\\Security\\Core\\Security' => 'Symfony\\Bundle\\SecurityBundle\\Security\\Security',
+        'Symfony\\Component\\Security\\Core\\Security' => 'Symfony\\Bundle\\SecurityBundle\\Security',
         // @see https://github.com/symfony/symfony/pull/46161
         'Symfony\\Component\\Translation\\Extractor\\PhpAstExtractor' => 'Symfony\\Component\\Translation\\Extractor\\PhpAstExtractor',
         // @see https://github.com/symfony/symfony/pull/47595
