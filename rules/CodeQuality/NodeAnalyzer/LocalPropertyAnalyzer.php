@@ -93,7 +93,7 @@ final class LocalPropertyAnalyzer
             // skip anonymous class scope
             $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node);
             if ($isAnonymousClass) {
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof PropertyFetch) {
                 return null;

@@ -45,7 +45,7 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract
             $nestedChainMethodCalls = $this->betterNodeFinder->findInstanceOf([$node->expr], MethodCall::class);
             if (\count($nestedChainMethodCalls) > $this->nestedChainMethodCallLimit) {
                 $this->removingExpression = $node;
-                return NodeTraverser::DONT_TRAVERSE_CHILDREN;
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
         }
         return null;
