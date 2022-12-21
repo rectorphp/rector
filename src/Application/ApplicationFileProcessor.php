@@ -23,7 +23,6 @@ use RectorPrefix202212\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202212\Symplify\EasyParallel\CpuCoreCountProvider;
 use RectorPrefix202212\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix202212\Symplify\EasyParallel\ScheduleFactory;
-use RectorPrefix202212\Webmozart\Assert\Assert;
 final class ApplicationFileProcessor
 {
     /**
@@ -129,7 +128,7 @@ final class ApplicationFileProcessor
             // 1. collect all files from files+dirs provided paths
             $files = $this->fileFactory->createFromPaths($fileInfos);
             // 2. PHPStan has to know about all files too
-            $this->configurePHPStanNodeScopeResolver($files);
+            $this->configurePHPStanNodeScopeResolver($fileInfos);
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
             $this->fileDiffFileDecorator->decorate($files);
             $this->printFiles($files, $configuration);
@@ -167,6 +166,16 @@ final class ApplicationFileProcessor
         }
         $this->removedAndAddedFilesProcessor->run($configuration);
         return $systemErrorsAndFileDiffs;
+    }
+    /**
+     * @param string[] $filePaths
+     */
+    public function configurePHPStanNodeScopeResolver(array $filePaths) : void
+    {
+        $phpFilePaths = \array_filter($filePaths, static function (string $filePath) : bool {
+            return \substr_compare($filePath, '.php', -\strlen('.php')) === 0;
+        });
+        $this->nodeScopeResolver->setAnalysedFiles($phpFilePaths);
     }
     /**
      * @param File[] $files
@@ -258,29 +267,5 @@ final class ApplicationFileProcessor
             return null;
         }
         return $potentialEcsBinaryPath;
-    }
-    /**
-     * @param File[] $files
-     */
-    private function configurePHPStanNodeScopeResolver(array $files) : void
-    {
-        $filePaths = $this->resolvePhpFilePaths($files);
-        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
-    }
-    /**
-     * @param File[] $files
-     * @return string[]
-     */
-    private function resolvePhpFilePaths(array $files) : array
-    {
-        Assert::allIsAOf($files, File::class);
-        $phpFilePaths = [];
-        foreach ($files as $file) {
-            $filePath = $file->getFilePath();
-            if (\substr_compare($filePath, '.php', -\strlen('.php')) === 0) {
-                $phpFilePaths[] = $filePath;
-            }
-        }
-        return $phpFilePaths;
     }
 }

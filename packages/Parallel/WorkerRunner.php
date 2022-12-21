@@ -6,7 +6,7 @@ namespace Rector\Parallel;
 use RectorPrefix202212\Clue\React\NDJson\Decoder;
 use RectorPrefix202212\Clue\React\NDJson\Encoder;
 use RectorPrefix202212\Nette\Utils\FileSystem;
-use PHPStan\Analyser\NodeScopeResolver;
+use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
@@ -40,11 +40,6 @@ final class WorkerRunner
     private $currentFileProvider;
     /**
      * @readonly
-     * @var \PHPStan\Analyser\NodeScopeResolver
-     */
-    private $nodeScopeResolver;
-    /**
-     * @readonly
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
@@ -59,6 +54,11 @@ final class WorkerRunner
      */
     private $removedAndAddedFilesProcessor;
     /**
+     * @readonly
+     * @var \Rector\Core\Application\ApplicationFileProcessor
+     */
+    private $applicationFileProcessor;
+    /**
      * @var FileProcessorInterface[]
      * @readonly
      */
@@ -66,14 +66,14 @@ final class WorkerRunner
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, NodeScopeResolver $nodeScopeResolver, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, array $fileProcessors = [])
+    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, ApplicationFileProcessor $applicationFileProcessor, array $fileProcessors = [])
     {
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->currentFileProvider = $currentFileProvider;
-        $this->nodeScopeResolver = $nodeScopeResolver;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->rectorConsoleOutputStyle = $rectorConsoleOutputStyle;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
+        $this->applicationFileProcessor = $applicationFileProcessor;
         $this->fileProcessors = $fileProcessors;
     }
     public function run(Encoder $encoder, Decoder $decoder, Configuration $configuration) : void
@@ -98,7 +98,7 @@ final class WorkerRunner
             $errorAndFileDiffs = [];
             $systemErrors = [];
             // 1. allow PHPStan to work with static reflection on provided files
-            $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+            $this->applicationFileProcessor->configurePHPStanNodeScopeResolver($filePaths);
             foreach ($filePaths as $filePath) {
                 try {
                     $file = new File($filePath, FileSystem::read($filePath));
