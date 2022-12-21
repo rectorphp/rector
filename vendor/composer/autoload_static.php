@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf0f163456d70a7ad1ec63c5cb8fd822b
+class ComposerStaticInita6e7f1f65c7a9cea3f7381fa9cc66a13
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2723,6 +2723,7 @@ class ComposerStaticInitf0f163456d70a7ad1ec63c5cb8fd822b
         'Rector\\Symfony\\Exception\\InvalidConfigurationException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/InvalidConfigurationException.php',
         'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',
         'Rector\\Symfony\\FormHelper\\FormTypeStringToTypeProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/FormHelper/FormTypeStringToTypeProvider.php',
+        'Rector\\Symfony\\Helper\\CommandHelper' => __DIR__ . '/..' . '/rector/rector-symfony/src/Helper/CommandHelper.php',
         'Rector\\Symfony\\Helper\\TemplateGuesser' => __DIR__ . '/..' . '/rector/rector-symfony/src/Helper/TemplateGuesser.php',
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\ClassAnnotationAssertResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/ClassAnnotationAssertResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\MethodCallAnnotationAssertResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/MethodCallAnnotationAssertResolver.php',
@@ -3060,9 +3061,9 @@ class ComposerStaticInitf0f163456d70a7ad1ec63c5cb8fd822b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf0f163456d70a7ad1ec63c5cb8fd822b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf0f163456d70a7ad1ec63c5cb8fd822b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf0f163456d70a7ad1ec63c5cb8fd822b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita6e7f1f65c7a9cea3f7381fa9cc66a13::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita6e7f1f65c7a9cea3f7381fa9cc66a13::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita6e7f1f65c7a9cea3f7381fa9cc66a13::$classMap;
 
         }, null, ClassLoader::class);
     }

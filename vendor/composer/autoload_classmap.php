@@ -2478,6 +2478,7 @@ return array(
     'Rector\\Symfony\\Exception\\InvalidConfigurationException' => $vendorDir . '/rector/rector-symfony/src/Exception/InvalidConfigurationException.php',
     'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => $vendorDir . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',
     'Rector\\Symfony\\FormHelper\\FormTypeStringToTypeProvider' => $vendorDir . '/rector/rector-symfony/src/FormHelper/FormTypeStringToTypeProvider.php',
+    'Rector\\Symfony\\Helper\\CommandHelper' => $vendorDir . '/rector/rector-symfony/src/Helper/CommandHelper.php',
     'Rector\\Symfony\\Helper\\TemplateGuesser' => $vendorDir . '/rector/rector-symfony/src/Helper/TemplateGuesser.php',
     'Rector\\Symfony\\NodeAnalyzer\\Annotations\\ClassAnnotationAssertResolver' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/ClassAnnotationAssertResolver.php',
     'Rector\\Symfony\\NodeAnalyzer\\Annotations\\MethodCallAnnotationAssertResolver' => $vendorDir . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/MethodCallAnnotationAssertResolver.php',
