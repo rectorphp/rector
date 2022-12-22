@@ -126,8 +126,14 @@ final class AstResolver
     public function resolveClassMethodFromMethodReflection(MethodReflection $methodReflection) : ?ClassMethod
     {
         $classReflection = $methodReflection->getDeclaringClass();
-        if (isset($this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()])) {
-            return $this->classMethodsByClassAndMethod[$classReflection->getName()][$methodReflection->getName()];
+        $classLikeName = $classReflection->getName();
+        $methodName = $methodReflection->getName();
+        if (isset($this->classMethodsByClassAndMethod[$classLikeName][$methodName])) {
+            return $this->classMethodsByClassAndMethod[$classLikeName][$methodName];
+        }
+        // saved as null data
+        if (\array_key_exists($classLikeName, $this->classMethodsByClassAndMethod) && \array_key_exists($methodName, $this->classMethodsByClassAndMethod[$classLikeName])) {
+            return null;
         }
         $fileName = $classReflection->getFileName();
         // probably native PHP method → un-parseable
@@ -140,21 +146,19 @@ final class AstResolver
         }
         /** @var ClassLike[] $classLikes */
         $classLikes = $this->betterNodeFinder->findInstanceOf($nodes, ClassLike::class);
-        $classLikeName = $classReflection->getName();
-        $methodReflectionName = $methodReflection->getName();
         foreach ($classLikes as $classLike) {
             if (!$this->nodeNameResolver->isName($classLike, $classLikeName)) {
                 continue;
             }
-            $classMethod = $classLike->getMethod($methodReflectionName);
+            $classMethod = $classLike->getMethod($methodName);
             if (!$classMethod instanceof ClassMethod) {
                 continue;
             }
-            $this->classMethodsByClassAndMethod[$classLikeName][$methodReflectionName] = $classMethod;
+            $this->classMethodsByClassAndMethod[$classLikeName][$methodName] = $classMethod;
             return $classMethod;
         }
         // avoids looking for a class in a file where is not present
-        $this->classMethodsByClassAndMethod[$classLikeName][$methodReflectionName] = null;
+        $this->classMethodsByClassAndMethod[$classLikeName][$methodName] = null;
         return null;
     }
     /**
@@ -170,8 +174,13 @@ final class AstResolver
     }
     public function resolveFunctionFromFunctionReflection(FunctionReflection $functionReflection) : ?Function_
     {
-        if (isset($this->functionsByName[$functionReflection->getName()])) {
-            return $this->functionsByName[$functionReflection->getName()];
+        $functionName = $functionReflection->getName();
+        if (isset($this->functionsByName[$functionName])) {
+            return $this->functionsByName[$functionName];
+        }
+        // saved as null data
+        if (\array_key_exists($functionName, $this->functionsByName)) {
+            return null;
         }
         $fileName = $functionReflection->getFileName();
         if ($fileName === null) {
@@ -184,15 +193,15 @@ final class AstResolver
         /** @var Function_[] $functions */
         $functions = $this->betterNodeFinder->findInstanceOf($nodes, Function_::class);
         foreach ($functions as $function) {
-            if (!$this->nodeNameResolver->isName($function, $functionReflection->getName())) {
+            if (!$this->nodeNameResolver->isName($function, $functionName)) {
                 continue;
             }
             // to avoid parsing missing function again
-            $this->functionsByName[$functionReflection->getName()] = $function;
+            $this->functionsByName[$functionName] = $function;
             return $function;
         }
         // to avoid parsing missing function again
-        $this->functionsByName[$functionReflection->getName()] = null;
+        $this->functionsByName[$functionName] = null;
         return null;
     }
     /**
