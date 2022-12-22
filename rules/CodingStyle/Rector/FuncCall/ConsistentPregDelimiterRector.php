@@ -159,7 +159,10 @@ CODE_SAMPLE
         if ($matchInnerRegex === $matchInnerUnionRegex) {
             return \false;
         }
-        return StringUtils::isMatch($matchInnerUnionRegex['content'], self::NEW_LINE_REGEX);
+        if (StringUtils::isMatch($matchInnerUnionRegex['content'], self::NEW_LINE_REGEX)) {
+            return \true;
+        }
+        return isset($string[0]) && $matchInnerUnionRegex['content'] === $string[0];
     }
     private function hasEscapedQuote(String_ $string) : bool
     {
