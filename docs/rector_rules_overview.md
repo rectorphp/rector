@@ -1,4 +1,4 @@
-# 416 Rules Overview
+# 417 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [Compatibility](#compatibility) (1)
 
-- [DeadCode](#deadcode) (47)
+- [DeadCode](#deadcode) (48)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -3659,6 +3659,40 @@ Removes unneeded `$value` = `$value` assigns
 ```diff
  function run() {
 -    $result = $result;
+ }
+```
+
+<br>
+
+### TargetRemoveClassMethodRector
+
+Remove defined class method
+
+:wrench: **configure it!**
+
+- class: [`Rector\DeadCode\Rector\Class_\TargetRemoveClassMethodRector`](../rules/DeadCode/Rector/Class_/TargetRemoveClassMethodRector.php)
+
+```php
+use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\Class_\TargetRemoveClassMethodRector;
+use Rector\DeadCode\ValueObject\TargetRemoveClassMethod;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(
+        TargetRemoveClassMethodRector::class,
+        [new TargetRemoveClassMethod('SomeClass', 'run')]
+    );
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public function run()
+-    {
+-    }
  }
 ```
 

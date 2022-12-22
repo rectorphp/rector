@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit099468b8f0503dfa63adfbd0082c61cf
+class ComposerStaticInitf4223b92917874ab1dbad62f3f4ea2d4
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1811,6 +1811,7 @@ class ComposerStaticInit099468b8f0503dfa63adfbd0082c61cf
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPromotedPropertyRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPromotedPropertyRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessParamTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessParamTagRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUselessReturnTagRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUselessReturnTagRector.php',
+        'Rector\\DeadCode\\Rector\\Class_\\TargetRemoveClassMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Class_/TargetRemoveClassMethodRector.php',
         'Rector\\DeadCode\\Rector\\Concat\\RemoveConcatAutocastRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Concat/RemoveConcatAutocastRector.php',
         'Rector\\DeadCode\\Rector\\ConstFetch\\RemovePhpVersionIdCheckRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php',
         'Rector\\DeadCode\\Rector\\Expression\\RemoveDeadStmtRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Expression/RemoveDeadStmtRector.php',
@@ -1848,6 +1849,7 @@ class ComposerStaticInit099468b8f0503dfa63adfbd0082c61cf
         'Rector\\DeadCode\\UselessIfCondBeforeForeachDetector' => __DIR__ . '/../..' . '/rules/DeadCode/UselessIfCondBeforeForeachDetector.php',
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
         'Rector\\DeadCode\\ValueObject\\PropertyFetchToVariableAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/PropertyFetchToVariableAssign.php',
+        'Rector\\DeadCode\\ValueObject\\TargetRemoveClassMethod' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/TargetRemoveClassMethod.php',
         'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
         'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php',
@@ -3061,9 +3063,9 @@ class ComposerStaticInit099468b8f0503dfa63adfbd0082c61cf
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit099468b8f0503dfa63adfbd0082c61cf::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit099468b8f0503dfa63adfbd0082c61cf::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit099468b8f0503dfa63adfbd0082c61cf::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf4223b92917874ab1dbad62f3f4ea2d4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf4223b92917874ab1dbad62f3f4ea2d4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf4223b92917874ab1dbad62f3f4ea2d4::$classMap;
 
         }, null, ClassLoader::class);
     }
