@@ -6,6 +6,7 @@ namespace Rector\BetterPhpDocParser\PhpDocParser;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
@@ -42,9 +43,9 @@ final class ClassAnnotationMatcher
         $this->useImportsResolver = $useImportsResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
-    public function resolveTagToKnownFullyQualifiedName(string $tag, Node $node) : ?string
+    public function resolveTagToKnownFullyQualifiedName(string $tag, Property $property) : ?string
     {
-        return $this->_resolveTagFullyQualifiedName($tag, $node, \true);
+        return $this->_resolveTagFullyQualifiedName($tag, $property, \true);
     }
     public function resolveTagFullyQualifiedName(string $tag, Node $node) : ?string
     {

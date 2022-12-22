@@ -12,9 +12,9 @@ use RectorPrefix202212\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorConsoleOutputStyle extends SymfonyStyle
 {
     /**
-     * @var mixed|ProgressBar
+     * @var \Symfony\Component\Console\Helper\ProgressBar|null
      */
-    public $progressBar;
+    private $progressBar;
     /**
      * @var bool|null
      */

@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202212\Webmozart\Assert\Assert;
 /**
- * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector\SpecificOrder\OrderAttributesRectorTest
+ * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\OrderAttributesRector\SpecificOrder\SpecificOrderAttributesRectorTest
  */
 final class OrderAttributesRector extends AbstractRector implements ConfigurableRectorInterface
 {

@@ -45,20 +45,20 @@ final class File
      * @readonly
      * @var string
      */
-    private $filepath;
+    private $filePath;
     /**
      * @var string
      */
     private $fileContent;
-    public function __construct(string $filepath, string $fileContent)
+    public function __construct(string $filePath, string $fileContent)
     {
-        $this->filepath = $filepath;
+        $this->filePath = $filePath;
         $this->fileContent = $fileContent;
         $this->originalFileContent = $fileContent;
     }
     public function getFilePath() : string
     {
-        return $this->filepath;
+        return $this->filePath;
     }
     public function getFileContent() : string
     {
