@@ -113,6 +113,17 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::READONLY_PROPERTY;
     }
+    /**
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
+     */
+    private function shouldSkipInReadonlyClass($node) : bool
+    {
+        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
+        if (!$class instanceof Class_) {
+            return \true;
+        }
+        return $class->isReadonly();
+    }
     private function refactorProperty(Property $property) : ?Property
     {
         // 1. is property read-only?
@@ -135,6 +146,9 @@ CODE_SAMPLE
             return null;
         }
         if ($this->propertyFetchAssignManipulator->isAssignedMultipleTimesInConstructor($property)) {
+            return null;
+        }
+        if ($this->shouldSkipInReadonlyClass($property)) {
             return null;
         }
         $this->visibilityManipulator->makeReadonly($property);
@@ -163,6 +177,9 @@ CODE_SAMPLE
             return null;
         }
         if ($this->isPromotedPropertyAssigned($param)) {
+            return null;
+        }
+        if ($this->shouldSkipInReadonlyClass($param)) {
             return null;
         }
         $this->visibilityManipulator->makeReadonly($param);
