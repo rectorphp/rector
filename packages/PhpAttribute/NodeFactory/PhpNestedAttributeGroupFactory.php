@@ -105,7 +105,7 @@ final class PhpNestedAttributeGroupFactory
     /**
      * @return Arg[]
      */
-    public function createAttributeArgs(DoctrineAnnotationTagValueNode $nestedDoctrineAnnotationTagValueNode, NestedAnnotationToAttribute $nestedAnnotationToAttribute) : array
+    private function createAttributeArgs(DoctrineAnnotationTagValueNode $nestedDoctrineAnnotationTagValueNode, NestedAnnotationToAttribute $nestedAnnotationToAttribute) : array
     {
         $args = $this->createArgsFromItems($nestedDoctrineAnnotationTagValueNode->getValues(), $nestedAnnotationToAttribute);
         return $this->attributeArrayNameInliner->inlineArrayToArgs($args);

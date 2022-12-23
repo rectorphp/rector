@@ -17,18 +17,18 @@ final class SimplePhpParameterReflection implements ParameterReflection
      * @readonly
      * @var \ReflectionParameter
      */
-    private $parameter;
+    private $reflectionParameter;
     public function __construct(ReflectionFunction $reflectionFunction, int $position)
     {
-        $this->parameter = $reflectionFunction->getParameters()[$position];
+        $this->reflectionParameter = $reflectionFunction->getParameters()[$position];
     }
     public function getName() : string
     {
-        return $this->parameter->getName();
+        return $this->reflectionParameter->getName();
     }
     public function isOptional() : bool
     {
-        return $this->parameter->isOptional();
+        return $this->reflectionParameter->isOptional();
     }
     /**
      * getType() is never used yet on manual object creation, and the implementation require PHPStan $phpDocType services injection
@@ -40,17 +40,17 @@ final class SimplePhpParameterReflection implements ParameterReflection
     }
     public function passedByReference() : PassedByReference
     {
-        return $this->parameter->isPassedByReference() ? PassedByReference::createCreatesNewVariable() : PassedByReference::createNo();
+        return $this->reflectionParameter->isPassedByReference() ? PassedByReference::createCreatesNewVariable() : PassedByReference::createNo();
     }
     public function isVariadic() : bool
     {
-        return $this->parameter->isVariadic();
+        return $this->reflectionParameter->isVariadic();
     }
     public function getDefaultValue() : ?Type
     {
         try {
-            if ($this->parameter->isDefaultValueAvailable()) {
-                $defaultValue = $this->parameter->getDefaultValue();
+            if ($this->reflectionParameter->isDefaultValueAvailable()) {
+                $defaultValue = $this->reflectionParameter->getDefaultValue();
                 return ConstantTypeHelper::getTypeFromValue($defaultValue);
             }
         } catch (Throwable $exception) {

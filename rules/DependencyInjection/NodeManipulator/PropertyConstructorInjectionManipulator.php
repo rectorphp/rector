@@ -56,6 +56,9 @@ final class PropertyConstructorInjectionManipulator
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->betterNodeFinder = $betterNodeFinder;
     }
+    /**
+     * @api symfony
+     */
     public function refactor(Property $property, Type $type, DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode) : void
     {
         $propertyName = $this->nodeNameResolver->getName($property);

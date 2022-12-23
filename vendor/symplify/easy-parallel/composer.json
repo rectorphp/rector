@@ -12,7 +12,7 @@
         "fidry\/cpu-core-counter": "^0.4.0"
     },
     "require-dev": {
-        "symplify\/package-builder": "^11.1.21",
+        "symplify\/package-builder": "^11.1.24",
         "phpunit\/phpunit": "^9.5.26"
     },
     "autoload": {
@@ -34,23 +34,23 @@
         "platform-check": false
     },
     "conflict": {
-        "symplify\/phpstan-rules": "<11.1.21",
-        "symplify\/easy-testing": "<11.1.21",
-        "symplify\/rule-doc-generator-contracts": "<11.1.21",
-        "symplify\/php-config-printer": "<11.1.21",
-        "symplify\/autowire-array-parameter": "<11.1.21",
-        "symplify\/phpstan-extensions": "<11.1.21",
-        "symplify\/rule-doc-generator": "<11.1.21",
-        "symplify\/symfony-static-dumper": "<11.1.21",
-        "symplify\/config-transformer": "<11.1.21",
-        "symplify\/coding-standard": "<11.1.21",
-        "symplify\/smart-file-system": "<11.1.21",
-        "symplify\/symplify-kernel": "<11.1.21",
-        "symplify\/package-builder": "<11.1.21",
-        "symplify\/easy-ci": "<11.1.21",
-        "symplify\/monorepo-builder": "<11.1.21",
-        "symplify\/vendor-patches": "<11.1.21",
-        "symplify\/easy-coding-standard": "<11.1.21"
+        "symplify\/phpstan-rules": "<11.1.24",
+        "symplify\/easy-testing": "<11.1.24",
+        "symplify\/rule-doc-generator-contracts": "<11.1.24",
+        "symplify\/php-config-printer": "<11.1.24",
+        "symplify\/autowire-array-parameter": "<11.1.24",
+        "symplify\/phpstan-extensions": "<11.1.24",
+        "symplify\/rule-doc-generator": "<11.1.24",
+        "symplify\/symfony-static-dumper": "<11.1.24",
+        "symplify\/config-transformer": "<11.1.24",
+        "symplify\/coding-standard": "<11.1.24",
+        "symplify\/smart-file-system": "<11.1.24",
+        "symplify\/symplify-kernel": "<11.1.24",
+        "symplify\/package-builder": "<11.1.24",
+        "symplify\/easy-ci": "<11.1.24",
+        "symplify\/monorepo-builder": "<11.1.24",
+        "symplify\/vendor-patches": "<11.1.24",
+        "symplify\/easy-coding-standard": "<11.1.24"
     },
     "minimum-stability": "dev",
     "prefer-stable": true

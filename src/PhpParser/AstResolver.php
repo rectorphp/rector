@@ -116,13 +116,6 @@ final class AstResolver
         $classReflection = $this->reflectionProvider->getClass($className);
         return $this->resolveClassFromClassReflection($classReflection);
     }
-    /**
-     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
-     */
-    public function resolveClassFromObjectType(TypeWithClassName $typeWithClassName)
-    {
-        return $this->resolveClassFromName($typeWithClassName->getClassName());
-    }
     public function resolveClassMethodFromMethodReflection(MethodReflection $methodReflection) : ?ClassMethod
     {
         $classReflection = $methodReflection->getDeclaringClass();

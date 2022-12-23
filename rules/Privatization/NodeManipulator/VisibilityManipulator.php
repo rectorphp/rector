@@ -42,13 +42,6 @@ final class VisibilityManipulator
         $node->flags -= Class_::MODIFIER_STATIC;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Class_ $node
-     */
-    public function makeAbstract($node) : void
-    {
-        $this->addVisibilityFlag($node, Visibility::ABSTRACT);
-    }
-    /**
      * @api
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Class_ $node
      */
@@ -76,27 +69,6 @@ final class VisibilityManipulator
             return;
         }
         $node->flags -= Class_::MODIFIER_FINAL;
-    }
-    /**
-     * This way "abstract", "static", "final" are kept
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
-     */
-    public function removeVisibility($node) : void
-    {
-        // no modifier
-        if ($node->flags === 0) {
-            return;
-        }
-        if ($node->isPublic()) {
-            $node->flags |= Class_::MODIFIER_PUBLIC;
-            $node->flags -= Class_::MODIFIER_PUBLIC;
-        }
-        if ($node->isProtected()) {
-            $node->flags -= Class_::MODIFIER_PROTECTED;
-        }
-        if ($node->isPrivate()) {
-            $node->flags -= Class_::MODIFIER_PRIVATE;
-        }
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
@@ -135,6 +107,9 @@ final class VisibilityManipulator
     {
         $node->flags -= Class_::MODIFIER_FINAL;
     }
+    /**
+     * @api downgrade
+     */
     public function removeAbstract(ClassMethod $classMethod) : void
     {
         $classMethod->flags -= Class_::MODIFIER_ABSTRACT;
@@ -159,6 +134,27 @@ final class VisibilityManipulator
     public function removeReadonly($node) : void
     {
         $this->removeVisibilityFlag($node, Visibility::READONLY);
+    }
+    /**
+     * This way "abstract", "static", "final" are kept
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
+     */
+    private function removeVisibility($node) : void
+    {
+        // no modifier
+        if ($node->flags === 0) {
+            return;
+        }
+        if ($node->isPublic()) {
+            $node->flags |= Class_::MODIFIER_PUBLIC;
+            $node->flags -= Class_::MODIFIER_PUBLIC;
+        }
+        if ($node->isProtected()) {
+            $node->flags -= Class_::MODIFIER_PROTECTED;
+        }
+        if ($node->isPrivate()) {
+            $node->flags -= Class_::MODIFIER_PRIVATE;
+        }
     }
     /**
      * @api

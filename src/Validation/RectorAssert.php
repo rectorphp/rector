@@ -73,6 +73,9 @@ final class RectorAssert
     {
         self::elementName($name, self::FUNCTION_NAME_REGEX, 'function');
     }
+    /**
+     * @api
+     */
     public static function elementName(string $name, string $regex, string $elementType) : void
     {
         if (StringUtils::isMatch($name, $regex)) {

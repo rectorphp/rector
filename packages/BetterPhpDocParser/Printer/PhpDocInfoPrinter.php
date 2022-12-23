@@ -143,7 +143,7 @@ final class PhpDocInfoPrinter
         // hotfix of extra space with callable ()
         return Strings::replace($phpDocString, self::CALLABLE_REGEX, 'callable(');
     }
-    public function getCurrentPhpDocInfo() : PhpDocInfo
+    private function getCurrentPhpDocInfo() : PhpDocInfo
     {
         if ($this->phpDocInfo === null) {
             throw new ShouldNotHappenException();

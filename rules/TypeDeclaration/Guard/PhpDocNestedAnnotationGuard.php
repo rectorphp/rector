@@ -46,7 +46,7 @@ final class PhpDocNestedAnnotationGuard
         $parsedPhpDocText = (string) $phpDocInfo->getPhpDocNode();
         return !$this->hasAnnotationCountChanged($originalPhpDocText, $parsedPhpDocText);
     }
-    public function hasAnnotationCountChanged(string $originalPhpDocText, string $updatedPhpDocText) : bool
+    private function hasAnnotationCountChanged(string $originalPhpDocText, string $updatedPhpDocText) : bool
     {
         $originalAnnotationCount = \count(Strings::matchAll($originalPhpDocText, self::SIMPLE_ANNOTATION_REGEX));
         $reconstructedAnnotationCount = \count(Strings::matchAll($updatedPhpDocText, self::SIMPLE_ANNOTATION_REGEX));

@@ -212,6 +212,7 @@ final class BetterNodeFinder
         return $this->nodeFinder->find($nodes, $filter);
     }
     /**
+     * @api symfony
      * @param Node[] $nodes
      * @return ClassLike|null
      */
@@ -254,6 +255,7 @@ final class BetterNodeFinder
         });
     }
     /**
+     * @api symfony
      * @return Assign|null
      */
     public function findPreviousAssignToExpr(Expr $expr) : ?Node

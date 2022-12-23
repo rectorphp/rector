@@ -87,7 +87,7 @@ final class RemovedAndAddedFilesCollector
         return \count($this->removedFilePaths);
     }
     /**
-     * For testing
+     * @api For testing
      */
     public function reset() : void
     {

@@ -29,6 +29,9 @@ final class RectorKernel
     {
         $this->configureCallValuesCollector = new ConfigureCallValuesCollector();
     }
+    /**
+     * @api used in tests
+     */
     public function create() : ContainerInterface
     {
         return $this->createFromConfigs([]);
@@ -52,6 +55,9 @@ final class RectorKernel
         $this->container = $containerBuilder;
         return $containerBuilder;
     }
+    /**
+     * @api used in tests
+     */
     public function getContainer() : ContainerInterface
     {
         if ($this->container === null) {

@@ -6,6 +6,9 @@ namespace Rector\StaticTypeMapper\ValueObject\Type;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
+/**
+ * @api
+ */
 final class ShortenedObjectType extends ObjectType
 {
     /**

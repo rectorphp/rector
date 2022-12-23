@@ -30,6 +30,8 @@ final class FormatPerservingPrinter
         $this->filesystem = $filesystem;
     }
     /**
+     * @api tests
+     *
      * @param Node[] $newStmts
      * @param Node[] $oldStmts
      * @param Node[] $oldTokens

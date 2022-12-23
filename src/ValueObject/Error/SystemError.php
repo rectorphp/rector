@@ -46,10 +46,6 @@ final class SystemError implements SerializableInterface
     {
         return $this->line;
     }
-    public function getFileWithLine() : string
-    {
-        return $this->relativeFilePath . ':' . $this->line;
-    }
     public function getRelativeFilePath() : ?string
     {
         return $this->relativeFilePath;

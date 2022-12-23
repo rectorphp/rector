@@ -221,6 +221,9 @@ final class PhpDocTypeChanger
         $this->changeParamType($phpDocInfo, $paramType, $param, $paramVarName);
         $this->processKeepComments($property, $param);
     }
+    /**
+     * @api doctrine
+     */
     public function changeVarTypeNode(PhpDocInfo $phpDocInfo, TypeNode $typeNode) : void
     {
         // add completely new one

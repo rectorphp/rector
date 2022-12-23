@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.0 (2022-12-23)
+
+*   Feature: Add support for PHP 8.1 and PHP 8.2.
+    (#31 by @clue and #30 by @SimonFring)
+
+*   Feature: Check type of incoming `data` before trying to decode NDJSON.
+    (#29 by @SimonFrings)
+
+*   Improve documentation and examples and update to new [default loop](https://reactphp.org/event-loop/#loop).
+    (#26 by @clue, #27 by @SimonFrings and #25 by @PaulRotmann)
+
+*   Improve test suite, report failed assertions and ensure 100% code coverage.
+    (#32 and #33 by @clue and #28 by @SimonFrings)
+
 ## 1.2.0 (2020-12-09)
 
 *   Improve test suite and add `.gitattributes` to exclude dev files from exports.

@@ -17,6 +17,14 @@
             "email": "christian@clue.engineering"
         }
     ],
+    "require": {
+        "php": ">=5.3",
+        "react\/stream": "^1.2"
+    },
+    "require-dev": {
+        "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.35",
+        "react\/event-loop": "^1.2"
+    },
     "autoload": {
         "psr-4": {
             "RectorPrefix202212\\Clue\\React\\NDJson\\": "src\/"
@@ -26,13 +34,5 @@
         "psr-4": {
             "RectorPrefix202212\\Clue\\Tests\\React\\NDJson\\": "tests\/"
         }
-    },
-    "require": {
-        "php": ">=5.3",
-        "react\/stream": "^1.0 || ^0.7 || ^0.6"
-    },
-    "require-dev": {
-        "react\/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3",
-        "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.35"
     }
 }

@@ -111,6 +111,7 @@ final class NodeTypeResolver
         }
     }
     /**
+     * @api doctrine symfony
      * @param ObjectType[] $requiredTypes
      */
     public function isObjectTypes(Node $node, array $requiredTypes) : bool

@@ -101,9 +101,10 @@ CODE_SAMPLE
     /**
      * @return string[]
      */
-    public function resolvePossibleGetMethodNames(string $propertyName) : array
+    private function resolvePossibleGetMethodNames(string $propertyName) : array
     {
-        return ['get' . \ucfirst($propertyName), 'has' . \ucfirst($propertyName), 'is' . \ucfirst($propertyName)];
+        $upperPropertyName = \ucfirst($propertyName);
+        return ['get' . $upperPropertyName, 'has' . $upperPropertyName, 'is' . $upperPropertyName];
     }
     private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch) : bool
     {

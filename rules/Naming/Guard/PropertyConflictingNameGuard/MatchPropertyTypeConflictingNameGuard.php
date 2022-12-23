@@ -39,7 +39,7 @@ final class MatchPropertyTypeConflictingNameGuard
     /**
      * @return string[]
      */
-    public function resolve(ClassLike $classLike) : array
+    private function resolve(ClassLike $classLike) : array
     {
         $expectedNames = [];
         foreach ($classLike->getProperties() as $property) {

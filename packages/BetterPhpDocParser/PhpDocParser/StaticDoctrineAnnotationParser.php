@@ -50,6 +50,7 @@ final class StaticDoctrineAnnotationParser
         return $this->resolveAnnotationValues($tokenIterator);
     }
     /**
+     * @api tests
      * @see https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1215-L1224
      * @return CurlyListNode|string|array<mixed>|ConstExprNode|DoctrineAnnotationTagValueNode
      */

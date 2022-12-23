@@ -25,6 +25,8 @@ final class NodeTransformer
      */
     private const PERCENT_TEXT_REGEX = '#^%\\w$#';
     /**
+     * @api symfony
+     *
      * From:
      * - sprintf("Hi %s", $name);
      *
@@ -71,6 +73,9 @@ final class NodeTransformer
         }
         return $yieldNodes;
     }
+    /**
+     * @api symfony
+     */
     public function transformConcatToStringArray(Concat $concat) : Array_
     {
         $arrayItems = $this->transformConcatToItems($concat);

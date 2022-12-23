@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
@@ -178,15 +177,6 @@ final class PhpDocInfo
         return $this->getTypeOrMixed($this->getReturnTagValue());
     }
     /**
-     * @template TNode as \PHPStan\PhpDocParser\Ast\Node
-     * @param class-string<TNode> $type
-     * @return TNode[]
-     */
-    public function getByType(string $type) : array
-    {
-        return $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, $type);
-    }
-    /**
      * @param class-string<Node> $type
      */
     public function hasByType(string $type) : bool
@@ -233,6 +223,9 @@ final class PhpDocInfo
         $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClasses($this->phpDocNode, $classes);
         return $doctrineAnnotationTagValueNodes[0] ?? null;
     }
+    /**
+     * @api doctrine/symfony
+     */
     public function getByAnnotationClass(string $class) : ?DoctrineAnnotationTagValueNode
     {
         $doctrineAnnotationTagValueNodes = $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $class);
@@ -269,14 +262,6 @@ final class PhpDocInfo
         return $foundTagValueNodes[0] ?? null;
     }
     /**
-     * @param class-string $desiredClass
-     * @return DoctrineAnnotationTagValueNode[]
-     */
-    public function findByAnnotationClass(string $desiredClass) : array
-    {
-        return $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $desiredClass);
-    }
-    /**
      * @template T of \PHPStan\PhpDocParser\Ast\Node
      * @param class-string<T> $typeToRemove
      */
@@ -301,18 +286,6 @@ final class PhpDocInfo
             $this->markAsChanged();
             return PhpDocNodeTraverser::NODE_REMOVE;
         });
-    }
-    /**
-     * @return array<string, Type>
-     */
-    public function getParamTypesByName() : array
-    {
-        $paramTypesByName = [];
-        foreach ($this->phpDocNode->getParamTagValues() as $paramTagValueNode) {
-            $parameterType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($paramTagValueNode, $this->node);
-            $paramTypesByName[$paramTagValueNode->parameterName] = $parameterType;
-        }
-        return $paramTypesByName;
     }
     public function addTagValueNode(PhpDocTagValueNode $phpDocTagValueNode) : void
     {
@@ -388,21 +361,6 @@ final class PhpDocInfo
     {
         return $this->phpDocNode->getTemplateTagValues();
     }
-    public function hasInheritDoc() : bool
-    {
-        if ($this->hasByNames(['inheritdoc', 'inheritDoc'])) {
-            return \true;
-        }
-        foreach ($this->phpDocNode->children as $children) {
-            if (!$children instanceof PhpDocTextNode) {
-                continue;
-            }
-            if (\in_array($children->text, ['{@inheritdoc}', '{@inheritDoc}'], \true)) {
-                return \true;
-            }
-        }
-        return \false;
-    }
     /**
      * @deprecated
      * Should be handled by attributes of phpdoc node - if stard_and_end is missing in one of nodes, it has been changed
@@ -431,17 +389,6 @@ final class PhpDocInfo
         $phpDocNodeTraverser->traverse($this->phpDocNode);
         return $changedPhpDocNodeVisitor->hasChanged();
     }
-    /**
-     * @return string[]
-     */
-    public function getMethodTagNames() : array
-    {
-        $methodTagNames = [];
-        foreach ($this->phpDocNode->getMethodTagValues() as $methodTagValueNode) {
-            $methodTagNames[] = $methodTagValueNode->methodName;
-        }
-        return $methodTagNames;
-    }
     public function makeMultiLined() : void
     {
         $this->isSingleLine = \false;
@@ -450,7 +397,7 @@ final class PhpDocInfo
     {
         return $this->node;
     }
-    public function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode) : ?string
+    private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode) : ?string
     {
         foreach (self::TAGS_TYPES_TO_NAMES as $tagValueNodeType => $name) {
             /** @var class-string<PhpDocTagNode> $tagValueNodeType */
@@ -459,6 +406,14 @@ final class PhpDocInfo
             }
         }
         return null;
+    }
+    /**
+     * @param class-string $desiredClass
+     * @return DoctrineAnnotationTagValueNode[]
+     */
+    private function findByAnnotationClass(string $desiredClass) : array
+    {
+        return $this->phpDocNodeByTypeFinder->findDoctrineAnnotationsByClass($this->phpDocNode, $desiredClass);
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\Type

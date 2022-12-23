@@ -22,6 +22,7 @@ final class SimplePhpParser
         $this->phpParser = $parserFactory->create(ParserFactory::PREFER_PHP7);
     }
     /**
+     * @api tests
      * @return Stmt[]
      */
     public function parseFile(string $filePath) : array

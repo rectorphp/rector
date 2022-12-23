@@ -9,6 +9,7 @@ use RectorPrefix202212\Webmozart\Assert\Assert;
 final class FixtureSplitter
 {
     /**
+     * @api
      * @var string
      * @see https://regex101.com/r/zZDoyy/1
      */

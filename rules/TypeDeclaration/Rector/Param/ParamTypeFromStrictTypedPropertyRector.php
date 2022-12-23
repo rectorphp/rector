@@ -90,7 +90,11 @@ CODE_SAMPLE
         }
         return $this->decorateParamWithType($parentNode, $node);
     }
-    public function decorateParamWithType(ClassMethod $classMethod, Param $param) : ?Param
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
+    }
+    private function decorateParamWithType(ClassMethod $classMethod, Param $param) : ?Param
     {
         if ($param->type !== null) {
             return null;
@@ -120,10 +124,6 @@ CODE_SAMPLE
             return $param;
         }
         return null;
-    }
-    public function provideMinPhpVersion() : int
-    {
-        return PhpVersionFeature::TYPED_PROPERTIES;
     }
     /**
      * @return Identifier|Name|ComplexType|null

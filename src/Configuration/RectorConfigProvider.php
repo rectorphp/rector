@@ -23,10 +23,16 @@ final class RectorConfigProvider
     {
         return $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
     }
+    /**
+     * @api symfony
+     */
     public function getSymfonyContainerPhp() : string
     {
         return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER);
     }
+    /**
+     * @api symfony
+     */
     public function getSymfonyContainerXml() : string
     {
         return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);

@@ -58,6 +58,9 @@ final class ClassChildAnalyzer
         }
         return \false;
     }
+    /**
+     * @api downgrade
+     */
     public function resolveParentClassMethodReturnType(ClassReflection $classReflection, string $methodName) : Type
     {
         $parentClassMethods = $this->resolveParentClassMethods($classReflection, $methodName);
@@ -76,7 +79,7 @@ final class ClassChildAnalyzer
     /**
      * @return PhpMethodReflection[]
      */
-    public function resolveParentClassMethods(ClassReflection $classReflection, string $methodName) : array
+    private function resolveParentClassMethods(ClassReflection $classReflection, string $methodName) : array
     {
         $parentClassMethods = [];
         $parents = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());

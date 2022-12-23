@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Foreach_;
@@ -19,7 +18,6 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
-use Rector\NodeNameResolver\NodeNameResolver;
 final class IfManipulator
 {
     /**
@@ -27,11 +25,6 @@ final class IfManipulator
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
     /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\StmtsManipulator
@@ -52,10 +45,9 @@ final class IfManipulator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\StmtsManipulator $stmtsManipulator, ValueResolver $valueResolver, ConditionInverter $conditionInverter, NodeComparator $nodeComparator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\StmtsManipulator $stmtsManipulator, ValueResolver $valueResolver, ConditionInverter $conditionInverter, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->valueResolver = $valueResolver;
         $this->conditionInverter = $conditionInverter;
@@ -158,22 +150,6 @@ final class IfManipulator
             return \false;
         }
         return $this->nodeComparator->areNodesEqual($desiredExpr, $lastElseStmt->var);
-    }
-    /**
-     * Matches:
-     * if (<some_function>) {
-     * } else {
-     * }
-     */
-    public function isIfOrIfElseWithFunctionCondition(If_ $if, string $functionName) : bool
-    {
-        if ((bool) $if->elseifs) {
-            return \false;
-        }
-        if (!$if->cond instanceof FuncCall) {
-            return \false;
-        }
-        return $this->nodeNameResolver->isName($if->cond, $functionName);
     }
     /**
      * @return If_[]

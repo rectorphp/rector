@@ -57,6 +57,7 @@ final class ClassInsertManipulator
         $this->addAsFirstMethod($class, $classConst);
     }
     /**
+     * @api
      * @param Property[] $properties
      */
     public function addPropertiesToClass(Class_ $class, array $properties) : void

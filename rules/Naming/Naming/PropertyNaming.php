@@ -113,6 +113,7 @@ final class PropertyNaming
         return $this->prolongIfTooShort($variableName, $className);
     }
     /**
+     * @api symfony
      * @see https://stackoverflow.com/a/2792045/1348344
      */
     public function underscoreToName(string $underscoreName) : string

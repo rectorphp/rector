@@ -63,7 +63,7 @@ final class UseImportNameMatcher
         }
         return null;
     }
-    public function resolveName(string $prefix, string $tag, UseUse $useUse) : string
+    private function resolveName(string $prefix, string $tag, UseUse $useUse) : string
     {
         // useuse can be renamed on the fly, so just in case, use the original one
         $originalUseUse = $useUse->getAttribute(AttributeKey::ORIGINAL_NODE);

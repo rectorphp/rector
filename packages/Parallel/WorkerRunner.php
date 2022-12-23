@@ -126,7 +126,7 @@ final class WorkerRunner
      * @param array{system_errors: SystemError[], file_diffs: FileDiff[]}|mixed[] $errorAndFileDiffs
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
      */
-    public function processFiles(File $file, Configuration $configuration, array $errorAndFileDiffs) : array
+    private function processFiles(File $file, Configuration $configuration, array $errorAndFileDiffs) : array
     {
         foreach ($this->fileProcessors as $fileProcessor) {
             if (!$fileProcessor->supports($file, $configuration)) {

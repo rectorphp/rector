@@ -52,7 +52,7 @@ final class ArgumentDefaultValueReplacer
     /**
      * @param mixed $value
      */
-    public function isDefaultValueMatched(?Expr $expr, $value) : bool
+    private function isDefaultValueMatched(?Expr $expr, $value) : bool
     {
         // allow any values before, also allow param without default value
         if ($value === ReplaceArgumentDefaultValue::ANY_VALUE_BEFORE) {

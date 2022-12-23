@@ -87,7 +87,7 @@ final class VariableNaming
         $bareName = $this->resolveBareFuncCallArgumentName($funcCall, $fallbackName, $suffix);
         return $this->createCountedValueName($bareName, $scope);
     }
-    public function resolveFromNodeAndType(Node $node, Type $type) : ?string
+    private function resolveFromNodeAndType(Node $node, Type $type) : ?string
     {
         $variableName = $this->resolveBareFromNode($node);
         if ($variableName === null) {

@@ -67,18 +67,6 @@ final class NodeRemover
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
-     */
-    public function removeStmt($functionLike, int $key) : void
-    {
-        if ($functionLike->stmts === null) {
-            throw new ShouldNotHappenException();
-        }
-        // notify about remove node
-        $this->rectorChangeCollector->notifyNodeFileInfo($functionLike->stmts[$key]);
-        unset($functionLike->stmts[$key]);
-    }
-    /**
      * @param int|\PhpParser\Node\Param $keyOrParam
      */
     public function removeParam(ClassMethod $classMethod, $keyOrParam) : void
@@ -110,5 +98,18 @@ final class NodeRemover
         // notify about remove node
         $this->rectorChangeCollector->notifyNodeFileInfo($node->args[$key]);
         unset($node->args[$key]);
+    }
+    /**
+     * @api phpunit
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     */
+    public function removeStmt($functionLike, int $key) : void
+    {
+        if ($functionLike->stmts === null) {
+            throw new ShouldNotHappenException();
+        }
+        // notify about remove node
+        $this->rectorChangeCollector->notifyNodeFileInfo($functionLike->stmts[$key]);
+        unset($functionLike->stmts[$key]);
     }
 }

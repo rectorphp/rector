@@ -9,6 +9,9 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+/**
+ * @api
+ */
 final class FullyQualifiedObjectType extends ObjectType
 {
     public function getShortNameType() : \Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType

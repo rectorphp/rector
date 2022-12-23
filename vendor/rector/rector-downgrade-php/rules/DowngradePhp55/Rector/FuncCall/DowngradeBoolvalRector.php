@@ -91,7 +91,7 @@ CODE_SAMPLE
             if (!$this->isBoolvalReference($arg)) {
                 continue;
             }
-            if ($functionLikeReflection === null) {
+            if (!$functionLikeReflection instanceof FunctionReflection) {
                 $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($funcCall);
                 if (!$functionLikeReflection instanceof FunctionReflection) {
                     break;

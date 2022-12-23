@@ -5,6 +5,9 @@ namespace Rector\NodeCollector\ValueObject;
 
 use PhpParser\Node\Expr;
 use Rector\Core\Validation\RectorAssert;
+/**
+ * @api
+ */
 final class ArrayCallableDynamicMethod
 {
     /**

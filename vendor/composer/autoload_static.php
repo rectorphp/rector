@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5727a5b552fffbd0bdf6eb3ddaeb80e1
+class ComposerStaticInit1ca47d59cbeda8a04e9c4a89331c80bf
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1853,7 +1853,6 @@ class ComposerStaticInit5727a5b552fffbd0bdf6eb3ddaeb80e1
         'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
         'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php',
-        'Rector\\Defluent\\NodeAnalyzer\\SameClassMethodCallAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/SameClassMethodCallAnalyzer.php',
         'Rector\\DependencyInjection\\Collector\\VariablesToPropertyFetchCollection' => __DIR__ . '/../..' . '/rules/DependencyInjection/Collector/VariablesToPropertyFetchCollection.php',
         'Rector\\DependencyInjection\\NodeManipulator\\PropertyConstructorInjectionManipulator' => __DIR__ . '/../..' . '/rules/DependencyInjection/NodeManipulator/PropertyConstructorInjectionManipulator.php',
         'Rector\\DependencyInjection\\Rector\\ClassMethod\\AddMethodParentCallRector' => __DIR__ . '/../..' . '/rules/DependencyInjection/Rector/ClassMethod/AddMethodParentCallRector.php',
@@ -2625,7 +2624,6 @@ class ComposerStaticInit5727a5b552fffbd0bdf6eb3ddaeb80e1
         'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallArgRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/FuncCall/RemoveFuncCallArgRector.php',
         'Rector\\Removing\\ValueObject\\ArgumentRemover' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/ArgumentRemover.php',
         'Rector\\Removing\\ValueObject\\RemoveFuncCallArg' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/RemoveFuncCallArg.php',
-        'Rector\\Renaming\\Collector\\MethodCallRenameCollector' => __DIR__ . '/../..' . '/rules/Renaming/Collector/MethodCallRenameCollector.php',
         'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
         'Rector\\Renaming\\Contract\\RenameAnnotationInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameAnnotationInterface.php',
         'Rector\\Renaming\\Contract\\RenameClassConstFetchInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/RenameClassConstFetchInterface.php',
@@ -3063,9 +3061,9 @@ class ComposerStaticInit5727a5b552fffbd0bdf6eb3ddaeb80e1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5727a5b552fffbd0bdf6eb3ddaeb80e1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5727a5b552fffbd0bdf6eb3ddaeb80e1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5727a5b552fffbd0bdf6eb3ddaeb80e1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1ca47d59cbeda8a04e9c4a89331c80bf::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1ca47d59cbeda8a04e9c4a89331c80bf::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1ca47d59cbeda8a04e9c4a89331c80bf::$classMap;
 
         }, null, ClassLoader::class);
     }

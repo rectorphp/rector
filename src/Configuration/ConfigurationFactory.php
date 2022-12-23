@@ -26,6 +26,7 @@ final class ConfigurationFactory
         $this->rectorOutputStyle = $rectorOutputStyle;
     }
     /**
+     * @api used in tests
      * @param string[] $paths
      */
     public function createForTests(array $paths) : Configuration

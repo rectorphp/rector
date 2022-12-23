@@ -17,12 +17,13 @@ use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictGetterMethodReturnTypeRector\TypedPropertyFromStrictGetterMethodReturnTypeRectorTest
  */
-final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends AbstractRector
+final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly

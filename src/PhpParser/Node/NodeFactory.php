@@ -35,8 +35,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\Stmt\UseUse;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Type;
@@ -92,15 +90,6 @@ final class NodeFactory
         $this->staticTypeMapper = $staticTypeMapper;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
-    }
-    /**
-     * Creates "SomeClass::CONSTANT"
-     * @deprecated
-     */
-    public function createShortClassConstFetch(string $shortClassName, string $constantName) : ClassConstFetch
-    {
-        $name = new Name($shortClassName);
-        return $this->createClassConstFetchFromName($name, $constantName);
     }
     /**
      * @param string|ObjectReference::* $className
@@ -205,6 +194,7 @@ final class NodeFactory
         return $property;
     }
     /**
+     * @api symfony
      * @param mixed[] $arguments
      */
     public function createLocalMethodCall(string $method, array $arguments = []) : MethodCall
@@ -236,6 +226,9 @@ final class NodeFactory
     {
         return new StaticCall(new Name(ObjectReference::PARENT), new Identifier(MethodName::CONSTRUCT), $this->createArgsFromParams($params));
     }
+    /**
+     * @api doctrine
+     */
     public function createPrivateProperty(string $name) : Property
     {
         $propertyBuilder = new PropertyBuilder($name);
@@ -260,19 +253,6 @@ final class NodeFactory
             throw new ShouldNotHappenException();
         }
         return $previousConcat;
-    }
-    /**
-     * @param string[] $names
-     * @return Use_[]
-     */
-    public function createUsesFromNames(array $names) : array
-    {
-        $uses = [];
-        foreach ($names as $name) {
-            $useUse = new UseUse(new Name($name));
-            $uses[] = new Use_([$useUse]);
-        }
-        return $uses;
     }
     /**
      * @param string|ObjectReference::* $class
@@ -337,6 +317,7 @@ final class NodeFactory
         return new ConstFetch(new Name('true'));
     }
     /**
+     * @api phpunit
      * @param string|ObjectReference::* $constantName
      */
     public function createClassConstFetchFromName(Name $className, string $constantName) : ClassConstFetch

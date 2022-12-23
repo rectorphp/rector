@@ -30,20 +30,9 @@ final class MissingRectorRulesReporter
     }
     public function reportIfMissing() : ?int
     {
-        $activeRectors = \array_filter($this->rectors, static function (RectorInterface $rector) : bool {
-            if ($rector instanceof PostRectorInterface) {
-                return \false;
-            }
-            return !$rector instanceof ComplementaryRectorInterface;
-        });
-        if ($activeRectors !== []) {
+        if ($this->filterActiveRectors($this->rectors) !== []) {
             return null;
         }
-        $this->report();
-        return Command::FAILURE;
-    }
-    public function report() : void
-    {
         $this->rectorOutputStyle->warning('We could not find any Rector rules to run. You have 2 options to add them:');
         $this->rectorOutputStyle->title('1. Add single rule to "rector.php"');
         $this->rectorOutputStyle->writeln('  $rectorConfig->rule(...);');
@@ -54,5 +43,19 @@ final class MissingRectorRulesReporter
         $this->rectorOutputStyle->title('Missing "rector.php" in your project? Let Rector create it for you');
         $this->rectorOutputStyle->writeln('  vendor/bin/rector init');
         $this->rectorOutputStyle->newLine();
+        return Command::FAILURE;
+    }
+    /**
+     * @param RectorInterface[] $rectors
+     * @return RectorInterface[]
+     */
+    private function filterActiveRectors(array $rectors) : array
+    {
+        return \array_filter($rectors, static function (RectorInterface $rector) : bool {
+            if ($rector instanceof PostRectorInterface) {
+                return \false;
+            }
+            return !$rector instanceof ComplementaryRectorInterface;
+        });
     }
 }

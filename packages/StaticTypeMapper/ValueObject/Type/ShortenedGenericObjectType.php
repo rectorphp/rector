@@ -6,6 +6,9 @@ namespace Rector\StaticTypeMapper\ValueObject\Type;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Type;
+/**
+ * @api
+ */
 final class ShortenedGenericObjectType extends GenericObjectType
 {
     /**
@@ -29,12 +32,5 @@ final class ShortenedGenericObjectType extends GenericObjectType
     public function getShortName() : string
     {
         return $this->getClassName();
-    }
-    /**
-     * @return class-string
-     */
-    public function getFullyQualifiedName() : string
-    {
-        return $this->fullyQualifiedName;
     }
 }

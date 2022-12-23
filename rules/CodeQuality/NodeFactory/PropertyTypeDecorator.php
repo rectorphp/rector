@@ -61,6 +61,7 @@ final class PropertyTypeDecorator
         $this->decoratePropertyWithType($property, $propertyType);
     }
     /**
+     * @api downgrade
      * @param \PhpParser\Node\ComplexType|\PhpParser\Node\Identifier|\PhpParser\Node\Name $typeNode
      */
     public function decoratePropertyWithDocBlock(Property $property, $typeNode) : void

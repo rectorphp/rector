@@ -21,6 +21,9 @@ final class DoctrineAnnotationFactory
     {
         $this->nodePrinter = $nodePrinter;
     }
+    /**
+     * @api downgrade
+     */
     public function createFromAttribute(Attribute $attribute, string $className) : DoctrineAnnotationTagValueNode
     {
         $items = $this->createItemsFromArgs($attribute->args);

@@ -10,6 +10,9 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+/**
+ * @api
+ */
 final class AliasedObjectType extends ObjectType
 {
     /**

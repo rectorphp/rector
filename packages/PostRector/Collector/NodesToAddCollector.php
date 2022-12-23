@@ -131,6 +131,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
         unset($this->nodesToAddBefore[$objectHash]);
     }
     /**
+     * @api downgrade
      * @deprecated Return created nodes right in refactor() method to keep context instead.
      * @param Node[] $newNodes
      */

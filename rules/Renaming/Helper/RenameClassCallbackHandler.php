@@ -62,7 +62,7 @@ final class RenameClassCallbackHandler extends NodeVisitorAbstract
     /**
      * @return array<string, string>
      */
-    public function handleClassLike(ClassLike $classLike) : array
+    private function handleClassLike(ClassLike $classLike) : array
     {
         $oldToNewClasses = [];
         $className = $classLike->name;

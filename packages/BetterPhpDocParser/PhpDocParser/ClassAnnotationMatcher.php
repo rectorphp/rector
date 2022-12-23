@@ -43,6 +43,9 @@ final class ClassAnnotationMatcher
         $this->useImportsResolver = $useImportsResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
+    /**
+     * @api doctrine
+     */
     public function resolveTagToKnownFullyQualifiedName(string $tag, Property $property) : ?string
     {
         return $this->_resolveTagFullyQualifiedName($tag, $property, \true);

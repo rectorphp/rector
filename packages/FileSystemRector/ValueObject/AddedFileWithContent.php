@@ -5,6 +5,9 @@ namespace Rector\FileSystemRector\ValueObject;
 
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\FileSystemRector\Contract\AddedFileInterface;
+/**
+ * @api
+ */
 final class AddedFileWithContent implements AddedFileInterface
 {
     /**

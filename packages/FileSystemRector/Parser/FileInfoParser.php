@@ -36,6 +36,7 @@ final class FileInfoParser
         $this->rectorParser = $rectorParser;
     }
     /**
+     * @api tests only
      * @return Stmt[]
      */
     public function parseFileInfoToNodesAndDecorate(string $filePath) : array

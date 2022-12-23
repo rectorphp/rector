@@ -113,6 +113,9 @@ final class ClassDependencyManipulator
             $this->addConstructorDependencyWithCustomAssign($class, $propertyMetadata->getName(), $propertyMetadata->getType(), $assign);
         }
     }
+    /**
+     * @api doctrine
+     */
     public function addConstructorDependencyWithCustomAssign(Class_ $class, string $name, ?Type $type, Assign $assign) : void
     {
         /** @var ClassMethod|null $constructorMethod */
@@ -129,6 +132,7 @@ final class ClassDependencyManipulator
         $this->dependencyClassMethodDecorator->decorateConstructorWithParentDependencies($class, $constructorMethod, $scope);
     }
     /**
+     * @api doctrine
      * @param Stmt[] $stmts
      */
     public function addStmtsToConstructorIfNotThereYet(Class_ $class, array $stmts) : void

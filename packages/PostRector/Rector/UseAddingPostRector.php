@@ -92,7 +92,6 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         $namespace = $this->betterNodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if ($namespace instanceof Namespace_) {
             // first clean
-            //$this->useImportsRemover->removeImportsFromNamespace($namespace, $removedShortUses);
             // then add, to prevent adding + removing false positive of same short use
             $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
             return $nodes;

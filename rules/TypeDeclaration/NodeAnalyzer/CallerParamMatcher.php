@@ -48,21 +48,6 @@ final class CallerParamMatcher
         }
         return $callParam->type;
     }
-    /**
-     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
-     */
-    public function matchCallParam($call, Param $param, Scope $scope) : ?Param
-    {
-        $callArgPosition = $this->matchCallArgPosition($call, $param);
-        if ($callArgPosition === null) {
-            return null;
-        }
-        $classMethodOrFunction = $this->astResolver->resolveClassMethodOrFunctionFromCall($call, $scope);
-        if ($classMethodOrFunction === null) {
-            return null;
-        }
-        return $classMethodOrFunction->params[$callArgPosition] ?? null;
-    }
     public function matchParentParam(StaticCall $parentStaticCall, Param $param, Scope $scope) : ?Param
     {
         $methodName = $this->nodeNameResolver->getName($parentStaticCall->name);
@@ -75,6 +60,21 @@ final class CallerParamMatcher
             return null;
         }
         return $this->resolveParentMethodParam($scope, $methodName, $parentStaticCallArgPosition);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call
+     */
+    private function matchCallParam($call, Param $param, Scope $scope) : ?Param
+    {
+        $callArgPosition = $this->matchCallArgPosition($call, $param);
+        if ($callArgPosition === null) {
+            return null;
+        }
+        $classMethodOrFunction = $this->astResolver->resolveClassMethodOrFunctionFromCall($call, $scope);
+        if ($classMethodOrFunction === null) {
+            return null;
+        }
+        return $classMethodOrFunction->params[$callArgPosition] ?? null;
     }
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\FuncCall $call

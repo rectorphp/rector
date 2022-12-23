@@ -18,7 +18,6 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Renaming\Collector\MethodCallRenameCollector;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
@@ -41,11 +40,6 @@ final class RenameMethodRector extends AbstractScopeAwareRector implements Confi
     private $classManipulator;
     /**
      * @readonly
-     * @var \Rector\Renaming\Collector\MethodCallRenameCollector
-     */
-    private $methodCallRenameCollector;
-    /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
@@ -54,10 +48,9 @@ final class RenameMethodRector extends AbstractScopeAwareRector implements Confi
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ClassManipulator $classManipulator, MethodCallRenameCollector $methodCallRenameCollector, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(ClassManipulator $classManipulator, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider)
     {
         $this->classManipulator = $classManipulator;
-        $this->methodCallRenameCollector = $methodCallRenameCollector;
         $this->reflectionResolver = $reflectionResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
@@ -114,7 +107,6 @@ CODE_SAMPLE
     {
         Assert::allIsAOf($configuration, MethodCallRenameInterface::class);
         $this->methodCallRenames = $configuration;
-        $this->methodCallRenameCollector->addMethodCallRenames($configuration);
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node

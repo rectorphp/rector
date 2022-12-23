@@ -6,6 +6,9 @@ namespace Rector\Testing\Fixture;
 use RectorPrefix202212\Nette\Utils\FileSystem;
 final class FixtureFileUpdater
 {
+    /**
+     * @api
+     */
     public static function updateFixtureContent(string $originalFilePath, string $changedContent, string $fixtureFilePath) : void
     {
         if (!\getenv('UPDATE_TESTS') && !\getenv('UT')) {

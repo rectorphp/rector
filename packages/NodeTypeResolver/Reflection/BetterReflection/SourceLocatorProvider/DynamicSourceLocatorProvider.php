@@ -12,6 +12,9 @@ use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceL
 use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202212\Webmozart\Assert\Assert;
+/**
+ * @api phpstan external
+ */
 final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterface
 {
     /**

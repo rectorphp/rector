@@ -182,14 +182,6 @@ final class NodeNameResolver
     {
         return $this->classNaming->getShortName($name);
     }
-    /**
-     * @param array<string, string> $renameMap
-     */
-    public function matchNameFromMap(Node $node, array $renameMap) : ?string
-    {
-        $name = $this->getName($node);
-        return $renameMap[$name] ?? null;
-    }
     public function isStringName(string $resolvedName, string $desiredName) : bool
     {
         if ($desiredName === '') {
