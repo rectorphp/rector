@@ -59,11 +59,14 @@ final class ParentPropertyLookupGuard
         $this->astResolver = $astResolver;
         $this->propertyManipulator = $propertyManipulator;
     }
-    public function isLegal(Property $property) : bool
+    public function isLegal(Property $property, ?Class_ $class = null) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
         if (!$class instanceof Class_) {
-            return \false;
+            // @todo optimize
+            $class = $this->betterNodeFinder->findParentType($property, Class_::class);
+            if (!$class instanceof Class_) {
+                return \false;
+            }
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($property);
         if (!$classReflection instanceof ClassReflection) {
@@ -77,20 +80,12 @@ final class ParentPropertyLookupGuard
             return \true;
         }
         $className = $classReflection->getName();
-        $parents = $classReflection->getParents();
+        $parentClassReflections = $classReflection->getParents();
         // parent class not autoloaded
-        if ($parents === []) {
+        if ($parentClassReflections === []) {
             return \false;
         }
-        foreach ($parents as $parent) {
-            if ($parent->hasProperty($propertyName)) {
-                return \false;
-            }
-            if ($this->isFoundInParentClassMethods($parent, $propertyName, $className)) {
-                return \false;
-            }
-        }
-        return \true;
+        return $this->isGuardedByParents($parentClassReflections, $propertyName, $className);
     }
     private function isFoundInParentClassMethods(ClassReflection $parentClassReflection, string $propertyName, string $className) : bool
     {
@@ -131,5 +126,20 @@ final class ParentPropertyLookupGuard
             }
             return $this->nodeNameResolver->isName($subNode->name, $propertyName);
         });
+    }
+    /**
+     * @param ClassReflection[] $parentClassReflections
+     */
+    private function isGuardedByParents(array $parentClassReflections, string $propertyName, string $className) : bool
+    {
+        foreach ($parentClassReflections as $parentClassReflection) {
+            if ($parentClassReflection->hasProperty($propertyName)) {
+                return \false;
+            }
+            if ($this->isFoundInParentClassMethods($parentClassReflection, $propertyName, $className)) {
+                return \false;
+            }
+        }
+        return \true;
     }
 }
