@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\AstResolver;
@@ -50,7 +51,12 @@ final class ParentPropertyLookupGuard
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, AstResolver $astResolver, PropertyManipulator $propertyManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
+     */
+    private $classAnalyzer;
+    public function __construct(BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, AstResolver $astResolver, PropertyManipulator $propertyManipulator, ClassAnalyzer $classAnalyzer)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->reflectionResolver = $reflectionResolver;
@@ -58,17 +64,14 @@ final class ParentPropertyLookupGuard
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->astResolver = $astResolver;
         $this->propertyManipulator = $propertyManipulator;
+        $this->classAnalyzer = $classAnalyzer;
     }
-    public function isLegal(Property $property, ?Class_ $class = null) : bool
+    public function isLegal(Property $property, Class_ $class) : bool
     {
-        if (!$class instanceof Class_) {
-            // @todo optimize
-            $class = $this->betterNodeFinder->findParentType($property, Class_::class);
-            if (!$class instanceof Class_) {
-                return \false;
-            }
+        if ($this->classAnalyzer->isAnonymousClass($class)) {
+            return \false;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($property);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }

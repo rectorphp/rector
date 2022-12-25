@@ -94,6 +94,6 @@ final class PropertyTypeChangeGuard
         if (!$parentNode->isFinal()) {
             return \false;
         }
-        return $this->parentPropertyLookupGuard->isLegal($property);
+        return $this->parentPropertyLookupGuard->isLegal($property, $parentNode);
     }
 }

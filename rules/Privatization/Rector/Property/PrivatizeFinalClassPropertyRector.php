@@ -67,7 +67,7 @@ CODE_SAMPLE
             if ($this->shouldSkipProperty($property)) {
                 continue;
             }
-            if (!$this->parentPropertyLookupGuard->isLegal($property)) {
+            if (!$this->parentPropertyLookupGuard->isLegal($property, $node)) {
                 continue;
             }
             $this->visibilityManipulator->makePrivate($property);
