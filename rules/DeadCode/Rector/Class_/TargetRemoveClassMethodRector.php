@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\ValueObject\TargetRemoveClassMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -21,6 +22,15 @@ final class TargetRemoveClassMethodRector extends AbstractRector implements Conf
      * @var TargetRemoveClassMethod[]
      */
     private $targetRemoveClassMethods = [];
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
+     */
+    private $classAnalyzer;
+    public function __construct(ClassAnalyzer $classAnalyzer)
+    {
+        $this->classAnalyzer = $classAnalyzer;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove defined class method', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -47,7 +57,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->isAnonymous()) {
+        if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
         foreach ($this->targetRemoveClassMethods as $targetRemoveClassMethod) {
