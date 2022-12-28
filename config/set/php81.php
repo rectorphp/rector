@@ -13,6 +13,7 @@ use Rector\Php81\Rector\FuncCall\NullToStrictStringFuncCallArgRector;
 use Rector\Php81\Rector\FuncCall\Php81ResourceReturnToObjectRector;
 use Rector\Php81\Rector\FunctionLike\IntersectionTypesRector;
 use Rector\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector;
+use Rector\Php81\Rector\MethodCall\SpatieEnumMethodCallToEnumConstRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 return static function (RectorConfig $rectorConfig) : void {
@@ -22,6 +23,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(FinalizePublicClassConstantRector::class);
     $rectorConfig->rule(ReadOnlyPropertyRector::class);
     $rectorConfig->rule(SpatieEnumClassToEnumRector::class);
+    $rectorConfig->rule(SpatieEnumMethodCallToEnumConstRector::class);
     $rectorConfig->rule(Php81ResourceReturnToObjectRector::class);
     $rectorConfig->rule(NewInInitializerRector::class);
     $rectorConfig->rule(IntersectionTypesRector::class);

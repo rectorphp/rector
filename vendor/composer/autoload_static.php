@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfd66961213f532093eb0107995840d13
+class ComposerStaticInit87fe46d5f52e67c6c6f0a318acd9b01c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2516,6 +2516,7 @@ class ComposerStaticInitfd66961213f532093eb0107995840d13
         'Rector\\Php81\\Rector\\FuncCall\\Php81ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php',
         'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
+        'Rector\\Php81\\Rector\\MethodCall\\SpatieEnumMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
         'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
         'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',
@@ -3062,9 +3063,9 @@ class ComposerStaticInitfd66961213f532093eb0107995840d13
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfd66961213f532093eb0107995840d13::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfd66961213f532093eb0107995840d13::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfd66961213f532093eb0107995840d13::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit87fe46d5f52e67c6c6f0a318acd9b01c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit87fe46d5f52e67c6c6f0a318acd9b01c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit87fe46d5f52e67c6c6f0a318acd9b01c::$classMap;
 
         }, null, ClassLoader::class);
     }

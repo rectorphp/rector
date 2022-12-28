@@ -2271,6 +2271,7 @@ return array(
     'Rector\\Php81\\Rector\\FuncCall\\Php81ResourceReturnToObjectRector' => $baseDir . '/rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php',
     'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => $baseDir . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
     'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => $baseDir . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
+    'Rector\\Php81\\Rector\\MethodCall\\SpatieEnumMethodCallToEnumConstRector' => $baseDir . '/rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php',
     'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => $baseDir . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
     'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => $baseDir . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
     'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => $baseDir . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',

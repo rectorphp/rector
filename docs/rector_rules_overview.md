@@ -46,7 +46,7 @@
 
 - [Php80](#php80) (20)
 
-- [Php81](#php81) (11)
+- [Php81](#php81) (12)
 
 - [Php82](#php82) (2)
 
@@ -6545,6 +6545,25 @@ Refactor Spatie enum class to native Enum
 +    case PUBLISHED = 'published';
 +    case ARCHIVED = 'archived';
  }
+```
+
+<br>
+
+### SpatieEnumMethodCallToEnumConstRector
+
+Refactor Spatie enum method calls
+
+- class: [`Rector\Php81\Rector\MethodCall\SpatieEnumMethodCallToEnumConstRector`](../rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php)
+
+```diff
+-$value1 = SomeEnum::SOME_CONSTANT()->getValue();
+-$value2 = SomeEnum::SOME_CONSTANT()->value;
+-$name1 = SomeEnum::SOME_CONSTANT()->getName();
+-$name2 = SomeEnum::SOME_CONSTANT()->name;
++$value1 = SomeEnum::SOME_CONSTANT->value;
++$value2 = SomeEnum::SOME_CONSTANT->value;
++$name1 = SomeEnum::SOME_CONSTANT->name;
++$name2 = SomeEnum::SOME_CONSTANT->name;
 ```
 
 <br>
