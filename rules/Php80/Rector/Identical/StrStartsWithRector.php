@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\Php80\Rector\Identical;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -70,10 +72,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Identical::class, NotIdentical::class];
+        return [Identical::class, NotIdentical::class, Equal::class, NotEqual::class];
     }
     /**
-     * @param Identical|NotIdentical $node
+     * @param Identical|NotIdentical|Equal|NotEqual $node
      */
     public function refactor(Node $node) : ?Node
     {

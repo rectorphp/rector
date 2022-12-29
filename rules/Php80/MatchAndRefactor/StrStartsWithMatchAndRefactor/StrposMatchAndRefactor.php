@@ -6,7 +6,9 @@ namespace Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
@@ -47,11 +49,11 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
         $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
-     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp
+     * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\Equal|\PhpParser\Node\Expr\BinaryOp\NotEqual $binaryOp
      */
     public function match($binaryOp) : ?StrStartsWith
     {
-        $isPositive = $binaryOp instanceof Identical;
+        $isPositive = $binaryOp instanceof Identical || $binaryOp instanceof Equal;
         if ($binaryOp->left instanceof FuncCall && $this->nodeNameResolver->isName($binaryOp->left, 'strpos')) {
             return $this->processBinaryOpLeft($binaryOp, $isPositive);
         }
