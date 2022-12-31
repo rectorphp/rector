@@ -24,7 +24,7 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/dev/App_KernelDevDebugContainer.xml');
 
     $rectorConfig->sets([
-        SymfonySetList::SYMFONY_52,
+        SymfonySetList::SYMFONY_62,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
     ]);
@@ -39,13 +39,13 @@ return static function (RectorConfig $rectorConfig): void {
 
 Some rules like `StringFormTypeToClassRector` need access to your Symfony container dumped XML. It contains list of form types with their string names, so it can convert them to class references.
 
-How to add it? Check your `/var/cache` directory and find the XML file for your test env. Then add it in `rector.php`:
+How to add it? Check your `var/cache/` directory and find the XML file for your test env. Then add it in `rector.php`:
 
 ```php
 use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/<env>/appProjectContainer.xml');
+    $rectorConfig->symfonyContainerXml(__DIR__ . '/var/cache/test/App_KernelTestDebugContainer.xml');
 };
 ```
 
@@ -70,7 +70,11 @@ The `tests/symfony-container.php` should provide your dependency injection conta
 ```php
 // tests/symfony-container.php
 
-$appKernel = new AppKernel('tests', false);
+use App\Kernel;
+
+require __DIR__ . '/bootstrap.php';
+
+$appKernel = new Kernel('test', false);
 $appKernel->boot();
 
 return $appKernel->getContainer();
