@@ -10,7 +10,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use Throwable;
-use RectorPrefix202212\Webmozart\Assert\Assert;
+use RectorPrefix202301\Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     /**

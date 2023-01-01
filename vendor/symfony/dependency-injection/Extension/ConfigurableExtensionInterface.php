@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202212\Symfony\Component\DependencyInjection\Extension;
+namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Extension;
 
-use RectorPrefix202212\Symfony\Component\Config\Definition\ConfigurableInterface;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202301\Symfony\Component\Config\Definition\ConfigurableInterface;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 /**
  * @author Yonel Ceruto <yonelceruto@gmail.com>
  */

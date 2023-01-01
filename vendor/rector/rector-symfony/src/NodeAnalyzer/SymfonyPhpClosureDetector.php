@@ -6,7 +6,7 @@ namespace Rector\Symfony\NodeAnalyzer;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 final class SymfonyPhpClosureDetector
 {
     /**

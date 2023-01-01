@@ -3,14 +3,14 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
-use RectorPrefix202212\Nette\Utils\FileSystem;
-use RectorPrefix202212\Nette\Utils\Strings;
+use RectorPrefix202301\Nette\Utils\FileSystem;
+use RectorPrefix202301\Nette\Utils\Strings;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\FileSystem\InitFilePathsResolver;
 use Rector\Core\Php\PhpVersionProvider;
-use RectorPrefix202212\Symfony\Component\Console\Command\Command;
-use RectorPrefix202212\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202212\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202301\Symfony\Component\Console\Command\Command;
+use RectorPrefix202301\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202301\Symfony\Component\Console\Output\OutputInterface;
 final class InitCommand extends Command
 {
     /**
@@ -37,7 +37,7 @@ final class InitCommand extends Command
      * @var \Rector\Core\FileSystem\InitFilePathsResolver
      */
     private $initFilePathsResolver;
-    public function __construct(\RectorPrefix202212\Symfony\Component\Filesystem\Filesystem $filesystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, InitFilePathsResolver $initFilePathsResolver)
+    public function __construct(\RectorPrefix202301\Symfony\Component\Filesystem\Filesystem $filesystem, OutputStyleInterface $rectorOutputStyle, PhpVersionProvider $phpVersionProvider, InitFilePathsResolver $initFilePathsResolver)
     {
         $this->filesystem = $filesystem;
         $this->rectorOutputStyle = $rectorOutputStyle;

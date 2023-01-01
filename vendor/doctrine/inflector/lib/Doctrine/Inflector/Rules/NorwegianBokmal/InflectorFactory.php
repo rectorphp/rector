@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202212\Doctrine\Inflector\Rules\NorwegianBokmal;
+namespace RectorPrefix202301\Doctrine\Inflector\Rules\NorwegianBokmal;
 
-use RectorPrefix202212\Doctrine\Inflector\GenericLanguageInflectorFactory;
-use RectorPrefix202212\Doctrine\Inflector\Rules\Ruleset;
+use RectorPrefix202301\Doctrine\Inflector\GenericLanguageInflectorFactory;
+use RectorPrefix202301\Doctrine\Inflector\Rules\Ruleset;
 final class InflectorFactory extends GenericLanguageInflectorFactory
 {
     protected function getSingularRuleset() : Ruleset

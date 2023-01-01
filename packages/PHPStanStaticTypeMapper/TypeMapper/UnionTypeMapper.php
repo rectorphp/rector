@@ -37,10 +37,10 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use function RectorPrefix202212\Symfony\Component\String\b;
-use RectorPrefix202212\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202212\Webmozart\Assert\Assert;
-use RectorPrefix202212\Webmozart\Assert\InvalidArgumentException;
+use function RectorPrefix202301\Symfony\Component\String\b;
+use RectorPrefix202301\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202301\Webmozart\Assert\Assert;
+use RectorPrefix202301\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements TypeMapperInterface<UnionType>
  */

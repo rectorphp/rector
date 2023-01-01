@@ -8,7 +8,7 @@ $loader = require_once __DIR__.'/autoload.php';
 // https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-functions
 if (!function_exists('trigger_deprecation')) {
     function trigger_deprecation() {
-        return \RectorPrefix202212\trigger_deprecation(...func_get_args());
+        return \RectorPrefix202301\trigger_deprecation(...func_get_args());
     }
 }
 

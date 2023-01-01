@@ -11,9 +11,9 @@ use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerInterface;
 final class RectorKernel
 {
     /**

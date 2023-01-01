@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 declare (strict_types=1);
-namespace RectorPrefix202212\Fidry\CpuCoreCounter\Exec;
+namespace RectorPrefix202301\Fidry\CpuCoreCounter\Exec;
 
 use function fclose;
 use function is_resource;

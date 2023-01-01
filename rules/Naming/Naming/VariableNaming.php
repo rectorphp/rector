@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
-use RectorPrefix202212\Nette\Utils\Strings;
+use RectorPrefix202301\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -22,7 +22,7 @@ use PHPStan\Type\Type;
 use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix202212\Symfony\Component\String\UnicodeString;
+use RectorPrefix202301\Symfony\Component\String\UnicodeString;
 final class VariableNaming
 {
     /**

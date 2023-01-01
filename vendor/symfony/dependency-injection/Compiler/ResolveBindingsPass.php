@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202212\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Argument\BoundArgument;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Attribute\Target;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202212\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute\Target;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202301\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * @author Guilhem Niot <guilhem.niot@gmail.com>
  */

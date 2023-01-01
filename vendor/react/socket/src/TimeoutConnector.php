@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix202212\React\Socket;
+namespace RectorPrefix202301\React\Socket;
 
-use RectorPrefix202212\React\EventLoop\Loop;
-use RectorPrefix202212\React\EventLoop\LoopInterface;
-use RectorPrefix202212\React\Promise\Timer;
-use RectorPrefix202212\React\Promise\Timer\TimeoutException;
+use RectorPrefix202301\React\EventLoop\Loop;
+use RectorPrefix202301\React\EventLoop\LoopInterface;
+use RectorPrefix202301\React\Promise\Timer;
+use RectorPrefix202301\React\Promise\Timer\TimeoutException;
 final class TimeoutConnector implements ConnectorInterface
 {
     private $connector;
