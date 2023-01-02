@@ -81,7 +81,7 @@ final class NodeValueResolver
         }
         // these values cannot be resolved in reliable way
         foreach (self::UNRESOLVABLE_TYPES as $unresolvableType) {
-            if (\is_a($expr, $unresolvableType, \true)) {
+            if ($expr instanceof $unresolvableType) {
                 throw new ConstExprEvaluationException('The node "%s" value is not possible to resolve. Provide different one.');
             }
         }

@@ -109,7 +109,7 @@ CODE_SAMPLE
             return null;
         }
         $sameNodeType = self::CAST_CLASS_TO_NODE_TYPE[$nodeClass];
-        if (!\is_a($nodeType, $sameNodeType, \true)) {
+        if (!$nodeType instanceof $sameNodeType) {
             return null;
         }
         if ($this->shouldSkip($node->expr)) {

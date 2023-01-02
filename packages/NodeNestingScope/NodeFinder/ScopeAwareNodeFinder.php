@@ -37,7 +37,7 @@ final class ScopeAwareNodeFinder
                 return \true;
             }
             foreach ($parentNestingBreakTypes as $parentNestingBreakType) {
-                if (!\is_a($node, $parentNestingBreakType, \true)) {
+                if (!$node instanceof $parentNestingBreakType) {
                     continue;
                 }
                 $this->isBreakingNodeFoundFirst = \true;

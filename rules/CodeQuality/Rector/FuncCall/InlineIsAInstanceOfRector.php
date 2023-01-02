@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
@@ -65,6 +66,12 @@ CODE_SAMPLE
         $firstArgValue = $args[0]->value;
         if (!$this->isFirstObjectType($firstArgValue)) {
             return null;
+        }
+        /**
+         * instanceof with Variable is ok, while on FuncCal with instanceof cause fatal error, see https://3v4l.org/IHb30
+         */
+        if ($args[1]->value instanceof Variable) {
+            return new Instanceof_($firstArgValue, $args[1]->value);
         }
         $className = $this->resolveClassName($args[1]->value);
         if ($className === null) {

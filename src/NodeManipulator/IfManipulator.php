@@ -249,6 +249,6 @@ final class IfManipulator
         if (\count($stmts) !== 1) {
             return \false;
         }
-        return \is_a($stmts[0], $desiredType);
+        return $stmts[0] instanceof $desiredType;
     }
 }

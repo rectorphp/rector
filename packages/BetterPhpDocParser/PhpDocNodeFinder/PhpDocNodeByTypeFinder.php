@@ -21,7 +21,7 @@ final class PhpDocNodeByTypeFinder
         $phpDocNodeTraverser = new PhpDocNodeTraverser();
         $foundNodes = [];
         $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', static function (Node $node) use(&$foundNodes, $desiredType) : Node {
-            if (!\is_a($node, $desiredType, \true)) {
+            if (!$node instanceof $desiredType) {
                 return $node;
             }
             /** @var TNode $node */
