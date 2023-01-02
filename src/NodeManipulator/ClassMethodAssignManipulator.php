@@ -25,6 +25,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\Util\ArrayChecker;
 use Rector\Core\ValueObject\Application\File;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -75,7 +76,12 @@ final class ClassMethodAssignManipulator
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, NodeComparator $nodeComparator, ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter, ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Util\ArrayChecker
+     */
+    private $arrayChecker;
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, \Rector\Core\NodeManipulator\VariableManipulator $variableManipulator, NodeComparator $nodeComparator, ReflectionResolver $reflectionResolver, \Rector\Core\NodeManipulator\ArrayDestructVariableFilter $arrayDestructVariableFilter, ExprUsedInNextNodeAnalyzer $exprUsedInNextNodeAnalyzer, ArrayChecker $arrayChecker)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeFactory = $nodeFactory;
@@ -85,6 +91,7 @@ final class ClassMethodAssignManipulator
         $this->reflectionResolver = $reflectionResolver;
         $this->arrayDestructVariableFilter = $arrayDestructVariableFilter;
         $this->exprUsedInNextNodeAnalyzer = $exprUsedInNextNodeAnalyzer;
+        $this->arrayChecker = $arrayChecker;
     }
     /**
      * @return Assign[]
@@ -127,7 +134,7 @@ final class ClassMethodAssignManipulator
                 if (!$node instanceof Encapsed) {
                     return \false;
                 }
-                return (bool) \array_filter($node->parts, function (Expr $expr) use($variable) : bool {
+                return $this->arrayChecker->doesExist($node->parts, function (Expr $expr) use($variable) : bool {
                     return $this->nodeComparator->areNodesEqual($expr, $variable);
                 });
             });

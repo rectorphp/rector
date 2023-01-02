@@ -1497,6 +1497,7 @@ return array(
     'Rector\\Core\\Reporting\\MissingRectorRulesReporter' => $baseDir . '/src/Reporting/MissingRectorRulesReporter.php',
     'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => $baseDir . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
     'Rector\\Core\\StaticReflection\\SourceLocator\\RenamedClassesSourceLocator' => $baseDir . '/src/StaticReflection/SourceLocator/RenamedClassesSourceLocator.php',
+    'Rector\\Core\\Util\\ArrayChecker' => $baseDir . '/src/Util/ArrayChecker.php',
     'Rector\\Core\\Util\\ArrayParametersMerger' => $baseDir . '/src/Util/ArrayParametersMerger.php',
     'Rector\\Core\\Util\\MemoryLimiter' => $baseDir . '/src/Util/MemoryLimiter.php',
     'Rector\\Core\\Util\\MultiInstanceofChecker' => $baseDir . '/src/Util/MultiInstanceofChecker.php',
