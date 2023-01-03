@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
+use PhpParser\Comment;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -105,6 +106,13 @@ final class PhpDocInfoFactory
             $tokenIterator = new BetterTokenIterator([]);
             $phpDocNode = new PhpDocNode([]);
         } else {
+            $comments = $node->getComments();
+            $docs = \array_filter($comments, static function (Comment $comment) : bool {
+                return $comment instanceof Doc;
+            });
+            if (\count($docs) > 1) {
+                $this->storePreviousDocs($node, $comments, $docComment);
+            }
             $text = $docComment->getText();
             $tokens = $this->lexer->tokenize($text);
             $tokenIterator = new BetterTokenIterator($tokens);
@@ -127,6 +135,34 @@ final class PhpDocInfoFactory
         // multiline by default
         $phpDocInfo->makeMultiLined();
         return $phpDocInfo;
+    }
+    /**
+     * @param Comment[]|Doc[] $comments
+     */
+    private function storePreviousDocs(Node $node, array $comments, Doc $doc) : void
+    {
+        $previousDocsAsComments = [];
+        $newMainDoc = null;
+        foreach ($comments as $comment) {
+            // On last Doc, stop
+            if ($comment === $doc) {
+                break;
+            }
+            // pure comment
+            if (!$comment instanceof Doc) {
+                $previousDocsAsComments[] = $comment;
+                continue;
+            }
+            // make Doc as comment Doc that not last
+            $previousDocsAsComments[] = new Comment($comment->getText(), $comment->getStartLine(), $comment->getStartFilePos(), $comment->getStartTokenPos(), $comment->getEndLine(), $comment->getEndFilePos(), $comment->getEndTokenPos());
+            /**
+             * Make last Doc before main Doc to candidate main Doc
+             * so it can immediatelly be used as replacement of Main doc when main doc removed
+             */
+            $newMainDoc = $comment;
+        }
+        $node->setAttribute(AttributeKey::PREVIOUS_DOCS_AS_COMMENTS, $previousDocsAsComments);
+        $node->setAttribute(AttributeKey::NEW_MAIN_DOC, $newMainDoc);
     }
     /**
      * Needed for printing
