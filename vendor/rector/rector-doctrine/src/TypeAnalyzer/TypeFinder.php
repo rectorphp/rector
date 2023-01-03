@@ -16,10 +16,10 @@ final class TypeFinder
      */
     public function find(Type $type, string $desiredTypeClass) : Type
     {
-        if (\is_a($type, $desiredTypeClass, \true)) {
+        if ($type instanceof $desiredTypeClass) {
             return $type;
         }
-        if ($type instanceof ArrayType && \is_a($type->getItemType(), $desiredTypeClass, \true)) {
+        if ($type instanceof ArrayType && $type->getItemType() instanceof $desiredTypeClass) {
             return $type->getItemType();
         }
         if ($type instanceof UnionType) {

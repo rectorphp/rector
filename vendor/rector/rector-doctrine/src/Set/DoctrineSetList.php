@@ -40,6 +40,10 @@ final class DoctrineSetList implements SetListInterface
     /**
      * @var string
      */
+    public const DOCTRINE_DBAL_40 = __DIR__ . '/../../config/sets/doctrine-dbal-40.php';
+    /**
+     * @var string
+     */
     public const DOCTRINE_REPOSITORY_AS_SERVICE = __DIR__ . '/../../config/sets/doctrine-repository-as-service.php';
     /**
      * @var string
