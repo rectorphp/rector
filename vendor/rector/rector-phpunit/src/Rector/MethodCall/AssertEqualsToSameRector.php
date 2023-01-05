@@ -116,7 +116,7 @@ final class AssertEqualsToSameRector extends AbstractRector
     private function isScalarType(Type $valueNodeType) : bool
     {
         foreach (self::SCALAR_TYPES as $scalarType) {
-            if (\is_a($valueNodeType, $scalarType, \true)) {
+            if ($valueNodeType instanceof $scalarType) {
                 return \true;
             }
         }
