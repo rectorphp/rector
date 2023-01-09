@@ -1,4 +1,4 @@
-# 23 Rules Overview
+# 24 Rules Overview
 
 ## AddEntityIdByConditionRector
 
@@ -9,15 +9,16 @@ Add entity id with annotations when meets condition
 - class: [`Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector`](../src/Rector/Class_/AddEntityIdByConditionRector.php)
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddEntityIdByConditionRector::class, [AddEntityIdByConditionRector::DETECTED_TRAITS => ['Knp\DoctrineBehaviors\Model\Translatable\Translation', 'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait']]);
+    $rectorConfig->ruleWithConfiguration(AddEntityIdByConditionRector::class, [
+        AddEntityIdByConditionRector::DETECTED_TRAITS => [
+            'Knp\DoctrineBehaviors\Model\Translatable\Translation',
+            'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
+        ],
+    ]);
 };
 ```
 
@@ -66,6 +67,29 @@ Change database type "bigint" for @var/type declaration to string
       * @ORM\Column(type="bigint", nullable=true)
       */
      private $bigNumber;
+ }
+```
+
+<br>
+
+## ChangeCompositeExpressionAddMultipleWithWithRector
+
+Change CompositeExpression ->addMultiple($parts) to ->with(...$parts)
+
+- class: [`Rector\Doctrine\Rector\MethodCall\ChangeCompositeExpressionAddMultipleWithWithRector`](../src/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php)
+
+```diff
+ use Doctrine\ORM\EntityRepository;
+ use Doctrine\DBAL\Query\Expression\CompositeExpression;
+
+ class SomeRepository extends EntityRepository
+ {
+     public function getSomething($parts)
+     {
+         $compositeExpression = CompositeExpression::and('', ...$parts);
+-        $compositeExpression->addMultiple($parts);
++        $compositeExpression->with(...$parts);
+     }
  }
 ```
 
@@ -192,15 +216,15 @@ Replaces doctrine alias with class.
 - class: [`Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector`](../src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php)
 
 ```php
-<?php
-
-declare(strict_types=1);
-
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => ['App' => 'App\Entity']]);
+    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [
+        EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
+            'App' => 'App\Entity',
+        ],
+    ]);
 };
 ```
 

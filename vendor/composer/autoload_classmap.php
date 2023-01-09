@@ -1651,6 +1651,7 @@ return array(
     'Rector\\Doctrine\\Rector\\Class_\\MoveRepositoryFromParentToConstructorRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\RemoveRedundantDefaultClassAnnotationValuesRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\RemoveRepositoryFromEntityAnnotationRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/RemoveRepositoryFromEntityAnnotationRector.php',
+    'Rector\\Doctrine\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
     'Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetParametersArrayToArrayCollectionRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeSetParametersArrayToArrayCollectionRector.php',
     'Rector\\Doctrine\\Rector\\MethodCall\\EntityAliasToClassConstantReferenceRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php',
     'Rector\\Doctrine\\Rector\\MethodCall\\ReplaceParentRepositoryCallsByRepositoryPropertyRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php',

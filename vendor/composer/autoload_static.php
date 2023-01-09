@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit88a1b7cbd571096bfb5221767aa5a8ef
+class ComposerStaticInit32a21627d1903237ad7d0cb6bce9d116
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1896,6 +1896,7 @@ class ComposerStaticInit88a1b7cbd571096bfb5221767aa5a8ef
         'Rector\\Doctrine\\Rector\\Class_\\MoveRepositoryFromParentToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\RemoveRedundantDefaultClassAnnotationValuesRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\RemoveRepositoryFromEntityAnnotationRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/RemoveRepositoryFromEntityAnnotationRector.php',
+        'Rector\\Doctrine\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
         'Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetParametersArrayToArrayCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeSetParametersArrayToArrayCollectionRector.php',
         'Rector\\Doctrine\\Rector\\MethodCall\\EntityAliasToClassConstantReferenceRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php',
         'Rector\\Doctrine\\Rector\\MethodCall\\ReplaceParentRepositoryCallsByRepositoryPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php',
@@ -3063,9 +3064,9 @@ class ComposerStaticInit88a1b7cbd571096bfb5221767aa5a8ef
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit88a1b7cbd571096bfb5221767aa5a8ef::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit88a1b7cbd571096bfb5221767aa5a8ef::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit88a1b7cbd571096bfb5221767aa5a8ef::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit32a21627d1903237ad7d0cb6bce9d116::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit32a21627d1903237ad7d0cb6bce9d116::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit32a21627d1903237ad7d0cb6bce9d116::$classMap;
 
         }, null, ClassLoader::class);
     }
