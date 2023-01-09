@@ -139,6 +139,9 @@ CODE_SAMPLE
             if ($currentClassMethodParam->default instanceof Expr) {
                 continue;
             }
+            if ($currentClassMethodParam->variadic) {
+                continue;
+            }
             $currentClassMethodParams[$key]->default = $this->nodeFactory->createNull();
             $hasChanged = \true;
         }
