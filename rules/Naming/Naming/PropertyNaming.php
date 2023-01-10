@@ -112,16 +112,6 @@ final class PropertyNaming
         // prolong too short generic names with one namespace up
         return $this->prolongIfTooShort($variableName, $className);
     }
-    /**
-     * @api symfony
-     * @see https://stackoverflow.com/a/2792045/1348344
-     */
-    public function underscoreToName(string $underscoreName) : string
-    {
-        $uppercaseWords = \ucwords($underscoreName, '_');
-        $pascalCaseName = \str_replace('_', '', $uppercaseWords);
-        return \lcfirst($pascalCaseName);
-    }
     private function resolveShortClassName(string $className) : string
     {
         if (\strpos($className, '\\') !== \false) {
@@ -234,7 +224,7 @@ final class PropertyNaming
             $shortClassName = \strtolower($shortClassName);
         }
         // remove "_"
-        $shortClassName = Strings::replace($shortClassName, '#_#', '');
+        $shortClassName = Strings::replace($shortClassName, '#_#');
         return $this->normalizeUpperCase($shortClassName);
     }
     private function resolveClassNameFromType(Type $type) : ?string

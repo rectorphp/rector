@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit94cdc26f3ced1adb2ace61719468a5ec
+class ComposerStaticInit58c70eaf531a8b46e8c985851030093e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1529,6 +1529,7 @@ class ComposerStaticInit94cdc26f3ced1adb2ace61719468a5ec
         'Rector\\CodingStyle\\Rector\\ClassConst\\SplitGroupedClassConstantsRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/SplitGroupedClassConstantsRector.php',
         'Rector\\CodingStyle\\Rector\\ClassConst\\SplitGroupedConstantsAndPropertiesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/SplitGroupedConstantsAndPropertiesRector.php',
         'Rector\\CodingStyle\\Rector\\ClassConst\\VarConstantCommentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/VarConstantCommentRector.php',
+        'Rector\\CodingStyle\\Rector\\ClassMethod\\DataProviderArrayItemsNewlinedRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/DataProviderArrayItemsNewlinedRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\FuncGetArgsToVariadicParamRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/FuncGetArgsToVariadicParamRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\NewlineBeforeNewAssignSetRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php',
@@ -3063,9 +3064,9 @@ class ComposerStaticInit94cdc26f3ced1adb2ace61719468a5ec
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit94cdc26f3ced1adb2ace61719468a5ec::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit94cdc26f3ced1adb2ace61719468a5ec::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit94cdc26f3ced1adb2ace61719468a5ec::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit58c70eaf531a8b46e8c985851030093e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit58c70eaf531a8b46e8c985851030093e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit58c70eaf531a8b46e8c985851030093e::$classMap;
 
         }, null, ClassLoader::class);
     }

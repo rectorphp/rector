@@ -120,8 +120,8 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     private function normalizePathsToRelativeWithLine(string $errorMessage) : string
     {
         $regex = '#' . \preg_quote(\getcwd(), '#') . '/#';
-        $errorMessage = Strings::replace($errorMessage, $regex, '');
-        return Strings::replace($errorMessage, self::ON_LINE_REGEX, ':');
+        $errorMessage = Strings::replace($errorMessage, $regex);
+        return Strings::replace($errorMessage, self::ON_LINE_REGEX);
     }
     private function reportRemovedNodes(ProcessResult $processResult) : void
     {
