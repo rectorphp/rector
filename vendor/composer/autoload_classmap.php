@@ -2563,7 +2563,6 @@ return array(
     'Rector\\Symfony\\Rector\\MethodCall\\FormIsValidRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/FormIsValidRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\FormTypeInstanceToClassConstRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/FormTypeInstanceToClassConstRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\GetHelperControllerToServiceRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/GetHelperControllerToServiceRector.php',
-    'Rector\\Symfony\\Rector\\MethodCall\\GetParameterToConstructorInjectionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/GetParameterToConstructorInjectionRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\GetToConstructorInjectionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/GetToConstructorInjectionRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\LiteralGetToRequestClassConstantRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\MakeDispatchFirstArgumentEventRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/MakeDispatchFirstArgumentEventRector.php',

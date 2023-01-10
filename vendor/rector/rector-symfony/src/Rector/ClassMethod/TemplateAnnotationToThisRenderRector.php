@@ -166,7 +166,7 @@ CODE_SAMPLE
                 return null;
             }
             foreach (NodeTypeGroup::STMTS_AWARE as $stmtsAwareType) {
-                if (!\is_a($node, $stmtsAwareType, \true)) {
+                if (!$node instanceof $stmtsAwareType) {
                     continue;
                 }
                 $this->refactorStmtsAwareNode($node, $templateDoctrineAnnotationTagValueNode, $hasThisRenderOrReturnsResponse, $classMethod);

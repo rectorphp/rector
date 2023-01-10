@@ -1,4 +1,4 @@
-# 74 Rules Overview
+# 72 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -263,7 +263,7 @@ Changes int return from execute to use Symfony Command constants.
      protected function execute(InputInterface $input, OutputInterface $output): int
      {
 -        return 0;
-+        return Command::SUCCESS;
++        return \Symfony\Component\Console\Command\Command::SUCCESS;
      }
 
  }
@@ -621,33 +621,6 @@ Replace `$this->getDoctrine()` and `$this->dispatchMessage()` calls in AbstractC
      {
 -        $productRepository = $this->getDoctrine()->getRepository(Product::class);
 +        $productRepository = $this->managerRegistry->getRepository(Product::class);
-     }
- }
-```
-
-<br>
-
-## GetParameterToConstructorInjectionRector
-
-Turns fetching of parameters via `getParameter()` in ContainerAware to constructor injection in Command and Controller in Symfony
-
-- class: [`Rector\Symfony\Rector\MethodCall\GetParameterToConstructorInjectionRector`](../src/Rector/MethodCall/GetParameterToConstructorInjectionRector.php)
-
-```diff
--class MyCommand extends ContainerAwareCommand
-+class MyCommand extends Command
- {
-+    private $someParameter;
-+
-+    public function __construct($someParameter)
-+    {
-+        $this->someParameter = $someParameter;
-+    }
-+
-     public function someMethod()
-     {
--        $this->getParameter('someParameter');
-+        $this->someParameter;
      }
  }
 ```
@@ -1270,31 +1243,6 @@ Remove unused `$request` parameter from controller action
 +    public function run(int $id)
      {
          echo $id;
-     }
- }
-```
-
-<br>
-
-## RenderMethodParamToTypeDeclarationRector
-
-Move `@param` docs on `render()` method in Symfony controller to strict type declaration
-
-- class: [`Rector\Symfony\Rector\ClassMethod\RenderMethodParamToTypeDeclarationRector`](../src/Rector/ClassMethod/RenderMethodParamToTypeDeclarationRector.php)
-
-```diff
- use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
- use Symfony\Component\Routing\Annotation\Route;
-
- final class SomeController extends AbstractController
- {
-     /**
-      * @Route()
--     * @param string $name
-      */
--    public function render($name)
-+    public function render(string $name)
-     {
      }
  }
 ```
