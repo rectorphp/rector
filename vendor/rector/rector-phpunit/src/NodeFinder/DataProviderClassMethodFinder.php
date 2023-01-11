@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\Exception\ShouldNotHappenException;
 final class DataProviderClassMethodFinder
 {
     /**
@@ -29,7 +28,7 @@ final class DataProviderClassMethodFinder
         foreach ($dataProviderMethodNames as $dataProviderMethodName) {
             $dataProviderClassMethod = $class->getMethod($dataProviderMethodName);
             if (!$dataProviderClassMethod instanceof ClassMethod) {
-                throw new ShouldNotHappenException();
+                continue;
             }
             $dataProviderClassMethods[] = $dataProviderClassMethod;
         }
