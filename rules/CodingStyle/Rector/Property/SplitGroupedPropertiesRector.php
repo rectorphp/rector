@@ -65,6 +65,6 @@ CODE_SAMPLE
         foreach ($allProperties as $allProperty) {
             $nextProperties[] = new Property($node->flags, [$allProperty], $node->getAttributes());
         }
-        return \array_merge([$node], $nextProperties);
+        return \array_merge([$node], \is_array($nextProperties) ? $nextProperties : \iterator_to_array($nextProperties));
     }
 }
