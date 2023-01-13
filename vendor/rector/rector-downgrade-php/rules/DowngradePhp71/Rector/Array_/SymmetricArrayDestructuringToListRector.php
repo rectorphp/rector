@@ -4,12 +4,9 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp71\Rector\Array_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
+use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -54,12 +51,8 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function processToList(Array_ $array) : FuncCall
+    private function processToList(Array_ $array) : List_
     {
-        $args = [];
-        foreach ($array->items as $arrayItem) {
-            $args[] = $arrayItem instanceof ArrayItem ? new Arg($arrayItem->value) : null;
-        }
-        return new FuncCall(new Name('list'), $args);
+        return new List_($array->items);
     }
 }

@@ -1913,12 +1913,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "6cf8d9dc726e3fcf577c1c166bfe2b9893623d48"
+                "reference": "e57d006c25129eacc2b02e5db31f5453e9354605"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/6cf8d9dc726e3fcf577c1c166bfe2b9893623d48",
-                "reference": "6cf8d9dc726e3fcf577c1c166bfe2b9893623d48",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/e57d006c25129eacc2b02e5db31f5453e9354605",
+                "reference": "e57d006c25129eacc2b02e5db31f5453e9354605",
                 "shasum": ""
             },
             "require": {
@@ -1944,7 +1944,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2022-12-23T16:38:50+00:00",
+            "time": "2023-01-13T15:12:41+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
