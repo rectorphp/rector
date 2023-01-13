@@ -1418,6 +1418,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\CoalesceAnalyzer' => $baseDir . '/src/NodeAnalyzer/CoalesceAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\CompactFuncCallAnalyzer' => $baseDir . '/src/NodeAnalyzer/CompactFuncCallAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ConstFetchAnalyzer' => $baseDir . '/src/NodeAnalyzer/ConstFetchAnalyzer.php',
+    'Rector\\Core\\NodeAnalyzer\\DoctrineEntityAnalyzer' => $baseDir . '/src/NodeAnalyzer/DoctrineEntityAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\EnumAnalyzer' => $baseDir . '/src/NodeAnalyzer/EnumAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ExprAnalyzer' => $baseDir . '/src/NodeAnalyzer/ExprAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\InlineHTMLAnalyzer' => $baseDir . '/src/NodeAnalyzer/InlineHTMLAnalyzer.php',
