@@ -81,36 +81,37 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
+            return null;
+        }
+        // is attribute? skip it
+        if ($node->attrGroups !== []) {
+            return null;
+        }
         $hasRemovedProperty = \false;
-        if (!$this->isName($node, MethodName::CONSTRUCT)) {
-            return null;
-        }
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
-        foreach ($node->getParams() as $param) {
+        foreach ($constructClassMethod->getParams() as $param) {
             // only private local scope; removing public property might be dangerous
             if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
                 continue;
             }
-            if ($this->propertyManipulator->isPropertyUsedInReadContext($class, $param)) {
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($node, $param)) {
                 continue;
             }
             $paramName = $this->getName($param);
-            $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($class, $paramName);
+            $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($node, $paramName);
             if ($propertyFetches !== []) {
                 continue;
             }
             // is variable used? only remove property, keep param
-            $variable = $this->betterNodeFinder->findVariableOfName((array) $node->stmts, $paramName);
+            $variable = $this->betterNodeFinder->findVariableOfName((array) $constructClassMethod->stmts, $paramName);
             if ($variable instanceof Variable) {
                 $param->flags = 0;
                 continue;
