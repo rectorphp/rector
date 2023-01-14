@@ -383,6 +383,10 @@ CODE_SAMPLE;
     {
         $firstNode = \current($nodes);
         $firstNodePreviousNode = $firstNode->getAttribute(AttributeKey::PREVIOUS_NODE);
+        if ($firstNodePreviousNode instanceof InlineHTML && !$firstNode instanceof InlineHTML) {
+            // re-print InlineHTML is safe
+            $firstNodePreviousNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        }
         if (!$firstNodePreviousNode instanceof Node && $node->hasAttribute(AttributeKey::PREVIOUS_NODE)) {
             /** @var Node $previousNode */
             $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
@@ -397,10 +401,6 @@ CODE_SAMPLE;
         if (!$lastNodeNextNode instanceof Node && $node->hasAttribute(AttributeKey::NEXT_NODE)) {
             /** @var Node $nextNode */
             $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-            if ($nextNode instanceof InlineHTML && !$lastNode instanceof InlineHTML) {
-                // re-print InlineHTML is safe
-                $nextNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            }
             $nodes = \array_merge(\is_array($nodes) ? $nodes : \iterator_to_array($nodes), [$nextNode]);
         }
         $nodeTraverser = new NodeTraverser();
