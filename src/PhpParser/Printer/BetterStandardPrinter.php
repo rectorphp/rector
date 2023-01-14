@@ -20,7 +20,6 @@ use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
@@ -111,11 +110,18 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (\count($stmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
         }
-        if ($newStmts === []) {
+        if (\count($newStmts) <= 1) {
             return $content;
         }
-        /** @var Stmt $firstStmt */
         $firstStmt = \current($newStmts);
+        $lastStmt = \end($newStmts);
+        if (!$firstStmt instanceof InlineHTML && !$lastStmt instanceof InlineHTML) {
+            return $content;
+        }
+        if ($lastStmt instanceof InlineHTML && \substr_compare($content, '<?php ' . $this->nl, -\strlen('<?php ' . $this->nl)) === 0) {
+            $content = \substr($content, 0, -7);
+        }
+        /** @var Node $firstStmt */
         $isFirstStmtReprinted = $firstStmt->getAttribute(AttributeKey::ORIGINAL_NODE) === null;
         if (!$isFirstStmtReprinted) {
             return $content;
@@ -123,18 +129,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (!$firstStmt instanceof InlineHTML) {
             return $content;
         }
-        $lastStmt = \end($newStmts);
-        if (\strncmp($content, '<?php' . $this->nl . $this->nl . '?>', \strlen('<?php' . $this->nl . $this->nl . '?>')) === 0) {
-            $content = \substr($content, 10);
-        }
-        if (\strncmp($content, '?>' . $this->nl, \strlen('?>' . $this->nl)) === 0) {
-            $content = \str_replace('<?php <?php' . $this->nl, '<?php' . $this->nl, $content);
-            $content = \substr($content, 3);
-        }
-        if ($lastStmt instanceof InlineHTML && \substr_compare($content, '<?php ' . $this->nl, -\strlen('<?php ' . $this->nl)) === 0) {
-            return \substr($content, 0, -7);
-        }
-        return $content;
+        return $this->cleanSurplusTag($content);
     }
     /**
      * @param \PhpParser\Node|mixed[]|null $node
@@ -418,6 +413,17 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     protected function pParam(Param $param) : string
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
+    }
+    private function cleanSurplusTag(string $content) : string
+    {
+        if (\strncmp($content, '<?php' . $this->nl . $this->nl . '?>', \strlen('<?php' . $this->nl . $this->nl . '?>')) === 0) {
+            $content = \substr($content, 10);
+        }
+        if (\strncmp($content, '?>' . $this->nl, \strlen('?>' . $this->nl)) === 0) {
+            $content = \str_replace('<?php <?php' . $this->nl, '<?php' . $this->nl, $content);
+            $content = \substr($content, 3);
+        }
+        return $content;
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $lNumber
