@@ -23,6 +23,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
@@ -108,6 +109,17 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         // add new line in case of added stmts
         if (\count($stmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
+        }
+        if ($newStmts === []) {
+            return $content;
+        }
+        $firstStmt = \current($newStmts);
+        $lastStmt = \end($newStmts);
+        if ($firstStmt instanceof InlineHTML && \strncmp($content, '<?php' . $this->nl . $this->nl . '?>', \strlen('<?php' . $this->nl . $this->nl . '?>')) === 0) {
+            $content = \substr($content, 10);
+        }
+        if ($lastStmt instanceof InlineHTML && \substr_compare($content, '<?php ' . $this->nl, -\strlen('<?php ' . $this->nl)) === 0) {
+            return \substr($content, 0, -7);
         }
         return $content;
     }
