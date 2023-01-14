@@ -110,11 +110,11 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (\count($stmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
         }
-        if (\count($newStmts) <= 1) {
-            return $content;
-        }
         $firstStmt = \current($newStmts);
         $lastStmt = \end($newStmts);
+        if ($firstStmt === $lastStmt) {
+            return $content;
+        }
         if (!$firstStmt instanceof InlineHTML && !$lastStmt instanceof InlineHTML) {
             return $content;
         }
@@ -417,13 +417,16 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     private function cleanSurplusTag(string $content) : string
     {
         if (\strncmp($content, '<?php' . $this->nl . $this->nl . '?>', \strlen('<?php' . $this->nl . $this->nl . '?>')) === 0) {
-            $content = \substr($content, 10);
+            return \substr($content, 10);
         }
-        if (\strncmp($content, '?>' . $this->nl, \strlen('?>' . $this->nl)) === 0) {
-            $content = \str_replace('<?php <?php' . $this->nl, '<?php' . $this->nl, $content);
-            $content = \substr($content, 3);
+        if (\strncmp($content, '?>' . $this->nl, \strlen('?>' . $this->nl)) !== 0) {
+            return $content;
         }
-        return $content;
+        if (\strpos($content, '<?php <?php' . $this->nl) === \false) {
+            return $content;
+        }
+        $content = \str_replace('<?php <?php' . $this->nl, '<?php' . $this->nl, $content);
+        return \substr($content, 3);
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $lNumber
