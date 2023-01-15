@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PhpAttribute\NodeFactory;
+namespace Rector\NodeFactory;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;

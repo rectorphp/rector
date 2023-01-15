@@ -16,7 +16,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
-use Rector\PhpAttribute\NodeFactory\DoctrineAnnotationFactory;
+use Rector\NodeFactory\DoctrineAnnotationFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202301\Webmozart\Assert\Assert;
@@ -37,7 +37,7 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
     private $isDowngraded = \false;
     /**
      * @readonly
-     * @var \Rector\PhpAttribute\NodeFactory\DoctrineAnnotationFactory
+     * @var \Rector\NodeFactory\DoctrineAnnotationFactory
      */
     private $doctrineAnnotationFactory;
     public function __construct(DoctrineAnnotationFactory $doctrineAnnotationFactory)

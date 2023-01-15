@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87
+class ComposerStaticInit39fe5fb82431888e736e091c51300842
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2142,6 +2142,7 @@ class ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87
         'Rector\\NodeCollector\\StaticAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/StaticAnalyzer.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallable' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallable.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallableDynamicMethod' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallableDynamicMethod.php',
+        'Rector\\NodeFactory\\DoctrineAnnotationFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/DoctrineAnnotationFactory.php',
         'Rector\\NodeManipulator\\PropertyDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeManipulator/PropertyDecorator.php',
         'Rector\\NodeNameResolver\\Contract\\NodeNameResolverInterface' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Contract/NodeNameResolverInterface.php',
         'Rector\\NodeNameResolver\\Error\\InvalidNameNodeReporter' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Error/InvalidNameNodeReporter.php',
@@ -2537,7 +2538,6 @@ class ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87
         'Rector\\PhpAttribute\\Enum\\DocTagNodeState' => __DIR__ . '/../..' . '/packages/PhpAttribute/Enum/DocTagNodeState.php',
         'Rector\\PhpAttribute\\NodeAnalyzer\\ExprParameterReflectionTypeCorrector' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeAnalyzer/ExprParameterReflectionTypeCorrector.php',
         'Rector\\PhpAttribute\\NodeFactory\\AttributeNameFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/AttributeNameFactory.php',
-        'Rector\\PhpAttribute\\NodeFactory\\DoctrineAnnotationFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/DoctrineAnnotationFactory.php',
         'Rector\\PhpAttribute\\NodeFactory\\NamedArgsFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/NamedArgsFactory.php',
         'Rector\\PhpAttribute\\NodeFactory\\PhpAttributeGroupFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/PhpAttributeGroupFactory.php',
         'Rector\\PhpAttribute\\NodeFactory\\PhpNestedAttributeGroupFactory' => __DIR__ . '/../..' . '/packages/PhpAttribute/NodeFactory/PhpNestedAttributeGroupFactory.php',
@@ -3066,9 +3066,9 @@ class ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit39fe5fb82431888e736e091c51300842::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit39fe5fb82431888e736e091c51300842::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit39fe5fb82431888e736e091c51300842::$classMap;
 
         }, null, ClassLoader::class);
     }
