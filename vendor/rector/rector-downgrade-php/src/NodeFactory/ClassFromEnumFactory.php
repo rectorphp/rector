@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Php81\NodeFactory;
+namespace Rector\NodeFactory;
 
 use PhpParser\Node\Const_;
 use PhpParser\Node\Expr;

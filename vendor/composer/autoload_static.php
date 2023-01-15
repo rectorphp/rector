@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit39fe5fb82431888e736e091c51300842
+class ComposerStaticInit479783b998d61cb0717211847faacdb7
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2142,6 +2142,7 @@ class ComposerStaticInit39fe5fb82431888e736e091c51300842
         'Rector\\NodeCollector\\StaticAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/StaticAnalyzer.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallable' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallable.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallableDynamicMethod' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallableDynamicMethod.php',
+        'Rector\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/ClassFromEnumFactory.php',
         'Rector\\NodeFactory\\DoctrineAnnotationFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/DoctrineAnnotationFactory.php',
         'Rector\\NodeManipulator\\PropertyDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeManipulator/PropertyDecorator.php',
         'Rector\\NodeNameResolver\\Contract\\NodeNameResolverInterface' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Contract/NodeNameResolverInterface.php',
@@ -2509,7 +2510,6 @@ class ComposerStaticInit39fe5fb82431888e736e091c51300842
         'Rector\\Php81\\Enum\\AttributeName' => __DIR__ . '/../..' . '/rules/Php81/Enum/AttributeName.php',
         'Rector\\Php81\\NodeAnalyzer\\ComplexNewAnalyzer' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/ComplexNewAnalyzer.php',
         'Rector\\Php81\\NodeAnalyzer\\EnumConstListClassDetector' => __DIR__ . '/../..' . '/rules/Php81/NodeAnalyzer/EnumConstListClassDetector.php',
-        'Rector\\Php81\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/ClassFromEnumFactory.php',
         'Rector\\Php81\\NodeFactory\\EnumFactory' => __DIR__ . '/../..' . '/rules/Php81/NodeFactory/EnumFactory.php',
         'Rector\\Php81\\Rector\\Array_\\FirstClassCallableRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Array_/FirstClassCallableRector.php',
         'Rector\\Php81\\Rector\\ClassConst\\FinalizePublicClassConstantRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/ClassConst/FinalizePublicClassConstantRector.php',
@@ -3066,9 +3066,9 @@ class ComposerStaticInit39fe5fb82431888e736e091c51300842
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit39fe5fb82431888e736e091c51300842::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit39fe5fb82431888e736e091c51300842::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit39fe5fb82431888e736e091c51300842::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit479783b998d61cb0717211847faacdb7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit479783b998d61cb0717211847faacdb7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit479783b998d61cb0717211847faacdb7::$classMap;
 
         }, null, ClassLoader::class);
     }

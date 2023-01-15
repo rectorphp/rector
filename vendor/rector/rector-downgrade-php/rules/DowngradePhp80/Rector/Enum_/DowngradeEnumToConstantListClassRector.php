@@ -20,7 +20,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer;
-use Rector\Php81\NodeFactory\ClassFromEnumFactory;
+use Rector\NodeFactory\ClassFromEnumFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -30,7 +30,7 @@ final class DowngradeEnumToConstantListClassRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Php81\NodeFactory\ClassFromEnumFactory
+     * @var \Rector\NodeFactory\ClassFromEnumFactory
      */
     private $classFromEnumFactory;
     /**
