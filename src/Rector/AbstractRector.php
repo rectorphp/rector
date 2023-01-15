@@ -383,10 +383,6 @@ CODE_SAMPLE;
     {
         $firstNode = \current($nodes);
         $firstNodePreviousNode = $firstNode->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($firstNodePreviousNode instanceof InlineHTML && !$firstNode instanceof InlineHTML) {
-            // re-print InlineHTML is safe
-            $firstNodePreviousNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-        }
         if (!$firstNodePreviousNode instanceof Node && $node->hasAttribute(AttributeKey::PREVIOUS_NODE)) {
             /** @var Node $previousNode */
             $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);

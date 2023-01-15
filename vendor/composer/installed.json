@@ -1913,12 +1913,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "3966deef7984ffc03b35ae37c604a852a5971402"
+                "reference": "3e9c70cfbf3ed9690a4d9612ad998ebd041d12c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/3966deef7984ffc03b35ae37c604a852a5971402",
-                "reference": "3966deef7984ffc03b35ae37c604a852a5971402",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/3e9c70cfbf3ed9690a4d9612ad998ebd041d12c1",
+                "reference": "3e9c70cfbf3ed9690a4d9612ad998ebd041d12c1",
                 "shasum": ""
             },
             "require": {
@@ -1937,7 +1937,7 @@
                 "rector\/rector-debugging": "dev-main",
                 "rector\/rector-generator": "^0.6.14",
                 "rector\/rector-src": "dev-main",
-                "symplify\/easy-ci": "^11.1",
+                "symplify\/easy-ci": "^11.2",
                 "symplify\/easy-coding-standard": "^11.1",
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.1",
@@ -1947,7 +1947,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-01-15T02:05:25+00:00",
+            "time": "2023-01-15T13:28:08+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1977,7 +1977,7 @@
             "description": "Rector downgrade PHP rules",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/tree\/0.14.3"
             },
             "install-path": "..\/rector\/rector-downgrade-php"
         },

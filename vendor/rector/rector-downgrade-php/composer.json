@@ -16,7 +16,7 @@
         "rector\/rector-debugging": "dev-main",
         "rector\/rector-generator": "^0.6.14",
         "rector\/rector-src": "dev-main",
-        "symplify\/easy-ci": "^11.1",
+        "symplify\/easy-ci": "^11.2",
         "symplify\/easy-coding-standard": "^11.1",
         "symplify\/phpstan-extensions": "^11.1",
         "symplify\/phpstan-rules": "^11.1",

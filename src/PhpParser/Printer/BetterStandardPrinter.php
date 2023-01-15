@@ -440,14 +440,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (\strncmp($content, '<?php' . $this->nl . $this->nl . '?>', \strlen('<?php' . $this->nl . $this->nl . '?>')) === 0) {
             return \substr($content, 10);
         }
-        if (\strncmp($content, '?>' . $this->nl, \strlen('?>' . $this->nl)) !== 0) {
-            return $content;
-        }
-        if (\strpos($content, '<?php <?php' . $this->nl) === \false) {
-            return $content;
-        }
-        $content = \str_replace('<?php <?php' . $this->nl, '<?php' . $this->nl, $content);
-        return \substr($content, 3);
+        return $content;
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $lNumber
