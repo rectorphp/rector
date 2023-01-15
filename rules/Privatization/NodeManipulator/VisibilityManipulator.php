@@ -108,13 +108,6 @@ final class VisibilityManipulator
         $node->flags -= Class_::MODIFIER_FINAL;
     }
     /**
-     * @api downgrade
-     */
-    public function removeAbstract(ClassMethod $classMethod) : void
-    {
-        $classMethod->flags -= Class_::MODIFIER_ABSTRACT;
-    }
-    /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $node
      */
     public function makeReadonly($node) : void
