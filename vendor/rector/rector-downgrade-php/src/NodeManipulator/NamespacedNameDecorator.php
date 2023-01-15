@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeDecorator;
+namespace Rector\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;

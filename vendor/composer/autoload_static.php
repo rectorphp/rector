@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2900543936600a9f7c79cd4022d8df33
+class ComposerStaticInitf0e5f51252f21c3a47bbdc83c5842fc3
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1676,7 +1676,6 @@ class ComposerStaticInit2900543936600a9f7c79cd4022d8df33
         'Rector\\Core\\NodeAnalyzer\\VariableAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/VariableAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\VariadicAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/VariadicAnalyzer.php',
         'Rector\\Core\\NodeDecorator\\CreatedByRuleDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/CreatedByRuleDecorator.php',
-        'Rector\\Core\\NodeDecorator\\NamespacedNameDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/NamespacedNameDecorator.php',
         'Rector\\Core\\NodeDecorator\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/PropertyTypeDecorator.php',
         'Rector\\Core\\NodeManipulator\\ArrayDestructVariableFilter' => __DIR__ . '/../..' . '/src/NodeManipulator/ArrayDestructVariableFilter.php',
         'Rector\\Core\\NodeManipulator\\ArrayManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ArrayManipulator.php',
@@ -2144,6 +2143,7 @@ class ComposerStaticInit2900543936600a9f7c79cd4022d8df33
         'Rector\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/ClassFromEnumFactory.php',
         'Rector\\NodeFactory\\DoctrineAnnotationFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/DoctrineAnnotationFactory.php',
         'Rector\\NodeFactory\\NamedVariableFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/NamedVariableFactory.php',
+        'Rector\\NodeManipulator\\NamespacedNameDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeManipulator/NamespacedNameDecorator.php',
         'Rector\\NodeManipulator\\PropertyDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeManipulator/PropertyDecorator.php',
         'Rector\\NodeNameResolver\\Contract\\NodeNameResolverInterface' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Contract/NodeNameResolverInterface.php',
         'Rector\\NodeNameResolver\\Error\\InvalidNameNodeReporter' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Error/InvalidNameNodeReporter.php',
@@ -3066,9 +3066,9 @@ class ComposerStaticInit2900543936600a9f7c79cd4022d8df33
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2900543936600a9f7c79cd4022d8df33::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2900543936600a9f7c79cd4022d8df33::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2900543936600a9f7c79cd4022d8df33::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf0e5f51252f21c3a47bbdc83c5842fc3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf0e5f51252f21c3a47bbdc83c5842fc3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf0e5f51252f21c3a47bbdc83c5842fc3::$classMap;
 
         }, null, ClassLoader::class);
     }
