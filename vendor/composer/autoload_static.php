@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4b4d671263c78027bb801eacaa3f73e6
+class ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1660,7 +1660,6 @@ class ComposerStaticInit4b4d671263c78027bb801eacaa3f73e6
         'Rector\\Core\\NodeAnalyzer\\BinaryOpAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/BinaryOpAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\CallAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/CallAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ClassAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ClassAnalyzer.php',
-        'Rector\\Core\\NodeAnalyzer\\CoalesceAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/CoalesceAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\CompactFuncCallAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/CompactFuncCallAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ConstFetchAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ConstFetchAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\DoctrineEntityAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/DoctrineEntityAnalyzer.php',
@@ -2135,6 +2134,7 @@ class ComposerStaticInit4b4d671263c78027bb801eacaa3f73e6
         'Rector\\Naming\\ValueObject\\VariableAndCallAssign' => __DIR__ . '/../..' . '/rules/Naming/ValueObject/VariableAndCallAssign.php',
         'Rector\\Naming\\ValueObject\\VariableAndCallForeach' => __DIR__ . '/../..' . '/rules/Naming/ValueObject/VariableAndCallForeach.php',
         'Rector\\Naming\\VariableRenamer' => __DIR__ . '/../..' . '/rules/Naming/VariableRenamer.php',
+        'Rector\\NodeAnalyzer\\CoalesceAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/CoalesceAnalyzer.php',
         'Rector\\NodeCollector\\BinaryOpConditionsCollector' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpConditionsCollector.php',
         'Rector\\NodeCollector\\BinaryOpTreeRootLocator' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpTreeRootLocator.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
@@ -2142,6 +2142,7 @@ class ComposerStaticInit4b4d671263c78027bb801eacaa3f73e6
         'Rector\\NodeCollector\\StaticAnalyzer' => __DIR__ . '/../..' . '/packages/NodeCollector/StaticAnalyzer.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallable' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallable.php',
         'Rector\\NodeCollector\\ValueObject\\ArrayCallableDynamicMethod' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallableDynamicMethod.php',
+        'Rector\\NodeManipulator\\PropertyDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeManipulator/PropertyDecorator.php',
         'Rector\\NodeNameResolver\\Contract\\NodeNameResolverInterface' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Contract/NodeNameResolverInterface.php',
         'Rector\\NodeNameResolver\\Error\\InvalidNameNodeReporter' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Error/InvalidNameNodeReporter.php',
         'Rector\\NodeNameResolver\\NodeNameResolver' => __DIR__ . '/../..' . '/packages/NodeNameResolver/NodeNameResolver.php',
@@ -3065,9 +3066,9 @@ class ComposerStaticInit4b4d671263c78027bb801eacaa3f73e6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4b4d671263c78027bb801eacaa3f73e6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4b4d671263c78027bb801eacaa3f73e6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4b4d671263c78027bb801eacaa3f73e6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9b6fe8c2e325a9b6213c78eead332d87::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -22,10 +22,10 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\NodeAnalyzer\CoalesceAnalyzer;
 use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeAnalyzer\CoalesceAnalyzer;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -43,7 +43,7 @@ final class DowngradeThrowExprRector extends AbstractRector
     private $ifManipulator;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\CoalesceAnalyzer
+     * @var \Rector\NodeAnalyzer\CoalesceAnalyzer
      */
     private $coalesceAnalyzer;
     /**

@@ -6,8 +6,8 @@ namespace Rector\DowngradePhp80\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
-use Rector\CodeQuality\NodeFactory\PropertyTypeDecorator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeManipulator\PropertyDecorator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -17,12 +17,12 @@ final class DowngradeUnionTypeTypedPropertyRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator
+     * @var \Rector\NodeManipulator\PropertyDecorator
      */
-    private $propertyTypeDecorator;
-    public function __construct(PropertyTypeDecorator $propertyTypeDecorator)
+    private $PropertyDecorator;
+    public function __construct(PropertyDecorator $PropertyDecorator)
     {
-        $this->propertyTypeDecorator = $propertyTypeDecorator;
+        $this->PropertyDecorator = $PropertyDecorator;
     }
     /**
      * @return array<class-string<Node>>
@@ -61,7 +61,7 @@ CODE_SAMPLE
         if (!$this->shouldRemoveProperty($node)) {
             return null;
         }
-        $this->propertyTypeDecorator->decoratePropertyWithDocBlock($node, $node->type);
+        $this->PropertyDecorator->decorateWithDocBlock($node, $node->type);
         $node->type = null;
         return $node;
     }

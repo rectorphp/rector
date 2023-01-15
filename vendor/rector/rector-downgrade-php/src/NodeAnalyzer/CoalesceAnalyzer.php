@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Core\NodeAnalyzer;
+namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -15,9 +15,6 @@ final class CoalesceAnalyzer
      * @var array<class-string<Expr>>
      */
     private const ISSETABLE_EXPR = [Variable::class, ArrayDimFetch::class, PropertyFetch::class, StaticPropertyFetch::class];
-    /**
-     * @api downgrade
-     */
     public function hasIssetableLeft(Coalesce $coalesce) : bool
     {
         $leftClass = \get_class($coalesce->left);
