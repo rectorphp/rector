@@ -118,9 +118,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (!$firstStmt instanceof InlineHTML && !$lastStmt instanceof InlineHTML) {
             return $content;
         }
-        if ($lastStmt instanceof InlineHTML && \substr_compare($content, '<?php ' . $this->nl, -\strlen('<?php ' . $this->nl)) === 0) {
-            $content = \substr($content, 0, -7);
-        }
+        $content = $this->cleanEndWithPHPOpenTag($lastStmt, $content);
         /** @var Node $firstStmt */
         $isFirstStmtReprinted = $firstStmt->getAttribute(AttributeKey::ORIGINAL_NODE) === null;
         if (!$isFirstStmtReprinted) {
@@ -413,6 +411,16 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     protected function pParam(Param $param) : string
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
+    }
+    private function cleanEndWithPHPOpenTag(Node $node, string $content) : string
+    {
+        if ($node instanceof InlineHTML && \substr_compare($content, '<?php ' . $this->nl, -\strlen('<?php ' . $this->nl)) === 0) {
+            $content = \substr($content, 0, -7);
+        }
+        if ($node instanceof InlineHTML && \substr_compare($content, '<?php ', -\strlen('<?php ')) === 0) {
+            return \substr($content, 0, -6);
+        }
+        return $content;
     }
     private function cleanSurplusTag(string $content) : string
     {
