@@ -31,7 +31,10 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Util\StringUtils;
+use Rector\Core\ValueObject\Application\File;
+use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @see \Rector\Core\Tests\PhpParser\Printer\BetterStandardPrinterTest
@@ -82,12 +85,18 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
      */
     private $rectorConfigProvider;
     /**
+     * @readonly
+     * @var \Rector\Core\Provider\CurrentFileProvider
+     */
+    private $currentFileProvider;
+    /**
      * @param mixed[] $options
      */
-    public function __construct(DocBlockUpdater $docBlockUpdater, RectorConfigProvider $rectorConfigProvider, array $options = [])
+    public function __construct(DocBlockUpdater $docBlockUpdater, RectorConfigProvider $rectorConfigProvider, CurrentFileProvider $currentFileProvider, array $options = [])
     {
         $this->docBlockUpdater = $docBlockUpdater;
         $this->rectorConfigProvider = $rectorConfigProvider;
+        $this->currentFileProvider = $currentFileProvider;
         parent::__construct($options);
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
@@ -109,6 +118,10 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         // add new line in case of added stmts
         if (\count($stmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
+        }
+        $currentFile = $this->currentFileProvider->getFile();
+        if ($currentFile instanceof File && !$currentFile->getFileDiff() instanceof FileDiff) {
+            return $content;
         }
         $firstStmt = \current($newStmts);
         $lastStmt = \end($newStmts);
