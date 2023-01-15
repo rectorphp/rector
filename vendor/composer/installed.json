@@ -1913,12 +1913,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "4c1bc82fd09231bc601b2e27183b15d853c5042a"
+                "reference": "3966deef7984ffc03b35ae37c604a852a5971402"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/4c1bc82fd09231bc601b2e27183b15d853c5042a",
-                "reference": "4c1bc82fd09231bc601b2e27183b15d853c5042a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/3966deef7984ffc03b35ae37c604a852a5971402",
+                "reference": "3966deef7984ffc03b35ae37c604a852a5971402",
                 "shasum": ""
             },
             "require": {
@@ -1947,7 +1947,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-01-15T01:53:13+00:00",
+            "time": "2023-01-15T02:05:25+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1977,7 +1977,7 @@
             "description": "Rector downgrade PHP rules",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/tree\/0.14.2"
+                "source": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/tree\/main"
             },
             "install-path": "..\/rector\/rector-downgrade-php"
         },

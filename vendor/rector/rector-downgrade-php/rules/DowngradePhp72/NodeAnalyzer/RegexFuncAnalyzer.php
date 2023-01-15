@@ -72,9 +72,18 @@ final class RegexFuncAnalyzer
         if (!$expr->if instanceof Expr) {
             return \false;
         }
-        if (!$this->valueResolver->isValues($expr->if, self::REGEX_FUNCTION_NAMES)) {
-            return \false;
+        return $this->hasPregMatchFunction($expr);
+    }
+    private function hasPregMatchFunction(Ternary $ternary) : bool
+    {
+        foreach (self::REGEX_FUNCTION_NAMES as $regexFunctionName) {
+            if ($ternary->if instanceof Expr && $this->valueResolver->isValue($ternary->if, $regexFunctionName)) {
+                return \true;
+            }
+            if ($this->valueResolver->isValue($ternary->else, $regexFunctionName)) {
+                return \true;
+            }
         }
-        return $this->valueResolver->isValues($expr->else, self::REGEX_FUNCTION_NAMES);
+        return \false;
     }
 }

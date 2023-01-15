@@ -120,7 +120,7 @@ final class ValueResolver
         return null;
     }
     /**
-     * @api downgrade symfony
+     * @api symfony
      * @param mixed[] $expectedValues
      */
     public function isValues(Expr $expr, array $expectedValues) : bool
