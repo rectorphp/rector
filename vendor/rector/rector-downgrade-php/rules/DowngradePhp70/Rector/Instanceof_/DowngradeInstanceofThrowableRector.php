@@ -10,10 +10,10 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use Rector\Core\PhpParser\Node\NamedVariableFactory;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeCollector\BinaryOpTreeRootLocator;
+use Rector\NodeFactory\NamedVariableFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -36,7 +36,7 @@ final class DowngradeInstanceofThrowableRector extends AbstractRector
     private $binaryOpTreeRootLocator;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\NamedVariableFactory
+     * @var \Rector\NodeFactory\NamedVariableFactory
      */
     private $namedVariableFactory;
     public function __construct(BinaryOpConditionsCollector $binaryOpConditionsCollector, BinaryOpTreeRootLocator $binaryOpTreeRootLocator, NamedVariableFactory $namedVariableFactory)

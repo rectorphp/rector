@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit479783b998d61cb0717211847faacdb7
+class ComposerStaticInit2900543936600a9f7c79cd4022d8df33
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1720,7 +1720,6 @@ class ComposerStaticInit479783b998d61cb0717211847faacdb7
         'Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap' => __DIR__ . '/../..' . '/src/PhpParser/Node/AssignAndBinaryMap.php',
         'Rector\\Core\\PhpParser\\Node\\BetterNodeFinder' => __DIR__ . '/../..' . '/src/PhpParser/Node/BetterNodeFinder.php',
         'Rector\\Core\\PhpParser\\Node\\CustomNode\\FileWithoutNamespace' => __DIR__ . '/../..' . '/src/PhpParser/Node/CustomNode/FileWithoutNamespace.php',
-        'Rector\\Core\\PhpParser\\Node\\NamedVariableFactory' => __DIR__ . '/../..' . '/src/PhpParser/Node/NamedVariableFactory.php',
         'Rector\\Core\\PhpParser\\Node\\NodeFactory' => __DIR__ . '/../..' . '/src/PhpParser/Node/NodeFactory.php',
         'Rector\\Core\\PhpParser\\Node\\Value\\ValueResolver' => __DIR__ . '/../..' . '/src/PhpParser/Node/Value/ValueResolver.php',
         'Rector\\Core\\PhpParser\\Parser\\InlineCodeParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/InlineCodeParser.php',
@@ -2144,6 +2143,7 @@ class ComposerStaticInit479783b998d61cb0717211847faacdb7
         'Rector\\NodeCollector\\ValueObject\\ArrayCallableDynamicMethod' => __DIR__ . '/../..' . '/packages/NodeCollector/ValueObject/ArrayCallableDynamicMethod.php',
         'Rector\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/ClassFromEnumFactory.php',
         'Rector\\NodeFactory\\DoctrineAnnotationFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/DoctrineAnnotationFactory.php',
+        'Rector\\NodeFactory\\NamedVariableFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/NamedVariableFactory.php',
         'Rector\\NodeManipulator\\PropertyDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeManipulator/PropertyDecorator.php',
         'Rector\\NodeNameResolver\\Contract\\NodeNameResolverInterface' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Contract/NodeNameResolverInterface.php',
         'Rector\\NodeNameResolver\\Error\\InvalidNameNodeReporter' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Error/InvalidNameNodeReporter.php',
@@ -3066,9 +3066,9 @@ class ComposerStaticInit479783b998d61cb0717211847faacdb7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit479783b998d61cb0717211847faacdb7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit479783b998d61cb0717211847faacdb7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit479783b998d61cb0717211847faacdb7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2900543936600a9f7c79cd4022d8df33::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2900543936600a9f7c79cd4022d8df33::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2900543936600a9f7c79cd4022d8df33::$classMap;
 
         }, null, ClassLoader::class);
     }
