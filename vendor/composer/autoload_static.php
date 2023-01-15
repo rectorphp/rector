@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit47b1ec4244873ddbc94f2c55f569c7c6
+class ComposerStaticInitc9a68d0668d7e1b7a423642a8307b356
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2133,6 +2133,7 @@ class ComposerStaticInit47b1ec4244873ddbc94f2c55f569c7c6
         'Rector\\Naming\\ValueObject\\VariableAndCallForeach' => __DIR__ . '/../..' . '/rules/Naming/ValueObject/VariableAndCallForeach.php',
         'Rector\\Naming\\VariableRenamer' => __DIR__ . '/../..' . '/rules/Naming/VariableRenamer.php',
         'Rector\\NodeAnalyzer\\CoalesceAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/CoalesceAnalyzer.php',
+        'Rector\\NodeAnalyzer\\MethodCallTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/MethodCallTypeAnalyzer.php',
         'Rector\\NodeCollector\\BinaryOpConditionsCollector' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpConditionsCollector.php',
         'Rector\\NodeCollector\\BinaryOpTreeRootLocator' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpTreeRootLocator.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
@@ -2214,7 +2215,6 @@ class ComposerStaticInit47b1ec4244873ddbc94f2c55f569c7c6
         'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\SourceLocator\\IntermediateSourceLocator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocator/IntermediateSourceLocator.php',
         'Rector\\NodeTypeResolver\\TypeAnalyzer\\ArrayTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeAnalyzer/ArrayTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\TypeAnalyzer\\CountableTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeAnalyzer/CountableTypeAnalyzer.php',
-        'Rector\\NodeTypeResolver\\TypeAnalyzer\\MethodTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeAnalyzer/MethodTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\TypeAnalyzer\\StringTypeAnalyzer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeAnalyzer/StringTypeAnalyzer.php',
         'Rector\\NodeTypeResolver\\TypeComparator\\ArrayTypeComparator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeComparator/ArrayTypeComparator.php',
         'Rector\\NodeTypeResolver\\TypeComparator\\ScalarTypeComparator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/TypeComparator/ScalarTypeComparator.php',
@@ -3066,9 +3066,9 @@ class ComposerStaticInit47b1ec4244873ddbc94f2c55f569c7c6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit47b1ec4244873ddbc94f2c55f569c7c6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit47b1ec4244873ddbc94f2c55f569c7c6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit47b1ec4244873ddbc94f2c55f569c7c6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc9a68d0668d7e1b7a423642a8307b356::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc9a68d0668d7e1b7a423642a8307b356::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc9a68d0668d7e1b7a423642a8307b356::$classMap;
 
         }, null, ClassLoader::class);
     }

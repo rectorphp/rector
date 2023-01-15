@@ -1913,12 +1913,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "e7f7f8e4f4ecf51b74a9b6fb284d35e42612f615"
+                "reference": "4c1bc82fd09231bc601b2e27183b15d853c5042a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/e7f7f8e4f4ecf51b74a9b6fb284d35e42612f615",
-                "reference": "e7f7f8e4f4ecf51b74a9b6fb284d35e42612f615",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/4c1bc82fd09231bc601b2e27183b15d853c5042a",
+                "reference": "4c1bc82fd09231bc601b2e27183b15d853c5042a",
                 "shasum": ""
             },
             "require": {
@@ -1942,9 +1942,12 @@
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.1",
                 "symplify\/rule-doc-generator": "^11.1",
-                "symplify\/vendor-patches": "^11.1"
+                "symplify\/vendor-patches": "^11.1",
+                "tomasvotruba\/cognitive-complexity": "^0.0.5",
+                "tomasvotruba\/type-coverage": "^0.0.9",
+                "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-01-15T01:43:30+00:00",
+            "time": "2023-01-15T01:53:13+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1974,7 +1977,7 @@
             "description": "Rector downgrade PHP rules",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-downgrade-php\/tree\/0.14.2"
             },
             "install-path": "..\/rector\/rector-downgrade-php"
         },
