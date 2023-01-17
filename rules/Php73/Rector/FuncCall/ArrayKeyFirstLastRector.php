@@ -95,6 +95,9 @@ CODE_SAMPLE
         if (!$keyFuncCall instanceof FuncCall) {
             return null;
         }
+        if ($this->hasPrevCallNext($keyFuncCall)) {
+            return null;
+        }
         $newName = self::PREVIOUS_TO_NEW_FUNCTIONS[$this->getName($node)];
         $keyFuncCall->name = new Name($newName);
         $this->removeNode($node);
@@ -103,6 +106,21 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::ARRAY_KEY_FIRST_LAST;
+    }
+    private function hasPrevCallNext(FuncCall $funcCall) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirstNext($funcCall, function (Node $subNode) use($funcCall) : bool {
+            if (!$subNode instanceof FuncCall) {
+                return \false;
+            }
+            if (!$this->isName($subNode, 'prev')) {
+                return \false;
+            }
+            if ($subNode->isFirstClassCallable()) {
+                return \true;
+            }
+            return $this->nodeComparator->areNodesEqual($subNode->args[0]->value, $funcCall->args[0]->value);
+        });
     }
     private function shouldSkip(FuncCall $funcCall) : bool
     {
