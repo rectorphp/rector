@@ -14,10 +14,12 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -67,7 +69,12 @@ final class TokenManipulator
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, NodesToRemoveCollector $nodesToRemoveCollector, ValueResolver $valueResolver, NodeComparator $nodeComparator, ArgsAnalyzer $argsAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, NodesToRemoveCollector $nodesToRemoveCollector, ValueResolver $valueResolver, NodeComparator $nodeComparator, ArgsAnalyzer $argsAnalyzer, BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -76,6 +83,7 @@ final class TokenManipulator
         $this->valueResolver = $valueResolver;
         $this->nodeComparator = $nodeComparator;
         $this->argsAnalyzer = $argsAnalyzer;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @param Node[] $nodes
@@ -175,7 +183,7 @@ final class TokenManipulator
      */
     public function removeIsArray(array $nodes, Variable $singleTokenVariable) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenVariable) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($nodes, function (Node $node) use($singleTokenVariable) : ?FuncCall {
             if (!$node instanceof FuncCall) {
                 return null;
             }
@@ -195,7 +203,23 @@ final class TokenManipulator
             }
             // remove correct node
             $nodeToRemove = $this->matchParentNodeInCaseOfIdenticalTrue($node);
+            $parentNode = $nodeToRemove->getAttribute(AttributeKey::PARENT_NODE);
+            if ($parentNode instanceof Ternary) {
+                $this->replaceTernary($parentNode);
+                return $node;
+            }
             $this->nodesToRemoveCollector->addNodeToRemove($nodeToRemove);
+            return $node;
+        });
+    }
+    private function replaceTernary(Ternary $ternary) : void
+    {
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($ternary);
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($currentStmt, static function (Node $subNode) use($ternary) : ?Expr {
+            if ($subNode === $ternary) {
+                return $ternary->if;
+            }
+            return null;
         });
     }
     /**
