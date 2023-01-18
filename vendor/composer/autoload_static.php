@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdb04846a9514098a54f27727c058164c
+class ComposerStaticInitc45e1662441b4c072df8d5fa9c42b3ae
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2526,6 +2526,7 @@ class ComposerStaticInitdb04846a9514098a54f27727c058164c
         'Rector\\Php81\\Rector\\Property\\ReadOnlyPropertyRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Property/ReadOnlyPropertyRector.php',
         'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
         'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',
+        'Rector\\Php82\\Rector\\New_\\FilesystemIteratorSkipDotsRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/New_/FilesystemIteratorSkipDotsRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',
@@ -2577,6 +2578,7 @@ class ComposerStaticInitdb04846a9514098a54f27727c058164c
         'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/UseNodesToAddCollector.php',
         'Rector\\PostRector\\Contract\\Collector\\NodeCollectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Collector/NodeCollectorInterface.php',
         'Rector\\PostRector\\Contract\\Rector\\ComplementaryRectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Rector/ComplementaryRectorInterface.php',
+        'Rector\\PostRector\\Contract\\Rector\\PostRectorDependencyInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Rector/PostRectorDependencyInterface.php',
         'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Rector/PostRectorInterface.php',
         'Rector\\PostRector\\NodeAnalyzer\\NetteInjectDetector' => __DIR__ . '/../..' . '/packages/PostRector/NodeAnalyzer/NetteInjectDetector.php',
         'Rector\\PostRector\\Rector\\AbstractPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/AbstractPostRector.php',
@@ -3067,9 +3069,9 @@ class ComposerStaticInitdb04846a9514098a54f27727c058164c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdb04846a9514098a54f27727c058164c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdb04846a9514098a54f27727c058164c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdb04846a9514098a54f27727c058164c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc45e1662441b4c072df8d5fa9c42b3ae::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc45e1662441b4c072df8d5fa9c42b3ae::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitc45e1662441b4c072df8d5fa9c42b3ae::$classMap;
 
         }, null, ClassLoader::class);
     }

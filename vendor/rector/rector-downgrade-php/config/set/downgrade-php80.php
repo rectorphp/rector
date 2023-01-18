@@ -50,6 +50,8 @@ return static function (RectorConfig $rectorConfig) : void {
         new DowngradeAttributeToAnnotation('Symfony\\Contracts\\Service\\Attribute\\Required', 'required'),
         // Nette
         new DowngradeAttributeToAnnotation('Nette\\DI\\Attributes\\Inject', 'inject'),
+        // Jetbrains\PhpStorm\Language under nette/utils
+        new DowngradeAttributeToAnnotation('Jetbrains\\PhpStorm\\Language', 'language'),
     ]);
     $rectorConfig->rule(DowngradeDereferenceableOperationRector::class);
     $rectorConfig->rule(DowngradeUnionTypeTypedPropertyRector::class);
