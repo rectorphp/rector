@@ -798,17 +798,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.9.12",
-            "version_normalized": "1.9.12.0",
+            "version": "1.9.14",
+            "version_normalized": "1.9.14.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "44a338ff0d5572c13fd77dfd91addb96e48c29f8"
+                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/44a338ff0d5572c13fd77dfd91addb96e48c29f8",
-                "reference": "44a338ff0d5572c13fd77dfd91addb96e48c29f8",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/e5fcc96289cf737304286a9b505fbed091f02e58",
+                "reference": "e5fcc96289cf737304286a9b505fbed091f02e58",
                 "shasum": ""
             },
             "require": {
@@ -817,7 +817,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2023-01-17T10:44:04+00:00",
+            "time": "2023-01-19T10:47:09+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -840,7 +840,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.9.12"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.9.14"
             },
             "funding": [
                 {
@@ -1914,12 +1914,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "0f2153103f1a616d37e2976f6d6d0fa788429b46"
+                "reference": "37bd454278c11b8e52676885d9b5580b89e9288a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/0f2153103f1a616d37e2976f6d6d0fa788429b46",
-                "reference": "0f2153103f1a616d37e2976f6d6d0fa788429b46",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/37bd454278c11b8e52676885d9b5580b89e9288a",
+                "reference": "37bd454278c11b8e52676885d9b5580b89e9288a",
                 "shasum": ""
             },
             "require": {
@@ -1948,7 +1948,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-01-18T11:57:11+00:00",
+            "time": "2023-01-18T12:07:51+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2126,12 +2126,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "3b132c15485836be4f16d9810a8390ce80ed553b"
+                "reference": "65d1307213ea07e2e4012ccf147f62b9df88c866"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/3b132c15485836be4f16d9810a8390ce80ed553b",
-                "reference": "3b132c15485836be4f16d9810a8390ce80ed553b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/65d1307213ea07e2e4012ccf147f62b9df88c866",
+                "reference": "65d1307213ea07e2e4012ccf147f62b9df88c866",
                 "shasum": ""
             },
             "require": {
@@ -2162,7 +2162,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2023-01-10T10:35:17+00:00",
+            "time": "2023-01-19T15:00:18+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2189,7 +2189,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.14.2"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
             },
             "install-path": "..\/rector\/rector-symfony"
         },
