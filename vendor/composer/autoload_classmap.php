@@ -1357,6 +1357,7 @@ return array(
     'Rector\\Core\\Console\\Command\\ProcessCommand' => $baseDir . '/src/Console/Command/ProcessCommand.php',
     'Rector\\Core\\Console\\Command\\WorkerCommand' => $baseDir . '/src/Console/Command/WorkerCommand.php',
     'Rector\\Core\\Console\\ConsoleApplication' => $baseDir . '/src/Console/ConsoleApplication.php',
+    'Rector\\Core\\Console\\ExitCode' => $baseDir . '/src/Console/ExitCode.php',
     'Rector\\Core\\Console\\Formatter\\ColorConsoleDiffFormatter' => $baseDir . '/src/Console/Formatter/ColorConsoleDiffFormatter.php',
     'Rector\\Core\\Console\\Formatter\\CompleteUnifiedDiffOutputBuilderFactory' => $baseDir . '/src/Console/Formatter/CompleteUnifiedDiffOutputBuilderFactory.php',
     'Rector\\Core\\Console\\Formatter\\ConsoleDiffer' => $baseDir . '/src/Console/Formatter/ConsoleDiffer.php',
