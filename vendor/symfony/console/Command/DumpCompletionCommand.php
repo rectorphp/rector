@@ -22,7 +22,6 @@ use RectorPrefix202301\Symfony\Component\Process\Process;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-#[\Symfony\Component\Console\Attribute\AsCommand(name: 'completion', description: 'Dump the shell completion script')]
 final class DumpCompletionCommand extends Command
 {
     /**

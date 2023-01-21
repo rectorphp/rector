@@ -10,7 +10,6 @@
  */
 namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute;
 
-#[\Attribute(\Attribute::TARGET_PARAMETER)]
 class TaggedLocator
 {
     /**

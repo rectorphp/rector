@@ -66,7 +66,6 @@ class DateTime extends \DateTime implements \JsonSerializable
      * @param  string|\DateTimeZone  $timezone (default timezone is used if null is passed)
      * @return static|false
      */
-    #[\ReturnTypeWillChange]
     public static function createFromFormat($format, $time, $timezone = null)
     {
         if ($timezone === null) {

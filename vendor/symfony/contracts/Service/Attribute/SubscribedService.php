@@ -22,7 +22,6 @@ use RectorPrefix202301\Symfony\Contracts\Service\ServiceSubscriberTrait;
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
-#[\Attribute(\Attribute::TARGET_METHOD)]
 final class SubscribedService
 {
     /** @var object[] */

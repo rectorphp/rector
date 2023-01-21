@@ -11,7 +11,6 @@
 namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute;
 
 use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerInterface;
-#[\Attribute(\Attribute::TARGET_CLASS)]
 class AsDecorator
 {
     /**

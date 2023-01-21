@@ -27,7 +27,6 @@ use RectorPrefix202301\Symfony\Component\Console\Output\OutputInterface;
  *
  * @author Wouter de Jong <wouter@wouterj.nl>
  */
-#[\Symfony\Component\Console\Attribute\AsCommand(name: '|_complete', description: 'Internal command to provide shell completion suggestions')]
 final class CompleteCommand extends Command
 {
     public const COMPLETION_API_VERSION = '1';

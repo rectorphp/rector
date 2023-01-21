@@ -15,7 +15,6 @@ namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute;
  *
  * @author Nicolas Grekas <p@tchwork.com>
  */
-#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 class Autoconfigure
 {
     /**

@@ -90,6 +90,8 @@ CODE_SAMPLE
             foreach ($attrGroup->attrs as $key => $attribute) {
                 $attributeToAnnotation = $this->matchAttributeToAnnotation($attribute, $this->attributesToAnnotations);
                 if (!$attributeToAnnotation instanceof DowngradeAttributeToAnnotation) {
+                    // clear the attribute to avoid inlining to a comment that will ignore the rest of the line
+                    unset($attrGroup->attrs[$key]);
                     continue;
                 }
                 unset($attrGroup->attrs[$key]);
