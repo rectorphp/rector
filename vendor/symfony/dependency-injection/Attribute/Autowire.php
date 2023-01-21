@@ -18,6 +18,7 @@ use RectorPrefix202301\Symfony\Component\ExpressionLanguage\Expression;
  *
  * @author Kevin Bond <kevinbond@gmail.com>
  */
+#[\Attribute(\Attribute::TARGET_PARAMETER)]
 class Autowire
 {
     /**

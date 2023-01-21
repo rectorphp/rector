@@ -13,6 +13,7 @@ namespace RectorPrefix202301\Symfony\Component\Console\Attribute;
 /**
  * Service tag to autoconfigure commands.
  */
+#[\Attribute(\Attribute::TARGET_CLASS)]
 class AsCommand
 {
     /**

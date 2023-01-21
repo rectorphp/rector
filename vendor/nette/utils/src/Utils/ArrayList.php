@@ -68,6 +68,7 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
      * @return T
      * @throws Nette\OutOfRangeException
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($index)
     {
         if (!\is_int($index) || $index < 0 || $index >= \count($this->list)) {
