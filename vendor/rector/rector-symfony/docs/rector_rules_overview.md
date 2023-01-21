@@ -1,4 +1,4 @@
-# 72 Rules Overview
+# 73 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1416,6 +1416,25 @@ Change `$service->set()` string names to class-type-based names, to allow `$cont
 
 -    $services->set('some_name', App\SomeClass::class);
 +    $services->set('app\\someclass', App\SomeClass::class);
+ };
+```
+
+<br>
+
+## ServicesSetNameToSetTypeRector
+
+Change `$services->set("name_type",` SomeType::class) to bare type, useful since Symfony 3.4
+
+- class: [`Rector\Symfony\Rector\Closure\ServicesSetNameToSetTypeRector`](../src/Rector/Closure/ServicesSetNameToSetTypeRector.php)
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+
+-    $services->set('some_name', App\SomeClass::class);
++    $services->set(App\SomeClass::class);
  };
 ```
 

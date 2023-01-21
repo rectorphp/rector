@@ -2556,6 +2556,7 @@ return array(
     'Rector\\Symfony\\Rector\\Class_\\MagicClosureTwigExtensionToNativeMethodsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php',
     'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
+    'Rector\\Symfony\\Rector\\Closure\\ServicesSetNameToSetTypeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServicesSetNameToSetTypeRector.php',
     'Rector\\Symfony\\Rector\\ConstFetch\\ConstraintUrlOptionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ConstFetch/ConstraintUrlOptionRector.php',
     'Rector\\Symfony\\Rector\\FuncCall\\ReplaceServiceArgumentRector' => $vendorDir . '/rector/rector-symfony/src/Rector/FuncCall/ReplaceServiceArgumentRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\AddViolationToBuildViolationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/AddViolationToBuildViolationRector.php',
