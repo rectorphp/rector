@@ -6,7 +6,6 @@ namespace Rector\Symfony\NodeAnalyzer;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Name\FullyQualified;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 final class SymfonyPhpClosureDetector
 {
     /**
@@ -27,6 +26,6 @@ final class SymfonyPhpClosureDetector
         if (!$firstParam->type instanceof FullyQualified) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($firstParam->type, ContainerConfigurator::class);
+        return $this->nodeNameResolver->isName($firstParam->type, 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ContainerConfigurator');
     }
 }
