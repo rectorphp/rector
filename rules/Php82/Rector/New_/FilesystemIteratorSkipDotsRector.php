@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name\FullyQualified;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver\ClassConstFetchNameResolver;
@@ -46,6 +47,9 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
      */
     public function refactor(Node $node) : ?New_
     {
+        if (!$this->isObjectType($node->class, new ObjectType('FilesystemIterator'))) {
+            return null;
+        }
         if ($node->isFirstClassCallable()) {
             return null;
         }
@@ -83,7 +87,8 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
     private function isSkipDots(Expr $expr) : bool
     {
         if (!$expr instanceof ClassConstFetch) {
-            return \false;
+            // can be anything
+            return \true;
         }
         return $this->classConstFetchNameResolver->resolve($expr) === 'FilesystemIterator::SKIP_DOTS';
     }
