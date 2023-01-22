@@ -2126,12 +2126,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "2f931343411b0a07fd2d9e955be2afbb6891ba79"
+                "reference": "1bdbe762aaad357e72f47ba289b02dbe2d521433"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/2f931343411b0a07fd2d9e955be2afbb6891ba79",
-                "reference": "2f931343411b0a07fd2d9e955be2afbb6891ba79",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/1bdbe762aaad357e72f47ba289b02dbe2d521433",
+                "reference": "1bdbe762aaad357e72f47ba289b02dbe2d521433",
                 "shasum": ""
             },
             "require": {
@@ -2160,9 +2160,12 @@
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.1",
                 "symplify\/rule-doc-generator": "^11.1",
-                "symplify\/vendor-patches": "^11.1"
+                "symplify\/vendor-patches": "^11.1",
+                "tomasvotruba\/cognitive-complexity": "^0.0.5",
+                "tomasvotruba\/type-coverage": "^0.0.9",
+                "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-01-21T22:20:04+00:00",
+            "time": "2023-01-22T11:31:10+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

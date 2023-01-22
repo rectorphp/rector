@@ -4,8 +4,12 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\Closure;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -17,6 +21,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ServicesSetNameToSetTypeRector extends AbstractRector
 {
+    /**
+     * @var array<string, string>
+     */
+    private $alreadyChangedServiceNamesToTypes = [];
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     /**
      * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
@@ -60,19 +72,31 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $hasChanged = \false;
+        $this->hasChanged = \false;
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use(&$hasChanged) {
+        $this->handleSetServices($node);
+        $this->handleRefServiceFunctionReferences($node);
+        if ($this->hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    private function isSetServices(MethodCall $methodCall) : bool
+    {
+        if (!$this->isName($methodCall->name, 'set')) {
+            return \false;
+        }
+        return $this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator'));
+    }
+    private function handleSetServices(Closure $closure) : void
+    {
+        $this->traverseNodesWithCallable($closure->stmts, function (Node $node) {
             if (!$node instanceof MethodCall) {
                 return null;
             }
-            // @todo not parameters! check type :)
-            if (!$this->isName($node->name, 'set')) {
-                return null;
-            }
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator'))) {
+            if (!$this->isSetServices($node)) {
                 return null;
             }
             // must be exactly 2 args
@@ -85,14 +109,44 @@ CODE_SAMPLE
             if (!$firstArg->value instanceof String_) {
                 return null;
             }
+            $secondArg = $args[1];
+            /** @var string $serviceName */
+            $serviceName = $this->valueResolver->getValue($firstArg->value);
+            $serviceType = $this->valueResolver->getValue($secondArg->value);
+            if (!\is_string($serviceType)) {
+                return null;
+            }
+            $this->alreadyChangedServiceNamesToTypes[$serviceName] = $serviceType;
             // move 2nd arg to 1st position
             $node->args = [$args[1]];
-            $hasChanged = \true;
+            $this->hasChanged = \true;
             return $node;
         });
-        if ($hasChanged) {
+    }
+    private function handleRefServiceFunctionReferences(Closure $closure) : void
+    {
+        $this->traverseNodesWithCallable($closure, function (Node $node) : ?Node {
+            if (!$node instanceof FuncCall) {
+                return null;
+            }
+            if (!$this->isNames($node->name, ['Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\service', 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ref'])) {
+                return null;
+            }
+            $args = $node->getArgs();
+            if ($args === []) {
+                return null;
+            }
+            $firstArg = $args[0];
+            foreach ($this->alreadyChangedServiceNamesToTypes as $serviceName => $serviceType) {
+                if (!$this->valueResolver->isValue($firstArg->value, $serviceName)) {
+                    continue;
+                }
+                // replace string value with type
+                $classConstFetch = new ClassConstFetch(new FullyQualified($serviceType), 'class');
+                $node->args = [new Arg($classConstFetch)];
+                $this->hasChanged = \true;
+            }
             return $node;
-        }
-        return null;
+        });
     }
 }

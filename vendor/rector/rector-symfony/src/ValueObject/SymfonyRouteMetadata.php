@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\ValueObject;
 
-class SymfonyRouteMetadata
+final class SymfonyRouteMetadata
 {
     /**
      * Format <class>::<method>
@@ -87,13 +87,6 @@ class SymfonyRouteMetadata
     /**
      * @return array<string, mixed>
      */
-    public function getDefaults() : array
-    {
-        return $this->defaults;
-    }
-    /**
-     * @return array<string, mixed>
-     */
     public function getDefaultsWithoutController() : array
     {
         $defaults = $this->defaults;
@@ -101,6 +94,7 @@ class SymfonyRouteMetadata
         return $defaults;
     }
     /**
+     * @api used
      * @return mixed
      */
     public function getDefault(string $name)
@@ -135,13 +129,6 @@ class SymfonyRouteMetadata
     public function getCondition() : string
     {
         return $this->condition;
-    }
-    /**
-     * @return array<string, mixed>
-     */
-    public function getOptions() : array
-    {
-        return $this->options;
     }
     /**
      * @return array<string, mixed>

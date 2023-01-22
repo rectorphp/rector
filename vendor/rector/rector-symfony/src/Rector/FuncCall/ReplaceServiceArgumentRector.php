@@ -46,7 +46,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?FuncCall
     {
         if (!$this->isName($node, 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\service')) {
             return null;
