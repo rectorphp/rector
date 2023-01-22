@@ -30,6 +30,10 @@ final class ServicesSetNameToSetTypeRector extends AbstractRector
      */
     private $hasChanged = \false;
     /**
+     * @var array<string, string[]>
+     */
+    private $servicesNamesByType = [];
+    /**
      * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
      */
@@ -76,7 +80,8 @@ CODE_SAMPLE
         if (!$this->symfonyPhpClosureDetector->detect($node)) {
             return null;
         }
-        $this->handleSetServices($node);
+        $duplicatedTypeNames = $this->resolveDuplicatedTypeNames($node);
+        $this->handleSetServices($node, $duplicatedTypeNames);
         $this->handleRefServiceFunctionReferences($node);
         if ($this->hasChanged) {
             return $node;
@@ -90,9 +95,12 @@ CODE_SAMPLE
         }
         return $this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator'));
     }
-    private function handleSetServices(Closure $closure) : void
+    /**
+     * @param string[] $serviceNamesToSkip
+     */
+    private function handleSetServices(Closure $closure, array $serviceNamesToSkip) : void
     {
-        $this->traverseNodesWithCallable($closure->stmts, function (Node $node) {
+        $this->traverseNodesWithCallable($closure->stmts, function (Node $node) use($serviceNamesToSkip) {
             if (!$node instanceof MethodCall) {
                 return null;
             }
@@ -107,6 +115,10 @@ CODE_SAMPLE
             $args = $node->getArgs();
             $firstArg = $args[0];
             if (!$firstArg->value instanceof String_) {
+                return null;
+            }
+            // skip
+            if ($this->valueResolver->isValues($firstArg->value, $serviceNamesToSkip)) {
                 return null;
             }
             $secondArg = $args[1];
@@ -148,5 +160,40 @@ CODE_SAMPLE
             }
             return $node;
         });
+    }
+    /**
+     * @return string[]
+     */
+    private function resolveDuplicatedTypeNames(Closure $closure) : array
+    {
+        $this->servicesNamesByType = [];
+        $this->traverseNodesWithCallable($closure, function (Node $node) {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if (!$this->isSetServices($node)) {
+                return null;
+            }
+            $args = $node->getArgs();
+            if (\count($args) !== 2) {
+                return null;
+            }
+            $firstArg = $args[0];
+            $secondArg = $args[1];
+            $serviceName = $this->valueResolver->getValue($firstArg->value);
+            $serviceType = $this->valueResolver->getValue($secondArg->value);
+            if (!\is_string($serviceType)) {
+                return null;
+            }
+            $this->servicesNamesByType[$serviceType][] = $serviceName;
+        });
+        $duplicatedTypeNames = [];
+        foreach ($this->servicesNamesByType as $servicesNames) {
+            if (\count($servicesNames) <= 1) {
+                continue;
+            }
+            $duplicatedTypeNames = \array_merge($duplicatedTypeNames, $servicesNames);
+        }
+        return $duplicatedTypeNames;
     }
 }
