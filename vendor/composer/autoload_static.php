@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitea52fcaa8a63173bc050ce2e45a49379
+class ComposerStaticInit1c7eb6da90a8fe61c0643f0a792b7779
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2767,6 +2767,7 @@ class ComposerStaticInitea52fcaa8a63173bc050ce2e45a49379
         'Rector\\Symfony\\NodeFactory\\InvokableController\\ActiveClassElementsFilter' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableController/ActiveClassElementsFilter.php',
         'Rector\\Symfony\\NodeFactory\\OnLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnSuccessLogoutClassMethodFactory.php',
+        'Rector\\Symfony\\NodeFactory\\RequiredClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/RequiredClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\ThisRenderFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ThisRenderFactory.php',
         'Rector\\Symfony\\NodeFinder\\EmptyReturnNodeFinder' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFinder/EmptyReturnNodeFinder.php',
         'Rector\\Symfony\\NodeRemover\\ConstructorDependencyRemover' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeRemover/ConstructorDependencyRemover.php',
@@ -2792,6 +2793,7 @@ class ComposerStaticInitea52fcaa8a63173bc050ce2e45a49379
         'Rector\\Symfony\\Rector\\Class_\\ChangeFileLoaderInExtensionAndKernelRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php',
         'Rector\\Symfony\\Rector\\Class_\\CommandDescriptionToPropertyRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/CommandDescriptionToPropertyRector.php',
         'Rector\\Symfony\\Rector\\Class_\\CommandPropertyToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/CommandPropertyToAttributeRector.php',
+        'Rector\\Symfony\\Rector\\Class_\\ContainerGetToRequiredDependencyAbstractClassRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/ContainerGetToRequiredDependencyAbstractClassRector.php',
         'Rector\\Symfony\\Rector\\Class_\\EventListenerToEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/EventListenerToEventSubscriberRector.php',
         'Rector\\Symfony\\Rector\\Class_\\FormTypeWithDependencyToOptionsRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/FormTypeWithDependencyToOptionsRector.php',
         'Rector\\Symfony\\Rector\\Class_\\InvokableControllerRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/InvokableControllerRector.php',
@@ -3072,9 +3074,9 @@ class ComposerStaticInitea52fcaa8a63173bc050ce2e45a49379
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitea52fcaa8a63173bc050ce2e45a49379::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitea52fcaa8a63173bc050ce2e45a49379::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitea52fcaa8a63173bc050ce2e45a49379::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1c7eb6da90a8fe61c0643f0a792b7779::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1c7eb6da90a8fe61c0643f0a792b7779::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1c7eb6da90a8fe61c0643f0a792b7779::$classMap;
 
         }, null, ClassLoader::class);
     }

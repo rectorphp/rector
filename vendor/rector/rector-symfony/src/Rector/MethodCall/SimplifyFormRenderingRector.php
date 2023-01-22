@@ -20,6 +20,8 @@ final class SimplifyFormRenderingRector extends AbstractRector
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Symplify form rendering by not calling `->createView()` on `render` function', [new CodeSample(<<<'CODE_SAMPLE'
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 class ReplaceFormCreateViewFunctionCall extends AbstractController
 {
     public function form(): Response
@@ -31,6 +33,8 @@ class ReplaceFormCreateViewFunctionCall extends AbstractController
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 class ReplaceFormCreateViewFunctionCall extends AbstractController
 {
     public function form(): Response
