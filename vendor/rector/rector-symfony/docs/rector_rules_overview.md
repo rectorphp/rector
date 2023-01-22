@@ -1,4 +1,4 @@
-# 73 Rules Overview
+# 74 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -378,6 +378,28 @@ Turns old default value to parameter in `ContainerBuilder->build()` method in DI
  $containerBuilder = new ContainerBuilder();
 -$containerBuilder->compile();
 +$containerBuilder->compile(true);
+```
+
+<br>
+
+## ContainerGetNameToTypeInTestsRector
+
+Change `$container->get("some_name")` to bare type, useful since Symfony 3.4
+
+- class: [`Rector\Symfony\Rector\Closure\ContainerGetNameToTypeInTestsRector`](../src/Rector/Closure/ContainerGetNameToTypeInTestsRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     public function run()
+     {
+         $container = $this->getContainer();
+-        $someClass = $container->get('some_name');
++        $someClass = $container->get(SomeType::class);
+     }
+ }
 ```
 
 <br>

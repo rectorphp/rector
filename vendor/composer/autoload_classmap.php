@@ -2555,6 +2555,7 @@ return array(
     'Rector\\Symfony\\Rector\\Class_\\LogoutSuccessHandlerToLogoutEventSubscriberRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php',
     'Rector\\Symfony\\Rector\\Class_\\MagicClosureTwigExtensionToNativeMethodsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php',
     'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
+    'Rector\\Symfony\\Rector\\Closure\\ContainerGetNameToTypeInTestsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ContainerGetNameToTypeInTestsRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServicesSetNameToSetTypeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServicesSetNameToSetTypeRector.php',
     'Rector\\Symfony\\Rector\\ConstFetch\\ConstraintUrlOptionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ConstFetch/ConstraintUrlOptionRector.php',
