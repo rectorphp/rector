@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
+use RectorPrefix202301\Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -60,7 +61,21 @@ final class RedirectToRouteRector extends AbstractRector
         if (!$this->isName($argumentValue->name, 'generateUrl')) {
             return null;
         }
+        if (!$this->isDefaultReferenceType($argumentValue)) {
+            return null;
+        }
         return $this->nodeFactory->createMethodCall('this', 'redirectToRoute', $this->resolveArguments($node));
+    }
+    private function isDefaultReferenceType(MethodCall $methodCall) : bool
+    {
+        if (!isset($methodCall->args[2])) {
+            return \true;
+        }
+        $refTypeArg = $methodCall->args[2];
+        if (!$refTypeArg instanceof Arg) {
+            return \false;
+        }
+        return $this->valueResolver->isValue($refTypeArg->value, UrlGeneratorInterface::ABSOLUTE_PATH);
     }
     /**
      * @return mixed[]
