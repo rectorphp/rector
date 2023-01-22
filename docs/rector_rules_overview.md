@@ -1,4 +1,4 @@
-# 419 Rules Overview
+# 420 Rules Overview
 
 <br>
 
@@ -6609,8 +6609,8 @@ Prior PHP 8.2 FilesystemIterator::SKIP_DOTS was always set and could not be remo
 - class: [`Rector\Php82\Rector\New_\FilesystemIteratorSkipDotsRector`](../rules/Php82/Rector/New_/FilesystemIteratorSkipDotsRector.php)
 
 ```diff
--new \FilesystemIterator(__DIR__, \FilesystemIterator::KEY_AS_FILENAME);
-+new \FilesystemIterator(__DIR__, \FilesystemIterator::KEY_AS_FILENAME | \FilesystemIterator::SKIP_DOTS);
+-new FilesystemIterator(__DIR__, FilesystemIterator::KEY_AS_FILENAME);
++new FilesystemIterator(__DIR__, FilesystemIterator::KEY_AS_FILENAME | FilesystemIterator::SKIP_DOTS);
 ```
 
 <br>
