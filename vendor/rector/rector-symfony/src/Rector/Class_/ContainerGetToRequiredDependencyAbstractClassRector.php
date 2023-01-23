@@ -125,7 +125,7 @@ CODE_SAMPLE
         }
         $autowiredTypes = \array_unique($this->autowiredTypes);
         $newStmts = $this->createPropertyStmts($autowiredTypes);
-        $newStmts[] = $this->requiredClassMethodFactory->createRequiredAutowireClassMethod($this->autowiredTypes);
+        $newStmts[] = $this->requiredClassMethodFactory->createRequiredAutowireClassMethod($this->autowiredTypes, $node);
         $node->stmts = \array_merge($newStmts, $node->stmts);
         return $node;
     }
