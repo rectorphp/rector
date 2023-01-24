@@ -1433,6 +1433,7 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\VariableAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariableAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\VariadicAnalyzer' => $baseDir . '/src/NodeAnalyzer/VariadicAnalyzer.php',
     'Rector\\Core\\NodeDecorator\\CreatedByRuleDecorator' => $baseDir . '/src/NodeDecorator/CreatedByRuleDecorator.php',
+    'Rector\\Core\\NodeDecorator\\MixPhpHtmlDecorator' => $baseDir . '/src/NodeDecorator/MixPhpHtmlDecorator.php',
     'Rector\\Core\\NodeDecorator\\PropertyTypeDecorator' => $baseDir . '/src/NodeDecorator/PropertyTypeDecorator.php',
     'Rector\\Core\\NodeManipulator\\ArrayDestructVariableFilter' => $baseDir . '/src/NodeManipulator/ArrayDestructVariableFilter.php',
     'Rector\\Core\\NodeManipulator\\ArrayManipulator' => $baseDir . '/src/NodeManipulator/ArrayManipulator.php',

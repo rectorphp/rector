@@ -4,8 +4,7 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
-use PhpParser\Node\Stmt\InlineHTML;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\NodeDecorator\MixPhpHtmlDecorator;
 use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -27,9 +26,15 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
      * @var \Rector\PostRector\Collector\NodesToAddCollector
      */
     private $nodesToAddCollector;
-    public function __construct(NodesToAddCollector $nodesToAddCollector)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeDecorator\MixPhpHtmlDecorator
+     */
+    private $mixPhpHtmlDecorator;
+    public function __construct(NodesToAddCollector $nodesToAddCollector, MixPhpHtmlDecorator $mixPhpHtmlDecorator)
     {
         $this->nodesToAddCollector = $nodesToAddCollector;
+        $this->mixPhpHtmlDecorator = $mixPhpHtmlDecorator;
     }
     public function getPriority() : int
     {
@@ -45,16 +50,13 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
         if ($nodesToAddAfter !== []) {
             $this->nodesToAddCollector->clearNodesToAddAfter($node);
             $newNodes = \array_merge($newNodes, $nodesToAddAfter);
+            $this->mixPhpHtmlDecorator->decorateAfter($node, \array_merge([$node], \is_array($nodesToAddAfter) ? $nodesToAddAfter : \iterator_to_array($nodesToAddAfter)));
         }
         $nodesToAddBefore = $this->nodesToAddCollector->getNodesToAddBeforeNode($node);
         if ($nodesToAddBefore !== []) {
             $this->nodesToAddCollector->clearNodesToAddBefore($node);
             $newNodes = \array_merge($nodesToAddBefore, $newNodes);
-            $firstNodePreviousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-            if ($firstNodePreviousNode instanceof InlineHTML && !$node instanceof InlineHTML) {
-                // re-print InlineHTML is safe
-                $firstNodePreviousNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            }
+            $this->mixPhpHtmlDecorator->decorateBefore($node);
         }
         if ($newNodes === [$node]) {
             return $node;

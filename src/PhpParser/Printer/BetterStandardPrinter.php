@@ -138,7 +138,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
             return $content;
         }
         if (!$firstStmt instanceof InlineHTML) {
-            return $content;
+            return \str_replace('<?php <?php', '<?php', $content);
         }
         return $this->cleanSurplusTag($content);
     }
@@ -427,13 +427,16 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     }
     private function cleanEndWithPHPOpenTag(Node $node, string $content) : string
     {
-        if ($node instanceof InlineHTML && \substr_compare($content, '<?php ' . $this->nl, -\strlen('<?php ' . $this->nl)) === 0) {
+        if (!$node instanceof InlineHTML) {
+            return $content;
+        }
+        if (\substr_compare($content, '<?php ' . $this->nl, -\strlen('<?php ' . $this->nl)) === 0) {
             $content = \substr($content, 0, -7);
         }
-        if ($node instanceof InlineHTML && \substr_compare($content, '<?php ', -\strlen('<?php ')) === 0) {
+        if (\substr_compare($content, '<?php ', -\strlen('<?php ')) === 0) {
             return \substr($content, 0, -6);
         }
-        return $content;
+        return \str_replace('<?php <?php ', '<?php ', $content);
     }
     private function cleanSurplusTag(string $content) : string
     {
