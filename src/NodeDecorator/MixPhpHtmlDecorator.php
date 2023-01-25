@@ -9,8 +9,13 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+/**
+ * Mix PHP+HTML decorator, which require reprint the InlineHTML
+ * which is the safe way to make next/prev Node has open and close php tag
+ */
 final class MixPhpHtmlDecorator
 {
     /**
@@ -28,12 +33,38 @@ final class MixPhpHtmlDecorator
         $this->nodeRemover = $nodeRemover;
         $this->nodeComparator = $nodeComparator;
     }
-    public function decorateBefore(Node $node) : void
+    /**
+     * @param Node[] $nodes
+     */
+    public function decorateNextNodesInlineHTML(File $file, array $nodes) : void
     {
-        $firstNodePreviousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($firstNodePreviousNode instanceof InlineHTML && !$node instanceof InlineHTML) {
-            // re-print InlineHTML is safe
-            $firstNodePreviousNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $oldTokens = $file->getOldTokens();
+        foreach ($nodes as $key => $subNode) {
+            if ($subNode instanceof InlineHTML) {
+                continue;
+            }
+            $endTokenPost = $subNode->getEndTokenPos();
+            if (isset($oldTokens[$endTokenPost])) {
+                continue;
+            }
+            if (!isset($nodes[$key + 1])) {
+                // already last one, nothing to do
+                return;
+            }
+            if ($nodes[$key + 1] instanceof InlineHTML) {
+                // No token end? Just added
+                $nodes[$key + 1]->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            }
+        }
+    }
+    public function decorateBefore(Node $node, Node $previousNode = null) : void
+    {
+        if ($previousNode instanceof InlineHTML && !$node instanceof InlineHTML) {
+            $previousNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            return;
+        }
+        if ($node instanceof InlineHTML && !$previousNode instanceof Node) {
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
     }
     /**
@@ -67,7 +98,6 @@ final class MixPhpHtmlDecorator
             $nodeComments[] = $comment;
         }
         $stmt->setAttribute(AttributeKey::COMMENTS, $nodeComments);
-        // re-print InlineHTML is safe
         $firstNodeAfterNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         // remove Nop is marked  as comment of Next Node
         $this->nodeRemover->removeNode($node);
@@ -78,7 +108,7 @@ final class MixPhpHtmlDecorator
     private function resolveAppendAfterNode(Nop $nop, array $nodes) : ?Node
     {
         foreach ($nodes as $key => $subNode) {
-            if (!$this->nodeComparator->areNodesEqual($subNode, $nop)) {
+            if (!$this->nodeComparator->areSameNode($subNode, $nop)) {
                 continue;
             }
             if (!isset($nodes[$key + 1])) {
