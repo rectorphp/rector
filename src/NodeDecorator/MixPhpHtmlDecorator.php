@@ -45,7 +45,7 @@ final class MixPhpHtmlDecorator
             }
             $endTokenPost = $subNode->getEndTokenPos();
             if (isset($oldTokens[$endTokenPost])) {
-                continue;
+                return;
             }
             if (!isset($nodes[$key + 1])) {
                 // already last one, nothing to do
@@ -54,6 +54,7 @@ final class MixPhpHtmlDecorator
             if ($nodes[$key + 1] instanceof InlineHTML) {
                 // No token end? Just added
                 $nodes[$key + 1]->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+                break;
             }
         }
     }
