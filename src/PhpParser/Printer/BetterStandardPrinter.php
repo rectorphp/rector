@@ -430,17 +430,17 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (!$node instanceof InlineHTML) {
             return $content;
         }
-        if (\substr_compare($content, '<?php ' . $this->nl, -\strlen('<?php ' . $this->nl)) === 0) {
-            $content = \substr($content, 0, -7);
+        if (\substr_compare($content, "<?php \n", -\strlen("<?php \n")) === 0) {
+            return \substr($content, 0, -7);
         }
         if (\substr_compare($content, '<?php ', -\strlen('<?php ')) === 0) {
             return \substr($content, 0, -6);
         }
-        return \str_replace('<?php <?php ', '<?php ', $content);
+        return $content;
     }
     private function cleanSurplusTag(string $content) : string
     {
-        if (\strncmp($content, '<?php' . $this->nl . $this->nl . '?>', \strlen('<?php' . $this->nl . $this->nl . '?>')) === 0) {
+        if (\strncmp($content, "<?php\n\n?>", \strlen("<?php\n\n?>")) === 0) {
             return \substr($content, 10);
         }
         return $content;
