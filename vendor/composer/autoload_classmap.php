@@ -1750,6 +1750,7 @@ return array(
     'Rector\\DowngradePhp73\\Rector\\String_\\DowngradeFlexibleHeredocSyntaxRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp73/Rector/String_/DowngradeFlexibleHeredocSyntaxRector.php',
     'Rector\\DowngradePhp73\\Rector\\Unset_\\DowngradeTrailingCommasInUnsetRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp73/Rector/Unset_/DowngradeTrailingCommasInUnsetRector.php',
     'Rector\\DowngradePhp73\\Tokenizer\\FollowedByCommaAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp73/Tokenizer/FollowedByCommaAnalyzer.php',
+    'Rector\\DowngradePhp73\\Tokenizer\\FollowedByNewlineOnlyMaybeWithSemicolonAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp73/Tokenizer/FollowedByNewlineOnlyMaybeWithSemicolonAnalyzer.php',
     'Rector\\DowngradePhp74\\Rector\\Array_\\DowngradeArraySpreadRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php',
     'Rector\\DowngradePhp74\\Rector\\ArrowFunction\\ArrowFunctionToAnonymousFunctionRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector.php',
     'Rector\\DowngradePhp74\\Rector\\ClassMethod\\DowngradeContravariantArgumentTypeRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/ClassMethod/DowngradeContravariantArgumentTypeRector.php',
