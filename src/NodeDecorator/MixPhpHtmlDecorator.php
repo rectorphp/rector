@@ -9,7 +9,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\ValueObject\Application\File;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
@@ -36,15 +35,13 @@ final class MixPhpHtmlDecorator
     /**
      * @param Node[] $nodes
      */
-    public function decorateNextNodesInlineHTML(File $file, array $nodes) : void
+    public function decorateNextNodesInlineHTML(array $nodes) : void
     {
-        $oldTokens = $file->getOldTokens();
         foreach ($nodes as $key => $subNode) {
             if ($subNode instanceof InlineHTML) {
                 continue;
             }
-            $endTokenPost = $subNode->getEndTokenPos();
-            if (isset($oldTokens[$endTokenPost])) {
+            if ($subNode->getStartTokenPos() >= 0) {
                 return;
             }
             if (!isset($nodes[$key + 1])) {
@@ -54,7 +51,7 @@ final class MixPhpHtmlDecorator
             if ($nodes[$key + 1] instanceof InlineHTML) {
                 // No token end? Just added
                 $nodes[$key + 1]->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-                break;
+                return;
             }
         }
     }

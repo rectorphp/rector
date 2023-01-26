@@ -404,9 +404,9 @@ CODE_SAMPLE;
             $nodes = \array_merge(\is_array($nodes) ? $nodes : \iterator_to_array($nodes), [$nextNode]);
         }
         if (\count($nodes) > 1) {
-            $this->mixPhpHtmlDecorator->decorateNextNodesInlineHTML($this->file, $nodes);
+            $this->mixPhpHtmlDecorator->decorateNextNodesInlineHTML($nodes);
         } elseif ($firstNode instanceof FileWithoutNamespace) {
-            $this->mixPhpHtmlDecorator->decorateNextNodesInlineHTML($this->file, $firstNode->stmts);
+            $this->mixPhpHtmlDecorator->decorateNextNodesInlineHTML($firstNode->stmts);
         }
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NodeConnectingVisitor());
