@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit088888ce9686ce0c1c41719c3185c710
+class ComposerStaticInit72b405dc505498f26af0bfb136783ece
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2256,6 +2256,7 @@ class ComposerStaticInit088888ce9686ce0c1c41719c3185c710
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\NullTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/NullTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ObjectTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ObjectWithoutClassTypeMapper.php',
+        'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\OversizedArrayTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/OversizedArrayTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ParentStaticTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ParentStaticTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ResourceTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ResourceTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\SelfObjectTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/SelfObjectTypeMapper.php',
@@ -3075,9 +3076,9 @@ class ComposerStaticInit088888ce9686ce0c1c41719c3185c710
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit088888ce9686ce0c1c41719c3185c710::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit088888ce9686ce0c1c41719c3185c710::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit088888ce9686ce0c1c41719c3185c710::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit72b405dc505498f26af0bfb136783ece::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit72b405dc505498f26af0bfb136783ece::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit72b405dc505498f26af0bfb136783ece::$classMap;
 
         }, null, ClassLoader::class);
     }

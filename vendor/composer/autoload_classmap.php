@@ -2011,6 +2011,7 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\NullTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/NullTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ObjectTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ObjectWithoutClassTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ObjectWithoutClassTypeMapper.php',
+    'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\OversizedArrayTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/OversizedArrayTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ParentStaticTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ParentStaticTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ResourceTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ResourceTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\SelfObjectTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/SelfObjectTypeMapper.php',
