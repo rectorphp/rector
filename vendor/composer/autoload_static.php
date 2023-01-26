@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit72b405dc505498f26af0bfb136783ece
+class ComposerStaticInitaece8384fb060524c28552402acad6fd
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1993,6 +1993,7 @@ class ComposerStaticInit72b405dc505498f26af0bfb136783ece
         'Rector\\DowngradePhp73\\Rector\\FuncCall\\SetCookieOptionsArrayToArgumentsRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Rector/FuncCall/SetCookieOptionsArrayToArgumentsRector.php',
         'Rector\\DowngradePhp73\\Rector\\List_\\DowngradeListReferenceAssignmentRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Rector/List_/DowngradeListReferenceAssignmentRector.php',
         'Rector\\DowngradePhp73\\Rector\\String_\\DowngradeFlexibleHeredocSyntaxRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Rector/String_/DowngradeFlexibleHeredocSyntaxRector.php',
+        'Rector\\DowngradePhp73\\Rector\\Unset_\\DowngradeTrailingCommasInUnsetRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Rector/Unset_/DowngradeTrailingCommasInUnsetRector.php',
         'Rector\\DowngradePhp73\\Tokenizer\\FollowedByCommaAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp73/Tokenizer/FollowedByCommaAnalyzer.php',
         'Rector\\DowngradePhp74\\Rector\\Array_\\DowngradeArraySpreadRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/Array_/DowngradeArraySpreadRector.php',
         'Rector\\DowngradePhp74\\Rector\\ArrowFunction\\ArrowFunctionToAnonymousFunctionRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp74/Rector/ArrowFunction/ArrowFunctionToAnonymousFunctionRector.php',
@@ -3076,9 +3077,9 @@ class ComposerStaticInit72b405dc505498f26af0bfb136783ece
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit72b405dc505498f26af0bfb136783ece::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit72b405dc505498f26af0bfb136783ece::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit72b405dc505498f26af0bfb136783ece::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitaece8384fb060524c28552402acad6fd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitaece8384fb060524c28552402acad6fd::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitaece8384fb060524c28552402acad6fd::$classMap;
 
         }, null, ClassLoader::class);
     }
