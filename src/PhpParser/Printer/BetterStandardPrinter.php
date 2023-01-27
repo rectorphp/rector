@@ -30,6 +30,7 @@ use PhpParser\PrettyPrinter\Standard;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\NodeDecorator\MixPhpHtmlDecorator;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Util\StringUtils;
@@ -90,13 +91,19 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
      */
     private $currentFileProvider;
     /**
+     * @readonly
+     * @var \Rector\Core\NodeDecorator\MixPhpHtmlDecorator
+     */
+    private $mixPhpHtmlDecorator;
+    /**
      * @param mixed[] $options
      */
-    public function __construct(DocBlockUpdater $docBlockUpdater, RectorConfigProvider $rectorConfigProvider, CurrentFileProvider $currentFileProvider, array $options = [])
+    public function __construct(DocBlockUpdater $docBlockUpdater, RectorConfigProvider $rectorConfigProvider, CurrentFileProvider $currentFileProvider, MixPhpHtmlDecorator $mixPhpHtmlDecorator, array $options = [])
     {
         $this->docBlockUpdater = $docBlockUpdater;
         $this->rectorConfigProvider = $rectorConfigProvider;
         $this->currentFileProvider = $currentFileProvider;
+        $this->mixPhpHtmlDecorator = $mixPhpHtmlDecorator;
         parent::__construct($options);
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
@@ -135,7 +142,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         /** @var Node $firstStmt */
         $isFirstStmtReprinted = $firstStmt->getAttribute(AttributeKey::ORIGINAL_NODE) === null;
         if (!$isFirstStmtReprinted) {
-            return $content;
+            return $this->cleanSurplusTag($content);
         }
         if (!$firstStmt instanceof InlineHTML) {
             return \str_replace('<?php <?php', '<?php', $content);
@@ -223,7 +230,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     {
         // reindex positions for printer
         $nodes = \array_values($nodes);
-        $this->moveCommentsFromAttributeObjectToCommentsAttribute($nodes);
+        $this->decorateInlineHTMLOrNopAndUpdatePhpdocInfo($nodes);
         $content = parent::pArray($nodes, $origNodes, $pos, $indentAdjustment, $parentNodeType, $subNodeName, $fixup);
         if ($content === null) {
             return $content;
@@ -323,7 +330,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
      */
     protected function pStmts(array $nodes, bool $indent = \true) : string
     {
-        $this->moveCommentsFromAttributeObjectToCommentsAttribute($nodes);
+        $this->decorateInlineHTMLOrNopAndUpdatePhpdocInfo($nodes);
         return parent::pStmts($nodes, $indent);
     }
     /**
@@ -489,12 +496,20 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     /**
      * @param array<Node|null> $nodes
      */
-    private function moveCommentsFromAttributeObjectToCommentsAttribute(array $nodes) : void
+    private function decorateInlineHTMLOrNopAndUpdatePhpdocInfo(array $nodes) : void
     {
+        $file = $this->currentFileProvider->getFile();
+        $hasDiff = $file instanceof File && $file->getFileDiff() instanceof FileDiff;
         // move phpdoc from node to "comment" attribute
-        foreach ($nodes as $node) {
+        foreach ($nodes as $key => $node) {
             if (!$node instanceof Node) {
                 continue;
+            }
+            if ($node instanceof InlineHTML && $hasDiff) {
+                $this->mixPhpHtmlDecorator->decorateInlineHTML($node, $key, $nodes);
+            }
+            if ($node instanceof Nop && $key === 0 && $hasDiff) {
+                $this->mixPhpHtmlDecorator->decorateAfterNop($node, $nodes);
             }
             $this->docBlockUpdater->updateNodeWithPhpDocInfo($node);
         }

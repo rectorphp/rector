@@ -6,114 +6,77 @@ namespace Rector\Core\NodeDecorator;
 use PhpParser\Comment;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-/**
- * Mix PHP+HTML decorator, which require reprint the InlineHTML
- * which is the safe way to make next/prev Node has open and close php tag
- */
+use RectorPrefix202301\Symfony\Contracts\Service\Attribute\Required;
 final class MixPhpHtmlDecorator
 {
     /**
-     * @readonly
      * @var \Rector\NodeRemoval\NodeRemover
      */
     private $nodeRemover;
     /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     * @required
      */
-    private $nodeComparator;
-    public function __construct(NodeRemover $nodeRemover, NodeComparator $nodeComparator)
+    public function autowire(NodeRemover $nodeRemover) : void
     {
         $this->nodeRemover = $nodeRemover;
-        $this->nodeComparator = $nodeComparator;
     }
     /**
-     * @param Node[] $nodes
+     * @param array<Node|null> $nodes
      */
-    public function decorateNextNodesInlineHTML(array $nodes) : void
+    public function decorateInlineHTML(InlineHTML $inlineHTML, int $key, array $nodes) : void
     {
-        foreach ($nodes as $key => $subNode) {
-            if ($subNode instanceof InlineHTML) {
-                continue;
-            }
-            if ($subNode->getStartTokenPos() >= 0) {
-                return;
-            }
-            if (!isset($nodes[$key + 1])) {
-                // already last one, nothing to do
-                return;
-            }
-            if ($nodes[$key + 1] instanceof InlineHTML) {
-                // No token end? Just added
-                $nodes[$key + 1]->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-                return;
-            }
+        if (isset($nodes[$key - 1]) && !$nodes[$key - 1] instanceof InlineHTML && $nodes[$key - 1] instanceof Stmt) {
+            $this->rePrintInlineHTML($inlineHTML, $nodes[$key - 1]);
         }
-    }
-    public function decorateBefore(Node $node, Node $previousNode = null) : void
-    {
-        if ($previousNode instanceof InlineHTML && !$node instanceof InlineHTML) {
-            $previousNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        if (!isset($nodes[$key + 1])) {
             return;
         }
-        if ($node instanceof InlineHTML && !$previousNode instanceof Node) {
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        if ($nodes[$key + 1] instanceof InlineHTML) {
+            return;
         }
+        if (!$nodes[$key + 1] instanceof Stmt) {
+            return;
+        }
+        $this->rePrintInlineHTML($inlineHTML, $nodes[$key + 1]);
     }
     /**
-     * @param Node[] $nodes
+     * @param array<Node|null> $nodes
      */
-    public function decorateAfter(Node $node, array $nodes) : void
+    public function decorateAfterNop(Nop $nop, array $nodes) : void
     {
-        if (!$node instanceof Nop) {
+        if (!isset($nodes[1]) || $nodes[1] instanceof InlineHTML) {
             return;
         }
-        $firstNodeAfterNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$firstNodeAfterNode instanceof Node) {
+        if (!$nodes[1] instanceof Stmt) {
             return;
         }
-        if (!$firstNodeAfterNode instanceof InlineHTML) {
+        $firstNodeAfterNop = $nodes[1];
+        if ($firstNodeAfterNop->getStartTokenPos() >= 0) {
             return;
         }
-        $stmt = $this->resolveAppendAfterNode($node, $nodes);
-        if (!$stmt instanceof Node) {
-            return;
-        }
-        if ($stmt instanceof InlineHTML) {
-            return;
-        }
+        // Token start = -1, just added
         $nodeComments = [];
-        foreach ($node->getComments() as $comment) {
+        foreach ($nop->getComments() as $comment) {
             if ($comment instanceof Doc) {
                 $nodeComments[] = new Comment($comment->getText(), $comment->getStartLine(), $comment->getStartFilePos(), $comment->getStartTokenPos(), $comment->getEndLine(), $comment->getEndFilePos(), $comment->getEndTokenPos());
                 continue;
             }
             $nodeComments[] = $comment;
         }
-        $stmt->setAttribute(AttributeKey::COMMENTS, $nodeComments);
-        $firstNodeAfterNode->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        $firstNodeAfterNop->setAttribute(AttributeKey::COMMENTS, $nodeComments);
         // remove Nop is marked  as comment of Next Node
-        $this->nodeRemover->removeNode($node);
+        $this->nodeRemover->removeNode($nop);
     }
-    /**
-     * @param Node[] $nodes
-     */
-    private function resolveAppendAfterNode(Nop $nop, array $nodes) : ?Node
+    private function rePrintInlineHTML(InlineHTML $inlineHTML, Stmt $stmt) : void
     {
-        foreach ($nodes as $key => $subNode) {
-            if (!$this->nodeComparator->areSameNode($subNode, $nop)) {
-                continue;
-            }
-            if (!isset($nodes[$key + 1])) {
-                continue;
-            }
-            return $nodes[$key + 1];
+        // Token start = -1, just added
+        if ($stmt->getStartTokenPos() < 0) {
+            $inlineHTML->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
-        return null;
     }
 }

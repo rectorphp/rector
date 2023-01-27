@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
@@ -27,10 +28,8 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
-use Rector\Core\NodeDecorator\MixPhpHtmlDecorator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
@@ -156,13 +155,9 @@ CODE_SAMPLE;
      */
     private $docBlockUpdater;
     /**
-     * @var \Rector\Core\NodeDecorator\MixPhpHtmlDecorator
-     */
-    private $mixPhpHtmlDecorator;
-    /**
      * @required
      */
-    public function autowire(NodesToRemoveCollector $nodesToRemoveCollector, NodeRemover $nodeRemover, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, RectorOutputStyle $rectorOutputStyle, FilePathHelper $filePathHelper, DocBlockUpdater $docBlockUpdater, MixPhpHtmlDecorator $mixPhpHtmlDecorator) : void
+    public function autowire(NodesToRemoveCollector $nodesToRemoveCollector, NodeRemover $nodeRemover, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, RectorOutputStyle $rectorOutputStyle, FilePathHelper $filePathHelper, DocBlockUpdater $docBlockUpdater) : void
     {
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->nodeRemover = $nodeRemover;
@@ -185,7 +180,6 @@ CODE_SAMPLE;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->filePathHelper = $filePathHelper;
         $this->docBlockUpdater = $docBlockUpdater;
-        $this->mixPhpHtmlDecorator = $mixPhpHtmlDecorator;
     }
     /**
      * @return Node[]|null
@@ -306,6 +300,9 @@ CODE_SAMPLE;
         if ($this->nodeComparator->areSameNode($newNode, $oldNode)) {
             return;
         }
+        if ($oldNode instanceof InlineHTML) {
+            return;
+        }
         $newNode->setAttribute(AttributeKey::PHP_DOC_INFO, $oldNode->getAttribute(AttributeKey::PHP_DOC_INFO));
         if (!$newNode instanceof Nop) {
             $newNode->setAttribute(AttributeKey::COMMENTS, $oldNode->getAttribute(AttributeKey::COMMENTS));
@@ -392,7 +389,6 @@ CODE_SAMPLE;
         if (!$firstNodePreviousNode instanceof Node && $node->hasAttribute(AttributeKey::PREVIOUS_NODE)) {
             /** @var Node $previousNode */
             $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-            $this->mixPhpHtmlDecorator->decorateBefore($node, $previousNode);
             $nodes = \array_merge([$previousNode], \is_array($nodes) ? $nodes : \iterator_to_array($nodes));
         }
         $lastNode = \end($nodes);
@@ -400,13 +396,7 @@ CODE_SAMPLE;
         if (!$lastNodeNextNode instanceof Node && $node->hasAttribute(AttributeKey::NEXT_NODE)) {
             /** @var Node $nextNode */
             $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-            $this->mixPhpHtmlDecorator->decorateAfter($node, $nodes);
             $nodes = \array_merge(\is_array($nodes) ? $nodes : \iterator_to_array($nodes), [$nextNode]);
-        }
-        if (\count($nodes) > 1) {
-            $this->mixPhpHtmlDecorator->decorateNextNodesInlineHTML($nodes);
-        } elseif ($firstNode instanceof FileWithoutNamespace) {
-            $this->mixPhpHtmlDecorator->decorateNextNodesInlineHTML($firstNode->stmts);
         }
         $nodeTraverser = new NodeTraverser();
         $nodeTraverser->addVisitor(new NodeConnectingVisitor());
