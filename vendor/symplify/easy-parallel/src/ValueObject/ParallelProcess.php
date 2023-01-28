@@ -17,6 +17,8 @@ use RectorPrefix202301\Symplify\EasyParallel\Exception\ParallelShouldNotHappenEx
 use Throwable;
 /**
  * Inspired at @see https://raw.githubusercontent.com/phpstan/phpstan-src/master/src/Parallel/Process.php
+ *
+ * @api
  */
 final class ParallelProcess
 {

@@ -7,6 +7,8 @@ use RectorPrefix202301\React\Socket\TcpServer;
 use RectorPrefix202301\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 /**
  * Used from https://github.com/phpstan/phpstan-src/blob/master/src/Parallel/ProcessPool.php
+ *
+ * @api
  */
 final class ProcessPool
 {

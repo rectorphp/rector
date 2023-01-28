@@ -7,6 +7,9 @@ use ReflectionClass;
 use ReflectionMethod;
 use RectorPrefix202301\Symfony\Component\Console\Command\Command;
 use RectorPrefix202301\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+/**
+ * @api
+ */
 final class CommandFromReflectionFactory
 {
     /**

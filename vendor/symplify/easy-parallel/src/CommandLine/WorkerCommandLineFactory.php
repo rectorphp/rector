@@ -8,6 +8,7 @@ use RectorPrefix202301\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202301\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix202301\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
 /**
+ * @api
  * @see \Symplify\EasyParallel\Tests\CommandLine\WorkerCommandLineFactoryTest
  */
 final class WorkerCommandLineFactory

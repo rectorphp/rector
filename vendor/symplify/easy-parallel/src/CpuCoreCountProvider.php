@@ -5,6 +5,9 @@ namespace RectorPrefix202301\Symplify\EasyParallel;
 
 use RectorPrefix202301\Fidry\CpuCoreCounter\CpuCoreCounter;
 use RectorPrefix202301\Fidry\CpuCoreCounter\NumberOfCpuCoreNotFound;
+/**
+ * @api
+ */
 final class CpuCoreCountProvider
 {
     /**

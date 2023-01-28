@@ -1,4 +1,4 @@
-# 420 Rules Overview
+# 421 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (39)
+- [TypeDeclaration](#typedeclaration) (40)
 
 - [Visibility](#visibility) (3)
 
@@ -9475,6 +9475,32 @@ Add `@var` to properties that are missing it
      public function run()
      {
          $this->value = 123;
+     }
+ }
+```
+
+<br>
+
+### PropertyTypeFromStrictSetterGetterRector
+
+Add property type based on strict setter and getter method
+
+- class: [`Rector\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector`](../rules/TypeDeclaration/Rector/Class_/PropertyTypeFromStrictSetterGetterRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    private $name = 'John';
++    private string $name = 'John';
+
+     public function setName(string $name): void
+     {
+         $this->name = $name;
+     }
+
+     public function getName(): string
+     {
+         return $this->name;
      }
  }
 ```

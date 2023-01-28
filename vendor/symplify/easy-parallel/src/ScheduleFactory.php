@@ -7,6 +7,8 @@ use RectorPrefix202301\Symplify\EasyParallel\ValueObject\Schedule;
 /**
  * Used from
  * https://github.com/phpstan/phpstan-src/blob/9124c66dcc55a222e21b1717ba5f60771f7dda92/src/Parallel/Scheduler.php
+ *
+ * @api
  */
 final class ScheduleFactory
 {
