@@ -139,15 +139,8 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
             return $content;
         }
         $content = $this->cleanEndWithPHPOpenTag($lastStmt, $content);
-        /** @var Node $firstStmt */
-        $isFirstStmtReprinted = $firstStmt->getAttribute(AttributeKey::ORIGINAL_NODE) === null;
-        if (!$isFirstStmtReprinted) {
-            return $this->cleanSurplusTag($content);
-        }
-        if (!$firstStmt instanceof InlineHTML) {
-            return \str_replace('<?php <?php', '<?php', $content);
-        }
-        return $this->cleanSurplusTag($content);
+        $content = \str_replace('<?php <?php', '<?php', $content);
+        return $this->cleanSurplusTag($firstStmt, $content);
     }
     /**
      * @param \PhpParser\Node|mixed[]|null $node
@@ -445,8 +438,14 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         }
         return $content;
     }
-    private function cleanSurplusTag(string $content) : string
+    private function cleanSurplusTag(Node $node, string $content) : string
     {
+        if (!$node instanceof InlineHTML) {
+            return $content;
+        }
+        if (\strncmp($content, "?>\n", \strlen("?>\n")) === 0) {
+            return \substr($content, 3);
+        }
         if (\strncmp($content, "<?php\n\n?>", \strlen("<?php\n\n?>")) === 0) {
             return \substr($content, 10);
         }
@@ -508,8 +507,8 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
             if ($node instanceof InlineHTML && $hasDiff) {
                 $this->mixPhpHtmlDecorator->decorateInlineHTML($node, $key, $nodes);
             }
-            if ($node instanceof Nop && $key === 0 && $hasDiff) {
-                $this->mixPhpHtmlDecorator->decorateAfterNop($node, $nodes);
+            if ($node instanceof Nop && $hasDiff) {
+                $this->mixPhpHtmlDecorator->decorateAfterNop($node, $key, $nodes);
             }
             $this->docBlockUpdater->updateNodeWithPhpDocInfo($node);
         }
