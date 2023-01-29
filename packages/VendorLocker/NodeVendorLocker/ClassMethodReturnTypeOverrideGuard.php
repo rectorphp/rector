@@ -8,8 +8,14 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\FunctionVariantWithPhpDocs;
+use PHPStan\Reflection\MethodReflection;
+use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
+use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -63,7 +69,12 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
+    /**
+     * @readonly
+     * @var \Rector\Core\FileSystem\FilePathHelper
+     */
+    private $filePathHelper;
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -73,6 +84,7 @@ final class ClassMethodReturnTypeOverrideGuard
         $this->reflectionResolver = $reflectionResolver;
         $this->returnTypeInferer = $returnTypeInferer;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
+        $this->filePathHelper = $filePathHelper;
     }
     public function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
@@ -88,7 +100,7 @@ final class ClassMethodReturnTypeOverrideGuard
         if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
-        if (!$this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($classMethod)) {
+        if (!$this->isReturnTypeChangeAllowed($classMethod)) {
             return \true;
         }
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
@@ -102,6 +114,46 @@ final class ClassMethodReturnTypeOverrideGuard
             return \true;
         }
         return $this->hasClassMethodExprReturn($classMethod);
+    }
+    private function isReturnTypeChangeAllowed(ClassMethod $classMethod) : bool
+    {
+        // make sure return type is not protected by parent contract
+        $parentClassMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($classMethod);
+        // nothing to check
+        if (!$parentClassMethodReflection instanceof MethodReflection) {
+            return \true;
+        }
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($parentClassMethodReflection->getVariants());
+        if ($parametersAcceptor instanceof FunctionVariantWithPhpDocs && !$parametersAcceptor->getNativeReturnType() instanceof MixedType) {
+            return \false;
+        }
+        $classReflection = $parentClassMethodReflection->getDeclaringClass();
+        $fileName = $classReflection->getFileName();
+        // probably internal
+        if ($fileName === null) {
+            return \false;
+        }
+        /*
+         * Below verify that both current file name and parent file name is not in the /vendor/, if yes, then allowed.
+         * This can happen when rector run into /vendor/ directory while child and parent both are there.
+         *
+         *  @see https://3v4l.org/Rc0RF#v8.0.13
+         *
+         *     - both in /vendor/ -> allowed
+         *     - one of them in /vendor/ -> not allowed
+         *     - both not in /vendor/ -> allowed
+         */
+        /** @var ClassReflection $currentClassReflection */
+        $currentClassReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        /** @var string $currentFileName */
+        $currentFileName = $currentClassReflection->getFileName();
+        // child (current)
+        $normalizedCurrentFileName = $this->filePathHelper->normalizePathAndSchema($currentFileName);
+        $isCurrentInVendor = \strpos($normalizedCurrentFileName, '/vendor/') !== \false;
+        // parent
+        $normalizedFileName = $this->filePathHelper->normalizePathAndSchema($fileName);
+        $isParentInVendor = \strpos($normalizedFileName, '/vendor/') !== \false;
+        return $isCurrentInVendor && $isParentInVendor || !$isCurrentInVendor && !$isParentInVendor;
     }
     /**
      * @param ClassReflection[] $childrenClassReflections

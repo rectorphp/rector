@@ -7,15 +7,23 @@ use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use function implode;
 class ArrayShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
 {
+    public const KIND_ARRAY = 'array';
+    public const KIND_LIST = 'list';
     use NodeAttributes;
     /** @var ArrayShapeItemNode[] */
     public $items;
     /** @var bool */
     public $sealed;
-    public function __construct(array $items, bool $sealed = \true)
+    /** @var self::KIND_* */
+    public $kind;
+    /**
+     * @param self::KIND_* $kind
+     */
+    public function __construct(array $items, bool $sealed = \true, string $kind = self::KIND_ARRAY)
     {
         $this->items = $items;
         $this->sealed = $sealed;
+        $this->kind = $kind;
     }
     public function __toString() : string
     {
@@ -23,6 +31,6 @@ class ArrayShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
         if (!$this->sealed) {
             $items[] = '...';
         }
-        return 'array{' . implode(', ', $items) . '}';
+        return $this->kind . '{' . implode(', ', $items) . '}';
     }
 }
