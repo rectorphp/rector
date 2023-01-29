@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\PropertyFetchAssignManipulator;
 use Rector\Core\NodeManipulator\PropertyManipulator;
@@ -54,18 +53,12 @@ final class ReadOnlyPropertyRector extends AbstractRector implements MinPhpVersi
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    /**
-     * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, ParamAnalyzer $paramAnalyzer, VisibilityManipulator $visibilityManipulator, ReflectionProvider $reflectionProvider)
+    public function __construct(PropertyManipulator $propertyManipulator, PropertyFetchAssignManipulator $propertyFetchAssignManipulator, ParamAnalyzer $paramAnalyzer, VisibilityManipulator $visibilityManipulator)
     {
         $this->propertyManipulator = $propertyManipulator;
         $this->propertyFetchAssignManipulator = $propertyFetchAssignManipulator;
         $this->paramAnalyzer = $paramAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
-        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -129,28 +122,7 @@ CODE_SAMPLE
         if (!$class instanceof Class_) {
             return \true;
         }
-        if ($class->isReadonly()) {
-            return \true;
-        }
-        $traitUses = $class->getTraitUses();
-        if ($traitUses === []) {
-            return \false;
-        }
-        foreach ($traitUses as $traitUse) {
-            foreach ($traitUse->traits as $trait) {
-                $traitName = $trait->toString();
-                // trait not autoloaded
-                if (!$this->reflectionProvider->hasClass($traitName)) {
-                    return \true;
-                }
-                $traitClassReflection = $this->reflectionProvider->getClass($traitName);
-                $nativeReflection = $traitClassReflection->getNativeReflection();
-                if ($nativeReflection->getProperties() !== []) {
-                    return \true;
-                }
-            }
-        }
-        return \false;
+        return $class->isReadonly();
     }
     private function refactorProperty(Property $property) : ?Property
     {

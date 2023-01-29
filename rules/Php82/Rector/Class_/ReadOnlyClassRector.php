@@ -8,7 +8,9 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\BetterReflection\Reflection\Adapter\ReflectionProperty;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -48,12 +50,18 @@ final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionI
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider)
     {
         $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
+        $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -153,6 +161,9 @@ CODE_SAMPLE
         if ($this->hasNonTypedProperty($properties)) {
             return \true;
         }
+        if ($this->shouldSkipConsumeTraitProperty($class)) {
+            return \true;
+        }
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
             // no __construct means no property promotion, skip if class has no property defined
@@ -164,6 +175,37 @@ CODE_SAMPLE
             return $properties === [];
         }
         return $this->shouldSkipParams($params);
+    }
+    private function shouldSkipConsumeTraitProperty(Class_ $class) : bool
+    {
+        $traitUses = $class->getTraitUses();
+        foreach ($traitUses as $traitUse) {
+            foreach ($traitUse->traits as $trait) {
+                $traitName = $trait->toString();
+                // trait not autoloaded
+                if (!$this->reflectionProvider->hasClass($traitName)) {
+                    return \true;
+                }
+                $traitClassReflection = $this->reflectionProvider->getClass($traitName);
+                $nativeReflection = $traitClassReflection->getNativeReflection();
+                if ($this->hasReadonlyProperty($nativeReflection->getProperties())) {
+                    return \true;
+                }
+            }
+        }
+        return \false;
+    }
+    /**
+     * @param ReflectionProperty[] $properties
+     */
+    private function hasReadonlyProperty(array $properties) : bool
+    {
+        foreach ($properties as $property) {
+            if (!$property->isReadOnly()) {
+                return \true;
+            }
+        }
+        return \false;
     }
     /**
      * @param ClassReflection[] $parents
