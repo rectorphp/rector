@@ -19,7 +19,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
-use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
+use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -31,9 +31,9 @@ final class ReturnNeverTypeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
+     * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
-    private $parentClassMethodTypeOverrideGuard;
+    private $classMethodReturnTypeOverrideGuard;
     /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
@@ -44,9 +44,9 @@ final class ReturnNeverTypeRector extends AbstractRector
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
-    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, PhpDocTypeChanger $phpDocTypeChanger, PhpVersionProvider $phpVersionProvider)
+    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, PhpDocTypeChanger $phpDocTypeChanger, PhpVersionProvider $phpVersionProvider)
     {
-        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
+        $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpVersionProvider = $phpVersionProvider;
     }
@@ -125,7 +125,7 @@ CODE_SAMPLE
         if (!$hasNeverNodes && !$hasNeverFuncCall) {
             return \true;
         }
-        if ($node instanceof ClassMethod && !$this->parentClassMethodTypeOverrideGuard->isReturnTypeChangeAllowed($node)) {
+        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node)) {
             return \true;
         }
         if (!$node->returnType instanceof Node) {
