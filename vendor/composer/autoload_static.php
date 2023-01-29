@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit237f60ed8c00a6a6ce0e2d6d91af6957
+class ComposerStaticInitdbfcbece273e5de83f5ecd5e170d7d08
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -3013,6 +3013,7 @@ class ComposerStaticInit237f60ed8c00a6a6ce0e2d6d91af6957
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
         'Rector\\TypeDeclaration\\Rector\\Class_\\PropertyTypeFromStrictSetterGetterRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/PropertyTypeFromStrictSetterGetterRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Class_\\ReturnTypeFromStrictTernaryRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Class_/ReturnTypeFromStrictTernaryRector.php',
         'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
         'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',
@@ -3048,6 +3049,7 @@ class ComposerStaticInit237f60ed8c00a6a6ce0e2d6d91af6957
         'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
         'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
         'Rector\\TypeDeclaration\\ValueObject\\ReturnFalseAndReturnOther' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/ReturnFalseAndReturnOther.php',
+        'Rector\\TypeDeclaration\\ValueObject\\TernaryIfElseTypes' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/TernaryIfElseTypes.php',
         'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',
@@ -3080,9 +3082,9 @@ class ComposerStaticInit237f60ed8c00a6a6ce0e2d6d91af6957
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit237f60ed8c00a6a6ce0e2d6d91af6957::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit237f60ed8c00a6a6ce0e2d6d91af6957::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit237f60ed8c00a6a6ce0e2d6d91af6957::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdbfcbece273e5de83f5ecd5e170d7d08::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdbfcbece273e5de83f5ecd5e170d7d08::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdbfcbece273e5de83f5ecd5e170d7d08::$classMap;
 
         }, null, ClassLoader::class);
     }

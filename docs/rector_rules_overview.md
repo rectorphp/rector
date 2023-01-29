@@ -1,4 +1,4 @@
-# 421 Rules Overview
+# 422 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (40)
+- [TypeDeclaration](#typedeclaration) (41)
 
 - [Visibility](#visibility) (3)
 
@@ -9683,6 +9683,25 @@ Add strict return array type based on created empty array and returned
          $values = [];
 
          return $values;
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictTernaryRector
+
+Add method return type based on strict ternary values
+
+- class: [`Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector`](../rules/TypeDeclaration/Rector/Class_/ReturnTypeFromStrictTernaryRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function getValue($number)
++    public function getValue($number): int
+     {
+         return $number ? 100 : 500;
      }
  }
 ```
