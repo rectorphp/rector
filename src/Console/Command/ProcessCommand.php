@@ -7,12 +7,12 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Autoloading\AdditionalAutoloader;
+use Rector\Core\Configuration\ConfigInitializer;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\ExitCode;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Reporting\MissingRectorRulesReporter;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\Util\MemoryLimiter;
 use Rector\Core\Validation\EmptyConfigurableRectorChecker;
@@ -36,9 +36,9 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     private $changedFilesDetector;
     /**
      * @readonly
-     * @var \Rector\Core\Reporting\MissingRectorRulesReporter
+     * @var \Rector\Core\Configuration\ConfigInitializer
      */
-    private $missingRectorRulesReporter;
+    private $configInitializer;
     /**
      * @readonly
      * @var \Rector\Core\Application\ApplicationFileProcessor
@@ -74,11 +74,11 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;
-    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, MissingRectorRulesReporter $missingRectorRulesReporter, ApplicationFileProcessor $applicationFileProcessor, ProcessResultFactory $processResultFactory, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, OutputFormatterCollector $outputFormatterCollector, OutputStyleInterface $rectorOutputStyle, MemoryLimiter $memoryLimiter)
+    public function __construct(AdditionalAutoloader $additionalAutoloader, ChangedFilesDetector $changedFilesDetector, ConfigInitializer $configInitializer, ApplicationFileProcessor $applicationFileProcessor, ProcessResultFactory $processResultFactory, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, EmptyConfigurableRectorChecker $emptyConfigurableRectorChecker, OutputFormatterCollector $outputFormatterCollector, OutputStyleInterface $rectorOutputStyle, MemoryLimiter $memoryLimiter)
     {
         $this->additionalAutoloader = $additionalAutoloader;
         $this->changedFilesDetector = $changedFilesDetector;
-        $this->missingRectorRulesReporter = $missingRectorRulesReporter;
+        $this->configInitializer = $configInitializer;
         $this->applicationFileProcessor = $applicationFileProcessor;
         $this->processResultFactory = $processResultFactory;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
@@ -96,9 +96,10 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
     }
     protected function execute(InputInterface $input, OutputInterface $output) : int
     {
-        $exitCode = $this->missingRectorRulesReporter->reportIfMissing();
-        if ($exitCode !== null) {
-            return $exitCode;
+        // missing config? add it :)
+        if (!$this->configInitializer->areSomeRectorsLoaded()) {
+            $this->configInitializer->createConfig(\getcwd());
+            return self::SUCCESS;
         }
         $configuration = $this->configurationFactory->createFromInput($input);
         $this->memoryLimiter->adjust($configuration);

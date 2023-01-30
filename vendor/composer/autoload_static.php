@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit91d4267ba4c606b22aa047e2c0b388c5
+class ComposerStaticInit8079f62218567f082555ac55acf69f28
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1589,6 +1589,7 @@ class ComposerStaticInit91d4267ba4c606b22aa047e2c0b388c5
         'Rector\\Core\\Bootstrap\\ExtensionConfigResolver' => __DIR__ . '/../..' . '/src/Bootstrap/ExtensionConfigResolver.php',
         'Rector\\Core\\Bootstrap\\RectorConfigsResolver' => __DIR__ . '/../..' . '/src/Bootstrap/RectorConfigsResolver.php',
         'Rector\\Core\\Config\\Loader\\ConfigureCallMergingLoaderFactory' => __DIR__ . '/../..' . '/src/Config/Loader/ConfigureCallMergingLoaderFactory.php',
+        'Rector\\Core\\Configuration\\ConfigInitializer' => __DIR__ . '/../..' . '/src/Configuration/ConfigInitializer.php',
         'Rector\\Core\\Configuration\\ConfigurationFactory' => __DIR__ . '/../..' . '/src/Configuration/ConfigurationFactory.php',
         'Rector\\Core\\Configuration\\CurrentNodeProvider' => __DIR__ . '/../..' . '/src/Configuration/CurrentNodeProvider.php',
         'Rector\\Core\\Configuration\\Option' => __DIR__ . '/../..' . '/src/Configuration/Option.php',
@@ -1741,7 +1742,6 @@ class ComposerStaticInit91d4267ba4c606b22aa047e2c0b388c5
         'Rector\\Core\\Rector\\AbstractRector' => __DIR__ . '/../..' . '/src/Rector/AbstractRector.php',
         'Rector\\Core\\Rector\\AbstractScopeAwareRector' => __DIR__ . '/../..' . '/src/Rector/AbstractScopeAwareRector.php',
         'Rector\\Core\\Reflection\\ReflectionResolver' => __DIR__ . '/../..' . '/src/Reflection/ReflectionResolver.php',
-        'Rector\\Core\\Reporting\\MissingRectorRulesReporter' => __DIR__ . '/../..' . '/src/Reporting/MissingRectorRulesReporter.php',
         'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => __DIR__ . '/../..' . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
         'Rector\\Core\\StaticReflection\\SourceLocator\\RenamedClassesSourceLocator' => __DIR__ . '/../..' . '/src/StaticReflection/SourceLocator/RenamedClassesSourceLocator.php',
         'Rector\\Core\\Util\\ArrayChecker' => __DIR__ . '/../..' . '/src/Util/ArrayChecker.php',
@@ -3082,9 +3082,9 @@ class ComposerStaticInit91d4267ba4c606b22aa047e2c0b388c5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit91d4267ba4c606b22aa047e2c0b388c5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit91d4267ba4c606b22aa047e2c0b388c5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit91d4267ba4c606b22aa047e2c0b388c5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8079f62218567f082555ac55acf69f28::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8079f62218567f082555ac55acf69f28::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8079f62218567f082555ac55acf69f28::$classMap;
 
         }, null, ClassLoader::class);
     }
