@@ -15,7 +15,7 @@ final class InitFilePathsResolver
      */
     public function resolve(string $projectDirectory) : array
     {
-        $rootDirectoryFinder = Finder::create()->directories()->depth(0)->notPath('#(vendor|var|stubs|temp|templates|tmp|e2e|bin|build)#')->in($projectDirectory)->sortByName();
+        $rootDirectoryFinder = Finder::create()->directories()->depth(0)->notPath('#(vendor|var|stubs|temp|templates|tmp|e2e|bin|build|Migrations|database|storage|migrations)#')->in($projectDirectory)->sortByName();
         /** @var SplFileInfo[] $rootDirectoryFileInfos */
         $rootDirectoryFileInfos = \iterator_to_array($rootDirectoryFinder);
         $projectDirectories = [];
