@@ -100,23 +100,27 @@ CODE_SAMPLE
         if ($this->nodeNameResolver->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
-        $parentMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($node);
-        if (!$parentMethodReflection instanceof MethodReflection) {
-            return null;
-        }
-        $parentClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($parentMethodReflection);
-        if (!$parentClassMethod instanceof ClassMethod) {
-            return null;
-        }
-        if ($parentClassMethod->isPrivate()) {
-            return null;
-        }
-        $parentClassMethodReturnType = $parentClassMethod->getReturnType();
+        $parentClassMethodReturnType = $this->getReturnTypeRecursive($node);
         if ($parentClassMethodReturnType === null) {
             return null;
         }
-        $parentClassMethodReturnType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($parentClassMethodReturnType);
         return $this->processClassMethodReturnType($node, $parentClassMethodReturnType);
+    }
+    private function getReturnTypeRecursive(ClassMethod $classMethod) : ?Type
+    {
+        $returnType = $classMethod->getReturnType();
+        if ($returnType === null) {
+            $parentMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($classMethod);
+            if (!$parentMethodReflection instanceof MethodReflection) {
+                return null;
+            }
+            $parentClassMethod = $this->astResolver->resolveClassMethodFromMethodReflection($parentMethodReflection);
+            if (!$parentClassMethod instanceof ClassMethod || $parentClassMethod->isPrivate()) {
+                return null;
+            }
+            return $this->getReturnTypeRecursive($parentClassMethod);
+        }
+        return $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
     }
     private function processClassMethodReturnType(ClassMethod $classMethod, Type $parentType) : ?ClassMethod
     {
