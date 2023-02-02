@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\BoundArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute\Target;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute\Target;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * @author Guilhem Niot <guilhem.niot@gmail.com>
  */
@@ -158,8 +158,13 @@ class ResolveBindingsPass extends AbstractRecursivePass
                     throw $e;
                 }
             }
+            $names = [];
             foreach ($reflectionMethod->getParameters() as $key => $parameter) {
+                $names[$key] = $parameter->name;
                 if (\array_key_exists($key, $arguments) && '' !== $arguments[$key]) {
+                    continue;
+                }
+                if (\array_key_exists($parameter->name, $arguments) && '' !== $arguments[$parameter->name]) {
                     continue;
                 }
                 $typeHint = ProxyHelper::getTypeHint($reflectionMethod, $parameter);
@@ -182,8 +187,14 @@ class ResolveBindingsPass extends AbstractRecursivePass
                     $this->errorMessages[] = \sprintf('Did you forget to add the type "%s" to argument "$%s" of method "%s::%s()"?', $argumentType, $parameter->name, $reflectionMethod->class, $reflectionMethod->name);
                 }
             }
+            foreach ($names as $key => $name) {
+                if (\array_key_exists($name, $arguments) && (0 === $key || \array_key_exists($key - 1, $arguments))) {
+                    $arguments[$key] = $arguments[$name];
+                    unset($arguments[$name]);
+                }
+            }
             if ($arguments !== $call[1]) {
-                \ksort($arguments);
+                \ksort($arguments, \SORT_NATURAL);
                 $calls[$i][1] = $arguments;
             }
         }

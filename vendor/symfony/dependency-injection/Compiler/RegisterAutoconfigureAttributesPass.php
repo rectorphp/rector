@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute\Autoconfigure;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 /**
  * Reads #[Autoconfigure] attributes on definitions that are autoconfigured
  * and don't have the "container.ignore_attributes" tag.

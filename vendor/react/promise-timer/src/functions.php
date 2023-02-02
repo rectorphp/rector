@@ -1,11 +1,11 @@
 <?php
 
-namespace RectorPrefix202301\React\Promise\Timer;
+namespace RectorPrefix202302\React\Promise\Timer;
 
-use RectorPrefix202301\React\EventLoop\Loop;
-use RectorPrefix202301\React\EventLoop\LoopInterface;
-use RectorPrefix202301\React\Promise\Promise;
-use RectorPrefix202301\React\Promise\PromiseInterface;
+use RectorPrefix202302\React\EventLoop\Loop;
+use RectorPrefix202302\React\EventLoop\LoopInterface;
+use RectorPrefix202302\React\Promise\Promise;
+use RectorPrefix202302\React\Promise\PromiseInterface;
 /**
  * Cancel operations that take *too long*.
  *

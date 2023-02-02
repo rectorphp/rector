@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

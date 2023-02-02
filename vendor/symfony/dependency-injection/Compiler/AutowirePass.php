@@ -8,24 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202301\Symfony\Component\Config\Resource\ClassExistenceResource;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute\Autowire;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute\MapDecorated;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Attribute\Target;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\AutowiringFailedException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix202302\Symfony\Component\Config\Resource\ClassExistenceResource;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute\Autowire;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute\MapDecorated;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute\Target;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\AutowiringFailedException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Inspects existing service definitions and wires the autowired ones using the type hints of their classes.
  *
@@ -253,6 +253,10 @@ class AutowirePass extends AbstractRecursivePass
         $this->defaultArgument->names = new \ArrayObject();
         foreach ($parameters as $index => $parameter) {
             $this->defaultArgument->names[$index] = $parameter->name;
+            if (\array_key_exists($parameter->name, $arguments)) {
+                $arguments[$index] = $arguments[$parameter->name];
+                unset($arguments[$parameter->name]);
+            }
             if (\array_key_exists($index, $arguments) && '' !== $arguments[$index]) {
                 continue;
             }
@@ -351,7 +355,7 @@ class AutowirePass extends AbstractRecursivePass
         }
         // it's possible index 1 was set, then index 0, then 2, etc
         // make sure that we re-order so they're injected as expected
-        \ksort($arguments);
+        \ksort($arguments, \SORT_NATURAL);
         return $arguments;
     }
     /**

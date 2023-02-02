@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202301\Nette\Utils;
+namespace RectorPrefix202302\Nette\Utils;
 
-use RectorPrefix202301\Nette;
+use RectorPrefix202302\Nette;
 if (\false) {
     /** @deprecated use Nette\HtmlStringable */
     interface IHtmlString extends Nette\HtmlStringable
@@ -16,7 +16,7 @@ if (\false) {
 } elseif (!\interface_exists(IHtmlString::class)) {
     \class_alias(Nette\HtmlStringable::class, IHtmlString::class);
 }
-namespace RectorPrefix202301\Nette\Localization;
+namespace RectorPrefix202302\Nette\Localization;
 
 if (\false) {
     /** @deprecated use Nette\Localization\Translator */

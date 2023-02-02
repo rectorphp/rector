@@ -6,10 +6,10 @@ namespace Rector\Core\Console\Command;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
-use RectorPrefix202301\Symfony\Component\Console\Command\Command;
-use RectorPrefix202301\Symfony\Component\Console\Input\InputArgument;
-use RectorPrefix202301\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202301\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202302\Symfony\Component\Console\Command\Command;
+use RectorPrefix202302\Symfony\Component\Console\Input\InputArgument;
+use RectorPrefix202302\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202302\Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractProcessCommand extends Command
 {
     /**

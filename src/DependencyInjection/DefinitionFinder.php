@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\DependencyInjection;
 
 use Rector\Core\DependencyInjection\Exception\DefinitionForTypeNotFoundException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
 use Throwable;
 /**
  * @api

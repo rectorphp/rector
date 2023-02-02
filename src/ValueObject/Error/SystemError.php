@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\ValueObject\Error;
 
 use Rector\Parallel\ValueObject\Name;
-use RectorPrefix202301\Symplify\EasyParallel\Contract\SerializableInterface;
+use RectorPrefix202302\Symplify\EasyParallel\Contract\SerializableInterface;
 final class SystemError implements SerializableInterface
 {
     /**

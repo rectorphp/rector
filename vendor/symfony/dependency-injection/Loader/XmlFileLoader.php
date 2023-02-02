@@ -8,25 +8,25 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix202301\Symfony\Component\Config\Util\XmlUtils;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\BoundArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202301\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix202302\Symfony\Component\Config\Util\XmlUtils;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202302\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * XmlFileLoader loads XML files service definitions.
  *

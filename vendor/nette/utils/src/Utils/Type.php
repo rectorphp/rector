@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202301\Nette\Utils;
+namespace RectorPrefix202302\Nette\Utils;
 
-use RectorPrefix202301\Nette;
+use RectorPrefix202302\Nette;
 /**
  * PHP type reflection.
  */

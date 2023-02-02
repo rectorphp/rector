@@ -9,7 +9,7 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\SebastianBergmann\Diff;
+namespace RectorPrefix202302\SebastianBergmann\Diff;
 
 use const PHP_INT_SIZE;
 use const PREG_SPLIT_DELIM_CAPTURE;
@@ -32,8 +32,8 @@ use function prev;
 use function reset;
 use function sprintf;
 use function substr;
-use RectorPrefix202301\SebastianBergmann\Diff\Output\DiffOutputBuilderInterface;
-use RectorPrefix202301\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
+use RectorPrefix202302\SebastianBergmann\Diff\Output\DiffOutputBuilderInterface;
+use RectorPrefix202302\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 final class Differ
 {
     public const OLD = 0;

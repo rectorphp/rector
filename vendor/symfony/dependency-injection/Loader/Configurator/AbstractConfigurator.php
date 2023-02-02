@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix202301\Symfony\Component\Config\Loader\ParamConfigurator;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Parameter;
-use RectorPrefix202301\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202301\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix202302\Symfony\Component\Config\Loader\ParamConfigurator;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Parameter;
+use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202302\Symfony\Component\ExpressionLanguage\Expression;
 abstract class AbstractConfigurator
 {
     public const FACTORY = 'unknown';

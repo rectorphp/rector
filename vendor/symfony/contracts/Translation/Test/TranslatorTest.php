@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Contracts\Translation\Test;
+namespace RectorPrefix202302\Symfony\Contracts\Translation\Test;
 
 use PHPUnit\Framework\TestCase;
-use RectorPrefix202301\Symfony\Contracts\Translation\TranslatorInterface;
-use RectorPrefix202301\Symfony\Contracts\Translation\TranslatorTrait;
+use RectorPrefix202302\Symfony\Contracts\Translation\TranslatorInterface;
+use RectorPrefix202302\Symfony\Contracts\Translation\TranslatorTrait;
 /**
  * Test should cover all languages mentioned on http://translate.sourceforge.net/wiki/l10n/pluralforms
  * and Plural forms mentioned on http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms.

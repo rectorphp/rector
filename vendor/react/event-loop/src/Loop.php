@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202301\React\EventLoop;
+namespace RectorPrefix202302\React\EventLoop;
 
 /**
  * The `Loop` class exists as a convenient way to get the currently relevant loop

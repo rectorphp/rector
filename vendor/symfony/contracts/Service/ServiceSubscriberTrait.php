@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Contracts\Service;
+namespace RectorPrefix202302\Symfony\Contracts\Service;
 
-use RectorPrefix202301\Psr\Container\ContainerInterface;
-use RectorPrefix202301\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202301\Symfony\Contracts\Service\Attribute\SubscribedService;
+use RectorPrefix202302\Psr\Container\ContainerInterface;
+use RectorPrefix202302\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202302\Symfony\Contracts\Service\Attribute\SubscribedService;
 /**
  * Implementation of ServiceSubscriberInterface that determines subscribed services from
  * method return types. Service ids are available as "ClassName::methodName".

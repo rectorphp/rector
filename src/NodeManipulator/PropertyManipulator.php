@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
-use RectorPrefix202301\Doctrine\ORM\Mapping\ManyToMany;
-use RectorPrefix202301\Doctrine\ORM\Mapping\Table;
+use RectorPrefix202302\Doctrine\ORM\Mapping\ManyToMany;
+use RectorPrefix202302\Doctrine\ORM\Mapping\Table;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202301\Symfony\Contracts\HttpClient;
+namespace RectorPrefix202302\Symfony\Contracts\HttpClient;
 
-use RectorPrefix202301\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
-use RectorPrefix202301\Symfony\Contracts\HttpClient\Test\HttpClientTestCase;
+use RectorPrefix202302\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use RectorPrefix202302\Symfony\Contracts\HttpClient\Test\HttpClientTestCase;
 /**
  * Provides flexible methods for requesting HTTP resources synchronously or asynchronously.
  *

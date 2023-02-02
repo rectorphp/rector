@@ -4,11 +4,11 @@ declare (strict_types=1);
 namespace Rector\Core\Console\Style;
 
 use Rector\Core\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202301\Symfony\Component\Console\Application;
-use RectorPrefix202301\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202301\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202301\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202301\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202302\Symfony\Component\Console\Application;
+use RectorPrefix202302\Symfony\Component\Console\Input\ArgvInput;
+use RectorPrefix202302\Symfony\Component\Console\Output\ConsoleOutput;
+use RectorPrefix202302\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202302\Symfony\Component\Console\Style\SymfonyStyle;
 final class SymfonyStyleFactory
 {
     /**
