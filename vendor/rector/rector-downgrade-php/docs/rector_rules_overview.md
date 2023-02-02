@@ -1,4 +1,4 @@
-# 112 Rules Overview
+# 115 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -304,15 +304,16 @@ Refactor PHP attribute markers to annotations notation
 - class: [`Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector`](../rules/DowngradePhp80/Rector/Class_/DowngradeAttributeToAnnotationRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        DowngradeAttributeToAnnotationRector::class,
-        [new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route')]
-    );
+    $rectorConfig->ruleWithConfiguration(DowngradeAttributeToAnnotationRector::class, [new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route')]);
 };
 ```
 
@@ -603,8 +604,7 @@ Replace the 2nd argument of `dirname()`
 
 Replace `enum_exists()` function
 
--
-class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeEnumExistsRector`](../rules/DowngradePhp81/Rector/FuncCall/DowngradeEnumExistsRector.php)
+- class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeEnumExistsRector`](../rules/DowngradePhp81/Rector/FuncCall/DowngradeEnumExistsRector.php)
 
 ```diff
 -enum_exists('SomeEnum', true);
@@ -1249,14 +1249,15 @@ Change param type to match the lowest type in whole family tree
 - class: [`Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector`](../rules/DowngradePhp72/Rector/ClassMethod/DowngradeParameterTypeWideningRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DowngradeParameterTypeWideningRector::class, [
-        'ContainerInterface' => ['set', 'get', 'has', 'initialized'],
-        'SomeContainerInterface' => ['set', 'has'],
-    ]);
+    $rectorConfig->ruleWithConfiguration(DowngradeParameterTypeWideningRector::class, ['ContainerInterface' => ['set', 'get', 'has', 'initialized'], 'SomeContainerInterface' => ['set', 'has']]);
 };
 ```
 
@@ -1271,7 +1272,6 @@ return static function (RectorConfig $rectorConfig): void {
 +     */
 +    public function test($input);
  }
-
  final class SomeClass implements SomeInterface
  {
      public function test($input)
@@ -1465,6 +1465,25 @@ Downgrade previously implemented interface
 -interface ExceptionInterface extends ContainerExceptionInterface, Throwable
 +interface ExceptionInterface extends ContainerExceptionInterface
  {
+ }
+```
+
+<br>
+
+## DowngradeProcOpenArrayCommandArgRector
+
+Change array command argument on proc_open to implode spaced string
+
+- class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeProcOpenArrayCommandArgRector`](../rules/DowngradePhp74/Rector/FuncCall/DowngradeProcOpenArrayCommandArgRector.php)
+
+```diff
+ function (array|string $command)
+ {
++    if (is_array($command)) {
++        $command = implode(" ", $command);
++    }
++
+     $process = proc_open($command, $descriptorspec, $pipes, null, null, ['suppress_errors' => true]);
  }
 ```
 
@@ -2054,6 +2073,22 @@ Remove trailing commas in param or use list
 
 <br>
 
+## DowngradeTrailingCommasInUnsetRector
+
+Remove trailing commas in unset
+
+- class: [`Rector\DowngradePhp73\Rector\Unset_\DowngradeTrailingCommasInUnsetRector`](../rules/DowngradePhp73/Rector/Unset_/DowngradeTrailingCommasInUnsetRector.php)
+
+```diff
+ unset(
+ 	$x,
+-	$y,
++	$y
+ );
+```
+
+<br>
+
 ## DowngradeTypedPropertyRector
 
 Changes property type definition from type definitions to `@var` annotations.
@@ -2194,6 +2229,24 @@ Remove "void" return type, add a `"@return` void" tag instead
 +     * @return void
 +     */
 +    public function run()
+     {
+     }
+ }
+```
+
+<br>
+
+## RemoveReturnTypeDeclarationFromCloneRector
+
+Remove return type from `__clone()` method
+
+- class: [`Rector\DowngradePhp80\Rector\ClassMethod\RemoveReturnTypeDeclarationFromCloneRector`](../rules/DowngradePhp80/Rector/ClassMethod/RemoveReturnTypeDeclarationFromCloneRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function __clone(): void
++    public function __clone()
      {
      }
  }

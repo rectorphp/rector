@@ -1,4 +1,4 @@
-# 45 Rules Overview
+# 46 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -78,18 +78,16 @@ Change annotations with value to attribute
 - class: [`Rector\PHPUnit\Rector\Class_\AnnotationWithValueToAttributeRector`](../src/Rector/Class_/AnnotationWithValueToAttributeRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\Class_\AnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        AnnotationWithValueToAttributeRector::class,
-        [new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\Framework\Attributes\BackupGlobals', [
-            true,
-            false,
-        ])]
-    );
+    $rectorConfig->ruleWithConfiguration(AnnotationWithValueToAttributeRector::class, [new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\Framework\Attributes\BackupGlobals', [true, false])]);
 };
 ```
 
@@ -119,16 +117,16 @@ Move array argument from tests into data provider [configurable]
 - class: [`Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector`](../src/Rector/Class_/ArrayArgumentToDataProviderRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ArrayArgumentToDataProviderRector::class, [
-        ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [
-            new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number'),
-        ],
-    ]);
+    $rectorConfig->ruleWithConfiguration(ArrayArgumentToDataProviderRector::class, [ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number')]]);
 };
 ```
 
@@ -564,6 +562,33 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 +$this->setExpectedException(SomeException::class);
 +$this->expectExceptionMessage('Message');
 +$this->expectExceptionCode('CODE');
+```
+
+<br>
+
+## DependsAnnotationWithValueToAttributeRector
+
+Change depends annotations with value to attribute
+
+- class: [`Rector\PHPUnit\Rector\ClassMethod\DependsAnnotationWithValueToAttributeRector`](../src/Rector/ClassMethod/DependsAnnotationWithValueToAttributeRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+     public function testOne() {}
+     public function testTwo() {}
+-    /**
+-     * @depends testOne
+-     * @depends testTwo
+-     */
++    #[\PHPUnit\Framework\Attributes\Depends('testOne')]
++    #[\PHPUnit\Framework\Attributes\Depends('testTwo')]
+     public function testThree(): void
+     {
+     }
+ }
 ```
 
 <br>

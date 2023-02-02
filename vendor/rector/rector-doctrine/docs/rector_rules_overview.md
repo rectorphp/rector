@@ -9,16 +9,15 @@ Add entity id with annotations when meets condition
 - class: [`Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector`](../src/Rector/Class_/AddEntityIdByConditionRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddEntityIdByConditionRector::class, [
-        AddEntityIdByConditionRector::DETECTED_TRAITS => [
-            'Knp\DoctrineBehaviors\Model\Translatable\Translation',
-            'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
-        ],
-    ]);
+    $rectorConfig->ruleWithConfiguration(AddEntityIdByConditionRector::class, [AddEntityIdByConditionRector::DETECTED_TRAITS => ['Knp\DoctrineBehaviors\Model\Translatable\Translation', 'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait']]);
 };
 ```
 
@@ -216,15 +215,15 @@ Replaces doctrine alias with class.
 - class: [`Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector`](../src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [
-        EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
-            'App' => 'App\Entity',
-        ],
-    ]);
+    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => ['App' => 'App\Entity']]);
 };
 ```
 

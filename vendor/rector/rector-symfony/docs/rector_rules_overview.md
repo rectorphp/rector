@@ -185,14 +185,15 @@ Change XML loader to YAML in Bundle Extension
 - class: [`Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector`](../src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ChangeFileLoaderInExtensionAndKernelRector::class, [
-        ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
-        ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
-    ]);
+    $rectorConfig->ruleWithConfiguration(ChangeFileLoaderInExtensionAndKernelRector::class, [ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml', ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml']);
 };
 ```
 
@@ -1334,16 +1335,17 @@ Replace defined `service()` argument in Symfony PHP config
 - class: [`Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector`](../src/Rector/FuncCall/ReplaceServiceArgumentRector.php)
 
 ```php
+<?php
+
+declare(strict_types=1);
+
 use PhpParser\Node\Scalar\String_;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(
-        ReplaceServiceArgumentRector::class,
-        [new ReplaceServiceArgument('ContainerInterface', new String_('service_container', []))]
-    );
+    $rectorConfig->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [new ReplaceServiceArgument('ContainerInterface', new String_('service_container', []))]);
 };
 ```
 
