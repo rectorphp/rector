@@ -18,6 +18,7 @@ use function fopen;
 use function fwrite;
 use function max;
 use function min;
+use function str_ends_with;
 use function stream_get_contents;
 use function strlen;
 use function substr;
@@ -32,11 +33,12 @@ final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
      */
     private $collapseRanges = \true;
     /**
-     * @var int >= 0
+     * @var int
      */
     private $commonLineThreshold = 6;
     /**
-     * @var int >= 0
+     * @psalm-var positive-int
+     * @var int
      */
     private $contextLines = 3;
     /**
@@ -57,7 +59,7 @@ final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
         $buffer = fopen('php://memory', 'r+b');
         if ('' !== $this->header) {
             fwrite($buffer, $this->header);
-            if ("\n" !== substr($this->header, -1, 1)) {
+            if (\substr_compare($this->header, "\n", -strlen("\n")) !== 0) {
                 fwrite($buffer, "\n");
             }
         }
@@ -82,9 +84,9 @@ final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
             }
         } else {
             // search back for the last `+` and `-` line,
-            // check if has trailing linebreak, else add under it warning under it
+            // check if it has trailing linebreak, else add a warning under it
             $toFind = [1 => \true, 2 => \true];
-            for ($i = $upperLimit - 1; $i >= 0; --$i) {
+            for ($i = $upperLimit - 1; $i >= 0; $i--) {
                 if (isset($toFind[$diff[$i][1]])) {
                     unset($toFind[$diff[$i][1]]);
                     $lc = substr($diff[$i][0], -1);
@@ -108,13 +110,13 @@ final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
             if (0 === $entry[1]) {
                 // same
                 if (\false === $hunkCapture) {
-                    ++$fromStart;
-                    ++$toStart;
+                    $fromStart++;
+                    $toStart++;
                     continue;
                 }
-                ++$sameCount;
-                ++$toRange;
-                ++$fromRange;
+                $sameCount++;
+                $toRange++;
+                $fromRange++;
                 if ($sameCount === $cutOff) {
                     $contextStartOffset = $hunkCapture - $this->contextLines < 0 ? $hunkCapture : $this->contextLines;
                     // note: $contextEndOffset = $this->contextLines;
@@ -143,16 +145,16 @@ final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
                 $hunkCapture = $i;
             }
             if (Differ::ADDED === $entry[1]) {
-                ++$toRange;
+                $toRange++;
             }
             if (Differ::REMOVED === $entry[1]) {
-                ++$fromRange;
+                $fromRange++;
             }
         }
         if (\false === $hunkCapture) {
             return;
         }
-        // we end here when cutoff (commonLineThreshold) was not reached, but we where capturing a hunk,
+        // we end here when cutoff (commonLineThreshold) was not reached, but we were capturing a hunk,
         // do not render hunk till end automatically because the number of context lines might be less than the commonLineThreshold
         $contextStartOffset = $hunkCapture - $this->contextLines < 0 ? $hunkCapture : $this->contextLines;
         // prevent trying to write out more common lines than there are in the diff _and_
@@ -177,7 +179,7 @@ final class UnifiedDiffOutputBuilder extends AbstractChunkOutputBuilder
         } else {
             fwrite($output, "@@ @@\n");
         }
-        for ($i = $diffStartIndex; $i < $diffEndIndex; ++$i) {
+        for ($i = $diffStartIndex; $i < $diffEndIndex; $i++) {
             if ($diff[$i][1] === Differ::ADDED) {
                 fwrite($output, '+' . $diff[$i][0]);
             } elseif ($diff[$i][1] === Differ::REMOVED) {

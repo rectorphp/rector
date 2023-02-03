@@ -30,7 +30,7 @@ final class Chunk
      */
     private $endRange;
     /**
-     * @var Line[]
+     * @var mixed[]
      */
     private $lines;
     public function __construct(int $start = 0, int $startRange = 1, int $end = 0, int $endRange = 1, array $lines = [])
@@ -58,14 +58,14 @@ final class Chunk
         return $this->endRange;
     }
     /**
-     * @return Line[]
+     * @psalm-return list<Line>
      */
     public function getLines() : array
     {
         return $this->lines;
     }
     /**
-     * @param Line[] $lines
+     * @psalm-param list<Line> $lines
      */
     public function setLines(array $lines) : void
     {

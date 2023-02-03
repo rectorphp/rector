@@ -21,7 +21,7 @@ use function max;
 final class MemoryEfficientLongestCommonSubsequenceCalculator implements LongestCommonSubsequenceCalculator
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function calculate(array $from, array $to) : array
     {

@@ -45,7 +45,6 @@ use Rector\PhpDocParser\PhpParser\SmartPhpParserFactory;
 use Rector\PSR4\Composer\PSR4NamespaceMatcher;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\Utils\Command\MissingInSetCommand;
-use RectorPrefix202302\SebastianBergmann\Diff\Differ;
 use RectorPrefix202302\Symfony\Component\Console\Application;
 use RectorPrefix202302\Symfony\Component\Console\Style\SymfonyStyle;
 use function RectorPrefix202302\Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -144,6 +143,4 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(\PHPStan\PhpDocParser\Lexer\Lexer::class);
     $services->set(TypeParser::class);
     $services->set(ConstExprParser::class);
-    // console color diff
-    $services->set(Differ::class);
 };

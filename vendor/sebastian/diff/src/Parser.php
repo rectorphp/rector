@@ -34,7 +34,7 @@ final class Parser
         $diffs = [];
         $diff = null;
         $collected = [];
-        for ($i = 0; $i < $lineCount; ++$i) {
+        for ($i = 0; $i < $lineCount; $i++) {
             if (preg_match('#^---\\h+"?(?P<file>[^\\v\\t"]+)#', $lines[$i], $fromMatch) && preg_match('#^\\+\\+\\+\\h+"?(?P<file>[^\\v\\t"]+)#', $lines[$i + 1], $toMatch)) {
                 if ($diff !== null) {
                     $this->parseFileDiff($diff, $collected);
@@ -42,9 +42,9 @@ final class Parser
                     $collected = [];
                 }
                 $diff = new Diff($fromMatch['file'], $toMatch['file']);
-                ++$i;
+                $i++;
             } else {
-                if (preg_match('/^(?:diff --git |index [\\da-f\\.]+|[+-]{3} [ab])/', $lines[$i])) {
+                if (preg_match('/^(?:diff --git |index [\\da-f.]+|[+-]{3} [ab])/', $lines[$i])) {
                     continue;
                 }
                 $collected[] = $lines[$i];
@@ -76,9 +76,7 @@ final class Parser
                     $type = Line::REMOVED;
                 }
                 $diffLines[] = new Line($type, $match['line']);
-                if (null !== $chunk) {
-                    $chunk->setLines($diffLines);
-                }
+                ($chunk2 = $chunk) ? $chunk2->setLines($diffLines) : null;
             }
         }
         $diff->setChunks($chunks);

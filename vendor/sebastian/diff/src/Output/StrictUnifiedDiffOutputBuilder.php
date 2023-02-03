@@ -34,6 +34,9 @@ use RectorPrefix202302\SebastianBergmann\Diff\Differ;
  */
 final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
 {
+    /**
+     * @var mixed[]
+     */
     private static $default = [
         'collapseRanges' => \true,
         // ranges of length one are rendered with the trailing `,1`
@@ -55,7 +58,8 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
      */
     private $collapseRanges;
     /**
-     * @var int >= 0
+     * @psalm-var positive-int
+     * @var int
      */
     private $commonLineThreshold;
     /**
@@ -63,7 +67,8 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
      */
     private $header;
     /**
-     * @var int >= 0
+     * @psalm-var positive-int
+     * @var int
      */
     private $contextLines;
     public function __construct(array $options = [])
@@ -118,9 +123,9 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
             }
         } else {
             // search back for the last `+` and `-` line,
-            // check if has trailing linebreak, else add under it warning under it
+            // check if it has a trailing linebreak, else add a warning under it
             $toFind = [1 => \true, 2 => \true];
-            for ($i = $upperLimit - 1; $i >= 0; --$i) {
+            for ($i = $upperLimit - 1; $i >= 0; $i--) {
                 if (isset($toFind[$diff[$i][1]])) {
                     unset($toFind[$diff[$i][1]]);
                     $lc = substr($diff[$i][0], -1);
@@ -144,13 +149,13 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
             if (0 === $entry[1]) {
                 // same
                 if (\false === $hunkCapture) {
-                    ++$fromStart;
-                    ++$toStart;
+                    $fromStart++;
+                    $toStart++;
                     continue;
                 }
-                ++$sameCount;
-                ++$toRange;
-                ++$fromRange;
+                $sameCount++;
+                $toRange++;
+                $fromRange++;
                 if ($sameCount === $cutOff) {
                     $contextStartOffset = $hunkCapture - $this->contextLines < 0 ? $hunkCapture : $this->contextLines;
                     // note: $contextEndOffset = $this->contextLines;
@@ -181,17 +186,17 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
             }
             if (Differ::ADDED === $entry[1]) {
                 // added
-                ++$toRange;
+                $toRange++;
             }
             if (Differ::REMOVED === $entry[1]) {
                 // removed
-                ++$fromRange;
+                $fromRange++;
             }
         }
         if (\false === $hunkCapture) {
             return;
         }
-        // we end here when cutoff (commonLineThreshold) was not reached, but we where capturing a hunk,
+        // we end here when cutoff (commonLineThreshold) was not reached, but we were capturing a hunk,
         // do not render hunk till end automatically because the number of context lines might be less than the commonLineThreshold
         $contextStartOffset = $hunkCapture - $this->contextLines < 0 ? $hunkCapture : $this->contextLines;
         // prevent trying to write out more common lines than there are in the diff _and_
@@ -212,7 +217,7 @@ final class StrictUnifiedDiffOutputBuilder implements DiffOutputBuilderInterface
             fwrite($output, ',' . $toRange);
         }
         fwrite($output, " @@\n");
-        for ($i = $diffStartIndex; $i < $diffEndIndex; ++$i) {
+        for ($i = $diffStartIndex; $i < $diffEndIndex; $i++) {
             if ($diff[$i][1] === Differ::ADDED) {
                 $this->changed = \true;
                 fwrite($output, '+' . $diff[$i][0]);

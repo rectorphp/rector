@@ -2,6 +2,16 @@
 
 All notable changes are documented in this file using the [Keep a CHANGELOG](http://keepachangelog.com/) principles.
 
+## [5.0.0] - 2022-02-03
+
+### Changed
+
+* Passing a `DiffOutputBuilderInterface` instance to `Differ::__construct()` is no longer optional
+
+### Removed
+
+* Removed support for PHP 7.3, PHP 7.4, and PHP 8.0
+
 ## [4.0.4] - 2020-10-26
 
 ### Fixed
@@ -76,6 +86,7 @@ All notable changes are documented in this file using the [Keep a CHANGELOG](htt
 
 * This component is no longer supported on PHP 5.6
 
+[5.0.0]: https://github.com/sebastianbergmann/diff/compare/4.0.4...5.0.0
 [4.0.4]: https://github.com/sebastianbergmann/diff/compare/4.0.3...4.0.4
 [4.0.3]: https://github.com/sebastianbergmann/diff/compare/4.0.2...4.0.3
 [4.0.2]: https://github.com/sebastianbergmann/diff/compare/4.0.1...4.0.2

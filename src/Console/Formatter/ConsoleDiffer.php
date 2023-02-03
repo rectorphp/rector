@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\Console\Formatter;
 
 use RectorPrefix202302\SebastianBergmann\Diff\Differ;
+use RectorPrefix202302\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
+use RectorPrefix202302\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 final class ConsoleDiffer
 {
     /**
@@ -16,10 +18,13 @@ final class ConsoleDiffer
      * @var \Rector\Core\Console\Formatter\ColorConsoleDiffFormatter
      */
     private $colorConsoleDiffFormatter;
-    public function __construct(Differ $differ, \Rector\Core\Console\Formatter\ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
+    public function __construct(\Rector\Core\Console\Formatter\ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
     {
-        $this->differ = $differ;
         $this->colorConsoleDiffFormatter = $colorConsoleDiffFormatter;
+        // @see https://github.com/sebastianbergmann/diff#strictunifieddiffoutputbuilder
+        // @see https://github.com/sebastianbergmann/diff/compare/4.0.4...5.0.0#diff-251edf56a6344c03fa264a4926b06c2cee43c25f66192d5f39ebee912b7442dc for upgrade
+        $unifiedDiffOutputBuilder = new UnifiedDiffOutputBuilder();
+        $this->differ = new Differ($unifiedDiffOutputBuilder);
     }
     public function diff(string $old, string $new) : string
     {

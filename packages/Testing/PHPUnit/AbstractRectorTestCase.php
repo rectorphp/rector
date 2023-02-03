@@ -80,7 +80,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     /**
      * @return Iterator<<string>>
      */
-    protected function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
+    protected static function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc') : Iterator
     {
         return FixtureFileFinder::yieldDirectory($directory, $suffix);
     }
@@ -105,7 +105,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         $this->originalTempFilePath = $inputFilePath;
         $this->doTestFileMatchesExpectedContent($inputFilePath, $expectedFilePath, $fixtureFilePath);
     }
-    protected function getFixtureTempDirectory() : string
+    protected static function getFixtureTempDirectory() : string
     {
         return FixtureTempFileDumper::getTempDirectory();
     }

@@ -14,6 +14,7 @@ namespace RectorPrefix202302\SebastianBergmann\Diff\Output;
 use function fclose;
 use function fopen;
 use function fwrite;
+use function str_ends_with;
 use function stream_get_contents;
 use function substr;
 use RectorPrefix202302\SebastianBergmann\Diff\Differ;
@@ -36,7 +37,7 @@ final class DiffOnlyOutputBuilder implements DiffOutputBuilderInterface
         $buffer = fopen('php://memory', 'r+b');
         if ('' !== $this->header) {
             fwrite($buffer, $this->header);
-            if ("\n" !== substr($this->header, -1, 1)) {
+            if (\substr_compare($this->header, "\n", -\strlen("\n")) !== 0) {
                 fwrite($buffer, "\n");
             }
         }
@@ -52,7 +53,7 @@ final class DiffOnlyOutputBuilder implements DiffOutputBuilderInterface
             } else {
                 /* Not changed (old) 0 */
                 continue;
-                // we didn't write the non changs line, so do not add a line break either
+                // we didn't write the not-changed line, so do not add a line break either
             }
             $lc = substr($diffEntry[0], -1);
             if ($lc !== "\n" && $lc !== "\r") {

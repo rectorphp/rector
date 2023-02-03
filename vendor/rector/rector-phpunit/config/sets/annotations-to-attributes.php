@@ -8,10 +8,12 @@ use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\PHPUnit\Rector\Class_\AnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\Rector\Class_\CoversAnnotationWithValueToAttributeRector;
+use Rector\PHPUnit\Rector\ClassMethod\DataProviderAnnotationToAttributeRector;
 use Rector\PHPUnit\Rector\ClassMethod\DependsAnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rules([
+        DataProviderAnnotationToAttributeRector::class,
         CoversAnnotationWithValueToAttributeRector::class,
         /**
          * Currently handle:
@@ -25,7 +27,7 @@ return static function (RectorConfig $rectorConfig) : void {
          */
         DependsAnnotationWithValueToAttributeRector::class,
     ]);
-    $rectorConfig->ruleWithConfiguration(AnnotationWithValueToAttributeRector::class, [new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\\Framework\\Attributes\\BackupGlobals', ['enabled' => \true, 'disabled' => \false]), new AnnotationWithValueToAttribute('backupStaticAttributes', 'PHPUnit\\Framework\\Attributes\\BackupStaticProperties', ['enabled' => \true, 'disabled' => \false]), new AnnotationWithValueToAttribute('preserveGlobalState', 'PHPUnit\\Framework\\Attributes\\PreserveGlobalState', ['enabled' => \true, 'disabled' => \false]), new AnnotationWithValueToAttribute('dataProvider', 'PHPUnit\\Framework\\Attributes\\DataProvider'), new AnnotationWithValueToAttribute('depends', 'PHPUnit\\Framework\\Attributes\\Depends'), new AnnotationWithValueToAttribute('group', 'PHPUnit\\Framework\\Attributes\\Group'), new AnnotationWithValueToAttribute('ticket', 'PHPUnit\\Framework\\Attributes\\Ticket'), new AnnotationWithValueToAttribute('uses', 'PHPUnit\\Framework\\Attributes\\UsesClass'), new AnnotationWithValueToAttribute('testWith', 'PHPUnit\\Framework\\Attributes\\TestWith'), new AnnotationWithValueToAttribute('testDox', 'PHPUnit\\Framework\\Attributes\\TestDox')]);
+    $rectorConfig->ruleWithConfiguration(AnnotationWithValueToAttributeRector::class, [new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\\Framework\\Attributes\\BackupGlobals', ['enabled' => \true, 'disabled' => \false]), new AnnotationWithValueToAttribute('backupStaticAttributes', 'PHPUnit\\Framework\\Attributes\\BackupStaticProperties', ['enabled' => \true, 'disabled' => \false]), new AnnotationWithValueToAttribute('preserveGlobalState', 'PHPUnit\\Framework\\Attributes\\PreserveGlobalState', ['enabled' => \true, 'disabled' => \false]), new AnnotationWithValueToAttribute('depends', 'PHPUnit\\Framework\\Attributes\\Depends'), new AnnotationWithValueToAttribute('group', 'PHPUnit\\Framework\\Attributes\\Group'), new AnnotationWithValueToAttribute('ticket', 'PHPUnit\\Framework\\Attributes\\Ticket'), new AnnotationWithValueToAttribute('uses', 'PHPUnit\\Framework\\Attributes\\UsesClass'), new AnnotationWithValueToAttribute('testWith', 'PHPUnit\\Framework\\Attributes\\TestWith'), new AnnotationWithValueToAttribute('testDox', 'PHPUnit\\Framework\\Attributes\\TestDox')]);
     $rectorConfig->ruleWithConfiguration(AnnotationToAttributeRector::class, [
         // @see https://github.com/sebastianbergmann/phpunit/issues/4502
         new AnnotationToAttribute('after', 'PHPUnit\\Framework\\Attributes\\After'),

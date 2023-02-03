@@ -22,11 +22,12 @@ final class Diff
      */
     private $to;
     /**
-     * @var Chunk[]
+     * @psalm-var list<Chunk>
+     * @var mixed[]
      */
     private $chunks;
     /**
-     * @param Chunk[] $chunks
+     * @psalm-param list<Chunk> $chunks
      */
     public function __construct(string $from, string $to, array $chunks = [])
     {
@@ -43,14 +44,14 @@ final class Diff
         return $this->to;
     }
     /**
-     * @return Chunk[]
+     * @psalm-return list<Chunk>
      */
     public function getChunks() : array
     {
         return $this->chunks;
     }
     /**
-     * @param Chunk[] $chunks
+     * @psalm-param list<Chunk> $chunks
      */
     public function setChunks(array $chunks) : void
     {

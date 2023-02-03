@@ -1,0 +1,123 @@
+<?php
+
+declare (strict_types=1);
+namespace Rector\PHPUnit\Rector\ClassMethod;
+
+use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\DataProviderAnnotationToAttributeRector\DataProviderAnnotationToAttributeRectorTest
+ */
+final class DataProviderAnnotationToAttributeRector extends AbstractRector implements MinPhpVersionInterface
+{
+    /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+    /**
+     * @readonly
+     * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
+     */
+    private $phpAttributeGroupFactory;
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
+     */
+    private $phpDocTagRemover;
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpDocTagRemover $phpDocTagRemover)
+    {
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;
+        $this->phpDocTagRemover = $phpDocTagRemover;
+    }
+    public function getRuleDefinition() : RuleDefinition
+    {
+        return new RuleDefinition('Change dataProvider annotations to attribute', [new CodeSample(<<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
+{
+    /**
+     * @dataProvider someMethod()
+     */
+    public function test(): void
+    {
+    }
+}
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use PHPUnit\Framework\TestCase;
+
+final class SomeTest extends TestCase
+{
+    #[\PHPUnit\Framework\Attributes\DataProvider('test')]
+    public function test(): void
+    {
+    }
+}
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes() : array
+    {
+        return [ClassMethod::class];
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::ATTRIBUTES;
+    }
+    /**
+     * @param ClassMethod $node
+     */
+    public function refactor(Node $node) : ?Node
+    {
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
+            return null;
+        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
+        /** @var PhpDocTagNode[] $desiredTagValueNodes */
+        $desiredTagValueNodes = $phpDocInfo->getTagsByName('dataProvider');
+        if ($desiredTagValueNodes === []) {
+            return null;
+        }
+        $currentClass = $node->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$currentClass instanceof Class_) {
+            return null;
+        }
+        foreach ($desiredTagValueNodes as $desiredTagValueNode) {
+            if (!$desiredTagValueNode->value instanceof GenericTagValueNode) {
+                continue;
+            }
+            $originalAttributeValue = $desiredTagValueNode->value->value;
+            $methodName = \trim($originalAttributeValue, '()');
+            $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\\Framework\\Attributes\\DataProvider', [$methodName]);
+            $node->attrGroups[] = $attributeGroup;
+            // cleanup
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
+        }
+        if (!$phpDocInfo->hasChanged()) {
+            return null;
+        }
+        return $node;
+    }
+}
