@@ -18,21 +18,21 @@ final class FinderRegistry
      */
     public static function getAllVariants() : array
     {
-        return [new CpuInfoFinder(), new DummyCpuCoreFinder(1), new HwLogicalFinder(), new HwPhysicalFinder(), new _NProcessorFinder(), new NProcessorFinder(), new NProcFinder(\true), new NProcFinder(\false), new NullCpuCoreFinder(), new OnlyOnWindowsFinder(new DummyCpuCoreFinder(1)), new SkipOnWindowsFinder(new DummyCpuCoreFinder(1)), new WmicPhysicalFinder(), new WmicLogicalFinder()];
+        return [new CpuInfoFinder(), new DummyCpuCoreFinder(1), new HwLogicalFinder(), new HwPhysicalFinder(), new LscpuLogicalFinder(), new LscpuPhysicalFinder(), new _NProcessorFinder(), new NProcessorFinder(), new NProcFinder(\true), new NProcFinder(\false), new NullCpuCoreFinder(), SkipOnOSFamilyFinder::forWindows(new DummyCpuCoreFinder(1)), OnlyOnOSFamilyFinder::forWindows(new DummyCpuCoreFinder(1)), new WmicPhysicalFinder(), new WmicLogicalFinder()];
     }
     /**
      * @return list<CpuCoreFinder>
      */
     public static function getDefaultLogicalFinders() : array
     {
-        return [new OnlyOnWindowsFinder(new WmicLogicalFinder()), new NProcFinder(), new HwLogicalFinder(), new _NProcessorFinder(), new NProcessorFinder(), new CpuInfoFinder()];
+        return [OnlyOnOSFamilyFinder::forWindows(new WmicLogicalFinder()), new NProcFinder(), new HwLogicalFinder(), new _NProcessorFinder(), new NProcessorFinder(), new LscpuLogicalFinder(), new CpuInfoFinder()];
     }
     /**
      * @return list<CpuCoreFinder>
      */
     public static function getDefaultPhysicalFinders() : array
     {
-        return [new OnlyOnWindowsFinder(new WmicPhysicalFinder()), new HwPhysicalFinder()];
+        return [OnlyOnOSFamilyFinder::forWindows(new WmicPhysicalFinder()), new HwPhysicalFinder(), new LscpuPhysicalFinder()];
     }
     private function __construct()
     {

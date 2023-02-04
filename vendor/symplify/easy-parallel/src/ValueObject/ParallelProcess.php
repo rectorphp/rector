@@ -47,14 +47,17 @@ final class ParallelProcess
      */
     private $timer;
     /**
+     * @readonly
      * @var string
      */
     private $command;
     /**
+     * @readonly
      * @var \React\EventLoop\LoopInterface
      */
     private $loop;
     /**
+     * @readonly
      * @var int
      */
     private $timetoutInSeconds;

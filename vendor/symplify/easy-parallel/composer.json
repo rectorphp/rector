@@ -12,8 +12,16 @@
         "fidry\/cpu-core-counter": "^0.4.0"
     },
     "require-dev": {
-        "symplify\/package-builder": "^11.1.25",
-        "phpunit\/phpunit": "^9.5.26"
+        "symplify\/package-builder": "^11.2",
+        "phpunit\/phpunit": "^9.5.26",
+        "php-parallel-lint\/php-parallel-lint": "^1.3",
+        "phpstan\/extension-installer": "^1.2",
+        "rector\/rector": "^0.15.10",
+        "symplify\/easy-ci": "^11.1",
+        "symplify\/easy-coding-standard": "^11.1",
+        "symplify\/phpstan-extensions": "^11.1",
+        "symplify\/symplify-kernel": "^11.2",
+        "tomasvotruba\/unused-public": "^0.0.34"
     },
     "autoload": {
         "psr-4": {
@@ -30,25 +38,19 @@
             "dev-main": "11.2-dev"
         }
     },
-    "config": {
-        "platform-check": false
+    "scripts": {
+        "check-cs": "vendor\/bin\/ecs check --ansi",
+        "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
+        "phpstan": "vendor\/bin\/phpstan analyse --ansi  --error-format symplify",
+        "rector": "vendor\/bin\/rector process --dry-run --ansi"
     },
-    "conflict": {
-        "symplify\/phpstan-rules": "<11.1.24",
-        "symplify\/easy-testing": "<11.1.25",
-        "symplify\/rule-doc-generator-contracts": "<11.1.25",
-        "symplify\/php-config-printer": "<11.1.25",
-        "symplify\/autowire-array-parameter": "<11.1.25",
-        "symplify\/phpstan-extensions": "<11.1.25",
-        "symplify\/rule-doc-generator": "<11.1.25",
-        "symplify\/symfony-static-dumper": "<11.1.25",
-        "symplify\/config-transformer": "<11.1.24",
-        "symplify\/coding-standard": "<11.1.24",
-        "symplify\/smart-file-system": "<11.1.25",
-        "symplify\/symplify-kernel": "<11.1.25",
-        "symplify\/package-builder": "<11.1.25",
-        "symplify\/easy-ci": "<11.1.24",
-        "symplify\/monorepo-builder": "<11.1.24"
+    "config": {
+        "sort-packages": true,
+        "platform-check": false,
+        "allow-plugins": {
+            "cweagans\/composer-patches": true,
+            "phpstan\/extension-installer": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

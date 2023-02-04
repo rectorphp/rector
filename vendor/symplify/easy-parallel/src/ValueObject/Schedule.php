@@ -12,11 +12,13 @@ namespace RectorPrefix202302\Symplify\EasyParallel\ValueObject;
 final class Schedule
 {
     /**
+     * @readonly
      * @var int
      */
     private $numberOfProcesses;
     /**
      * @var array<array<string>>
+     * @readonly
      */
     private $jobs;
     /**

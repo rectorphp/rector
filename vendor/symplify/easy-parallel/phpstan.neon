@@ -1,0 +1,22 @@
+parameters:
+    level: 8
+
+    paths:
+        - src
+        - tests
+
+    excludePaths:
+        - '*/tests/**/Source/*'
+        - '*/tests/**/Fixture/*'
+
+    unused_public:
+        methods: true
+        properties: true
+        constants: true
+
+    ignoreErrors:
+        -
+            message: '#Parameter \#2 \$length of function array_chunk expects int<1, max>, int given#'
+            path: src/ScheduleFactory.php
+
+        -   '#Parameter \#1 \$stream of function (rewind|stream_get_contents|fclose) expects resource, resource\|null given#'

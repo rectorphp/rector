@@ -24,6 +24,7 @@ final class WorkerCommandLineFactory
      */
     private const EXCLUDED_OPTION_NAMES = ['output-format'];
     /**
+     * @readonly
      * @var \Symplify\EasyParallel\Reflection\CommandFromReflectionFactory
      */
     private $commandFromReflectionFactory;
@@ -50,7 +51,7 @@ final class WorkerCommandLineFactory
             if ($arg === $mainCommandName) {
                 break;
             }
-            $processCommandArray[] = \escapeshellarg($arg);
+            $processCommandArray[] = \escapeshellarg((string) $arg);
         }
         $processCommandArray[] = $workerCommandName;
         if ($projectConfigFile !== null) {

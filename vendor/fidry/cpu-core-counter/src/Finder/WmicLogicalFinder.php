@@ -28,7 +28,7 @@ final class WmicLogicalFinder extends ProcOpenBasedFinder
     {
         return 'WmicLogicalFinder';
     }
-    public static function countCpuCores(string $process) : ?int
+    protected function countCpuCores(string $process) : ?int
     {
         if (0 === preg_match(self::CPU_CORE_COUNT_REGEX, $process, $matches)) {
             return parent::countCpuCores($process);

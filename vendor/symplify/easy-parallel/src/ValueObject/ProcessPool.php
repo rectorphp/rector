@@ -17,6 +17,7 @@ final class ProcessPool
      */
     private $processes = [];
     /**
+     * @readonly
      * @var \React\Socket\TcpServer
      */
     private $tcpServer;
