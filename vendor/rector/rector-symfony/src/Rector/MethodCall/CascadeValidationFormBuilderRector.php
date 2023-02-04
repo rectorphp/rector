@@ -155,7 +155,10 @@ CODE_SAMPLE
         if (!$arrayItem->key instanceof Expr) {
             return null;
         }
-        if (!$this->valueResolver->isValue($arrayItem->key, 'cascade_validation')) {
+        if (!$arrayItem->key instanceof String_) {
+            return null;
+        }
+        if ($arrayItem->key->value !== 'cascade_validation') {
             return null;
         }
         if (!$this->valueResolver->isValue($arrayItem->value, \true)) {
