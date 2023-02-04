@@ -10,5 +10,5 @@ use Rector\Doctrine\Rector\Property\DoctrineTargetEntityStringToClassConstantRec
 use RectorPrefix202302\Symplify\EasyCI\Config\EasyCIConfig;
 return static function (EasyCIConfig $easyCIConfig) : void {
     $easyCIConfig->paths([__DIR__ . '/config', __DIR__ . '/src']);
-    $easyCIConfig->typesToSkip([ClassAnnotationToNamedArgumentConstructorRector::class, ChangeSetParametersArrayToArrayCollectionRector::class, EntityAliasToClassConstantReferenceRector::class, DoctrineTargetEntityStringToClassConstantRector::class]);
+    $easyCIConfig->typesToSkip([\Rector\Core\Contract\Rector\RectorInterface::class]);
 };

@@ -8,7 +8,7 @@
     },
     "require-dev": {
         "phpstan\/extension-installer": "^1.1",
-        "phpunit\/phpunit": "^9.5.21",
+        "phpunit\/phpunit": "^10.0",
         "rector\/phpstan-rules": "^0.6",
         "phpstan\/phpstan": "^1.8.2",
         "symplify\/phpstan-rules": "^11.1",
@@ -20,7 +20,8 @@
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "symplify\/vendor-patches": "^11.1",
         "rector\/rector-debugging": "dev-main",
-        "rector\/rector-generator": "^0.6.13"
+        "rector\/rector-generator": "^0.6.13",
+        "symplify\/easy-ci": "11.2.0.72"
     },
     "autoload": {
         "psr-4": {

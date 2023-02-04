@@ -11,7 +11,7 @@
         "phpstan\/phpstan": "^1.9",
         "phpstan\/phpstan-strict-rules": "^1.4",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
-        "phpunit\/phpunit": "^9.5",
+        "phpunit\/phpunit": "^10.0",
         "rector\/phpstan-rules": "^0.6",
         "rector\/rector-debugging": "dev-main",
         "rector\/rector-generator": "^0.6.14",

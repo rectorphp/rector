@@ -20,10 +20,10 @@ final class DowngradeTypedPropertyRector extends AbstractRector
      * @readonly
      * @var \Rector\NodeManipulator\PropertyDecorator
      */
-    private $PropertyDecorator;
-    public function __construct(PropertyDecorator $PropertyDecorator)
+    private $propertyDecorator;
+    public function __construct(PropertyDecorator $propertyDecorator)
     {
-        $this->PropertyDecorator = $PropertyDecorator;
+        $this->propertyDecorator = $propertyDecorator;
     }
     /**
      * @return array<class-string<Node>>
@@ -63,7 +63,7 @@ CODE_SAMPLE
         if ($node->type instanceof NullableType && $default instanceof Expr && $this->valueResolver->isNull($default)) {
             $node->props[0]->default = null;
         }
-        $this->PropertyDecorator->decorateWithDocBlock($node, $node->type);
+        $this->propertyDecorator->decorateWithDocBlock($node, $node->type);
         $node->type = null;
         return $node;
     }

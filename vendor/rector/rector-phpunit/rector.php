@@ -9,7 +9,6 @@ use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->importNames();
-    $rectorConfig->parallel();
     $rectorConfig->paths([__DIR__ . '/src', __DIR__ . '/tests']);
     $rectorConfig->skip([
         // for tests
@@ -23,6 +22,7 @@ return static function (RectorConfig $rectorConfig) : void {
         __DIR__ . '/config/config.php',
         LevelSetList::UP_TO_PHP_81,
         SetList::DEAD_CODE,
+        \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100,
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
         SetList::EARLY_RETURN,
@@ -32,9 +32,7 @@ return static function (RectorConfig $rectorConfig) : void {
     ]);
     $rectorConfig->ruleWithConfiguration(StringClassNameToClassConstantRector::class, [
         // keep unprefixed to protected from downgrade
-        'PHPUnit\\Framework\\Assert',
-        'PHPUnit\\Framework\\MockObject\\*',
-        'PHPUnit\\Framework\\TestCase',
+        'PHPUnit\\Framework\\*',
         'Prophecy\\Prophet',
     ]);
 };
