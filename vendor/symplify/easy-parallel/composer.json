@@ -9,7 +9,7 @@
         "react\/event-loop": "^1.3",
         "react\/socket": "^1.12",
         "symfony\/console": "^6.2",
-        "fidry\/cpu-core-counter": "^0.4.0"
+        "fidry\/cpu-core-counter": "^0.4.0 || ^0.5.1"
     },
     "require-dev": {
         "symplify\/package-builder": "^11.2",
