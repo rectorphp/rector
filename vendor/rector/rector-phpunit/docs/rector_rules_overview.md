@@ -1,4 +1,4 @@
-# 46 Rules Overview
+# 48 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -87,7 +87,12 @@ use Rector\PHPUnit\Rector\Class_\AnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AnnotationWithValueToAttributeRector::class, [new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\Framework\Attributes\BackupGlobals', [true, false])]);
+    $rectorConfig->ruleWithConfiguration(AnnotationWithValueToAttributeRector::class, [
+        new AnnotationWithValueToAttribute('backupGlobals', 'PHPUnit\Framework\Attributes\BackupGlobals', [
+            true,
+            false,
+        ]),
+    ]);
 };
 ```
 
@@ -126,7 +131,11 @@ use Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ArrayArgumentToDataProviderRector::class, [ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number')]]);
+    $rectorConfig->ruleWithConfiguration(ArrayArgumentToDataProviderRector::class, [
+        ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [
+            new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number'),
+        ],
+    ]);
 };
 ```
 
@@ -551,6 +560,29 @@ Replaces `createMock()` with `createStub()` when relevant
 
 <br>
 
+## DataProviderAnnotationToAttributeRector
+
+Change dataProvider annotations to attribute
+
+- class: [`Rector\PHPUnit\Rector\ClassMethod\DataProviderAnnotationToAttributeRector`](../src/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest extends TestCase
+ {
+-    /**
+-     * @dataProvider someMethod()
+-     */
++    #[\PHPUnit\Framework\Attributes\DataProvider('test')]
+     public function test(): void
+     {
+     }
+ }
+```
+
+<br>
+
 ## DelegateExceptionArgumentsRector
 
 Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
@@ -798,6 +830,25 @@ Remove `"setMethods()"` method as never used
 -            ->setMethods(['run'])
              ->getMock();
      }
+ }
+```
+
+<br>
+
+## RemoveTestSuffixFromAbstractTestClassesRector
+
+Rename abstract test class suffix from "*Test" to "*TestCase"
+
+- class: [`Rector\PHPUnit\Rector\ClassLike\RemoveTestSuffixFromAbstractTestClassesRector`](../src/Rector/ClassLike/RemoveTestSuffixFromAbstractTestClassesRector.php)
+
+```diff
+-// tests/AbstractTest.php
++// tests/AbstractTestCase.php
+ use PHPUnit\Framework\TestCase;
+
+-abstract class AbstractTest extends TestCase
++abstract class AbstractTestCase extends TestCase
+ {
  }
 ```
 

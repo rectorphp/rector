@@ -14,14 +14,17 @@
         "symplify\/phpstan-extensions": "^11.1",
         "symplify\/easy-coding-standard": "^11.2",
         "symplify\/rule-doc-generator": "^11.2",
-        "rector\/phpstan-rules": "^0.6.5",
+        "rector\/phpstan-rules": "^0.6",
         "phpstan\/extension-installer": "^1.2",
         "phpstan\/phpstan-strict-rules": "^1.4.5",
         "phpstan\/phpstan-webmozart-assert": "^1.2.2",
         "symplify\/vendor-patches": "^11.2.0",
         "symplify\/easy-ci": "^11.2.0",
         "rector\/rector-generator": "^0.6.14",
-        "rector\/rector-debugging": "dev-main"
+        "rector\/rector-debugging": "dev-main",
+        "tomasvotruba\/type-coverage": "^0.0.9",
+        "tomasvotruba\/unused-public": "^0.0.34",
+        "tomasvotruba\/cognitive-complexity": "^0.0.5"
     },
     "autoload": {
         "psr-4": {

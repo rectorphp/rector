@@ -5,6 +5,7 @@ namespace RectorPrefix202302;
 
 use Rector\Config\RectorConfig;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 return static function (RectorConfig $rectorConfig) : void {
@@ -14,6 +15,7 @@ return static function (RectorConfig $rectorConfig) : void {
         // for tests
         '*/Source/*',
         '*/Fixture/*',
+        '*/Expected/*',
         // object types
         StringClassNameToClassConstantRector::class => [__DIR__ . '/src/Rector/MethodCall/UseSpecificWillMethodRector.php', __DIR__ . '/src/Rector/Class_/TestListenerToHooksRector.php', __DIR__ . '/src/NodeFactory/ConsecutiveAssertionFactory.php', __DIR__ . '/src/NodeAnalyzer/TestsNodeAnalyzer.php', __DIR__ . '/src/NodeFactory/DataProviderClassMethodFactory.php', __DIR__ . '/config'],
     ]);
@@ -22,7 +24,7 @@ return static function (RectorConfig $rectorConfig) : void {
         __DIR__ . '/config/config.php',
         LevelSetList::UP_TO_PHP_81,
         SetList::DEAD_CODE,
-        \Rector\PHPUnit\Set\PHPUnitSetList::PHPUNIT_100,
+        PHPUnitSetList::PHPUNIT_100,
         SetList::CODE_QUALITY,
         SetList::CODING_STYLE,
         SetList::EARLY_RETURN,

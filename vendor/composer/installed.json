@@ -2059,12 +2059,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "008ad4d517f1c62aa7a56124fbe3b59d3c568e5f"
+                "reference": "dcfdf20afde70255c8621828d915747b65575949"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/008ad4d517f1c62aa7a56124fbe3b59d3c568e5f",
-                "reference": "008ad4d517f1c62aa7a56124fbe3b59d3c568e5f",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/dcfdf20afde70255c8621828d915747b65575949",
+                "reference": "dcfdf20afde70255c8621828d915747b65575949",
                 "shasum": ""
             },
             "require": {
@@ -2079,7 +2079,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.4.5",
                 "phpstan\/phpstan-webmozart-assert": "^1.2.2",
                 "phpunit\/phpunit": "^10.0",
-                "rector\/phpstan-rules": "^0.6.5",
+                "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-debugging": "dev-main",
                 "rector\/rector-generator": "^0.6.14",
                 "rector\/rector-src": "dev-main",
@@ -2088,9 +2088,12 @@
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.2.3",
                 "symplify\/rule-doc-generator": "^11.2",
-                "symplify\/vendor-patches": "^11.2.0"
+                "symplify\/vendor-patches": "^11.2.0",
+                "tomasvotruba\/cognitive-complexity": "^0.0.5",
+                "tomasvotruba\/type-coverage": "^0.0.9",
+                "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-06T16:07:10+00:00",
+            "time": "2023-02-06T18:30:45+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

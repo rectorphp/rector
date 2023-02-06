@@ -2048,6 +2048,7 @@ return array(
     'Rector\\PHPUnit\\NodeManipulator\\ParamAndArgFromArrayResolver' => $vendorDir . '/rector/rector-phpunit/src/NodeManipulator/ParamAndArgFromArrayResolver.php',
     'Rector\\PHPUnit\\PhpDoc\\DataProviderMethodRenamer' => $vendorDir . '/rector/rector-phpunit/src/PhpDoc/DataProviderMethodRenamer.php',
     'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => $vendorDir . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
+    'Rector\\PHPUnit\\Rector\\ClassLike\\RemoveTestSuffixFromAbstractTestClassesRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassLike/RemoveTestSuffixFromAbstractTestClassesRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\CreateMockToAnonymousClassRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/CreateMockToAnonymousClassRector.php',
     'Rector\\PHPUnit\\Rector\\ClassMethod\\DataProviderAnnotationToAttributeRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php',
