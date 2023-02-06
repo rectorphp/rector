@@ -2059,12 +2059,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "494253872e5efc079cc92036e4e700b0970e1a27"
+                "reference": "008ad4d517f1c62aa7a56124fbe3b59d3c568e5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/494253872e5efc079cc92036e4e700b0970e1a27",
-                "reference": "494253872e5efc079cc92036e4e700b0970e1a27",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/008ad4d517f1c62aa7a56124fbe3b59d3c568e5f",
+                "reference": "008ad4d517f1c62aa7a56124fbe3b59d3c568e5f",
                 "shasum": ""
             },
             "require": {
@@ -2083,14 +2083,14 @@
                 "rector\/rector-debugging": "dev-main",
                 "rector\/rector-generator": "^0.6.14",
                 "rector\/rector-src": "dev-main",
-                "symplify\/easy-ci": "^11.2.0.72",
-                "symplify\/easy-coding-standard": "^11.2.7",
-                "symplify\/phpstan-extensions": "^11.1.25",
-                "symplify\/phpstan-rules": "^11.2.3.72",
-                "symplify\/rule-doc-generator": "^11.1.25",
-                "symplify\/vendor-patches": "^11.2.0.72"
+                "symplify\/easy-ci": "^11.2.0",
+                "symplify\/easy-coding-standard": "^11.2",
+                "symplify\/phpstan-extensions": "^11.1",
+                "symplify\/phpstan-rules": "^11.2.3",
+                "symplify\/rule-doc-generator": "^11.2",
+                "symplify\/vendor-patches": "^11.2.0"
             },
-            "time": "2023-02-05T09:37:23+00:00",
+            "time": "2023-02-06T16:07:10+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
