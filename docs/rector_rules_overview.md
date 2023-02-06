@@ -1,4 +1,4 @@
-# 422 Rules Overview
+# 415 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (79)
 
-- [CodingStyle](#codingstyle) (40)
+- [CodingStyle](#codingstyle) (39)
 
 - [Compatibility](#compatibility) (1)
 
@@ -42,7 +42,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (15)
+- [Php74](#php74) (14)
 
 - [Php80](#php80) (20)
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (41)
+- [TypeDeclaration](#typedeclaration) (36)
 
 - [Visibility](#visibility) (3)
 
@@ -2522,34 +2522,6 @@ Separate class constant to own lines
 -    const HI = true, HELLO = 'true';
 +    const HI = true;
 +    const HELLO = 'true';
- }
-```
-
-<br>
-
-### SplitGroupedConstantsAndPropertiesRector
-
-Separate constant and properties to own lines
-
-- class: [`Rector\CodingStyle\Rector\ClassConst\SplitGroupedConstantsAndPropertiesRector`](../rules/CodingStyle/Rector/ClassConst/SplitGroupedConstantsAndPropertiesRector.php)
-
-```diff
- class SomeClass
- {
--    const HI = true, AHOJ = 'true';
-+    const HI = true;
-+    const AHOJ = 'true';
-
-     /**
-      * @var string
-      */
--    public $isIt, $isIsThough;
-+    public $isIt;
-+
-+    /**
-+     * @var string
-+     */
-+    public $isIsThough;
  }
 ```
 
@@ -5896,28 +5868,6 @@ Add null default to properties with PHP 7.4 property nullable type
 
 <br>
 
-### TypedPropertyRector
-
-Changes property type by `@var` annotations or default value.
-
-- class: [`Rector\Php74\Rector\Property\TypedPropertyRector`](../rules/Php74/Rector/Property/TypedPropertyRector.php)
-
-```diff
- final class SomeClass
- {
--    /**
--     * @var int
--     */
--    private $count;
-+    private int $count;
-
--    private $isDone = false;
-+    private bool $isDone = false;
- }
-```
-
-<br>
-
 ## Php80
 
 ### AddParamBasedOnParentClassMethodRector
@@ -9193,58 +9143,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 ## TypeDeclaration
 
-### AddArrayParamDocTypeRector
-
-Adds `@param` annotation to array parameters inferred from the rest of the code
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddArrayParamDocTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddArrayParamDocTypeRector.php)
-
-```diff
- class SomeClass
- {
-     /**
-      * @var int[]
-      */
-     private $values;
-
-+    /**
-+     * @param int[] $values
-+     */
-     public function __construct(array $values)
-     {
-         $this->values = $values;
-     }
- }
-```
-
-<br>
-
-### AddArrayReturnDocTypeRector
-
-Adds `@return` annotation to array parameters inferred from the rest of the code
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\AddArrayReturnDocTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/AddArrayReturnDocTypeRector.php)
-
-```diff
- class SomeClass
- {
-     /**
-      * @var int[]
-      */
-     private $values;
-
-+    /**
-+     * @return int[]
-+     */
-     public function getValues(): array
-     {
-         return $this->values;
-     }
- }
-```
-
-<br>
-
 ### AddArrowFunctionReturnTypeRector
 
 Add known return type to arrow function
@@ -9727,27 +9625,6 @@ Change param type based on parent param type
 
 <br>
 
-### ParamTypeDeclarationRector
-
-Change `@param` types to type declarations if not a BC-break
-
-- class: [`Rector\TypeDeclaration\Rector\FunctionLike\ParamTypeDeclarationRector`](../rules/TypeDeclaration/Rector/FunctionLike/ParamTypeDeclarationRector.php)
-
-```diff
- final class SomeClass
- {
--    /**
--     * @param int $number
--     */
--    public function run($number)
-+    public function run(int $number)
-     {
-     }
- }
-```
-
-<br>
-
 ### ParamTypeFromStrictTypedPropertyRector
 
 Add param type from `$param` set to typed property
@@ -9763,29 +9640,6 @@ Add param type from `$param` set to typed property
 +    public function setAge(int $age)
      {
          $this->age = $age;
-     }
- }
-```
-
-<br>
-
-### PropertyTypeDeclarationRector
-
-Add `@var` to properties that are missing it
-
-- class: [`Rector\TypeDeclaration\Rector\Property\PropertyTypeDeclarationRector`](../rules/TypeDeclaration/Rector/Property/PropertyTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
-+    /**
-+     * @var int
-+     */
-     private $value;
-
-     public function run()
-     {
-         $this->value = 123;
      }
  }
 ```
@@ -9855,27 +9709,6 @@ Add "never" return-type for methods that never return anything
      public function run()
      {
          throw new InvalidException();
-     }
- }
-```
-
-<br>
-
-### ReturnTypeDeclarationRector
-
-Change `@return` types and type from static analysis to type declarations if not a BC-break
-
-- class: [`Rector\TypeDeclaration\Rector\FunctionLike\ReturnTypeDeclarationRector`](../rules/TypeDeclaration/Rector/FunctionLike/ReturnTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    /**
--     * @return int
--     */
--    public function getCount()
-+    public function getCount(): int
-     {
      }
  }
 ```
