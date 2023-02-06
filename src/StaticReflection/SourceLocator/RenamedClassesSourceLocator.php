@@ -35,6 +35,10 @@ final class RenamedClassesSourceLocator implements SourceLocator
             if ($identifierName !== $oldClass) {
                 continue;
             }
+            /* Use ReflectionProvider causes infinite loop */
+            if (!\class_exists($oldClass)) {
+                continue;
+            }
             return $this->createFakeReflectionClassFromClassName($oldClass);
         }
         return null;
