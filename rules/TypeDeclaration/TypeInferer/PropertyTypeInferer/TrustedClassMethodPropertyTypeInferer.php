@@ -22,6 +22,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
+use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -33,6 +34,7 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+use Rector\TypeDeclaration\TypeAnalyzer\PropertyFetchTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 /**
  * @deprecated
@@ -95,7 +97,17 @@ final class TrustedClassMethodPropertyTypeInferer
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
-    public function __construct(ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator, ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper, NodeTypeResolver $nodeTypeResolver, BetterNodeFinder $betterNodeFinder, ParamAnalyzer $paramAnalyzer, AssignToPropertyTypeInferer $assignToPropertyTypeInferer, TypeComparator $typeComparator)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
+     */
+    private $propertyFetchAnalyzer;
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeAnalyzer\PropertyFetchTypeAnalyzer
+     */
+    private $propertyFetchTypeAnalyzer;
+    public function __construct(ClassMethodPropertyFetchManipulator $classMethodPropertyFetchManipulator, ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, TypeFactory $typeFactory, StaticTypeMapper $staticTypeMapper, NodeTypeResolver $nodeTypeResolver, BetterNodeFinder $betterNodeFinder, ParamAnalyzer $paramAnalyzer, AssignToPropertyTypeInferer $assignToPropertyTypeInferer, TypeComparator $typeComparator, PropertyFetchAnalyzer $propertyFetchAnalyzer, PropertyFetchTypeAnalyzer $propertyFetchTypeAnalyzer)
     {
         $this->classMethodPropertyFetchManipulator = $classMethodPropertyFetchManipulator;
         $this->reflectionProvider = $reflectionProvider;
@@ -108,6 +120,8 @@ final class TrustedClassMethodPropertyTypeInferer
         $this->paramAnalyzer = $paramAnalyzer;
         $this->assignToPropertyTypeInferer = $assignToPropertyTypeInferer;
         $this->typeComparator = $typeComparator;
+        $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
+        $this->propertyFetchTypeAnalyzer = $propertyFetchTypeAnalyzer;
     }
     public function inferProperty(Property $property, ClassMethod $classMethod) : Type
     {
@@ -126,6 +140,9 @@ final class TrustedClassMethodPropertyTypeInferer
         $assignedExprs = $this->classMethodPropertyFetchManipulator->findAssignsToPropertyName($classMethod, $propertyName);
         $resolvedTypes = [];
         foreach ($assignedExprs as $assignedExpr) {
+            if ($this->propertyFetchAnalyzer->isPropertyFetch($assignedExpr) && $this->propertyFetchTypeAnalyzer->isPropertyFetchExprNotNativelyTyped($assignedExpr)) {
+                continue;
+            }
             $resolvedTypes[] = $this->nodeTypeResolver->getType($assignedExpr);
         }
         if ($resolvedTypes === []) {
