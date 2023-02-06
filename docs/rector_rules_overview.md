@@ -2050,7 +2050,7 @@ Change data provider in PHPUnit test case to newline per item
          // ...
      }
 
-     public function provideData(): array
+     public static function provideData(): array
      {
 -        return [['content', 8], ['content123', 11]];
 +        return [
@@ -9132,7 +9132,7 @@ Adds param type declaration based on PHPUnit provider return type declaration
      {
      }
 
-     public function provideData()
+     public static function provideData()
      {
          yield ['name'];
      }
