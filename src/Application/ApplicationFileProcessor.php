@@ -116,19 +116,19 @@ final class ApplicationFileProcessor
      */
     public function run(Configuration $configuration, InputInterface $input) : array
     {
-        $fileInfos = $this->fileFactory->createFileInfosFromPaths($configuration->getPaths(), $configuration);
+        $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
         // no files found
-        if ($fileInfos === []) {
+        if ($filePaths === []) {
             return [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
         }
         $this->configureCustomErrorHandler();
         if ($configuration->isParallel()) {
-            $systemErrorsAndFileDiffs = $this->runParallel($fileInfos, $configuration, $input);
+            $systemErrorsAndFileDiffs = $this->runParallel($filePaths, $configuration, $input);
         } else {
             // 1. collect all files from files+dirs provided paths
-            $files = $this->fileFactory->createFromPaths($fileInfos);
+            $files = $this->fileFactory->createFromPaths($filePaths);
             // 2. PHPStan has to know about all files too
-            $this->configurePHPStanNodeScopeResolver($fileInfos);
+            $this->configurePHPStanNodeScopeResolver($filePaths);
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
             $this->fileDiffFileDecorator->decorate($files);
             $this->printFiles($files, $configuration);

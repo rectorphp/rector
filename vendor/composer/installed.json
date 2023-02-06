@@ -2128,12 +2128,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "dabd988a91b3d0f40386468166a8d6aee55ac859"
+                "reference": "cd25b6a2f5bb116c65ef7395f5d0e416b2498423"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/dabd988a91b3d0f40386468166a8d6aee55ac859",
-                "reference": "dabd988a91b3d0f40386468166a8d6aee55ac859",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/cd25b6a2f5bb116c65ef7395f5d0e416b2498423",
+                "reference": "cd25b6a2f5bb116c65ef7395f5d0e416b2498423",
                 "shasum": ""
             },
             "require": {
@@ -2164,7 +2164,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-04T13:47:16+00:00",
+            "time": "2023-02-06T12:52:12+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2188,7 +2188,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.14.3"
             },
             "install-path": "..\/rector\/rector-symfony"
         },

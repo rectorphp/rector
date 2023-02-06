@@ -6,39 +6,24 @@ namespace Rector\Testing\PHPUnit\Behavior;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\PhpParser\Printer\NodesWithFileDestinationPrinter;
 use Rector\FileSystemRector\ValueObject\AddedFileWithContent;
-use Rector\Testing\Fixture\FixtureTempFileDumper;
-use RectorPrefix202302\Webmozart\Assert\Assert;
 /**
  * @property-read RemovedAndAddedFilesCollector $removedAndAddedFilesCollector
  */
 trait MovingFilesTrait
 {
-    protected function assertFileWasAdded(AddedFileWithContent $addedFileWithContent) : void
+    protected function assertFileWasAdded(string $expectedFilePath, string $expectedFileContents) : void
     {
-        $this->assertFilesWereAdded([$addedFileWithContent]);
-    }
-    /**
-     * @param AddedFileWithContent[] $expectedAddedFileWithContents
-     */
-    protected function assertFilesWereAdded(array $expectedAddedFileWithContents) : void
-    {
-        Assert::allIsAOf($expectedAddedFileWithContents, AddedFileWithContent::class);
-        \sort($expectedAddedFileWithContents);
         $addedFilePathsWithContents = $this->resolveAddedFilePathsWithContents();
-        \sort($addedFilePathsWithContents);
-        // there should be at least some added files
-        Assert::notEmpty($addedFilePathsWithContents);
-        foreach ($addedFilePathsWithContents as $key => $addedFilePathWithContent) {
-            $expectedFilePathWithContent = $expectedAddedFileWithContents[$key];
-            /**
-             * use relative path against _temp_fixture_easy_testing
-             * to make work in all OSs, for example:
-             * In MacOS, the realpath() of sys_get_temp_dir() pointed to /private/var/* which symlinked of /var/*
-             */
-            [, $expectedFilePathWithContentFilePath] = \explode(FixtureTempFileDumper::TEMP_FIXTURE_DIRECTORY, $expectedFilePathWithContent->getFilePath());
-            [, $addedFilePathWithContentFilePath] = \explode(FixtureTempFileDumper::TEMP_FIXTURE_DIRECTORY, $addedFilePathWithContent->getFilePath());
-            $this->assertSame($expectedFilePathWithContentFilePath, $addedFilePathWithContentFilePath);
-            $this->assertSame($expectedFilePathWithContent->getFileContent(), $addedFilePathWithContent->getFileContent());
+        $wasFound = \false;
+        foreach ($addedFilePathsWithContents as $addedFilePathsWithContent) {
+            if ($addedFilePathsWithContent->getFilePath() !== $expectedFilePath) {
+                continue;
+            }
+            $this->assertSame($expectedFileContents, $addedFilePathsWithContent->getFileContent());
+            $wasFound = \true;
+        }
+        if ($wasFound === \false) {
+            $this->fail(\sprintf('File "%s" was not added', $expectedFilePath));
         }
     }
     /**
@@ -57,9 +42,9 @@ trait MovingFilesTrait
         if ($addedFilesWithNodes === []) {
             return $addedFilePathsWithContents;
         }
-        foreach ($addedFilesWithNodes as $addedFileWithNode) {
-            $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($addedFileWithNode);
-            $addedFilePathsWithContents[] = new AddedFileWithContent($addedFileWithNode->getFilePath(), $fileContent);
+        foreach ($addedFilesWithNodes as $addedFileWithNodes) {
+            $fileContent = $nodesWithFileDestinationPrinter->printNodesWithFileDestination($addedFileWithNodes);
+            $addedFilePathsWithContents[] = new AddedFileWithContent($addedFileWithNodes->getFilePath(), $fileContent);
         }
         return $addedFilePathsWithContents;
     }

@@ -35,9 +35,6 @@ final class RemovedAndAddedFilesCollector
     }
     public function isFileRemoved(string $filePath) : bool
     {
-        // early assign to variable for increase performance
-        // @see https://3v4l.org/FM3vY#focus=8.0.7 vs https://3v4l.org/JZW7b#focus=8.0.7
-        //        $pathname = $filePath->getPathname();
         foreach ($this->removedFilePaths as $removedFilePath) {
             if ($removedFilePath !== $filePath) {
                 continue;

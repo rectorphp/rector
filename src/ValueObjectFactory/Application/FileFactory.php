@@ -42,7 +42,7 @@ final class FileFactory
      * @param string[] $paths
      * @return string[]
      */
-    public function createFileInfosFromPaths(array $paths, Configuration $configuration) : array
+    public function findFilesInPaths(array $paths, Configuration $configuration) : array
     {
         if ($configuration->shouldClearCache()) {
             $this->changedFilesDetector->clear();

@@ -16,33 +16,29 @@ use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\Fixture\FixtureFileFinder;
 use Rector\Testing\Fixture\FixtureFileUpdater;
 use Rector\Testing\Fixture\FixtureSplitter;
-use Rector\Testing\Fixture\FixtureTempFileDumper;
 use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
 abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTestCase implements RectorTestInterface
 {
     use MovingFilesTrait;
     /**
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    protected $parameterProvider;
-    /**
      * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
      */
     protected $removedAndAddedFilesCollector;
     /**
-     * @var string|null
-     */
-    protected $originalTempFilePath;
-    /**
      * @var \Psr\Container\ContainerInterface|null
      */
     protected static $allRectorContainer;
+    /**
+     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
+     */
+    private $parameterProvider;
     /**
      * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
      */
@@ -51,6 +47,10 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
      * @var \Rector\Core\Application\ApplicationFileProcessor
      */
     private $applicationFileProcessor;
+    /**
+     * @var string|null
+     */
+    private $inputFilePath;
     protected function setUp() : void
     {
         // speed up
@@ -73,8 +73,12 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     }
     protected function tearDown() : void
     {
+        // clear temporary file
+        if (\is_string($this->inputFilePath)) {
+            FileSystem::delete($this->inputFilePath);
+        }
         // free memory and trigger gc to reduce memory peak consumption on windows
-        unset($this->applicationFileProcessor, $this->parameterProvider, $this->dynamicSourceLocatorProvider, $this->removedAndAddedFilesCollector, $this->originalTempFilePath);
+        unset($this->applicationFileProcessor, $this->parameterProvider, $this->dynamicSourceLocatorProvider, $this->removedAndAddedFilesCollector);
         \gc_collect_cycles();
     }
     /**
@@ -90,40 +94,25 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     }
     protected function doTestFile(string $fixtureFilePath) : void
     {
+        // prepare input file contents and expected file output contents
         $fixtureFileContents = FileSystem::read($fixtureFilePath);
-        if (Strings::match($fixtureFileContents, FixtureSplitter::SPLIT_LINE_REGEX)) {
+        if (FixtureSplitter::containsSplit($fixtureFileContents)) {
             // changed content
-            [$inputFileContents, $expectedFileContents] = FixtureSplitter::loadFileAndSplitInputAndExpected($fixtureFilePath);
+            [$inputFileContents, $expectedFileContents] = FixtureSplitter::split($fixtureFilePath);
         } else {
             // no change
             $inputFileContents = $fixtureFileContents;
             $expectedFileContents = $fixtureFileContents;
         }
-        $fileSuffix = $this->resolveOriginalFixtureFileSuffix($fixtureFilePath);
-        $inputFilePath = FixtureTempFileDumper::dump($inputFileContents, $fileSuffix);
-        $expectedFilePath = FixtureTempFileDumper::dump($expectedFileContents, $fileSuffix);
-        $this->originalTempFilePath = $inputFilePath;
-        $this->doTestFileMatchesExpectedContent($inputFilePath, $expectedFilePath, $fixtureFilePath);
-    }
-    protected static function getFixtureTempDirectory() : string
-    {
-        return FixtureTempFileDumper::getTempDirectory();
-    }
-    private function resolveExpectedContents(string $filePath) : string
-    {
-        $contents = FileSystem::read($filePath);
-        // make sure we don't get a diff in which every line is different (because of differences in EOL)
-        return \str_replace("\r\n", "\n", $contents);
-    }
-    private function resolveOriginalFixtureFileSuffix(string $filePath) : string
-    {
-        if (\substr_compare($filePath, '.inc', -\strlen('.inc')) === 0) {
-            $filePath = \rtrim($filePath, '.inc');
+        $inputFilePath = $this->createInputFilePath($fixtureFilePath);
+        // to remove later in tearDown()
+        $this->inputFilePath = $inputFilePath;
+        if ($fixtureFilePath === $inputFilePath) {
+            throw new ShouldNotHappenException('Fixture file and input file cannot be the same: ' . $fixtureFilePath);
         }
-        if (\substr_compare($filePath, '.blade.php', -\strlen('.blade.php')) === 0) {
-            return 'blade.php';
-        }
-        return \pathinfo($filePath, \PATHINFO_EXTENSION);
+        // write temp file
+        FileSystem::write($inputFilePath, $inputFileContents);
+        $this->doTestFileMatchesExpectedContent($inputFilePath, $expectedFileContents, $fixtureFilePath);
     }
     private function includePreloadFilesAndScoperAutoload() : void
     {
@@ -139,7 +128,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             require_once __DIR__ . '/../../../vendor/scoper-autoload.php';
         }
     }
-    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $expectedFilePath, string $fixtureFilePath) : void
+    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $expectedFileContents, string $fixtureFilePath) : void
     {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFilePath]);
         $changedContent = $this->processFilePath($originalFilePath);
@@ -148,12 +137,11 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             return;
         }
         try {
-            $this->assertStringEqualsFile($expectedFilePath, $changedContent);
+            $this->assertSame($expectedFileContents, $changedContent);
         } catch (ExpectationFailedException $exception) {
             FixtureFileUpdater::updateFixtureContent($originalFilePath, $changedContent, $fixtureFilePath);
-            $contents = $this->resolveExpectedContents($expectedFilePath);
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
-            $this->assertStringMatchesFormat($contents, $changedContent);
+            $this->assertStringMatchesFormat($expectedFileContents, $changedContent);
         }
     }
     private function processFilePath(string $filePath) : string
@@ -169,5 +157,17 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         $file = new File($filePath, FileSystem::read($filePath));
         $this->applicationFileProcessor->processFiles([$file], $configuration);
         return $file->getFileContent();
+    }
+    private function createInputFilePath(string $fixtureFilePath) : string
+    {
+        $inputFileDirectory = \dirname($fixtureFilePath);
+        // remove ".inc" suffix
+        if (\substr_compare($fixtureFilePath, '.inc', -\strlen('.inc')) === 0) {
+            $trimmedFixtureFilePath = Strings::substring($fixtureFilePath, 0, -4);
+        } else {
+            $trimmedFixtureFilePath = $fixtureFilePath;
+        }
+        $fixtureBasename = \pathinfo($trimmedFixtureFilePath, \PATHINFO_BASENAME);
+        return $inputFileDirectory . '/' . $fixtureBasename;
     }
 }
