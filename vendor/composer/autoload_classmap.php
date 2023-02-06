@@ -1381,7 +1381,6 @@ return array(
     'Rector\\Core\\Contract\\Rector\\PhpRectorInterface' => $baseDir . '/src/Contract/Rector/PhpRectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\RectorInterface' => $baseDir . '/src/Contract/Rector/RectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface' => $baseDir . '/src/Contract/Rector/ScopeAwarePhpRectorInterface.php',
-    'Rector\\Core\\Contract\\Template\\TemplateResolverInterface' => $baseDir . '/src/Contract/Template/TemplateResolverInterface.php',
     'Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector' => $baseDir . '/src/DependencyInjection/Collector/ConfigureCallValuesCollector.php',
     'Rector\\Core\\DependencyInjection\\CompilerPass\\AutowireArrayParameterCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/AutowireArrayParameterCompilerPass.php',
     'Rector\\Core\\DependencyInjection\\CompilerPass\\AutowireRectorCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/AutowireRectorCompilerPass.php',
