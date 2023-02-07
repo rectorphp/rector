@@ -6,7 +6,10 @@ namespace Rector\PHPUnit\NodeFinder;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
+use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 final class DataProviderClassMethodFinder
 {
     /**
@@ -14,16 +17,34 @@ final class DataProviderClassMethodFinder
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    public function __construct(PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, AstResolver $astResolver)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->astResolver = $astResolver;
     }
     /**
      * @return ClassMethod[]
      */
     public function find(Class_ $class) : array
     {
-        $dataProviderMethodNames = $this->resolverDataProviderClassMethodNames($class);
+        $parentAbstractClasses = $this->resolveParentAbstractClasses($class);
+        $targetClasses = \array_merge([$class], $parentAbstractClasses);
+        // foreach to find method names
+        $dataProviderMethodNames = [];
+        foreach ($targetClasses as $targetClass) {
+            $dataProviderMethodNames = \array_merge($dataProviderMethodNames, $this->resolverDataProviderClassMethodNames($targetClass));
+        }
         $dataProviderClassMethods = [];
         foreach ($dataProviderMethodNames as $dataProviderMethodName) {
             $dataProviderClassMethod = $class->getMethod($dataProviderMethodName);
@@ -59,5 +80,25 @@ final class DataProviderClassMethodFinder
     {
         $rawValue = $genericTagValueNode->value;
         return \trim($rawValue, '()');
+    }
+    /**
+     * @return Class_[]
+     */
+    private function resolveParentAbstractClasses(Class_ $class) : array
+    {
+        // resolve from parent one?
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (!$classReflection instanceof ClassReflection) {
+            return [];
+        }
+        $parentClasses = [];
+        foreach ($classReflection->getParents() as $parentClassReflection) {
+            // is the top parent class? stop
+            if ($parentClassReflection->getName() === 'PHPUnit\\Framework\\TestCase') {
+                break;
+            }
+            $parentClasses[] = $this->astResolver->resolveClassFromClassReflection($parentClassReflection);
+        }
+        return $parentClasses;
     }
 }
