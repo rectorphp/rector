@@ -2059,12 +2059,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "1ced18f1a5639d095307dd3c90be752afe09c316"
+                "reference": "933bccdffe41f45b1223ecbfb5750925376ff50b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/1ced18f1a5639d095307dd3c90be752afe09c316",
-                "reference": "1ced18f1a5639d095307dd3c90be752afe09c316",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/933bccdffe41f45b1223ecbfb5750925376ff50b",
+                "reference": "933bccdffe41f45b1223ecbfb5750925376ff50b",
                 "shasum": ""
             },
             "require": {
@@ -2093,7 +2093,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-07T12:28:09+00:00",
+            "time": "2023-02-07T12:36:35+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
