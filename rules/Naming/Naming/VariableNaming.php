@@ -49,6 +49,9 @@ final class VariableNaming
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->assignVariableNameResolvers = $assignVariableNameResolvers;
     }
+    /**
+     * @api
+     */
     public function resolveFromNodeWithScopeCountAndFallbackName(Expr $expr, MutatingScope $mutatingScope, string $fallbackName) : string
     {
         $name = $this->resolveFromNode($expr);
@@ -79,9 +82,6 @@ final class VariableNaming
         }
         return $valueName;
     }
-    /**
-     * @api
-     */
     public function resolveFromFuncCallFirstArgumentWithSuffix(FuncCall $funcCall, string $suffix, string $fallbackName, ?Scope $scope) : string
     {
         $bareName = $this->resolveBareFuncCallArgumentName($funcCall, $fallbackName, $suffix);

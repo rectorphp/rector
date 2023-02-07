@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9
+class ComposerStaticInita6db8ff7685b5b587feeb9f8fbe8099d
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2407,7 +2407,6 @@ class ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9
         'Rector\\Php70\\Rector\\FuncCall\\CallUserMethodRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/FuncCall/CallUserMethodRector.php',
         'Rector\\Php70\\Rector\\FuncCall\\EregToPregMatchRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/FuncCall/EregToPregMatchRector.php',
         'Rector\\Php70\\Rector\\FuncCall\\MultiDirnameRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/FuncCall/MultiDirnameRector.php',
-        'Rector\\Php70\\Rector\\FuncCall\\NonVariableToVariableOnFunctionCallRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/FuncCall/NonVariableToVariableOnFunctionCallRector.php',
         'Rector\\Php70\\Rector\\FuncCall\\RandomFunctionRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/FuncCall/RandomFunctionRector.php',
         'Rector\\Php70\\Rector\\FuncCall\\RenameMktimeWithoutArgsToTimeRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/FuncCall/RenameMktimeWithoutArgsToTimeRector.php',
         'Rector\\Php70\\Rector\\FunctionLike\\ExceptionHandlerTypehintRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/FunctionLike/ExceptionHandlerTypehintRector.php',
@@ -2419,7 +2418,6 @@ class ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9
         'Rector\\Php70\\Rector\\Ternary\\TernaryToNullCoalescingRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Ternary/TernaryToNullCoalescingRector.php',
         'Rector\\Php70\\Rector\\Ternary\\TernaryToSpaceshipRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Ternary/TernaryToSpaceshipRector.php',
         'Rector\\Php70\\Rector\\Variable\\WrapVariableVariableNameInCurlyBracesRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Variable/WrapVariableVariableNameInCurlyBracesRector.php',
-        'Rector\\Php70\\ValueObject\\VariableAssignPair' => __DIR__ . '/../..' . '/rules/Php70/ValueObject/VariableAssignPair.php',
         'Rector\\Php71\\IsArrayAndDualCheckToAble' => __DIR__ . '/../..' . '/rules/Php71/IsArrayAndDualCheckToAble.php',
         'Rector\\Php71\\NodeAnalyzer\\CountableAnalyzer' => __DIR__ . '/../..' . '/rules/Php71/NodeAnalyzer/CountableAnalyzer.php',
         'Rector\\Php71\\Rector\\Assign\\AssignArrayToStringRector' => __DIR__ . '/../..' . '/rules/Php71/Rector/Assign/AssignArrayToStringRector.php',
@@ -3099,9 +3097,9 @@ class ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita6db8ff7685b5b587feeb9f8fbe8099d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita6db8ff7685b5b587feeb9f8fbe8099d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita6db8ff7685b5b587feeb9f8fbe8099d::$classMap;
 
         }, null, ClassLoader::class);
     }
