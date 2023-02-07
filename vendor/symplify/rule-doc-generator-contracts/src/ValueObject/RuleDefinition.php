@@ -23,6 +23,7 @@ final class RuleDefinition
      */
     private $codeSamples = [];
     /**
+     * @readonly
      * @var string
      */
     private $description;
