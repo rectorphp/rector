@@ -2131,12 +2131,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "cd25b6a2f5bb116c65ef7395f5d0e416b2498423"
+                "reference": "948357fafe6f490315216a21b1dd3d02d49a66d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/cd25b6a2f5bb116c65ef7395f5d0e416b2498423",
-                "reference": "cd25b6a2f5bb116c65ef7395f5d0e416b2498423",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/948357fafe6f490315216a21b1dd3d02d49a66d1",
+                "reference": "948357fafe6f490315216a21b1dd3d02d49a66d1",
                 "shasum": ""
             },
             "require": {
@@ -2154,20 +2154,20 @@
                 "rector\/rector-generator": "^0.6",
                 "rector\/rector-src": "dev-main",
                 "symfony\/routing": "^6.1",
-                "symfony\/security-core": "^6.1",
+                "symfony\/security-core": "^6.2",
                 "symfony\/security-http": "^6.1",
                 "symplify\/easy-ci": "^11.1",
                 "symplify\/easy-coding-standard": "^11.2",
-                "symplify\/monorepo-builder": "^11.1",
+                "symplify\/monorepo-builder": "^11.2",
                 "symplify\/phpstan-extensions": "^11.1",
-                "symplify\/phpstan-rules": "^11.1",
-                "symplify\/rule-doc-generator": "^11.1",
-                "symplify\/vendor-patches": "^11.1",
+                "symplify\/phpstan-rules": "^11.2",
+                "symplify\/rule-doc-generator": "^11.2",
+                "symplify\/vendor-patches": "^11.2",
                 "tomasvotruba\/cognitive-complexity": "^0.0.5",
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-06T12:52:12+00:00",
+            "time": "2023-02-06T23:56:14+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2191,7 +2191,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.14.3"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
             },
             "install-path": "..\/rector\/rector-symfony"
         },
