@@ -1,4 +1,4 @@
-# 75 Rules Overview
+# 76 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -193,7 +193,10 @@ use Rector\Config\RectorConfig;
 use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ChangeFileLoaderInExtensionAndKernelRector::class, [ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml', ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml']);
+    $rectorConfig->ruleWithConfiguration(ChangeFileLoaderInExtensionAndKernelRector::class, [
+        ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
+        ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
+    ]);
 };
 ```
 
@@ -1345,7 +1348,10 @@ use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [new ReplaceServiceArgument('ContainerInterface', new String_('service_container', []))]);
+    $rectorConfig->ruleWithConfiguration(ReplaceServiceArgumentRector::class, [
+        new ReplaceServiceArgument('ContainerInterface', new String_('service_container', [
+        ])),
+    ]);
 };
 ```
 
@@ -1471,6 +1477,31 @@ Change `$service->set()` string names to class-type-based names, to allow `$cont
 
 -    $services->set('some_name', App\SomeClass::class);
 +    $services->set('app\\someclass', App\SomeClass::class);
+ };
+```
+
+<br>
+
+## ServiceSettersToSettersAutodiscoveryRector
+
+Change `$services->set(...,` ...) to `$services->load(...,` ...) where meaning ful
+
+- class: [`Rector\Symfony\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector`](../src/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php)
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+-use App\Services\FistService;
+-use App\Services\SecondService;
+-
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $parameters = $containerConfigurator->parameters();
+
+     $services = $containerConfigurator->services();
+
+-    $services->set(FistService::class);
+-    $services->set(SecondService::class);
++    $services->load('App\\Services\\', '../src/Services/*');
  };
 ```
 

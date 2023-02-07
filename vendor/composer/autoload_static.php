@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384
+class ComposerStaticInit55ec482caaceab1f447e198177c13e96
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -35,6 +35,7 @@ class ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384
             'Rector\\Core\\' => 12,
             'Rector\\' => 7,
             'RectorPrefix202302\\Webmozart\\Assert\\' => 36,
+            'RectorPrefix202302\\Triun\\LongestCommonSubstring\\' => 48,
             'RectorPrefix202302\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202302\\Symfony\\Contracts\\' => 37,
             'RectorPrefix202302\\Symfony\\Component\\String\\' => 44,
@@ -123,6 +124,10 @@ class ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384
         'RectorPrefix202302\\Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
+        'RectorPrefix202302\\Triun\\LongestCommonSubstring\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/triun/longest-common-substring/src',
         ),
         'RectorPrefix202302\\Symplify\\EasyParallel\\' => 
         array (
@@ -1317,6 +1322,8 @@ class ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384
         'RectorPrefix202302\\Symplify\\EasyParallel\\ValueObject\\ParallelProcess' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ParallelProcess.php',
         'RectorPrefix202302\\Symplify\\EasyParallel\\ValueObject\\ProcessPool' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/ProcessPool.php',
         'RectorPrefix202302\\Symplify\\EasyParallel\\ValueObject\\Schedule' => __DIR__ . '/..' . '/symplify/easy-parallel/src/ValueObject/Schedule.php',
+        'RectorPrefix202302\\Triun\\LongestCommonSubstring\\Solver' => __DIR__ . '/..' . '/triun/longest-common-substring/src/Solver.php',
+        'RectorPrefix202302\\Triun\\LongestCommonSubstring\\SolverInterface' => __DIR__ . '/..' . '/triun/longest-common-substring/src/SolverInterface.php',
         'RectorPrefix202302\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix202302\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix202302\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
@@ -2810,6 +2817,7 @@ class ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384
         'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ContainerGetNameToTypeInTestsRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ContainerGetNameToTypeInTestsRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
+        'Rector\\Symfony\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ServicesSetNameToSetTypeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServicesSetNameToSetTypeRector.php',
         'Rector\\Symfony\\Rector\\ConstFetch\\ConstraintUrlOptionRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ConstFetch/ConstraintUrlOptionRector.php',
         'Rector\\Symfony\\Rector\\FuncCall\\ReplaceServiceArgumentRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/FuncCall/ReplaceServiceArgumentRector.php',
@@ -2868,6 +2876,7 @@ class ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384
         'Rector\\Symfony\\TypeAnalyzer\\JMSDITypeResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/JMSDITypeResolver.php',
         'Rector\\Symfony\\TypeDeclaration\\ReturnTypeDeclarationUpdater' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeDeclaration/ReturnTypeDeclarationUpdater.php',
         'Rector\\Symfony\\ValueObjectFactory\\ServiceMapFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObjectFactory/ServiceMapFactory.php',
+        'Rector\\Symfony\\ValueObject\\ClassNameAndFilePath' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ClassNameAndFilePath.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyCommandConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyCommandConstantMap.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyRequestConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyRequestConstantMap.php',
         'Rector\\Symfony\\ValueObject\\ConstantMap\\SymfonyResponseConstantMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ConstantMap/SymfonyResponseConstantMap.php',
@@ -3080,9 +3089,9 @@ class ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit36cb3b9d8499b09a857da3f0cb0c4384::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit55ec482caaceab1f447e198177c13e96::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit55ec482caaceab1f447e198177c13e96::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit55ec482caaceab1f447e198177c13e96::$classMap;
 
         }, null, ClassLoader::class);
     }

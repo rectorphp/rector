@@ -18,6 +18,7 @@ return array(
     'Rector\\Core\\' => array($baseDir . '/src'),
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules', $vendorDir . '/rector/rector-downgrade-php/src', $vendorDir . '/rector/rector-downgrade-php/rules'),
     'RectorPrefix202302\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
+    'RectorPrefix202302\\Triun\\LongestCommonSubstring\\' => array($vendorDir . '/triun/longest-common-substring/src'),
     'RectorPrefix202302\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
     'RectorPrefix202302\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
     'RectorPrefix202302\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace RectorPrefix202302;
 
 use Rector\Config\RectorConfig;
+use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -19,7 +20,7 @@ return static function (RectorConfig $rectorConfig) : void {
         '*/Source*/*',
         '*/tests/*/Fixture*/Expected/*',
         StringClassNameToClassConstantRector::class => [__DIR__ . '/config'],
-        \Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
+        RenameForeachValueVariableToMatchMethodCallReturnTypeRector::class => [
             // "data" => "datum" false positive
             __DIR__ . '/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
         ],

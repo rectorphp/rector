@@ -2131,18 +2131,19 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "948357fafe6f490315216a21b1dd3d02d49a66d1"
+                "reference": "89e994ffb68921d571bbf5b8e1d59280b7f30a50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/948357fafe6f490315216a21b1dd3d02d49a66d1",
-                "reference": "948357fafe6f490315216a21b1dd3d02d49a66d1",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/89e994ffb68921d571bbf5b8e1d59280b7f30a50",
+                "reference": "89e994ffb68921d571bbf5b8e1d59280b7f30a50",
                 "shasum": ""
             },
             "require": {
                 "ext-xml": "*",
                 "php": ">=8.1",
-                "symfony\/string": "^6.1"
+                "symfony\/string": "^6.1",
+                "triun\/longest-common-substring": "^1.0"
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.2",
@@ -2167,7 +2168,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-06T23:56:14+00:00",
+            "time": "2023-02-07T01:40:50+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -3176,6 +3177,55 @@
                 }
             ],
             "install-path": "..\/symplify\/rule-doc-generator-contracts"
+        },
+        {
+            "name": "triun\/longest-common-substring",
+            "version": "1.0.0",
+            "version_normalized": "1.0.0.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/Triun\/PHP-Longest-Common-Substring.git",
+                "reference": "eb353758f4b2ec8c874ad36c2acd35d38cf436d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/Triun\/PHP-Longest-Common-Substring\/zipball\/eb353758f4b2ec8c874ad36c2acd35d38cf436d4",
+                "reference": "eb353758f4b2ec8c874ad36c2acd35d38cf436d4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0.0"
+            },
+            "require-dev": {
+                "phpunit\/phpunit": "^6.5",
+                "squizlabs\/php_codesniffer": "^3.2",
+                "symfony\/var-dumper": "^3.4"
+            },
+            "time": "2018-04-08T13:56:01+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix202302\\Triun\\LongestCommonSubstring\\": "src\/"
+                }
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Gonzalo Moreno",
+                    "homepage": "https:\/\/github.com\/gonzalom"
+                }
+            ],
+            "description": "PHP implementation of an algorithm to solve the `longest common substring` problem.",
+            "homepage": "https:\/\/github.com\/Triun",
+            "support": {
+                "issues": "https:\/\/github.com\/Triun\/PHP-Longest-Common-Substring\/issues",
+                "source": "https:\/\/github.com\/Triun\/PHP-Longest-Common-Substring"
+            },
+            "install-path": "..\/triun\/longest-common-substring"
         },
         {
             "name": "webmozart\/assert",
