@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcc56f372859d250d46691667baa25a8f
+class ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -31,7 +31,6 @@ class ComposerStaticInitcc56f372859d250d46691667baa25a8f
             'Rector\\Utils\\' => 13,
             'Rector\\Symfony\\' => 15,
             'Rector\\RectorInstaller\\' => 23,
-            'Rector\\PhpParser\\' => 17,
             'Rector\\PHPUnit\\' => 15,
             'Rector\\Doctrine\\' => 16,
             'Rector\\Core\\' => 12,
@@ -99,10 +98,6 @@ class ComposerStaticInitcc56f372859d250d46691667baa25a8f
         'Rector\\RectorInstaller\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/extension-installer/src',
-        ),
-        'Rector\\PhpParser\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/rector/rector-php-parser/src',
         ),
         'Rector\\PHPUnit\\' => 
         array (
@@ -2600,8 +2595,6 @@ class ComposerStaticInitcc56f372859d250d46691667baa25a8f
         'Rector\\PhpDocParser\\PhpParser\\SmartPhpParserFactory' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpParser/SmartPhpParserFactory.php',
         'Rector\\PhpDocParser\\TypeAnalyzer\\ClassMethodReturnTypeResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/TypeAnalyzer/ClassMethodReturnTypeResolver.php',
         'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/AttributeKey.php',
-        'Rector\\PhpParser\\Rector\\MethodCall\\ParserFactoryRector' => __DIR__ . '/..' . '/rector/rector-php-parser/src/Rector/MethodCall/ParserFactoryRector.php',
-        'Rector\\PhpParser\\Set\\PhpParserSetList' => __DIR__ . '/..' . '/rector/rector-php-parser/src/Set/PhpParserSetList.php',
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/packages/PostRector/Application/PostFileProcessor.php',
         'Rector\\PostRector\\Collector\\NodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToAddCollector.php',
         'Rector\\PostRector\\Collector\\NodesToRemoveCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToRemoveCollector.php',
@@ -3106,9 +3099,9 @@ class ComposerStaticInitcc56f372859d250d46691667baa25a8f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcc56f372859d250d46691667baa25a8f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcc56f372859d250d46691667baa25a8f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcc56f372859d250d46691667baa25a8f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit576dff0c2e3cd10b4aa48e61961493e9::$classMap;
 
         }, null, ClassLoader::class);
     }

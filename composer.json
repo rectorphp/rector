@@ -23,7 +23,6 @@
         "rector/rector-phpunit": "*",
         "rector/rector-symfony": "*",
         "rector/rector-doctrine": "*",
-        "rector/rector-php-parser": "*",
         "rector/rector-downgrade-php": "*"
     },
     "minimum-stability": "dev",
