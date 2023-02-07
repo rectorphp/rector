@@ -1,0 +1,73 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+/**
+ * @var \Throwable $exception
+ * @var array[] $actions
+ * @var string[] $info
+ * @var string $source
+ * @var ?array $lastError
+ * @var string[] $httpHeaders
+ * @var callable $dump
+ * @var array $snapshot
+ * @var bool $showEnvironment
+ * @var BlueScreen $this
+ * @var bool $headersSent
+ * @var ?string $headersFile
+ * @var ?int $headersLine
+ * @var ?array $obStatus
+ * @var \Generator[] $generators
+ * @var \Fiber[] $fibers
+ */
+?>
+<tracy-div id="tracy-bs" itemscope>
+	<a id="tracy-bs-toggle" href="#" class="tracy-toggle">&#xfeff;</a>
+	<div class="tracy-bs-main">
+<?php $ex = $exception; $exceptions = []; ?>
+<?php require __DIR__ . '/section-exception.phtml' ?>
+
+<?php require __DIR__ . '/section-lastMutedError.phtml' ?>
+
+<?php $bottomPanels = [] ?>
+<?php foreach ($this->renderPanels(null) as $panel): ?>
+<?php if (!empty($panel->bottom)) { $bottomPanels[] = $panel; continue; } ?>
+<?php $collapsedClass = !isset($panel->collapsed) || $panel->collapsed ? ' tracy-collapsed' : ''; ?>
+		<section class="tracy-section">
+			<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle<?= $collapsedClass ?>"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
+
+			<div class="tracy-section-panel<?= $collapsedClass ?>">
+			<?= $panel->panel ?>
+			</div>
+		</section>
+<?php endforeach ?>
+
+<?php require __DIR__ . '/section-environment.phtml' ?>
+
+<?php require __DIR__ . '/section-cli.phtml' ?>
+
+<?php require __DIR__ . '/section-http.phtml' ?>
+
+<?php foreach ($bottomPanels as $panel): ?>
+		<section class="tracy-section">
+			<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle"><?= Helpers::escapeHtml($panel->tab) ?></a></h2>
+
+			<div class="tracy-section-panel">
+			<?= $panel->panel ?>
+			</div>
+		</section>
+<?php endforeach ?>
+
+		<footer>
+			<ul>
+				<li><b><a href="https://github.com/sponsors/dg" target="_blank" rel="noreferrer noopener">Please support Tracy via a donation 💙️</a></b></li>
+				<li>Report generated at <?= date('Y/m/d H:i:s') ?></li>
+				<?php foreach ($info as $item): ?><li><?= Helpers::escapeHtml($item) ?></li><?php endforeach ?>
+			</ul>
+			<div class="tracy-footer-logo"><a href="https://tracy.nette.org" rel="noreferrer"></a></div>
+		</footer>
+	</div>
+	<meta itemprop=tracy-snapshot content=<?= Dumper::formatSnapshotAttribute($snapshot) ?>>
+</tracy-div>

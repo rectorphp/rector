@@ -1,0 +1,103 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+/**
+ * @var callable $dump
+ * @var bool $showEnvironment
+ * @var array $obStatus
+ * @var BlueScreen $this
+ */
+
+if (!$showEnvironment) {
+	return;
+}
+
+$constants = get_defined_constants(true)['user'] ?? [];
+?>
+<section class="tracy-section">
+	<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Environment</a></h2>
+
+	<div class="tracy-section-panel tracy-collapsed">
+
+	<div class="tracy-tabs">
+		<ul class="tracy-tab-bar">
+			<li class="tracy-tab-label tracy-active"><a href="#">$_SERVER</a></li>
+<?php if ($_SESSION ?? null): ?>
+			<li class="tracy-tab-label"><a href="#">$_SESSION</a></li>
+<?php endif ?>
+<?php if ($constants): ?>
+			<li class="tracy-tab-label"><a href="#">Constants</a></li>
+<?php endif ?>
+			<li class="tracy-tab-label"><a href="#">Configuration</a></li>
+<?php if ($obStatus): ?>
+			<li class="tracy-tab-label"><a href="#">Output buffers</a></li>
+<?php endif ?>
+
+		</ul>
+
+
+		<div>
+			<div class="tracy-tab-panel tracy-pane tracy-active">
+				<table class="tracy-sortable">
+<?php foreach ($_SERVER as $k => $v): ?>
+				<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
+<?php endforeach ?>
+				</table>
+			</div>
+
+
+<?php if ($_SESSION ?? null): ?>
+			<div class="tracy-tab-panel">
+				<div class="tracy-pane">
+					<table class="tracy-sortable">
+<?php	foreach ($_SESSION as $k => $v): ?>
+						<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $k === '__NF' ? '<i>Nette Session</i>' : $dump($v, $k) ?></td></tr>
+<?php	endforeach ?>
+					</table>
+				</div>
+
+
+<?php if (!empty($_SESSION['__NF']['DATA'])):?>
+				<h3>Nette Session</h3>
+				<div class="tracy-pane">
+					<table class="tracy-sortable">
+<?php	foreach ($_SESSION['__NF']['DATA'] as $k => $v): ?>
+						<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
+<?php	endforeach ?>
+					</table>
+				</div>
+<?php endif ?>
+			</div>
+<?php endif ?>
+
+
+
+<?php if ($constants): ?>
+			<div class="tracy-tab-panel tracy-pane">
+				<table class="tracy-sortable">
+<?php	foreach ($constants as $k => $v): ?>
+					<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
+<?php	endforeach ?>
+				</table>
+			</div>
+<?php endif ?>
+
+
+			<div class="tracy-tab-panel">
+				<?php $this->renderPhpInfo() ?>
+
+			</div>
+
+
+<?php if ($obStatus): ?>
+			<div class="tracy-tab-panel tracy-pane">
+				<?= Dumper::toHtml($obStatus, [Dumper::COLLAPSE_COUNT => 10]) ?>
+			</div>
+<?php endif ?>
+		</div>
+	</div>
+	</div>
+</section>

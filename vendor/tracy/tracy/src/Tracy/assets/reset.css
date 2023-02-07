@@ -1,0 +1,376 @@
+/**
+ * This file is part of the Tracy (https://tracy.nette.org)
+ */
+
+tracy-div:not(a b),
+tracy-div:not(a b) * {
+	font: inherit;
+	line-height: inherit;
+	color: inherit;
+	background: transparent;
+	margin: 0;
+	padding: 0;
+	border: none;
+	text-align: inherit;
+	list-style: inherit;
+	opacity: 1;
+	border-radius: 0;
+	box-shadow: none;
+	text-shadow: none;
+	box-sizing: border-box;
+	text-decoration: none;
+	text-transform: inherit;
+	white-space: inherit;
+	float: none;
+	clear: none;
+	max-width: initial;
+	min-width: initial;
+	max-height: initial;
+	min-height: initial;
+}
+
+tracy-div:not(a b) *:hover {
+	color: inherit;
+	background: transparent;
+}
+
+tracy-div:not(a b) *:not(svg):not(img):not(table) {
+	width: initial;
+	height: initial;
+}
+
+tracy-div:not(a b):before,
+tracy-div:not(a b):after,
+tracy-div:not(a b) *:before,
+tracy-div:not(a b) *:after {
+	all: unset;
+}
+
+tracy-div:not(a b) b,
+tracy-div:not(a b) strong {
+	font-weight: bold;
+}
+
+tracy-div:not(a b) small {
+	font-size: smaller;
+}
+
+tracy-div:not(a b) i,
+tracy-div:not(a b) em {
+	font-style: italic;
+}
+
+tracy-div:not(a b) big {
+	font-size: larger;
+}
+
+tracy-div:not(a b) small,
+tracy-div:not(a b) sub,
+tracy-div:not(a b) sup {
+	font-size: smaller;
+}
+
+tracy-div:not(a b) ins {
+	text-decoration: underline;
+}
+
+tracy-div:not(a b) del {
+	text-decoration: line-through;
+}
+
+tracy-div:not(a b) table {
+	border-collapse: collapse;
+}
+
+tracy-div:not(a b) pre {
+	font-family: monospace;
+	white-space: pre;
+}
+
+tracy-div:not(a b) code,
+tracy-div:not(a b) kbd,
+tracy-div:not(a b) samp {
+	font-family: monospace;
+}
+
+tracy-div:not(a b) input {
+	background-color: white;
+	padding: 1px;
+	border: 1px solid;
+}
+
+tracy-div:not(a b) textarea {
+	background-color: white;
+	border: 1px solid;
+	padding: 2px;
+	white-space: pre-wrap;
+}
+
+tracy-div:not(a b) select {
+	border: 1px solid;
+	white-space: pre;
+}
+
+tracy-div:not(a b) article,
+tracy-div:not(a b) aside,
+tracy-div:not(a b) details,
+tracy-div:not(a b) div,
+tracy-div:not(a b) figcaption,
+tracy-div:not(a b) footer,
+tracy-div:not(a b) form,
+tracy-div:not(a b) header,
+tracy-div:not(a b) hgroup,
+tracy-div:not(a b) main,
+tracy-div:not(a b) nav,
+tracy-div:not(a b) section,
+tracy-div:not(a b) summary,
+tracy-div:not(a b) pre,
+tracy-div:not(a b) p,
+tracy-div:not(a b) dl,
+tracy-div:not(a b) dd,
+tracy-div:not(a b) dt,
+tracy-div:not(a b) blockquote,
+tracy-div:not(a b) figure,
+tracy-div:not(a b) address,
+tracy-div:not(a b) h1,
+tracy-div:not(a b) h2,
+tracy-div:not(a b) h3,
+tracy-div:not(a b) h4,
+tracy-div:not(a b) h5,
+tracy-div:not(a b) h6,
+tracy-div:not(a b) ul,
+tracy-div:not(a b) ol,
+tracy-div:not(a b) li,
+tracy-div:not(a b) hr {
+	display: block;
+}
+
+tracy-div:not(a b) a,
+tracy-div:not(a b) b,
+tracy-div:not(a b) big,
+tracy-div:not(a b) code,
+tracy-div:not(a b) em,
+tracy-div:not(a b) i,
+tracy-div:not(a b) small,
+tracy-div:not(a b) span,
+tracy-div:not(a b) strong {
+	display: inline;
+}
+
+tracy-div:not(a b) table {
+	display: table;
+}
+
+tracy-div:not(a b) tr {
+	display: table-row;
+}
+
+tracy-div:not(a b) col {
+	display: table-column;
+}
+
+tracy-div:not(a b) colgroup {
+	display: table-column-group;
+}
+
+tracy-div:not(a b) tbody {
+	display: table-row-group;
+}
+
+tracy-div:not(a b) thead {
+	display: table-header-group;
+}
+
+tracy-div:not(a b) tfoot {
+	display: table-footer-group;
+}
+
+tracy-div:not(a b) td {
+	display: table-cell;
+}
+
+tracy-div:not(a b) th {
+	display: table-cell;
+}
+
+
+
+/* TableSort */
+tracy-div:not(a b) .tracy-sortable > :first-child > tr:first-child > * {
+	position: relative;
+}
+
+tracy-div:not(a b) .tracy-sortable > :first-child > tr:first-child > *:hover:before {
+	position: absolute;
+	right: .3em;
+	content: "\21C5";
+	opacity: .4;
+	font-weight: normal;
+}
+
+
+/* dump */
+tracy-div:not(a b) .tracy-dump div {
+	padding-left: 3ex;
+}
+
+tracy-div:not(a b) .tracy-dump div div {
+	border-left: 1px solid rgba(0, 0, 0, .1);
+	margin-left: .5ex;
+}
+
+tracy-div:not(a b) .tracy-dump div div:hover {
+	border-left-color: rgba(0, 0, 0, .25);
+}
+
+tracy-div:not(a b) .tracy-dump {
+	background: #FDF5CE;
+	padding: .4em .7em;
+	border: 1px dotted silver;
+	overflow: auto;
+}
+
+tracy-div:not(a b) table .tracy-dump.tracy-dump { /* overwrite .tracy-dump.tracy-light etc. */
+	padding: 0;
+	margin: 0;
+	border: none;
+}
+
+tracy-div:not(a b) .tracy-dump-location {
+	color: gray;
+	font-size: 80%;
+	text-decoration: none;
+	background: none;
+	opacity: .5;
+	float: right;
+	cursor: pointer;
+}
+
+tracy-div:not(a b) .tracy-dump-location:hover,
+tracy-div:not(a b) .tracy-dump-location:focus {
+	color: gray;
+	background: none;
+	opacity: 1;
+}
+
+tracy-div:not(a b) .tracy-dump-array,
+tracy-div:not(a b) .tracy-dump-object {
+	color: #C22;
+}
+
+tracy-div:not(a b) .tracy-dump-string {
+	color: #35D;
+	white-space: break-spaces;
+}
+
+tracy-div:not(a b) div.tracy-dump-string {
+	position: relative;
+	padding-left: 3.5ex;
+}
+
+tracy-div:not(a b) .tracy-dump-lq {
+	margin-left: calc(-1ex - 1px);
+}
+
+tracy-div:not(a b) div.tracy-dump-string:before {
+	content: '';
+	position: absolute;
+	left: calc(3ex - 1px);
+	top: 1.5em;
+	bottom: 0;
+	border-left: 1px solid rgba(0, 0, 0, .1);
+}
+
+tracy-div:not(a b) .tracy-dump-virtual span,
+tracy-div:not(a b) .tracy-dump-dynamic span,
+tracy-div:not(a b) .tracy-dump-string span {
+	color: rgba(0, 0, 0, 0.5);
+}
+
+tracy-div:not(a b) .tracy-dump-virtual i,
+tracy-div:not(a b) .tracy-dump-dynamic i,
+tracy-div:not(a b) .tracy-dump-string i {
+	font-size: 80%;
+	font-style: normal;
+	color: rgba(0, 0, 0, 0.5);
+	user-select: none;
+}
+
+tracy-div:not(a b) .tracy-dump-number {
+	color: #090;
+}
+
+tracy-div:not(a b) .tracy-dump-null,
+tracy-div:not(a b) .tracy-dump-bool {
+	color: #850;
+}
+
+tracy-div:not(a b) .tracy-dump-virtual {
+	font-style: italic;
+}
+
+tracy-div:not(a b) .tracy-dump-public::after {
+	content: ' pub';
+}
+
+tracy-div:not(a b) .tracy-dump-protected::after {
+	content: ' pro';
+}
+
+tracy-div:not(a b) .tracy-dump-private::after {
+	content: ' pri';
+}
+
+tracy-div:not(a b) .tracy-dump-public::after,
+tracy-div:not(a b) .tracy-dump-protected::after,
+tracy-div:not(a b) .tracy-dump-private::after,
+tracy-div:not(a b) .tracy-dump-hash {
+	font-size: 85%;
+	color: rgba(0, 0, 0, 0.5);
+}
+
+tracy-div:not(a b) .tracy-dump-indent {
+	display: none;
+}
+
+tracy-div:not(a b) .tracy-dump-highlight {
+	background: #C22;
+	color: white;
+	border-radius: 2px;
+	padding: 0 2px;
+	margin: 0 -2px;
+}
+
+tracy-div:not(a b) span[data-tracy-href] {
+	border-bottom: 1px dotted rgba(0, 0, 0, .2);
+}
+
+
+/* toggle */
+tracy-div:not(a b) .tracy-toggle:after {
+	content: '';
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 0;
+	border-top: .6ex solid;
+	border-right: .6ex solid transparent;
+	border-left: .6ex solid transparent;
+	transform: scale(1, 1.5);
+	margin: 0 .2ex 0 .7ex;
+	transition: .1s transform;
+	opacity: .5;
+}
+
+tracy-div:not(a b) .tracy-toggle.tracy-collapsed:after {
+	transform: rotate(-90deg) scale(1, 1.5) translate(.1ex, 0);
+}
+
+
+/* tabs */
+tracy-div:not(a b) .tracy-tab-label {
+	user-select: none;
+}
+
+tracy-div:not(a b) .tracy-tab-panel:not(.tracy-active) {
+	display: none;
+}

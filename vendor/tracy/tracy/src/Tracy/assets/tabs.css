@@ -1,0 +1,11 @@
+/**
+ * This file is part of the Tracy (https://tracy.nette.org)
+ */
+
+.tracy-tab-label {
+	user-select: none;
+}
+
+.tracy-tab-panel:not(.tracy-active) {
+	display: none;
+}

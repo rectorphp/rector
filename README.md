@@ -133,6 +133,24 @@ Or with Xdebug:
 vendor/bin/rector process src/Controller --dry-run --xdebug
 ```
 
+To assist with simple debugging Rector provides 2 helpers to pretty-print AST-nodes:
+
+```php
+use PhpParser\Node\Scalar\String_;
+$node = new String_('hello world!');
+
+// prints node to string, as PHP code displays it
+print_node($node);
+
+// dump nested node object with nested properties
+dump_node($node);
+
+// 2nd argument is how deep the nesting is - this makes sure the dump is short and useful
+dump_node($node, 1);
+```
+
+<br>
+
 ## Known Drawbacks
 
 ### How to Apply Coding Standards?

@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+/**
+ * @var \Throwable $ex
+ * @var callable $dump
+ */
+
+if (count((array) $ex) <= count((array) new \Exception)) {
+	return;
+}
+?>
+<section class="tracy-section">
+	<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">Exception</a></h2>
+	<div class="tracy-section-panel tracy-collapsed">
+		<?= $dump($ex) ?>
+	</div>
+</section>

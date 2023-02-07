@@ -1,0 +1,91 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tracy;
+
+/**
+ * @var string $source
+ * @var string[] $httpHeaders
+ * @var callable $dump
+ * @var bool $headersSent
+ * @var ?string $headersFile
+ * @var ?int $headersLine
+ */
+
+if (Helpers::isCli()) {
+	return;
+}
+?>
+<section class="tracy-section">
+	<h2 class="tracy-section-label"><a href="#" data-tracy-ref="^+" class="tracy-toggle tracy-collapsed">HTTP</a></h2>
+
+	<div class="tracy-section-panel tracy-collapsed">
+
+	<div class="tracy-tabs">
+		<ul class="tracy-tab-bar">
+			<li class="tracy-tab-label tracy-active"><a href="#">Request</a></li>
+			<li class="tracy-tab-label"><a href="#">Response</a></li>
+		</ul>
+
+		<div>
+
+			<div class="tracy-tab-panel tracy-active">
+			<h3><?= Helpers::escapeHtml($_SERVER['REQUEST_METHOD'] ?? 'URL') ?> <a href="<?= Helpers::escapeHtml($source) ?>" target="_blank" rel="noreferrer noopener" style="font-weight: normal"><?= Helpers::escapeHtml($source) ?></a></h3>
+
+<?php if ($httpHeaders): ?>
+			<div class="tracy-pane">
+				<table class="tracy-sortable">
+<?php	foreach ($httpHeaders as $k => $v): ?>
+					<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
+<?php	endforeach ?>
+				</table>
+			</div>
+<?php endif ?>
+
+
+<?php foreach (['_GET', '_POST', '_COOKIE'] as $name): ?>
+			<h3>$<?= Helpers::escapeHtml($name) ?></h3>
+<?php	if (empty($GLOBALS[$name])):?>
+			<p><i>empty</i></p>
+<?php	else: ?>
+			<div class="tracy-pane">
+				<table class="tracy-sortable">
+<?php	foreach ($GLOBALS[$name] as $k => $v): ?>
+					<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
+<?php	endforeach ?>
+				</table>
+			</div>
+<?php	endif ?>
+<?php endforeach ?>
+			</div>
+
+
+			<div class="tracy-tab-panel">
+			<h3>Code: <?= Helpers::escapeHtml(http_response_code()) ?></h3>
+<?php if (headers_list()): ?>
+			<div class="tracy-pane">
+				<table class="tracy-sortable">
+<?php	foreach (headers_list() as $s): $s = explode(':', $s, 2); ?>
+					<tr><th><?= Helpers::escapeHtml($s[0]) ?></th><td><?= $dump(trim($s[1]), $s[0]) ?></td></tr>
+<?php	endforeach ?>
+				</table>
+			</div>
+<?php else: ?>
+			<p><i>no headers</i></p>
+<?php endif ?>
+
+
+<?php if ($headersSent && $headersFile && @is_file($headersFile)): ?>
+			<p>Headers have been sent, output started at <?= Helpers::editorLink($headersFile, $headersLine) ?> <a href="#" data-tracy-ref="^p + div" class="tracy-toggle tracy-collapsed">source</a></p>
+			<div class="tracy-collapsed"><?= BlueScreen::highlightFile($headersFile, $headersLine) ?></div>
+<?php elseif ($headersSent): ?>
+			<p>Headers have been sent</p>
+<?php else: ?>
+			<p>Headers were not sent at the time the exception was thrown</p>
+<?php endif ?>
+			</div>
+		</div>
+	</div>
+	</div>
+</section>
