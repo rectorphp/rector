@@ -3,8 +3,10 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
+use RectorPrefix202302\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Name;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeTraverser;
@@ -111,6 +113,13 @@ CODE_SAMPLE
                 return null;
             }
             $names[] = $node->toString();
+            if ($node instanceof FullyQualified) {
+                $originalName = $node->getAttribute(AttributeKey::ORIGINAL_NAME);
+                if ($originalName instanceof Name) {
+                    // collect original Name as well to cover namespaced used
+                    $names[] = $originalName->toString();
+                }
+            }
             return $node;
         });
         return $names;
@@ -147,9 +156,13 @@ CODE_SAMPLE
         if (\in_array($comparedName, $names, \true)) {
             return \true;
         }
+        $namespacedPrefix = Strings::after($comparedName, '\\', -1) . '\\';
         // match partial import
         foreach ($names as $name) {
             if (\substr_compare($comparedName, $name, -\strlen($name)) === 0) {
+                return \true;
+            }
+            if (\strncmp($name, $namespacedPrefix, \strlen($namespacedPrefix)) === 0) {
                 return \true;
             }
         }
