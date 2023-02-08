@@ -157,6 +157,9 @@ CODE_SAMPLE
             return \true;
         }
         $namespacedPrefix = Strings::after($comparedName, '\\', -1) . '\\';
+        if ($namespacedPrefix === '\\') {
+            $namespacedPrefix = $comparedName . '\\';
+        }
         // match partial import
         foreach ($names as $name) {
             if (\substr_compare($comparedName, $name, -\strlen($name)) === 0) {
