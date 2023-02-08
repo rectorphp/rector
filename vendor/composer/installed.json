@@ -798,17 +798,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.9.16",
-            "version_normalized": "1.9.16.0",
+            "version": "1.9.17",
+            "version_normalized": "1.9.17.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "922e2689bb180575d0f57de0443c431a5a698e8f"
+                "reference": "204e459e7822f2c586463029f5ecec31bb45a1f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/922e2689bb180575d0f57de0443c431a5a698e8f",
-                "reference": "922e2689bb180575d0f57de0443c431a5a698e8f",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/204e459e7822f2c586463029f5ecec31bb45a1f2",
+                "reference": "204e459e7822f2c586463029f5ecec31bb45a1f2",
                 "shasum": ""
             },
             "require": {
@@ -817,7 +817,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2023-02-07T10:42:21+00:00",
+            "time": "2023-02-08T12:25:00+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -840,7 +840,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.9.16"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.9.17"
             },
             "funding": [
                 {
@@ -1915,48 +1915,39 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "46346e2425dcc68086c540102d8e5e54b3cd97cf"
+                "reference": "e4df3fd5345ced0071e8857aa19fbc2b93c01e9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/46346e2425dcc68086c540102d8e5e54b3cd97cf",
-                "reference": "46346e2425dcc68086c540102d8e5e54b3cd97cf",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/e4df3fd5345ced0071e8857aa19fbc2b93c01e9d",
+                "reference": "e4df3fd5345ced0071e8857aa19fbc2b93c01e9d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "conflict": {
-                "rector\/rector": "<0.13"
-            },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.2",
                 "phpstan\/phpstan": "^1.9",
-                "phpstan\/phpstan-strict-rules": "^1.4",
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.0",
                 "rector\/phpstan-rules": "^0.6",
-                "rector\/rector-debugging": "dev-main",
                 "rector\/rector-generator": "^0.6.14",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-ci": "^11.2",
-                "symplify\/easy-coding-standard": "^11.1",
+                "symplify\/easy-coding-standard": "^11.2",
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.1",
-                "symplify\/rule-doc-generator": "^11.1",
-                "symplify\/vendor-patches": "^11.1",
+                "symplify\/rule-doc-generator": "^11.2",
                 "tomasvotruba\/cognitive-complexity": "^0.0.5",
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-03T18:31:11+00:00",
+            "time": "2023-02-08T14:48:16+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
                 "enable-patching": true,
-                "branch-alias": {
-                    "dev-main": "0.11-dev"
-                },
                 "rector": {
                     "includes": [
                         "config\/config.php"
@@ -2525,8 +2516,7 @@
             "type": "library",
             "extra": {
                 "patches_applied": [
-                    "https:\/\/raw.githubusercontent.com\/symplify\/vendor-patch-files\/main\/patches\/generic-php-config-loader.patch",
-                    "https:\/\/raw.githubusercontent.com\/rectorphp\/vendor-patches\/main\/patches\/symfony-dependency-injection.patch"
+                    "https:\/\/raw.githubusercontent.com\/symplify\/vendor-patch-files\/main\/patches\/generic-php-config-loader.patch"
                 ]
             },
             "installation-source": "dist",

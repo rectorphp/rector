@@ -1408,7 +1408,6 @@ return array(
     'Rector\\Core\\DependencyInjection\\DocBlock\\ParamTypeDocBlockResolver' => $baseDir . '/src/DependencyInjection/DocBlock/ParamTypeDocBlockResolver.php',
     'Rector\\Core\\DependencyInjection\\Exception\\DefinitionForTypeNotFoundException' => $baseDir . '/src/DependencyInjection/Exception/DefinitionForTypeNotFoundException.php',
     'Rector\\Core\\DependencyInjection\\Loader\\ConfigurableCallValuesCollectingPhpFileLoader' => $baseDir . '/src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php',
-    'Rector\\Core\\DependencyInjection\\Loader\\Configurator\\RectorServiceConfigurator' => $baseDir . '/src/DependencyInjection/Loader/Configurator/RectorServiceConfigurator.php',
     'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => $baseDir . '/src/DependencyInjection/RectorContainerFactory.php',
     'Rector\\Core\\DependencyInjection\\Skipper\\ParameterSkipper' => $baseDir . '/src/DependencyInjection/Skipper/ParameterSkipper.php',
     'Rector\\Core\\DependencyInjection\\TypeResolver\\ParameterTypeResolver' => $baseDir . '/src/DependencyInjection/TypeResolver/ParameterTypeResolver.php',

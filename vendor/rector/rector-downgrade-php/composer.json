@@ -9,19 +9,16 @@
     "require-dev": {
         "phpstan\/extension-installer": "^1.2",
         "phpstan\/phpstan": "^1.9",
-        "phpstan\/phpstan-strict-rules": "^1.4",
         "phpstan\/phpstan-webmozart-assert": "^1.2",
         "phpunit\/phpunit": "^10.0",
         "rector\/phpstan-rules": "^0.6",
-        "rector\/rector-debugging": "dev-main",
         "rector\/rector-generator": "^0.6.14",
         "rector\/rector-src": "dev-main",
         "symplify\/easy-ci": "^11.2",
-        "symplify\/easy-coding-standard": "^11.1",
+        "symplify\/easy-coding-standard": "^11.2",
         "symplify\/phpstan-extensions": "^11.1",
         "symplify\/phpstan-rules": "^11.1",
-        "symplify\/rule-doc-generator": "^11.1",
-        "symplify\/vendor-patches": "^11.1",
+        "symplify\/rule-doc-generator": "^11.2",
         "tomasvotruba\/cognitive-complexity": "^0.0.5",
         "tomasvotruba\/type-coverage": "^0.0.9",
         "tomasvotruba\/unused-public": "^0.0.34"
@@ -53,14 +50,8 @@
             "vendor\/bin\/rule-doc-generator generate rules --output-file docs\/rector_rules_overview.md --ansi"
         ]
     },
-    "conflict": {
-        "rector\/rector": "<0.13"
-    },
     "extra": {
         "enable-patching": true,
-        "branch-alias": {
-            "dev-main": "0.11-dev"
-        },
         "rector": {
             "includes": [
                 "config\/config.php"

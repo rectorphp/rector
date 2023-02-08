@@ -83,7 +83,7 @@ class ServicesConfigurator extends AbstractConfigurator
      * @param string|null $id    The service id, or null to create an anonymous service
      * @param string|null $class The class of the service, or null when $id is also the class name
      */
-    public function set(?string $id, string $class = null) : \Rector\Core\DependencyInjection\Loader\Configurator\RectorServiceConfigurator
+    public final function set(?string $id, string $class = null) : ServiceConfigurator
     {
         $defaults = $this->defaults;
         $definition = new Definition();
@@ -100,7 +100,7 @@ class ServicesConfigurator extends AbstractConfigurator
         // deep clone, to avoid multiple process of the same instance in the passes
         $definition->setBindings(\unserialize(\serialize($defaults->getBindings())));
         $definition->setChanges([]);
-        $configurator = new \Rector\Core\DependencyInjection\Loader\Configurator\RectorServiceConfigurator($this->container, $this->instanceof, \true, $this, $definition, $id, $defaults->getTags(), $this->path);
+        $configurator = new ServiceConfigurator($this->container, $this->instanceof, \true, $this, $definition, $id, $defaults->getTags(), $this->path);
         return null !== $class ? $configurator->class($class) : $configurator;
     }
     /**
