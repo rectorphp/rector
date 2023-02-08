@@ -19,6 +19,7 @@
         "symplify\/phpstan-extensions": "^11.1",
         "symplify\/phpstan-rules": "^11.1",
         "symplify\/rule-doc-generator": "^11.2",
+        "symplify\/vendor-patches": "^11.2",
         "tomasvotruba\/cognitive-complexity": "^0.0.5",
         "tomasvotruba\/type-coverage": "^0.0.9",
         "tomasvotruba\/unused-public": "^0.0.34"

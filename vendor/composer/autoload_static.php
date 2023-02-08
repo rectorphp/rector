@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6ea0b37f1c056cce8493bb809d686233
+class ComposerStaticInita469e8b9d4d2111f216206d808b3dfa5
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2608,6 +2608,7 @@ class ComposerStaticInit6ea0b37f1c056cce8493bb809d686233
         'Rector\\PostRector\\Rector\\NodeAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NodeAddingPostRector.php',
         'Rector\\PostRector\\Rector\\NodeRemovingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NodeRemovingPostRector.php',
         'Rector\\PostRector\\Rector\\PropertyAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/PropertyAddingPostRector.php',
+        'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UnusedImportRemovingPostRector.php',
         'Rector\\PostRector\\Rector\\UseAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UseAddingPostRector.php',
         'Rector\\PostRector\\ValueObject\\PropertyMetadata' => __DIR__ . '/../..' . '/packages/PostRector/ValueObject/PropertyMetadata.php',
         'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
@@ -3097,9 +3098,9 @@ class ComposerStaticInit6ea0b37f1c056cce8493bb809d686233
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6ea0b37f1c056cce8493bb809d686233::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6ea0b37f1c056cce8493bb809d686233::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6ea0b37f1c056cce8493bb809d686233::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita469e8b9d4d2111f216206d808b3dfa5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita469e8b9d4d2111f216206d808b3dfa5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita469e8b9d4d2111f216206d808b3dfa5::$classMap;
 
         }, null, ClassLoader::class);
     }

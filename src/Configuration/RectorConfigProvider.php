@@ -23,6 +23,10 @@ final class RectorConfigProvider
     {
         return $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
     }
+    public function shouldRemoveUnusedImports() : bool
+    {
+        return $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::REMOVE_UNUSED_IMPORTS);
+    }
     /**
      * @api symfony
      */

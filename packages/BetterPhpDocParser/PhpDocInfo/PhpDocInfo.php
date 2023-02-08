@@ -15,6 +15,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
@@ -396,6 +397,19 @@ final class PhpDocInfo
     public function getNode() : \PhpParser\Node
     {
         return $this->node;
+    }
+    /**
+     * @return string[]
+     */
+    public function getAnnotationClassNames() : array
+    {
+        /** @var IdentifierTypeNode[] $identifierTypeNodes */
+        $identifierTypeNodes = $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, IdentifierTypeNode::class);
+        $resolvedClasses = [];
+        foreach ($identifierTypeNodes as $identifierTypeNode) {
+            $resolvedClasses[] = \ltrim($identifierTypeNode->name, '@');
+        }
+        return $resolvedClasses;
     }
     private function resolveNameForPhpDocTagValueNode(PhpDocTagValueNode $phpDocTagValueNode) : ?string
     {

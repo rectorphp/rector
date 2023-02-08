@@ -1915,12 +1915,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "e4df3fd5345ced0071e8857aa19fbc2b93c01e9d"
+                "reference": "b9bfc7810187570f97d68ee3e51881952cc887d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/e4df3fd5345ced0071e8857aa19fbc2b93c01e9d",
-                "reference": "e4df3fd5345ced0071e8857aa19fbc2b93c01e9d",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b9bfc7810187570f97d68ee3e51881952cc887d5",
+                "reference": "b9bfc7810187570f97d68ee3e51881952cc887d5",
                 "shasum": ""
             },
             "require": {
@@ -1939,11 +1939,12 @@
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.1",
                 "symplify\/rule-doc-generator": "^11.2",
+                "symplify\/vendor-patches": "^11.2",
                 "tomasvotruba\/cognitive-complexity": "^0.0.5",
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-08T14:48:16+00:00",
+            "time": "2023-02-08T14:55:55+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

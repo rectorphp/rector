@@ -2361,6 +2361,7 @@ return array(
     'Rector\\PostRector\\Rector\\NodeAddingPostRector' => $baseDir . '/packages/PostRector/Rector/NodeAddingPostRector.php',
     'Rector\\PostRector\\Rector\\NodeRemovingPostRector' => $baseDir . '/packages/PostRector/Rector/NodeRemovingPostRector.php',
     'Rector\\PostRector\\Rector\\PropertyAddingPostRector' => $baseDir . '/packages/PostRector/Rector/PropertyAddingPostRector.php',
+    'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => $baseDir . '/packages/PostRector/Rector/UnusedImportRemovingPostRector.php',
     'Rector\\PostRector\\Rector\\UseAddingPostRector' => $baseDir . '/packages/PostRector/Rector/UseAddingPostRector.php',
     'Rector\\PostRector\\ValueObject\\PropertyMetadata' => $baseDir . '/packages/PostRector/ValueObject/PropertyMetadata.php',
     'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => $baseDir . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',

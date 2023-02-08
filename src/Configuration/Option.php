@@ -175,4 +175,9 @@ final class Option
      * @var string
      */
     public const INDENT_SIZE = 'indent-size';
+    /**
+     * @internal Use @see \Rector\Config\RectorConfig::removeUnusedImports() method
+     * @var string
+     */
+    public const REMOVE_UNUSED_IMPORTS = 'remove-unused-imports';
 }
