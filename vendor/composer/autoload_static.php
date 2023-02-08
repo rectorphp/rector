@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1626bd9b98df3fc521cf79938cf0de08
+class ComposerStaticInitbc88e1f54f086d15069e60056050418c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2802,6 +2802,7 @@ class ComposerStaticInit1626bd9b98df3fc521cf79938cf0de08
         'Rector\\Symfony\\Rector\\ClassMethod\\FormTypeGetParentRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/FormTypeGetParentRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\GetRequestRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/GetRequestRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\MergeMethodAnnotationToRouteAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/MergeMethodAnnotationToRouteAnnotationRector.php',
+        'Rector\\Symfony\\Rector\\ClassMethod\\ParamConverterAttributeToMapEntityAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\ParamTypeFromRouteRequiredRegexRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ParamTypeFromRouteRequiredRegexRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\RemoveDefaultGetBlockPrefixRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\RemoveServiceFromSensioRouteRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php',
@@ -3097,9 +3098,9 @@ class ComposerStaticInit1626bd9b98df3fc521cf79938cf0de08
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1626bd9b98df3fc521cf79938cf0de08::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1626bd9b98df3fc521cf79938cf0de08::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1626bd9b98df3fc521cf79938cf0de08::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbc88e1f54f086d15069e60056050418c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbc88e1f54f086d15069e60056050418c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbc88e1f54f086d15069e60056050418c::$classMap;
 
         }, null, ClassLoader::class);
     }

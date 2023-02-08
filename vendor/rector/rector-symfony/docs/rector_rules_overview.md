@@ -1,4 +1,4 @@
-# 77 Rules Overview
+# 78 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1072,6 +1072,30 @@ Turns old option names to new ones in FormTypes in Form in Symfony
  $builder = new FormBuilder;
 -$builder->add("...", ["precision" => "...", "virtual" => "..."];
 +$builder->add("...", ["scale" => "...", "inherit_data" => "..."];
+```
+
+<br>
+
+## ParamConverterAttributeToMapEntityAttributeRector
+
+Replace ParamConverter attribute with mappings with the MapEntity attribute
+
+- class: [`Rector\Symfony\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector`](../src/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php)
+
+```diff
+ class SomeController
+ {
+     #[Route('/blog/{date}/{slug}/comments/{comment_slug}')]
+-    #[ParamConverter('post', options: ['mapping' => ['date' => 'date', 'slug' => 'slug']])]
+-    #[ParamConverter('comment', options: ['mapping' => ['comment_slug' => 'slug']])]
+     public function showComment(
+-        Post $post,
+-        Comment $comment
++        #[\Symfony\Bridge\Doctrine\Attribute\MapEntity(mapping: ['date' => 'date', 'slug' => 'slug'])] Post $post,
++        #[\Symfony\Bridge\Doctrine\Attribute\MapEntity(mapping: ['comment_slug' => 'slug'])] Comment $comment
+     ) {
+     }
+ }
 ```
 
 <br>

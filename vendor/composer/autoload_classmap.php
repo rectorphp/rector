@@ -2555,6 +2555,7 @@ return array(
     'Rector\\Symfony\\Rector\\ClassMethod\\FormTypeGetParentRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/FormTypeGetParentRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\GetRequestRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/GetRequestRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\MergeMethodAnnotationToRouteAnnotationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/MergeMethodAnnotationToRouteAnnotationRector.php',
+    'Rector\\Symfony\\Rector\\ClassMethod\\ParamConverterAttributeToMapEntityAttributeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\ParamTypeFromRouteRequiredRegexRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/ParamTypeFromRouteRequiredRegexRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\RemoveDefaultGetBlockPrefixRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\RemoveServiceFromSensioRouteRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php',
