@@ -58,7 +58,7 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Change $services->set(..., ...) to $services->load(..., ...) where meaning ful', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change $services->set(..., ...) to $services->load(..., ...) where meaningful', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use App\Services\FistService;

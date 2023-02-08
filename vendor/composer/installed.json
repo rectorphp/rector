@@ -2062,12 +2062,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "89e994ffb68921d571bbf5b8e1d59280b7f30a50"
+                "reference": "d30ef6be6c074f080cc96db866a243ab327e04f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/89e994ffb68921d571bbf5b8e1d59280b7f30a50",
-                "reference": "89e994ffb68921d571bbf5b8e1d59280b7f30a50",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/d30ef6be6c074f080cc96db866a243ab327e04f3",
+                "reference": "d30ef6be6c074f080cc96db866a243ab327e04f3",
                 "shasum": ""
             },
             "require": {
@@ -2082,7 +2082,6 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
                 "phpunit\/phpunit": "^10.0",
                 "rector\/phpstan-rules": "^0.6",
-                "rector\/rector-debugging": "dev-main",
                 "rector\/rector-generator": "^0.6",
                 "rector\/rector-src": "dev-main",
                 "symfony\/routing": "^6.1",
@@ -2090,7 +2089,6 @@
                 "symfony\/security-http": "^6.1",
                 "symplify\/easy-ci": "^11.1",
                 "symplify\/easy-coding-standard": "^11.2",
-                "symplify\/monorepo-builder": "^11.2",
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.2",
                 "symplify\/rule-doc-generator": "^11.2",
@@ -2099,7 +2097,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-07T01:40:50+00:00",
+            "time": "2023-02-08T09:57:13+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

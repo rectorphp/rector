@@ -2579,6 +2579,7 @@ return array(
     'Rector\\Symfony\\Rector\\Closure\\ContainerGetNameToTypeInTestsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ContainerGetNameToTypeInTestsRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',
+    'Rector\\Symfony\\Rector\\Closure\\ServiceTagsToDefaultsAutoconfigureRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceTagsToDefaultsAutoconfigureRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServicesSetNameToSetTypeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServicesSetNameToSetTypeRector.php',
     'Rector\\Symfony\\Rector\\ConstFetch\\ConstraintUrlOptionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ConstFetch/ConstraintUrlOptionRector.php',
     'Rector\\Symfony\\Rector\\FuncCall\\ReplaceServiceArgumentRector' => $vendorDir . '/rector/rector-symfony/src/Rector/FuncCall/ReplaceServiceArgumentRector.php',

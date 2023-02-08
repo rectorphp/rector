@@ -1,4 +1,4 @@
-# 76 Rules Overview
+# 77 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1484,7 +1484,7 @@ Change `$service->set()` string names to class-type-based names, to allow `$cont
 
 ## ServiceSettersToSettersAutodiscoveryRector
 
-Change `$services->set(...,` ...) to `$services->load(...,` ...) where meaning ful
+Change `$services->set(...,` ...) to `$services->load(...,` ...) where meaningful
 
 - class: [`Rector\Symfony\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector`](../src/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php)
 
@@ -1502,6 +1502,29 @@ Change `$services->set(...,` ...) to `$services->load(...,` ...) where meaning f
 -    $services->set(FistService::class);
 -    $services->set(SecondService::class);
 +    $services->load('App\\Services\\', '../src/Services/*');
+ };
+```
+
+<br>
+
+## ServiceTagsToDefaultsAutoconfigureRector
+
+Change `$services->set(...,` ...)->tag(...) to `$services->defaults()->autodiscovery()` where meaningful
+
+- class: [`Rector\Symfony\Rector\Closure\ServiceTagsToDefaultsAutoconfigureRector`](../src/Rector/Closure/ServiceTagsToDefaultsAutoconfigureRector.php)
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+ use App\Command\SomeCommand;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
++    $services->defaults()
++        ->autoconfigure();
+
+-    $services->set(SomeCommand::class)
+-        ->tag('console.command');
++    $services->set(SomeCommand::class);
  };
 ```
 
