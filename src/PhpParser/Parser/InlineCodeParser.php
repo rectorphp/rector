@@ -49,6 +49,11 @@ final class InlineCodeParser
      */
     private const BACKREFERENCE_NO_QUOTE_REGEX = '#(?<!")(?<backreference>\\\\\\d+)(?!")#';
     /**
+     * @var string
+     * @see https://regex101.com/r/nSO3Eq/1
+     */
+    private const BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX = '#(?<!")(?<backreference>\\$\\d+)#';
+    /**
      * @readonly
      * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
      */
@@ -94,7 +99,9 @@ final class InlineCodeParser
     {
         if ($expr instanceof String_) {
             if (!StringUtils::isMatch($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX)) {
-                return $expr->value;
+                return Strings::replace($expr->value, self::BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX, static function (array $match) : string {
+                    return '"' . $match['backreference'] . '"';
+                });
             }
             return Strings::replace($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX, static function (array $match) : string {
                 return '"\\' . $match['backreference'] . '"';
