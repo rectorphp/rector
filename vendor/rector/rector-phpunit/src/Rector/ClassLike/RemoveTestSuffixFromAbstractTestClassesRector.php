@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
@@ -35,11 +36,17 @@ final class RemoveTestSuffixFromAbstractTestClassesRector extends AbstractRector
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
-    public function __construct(NeighbourClassLikePrinter $neighbourClassLikePrinter, TestsNodeAnalyzer $testsNodeAnalyzer, RenamedClassesDataCollector $renamedClassesDataCollector)
+    /**
+     * @readonly
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    public function __construct(NeighbourClassLikePrinter $neighbourClassLikePrinter, TestsNodeAnalyzer $testsNodeAnalyzer, RenamedClassesDataCollector $renamedClassesDataCollector, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->neighbourClassLikePrinter = $neighbourClassLikePrinter;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -93,6 +100,8 @@ CODE_SAMPLE
         $this->printNewNodes($node);
         // to rename all other references
         $this->renamedClassesDataCollector->addOldToNewClass($oldClassName, $oldClassName . 'Case');
+        // remove source files that were renamed above
+        $this->removedAndAddedFilesCollector->removeFile($this->file->getFilePath());
         return $node;
     }
     private function printNewNodes(Class_ $class) : void
