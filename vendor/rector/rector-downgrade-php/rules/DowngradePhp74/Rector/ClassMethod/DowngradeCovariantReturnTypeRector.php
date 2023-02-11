@@ -195,7 +195,7 @@ CODE_SAMPLE
                 continue;
             }
             /** @var Type $parentReturnType */
-            $parentReturnType = $this->privatesAccessor->callPrivateMethod($parameterMethodReflection, 'getReturnType', []);
+            $parentReturnType = $this->privatesAccessor->callPrivateMethod($parameterMethodReflection, 'getNativeReturnType', []);
             // skip "parent" reference if correct
             if ($returnType instanceof ParentStaticType && $parentReturnType->accepts($returnType, \true)->yes()) {
                 continue;

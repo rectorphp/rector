@@ -68,7 +68,7 @@ final class StrposMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     /**
      * @return FuncCall|BooleanNot
      */
-    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : Node
+    public function refactorStrStartsWith(StrStartsWith $strStartsWith) : ?\PhpParser\Node
     {
         $strposFuncCall = $strStartsWith->getFuncCall();
         $strposFuncCall->name = new Name('str_starts_with');

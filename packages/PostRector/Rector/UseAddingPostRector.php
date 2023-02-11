@@ -69,7 +69,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function beforeTraverse(array $nodes) : ?array
+    public function beforeTraverse(array $nodes) : array
     {
         // no nodes → just return
         if ($nodes === []) {

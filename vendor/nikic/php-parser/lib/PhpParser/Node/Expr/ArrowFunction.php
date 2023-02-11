@@ -64,7 +64,7 @@ class ArrowFunction extends Expr implements FunctionLike
     /**
      * @return Node\Stmt\Return_[]
      */
-    public function getStmts() : ?array
+    public function getStmts() : array
     {
         return [new Node\Stmt\Return_($this->expr)];
     }

@@ -66,7 +66,7 @@ class Function_ extends Node\Stmt implements FunctionLike, StmtsAwareInterface
         return $this->attrGroups;
     }
     /** @return Node\Stmt[] */
-    public function getStmts() : ?array
+    public function getStmts() : array
     {
         return $this->stmts;
     }
