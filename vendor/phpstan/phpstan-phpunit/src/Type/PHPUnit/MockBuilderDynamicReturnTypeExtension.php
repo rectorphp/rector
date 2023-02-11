@@ -20,7 +20,7 @@ class MockBuilderDynamicReturnTypeExtension implements DynamicMethodReturnTypeEx
     {
         return !in_array($methodReflection->getName(), ['getMock', 'getMockForAbstractClass', 'getMockForTrait'], \true);
     }
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : ?\PHPStan\Type\Type
+    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : Type
     {
         return $scope->getType($methodCall->var);
     }

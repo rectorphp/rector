@@ -19,7 +19,7 @@ class InvocationMockerDynamicReturnTypeExtension implements DynamicMethodReturnT
     {
         return $methodReflection->getName() !== 'getMatcher';
     }
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : ?\PHPStan\Type\Type
+    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : Type
     {
         return $scope->getType($methodCall->var);
     }

@@ -27,7 +27,7 @@ class MockObjectDynamicReturnTypeExtension implements DynamicMethodReturnTypeExt
     {
         return $methodReflection->getName() === 'expects';
     }
-    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : ?\PHPStan\Type\Type
+    public function getTypeFromMethodCall(MethodReflection $methodReflection, MethodCall $methodCall, Scope $scope) : Type
     {
         $type = $scope->getType($methodCall->var);
         if (!$type instanceof IntersectionType) {
