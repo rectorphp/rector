@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\NullType;
@@ -46,6 +46,6 @@ final class NullTypeMapper implements TypeMapperInterface
         if ($typeKind === TypeKind::RETURN) {
             return null;
         }
-        return new Name('null');
+        return new Identifier('null');
     }
 }

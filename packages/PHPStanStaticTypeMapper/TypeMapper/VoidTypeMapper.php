@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
@@ -57,6 +57,6 @@ final class VoidTypeMapper implements TypeMapperInterface
         if (\in_array($typeKind, [TypeKind::PARAM, TypeKind::PROPERTY], \true)) {
             return null;
         }
-        return new Name(self::VOID);
+        return new Identifier(self::VOID);
     }
 }

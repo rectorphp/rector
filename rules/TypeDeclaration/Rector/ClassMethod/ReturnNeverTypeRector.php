@@ -6,7 +6,7 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Name;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -92,7 +92,7 @@ CODE_SAMPLE
         }
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::NEVER_TYPE)) {
             // never-type supported natively
-            $node->returnType = new Name('never');
+            $node->returnType = new Identifier('never');
         } else {
             // static anlysis based never type
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);

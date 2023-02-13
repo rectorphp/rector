@@ -56,23 +56,34 @@ final class DataProviderClassMethodFinder
         return $dataProviderClassMethods;
     }
     /**
+     * @api
+     * @return string[]
+     */
+    public function findDataProviderNamesForClassMethod(ClassMethod $classMethod) : array
+    {
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+        $dataProviderTagValueNodes = $phpDocInfo->getTagsByName('dataProvider');
+        if ($dataProviderTagValueNodes === []) {
+            return [];
+        }
+        $dataProviderMethodNames = [];
+        foreach ($dataProviderTagValueNodes as $dataProviderTagValueNode) {
+            if (!$dataProviderTagValueNode->value instanceof GenericTagValueNode) {
+                continue;
+            }
+            $dataProviderMethodNames[] = $this->resolveMethodName($dataProviderTagValueNode->value);
+        }
+        return $dataProviderMethodNames;
+    }
+    /**
      * @return string[]
      */
     private function resolverDataProviderClassMethodNames(Class_ $class) : array
     {
         $dataProviderMethodNames = [];
         foreach ($class->getMethods() as $classMethod) {
-            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            $dataProviderTagValueNodes = $phpDocInfo->getTagsByName('dataProvider');
-            if ($dataProviderTagValueNodes === []) {
-                continue;
-            }
-            foreach ($dataProviderTagValueNodes as $dataProviderTagValueNode) {
-                if (!$dataProviderTagValueNode->value instanceof GenericTagValueNode) {
-                    continue;
-                }
-                $dataProviderMethodNames[] = $this->resolveMethodName($dataProviderTagValueNode->value);
-            }
+            $currentDataProviderMethodNames = $this->findDataProviderNamesForClassMethod($classMethod);
+            $dataProviderMethodNames = \array_merge($dataProviderMethodNames, $currentDataProviderMethodNames);
         }
         return $dataProviderMethodNames;
     }
