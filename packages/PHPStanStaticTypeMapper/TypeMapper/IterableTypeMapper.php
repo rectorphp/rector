@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
+use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\ArrayTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
@@ -54,7 +54,7 @@ final class IterableTypeMapper implements TypeMapperInterface
      */
     public function mapToPhpParserNode(Type $type, string $typeKind) : ?Node
     {
-        return new Name('iterable');
+        return new Identifier('iterable');
     }
     private function convertUnionArrayTypeNodesToArrayTypeOfUnionTypeNodes(UnionTypeNode $unionTypeNode) : BracketsAwareUnionTypeNode
     {
