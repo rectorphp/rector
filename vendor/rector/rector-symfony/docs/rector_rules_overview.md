@@ -1,4 +1,4 @@
-# 78 Rules Overview
+# 79 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1483,6 +1483,26 @@ Change RouteCollectionBuilder to RoutingConfiguratorRector
 +        $routes->add('admin_dashboard', '/admin')
 +            ->controller('App\Controller\AdminController::dashboard')
 +    }}
+```
+
+<br>
+
+## ServiceArgsToServiceNamedArgRector
+
+Converts order-dependent arguments `args()` to named arg `arg()`
+
+- class: [`Rector\Symfony\Rector\Closure\ServiceArgsToServiceNamedArgRector`](../src/Rector/Closure/ServiceArgsToServiceNamedArgRector.php)
+
+```diff
+ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+ return static function (ContainerConfigurator $containerConfigurator): void {
+     $services = $containerConfigurator->services();
+
+     $services->set(SomeClass::class)
+-        ->args(['some_value']);
++        ->arg('$someCtorParameter', 'some_value');
+ };
 ```
 
 <br>

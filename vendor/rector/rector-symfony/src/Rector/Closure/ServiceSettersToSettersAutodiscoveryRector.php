@@ -33,7 +33,7 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
      * @readonly
      * @var \Triun\LongestCommonSubstring\Solver
      */
-    private $solver;
+    private $minimalSharedStringSolver;
     /**
      * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
@@ -54,7 +54,7 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
         $this->reflectionProvider = $reflectionProvider;
         $this->filesystem = $filesystem;
-        $this->solver = new Solver();
+        $this->minimalSharedStringSolver = new Solver();
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -109,14 +109,13 @@ CODE_SAMPLE
         $classNames = \array_map(function (ClassNameAndFilePath $classNameAndFilePath) {
             return $classNameAndFilePath->getClassName();
         }, $classNamesAndFilesPaths);
-        $sharedNamespace = $this->solver->solve(...$classNames);
+        $sharedNamespace = $this->minimalSharedStringSolver->solve(...$classNames);
         if (!\is_string($sharedNamespace)) {
             return null;
         }
         $firstClassNameAndFilePath = $classNamesAndFilesPaths[0];
         $classFilePath = $firstClassNameAndFilePath->getFilePath();
-        $relativeDirectoryPath = $this->filesystem->makePathRelative(\dirname($classFilePath), \dirname($this->file->getFilePath()));
-        $directoryConcat = new Concat(new ConstFetch(new Name('__DIR__')), new String_('/' . $relativeDirectoryPath));
+        $directoryConcat = $this->createAbsolutePathConcat($classFilePath);
         $args = [new Arg(new String_($sharedNamespace)), new Arg($directoryConcat)];
         $loadMethodCall = new MethodCall(new Variable('services'), 'load', $args);
         $node->stmts[] = new Expression($loadMethodCall);
@@ -189,5 +188,11 @@ CODE_SAMPLE
             $classNamesAndFilesPaths[] = new ClassNameAndFilePath($classReflection->getName(), $filename);
         }
         return $classNamesAndFilesPaths;
+    }
+    private function createAbsolutePathConcat(string $classFilePath) : Concat
+    {
+        $relativeDirectoryPath = $this->filesystem->makePathRelative(\dirname($classFilePath), \dirname($this->file->getFilePath()));
+        $distConstFetch = new ConstFetch(new Name('__DIR__'));
+        return new Concat($distConstFetch, new String_('/' . $relativeDirectoryPath));
     }
 }

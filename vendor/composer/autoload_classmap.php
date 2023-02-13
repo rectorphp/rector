@@ -2577,6 +2577,7 @@ return array(
     'Rector\\Symfony\\Rector\\Class_\\MagicClosureTwigExtensionToNativeMethodsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php',
     'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ContainerGetNameToTypeInTestsRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ContainerGetNameToTypeInTestsRector.php',
+    'Rector\\Symfony\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceArgsToServiceNamedArgRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',
     'Rector\\Symfony\\Rector\\Closure\\ServiceTagsToDefaultsAutoconfigureRector' => $vendorDir . '/rector/rector-symfony/src/Rector/Closure/ServiceTagsToDefaultsAutoconfigureRector.php',

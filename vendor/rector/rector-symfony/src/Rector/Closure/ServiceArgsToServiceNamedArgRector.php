@@ -1,0 +1,182 @@
+<?php
+
+declare (strict_types=1);
+namespace Rector\Symfony\Rector\Closure;
+
+use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Scalar\String_;
+use PHPStan\Reflection\ParametersAcceptorSelector;
+use PHPStan\Reflection\Php\PhpParameterReflection;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
+use Rector\Core\Rector\AbstractRector;
+use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
+use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+/**
+ * @see \Rector\Symfony\Tests\Rector\Closure\ServiceArgsToServiceNamedArgRector\ServiceArgsToServiceNamedArgRectorTest
+ */
+final class ServiceArgsToServiceNamedArgRector extends AbstractRector
+{
+    /**
+     * @readonly
+     * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
+     */
+    private $symfonyPhpClosureDetector;
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, ReflectionProvider $reflectionProvider)
+    {
+        $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
+        $this->reflectionProvider = $reflectionProvider;
+    }
+    public function getRuleDefinition() : RuleDefinition
+    {
+        return new RuleDefinition('Converts order-dependent arguments args() to named arg arg()', [new CodeSample(<<<'CODE_SAMPLE'
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(SomeClass::class)
+        ->args(['some_value']);
+};
+CODE_SAMPLE
+, <<<'CODE_SAMPLE'
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(SomeClass::class)
+        ->arg('$someCtorParameter', 'some_value');
+};
+CODE_SAMPLE
+)]);
+    }
+    /**
+     * @return array<class-string<Node>>
+     */
+    public function getNodeTypes() : array
+    {
+        return [Closure::class];
+    }
+    /**
+     * @param Closure $node
+     */
+    public function refactor(Node $node) : ?Node
+    {
+        if (!$this->symfonyPhpClosureDetector->detect($node)) {
+            return null;
+        }
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use(&$hasChanged) {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if (!$this->isServiceArgsMethodCall($node)) {
+                return null;
+            }
+            $serviceClass = $this->resolveServiceClass($node);
+            // impossible to resolve
+            if ($serviceClass === null) {
+                return null;
+            }
+            $constructorParameterNames = $this->resolveConstructorParameterNames($serviceClass);
+            $mainArgMethodCall = $this->createMainArgMethodCall($node, $constructorParameterNames);
+            if (!$mainArgMethodCall instanceof MethodCall) {
+                return null;
+            }
+            $hasChanged = \true;
+            return $mainArgMethodCall;
+        });
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    private function resolveServiceClass(MethodCall $methodCall) : ?string
+    {
+        while ($methodCall->var instanceof MethodCall) {
+            $methodCall = $methodCall->var;
+        }
+        if (!$this->isName($methodCall->name, 'set')) {
+            return null;
+        }
+        $servicesSetArgs = $methodCall->getArgs();
+        // we can handle only one arg
+        if (\count($servicesSetArgs) !== 1) {
+            return null;
+        }
+        $className = $servicesSetArgs[0]->value;
+        return $this->valueResolver->getValue($className);
+    }
+    /**
+     * @return string[]
+     */
+    private function resolveConstructorParameterNames(string $serviceClass) : array
+    {
+        $serviceClassReflection = $this->reflectionProvider->getClass($serviceClass);
+        if (!$serviceClassReflection->hasConstructor()) {
+            return [];
+        }
+        $constructorParameterNames = [];
+        $extendedMethodReflection = $serviceClassReflection->getConstructor();
+        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
+        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
+            /** @var PhpParameterReflection $parameterReflection */
+            $constructorParameterNames[] = '$' . $parameterReflection->getName();
+        }
+        return $constructorParameterNames;
+    }
+    private function isServiceArgsMethodCall(MethodCall $methodCall) : bool
+    {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServiceConfigurator'))) {
+            return \false;
+        }
+        return $this->isName($methodCall->name, 'args');
+    }
+    private function createArgMethodCall(string $parameterName, Expr $expr, ?MethodCall $argMethodCall, MethodCall $node) : MethodCall
+    {
+        $argArgs = [new Arg(new String_($parameterName)), new Arg($expr)];
+        $callerExpr = $argMethodCall instanceof MethodCall ? $argMethodCall : $node->var;
+        return new MethodCall($callerExpr, 'arg', $argArgs);
+    }
+    /**
+     * @param string[] $constructorParameterNames
+     */
+    private function createMainArgMethodCall(MethodCall $methodCall, array $constructorParameterNames) : ?MethodCall
+    {
+        if ($constructorParameterNames === []) {
+            return null;
+        }
+        $argMethodCall = null;
+        foreach ($methodCall->getArgs() as $arg) {
+            if (!$arg->value instanceof Array_) {
+                return null;
+            }
+            $array = $arg->value;
+            foreach ($array->items as $key => $arrayItem) {
+                if (!$arrayItem instanceof ArrayItem) {
+                    continue;
+                }
+                $arrayItemValue = $arrayItem->value;
+                if ($arrayItemValue instanceof FuncCall) {
+                    continue;
+                }
+                $argMethodCall = $this->createArgMethodCall($constructorParameterNames[$key], $arrayItemValue, $argMethodCall, $methodCall);
+            }
+        }
+        return $argMethodCall;
+    }
+}
