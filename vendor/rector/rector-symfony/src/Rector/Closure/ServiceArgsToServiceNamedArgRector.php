@@ -174,9 +174,18 @@ CODE_SAMPLE
                 if ($arrayItemValue instanceof FuncCall) {
                     continue;
                 }
-                $argMethodCall = $this->createArgMethodCall($constructorParameterNames[$key], $arrayItemValue, $argMethodCall, $methodCall);
+                $parameterPosition = $this->resolveParameterPosition($arrayItem, $key);
+                $argMethodCall = $this->createArgMethodCall($constructorParameterNames[$parameterPosition], $arrayItemValue, $argMethodCall, $methodCall);
             }
         }
         return $argMethodCall;
+    }
+    private function resolveParameterPosition(ArrayItem $arrayItem, int $key) : int
+    {
+        if ($arrayItem->key instanceof Expr) {
+            return $this->valueResolver->getValue($arrayItem->key);
+        }
+        // fallbakc in case of empty array item
+        return $key;
     }
 }
