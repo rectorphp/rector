@@ -4,13 +4,8 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -76,32 +71,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class, Closure::class, StaticCall::class, FuncCall::class, MethodCall::class, New_::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
-     * @param ClassMethod|Function_|Closure|FuncCall|MethodCall|StaticCall|New_ $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof MethodCall || $node instanceof FuncCall || $node instanceof StaticCall || $node instanceof New_) {
-            /** @var MethodCall|FuncCall|StaticCall|New_ $node */
-            return $this->processArgs($node);
-        }
         if ($node instanceof Closure) {
             $this->processUses($node);
         }
         return $this->processParams($node);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\New_ $node
-     */
-    private function processArgs($node) : ?Node
-    {
-        $args = $node->getArgs();
-        if ($args === []) {
-            return null;
-        }
-        return $this->cleanTrailingComma($node, $args);
     }
     private function processUses(Closure $node) : ?Node
     {
@@ -121,8 +101,8 @@ CODE_SAMPLE
         return $this->cleanTrailingComma($node, $node->params);
     }
     /**
-     * @param ClosureUse[]|Param[]|Arg[] $array
-     * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param ClosureUse[]|Param[] $array
+     * @param \PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
     private function cleanTrailingComma($node, array $array) : ?Node
     {
