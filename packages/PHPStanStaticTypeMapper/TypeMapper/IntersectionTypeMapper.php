@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Reflection\ReflectionProvider;
@@ -81,22 +82,22 @@ final class IntersectionTypeMapper implements TypeMapperInterface
         $intersectionedTypeNodes = [];
         foreach ($type->getTypes() as $intersectionedType) {
             $resolvedType = $this->phpStanStaticTypeMapper->mapToPhpParserNode($intersectionedType, $typeKind);
-            if (!$resolvedType instanceof Name) {
-                continue;
+            if (!$resolvedType instanceof Name && !$resolvedType instanceof Identifier) {
+                return null;
             }
             $resolvedTypeName = (string) $resolvedType;
+            /**
+             * ObjectWithoutClassType can happen when use along with \PHPStan\Type\Accessory\HasMethodType
+             * Use "object" as returned type
+             */
             if ($intersectionedType instanceof ObjectWithoutClassType) {
                 return $resolvedType;
             }
-            /**
-             * $this->reflectionProvider->hasClass($resolvedTypeName) returns true on iterable type
-             * this ensure type is ObjectType early
-             */
             if (!$intersectionedType instanceof ObjectType) {
-                continue;
+                return null;
             }
             if (!$this->reflectionProvider->hasClass($resolvedTypeName)) {
-                continue;
+                return null;
             }
             $intersectionedTypeNodes[] = $resolvedType;
         }

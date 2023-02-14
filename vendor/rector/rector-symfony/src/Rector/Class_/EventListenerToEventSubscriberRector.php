@@ -10,6 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider;
+use Rector\Symfony\NodeAnalyzer\ClassAnalyzer;
 use Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory;
 use Rector\Symfony\ValueObject\EventNameToClassAndConstant;
 use Rector\Symfony\ValueObject\ServiceDefinition;
@@ -51,10 +52,16 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
      */
     private $getSubscribedEventsClassMethodFactory;
-    public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory)
+    /**
+     * @readonly
+     * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
+     */
+    private $classAnalyzer;
+    public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer)
     {
         $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;
         $this->getSubscribedEventsClassMethodFactory = $getSubscribedEventsClassMethodFactory;
+        $this->classAnalyzer = $classAnalyzer;
         $this->eventNamesToClassConstants = [
             // kernel events
             new EventNameToClassAndConstant('kernel.request', self::KERNEL_EVENTS_CLASS, 'REQUEST'),
@@ -124,7 +131,7 @@ CODE_SAMPLE
             return null;
         }
         // is already a subscriber
-        if ($this->isAlreadyEventSubscriber($node)) {
+        if ($this->classAnalyzer->hasImplements($node, 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface')) {
             return null;
         }
         // there must be event dispatcher in the application
@@ -138,15 +145,6 @@ CODE_SAMPLE
         }
         $this->changeListenerToSubscriberWithMethods($node, $listenerClassesToEventsToMethods[$className]);
         return $node;
-    }
-    private function isAlreadyEventSubscriber(Class_ $class) : bool
-    {
-        foreach ($class->implements as $implement) {
-            if ($this->isName($implement, 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface')) {
-                return \true;
-            }
-        }
-        return \false;
     }
     /**
      * @param array<string, ServiceDefinition[]> $eventsToMethods

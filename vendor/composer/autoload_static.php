@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitad4ca5488857da5d6b19f9f67543231d
+class ComposerStaticInit51c34ff907724dd47bf3dc3a0bf543c6
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2759,6 +2759,7 @@ class ComposerStaticInitad4ca5488857da5d6b19f9f67543231d
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\MethodCallAnnotationAssertResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/MethodCallAnnotationAssertResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\PropertyAnnotationAssertResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/PropertyAnnotationAssertResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\Annotations\\StmtMethodCallMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/Annotations/StmtMethodCallMatcher.php',
+        'Rector\\Symfony\\NodeAnalyzer\\ClassAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ClassAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\DependencyInjectionMethodCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/DependencyInjectionMethodCallAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormAddMethodCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormAddMethodCallAnalyzer.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormCollectionAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormCollectionAnalyzer.php',
@@ -2790,6 +2791,7 @@ class ComposerStaticInitad4ca5488857da5d6b19f9f67543231d
         'Rector\\Symfony\\NodeFactory\\RequiredClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/RequiredClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\ThisRenderFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ThisRenderFactory.php',
         'Rector\\Symfony\\NodeFinder\\EmptyReturnNodeFinder' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFinder/EmptyReturnNodeFinder.php',
+        'Rector\\Symfony\\NodeManipulator\\ClassManipulator' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeManipulator/ClassManipulator.php',
         'Rector\\Symfony\\NodeRemover\\ConstructorDependencyRemover' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeRemover/ConstructorDependencyRemover.php',
         'Rector\\Symfony\\PhpDocNode\\SymfonyRouteTagValueNodeFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/PhpDocNode/SymfonyRouteTagValueNodeFactory.php',
         'Rector\\Symfony\\Printer\\NeighbourClassLikePrinter' => __DIR__ . '/..' . '/rector/rector-symfony/src/Printer/NeighbourClassLikePrinter.php',
@@ -3099,9 +3101,9 @@ class ComposerStaticInitad4ca5488857da5d6b19f9f67543231d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitad4ca5488857da5d6b19f9f67543231d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitad4ca5488857da5d6b19f9f67543231d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitad4ca5488857da5d6b19f9f67543231d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit51c34ff907724dd47bf3dc3a0bf543c6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit51c34ff907724dd47bf3dc3a0bf543c6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit51c34ff907724dd47bf3dc3a0bf543c6::$classMap;
 
         }, null, ClassLoader::class);
     }
