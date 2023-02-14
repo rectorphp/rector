@@ -22,6 +22,7 @@ final class RectorContainerFactory
         /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
         $bootstrapFilesIncluder = $container->get(BootstrapFilesIncluder::class);
         $bootstrapFilesIncluder->includeBootstrapFiles();
+        $bootstrapFilesIncluder->includePHPStanExtensionsBoostrapFiles();
         return $container;
     }
     /**

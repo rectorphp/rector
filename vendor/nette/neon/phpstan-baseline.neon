@@ -1,0 +1,41 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Property Nette\\Neon\\Node\\EntityChainNode\:\:\$chain \(array\<Nette\\Neon\\Node\\EntityNode\>\) does not accept array\<Nette\\Neon\\Node\>\.$#'
+			count: 1
+			path: src/Neon/Encoder.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			count: 1
+			path: src/Neon/Node.php
+
+		-
+			message: '#^If condition is always true\.$#'
+			count: 1
+			path: src/Neon/Parser.php
+
+		-
+			message: '#^Left side of && is always true\.$#'
+			count: 1
+			path: src/Neon/Parser.php
+
+		-
+			message: '#^Parameter \#1 \$chain of class Nette\\Neon\\Node\\EntityChainNode constructor expects array\<Nette\\Neon\\Node\\EntityNode\>, array\<int, Nette\\Neon\\Node\> given\.$#'
+			count: 1
+			path: src/Neon/Parser.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			count: 1
+			path: src/Neon/Parser.php
+
+		-
+			message: '#^While loop condition is always false\.$#'
+			count: 2
+			path: src/Neon/Parser.php
+
+		-
+			message: '#^While loop condition is always true\.$#'
+			count: 1
+			path: src/Neon/Parser.php

@@ -70,6 +70,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
         $bootstrapFilesIncluder = $this->getService(BootstrapFilesIncluder::class);
         $bootstrapFilesIncluder->includeBootstrapFiles();
+        $bootstrapFilesIncluder->includePHPStanExtensionsBoostrapFiles();
     }
     protected function tearDown() : void
     {

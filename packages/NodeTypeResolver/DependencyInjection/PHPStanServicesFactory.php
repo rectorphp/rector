@@ -9,16 +9,13 @@ use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Dependency\DependencyResolver;
 use PHPStan\DependencyInjection\Container;
 use PHPStan\DependencyInjection\ContainerFactory;
-use PHPStan\ExtensionInstaller\GeneratedConfig;
 use PHPStan\File\FileHelper;
 use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use ReflectionClass;
 /**
  * Factory so Symfony app can use services from PHPStan container
  */
@@ -29,7 +26,7 @@ final class PHPStanServicesFactory
      * @var \PHPStan\DependencyInjection\Container
      */
     private $container;
-    public function __construct(ParameterProvider $parameterProvider)
+    public function __construct(ParameterProvider $parameterProvider, \Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver $phpStanExtensionsConfigResolver)
     {
         $containerFactory = new ContainerFactory(\getcwd());
         $additionalConfigFiles = [];
@@ -39,7 +36,7 @@ final class PHPStanServicesFactory
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/parser.neon';
-        $extensionConfigFiles = $this->resolveExtensionConfigs();
+        $extensionConfigFiles = $phpStanExtensionsConfigResolver->resolve();
         $additionalConfigFiles = \array_merge($additionalConfigFiles, $extensionConfigFiles);
         $existingAdditionalConfigFiles = \array_filter($additionalConfigFiles, 'file_exists');
         $this->container = $containerFactory->create(\sys_get_temp_dir(), $existingAdditionalConfigFiles, []);
@@ -106,33 +103,5 @@ final class PHPStanServicesFactory
     public function createDynamicSourceLocatorProvider() : DynamicSourceLocatorProvider
     {
         return $this->container->getByType(DynamicSourceLocatorProvider::class);
-    }
-    /**
-     * @return string[]
-     */
-    private function resolveExtensionConfigs() : array
-    {
-        // same logic as in PHPStan for extension installed - https://github.com/phpstan/phpstan-src/blob/5956ec4f6cd09c8d7db9466ed4e7f25706f37a43/src/Command/CommandHelper.php#L195-L222
-        if (!\class_exists(GeneratedConfig::class)) {
-            return [];
-        }
-        $reflectionClass = new ReflectionClass(GeneratedConfig::class);
-        $generatedConfigClassFileName = $reflectionClass->getFileName();
-        if ($generatedConfigClassFileName === \false) {
-            throw new ShouldNotHappenException();
-        }
-        $generatedConfigDirectory = \dirname($generatedConfigClassFileName);
-        $extensionConfigFiles = [];
-        foreach (GeneratedConfig::EXTENSIONS as $extension) {
-            $fileNames = $extension['extra']['includes'] ?? [];
-            foreach ($fileNames as $fileName) {
-                $configFilePath = $generatedConfigDirectory . '/' . $extension['relative_install_path'] . '/' . $fileName;
-                if (!\file_exists($configFilePath)) {
-                    continue;
-                }
-                $extensionConfigFiles[] = $configFilePath;
-            }
-        }
-        return $extensionConfigFiles;
     }
 }

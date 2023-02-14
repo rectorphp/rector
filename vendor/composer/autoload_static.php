@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitea4756fe54e6b2eb6dba86dfa54e1a9f
+class ComposerStaticInite0225503d6547de35721ddc00c747139
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -698,6 +698,25 @@ class ComposerStaticInitea4756fe54e6b2eb6dba86dfa54e1a9f
         'RectorPrefix202302\\Nette\\Localization\\ITranslator' => __DIR__ . '/..' . '/nette/utils/src/compatibility.php',
         'RectorPrefix202302\\Nette\\Localization\\Translator' => __DIR__ . '/..' . '/nette/utils/src/Translator.php',
         'RectorPrefix202302\\Nette\\MemberAccessException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
+        'RectorPrefix202302\\Nette\\Neon\\Decoder' => __DIR__ . '/..' . '/nette/neon/src/Neon/Decoder.php',
+        'RectorPrefix202302\\Nette\\Neon\\Encoder' => __DIR__ . '/..' . '/nette/neon/src/Neon/Encoder.php',
+        'RectorPrefix202302\\Nette\\Neon\\Entity' => __DIR__ . '/..' . '/nette/neon/src/Neon/Entity.php',
+        'RectorPrefix202302\\Nette\\Neon\\Exception' => __DIR__ . '/..' . '/nette/neon/src/Neon/Exception.php',
+        'RectorPrefix202302\\Nette\\Neon\\Lexer' => __DIR__ . '/..' . '/nette/neon/src/Neon/Lexer.php',
+        'RectorPrefix202302\\Nette\\Neon\\Neon' => __DIR__ . '/..' . '/nette/neon/src/Neon/Neon.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node\\ArrayItemNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/ArrayItemNode.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node\\ArrayNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/ArrayNode.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node\\BlockArrayNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/BlockArrayNode.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node\\EntityChainNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/EntityChainNode.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node\\EntityNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/EntityNode.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node\\InlineArrayNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/InlineArrayNode.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node\\LiteralNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/LiteralNode.php',
+        'RectorPrefix202302\\Nette\\Neon\\Node\\StringNode' => __DIR__ . '/..' . '/nette/neon/src/Neon/Node/StringNode.php',
+        'RectorPrefix202302\\Nette\\Neon\\Parser' => __DIR__ . '/..' . '/nette/neon/src/Neon/Parser.php',
+        'RectorPrefix202302\\Nette\\Neon\\Token' => __DIR__ . '/..' . '/nette/neon/src/Neon/Token.php',
+        'RectorPrefix202302\\Nette\\Neon\\TokenStream' => __DIR__ . '/..' . '/nette/neon/src/Neon/TokenStream.php',
+        'RectorPrefix202302\\Nette\\Neon\\Traverser' => __DIR__ . '/..' . '/nette/neon/src/Neon/Traverser.php',
         'RectorPrefix202302\\Nette\\NotImplementedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix202302\\Nette\\NotSupportedException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
         'RectorPrefix202302\\Nette\\OutOfRangeException' => __DIR__ . '/..' . '/nette/utils/src/exceptions.php',
@@ -2193,6 +2212,7 @@ class ComposerStaticInitea4756fe54e6b2eb6dba86dfa54e1a9f
         'Rector\\NodeRemoval\\NodeRemover' => __DIR__ . '/../..' . '/packages/NodeRemoval/NodeRemover.php',
         'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
         'Rector\\NodeTypeResolver\\Contract\\SourceLocatorProviderInterface' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Contract/SourceLocatorProviderInterface.php',
+        'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanExtensionsConfigResolver' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/DependencyInjection/PHPStanExtensionsConfigResolver.php',
         'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php',
         'Rector\\NodeTypeResolver\\MethodParameterTypeResolver' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/MethodParameterTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeScopeAndMetadataDecorator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeScopeAndMetadataDecorator.php',
@@ -3101,9 +3121,9 @@ class ComposerStaticInitea4756fe54e6b2eb6dba86dfa54e1a9f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitea4756fe54e6b2eb6dba86dfa54e1a9f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitea4756fe54e6b2eb6dba86dfa54e1a9f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitea4756fe54e6b2eb6dba86dfa54e1a9f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite0225503d6547de35721ddc00c747139::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite0225503d6547de35721ddc00c747139::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite0225503d6547de35721ddc00c747139::$classMap;
 
         }, null, ClassLoader::class);
     }
