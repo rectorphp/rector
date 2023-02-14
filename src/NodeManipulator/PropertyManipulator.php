@@ -188,7 +188,7 @@ final class PropertyManipulator
     public function isPropertyChangeableExceptConstructor($propertyOrParam) : bool
     {
         $class = $this->betterNodeFinder->findParentType($propertyOrParam, Class_::class);
-        // does not has parent type ClassLike? Possibly parent is changed by other rule
+        // does not have parent type ClassLike? Possibly parent is changed by other rule
         if (!$class instanceof Class_) {
             return \true;
         }
