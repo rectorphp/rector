@@ -8,6 +8,7 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
@@ -41,7 +42,7 @@ final class ServiceArgsToServiceNamedArgRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Converts order-dependent arguments args() to named arg arg()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Converts order-dependent arguments args() to named arg() call', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -116,12 +117,13 @@ CODE_SAMPLE
             return null;
         }
         $servicesSetArgs = $methodCall->getArgs();
-        // we can handle only one arg
-        if (\count($servicesSetArgs) !== 1) {
-            return null;
+        foreach ($servicesSetArgs as $serviceSetArg) {
+            if (!$serviceSetArg->value instanceof ClassConstFetch) {
+                continue;
+            }
+            return $this->valueResolver->getValue($serviceSetArg->value);
         }
-        $className = $servicesSetArgs[0]->value;
-        return $this->valueResolver->getValue($className);
+        return null;
     }
     /**
      * @return string[]

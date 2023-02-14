@@ -21,7 +21,6 @@ use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 # https://github.com/symfony/symfony/blob/5.4/UPGRADE-5.3.md
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->sets([SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES]);
-    $rectorConfig->import(__DIR__ . '/symfony53-types.php');
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [
         // @see https://github.com/symfony/symfony/pull/40536
         new MethodCallRename('Symfony\\Component\\HttpFoundation\\RequestStack', 'getMasterRequest', 'getMainRequest'),
