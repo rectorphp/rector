@@ -19,11 +19,19 @@ final class MixPhpHtmlDecorator
      */
     private $nodeRemover;
     /**
+     * @var bool
+     */
+    private $isRequireReprintInlineHTML = \false;
+    /**
      * @required
      */
     public function autowire(NodeRemover $nodeRemover) : void
     {
         $this->nodeRemover = $nodeRemover;
+    }
+    public function isRequireReprintInlineHTML() : bool
+    {
+        return $this->isRequireReprintInlineHTML;
     }
     /**
      * @param array<Node|null> $nodes
@@ -71,12 +79,14 @@ final class MixPhpHtmlDecorator
         $firstNodeAfterNop->setAttribute(AttributeKey::COMMENTS, $nodeComments);
         // remove Nop is marked  as comment of Next Node
         $this->nodeRemover->removeNode($nop);
+        $this->isRequireReprintInlineHTML = \true;
     }
     private function rePrintInlineHTML(InlineHTML $inlineHTML, Stmt $stmt) : void
     {
         // Token start = -1, just added
         if ($stmt->getStartTokenPos() < 0) {
             $inlineHTML->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+            $this->isRequireReprintInlineHTML = \true;
         }
     }
 }

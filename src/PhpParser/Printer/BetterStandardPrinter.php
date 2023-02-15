@@ -126,21 +126,11 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (\count($stmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
         }
-        $currentFile = $this->currentFileProvider->getFile();
-        if ($currentFile instanceof File && !$currentFile->getFileDiff() instanceof FileDiff) {
+        if (!$this->mixPhpHtmlDecorator->isRequireReprintInlineHTML()) {
             return $content;
         }
-        $firstStmt = \current($newStmts);
-        $lastStmt = \end($newStmts);
-        if ($firstStmt === $lastStmt) {
-            return $content;
-        }
-        if (!$firstStmt instanceof InlineHTML && !$lastStmt instanceof InlineHTML) {
-            return $content;
-        }
-        $content = $this->cleanEndWithPHPOpenTag($lastStmt, $content);
-        $content = \str_replace('<?php <?php', '<?php', $content);
-        return $this->cleanSurplusTag($firstStmt, $content);
+        $content = $this->cleanSurplusTag($content);
+        return $this->cleanEndWithPHPOpenTag($content);
     }
     /**
      * @param \PhpParser\Node|mixed[]|null $node
@@ -425,11 +415,8 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
     }
-    private function cleanEndWithPHPOpenTag(Node $node, string $content) : string
+    private function cleanEndWithPHPOpenTag(string $content) : string
     {
-        if (!$node instanceof InlineHTML) {
-            return $content;
-        }
         if (\substr_compare($content, "<?php \n", -\strlen("<?php \n")) === 0) {
             return \substr($content, 0, -7);
         }
@@ -438,11 +425,10 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         }
         return $content;
     }
-    private function cleanSurplusTag(Node $node, string $content) : string
+    private function cleanSurplusTag(string $content) : string
     {
-        if (!$node instanceof InlineHTML) {
-            return $content;
-        }
+        $content = \str_replace('<?php <?php', '<?php', $content);
+        $content = \str_replace('?>?>', '?>', $content);
         if (\strncmp($content, "?>\n", \strlen("?>\n")) === 0) {
             return \substr($content, 3);
         }
