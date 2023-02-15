@@ -129,6 +129,8 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (!$this->mixPhpHtmlDecorator->isRequireReprintInlineHTML()) {
             return $content;
         }
+        // ensure disable flag isRequireReprintInlineHTML on change file
+        $this->mixPhpHtmlDecorator->disableIsRequireReprintInlineHTML();
         $content = $this->cleanSurplusTag($content);
         return $this->cleanEndWithPHPOpenTag($content);
     }

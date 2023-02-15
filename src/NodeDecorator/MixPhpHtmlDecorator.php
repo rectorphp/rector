@@ -33,6 +33,10 @@ final class MixPhpHtmlDecorator
     {
         return $this->isRequireReprintInlineHTML;
     }
+    public function disableIsRequireReprintInlineHTML() : void
+    {
+        $this->isRequireReprintInlineHTML = \false;
+    }
     /**
      * @param array<Node|null> $nodes
      */
