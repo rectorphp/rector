@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Throw_;
-use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,15 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class RemoveAlwaysElseRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer
-     */
-    private $inlineHTMLAnalyzer;
-    public function __construct(InlineHTMLAnalyzer $inlineHTMLAnalyzer)
-    {
-        $this->inlineHTMLAnalyzer = $inlineHTMLAnalyzer;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Split if statement, when if condition always break execution flow', [new CodeSample(<<<'CODE_SAMPLE'
@@ -87,13 +77,13 @@ CODE_SAMPLE
             $node->stmts = $firstElseIf->stmts;
             $this->mirrorComments($node, $firstElseIf);
             $nodesToReturnAfterNode = $this->getStatementsElseIfs($node);
-            if ($originalNode->else instanceof Else_ && !$this->inlineHTMLAnalyzer->hasInlineHTML($originalNode->else)) {
+            if ($originalNode->else instanceof Else_) {
                 $node->else = null;
                 $nodesToReturnAfterNode = \array_merge($nodesToReturnAfterNode, [$originalNode->else]);
             }
             return \array_merge([$if, $node], $nodesToReturnAfterNode);
         }
-        if ($node->else instanceof Else_ && !$this->inlineHTMLAnalyzer->hasInlineHTML($node->else)) {
+        if ($node->else instanceof Else_) {
             $stmts = $node->else->stmts;
             $node->else = null;
             return \array_merge([$node], $stmts);

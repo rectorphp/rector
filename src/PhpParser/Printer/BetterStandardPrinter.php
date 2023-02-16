@@ -431,6 +431,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     {
         $content = \str_replace('<?php <?php', '<?php', $content);
         $content = \str_replace('?>?>', '?>', $content);
+        $content = \str_replace("?>\n?>", '?>', $content);
         if (\strncmp($content, "?>\n", \strlen("?>\n")) === 0) {
             return \substr($content, 3);
         }
