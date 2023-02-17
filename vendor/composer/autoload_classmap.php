@@ -1965,6 +1965,7 @@ return array(
     'Rector\\NodeRemoval\\NodeRemover' => $baseDir . '/packages/NodeRemoval/NodeRemover.php',
     'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => $baseDir . '/packages/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
     'Rector\\NodeTypeResolver\\Contract\\SourceLocatorProviderInterface' => $baseDir . '/packages/NodeTypeResolver/Contract/SourceLocatorProviderInterface.php',
+    'Rector\\NodeTypeResolver\\DependencyInjection\\BleedingEdgeIncludePurifier' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/BleedingEdgeIncludePurifier.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanExtensionsConfigResolver' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/PHPStanExtensionsConfigResolver.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php',
     'Rector\\NodeTypeResolver\\MethodParameterTypeResolver' => $baseDir . '/packages/NodeTypeResolver/MethodParameterTypeResolver.php',

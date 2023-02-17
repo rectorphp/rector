@@ -61,6 +61,9 @@ final class RedirectToRouteRector extends AbstractRector
         if (!$this->isName($argumentValue->name, 'generateUrl')) {
             return null;
         }
+        if (!$this->isName($argumentValue->var, 'this')) {
+            return null;
+        }
         if (!$this->isDefaultReferenceType($argumentValue)) {
             return null;
         }
