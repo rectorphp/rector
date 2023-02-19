@@ -69,7 +69,8 @@ final class PostFileProcessor
         $postRectorsByPriority = [];
         foreach ($postRectors as $postRector) {
             if (isset($postRectorsByPriority[$postRector->getPriority()])) {
-                throw new ShouldNotHappenException();
+                $errorMessage = \sprintf('There are multiple post rectors with the same priority: %d. Use different one for your new PostRector', $postRector->getPriority());
+                throw new ShouldNotHappenException($errorMessage);
             }
             $postRectorsByPriority[$postRector->getPriority()] = $postRector;
         }
