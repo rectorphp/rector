@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
@@ -45,6 +46,7 @@ use PHPStan\Type\TypeCombinator;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\StaticReflection\SourceLocator\RenamedClassesSourceLocator;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\Core\Util\StringUtils;
@@ -112,7 +114,12 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, RenamedClassesSourceLocator $renamedClassesSourceLocator, NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, RenamedClassesSourceLocator $renamedClassesSourceLocator, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -123,6 +130,7 @@ final class PHPStanNodeScopeResolver
         $this->privatesAccessor = $privatesAccessor;
         $this->renamedClassesSourceLocator = $renamedClassesSourceLocator;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->betterNodeFinder = $betterNodeFinder;
         $this->decoratePHPStanNodeScopeResolverWithRenamedClassSourceLocator($this->nodeScopeResolver);
     }
     /**
@@ -202,6 +210,9 @@ final class PHPStanNodeScopeResolver
                 /** @var MutatingScope $mutatingScope */
                 $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope, $isScopeRefreshing);
             }
+            if ($node instanceof Stmt) {
+                $this->setChildOfUnreachableStatementNodeAttribute($node);
+            }
             // special case for unreachable nodes
             if ($node instanceof UnreachableStatementNode) {
                 $this->processUnreachableStatementNode($node, $filePath, $mutatingScope);
@@ -210,6 +221,25 @@ final class PHPStanNodeScopeResolver
             }
         };
         return $this->processNodesWithDependentFiles($filePath, $stmts, $scope, $nodeCallback);
+    }
+    private function setChildOfUnreachableStatementNodeAttribute(Stmt $stmt) : void
+    {
+        if ($stmt->getAttribute(AttributeKey::IS_UNREACHABLE) === \true) {
+            return;
+        }
+        $parentStmt = $stmt->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentStmt instanceof Node) {
+            return;
+        }
+        if ($parentStmt instanceof Closure) {
+            $parentStmt = $this->betterNodeFinder->resolveCurrentStatement($parentStmt);
+        }
+        if (!$parentStmt instanceof Stmt) {
+            return;
+        }
+        if ($parentStmt->getAttribute(AttributeKey::IS_UNREACHABLE) === \true) {
+            $stmt->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
+        }
     }
     private function processArray(Array_ $array, MutatingScope $mutatingScope) : void
     {
