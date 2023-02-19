@@ -1,4 +1,4 @@
-# 413 Rules Overview
+# 414 Rules Overview
 
 <br>
 
@@ -62,7 +62,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (34)
+- [Transform](#transform) (35)
 
 - [TypeDeclaration](#typedeclaration) (36)
 
@@ -8301,6 +8301,45 @@ return static function (RectorConfig $rectorConfig): void {
  $serviceDefinition = new Nette\DI\ServiceDefinition;
 -$serviceDefinition->setInject();
 +$serviceDefinition->addTag('inject');
+```
+
+<br>
+
+### MethodCallToFuncCallRector
+
+Change method call to function call
+
+:wrench: **configure it!**
+
+- class: [`Rector\Transform\Rector\MethodCall\MethodCallToFuncCallRector`](../rules/Transform/Rector/MethodCall/MethodCallToFuncCallRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use Rector\Transform\Rector\MethodCall\MethodCallToFuncCallRector;
+use Rector\Transform\ValueObject\MethodCallToFuncCall;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(MethodCallToFuncCallRector::class, [
+        new MethodCallToFuncCall('SomeClass', 'render', 'view'),
+    ]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function show()
+     {
+-        return $this->render('some_template');
++        return view('some_template');
+     }
+ }
 ```
 
 <br>

@@ -49,7 +49,7 @@ final class FileDiff implements SerializableInterface
         $this->diff = $diff;
         $this->diffConsoleFormatted = $diffConsoleFormatted;
         $this->rectorsWithLineChanges = $rectorsWithLineChanges;
-        Assert::allIsAOf($rectorsWithLineChanges, RectorWithLineChange::class);
+        Assert::allIsInstanceOf($rectorsWithLineChanges, RectorWithLineChange::class);
     }
     public function getDiff() : string
     {
