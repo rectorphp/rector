@@ -34,7 +34,14 @@ final class PHPStanExtensionsConfigResolver
         }
         $generatedConfigDirectory = \dirname($generatedConfigClassFileName);
         $extensionConfigFiles = [];
-        foreach (GeneratedConfig::EXTENSIONS as $extension) {
+        // Some extensions are unsupported and only work when used by PHPstan directly, so we skip them.
+        $unsupportedExtensions = [
+          'mglaman/phpstan-drupal', // https://github.com/rectorphp/rector/issues/7795
+        ];
+        foreach (GeneratedConfig::EXTENSIONS as $name => $extension) {
+            if (in_array($name, $unsupportedExtensions)) {
+              continue;
+            }
             $fileNames = $extension['extra']['includes'] ?? [];
             foreach ($fileNames as $fileName) {
                 $configFilePath = $generatedConfigDirectory . '/' . $extension['relative_install_path'] . '/' . $fileName;
