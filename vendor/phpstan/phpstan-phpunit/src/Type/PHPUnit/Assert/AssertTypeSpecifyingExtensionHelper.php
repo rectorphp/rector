@@ -19,7 +19,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Analyser\SpecifiedTypes;
 use PHPStan\Analyser\TypeSpecifier;
 use PHPStan\Analyser\TypeSpecifierContext;
-use PHPStan\Type\Constant\ConstantStringType;
 use ReflectionObject;
 use function array_key_exists;
 use function count;
@@ -93,11 +92,12 @@ class AssertTypeSpecifyingExtensionHelper
     {
         if (self::$resolvers === null) {
             self::$resolvers = ['InstanceOf' => static function (Scope $scope, Arg $class, Arg $object) : ?Instanceof_ {
-                $classType = $scope->getType($class->value);
-                if (!$classType instanceof ConstantStringType) {
+                $classType = $scope->getType($class->value)->getClassStringObjectType();
+                $classNames = $classType->getObjectClassNames();
+                if (count($classNames) !== 1) {
                     return null;
                 }
-                return new Instanceof_($object->value, new Name($classType->getValue()));
+                return new Instanceof_($object->value, new Name($classNames[0]));
             }, 'Same' => static function (Scope $scope, Arg $expected, Arg $actual) : Identical {
                 return new Identical($expected->value, $actual->value);
             }, 'True' => static function (Scope $scope, Arg $actual) : Identical {
@@ -131,11 +131,11 @@ class AssertTypeSpecifyingExtensionHelper
             }, 'IsScalar' => static function (Scope $scope, Arg $actual) : FuncCall {
                 return new FuncCall(new Name('is_scalar'), [$actual]);
             }, 'InternalType' => static function (Scope $scope, Arg $type, Arg $value) : ?FuncCall {
-                $typeType = $scope->getType($type->value);
-                if (!$typeType instanceof ConstantStringType) {
+                $typeNames = $scope->getType($type->value)->getConstantStrings();
+                if (count($typeNames) !== 1) {
                     return null;
                 }
-                switch ($typeType->getValue()) {
+                switch ($typeNames[0]->getValue()) {
                     case 'numeric':
                         $functionName = 'is_numeric';
                         break;

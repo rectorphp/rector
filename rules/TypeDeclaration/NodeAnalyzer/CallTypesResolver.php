@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\NodeAnalyzer;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
@@ -14,6 +15,9 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
+use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -34,11 +38,29 @@ final class CallTypesResolver
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory, ReflectionProvider $reflectionProvider)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    public function __construct(NodeTypeResolver $nodeTypeResolver, TypeFactory $typeFactory, ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, NodeComparator $nodeComparator)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->typeFactory = $typeFactory;
         $this->reflectionProvider = $reflectionProvider;
+        $this->betterNodeFinder = $betterNodeFinder;
+        $this->astResolver = $astResolver;
+        $this->nodeComparator = $nodeComparator;
     }
     /**
      * @param MethodCall[]|StaticCall[]|ArrayCallable[] $calls
@@ -51,6 +73,9 @@ final class CallTypesResolver
             if (!$call instanceof StaticCall && !$call instanceof MethodCall) {
                 continue;
             }
+            if ($this->isRecursiveCall($call)) {
+                return [];
+            }
             foreach ($call->args as $position => $arg) {
                 if (!$arg instanceof Arg) {
                     continue;
@@ -60,6 +85,18 @@ final class CallTypesResolver
         }
         // unite to single type
         return $this->unionToSingleType($staticTypesByArgumentPosition);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     */
+    private function isRecursiveCall($call) : bool
+    {
+        $parentClassMethod = $this->betterNodeFinder->findParentType($call, ClassMethod::class);
+        if (!$parentClassMethod instanceof ClassMethod) {
+            return \false;
+        }
+        $classMethod = $this->astResolver->resolveClassMethodFromCall($call);
+        return $this->nodeComparator->areNodesEqual($parentClassMethod, $classMethod);
     }
     private function resolveStrictArgValueType(Arg $arg) : Type
     {

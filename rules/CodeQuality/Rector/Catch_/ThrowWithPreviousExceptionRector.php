@@ -154,9 +154,9 @@ CODE_SAMPLE
             return self::DEFAULT_EXCEPTION_ARGUMENT_POSITION;
         }
         $extendedMethodReflection = $classReflection->getConstructor();
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
-        foreach ($parametersAcceptor->getParameters() as $position => $parameterReflection) {
-            $parameterType = $parameterReflection->getType();
+        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
+        foreach ($parametersAcceptorWithPhpDocs->getParameters() as $position => $parameterReflectionWithPhpDoc) {
+            $parameterType = $parameterReflectionWithPhpDoc->getType();
             if (!$parameterType instanceof TypeWithClassName) {
                 continue;
             }

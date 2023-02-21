@@ -7,10 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\ObjectType;
 use RectorPrefix202302\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use RectorPrefix202302\PHPUnit\Framework\MockObject\MockObject;
 use RectorPrefix202302\PHPUnit\Framework\MockObject\Stub;
@@ -39,23 +35,29 @@ class MockMethodCallRule implements Rule
             return [];
         }
         $argType = $scope->getType($node->getArgs()[0]->value);
-        if (!$argType instanceof ConstantStringType) {
+        if (count($argType->getConstantStrings()) === 0) {
             return [];
         }
-        $method = $argType->getValue();
-        $type = $scope->getType($node->var);
-        if ($type instanceof IntersectionType && (in_array(MockObject::class, $type->getReferencedClasses(), \true) || in_array(Stub::class, $type->getReferencedClasses(), \true)) && !$type->hasMethod($method)->yes()) {
-            $mockClass = array_filter($type->getReferencedClasses(), static function (string $class) : bool {
-                return $class !== MockObject::class && $class !== Stub::class;
-            });
-            return [sprintf('Trying to mock an undefined method %s() on class %s.', $method, implode('&', $mockClass))];
-        }
-        if ($type instanceof GenericObjectType && $type->getClassName() === InvocationMocker::class && count($type->getTypes()) > 0) {
-            $mockClass = $type->getTypes()[0];
-            if ($mockClass instanceof ObjectType && !$mockClass->hasMethod($method)->yes()) {
-                return [sprintf('Trying to mock an undefined method %s() on class %s.', $method, $mockClass->getClassName())];
+        $errors = [];
+        foreach ($argType->getConstantStrings() as $constantString) {
+            $method = $constantString->getValue();
+            $type = $scope->getType($node->var);
+            if ((in_array(MockObject::class, $type->getObjectClassNames(), \true) || in_array(Stub::class, $type->getObjectClassNames(), \true)) && !$type->hasMethod($method)->yes()) {
+                $mockClasses = array_filter($type->getObjectClassNames(), static function (string $class) : bool {
+                    return $class !== MockObject::class && $class !== Stub::class;
+                });
+                if (count($mockClasses) === 0) {
+                    continue;
+                }
+                $errors[] = sprintf('Trying to mock an undefined method %s() on class %s.', $method, implode('&', $mockClasses));
+                continue;
             }
+            $mockedClassObject = $type->getTemplateType(InvocationMocker::class, 'TMockedClass');
+            if ($mockedClassObject->hasMethod($method)->yes()) {
+                continue;
+            }
+            $errors[] = sprintf('Trying to mock an undefined method %s() on class %s.', $method, implode('|', $mockedClassObject->getObjectClassNames()));
         }
-        return [];
+        return $errors;
     }
 }
