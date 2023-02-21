@@ -101,8 +101,9 @@ final class MixPhpHtmlDecorator
         if (!$node instanceof Stmt) {
             return;
         }
-        // last Stmt that connected to InlineHTML just removed
-        if ($inlineHTML->getAttribute(AttributeKey::PARENT_NODE) !== $node) {
+        $parentInlineHTML = $inlineHTML->getAttribute(AttributeKey::PARENT_NODE);
+        // last Stmt that connected to InlineHTML just removed detected by different start token pos
+        if ($parentInlineHTML instanceof Stmt && $parentInlineHTML->getStartTokenPos() !== $node->getStartTokenPos()) {
             $inlineHTML->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             $this->isRequireReprintInlineHTML = \true;
         }
