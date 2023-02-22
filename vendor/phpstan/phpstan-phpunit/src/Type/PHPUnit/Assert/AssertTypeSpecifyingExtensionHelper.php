@@ -92,12 +92,12 @@ class AssertTypeSpecifyingExtensionHelper
     {
         if (self::$resolvers === null) {
             self::$resolvers = ['InstanceOf' => static function (Scope $scope, Arg $class, Arg $object) : ?Instanceof_ {
-                $classType = $scope->getType($class->value)->getClassStringObjectType();
-                $classNames = $classType->getObjectClassNames();
+                $classType = $scope->getType($class->value);
+                $classNames = $classType->getConstantStrings();
                 if (count($classNames) !== 1) {
                     return null;
                 }
-                return new Instanceof_($object->value, new Name($classNames[0]));
+                return new Instanceof_($object->value, new Name($classNames[0]->getValue()));
             }, 'Same' => static function (Scope $scope, Arg $expected, Arg $actual) : Identical {
                 return new Identical($expected->value, $actual->value);
             }, 'True' => static function (Scope $scope, Arg $actual) : Identical {
