@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\NonPhpFile;
 
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
+use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\ValueObject\Application\File;
@@ -12,6 +13,7 @@ use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 use Rector\Parallel\ValueObject\Bridge;
+use RectorPrefix202302\Symfony\Component\Filesystem\Filesystem;
 final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
@@ -25,12 +27,24 @@ final class NonPhpFileProcessor implements FileProcessorInterface
      */
     private $fileDiffFactory;
     /**
+     * @readonly
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    private $filesystem;
+    /**
+     * @readonly
+     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
+     */
+    private $removedAndAddedFilesCollector;
+    /**
      * @param NonPhpRectorInterface[] $nonPhpRectors
      */
-    public function __construct(array $nonPhpRectors, FileDiffFactory $fileDiffFactory)
+    public function __construct(array $nonPhpRectors, FileDiffFactory $fileDiffFactory, Filesystem $filesystem, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector)
     {
         $this->nonPhpRectors = $nonPhpRectors;
         $this->fileDiffFactory = $fileDiffFactory;
+        $this->filesystem = $filesystem;
+        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
     }
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
@@ -53,6 +67,7 @@ final class NonPhpFileProcessor implements FileProcessorInterface
         if ($oldFileContent !== $newFileContent) {
             $fileDiff = $this->fileDiffFactory->createFileDiff($file, $oldFileContent, $newFileContent);
             $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS][] = $fileDiff;
+            $this->printFile($file, $configuration);
         }
         return $systemErrorsAndFileDiffs;
     }
@@ -75,5 +90,17 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     public function getSupportedFileExtensions() : array
     {
         return StaticNonPhpFileSuffixes::SUFFIXES;
+    }
+    private function printFile(File $file, Configuration $configuration) : void
+    {
+        $filePath = $file->getFilePath();
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($filePath)) {
+            // skip, because this file exists no more
+            return;
+        }
+        if ($configuration->isDryRun()) {
+            return;
+        }
+        $this->filesystem->dumpFile($filePath, $file->getFileContent());
     }
 }
