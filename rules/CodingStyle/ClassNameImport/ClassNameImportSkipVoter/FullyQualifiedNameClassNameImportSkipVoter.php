@@ -33,13 +33,11 @@ final class FullyQualifiedNameClassNameImportSkipVoter implements ClassNameImpor
         // "new X" or "X::static()"
         /** @var array<string, string> $shortNamesToFullyQualifiedNames */
         $shortNamesToFullyQualifiedNames = $this->shortNameResolver->resolveFromFile($file);
-        $loweredShortNameFullyQualified = $fullyQualifiedObjectType->getShortNameLowered();
         foreach ($shortNamesToFullyQualifiedNames as $shortName => $fullyQualifiedName) {
-            $shortNameLowered = \strtolower($shortName);
-            if ($loweredShortNameFullyQualified !== $shortNameLowered) {
+            if ($fullyQualifiedObjectType->getShortName() !== $shortName) {
                 continue;
             }
-            return $fullyQualifiedObjectType->getClassNameLowered() !== \strtolower($fullyQualifiedName);
+            return $fullyQualifiedObjectType->getClassName() !== $fullyQualifiedName;
         }
         return \false;
     }
