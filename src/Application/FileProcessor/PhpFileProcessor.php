@@ -94,21 +94,34 @@ final class PhpFileProcessor implements FileProcessorInterface
             $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
             return $systemErrorsAndFileDiffs;
         }
+        $hasChangedOnPostRector = \false;
         // 2. change nodes with Rectors
         do {
             $file->changeHasChanged(\false);
             $this->fileProcessor->refactor($file, $configuration);
+            $fileNewStmts = $file->getNewStmts();
             // 3. apply post rectors
-            $newStmts = $this->postFileProcessor->traverse($file->getNewStmts());
+            $filePostRectorNewStmts = $this->postFileProcessor->traverse($fileNewStmts);
             // this is needed for new tokens added in "afterTraverse()"
-            $file->changeNewStmts($newStmts);
+            $file->changeNewStmts($filePostRectorNewStmts);
+            if (!$hasChangedOnPostRector && $file->getRectorWithLineChanges() === [] && $fileNewStmts !== $filePostRectorNewStmts) {
+                $hasChangedOnPostRector = \true;
+            }
             // 4. print to file or string
             // important to detect if file has changed
             $this->printFile($file, $configuration);
         } while ($file->hasChanged());
-        // return json here
+        // return early on no diff
         $fileDiff = $file->getFileDiff();
         if (!$fileDiff instanceof FileDiff) {
+            return $systemErrorsAndFileDiffs;
+        }
+        // No Line change and no PostRector change? return early
+        if ($file->getRectorWithLineChanges() === [] && !$hasChangedOnPostRector) {
+            return $systemErrorsAndFileDiffs;
+        }
+        // return early on diff is empty
+        if ($fileDiff->getDiff() === '') {
             return $systemErrorsAndFileDiffs;
         }
         $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
