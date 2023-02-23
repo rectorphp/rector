@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Application\FileProcessor;
 
+use RectorPrefix202302\Nette\Utils\FileSystem;
 use PHPStan\AnalysedCodeException;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
@@ -118,10 +119,7 @@ final class PhpFileProcessor implements FileProcessorInterface
         }
         // No Line change and no PostRector change? return early
         if ($file->getRectorWithLineChanges() === [] && !$hasChangedOnPostRector) {
-            return $systemErrorsAndFileDiffs;
-        }
-        // return early on diff is empty
-        if ($fileDiff->getDiff() === '') {
+            $this->rollbackOriginalFile($file, $configuration);
             return $systemErrorsAndFileDiffs;
         }
         $systemErrorsAndFileDiffs[Bridge::FILE_DIFFS] = [$fileDiff];
@@ -138,6 +136,18 @@ final class PhpFileProcessor implements FileProcessorInterface
     public function getSupportedFileExtensions() : array
     {
         return ['php'];
+    }
+    private function rollbackOriginalFile(File $file, Configuration $configuration) : void
+    {
+        if ($configuration->isDryRun()) {
+            return;
+        }
+        $filePath = $file->getFilePath();
+        if ($this->removedAndAddedFilesCollector->isFileRemoved($filePath)) {
+            // skip, because this file exists no more
+            return;
+        }
+        Filesystem::write($filePath, $file->getOriginalFileContent());
     }
     /**
      * @return SystemError[]
