@@ -157,20 +157,21 @@ final class PhpDocFromTypeDeclarationDecorator
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
      */
-    public function decorateParamWithSpecificType(Param $param, $functionLike, Type $requireType) : void
+    public function decorateParamWithSpecificType(Param $param, $functionLike, Type $requireType) : bool
     {
         if ($param->type === null) {
-            return;
+            return \false;
         }
         if (!$this->isTypeMatch($param->type, $requireType)) {
-            return;
+            return \false;
         }
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         if ($this->isNullableSupportedAndPossible($type)) {
             $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
-            return;
+            return \true;
         }
         $this->moveParamTypeToParamDoc($functionLike, $param, $type);
+        return \true;
     }
     /**
      * @return bool True if node was changed

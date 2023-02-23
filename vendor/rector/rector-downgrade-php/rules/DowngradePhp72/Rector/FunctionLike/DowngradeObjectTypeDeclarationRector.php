@@ -39,10 +39,18 @@ final class DowngradeObjectTypeDeclarationRector extends AbstractRector
     public function refactor(Node $node) : ?Node
     {
         $objectWithoutClassType = new ObjectWithoutClassType();
+        $hasChanged = \false;
+        $hasParamChanged = \false;
         foreach ($node->params as $param) {
-            $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $objectWithoutClassType);
+            $hasParamChanged = $this->phpDocFromTypeDeclarationDecorator->decorateParamWithSpecificType($param, $node, $objectWithoutClassType);
+            if ($hasParamChanged) {
+                $hasChanged = \true;
+            }
         }
         if (!$this->phpDocFromTypeDeclarationDecorator->decorateReturnWithSpecificType($node, $objectWithoutClassType)) {
+            if ($hasChanged) {
+                return $node;
+            }
             return null;
         }
         return $node;
