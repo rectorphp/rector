@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Autoloading;
 
 use RectorPrefix202302\Nette\Neon\Neon;
+use PHPStan\DependencyInjection\Container;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -33,12 +34,12 @@ final class BootstrapFilesIncluder
         $this->parameterProvider = $parameterProvider;
         $this->phpStanExtensionsConfigResolver = $phpStanExtensionsConfigResolver;
     }
-    public function includePHPStanExtensionsBoostrapFiles() : void
+    public function includePHPStanExtensionsBoostrapFiles(?Container $container = null) : void
     {
         $extensionConfigFiles = $this->phpStanExtensionsConfigResolver->resolve();
         $absoluteBootstrapFilePaths = $this->resolveAbsoluteBootstrapFilePaths($extensionConfigFiles);
         foreach ($absoluteBootstrapFilePaths as $absoluteBootstrapFilePath) {
-            $this->tryRequireFile($absoluteBootstrapFilePath);
+            $this->tryRequireFile($absoluteBootstrapFilePath, $container);
         }
     }
     /**
@@ -79,10 +80,16 @@ final class BootstrapFilesIncluder
         }
         return $absoluteBootstrapFilePaths;
     }
-    private function tryRequireFile(string $bootstrapFile) : void
+    /**
+     * PHPStan container mimics:
+     * https://github.com/phpstan/phpstan-src/blob/34881e682e36e30917dcfa8dc69c70e857143436/src/Command/CommandHelper.php#L513-L515
+     */
+    private function tryRequireFile(string $bootstrapFile, ?Container $container = null) : void
     {
         try {
-            require_once $bootstrapFile;
+            (static function (string $bootstrapFile) use($container) : void {
+                require_once $bootstrapFile;
+            })($bootstrapFile);
         } catch (Throwable $throwable) {
             $errorMessage = \sprintf('"%s" thrown in "%s" on line %d while loading bootstrap file %s: %s', \get_class($throwable), $throwable->getFile(), $throwable->getLine(), $bootstrapFile, $throwable->getMessage());
             throw new ShouldNotHappenException($errorMessage, $throwable->getCode(), $throwable);

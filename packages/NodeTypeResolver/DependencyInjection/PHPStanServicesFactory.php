@@ -60,6 +60,10 @@ final class PHPStanServicesFactory
         $filesystem = new Filesystem();
         $filesystem->remove($purifiedConfigFiles);
     }
+    public function provideContainer() : Container
+    {
+        return $this->container;
+    }
     /**
      * @api
      */
