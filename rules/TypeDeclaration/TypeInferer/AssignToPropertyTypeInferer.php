@@ -27,7 +27,6 @@ use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
-use Rector\TypeDeclaration\TypeAnalyzer\PropertyFetchTypeAnalyzer;
 /**
  * @deprecated
  * @todo Split into many narrow-focused rules
@@ -84,12 +83,7 @@ final class AssignToPropertyTypeInferer
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\TypeDeclaration\TypeAnalyzer\PropertyFetchTypeAnalyzer
-     */
-    private $propertyFetchTypeAnalyzer;
-    public function __construct(ConstructorAssignDetector $constructorAssignDetector, PropertyAssignMatcher $propertyAssignMatcher, PropertyDefaultAssignDetector $propertyDefaultAssignDetector, NullTypeAssignDetector $nullTypeAssignDetector, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, TypeFactory $typeFactory, NodeTypeResolver $nodeTypeResolver, ExprAnalyzer $exprAnalyzer, ValueResolver $valueResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, PropertyFetchTypeAnalyzer $propertyFetchTypeAnalyzer)
+    public function __construct(ConstructorAssignDetector $constructorAssignDetector, PropertyAssignMatcher $propertyAssignMatcher, PropertyDefaultAssignDetector $propertyDefaultAssignDetector, NullTypeAssignDetector $nullTypeAssignDetector, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, TypeFactory $typeFactory, NodeTypeResolver $nodeTypeResolver, ExprAnalyzer $exprAnalyzer, ValueResolver $valueResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
@@ -101,7 +95,6 @@ final class AssignToPropertyTypeInferer
         $this->exprAnalyzer = $exprAnalyzer;
         $this->valueResolver = $valueResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->propertyFetchTypeAnalyzer = $propertyFetchTypeAnalyzer;
     }
     public function inferPropertyInClassLike(Property $property, string $propertyName, ClassLike $classLike) : ?Type
     {
@@ -213,9 +206,6 @@ final class AssignToPropertyTypeInferer
             }
             $expr = $this->propertyAssignMatcher->matchPropertyAssignExpr($node, $propertyName);
             if (!$expr instanceof Expr) {
-                return null;
-            }
-            if ($this->propertyFetchAnalyzer->isPropertyFetch($node->expr) && $this->propertyFetchTypeAnalyzer->isPropertyFetchExprNotNativelyTyped($node->expr)) {
                 return null;
             }
             if ($this->exprAnalyzer->isNonTypedFromParam($node->expr)) {

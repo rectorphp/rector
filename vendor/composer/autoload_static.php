@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit466f8ae2befaae596f962111b327b685
+class ComposerStaticInit916c90a106fbfd244faef021e7e06d3e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -3074,7 +3074,6 @@ class ComposerStaticInit466f8ae2befaae596f962111b327b685
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
-        'Rector\\TypeDeclaration\\TypeAnalyzer\\PropertyFetchTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/PropertyFetchTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\ReturnStrictTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/ReturnStrictTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\StrictReturnClassConstReturnTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/StrictReturnClassConstReturnTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
@@ -3126,9 +3125,9 @@ class ComposerStaticInit466f8ae2befaae596f962111b327b685
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit466f8ae2befaae596f962111b327b685::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit466f8ae2befaae596f962111b327b685::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit466f8ae2befaae596f962111b327b685::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit916c90a106fbfd244faef021e7e06d3e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit916c90a106fbfd244faef021e7e06d3e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit916c90a106fbfd244faef021e7e06d3e::$classMap;
 
         }, null, ClassLoader::class);
     }

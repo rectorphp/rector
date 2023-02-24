@@ -2827,7 +2827,6 @@ return array(
     'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
-    'Rector\\TypeDeclaration\\TypeAnalyzer\\PropertyFetchTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/PropertyFetchTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\ReturnStrictTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/ReturnStrictTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\StrictReturnClassConstReturnTypeAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/StrictReturnClassConstReturnTypeAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => $baseDir . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
