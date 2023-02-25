@@ -76,7 +76,11 @@ class CoversHelper
             if (!isset($method) && $this->reflectionProvider->hasFunction(new Name($covers, []), null)) {
                 return $errors;
             }
-            $errors[] = RuleErrorBuilder::message(sprintf('@covers value %s references an invalid %s.', $fullName, $isMethod ? 'method' : 'class or function'))->build();
+            $error = RuleErrorBuilder::message(sprintf('@covers value %s references an invalid %s.', $fullName, $isMethod ? 'method' : 'class or function'));
+            if (strpos($className, '\\') === \false) {
+                $error->tip('The @covers annotation requires a fully qualified name.');
+            }
+            $errors[] = $error->build();
         }
         return $errors;
     }

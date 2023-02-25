@@ -170,11 +170,11 @@ final class PhpFileProcessor implements FileProcessorInterface
         // only save to string first, no need to print to file when not needed
         $newContent = $this->formatPerservingPrinter->printParsedStmstAndTokensToString($file);
         /**
-         * When no Rules applied, the PostRector may still change the content, that's why printing still needed
+         * When no diff applied, the PostRector may still change the content, that's why printing still needed
          * On printing, the space may be wiped, these below check compare with original file content used to verify
-         * that no diff actually needed
+         * that no change actually needed
          */
-        if ($file->getRectorWithLineChanges() === []) {
+        if (!$file->getFileDiff() instanceof FileDiff) {
             /**
              * Handle new line or space before <?php or InlineHTML node wiped on print format preserving
              * On very first content level
