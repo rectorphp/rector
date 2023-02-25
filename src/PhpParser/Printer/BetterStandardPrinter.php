@@ -123,7 +123,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         $newStmts = $this->resolveNewStmts($stmts);
         $content = parent::printFormatPreserving($newStmts, $origStmts, $origTokens);
         // add new line in case of added stmts
-        if (\count($stmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
+        if (\count($newStmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
         }
         if (!$this->mixPhpHtmlDecorator->isRequireReprintInlineHTML()) {
