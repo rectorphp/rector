@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Application\FileProcessor;
 
+use RectorPrefix202302\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
@@ -24,6 +25,11 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Throwable;
 final class PhpFileProcessor implements FileProcessorInterface
 {
+    /**
+     * @var string
+     * @see https://regex101.com/r/xP2MGa/1
+     */
+    private const OPEN_TAG_SPACED_REGEX = '#^(?<open_tag_spaced>[^\\S\\r\\n]+\\<\\?php)#m';
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Printer\FormatPerservingPrinter
@@ -161,7 +167,34 @@ final class PhpFileProcessor implements FileProcessorInterface
             // skip, because this file exists no more
             return;
         }
-        $newContent = $configuration->isDryRun() ? $this->formatPerservingPrinter->printParsedStmstAndTokensToString($file) : $this->formatPerservingPrinter->printParsedStmstAndTokens($file);
+        // only save to string first, no need to print to file when not needed
+        $newContent = $this->formatPerservingPrinter->printParsedStmstAndTokensToString($file);
+        /**
+         * When no Rules applied, the PostRector may still change the content, that's why printing still needed
+         * On printing, the space may be wiped, these below check compare with original file content used to verify
+         * that no diff actually needed
+         */
+        if ($file->getRectorWithLineChanges() === []) {
+            /**
+             * Handle new line or space before <?php or InlineHTML node wiped on print format preserving
+             * On very first content level
+             */
+            $originalFileContent = $file->getOriginalFileContent();
+            if (\ltrim($originalFileContent) === $newContent) {
+                return;
+            }
+            /**
+             * Handle space before <?php wiped on print format preserving
+             * On inside content level
+             */
+            $cleanedOriginalFileContent = Strings::replace($originalFileContent, self::OPEN_TAG_SPACED_REGEX, '<?php');
+            if ($cleanedOriginalFileContent === $newContent) {
+                return;
+            }
+        }
+        if (!$configuration->isDryRun()) {
+            $this->formatPerservingPrinter->dumpFile($file->getFilePath(), $newContent);
+        }
         $file->changeFileContent($newContent);
         $this->fileDiffFileDecorator->decorate([$file]);
     }
