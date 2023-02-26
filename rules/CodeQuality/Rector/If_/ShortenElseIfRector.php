@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Nop;
-use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,15 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ShortenElseIfRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
-     */
-    private $commentsMerger;
-    public function __construct(CommentsMerger $commentsMerger)
-    {
-        $this->commentsMerger = $commentsMerger;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Shortens else/if to elseif', [new CodeSample(<<<'CODE_SAMPLE'
@@ -97,7 +87,8 @@ CODE_SAMPLE
             $if->stmts[] = $nop;
         } else {
             $currentStmt = \current($if->stmts);
-            $this->commentsMerger->keepChildren($currentStmt, $if);
+            $mergedComments = \array_merge($if->getComments(), $currentStmt->getComments());
+            $currentStmt->setAttribute(AttributeKey::COMMENTS, $mergedComments);
         }
         $node->elseifs[] = new ElseIf_($if->cond, $if->stmts);
         $node->else = $if->else;
