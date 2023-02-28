@@ -1,0 +1,48 @@
+# github action that checks code with Rector
+name: Rector
+
+on:
+    pull_request: null
+
+
+jobs:
+    rector:
+        # Don't run on forks.
+        if: github.repository == '__CURRENT_REPOSITORY__'
+
+        runs-on: ubuntu-latest
+
+        steps:
+            -
+                uses: actions/checkout@v3
+                with:
+                    # needed to trigger workflow after push
+                    token: ${{ secrets.ACCESS_TOKEN }}
+
+            -
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: 8.1
+                    coverage: none
+
+            -   uses: "ramsey/composer-install@v2"
+
+            ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anything in the future
+            -   run: vendor/bin/rector --ansi
+
+            -   run: vendor/bin/ecs check --fix --ansi
+
+            # see https://github.com/EndBug/add-and-commit
+            -
+                # commit only to core contributors who have repository access
+                if: github.event.pull_request.head.repo.full_name == github.repository
+                uses: EndBug/add-and-commit@v7.5.0
+                with:
+                    # The arguments for the `git add` command (see the paragraph below for more info)
+                    add: .
+                    message: "[rector] Rector fixes"
+                    author_name: "GitHub Action"
+                    author_email: "action@github.com"
+                env:
+                    # to get push access
+                    GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}

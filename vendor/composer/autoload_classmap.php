@@ -1393,6 +1393,7 @@ return array(
     'Rector\\Core\\Console\\Command\\InitCommand' => $baseDir . '/src/Console/Command/InitCommand.php',
     'Rector\\Core\\Console\\Command\\ListRulesCommand' => $baseDir . '/src/Console/Command/ListRulesCommand.php',
     'Rector\\Core\\Console\\Command\\ProcessCommand' => $baseDir . '/src/Console/Command/ProcessCommand.php',
+    'Rector\\Core\\Console\\Command\\SetupCICommand' => $baseDir . '/src/Console/Command/SetupCICommand.php',
     'Rector\\Core\\Console\\Command\\WorkerCommand' => $baseDir . '/src/Console/Command/WorkerCommand.php',
     'Rector\\Core\\Console\\ConsoleApplication' => $baseDir . '/src/Console/ConsoleApplication.php',
     'Rector\\Core\\Console\\ExitCode' => $baseDir . '/src/Console/ExitCode.php',
