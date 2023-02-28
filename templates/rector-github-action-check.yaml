@@ -22,7 +22,7 @@ jobs:
             -
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: __PHP_VERSION__
+                    php-version: 8.1
                     coverage: none
 
             -   uses: "ramsey/composer-install@v2"
