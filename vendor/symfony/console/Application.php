@@ -131,7 +131,7 @@ class Application implements ResetInterface
      */
     private $initialized = \false;
     /**
-     * @var \Symfony\Component\Console\SignalRegistry\SignalRegistry
+     * @var \Symfony\Component\Console\SignalRegistry\SignalRegistry|null
      */
     private $signalRegistry;
     /**

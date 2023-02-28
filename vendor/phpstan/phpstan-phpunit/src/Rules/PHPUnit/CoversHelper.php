@@ -52,6 +52,10 @@ class CoversHelper
     {
         $errors = [];
         $covers = (string) $phpDocTag->value;
+        if ($covers === '') {
+            $errors[] = RuleErrorBuilder::message('@covers value does not specify anything.')->build();
+            return $errors;
+        }
         $isMethod = strpos($covers, '::') !== \false;
         $fullName = $covers;
         if ($isMethod) {
@@ -68,14 +72,11 @@ class CoversHelper
             if (isset($method) && $method !== '' && !$class->hasMethod($method)) {
                 $errors[] = RuleErrorBuilder::message(sprintf('@covers value %s references an invalid method.', $fullName))->build();
             }
+        } elseif (isset($method) && $this->reflectionProvider->hasFunction(new Name($method, []), null)) {
+            return $errors;
+        } elseif (!isset($method) && $this->reflectionProvider->hasFunction(new Name($className, []), null)) {
+            return $errors;
         } else {
-            if ($covers === '') {
-                $errors[] = RuleErrorBuilder::message('@covers value does not specify anything.')->build();
-                return $errors;
-            }
-            if (!isset($method) && $this->reflectionProvider->hasFunction(new Name($covers, []), null)) {
-                return $errors;
-            }
             $error = RuleErrorBuilder::message(sprintf('@covers value %s references an invalid %s.', $fullName, $isMethod ? 'method' : 'class or function'));
             if (strpos($className, '\\') === \false) {
                 $error->tip('The @covers annotation requires a fully qualified name.');

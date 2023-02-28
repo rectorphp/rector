@@ -22,6 +22,7 @@ use RectorPrefix202302\Symfony\Component\Console\Helper\TableCell;
 use RectorPrefix202302\Symfony\Component\Console\Helper\TableSeparator;
 use RectorPrefix202302\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202302\Symfony\Component\Console\Output\ConsoleOutputInterface;
+use RectorPrefix202302\Symfony\Component\Console\Output\ConsoleSectionOutput;
 use RectorPrefix202302\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202302\Symfony\Component\Console\Output\TrimmedBufferOutput;
 use RectorPrefix202302\Symfony\Component\Console\Question\ChoiceQuestion;
@@ -291,6 +292,11 @@ class SymfonyStyle extends OutputStyle
         $this->questionHelper = $this->questionHelper ?? new SymfonyQuestionHelper();
         $answer = $this->questionHelper->ask($this->input, $this, $question);
         if ($this->input->isInteractive()) {
+            if ($this->output instanceof ConsoleSectionOutput) {
+                // add the new line of the `return` to submit the input to ConsoleSectionOutput, because ConsoleSectionOutput is holding all it's lines.
+                // this is relevant when a `ConsoleSectionOutput::clear` is called.
+                $this->output->addNewLineOfInputSubmit();
+            }
             $this->newLine();
             $this->bufferedOutput->write("\n");
         }

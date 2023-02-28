@@ -13,7 +13,7 @@ use ErrorException;
  */
 class Debugger
 {
-    public const VERSION = '2.9.6';
+    public const VERSION = '2.9.7';
     /** server modes for Debugger::enable() */
     public const Development = \false, Production = \true, Detect = null;
     public const DEVELOPMENT = self::Development, PRODUCTION = self::Production, DETECT = self::Detect;

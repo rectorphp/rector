@@ -51,7 +51,7 @@ if [ "${url:0:9}" != "editor://" ]; then
 fi
 
 # Parse action and essential data from the URI.
-regex='editor\:\/\/(open|create|fix)\/\?(.*)'
+regex='editor\:\/\/(open|create|fix)\/?\?(.*)'
 action=`echo $url | sed -r "s/$regex/\1/i"`
 uri_params=`echo $url | sed -r "s/$regex/\2/i"`
 

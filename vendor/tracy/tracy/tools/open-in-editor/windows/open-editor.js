@@ -41,7 +41,7 @@ if (!settings.editor) {
 }
 
 var url = WScript.Arguments(0);
-var match = /^editor:\/\/(open|create|fix)\/\?file=([^&]+)&line=(\d+)(?:&search=([^&]*)&replace=([^&]*))?/.exec(url);
+var match = /^editor:\/\/(open|create|fix)\/?\?file=([^&]+)&line=(\d+)(?:&search=([^&]*)&replace=([^&]*))?/.exec(url);
 if (!match) {
 	WScript.Echo('Unexpected URI ' + url);
 	WScript.Quit();

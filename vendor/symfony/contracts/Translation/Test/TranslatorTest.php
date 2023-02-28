@@ -96,11 +96,11 @@ class TranslatorTest extends TestCase
         \Locale::setDefault('en');
         $this->assertEquals('en', $translator->getLocale());
     }
-    public function getTransTests()
+    public static function getTransTests()
     {
         return [['Symfony is great!', 'Symfony is great!', []], ['Symfony is awesome!', 'Symfony is %what%!', ['%what%' => 'awesome']]];
     }
-    public function getTransChoiceTests()
+    public static function getTransChoiceTests()
     {
         return [
             ['There are no apples', '{0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples', 0],
@@ -114,14 +114,14 @@ class TranslatorTest extends TestCase
         ];
     }
     /**
-     * @dataProvider getInternal
+     * @dataProvider getInterval
      */
     public function testInterval($expected, $number, $interval)
     {
         $translator = $this->getTranslator();
         $this->assertEquals($expected, $translator->trans($interval . ' foo|[1,Inf[ bar', ['%count%' => $number]));
     }
-    public function getInternal()
+    public static function getInterval()
     {
         return [['foo', 3, '{1,2, 3 ,4}'], ['bar', 10, '{1,2, 3 ,4}'], ['bar', 3, '[1,2]'], ['foo', 1, '[1,2]'], ['foo', 2, '[1,2]'], ['bar', 1, ']1,2['], ['bar', 2, ']1,2['], ['foo', \log(0), '[-Inf,2['], ['foo', -\log(0), '[-2,+Inf]']];
     }
@@ -147,11 +147,11 @@ class TranslatorTest extends TestCase
         $translator = $this->getTranslator();
         $translator->trans($id, ['%count%' => $number]);
     }
-    public function getNonMatchingMessages()
+    public static function getNonMatchingMessages()
     {
         return [['{0} There are no apples|{1} There is one apple', 2], ['{1} There is one apple|]1,Inf] There are %count% apples', 0], ['{1} There is one apple|]2,Inf] There are %count% apples', 2], ['{0} There are no apples|There is one apple', 2]];
     }
-    public function getChooseTests()
+    public static function getChooseTests()
     {
         return [
             ['There are no apples', '{0} There are no apples|{1} There is one apple|]1,Inf] There are %count% apples', 0],
@@ -253,7 +253,7 @@ class TranslatorTest extends TestCase
      *
      * As it is impossible to have this ever complete we should try as hard as possible to have it almost complete.
      */
-    public function successLangcodes() : array
+    public static function successLangcodes() : array
     {
         return [['1', ['ay', 'bo', 'cgg', 'dz', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky']], ['2', ['nl', 'fr', 'en', 'de', 'de_GE', 'hy', 'hy_AM', 'en_US_POSIX']], ['3', ['be', 'bs', 'cs', 'hr']], ['4', ['cy', 'mt', 'sl']], ['6', ['ar']]];
     }
@@ -265,7 +265,7 @@ class TranslatorTest extends TestCase
      *
      * @return array with nplural together with langcodes
      */
-    public function failingLangcodes() : array
+    public static function failingLangcodes() : array
     {
         return [['1', ['fa']], ['2', ['jbo']], ['3', ['cbs']], ['4', ['gd', 'kw']], ['5', ['ga']]];
     }

@@ -14,10 +14,12 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use Rector\BetterPhpDocParser\PhpDocManipulator\VarAnnotationManipulator;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassMethodAssignManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\Privatization\Naming\ConstantNaming;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -188,6 +190,10 @@ CODE_SAMPLE
                 if ($this->nodeNameResolver->isName($param->var, $variableName)) {
                     continue 2;
                 }
+            }
+            $parentAssign = $readOnlyVariableAssign->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parentAssign instanceof Expression) {
+                continue;
             }
             $this->removeNode($readOnlyVariableAssign);
             $classConst = $this->createPrivateClassConst($variable, $readOnlyVariableAssign->expr);

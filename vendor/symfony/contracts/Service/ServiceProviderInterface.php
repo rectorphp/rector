@@ -17,7 +17,7 @@ use RectorPrefix202302\Psr\Container\ContainerInterface;
  * @author Nicolas Grekas <p@tchwork.com>
  * @author Mateusz Sip <mateusz.sip@gmail.com>
  *
- * @template T of mixed
+ * @template-covariant T of mixed
  */
 interface ServiceProviderInterface extends ContainerInterface
 {

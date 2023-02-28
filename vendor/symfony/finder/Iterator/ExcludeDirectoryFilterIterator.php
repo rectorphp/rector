@@ -17,6 +17,7 @@ use RectorPrefix202302\Symfony\Component\Finder\SplFileInfo;
  * @author Fabien Potencier <fabien@symfony.com>
  *
  * @extends \FilterIterator<string, SplFileInfo>
+ *
  * @implements \RecursiveIterator<string, SplFileInfo>
  */
 class ExcludeDirectoryFilterIterator extends \FilterIterator implements \RecursiveIterator
