@@ -50,7 +50,7 @@ final class ConstantStringTypeToCallReflectionResolver implements TypeToCallRefl
     }
     /**
      * @param ConstantStringType $type
-     * @return FunctionReflection|MethodReflection|null
+     * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null
      */
     public function resolve(Type $type, Scope $scope)
     {

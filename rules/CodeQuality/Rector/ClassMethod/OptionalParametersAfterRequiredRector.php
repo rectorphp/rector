@@ -81,6 +81,7 @@ CODE_SAMPLE
     }
     /**
      * @param ClassMethod|New_|MethodCall|StaticCall $node
+     * @return \PhpParser\Node\Stmt\ClassMethod|null|\PhpParser\Node\Expr\New_|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
      */
     public function refactorWithScope(Node $node, Scope $scope)
     {

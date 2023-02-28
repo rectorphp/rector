@@ -13,7 +13,6 @@ use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\AstResolver;
@@ -100,6 +99,12 @@ final class ClassMethodReturnTypeOverrideGuard
         }
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof ClassReflection) {
+            return \true;
+        }
+        if ($classReflection->isAbstract()) {
+            return \true;
+        }
+        if ($classReflection->isInterface()) {
             return \true;
         }
         if (!$this->isReturnTypeChangeAllowed($classMethod)) {

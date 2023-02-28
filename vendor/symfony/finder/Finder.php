@@ -79,7 +79,7 @@ class Finder implements \IteratorAggregate, \Countable
      */
     private $reverseSorting = \false;
     /**
-     * @var \Closure|int|true
+     * @var \Closure|int|false
      */
     private $sort = \false;
     /**

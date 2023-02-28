@@ -16,7 +16,7 @@ if (!function_exists('normalizer_is_normalized')) {
 }
 if (!function_exists('normalizer_normalize')) {
     /**
-     * @return string|true
+     * @return string|false
      */
     function normalizer_normalize(?string $string, ?int $form = p\Normalizer::FORM_C) { return p\Normalizer::normalize((string) $string, (int) $form); }
 }

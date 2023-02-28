@@ -426,7 +426,7 @@ class QuestionHelper extends Helper
      *
      * @param resource $inputStream The handler resource
      * @param Question $question    The question being asked
-     * @return string|true
+     * @return string|false
      */
     private function readInput($inputStream, Question $question)
     {
@@ -460,8 +460,8 @@ class QuestionHelper extends Helper
     }
     /**
      * Sets console I/O to the specified code page and converts the user input.
-     * @param string|true $input
-     * @return string|true
+     * @param string|false $input
+     * @return string|false
      */
     private function resetIOCodepage(int $cp, $input)
     {

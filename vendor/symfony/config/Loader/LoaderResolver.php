@@ -34,7 +34,7 @@ class LoaderResolver implements LoaderResolverInterface
         }
     }
     /**
-     * @return \Symfony\Component\Config\Loader\LoaderInterface|true
+     * @return \Symfony\Component\Config\Loader\LoaderInterface|false
      * @param mixed $resource
      */
     public function resolve($resource, string $type = null)

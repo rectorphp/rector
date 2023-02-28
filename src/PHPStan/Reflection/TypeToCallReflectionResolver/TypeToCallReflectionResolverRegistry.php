@@ -23,7 +23,7 @@ final class TypeToCallReflectionResolverRegistry
         $this->resolvers = $resolvers;
     }
     /**
-     * @return FunctionReflection|MethodReflection|null
+     * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null
      */
     public function resolve(Type $type, Scope $scope)
     {

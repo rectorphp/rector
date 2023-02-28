@@ -333,7 +333,7 @@ class Container implements ContainerInterface, ResetInterface
     }
     /**
      * @internal
-     * @param string|true $registry
+     * @param string|false $registry
      * @param string|bool $load
      * @return mixed
      */
