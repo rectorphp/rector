@@ -2,6 +2,7 @@
     "name": "rector/rector",
     "description": "Instant Upgrade and Automated Refactoring of any PHP code",
     "license": "MIT",
+    "keywords": ["dev", "refactoring", "automation", "migration"],
     "bin": [
         "bin/rector"
     ],
