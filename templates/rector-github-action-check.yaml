@@ -22,15 +22,13 @@ jobs:
             -
                 uses: shivammathur/setup-php@v2
                 with:
-                    php-version: 8.1
+                    php-version: __PHP_VERSION__
                     coverage: none
 
             -   uses: "ramsey/composer-install@v2"
 
-            ## First run Rector - here can't be --dry-run !!! it would stop the job with it and not commit anything in the future
+            ## here can't be --dry-run, it would stop the job
             -   run: vendor/bin/rector --ansi
-
-            -   run: vendor/bin/ecs check --fix --ansi
 
             # see https://github.com/EndBug/add-and-commit
             -
