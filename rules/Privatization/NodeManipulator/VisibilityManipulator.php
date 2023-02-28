@@ -129,6 +129,23 @@ final class VisibilityManipulator
         $this->removeVisibilityFlag($node, Visibility::READONLY);
     }
     /**
+     * @param \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod $node
+     * @return \PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod|null
+     */
+    public function publicize($node)
+    {
+        // already non-public
+        if (!$node->isPublic()) {
+            return null;
+        }
+        // explicitly public
+        if ($this->hasVisibility($node, Visibility::PUBLIC)) {
+            return null;
+        }
+        $this->makePublic($node);
+        return $node;
+    }
+    /**
      * This way "abstract", "static", "final" are kept
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst $node
      */

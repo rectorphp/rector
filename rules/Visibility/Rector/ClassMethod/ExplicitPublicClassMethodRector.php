@@ -6,7 +6,6 @@ namespace Rector\Visibility\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\Visibility;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -56,15 +55,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        // already non-public
-        if (!$node->isPublic()) {
-            return null;
-        }
-        // explicitly public
-        if ($this->visibilityManipulator->hasVisibility($node, Visibility::PUBLIC)) {
-            return null;
-        }
-        $this->visibilityManipulator->makePublic($node);
-        return $node;
+        return $this->visibilityManipulator->publicize($node);
     }
 }
