@@ -4,14 +4,11 @@ name: Rector
 on:
     pull_request: null
 
-
 jobs:
     rector:
         # Don't run on forks.
         if: github.repository == '__CURRENT_REPOSITORY__'
-
         runs-on: ubuntu-latest
-
         steps:
             -
                 uses: actions/checkout@v3
@@ -27,10 +24,8 @@ jobs:
 
             -   uses: "ramsey/composer-install@v2"
 
-            ## here can't be --dry-run, it would stop the job
             -   run: vendor/bin/rector --ansi
 
-            # see https://github.com/EndBug/add-and-commit
             -
                 # commit only to core contributors who have repository access
                 if: github.event.pull_request.head.repo.full_name == github.repository
