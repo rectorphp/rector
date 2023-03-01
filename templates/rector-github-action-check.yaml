@@ -10,11 +10,19 @@ jobs:
         if: github.repository == '__CURRENT_REPOSITORY__'
         runs-on: ubuntu-latest
         steps:
+            # workaround for missing secret in fork PRs - see https://github.com/actions/checkout/issues/298
+            # see https://github.com/rectorphp/rector/commit/d395e1c28b8e6a56711dcc2e10490a82965850e4
             -
+                if: github.event.pull_request.head.repo.full_name == github.repository
                 uses: actions/checkout@v3
                 with:
-                    # needed to trigger workflow after push
+                    # Must be used to trigger workflow after push
                     token: ${{ secrets.ACCESS_TOKEN }}
+
+            # in forks, the token is not available - so we cannot use it
+            -
+                if: github.event.pull_request.head.repo.full_name != github.repository
+                uses: actions/checkout@v3
 
             -
                 uses: shivammathur/setup-php@v2
