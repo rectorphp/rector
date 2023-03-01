@@ -8,7 +8,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\DynamicMethodReturnTypeExtension;
 use PHPStan\Type\Type;
-use RectorPrefix202302\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
+use RectorPrefix202303\PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 class InvocationMockerDynamicReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
     public function getClass() : string

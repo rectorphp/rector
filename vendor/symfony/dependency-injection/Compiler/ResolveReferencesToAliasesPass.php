@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Reference;
 /**
  * Replaces all references to aliases with references to the actual service.
  *
@@ -57,7 +57,7 @@ class ResolveReferencesToAliasesPass extends AbstractRecursivePass
             $referencingDefinition = $container->hasDefinition($this->currentId) ? $container->getDefinition($this->currentId) : $container->getAlias($this->currentId);
             if (!$referencingDefinition->isDeprecated()) {
                 $deprecation = $alias->getDeprecation($id);
-                \RectorPrefix202302\trigger_deprecation($deprecation['package'], $deprecation['version'], \rtrim($deprecation['message'], '. ') . '. It is being referenced by the "%s" ' . ($container->hasDefinition($this->currentId) ? 'service.' : 'alias.'), $this->currentId);
+                \RectorPrefix202303\trigger_deprecation($deprecation['package'], $deprecation['version'], \rtrim($deprecation['message'], '. ') . '. It is being referenced by the "%s" ' . ($container->hasDefinition($this->currentId) ? 'service.' : 'alias.'), $this->currentId);
             }
         }
         $seen = [];

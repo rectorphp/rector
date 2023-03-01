@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
-use RectorPrefix202302\Clue\React\NDJson\Decoder;
-use RectorPrefix202302\Clue\React\NDJson\Encoder;
-use RectorPrefix202302\React\EventLoop\StreamSelectLoop;
-use RectorPrefix202302\React\Socket\ConnectionInterface;
-use RectorPrefix202302\React\Socket\TcpConnector;
+use RectorPrefix202303\Clue\React\NDJson\Decoder;
+use RectorPrefix202303\Clue\React\NDJson\Encoder;
+use RectorPrefix202303\React\EventLoop\StreamSelectLoop;
+use RectorPrefix202303\React\Socket\ConnectionInterface;
+use RectorPrefix202303\React\Socket\TcpConnector;
 use Rector\Core\Util\MemoryLimiter;
 use Rector\Parallel\WorkerRunner;
-use RectorPrefix202302\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202302\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202302\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202302\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix202303\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202303\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202303\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix202303\Symplify\EasyParallel\Enum\ReactCommand;
 /**
  * Inspired at: https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92
  * https://github.com/phpstan/phpstan-src/blob/c471c7b050e0929daf432288770de673b394a983/src/Command/WorkerCommand.php

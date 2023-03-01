@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\Console\Formatter;
+namespace RectorPrefix202303\Symfony\Component\Console\Formatter;
 
-use RectorPrefix202302\Symfony\Component\Console\Color;
+use RectorPrefix202303\Symfony\Component\Console\Color;
 /**
  * Formatter style class for defining styles.
  *
@@ -55,14 +55,14 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
     public function setForeground(string $color = null)
     {
         if (1 > \func_num_args()) {
-            \RectorPrefix202302\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+            \RectorPrefix202303\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
         }
         $this->color = new Color($this->foreground = $color ?: '', $this->background, $this->options);
     }
     public function setBackground(string $color = null)
     {
         if (1 > \func_num_args()) {
-            \RectorPrefix202302\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+            \RectorPrefix202303\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
         }
         $this->color = new Color($this->foreground, $this->background = $color ?: '', $this->options);
     }

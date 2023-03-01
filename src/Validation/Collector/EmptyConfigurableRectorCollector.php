@@ -6,8 +6,8 @@ namespace Rector\Core\Validation\Collector;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Definition;
 /**
  * @see \Rector\Core\Tests\Validation\Collector\EmptyConfigurableRectorCollector\EmptyConfigurableRectorCollectorTest
  */

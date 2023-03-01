@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202302\OndraM\CiDetector\Ci;
+namespace RectorPrefix202303\OndraM\CiDetector\Ci;
 
-use RectorPrefix202302\OndraM\CiDetector\CiDetector;
-use RectorPrefix202302\OndraM\CiDetector\Env;
-use RectorPrefix202302\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202303\OndraM\CiDetector\CiDetector;
+use RectorPrefix202303\OndraM\CiDetector\Env;
+use RectorPrefix202303\OndraM\CiDetector\TrinaryLogic;
 class Codeship extends AbstractCi
 {
     public static function isDetected(Env $env) : bool

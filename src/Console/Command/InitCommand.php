@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
 use Rector\Core\Configuration\ConfigInitializer;
-use RectorPrefix202302\Symfony\Component\Console\Command\Command;
-use RectorPrefix202302\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202302\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202303\Symfony\Component\Console\Command\Command;
+use RectorPrefix202303\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202303\Symfony\Component\Console\Output\OutputInterface;
 /**
  * @deprecated Now part of the "process" command
  */

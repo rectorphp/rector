@@ -8,13 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Contracts\Cache;
+namespace RectorPrefix202303\Symfony\Contracts\Cache;
 
-use RectorPrefix202302\Psr\Cache\CacheItemInterface;
+use RectorPrefix202303\Psr\Cache\CacheItemInterface;
 /**
  * Computes and returns the cached value of an item.
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ *
+ * @template T
  */
 interface CallbackInterface
 {
@@ -22,7 +24,7 @@ interface CallbackInterface
      * @param CacheItemInterface|ItemInterface $item  The item to compute the value for
      * @param bool                             &$save Should be set to false when the value should not be saved in the pool
      *
-     * @return mixed The computed value for the passed item
+     * @return T The computed value for the passed item
      */
     public function __invoke(CacheItemInterface $item, bool &$save) : mixed;
 }

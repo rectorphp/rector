@@ -3,18 +3,18 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\CompilerPass;
 
-use RectorPrefix202302\Nette\Utils\Strings;
+use RectorPrefix202303\Nette\Utils\Strings;
 use Rector\Core\DependencyInjection\DefinitionFinder;
 use Rector\Core\DependencyInjection\DocBlock\ParamTypeDocBlockResolver;
 use Rector\Core\DependencyInjection\Skipper\ParameterSkipper;
 use Rector\Core\DependencyInjection\TypeResolver\ParameterTypeResolver;
 use ReflectionClass;
 use ReflectionMethod;
-use RectorPrefix202302\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202303\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Reference;
 /**
  * @inspiration https://github.com/nette/di/pull/178
  * @see \Rector\Core\Tests\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPassTest

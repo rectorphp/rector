@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\Config\Loader;
+namespace RectorPrefix202303\Symfony\Component\Config\Loader;
 
 /**
  * A loader that can be scoped to a given filesystem directory.

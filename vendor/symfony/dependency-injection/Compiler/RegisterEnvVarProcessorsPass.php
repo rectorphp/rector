@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\EnvVarProcessor;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\EnvVarProcessorInterface;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\EnvVarProcessor;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\EnvVarProcessorInterface;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Reference;
 /**
  * Creates the container.env_var_processors_locator service.
  *

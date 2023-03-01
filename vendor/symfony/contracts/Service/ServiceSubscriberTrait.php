@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Contracts\Service;
+namespace RectorPrefix202303\Symfony\Contracts\Service;
 
-use RectorPrefix202302\Psr\Container\ContainerInterface;
-use RectorPrefix202302\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202302\Symfony\Contracts\Service\Attribute\SubscribedService;
+use RectorPrefix202303\Psr\Container\ContainerInterface;
+use RectorPrefix202303\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202303\Symfony\Contracts\Service\Attribute\SubscribedService;
 /**
  * Implementation of ServiceSubscriberInterface that determines subscribed services from
  * method return types. Service ids are available as "ClassName::methodName".
@@ -57,10 +57,11 @@ trait ServiceSubscriberTrait
      */
     public function setContainer(ContainerInterface $container) : ?ContainerInterface
     {
-        $this->container = $container;
+        $ret = null;
         if (\method_exists(\get_parent_class(self::class) ?: '', __FUNCTION__)) {
-            return parent::setContainer($container);
+            $ret = parent::setContainer($container);
         }
-        return null;
+        $this->container = $container;
+        return $ret;
     }
 }

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix202303\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix202302\Symfony\Component\Config\Definition\BooleanNode;
-use RectorPrefix202302\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
+use RectorPrefix202303\Symfony\Component\Config\Definition\BooleanNode;
+use RectorPrefix202303\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
 /**
  * This class provides a fluent interface for defining a node.
  *
@@ -27,7 +27,7 @@ class BooleanNodeDefinition extends ScalarNodeDefinition
     /**
      * Instantiate a Node.
      */
-    protected function instantiateNode() : \RectorPrefix202302\Symfony\Component\Config\Definition\ScalarNode
+    protected function instantiateNode() : \RectorPrefix202303\Symfony\Component\Config\Definition\ScalarNode
     {
         return new BooleanNode($this->name, $this->parent, $this->pathSeparator);
     }

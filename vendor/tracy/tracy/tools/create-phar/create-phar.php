@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202302;
+namespace RectorPrefix202303;
 
 // creates tracy.phar
 if (!\class_exists('Phar') || \ini_get('phar.readonly')) {

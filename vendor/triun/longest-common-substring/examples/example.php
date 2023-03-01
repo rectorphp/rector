@@ -1,13 +1,13 @@
 <?php
 
-namespace RectorPrefix202302;
+namespace RectorPrefix202303;
 
 require \dirname(__DIR__) . '/vendor/autoload.php';
-use RectorPrefix202302\Triun\LongestCommonSubstring\Solver;
-use RectorPrefix202302\Triun\LongestCommonSubstring\MatchesSolver;
-use RectorPrefix202302\Symfony\Component\VarDumper\Cloner\VarCloner;
-use RectorPrefix202302\Symfony\Component\VarDumper\Dumper\CliDumper;
-use RectorPrefix202302\Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use RectorPrefix202303\Triun\LongestCommonSubstring\Solver;
+use RectorPrefix202303\Triun\LongestCommonSubstring\MatchesSolver;
+use RectorPrefix202303\Symfony\Component\VarDumper\Cloner\VarCloner;
+use RectorPrefix202303\Symfony\Component\VarDumper\Dumper\CliDumper;
+use RectorPrefix202303\Symfony\Component\VarDumper\Dumper\HtmlDumper;
 function dump($value)
 {
     if (\class_exists(CliDumper::class)) {

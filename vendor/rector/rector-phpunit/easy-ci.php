@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202302;
+namespace RectorPrefix202303;
 
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector;
@@ -13,7 +13,7 @@ use Rector\PHPUnit\Rector\ClassMethod\TryCatchToExpectExceptionRector;
 use Rector\PHPUnit\Rector\MethodCall\AssertResourceToClosedResourceRector;
 use Rector\PHPUnit\Rector\MethodCall\CreateMockToCreateStubRector;
 use Rector\PHPUnit\Rector\MethodCall\UseSpecificWithMethodRector;
-use RectorPrefix202302\Symplify\EasyCI\Config\EasyCIConfig;
+use RectorPrefix202303\Symplify\EasyCI\Config\EasyCIConfig;
 return static function (EasyCIConfig $easyCIConfig) : void {
     $easyCIConfig->paths([__DIR__ . '/config', __DIR__ . '/src']);
     $easyCIConfig->typesToSkip([RectorInterface::class, \Rector\Set\Contract\SetListInterface::class]);

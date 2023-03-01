@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration\Parameter;
 
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 /**
  * @api
  */

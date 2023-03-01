@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeFactory;
 
-use RectorPrefix202302\Nette\Utils\Strings;
+use RectorPrefix202303\Nette\Utils\Strings;
 use PhpParser\Builder\Method;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Expr\Assign;
@@ -16,7 +16,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202302\Webmozart\Assert\Assert;
+use RectorPrefix202303\Webmozart\Assert\Assert;
 final class RequiredClassMethodFactory
 {
     /**

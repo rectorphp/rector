@@ -35,7 +35,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "RectorPrefix202302\\React\\Promise\\Timer\\": "src\/"
+            "RectorPrefix202303\\React\\Promise\\Timer\\": "src\/"
         },
         "files": [
             "src\/functions_include.php"
@@ -43,7 +43,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202302\\React\\Tests\\Promise\\Timer\\": "tests\/"
+            "RectorPrefix202303\\React\\Tests\\Promise\\Timer\\": "tests\/"
         }
     },
     "require": {

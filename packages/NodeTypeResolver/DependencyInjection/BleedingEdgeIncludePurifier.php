@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
-use RectorPrefix202302\Nette\Utils\FileSystem;
-use RectorPrefix202302\Nette\Utils\Strings;
+use RectorPrefix202303\Nette\Utils\FileSystem;
+use RectorPrefix202303\Nette\Utils\Strings;
 /**
  * Prevents failing include of bleeding edge in of phpstan extensions.
  * @see https://github.com/rectorphp/rector/issues/2431

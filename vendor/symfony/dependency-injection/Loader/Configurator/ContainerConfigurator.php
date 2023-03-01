@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix202302\Symfony\Component\Config\Loader\ParamConfigurator;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix202302\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix202303\Symfony\Component\Config\Loader\ParamConfigurator;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix202303\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

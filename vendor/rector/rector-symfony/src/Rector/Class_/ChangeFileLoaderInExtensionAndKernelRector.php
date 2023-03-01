@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\Class_;
 
-use RectorPrefix202302\Nette\Utils\Strings;
+use RectorPrefix202303\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -15,9 +15,9 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\Exception\InvalidConfigurationException;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

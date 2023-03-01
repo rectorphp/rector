@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202302\Triun\LongestCommonSubstring;
+namespace RectorPrefix202303\Triun\LongestCommonSubstring;
 
 /**
  * Interface SolverInterface

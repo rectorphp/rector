@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Php\Regex;
 
-use RectorPrefix202302\Nette\Utils\Strings;
+use RectorPrefix202303\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Const_;

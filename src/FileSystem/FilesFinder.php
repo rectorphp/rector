@@ -7,8 +7,8 @@ use Rector\Caching\UnchangedFilesFilter;
 use Rector\Core\Util\StringUtils;
 use Rector\Skipper\Enum\AsteriskMatch;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
-use RectorPrefix202302\Symfony\Component\Finder\Finder;
-use RectorPrefix202302\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202303\Symfony\Component\Finder\Finder;
+use RectorPrefix202303\Symfony\Component\Finder\SplFileInfo;
 /**
  * @see \Rector\Core\Tests\FileSystem\FilesFinder\FilesFinderTest
  */

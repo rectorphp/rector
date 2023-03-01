@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Contracts\Cache;
+namespace RectorPrefix202303\Symfony\Contracts\Cache;
 
-use RectorPrefix202302\Psr\Cache\CacheItemPoolInterface;
-use RectorPrefix202302\Psr\Cache\InvalidArgumentException;
-use RectorPrefix202302\Psr\Log\LoggerInterface;
+use RectorPrefix202303\Psr\Cache\CacheItemPoolInterface;
+use RectorPrefix202303\Psr\Cache\InvalidArgumentException;
+use RectorPrefix202303\Psr\Log\LoggerInterface;
 // Help opcache.preload discover always-needed symbols
 \class_exists(InvalidArgumentException::class);
 /**

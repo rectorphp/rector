@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202302\Psr\Log;
+namespace RectorPrefix202303\Psr\Log;
 
 /**
  * This is a simple Logger trait that classes unable to extend AbstractLogger

@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202302\Tracy;
+namespace RectorPrefix202303\Tracy;
 
 use ErrorException;
 /**

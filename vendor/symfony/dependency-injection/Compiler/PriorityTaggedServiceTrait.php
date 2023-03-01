@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202302\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Attribute\AsTaggedItem;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Trait that allows a generic method to find and sort service by priority option in the tag.
  *

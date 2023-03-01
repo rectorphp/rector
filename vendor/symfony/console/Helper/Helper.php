@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\Console\Helper;
+namespace RectorPrefix202303\Symfony\Component\Console\Helper;
 
-use RectorPrefix202302\Symfony\Component\Console\Formatter\OutputFormatterInterface;
-use RectorPrefix202302\Symfony\Component\String\UnicodeString;
+use RectorPrefix202303\Symfony\Component\Console\Formatter\OutputFormatterInterface;
+use RectorPrefix202303\Symfony\Component\String\UnicodeString;
 /**
  * Helper is the base class for all helper classes.
  *
@@ -23,7 +23,7 @@ abstract class Helper implements HelperInterface
     public function setHelperSet(HelperSet $helperSet = null)
     {
         if (1 > \func_num_args()) {
-            \RectorPrefix202302\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+            \RectorPrefix202303\trigger_deprecation('symfony/console', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
         }
         $this->helperSet = $helperSet;
     }

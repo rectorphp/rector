@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\Console\Helper;
+namespace RectorPrefix202303\Symfony\Component\Console\Helper;
 
-use RectorPrefix202302\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202302\Symfony\Component\Console\Exception\RuntimeException;
-use RectorPrefix202302\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202302\Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface;
-use RectorPrefix202302\Symfony\Component\Console\Output\ConsoleSectionOutput;
-use RectorPrefix202302\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202303\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202303\Symfony\Component\Console\Exception\RuntimeException;
+use RectorPrefix202303\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202303\Symfony\Component\Console\Formatter\WrappableOutputFormatterInterface;
+use RectorPrefix202303\Symfony\Component\Console\Output\ConsoleSectionOutput;
+use RectorPrefix202303\Symfony\Component\Console\Output\OutputInterface;
 /**
  * Provides helpers to display a table.
  *

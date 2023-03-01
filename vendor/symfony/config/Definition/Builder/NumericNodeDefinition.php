@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\Config\Definition\Builder;
+namespace RectorPrefix202303\Symfony\Component\Config\Definition\Builder;
 
-use RectorPrefix202302\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
+use RectorPrefix202303\Symfony\Component\Config\Definition\Exception\InvalidDefinitionException;
 /**
  * Abstract class that contains common code of integer and float node definitions.
  *

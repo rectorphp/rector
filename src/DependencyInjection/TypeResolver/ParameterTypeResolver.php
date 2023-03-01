@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\TypeResolver;
 
-use RectorPrefix202302\Nette\Utils\Reflection;
+use RectorPrefix202303\Nette\Utils\Reflection;
 use Rector\Core\DependencyInjection\DocBlock\ParamTypeDocBlockResolver;
 use ReflectionMethod;
 final class ParameterTypeResolver

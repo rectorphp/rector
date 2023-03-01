@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
-use RectorPrefix202302\Nette\Utils\FileSystem;
+use RectorPrefix202303\Nette\Utils\FileSystem;
 final class FixtureFileUpdater
 {
     /**

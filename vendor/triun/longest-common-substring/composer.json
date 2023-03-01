@@ -40,7 +40,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202302\\Triun\\LongestCommonSubstring\\": "src\/"
+            "RectorPrefix202303\\Triun\\LongestCommonSubstring\\": "src\/"
         }
     },
     "autoload-dev": {

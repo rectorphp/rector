@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202302\Symfony\Component\DependencyInjection\Attribute;
+namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Attribute;
 
-use RectorPrefix202302\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202303\Symfony\Component\DependencyInjection\ContainerInterface;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 class AsDecorator
 {
