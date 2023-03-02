@@ -2942,6 +2942,70 @@
             "install-path": "..\/symfony\/polyfill-mbstring"
         },
         {
+            "name": "symfony\/process",
+            "version": "v6.2.7",
+            "version_normalized": "6.2.7.0",
+            "source": {
+                "type": "git",
+                "url": "https:\/\/github.com\/symfony\/process.git",
+                "reference": "680e8a2ea6b3f87aecc07a6a65a203ae573d1902"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/680e8a2ea6b3f87aecc07a6a65a203ae573d1902",
+                "reference": "680e8a2ea6b3f87aecc07a6a65a203ae573d1902",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.1"
+            },
+            "time": "2023-02-24T10:42:00+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "RectorPrefix202303\\Symfony\\Component\\Process\\": ""
+                },
+                "exclude-from-classmap": [
+                    "\/Tests\/"
+                ]
+            },
+            "notification-url": "https:\/\/packagist.org\/downloads\/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https:\/\/symfony.com\/contributors"
+                }
+            ],
+            "description": "Executes commands in sub-processes",
+            "homepage": "https:\/\/symfony.com",
+            "support": {
+                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.2.7"
+            },
+            "funding": [
+                {
+                    "url": "https:\/\/symfony.com\/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https:\/\/github.com\/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https:\/\/tidelift.com\/funding\/github\/packagist\/symfony\/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "..\/symfony\/process"
+        },
+        {
             "name": "symfony\/string",
             "version": "v6.2.7",
             "version_normalized": "6.2.7.0",

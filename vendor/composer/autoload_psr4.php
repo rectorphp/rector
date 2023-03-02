@@ -21,6 +21,7 @@ return array(
     'RectorPrefix202303\\Symplify\\EasyParallel\\' => array($vendorDir . '/symplify/easy-parallel/src'),
     'RectorPrefix202303\\Symfony\\Contracts\\' => array($vendorDir . '/symfony/contracts'),
     'RectorPrefix202303\\Symfony\\Component\\String\\' => array($vendorDir . '/symfony/string'),
+    'RectorPrefix202303\\Symfony\\Component\\Process\\' => array($vendorDir . '/symfony/process'),
     'RectorPrefix202303\\Symfony\\Component\\Finder\\' => array($vendorDir . '/symfony/finder'),
     'RectorPrefix202303\\Symfony\\Component\\Filesystem\\' => array($vendorDir . '/symfony/filesystem'),
     'RectorPrefix202303\\Symfony\\Component\\DependencyInjection\\' => array($vendorDir . '/symfony/dependency-injection'),
