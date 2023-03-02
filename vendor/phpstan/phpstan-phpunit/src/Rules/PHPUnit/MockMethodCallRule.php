@@ -56,7 +56,11 @@ class MockMethodCallRule implements Rule
             if ($mockedClassObject->hasMethod($method)->yes()) {
                 continue;
             }
-            $errors[] = sprintf('Trying to mock an undefined method %s() on class %s.', $method, implode('|', $mockedClassObject->getObjectClassNames()));
+            $classNames = $mockedClassObject->getObjectClassNames();
+            if (count($classNames) === 0) {
+                continue;
+            }
+            $errors[] = sprintf('Trying to mock an undefined method %s() on class %s.', $method, implode('|', $classNames));
         }
         return $errors;
     }

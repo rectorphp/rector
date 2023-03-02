@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
@@ -38,6 +39,9 @@ final class AlwaysStrictScalarExprAnalyzer
     }
     public function matchStrictScalarExpr(Expr $expr) : ?Type
     {
+        if ($expr instanceof Concat) {
+            return new StringType();
+        }
         if ($expr instanceof Scalar) {
             return $this->resolveTypeFromScalar($expr);
         }
