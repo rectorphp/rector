@@ -41,22 +41,35 @@ final class SetupCICommand extends Command
             $this->symfonyStyle->error('No CI detected');
             return self::FAILURE;
         }
-        if ($ci === CiDetector::CI_GITHUB_ACTIONS) {
-            $rectorWorkflowFilePath = \getcwd() . '/.github/workflows/rector.yaml';
-            if (\file_exists($rectorWorkflowFilePath)) {
-                $this->symfonyStyle->warning('The "rector.yaml" workflow already exists');
+        if ($ci !== CiDetector::CI_GITHUB_ACTIONS) {
+            $noteMessage = \sprintf('Only Github Action is supported for now.%sCreate an issue to add your CI %s', \PHP_EOL, 'https://github.com/rectorphp/rector/issues/');
+            $this->symfonyStyle->note($noteMessage);
+            return self::SUCCESS;
+        }
+        $rectorWorkflowFilePath = \getcwd() . '/.github/workflows/rector.yaml';
+        if (\file_exists($rectorWorkflowFilePath)) {
+            $response = $this->symfonyStyle->ask('The "rector.yaml" workflow already exists. Overwrite it?', 'Yes');
+            if (!\in_array($response, ['y', 'yes', 'Yes'], \true)) {
+                $this->symfonyStyle->note('Nothing changed');
                 return self::SUCCESS;
             }
-            $currentRepository = $this->resolveCurrentRepositoryName(\getcwd());
-            if ($currentRepository === null) {
-                $this->symfonyStyle->error('Current repository name could not be resolved');
-                return self::FAILURE;
-            }
-            $workflowTemplate = FileSystem::read(__DIR__ . '/../../../templates/rector-github-action-check.yaml');
-            $workflowContents = \strtr($workflowTemplate, ['__CURRENT_REPOSITORY__' => $currentRepository]);
-            FileSystem::write($rectorWorkflowFilePath, $workflowContents);
-            $this->symfonyStyle->success('The "rector.yaml" workflow was added');
         }
+        $currentRepository = $this->resolveCurrentRepositoryName(\getcwd());
+        if ($currentRepository === null) {
+            $this->symfonyStyle->error('Current repository name could not be resolved');
+            return self::FAILURE;
+        }
+        $workflowTemplate = FileSystem::read(__DIR__ . '/../../../templates/rector-github-action-check.yaml');
+        $workflowContents = \strtr($workflowTemplate, ['__CURRENT_REPOSITORY__' => $currentRepository]);
+        FileSystem::write($rectorWorkflowFilePath, $workflowContents);
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->note('The "rector.yaml" workflow was added');
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->title('2 steps more to run you Github Action:');
+        $this->symfonyStyle->writeln('1) Generate new Github Token here:' . \PHP_EOL . 'https://github.com/settings/tokens/new');
+        $this->symfonyStyle->newLine();
+        $this->symfonyStyle->writeln('2) Add it to your repository secrets under "GITHUB_TOKE" name:' . \PHP_EOL . \sprintf('https://github.com/%s/settings/secrets/actions/new', $currentRepository));
+        $this->symfonyStyle->newLine();
         return Command::SUCCESS;
     }
     /**
