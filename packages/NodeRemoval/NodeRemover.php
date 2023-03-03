@@ -45,6 +45,7 @@ final class NodeRemover
         $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
     /**
+     * @api used in rector-doctrine
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $nodeWithStatements
      */
     public function removeNodeFromStatements($nodeWithStatements, Node $toBeRemovedNode) : void

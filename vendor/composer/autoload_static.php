@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6435ea052efd329e2300733a81101493
+class ComposerStaticInit7066486d076958430468d361debe5921
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2612,14 +2612,7 @@ class ComposerStaticInit6435ea052efd329e2300733a81101493
         'Rector\\PhpAttribute\\UseAliasNameMatcher' => __DIR__ . '/../..' . '/packages/PhpAttribute/UseAliasNameMatcher.php',
         'Rector\\PhpAttribute\\ValueObject\\UseAliasMetadata' => __DIR__ . '/../..' . '/packages/PhpAttribute/ValueObject/UseAliasMetadata.php',
         'Rector\\PhpDocDecorator\\PhpDocFromTypeDeclarationDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/PhpDocDecorator/PhpDocFromTypeDeclarationDecorator.php',
-        'Rector\\PhpDocParser\\Contract\\NodeValueResolver\\NodeValueResolverInterface' => __DIR__ . '/../..' . '/packages/PhpDocParser/Contract/NodeValueResolver/NodeValueResolverInterface.php',
-        'Rector\\PhpDocParser\\Exception\\UnresolvableValueException' => __DIR__ . '/../..' . '/packages/PhpDocParser/Exception/UnresolvableValueException.php',
         'Rector\\PhpDocParser\\NodeTraverser\\SimpleCallableNodeTraverser' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeTraverser/SimpleCallableNodeTraverser.php',
-        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver.php',
-        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\ClassConstFetchValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/ClassConstFetchValueResolver.php',
-        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\ConstFetchValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/ConstFetchValueResolver.php',
-        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\FuncCallValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/FuncCallValueResolver.php',
-        'Rector\\PhpDocParser\\NodeValue\\NodeValueResolver\\MagicConstValueResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeValue/NodeValueResolver/MagicConstValueResolver.php',
         'Rector\\PhpDocParser\\NodeVisitor\\CallableNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/NodeVisitor/CallableNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocInfoAnalyzer' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocInfoAnalyzer.php',
         'Rector\\PhpDocParser\\PhpDocParser\\Contract\\PhpDocNodeVisitorInterface' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/Contract/PhpDocNodeVisitorInterface.php',
@@ -2657,7 +2650,6 @@ class ComposerStaticInit6435ea052efd329e2300733a81101493
         'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
         'Rector\\Privatization\\Naming\\ConstantNaming' => __DIR__ . '/../..' . '/rules/Privatization/Naming/ConstantNaming.php',
         'Rector\\Privatization\\NodeFactory\\ClassConstantFactory' => __DIR__ . '/../..' . '/rules/Privatization/NodeFactory/ClassConstantFactory.php',
-        'Rector\\Privatization\\NodeFactory\\ClassConstantFetchValueFactory' => __DIR__ . '/../..' . '/rules/Privatization/NodeFactory/ClassConstantFetchValueFactory.php',
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
         'Rector\\Privatization\\NodeReplacer\\PropertyFetchWithConstFetchReplacer' => __DIR__ . '/../..' . '/rules/Privatization/NodeReplacer/PropertyFetchWithConstFetchReplacer.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
@@ -2665,12 +2657,9 @@ class ComposerStaticInit6435ea052efd329e2300733a81101493
         'Rector\\Privatization\\Rector\\Class_\\ChangeReadOnlyVariableWithDefaultValueToConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php',
         'Rector\\Privatization\\Rector\\Class_\\FinalizeClassesWithoutChildrenRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php',
         'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
-        'Rector\\Privatization\\Rector\\MethodCall\\ReplaceStringWithClassConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/ReplaceStringWithClassConstantRector.php',
         'Rector\\Privatization\\Rector\\Property\\ChangeReadOnlyPropertyWithDefaultValueToConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/ChangeReadOnlyPropertyWithDefaultValueToConstantRector.php',
         'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
-        'Rector\\Privatization\\Reflection\\ClassConstantsResolver' => __DIR__ . '/../..' . '/rules/Privatization/Reflection/ClassConstantsResolver.php',
         'Rector\\Privatization\\TypeManipulator\\TypeNormalizer' => __DIR__ . '/../..' . '/rules/Privatization/TypeManipulator/TypeNormalizer.php',
-        'Rector\\Privatization\\ValueObject\\ReplaceStringWithClassConstant' => __DIR__ . '/../..' . '/rules/Privatization/ValueObject/ReplaceStringWithClassConstant.php',
         'Rector\\Privatization\\VisibilityGuard\\ClassMethodVisibilityGuard' => __DIR__ . '/../..' . '/rules/Privatization/VisibilityGuard/ClassMethodVisibilityGuard.php',
         'Rector\\ReadWrite\\Contract\\ParentNodeReadAnalyzerInterface' => __DIR__ . '/../..' . '/packages/ReadWrite/Contract/ParentNodeReadAnalyzerInterface.php',
         'Rector\\ReadWrite\\Contract\\ReadNodeAnalyzerInterface' => __DIR__ . '/../..' . '/packages/ReadWrite/Contract/ReadNodeAnalyzerInterface.php',
@@ -2962,7 +2951,6 @@ class ComposerStaticInit6435ea052efd329e2300733a81101493
         'Rector\\Testing\\TestingParser\\TestingParser' => __DIR__ . '/../..' . '/packages/Testing/TestingParser/TestingParser.php',
         'Rector\\Transform\\Contract\\ValueObject\\ArgumentFuncCallToMethodCallInterface' => __DIR__ . '/../..' . '/rules/Transform/Contract/ValueObject/ArgumentFuncCallToMethodCallInterface.php',
         'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => __DIR__ . '/../..' . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
-        'Rector\\Transform\\NodeAnalyzer\\SingletonClassMethodAnalyzer' => __DIR__ . '/../..' . '/rules/Transform/NodeAnalyzer/SingletonClassMethodAnalyzer.php',
         'Rector\\Transform\\NodeFactory\\PropertyFetchFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/PropertyFetchFactory.php',
         'Rector\\Transform\\NodeTypeAnalyzer\\TypeProvidingExprFromClassResolver' => __DIR__ . '/../..' . '/rules/Transform/NodeTypeAnalyzer/TypeProvidingExprFromClassResolver.php',
         'Rector\\Transform\\Rector\\Assign\\DimFetchAssignToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Assign/DimFetchAssignToMethodCallRector.php',
@@ -2974,7 +2962,6 @@ class ComposerStaticInit6435ea052efd329e2300733a81101493
         'Rector\\Transform\\Rector\\ClassMethod\\WrapReturnRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/ClassMethod/WrapReturnRector.php',
         'Rector\\Transform\\Rector\\Class_\\AddAllowDynamicPropertiesAttributeRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/AddAllowDynamicPropertiesAttributeRector.php',
         'Rector\\Transform\\Rector\\Class_\\AddInterfaceByTraitRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/AddInterfaceByTraitRector.php',
-        'Rector\\Transform\\Rector\\Class_\\ChangeSingletonToServiceRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/ChangeSingletonToServiceRector.php',
         'Rector\\Transform\\Rector\\Class_\\MergeInterfacesRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/MergeInterfacesRector.php',
         'Rector\\Transform\\Rector\\Class_\\ParentClassToTraitsRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/ParentClassToTraitsRector.php',
         'Rector\\Transform\\Rector\\Class_\\RemoveAllowDynamicPropertiesAttributeRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Class_/RemoveAllowDynamicPropertiesAttributeRector.php',
@@ -3017,7 +3004,6 @@ class ComposerStaticInit6435ea052efd329e2300733a81101493
         'Rector\\Transform\\ValueObject\\NewToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/NewToMethodCall.php',
         'Rector\\Transform\\ValueObject\\NewToStaticCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/NewToStaticCall.php',
         'Rector\\Transform\\ValueObject\\ParentClassToTraits' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ParentClassToTraits.php',
-        'Rector\\Transform\\ValueObject\\PropertyAndClassMethodName' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/PropertyAndClassMethodName.php',
         'Rector\\Transform\\ValueObject\\PropertyAssignToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/PropertyAssignToMethodCall.php',
         'Rector\\Transform\\ValueObject\\PropertyFetchToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/PropertyFetchToMethodCall.php',
         'Rector\\Transform\\ValueObject\\ReplaceParentCallByPropertyCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ReplaceParentCallByPropertyCall.php',
@@ -3148,9 +3134,9 @@ class ComposerStaticInit6435ea052efd329e2300733a81101493
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6435ea052efd329e2300733a81101493::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6435ea052efd329e2300733a81101493::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6435ea052efd329e2300733a81101493::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7066486d076958430468d361debe5921::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7066486d076958430468d361debe5921::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7066486d076958430468d361debe5921::$classMap;
 
         }, null, ClassLoader::class);
     }

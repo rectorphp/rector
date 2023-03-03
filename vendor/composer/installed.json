@@ -1916,12 +1916,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "ea9cf46a738e623ecd3e1ed7402eec1afa6032cd"
+                "reference": "a8168bc365546a970190aa0e0709ab02c998e84c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/ea9cf46a738e623ecd3e1ed7402eec1afa6032cd",
-                "reference": "ea9cf46a738e623ecd3e1ed7402eec1afa6032cd",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/a8168bc365546a970190aa0e0709ab02c998e84c",
+                "reference": "a8168bc365546a970190aa0e0709ab02c998e84c",
                 "shasum": ""
             },
             "require": {
@@ -1948,7 +1948,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2023-02-03T18:09:54+00:00",
+            "time": "2023-03-02T23:33:33+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

@@ -28,8 +28,7 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\TypeDeclaration\TypeInferer\SplArrayFixedTypeNarrower;
 /**
- * @deprecated
- * @todo Split into many narrow-focused rules
+ * @internal
  */
 final class ReturnedNodesReturnTypeInfererTypeInferer
 {
