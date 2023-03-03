@@ -1,4 +1,4 @@
-# 414 Rules Overview
+# 412 Rules Overview
 
 <br>
 
@@ -50,7 +50,7 @@
 
 - [Php82](#php82) (3)
 
-- [Privatization](#privatization) (8)
+- [Privatization](#privatization) (7)
 
 - [Removing](#removing) (5)
 
@@ -62,7 +62,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (35)
+- [Transform](#transform) (34)
 
 - [TypeDeclaration](#typedeclaration) (36)
 
@@ -6840,45 +6840,6 @@ Privatize getter of local property to property
 
 <br>
 
-### ReplaceStringWithClassConstantRector
-
-Replace string values in specific method call by constant of provided class
-
-:wrench: **configure it!**
-
-- class: [`Rector\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector`](../rules/Privatization/Rector/MethodCall/ReplaceStringWithClassConstantRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Privatization\Rector\MethodCall\ReplaceStringWithClassConstantRector;
-use Rector\Privatization\ValueObject\ReplaceStringWithClassConstant;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReplaceStringWithClassConstantRector::class, [
-        new ReplaceStringWithClassConstant('SomeClass', 'call', 0, 'Placeholder', false),
-    ]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $this->call('name');
-+        $this->call(Placeholder::NAME);
-     }
- }
-```
-
-<br>
-
 ## Removing
 
 ### ArgumentRemoverRector
@@ -7924,35 +7885,6 @@ return static function (RectorConfig $rectorConfig): void {
 -    #[Column(type: "string")]
 +    #[Column(type: Types::STRING)]
      public $name;
- }
-```
-
-<br>
-
-### ChangeSingletonToServiceRector
-
-Change singleton class to normal class that can be registered as a service
-
-- class: [`Rector\Transform\Rector\Class_\ChangeSingletonToServiceRector`](../rules/Transform/Rector/Class_/ChangeSingletonToServiceRector.php)
-
-```diff
- class SomeClass
- {
--    private static $instance;
--
--    private function __construct()
-+    public function __construct()
-     {
--    }
--
--    public static function getInstance()
--    {
--        if (null === static::$instance) {
--            static::$instance = new static();
--        }
--
--        return static::$instance;
-     }
  }
 ```
 

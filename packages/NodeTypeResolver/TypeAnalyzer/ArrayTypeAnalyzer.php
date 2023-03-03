@@ -165,7 +165,13 @@ final class ArrayTypeAnalyzer
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($expr);
         if ($phpPropertyReflection instanceof PhpPropertyReflection) {
             $reflectionProperty = $phpPropertyReflection->getNativeReflection();
-            return \is_array($reflectionProperty->getDefaultValue());
+            $betterReflection = $reflectionProperty->getBetterReflection();
+            $defaultValueExpr = $betterReflection->getDefaultValueExpression();
+            if (!$defaultValueExpr instanceof Expr) {
+                return \false;
+            }
+            $defaultValueType = $this->nodeTypeResolver->getType($defaultValueExpr);
+            return $defaultValueType->isArray()->yes();
         }
         return \false;
     }
