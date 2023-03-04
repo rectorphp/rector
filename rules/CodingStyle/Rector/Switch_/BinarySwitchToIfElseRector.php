@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Switch_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Stmt\Case_;
@@ -12,7 +11,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
-use PHPStan\Type\NullType;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\SwitchManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,9 +26,15 @@ final class BinarySwitchToIfElseRector extends AbstractRector
      * @var \Rector\Renaming\NodeManipulator\SwitchManipulator
      */
     private $switchManipulator;
-    public function __construct(SwitchManipulator $switchManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
+    public function __construct(SwitchManipulator $switchManipulator, ExprAnalyzer $exprAnalyzer)
     {
         $this->switchManipulator = $switchManipulator;
+        $this->exprAnalyzer = $exprAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -74,7 +79,7 @@ CODE_SAMPLE
         if ($firstCase->cond === null) {
             return null;
         }
-        if ($this->shouldSkipTypeWithValue($firstCase->cond)) {
+        if ($this->exprAnalyzer->isDynamicExpr($firstCase->cond)) {
             return null;
         }
         $secondCase = \array_shift($cases);
@@ -101,11 +106,5 @@ CODE_SAMPLE
             $ifNode->else = new Else_($this->switchManipulator->removeBreakNodes($secondCase->stmts));
         }
         return $ifNode;
-    }
-    private function shouldSkipTypeWithValue(Expr $expr) : bool
-    {
-        $type = $this->nodeTypeResolver->getType($expr);
-        $value = $this->valueResolver->getValue($expr);
-        return !$type instanceof NullType && $value === null;
     }
 }
