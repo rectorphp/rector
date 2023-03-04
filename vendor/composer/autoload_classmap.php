@@ -1551,7 +1551,6 @@ return array(
     'Rector\\Core\\Rector\\AbstractScopeAwareRector' => $baseDir . '/src/Rector/AbstractScopeAwareRector.php',
     'Rector\\Core\\Reflection\\ReflectionResolver' => $baseDir . '/src/Reflection/ReflectionResolver.php',
     'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => $baseDir . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
-    'Rector\\Core\\StaticReflection\\SourceLocator\\RenamedClassesSourceLocator' => $baseDir . '/src/StaticReflection/SourceLocator/RenamedClassesSourceLocator.php',
     'Rector\\Core\\Util\\ArrayChecker' => $baseDir . '/src/Util/ArrayChecker.php',
     'Rector\\Core\\Util\\ArrayParametersMerger' => $baseDir . '/src/Util/ArrayParametersMerger.php',
     'Rector\\Core\\Util\\MemoryLimiter' => $baseDir . '/src/Util/MemoryLimiter.php',
