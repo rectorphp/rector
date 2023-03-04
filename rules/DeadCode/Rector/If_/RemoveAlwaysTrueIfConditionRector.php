@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -96,6 +97,10 @@ CODE_SAMPLE
             return null;
         }
         if ($this->shouldSkipFromParam($node->cond)) {
+            return null;
+        }
+        $hasAssign = (bool) $this->betterNodeFinder->findFirstInstanceOf($node->cond, Assign::class);
+        if ($hasAssign) {
             return null;
         }
         if ($node->stmts === []) {

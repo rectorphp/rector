@@ -1916,12 +1916,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "b610182bba8fd1a911a7a3a5367109737d90dd30"
+                "reference": "5fe59e9f3a2ef37bacca898a7a7dd438cc389626"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/b610182bba8fd1a911a7a3a5367109737d90dd30",
-                "reference": "b610182bba8fd1a911a7a3a5367109737d90dd30",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/5fe59e9f3a2ef37bacca898a7a7dd438cc389626",
+                "reference": "5fe59e9f3a2ef37bacca898a7a7dd438cc389626",
                 "shasum": ""
             },
             "require": {
@@ -1940,7 +1940,7 @@
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-debugging": "dev-main",
                 "rector\/rector-generator": "^0.6.10",
-                "rector\/rector-src": "dev-hanlde-default-value-expr-null",
+                "rector\/rector-src": "dev-main",
                 "symplify\/easy-ci": "^11.2",
                 "symplify\/easy-coding-standard": "^11.2",
                 "symplify\/phpstan-extensions": "^11.1",
@@ -1948,7 +1948,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2023-03-03T09:54:32+00:00",
+            "time": "2023-03-03T10:04:37+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
