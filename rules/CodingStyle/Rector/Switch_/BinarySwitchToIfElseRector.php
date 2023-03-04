@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Switch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Stmt\Case_;
@@ -11,6 +12,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Switch_;
+use PHPStan\Type\NullType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\SwitchManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -65,12 +67,17 @@ CODE_SAMPLE
         if (\count($node->cases) > 2) {
             return null;
         }
+        // avoid removal of cases if it goes to be skipped next
+        $cases = $node->cases;
         /** @var Case_ $firstCase */
-        $firstCase = \array_shift($node->cases);
+        $firstCase = \array_shift($cases);
         if ($firstCase->cond === null) {
             return null;
         }
-        $secondCase = \array_shift($node->cases);
+        if ($this->shouldSkipTypeWithValue($firstCase->cond)) {
+            return null;
+        }
+        $secondCase = \array_shift($cases);
         // special case with empty first case → ||
         $isFirstCaseEmpty = $firstCase->stmts === [];
         if ($isFirstCaseEmpty && $secondCase !== null && $secondCase->cond !== null) {
@@ -94,5 +101,11 @@ CODE_SAMPLE
             $ifNode->else = new Else_($this->switchManipulator->removeBreakNodes($secondCase->stmts));
         }
         return $ifNode;
+    }
+    private function shouldSkipTypeWithValue(Expr $expr) : bool
+    {
+        $type = $this->nodeTypeResolver->getType($expr);
+        $value = $this->valueResolver->getValue($expr);
+        return !$type instanceof NullType && $value === null;
     }
 }
