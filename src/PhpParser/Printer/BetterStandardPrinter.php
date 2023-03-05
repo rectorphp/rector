@@ -475,6 +475,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
      */
     private function resolveNewStmts(array $stmts) : array
     {
+        $stmts = \array_values($stmts);
         if (\count($stmts) === 1 && $stmts[0] instanceof FileWithoutNamespace) {
             return $this->resolveNewStmts($stmts[0]->stmts);
         }
