@@ -669,6 +669,7 @@ class Php7 extends \PhpParser\ParserAbstract
             $this->semValue = $this->semStack[$stackPos - (2 - 1)];
         }, 266 => function ($stackPos) {
             $this->semValue = new Stmt\ElseIf_($this->semStack[$stackPos - (6 - 3)], $this->semStack[$stackPos - (6 - 6)], $this->startAttributeStack[$stackPos - (6 - 1)] + $this->endAttributes);
+            $this->fixupAlternativeElse($this->semValue);
         }, 267 => function ($stackPos) {
             $this->semValue = null;
         }, 268 => function ($stackPos) {
@@ -677,6 +678,7 @@ class Php7 extends \PhpParser\ParserAbstract
             $this->semValue = null;
         }, 270 => function ($stackPos) {
             $this->semValue = new Stmt\Else_($this->semStack[$stackPos - (3 - 3)], $this->startAttributeStack[$stackPos - (3 - 1)] + $this->endAttributes);
+            $this->fixupAlternativeElse($this->semValue);
         }, 271 => function ($stackPos) {
             $this->semValue = array($this->semStack[$stackPos - (1 - 1)], \false);
         }, 272 => function ($stackPos) {

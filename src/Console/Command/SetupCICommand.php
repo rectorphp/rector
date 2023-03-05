@@ -66,9 +66,10 @@ final class SetupCICommand extends Command
         $this->symfonyStyle->note('The "rector.yaml" workflow was added');
         $this->symfonyStyle->newLine();
         $this->symfonyStyle->title('2 steps more to run you Github Action:');
-        $this->symfonyStyle->writeln('1) Generate new Github Token here:' . \PHP_EOL . 'https://github.com/settings/tokens/new');
+        $this->symfonyStyle->writeln('1) Generate new Github Token here:' . \PHP_EOL . $this->createClickableLink('https://github.com/settings/tokens/new'));
         $this->symfonyStyle->newLine();
-        $this->symfonyStyle->writeln('2) Add it to your repository secrets under "GITHUB_TOKE" name:' . \PHP_EOL . \sprintf('https://github.com/%s/settings/secrets/actions/new', $currentRepository));
+        $repositoryUrl = \sprintf('https://github.com/%s/settings/secrets/actions/new', $currentRepository);
+        $this->symfonyStyle->writeln('2) Add it to your repository secrets under "GITHUB_TOKE" name:' . \PHP_EOL . $this->createClickableLink($repositoryUrl));
         $this->symfonyStyle->newLine();
         return Command::SUCCESS;
     }
@@ -90,5 +91,9 @@ final class SetupCICommand extends Command
         $output = $process->getOutput();
         $match = Strings::match($output, self::GITHUB_REPOSITORY_REGEX);
         return $match['repository_name'] ?? null;
+    }
+    private function createClickableLink(string $url) : string
+    {
+        return \sprintf('<href=%s>%s</>', $url, $url);
     }
 }
