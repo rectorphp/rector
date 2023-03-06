@@ -5,8 +5,18 @@ namespace Rector\CodingStyle\Application;
 
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Use_;
+use Rector\Core\Configuration\RectorConfigProvider;
 final class UseImportsRemover
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\Configuration\RectorConfigProvider
+     */
+    private $rectorConfigProvider;
+    public function __construct(RectorConfigProvider $rectorConfigProvider)
+    {
+        $this->rectorConfigProvider = $rectorConfigProvider;
+    }
     /**
      * @param Stmt[] $stmts
      * @param string[] $removedShortUses
@@ -14,6 +24,13 @@ final class UseImportsRemover
      */
     public function removeImportsFromStmts(array $stmts, array $removedShortUses) : array
     {
+        /**
+         * Verify import name to cover conflict on rename+import,
+         * but without $rectorConfig->removeUnusedImports() used
+         */
+        if (!$this->rectorConfigProvider->shouldImportNames()) {
+            return $stmts;
+        }
         foreach ($stmts as $stmtKey => $stmt) {
             if (!$stmt instanceof Use_) {
                 continue;
