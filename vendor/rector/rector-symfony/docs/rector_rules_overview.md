@@ -1,4 +1,4 @@
-# 79 Rules Overview
+# 80 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1062,6 +1062,29 @@ Merge removed `@Method` annotation to `@Route` one
 
 <br>
 
+## MessageHandlerInterfaceToAttributeRector
+
+Replaces MessageHandlerInterface with AsMessageHandler attribute
+
+- class: [`Rector\Symfony\Rector\Class_\MessageHandlerInterfaceToAttributeRector`](../src/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php)
+
+```diff
+-use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
++use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+
+-class SmsNotificationHandler implements MessageHandlerInterface
++#[AsMessageHandler]
++class SmsNotificationHandler
+ {
+     public function __invoke(SmsNotification $message)
+     {
+         // ... do some work - like sending an SMS message!
+     }
+ }
+```
+
+<br>
+
 ## OptionNameRector
 
 Turns old option names to new ones in FormTypes in Form in Symfony
@@ -1489,7 +1512,7 @@ Change RouteCollectionBuilder to RoutingConfiguratorRector
 
 ## ServiceArgsToServiceNamedArgRector
 
-Converts order-dependent arguments `args()` to named arg `arg()`
+Converts order-dependent arguments `args()` to named `arg()` call
 
 - class: [`Rector\Symfony\Rector\Closure\ServiceArgsToServiceNamedArgRector`](../src/Rector/Closure/ServiceArgsToServiceNamedArgRector.php)
 

@@ -869,17 +869,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.10.3",
-            "version_normalized": "1.10.3.0",
+            "version": "1.10.4",
+            "version_normalized": "1.10.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "5419375b5891add97dc74be71e6c1c34baaddf64"
+                "reference": "8d39218664b45a4a42d5be66d2b63dcf8c149982"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/5419375b5891add97dc74be71e6c1c34baaddf64",
-                "reference": "5419375b5891add97dc74be71e6c1c34baaddf64",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/8d39218664b45a4a42d5be66d2b63dcf8c149982",
+                "reference": "8d39218664b45a4a42d5be66d2b63dcf8c149982",
                 "shasum": ""
             },
             "require": {
@@ -888,7 +888,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2023-02-25T14:47:13+00:00",
+            "time": "2023-03-06T13:39:20+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -911,7 +911,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.10.3"
+                "source": "https:\/\/github.com\/phpstan\/phpstan\/tree\/1.10.4"
             },
             "funding": [
                 {
@@ -2125,12 +2125,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "c527ff3cfe2a200f65d2f54b12fcbcb98439640a"
+                "reference": "ee203c96f524f2e1630d1bc45afe5f4bfb176011"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/c527ff3cfe2a200f65d2f54b12fcbcb98439640a",
-                "reference": "c527ff3cfe2a200f65d2f54b12fcbcb98439640a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/ee203c96f524f2e1630d1bc45afe5f4bfb176011",
+                "reference": "ee203c96f524f2e1630d1bc45afe5f4bfb176011",
                 "shasum": ""
             },
             "require": {
@@ -2146,7 +2146,7 @@
                 "phpunit\/phpunit": "^10.0",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-generator": "^0.6",
-                "rector\/rector-src": "dev-main#a10f28873a636995473497c74f34f3bb91d3e829",
+                "rector\/rector-src": "dev-main",
                 "symfony\/routing": "^6.1",
                 "symfony\/security-core": "^6.2",
                 "symfony\/security-http": "^6.1",
@@ -2160,7 +2160,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-03-06T11:27:17+00:00",
+            "time": "2023-03-06T13:47:33+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

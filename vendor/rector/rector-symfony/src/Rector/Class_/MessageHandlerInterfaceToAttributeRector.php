@@ -53,7 +53,7 @@ final class MessageHandlerInterfaceToAttributeRector extends AbstractRector impl
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Add Symfony\\Component\\Console\\Attribute\\AsCommand to Symfony Commands and remove the deprecated properties', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces MessageHandlerInterface with AsMessageHandler attribute', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
 
 class SmsNotificationHandler implements MessageHandlerInterface
@@ -111,7 +111,9 @@ CODE_SAMPLE
         foreach ($handlers as $handler) {
             if ($this->isName($class, $handler->getClass() ?? $handler->getId())) {
                 $options = $this->messengerHelper->extractOptionsFromServiceDefinition($handler);
-                $this->messengerHelper->addAttribute($class, $options);
+                if (!isset($options['method']) || $options['method'] === '__invoke') {
+                    $this->messengerHelper->addAttribute($class, $options);
+                }
             }
         }
         return $class;
