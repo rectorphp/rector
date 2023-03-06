@@ -136,10 +136,10 @@ CODE_SAMPLE
         }
         $constructorParameterNames = [];
         $extendedMethodReflection = $serviceClassReflection->getConstructor();
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
-        foreach ($parametersAcceptor->getParameters() as $parameterReflection) {
-            /** @var PhpParameterReflection $parameterReflection */
-            $constructorParameterNames[] = '$' . $parameterReflection->getName();
+        $parametersAcceptorWithPhpDocs = ParametersAcceptorSelector::selectSingle($extendedMethodReflection->getVariants());
+        foreach ($parametersAcceptorWithPhpDocs->getParameters() as $parameterReflectionWithPhpDoc) {
+            /** @var PhpParameterReflection $parameterReflectionWithPhpDoc */
+            $constructorParameterNames[] = '$' . $parameterReflectionWithPhpDoc->getName();
         }
         return $constructorParameterNames;
     }

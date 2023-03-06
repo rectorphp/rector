@@ -16,7 +16,7 @@
         "phpunit\/phpunit": "^10.0",
         "rector\/phpstan-rules": "^0.6",
         "rector\/rector-generator": "^0.6",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-main#a10f28873a636995473497c74f34f3bb91d3e829",
         "symfony\/routing": "^6.1",
         "symfony\/security-core": "^6.2",
         "symfony\/security-http": "^6.1",
