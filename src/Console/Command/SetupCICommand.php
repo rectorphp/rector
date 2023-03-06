@@ -70,7 +70,7 @@ final class SetupCICommand extends Command
         $this->symfonyStyle->writeln('1) Generate token with "repo" scope:' . \PHP_EOL . 'https://github.com/settings/tokens/new');
         $this->symfonyStyle->newLine();
         $repositoryNewSecretsLink = sprintf('https://github.com/%s/settings/secrets/actions/new', $currentRepository);
-        $this->symfonyStyle->writeln('2) Add the token to Action secrets as "GITHUB_TOKEN":' . \PHP_EOL . $repositoryNewSecretsLink);
+        $this->symfonyStyle->writeln('2) Add the token to Action secrets as "ACCESS_TOKEN":' . \PHP_EOL . $repositoryNewSecretsLink);
         return Command::SUCCESS;
     }
     /**
