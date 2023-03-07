@@ -92,8 +92,4 @@ final class SetupCICommand extends Command
         $match = Strings::match($output, self::GITHUB_REPOSITORY_REGEX);
         return $match['repository_name'] ?? null;
     }
-    private function createClickableLink(string $url) : string
-    {
-        return sprintf('<href=%s>%s</>', $url, $url);
-    }
 }
