@@ -77,7 +77,10 @@ final class UseImportsAdder
         $useImportTypes = $this->diffFullyQualifiedObjectTypes($useImportTypes, $existingUseImportTypes);
         $functionUseImportTypes = $this->diffFullyQualifiedObjectTypes($functionUseImportTypes, $existingFunctionUseImportTypes);
         $newUses = $this->createUses($useImportTypes, $functionUseImportTypes, $namespaceName);
-        if ($namespace->stmts[0] instanceof Use_ && $newUses !== []) {
+        if ($newUses === []) {
+            return;
+        }
+        if ($namespace->stmts[0] instanceof Use_) {
             $comments = (array) $namespace->stmts[0]->getAttribute(AttributeKey::COMMENTS);
             if ($comments !== []) {
                 $newUses[0]->setAttribute(AttributeKey::COMMENTS, $namespace->stmts[0]->getAttribute(AttributeKey::COMMENTS));
