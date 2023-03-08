@@ -34,6 +34,23 @@ final class UseImportsAdder
     }
     /**
      * @param Stmt[] $stmts
+     * @param Use_[] $newUses
+     */
+    private function mirrorUseComments(array $stmts, array $newUses, int $indexStmt = 0) : void
+    {
+        if ($stmts === []) {
+            return;
+        }
+        if ($stmts[$indexStmt] instanceof Use_) {
+            $comments = (array) $stmts[$indexStmt]->getAttribute(AttributeKey::COMMENTS);
+            if ($comments !== []) {
+                $newUses[0]->setAttribute(AttributeKey::COMMENTS, $stmts[$indexStmt]->getAttribute(AttributeKey::COMMENTS));
+                $stmts[$indexStmt]->setAttribute(AttributeKey::COMMENTS, null);
+            }
+        }
+    }
+    /**
+     * @param Stmt[] $stmts
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $useImportTypes
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $functionUseImportTypes
      * @return Stmt[]
@@ -57,10 +74,12 @@ final class UseImportsAdder
                     // add extra space, if there are no new use imports to be added
                     $nodesToAdd = \array_merge([new Nop()], $newUses);
                 }
+                $this->mirrorUseComments($stmts, $newUses, $key + 1);
                 \array_splice($stmts, $key + 1, 0, $nodesToAdd);
                 return $stmts;
             }
         }
+        $this->mirrorUseComments($stmts, $newUses);
         // make use stmts first
         return \array_merge($newUses, $stmts);
     }
@@ -80,13 +99,7 @@ final class UseImportsAdder
         if ($newUses === []) {
             return;
         }
-        if ($namespace->stmts[0] instanceof Use_) {
-            $comments = (array) $namespace->stmts[0]->getAttribute(AttributeKey::COMMENTS);
-            if ($comments !== []) {
-                $newUses[0]->setAttribute(AttributeKey::COMMENTS, $namespace->stmts[0]->getAttribute(AttributeKey::COMMENTS));
-                $namespace->stmts[0]->setAttribute(AttributeKey::COMMENTS, null);
-            }
-        }
+        $this->mirrorUseComments($namespace->stmts, $newUses);
         $namespace->stmts = \array_merge($newUses, $namespace->stmts);
     }
     /**
