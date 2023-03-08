@@ -53,6 +53,11 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             if (!$namespaceStmt instanceof Use_) {
                 continue;
             }
+            if ($namespaceStmt->uses === []) {
+                unset($node->stmts[$key]);
+                $hasChanged = \true;
+                continue;
+            }
             $useUse = $namespaceStmt->uses[0];
             // skip aliased imports, harder to check
             if ($useUse->alias !== null) {

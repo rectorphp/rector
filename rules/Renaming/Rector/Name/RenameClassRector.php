@@ -5,14 +5,12 @@ namespace Rector\Renaming\Rector\Name;
 
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -44,19 +42,13 @@ final class RenameClassRector extends AbstractRector implements ConfigurableRect
     private $classRenamer;
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\RectorConfigProvider
-     */
-    private $rectorConfigProvider;
-    /**
-     * @readonly
      * @var \Rector\Renaming\Helper\RenameClassCallbackHandler
      */
     private $renameClassCallbackHandler;
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ClassRenamer $classRenamer, RectorConfigProvider $rectorConfigProvider, RenameClassCallbackHandler $renameClassCallbackHandler)
+    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ClassRenamer $classRenamer, RenameClassCallbackHandler $renameClassCallbackHandler)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->classRenamer = $classRenamer;
-        $this->rectorConfigProvider = $rectorConfigProvider;
         $this->renameClassCallbackHandler = $renameClassCallbackHandler;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -95,21 +87,18 @@ CODE_SAMPLE
         return [Name::class, Property::class, FunctionLike::class, Expression::class, ClassLike::class, Namespace_::class, FileWithoutNamespace::class, Use_::class];
     }
     /**
-     * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace|Use_ $node
+     * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property|FileWithoutNamespace $node
      */
     public function refactor(Node $node) : ?Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
-        if ($oldToNewClasses === [] && !$this->renameClassCallbackHandler->hasOldToNewClassCallbacks()) {
-            return null;
-        }
-        if (!$node instanceof Use_) {
+        if ($oldToNewClasses !== []) {
             return $this->classRenamer->renameNode($node, $oldToNewClasses);
         }
-        if (!$this->rectorConfigProvider->shouldImportNames()) {
-            return null;
+        if ($this->renameClassCallbackHandler->hasOldToNewClassCallbacks()) {
+            return $this->classRenamer->renameNode($node, $oldToNewClasses);
         }
-        return $this->processCleanUpUse($node, $oldToNewClasses);
+        return null;
     }
     /**
      * @param mixed[] $configuration
@@ -127,19 +116,6 @@ CODE_SAMPLE
         Assert::allString($configuration);
         Assert::allString(\array_keys($configuration));
         $this->addOldToNewClasses($configuration);
-    }
-    /**
-     * @param array<string, string> $oldToNewClasses
-     */
-    private function processCleanUpUse(Use_ $use, array $oldToNewClasses) : ?Use_
-    {
-        foreach ($use->uses as $useUse) {
-            if (!$useUse->alias instanceof Identifier && isset($oldToNewClasses[$useUse->name->toString()])) {
-                $this->removeNode($use);
-                return $use;
-            }
-        }
-        return null;
     }
     /**
      * @param mixed[] $oldToNewClasses
