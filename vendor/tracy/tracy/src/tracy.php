@@ -18,7 +18,6 @@ require __DIR__ . '/Tracy/Dumper/Dumper.php';
 require __DIR__ . '/Tracy/Dumper/Exposer.php';
 require __DIR__ . '/Tracy/Dumper/Renderer.php';
 require __DIR__ . '/Tracy/Logger/ILogger.php';
-require __DIR__ . '/Tracy/Logger/FireLogger.php';
 require __DIR__ . '/Tracy/Logger/Logger.php';
 require __DIR__ . '/Tracy/Debugger/Debugger.php';
 require __DIR__ . '/Tracy/Debugger/DeferredContent.php';

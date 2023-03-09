@@ -18,28 +18,45 @@ final class Describer
     public const HiddenValue = '*****';
     // Number.MAX_SAFE_INTEGER
     private const JsSafeInteger = 1 << 53 - 1;
-    /** @var int */
+    /**
+     * @var int
+     */
     public $maxDepth = 7;
-    /** @var int */
+    /**
+     * @var int
+     */
     public $maxLength = 150;
-    /** @var int */
+    /**
+     * @var int
+     */
     public $maxItems = 100;
     /** @var Value[] */
     public $snapshot = [];
-    /** @var bool */
+    /**
+     * @var bool
+     */
     public $debugInfo = \false;
-    /** @var array */
+    /**
+     * @var mixed[]
+     */
     public $keysToHide = [];
-    /** @var callable|null  fn(string $key, mixed $val): bool */
+    /** @var (callable(string, mixed): bool)|null */
     public $scrubber;
-    /** @var bool */
+    /**
+     * @var bool
+     */
     public $location = \false;
     /** @var callable[] */
-    public $resourceExposers;
+    public $resourceExposers = [];
     /** @var array<string,callable> */
-    public $objectExposers;
+    public $objectExposers = [];
+    /** @var array<string, array{bool, string[]}> */
+    public $enumProperties = [];
     /** @var (int|\stdClass)[] */
     public $references = [];
+    /**
+     * @param mixed $var
+     */
     public function describe($var) : \stdClass
     {
         \uksort($this->objectExposers, function ($a, $b) : int {
@@ -54,6 +71,7 @@ final class Describer
         }
     }
     /**
+     * @param mixed $var
      * @return mixed
      */
     private function describeVar($var, int $depth = 0, ?int $refId = null)
@@ -65,14 +83,14 @@ final class Describer
         return $this->{$m}($var, $depth, $refId);
     }
     /**
-     * @return Value|int
+     * @return \Tracy\Dumper\Value|int
      */
     private function describeInteger(int $num)
     {
         return $num <= self::JsSafeInteger && $num >= -self::JsSafeInteger ? $num : new Value(Value::TypeNumber, "{$num}");
     }
     /**
-     * @return Value|float
+     * @return \Tracy\Dumper\Value|float
      */
     private function describeDouble(float $num)
     {
@@ -84,7 +102,7 @@ final class Describer
         // to distinct int and float in JS
     }
     /**
-     * @return Value|string
+     * @return \Tracy\Dumper\Value|string
      */
     private function describeString(string $s, int $depth = 0)
     {
@@ -98,7 +116,7 @@ final class Describer
         }
     }
     /**
-     * @return Value|array
+     * @return \Tracy\Dumper\Value|mixed[]
      */
     private function describeArray(array $arr, int $depth = 0, ?int $refId = null)
     {
@@ -141,7 +159,7 @@ final class Describer
         if ($value && $value->depth <= $depth) {
             return new Value(Value::TypeRef, $id);
         }
-        $value = new Value(Value::TypeObject, Helpers::getClass($obj));
+        $value = new Value(Value::TypeObject, \get_debug_type($obj));
         $value->id = $id;
         $value->depth = $depth;
         $value->holder = $obj;
@@ -183,7 +201,7 @@ final class Describer
         return new Value(Value::TypeRef, $id);
     }
     /**
-     * @return Value|string
+     * @return \Tracy\Dumper\Value|string
      */
     public function describeKey(string $key)
     {
@@ -193,14 +211,17 @@ final class Describer
         $value = $this->describeString($key);
         return \is_string($value) ? new Value(Value::TypeStringHtml, $key, Helpers::utf8Length($key)) : $value;
     }
-    public function addPropertyTo(Value $value, string $k, $v, $type = Value::PropertyVirtual, ?int $refId = null, ?string $class = null)
+    /**
+     * @param mixed $v
+     */
+    public function addPropertyTo(Value $value, string $k, $v, int $type = Value::PropertyVirtual, ?int $refId = null, ?string $class = null, ?Value $described = null) : void
     {
         if ($value->depth && $this->maxItems && \count($value->items ?? []) >= $this->maxItems) {
             $value->length = ($value->length ?? \count($value->items)) + 1;
             return;
         }
         $class = $class ?? $value->value;
-        $value->items[] = [$this->describeKey($k), $type !== Value::PropertyVirtual && $this->isSensitive($k, $v, $class) ? new Value(Value::TypeText, self::hideValue($v)) : $this->describeVar($v, $value->depth + 1, $refId), $type === Value::PropertyPrivate ? $class : $type] + ($refId ? [3 => $refId] : []);
+        $value->items[] = [$this->describeKey($k), $type !== Value::PropertyVirtual && $this->isSensitive($k, $v, $class) ? new Value(Value::TypeText, self::hideValue($v)) : $described ?? $this->describeVar($v, $value->depth + 1, $refId), $type === Value::PropertyPrivate ? $class : $type] + ($refId ? [3 => $refId] : []);
     }
     private function exposeObject(object $obj, Value $value) : ?array
     {
@@ -215,43 +236,43 @@ final class Describer
         Exposer::exposeObject($obj, $value, $this);
         return null;
     }
+    /**
+     * @param mixed $val
+     */
     private function isSensitive(string $key, $val, ?string $class = null) : bool
     {
         return $val instanceof \SensitiveParameterValue || $this->scrubber !== null && ($this->scrubber)($key, $val, $class) || isset($this->keysToHide[\strtolower($key)]) || isset($this->keysToHide[\strtolower($class . '::$' . $key)]);
     }
+    /**
+     * @param mixed $val
+     */
     private static function hideValue($val) : string
     {
         if ($val instanceof \SensitiveParameterValue) {
             $val = $val->getValue();
         }
-        return self::HiddenValue . ' (' . (\is_object($val) ? Helpers::getClass($val) : \gettype($val)) . ')';
+        return self::HiddenValue . ' (' . \get_debug_type($val) . ')';
     }
-    public function getReferenceId($arr, $key) : ?int
+    /**
+     * @param mixed $value
+     */
+    public function describeEnumProperty(string $class, string $property, $value) : ?Value
     {
-        if (\PHP_VERSION_ID >= 70400) {
-            if (!($rr = \ReflectionReference::fromArrayElement($arr, $key))) {
-                return null;
-            }
-            $tmp =& $this->references[$rr->getId()];
-            if ($tmp === null) {
-                return $tmp = \count($this->references);
-            }
-            return $tmp;
-        }
-        $uniq = new \stdClass();
-        $copy = $arr;
-        $orig = $copy[$key];
-        $copy[$key] = $uniq;
-        if ($arr[$key] !== $uniq) {
+        [$set, $constants] = $this->enumProperties["{$class}::{$property}"] ?? null;
+        if (!\is_int($value) || !$constants || !($constants = Helpers::decomposeFlags($value, $set, $constants))) {
             return null;
         }
-        $res = \array_search($uniq, $this->references, \true);
-        $copy[$key] = $orig;
-        if ($res === \false) {
-            $this->references[] =& $arr[$key];
-            return \count($this->references);
-        }
-        return $res + 1;
+        $constants = \array_map(function (string $const) use($class) : string {
+            return \str_replace("{$class}::", 'self::', $const);
+        }, $constants);
+        return new Value(Value::TypeNumber, \implode(' | ', $constants) . " ({$value})");
+    }
+    /**
+     * @param string|int $key
+     */
+    public function getReferenceId(array $arr, $key) : ?int
+    {
+        return ($rr = \ReflectionReference::fromArrayElement($arr, $key)) ? $this->references[$rr->getId()] = $this->references[$rr->getId()] ?? \count($this->references) + 1 : null;
     }
     /**
      * Finds the location where dump was called. Returns [file, line, code]

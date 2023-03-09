@@ -25,7 +25,7 @@ class Logger implements ILogger
     /** @var BlueScreen|null */
     private $blueScreen;
     /**
-     * @param  string|array|null  $email
+     * @param string|mixed[]|null $email
      */
     public function __construct(?string $directory, $email = null, ?BlueScreen $blueScreen = null)
     {
@@ -36,11 +36,11 @@ class Logger implements ILogger
     }
     /**
      * Logs message or exception to file and sends email notification.
-     * @param  mixed  $message
-     * @param  string  $level  one of constant ILogger::INFO, WARNING, ERROR (sends email), EXCEPTION (sends email), CRITICAL (sends email)
+     * For levels ERROR, EXCEPTION and CRITICAL it sends email.
      * @return string|null logged error filename
+     * @param mixed $message
      */
-    public function log($message, $level = self::INFO)
+    public function log($message, string $level = self::INFO)
     {
         if (!$this->directory) {
             throw new \LogicException('Logging directory is not specified.');
@@ -69,7 +69,7 @@ class Logger implements ILogger
     {
         if ($message instanceof \Throwable) {
             foreach (Helpers::getExceptionChain($message) as $exception) {
-                $tmp[] = ($exception instanceof \ErrorException ? Helpers::errorTypeToString($exception->getSeverity()) . ': ' . $exception->getMessage() : Helpers::getClass($exception) . ': ' . $exception->getMessage() . ($exception->getCode() ? ' #' . $exception->getCode() : '')) . ' in ' . $exception->getFile() . ':' . $exception->getLine();
+                $tmp[] = ($exception instanceof \ErrorException ? Helpers::errorTypeToString($exception->getSeverity()) . ': ' . $exception->getMessage() : \get_debug_type($exception) . ': ' . $exception->getMessage() . ($exception->getCode() ? ' #' . $exception->getCode() : '')) . ' in ' . $exception->getFile() . ':' . $exception->getLine();
             }
             $message = \implode("\ncaused by ", $tmp);
         } elseif (!\is_string($message)) {

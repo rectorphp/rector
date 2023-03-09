@@ -16,22 +16,20 @@ final class Exposer
 {
     public static function exposeObject(object $obj, Value $value, Describer $describer) : void
     {
-        $tmp = (array) $obj;
-        $values = $tmp;
-        // bug #79477, PHP < 7.4.6
+        $values = \get_mangled_object_vars($obj);
         $props = self::getProperties(\get_class($obj));
         foreach (\array_diff_key($values, $props) as $k => $v) {
             $describer->addPropertyTo($value, (string) $k, $v, Value::PropertyDynamic, $describer->getReferenceId($values, $k));
         }
         foreach ($props as $k => [$name, $class, $type]) {
             if (\array_key_exists($k, $values)) {
-                $describer->addPropertyTo($value, $name, $values[$k], $type, $describer->getReferenceId($values, $k), $class);
+                $describer->addPropertyTo($value, $name, $values[$k], $type, $describer->getReferenceId($values, $k), $class, $describer->describeEnumProperty($class, $name, $values[$k]));
             } else {
-                $value->items[] = [$name, new Value(Value::TypeText, 'unset'), $type === Value::PropertyPrivate ? $class : $type];
+                $describer->addPropertyTo($value, $name, null, $type, null, $class, new Value(Value::TypeText, 'unset'));
             }
         }
     }
-    private static function getProperties($class) : array
+    private static function getProperties(string $class) : array
     {
         static $cache;
         if (isset($cache[$class])) {
@@ -76,7 +74,7 @@ final class Exposer
         if ($uses) {
             $useValue->value = \implode(', ', $uses);
             $useValue->collapsed = \true;
-            $value->items[] = ['use', $useValue];
+            $describer->addPropertyTo($value, 'use', null, 4, null, null, $useValue);
         }
     }
     public static function exposeEnum(\UnitEnum $enum, Value $value, Describer $describer) : void
@@ -95,6 +93,10 @@ final class Exposer
         $obj->setFlags($flags);
         $describer->addPropertyTo($value, 'storage', $obj->getArrayCopy(), Value::PropertyPrivate, null, \ArrayObject::class);
     }
+    public static function exposeArrayIterator(\ArrayIterator $obj, Value $value, Describer $describer) : void
+    {
+        self::exposeObject((object) $obj->getArrayCopy(), $value, $describer);
+    }
     public static function exposeDOMNode(\DOMNode $obj, Value $value, Describer $describer) : void
     {
         $props = \preg_match_all('#^\\s*\\[([^\\]]+)\\] =>#m', \print_r($obj, \true), $tmp) ? $tmp[1] : [];
@@ -104,7 +106,7 @@ final class Exposer
         }
     }
     /**
-     * @param  \DOMNodeList|\DOMNamedNodeMap  $obj
+     * @param \DOMNodeList|\DOMNamedNodeMap $obj
      */
     public static function exposeDOMNodeList($obj, Value $value, Describer $describer) : void
     {
@@ -147,7 +149,7 @@ final class Exposer
     }
     public static function exposePhpIncompleteClass(\__PHP_Incomplete_Class $obj, Value $value, Describer $describer) : void
     {
-        $values = (array) $obj;
+        $values = \get_mangled_object_vars($obj);
         $class = $values['__PHP_Incomplete_Class_Name'];
         unset($values['__PHP_Incomplete_Class_Name']);
         foreach ($values as $k => $v) {
@@ -169,14 +171,14 @@ final class Exposer
     public static function exposeDsCollection(Ds\Collection $obj, Value $value, Describer $describer) : void
     {
         foreach ($obj as $k => $v) {
-            $describer->addPropertyTo($value, (string) $k, $v, Value::PropertyVirtual);
+            $describer->addPropertyTo($value, (string) $k, $v);
         }
     }
     public static function exposeDsMap(Ds\Map $obj, Value $value, Describer $describer) : void
     {
         $i = 0;
         foreach ($obj as $k => $v) {
-            $describer->addPropertyTo($value, (string) $i++, new Ds\Pair($k, $v), Value::PropertyVirtual);
+            $describer->addPropertyTo($value, (string) $i++, new Ds\Pair($k, $v));
         }
     }
 }

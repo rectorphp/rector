@@ -17,25 +17,37 @@ class BlueScreen
     public $info = [];
     /** @var string[] paths to be collapsed in stack trace (e.g. core libraries) */
     public $collapsePaths = [];
-    /** @var int  */
+    /**
+     * @var int
+     */
     public $maxDepth = 5;
-    /** @var int  */
+    /**
+     * @var int
+     */
     public $maxLength = 150;
-    /** @var int */
+    /**
+     * @var int
+     */
     public $maxItems = 100;
     /** @var callable|null  a callable returning true for sensitive data; fn(string $key, mixed $val): bool */
     public $scrubber;
     /** @var string[] */
     public $keysToHide = ['password', 'passwd', 'pass', 'pwd', 'creditcard', 'credit card', 'cc', 'pin', 'authorization', self::class . '::$snapshot'];
-    /** @var bool */
+    /**
+     * @var bool
+     */
     public $showEnvironment = \true;
     /** @var callable[] */
     private $panels = [];
     /** @var callable[] functions that returns action for exceptions */
     private $actions = [];
-    /** @var callable[] */
+    /**
+     * @var mixed[]
+     */
     private $fileGenerators = [];
-    /** @var array */
+    /**
+     * @var mixed[]|null
+     */
     private $snapshot;
     /** @var \WeakMap<\Fiber|\Generator> */
     private $fibers;
@@ -43,7 +55,7 @@ class BlueScreen
     {
         $this->collapsePaths = \preg_match('#(.+/vendor)/tracy/tracy/src/Tracy/BlueScreen$#', \strtr(__DIR__, '\\', '/'), $m) ? [$m[1] . '/tracy', $m[1] . '/nette', $m[1] . '/latte'] : [\dirname(__DIR__)];
         $this->fileGenerators[] = [self::class, 'generateNewPhpFileContents'];
-        $this->fibers = \PHP_VERSION_ID < 80000 ? new \SplObjectStorage() : new \WeakMap();
+        $this->fibers = new \WeakMap();
     }
     /**
      * Add custom panel as function (?\Throwable $e): ?array
@@ -77,9 +89,9 @@ class BlueScreen
     }
     /**
      * @param \Fiber|\Generator $fiber
-     * @return static
+     * @return $this
      */
-    public function addFiber($fiber) : self
+    public function addFiber($fiber)
     {
         $this->fibers[$fiber] = \true;
         return $this;
@@ -98,7 +110,7 @@ class BlueScreen
     public function renderToAjax(\Throwable $exception, DeferredContent $defer) : void
     {
         $defer->addSetup('Tracy.BlueScreen.loadAjax', Helpers::capture(function () use($exception) {
-            $this->renderTemplate($exception, __DIR__ . '/assets/content.phtml');
+            return $this->renderTemplate($exception, __DIR__ . '/assets/content.phtml');
         }));
     }
     /**
@@ -120,7 +132,7 @@ class BlueScreen
         }
         return \false;
     }
-    private function renderTemplate(\Throwable $exception, string $template, $toScreen = \true) : void
+    private function renderTemplate(\Throwable $exception, string $template, bool $toScreen = \true) : void
     {
         [$generators, $fibers] = $this->findGeneratorsAndFibers($exception);
         $headersSent = \headers_sent($headersFile, $headersLine);
@@ -128,7 +140,7 @@ class BlueScreen
         $showEnvironment = $this->showEnvironment && \strpos($exception->getMessage(), 'Allowed memory size') === \false;
         $info = \array_filter($this->info);
         $source = Helpers::getSource();
-        $title = $exception instanceof \ErrorException ? Helpers::errorTypeToString($exception->getSeverity()) : Helpers::getClass($exception);
+        $title = $exception instanceof \ErrorException ? Helpers::errorTypeToString($exception->getSeverity()) : \get_debug_type($exception);
         $lastError = $exception instanceof \ErrorException || $exception instanceof \Error ? null : \error_get_last();
         if (\function_exists('apache_request_headers')) {
             $httpHeaders = \apache_request_headers();
@@ -209,7 +221,7 @@ class BlueScreen
             }
             $actions[] = ['link' => Helpers::editorUri($file, $line, $label, '', $content), 'label' => $label . ' file'];
         }
-        $query = ($ex instanceof \ErrorException ? '' : Helpers::getClass($ex) . ' ') . \preg_replace('#\'.*\'|".*"#Us', '', $ex->getMessage());
+        $query = ($ex instanceof \ErrorException ? '' : \get_debug_type($ex) . ' ') . \preg_replace('#\'.*\'|".*"#Us', '', $ex->getMessage());
         $actions[] = ['link' => 'https://www.google.com/search?sourceid=tracy&q=' . \urlencode($query), 'label' => 'search', 'external' => \true];
         if ($ex instanceof \ErrorException && !empty($ex->skippable) && \preg_match('#^https?://#', $source = Helpers::getSource())) {
             $actions[] = ['link' => $source . (\strpos($source, '?') ? '&' : '?') . '_tracy_skip_error', 'label' => 'skip error'];
@@ -246,6 +258,7 @@ class BlueScreen
         }
         $source = \preg_replace('#(__halt_compiler\\s*\\(\\)\\s*;).*#is', '$1', $source);
         $source = \str_replace(["\r\n", "\r"], "\n", $source);
+        $source = \preg_replace('#/\\*sensitive\\{\\*/.*?/\\*\\}\\*/#s', Dumper\Describer::HiddenValue, $source);
         $source = \explode("\n", \highlight_string($source, \true));
         $out = $source[0];
         // <code><span color=highlight.html>

@@ -13,7 +13,7 @@ namespace Tracy;
 
 $title = $ex instanceof \ErrorException
 	? Helpers::errorTypeToString($ex->getSeverity())
-	: Helpers::getClass($ex);
+	: get_debug_type($ex);
 $code = $ex->getCode() ? ' #' . $ex->getCode() : '';
 
 ?>
@@ -30,6 +30,6 @@ $code = $ex->getCode() ? ' #' . $ex->getCode() : '';
 
 <?php if ($ex->getPrevious()): ?>
 <div class="tracy-caused">
-	<a href="#tracyCaused<?= count($exceptions) + 1 ?>">Caused by <?= Helpers::escapeHtml(Helpers::getClass($ex->getPrevious())) ?></a>
+	<a href="#tracyCaused<?= count($exceptions) + 1 ?>">Caused by <?= Helpers::escapeHtml(get_debug_type($ex->getPrevious())) ?></a>
 </div>
 <?php endif ?>

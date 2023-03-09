@@ -13,69 +13,90 @@ use ErrorException;
  */
 class Debugger
 {
-    public const VERSION = '2.9.7';
+    public const VERSION = '2.10.0';
     /** server modes for Debugger::enable() */
     public const Development = \false, Production = \true, Detect = null;
     public const DEVELOPMENT = self::Development, PRODUCTION = self::Production, DETECT = self::Detect;
     public const CookieSecret = 'tracy-debug';
     public const COOKIE_SECRET = self::CookieSecret;
-    /** @var bool in production mode is suppressed any debugging output */
-    public static $productionMode = self::Detect;
-    /** @var bool whether to display debug bar in development mode */
+    /** in production mode is suppressed any debugging output
+     * @var bool|null */
+    public static $productionMode = self::DETECT;
+    /** whether to display debug bar in development mode
+     * @var bool */
     public static $showBar = \true;
-    /** @var bool whether to send data to FireLogger in development mode */
-    public static $showFireLogger = \true;
-    /** @var int size of reserved memory */
+    /** size of reserved memory
+     * @var int */
     public static $reservedMemorySize = 500000;
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private static $enabled = \false;
-    /** @var string|null reserved memory; also prevents double rendering */
+    /** reserved memory; also prevents double rendering
+     * @var string|null */
     private static $reserved;
-    /** @var int initial output buffer level */
+    /** initial output buffer level
+     * @var int */
     private static $obLevel;
-    /** @var ?array output buffer status @internal */
+    /** output buffer status @internal
+     * @var mixed[]|null */
     public static $obStatus;
     /********************* errors and exceptions reporting ****************d*g**/
-    /** @var bool|int determines whether any error will cause immediate death in development mode; if integer that it's matched against error severity */
+    /** determines whether any error will cause immediate death in development mode; if integer that it's matched against error severity
+     * @var bool|int */
     public static $strictMode = \false;
-    /** @var bool|int disables the @ (shut-up) operator so that notices and warnings are no longer hidden; if integer than it's matched against error severity */
+    /** disables the @ (shut-up) operator so that notices and warnings are no longer hidden; if integer than it's matched against error severity
+     * @var bool|int */
     public static $scream = \false;
     /** @var callable[] functions that are automatically called after fatal error */
     public static $onFatalError = [];
     /********************* Debugger::dump() ****************d*g**/
-    /** @var int  how many nested levels of array/object properties display by dump() */
+    /** how many nested levels of array/object properties display by dump()
+     * @var int */
     public static $maxDepth = 15;
-    /** @var int  how long strings display by dump() */
+    /** how long strings display by dump()
+     * @var int */
     public static $maxLength = 150;
-    /** @var int  how many items in array/object display by dump() */
+    /** how many items in array/object display by dump()
+     * @var int */
     public static $maxItems = 100;
-    /** @var bool display location by dump()? */
+    /** display location by dump()?
+     * @var bool|null */
     public static $showLocation;
     /** @var string[] sensitive keys not displayed by dump() */
     public static $keysToHide = [];
-    /** @var string theme for dump() */
+    /** theme for dump()
+     * @var string */
     public static $dumpTheme = 'light';
     /** @deprecated */
     public static $maxLen;
     /********************* logging ****************d*g**/
-    /** @var string|null name of the directory where errors should be logged */
+    /** name of the directory where errors should be logged
+     * @var string|null */
     public static $logDirectory;
-    /** @var int  log bluescreen in production mode for this error severity */
+    /** log bluescreen in production mode for this error severity
+     * @var int */
     public static $logSeverity = 0;
-    /** @var string|array email(s) to which send error notifications */
-    public static $email;
-    /** for Debugger::log() and Debugger::fireLog() */
+    /** email(s) to which send error notifications
+     * @var string|mixed[]|null */
+    public static $email = null;
+    /** for Debugger::log() */
     public const DEBUG = ILogger::DEBUG, INFO = ILogger::INFO, WARNING = ILogger::WARNING, ERROR = ILogger::ERROR, EXCEPTION = ILogger::EXCEPTION, CRITICAL = ILogger::CRITICAL;
     /********************* misc ****************d*g**/
-    /** @var float timestamp with microseconds of the start of the request */
+    /** timestamp with microseconds of the start of the request
+     * @var float */
     public static $time;
-    /** @var string URI pattern mask to open editor */
+    /** URI pattern mask to open editor
+     * @var string|null */
     public static $editor = 'editor://%action/?file=%file&line=%line&search=%search&replace=%replace';
-    /** @var array replacements in path */
+    /** replacements in path
+     * @var mixed[] */
     public static $editorMapping = [];
-    /** @var string command to open browser (use 'start ""' in Windows) */
+    /** command to open browser (use 'start ""' in Windows)
+     * @var string|null */
     public static $browser;
-    /** @var string custom static error template */
+    /** custom static error template
+     * @var string|null */
     public static $errorTemplate;
     /** @var string[] */
     public static $customCssFiles = [];
@@ -83,20 +104,28 @@ class Debugger
     public static $customJsFiles = [];
     /** @var callable[] */
     private static $sourceMappers = [];
-    /** @var array|null */
+    /**
+     * @var mixed[]|null
+     */
     private static $cpuUsage;
     /********************* services ****************d*g**/
-    /** @var BlueScreen */
+    /**
+     * @var \Tracy\BlueScreen
+     */
     private static $blueScreen;
-    /** @var Bar */
+    /**
+     * @var \Tracy\Bar
+     */
     private static $bar;
-    /** @var ILogger */
+    /**
+     * @var \Tracy\ILogger
+     */
     private static $logger;
-    /** @var ILogger */
-    private static $fireLogger;
     /** @var array{DevelopmentStrategy, ProductionStrategy} */
     private static $strategy;
-    /** @var SessionStorage */
+    /**
+     * @var \Tracy\SessionStorage
+     */
     private static $sessionStorage;
     /**
      * Static class - cannot be instantiated.
@@ -157,7 +186,7 @@ class Debugger
             exit(255);
         });
         \set_error_handler([self::class, 'errorHandler']);
-        foreach (['Bar/Bar', 'Bar/DefaultBarPanel', 'BlueScreen/BlueScreen', 'Dumper/Describer', 'Dumper/Dumper', 'Dumper/Exposer', 'Dumper/Renderer', 'Dumper/Value', 'Logger/FireLogger', 'Logger/Logger', 'Session/SessionStorage', 'Session/FileSession', 'Session/NativeSession', 'Helpers'] as $path) {
+        foreach (['Bar/Bar', 'Bar/DefaultBarPanel', 'BlueScreen/BlueScreen', 'Dumper/Describer', 'Dumper/Dumper', 'Dumper/Exposer', 'Dumper/Renderer', 'Dumper/Value', 'Logger/Logger', 'Session/SessionStorage', 'Session/FileSession', 'Session/NativeSession', 'Helpers'] as $path) {
             require_once \dirname(__DIR__) . "/{$path}.php";
         }
         self::$enabled = \true;
@@ -234,33 +263,17 @@ class Debugger
      * @throws ErrorException
      * @internal
      */
-    public static function errorHandler(int $severity, string $message, string $file, int $line, ?array $context = null) : bool
+    public static function errorHandler(int $severity, string $message, string $file, int $line) : bool
     {
         $error = \error_get_last();
         if (($error['type'] ?? null) === \E_COMPILE_WARNING) {
             \error_clear_last();
             self::errorHandler($error['type'], $error['message'], $error['file'], $error['line']);
         }
-        if ($context) {
-            $context = (array) (object) $context;
-            // workaround for PHP bug #80234
-        }
         if ($severity === \E_RECOVERABLE_ERROR || $severity === \E_USER_ERROR) {
-            if (Helpers::findTrace(\debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS), '*::__toString')) {
-                // workaround for PHP < 7.4
-                $previous = isset($context['e']) && $context['e'] instanceof \Throwable ? $context['e'] : null;
-                $e = new ErrorException($message, 0, $severity, $file, $line, $previous);
-                @($e->context = $context);
-                // dynamic properties are deprecated since PHP 8.2
-                self::exceptionHandler($e);
-                exit(255);
-            }
-            $e = new ErrorException($message, 0, $severity, $file, $line);
-            @($e->context = $context);
-            // dynamic properties are deprecated since PHP 8.2
-            throw $e;
+            throw new ErrorException($message, 0, $severity, $file, $line);
         } elseif ($severity & \error_reporting() || (\is_int(self::$scream) ? $severity & self::$scream : self::$scream)) {
-            self::getStrategy()->handleError($severity, $message, $file, $line, $context);
+            self::getStrategy()->handleError($severity, $message, $file, $line);
         }
         return \false;
         // calls normal error handler to fill-in error_get_last()
@@ -283,7 +296,7 @@ class Debugger
     /********************* services ****************d*g**/
     public static function getBlueScreen() : BlueScreen
     {
-        if (!self::$blueScreen) {
+        if (empty(self::$blueScreen)) {
             self::$blueScreen = new BlueScreen();
             self::$blueScreen->info = ['PHP ' . \PHP_VERSION, $_SERVER['SERVER_SOFTWARE'] ?? null, 'Tracy ' . self::VERSION];
         }
@@ -291,7 +304,7 @@ class Debugger
     }
     public static function getBar() : Bar
     {
-        if (!self::$bar) {
+        if (empty(self::$bar)) {
             self::$bar = new Bar();
             self::$bar->addPanel($info = new DefaultBarPanel('info'), 'Tracy:info');
             $info->cpuUsage = self::$cpuUsage;
@@ -306,7 +319,7 @@ class Debugger
     }
     public static function getLogger() : ILogger
     {
-        if (!self::$logger) {
+        if (empty(self::$logger)) {
             self::$logger = new Logger(self::$logDirectory, self::$email, self::getBlueScreen());
             self::$logger->directory =& self::$logDirectory;
             // back compatiblity
@@ -314,14 +327,8 @@ class Debugger
         }
         return self::$logger;
     }
-    public static function getFireLogger() : ILogger
-    {
-        if (!self::$fireLogger) {
-            self::$fireLogger = new FireLogger();
-        }
-        return self::$fireLogger;
-    }
-    /** @return ProductionStrategy|DevelopmentStrategy @internal */
+    /** @internal
+     * @return \Tracy\ProductionStrategy|\Tracy\DevelopmentStrategy */
     public static function getStrategy()
     {
         if (empty(self::$strategy[self::$productionMode])) {
@@ -331,7 +338,7 @@ class Debugger
     }
     public static function setSessionStorage(SessionStorage $storage) : void
     {
-        if (self::$sessionStorage) {
+        if (isset(self::$sessionStorage)) {
             throw new \Exception('Storage is already set.');
         }
         self::$sessionStorage = $storage;
@@ -339,7 +346,7 @@ class Debugger
     /** @internal */
     public static function getSessionStorage() : SessionStorage
     {
-        if (!self::$sessionStorage) {
+        if (empty(self::$sessionStorage)) {
             self::$sessionStorage = @\is_dir($dir = \session_save_path()) || @\is_dir($dir = \ini_get('upload_tmp_dir')) || @\is_dir($dir = \sys_get_temp_dir()) || ($dir = self::$logDirectory) ? new FileSession($dir) : new NativeSession();
         }
         return self::$sessionStorage;
@@ -357,7 +364,7 @@ class Debugger
         if ($return) {
             $options = [Dumper::DEPTH => self::$maxDepth, Dumper::TRUNCATE => self::$maxLength, Dumper::ITEMS => self::$maxItems];
             return Helpers::isCli() ? Dumper::toText($var) : Helpers::capture(function () use($var, $options) {
-                Dumper::dump($var, $options);
+                return Dumper::dump($var, $options);
             });
         } elseif (!self::$productionMode) {
             $html = Helpers::isHtmlMode();
@@ -374,16 +381,16 @@ class Debugger
     public static function timer(?string $name = null) : float
     {
         static $time = [];
-        $now = \microtime(\true);
+        $now = \hrtime(\true);
         $delta = isset($time[$name]) ? $now - $time[$name] : 0;
         $time[$name] = $now;
-        return $delta;
+        return $delta / 1000000000.0;
     }
     /**
      * Dumps information about a variable in Tracy Debug Bar.
      * @tracySkipLocation
-     * @param  mixed  $var
      * @return mixed  variable itself
+     * @param mixed $var
      */
     public static function barDump($var, ?string $title = null, array $options = [])
     {
@@ -398,20 +405,12 @@ class Debugger
     }
     /**
      * Logs message or exception.
-     * @param  mixed  $message
+     * @param mixed $message
      * @return mixed
      */
     public static function log($message, string $level = ILogger::INFO)
     {
         return self::getLogger()->log($message, $level);
-    }
-    /**
-     * Sends message to FireLogger console.
-     * @param  mixed  $message
-     */
-    public static function fireLog($message) : bool
-    {
-        return !self::$productionMode && self::$showFireLogger ? self::getFireLogger()->log($message) : \false;
     }
     /** @internal */
     public static function addSourceMapper(callable $mapper) : void

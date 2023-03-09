@@ -12,11 +12,17 @@ namespace RectorPrefix202303\Tracy;
  */
 final class DeferredContent
 {
-    /** @var SessionStorage */
+    /**
+     * @var \Tracy\SessionStorage
+     */
     private $sessionStorage;
-    /** @var string */
+    /**
+     * @var string
+     */
     private $requestId;
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $useSession = \false;
     public function __construct(SessionStorage $sessionStorage)
     {
@@ -37,6 +43,9 @@ final class DeferredContent
         $items = (array) $items;
         return $items;
     }
+    /**
+     * @param mixed $argument
+     */
     public function addSetup(string $method, $argument) : void
     {
         $argument = \json_encode($argument, \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_INVALID_UTF8_SUBSTITUTE);

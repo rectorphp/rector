@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2 <8.3",
+        "php": ">=8.0 <8.3",
         "ext-session": "*",
         "ext-json": "*"
     },
@@ -54,7 +54,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "2.9-dev"
+            "dev-master": "2.10-dev"
         }
     }
 }

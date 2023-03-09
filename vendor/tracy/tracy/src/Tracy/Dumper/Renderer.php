@@ -15,29 +15,48 @@ use RectorPrefix202303\Tracy\Helpers;
 final class Renderer
 {
     private const TypeArrayKey = 'array';
-    /** @var int|bool */
+    /**
+     * @var int|bool
+     */
     public $collapseTop = 14;
-    /** @var int */
+    /**
+     * @var int
+     */
     public $collapseSub = 7;
-    /** @var bool */
+    /**
+     * @var bool
+     */
     public $classLocation = \false;
-    /** @var bool */
+    /**
+     * @var bool
+     */
     public $sourceLocation = \false;
-    /** @var bool|null  lazy-loading via JavaScript? true=full, false=none, null=collapsed parts */
+    /** lazy-loading via JavaScript? true=full, false=none, null=collapsed parts
+     * @var bool|null */
     public $lazy;
-    /** @var bool */
+    /**
+     * @var bool
+     */
     public $hash = \true;
-    /** @var string */
+    /**
+     * @var string|null
+     */
     public $theme = 'light';
-    /** @var bool */
+    /**
+     * @var bool
+     */
     public $collectingMode = \false;
     /** @var Value[] */
     private $snapshot = [];
     /** @var Value[]|null */
     private $snapshotSelection;
-    /** @var array */
+    /**
+     * @var mixed[]
+     */
     private $parents = [];
-    /** @var array */
+    /**
+     * @var mixed[]
+     */
     private $above = [];
     public function renderAsHtml(\stdClass $model) : string
     {
@@ -90,8 +109,8 @@ final class Renderer
         return $s;
     }
     /**
-     * @param  mixed  $value
-     * @param  string|int|null  $keyType
+     * @param string|int|null $keyType
+     * @param mixed $value
      */
     private function renderVar($value, int $depth = 0, $keyType = null) : string
     {
@@ -127,8 +146,8 @@ final class Renderer
         }
     }
     /**
-     * @param  string|Value  $str
-     * @param  string|int|null  $keyType
+     * @param string|\Tracy\Dumper\Value $str
+     * @param string|int|null $keyType
      */
     private function renderString($str, int $depth, $keyType) : string
     {
@@ -161,7 +180,7 @@ final class Renderer
         }
     }
     /**
-     * @param  array|Value  $array
+     * @param mixed[]|\Tracy\Dumper\Value $array
      */
     private function renderArray($array, int $depth) : string
     {
@@ -275,6 +294,9 @@ final class Renderer
             return $out . '</div>';
         }
     }
+    /**
+     * @param mixed $value
+     */
     private function copySnapshot($value) : void
     {
         if ($this->collectingMode) {
@@ -298,12 +320,15 @@ final class Renderer
             }
         }
     }
-    public static function jsonEncode($snapshot) : string
+    /**
+     * @param mixed $value
+     */
+    public static function jsonEncode($value) : string
     {
         $old = @\ini_set('serialize_precision', '-1');
         // @ may be disabled
         try {
-            return \json_encode($snapshot, \JSON_HEX_APOS | \JSON_HEX_AMP | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
+            return \json_encode($value, \JSON_HEX_APOS | \JSON_HEX_AMP | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES);
         } finally {
             if ($old !== \false) {
                 \ini_set('serialize_precision', $old);

@@ -13,5 +13,8 @@ namespace RectorPrefix202303\Tracy;
 interface ILogger
 {
     public const DEBUG = 'debug', INFO = 'info', WARNING = 'warning', ERROR = 'error', EXCEPTION = 'exception', CRITICAL = 'critical';
-    function log($value, $level = self::INFO);
+    /**
+     * @param mixed $value
+     */
+    function log($value, string $level = self::INFO);
 }

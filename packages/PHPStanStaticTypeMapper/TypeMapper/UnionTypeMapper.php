@@ -29,6 +29,7 @@ use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -80,7 +81,12 @@ final class UnionTypeMapper implements TypeMapperInterface
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer, UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
+     */
+    private $typeFactory;
+    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, PhpVersionProvider $phpVersionProvider, UnionTypeAnalyzer $unionTypeAnalyzer, BoolUnionTypeAnalyzer $boolUnionTypeAnalyzer, UnionTypeCommonTypeNarrower $unionTypeCommonTypeNarrower, NodeNameResolver $nodeNameResolver, TypeFactory $typeFactory)
     {
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->phpVersionProvider = $phpVersionProvider;
@@ -88,6 +94,7 @@ final class UnionTypeMapper implements TypeMapperInterface
         $this->boolUnionTypeAnalyzer = $boolUnionTypeAnalyzer;
         $this->unionTypeCommonTypeNarrower = $unionTypeCommonTypeNarrower;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->typeFactory = $typeFactory;
     }
     /**
      * @required
@@ -279,7 +286,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             return $phpParserUnionType;
         }
         if ($phpParserUnionType !== null) {
-            return $this->narrowBoolType($unionType, $phpParserUnionType);
+            return $this->narrowBoolType($unionType, $phpParserUnionType, $typeKind);
         }
         if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
             return new Identifier('bool');
@@ -436,9 +443,10 @@ final class UnionTypeMapper implements TypeMapperInterface
         return new Identifier('int');
     }
     /**
-     * @return PhpParserUnionType|null|\PhpParser\Node\Identifier
+     * @param TypeKind::* $typeKind
+     * @return PhpParserUnionType|null|\PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\ComplexType
      */
-    private function narrowBoolType(UnionType $unionType, PhpParserUnionType $phpParserUnionType)
+    private function narrowBoolType(UnionType $unionType, PhpParserUnionType $phpParserUnionType, string $typeKind)
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             // maybe all one type
@@ -450,6 +458,14 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($this->hasObjectAndStaticType($phpParserUnionType)) {
             return null;
         }
-        return $phpParserUnionType;
+        $unionType = $this->typeFactory->createMixedPassedOrUnionType($unionType->getTypes());
+        if (!$unionType instanceof UnionType) {
+            return $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionType, $typeKind);
+        }
+        // avoid infinite loop by compare early
+        if (\count($unionType->getTypes()) === \count($phpParserUnionType->types)) {
+            return $phpParserUnionType;
+        }
+        return $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionType, $typeKind);
     }
 }

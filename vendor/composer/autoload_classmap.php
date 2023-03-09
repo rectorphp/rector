@@ -1117,7 +1117,6 @@ return array(
     'RectorPrefix202303\\Tracy\\Dumper\\Exposer' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Exposer.php',
     'RectorPrefix202303\\Tracy\\Dumper\\Renderer' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Renderer.php',
     'RectorPrefix202303\\Tracy\\Dumper\\Value' => $vendorDir . '/tracy/tracy/src/Tracy/Dumper/Value.php',
-    'RectorPrefix202303\\Tracy\\FireLogger' => $vendorDir . '/tracy/tracy/src/Tracy/Logger/FireLogger.php',
     'RectorPrefix202303\\Tracy\\Helpers' => $vendorDir . '/tracy/tracy/src/Tracy/Helpers.php',
     'RectorPrefix202303\\Tracy\\ILogger' => $vendorDir . '/tracy/tracy/src/Tracy/Logger/ILogger.php',
     'RectorPrefix202303\\Tracy\\Logger' => $vendorDir . '/tracy/tracy/src/Tracy/Logger/Logger.php',

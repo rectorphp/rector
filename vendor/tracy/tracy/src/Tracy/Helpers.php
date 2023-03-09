@@ -53,10 +53,16 @@ class Helpers
             return \str_replace("\n", '&#10;', self::escapeHtml($args[++$count]));
         }, $mask);
     }
+    /**
+     * @param mixed $s
+     */
     public static function escapeHtml($s) : string
     {
         return \htmlspecialchars((string) $s, \ENT_QUOTES | \ENT_SUBSTITUTE | \ENT_HTML5, 'UTF-8');
     }
+    /**
+     * @param mixed[]|string $method
+     */
     public static function findTrace(array $trace, $method, ?int &$index = null) : ?array
     {
         $m = \is_array($method) ? $method : \explode('::', $method);
@@ -67,10 +73,6 @@ class Helpers
             }
         }
         return null;
-    }
-    public static function getClass($obj) : string
-    {
-        return \explode("\x00", \get_class($obj))[0];
     }
     /** @internal */
     public static function fixStack(\Throwable $exception) : \Throwable
@@ -126,10 +128,6 @@ class Helpers
             $hint = self::getSuggestion(\get_class_methods($m[1]) ?: [], $m[2]);
             $message .= ", did you mean {$hint}()?";
             $replace = ["{$m[2]}(", "{$hint}("];
-        } elseif (\preg_match('#^Undefined variable:? \\$?(\\w+)#', $message, $m) && !empty($e->context)) {
-            $hint = self::getSuggestion(\array_keys($e->context), $m[1]);
-            $message = "Undefined variable \${$m[1]}, did you mean \${$hint}?";
-            $replace = ["\${$m[1]}", "\${$hint}"];
         } elseif (\preg_match('#^Undefined property: ([\\w\\\\]+)::\\$(\\w+)#', $message, $m)) {
             $rc = new \ReflectionClass($m[1]);
             $items = \array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($prop) {
@@ -160,12 +158,9 @@ class Helpers
         }
     }
     /** @internal */
-    public static function improveError(string $message, array $context = []) : string
+    public static function improveError(string $message) : string
     {
-        if (\preg_match('#^Undefined variable:? \\$?(\\w+)#', $message, $m) && $context) {
-            $hint = self::getSuggestion(\array_keys($context), $m[1]);
-            return $hint ? "Undefined variable \${$m[1]}, did you mean \${$hint}?" : $message;
-        } elseif (\preg_match('#^Undefined property: ([\\w\\\\]+)::\\$(\\w+)#', $message, $m)) {
+        if (\preg_match('#^Undefined property: ([\\w\\\\]+)::\\$(\\w+)#', $message, $m)) {
             $rc = new \ReflectionClass($m[1]);
             $items = \array_filter($rc->getProperties(\ReflectionProperty::IS_PUBLIC), function ($prop) {
                 return !$prop->isStatic();
@@ -261,6 +256,7 @@ class Helpers
     public static function capture(callable $func) : string
     {
         \ob_start(function () {
+            return null;
         });
         try {
             $func();
@@ -329,20 +325,20 @@ class Helpers
         // author: Jakub Vrana https://php.vrana.cz/minifikace-javascriptu.php
         $last = '';
         return \preg_replace_callback(<<<'XX'
-			(
-				(?:
-					(^|[-+\([{}=,:;!%^&*|?~]|/(?![/*])|return|throw) # context before regexp
-					(?:\s|//[^\n]*+\n|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
-					(/(?![/*])(?:\\[^\n]|[^[\n/\\]|\[(?:\\[^\n]|[^]])++)+/) # regexp
-					|(^
-						|'(?:\\.|[^\n'\\])*'
-						|"(?:\\.|[^\n"\\])*"
-						|([0-9A-Za-z_$]+)
-						|([-+]+)
-						|.
-					)
-				)(?:\s|//[^\n]*+\n|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
-			())sx
+(
+	(?:
+		(^|[-+\([{}=,:;!%^&*|?~]|/(?![/*])|return|throw) # context before regexp
+		(?:\s|//[^\n]*+\n|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
+		(/(?![/*])(?:\\[^\n]|[^[\n/\\]|\[(?:\\[^\n]|[^]])++)+/) # regexp
+		|(^
+			|'(?:\\.|[^\n'\\])*'
+			|"(?:\\.|[^\n"\\])*"
+			|([0-9A-Za-z_$]+)
+			|([-+]+)
+			|.
+		)
+	)(?:\s|//[^\n]*+\n|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
+())sx
 XX
 , function ($match) use(&$last) {
             [, $context, $regexp, $result, $word, $operator] = $match;
@@ -366,14 +362,14 @@ XX
     {
         $last = '';
         return \preg_replace_callback(<<<'XX'
-			(
-				(^
-					|'(?:\\.|[^\n'\\])*'
-					|"(?:\\.|[^\n"\\])*"
-					|([0-9A-Za-z_*#.%:()[\]-]+)
-					|.
-				)(?:\s|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
-			())sx
+(
+	(^
+		|'(?:\\.|[^\n'\\])*'
+		|"(?:\\.|[^\n"\\])*"
+		|([0-9A-Za-z_*#.%:()[\]-]+)
+		|.
+	)(?:\s|/\*(?:[^*]|\*(?!/))*+\*/)* # optional space
+())sx
 XX
 , function ($match) use(&$last) {
             [, $result, $word] = $match;
@@ -405,6 +401,9 @@ XX
         }
         return $res;
     }
+    /**
+     * @param mixed $val
+     */
     public static function traverseValue($val, callable $callback, array &$skip = [], ?string $refId = null) : void
     {
         if (\is_object($val)) {
@@ -422,9 +421,31 @@ XX
                 $skip[$refId] = \true;
             }
             foreach ($val as $k => $v) {
-                $refId = ($r = \ReflectionReference::fromArrayElement($val, $k)) ? $r->getId() : null;
+                $refId = ($fromArrayElement = \ReflectionReference::fromArrayElement($val, $k)) ? $fromArrayElement->getId() : null;
                 self::traverseValue($v, $callback, $skip, $refId);
             }
         }
+    }
+    /** @internal */
+    public static function decomposeFlags(int $flags, bool $set, array $constants) : ?array
+    {
+        $res = null;
+        foreach ($constants as $constant) {
+            if (\defined($constant)) {
+                $v = \constant($constant);
+                if ($set) {
+                    if ($v && ($flags & $v) === $v) {
+                        $res[] = $constant;
+                        $flags &= ~$v;
+                    }
+                } elseif ($flags === $v) {
+                    return [$constant];
+                }
+            }
+        }
+        if ($flags && $res && $set) {
+            $res[] = (string) $flags;
+        }
+        return $res;
     }
 }

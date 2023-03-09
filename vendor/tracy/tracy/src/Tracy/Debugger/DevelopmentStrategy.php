@@ -13,11 +13,17 @@ use ErrorException;
  */
 final class DevelopmentStrategy
 {
-    /** @var Bar */
+    /**
+     * @var \Tracy\Bar
+     */
     private $bar;
-    /** @var BlueScreen */
+    /**
+     * @var \Tracy\BlueScreen
+     */
     private $blueScreen;
-    /** @var DeferredContent */
+    /**
+     * @var \Tracy\DeferredContent
+     */
     private $defer;
     public function __construct(Bar $bar, BlueScreen $blueScreen, DeferredContent $defer)
     {
@@ -35,7 +41,6 @@ final class DevelopmentStrategy
         } elseif ($firstTime && Helpers::isHtmlMode()) {
             $this->blueScreen->render($exception);
         } else {
-            Debugger::fireLog($exception);
             $this->renderExceptionCli($exception);
         }
     }
@@ -58,27 +63,22 @@ final class DevelopmentStrategy
             \exec(Debugger::$browser . ' ' . \escapeshellarg(\strtr($logFile, Debugger::$editorMapping)));
         }
     }
-    public function handleError(int $severity, string $message, string $file, int $line, array $context = null) : void
+    public function handleError(int $severity, string $message, string $file, int $line) : void
     {
         if (\function_exists('ini_set')) {
             $oldDisplay = \ini_set('display_errors', '1');
         }
         if ((\is_bool(Debugger::$strictMode) ? Debugger::$strictMode : Debugger::$strictMode & $severity) && !isset($_GET['_tracy_skip_error'])) {
             $e = new ErrorException($message, 0, $severity, $file, $line);
-            @($e->context = $context);
-            // dynamic properties are deprecated since PHP 8.2
             @($e->skippable = \true);
+            // dynamic properties are deprecated since PHP 8.2
             Debugger::exceptionHandler($e);
             exit(255);
         }
-        $message = 'PHP ' . Helpers::errorTypeToString($severity) . ': ' . Helpers::improveError($message, (array) $context);
+        $message = 'PHP ' . Helpers::errorTypeToString($severity) . ': ' . Helpers::improveError($message);
         $count =& $this->bar->getPanel('Tracy:errors')->data["{$file}|{$line}|{$message}"];
-        if (!$count++) {
-            // not repeated error
-            Debugger::fireLog(new ErrorException($message, 0, $severity, $file, $line));
-            if (!Helpers::isHtmlMode() && !Helpers::isAjax()) {
-                echo "\n{$message} in {$file} on line {$line}\n";
-            }
+        if (!$count++ && !Helpers::isHtmlMode() && !Helpers::isAjax()) {
+            echo "\n{$message} in {$file} on line {$line}\n";
         }
         if (\function_exists('ini_set')) {
             \ini_set('display_errors', $oldDisplay);

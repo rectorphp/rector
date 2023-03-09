@@ -23,19 +23,32 @@ class Dumper
     public const HIDDEN_VALUE = Describer::HiddenValue;
     /** @var Dumper\Value[] */
     public static $liveSnapshot = [];
-    /** @var array */
+    /**
+     * @var mixed[]|null
+     */
     public static $terminalColors = ['bool' => '1;33', 'null' => '1;33', 'number' => '1;32', 'string' => '1;36', 'array' => '1;31', 'public' => '1;37', 'protected' => '1;37', 'private' => '1;37', 'dynamic' => '1;37', 'virtual' => '1;37', 'object' => '1;31', 'resource' => '1;37', 'indent' => '1;30'];
-    /** @var array */
+    /**
+     * @var mixed[]
+     */
     public static $resources = ['stream' => 'stream_get_meta_data', 'stream-context' => 'stream_context_get_options', 'curl' => 'curl_getinfo'];
-    /** @var array */
-    public static $objectExporters = [\Closure::class => [Exposer::class, 'exposeClosure'], \UnitEnum::class => [Exposer::class, 'exposeEnum'], \ArrayObject::class => [Exposer::class, 'exposeArrayObject'], \SplFileInfo::class => [Exposer::class, 'exposeSplFileInfo'], \SplObjectStorage::class => [Exposer::class, 'exposeSplObjectStorage'], \__PHP_Incomplete_Class::class => [Exposer::class, 'exposePhpIncompleteClass'], \Generator::class => [Exposer::class, 'exposeGenerator'], \Fiber::class => [Exposer::class, 'exposeFiber'], \DOMNode::class => [Exposer::class, 'exposeDOMNode'], \DOMNodeList::class => [Exposer::class, 'exposeDOMNodeList'], \DOMNamedNodeMap::class => [Exposer::class, 'exposeDOMNodeList'], Ds\Collection::class => [Exposer::class, 'exposeDsCollection'], Ds\Map::class => [Exposer::class, 'exposeDsMap']];
-    /** @var Describer */
+    /**
+     * @var mixed[]
+     */
+    public static $objectExporters = [\Closure::class => [Exposer::class, 'exposeClosure'], \UnitEnum::class => [Exposer::class, 'exposeEnum'], \ArrayObject::class => [Exposer::class, 'exposeArrayObject'], \ArrayIterator::class => [Exposer::class, 'exposeArrayIterator'], \SplFileInfo::class => [Exposer::class, 'exposeSplFileInfo'], \SplObjectStorage::class => [Exposer::class, 'exposeSplObjectStorage'], \__PHP_Incomplete_Class::class => [Exposer::class, 'exposePhpIncompleteClass'], \Generator::class => [Exposer::class, 'exposeGenerator'], \Fiber::class => [Exposer::class, 'exposeFiber'], \DOMNode::class => [Exposer::class, 'exposeDOMNode'], \DOMNodeList::class => [Exposer::class, 'exposeDOMNodeList'], \DOMNamedNodeMap::class => [Exposer::class, 'exposeDOMNodeList'], Ds\Collection::class => [Exposer::class, 'exposeDsCollection'], Ds\Map::class => [Exposer::class, 'exposeDsMap']];
+    /** @var array<string, array{bool, string[]}> */
+    private static $enumProperties = [];
+    /**
+     * @var \Tracy\Dumper\Describer
+     */
     private $describer;
-    /** @var Renderer */
+    /**
+     * @var \Tracy\Dumper\Renderer
+     */
     private $renderer;
     /**
      * Dumps variable to the output.
-     * @return mixed  variable
+     * @param mixed $var
+     * @return mixed
      */
     public static function dump($var, array $options = [])
     {
@@ -54,6 +67,8 @@ class Dumper
     }
     /**
      * Dumps variable to HTML.
+     * @param mixed $var
+     * @param mixed $key
      */
     public static function toHtml($var, array $options = [], $key = null) : string
     {
@@ -61,6 +76,7 @@ class Dumper
     }
     /**
      * Dumps variable to plain text.
+     * @param mixed $var
      */
     public static function toText($var, array $options = []) : string
     {
@@ -68,6 +84,7 @@ class Dumper
     }
     /**
      * Dumps variable to x-terminal.
+     * @param mixed $var
      */
     public static function toTerminal($var, array $options = []) : string
     {
@@ -105,6 +122,7 @@ class Dumper
         $describer->keysToHide = \array_flip(\array_map('strtolower', $options[self::KEYS_TO_HIDE] ?? []));
         $describer->resourceExposers = ($options['resourceExporters'] ?? []) + self::$resources;
         $describer->objectExposers = ($options[self::OBJECT_EXPORTERS] ?? []) + self::$objectExporters;
+        $describer->enumProperties = self::$enumProperties;
         $describer->location = (bool) $location;
         if ($options[self::LIVE] ?? \false) {
             $tmp =& self::$liveSnapshot;
@@ -124,11 +142,13 @@ class Dumper
         $renderer->lazy = $renderer->collectingMode ? \true : $options[self::LAZY] ?? $renderer->lazy;
         $renderer->sourceLocation = !(~$location & self::LOCATION_SOURCE);
         $renderer->classLocation = !(~$location & self::LOCATION_CLASS);
-        $renderer->theme = $options[self::THEME] ?? $renderer->theme;
+        $renderer->theme = $options[self::THEME] ?? $renderer->theme ?: null;
         $renderer->hash = $options[self::HASH] ?? \true;
     }
     /**
      * Dumps variable to HTML.
+     * @param mixed $var
+     * @param mixed $key
      */
     private function asHtml($var, $key = null) : string
     {
@@ -142,6 +162,7 @@ class Dumper
     }
     /**
      * Dumps variable to x-terminal.
+     * @param mixed $var
      */
     private function asTerminal($var, array $colors = []) : string
     {
@@ -153,5 +174,9 @@ class Dumper
         $res = "'" . Renderer::jsonEncode($snapshot[0] ?? []) . "'";
         $snapshot = [];
         return $res;
+    }
+    public static function addEnumProperty(string $class, string $property, array $constants, bool $set = \false) : void
+    {
+        self::$enumProperties["{$class}::{$property}"] = [$set, $constants];
     }
 }

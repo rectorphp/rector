@@ -11,6 +11,8 @@ if (!\function_exists('RectorPrefix202303\\dump')) {
     /**
      * Tracy\Debugger::dump() shortcut.
      * @tracySkipLocation
+     * @param mixed $var
+     * @return mixed
      */
     function dump($var)
     {
@@ -22,6 +24,7 @@ if (!\function_exists('RectorPrefix202303\\dumpe')) {
     /**
      * Tracy\Debugger::dump() & exit shortcut.
      * @tracySkipLocation
+     * @param mixed $var
      */
     function dumpe($var) : void
     {
@@ -35,6 +38,8 @@ if (!\function_exists('RectorPrefix202303\\bdump')) {
     /**
      * Tracy\Debugger::barDump() shortcut.
      * @tracySkipLocation
+     * @param mixed $var
+     * @return mixed
      */
     function bdump($var)
     {

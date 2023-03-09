@@ -1986,12 +1986,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "d4acd905e4c64061dde78486a924994ff38b688b"
+                "reference": "b7d84923a099e4cf8cba027dcb447580e345d3e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/d4acd905e4c64061dde78486a924994ff38b688b",
-                "reference": "d4acd905e4c64061dde78486a924994ff38b688b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b7d84923a099e4cf8cba027dcb447580e345d3e3",
+                "reference": "b7d84923a099e4cf8cba027dcb447580e345d3e3",
                 "shasum": ""
             },
             "require": {
@@ -2015,7 +2015,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-02-23T13:46:43+00:00",
+            "time": "2023-03-09T13:49:24+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -3229,23 +3229,23 @@
         },
         {
             "name": "tracy\/tracy",
-            "version": "v2.9.7",
-            "version_normalized": "2.9.7.0",
+            "version": "v2.10.0",
+            "version_normalized": "2.10.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/tracy.git",
-                "reference": "1c6e9b5bad030fdf49194154c9674201fa6372bb"
+                "reference": "e580b9578858403762fceb2a8664550515167530"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/1c6e9b5bad030fdf49194154c9674201fa6372bb",
-                "reference": "1c6e9b5bad030fdf49194154c9674201fa6372bb",
+                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/e580b9578858403762fceb2a8664550515167530",
+                "reference": "e580b9578858403762fceb2a8664550515167530",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-session": "*",
-                "php": ">=7.2 <8.3"
+                "php": ">=8.0 <8.3"
             },
             "conflict": {
                 "nette\/di": "<3.0"
@@ -3259,11 +3259,11 @@
                 "phpstan\/phpstan": "^1.0",
                 "psr\/log": "^1.0 || ^2.0 || ^3.0"
             },
-            "time": "2023-02-28T13:01:54+00:00",
+            "time": "2023-03-09T00:37:06+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.9-dev"
+                    "dev-master": "2.10-dev"
                 }
             },
             "installation-source": "dist",
@@ -3300,7 +3300,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/tracy\/issues",
-                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.9.7"
+                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.10.0"
             },
             "install-path": "..\/tracy\/tracy"
         },

@@ -204,7 +204,7 @@ CODE_SAMPLE
             return;
         }
         $phpParserUnionType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($uniqueatedReturnType, TypeKind::RETURN);
-        if (!$phpParserUnionType instanceof PhpParserUnionType) {
+        if (!$phpParserUnionType instanceof Node) {
             return;
         }
         $functionLike->returnType = $phpParserUnionType;
@@ -236,12 +236,12 @@ CODE_SAMPLE
     }
     /**
      * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType|null $type
-     * @param \PhpParser\Node\Name|\PhpParser\Node\ComplexType|\PhpParser\Node|null $phpParserUnionType
+     * @param \PhpParser\Node\Name|\PhpParser\Node\Identifier|\PhpParser\Node\ComplexType|null $phpParserUnionType
      */
     private function shouldSkipParamTypeRefactor($type, $phpParserUnionType) : bool
     {
         if (!$phpParserUnionType instanceof PhpParserUnionType) {
-            return \true;
+            return $type instanceof Node;
         }
         if ($type instanceof PhpParserUnionType) {
             return \true;
