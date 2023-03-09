@@ -2514,6 +2514,7 @@ return array(
     'Rector\\Strict\\NodeFactory\\ExactCompareFactory' => $baseDir . '/rules/Strict/NodeFactory/ExactCompareFactory.php',
     'Rector\\Strict\\Rector\\AbstractFalsyScalarRuleFixerRector' => $baseDir . '/rules/Strict/Rector/AbstractFalsyScalarRuleFixerRector.php',
     'Rector\\Strict\\Rector\\BooleanNot\\BooleanInBooleanNotRuleFixerRector' => $baseDir . '/rules/Strict/Rector/BooleanNot/BooleanInBooleanNotRuleFixerRector.php',
+    'Rector\\Strict\\Rector\\ClassMethod\\AddConstructorParentCallRector' => $baseDir . '/rules/Strict/Rector/ClassMethod/AddConstructorParentCallRector.php',
     'Rector\\Strict\\Rector\\Empty_\\DisallowedEmptyRuleFixerRector' => $baseDir . '/rules/Strict/Rector/Empty_/DisallowedEmptyRuleFixerRector.php',
     'Rector\\Strict\\Rector\\If_\\BooleanInIfConditionRuleFixerRector' => $baseDir . '/rules/Strict/Rector/If_/BooleanInIfConditionRuleFixerRector.php',
     'Rector\\Strict\\Rector\\Ternary\\BooleanInTernaryOperatorRuleFixerRector' => $baseDir . '/rules/Strict/Rector/Ternary/BooleanInTernaryOperatorRuleFixerRector.php',

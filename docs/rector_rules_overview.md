@@ -1,4 +1,4 @@
-# 412 Rules Overview
+# 413 Rules Overview
 
 <br>
 
@@ -60,7 +60,7 @@
 
 - [Restoration](#restoration) (4)
 
-- [Strict](#strict) (5)
+- [Strict](#strict) (6)
 
 - [Transform](#transform) (34)
 
@@ -7525,6 +7525,27 @@ Rename file to respect class name
 <br>
 
 ## Strict
+
+### AddConstructorParentCallRector
+
+Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\Classes\RequireParentConstructCallRule"
+
+- class: [`Rector\Strict\Rector\ClassMethod\AddConstructorParentCallRector`](../rules/Strict/Rector/ClassMethod/AddConstructorParentCallRector.php)
+
+```diff
+ class SunshineCommand extends ParentClassWithConstructor
+ {
+-    public function __construct()
++    public function __construct(ParentDependency $parentDependency)
+     {
+         $value = 5;
++
++        parent::__construct($parentDependency);
+     }
+ }
+```
+
+<br>
 
 ### BooleanInBooleanNotRuleFixerRector
 
