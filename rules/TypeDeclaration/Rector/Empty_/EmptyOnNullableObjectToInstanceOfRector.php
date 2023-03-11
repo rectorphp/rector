@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\Empty_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Instanceof_;
@@ -69,6 +70,9 @@ CODE_SAMPLE
         } else {
             $empty = $node;
             $isNegated = \false;
+        }
+        if ($empty->expr instanceof ArrayDimFetch) {
+            return null;
         }
         $exprType = $this->getType($empty->expr);
         if (!$exprType instanceof ObjectType) {
