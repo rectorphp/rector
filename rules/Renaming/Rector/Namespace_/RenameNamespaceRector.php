@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\NamespaceMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -33,7 +32,7 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
     /**
      * @var array<class-string<Node>>
      */
-    private const ONLY_CHANGE_DOCBLOCK_NODE = [Property::class, ClassMethod::class, Function_::class, Expression::class, ClassLike::class, FileWithoutNamespace::class];
+    private const ONLY_CHANGE_DOCBLOCK_NODE = [Property::class, ClassMethod::class, Function_::class, Expression::class, ClassLike::class];
     /**
      * @var array<string, string>
      */
@@ -70,12 +69,12 @@ final class RenameNamespaceRector extends AbstractRector implements Configurable
         return \array_merge([Namespace_::class, Use_::class, Name::class], $item3Unpacked);
     }
     /**
-     * @param Namespace_|Use_|Name|Property|ClassMethod|Function_|Expression|ClassLike|FileWithoutNamespace $node
+     * @param Namespace_|Use_|Name|Property|ClassMethod|Function_|Expression|ClassLike $node
      */
     public function refactor(Node $node) : ?Node
     {
         if (\in_array(\get_class($node), self::ONLY_CHANGE_DOCBLOCK_NODE, \true)) {
-            /** @var Property|ClassMethod|Function_|Expression|ClassLike|FileWithoutNamespace $node */
+            /** @var Property|ClassMethod|Function_|Expression|ClassLike $node */
             return $this->docBlockNamespaceRenamer->renameFullyQualifiedNamespace($node, $this->oldToNewNamespaces);
         }
         /** @var Namespace_|Use_|Name $node */

@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Node as DocNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Naming\NamespaceMatcher;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\Renaming\ValueObject\RenamedNamespace;
@@ -35,7 +34,7 @@ final class DocBlockNamespaceRenamer
     }
     /**
      * @param array<string, string> $oldToNewNamespaces
-     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\ClassLike|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $node
+     * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\ClassLike $node
      */
     public function renameFullyQualifiedNamespace($node, array $oldToNewNamespaces) : ?Node
     {
