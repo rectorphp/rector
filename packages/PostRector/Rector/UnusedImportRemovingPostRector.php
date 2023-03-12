@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Use_;
 use PhpParser\NodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Configuration\RectorConfigProvider;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -44,7 +45,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         if (!$this->rectorConfigProvider->shouldRemoveUnusedImports()) {
             return null;
         }
-        if (!$node instanceof Namespace_) {
+        if (!$node instanceof Namespace_ && !$node instanceof FileWithoutNamespace) {
             return null;
         }
         $hasChanged = \false;
@@ -106,8 +107,9 @@ CODE_SAMPLE
     }
     /**
      * @return string[]
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $namespace
      */
-    private function findNonUseImportNames(Namespace_ $namespace) : array
+    private function findNonUseImportNames($namespace) : array
     {
         $names = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($namespace, static function (Node $node) use(&$names) {
@@ -131,8 +133,9 @@ CODE_SAMPLE
     }
     /**
      * @return string[]
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $namespace
      */
-    private function findNamesInDocBlocks(Namespace_ $namespace) : array
+    private function findNamesInDocBlocks($namespace) : array
     {
         $names = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($namespace, function (Node $node) use(&$names) {
@@ -146,8 +149,9 @@ CODE_SAMPLE
     }
     /**
      * @return string[]
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace $namespace
      */
-    private function resolveUsedPhpAndDocNames(Namespace_ $namespace) : array
+    private function resolveUsedPhpAndDocNames($namespace) : array
     {
         $phpNames = $this->findNonUseImportNames($namespace);
         $docBlockNames = $this->findNamesInDocBlocks($namespace);
