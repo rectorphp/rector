@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit634c3a30f651b87bed8edf65fe363205
+class ComposerStaticInitabddcf2c38c6b8af19139a50b22312e7
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -36,7 +36,6 @@ class ComposerStaticInit634c3a30f651b87bed8edf65fe363205
             'Rector\\Core\\' => 12,
             'Rector\\' => 7,
             'RectorPrefix202303\\Webmozart\\Assert\\' => 36,
-            'RectorPrefix202303\\Triun\\LongestCommonSubstring\\' => 48,
             'RectorPrefix202303\\Symplify\\EasyParallel\\' => 41,
             'RectorPrefix202303\\Symfony\\Contracts\\' => 37,
             'RectorPrefix202303\\Symfony\\Component\\String\\' => 44,
@@ -122,10 +121,6 @@ class ComposerStaticInit634c3a30f651b87bed8edf65fe363205
         'RectorPrefix202303\\Webmozart\\Assert\\' => 
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
-        ),
-        'RectorPrefix202303\\Triun\\LongestCommonSubstring\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/triun/longest-common-substring/src',
         ),
         'RectorPrefix202303\\Symplify\\EasyParallel\\' => 
         array (
@@ -1374,8 +1369,6 @@ class ComposerStaticInit634c3a30f651b87bed8edf65fe363205
         'RectorPrefix202303\\Tracy\\Logger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Logger/Logger.php',
         'RectorPrefix202303\\Tracy\\OutputDebugger' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/OutputDebugger/OutputDebugger.php',
         'RectorPrefix202303\\Tracy\\ProductionStrategy' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/Debugger/ProductionStrategy.php',
-        'RectorPrefix202303\\Triun\\LongestCommonSubstring\\Solver' => __DIR__ . '/..' . '/triun/longest-common-substring/src/Solver.php',
-        'RectorPrefix202303\\Triun\\LongestCommonSubstring\\SolverInterface' => __DIR__ . '/..' . '/triun/longest-common-substring/src/SolverInterface.php',
         'RectorPrefix202303\\Webmozart\\Assert\\Assert' => __DIR__ . '/..' . '/webmozart/assert/src/Assert.php',
         'RectorPrefix202303\\Webmozart\\Assert\\InvalidArgumentException' => __DIR__ . '/..' . '/webmozart/assert/src/InvalidArgumentException.php',
         'RectorPrefix202303\\Webmozart\\Assert\\Mixin' => __DIR__ . '/..' . '/webmozart/assert/src/Mixin.php',
@@ -2860,6 +2853,7 @@ class ComposerStaticInit634c3a30f651b87bed8edf65fe363205
         'Rector\\Symfony\\Rector\\Class_\\MakeCommandLazyRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/MakeCommandLazyRector.php',
         'Rector\\Symfony\\Rector\\Class_\\MessageHandlerInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ContainerGetNameToTypeInTestsRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ContainerGetNameToTypeInTestsRector.php',
+        'Rector\\Symfony\\Rector\\Closure\\MinimalSharedStringSolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/MinimalSharedStringSolver.php',
         'Rector\\Symfony\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceArgsToServiceNamedArgRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ServiceSetStringNameToClassNameRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceSetStringNameToClassNameRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',
@@ -3133,9 +3127,9 @@ class ComposerStaticInit634c3a30f651b87bed8edf65fe363205
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit634c3a30f651b87bed8edf65fe363205::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit634c3a30f651b87bed8edf65fe363205::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit634c3a30f651b87bed8edf65fe363205::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitabddcf2c38c6b8af19139a50b22312e7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitabddcf2c38c6b8af19139a50b22312e7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitabddcf2c38c6b8af19139a50b22312e7::$classMap;
 
         }, null, ClassLoader::class);
     }

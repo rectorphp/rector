@@ -23,7 +23,6 @@ use Rector\Symfony\ValueObject\ClassNameAndFilePath;
 use RectorPrefix202303\Symfony\Component\Filesystem\Filesystem;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202303\Triun\LongestCommonSubstring\Solver;
 /**
  * @see \Rector\Symfony\Tests\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector\ServiceSettersToSettersAutodiscoveryRectorTest
  */
@@ -31,7 +30,7 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Triun\LongestCommonSubstring\Solver
+     * @var \Rector\Symfony\Rector\Closure\MinimalSharedStringSolver
      */
     private $minimalSharedStringSolver;
     /**
@@ -54,7 +53,7 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
         $this->reflectionProvider = $reflectionProvider;
         $this->filesystem = $filesystem;
-        $this->minimalSharedStringSolver = new Solver();
+        $this->minimalSharedStringSolver = new \Rector\Symfony\Rector\Closure\MinimalSharedStringSolver();
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -110,9 +109,6 @@ CODE_SAMPLE
             return $classNameAndFilePath->getClassName();
         }, $classNamesAndFilesPaths);
         $sharedNamespace = $this->minimalSharedStringSolver->solve(...$classNames);
-        if (!\is_string($sharedNamespace)) {
-            return null;
-        }
         $firstClassNameAndFilePath = $classNamesAndFilesPaths[0];
         $classFilePath = $firstClassNameAndFilePath->getFilePath();
         $directoryConcat = $this->createAbsolutePathConcat($classFilePath);
