@@ -101,7 +101,7 @@ final class ChangedFilesDetector
     }
     private function storeConfigurationDataHash(string $filePath, string $configurationHash) : void
     {
-        $key = CacheKey::CONFIGURATION_HASH_KEY . '_' . $this->hashFile($filePath);
+        $key = CacheKey::CONFIGURATION_HASH_KEY . '_' . $this->getFilePathCacheKey($filePath);
         $this->invalidateCacheIfConfigurationChanged($key, $configurationHash);
         $this->cache->save($key, CacheKey::CONFIGURATION_HASH_KEY, $configurationHash);
     }
