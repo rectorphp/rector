@@ -5,6 +5,7 @@ namespace Rector\CodingStyle\Rector\Assign;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Stmt\Expression;
@@ -60,7 +61,11 @@ CODE_SAMPLE
             return null;
         }
         $lastAssignValue = $this->resolveLastAssignExpr($firstAssign);
-        return $this->collectExpressions($firstAssign, $lastAssignValue);
+        $collectExpressions = $this->collectExpressions($firstAssign, $lastAssignValue);
+        if ($collectExpressions === []) {
+            return null;
+        }
+        return $collectExpressions;
     }
     /**
      * @return Expression[]
@@ -70,6 +75,9 @@ CODE_SAMPLE
         /** @var Expression[] $expressions */
         $expressions = [];
         while ($assign instanceof Assign) {
+            if ($assign->var instanceof ArrayDimFetch) {
+                return [];
+            }
             $expressions[] = new Expression(new Assign($assign->var, $expr));
             // CallLike check need to be after first fill Expression
             // so use existing variable defined to avoid repetitive call
