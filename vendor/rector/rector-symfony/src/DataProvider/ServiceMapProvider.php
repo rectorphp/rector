@@ -22,17 +22,27 @@ final class ServiceMapProvider
      * @var \Rector\Symfony\ValueObjectFactory\ServiceMapFactory
      */
     private $serviceMapFactory;
-    public function __construct(ParameterProvider $parameterProvider, ServiceMapFactory $serviceMapFactory)
+    /**
+     * @var \Rector\Symfony\ValueObject\ServiceMap\ServiceMap|null
+     */
+    private $serviceMap;
+    public function __construct(ParameterProvider $parameterProvider, ServiceMapFactory $serviceMapFactory, ?ServiceMap $serviceMap = null)
     {
         $this->parameterProvider = $parameterProvider;
         $this->serviceMapFactory = $serviceMapFactory;
+        $this->serviceMap = $serviceMap;
     }
     public function provide() : ServiceMap
     {
+        if ($this->serviceMap instanceof ServiceMap) {
+            return $this->serviceMap;
+        }
         $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
         if ($symfonyContainerXmlPath === '') {
-            return $this->serviceMapFactory->createEmpty();
+            $this->serviceMap = $this->serviceMapFactory->createEmpty();
+        } else {
+            $this->serviceMap = $this->serviceMapFactory->createFromFileContent($symfonyContainerXmlPath);
         }
-        return $this->serviceMapFactory->createFromFileContent($symfonyContainerXmlPath);
+        return $this->serviceMap;
     }
 }
