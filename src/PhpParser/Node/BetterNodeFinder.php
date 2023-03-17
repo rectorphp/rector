@@ -458,6 +458,9 @@ final class BetterNodeFinder
         if (!$previousNode instanceof Node) {
             return null;
         }
+        if ($previousNode === $node) {
+            return null;
+        }
         $foundNode = $this->findFirst($previousNode, $filter);
         // we found what we need
         if ($foundNode instanceof Node) {
