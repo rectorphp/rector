@@ -167,6 +167,10 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
         if (!$methodReflection instanceof MethodReflection) {
             return new MixedType();
         }
+        $parentClassMethod = $this->betterNodeFinder->findParentType($return, ClassMethod::class);
+        if ($parentClassMethod === $originalFunctionLike) {
+            return new MixedType();
+        }
         return $this->resolveClassMethod($methodReflection, $originalFunctionLike);
     }
     private function isArrayTypeMixed(Type $type) : bool
