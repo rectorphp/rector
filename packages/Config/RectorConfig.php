@@ -176,8 +176,17 @@ final class RectorConfig extends ContainerConfigurator
     }
     public function cacheDirectory(string $directoryPath) : void
     {
+        // cache directory path is created via mkdir in CacheFactory
+        // when not exists, so no need to validate $directoryPath is a directory
         $parameters = $this->parameters();
         $parameters->set(Option::CACHE_DIR, $directoryPath);
+    }
+    public function containerCacheDirectory(string $directoryPath) : void
+    {
+        // container cache directory path must be a directory on the first place
+        Assert::directory($directoryPath);
+        $parameters = $this->parameters();
+        $parameters->set(Option::CONTAINER_CACHE_DIRECTORY, $directoryPath);
     }
     /**
      * @param class-string<CacheStorageInterface> $cacheClass

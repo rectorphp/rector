@@ -180,4 +180,9 @@ final class Option
      * @var string
      */
     public const REMOVE_UNUSED_IMPORTS = 'remove-unused-imports';
+    /**
+     * @internal Use @see \Rector\Config\RectorConfig::containerCacheDirectory() method
+     * @var string
+     */
+    public const CONTAINER_CACHE_DIRECTORY = 'container-cache-directory';
 }
