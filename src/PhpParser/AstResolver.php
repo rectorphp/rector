@@ -31,6 +31,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\PhpParser\SmartPhpParser;
@@ -123,14 +124,21 @@ final class AstResolver
         if ($nodes === null) {
             return null;
         }
-        /** @var ClassLike|null $classLike */
-        $classLike = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use($classLikeName, $methodName) : bool {
-            return $node instanceof ClassLike && $this->nodeNameResolver->isName($node, $classLikeName) && $node->getMethod($methodName) instanceof ClassMethod;
+        /** @var ClassMethod|null $classMethod */
+        $classMethod = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use($classLikeName, $methodName) : bool {
+            if (!$node instanceof ClassMethod) {
+                return \false;
+            }
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof ClassLike) {
+                return \false;
+            }
+            if (!$this->nodeNameResolver->isName($parentNode, $classLikeName)) {
+                return \false;
+            }
+            return $parentNode->getMethod($methodName) === $node;
         });
-        if ($classLike instanceof ClassLike && ($method = $classLike->getMethod($methodName)) instanceof ClassMethod) {
-            return $method;
-        }
-        return null;
+        return $classMethod;
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
@@ -244,10 +252,21 @@ final class AstResolver
             return null;
         }
         $nativeReflectionProperty = $phpPropertyReflection->getNativeReflection();
+        $desiredClassName = $classReflection->getName();
         $desiredPropertyName = $nativeReflectionProperty->getName();
         /** @var Property|null $property */
-        $property = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use($desiredPropertyName) : bool {
-            return $node instanceof Property && $this->nodeNameResolver->isName($node, $desiredPropertyName);
+        $property = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use($desiredClassName, $desiredPropertyName) : bool {
+            if (!$node instanceof Property) {
+                return \false;
+            }
+            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$parentNode instanceof ClassLike) {
+                return \false;
+            }
+            if (!$this->nodeNameResolver->isName($parentNode, $desiredClassName)) {
+                return \false;
+            }
+            return $parentNode->getProperty($desiredPropertyName) === $node;
         });
         if ($property instanceof Property) {
             return $property;
