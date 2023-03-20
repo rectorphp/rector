@@ -9,6 +9,10 @@ use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 final class PathSkipVoter implements SkipVoterInterface
 {
     /**
+     * @var array<string, bool>
+     */
+    private $skippedFiles = [];
+    /**
      * @readonly
      * @var \Rector\Skipper\Matcher\FileInfoMatcher
      */
@@ -35,7 +39,10 @@ final class PathSkipVoter implements SkipVoterInterface
      */
     public function shouldSkip($element, string $filePath) : bool
     {
+        if (isset($this->skippedFiles[$filePath])) {
+            return $this->skippedFiles[$filePath];
+        }
         $skippedPaths = $this->skippedPathsResolver->resolve();
-        return $this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, $skippedPaths);
+        return $this->skippedFiles[$filePath] = $this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, $skippedPaths);
     }
 }
