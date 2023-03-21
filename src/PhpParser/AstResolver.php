@@ -121,7 +121,7 @@ final class AstResolver
             return null;
         }
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-        if ($nodes === null) {
+        if ($nodes === []) {
             return null;
         }
         $classMethod = null;
@@ -161,7 +161,7 @@ final class AstResolver
             return null;
         }
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-        if ($nodes === null) {
+        if ($nodes === []) {
             return null;
         }
         $functionNode = null;
@@ -229,7 +229,7 @@ final class AstResolver
                 continue;
             }
             $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-            if ($nodes === null) {
+            if ($nodes === []) {
                 continue;
             }
             $traitName = $classLike->getName();
@@ -262,7 +262,7 @@ final class AstResolver
             return null;
         }
         $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-        if ($nodes === null) {
+        if ($nodes === []) {
             return null;
         }
         $nativeReflectionProperty = $phpPropertyReflection->getNativeReflection();
@@ -309,16 +309,16 @@ final class AstResolver
         return $classMethod;
     }
     /**
-     * @return Stmt[]|null
+     * @return Stmt[]
      */
-    private function parseFileNameToDecoratedNodes(string $fileName) : ?array
+    public function parseFileNameToDecoratedNodes(string $fileName) : array
     {
         if (isset($this->parsedFileNodes[$fileName])) {
             return $this->parsedFileNodes[$fileName];
         }
         $stmts = $this->smartPhpParser->parseFile($fileName);
         if ($stmts === []) {
-            return $this->parsedFileNodes[$fileName] = null;
+            return $this->parsedFileNodes[$fileName] = [];
         }
         $file = new File($fileName, FileSystem::read($fileName));
         return $this->parsedFileNodes[$fileName] = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $stmts);
