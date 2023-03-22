@@ -327,9 +327,11 @@ final class NodeTypeResolver
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($resolvedObjectType->getClassName());
-        foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-            if ($ancestorClassReflection->hasTraitUse($requiredObjectType->getClassName())) {
-                return \true;
+        if (\trait_exists($requiredObjectType->getClassName())) {
+            foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
+                if ($ancestorClassReflection->hasTraitUse($requiredObjectType->getClassName())) {
+                    return \true;
+                }
             }
         }
         return $classReflection->isSubclassOf($requiredObjectType->getClassName());
