@@ -491,14 +491,9 @@ final class BetterNodeFinder
     private function findInstanceOfName($nodes, string $type, string $name) : ?Node
     {
         Assert::isAOf($type, Node::class);
-        $foundInstances = $this->nodeFinder->findInstanceOf($nodes, $type);
-        foreach ($foundInstances as $foundInstance) {
-            if (!$this->nodeNameResolver->isName($foundInstance, $name)) {
-                continue;
-            }
-            return $foundInstance;
-        }
-        return null;
+        return $this->nodeFinder->findFirst($nodes, function (Node $node) use($type, $name) : bool {
+            return $node instanceof $type && $this->nodeNameResolver->isName($node, $name);
+        });
     }
     /**
      * @return Closure|Function_|ClassMethod|Class_|Namespace_|null
