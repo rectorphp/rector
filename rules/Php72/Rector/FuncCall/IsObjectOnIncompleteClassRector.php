@@ -59,10 +59,10 @@ CODE_SAMPLE
         if (!$node->args[0] instanceof Arg) {
             return null;
         }
-        if (!$this->isObjectType($node->args[0]->value, $incompleteClassObjectType)) {
+        if ($this->shouldSkip($node)) {
             return null;
         }
-        if ($this->shouldSkip($node)) {
+        if (!$this->isObjectType($node->args[0]->value, $incompleteClassObjectType)) {
             return null;
         }
         return new BooleanNot($node);

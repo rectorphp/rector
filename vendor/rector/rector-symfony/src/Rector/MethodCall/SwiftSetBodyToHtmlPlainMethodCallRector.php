@@ -50,10 +50,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Swift_Message'))) {
+        if (!$this->isName($node->name, 'setBody')) {
             return null;
         }
-        if (!$this->isName($node->name, 'setBody')) {
+        if (!$this->isObjectType($node->var, new ObjectType('Swift_Message'))) {
             return null;
         }
         if (\count($node->args) === 2) {

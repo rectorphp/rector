@@ -67,14 +67,14 @@ CODE_SAMPLE
         }
         $className = (string) $this->nodeNameResolver->getName($classLike);
         foreach ($this->methodByParentTypes as $type => $method) {
-            if (!$this->isObjectType($classLike, new ObjectType($type))) {
-                continue;
-            }
             // not itself
             if ($className === $type) {
                 continue;
             }
             if ($this->shouldSkipMethod($node, $method)) {
+                continue;
+            }
+            if (!$this->isObjectType($classLike, new ObjectType($type))) {
                 continue;
             }
             $node->stmts[] = $this->createParentStaticCall($method);

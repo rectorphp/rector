@@ -59,10 +59,10 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         foreach ($this->replacedArguments as $replacedArgument) {
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $replacedArgument->getObjectType())) {
+            if (!$this->isName($node->name, $replacedArgument->getMethod())) {
                 continue;
             }
-            if (!$this->isName($node->name, $replacedArgument->getMethod())) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $replacedArgument->getObjectType())) {
                 continue;
             }
             $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);

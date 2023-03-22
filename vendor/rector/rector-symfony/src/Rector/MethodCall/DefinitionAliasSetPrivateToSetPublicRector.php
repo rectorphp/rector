@@ -73,10 +73,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeTypeResolver->isObjectTypes($node->var, $this->definitionObjectTypes)) {
+        if (!$this->isName($node->name, 'setPrivate')) {
             return null;
         }
-        if (!$this->isName($node->name, 'setPrivate')) {
+        if (!$this->nodeTypeResolver->isObjectTypes($node->var, $this->definitionObjectTypes)) {
             return null;
         }
         $argValue = $node->getArgs()[0]->value;

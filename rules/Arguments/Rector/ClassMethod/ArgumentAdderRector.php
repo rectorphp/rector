@@ -111,10 +111,10 @@ CODE_SAMPLE
     {
         $this->haveArgumentsChanged = \false;
         foreach ($this->addedArguments as $addedArgument) {
-            if (!$this->isObjectTypeMatch($node, $addedArgument->getObjectType())) {
+            if (!$this->isName($node->name, $addedArgument->getMethod())) {
                 continue;
             }
-            if (!$this->isName($node->name, $addedArgument->getMethod())) {
+            if (!$this->isObjectTypeMatch($node, $addedArgument->getObjectType())) {
                 continue;
             }
             $this->processPositionWithDefaultValues($node, $addedArgument);

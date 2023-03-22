@@ -56,10 +56,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Validator\\ValidatorBuilder'))) {
+        if (!$this->isName($node->name, 'enableAnnotationMapping')) {
             return null;
         }
-        if (!$this->isName($node->name, 'enableAnnotationMapping')) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Validator\\ValidatorBuilder'))) {
             return null;
         }
         $firstArg = $node->args[0];

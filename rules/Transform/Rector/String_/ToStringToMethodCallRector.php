@@ -76,10 +76,10 @@ CODE_SAMPLE
     private function processMethodCall(MethodCall $methodCall) : ?Node
     {
         foreach ($this->methodNamesByType as $type => $methodName) {
-            if (!$this->isObjectType($methodCall->var, new ObjectType($type))) {
+            if (!$this->isName($methodCall->name, '__toString')) {
                 continue;
             }
-            if (!$this->isName($methodCall->name, '__toString')) {
+            if (!$this->isObjectType($methodCall->var, new ObjectType($type))) {
                 continue;
             }
             $methodCall->name = new Identifier($methodName);

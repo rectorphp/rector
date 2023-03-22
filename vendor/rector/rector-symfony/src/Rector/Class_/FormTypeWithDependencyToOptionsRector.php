@@ -99,12 +99,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $formObjectType = new ObjectType('Symfony\\Component\\Form\\AbstractType');
-        if (!$this->isObjectType($node, $formObjectType)) {
-            return null;
-        }
         // skip abstract
         if ($node->isAbstract()) {
+            return null;
+        }
+        $formObjectType = new ObjectType('Symfony\\Component\\Form\\AbstractType');
+        if (!$this->isObjectType($node, $formObjectType)) {
             return null;
         }
         $constructorClassMethod = $node->getMethod(MethodName::CONSTRUCT);

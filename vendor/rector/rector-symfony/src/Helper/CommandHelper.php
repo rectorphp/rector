@@ -73,10 +73,10 @@ final class CommandHelper
             if ($node->isFirstClassCallable()) {
                 return null;
             }
-            if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->nodeNameResolver->isName($node->name, 'setAliases')) {
                 return null;
             }
-            if (!$this->nodeNameResolver->isName($node->name, 'setAliases')) {
+            if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             /** @var Arg $arg */
@@ -109,10 +109,10 @@ final class CommandHelper
             if ($node->isFirstClassCallable()) {
                 return null;
             }
-            if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->nodeNameResolver->isName($node->name, 'setHidden')) {
                 return null;
             }
-            if (!$this->nodeNameResolver->isName($node->name, 'setHidden')) {
+            if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             $commandHidden = $this->getCommandHiddenValue($node);

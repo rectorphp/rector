@@ -93,11 +93,11 @@ final class RenamePropertyRector extends AbstractRector implements ConfigurableR
     {
         $class = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
         foreach ($this->renamedProperties as $renamedProperty) {
-            if (!$this->isObjectType($propertyFetch->var, $renamedProperty->getObjectType())) {
-                continue;
-            }
             $oldProperty = $renamedProperty->getOldProperty();
             if (!$this->isName($propertyFetch, $oldProperty)) {
+                continue;
+            }
+            if (!$this->isObjectType($propertyFetch->var, $renamedProperty->getObjectType())) {
                 continue;
             }
             $nodeVarType = $this->nodeTypeResolver->getType($propertyFetch->var);

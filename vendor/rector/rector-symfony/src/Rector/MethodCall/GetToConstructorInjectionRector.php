@@ -74,10 +74,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->containerAwareAnalyzer->isGetMethodAwareType($node->var)) {
+        if (!$this->isName($node->name, 'get')) {
             return null;
         }
-        if (!$this->isName($node->name, 'get')) {
+        if (!$this->containerAwareAnalyzer->isGetMethodAwareType($node->var)) {
             return null;
         }
         return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);

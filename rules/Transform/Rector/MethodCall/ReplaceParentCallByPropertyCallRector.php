@@ -55,10 +55,10 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         foreach ($this->parentCallToProperties as $parentCallToProperty) {
-            if (!$this->isObjectType($node->var, $parentCallToProperty->getObjectType())) {
+            if (!$this->isName($node->name, $parentCallToProperty->getMethod())) {
                 continue;
             }
-            if (!$this->isName($node->name, $parentCallToProperty->getMethod())) {
+            if (!$this->isObjectType($node->var, $parentCallToProperty->getObjectType())) {
                 continue;
             }
             $node->var = $this->nodeFactory->createPropertyFetch('this', $parentCallToProperty->getProperty());

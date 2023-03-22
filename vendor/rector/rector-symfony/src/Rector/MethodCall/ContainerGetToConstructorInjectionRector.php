@@ -76,10 +76,10 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\DependencyInjection\\ContainerInterface'))) {
+        if (!$this->isName($node->name, 'get')) {
             return null;
         }
-        if (!$this->isName($node->name, 'get')) {
+        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\DependencyInjection\\ContainerInterface'))) {
             return null;
         }
         if ($this->testsNodeAnalyzer->isInTestClass($node)) {

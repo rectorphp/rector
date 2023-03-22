@@ -118,9 +118,9 @@ CODE_SAMPLE
     }
     private function isFormCreateMethodCallMatch(MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Form\\FormFactoryInterface')) && !$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'))) {
+        if (!$this->isNames($methodCall->name, ['create', 'add'])) {
             return \false;
         }
-        return $this->isNames($methodCall->name, ['create', 'add']);
+        return $this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Form\\FormFactoryInterface')) || $this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Form\\FormBuilderInterface'));
     }
 }

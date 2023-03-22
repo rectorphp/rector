@@ -145,10 +145,10 @@ CODE_SAMPLE
     }
     private function isServiceArgsMethodCall(MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServiceConfigurator'))) {
+        if (!$this->isName($methodCall->name, 'args')) {
             return \false;
         }
-        return $this->isName($methodCall->name, 'args');
+        return $this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServiceConfigurator'));
     }
     private function createArgMethodCall(string $parameterName, Expr $expr, ?MethodCall $argMethodCall, MethodCall $node) : MethodCall
     {

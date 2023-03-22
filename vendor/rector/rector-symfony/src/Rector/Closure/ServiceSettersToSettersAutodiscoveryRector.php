@@ -123,10 +123,10 @@ CODE_SAMPLE
     }
     public function isBareServicesSetMethodCall(MethodCall $methodCall) : bool
     {
-        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator'))) {
+        if (!$this->isName($methodCall->name, 'set')) {
             return \false;
         }
-        if (!$this->isName($methodCall->name, 'set')) {
+        if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\ServicesConfigurator'))) {
             return \false;
         }
         // must have exactly single argument

@@ -46,10 +46,10 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         foreach ($this->methodCallRenamesWithAddedArguments as $methodCallRenameWithAddedArgument) {
-            if (!$this->isObjectType($node->var, $methodCallRenameWithAddedArgument->getObjectType())) {
+            if (!$this->isName($node->name, $methodCallRenameWithAddedArgument->getOldMethod())) {
                 continue;
             }
-            if (!$this->isName($node->name, $methodCallRenameWithAddedArgument->getOldMethod())) {
+            if (!$this->isObjectType($node->var, $methodCallRenameWithAddedArgument->getObjectType())) {
                 continue;
             }
             $node->name = new Identifier($methodCallRenameWithAddedArgument->getNewMethod());

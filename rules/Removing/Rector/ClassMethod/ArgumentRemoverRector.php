@@ -55,10 +55,10 @@ CODE_SAMPLE
     {
         $this->hasChanged = \false;
         foreach ($this->removedArguments as $removedArgument) {
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $removedArgument->getObjectType())) {
+            if (!$this->isName($node->name, $removedArgument->getMethod())) {
                 continue;
             }
-            if (!$this->isName($node->name, $removedArgument->getMethod())) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $removedArgument->getObjectType())) {
                 continue;
             }
             $this->processPosition($node, $removedArgument);

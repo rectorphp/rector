@@ -146,10 +146,10 @@ CODE_SAMPLE
             }
             return $this->isName($methodCall->name, $methodCallToMethodCall->getOldMethod());
         }
-        if (!$this->isObjectType($methodCall->var, $oldTypeObject)) {
+        if (!$this->isName($methodCall->name, $methodCallToMethodCall->getOldMethod())) {
             return \false;
         }
-        return $this->isName($methodCall->name, $methodCallToMethodCall->getOldMethod());
+        return $this->isObjectType($methodCall->var, $oldTypeObject);
     }
     private function matchNewPropertyName(MethodCallToMethodCall $methodCallToMethodCall, Class_ $class) : ?string
     {

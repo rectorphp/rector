@@ -108,10 +108,10 @@ CODE_SAMPLE
             if ($node->isFirstClassCallable()) {
                 return null;
             }
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->isName($node->name, 'setDescription')) {
                 return null;
             }
-            if (!$this->isName($node->name, 'setDescription')) {
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             /** @var Arg $arg */

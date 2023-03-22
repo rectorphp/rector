@@ -52,6 +52,10 @@ final class NodeTypeResolver
      */
     private $nodeTypeResolvers = [];
     /**
+     * @var array<string, bool>
+     */
+    private $traitExistsCache = [];
+    /**
      * @readonly
      * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
@@ -327,7 +331,10 @@ final class NodeTypeResolver
             return \false;
         }
         $classReflection = $this->reflectionProvider->getClass($resolvedObjectType->getClassName());
-        if (\trait_exists($requiredObjectType->getClassName())) {
+        if (!isset($this->traitExistsCache[$classReflection->getName()])) {
+            $this->traitExistsCache[$classReflection->getName()] = \trait_exists($requiredObjectType->getClassName());
+        }
+        if ($this->traitExistsCache[$classReflection->getName()]) {
             foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
                 if ($ancestorClassReflection->hasTraitUse($requiredObjectType->getClassName())) {
                     return \true;

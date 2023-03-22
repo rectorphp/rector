@@ -96,11 +96,11 @@ CODE_SAMPLE
     }
     private function shouldSkip(MethodCall $methodCall) : bool
     {
-        $reflectionExtractorObjectType = new ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor');
-        if (!$this->isObjectType($methodCall->var, $reflectionExtractorObjectType)) {
+        if (!$this->isNames($methodCall->name, self::METHODS_WITH_OPTION)) {
             return \true;
         }
-        if (!$this->isNames($methodCall->name, self::METHODS_WITH_OPTION)) {
+        $reflectionExtractorObjectType = new ObjectType('Symfony\\Component\\PropertyInfo\\Extractor\\ReflectionExtractor');
+        if (!$this->isObjectType($methodCall->var, $reflectionExtractorObjectType)) {
             return \true;
         }
         if (\count($methodCall->args) < 3) {

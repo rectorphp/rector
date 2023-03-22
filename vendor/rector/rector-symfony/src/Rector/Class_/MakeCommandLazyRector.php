@@ -132,10 +132,10 @@ CODE_SAMPLE
             if (!$node instanceof MethodCall) {
                 return null;
             }
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
+            if (!$this->isName($node->name, 'setName')) {
                 return null;
             }
-            if (!$this->isName($node->name, 'setName')) {
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
                 return null;
             }
             $commandName = $node->getArgs()[0]->value;

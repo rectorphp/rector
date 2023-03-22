@@ -31,10 +31,10 @@ final class FormAddMethodCallAnalyzer
     }
     public function isMatching(MethodCall $methodCall) : bool
     {
-        if (!$this->nodeTypeResolver->isObjectTypes($methodCall->var, $this->formObjectTypes)) {
+        if (!$this->nodeNameResolver->isName($methodCall->name, 'add')) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($methodCall->name, 'add')) {
+        if (!$this->nodeTypeResolver->isObjectTypes($methodCall->var, $this->formObjectTypes)) {
             return \false;
         }
         // just one argument

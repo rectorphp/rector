@@ -105,10 +105,10 @@ CODE_SAMPLE
         if ($this->isName($methodCall->name, 'redirect')) {
             return $this->processRedirectMethodCall($methodCall);
         }
-        if (!$this->isObjectType($methodCall->var, $this->responseObjectType)) {
+        if (!$this->isName($methodCall->name, 'setStatusCode')) {
             return null;
         }
-        if (!$this->isName($methodCall->name, 'setStatusCode')) {
+        if (!$this->isObjectType($methodCall->var, $this->responseObjectType)) {
             return null;
         }
         return $this->literalCallLikeConstFetchReplacer->replaceArgOnPosition($methodCall, 0, 'Symfony\\Component\\HttpFoundation\\Response', SymfonyResponseConstantMap::CODE_TO_CONST);
@@ -133,10 +133,10 @@ CODE_SAMPLE
         if (!$node instanceof MethodCall) {
             return \false;
         }
-        if (!$this->isObjectType($node->var, $this->responseObjectType)) {
+        if (!$this->isName($node->name, 'getStatusCode')) {
             return \false;
         }
-        return $this->isName($node->name, 'getStatusCode');
+        return $this->isObjectType($node->var, $this->responseObjectType);
     }
     /**
      * @return \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Scalar\LNumber
