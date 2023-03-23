@@ -7,13 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
+ * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfExactValueReturnValueRector\SimplifyIfExactValueReturnValueRectorTest
  */
 final class SimplifyIfExactValueReturnValueRector extends AbstractRector
 {
@@ -47,25 +47,35 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param If_ $node
+     * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Return_
+    public function refactor(Node $node) : ?StmtsAwareInterface
     {
-        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof Return_) {
-            return null;
+        foreach ((array) $node->stmts as $key => $stmt) {
+            if (!$stmt instanceof If_) {
+                continue;
+            }
+            // on last stmt already
+            if (!isset($node->stmts[$key + 1])) {
+                return null;
+            }
+            $nextNode = $node->stmts[$key + 1];
+            if (!$nextNode instanceof Return_) {
+                return null;
+            }
+            $expr = $this->ifManipulator->matchIfValueReturnValue($stmt);
+            if (!$expr instanceof Expr) {
+                return null;
+            }
+            if (!$this->nodeComparator->areNodesEqual($expr, $nextNode->expr)) {
+                return null;
+            }
+            unset($node->stmts[$key]);
+            return $node;
         }
-        $expr = $this->ifManipulator->matchIfValueReturnValue($node);
-        if (!$expr instanceof Expr) {
-            return null;
-        }
-        if (!$this->nodeComparator->areNodesEqual($expr, $nextNode->expr)) {
-            return null;
-        }
-        $this->removeNode($nextNode);
-        return clone $nextNode;
+        return null;
     }
 }
