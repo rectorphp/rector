@@ -102,9 +102,6 @@ final class ExprAnalyzer
             if (!$expr->name instanceof Identifier) {
                 return \false;
             }
-            if ($expr->name->toString() !== 'class') {
-                return \true;
-            }
             // static::class cannot be used for compile-time class name resolution
             return $expr->class->toString() !== ObjectReference::STATIC;
         }
