@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Ternary;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Ternary;
 use PHPStan\Type\BooleanType;
@@ -59,7 +60,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->if === null) {
+        if (!$node->if instanceof Expr) {
             return null;
         }
         if (!$this->valueResolver->isFalse($node->else)) {

@@ -42,7 +42,7 @@ final class SwitchExprsResolver
                 $expr = $expr->expr;
             }
             $condExprs = [];
-            if ($case->cond !== null) {
+            if ($case->cond instanceof Expr) {
                 $emptyCasesCond = [];
                 foreach ($collectionEmptyCasesCond as $i => $collectionEmptyCaseCond) {
                     if ($i > $key) {
@@ -121,6 +121,6 @@ final class SwitchExprsResolver
             return \true;
         }
         // default value
-        return $case->cond === null;
+        return !$case->cond instanceof Expr;
     }
 }

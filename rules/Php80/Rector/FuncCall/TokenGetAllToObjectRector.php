@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
@@ -150,7 +151,7 @@ CODE_SAMPLE
             $this->tokenManipulator->refactorTokenIsKind([$node], $singleToken);
             $this->tokenManipulator->removeIsArray([$node], $singleToken);
             // drop if "If_" node not needed
-            if ($node instanceof If_ && $node->else !== null) {
+            if ($node instanceof If_ && $node->else instanceof Else_) {
                 if (!$this->nodeComparator->areNodesEqual($node->stmts, $node->else->stmts)) {
                     return null;
                 }

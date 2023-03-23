@@ -87,7 +87,7 @@ CODE_SAMPLE
         if (\count($node->types) !== 1) {
             return null;
         }
-        if ($node->var === null) {
+        if (!$node->var instanceof Variable) {
             return null;
         }
         $oldVariableName = $this->getName($node->var);

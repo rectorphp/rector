@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Switch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Stmt\Case_;
@@ -76,7 +77,7 @@ CODE_SAMPLE
         $cases = $node->cases;
         /** @var Case_ $firstCase */
         $firstCase = \array_shift($cases);
-        if ($firstCase->cond === null) {
+        if (!$firstCase->cond instanceof Expr) {
             return null;
         }
         if ($this->exprAnalyzer->isDynamicExpr($firstCase->cond)) {
@@ -85,7 +86,7 @@ CODE_SAMPLE
         $secondCase = \array_shift($cases);
         // special case with empty first case → ||
         $isFirstCaseEmpty = $firstCase->stmts === [];
-        if ($isFirstCaseEmpty && $secondCase !== null && $secondCase->cond !== null) {
+        if ($isFirstCaseEmpty && $secondCase instanceof Case_ && $secondCase->cond instanceof Expr) {
             $else = new BooleanOr(new Equal($node->cond, $firstCase->cond), new Equal($node->cond, $secondCase->cond));
             $ifNode = new If_($else);
             $ifNode->stmts = $this->switchManipulator->removeBreakNodes($secondCase->stmts);
@@ -97,7 +98,7 @@ CODE_SAMPLE
         if (!$secondCase instanceof Case_) {
             return $ifNode;
         }
-        if ($secondCase->cond !== null) {
+        if ($secondCase->cond instanceof Expr) {
             // has condition
             $equal = new Equal($node->cond, $secondCase->cond);
             $ifNode->elseifs[] = new ElseIf_($equal, $this->switchManipulator->removeBreakNodes($secondCase->stmts));

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php54\Rector\Break_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Break_;
@@ -72,7 +73,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->num === null) {
+        if (!$node->num instanceof Expr) {
             return null;
         }
         if ($node->num instanceof LNumber) {

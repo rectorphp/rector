@@ -64,7 +64,7 @@ CODE_SAMPLE
             return null;
         }
         $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if ($previousNode !== null) {
+        if ($previousNode instanceof Node) {
             return null;
         }
         $node->if = $nodeIf->expr;

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
@@ -96,7 +97,7 @@ CODE_SAMPLE
         $ifNode = $node->stmts[0];
         $condExpr = $ifNode->cond;
         $foreachKeyVar = $node->keyVar;
-        if ($foreachKeyVar !== null && $this->shouldSkipForeachKeyUsage($ifNode, $foreachKeyVar)) {
+        if ($foreachKeyVar instanceof Expr && $this->shouldSkipForeachKeyUsage($ifNode, $foreachKeyVar)) {
             return null;
         }
         if ($condExpr instanceof FuncCall) {
@@ -119,7 +120,7 @@ CODE_SAMPLE
         }
         /** @var If_ $ifNode */
         $ifNode = $foreach->stmts[0];
-        if ($ifNode->else !== null) {
+        if ($ifNode->else instanceof Else_) {
             return \true;
         }
         return $ifNode->elseifs !== [];

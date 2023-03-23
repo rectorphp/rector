@@ -70,7 +70,7 @@ final class UseImportNameMatcher
         if (!$originalUseUse instanceof UseUse) {
             throw new ShouldNotHappenException();
         }
-        if ($originalUseUse->alias === null) {
+        if (!$originalUseUse->alias instanceof Identifier) {
             return $prefix . $originalUseUse->name->toString();
         }
         $unaliasedShortClass = Strings::substring($tag, Strings::length($originalUseUse->alias->toString()));

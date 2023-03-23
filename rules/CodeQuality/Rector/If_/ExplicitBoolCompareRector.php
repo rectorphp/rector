@@ -95,7 +95,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         // skip short ternary
-        if ($node instanceof Ternary && $node->if === null) {
+        if ($node instanceof Ternary && !$node->if instanceof Expr) {
             return null;
         }
         if ($node->cond instanceof BooleanNot) {

@@ -155,7 +155,7 @@ final class ValueResolver
     public function areValuesEqual(array $nodes, array $expectedValues) : bool
     {
         foreach ($nodes as $i => $node) {
-            if ($node === null) {
+            if (!$node instanceof Expr) {
                 return \false;
             }
             if (!$this->isValue($node, $expectedValues[$i])) {
@@ -182,7 +182,7 @@ final class ValueResolver
     }
     private function getConstExprEvaluator() : ConstExprEvaluator
     {
-        if ($this->constExprEvaluator !== null) {
+        if ($this->constExprEvaluator instanceof ConstExprEvaluator) {
             return $this->constExprEvaluator;
         }
         $this->constExprEvaluator = new ConstExprEvaluator(function (Expr $expr) {

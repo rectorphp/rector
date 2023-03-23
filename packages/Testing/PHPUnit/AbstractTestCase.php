@@ -47,7 +47,7 @@ abstract class AbstractTestCase extends TestCase
      */
     protected function getService(string $type) : object
     {
-        if (self::$currentContainer === null) {
+        if (!self::$currentContainer instanceof ContainerInterface) {
             throw new ShouldNotHappenException('First, create container with "boot()" or "bootWithConfigFileInfos([...])"');
         }
         $object = self::$currentContainer->get($type);

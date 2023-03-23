@@ -59,11 +59,11 @@ final class VariableRenamer
     public function renameVariableInFunctionLike($functionLike, string $oldName, string $expectedName, ?Assign $assign = null) : void
     {
         $isRenamingActive = \false;
-        if ($assign === null) {
+        if (!$assign instanceof Assign) {
             $isRenamingActive = \true;
         }
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use($oldName, $expectedName, $assign, &$isRenamingActive) : ?Variable {
-            if ($assign !== null && $node === $assign) {
+            if ($assign instanceof Assign && $node === $assign) {
                 $isRenamingActive = \true;
                 return null;
             }

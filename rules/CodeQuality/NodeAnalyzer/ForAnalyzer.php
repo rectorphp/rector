@@ -120,7 +120,7 @@ final class ForAnalyzer
                 return \false;
             }
             $arrayDimFetch = $node->var;
-            if ($arrayDimFetch->dim === null) {
+            if (!$arrayDimFetch->dim instanceof Expr) {
                 return \false;
             }
             if (!$arrayDimFetch->dim instanceof Variable) {

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FunctionLike;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
@@ -199,7 +200,7 @@ CODE_SAMPLE
         if ($expression->getComments() !== []) {
             return \true;
         }
-        return $expression->getDocComment() !== null;
+        return $expression->getDocComment() instanceof Doc;
     }
     /**
      * @param Stmt[] $stmts

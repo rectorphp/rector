@@ -222,7 +222,7 @@ final class ClassMethodAssignManipulator
                 continue;
             }
             $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode !== null && $this->isExplicitlyReferenced($parentNode)) {
+            if ($parentNode instanceof Node && $this->isExplicitlyReferenced($parentNode)) {
                 $variableName = $this->nodeNameResolver->getName($variable);
                 if ($variableName === null) {
                     continue;

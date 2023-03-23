@@ -120,7 +120,7 @@ final class ClassDependencyManipulator
     {
         /** @var ClassMethod|null $constructorMethod */
         $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructorMethod !== null) {
+        if ($constructorMethod instanceof ClassMethod) {
             $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructorMethod, $name, $type, $assign);
             return;
         }

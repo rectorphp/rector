@@ -177,7 +177,7 @@ final class NodeTypeResolver
             }
         }
         $type = $this->resolveByNodeTypeResolvers($node);
-        if ($type !== null) {
+        if ($type instanceof Type) {
             $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
             $type = $this->genericClassStringTypeCorrector->correct($type);
             if ($type instanceof ObjectType) {
@@ -359,7 +359,7 @@ final class NodeTypeResolver
      */
     private function resolveTernaryType(Ternary $ternary)
     {
-        if ($ternary->if !== null) {
+        if ($ternary->if instanceof Expr) {
             $first = $this->getType($ternary->if);
             $second = $this->getType($ternary->else);
             if ($this->isUnionTypeable($first, $second)) {

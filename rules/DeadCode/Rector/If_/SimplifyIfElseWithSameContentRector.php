@@ -65,7 +65,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?array
     {
-        if ($node->else === null) {
+        if (!$node->else instanceof Else_) {
             return null;
         }
         if (!$this->isIfWithConstantReturns($node)) {

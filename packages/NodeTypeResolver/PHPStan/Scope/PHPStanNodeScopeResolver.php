@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -364,7 +365,7 @@ final class PHPStanNodeScopeResolver
         if ($classLike->namespacedName instanceof Name) {
             return (string) $classLike->namespacedName;
         }
-        if ($classLike->name === null) {
+        if (!$classLike->name instanceof Identifier) {
             throw new ShouldNotHappenException();
         }
         return $classLike->name->toString();

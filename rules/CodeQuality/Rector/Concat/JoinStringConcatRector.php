@@ -22,15 +22,15 @@ final class JoinStringConcatRector extends AbstractRector
      */
     private const LINE_BREAK_POINT = 100;
     /**
-     * @var bool
-     */
-    private $nodeReplacementIsRestricted = \false;
-    /**
      * @var string
      * @see https://regex101.com/r/VaXM1t/1
      * @see https://stackoverflow.com/questions/4147646/determine-if-utf-8-text-is-all-ascii
      */
     private const ASCII_REGEX = '#[^\\x00-\\x7F]#';
+    /**
+     * @var bool
+     */
+    private $nodeReplacementIsRestricted = \false;
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Joins concat of 2 strings, unless the length is too long', [new CodeSample(<<<'CODE_SAMPLE'

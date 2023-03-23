@@ -268,13 +268,13 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
      */
     protected function pExpr_Yield(Yield_ $yield) : string
     {
-        if ($yield->value === null) {
+        if (!$yield->value instanceof Expr) {
             return 'yield';
         }
         $parentNode = $yield->getAttribute(AttributeKey::PARENT_NODE);
         // brackets are needed only in case of assign, @see https://www.php.net/manual/en/language.generators.syntax.php
         $shouldAddBrackets = $parentNode instanceof Assign;
-        return \sprintf('%syield %s%s%s', $shouldAddBrackets ? '(' : '', $yield->key !== null ? $this->p($yield->key) . ' => ' : '', $this->p($yield->value), $shouldAddBrackets ? ')' : '');
+        return \sprintf('%syield %s%s%s', $shouldAddBrackets ? '(' : '', $yield->key instanceof Expr ? $this->p($yield->key) . ' => ' : '', $this->p($yield->value), $shouldAddBrackets ? ')' : '');
     }
     /**
      * Print arrays in short [] by default,

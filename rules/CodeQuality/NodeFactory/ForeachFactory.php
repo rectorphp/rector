@@ -12,7 +12,7 @@ final class ForeachFactory
 {
     public function createFromFor(For_ $for, string $iteratedVariableName, ?Expr $iteratedExpr, ?string $keyValueName) : Foreach_
     {
-        if ($iteratedExpr === null) {
+        if (!$iteratedExpr instanceof Expr) {
             throw new ShouldNotHappenException();
         }
         if ($keyValueName === null) {

@@ -45,7 +45,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         foreach ($node->items as $item) {
-            if ($item !== null) {
+            if ($item instanceof ArrayItem) {
                 return null;
             }
         }

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
 
 use PhpParser\Node\ComplexType;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
@@ -62,7 +63,7 @@ final class PropertyTypeDecorator
         $property->type = $typeNode;
         $propertyProperty = $property->props[0];
         // add null default
-        if ($propertyProperty->default === null) {
+        if (!$propertyProperty->default instanceof Expr) {
             $propertyProperty->default = $this->nodeFactory->createNull();
         }
         // has array with defined type? add docs

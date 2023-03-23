@@ -64,7 +64,7 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
     {
         /** Node|null $parentNode */
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode !== null && $this->isUsedInArg($node, $parentNode)) {
+        if ($parentNode instanceof Node && $this->isUsedInArg($node, $parentNode)) {
             return;
         }
         // chain call: "->method()->another()"

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php70\Rector\Assign;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
@@ -56,7 +57,7 @@ final class ListSwapArrayOrderRector extends AbstractRector implements MinPhpVer
             if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            if ($arrayItem->value instanceof ArrayDimFetch && $arrayItem->value->dim === null) {
+            if ($arrayItem->value instanceof ArrayDimFetch && !$arrayItem->value->dim instanceof Expr) {
                 $printedVariables[] = $this->nodePrinter->print($arrayItem->value->var);
             } else {
                 return null;

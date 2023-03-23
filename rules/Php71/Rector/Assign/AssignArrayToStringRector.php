@@ -77,7 +77,7 @@ CODE_SAMPLE
                 continue;
             }
             // skip explicit assigns
-            if ($parentNode->dim !== null) {
+            if ($parentNode->dim instanceof Expr) {
                 continue;
             }
             $shouldRetype = \true;

@@ -78,7 +78,7 @@ CODE_SAMPLE
         }
         // Try to shorten the nested if before transforming it to elseif
         $refactored = $this->shortenElseIf($if);
-        if ($refactored !== null) {
+        if ($refactored instanceof If_) {
             $if = $refactored;
         }
         if ($if->stmts === []) {

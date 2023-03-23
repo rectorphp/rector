@@ -128,7 +128,7 @@ CODE_SAMPLE
         if (!$this->forAnalyzer->isLoopMatch($node->loop, $this->keyValueName)) {
             return null;
         }
-        if ($this->iteratedExpr === null) {
+        if (!$this->iteratedExpr instanceof Expr) {
             return null;
         }
         if ($this->keyValueName === null) {

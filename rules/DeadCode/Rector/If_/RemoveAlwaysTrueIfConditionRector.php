@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Constant\ConstantBooleanType;
@@ -79,7 +80,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
-        if ($node->else !== null) {
+        if ($node->else instanceof Else_) {
             return null;
         }
         // just one if

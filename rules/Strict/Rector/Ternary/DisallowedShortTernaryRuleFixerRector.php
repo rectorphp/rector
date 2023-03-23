@@ -70,7 +70,7 @@ CODE_SAMPLE
             return null;
         }
         // skip non-short ternary
-        if ($node->if !== null) {
+        if ($node->if instanceof Expr) {
             return null;
         }
         // special case for reset() function

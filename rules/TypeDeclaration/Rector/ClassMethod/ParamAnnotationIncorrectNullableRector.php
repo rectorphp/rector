@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
@@ -131,7 +132,7 @@ CODE_SAMPLE
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, TypeKind::PARAM);
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
         // override existing type
-        if ($paramTagValueNode !== null) {
+        if ($paramTagValueNode instanceof ParamTagValueNode) {
             // already set
             $currentType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($paramTagValueNode->type, $param);
             if ($this->typeComparator->areTypesEqual($currentType, $newType)) {

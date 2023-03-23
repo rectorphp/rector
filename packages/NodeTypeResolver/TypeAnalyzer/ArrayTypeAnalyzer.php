@@ -157,7 +157,7 @@ final class ArrayTypeAnalyzer
         }
         // A. local property
         $property = $classLike->getProperty($propertyName);
-        if ($property !== null) {
+        if ($property instanceof Property) {
             $propertyProperty = $property->props[0];
             return $propertyProperty->default instanceof Array_;
         }

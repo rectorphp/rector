@@ -7,6 +7,7 @@ use RectorPrefix202303\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
@@ -74,7 +75,7 @@ final class ObjectTypeSpecifier
             return new FullyQualifiedObjectType($objectType->getClassName(), null, $objectType->getClassReflection());
         }
         $aliasedObjectType = $this->matchAliasedObjectType($node, $objectType, $uses);
-        if ($aliasedObjectType !== null) {
+        if ($aliasedObjectType instanceof AliasedObjectType) {
             return $aliasedObjectType;
         }
         $shortenedObjectType = $this->matchShortenedObjectType($objectType, $uses);
@@ -101,7 +102,7 @@ final class ObjectTypeSpecifier
         foreach ($uses as $use) {
             $prefix = $this->useImportsResolver->resolvePrefix($use);
             foreach ($use->uses as $useUse) {
-                if ($useUse->alias === null) {
+                if (!$useUse->alias instanceof Identifier) {
                     continue;
                 }
                 $useName = $prefix . $useUse->name->toString();
@@ -143,11 +144,11 @@ final class ObjectTypeSpecifier
         foreach ($uses as $use) {
             $prefix = $use instanceof GroupUse ? $use->prefix . '\\' : '';
             foreach ($use->uses as $useUse) {
-                if ($useUse->alias !== null) {
+                if ($useUse->alias instanceof Identifier) {
                     continue;
                 }
                 $partialNamespaceObjectType = $this->matchPartialNamespaceObjectType($prefix, $objectType, $useUse);
-                if ($partialNamespaceObjectType !== null) {
+                if ($partialNamespaceObjectType instanceof ShortenedObjectType) {
                     return $partialNamespaceObjectType;
                 }
                 $partialNamespaceObjectType = $this->matchClassWithLastUseImportPart($prefix, $objectType, $useUse);

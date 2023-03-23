@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -105,7 +106,7 @@ final class PropertyPresenceChecker
      */
     private function matchPropertyByType(PropertyMetadata $propertyMetadata, PhpPropertyReflection $phpPropertyReflection)
     {
-        if ($propertyMetadata->getType() === null) {
+        if (!$propertyMetadata->getType() instanceof Type) {
             return null;
         }
         if (!$propertyMetadata->getType() instanceof TypeWithClassName) {

@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FunctionLike;
 
+use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
@@ -161,7 +162,7 @@ CODE_SAMPLE
         if ($stmt->getComments() !== []) {
             return \true;
         }
-        return $stmt->getDocComment() !== null;
+        return $stmt->getDocComment() instanceof Doc;
     }
     private function isReturnWithVarAnnotation(Return_ $return) : bool
     {

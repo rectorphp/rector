@@ -4,11 +4,13 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FunctionLike;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
@@ -111,7 +113,7 @@ CODE_SAMPLE
             return null;
         }
         // there is some else
-        if ($if->else !== null) {
+        if ($if->else instanceof Else_) {
             return null;
         }
         // only property fetch, because of constructor set
@@ -146,11 +148,11 @@ CODE_SAMPLE
         $propertyType = $this->resolvePropertyTypeAfterConstructor($classLike, $propertyName);
         $resolvedTypes = [$propertyType];
         $defaultValue = $property->props[0]->default;
-        if ($defaultValue !== null) {
+        if ($defaultValue instanceof Expr) {
             $resolvedTypes[] = $this->getType($defaultValue);
         }
         $resolveAssignedType = $this->resolveAssignedTypeInStmtsByPropertyName($classLike->stmts, $propertyName);
-        if ($resolveAssignedType !== null) {
+        if ($resolveAssignedType instanceof Type) {
             $resolvedTypes[] = $resolveAssignedType;
         }
         return $this->typeFactory->createMixedPassedOrUnionTypeAndKeepConstant($resolvedTypes);
@@ -159,10 +161,10 @@ CODE_SAMPLE
     {
         $propertyTypeFromConstructor = null;
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if ($constructClassMethod !== null) {
+        if ($constructClassMethod instanceof ClassMethod) {
             $propertyTypeFromConstructor = $this->resolveAssignedTypeInStmtsByPropertyName((array) $constructClassMethod->stmts, $propertyName);
         }
-        if ($propertyTypeFromConstructor !== null) {
+        if ($propertyTypeFromConstructor instanceof Type) {
             return $propertyTypeFromConstructor;
         }
         // undefined property is null by default

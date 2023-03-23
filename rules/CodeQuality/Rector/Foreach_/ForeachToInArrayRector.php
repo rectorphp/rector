@@ -93,7 +93,7 @@ CODE_SAMPLE
         $returnToRemove = $node->getAttribute(AttributeKey::NEXT_NODE);
         /** @var Return_ $return */
         $return = $firstNodeInsideForeach->stmts[0];
-        if ($returnToRemove->expr === null) {
+        if (!$returnToRemove->expr instanceof Expr) {
             return null;
         }
         if (!$this->valueResolver->isTrueOrFalse($returnToRemove->expr)) {
@@ -114,7 +114,7 @@ CODE_SAMPLE
     }
     private function shouldSkipForeach(Foreach_ $foreach) : bool
     {
-        if ($foreach->keyVar !== null) {
+        if ($foreach->keyVar instanceof Expr) {
             return \true;
         }
         if (\count($foreach->stmts) > 1) {
@@ -163,7 +163,7 @@ CODE_SAMPLE
         if (!$ifStatment instanceof Return_) {
             return \false;
         }
-        if ($ifStatment->expr === null) {
+        if (!$ifStatment->expr instanceof Expr) {
             return \false;
         }
         return $this->valueResolver->isTrueOrFalse($ifStatment->expr);

@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
@@ -62,7 +63,7 @@ final class UsedImportsResolver
             $usedImports[] = new FullyQualifiedObjectType($className);
         }
         $this->useImportsTraverser->traverserStmts($stmts, static function (UseUse $useUse, string $name) use(&$usedImports) : void {
-            if ($useUse->alias !== null) {
+            if ($useUse->alias instanceof Identifier) {
                 $usedImports[] = new AliasedObjectType($useUse->alias->toString(), $name);
             } else {
                 $usedImports[] = new FullyQualifiedObjectType($name);

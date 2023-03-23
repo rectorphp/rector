@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
@@ -79,7 +80,7 @@ CODE_SAMPLE
             if (!$returnVariable instanceof Variable) {
                 continue;
             }
-            if ($stmt instanceof If_ && $stmt->else === null && $stmt->elseifs === []) {
+            if ($stmt instanceof If_ && !$stmt->else instanceof Else_ && $stmt->elseifs === []) {
                 // is single condition if
                 $if = $stmt;
                 if (\count($if->stmts) !== 1) {

@@ -85,7 +85,7 @@ final class AssignManipulator
         if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($parentNode->var, $node)) {
             return \true;
         }
-        if ($parentNode !== null && $this->multiInstanceofChecker->isInstanceOf($parentNode, self::MODIFYING_NODE_TYPES)) {
+        if ($parentNode instanceof Node && $this->multiInstanceofChecker->isInstanceOf($parentNode, self::MODIFYING_NODE_TYPES)) {
             return \true;
         }
         if ($this->isOnArrayDestructuring($parentNode)) {

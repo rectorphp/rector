@@ -69,7 +69,7 @@ final class PlainValueParser
         $tokenIterator->next();
         // normalize value
         $constExprNode = $this->matchConstantValue($currentTokenValue);
-        if ($constExprNode !== null) {
+        if ($constExprNode instanceof ConstExprNode) {
             return $constExprNode;
         }
         while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_DOUBLE_COLON) || $tokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER)) {

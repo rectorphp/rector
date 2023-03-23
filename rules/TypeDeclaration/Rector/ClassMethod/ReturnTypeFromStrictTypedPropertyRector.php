@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
@@ -118,7 +119,7 @@ CODE_SAMPLE
         $returns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($classMethod, Return_::class);
         $propertyTypes = [];
         foreach ($returns as $return) {
-            if ($return->expr === null) {
+            if (!$return->expr instanceof Expr) {
                 return [];
             }
             if (!$return->expr instanceof PropertyFetch) {

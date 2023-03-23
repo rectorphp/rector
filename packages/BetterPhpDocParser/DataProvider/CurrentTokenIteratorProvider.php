@@ -17,7 +17,7 @@ final class CurrentTokenIteratorProvider
     }
     public function provide() : BetterTokenIterator
     {
-        if ($this->betterTokenIterator === null) {
+        if (!$this->betterTokenIterator instanceof BetterTokenIterator) {
             throw new ShouldNotHappenException();
         }
         return $this->betterTokenIterator;

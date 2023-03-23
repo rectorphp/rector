@@ -52,7 +52,7 @@ CODE_SAMPLE
         /** @var Ternary $nestedTernary */
         $nestedTernary = $node->else;
         $spaceshipNode = $this->processSmallerThanTernary($node, $nestedTernary);
-        if ($spaceshipNode !== null) {
+        if ($spaceshipNode instanceof Spaceship) {
             return $spaceshipNode;
         }
         return $this->processGreaterThanTernary($node, $nestedTernary);

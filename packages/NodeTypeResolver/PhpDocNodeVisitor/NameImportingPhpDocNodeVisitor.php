@@ -70,7 +70,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     }
     public function beforeTraverse(Node $node) : void
     {
-        if ($this->currentPhpParserNode === null) {
+        if (!$this->currentPhpParserNode instanceof PhpParserNode) {
             throw new ShouldNotHappenException('Set "$currentPhpParserNode" first');
         }
     }
@@ -98,7 +98,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
         if (!$file instanceof File) {
             return null;
         }
-        if ($this->currentPhpParserNode === null) {
+        if (!$this->currentPhpParserNode instanceof PhpParserNode) {
             throw new ShouldNotHappenException();
         }
         return $this->processFqnNameImport($this->currentPhpParserNode, $node, $staticType, $file);
@@ -220,7 +220,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return null;
         }
         $importedName = $this->processFqnNameImport($currentPhpParserNode, $identifierTypeNode, $staticType, $file);
-        if ($importedName !== null) {
+        if ($importedName instanceof IdentifierTypeNode) {
             $spacelessPhpDocTagNode->name = '@' . $importedName->name;
             return $spacelessPhpDocTagNode;
         }

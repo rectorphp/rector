@@ -316,7 +316,7 @@ final class BetterNodeFinder
     {
         $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
         if ($nextNode instanceof Node) {
-            if ($nextNode instanceof Return_ && $nextNode->expr === null) {
+            if ($nextNode instanceof Return_ && !$nextNode->expr instanceof Expr) {
                 $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
                 if (!$parentNode instanceof Case_) {
                     return null;

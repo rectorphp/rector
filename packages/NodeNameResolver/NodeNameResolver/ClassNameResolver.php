@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
@@ -37,7 +38,7 @@ final class ClassNameResolver implements NodeNameResolverInterface
         if ($node->namespacedName instanceof Name) {
             return $node->namespacedName->toString();
         }
-        if ($node->name === null) {
+        if (!$node->name instanceof Identifier) {
             return null;
         }
         return $this->nodeNameResolver->getName($node->name);

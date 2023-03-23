@@ -57,7 +57,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $newNode = $this->processArrayDimFetchNode($node, $arrayDimFetch, $issetUnsetToMethodCall);
-                if ($newNode !== null) {
+                if ($newNode instanceof Node) {
                     return $newNode;
                 }
             }

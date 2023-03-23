@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php70\Rector\Switch_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
@@ -60,7 +61,7 @@ CODE_SAMPLE
     {
         $defaultCases = [];
         foreach ($node->cases as $case) {
-            if ($case->cond !== null) {
+            if ($case->cond instanceof Expr) {
                 continue;
             }
             $defaultCases[] = $case;

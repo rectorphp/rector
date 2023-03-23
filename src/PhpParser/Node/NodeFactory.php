@@ -166,7 +166,7 @@ final class NodeFactory
     public function createParamFromNameAndType(string $name, ?Type $type) : Param
     {
         $param = new ParamBuilder($name);
-        if ($type !== null) {
+        if ($type instanceof Type) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
             if ($typeNode !== null) {
                 $param->setType($typeNode);
@@ -297,7 +297,7 @@ final class NodeFactory
     {
         $paramBuilder = new ParamBuilder($propertyMetadata->getName());
         $propertyType = $propertyMetadata->getType();
-        if ($propertyType !== null) {
+        if ($propertyType instanceof Type) {
             $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
             if ($typeNode !== null) {
                 $paramBuilder->setType($typeNode);
@@ -326,7 +326,7 @@ final class NodeFactory
         $classNameString = $className->toString();
         if (\in_array($classNameString, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
             $currentNode = $this->currentNodeProvider->getNode();
-            if ($currentNode !== null) {
+            if ($currentNode instanceof Node) {
                 $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $className);
             }
         } else {

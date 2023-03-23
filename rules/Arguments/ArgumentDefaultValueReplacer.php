@@ -58,7 +58,7 @@ final class ArgumentDefaultValueReplacer
         if ($value === ReplaceArgumentDefaultValue::ANY_VALUE_BEFORE) {
             return \true;
         }
-        if ($expr === null) {
+        if (!$expr instanceof Expr) {
             return \false;
         }
         if ($this->valueResolver->isValue($expr, $value)) {

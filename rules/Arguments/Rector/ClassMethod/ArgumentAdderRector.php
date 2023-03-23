@@ -251,7 +251,7 @@ CODE_SAMPLE
             throw new ShouldNotHappenException();
         }
         $param = new Param(new Variable($argumentName), BuilderHelpers::normalizeValue($defaultValue));
-        if ($type !== null) {
+        if ($type instanceof Type) {
             $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
         }
         $classMethod->params[$position] = $param;

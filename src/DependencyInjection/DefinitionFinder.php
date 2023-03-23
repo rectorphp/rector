@@ -34,7 +34,7 @@ final class DefinitionFinder
     public function getByType(ContainerBuilder $containerBuilder, string $type) : Definition
     {
         $definition = $this->getByTypeIfExists($containerBuilder, $type);
-        if ($definition !== null) {
+        if ($definition instanceof Definition) {
             return $definition;
         }
         throw new DefinitionForTypeNotFoundException(\sprintf('Definition for type "%s" was not found.', $type));

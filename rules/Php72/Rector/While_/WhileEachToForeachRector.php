@@ -106,7 +106,7 @@ CODE_SAMPLE
         if ($listNode->items !== []) {
             /** @var ArrayItem|null $keyItem */
             $keyItem = \array_pop($listNode->items);
-            if ($keyItem !== null && !$isTrailingCommaLast) {
+            if ($keyItem instanceof ArrayItem && !$isTrailingCommaLast) {
                 $foreach->keyVar = $keyItem->value;
             }
         }

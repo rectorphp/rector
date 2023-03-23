@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Transform\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -85,7 +86,7 @@ CODE_SAMPLE
             return null;
         }
         foreach ($classMethod->stmts as $key => $stmt) {
-            if ($stmt instanceof Return_ && $stmt->expr !== null) {
+            if ($stmt instanceof Return_ && $stmt->expr instanceof Expr) {
                 if ($isArrayWrap && !$stmt->expr instanceof Array_) {
                     $stmt->expr = new Array_([new ArrayItem($stmt->expr)]);
                 }

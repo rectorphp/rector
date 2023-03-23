@@ -68,7 +68,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->keyVar === null) {
+        if (!$node->keyVar instanceof Expr) {
             return null;
         }
         // special case of nested array items

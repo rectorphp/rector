@@ -7,6 +7,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
@@ -106,7 +107,7 @@ final class PhpDocTypeChanger
         // override existing type
         $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, TypeKind::PROPERTY);
         $currentVarTagValueNode = $phpDocInfo->getVarTagValueNode();
-        if ($currentVarTagValueNode !== null) {
+        if ($currentVarTagValueNode instanceof VarTagValueNode) {
             // only change type
             $currentVarTagValueNode->type = $newPHPStanPhpDocType;
             $phpDocInfo->markAsChanged();
@@ -132,7 +133,7 @@ final class PhpDocTypeChanger
         // override existing type
         $newPHPStanPhpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, TypeKind::RETURN);
         $currentReturnTagValueNode = $phpDocInfo->getReturnTagValue();
-        if ($currentReturnTagValueNode !== null) {
+        if ($currentReturnTagValueNode instanceof ReturnTagValueNode) {
             // only change type
             $currentReturnTagValueNode->type = $newPHPStanPhpDocType;
             $phpDocInfo->markAsChanged();
@@ -155,7 +156,7 @@ final class PhpDocTypeChanger
         $phpDocType = $this->staticTypeMapper->mapPHPStanTypeToPHPStanPhpDocTypeNode($newType, TypeKind::PARAM);
         $paramTagValueNode = $phpDocInfo->getParamTagValueByName($paramName);
         // override existing type
-        if ($paramTagValueNode !== null) {
+        if ($paramTagValueNode instanceof ParamTagValueNode) {
             // already set
             $currentType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($paramTagValueNode->type, $param);
             // avoid overriding better type

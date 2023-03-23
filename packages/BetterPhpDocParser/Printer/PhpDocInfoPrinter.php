@@ -145,7 +145,7 @@ final class PhpDocInfoPrinter
     }
     private function getCurrentPhpDocInfo() : PhpDocInfo
     {
-        if ($this->phpDocInfo === null) {
+        if (!$this->phpDocInfo instanceof PhpDocInfo) {
             throw new ShouldNotHappenException();
         }
         return $this->phpDocInfo;

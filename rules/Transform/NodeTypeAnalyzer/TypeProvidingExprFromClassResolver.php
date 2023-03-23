@@ -56,7 +56,7 @@ final class TypeProvidingExprFromClassResolver
         // A. match a method
         $classReflection = $this->reflectionProvider->getClass($className);
         $methodCallProvidingType = $this->resolveMethodCallProvidingType($classReflection, $objectType);
-        if ($methodCallProvidingType !== null) {
+        if ($methodCallProvidingType instanceof MethodCall) {
             return $methodCallProvidingType;
         }
         // B. match existing property
@@ -65,7 +65,7 @@ final class TypeProvidingExprFromClassResolver
             return null;
         }
         $propertyFetch = $this->resolvePropertyFetchProvidingType($classReflection, $scope, $objectType);
-        if ($propertyFetch !== null) {
+        if ($propertyFetch instanceof PropertyFetch) {
             return $propertyFetch;
         }
         // C. param in constructor?

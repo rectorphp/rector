@@ -5,6 +5,7 @@ namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
@@ -44,7 +45,7 @@ final class ArrayDestructVariableFilter
             }
             foreach ($node->var->items as $arrayItem) {
                 // empty item
-                if ($arrayItem === null) {
+                if (!$arrayItem instanceof ArrayItem) {
                     continue;
                 }
                 if (!$arrayItem->value instanceof Variable) {

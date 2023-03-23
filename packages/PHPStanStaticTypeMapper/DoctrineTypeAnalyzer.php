@@ -27,7 +27,7 @@ final class DoctrineTypeAnalyzer
         if (!$hasDoctrineCollectionType) {
             return \false;
         }
-        return $arrayType !== null;
+        return $arrayType instanceof ArrayType;
     }
     private function isCollectionObjectType(Type $type) : bool
     {

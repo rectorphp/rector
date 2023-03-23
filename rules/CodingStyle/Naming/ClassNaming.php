@@ -15,7 +15,7 @@ final class ClassNaming
     public function getShortName($name) : string
     {
         if ($name instanceof ClassLike) {
-            if ($name->name === null) {
+            if (!$name->name instanceof Identifier) {
                 return '';
             }
             return $this->getShortName($name->name);

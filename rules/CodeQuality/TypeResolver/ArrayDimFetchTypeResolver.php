@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\TypeResolver;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PHPStan\Type\ArrayType;
@@ -29,7 +30,7 @@ final class ArrayDimFetchTypeResolver
     }
     private function resolveDimType(ArrayDimFetch $arrayDimFetch) : Type
     {
-        if ($arrayDimFetch->dim !== null) {
+        if ($arrayDimFetch->dim instanceof Expr) {
             return $this->nodeTypeResolver->getType($arrayDimFetch->dim);
         }
         return new MixedType();

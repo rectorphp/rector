@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -63,7 +64,7 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
         foreach ($uses as $use) {
             $prefix = $this->useImportsResolver->resolvePrefix($use);
             foreach ($use->uses as $useUse) {
-                if ($useUse->alias !== null) {
+                if ($useUse->alias instanceof Identifier) {
                     $objectTypes[] = new AliasedObjectType($useUse->alias->toString(), $prefix . $useUse->name);
                 } else {
                     $objectTypes[] = new FullyQualifiedObjectType($prefix . $useUse->name);

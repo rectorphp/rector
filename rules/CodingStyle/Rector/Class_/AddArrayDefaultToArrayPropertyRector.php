@@ -122,7 +122,7 @@ CODE_SAMPLE
             if (!$node instanceof PropertyProperty) {
                 return null;
             }
-            if ($node->default !== null) {
+            if ($node->default instanceof Expr) {
                 return null;
             }
             $varType = $this->resolveVarType($node);

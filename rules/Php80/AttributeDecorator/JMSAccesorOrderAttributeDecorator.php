@@ -16,7 +16,7 @@ final class JMSAccesorOrderAttributeDecorator implements AttributeDecoratorInter
     {
         // make first named arg explicit, @see https://github.com/rectorphp/rector/issues/7369
         $firstArg = $attribute->args[0];
-        if ($firstArg->name !== null) {
+        if ($firstArg->name instanceof Identifier) {
             return;
         }
         $firstArg->name = new Identifier('order');

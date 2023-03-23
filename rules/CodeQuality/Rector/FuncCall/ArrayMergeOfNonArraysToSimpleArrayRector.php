@@ -75,7 +75,7 @@ CODE_SAMPLE
                 return null;
             }
             foreach ($nestedArrayItem->items as $nestedArrayItemItem) {
-                if ($nestedArrayItemItem === null) {
+                if (!$nestedArrayItemItem instanceof ArrayItem) {
                     continue;
                 }
                 $array->items[] = new ArrayItem($nestedArrayItemItem->value, $nestedArrayItemItem->key);

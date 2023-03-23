@@ -81,10 +81,10 @@ CODE_SAMPLE
     {
         $this->reset();
         $currentNode = $node;
-        while ($currentNode !== null) {
+        while ($currentNode instanceof Node) {
             if ($currentNode instanceof If_) {
                 $comparedNode = $this->ifManipulator->matchIfNotNullReturnValue($currentNode);
-                if ($comparedNode !== null) {
+                if ($comparedNode instanceof Expr) {
                     $this->coalescingNodes[] = $comparedNode;
                     $this->nodesToRemove[] = $currentNode;
                     $currentNode = $currentNode->getAttribute(AttributeKey::NEXT_NODE);
@@ -119,7 +119,7 @@ CODE_SAMPLE
         if (!$node instanceof Return_) {
             return \false;
         }
-        if ($node->expr === null) {
+        if (!$node->expr instanceof Expr) {
             return \false;
         }
         return $this->valueResolver->isNull($node->expr);

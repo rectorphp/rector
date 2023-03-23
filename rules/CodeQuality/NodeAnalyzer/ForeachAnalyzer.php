@@ -77,7 +77,7 @@ final class ForeachAnalyzer
         if (!$onlyStatement->var instanceof ArrayDimFetch) {
             return null;
         }
-        if ($onlyStatement->var->dim !== null) {
+        if ($onlyStatement->var->dim instanceof Expr) {
             return null;
         }
         if (!$this->nodeComparator->areNodesEqual($foreach->valueVar, $onlyStatement->expr)) {

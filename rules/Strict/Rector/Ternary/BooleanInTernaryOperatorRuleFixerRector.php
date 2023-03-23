@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
         // skip short ternary
-        if ($node->if === null) {
+        if (!$node->if instanceof Expr) {
             return null;
         }
         $exprType = $scope->getType($node->cond);

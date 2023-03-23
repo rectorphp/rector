@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
@@ -79,7 +80,7 @@ final class ParentPropertyLookupGuard
         if ($this->propertyManipulator->isUsedByTrait($classReflection, $propertyName)) {
             return \false;
         }
-        if ($class->extends === null) {
+        if (!$class->extends instanceof Name) {
             return \true;
         }
         $className = $classReflection->getName();

@@ -43,7 +43,7 @@ final class PropertyTypeDecorator
     }
     public function decorate(Property $property, ?Type $type) : void
     {
-        if ($type === null) {
+        if (!$type instanceof Type) {
             return;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);

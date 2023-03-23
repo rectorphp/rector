@@ -134,7 +134,7 @@ final class TokenManipulator
             if ($tokenStaticType->isArray()->yes()) {
                 return null;
             }
-            if ($this->assignedNameExpr === null) {
+            if (!$this->assignedNameExpr instanceof Expr) {
                 return null;
             }
             if (!$this->nodeComparator->areNodesEqual($node->var, $this->assignedNameExpr)) {
@@ -249,7 +249,7 @@ final class TokenManipulator
             if (!$tokenStaticType->isArray()->yes()) {
                 return null;
             }
-            if ($possibleTokenArray->dim === null) {
+            if (!$possibleTokenArray->dim instanceof Expr) {
                 return null;
             }
             if (!$this->valueResolver->isValue($possibleTokenArray->dim, 0)) {
@@ -268,7 +268,7 @@ final class TokenManipulator
     }
     private function isArrayDimFetchWithDimIntegerValue(ArrayDimFetch $arrayDimFetch, int $value) : bool
     {
-        if ($arrayDimFetch->dim === null) {
+        if (!$arrayDimFetch->dim instanceof Expr) {
             return \false;
         }
         return $this->valueResolver->isValue($arrayDimFetch->dim, $value);

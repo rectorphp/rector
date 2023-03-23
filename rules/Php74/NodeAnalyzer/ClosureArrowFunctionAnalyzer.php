@@ -46,7 +46,7 @@ final class ClosureArrowFunctionAnalyzer
         }
         /** @var Return_ $return */
         $return = $onlyStmt;
-        if ($return->expr === null) {
+        if (!$return->expr instanceof Expr) {
             return null;
         }
         if ($this->shouldSkipForUsedReferencedValue($closure)) {

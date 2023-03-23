@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PhpAttribute;
 
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -26,7 +27,7 @@ final class UseAliasNameMatcher
                 if (!$originalUseUse instanceof UseUse) {
                     continue;
                 }
-                if ($originalUseUse->alias === null) {
+                if (!$originalUseUse->alias instanceof Identifier) {
                     continue;
                 }
                 $alias = $originalUseUse->alias->toString();

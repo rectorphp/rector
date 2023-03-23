@@ -226,7 +226,7 @@ final class ClassRenamer
         if (!$uses instanceof UseUse) {
             return;
         }
-        if ($uses->alias !== null) {
+        if ($uses->alias instanceof Identifier) {
             return;
         }
         // ios the only one? Remove whole use instead to avoid "use ;" constructions

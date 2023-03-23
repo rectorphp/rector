@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
@@ -86,7 +87,7 @@ CODE_SAMPLE
         if (!$nextNode instanceof Return_) {
             return null;
         }
-        if ($nextNode->expr === null) {
+        if (!$nextNode->expr instanceof Expr) {
             return null;
         }
         if (!$this->ifManipulator->isIfAndElseWithSameVariableAssignAsLastStmts($node, $nextNode->expr)) {

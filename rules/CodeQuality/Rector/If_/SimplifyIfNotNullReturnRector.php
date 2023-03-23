@@ -62,7 +62,7 @@ CODE_SAMPLE
             if (!$nextNode instanceof Return_) {
                 return null;
             }
-            if ($nextNode->expr === null) {
+            if (!$nextNode->expr instanceof Expr) {
                 return null;
             }
             if (!$this->valueResolver->isNull($nextNode->expr)) {

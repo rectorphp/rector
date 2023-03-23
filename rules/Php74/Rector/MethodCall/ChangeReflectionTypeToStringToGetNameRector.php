@@ -205,7 +205,7 @@ CODE_SAMPLE
     private function refactorReflectionFunctionGetReturnType(MethodCall $methodCall)
     {
         $refactoredMethodCall = $this->refactorIfHasReturnTypeWasCalled($methodCall);
-        if ($refactoredMethodCall !== null) {
+        if ($refactoredMethodCall instanceof Node) {
             return $refactoredMethodCall;
         }
         $getNameMethodCall = $this->nodeFactory->createMethodCall($methodCall, self::GET_NAME);
