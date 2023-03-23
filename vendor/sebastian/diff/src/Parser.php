@@ -62,8 +62,8 @@ final class Parser
         $chunk = null;
         $diffLines = [];
         foreach ($lines as $line) {
-            if (preg_match('/^@@\\s+-(?P<start>\\d+)(?:,\\s*(?P<startrange>\\d+))?\\s+\\+(?P<end>\\d+)(?:,\\s*(?P<endrange>\\d+))?\\s+@@/', $line, $match)) {
-                $chunk = new Chunk((int) $match['start'], isset($match['startrange']) ? max(1, (int) $match['startrange']) : 1, (int) $match['end'], isset($match['endrange']) ? max(1, (int) $match['endrange']) : 1);
+            if (preg_match('/^@@\\s+-(?P<start>\\d+)(?:,\\s*(?P<startrange>\\d+))?\\s+\\+(?P<end>\\d+)(?:,\\s*(?P<endrange>\\d+))?\\s+@@/', $line, $match, \PREG_UNMATCHED_AS_NULL)) {
+                $chunk = new Chunk((int) $match['start'], isset($match['startrange']) ? max(0, (int) $match['startrange']) : 1, (int) $match['end'], isset($match['endrange']) ? max(0, (int) $match['endrange']) : 1);
                 $chunks[] = $chunk;
                 $diffLines = [];
                 continue;

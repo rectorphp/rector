@@ -19,6 +19,10 @@
             "email": "mail@kore-nordmann.de"
         }
     ],
+    "support": {
+        "issues": "https:\/\/github.com\/sebastianbergmann\/diff\/issues",
+        "security": "https:\/\/github.com\/sebastianbergmann\/diff\/security\/policy"
+    },
     "prefer-stable": true,
     "config": {
         "platform": {

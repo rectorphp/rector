@@ -354,10 +354,11 @@ final class BetterNodeFinder
             if ($exprName === null) {
                 return [];
             }
-            $variables = $this->findInstancesOf($scopeNode, [Variable::class]);
-            return \array_filter($variables, function (Variable $variable) use($exprName) : bool {
-                return $this->nodeNameResolver->isName($variable, $exprName);
+            /** @var Variable[] $variables */
+            $variables = $this->find($scopeNode, function (Node $node) use($exprName) : bool {
+                return $node instanceof Variable && $this->nodeNameResolver->isName($node, $exprName);
             });
+            return $variables;
         }
         if ($expr instanceof Property) {
             $singleProperty = $expr->props[0];
@@ -370,10 +371,11 @@ final class BetterNodeFinder
         if ($exprName === null) {
             return [];
         }
-        $propertyFetches = $this->findInstancesOf($scopeNode, [PropertyFetch::class, StaticPropertyFetch::class]);
-        return \array_filter($propertyFetches, function ($propertyFetch) use($exprName) : bool {
-            return $this->nodeNameResolver->isName($propertyFetch->name, $exprName);
+        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
+        $propertyFetches = $this->find($scopeNode, function (Node $node) use($exprName) : bool {
+            return ($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch) && $this->nodeNameResolver->isName($node->name, $exprName);
         });
+        return $propertyFetches;
     }
     /**
      * @template T of Node

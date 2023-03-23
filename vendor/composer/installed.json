@@ -2192,17 +2192,17 @@
         },
         {
             "name": "sebastian\/diff",
-            "version": "5.0.0",
-            "version_normalized": "5.0.0.0",
+            "version": "5.0.1",
+            "version_normalized": "5.0.1.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sebastianbergmann\/diff.git",
-                "reference": "70dd1b20bc198da394ad542e988381b44e64e39f"
+                "reference": "aae9a0a43bff37bd5d8d0311426c87bf36153f02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sebastianbergmann\/diff\/zipball\/70dd1b20bc198da394ad542e988381b44e64e39f",
-                "reference": "70dd1b20bc198da394ad542e988381b44e64e39f",
+                "url": "https:\/\/api.github.com\/repos\/sebastianbergmann\/diff\/zipball\/aae9a0a43bff37bd5d8d0311426c87bf36153f02",
+                "reference": "aae9a0a43bff37bd5d8d0311426c87bf36153f02",
                 "shasum": ""
             },
             "require": {
@@ -2212,7 +2212,7 @@
                 "phpunit\/phpunit": "^10.0",
                 "symfony\/process": "^4.2 || ^5"
             },
-            "time": "2023-02-03T07:00:31+00:00",
+            "time": "2023-03-23T05:12:41+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2249,7 +2249,8 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/sebastianbergmann\/diff\/issues",
-                "source": "https:\/\/github.com\/sebastianbergmann\/diff\/tree\/5.0.0"
+                "security": "https:\/\/github.com\/sebastianbergmann\/diff\/security\/policy",
+                "source": "https:\/\/github.com\/sebastianbergmann\/diff\/tree\/5.0.1"
             },
             "funding": [
                 {
