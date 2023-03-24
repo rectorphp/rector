@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Encapsed;
 
 use RectorPrefix202303\Nette\Utils\Strings;
-use const PHP_EOL;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -40,23 +39,11 @@ final class EncapsedStringsToSprintfRector extends AbstractRector
     private $argumentVariables = [];
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Convert enscaped {$string} to more readable sprintf', [new CodeSample(<<<'CODE_SAMPLE'
-final class SomeClass
-{
-    public function run(string $format)
-    {
-        return "Unsupported format {$format}";
-    }
-}
+        return new RuleDefinition('Convert enscaped {$string} to more readable sprintf or concat, if no mask is used', [new CodeSample(<<<'CODE_SAMPLE'
+echo "Unsupported format {$format}";
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-final class SomeClass
-{
-    public function run(string $format)
-    {
-        return sprintf('Unsupported format %s', $format);
-    }
-}
+echo sprintf('Unsupported format %s', $format);
 CODE_SAMPLE
 )]);
     }
@@ -129,37 +116,25 @@ CODE_SAMPLE
     }
     /**
      * @param Expr[] $argumentVariables
-     * @return Concat|FuncCall|null
+     * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr|null
      */
-    private function createSprintfFuncCallOrConcat(string $string, array $argumentVariables) : ?Node
+    private function createSprintfFuncCallOrConcat(string $mask, array $argumentVariables)
     {
-        // special case for variable with PHP_EOL
-        if ($string === '%s%s' && \count($argumentVariables) === 2 && $this->hasEndOfLine($argumentVariables)) {
-            return new Concat($argumentVariables[0], $argumentVariables[1]);
+        $bareMask = \str_repeat('%s', \count($argumentVariables));
+        if ($mask === $bareMask) {
+            if (\count($argumentVariables) === 1) {
+                return $argumentVariables[0];
+            }
+            return $this->nodeFactory->createConcat($argumentVariables);
         }
         // checks for windows or linux line ending. \n is contained in both.
-        if (\strpos($string, "\n") !== \false) {
+        if (\strpos($mask, "\n") !== \false) {
             return null;
         }
-        $arguments = [new Arg(new String_($string))];
+        $arguments = [new Arg(new String_($mask))];
         foreach ($argumentVariables as $argumentVariable) {
             $arguments[] = new Arg($argumentVariable);
         }
         return new FuncCall(new Name('sprintf'), $arguments);
-    }
-    /**
-     * @param Expr[] $argumentVariables
-     */
-    private function hasEndOfLine(array $argumentVariables) : bool
-    {
-        foreach ($argumentVariables as $argumentVariable) {
-            if (!$argumentVariable instanceof ConstFetch) {
-                continue;
-            }
-            if ($this->isName($argumentVariable, 'PHP_EOL')) {
-                return \true;
-            }
-        }
-        return \false;
     }
 }
