@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NodeConnectingVisitor;
-use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Type\ObjectType;
@@ -237,7 +236,7 @@ CODE_SAMPLE;
         if (\is_array($refactoredNode)) {
             $firstNode = \current($refactoredNode);
             $this->mirrorComments($firstNode, $originalNode);
-            $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
+            $this->updateParentNodes($refactoredNode, $parentNode);
             $this->connectNodes($refactoredNode, $node);
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
             $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
@@ -245,7 +244,7 @@ CODE_SAMPLE;
             return $originalNode;
         }
         $refactoredNode = $originalNode instanceof Stmt && $refactoredNode instanceof Expr ? new Expression($refactoredNode) : $refactoredNode;
-        $this->updateAndconnectParentNodes($refactoredNode, $parentNode);
+        $this->updateParentNodes($refactoredNode, $parentNode);
         $this->connectNodes([$refactoredNode], $node);
         $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
         $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
@@ -365,19 +364,16 @@ CODE_SAMPLE;
     /**
      * @param mixed[]|\PhpParser\Node $node
      */
-    private function updateAndconnectParentNodes($node, ?Node $parentNode) : void
+    private function updateParentNodes($node, ?Node $parentNode) : void
     {
         if (!$parentNode instanceof Node) {
             return;
         }
         $nodes = $node instanceof Node ? [$node] : $node;
         foreach ($nodes as $node) {
-            // update parents relations - must run before addVisitor(new ParentConnectingVisitor())
+            // update parents relations
             $node->setAttribute(AttributeKey::PARENT_NODE, $parentNode);
         }
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor(new ParentConnectingVisitor());
-        $nodeTraverser->traverse($nodes);
     }
     /**
      * @param non-empty-array<Node> $nodes
