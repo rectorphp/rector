@@ -5,12 +5,11 @@ namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -48,28 +47,38 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param If_ $node
+     * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Stmt
+    public function refactor(Node $node) : ?StmtsAwareInterface
     {
-        $expr = $this->ifManipulator->matchIfNotNullReturnValue($node);
-        if ($expr instanceof Expr) {
-            $insideIfNode = $node->stmts[0];
-            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-            if (!$nextNode instanceof Return_) {
+        foreach ((array) $node->stmts as $key => $stmt) {
+            if (!$stmt instanceof If_) {
+                continue;
+            }
+            if (!isset($node->stmts[$key + 1])) {
                 return null;
             }
+            $nextNode = $node->stmts[$key + 1];
+            if (!$nextNode instanceof Return_) {
+                continue;
+            }
+            $expr = $this->ifManipulator->matchIfNotNullReturnValue($stmt);
+            if (!$expr instanceof Expr) {
+                continue;
+            }
+            $insideIfNode = $stmt->stmts[0];
             if (!$nextNode->expr instanceof Expr) {
-                return null;
+                continue;
             }
             if (!$this->valueResolver->isNull($nextNode->expr)) {
-                return null;
+                continue;
             }
-            $this->removeNode($nextNode);
-            return $insideIfNode;
+            unset($node->stmts[$key]);
+            $node->stmts[$key + 1] = $insideIfNode;
+            return $node;
         }
         return null;
     }
