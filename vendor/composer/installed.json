@@ -934,17 +934,17 @@
         },
         {
             "name": "phpstan\/phpstan-phpunit",
-            "version": "1.3.10",
-            "version_normalized": "1.3.10.0",
+            "version": "1.3.11",
+            "version_normalized": "1.3.11.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan-phpunit.git",
-                "reference": "4cc5c6cc38e56bce7ea47c4091814e516d172dc3"
+                "reference": "9e1b9de6d260461f6e99b6a8f2dbb0bbb98b579c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/4cc5c6cc38e56bce7ea47c4091814e516d172dc3",
-                "reference": "4cc5c6cc38e56bce7ea47c4091814e516d172dc3",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan-phpunit\/zipball\/9e1b9de6d260461f6e99b6a8f2dbb0bbb98b579c",
+                "reference": "9e1b9de6d260461f6e99b6a8f2dbb0bbb98b579c",
                 "shasum": ""
             },
             "require": {
@@ -960,7 +960,7 @@
                 "phpstan\/phpstan-strict-rules": "^1.0",
                 "phpunit\/phpunit": "^9.5"
             },
-            "time": "2023-03-02T10:25:13+00:00",
+            "time": "2023-03-25T19:42:13+00:00",
             "type": "phpstan-extension",
             "extra": {
                 "phpstan": {
@@ -983,7 +983,7 @@
             "description": "PHPUnit extensions and rules for PHPStan",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/1.3.10"
+                "source": "https:\/\/github.com\/phpstan\/phpstan-phpunit\/tree\/1.3.11"
             },
             "install-path": "..\/phpstan\/phpstan-phpunit"
         },
