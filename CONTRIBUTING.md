@@ -26,7 +26,7 @@ Then you can start working with the code :+1:
 
 <br>
 
-Do you want to **contribute a failing test**? [This tutorial will show you how](https://github.com/rectorphp/rector/blob/main/docs/how_to_add_test_for_rector_rule.md)
+Do you want to **contribute a failing test**? [This tutorial will show you how](https://getrector.com/documentation/reporting-issue-with-rector)
 
 ## Preparing Pull Request
 
