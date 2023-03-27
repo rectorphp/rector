@@ -64,7 +64,7 @@ CODE_SAMPLE
             }
             $nextNode = $node->stmts[$key + 1];
             if (!$nextNode instanceof Return_) {
-                return null;
+                continue;
             }
             $expr = $this->ifManipulator->matchIfValueReturnValue($stmt);
             if (!$expr instanceof Expr) {
