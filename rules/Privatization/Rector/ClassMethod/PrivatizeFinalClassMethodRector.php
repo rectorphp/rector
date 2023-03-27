@@ -6,10 +6,8 @@ namespace Rector\Privatization\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -65,35 +63,35 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof ClassReflection) {
+        if (!$node->isFinal()) {
             return null;
         }
-        $class = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$class instanceof Class_) {
-            return null;
+        $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($node);
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->shouldSkipClassMethod($classMethod)) {
+                continue;
+            }
+            if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($classMethod, $classReflection)) {
+                continue;
+            }
+            if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByTrait($classMethod, $classReflection)) {
+                continue;
+            }
+            $this->visibilityManipulator->makePrivate($classMethod);
+            $hasChanged = \true;
         }
-        if (!$class->isFinal()) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        if ($this->shouldSkipClassMethod($node)) {
-            return null;
-        }
-        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($node, $classReflection)) {
-            return null;
-        }
-        if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByTrait($node, $classReflection)) {
-            return null;
-        }
-        $this->visibilityManipulator->makePrivate($node);
-        return $node;
+        return null;
     }
     private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
     {
