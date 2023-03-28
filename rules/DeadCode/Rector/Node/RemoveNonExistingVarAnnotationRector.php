@@ -6,7 +6,9 @@ namespace Rector\DeadCode\Rector\Node;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignRef;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
@@ -95,6 +97,9 @@ CODE_SAMPLE
             return null;
         }
         $variableName = \ltrim($varTagValueNode->variableName, '$');
+        if ($variableName === '' && $this->isAnnotatableReturn($node)) {
+            return null;
+        }
         if ($this->hasVariableName($node, $variableName)) {
             return null;
         }
@@ -160,5 +165,9 @@ CODE_SAMPLE
             return \false;
         }
         return \strpos($varTagValueNode->description, '}') !== \false;
+    }
+    private function isAnnotatableReturn(Node $node) : bool
+    {
+        return $node instanceof Return_ && $node->expr instanceof CallLike && !$node->expr instanceof New_;
     }
 }
