@@ -54,14 +54,4 @@ final class NodeScopeAndMetadataDecorator
         $nodeTraverser->addVisitor($this->functionLikeParamArgPositionNodeVisitor);
         return $nodeTraverser->traverse($stmts);
     }
-    /**
-     * @param Stmt[] $stmts
-     * @return Stmt[]
-     */
-    public function decorateStmtsFromString(array $stmts) : array
-    {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->nodeConnectingVisitor);
-        return $nodeTraverser->traverse($stmts);
-    }
 }

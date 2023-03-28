@@ -18,6 +18,9 @@ final class Exposer
     {
         $values = \get_mangled_object_vars($obj);
         $props = self::getProperties(\get_class($obj));
+        foreach (\array_diff_key((array) $obj, $values) as $k => $v) {
+            $describer->addPropertyTo($value, $k, $v);
+        }
         foreach (\array_diff_key($values, $props) as $k => $v) {
             $describer->addPropertyTo($value, (string) $k, $v, Value::PropertyDynamic, $describer->getReferenceId($values, $k));
         }
@@ -92,10 +95,6 @@ final class Exposer
         self::exposeObject($obj, $value, $describer);
         $obj->setFlags($flags);
         $describer->addPropertyTo($value, 'storage', $obj->getArrayCopy(), Value::PropertyPrivate, null, \ArrayObject::class);
-    }
-    public static function exposeArrayIterator(\ArrayIterator $obj, Value $value, Describer $describer) : void
-    {
-        self::exposeObject((object) $obj->getArrayCopy(), $value, $describer);
     }
     public static function exposeDOMNode(\DOMNode $obj, Value $value, Describer $describer) : void
     {
