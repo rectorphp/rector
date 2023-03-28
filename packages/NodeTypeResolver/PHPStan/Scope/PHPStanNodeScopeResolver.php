@@ -62,6 +62,11 @@ final class PHPStanNodeScopeResolver
     private const CONTEXT = 'context';
     /**
      * @readonly
+     * @var \PhpParser\NodeTraverser
+     */
+    private $nodeTraverser;
+    /**
+     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
@@ -80,11 +85,6 @@ final class PHPStanNodeScopeResolver
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor
-     */
-    private $removeDeepChainMethodCallNodeVisitor;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
@@ -116,12 +116,13 @@ final class PHPStanNodeScopeResolver
         $this->dependencyResolver = $dependencyResolver;
         $this->nodeScopeResolver = $nodeScopeResolver;
         $this->reflectionProvider = $reflectionProvider;
-        $this->removeDeepChainMethodCallNodeVisitor = $removeDeepChainMethodCallNodeVisitor;
         $this->scopeFactory = $scopeFactory;
         $this->privatesAccessor = $privatesAccessor;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->classAnalyzer = $classAnalyzer;
+        $this->nodeTraverser = new NodeTraverser();
+        $this->nodeTraverser->addVisitor($removeDeepChainMethodCallNodeVisitor);
     }
     /**
      * @param Stmt[] $stmts
@@ -135,7 +136,7 @@ final class PHPStanNodeScopeResolver
          * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
          */
         Assert::allIsInstanceOf($stmts, Stmt::class);
-        $this->removeDeepChainMethodCallNodes($stmts);
+        $this->nodeTraverser->traverse($stmts);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
         $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use(&$nodeCallback, $isScopeRefreshing, $filePath) : void {
@@ -326,15 +327,6 @@ final class PHPStanNodeScopeResolver
         $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
         $this->resolveAndSaveDependentFiles($stmts, $mutatingScope, $filePath);
         return $stmts;
-    }
-    /**
-     * @param Node[] $nodes
-     */
-    private function removeDeepChainMethodCallNodes(array $nodes) : void
-    {
-        $nodeTraverser = new NodeTraverser();
-        $nodeTraverser->addVisitor($this->removeDeepChainMethodCallNodeVisitor);
-        $nodeTraverser->traverse($nodes);
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
