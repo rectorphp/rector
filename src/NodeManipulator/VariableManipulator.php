@@ -17,11 +17,12 @@ use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeTraverser;
 use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\ReadWrite\Guard\VariableToConstantGuard;
 final class VariableManipulator
@@ -159,8 +160,7 @@ final class VariableManipulator
         }
         $variableUsages = $this->collectVariableUsages($classMethod, $assign->var, $assign);
         foreach ($variableUsages as $variableUsage) {
-            $parentNode = $variableUsage->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Arg && !$this->variableToConstantGuard->isReadArg($parentNode)) {
+            if ($variableUsage instanceof Arg) {
                 return \false;
             }
             if (!$this->assignManipulator->isLeftPartOfAssign($variableUsage)) {
@@ -171,20 +171,33 @@ final class VariableManipulator
         return \true;
     }
     /**
-     * @return Variable[]
+     * @return Variable[]|Arg[]
      */
     private function collectVariableUsages(ClassMethod $classMethod, Variable $variable, Assign $assign) : array
     {
-        return $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (Node $node) use($variable, $assign) : bool {
-            if (!$node instanceof Variable) {
-                return \false;
+        /** @var Variable[]|Arg[] $variables */
+        $variables = [];
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use($variable, $assign, &$variables) : ?int {
+            // skip anonymous classes and inner function
+            if ($node instanceof Class_ || $node instanceof Function_) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             // skip initialization
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode === $assign) {
-                return \false;
+            if ($node === $assign) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            return $this->nodeComparator->areNodesEqual($node, $variable);
+            if ($node instanceof Arg && $node->value instanceof Variable && !$this->variableToConstantGuard->isReadArg($node)) {
+                $variables = [$node];
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
+            if (!$node instanceof Variable) {
+                return null;
+            }
+            if ($this->nodeComparator->areNodesEqual($node, $variable)) {
+                $variables[] = $node;
+            }
+            return null;
         });
+        return $variables;
     }
 }
