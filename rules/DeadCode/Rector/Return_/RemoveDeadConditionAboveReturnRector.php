@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -47,39 +47,45 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param Return_ $node
+     * @param StmtsAwareInterface $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node) : ?StmtsAwareInterface
     {
-        $previousNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (!$previousNode instanceof If_) {
-            return null;
-        }
-        if ($previousNode->elseifs !== []) {
-            return null;
-        }
-        if ($previousNode->else instanceof Else_) {
-            return null;
-        }
-        $countStmt = \count($previousNode->stmts);
-        if ($countStmt === 0) {
-            $this->removeNode($previousNode);
+        foreach ((array) $node->stmts as $key => $stmt) {
+            if (!$stmt instanceof Return_) {
+                continue;
+            }
+            $previousNode = $node->stmts[$key - 1] ?? null;
+            if (!$previousNode instanceof If_) {
+                return null;
+            }
+            if ($previousNode->elseifs !== []) {
+                return null;
+            }
+            if ($previousNode->else instanceof Else_) {
+                return null;
+            }
+            $countStmt = \count($previousNode->stmts);
+            if ($countStmt === 0) {
+                unset($node->stmts[$key - 1]);
+                return $node;
+            }
+            if ($countStmt > 1) {
+                return null;
+            }
+            $previousFirstStmt = $previousNode->stmts[0];
+            if (!$previousFirstStmt instanceof Return_) {
+                return null;
+            }
+            if (!$this->nodeComparator->areNodesEqual($previousFirstStmt, $stmt)) {
+                return null;
+            }
+            unset($node->stmts[$key - 1]);
             return $node;
         }
-        if ($countStmt > 1) {
-            return null;
-        }
-        $stmt = $previousNode->stmts[0];
-        if (!$stmt instanceof Return_) {
-            return null;
-        }
-        if (!$this->nodeComparator->areNodesEqual($stmt, $node)) {
-            return null;
-        }
-        $this->removeNode($previousNode);
-        return $node;
+        return null;
     }
 }

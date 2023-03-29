@@ -19,7 +19,7 @@ final class Exposer
         $values = \get_mangled_object_vars($obj);
         $props = self::getProperties(\get_class($obj));
         foreach (\array_diff_key((array) $obj, $values) as $k => $v) {
-            $describer->addPropertyTo($value, $k, $v);
+            $describer->addPropertyTo($value, (string) $k, $v);
         }
         foreach (\array_diff_key($values, $props) as $k => $v) {
             $describer->addPropertyTo($value, (string) $k, $v, Value::PropertyDynamic, $describer->getReferenceId($values, $k));
