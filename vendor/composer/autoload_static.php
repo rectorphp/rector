@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite9386237ab281af93c9ac83bd21ad7ea
+class ComposerStaticInit87c82166733955f64f3d69b8bdd50f1e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1549,6 +1549,7 @@ class ComposerStaticInite9386237ab281af93c9ac83bd21ad7ea
         'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
         'Rector\\CodeQuality\\Rector\\PropertyFetch\\ExplicitMethodCallOverMagicGetSetRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php',
         'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
+        'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToIfRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\ArrayKeyExistsTernaryThenValueToCoalescingRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',
         'Rector\\CodeQuality\\Rector\\Ternary\\SwitchNegatedTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/SwitchNegatedTernaryRector.php',
@@ -3128,9 +3129,9 @@ class ComposerStaticInite9386237ab281af93c9ac83bd21ad7ea
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite9386237ab281af93c9ac83bd21ad7ea::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite9386237ab281af93c9ac83bd21ad7ea::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite9386237ab281af93c9ac83bd21ad7ea::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit87c82166733955f64f3d69b8bdd50f1e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit87c82166733955f64f3d69b8bdd50f1e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit87c82166733955f64f3d69b8bdd50f1e::$classMap;
 
         }, null, ClassLoader::class);
     }

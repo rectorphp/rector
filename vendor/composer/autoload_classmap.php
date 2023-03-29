@@ -1302,6 +1302,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => $baseDir . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
     'Rector\\CodeQuality\\Rector\\PropertyFetch\\ExplicitMethodCallOverMagicGetSetRector' => $baseDir . '/rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php',
     'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
+    'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToIfRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\ArrayKeyExistsTernaryThenValueToCoalescingRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/ArrayKeyExistsTernaryThenValueToCoalescingRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\SimplifyTautologyTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/SimplifyTautologyTernaryRector.php',
     'Rector\\CodeQuality\\Rector\\Ternary\\SwitchNegatedTernaryRector' => $baseDir . '/rules/CodeQuality/Rector/Ternary/SwitchNegatedTernaryRector.php',
