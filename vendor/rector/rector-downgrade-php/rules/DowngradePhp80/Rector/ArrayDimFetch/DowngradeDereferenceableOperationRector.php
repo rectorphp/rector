@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\MagicConst;
@@ -54,7 +55,7 @@ CODE_SAMPLE
     }
     private function shouldSkip(ArrayDimFetch $arrayDimFetch) : bool
     {
-        if ($arrayDimFetch->dim === null) {
+        if (!$arrayDimFetch->dim instanceof Expr) {
             return \true;
         }
         if ($arrayDimFetch->var instanceof Encapsed) {
@@ -71,7 +72,7 @@ CODE_SAMPLE
         if ($wrappedInParentheses === \true) {
             return \true;
         }
-        \assert($arrayDimFetch->dim !== null);
+        \assert($arrayDimFetch->dim instanceof Expr);
         // already checked in shouldSkip()
         $oldTokens = $this->file->getOldTokens();
         $varEndTokenPos = $arrayDimFetch->var->getEndTokenPos();

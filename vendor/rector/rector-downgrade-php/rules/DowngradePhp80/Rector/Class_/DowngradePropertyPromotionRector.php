@@ -5,6 +5,7 @@ namespace Rector\DowngradePhp80\Rector\Class_;
 
 use PhpParser\Comment;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
@@ -186,8 +187,8 @@ CODE_SAMPLE
             $name = $this->getName($param->var);
             $property = new Property($param->flags, [new PropertyProperty($name)], [], $param->type);
             $this->decoratePropertyWithParamDocInfo($param, $property);
-            $hasNew = $param->default === null ? \false : (bool) $this->betterNodeFinder->findFirstInstanceOf($param->default, New_::class);
-            if ($param->default !== null && !$hasNew) {
+            $hasNew = $param->default instanceof Expr && (bool) $this->betterNodeFinder->findFirstInstanceOf($param->default, New_::class);
+            if ($param->default instanceof Expr && !$hasNew) {
                 $property->props[0]->default = $param->default;
             }
             $properties[] = $property;

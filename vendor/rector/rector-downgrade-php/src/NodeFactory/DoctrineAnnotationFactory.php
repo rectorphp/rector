@@ -5,6 +5,7 @@ namespace Rector\NodeFactory;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -43,7 +44,7 @@ final class DoctrineAnnotationFactory
                 $arg->value->setAttribute(AttributeKey::KIND, String_::KIND_DOUBLE_QUOTED);
             }
             $itemValue = $this->nodePrinter->print($arg->value);
-            if ($arg->name !== null) {
+            if ($arg->name instanceof Identifier) {
                 $name = $this->nodePrinter->print($arg->name);
                 $items[$name] = $itemValue;
             } else {

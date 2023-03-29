@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -79,7 +80,7 @@ CODE_SAMPLE
         }
         $associativeValue = $args[1]->value;
         // already converted
-        if ($associativeValue instanceof Ternary && $associativeValue->if === null) {
+        if ($associativeValue instanceof Ternary && !$associativeValue->if instanceof Expr) {
             return null;
         }
         $associativeValueType = $this->nodeTypeResolver->getType($associativeValue);

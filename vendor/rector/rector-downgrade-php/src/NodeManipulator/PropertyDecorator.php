@@ -7,6 +7,7 @@ use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -39,7 +40,7 @@ final class PropertyDecorator
     public function decorateWithDocBlock(Property $property, $typeNode) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        if ($phpDocInfo->getVarTagValueNode() !== null) {
+        if ($phpDocInfo->getVarTagValueNode() instanceof VarTagValueNode) {
             return;
         }
         $newType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($typeNode);

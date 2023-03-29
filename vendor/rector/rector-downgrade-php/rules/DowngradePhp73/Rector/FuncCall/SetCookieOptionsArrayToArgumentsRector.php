@@ -105,7 +105,7 @@ CODE_SAMPLE
         $optionsArray = $thirdArg->value;
         /** @var ArrayItem|null $arrayItem */
         foreach ($optionsArray->items as $arrayItem) {
-            if ($arrayItem === null) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
             $value = $arrayItem->value;

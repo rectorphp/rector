@@ -5,6 +5,7 @@ namespace Rector\DowngradePhp74\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
@@ -144,7 +145,7 @@ CODE_SAMPLE
             return \true;
         }
         // already refactored
-        if ($allowableTagsParam instanceof Ternary && $allowableTagsParam->if !== null) {
+        if ($allowableTagsParam instanceof Ternary && $allowableTagsParam->if instanceof Expr) {
             return \true;
         }
         if ($allowableTagsParam instanceof Concat) {

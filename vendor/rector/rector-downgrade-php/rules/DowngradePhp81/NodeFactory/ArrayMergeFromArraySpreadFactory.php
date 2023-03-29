@@ -102,7 +102,7 @@ final class ArrayMergeFromArraySpreadFactory
         $newItems = [];
         $accumulatedItems = [];
         foreach ($array->items as $position => $item) {
-            if ($item !== null && $item->unpack) {
+            if ($item instanceof ArrayItem && $item->unpack) {
                 // Spread operator found
                 if (!$item->value instanceof Variable) {
                     // If it is a not variable, transform it to a variable

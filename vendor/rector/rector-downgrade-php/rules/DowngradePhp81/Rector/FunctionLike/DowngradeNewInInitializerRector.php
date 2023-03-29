@@ -113,7 +113,7 @@ CODE_SAMPLE
         if ($param->var instanceof Error) {
             return \true;
         }
-        if ($param->default === null) {
+        if (!$param->default instanceof Expr) {
             return \true;
         }
         $hasNew = (bool) $this->betterNodeFinder->findFirstInstanceOf($param->default, New_::class);

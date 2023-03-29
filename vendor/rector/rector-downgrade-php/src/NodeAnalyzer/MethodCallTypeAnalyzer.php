@@ -51,6 +51,6 @@ final class MethodCallTypeAnalyzer
         if ($this->areNamesEqual($expectedClass, $type->getClassName())) {
             return \true;
         }
-        return $type->getAncestorWithClassName($expectedClass) !== null;
+        return $type->getAncestorWithClassName($expectedClass) instanceof TypeWithClassName;
     }
 }

@@ -265,8 +265,8 @@ CODE_SAMPLE
             $nestedArrayIndexDim = BuilderHelpers::normalizeValue($nestedArrayIndex);
             $nestedExprVariable = new ArrayDimFetch($nestedExprVariable, $nestedArrayIndexDim);
         }
-        $dim = BuilderHelpers::normalizeValue($arrayIndex);
-        $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $dim);
+        $expr = BuilderHelpers::normalizeValue($arrayIndex);
+        $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $expr);
         return new AssignRef($assignVariable, $arrayDimFetch);
     }
     /**
@@ -277,7 +277,7 @@ CODE_SAMPLE
     {
         $itemsByRef = [];
         foreach ($arrayItems as $arrayItem) {
-            if ($arrayItem === null) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
             if (!$this->isItemByRef($arrayItem, $condition)) {
