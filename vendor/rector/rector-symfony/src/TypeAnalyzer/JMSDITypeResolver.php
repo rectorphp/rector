@@ -92,7 +92,7 @@ final class JMSDITypeResolver
         // 2. service name
         if ($serviceMap->hasService($serviceName)) {
             $serviceType = $serviceMap->getServiceType($serviceName);
-            if ($serviceType !== null) {
+            if ($serviceType instanceof Type) {
                 return $serviceType;
             }
         }

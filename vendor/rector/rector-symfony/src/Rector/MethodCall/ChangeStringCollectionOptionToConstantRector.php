@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -119,10 +121,10 @@ CODE_SAMPLE
     private function processChangeToConstant(Array_ $optionsArray, MethodCall $methodCall) : ?Node
     {
         foreach ($optionsArray->items as $optionsArrayItem) {
-            if ($optionsArrayItem === null) {
+            if (!$optionsArrayItem instanceof ArrayItem) {
                 continue;
             }
-            if ($optionsArrayItem->key === null) {
+            if (!$optionsArrayItem->key instanceof Expr) {
                 continue;
             }
             if (!$this->valueResolver->isValues($optionsArrayItem->key, ['type', 'entry_type'])) {

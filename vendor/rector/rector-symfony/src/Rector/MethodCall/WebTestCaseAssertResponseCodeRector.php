@@ -5,10 +5,10 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer;
@@ -32,10 +32,16 @@ final class WebTestCaseAssertResponseCodeRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
+    public function __construct(SymfonyTestCaseAnalyzer $symfonyTestCaseAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ExprAnalyzer $exprAnalyzer)
     {
         $this->symfonyTestCaseAnalyzer = $symfonyTestCaseAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->exprAnalyzer = $exprAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -136,7 +142,7 @@ CODE_SAMPLE
         $newArgs = [$methodCall->args[0]];
         // When we had a custom message argument we want to add it to the new assert.
         if (isset($args[2])) {
-            if ($args[2]->value instanceof FuncCall) {
+            if ($this->exprAnalyzer->isDynamicExpr($args[2]->value)) {
                 $newArgs[] = $args[2]->value;
             } else {
                 $newArgs[] = $this->valueResolver->getValue($args[2]->value, \true);
@@ -165,7 +171,7 @@ CODE_SAMPLE
         if (isset($args[2])) {
             // When we had a $message argument we want to add it to the new assert together with $expectedCode null.
             $newArgs[] = null;
-            if ($args[2]->value instanceof FuncCall) {
+            if ($this->exprAnalyzer->isDynamicExpr($args[2]->value)) {
                 $newArgs[] = $args[2]->value;
             } else {
                 $newArgs[] = $this->valueResolver->getValue($args[2]->value, \true);

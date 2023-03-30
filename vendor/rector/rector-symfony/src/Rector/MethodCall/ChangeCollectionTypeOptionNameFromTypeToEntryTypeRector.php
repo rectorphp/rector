@@ -4,7 +4,9 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -111,10 +113,10 @@ CODE_SAMPLE
     private function refactorOptionsArray(Array_ $optionsArray) : void
     {
         foreach ($optionsArray->items as $arrayItem) {
-            if ($arrayItem === null) {
+            if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            if ($arrayItem->key === null) {
+            if (!$arrayItem->key instanceof Expr) {
                 continue;
             }
             foreach (self::OLD_TO_NEW_OPTION_NAME as $oldName => $newName) {

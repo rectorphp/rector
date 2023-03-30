@@ -69,7 +69,7 @@ final class ThisRenderFactory
         $templateNameString = $this->resolveTemplateName($classMethod, $templateDoctrineAnnotationTagValueNode);
         $arguments = [$templateNameString];
         $parametersExpr = $this->resolveParametersExpr($return, $templateDoctrineAnnotationTagValueNode);
-        if ($parametersExpr !== null) {
+        if ($parametersExpr instanceof Expr) {
             $arguments[] = new Arg($parametersExpr);
         }
         return $this->nodeFactory->createArgs($arguments);
@@ -92,7 +92,7 @@ final class ThisRenderFactory
         if ($vars !== []) {
             return $this->createArrayFromArrayItemNodes($vars);
         }
-        if ($return === null) {
+        if (!$return instanceof Return_) {
             return null;
         }
         if ($return->expr instanceof Array_ && $return->expr->items !== []) {

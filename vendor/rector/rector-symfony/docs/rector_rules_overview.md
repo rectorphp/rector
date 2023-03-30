@@ -1,4 +1,4 @@
-# 80 Rules Overview
+# 81 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -488,6 +488,25 @@ Migrates from deprecated `Definition/Alias->setPrivate()` to `Definition/Alias->
 -        $alias->setPrivate(false);
 +        $alias->setPublic(true);
      }
+ }
+```
+
+<br>
+
+## ErrorNamesPropertyToConstantRector
+
+Turns old Constraint::$errorNames properties to use Constraint::ERROR_NAMES instead
+
+- class: [`Rector\Symfony\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector`](../src/Rector/StaticPropertyFetch/ErrorNamesPropertyToConstantRector.php)
+
+```diff
+ use Symfony\Component\Validator\Constraints\NotBlank;
+
+ class SomeClass
+ {
+-    NotBlank::$errorNames
++    NotBlank::ERROR_NAMES
+
  }
 ```
 

@@ -115,15 +115,15 @@ CODE_SAMPLE
         $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultName));
         if ($defaultDescription !== null) {
             $attributeGroup->attrs[0]->args[] = new Arg(new String_($defaultDescription));
-        } elseif ($array !== null || $constFetch !== null) {
+        } elseif ($array instanceof Array_ || $constFetch instanceof ConstFetch) {
             $attributeGroup->attrs[0]->args[] = new Arg($this->nodeFactory->createNull());
         }
-        if ($array !== null) {
+        if ($array instanceof Array_) {
             $attributeGroup->attrs[0]->args[] = new Arg($array);
-        } elseif ($constFetch !== null) {
+        } elseif ($constFetch instanceof ConstFetch) {
             $attributeGroup->attrs[0]->args[] = new Arg(new Array_());
         }
-        if ($constFetch !== null) {
+        if ($constFetch instanceof ConstFetch) {
             $attributeGroup->attrs[0]->args[] = new Arg($constFetch);
         }
         return $attributeGroup;

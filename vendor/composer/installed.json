@@ -869,17 +869,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.10.8",
-            "version_normalized": "1.10.8.0",
+            "version": "1.10.9",
+            "version_normalized": "1.10.9.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9"
+                "reference": "9b13dafe3d66693d20fe5729c3dde1d31bb64703"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/0166aef76e066f0dd2adc2799bdadfa1635711e9",
-                "reference": "0166aef76e066f0dd2adc2799bdadfa1635711e9",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/9b13dafe3d66693d20fe5729c3dde1d31bb64703",
+                "reference": "9b13dafe3d66693d20fe5729c3dde1d31bb64703",
                 "shasum": ""
             },
             "require": {
@@ -888,7 +888,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2023-03-24T10:28:16+00:00",
+            "time": "2023-03-30T08:58:01+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -2128,12 +2128,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "e43a11e910f64f30e0b8fdb0c6b621f9796ed41e"
+                "reference": "141e7e2a1703b7b8f80a6c2f8395f8df58d3a753"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/e43a11e910f64f30e0b8fdb0c6b621f9796ed41e",
-                "reference": "e43a11e910f64f30e0b8fdb0c6b621f9796ed41e",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/141e7e2a1703b7b8f80a6c2f8395f8df58d3a753",
+                "reference": "141e7e2a1703b7b8f80a6c2f8395f8df58d3a753",
                 "shasum": ""
             },
             "require": {
@@ -2152,6 +2152,7 @@
                 "symfony\/routing": "^6.1",
                 "symfony\/security-core": "^6.2",
                 "symfony\/security-http": "^6.1",
+                "symfony\/validator": "^6.2",
                 "symplify\/easy-ci": "^11.1",
                 "symplify\/easy-coding-standard": "^11.2",
                 "symplify\/phpstan-extensions": "^11.1",
@@ -2162,7 +2163,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-03-22T14:09:14+00:00",
+            "time": "2023-03-30T08:57:59+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

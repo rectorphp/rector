@@ -183,7 +183,7 @@ CODE_SAMPLE
     }
     private function setReturnTo0InsteadOfNull(Return_ $return) : void
     {
-        if ($return->expr === null) {
+        if (!$return->expr instanceof Expr) {
             $return->expr = new LNumber(0);
             return;
         }

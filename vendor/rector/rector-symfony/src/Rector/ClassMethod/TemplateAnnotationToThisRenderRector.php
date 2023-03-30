@@ -11,6 +11,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -123,7 +124,7 @@ CODE_SAMPLE
     }
     private function addAbstractControllerParentClassIfMissing(Class_ $class) : ?Class_
     {
-        if ($class->extends !== null) {
+        if ($class->extends instanceof Name) {
             return null;
         }
         if (!$this->hasClassMethodWithTemplateAnnotation($class)) {
@@ -186,7 +187,7 @@ CODE_SAMPLE
         if (!$node instanceof Return_) {
             return \false;
         }
-        if ($node->expr === null) {
+        if (!$node->expr instanceof Expr) {
             return \false;
         }
         $responseObjectType = new ObjectType(self::RESPONSE_CLASS);
@@ -196,7 +197,7 @@ CODE_SAMPLE
     private function refactorReturn(Return_ $return, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse, ClassMethod $classMethod) : void
     {
         // nothing we can do
-        if ($return->expr === null) {
+        if (!$return->expr instanceof Expr) {
             return;
         }
         // create "$this->render('template.file.twig.html', ['key' => 'value']);" method call

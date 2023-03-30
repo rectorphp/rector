@@ -5,6 +5,7 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use Rector\Core\Rector\AbstractRector;
@@ -68,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
         foreach ($optionsArray->items as $arrayItemNode) {
-            if ($arrayItemNode === null) {
+            if (!$arrayItemNode instanceof ArrayItem) {
                 continue;
             }
             if (!$arrayItemNode->key instanceof String_) {
