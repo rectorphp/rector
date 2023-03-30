@@ -162,4 +162,8 @@ final class AttributeKey
      * @var string
      */
     public const NEWLINED_ARRAY_PRINT = 'newlined_array_print';
+    /**
+     * @var string
+     */
+    public const ASSIGNED_TO = 'assigned_to';
 }
