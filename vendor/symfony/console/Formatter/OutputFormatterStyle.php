@@ -89,7 +89,7 @@ class OutputFormatterStyle implements OutputFormatterStyleInterface
     }
     public function apply(string $text) : string
     {
-        $this->handlesHrefGracefully = $this->handlesHrefGracefully ?? 'JetBrains-JediTerm' !== \getenv('TERMINAL_EMULATOR') && (!\getenv('KONSOLE_VERSION') || (int) \getenv('KONSOLE_VERSION') > 201100);
+        $this->handlesHrefGracefully = $this->handlesHrefGracefully ?? 'JetBrains-JediTerm' !== \getenv('TERMINAL_EMULATOR') && (!\getenv('KONSOLE_VERSION') || (int) \getenv('KONSOLE_VERSION') > 201100) && !isset($_SERVER['IDEA_INITIAL_DIRECTORY']);
         if (null !== $this->href && $this->handlesHrefGracefully) {
             $text = "\x1b]8;;{$this->href}\x1b\\{$text}\x1b]8;;\x1b\\";
         }
