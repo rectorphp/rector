@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202303\Doctrine\Inflector\Rules;
+namespace RectorPrefix202304\Doctrine\Inflector\Rules;
 
 class Ruleset
 {

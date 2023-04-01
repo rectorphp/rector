@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202303\Symfony\Component\String\Inflector;
+namespace RectorPrefix202304\Symfony\Component\String\Inflector;
 
 /**
  * French inflector.
@@ -50,8 +50,8 @@ final class FrenchInflector implements InflectorInterface
         // Invariable words
         ['/^(cinquante|soixante|mille)$/i', '\\1'],
         // French titles
-        ['/^(mon|ma)(sieur|dame|demoiselle|seigneur)$/', 'RectorPrefix202303\\mes\\2s'],
-        ['/^(Mon|Ma)(sieur|dame|demoiselle|seigneur)$/', 'RectorPrefix202303\\Mes\\2s'],
+        ['/^(mon|ma)(sieur|dame|demoiselle|seigneur)$/', 'RectorPrefix202304\\mes\\2s'],
+        ['/^(Mon|Ma)(sieur|dame|demoiselle|seigneur)$/', 'RectorPrefix202304\\Mes\\2s'],
     ];
     /**
      * A list of all rules for singularize.
@@ -77,10 +77,10 @@ final class FrenchInflector implements InflectorInterface
         // Les mots finissant par "ou" prennent un "s" sauf bijou, caillou, chou, genou, hibou, joujou, pou
         ['/(bij|caill|ch|gen|hib|jouj|p)oux$/i', '\\1ou'],
         // French titles
-        ['/^mes(dame|demoiselle)s$/', 'RectorPrefix202303\\ma\\1'],
-        ['/^Mes(dame|demoiselle)s$/', 'RectorPrefix202303\\Ma\\1'],
-        ['/^mes(sieur|seigneur)s$/', 'RectorPrefix202303\\mon\\1'],
-        ['/^Mes(sieur|seigneur)s$/', 'RectorPrefix202303\\Mon\\1'],
+        ['/^mes(dame|demoiselle)s$/', 'RectorPrefix202304\\ma\\1'],
+        ['/^Mes(dame|demoiselle)s$/', 'RectorPrefix202304\\Ma\\1'],
+        ['/^mes(sieur|seigneur)s$/', 'RectorPrefix202304\\mon\\1'],
+        ['/^Mes(sieur|seigneur)s$/', 'RectorPrefix202304\\Mon\\1'],
         // Default rule
         ['/s$/i', ''],
     ];

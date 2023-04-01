@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202303\Tracy\Dumper;
+namespace RectorPrefix202304\Tracy\Dumper;
 
-use RectorPrefix202303\Tracy;
-use RectorPrefix202303\Tracy\Helpers;
+use RectorPrefix202304\Tracy;
+use RectorPrefix202304\Tracy\Helpers;
 /**
  * Converts PHP values to internal representation.
  * @internal

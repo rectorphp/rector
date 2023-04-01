@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202304\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202303\Psr\Container\ContainerInterface;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202303\Symfony\Contracts\Service\ServiceProviderInterface;
+use RectorPrefix202304\Psr\Container\ContainerInterface;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202304\Symfony\Contracts\Service\ServiceProviderInterface;
 /**
  * Compiler pass to inject their service locator to service subscribers.
  *

@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Testing\Fixture;
 
-use RectorPrefix202303\Nette\Utils\FileSystem;
-use RectorPrefix202303\Nette\Utils\Strings;
-use RectorPrefix202303\Webmozart\Assert\Assert;
+use RectorPrefix202304\Nette\Utils\FileSystem;
+use RectorPrefix202304\Nette\Utils\Strings;
+use RectorPrefix202304\Webmozart\Assert\Assert;
 /**
  * @api
  */

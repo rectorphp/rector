@@ -7,7 +7,7 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Configuration;
-use RectorPrefix202303\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202304\Symfony\Component\Console\Input\InputInterface;
 final class ConfigurationFactory
 {
     /**

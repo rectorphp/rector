@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Exception;
+namespace RectorPrefix202304\Symfony\Component\DependencyInjection\Exception;
 
-use RectorPrefix202303\Psr\Container\NotFoundExceptionInterface;
+use RectorPrefix202304\Psr\Container\NotFoundExceptionInterface;
 /**
  * This exception is thrown when a non-existent service is requested.
  *

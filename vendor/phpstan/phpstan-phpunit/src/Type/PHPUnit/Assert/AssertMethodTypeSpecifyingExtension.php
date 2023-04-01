@@ -21,7 +21,7 @@ class AssertMethodTypeSpecifyingExtension implements MethodTypeSpecifyingExtensi
     }
     public function getClass() : string
     {
-        return 'RectorPrefix202303\\PHPUnit\\Framework\\Assert';
+        return 'RectorPrefix202304\\PHPUnit\\Framework\\Assert';
     }
     public function isMethodSupported(MethodReflection $methodReflection, MethodCall $node, TypeSpecifierContext $context) : bool
     {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202303;
+namespace RectorPrefix202304;
 
 /*
  * This file is part of Evenement.
@@ -13,11 +13,11 @@ namespace RectorPrefix202303;
  */
 \ini_set('memory_limit', '512M');
 const ITERATIONS = 100000;
-use RectorPrefix202303\Evenement\EventEmitter;
+use RectorPrefix202304\Evenement\EventEmitter;
 require __DIR__ . '/../vendor/autoload.php';
 $emitter = new EventEmitter();
 $listeners = [];
-for ($i = 0; $i < \RectorPrefix202303\ITERATIONS; $i++) {
+for ($i = 0; $i < \RectorPrefix202304\ITERATIONS; $i++) {
     $listeners[] = function ($a, $b, $c) {
     };
 }
@@ -26,10 +26,10 @@ foreach ($listeners as $listener) {
     $emitter->once('event', $listener);
 }
 $time = \microtime(\true) - $start;
-echo 'Adding ', \number_format(\RectorPrefix202303\ITERATIONS), ' once listeners took: ', \number_format($time, 2), 's', \PHP_EOL;
+echo 'Adding ', \number_format(\RectorPrefix202304\ITERATIONS), ' once listeners took: ', \number_format($time, 2), 's', \PHP_EOL;
 $start = \microtime(\true);
 foreach ($listeners as $listener) {
     $emitter->removeListener('event', $listener);
 }
 $time = \microtime(\true) - $start;
-echo 'Removing ', \number_format(\RectorPrefix202303\ITERATIONS), ' once listeners took: ', \number_format($time, 2), 's', \PHP_EOL;
+echo 'Removing ', \number_format(\RectorPrefix202304\ITERATIONS), ' once listeners took: ', \number_format($time, 2), 's', \PHP_EOL;

@@ -16,7 +16,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use RectorPrefix202303\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202304\Symfony\Component\Filesystem\Filesystem;
 /**
  * Factory so Symfony app can use services from PHPStan container
  *

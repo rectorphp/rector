@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202303\Tracy\Dumper;
+namespace RectorPrefix202304\Tracy\Dumper;
 
-use RectorPrefix202303\Tracy\Helpers;
+use RectorPrefix202304\Tracy\Helpers;
 /**
  * Visualisation of internal representation.
  * @internal

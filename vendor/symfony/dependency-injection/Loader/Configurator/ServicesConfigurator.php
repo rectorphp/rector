@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Loader\Configurator;
+namespace RectorPrefix202304\Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use RectorPrefix202303\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

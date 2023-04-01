@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202303\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix202304\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix202303\Symfony\Component\Config\Util\XmlUtils;
-use RectorPrefix202303\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202304\Symfony\Component\Config\Util\XmlUtils;
+use RectorPrefix202304\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * IniFileLoader loads parameters from INI files.
  *

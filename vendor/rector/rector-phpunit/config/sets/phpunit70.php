@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202303;
+namespace RectorPrefix202304;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector;
