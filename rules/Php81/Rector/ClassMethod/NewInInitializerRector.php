@@ -146,6 +146,7 @@ CODE_SAMPLE
             return;
         }
         $param->flags = $property->flags;
+        $param->attrGroups = \array_merge($property->attrGroups, $param->attrGroups);
         $this->removeNode($property);
     }
     private function isLegalClass(ClassMethod $classMethod) : bool
