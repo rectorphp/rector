@@ -111,6 +111,12 @@ CODE_SAMPLE
             if ($this->shouldSkipArrayForInvalidTypeOrKeys($value)) {
                 return null;
             }
+            if ($value instanceof Array_) {
+                $item0Unpacked = $array->items;
+                $item1Unpacked = $value->items;
+                $array->items = \array_merge($item0Unpacked, $item1Unpacked);
+                continue;
+            }
             $value = $this->resolveValue($value);
             $array->items[] = $this->createUnpackedArrayItem($value);
         }
