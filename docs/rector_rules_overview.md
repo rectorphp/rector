@@ -1,4 +1,4 @@
-# 413 Rules Overview
+# 414 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (78)
+- [CodeQuality](#codequality) (79)
 
 - [CodingStyle](#codingstyle) (39)
 
@@ -1676,6 +1676,42 @@ Switch negated ternary condition rector
 +        return $upper
 +            ? strtoupper($name)
 +            : $name;
+     }
+ }
+```
+
+<br>
+
+### SwitchTrueToIfRector
+
+Change switch (true) to if statements
+
+- class: [`Rector\CodeQuality\Rector\Switch_\SwitchTrueToIfRector`](../rules/CodeQuality/Rector/Switch_/SwitchTrueToIfRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        switch (true) {
+-            case $value === 0:
+-                return 'no';
+-            case $value === 1:
+-                return 'yes';
+-            case $value === 2:
+-                return 'maybe';
+-        };
++        if ($value === 0) {
++            return 'no';
++        }
++
++        if ($value === 1) {
++            return 'yes';
++        }
++
++        if ($value === 2) {
++            return 'maybe';
++        }
      }
  }
 ```
