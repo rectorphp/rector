@@ -82,8 +82,8 @@ final class AssignManipulator
     public function isLeftPartOfAssign(Node $node) : bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($parentNode->var, $node)) {
-            return \true;
+        if ($parentNode instanceof Assign || $parentNode instanceof AssignOp) {
+            return $this->nodeComparator->areNodesEqual($parentNode->var, $node);
         }
         if ($parentNode instanceof Node && $this->multiInstanceofChecker->isInstanceOf($parentNode, self::MODIFYING_NODE_TYPES)) {
             return \true;
