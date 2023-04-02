@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Switch_;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\If_;
