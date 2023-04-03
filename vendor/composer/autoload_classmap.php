@@ -1702,6 +1702,7 @@ return array(
     'Rector\\Doctrine\\Rector\\Class_\\ManagerRegistryGetManagerToEntityManagerRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/ManagerRegistryGetManagerToEntityManagerRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\MoveRepositoryFromParentToConstructorRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php',
+    'Rector\\Doctrine\\Rector\\Class_\\RemoveEmptyTableAttributeRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/RemoveEmptyTableAttributeRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\RemoveRedundantDefaultClassAnnotationValuesRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php',
     'Rector\\Doctrine\\Rector\\Class_\\RemoveRepositoryFromEntityAnnotationRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Class_/RemoveRepositoryFromEntityAnnotationRector.php',
     'Rector\\Doctrine\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',

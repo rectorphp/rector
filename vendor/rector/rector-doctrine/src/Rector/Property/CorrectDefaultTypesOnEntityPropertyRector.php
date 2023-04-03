@@ -94,7 +94,7 @@ CODE_SAMPLE
     }
     private function refactorToBoolType(PropertyProperty $propertyProperty, Property $property) : ?Property
     {
-        if ($propertyProperty->default === null) {
+        if (!$propertyProperty->default instanceof Expr) {
             return null;
         }
         $defaultExpr = $propertyProperty->default;
@@ -110,7 +110,7 @@ CODE_SAMPLE
     }
     private function refactorToIntType(PropertyProperty $propertyProperty, Property $property) : ?Property
     {
-        if ($propertyProperty->default === null) {
+        if (!$propertyProperty->default instanceof Expr) {
             return null;
         }
         $defaultExpr = $propertyProperty->default;

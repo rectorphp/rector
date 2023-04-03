@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
@@ -94,7 +95,7 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
             return null;
         }
-        if ($node->extends === null) {
+        if (!$node->extends instanceof Name) {
             return null;
         }
         // remove parent class

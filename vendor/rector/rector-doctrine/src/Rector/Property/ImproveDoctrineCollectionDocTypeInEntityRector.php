@@ -205,7 +205,7 @@ CODE_SAMPLE
     private function refactorPropertyPhpDocInfo(Property $property, PhpDocInfo $phpDocInfo) : ?Property
     {
         $varTagValueNode = $this->collectionVarTagValueNodeResolver->resolve($property);
-        if ($varTagValueNode !== null) {
+        if ($varTagValueNode instanceof VarTagValueNode) {
             $collectionObjectType = $this->collectionTypeResolver->resolveFromTypeNode($varTagValueNode->type, $property);
             if (!$collectionObjectType instanceof FullyQualifiedObjectType) {
                 return null;

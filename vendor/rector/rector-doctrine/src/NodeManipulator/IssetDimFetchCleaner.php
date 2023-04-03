@@ -116,7 +116,7 @@ final class IssetDimFetchCleaner
         if (!$expr instanceof ArrayDimFetch) {
             return null;
         }
-        if ($expr->dim === null) {
+        if (!$expr->dim instanceof Expr) {
             return null;
         }
         if (!$this->isArrayDimFetchOnVariable($expr, $variable)) {

@@ -7,6 +7,7 @@ use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\Class_\InitializeDefaultEntityCollectionRector;
 use Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector;
 use Rector\Doctrine\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
+use Rector\Doctrine\Rector\Class_\RemoveEmptyTableAttributeRector;
 use Rector\Doctrine\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector;
 use Rector\Doctrine\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector;
 use Rector\Doctrine\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector;
@@ -31,6 +32,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(ImproveDoctrineCollectionDocTypeInEntityRector::class);
     $rectorConfig->rule(RemoveRedundantDefaultPropertyAnnotationValuesRector::class);
     $rectorConfig->rule(RemoveRedundantDefaultClassAnnotationValuesRector::class);
+    $rectorConfig->rule(RemoveEmptyTableAttributeRector::class);
     // typed properties in entities from annotations/attributes
     $rectorConfig->rule(TypedPropertyFromColumnTypeRector::class);
     $rectorConfig->rule(TypedPropertyFromToOneRelationTypeRector::class);

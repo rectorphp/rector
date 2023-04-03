@@ -95,7 +95,7 @@ CODE_SAMPLE
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
         if ($phpDocInfo instanceof PhpDocInfo) {
             $property = $this->changeTypeInAnnotationTypes($node, $phpDocInfo);
-            $annotationDetected = $property !== null || $phpDocInfo->hasChanged();
+            $annotationDetected = $property instanceof Property || $phpDocInfo->hasChanged();
             if ($annotationDetected) {
                 return $property;
             }

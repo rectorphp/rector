@@ -32,18 +32,14 @@ final class DoctrineCollectionTypeAnalyzer
         if (!$hasDoctrineCollectionType) {
             return \false;
         }
-        return $arrayType !== null;
+        return $arrayType instanceof ArrayType;
     }
     private function isCollectionObjectType(Type $type) : bool
     {
         if (!$type instanceof TypeWithClassName) {
             return \false;
         }
-        if ($type instanceof ShortenedObjectType) {
-            $className = $type->getFullyQualifiedName();
-        } else {
-            $className = $type->getClassName();
-        }
+        $className = $type instanceof ShortenedObjectType ? $type->getFullyQualifiedName() : $type->getClassName();
         return $className === 'Doctrine\\Common\\Collections\\Collection';
     }
 }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit90b0a339f5e68da0f08b9e7390f4c7cd
+class ComposerStaticInit4c05484305864b0e5733b0ca9f0cc86e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1949,6 +1949,7 @@ class ComposerStaticInit90b0a339f5e68da0f08b9e7390f4c7cd
         'Rector\\Doctrine\\Rector\\Class_\\ManagerRegistryGetManagerToEntityManagerRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/ManagerRegistryGetManagerToEntityManagerRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\MoveRepositoryFromParentToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php',
+        'Rector\\Doctrine\\Rector\\Class_\\RemoveEmptyTableAttributeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/RemoveEmptyTableAttributeRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\RemoveRedundantDefaultClassAnnotationValuesRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\RemoveRepositoryFromEntityAnnotationRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/RemoveRepositoryFromEntityAnnotationRector.php',
         'Rector\\Doctrine\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
@@ -3130,9 +3131,9 @@ class ComposerStaticInit90b0a339f5e68da0f08b9e7390f4c7cd
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit90b0a339f5e68da0f08b9e7390f4c7cd::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit90b0a339f5e68da0f08b9e7390f4c7cd::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit90b0a339f5e68da0f08b9e7390f4c7cd::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4c05484305864b0e5733b0ca9f0cc86e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4c05484305864b0e5733b0ca9f0cc86e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4c05484305864b0e5733b0ca9f0cc86e::$classMap;
 
         }, null, ClassLoader::class);
     }
