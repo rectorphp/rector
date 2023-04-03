@@ -89,7 +89,7 @@ CODE_SAMPLE
             return null;
         }
         $this->removeNode($node);
-        return $node;
+        return null;
     }
     private function shouldSkipNonFinalNonPrivateClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {

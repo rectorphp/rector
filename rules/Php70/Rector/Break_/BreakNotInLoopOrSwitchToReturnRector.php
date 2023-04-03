@@ -85,6 +85,6 @@ CODE_SAMPLE
             return new Return_();
         }
         $this->removeNode($node);
-        return $node;
+        return null;
     }
 }

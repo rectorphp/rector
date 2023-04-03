@@ -125,7 +125,7 @@ CODE_SAMPLE
             return $this->cleanCastedExpr($node->expr);
         }
         $this->removeNode($node);
-        return $node;
+        return null;
     }
     private function cleanCastedExpr(Expr $expr) : Expr
     {

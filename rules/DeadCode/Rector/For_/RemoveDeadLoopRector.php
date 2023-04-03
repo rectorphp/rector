@@ -54,6 +54,6 @@ CODE_SAMPLE
             return null;
         }
         $this->removeNode($node);
-        return $node;
+        return null;
     }
 }

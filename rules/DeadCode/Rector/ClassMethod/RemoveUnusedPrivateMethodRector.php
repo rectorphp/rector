@@ -84,7 +84,7 @@ CODE_SAMPLE
             return null;
         }
         $this->removeNode($node);
-        return $node;
+        return null;
     }
     private function shouldSkip(ClassMethod $classMethod) : bool
     {

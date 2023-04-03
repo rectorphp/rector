@@ -101,6 +101,7 @@ CODE_SAMPLE
         $newName = self::PREVIOUS_TO_NEW_FUNCTIONS[$this->getName($node)];
         $keyFuncCall->name = new Name($newName);
         $this->removeNode($node);
+        // change next node before remove, so it needs to return the Node
         return $node;
     }
     public function provideMinPhpVersion() : int
