@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Naming\ParamRenamer;
 
-use PhpParser\Node\Param;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PropertyDocBlockManipulator;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\VariableRenamer;

@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PHPStan\Analyser\Scope;

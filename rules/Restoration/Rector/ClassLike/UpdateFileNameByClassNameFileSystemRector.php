@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\ValueObject\Application\File;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

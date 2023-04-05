@@ -5,7 +5,6 @@ namespace Rector\DeadCode\PhpDoc\TagRemover;
 
 use PhpParser\Node\FunctionLike;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\DeadCode\PhpDoc\DeadReturnTagValueNodeAnalyzer;
 final class ReturnTagRemover

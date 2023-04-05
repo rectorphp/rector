@@ -6,7 +6,6 @@ namespace Rector\CodeQuality\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\CodeQuality\NodeAnalyzer\ConstructorPropertyDefaultExprResolver;
 use Rector\Core\Rector\AbstractRector;
