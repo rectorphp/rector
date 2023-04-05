@@ -59,6 +59,7 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\Type\\GenericTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/GenericTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\IntersectionTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/IntersectionTypeNode.php',
+    'PHPStan\\PhpDocParser\\Ast\\Type\\InvalidTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/InvalidTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\NullableTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/NullableTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\OffsetAccessTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/OffsetAccessTypeNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Type\\ThisTypeNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Type/ThisTypeNode.php',

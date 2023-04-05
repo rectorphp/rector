@@ -117,7 +117,7 @@ final class AssertCallAnalyzer
             if ($currentClassMethod === $classMethod) {
                 return \false;
             }
-            if ($classMethod !== null) {
+            if ($classMethod instanceof ClassMethod) {
                 return $this->containsAssertCall($classMethod);
             }
             return \false;

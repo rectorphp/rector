@@ -5,6 +5,7 @@ namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Node;
+use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -411,6 +412,19 @@ final class PhpDocInfo
         $resolvedClasses = [];
         foreach ($identifierTypeNodes as $identifierTypeNode) {
             $resolvedClasses[] = \ltrim($identifierTypeNode->name, '@');
+        }
+        return $resolvedClasses;
+    }
+    /**
+     * @return string[]
+     */
+    public function getGenericTagClassNames() : array
+    {
+        /** @var GenericTagValueNode[] $genericTagValueNodes */
+        $genericTagValueNodes = $this->phpDocNodeByTypeFinder->findByType($this->phpDocNode, GenericTagValueNode::class);
+        $resolvedClasses = [];
+        foreach ($genericTagValueNodes as $genericTagValueNode) {
+            $resolvedClasses[] = $genericTagValueNode->value;
         }
         return $resolvedClasses;
     }

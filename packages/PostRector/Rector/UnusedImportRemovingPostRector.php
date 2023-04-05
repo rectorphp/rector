@@ -143,6 +143,8 @@ CODE_SAMPLE
             $names = \array_merge($names, $phpDocInfo->getAnnotationClassNames());
             $constFetchNodeNames = $phpDocInfo->getConstFetchNodeClassNames();
             $names = \array_merge($names, $constFetchNodeNames);
+            $genericTagClassNames = $phpDocInfo->getGenericTagClassNames();
+            $names = \array_merge($names, $genericTagClassNames);
         });
         return $names;
     }

@@ -108,7 +108,9 @@ final class DataProviderClassMethodFinder
             if ($parentClassReflection->getName() === 'PHPUnit\\Framework\\TestCase') {
                 break;
             }
-            $parentClasses[] = $this->astResolver->resolveClassFromClassReflection($parentClassReflection);
+            /** @var Class_ $parentClass */
+            $parentClass = $this->astResolver->resolveClassFromClassReflection($parentClassReflection);
+            $parentClasses[] = $parentClass;
         }
         return $parentClasses;
     }
