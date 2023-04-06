@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit768137cd555d1389ab03847e6d291cef
+class ComposerStaticInit8b934d9a1a490420cc4b30ff6c9e927a
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -308,6 +308,8 @@ class ComposerStaticInit768137cd555d1389ab03847e6d291cef
         'PHPStan\\PhpDocParser\\Ast\\Type\\IntersectionTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/IntersectionTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\InvalidTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/InvalidTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\NullableTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/NullableTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ObjectShapeItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ObjectShapeItemNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ObjectShapeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ObjectShapeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\OffsetAccessTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/OffsetAccessTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\ThisTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ThisTypeNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/TypeNode.php',
@@ -2907,6 +2909,7 @@ class ComposerStaticInit768137cd555d1389ab03847e6d291cef
         'Rector\\Symfony\\Rector\\StaticCall\\ProcessBuilderInstanceRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticCall/ProcessBuilderInstanceRector.php',
         'Rector\\Symfony\\Rector\\StaticPropertyFetch\\ErrorNamesPropertyToConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticPropertyFetch/ErrorNamesPropertyToConstantRector.php',
         'Rector\\Symfony\\Rector\\StaticPropertyFetch\\KernelTestCaseContainerPropertyDeprecationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticPropertyFetch/KernelTestCaseContainerPropertyDeprecationRector.php',
+        'Rector\\Symfony\\Rector\\StmtsAwareInterface\\TwigBundleFilesystemLoaderToTwigRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StmtsAwareInterface/TwigBundleFilesystemLoaderToTwigRector.php',
         'Rector\\Symfony\\Set\\FOSRestSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/FOSRestSetList.php',
         'Rector\\Symfony\\Set\\JMSSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/JMSSetList.php',
         'Rector\\Symfony\\Set\\SensiolabsSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SensiolabsSetList.php',
@@ -3132,9 +3135,9 @@ class ComposerStaticInit768137cd555d1389ab03847e6d291cef
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit768137cd555d1389ab03847e6d291cef::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit768137cd555d1389ab03847e6d291cef::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit768137cd555d1389ab03847e6d291cef::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8b934d9a1a490420cc4b30ff6c9e927a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8b934d9a1a490420cc4b30ff6c9e927a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8b934d9a1a490420cc4b30ff6c9e927a::$classMap;
 
         }, null, ClassLoader::class);
     }

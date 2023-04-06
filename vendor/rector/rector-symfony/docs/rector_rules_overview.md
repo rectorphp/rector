@@ -1,4 +1,4 @@
-# 81 Rules Overview
+# 82 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1762,6 +1762,25 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
  {
 +    return $this->render('index.html.twig');
  }
+```
+
+<br>
+
+## TwigBundleFilesystemLoaderToTwigRector
+
+Change TwigBundle FilesystemLoader to native one
+
+- class: [`Rector\Symfony\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector`](../src/Rector/StmtsAwareInterface/TwigBundleFilesystemLoaderToTwigRector.php)
+
+```diff
+-use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
+-use Symfony\Bundle\FrameworkBundle\Templating\Loader\TemplateLocator;
+-use Symfony\Bundle\FrameworkBundle\Templating\TemplateNameParser;
++use Twig\Loader\FilesystemLoader;
+
+-$filesystemLoader = new FilesystemLoader(new TemplateLocator(), new TemplateParser());
+-$filesystemLoader->addPath(__DIR__ . '/some-directory');
++$fileSystemLoader = new FilesystemLoader([__DIR__ . '/some-directory']);
 ```
 
 <br>

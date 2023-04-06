@@ -14,14 +14,17 @@ use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
+use Rector\Symfony\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
 return static function (RectorConfig $rectorConfig) : void {
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
-    $rectorConfig->rule(WebTestCaseAssertIsSuccessfulRector::class);
-    $rectorConfig->rule(WebTestCaseAssertResponseCodeRector::class);
+    $rectorConfig->rules([WebTestCaseAssertIsSuccessfulRector::class, WebTestCaseAssertResponseCodeRector::class, TwigBundleFilesystemLoaderToTwigRector::class, MakeDispatchFirstArgumentEventRector::class]);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Symfony\\Component\\BrowserKit\\Response', 'getStatus', 'getStatusCode'), new MethodCallRename('Symfony\\Component\\Security\\Http\\Firewall', 'handleRequest', 'callListeners')]);
-    $rectorConfig->rule(MakeDispatchFirstArgumentEventRector::class);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
+        // assets deprecation
+        'Symfony\\Bundle\\FrameworkBundle\\Templating\\Helper\\AssetsHelper' => 'Symfony\\Component\\Asset\\Packages',
+        // templating
+        'Symfony\\Bundle\\FrameworkBundle\\Templating\\EngineInterface' => 'Symfony\\Component\\Templating\\EngineInterface',
         # https://symfony.com/blog/new-in-symfony-4-3-simpler-event-dispatching
         # Browser Kit
         'Symfony\\Component\\BrowserKit\\Client' => 'Symfony\\Component\\BrowserKit\\AbstractBrowser',
