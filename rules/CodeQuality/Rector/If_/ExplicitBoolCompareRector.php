@@ -146,7 +146,7 @@ CODE_SAMPLE
             return $this->resolveString($isNegated, $expr);
         }
         $exprType = $this->getType($expr);
-        if ($exprType instanceof IntegerType) {
+        if ($exprType->isInteger()->yes()) {
             return $this->resolveInteger($isNegated, $expr);
         }
         if ($exprType->isFloat()->yes()) {

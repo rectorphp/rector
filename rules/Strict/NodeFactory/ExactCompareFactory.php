@@ -41,7 +41,7 @@ final class ExactCompareFactory
         if ($exprType->isString()->yes()) {
             return new Identical($expr, new String_(''));
         }
-        if ($exprType instanceof IntegerType) {
+        if ($exprType->isInteger()->yes()) {
             return new Identical($expr, new LNumber(0));
         }
         if ($exprType->isBoolean()->yes()) {
@@ -66,7 +66,7 @@ final class ExactCompareFactory
         if ($exprType->isString()->yes()) {
             return new NotIdentical($expr, new String_(''));
         }
-        if ($exprType instanceof IntegerType) {
+        if ($exprType->isInteger()->yes()) {
             return new NotIdentical($expr, new LNumber(0));
         }
         if ($exprType->isArray()->yes()) {

@@ -63,7 +63,7 @@ final class StaticTypeAnalyzer
         if ($type->isString()->yes()) {
             return \true;
         }
-        if ($type instanceof IntegerType) {
+        if ($type->isInteger()->yes()) {
             return \true;
         }
         return $type->isFloat()->yes();

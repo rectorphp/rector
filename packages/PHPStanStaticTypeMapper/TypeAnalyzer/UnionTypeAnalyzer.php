@@ -96,7 +96,7 @@ final class UnionTypeAnalyzer
             if ($type->isFloat()->yes()) {
                 continue;
             }
-            if ($type instanceof IntegerType) {
+            if ($type->isInteger()->yes()) {
                 continue;
             }
             if ($type->isBoolean()->yes()) {
