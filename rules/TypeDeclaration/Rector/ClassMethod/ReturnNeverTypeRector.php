@@ -115,8 +115,8 @@ CODE_SAMPLE
         if ($hasReturn) {
             return \true;
         }
-        $yieldAndConditionalNodes = \array_merge([Yield_::class], ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES);
-        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, $yieldAndConditionalNodes);
+        $item1Unpacked = ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES;
+        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, \array_merge([Yield_::class], $item1Unpacked));
         if ($hasNotNeverNodes) {
             return \true;
         }
@@ -134,7 +134,7 @@ CODE_SAMPLE
         return $this->isName($node->returnType, 'never');
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Stmt\Function_ $functionLike
      */
     private function hasNeverFuncCall($functionLike) : bool
     {

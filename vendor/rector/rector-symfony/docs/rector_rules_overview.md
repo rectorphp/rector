@@ -1,4 +1,4 @@
-# 82 Rules Overview
+# 83 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -672,6 +672,21 @@ Move constructor dependency from form type class to an `$options` parameter
          }
      }
  }
+```
+
+<br>
+
+## GetCurrencyBundleMethodCallsToIntlRector
+
+Intl static bundle method were changed to direct static calls
+
+- class: [`Rector\Symfony\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector`](../src/Rector/MethodCall/GetCurrencyBundleMethodCallsToIntlRector.php)
+
+```diff
+-$currencyBundle = \Symfony\Component\Intl\Intl::getCurrencyBundle();
+-
+-$currencyNames = $currencyBundle->getCurrencyNames();
++$currencyNames = \Symfony\Component\Intl\Currencies::getNames();
 ```
 
 <br>

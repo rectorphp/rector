@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit033adc17bbfb50a98dd62d2bd676dc77
+class ComposerStaticInit52eceb03eedec6c93bf1a3f332a12162
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2878,6 +2878,7 @@ class ComposerStaticInit033adc17bbfb50a98dd62d2bd676dc77
         'Rector\\Symfony\\Rector\\MethodCall\\FormBuilderSetDataMapperRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/FormBuilderSetDataMapperRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\FormIsValidRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/FormIsValidRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\FormTypeInstanceToClassConstRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/FormTypeInstanceToClassConstRector.php',
+        'Rector\\Symfony\\Rector\\MethodCall\\GetCurrencyBundleMethodCallsToIntlRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/GetCurrencyBundleMethodCallsToIntlRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\GetHelperControllerToServiceRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/GetHelperControllerToServiceRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\GetToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/GetToConstructorInjectionRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\LiteralGetToRequestClassConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php',
@@ -2931,6 +2932,7 @@ class ComposerStaticInit033adc17bbfb50a98dd62d2bd676dc77
         'Rector\\Symfony\\ValueObject\\EventNameToClassAndConstant' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventNameToClassAndConstant.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodName' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodName.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodNameWithPriority' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodNameWithPriority.php',
+        'Rector\\Symfony\\ValueObject\\IntlBundleClassToNewClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/IntlBundleClassToNewClass.php',
         'Rector\\Symfony\\ValueObject\\InvokableController\\ActiveClassElements' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/InvokableController/ActiveClassElements.php',
         'Rector\\Symfony\\ValueObject\\ReplaceServiceArgument' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ReplaceServiceArgument.php',
         'Rector\\Symfony\\ValueObject\\ServiceDefinition' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceDefinition.php',
@@ -3135,9 +3137,9 @@ class ComposerStaticInit033adc17bbfb50a98dd62d2bd676dc77
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit033adc17bbfb50a98dd62d2bd676dc77::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit033adc17bbfb50a98dd62d2bd676dc77::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit033adc17bbfb50a98dd62d2bd676dc77::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit52eceb03eedec6c93bf1a3f332a12162::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit52eceb03eedec6c93bf1a3f332a12162::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit52eceb03eedec6c93bf1a3f332a12162::$classMap;
 
         }, null, ClassLoader::class);
     }
