@@ -12,6 +12,8 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
+use PHPStan\Type\IntegerType;
+use PHPStan\Type\StringType;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -134,13 +136,16 @@ CODE_SAMPLE
     }
     private function isArrayKeyTypeAllowed(ArrayType $arrayType) : bool
     {
-        if ($arrayType->getKeyType()->isInteger()->yes()) {
-            return \true;
+        $allowedKeyTypes = [IntegerType::class];
+        if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD_STRING_KEYS)) {
+            $allowedKeyTypes[] = StringType::class;
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::ARRAY_SPREAD_STRING_KEYS)) {
-            return \false;
+        foreach ($allowedKeyTypes as $allowedKeyType) {
+            if ($arrayType->getKeyType() instanceof $allowedKeyType) {
+                return \true;
+            }
         }
-        return $arrayType->getKeyType()->isString()->yes();
+        return \false;
     }
     private function resolveValue(Expr $expr) : Expr
     {

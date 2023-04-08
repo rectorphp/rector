@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -45,7 +46,7 @@ final class SwitchAnalyzer
         }
         $uniqueTypes = $this->typeFactory->uniquateTypes($types);
         $countUniqueTypes = \count($uniqueTypes);
-        if ($countUniqueTypes === 1 && $uniqueTypes[0]->isInteger()->yes()) {
+        if ($countUniqueTypes === 1 && $uniqueTypes[0] instanceof IntegerType) {
             $switchCondType = $this->nodeTypeResolver->getType($expr);
             if (!$switchCondType instanceof MixedType && $switchCondType->isString()->maybe()) {
                 return \true;

@@ -5,6 +5,7 @@ namespace Rector\TypeDeclaration\Rector\ArrowFunction;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
+use PHPStan\Type\VoidType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -42,7 +43,7 @@ CODE_SAMPLE
             return null;
         }
         $type = $this->getType($node->expr);
-        if ($type->isVoid()->yes()) {
+        if ($type instanceof VoidType) {
             return null;
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::RETURN);

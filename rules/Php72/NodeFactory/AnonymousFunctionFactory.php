@@ -35,6 +35,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use PHPStan\Type\VoidType;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
@@ -359,7 +360,7 @@ final class AnonymousFunctionFactory
      */
     private function resolveStmts(FunctionVariantWithPhpDocs $functionVariantWithPhpDocs, $innerMethodCall) : array
     {
-        if ($functionVariantWithPhpDocs->getReturnType()->isVoid()->yes()) {
+        if ($functionVariantWithPhpDocs->getReturnType() instanceof VoidType) {
             return [new Expression($innerMethodCall)];
         }
         return [new Return_($innerMethodCall)];

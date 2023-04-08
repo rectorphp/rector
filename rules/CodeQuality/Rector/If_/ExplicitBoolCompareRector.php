@@ -22,6 +22,9 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\FloatType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
@@ -106,7 +109,7 @@ CODE_SAMPLE
             return null;
         }
         $conditionStaticType = $this->getType($conditionNode);
-        if ($conditionStaticType->isBoolean()->yes()) {
+        if ($conditionStaticType instanceof BooleanType) {
             return null;
         }
         $binaryOp = $this->resolveNewConditionNode($conditionNode, $isNegated);
@@ -143,10 +146,10 @@ CODE_SAMPLE
             return $this->resolveString($isNegated, $expr);
         }
         $exprType = $this->getType($expr);
-        if ($exprType->isInteger()->yes()) {
+        if ($exprType instanceof IntegerType) {
             return $this->resolveInteger($isNegated, $expr);
         }
-        if ($exprType->isFloat()->yes()) {
+        if ($exprType instanceof FloatType) {
             return $this->resolveFloat($isNegated, $expr);
         }
         if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($expr, ObjectType::class)) {

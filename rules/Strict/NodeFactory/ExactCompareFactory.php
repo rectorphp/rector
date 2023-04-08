@@ -14,6 +14,8 @@ use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Type\BooleanType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
@@ -39,10 +41,10 @@ final class ExactCompareFactory
         if ($exprType->isString()->yes()) {
             return new Identical($expr, new String_(''));
         }
-        if ($exprType->isInteger()->yes()) {
+        if ($exprType instanceof IntegerType) {
             return new Identical($expr, new LNumber(0));
         }
-        if ($exprType->isBoolean()->yes()) {
+        if ($exprType instanceof BooleanType) {
             return new Identical($expr, $this->nodeFactory->createFalse());
         }
         if ($exprType->isArray()->yes()) {
@@ -64,7 +66,7 @@ final class ExactCompareFactory
         if ($exprType->isString()->yes()) {
             return new NotIdentical($expr, new String_(''));
         }
-        if ($exprType->isInteger()->yes()) {
+        if ($exprType instanceof IntegerType) {
             return new NotIdentical($expr, new LNumber(0));
         }
         if ($exprType->isArray()->yes()) {
@@ -81,7 +83,7 @@ final class ExactCompareFactory
     private function createFromUnionType(UnionType $unionType, Expr $expr, bool $treatAsNotEmpty)
     {
         $unionType = TypeCombinator::removeNull($unionType);
-        if ($unionType->isBoolean()->yes()) {
+        if ($unionType instanceof BooleanType) {
             return new Identical($expr, $this->nodeFactory->createTrue());
         }
         if ($unionType instanceof TypeWithClassName) {
@@ -170,7 +172,7 @@ final class ExactCompareFactory
             $compareExprs = $this->collectCompareExprs($unionType, $expr, $treatAsNonEmpty);
             return $this->createBooleanOr($compareExprs);
         }
-        if ($unionType->isBoolean()->yes()) {
+        if ($unionType instanceof BooleanType) {
             return new NotIdentical($expr, $this->nodeFactory->createTrue());
         }
         if ($unionType instanceof TypeWithClassName) {

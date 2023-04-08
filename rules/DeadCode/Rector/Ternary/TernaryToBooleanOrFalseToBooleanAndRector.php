@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Ternary;
+use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -69,7 +70,7 @@ CODE_SAMPLE
             return null;
         }
         $ifType = $this->getType($node->if);
-        if (!$ifType->isBoolean()->yes()) {
+        if (!$ifType instanceof BooleanType) {
             return null;
         }
         return new BooleanAnd($node->cond, $node->if);

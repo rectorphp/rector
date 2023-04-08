@@ -118,13 +118,13 @@ final class AlwaysStrictScalarExprAnalyzer
         if ($type->isString()->yes() && !$type instanceof ConstantStringType) {
             return \true;
         }
-        if ($type->isFloat()->yes()) {
+        if ($type instanceof FloatType) {
             return \true;
         }
-        if ($type->isInteger()->yes()) {
+        if ($type instanceof IntegerType) {
             return \true;
         }
-        return $type->isBoolean()->yes();
+        return $type instanceof BooleanType;
     }
     private function resolveTypeFromScalar(Scalar $scalar) : ?\PHPStan\Type\Type
     {
