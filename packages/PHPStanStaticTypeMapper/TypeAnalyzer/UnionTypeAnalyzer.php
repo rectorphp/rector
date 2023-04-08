@@ -90,7 +90,7 @@ final class UnionTypeAnalyzer
             return \false;
         }
         foreach ($types as $type) {
-            if ($type instanceof StringType && !$type instanceof ConstantStringType) {
+            if ($type->isString()->yes() && !$type instanceof ConstantStringType) {
                 continue;
             }
             if ($type->isFloat()->yes()) {
