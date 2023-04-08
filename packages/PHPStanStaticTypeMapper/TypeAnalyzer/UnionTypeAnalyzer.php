@@ -93,7 +93,7 @@ final class UnionTypeAnalyzer
             if ($type instanceof StringType && !$type instanceof ConstantStringType) {
                 continue;
             }
-            if ($type instanceof FloatType) {
+            if ($type->isFloat()->yes()) {
                 continue;
             }
             if ($type instanceof IntegerType) {

@@ -25,7 +25,7 @@ final class ScalarTypeComparator
         if ($firstType instanceof IntegerType && $secondType instanceof IntegerType) {
             return \true;
         }
-        if ($firstType instanceof FloatType && $secondType instanceof FloatType) {
+        if ($firstType->isFloat()->yes() && $secondType->isFloat()->yes()) {
             return \true;
         }
         if (!$firstType instanceof BooleanType) {
@@ -61,7 +61,7 @@ final class ScalarTypeComparator
         if ($type instanceof StringType) {
             return \true;
         }
-        if ($type instanceof FloatType) {
+        if ($type->isFloat()->yes()) {
             return \true;
         }
         if ($type instanceof IntegerType) {

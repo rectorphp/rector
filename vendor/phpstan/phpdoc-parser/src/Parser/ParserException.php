@@ -8,6 +8,7 @@ use PHPStan\PhpDocParser\Lexer\Lexer;
 use function assert;
 use function json_encode;
 use function sprintf;
+use const JSON_INVALID_UTF8_SUBSTITUTE;
 use const JSON_UNESCAPED_SLASHES;
 use const JSON_UNESCAPED_UNICODE;
 class ParserException extends Exception
@@ -53,7 +54,7 @@ class ParserException extends Exception
     }
     private function formatValue(string $value) : string
     {
-        $json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        $json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
         assert($json !== \false);
         return $json;
     }

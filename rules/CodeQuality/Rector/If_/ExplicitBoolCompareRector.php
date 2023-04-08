@@ -149,7 +149,7 @@ CODE_SAMPLE
         if ($exprType instanceof IntegerType) {
             return $this->resolveInteger($isNegated, $expr);
         }
-        if ($exprType instanceof FloatType) {
+        if ($exprType->isFloat()->yes()) {
             return $this->resolveFloat($isNegated, $expr);
         }
         if ($this->nodeTypeResolver->isNullableTypeOfSpecificType($expr, ObjectType::class)) {

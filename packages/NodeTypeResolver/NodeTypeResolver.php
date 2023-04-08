@@ -245,7 +245,7 @@ final class NodeTypeResolver
         if ($nodeType instanceof IntegerType) {
             return \true;
         }
-        return $nodeType instanceof FloatType;
+        return $nodeType->isFloat()->yes();
     }
     /**
      * @api
