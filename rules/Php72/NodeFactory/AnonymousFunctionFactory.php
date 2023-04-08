@@ -360,7 +360,7 @@ final class AnonymousFunctionFactory
      */
     private function resolveStmts(FunctionVariantWithPhpDocs $functionVariantWithPhpDocs, $innerMethodCall) : array
     {
-        if ($functionVariantWithPhpDocs->getReturnType() instanceof VoidType) {
+        if ($functionVariantWithPhpDocs->getReturnType()->isVoid()->yes()) {
             return [new Expression($innerMethodCall)];
         }
         return [new Return_($innerMethodCall)];

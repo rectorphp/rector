@@ -43,7 +43,7 @@ CODE_SAMPLE
             return null;
         }
         $type = $this->getType($node->expr);
-        if ($type instanceof VoidType) {
+        if ($type->isVoid()->yes()) {
             return null;
         }
         $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::RETURN);
