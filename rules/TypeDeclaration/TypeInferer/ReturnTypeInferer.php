@@ -146,7 +146,7 @@ final class ReturnTypeInferer
      */
     private function resolveTypeWithVoidHandling($functionLike, Type $resolvedType) : Type
     {
-        if ($resolvedType instanceof VoidType) {
+        if ($resolvedType->isVoid()->yes()) {
             if ($functionLike instanceof ArrowFunction) {
                 return new MixedType();
             }

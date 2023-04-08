@@ -19,7 +19,6 @@ use PhpParser\Node\UnionType as PhpParserUnionType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use PHPStan\Type\VoidType;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -153,7 +152,7 @@ CODE_SAMPLE
     {
         $resolvedType = $this->nodeTypeResolver->getType($arrowFunction->expr);
         // void type is not accepted for arrow functions - https://www.php.net/manual/en/functions.arrow.php#125673
-        if ($resolvedType instanceof VoidType) {
+        if ($resolvedType->isVoid()->yes()) {
             return null;
         }
         $returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($resolvedType, TypeKind::RETURN);
@@ -171,7 +170,7 @@ CODE_SAMPLE
         $inferReturnType = $this->returnTypeInferer->inferFunctionLike($node);
         if ($inferReturnType instanceof UnionType) {
             foreach ($inferReturnType->getTypes() as $type) {
-                if ($type instanceof VoidType) {
+                if ($type->isVoid()->yes()) {
                     return \true;
                 }
             }
