@@ -308,6 +308,8 @@ require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTyp
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/IntersectionTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/InvalidTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/NullableTypeNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ObjectShapeItemNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ObjectShapeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/OffsetAccessTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/ThisTypeNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/Type/UnionTypeNode.php';
