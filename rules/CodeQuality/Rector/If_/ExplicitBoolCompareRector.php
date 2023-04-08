@@ -22,7 +22,6 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
@@ -109,7 +108,7 @@ CODE_SAMPLE
             return null;
         }
         $conditionStaticType = $this->getType($conditionNode);
-        if ($conditionStaticType instanceof BooleanType) {
+        if ($conditionStaticType->isBoolean()->yes()) {
             return null;
         }
         $binaryOp = $this->resolveNewConditionNode($conditionNode, $isNegated);

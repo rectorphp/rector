@@ -42,7 +42,6 @@ use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use PHPStan\Analyser\Scope;
-use PHPStan\Type\BooleanType;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class AssignAndBinaryMap
 {
@@ -97,7 +96,7 @@ final class AssignAndBinaryMap
             return new Bool_($expr);
         }
         $type = $scope->getType($expr);
-        if ($type instanceof BooleanType) {
+        if ($type->isBoolean()->yes()) {
             return $expr;
         }
         return new Bool_($expr);

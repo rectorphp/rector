@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeAnalyzer;
 
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
@@ -99,7 +98,7 @@ final class UnionTypeAnalyzer
             if ($type instanceof IntegerType) {
                 continue;
             }
-            if ($type instanceof BooleanType) {
+            if ($type->isBoolean()->yes()) {
                 continue;
             }
             return \false;

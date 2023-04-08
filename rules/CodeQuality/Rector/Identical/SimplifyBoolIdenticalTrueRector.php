@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Variable;
-use PHPStan\Type\BooleanType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -55,11 +54,11 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $leftType = $this->getType($node->left);
-        if ($leftType instanceof BooleanType && !$this->valueResolver->isTrueOrFalse($node->left)) {
+        if ($leftType->isBoolean()->yes() && !$this->valueResolver->isTrueOrFalse($node->left)) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
         $rightType = $this->getType($node->right);
-        if (!$rightType instanceof BooleanType) {
+        if (!$rightType->isBoolean()->yes()) {
             return null;
         }
         if ($this->valueResolver->isTrueOrFalse($node->right)) {
@@ -89,7 +88,7 @@ CODE_SAMPLE
             }
             $leftExprType = $this->getType($leftExpr);
             // keep as it is, readable enough
-            if ($leftExpr instanceof Variable && $leftExprType instanceof BooleanType) {
+            if ($leftExpr instanceof Variable && $leftExprType->isBoolean()->yes()) {
                 return null;
             }
             return new BooleanNot($leftExpr);

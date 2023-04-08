@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
 use PHPStan\Type\FloatType;
@@ -57,7 +56,7 @@ final class StaticTypeAnalyzer
         if ($type instanceof NullType) {
             return \true;
         }
-        if ($type instanceof BooleanType) {
+        if ($type->isBoolean()->yes()) {
             return \true;
         }
         if ($type->isString()->yes()) {
