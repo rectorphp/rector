@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Foreach_;
@@ -124,8 +126,13 @@ CODE_SAMPLE
                 return \false;
             }
         }
-        if (($if->cond instanceof Variable || $this->propertyFetchAnalyzer->isPropertyFetch($if->cond)) && $this->nodeComparator->areNodesEqual($if->cond, $foreachExpr)) {
-            return $scope->getType($if->cond)->isArray()->yes();
+        $ifCond = $if->cond;
+        if ($ifCond instanceof BooleanAnd) {
+            return $this->isUselessBooleanAnd($ifCond, $foreachExpr);
+        }
+        if (($ifCond instanceof Variable || $this->propertyFetchAnalyzer->isPropertyFetch($ifCond)) && $this->nodeComparator->areNodesEqual($ifCond, $foreachExpr)) {
+            $ifType = $scope->getType($ifCond);
+            return $ifType->isArray()->yes();
         }
         if ($this->uselessIfCondBeforeForeachDetector->isMatchingNotIdenticalEmptyArray($if, $foreachExpr)) {
             return \true;
@@ -134,5 +141,15 @@ CODE_SAMPLE
             return \true;
         }
         return $this->countManipulator->isCounterHigherThanOne($if->cond, $foreachExpr);
+    }
+    private function isUselessBooleanAnd(BooleanAnd $booleanAnd, Expr $foreachExpr) : bool
+    {
+        if (!$booleanAnd->left instanceof Variable) {
+            return \false;
+        }
+        if (!$this->nodeComparator->areNodesEqual($booleanAnd->left, $foreachExpr)) {
+            return \false;
+        }
+        return $this->countManipulator->isCounterHigherThanOne($booleanAnd->right, $foreachExpr);
     }
 }
