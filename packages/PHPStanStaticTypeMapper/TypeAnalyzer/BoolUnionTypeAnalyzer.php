@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeAnalyzer;
 
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\UnionType;
 final class BoolUnionTypeAnalyzer

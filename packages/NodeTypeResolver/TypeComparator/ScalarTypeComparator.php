@@ -3,11 +3,7 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\TypeComparator;
 
-use PHPStan\Type\BooleanType;
 use PHPStan\Type\ClassStringType;
-use PHPStan\Type\FloatType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 /**
  * @see \Rector\Tests\NodeTypeResolver\TypeComparator\ScalarTypeComparatorTest
