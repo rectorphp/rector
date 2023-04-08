@@ -57,7 +57,7 @@ final class StaticTypeAnalyzer
         if ($type instanceof NullType) {
             return \true;
         }
-        if ($type instanceof BooleanType) {
+        if ($type->isBoolean()->yes()) {
             return \true;
         }
         if ($type->isString()->yes()) {

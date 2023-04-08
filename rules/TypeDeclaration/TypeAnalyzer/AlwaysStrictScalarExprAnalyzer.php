@@ -124,7 +124,7 @@ final class AlwaysStrictScalarExprAnalyzer
         if ($type instanceof IntegerType) {
             return \true;
         }
-        return $type instanceof BooleanType;
+        return $type->isBoolean()->yes();
     }
     private function resolveTypeFromScalar(Scalar $scalar) : ?\PHPStan\Type\Type
     {

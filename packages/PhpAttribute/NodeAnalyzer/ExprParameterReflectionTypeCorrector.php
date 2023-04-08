@@ -92,7 +92,7 @@ final class ExprParameterReflectionTypeCorrector
         if ($clearParameterType instanceof IntegerType && $item instanceof String_) {
             return new LNumber((int) $item->value);
         }
-        if ($clearParameterType instanceof BooleanType && $item instanceof String_) {
+        if ($clearParameterType->isBoolean()->yes() && $item instanceof String_) {
             if (\strtolower($item->value) === 'true') {
                 return $this->nodeFactory->createTrue();
             }

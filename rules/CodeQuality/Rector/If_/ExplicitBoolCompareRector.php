@@ -109,7 +109,7 @@ CODE_SAMPLE
             return null;
         }
         $conditionStaticType = $this->getType($conditionNode);
-        if ($conditionStaticType instanceof BooleanType) {
+        if ($conditionStaticType->isBoolean()->yes()) {
             return null;
         }
         $binaryOp = $this->resolveNewConditionNode($conditionNode, $isNegated);

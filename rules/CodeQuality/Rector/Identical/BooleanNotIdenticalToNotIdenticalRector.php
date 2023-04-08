@@ -67,11 +67,11 @@ CODE_SAMPLE
         if ($node->expr instanceof Identical) {
             $identical = $node->expr;
             $leftType = $this->getType($identical->left);
-            if (!$leftType instanceof BooleanType) {
+            if (!$leftType->isBoolean()->yes()) {
                 return null;
             }
             $rightType = $this->getType($identical->right);
-            if (!$rightType instanceof BooleanType) {
+            if (!$rightType->isBoolean()->yes()) {
                 return null;
             }
             return new NotIdentical($identical->left, $identical->right);
@@ -81,11 +81,11 @@ CODE_SAMPLE
     private function processIdentical(Identical $identical) : ?NotIdentical
     {
         $leftType = $this->getType($identical->left);
-        if (!$leftType instanceof BooleanType) {
+        if (!$leftType->isBoolean()->yes()) {
             return null;
         }
         $rightType = $this->getType($identical->right);
-        if (!$rightType instanceof BooleanType) {
+        if (!$rightType->isBoolean()->yes()) {
             return null;
         }
         if ($identical->left instanceof BooleanNot) {

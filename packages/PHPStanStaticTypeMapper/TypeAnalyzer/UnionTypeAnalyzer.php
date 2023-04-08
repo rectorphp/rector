@@ -99,7 +99,7 @@ final class UnionTypeAnalyzer
             if ($type instanceof IntegerType) {
                 continue;
             }
-            if ($type instanceof BooleanType) {
+            if ($type->isBoolean()->yes()) {
                 continue;
             }
             return \false;

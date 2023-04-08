@@ -85,7 +85,7 @@ CODE_SAMPLE
         /** @var BooleanAnd|BooleanOr $booleanExpr */
         $booleanExpr = $expression->expr;
         $leftStaticType = $this->getType($booleanExpr->left);
-        if (!$leftStaticType instanceof BooleanType) {
+        if (!$leftStaticType->isBoolean()->yes()) {
             return null;
         }
         $exprLeft = $booleanExpr->left instanceof BooleanNot ? $booleanExpr->left->expr : $booleanExpr->left;

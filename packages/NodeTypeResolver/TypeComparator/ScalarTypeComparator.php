@@ -28,10 +28,10 @@ final class ScalarTypeComparator
         if ($firstType->isFloat()->yes() && $secondType->isFloat()->yes()) {
             return \true;
         }
-        if (!$firstType instanceof BooleanType) {
+        if (!$firstType->isBoolean()->yes()) {
             return \false;
         }
-        return $secondType instanceof BooleanType;
+        return $secondType->isBoolean()->yes();
     }
     /**
      * E.g. first is string, second is bool
@@ -67,6 +67,6 @@ final class ScalarTypeComparator
         if ($type instanceof IntegerType) {
             return \true;
         }
-        return $type instanceof BooleanType;
+        return $type->isBoolean()->yes();
     }
 }

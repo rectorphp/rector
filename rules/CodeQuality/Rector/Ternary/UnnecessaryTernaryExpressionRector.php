@@ -94,7 +94,7 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     private function processTrueIfExpressionWithFalseElseExpression(Expr $expr) : Expr
     {
         $exprType = $this->getType($expr);
-        if ($exprType instanceof BooleanType) {
+        if ($exprType->isBoolean()->yes()) {
             return $expr;
         }
         return new Bool_($expr);
@@ -103,13 +103,13 @@ final class UnnecessaryTernaryExpressionRector extends AbstractRector
     {
         if ($expr instanceof BooleanNot) {
             $negatedExprType = $this->getType($expr->expr);
-            if ($negatedExprType instanceof BooleanType) {
+            if ($negatedExprType->isBoolean()->yes()) {
                 return $expr->expr;
             }
             return new Bool_($expr->expr);
         }
         $exprType = $this->getType($expr);
-        if ($exprType instanceof BooleanType) {
+        if ($exprType->isBoolean()->yes()) {
             return new BooleanNot($expr);
         }
         return new BooleanNot(new Bool_($expr));

@@ -70,7 +70,7 @@ CODE_SAMPLE
             return null;
         }
         $ifType = $this->getType($node->if);
-        if (!$ifType instanceof BooleanType) {
+        if (!$ifType->isBoolean()->yes()) {
             return null;
         }
         return new BooleanAnd($node->cond, $node->if);

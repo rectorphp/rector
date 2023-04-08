@@ -44,7 +44,7 @@ final class ExactCompareFactory
         if ($exprType instanceof IntegerType) {
             return new Identical($expr, new LNumber(0));
         }
-        if ($exprType instanceof BooleanType) {
+        if ($exprType->isBoolean()->yes()) {
             return new Identical($expr, $this->nodeFactory->createFalse());
         }
         if ($exprType->isArray()->yes()) {
@@ -83,7 +83,7 @@ final class ExactCompareFactory
     private function createFromUnionType(UnionType $unionType, Expr $expr, bool $treatAsNotEmpty)
     {
         $unionType = TypeCombinator::removeNull($unionType);
-        if ($unionType instanceof BooleanType) {
+        if ($unionType->isBoolean()->yes()) {
             return new Identical($expr, $this->nodeFactory->createTrue());
         }
         if ($unionType instanceof TypeWithClassName) {
@@ -172,7 +172,7 @@ final class ExactCompareFactory
             $compareExprs = $this->collectCompareExprs($unionType, $expr, $treatAsNonEmpty);
             return $this->createBooleanOr($compareExprs);
         }
-        if ($unionType instanceof BooleanType) {
+        if ($unionType->isBoolean()->yes()) {
             return new NotIdentical($expr, $this->nodeFactory->createTrue());
         }
         if ($unionType instanceof TypeWithClassName) {
