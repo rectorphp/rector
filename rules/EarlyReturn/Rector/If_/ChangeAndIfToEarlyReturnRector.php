@@ -144,7 +144,7 @@ CODE_SAMPLE
             $afterStmts = [];
             if (!$nextStmt instanceof Return_) {
                 $afterStmts[] = $stmt->stmts[0];
-                $node->stmts = \array_merge($newStmts, $this->processReplaceIfs($stmt, $booleanAndConditions, new Return_(), $afterStmts));
+                $node->stmts = \array_merge($newStmts, $this->processReplaceIfs($stmt, $booleanAndConditions, new Return_(), $afterStmts, $nextStmt));
                 return $node;
             }
             // remove next node
@@ -154,7 +154,7 @@ CODE_SAMPLE
             if ($this->isInLoopWithoutContinueOrBreak($stmt)) {
                 $afterStmts[] = new Return_();
             }
-            $changedStmts = $this->processReplaceIfs($stmt, $booleanAndConditions, $ifNextReturnClone, $afterStmts);
+            $changedStmts = $this->processReplaceIfs($stmt, $booleanAndConditions, $ifNextReturnClone, $afterStmts, $nextStmt);
             // update stmts
             $node->stmts = \array_merge($newStmts, $changedStmts);
             return $node;
@@ -176,9 +176,9 @@ CODE_SAMPLE
      * @param Stmt[] $afters
      * @return Stmt[]
      */
-    private function processReplaceIfs(If_ $if, array $conditions, Return_ $ifNextReturnClone, array $afters) : array
+    private function processReplaceIfs(If_ $if, array $conditions, Return_ $ifNextReturnClone, array $afters, ?Stmt $nextStmt) : array
     {
-        $ifs = $this->invertedIfFactory->createFromConditions($if, $conditions, $ifNextReturnClone);
+        $ifs = $this->invertedIfFactory->createFromConditions($if, $conditions, $ifNextReturnClone, $nextStmt);
         $this->mirrorComments($ifs[0], $if);
         $result = \array_merge($ifs, $afters);
         if ($if->stmts[0] instanceof Return_) {
