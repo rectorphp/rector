@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PHPStan\Type\ClassStringType;
-use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
 use PHPStan\Type\Type;
 /**
@@ -23,7 +22,7 @@ final class ScalarTypeComparator
         if ($firstType instanceof IntegerType && $secondType instanceof IntegerType) {
             return \true;
         }
-        if ($firstType instanceof FloatType && $secondType instanceof FloatType) {
+        if ($firstType->isFloat()->yes() && $secondType->isFloat()->yes()) {
             return \true;
         }
         if (!$firstType->isBoolean()->yes()) {
@@ -59,7 +58,7 @@ final class ScalarTypeComparator
         if ($type->isString()->yes()) {
             return \true;
         }
-        if ($type instanceof FloatType) {
+        if ($type->isFloat()->yes()) {
             return \true;
         }
         if ($type instanceof IntegerType) {

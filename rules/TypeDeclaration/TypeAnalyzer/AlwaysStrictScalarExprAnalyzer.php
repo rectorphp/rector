@@ -118,7 +118,7 @@ final class AlwaysStrictScalarExprAnalyzer
         if ($type->isString()->yes() && !$type instanceof ConstantStringType) {
             return \true;
         }
-        if ($type instanceof FloatType) {
+        if ($type->isFloat()->yes()) {
             return \true;
         }
         if ($type instanceof IntegerType) {

@@ -44,13 +44,19 @@ final class DeadReturnTagValueNodeAnalyzer
      * @var \Rector\DeadCode\PhpDoc\Guard\StandaloneTypeRemovalGuard
      */
     private $standaloneTypeRemovalGuard;
-    public function __construct(TypeComparator $typeComparator, BetterNodeFinder $betterNodeFinder, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard)
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+    public function __construct(TypeComparator $typeComparator, BetterNodeFinder $betterNodeFinder, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, StandaloneTypeRemovalGuard $standaloneTypeRemovalGuard, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->typeComparator = $typeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->genericTypeNodeAnalyzer = $genericTypeNodeAnalyzer;
         $this->mixedArrayTypeNodeAnalyzer = $mixedArrayTypeNodeAnalyzer;
         $this->standaloneTypeRemovalGuard = $standaloneTypeRemovalGuard;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     public function isDead(ReturnTagValueNode $returnTagValueNode, FunctionLike $functionLike) : bool
     {
@@ -65,7 +71,7 @@ final class DeadReturnTagValueNodeAnalyzer
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($returnType, $returnTagValueNode->type, $functionLike)) {
             return \false;
         }
-        if (\in_array(\get_class($returnTagValueNode->type), PhpDocTypeChanger::ALLOWED_TYPES, \true)) {
+        if ($this->phpDocTypeChanger->isAllowed($returnTagValueNode->type)) {
             return \false;
         }
         if (!$returnTagValueNode->type instanceof BracketsAwareUnionTypeNode) {

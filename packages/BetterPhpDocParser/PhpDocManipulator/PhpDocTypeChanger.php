@@ -6,11 +6,13 @@ namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
+use PHPStan\PhpDocParser\Ast\Type\ConstTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -37,7 +39,7 @@ final class PhpDocTypeChanger
     /**
      * @var array<class-string<Node>>
      */
-    public const ALLOWED_TYPES = [GenericTypeNode::class, SpacingAwareArrayTypeNode::class, SpacingAwareCallableTypeNode::class, ArrayShapeNode::class];
+    private const ALLOWED_TYPES = [GenericTypeNode::class, SpacingAwareArrayTypeNode::class, SpacingAwareCallableTypeNode::class, ArrayShapeNode::class];
     /**
      * @var string[]
      */
@@ -181,6 +183,9 @@ final class PhpDocTypeChanger
                     return \true;
                 }
             }
+        }
+        if ($typeNode instanceof ConstTypeNode && $typeNode->constExpr instanceof ConstFetchNode) {
+            return \true;
         }
         if (\in_array(\get_class($typeNode), self::ALLOWED_TYPES, \true)) {
             return \true;

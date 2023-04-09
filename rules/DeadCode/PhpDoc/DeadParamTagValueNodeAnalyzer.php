@@ -49,13 +49,19 @@ final class DeadParamTagValueNodeAnalyzer
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, ParamAnalyzer $paramAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
+     */
+    private $phpDocTypeChanger;
+    public function __construct(NodeNameResolver $nodeNameResolver, TypeComparator $typeComparator, GenericTypeNodeAnalyzer $genericTypeNodeAnalyzer, MixedArrayTypeNodeAnalyzer $mixedArrayTypeNodeAnalyzer, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->typeComparator = $typeComparator;
         $this->genericTypeNodeAnalyzer = $genericTypeNodeAnalyzer;
         $this->mixedArrayTypeNodeAnalyzer = $mixedArrayTypeNodeAnalyzer;
         $this->paramAnalyzer = $paramAnalyzer;
+        $this->phpDocTypeChanger = $phpDocTypeChanger;
     }
     public function isDead(ParamTagValueNode $paramTagValueNode, FunctionLike $functionLike) : bool
     {
@@ -72,7 +78,7 @@ final class DeadParamTagValueNodeAnalyzer
         if (!$this->typeComparator->arePhpParserAndPhpStanPhpDocTypesEqual($param->type, $paramTagValueNode->type, $functionLike)) {
             return \false;
         }
-        if (\in_array(\get_class($paramTagValueNode->type), PhpDocTypeChanger::ALLOWED_TYPES, \true)) {
+        if ($this->phpDocTypeChanger->isAllowed($paramTagValueNode->type)) {
             return \false;
         }
         if (!$paramTagValueNode->type instanceof BracketsAwareUnionTypeNode) {
