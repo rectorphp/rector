@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\PHPStan\Type;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
@@ -61,7 +60,7 @@ final class StaticTypeAnalyzer
         if ($type->isString()->yes()) {
             return \true;
         }
-        if ($type instanceof IntegerType) {
+        if ($type->isInteger()->yes()) {
             return \true;
         }
         return $type->isFloat()->yes();

@@ -121,7 +121,7 @@ final class AlwaysStrictScalarExprAnalyzer
         if ($type->isFloat()->yes()) {
             return \true;
         }
-        if ($type instanceof IntegerType) {
+        if ($type->isInteger()->yes()) {
             return \true;
         }
         return $type->isBoolean()->yes();

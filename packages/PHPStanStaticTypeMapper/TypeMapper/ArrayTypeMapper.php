@@ -14,7 +14,6 @@ use PHPStan\Type\ClassStringType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Constant\ConstantIntegerType;
 use PHPStan\Type\Generic\GenericClassStringType;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
@@ -209,7 +208,7 @@ final class ArrayTypeMapper implements TypeMapperInterface
     }
     private function isIntegerKeyAndNonNestedArray(ArrayType $arrayType) : bool
     {
-        if (!$arrayType->getKeyType() instanceof IntegerType) {
+        if (!$arrayType->getKeyType()->isInteger()->yes()) {
             return \false;
         }
         return !$arrayType->getItemType() instanceof ArrayType;

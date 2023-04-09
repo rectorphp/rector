@@ -22,7 +22,6 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
-use PHPStan\Type\IntegerType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
@@ -144,7 +143,7 @@ CODE_SAMPLE
             return $this->resolveString($isNegated, $expr);
         }
         $exprType = $this->getType($expr);
-        if ($exprType instanceof IntegerType) {
+        if ($exprType->isInteger()->yes()) {
             return $this->resolveInteger($isNegated, $expr);
         }
         if ($exprType->isFloat()->yes()) {
