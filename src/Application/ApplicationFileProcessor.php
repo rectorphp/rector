@@ -149,6 +149,7 @@ final class ApplicationFileProcessor
         if ($shouldShowProgressBar) {
             $fileCount = \count($files);
             $this->rectorOutputStyle->progressStart($fileCount);
+            $this->rectorOutputStyle->progressAdvance(0);
         }
         $systemErrorsAndFileDiffs = [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
         foreach ($files as $file) {
@@ -235,20 +236,17 @@ final class ApplicationFileProcessor
         // must be a string, otherwise the serialization returns empty arrays
         // $filePaths // = $this->filePathNormalizer->resolveFilePathsFromFileInfos($filePaths);
         $schedule = $this->scheduleFactory->create($this->cpuCoreCountProvider->provide(), $this->parameterProvider->provideIntParameter(Option::PARALLEL_JOB_SIZE), $this->parameterProvider->provideIntParameter(Option::PARALLEL_MAX_NUMBER_OF_PROCESSES), $filePaths);
-        // for progress bar
-        $isProgressBarStarted = \false;
-        $postFileCallback = function (int $stepCount) use(&$isProgressBarStarted, $filePaths, $configuration) : void {
-            if (!$configuration->shouldShowProgressBar()) {
-                return;
-            }
-            if (!$isProgressBarStarted) {
-                $fileCount = \count($filePaths);
-                $this->rectorOutputStyle->progressStart($fileCount);
-                $isProgressBarStarted = \true;
-            }
-            $this->rectorOutputStyle->progressAdvance($stepCount);
-            // running in parallel here → nothing else to do
+        $postFileCallback = static function (int $stepCount) : void {
         };
+        if ($configuration->shouldShowProgressBar()) {
+            $fileCount = \count($filePaths);
+            $this->rectorOutputStyle->progressStart($fileCount);
+            $this->rectorOutputStyle->progressAdvance(0);
+            $postFileCallback = function (int $stepCount) : void {
+                $this->rectorOutputStyle->progressAdvance($stepCount);
+                // running in parallel here → nothing else to do
+            };
+        }
         $mainScript = $this->resolveCalledRectorBinary();
         if ($mainScript === null) {
             throw new ParallelShouldNotHappenException('[parallel] Main script was not found');
