@@ -56,6 +56,11 @@ final class RectorConfig extends ContainerConfigurator
         $parameters = $this->parameters();
         $parameters->set(Option::NO_DIFFS, \true);
     }
+    public function memoryLimit(string $memoryLimit) : void
+    {
+        $parameters = $this->parameters();
+        $parameters->set(Option::MEMORY_LIMIT, $memoryLimit);
+    }
     /**
      * @param array<int|string, mixed> $criteria
      */

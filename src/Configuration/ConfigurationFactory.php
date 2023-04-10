@@ -49,8 +49,7 @@ final class ConfigurationFactory
         $isParallel = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::PARALLEL);
         $parallelPort = (string) $input->getOption(\Rector\Core\Configuration\Option::PARALLEL_PORT);
         $parallelIdentifier = (string) $input->getOption(\Rector\Core\Configuration\Option::PARALLEL_IDENTIFIER);
-        /** @var string|null $memoryLimit */
-        $memoryLimit = $input->getOption(\Rector\Core\Configuration\Option::MEMORY_LIMIT);
+        $memoryLimit = $this->resolveMemoryLimit($input);
         return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit);
     }
     private function shouldShowProgressBar(InputInterface $input, string $outputFormat) : bool
@@ -99,5 +98,16 @@ final class ConfigurationFactory
         }
         // fallback to parameter
         return $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::PATHS);
+    }
+    private function resolveMemoryLimit(InputInterface $input) : ?string
+    {
+        $memoryLimit = $input->getOption(\Rector\Core\Configuration\Option::MEMORY_LIMIT);
+        if ($memoryLimit !== null) {
+            return (string) $memoryLimit;
+        }
+        if (!$this->parameterProvider->hasParameter(\Rector\Core\Configuration\Option::MEMORY_LIMIT)) {
+            return null;
+        }
+        return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::MEMORY_LIMIT);
     }
 }
