@@ -11,6 +11,7 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\NodeFinder\ScopeAwareNodeFinder;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeUsageFinder
 {
     /**
@@ -57,7 +58,11 @@ final class NodeUsageFinder
             if ($node === $variable) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($node, $variableName);
+            if (!$this->nodeNameResolver->isName($node, $variableName)) {
+                return \false;
+            }
+            $assignedTo = $node->getAttribute(AttributeKey::ASSIGNED_TO);
+            return !$assignedTo instanceof Node;
         });
     }
     public function findPreviousForeachNodeUsage(Foreach_ $foreach, Expr $expr) : ?Node
