@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit89fc8dc7efd43be062f97964d6ed76aa
+class ComposerStaticInit396b82c5df91b4b5cc5ac3eeddf2c8e3
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2682,6 +2682,7 @@ class ComposerStaticInit89fc8dc7efd43be062f97964d6ed76aa
         'Rector\\Removing\\Rector\\Class_\\RemoveParentRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/Class_/RemoveParentRector.php',
         'Rector\\Removing\\Rector\\Class_\\RemoveTraitUseRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/Class_/RemoveTraitUseRector.php',
         'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallArgRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/FuncCall/RemoveFuncCallArgRector.php',
+        'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/FuncCall/RemoveFuncCallRector.php',
         'Rector\\Removing\\ValueObject\\ArgumentRemover' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/ArgumentRemover.php',
         'Rector\\Removing\\ValueObject\\RemoveFuncCallArg' => __DIR__ . '/../..' . '/rules/Removing/ValueObject/RemoveFuncCallArg.php',
         'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => __DIR__ . '/../..' . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
@@ -3137,9 +3138,9 @@ class ComposerStaticInit89fc8dc7efd43be062f97964d6ed76aa
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit89fc8dc7efd43be062f97964d6ed76aa::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit89fc8dc7efd43be062f97964d6ed76aa::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit89fc8dc7efd43be062f97964d6ed76aa::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit396b82c5df91b4b5cc5ac3eeddf2c8e3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit396b82c5df91b4b5cc5ac3eeddf2c8e3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit396b82c5df91b4b5cc5ac3eeddf2c8e3::$classMap;
 
         }, null, ClassLoader::class);
     }

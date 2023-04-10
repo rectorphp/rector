@@ -52,7 +52,7 @@
 
 - [Privatization](#privatization) (7)
 
-- [Removing](#removing) (5)
+- [Removing](#removing) (6)
 
 - [RemovingStatic](#removingstatic) (1)
 
@@ -6938,6 +6938,39 @@ return static function (RectorConfig $rectorConfig): void {
 ```diff
 -remove_last_arg(1, 2);
 +remove_last_arg(1);
+```
+
+<br>
+
+### RemoveFuncCallRector
+
+Remove function
+
+:wrench: **configure it!**
+
+- class: [`Rector\Removing\Rector\FuncCall\RemoveFuncCallRector`](../rules/Removing/Rector/FuncCall/RemoveFuncCallRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use Rector\Removing\Rector\FuncCall\RemoveFuncCallRector;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RemoveFuncCallRector::class, [
+        'var_dump',
+    ]);
+};
+```
+
+↓
+
+```diff
+-$x = 'something';
+-var_dump($x);
++$x = 'something';
 ```
 
 <br>

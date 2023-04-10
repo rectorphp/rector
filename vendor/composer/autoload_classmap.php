@@ -2435,6 +2435,7 @@ return array(
     'Rector\\Removing\\Rector\\Class_\\RemoveParentRector' => $baseDir . '/rules/Removing/Rector/Class_/RemoveParentRector.php',
     'Rector\\Removing\\Rector\\Class_\\RemoveTraitUseRector' => $baseDir . '/rules/Removing/Rector/Class_/RemoveTraitUseRector.php',
     'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallArgRector' => $baseDir . '/rules/Removing/Rector/FuncCall/RemoveFuncCallArgRector.php',
+    'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallRector' => $baseDir . '/rules/Removing/Rector/FuncCall/RemoveFuncCallRector.php',
     'Rector\\Removing\\ValueObject\\ArgumentRemover' => $baseDir . '/rules/Removing/ValueObject/ArgumentRemover.php',
     'Rector\\Removing\\ValueObject\\RemoveFuncCallArg' => $baseDir . '/rules/Removing/ValueObject/RemoveFuncCallArg.php',
     'Rector\\Renaming\\Contract\\MethodCallRenameInterface' => $baseDir . '/rules/Renaming/Contract/MethodCallRenameInterface.php',
