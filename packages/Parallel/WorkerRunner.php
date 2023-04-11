@@ -6,7 +6,6 @@ namespace Rector\Parallel;
 use RectorPrefix202304\Clue\React\NDJson\Decoder;
 use RectorPrefix202304\Clue\React\NDJson\Encoder;
 use RectorPrefix202304\Nette\Utils\FileSystem;
-use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
@@ -60,11 +59,6 @@ final class WorkerRunner
      */
     private $applicationFileProcessor;
     /**
-     * @readonly
-     * @var \Rector\Caching\Detector\ChangedFilesDetector
-     */
-    private $changedFilesDetector;
-    /**
      * @var FileProcessorInterface[]
      * @readonly
      */
@@ -72,7 +66,7 @@ final class WorkerRunner
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, ApplicationFileProcessor $applicationFileProcessor, ChangedFilesDetector $changedFilesDetector, array $fileProcessors = [])
+    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, ApplicationFileProcessor $applicationFileProcessor, array $fileProcessors = [])
     {
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->currentFileProvider = $currentFileProvider;
@@ -80,7 +74,6 @@ final class WorkerRunner
         $this->rectorConsoleOutputStyle = $rectorConsoleOutputStyle;
         $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->applicationFileProcessor = $applicationFileProcessor;
-        $this->changedFilesDetector = $changedFilesDetector;
         $this->fileProcessors = $fileProcessors;
     }
     public function run(Encoder $encoder, Decoder $decoder, Configuration $configuration) : void
@@ -107,20 +100,13 @@ final class WorkerRunner
             // 1. allow PHPStan to work with static reflection on provided files
             $this->applicationFileProcessor->configurePHPStanNodeScopeResolver($filePaths, $configuration);
             foreach ($filePaths as $filePath) {
-                $file = null;
                 try {
                     $file = new File($filePath, FileSystem::read($filePath));
                     $this->currentFileProvider->setFile($file);
                     $errorAndFileDiffs = $this->processFiles($file, $configuration, $errorAndFileDiffs);
-                    if ($errorAndFileDiffs[Bridge::SYSTEM_ERRORS] !== []) {
-                        $this->changedFilesDetector->invalidateFile($file->getFilePath());
-                    } else {
-                        $this->changedFilesDetector->addFileWithDependencies($file->getFilePath());
-                    }
                 } catch (Throwable $throwable) {
                     ++$systemErrorsCount;
                     $systemErrors = $this->collectSystemErrors($systemErrors, $throwable, $filePath);
-                    $this->invalidateFile($file);
                 }
             }
             $this->removedAndAddedFilesProcessor->run($configuration);
@@ -160,12 +146,5 @@ final class WorkerRunner
         $errorMessage .= 'Run Rector with "--debug" option and post the report here: https://github.com/rectorphp/rector/issues/new';
         $systemErrors[] = new SystemError($errorMessage, $filePath, $throwable->getLine());
         return $systemErrors;
-    }
-    private function invalidateFile(?File $file) : void
-    {
-        if ($file === null) {
-            return;
-        }
-        $this->changedFilesDetector->invalidateFile($file->getFilePath());
     }
 }
