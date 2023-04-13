@@ -67,10 +67,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $stmts = $node->stmts;
-        if ($stmts === null) {
-            return null;
-        }
+        $stmts = (array) $node->stmts;
         if (\count($stmts) < 3) {
             return null;
         }

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5ff64d492681897def51109d95dd4f69
+class ComposerStaticInit2c290fdea3530f26f3ca0e8e30ce20e1
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -3084,6 +3084,7 @@ class ComposerStaticInit5ff64d492681897def51109d95dd4f69
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\VarAnnotationIncorrectNullableRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
@@ -3138,9 +3139,9 @@ class ComposerStaticInit5ff64d492681897def51109d95dd4f69
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5ff64d492681897def51109d95dd4f69::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5ff64d492681897def51109d95dd4f69::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5ff64d492681897def51109d95dd4f69::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2c290fdea3530f26f3ca0e8e30ce20e1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2c290fdea3530f26f3ca0e8e30ce20e1::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2c290fdea3530f26f3ca0e8e30ce20e1::$classMap;
 
         }, null, ClassLoader::class);
     }

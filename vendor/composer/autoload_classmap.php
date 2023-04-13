@@ -2837,6 +2837,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
     'Rector\\TypeDeclaration\\Rector\\Property\\VarAnnotationIncorrectNullableRector' => $baseDir . '/rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php',
+    'Rector\\TypeDeclaration\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => $baseDir . '/rules/TypeDeclaration/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
     'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => $baseDir . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
