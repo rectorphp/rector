@@ -101,6 +101,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->isReadonly()) {
+            return null;
+        }
         $changedProperties = $this->collectPropertyNamesWithMissingDefaultArray($node);
         if ($changedProperties === []) {
             return null;
