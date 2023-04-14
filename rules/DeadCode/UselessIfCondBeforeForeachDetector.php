@@ -13,6 +13,7 @@ use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -42,6 +43,29 @@ final class UselessIfCondBeforeForeachDetector
     }
     /**
      * Matches:
+     * empty($values)
+     */
+    public function isMatchingEmptyAndForeachedExpr(If_ $if, Expr $foreachExpr) : bool
+    {
+        if (!$if->cond instanceof Empty_) {
+            return \false;
+        }
+        /** @var Empty_ $empty */
+        $empty = $if->cond;
+        if (!$this->nodeComparator->areNodesEqual($empty->expr, $foreachExpr)) {
+            return \false;
+        }
+        if ($if->stmts === []) {
+            return \true;
+        }
+        if (\count($if->stmts) !== 1) {
+            return \false;
+        }
+        $stmt = $if->stmts[0];
+        return $stmt instanceof Return_ && !$stmt->expr instanceof Expr;
+    }
+    /**
+     * Matches:
      * !empty($values)
      */
     public function isMatchingNotEmpty(If_ $if, Expr $foreachExpr, Scope $scope) : bool
@@ -55,22 +79,7 @@ final class UselessIfCondBeforeForeachDetector
         }
         /** @var Empty_ $empty */
         $empty = $cond->expr;
-        if (!$this->nodeComparator->areNodesEqual($empty->expr, $foreachExpr)) {
-            return \false;
-        }
-        // is array though?
-        $arrayType = $scope->getType($empty->expr);
-        if (!$arrayType->isArray()->yes()) {
-            return \false;
-        }
-        $previousParam = $this->fromPreviousParam($foreachExpr);
-        if (!$previousParam instanceof Param) {
-            return \true;
-        }
-        if ($this->paramAnalyzer->isNullable($previousParam)) {
-            return \false;
-        }
-        return !$this->paramAnalyzer->hasDefaultNull($previousParam);
+        return $this->areCondExprAndForeachExprSame($empty, $foreachExpr, $scope);
     }
     /**
      * Matches:
@@ -123,5 +132,24 @@ final class UselessIfCondBeforeForeachDetector
             return \false;
         }
         return $expr->items === [];
+    }
+    private function areCondExprAndForeachExprSame(Empty_ $empty, Expr $foreachExpr, Scope $scope) : bool
+    {
+        if (!$this->nodeComparator->areNodesEqual($empty->expr, $foreachExpr)) {
+            return \false;
+        }
+        // is array though?
+        $arrayType = $scope->getType($empty->expr);
+        if (!$arrayType->isArray()->yes()) {
+            return \false;
+        }
+        $previousParam = $this->fromPreviousParam($foreachExpr);
+        if (!$previousParam instanceof Param) {
+            return \true;
+        }
+        if ($this->paramAnalyzer->isNullable($previousParam)) {
+            return \false;
+        }
+        return !$this->paramAnalyzer->hasDefaultNull($previousParam);
     }
 }
