@@ -1,4 +1,4 @@
-# 415 Rules Overview
+# 416 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (36)
+- [TypeDeclaration](#typedeclaration) (37)
 
 - [Visibility](#visibility) (3)
 
@@ -9560,6 +9560,19 @@ Change class method that returns false as invalid state, to nullable
          return $number;
      }
  }
+```
+
+<br>
+
+### FlipNegatedTernaryInstanceofRector
+
+Flip negated ternary of instanceof to direct use of object
+
+- class: [`Rector\TypeDeclaration\Rector\Ternary\FlipNegatedTernaryInstanceofRector`](../rules/TypeDeclaration/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php)
+
+```diff
+-echo ! $object instanceof Product ? null : $object->getPrice();
++echo $object instanceof Product ? $object->getPrice() : null;
 ```
 
 <br>
