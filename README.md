@@ -18,6 +18,8 @@ Do you have code quality you need, but struggle to keep it with new developers i
 
 Add Rector to your CI and let it **continuously refactor your code** and keep the code quality high.
 
+Read our [blogpost](https://getrector.com/blog/new-setup-ci-command-to-let-rector-work-for-you) to see how to set up automated refactoring.
+
 ## Install
 
 ```bash
