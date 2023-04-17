@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2d4e91d23c53ce21a77e085e22a4a0ac
+class ComposerStaticInit67a0cab39c3e159fe58270f60be93d3e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -265,6 +265,7 @@ class ComposerStaticInit2d4e91d23c53ce21a77e085e22a4a0ac
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprStringNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprTrueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprTrueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstFetchNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstFetchNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\QuoteAwareConstExprStringNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/QuoteAwareConstExprStringNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Node' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Node.php',
         'PHPStan\\PhpDocParser\\Ast\\NodeAttributes' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagMethodValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagMethodValueNode.php',
@@ -318,6 +319,7 @@ class ComposerStaticInit2d4e91d23c53ce21a77e085e22a4a0ac
         'PHPStan\\PhpDocParser\\Parser\\ConstExprParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/ConstExprParser.php',
         'PHPStan\\PhpDocParser\\Parser\\ParserException' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/ParserException.php',
         'PHPStan\\PhpDocParser\\Parser\\PhpDocParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/PhpDocParser.php',
+        'PHPStan\\PhpDocParser\\Parser\\StringUnescaper' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/StringUnescaper.php',
         'PHPStan\\PhpDocParser\\Parser\\TokenIterator' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TokenIterator.php',
         'PHPStan\\PhpDocParser\\Parser\\TypeParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TypeParser.php',
         'PHPStan\\PhpDoc\\PHPUnit\\MockObjectTypeNodeResolverExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/PhpDoc/PHPUnit/MockObjectTypeNodeResolverExtension.php',
@@ -3084,6 +3086,7 @@ class ComposerStaticInit2d4e91d23c53ce21a77e085e22a4a0ac
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\VarAnnotationIncorrectNullableRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php',
+        'Rector\\TypeDeclaration\\Rector\\StmtsAwareInterface\\DeclareStrictTypesRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/StmtsAwareInterface/DeclareStrictTypesRector.php',
         'Rector\\TypeDeclaration\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
@@ -3139,9 +3142,9 @@ class ComposerStaticInit2d4e91d23c53ce21a77e085e22a4a0ac
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2d4e91d23c53ce21a77e085e22a4a0ac::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2d4e91d23c53ce21a77e085e22a4a0ac::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2d4e91d23c53ce21a77e085e22a4a0ac::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit67a0cab39c3e159fe58270f60be93d3e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit67a0cab39c3e159fe58270f60be93d3e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit67a0cab39c3e159fe58270f60be93d3e::$classMap;
 
         }, null, ClassLoader::class);
     }

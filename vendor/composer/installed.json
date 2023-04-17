@@ -821,17 +821,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.18.1",
-            "version_normalized": "1.18.1.0",
+            "version": "1.19.0",
+            "version_normalized": "1.19.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "22dcdfd725ddf99583bfe398fc624ad6c5004a0f"
+                "reference": "178b33aa1c8b8d7725f0abee618ef47337e607ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/22dcdfd725ddf99583bfe398fc624ad6c5004a0f",
-                "reference": "22dcdfd725ddf99583bfe398fc624ad6c5004a0f",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/178b33aa1c8b8d7725f0abee618ef47337e607ce",
+                "reference": "178b33aa1c8b8d7725f0abee618ef47337e607ce",
                 "shasum": ""
             },
             "require": {
@@ -846,7 +846,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2023-04-07T11:51:11+00:00",
+            "time": "2023-04-17T13:16:52+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -863,7 +863,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.18.1"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.19.0"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
@@ -1919,12 +1919,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "b88c766bfa958d04cf778203a41c3e8b469557be"
+                "reference": "040c091692d6a455363cbb2a61435d5dfd1477d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/b88c766bfa958d04cf778203a41c3e8b469557be",
-                "reference": "b88c766bfa958d04cf778203a41c3e8b469557be",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/040c091692d6a455363cbb2a61435d5dfd1477d0",
+                "reference": "040c091692d6a455363cbb2a61435d5dfd1477d0",
                 "shasum": ""
             },
             "require": {
@@ -1936,7 +1936,7 @@
             "require-dev": {
                 "doctrine\/orm": "^2.10",
                 "phpstan\/extension-installer": "^1.1",
-                "phpstan\/phpstan": "^1.8.2",
+                "phpstan\/phpstan": "^1.10",
                 "phpstan\/phpstan-strict-rules": "^1.1",
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^10.0",
@@ -1951,7 +1951,7 @@
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1"
             },
-            "time": "2023-04-03T08:35:29+00:00",
+            "time": "2023-04-17T15:34:51+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1978,7 +1978,7 @@
             "description": "Rector upgrades rules for Doctrine",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-doctrine\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/main"
+                "source": "https:\/\/github.com\/rectorphp\/rector-doctrine\/tree\/0.14.2"
             },
             "install-path": "..\/rector\/rector-doctrine"
         },

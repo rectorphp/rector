@@ -9,7 +9,7 @@
     "require-dev": {
         "phpstan\/extension-installer": "^1.1",
         "rector\/phpstan-rules": "^0.6",
-        "phpstan\/phpstan": "^1.8.2",
+        "phpstan\/phpstan": "^1.10",
         "phpunit\/phpunit": "^10.0",
         "symplify\/phpstan-rules": "^11.1",
         "symplify\/phpstan-extensions": "^11.1",

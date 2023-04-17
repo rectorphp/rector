@@ -68,6 +68,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->stmts === null) {
+            return null;
+        }
         $variableAndPropertyFetchAssign = $this->justPropertyFetchVariableAssignMatcher->match($node);
         if (!$variableAndPropertyFetchAssign instanceof VariableAndPropertyFetchAssign) {
             return null;

@@ -13,9 +13,12 @@ class TypeParser
 {
     /** @var ConstExprParser|null */
     private $constExprParser;
-    public function __construct(?\PHPStan\PhpDocParser\Parser\ConstExprParser $constExprParser = null)
+    /** @var bool */
+    private $quoteAwareConstExprString;
+    public function __construct(?\PHPStan\PhpDocParser\Parser\ConstExprParser $constExprParser = null, bool $quoteAwareConstExprString = \false)
     {
         $this->constExprParser = $constExprParser;
+        $this->quoteAwareConstExprString = $quoteAwareConstExprString;
     }
     /** @phpstan-impure */
     public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\Type\TypeNode
@@ -429,10 +432,18 @@ class TypeParser
             $key = new Ast\ConstExpr\ConstExprIntegerNode($tokens->currentTokenValue());
             $tokens->next();
         } elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_SINGLE_QUOTED_STRING)) {
-            $key = new Ast\ConstExpr\ConstExprStringNode(trim($tokens->currentTokenValue(), "'"));
+            if ($this->quoteAwareConstExprString) {
+                $key = new Ast\ConstExpr\QuoteAwareConstExprStringNode(\PHPStan\PhpDocParser\Parser\StringUnescaper::unescapeString($tokens->currentTokenValue()), Ast\ConstExpr\QuoteAwareConstExprStringNode::SINGLE_QUOTED);
+            } else {
+                $key = new Ast\ConstExpr\ConstExprStringNode(trim($tokens->currentTokenValue(), "'"));
+            }
             $tokens->next();
         } elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_DOUBLE_QUOTED_STRING)) {
-            $key = new Ast\ConstExpr\ConstExprStringNode(trim($tokens->currentTokenValue(), '"'));
+            if ($this->quoteAwareConstExprString) {
+                $key = new Ast\ConstExpr\QuoteAwareConstExprStringNode(\PHPStan\PhpDocParser\Parser\StringUnescaper::unescapeString($tokens->currentTokenValue()), Ast\ConstExpr\QuoteAwareConstExprStringNode::DOUBLE_QUOTED);
+            } else {
+                $key = new Ast\ConstExpr\ConstExprStringNode(trim($tokens->currentTokenValue(), '"'));
+            }
             $tokens->next();
         } else {
             $key = new Ast\Type\IdentifierTypeNode($tokens->currentTokenValue());
@@ -475,10 +486,18 @@ class TypeParser
     private function parseObjectShapeKey(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens)
     {
         if ($tokens->isCurrentTokenType(Lexer::TOKEN_SINGLE_QUOTED_STRING)) {
-            $key = new Ast\ConstExpr\ConstExprStringNode(trim($tokens->currentTokenValue(), "'"));
+            if ($this->quoteAwareConstExprString) {
+                $key = new Ast\ConstExpr\QuoteAwareConstExprStringNode(\PHPStan\PhpDocParser\Parser\StringUnescaper::unescapeString($tokens->currentTokenValue()), Ast\ConstExpr\QuoteAwareConstExprStringNode::SINGLE_QUOTED);
+            } else {
+                $key = new Ast\ConstExpr\ConstExprStringNode(trim($tokens->currentTokenValue(), "'"));
+            }
             $tokens->next();
         } elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_DOUBLE_QUOTED_STRING)) {
-            $key = new Ast\ConstExpr\ConstExprStringNode(trim($tokens->currentTokenValue(), '"'));
+            if ($this->quoteAwareConstExprString) {
+                $key = new Ast\ConstExpr\QuoteAwareConstExprStringNode(\PHPStan\PhpDocParser\Parser\StringUnescaper::unescapeString($tokens->currentTokenValue()), Ast\ConstExpr\QuoteAwareConstExprStringNode::DOUBLE_QUOTED);
+            } else {
+                $key = new Ast\ConstExpr\ConstExprStringNode(trim($tokens->currentTokenValue(), '"'));
+            }
             $tokens->next();
         } else {
             $key = new Ast\Type\IdentifierTypeNode($tokens->currentTokenValue());
