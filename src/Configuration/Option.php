@@ -160,7 +160,7 @@ final class Option
      * @internal Use @see \Rector\Config\RectorConfig::parallel() instead with pass int $seconds parameter
      * @var string
      */
-    public const PARALLEL_TIMEOUT_IN_SECONDS = 'parallel-timeout-in-seconds';
+    public const PARALLEL_JOB_TIMEOUT_IN_SECONDS = 'parallel-job-timeout-in-seconds';
     /**
      * @var string
      */
