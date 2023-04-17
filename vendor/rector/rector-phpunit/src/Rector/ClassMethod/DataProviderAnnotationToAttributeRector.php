@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -109,9 +110,7 @@ CODE_SAMPLE
                 continue;
             }
             $originalAttributeValue = $desiredTagValueNode->value->value;
-            $methodName = \trim($originalAttributeValue, '()');
-            $attributeGroup = $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\\Framework\\Attributes\\DataProvider', [$methodName]);
-            $node->attrGroups[] = $attributeGroup;
+            $node->attrGroups[] = $this->createAttributeGroup($originalAttributeValue);
             // cleanup
             $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $desiredTagValueNode);
         }
@@ -119,5 +118,20 @@ CODE_SAMPLE
             return null;
         }
         return $node;
+    }
+    private function createAttributeGroup(string $originalAttributeValue) : AttributeGroup
+    {
+        $methodName = \trim($originalAttributeValue, '()');
+        $className = '';
+        if (\strpos($methodName, '::') !== \false) {
+            [$className, $methodName] = \explode('::', $methodName, 2);
+        }
+        if ($className !== '') {
+            if ($className[0] !== '\\') {
+                $className = '\\' . $className;
+            }
+            return $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\\Framework\\Attributes\\DataProviderExternal', [$className . '::class', $methodName]);
+        }
+        return $this->phpAttributeGroupFactory->createFromClassWithItems('PHPUnit\\Framework\\Attributes\\DataProvider', [$methodName]);
     }
 }
