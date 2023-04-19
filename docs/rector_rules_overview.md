@@ -1,4 +1,4 @@
-# 418 Rules Overview
+# 419 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (38)
+- [TypeDeclaration](#typedeclaration) (39)
 
 - [Visibility](#visibility) (3)
 
@@ -9528,6 +9528,26 @@ Add array shape exact types based on constant keys of array
      {
          return ['name' => $name];
      }
+ }
+```
+
+<br>
+
+### BinaryOpNullableToInstanceofRector
+
+Change && and || between nullable objects to instanceof compares
+
+- class: [`Rector\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector`](../rules/TypeDeclaration/Rector/BooleanAnd/BinaryOpNullableToInstanceofRector.php)
+
+```diff
+ function someFunction(?SomeClass $someClass)
+ {
+-    if ($someClass && $someClass->someMethod()) {
++    if ($someClass instanceof SomeClass && $someClass->someMethod()) {
+         return 'yes';
+     }
+
+     return 'no';
  }
 ```
 

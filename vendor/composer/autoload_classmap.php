@@ -2805,6 +2805,7 @@ return array(
     'Rector\\TypeDeclaration\\PHPStan\\TypeSpecifier\\SelfStaticParentTypeSpecifier' => $baseDir . '/rules/TypeDeclaration/PHPStan/TypeSpecifier/SelfStaticParentTypeSpecifier.php',
     'Rector\\TypeDeclaration\\PhpDocParser\\ParamPhpDocNodeFactory' => $baseDir . '/rules/TypeDeclaration/PhpDocParser/ParamPhpDocNodeFactory.php',
     'Rector\\TypeDeclaration\\Rector\\ArrowFunction\\AddArrowFunctionReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ArrowFunction/AddArrowFunctionReturnTypeRector.php',
+    'Rector\\TypeDeclaration\\Rector\\BooleanAnd\\BinaryOpNullableToInstanceofRector' => $baseDir . '/rules/TypeDeclaration/Rector/BooleanAnd/BinaryOpNullableToInstanceofRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddMethodCallBasedStrictParamTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddMethodCallBasedStrictParamTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeBasedOnPHPUnitDataProviderRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeBasedOnPHPUnitDataProviderRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddParamTypeDeclarationRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddParamTypeDeclarationRector.php',
