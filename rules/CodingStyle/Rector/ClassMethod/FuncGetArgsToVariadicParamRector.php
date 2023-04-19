@@ -148,7 +148,7 @@ CODE_SAMPLE
     private function matchFuncGetArgsVariableAssign($functionLike) : ?Assign
     {
         /** @var Assign[] $assigns */
-        $assigns = $this->betterNodeFinder->findInstanceOf((array) $functionLike->stmts, Assign::class);
+        $assigns = $this->betterNodeFinder->findInstancesOfInFunctionLikeScoped($functionLike, Assign::class);
         foreach ($assigns as $assign) {
             if (!$assign->expr instanceof FuncCall) {
                 continue;
