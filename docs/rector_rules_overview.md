@@ -1,4 +1,4 @@
-# 416 Rules Overview
+# 418 Rules Overview
 
 <br>
 
@@ -30,7 +30,7 @@
 
 - [Php54](#php54) (3)
 
-- [Php55](#php55) (5)
+- [Php55](#php55) (6)
 
 - [Php56](#php56) (2)
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (37)
+- [TypeDeclaration](#typedeclaration) (38)
 
 - [Visibility](#visibility) (3)
 
@@ -4698,6 +4698,25 @@ The /e modifier is no longer supported, use preg_replace_callback instead
 +              return($matches[1].strtolower($matches[2]));
 +        }, $comment);
      }
+ }
+```
+
+<br>
+
+### StaticToSelfOnFinalClassRector
+
+Change `static::class` to `self::class` on final class
+
+- class: [`Rector\Php55\Rector\ClassConstFetch\StaticToSelfOnFinalClassRector`](../rules/Php55/Rector/ClassConstFetch/StaticToSelfOnFinalClassRector.php)
+
+```diff
+ final class SomeClass
+ {
+    public function callOnMe()
+    {
+-       var_dump(static::class);
++       var_dump(self::class);
+    }
  }
 ```
 
@@ -9509,6 +9528,22 @@ Add array shape exact types based on constant keys of array
      {
          return ['name' => $name];
      }
+ }
+```
+
+<br>
+
+### DeclareStrictTypesRector
+
+Add declare(strict_types=1) if missing
+
+- class: [`Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector`](../rules/TypeDeclaration/Rector/StmtsAwareInterface/DeclareStrictTypesRector.php)
+
+```diff
++declare(strict_types=1);
++
+ function someFunction()
+ {
  }
 ```
 
