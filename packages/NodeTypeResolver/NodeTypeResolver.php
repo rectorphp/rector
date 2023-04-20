@@ -50,10 +50,6 @@ final class NodeTypeResolver
      */
     private $nodeTypeResolvers = [];
     /**
-     * @var array<string, bool>
-     */
-    private $traitExistsCache = [];
-    /**
      * @readonly
      * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
@@ -319,27 +315,30 @@ final class NodeTypeResolver
     }
     private function isObjectTypeOfObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType) : bool
     {
-        if ($resolvedObjectType->getClassName() === $requiredObjectType->getClassName()) {
+        $requiredClassName = $requiredObjectType->getClassName();
+        $resolvedClassName = $resolvedObjectType->getClassName();
+        if ($resolvedClassName === $requiredClassName) {
             return \true;
         }
-        if ($resolvedObjectType->isInstanceOf($requiredObjectType->getClassName())->yes()) {
+        if ($resolvedObjectType->isInstanceOf($requiredClassName)->yes()) {
             return \true;
         }
-        if (!$this->reflectionProvider->hasClass($resolvedObjectType->getClassName())) {
+        if (!$this->reflectionProvider->hasClass($requiredClassName)) {
             return \false;
         }
-        $classReflection = $this->reflectionProvider->getClass($resolvedObjectType->getClassName());
-        if (!isset($this->traitExistsCache[$classReflection->getName()])) {
-            $this->traitExistsCache[$classReflection->getName()] = \trait_exists($requiredObjectType->getClassName());
+        $requiredClassReflection = $this->reflectionProvider->getClass($requiredClassName);
+        if (!$this->reflectionProvider->hasClass($resolvedClassName)) {
+            return \false;
         }
-        if ($this->traitExistsCache[$classReflection->getName()]) {
-            foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
-                if ($ancestorClassReflection->hasTraitUse($requiredObjectType->getClassName())) {
+        $resolvedClassReflection = $this->reflectionProvider->getClass($resolvedClassName);
+        if ($requiredClassReflection->isTrait()) {
+            foreach ($resolvedClassReflection->getAncestors() as $ancestorClassReflection) {
+                if ($ancestorClassReflection->hasTraitUse($requiredClassName)) {
                     return \true;
                 }
             }
         }
-        return $classReflection->isSubclassOf($requiredObjectType->getClassName());
+        return $resolvedClassReflection->isSubclassOf($requiredClassName);
     }
     private function resolveObjectType(ObjectType $resolvedObjectType, ObjectType $requiredObjectType) : bool
     {
