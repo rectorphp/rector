@@ -11,12 +11,15 @@ use function in_array;
 use function strlen;
 class TokenIterator
 {
-    /** @var mixed[][] */
+    /** @var list<array{string, int, int}> */
     private $tokens;
     /** @var int */
     private $index;
     /** @var int[] */
     private $savePoints = [];
+    /**
+     * @param list<array{string, int, int}> $tokens
+     */
     public function __construct(array $tokens, int $index = 0)
     {
         $this->tokens = $tokens;
@@ -41,6 +44,14 @@ class TokenIterator
             $offset += strlen($this->tokens[$i][Lexer::VALUE_OFFSET]);
         }
         return $offset;
+    }
+    public function currentTokenLine() : int
+    {
+        return $this->tokens[$this->index][Lexer::LINE_OFFSET];
+    }
+    public function currentTokenIndex() : int
+    {
+        return $this->index;
     }
     public function isCurrentTokenValue(string $tokenValue) : bool
     {
@@ -155,6 +166,6 @@ class TokenIterator
      */
     private function throwError(int $expectedTokenType, ?string $expectedTokenValue = null) : void
     {
-        throw new \PHPStan\PhpDocParser\Parser\ParserException($this->currentTokenValue(), $this->currentTokenType(), $this->currentTokenOffset(), $expectedTokenType, $expectedTokenValue);
+        throw new \PHPStan\PhpDocParser\Parser\ParserException($this->currentTokenValue(), $this->currentTokenType(), $this->currentTokenOffset(), $expectedTokenType, $expectedTokenValue, $this->currentTokenLine());
     }
 }

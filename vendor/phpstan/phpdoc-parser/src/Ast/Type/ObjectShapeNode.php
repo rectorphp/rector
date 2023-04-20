@@ -10,6 +10,9 @@ class ObjectShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     use NodeAttributes;
     /** @var ObjectShapeItemNode[] */
     public $items;
+    /**
+     * @param ObjectShapeItemNode[] $items
+     */
     public function __construct(array $items)
     {
         $this->items = $items;

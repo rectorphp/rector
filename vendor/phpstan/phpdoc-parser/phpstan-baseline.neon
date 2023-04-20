@@ -1,0 +1,26 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method PHPStan\\\\PhpDocParser\\\\Ast\\\\ConstExpr\\\\QuoteAwareConstExprStringNode\\:\\:escapeDoubleQuotedString\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: src/Ast/ConstExpr/QuoteAwareConstExprStringNode.php
+
+		-
+			message: "#^Cannot use array destructuring on array\\<int, array\\<PHPStan\\\\PhpDocParser\\\\Ast\\\\Node\\>\\|int\\|string\\>\\|null\\.$#"
+			count: 1
+			path: src/Ast/NodeTraverser.php
+
+		-
+			message: "#^Strict comparison using \\=\\=\\= between 2 and 2 will always evaluate to true\\.$#"
+			count: 2
+			path: src/Ast/NodeTraverser.php
+
+		-
+			message: "#^Variable property access on PHPStan\\\\PhpDocParser\\\\Ast\\\\Node\\.$#"
+			count: 1
+			path: src/Ast/NodeTraverser.php
+
+		-
+			message: "#^Method PHPStan\\\\PhpDocParser\\\\Parser\\\\StringUnescaper\\:\\:parseEscapeSequences\\(\\) should return string but returns string\\|null\\.$#"
+			count: 1
+			path: src/Parser/StringUnescaper.php

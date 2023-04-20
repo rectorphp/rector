@@ -8,6 +8,8 @@ $baseDir = dirname($vendorDir);
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Normalizer' => $vendorDir . '/symfony/polyfill-intl-normalizer/Resources/stubs/Normalizer.php',
+    'PHPStan\\PhpDocParser\\Ast\\AbstractNodeVisitor' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/AbstractNodeVisitor.php',
+    'PHPStan\\PhpDocParser\\Ast\\Attribute' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Attribute.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFalseNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFalseNode.php',
@@ -21,6 +23,9 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\QuoteAwareConstExprStringNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/QuoteAwareConstExprStringNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Node' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Node.php',
     'PHPStan\\PhpDocParser\\Ast\\NodeAttributes' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php',
+    'PHPStan\\PhpDocParser\\Ast\\NodeTraverser' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/NodeTraverser.php',
+    'PHPStan\\PhpDocParser\\Ast\\NodeVisitor' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/NodeVisitor.php',
+    'PHPStan\\PhpDocParser\\Ast\\NodeVisitor\\CloningVisitor' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/NodeVisitor/CloningVisitor.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagMethodValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagMethodValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagPropertyValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagPropertyValueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagValueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagValueNode.php',

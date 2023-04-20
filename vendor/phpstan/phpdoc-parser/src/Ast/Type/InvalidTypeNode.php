@@ -12,7 +12,7 @@ class InvalidTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     private $exceptionArgs;
     public function __construct(ParserException $exception)
     {
-        $this->exceptionArgs = [$exception->getCurrentTokenValue(), $exception->getCurrentTokenType(), $exception->getCurrentOffset(), $exception->getExpectedTokenType(), $exception->getExpectedTokenValue()];
+        $this->exceptionArgs = [$exception->getCurrentTokenValue(), $exception->getCurrentTokenType(), $exception->getCurrentOffset(), $exception->getExpectedTokenType(), $exception->getExpectedTokenValue(), $exception->getCurrentTokenLine()];
     }
     public function getException() : ParserException
     {

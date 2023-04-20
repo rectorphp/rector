@@ -14,6 +14,9 @@ class CallableTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     public $parameters;
     /** @var TypeNode */
     public $returnType;
+    /**
+     * @param CallableTypeParameterNode[] $parameters
+     */
     public function __construct(\PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode $identifier, array $parameters, \PHPStan\PhpDocParser\Ast\Type\TypeNode $returnType)
     {
         $this->identifier = $identifier;

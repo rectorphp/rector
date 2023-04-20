@@ -37,7 +37,7 @@ class QuoteAwareConstExprStringNode extends \PHPStan\PhpDocParser\Ast\ConstExpr\
         // from https://github.com/nikic/PHP-Parser/blob/0ffddce52d816f72d0efc4d9b02e276d3309ef01/lib/PhpParser/PrettyPrinter/Standard.php#L1010-L1040
         return sprintf('"%s"', $this->escapeDoubleQuotedString());
     }
-    private function escapeDoubleQuotedString()
+    private function escapeDoubleQuotedString() : string
     {
         $quote = '"';
         $escaped = addcslashes($this->value, "\n\r\t\f\v\$" . $quote . '\\');

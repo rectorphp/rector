@@ -49,8 +49,12 @@ class Lexer
     public const TOKEN_LABELS = [self::TOKEN_REFERENCE => '\'&\'', self::TOKEN_UNION => '\'|\'', self::TOKEN_INTERSECTION => '\'&\'', self::TOKEN_NULLABLE => '\'?\'', self::TOKEN_NEGATED => '\'!\'', self::TOKEN_OPEN_PARENTHESES => '\'(\'', self::TOKEN_CLOSE_PARENTHESES => '\')\'', self::TOKEN_OPEN_ANGLE_BRACKET => '\'<\'', self::TOKEN_CLOSE_ANGLE_BRACKET => '\'>\'', self::TOKEN_OPEN_SQUARE_BRACKET => '\'[\'', self::TOKEN_CLOSE_SQUARE_BRACKET => '\']\'', self::TOKEN_OPEN_CURLY_BRACKET => '\'{\'', self::TOKEN_CLOSE_CURLY_BRACKET => '\'}\'', self::TOKEN_COMMA => '\',\'', self::TOKEN_COLON => '\':\'', self::TOKEN_VARIADIC => '\'...\'', self::TOKEN_DOUBLE_COLON => '\'::\'', self::TOKEN_DOUBLE_ARROW => '\'=>\'', self::TOKEN_ARROW => '\'->\'', self::TOKEN_EQUAL => '\'=\'', self::TOKEN_OPEN_PHPDOC => '\'/**\'', self::TOKEN_CLOSE_PHPDOC => '\'*/\'', self::TOKEN_PHPDOC_TAG => 'TOKEN_PHPDOC_TAG', self::TOKEN_PHPDOC_EOL => 'TOKEN_PHPDOC_EOL', self::TOKEN_FLOAT => 'TOKEN_FLOAT', self::TOKEN_INTEGER => 'TOKEN_INTEGER', self::TOKEN_SINGLE_QUOTED_STRING => 'TOKEN_SINGLE_QUOTED_STRING', self::TOKEN_DOUBLE_QUOTED_STRING => 'TOKEN_DOUBLE_QUOTED_STRING', self::TOKEN_IDENTIFIER => 'type', self::TOKEN_THIS_VARIABLE => '\'$this\'', self::TOKEN_VARIABLE => 'variable', self::TOKEN_HORIZONTAL_WS => 'TOKEN_HORIZONTAL_WS', self::TOKEN_OTHER => 'TOKEN_OTHER', self::TOKEN_END => 'TOKEN_END', self::TOKEN_WILDCARD => '*'];
     public const VALUE_OFFSET = 0;
     public const TYPE_OFFSET = 1;
+    public const LINE_OFFSET = 2;
     /** @var string|null */
     private $regexp;
+    /**
+     * @return list<array{string, int, int}>
+     */
     public function tokenize(string $s) : array
     {
         if ($this->regexp === null) {
@@ -58,10 +62,16 @@ class Lexer
         }
         preg_match_all($this->regexp, $s, $matches, PREG_SET_ORDER);
         $tokens = [];
+        $line = 1;
         foreach ($matches as $match) {
-            $tokens[] = [$match[0], (int) $match['MARK']];
+            $type = (int) $match['MARK'];
+            $tokens[] = [$match[0], $type, $line];
+            if ($type !== self::TOKEN_PHPDOC_EOL) {
+                continue;
+            }
+            $line++;
         }
-        $tokens[] = ['', self::TOKEN_END];
+        $tokens[] = ['', self::TOKEN_END, $line];
         return $tokens;
     }
     private function generateRegexp() : string

@@ -17,6 +17,7 @@ class ArrayShapeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     /** @var self::KIND_* */
     public $kind;
     /**
+     * @param ArrayShapeItemNode[] $items
      * @param self::KIND_* $kind
      */
     public function __construct(array $items, bool $sealed = \true, string $kind = self::KIND_ARRAY)

@@ -32,12 +32,12 @@ class StringUnescaper
                 return self::REPLACEMENTS[$str];
             }
             if ($str[0] === 'x' || $str[0] === 'X') {
-                return chr(hexdec(substr($str, 1)));
+                return chr((int) hexdec(substr($str, 1)));
             }
             if ($str[0] === 'u') {
-                return self::codePointToUtf8(hexdec($matches[2]));
+                return self::codePointToUtf8((int) hexdec($matches[2]));
             }
-            return chr(octdec($str));
+            return chr((int) octdec($str));
         }, $str);
     }
     /**
