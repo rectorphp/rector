@@ -49,7 +49,7 @@ final class ClassConstManipulator
                 continue;
             }
             // has in class?
-            $isClassConstFetchFound = (bool) $this->betterNodeFinder->find($ancestorClass, function (Node $node) use($classConst, $className) : bool {
+            $isClassConstFetchFound = (bool) $this->betterNodeFinder->findFirst($ancestorClass, function (Node $node) use($classConst, $className) : bool {
                 // property + static fetch
                 if (!$node instanceof ClassConstFetch) {
                     return \false;

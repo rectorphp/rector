@@ -104,7 +104,7 @@ CODE_SAMPLE
                 return \true;
             }
             if (!$node instanceof Assign) {
-                return !(bool) $this->betterNodeFinder->find($node, function (Node $subNode) use($expr) : bool {
+                return !(bool) $this->betterNodeFinder->findFirst($node, function (Node $subNode) use($expr) : bool {
                     return $this->nodeComparator->areNodesEqual($expr, $subNode);
                 });
             }
