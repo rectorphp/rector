@@ -77,6 +77,9 @@ CODE_SAMPLE
         if (!$firstArrayItem instanceof ArrayItem) {
             return null;
         }
+        if ($firstArrayItem->unpack) {
+            return null;
+        }
         if (!isset($node->args[0])) {
             return null;
         }
