@@ -147,9 +147,6 @@ final class UndefinedVariableResolver
         if ($this->isAsCoalesceLeftOrAssignOpCoalesceVar($parentNode, $variable)) {
             return \true;
         }
-        if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
-            return \true;
-        }
         if ($this->isAssign($parentNode)) {
             return \true;
         }
@@ -160,15 +157,18 @@ final class UndefinedVariableResolver
         if ($this->isListAssign($parentNode)) {
             return \true;
         }
-        if ($this->isDifferentWithOriginalNodeOrNoScope($variable)) {
-            return \true;
-        }
         $variableName = $this->nodeNameResolver->getName($variable);
         // skip $this, as probably in outer scope
         if ($variableName === 'this') {
             return \true;
         }
         if ($variableName === null) {
+            return \true;
+        }
+        if ($this->isDifferentWithOriginalNodeOrNoScope($variable)) {
+            return \true;
+        }
+        if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
             return \true;
         }
         if ($this->hasPreviousCheckedWithIsset($variable)) {
