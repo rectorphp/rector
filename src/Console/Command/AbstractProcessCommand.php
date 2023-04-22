@@ -33,7 +33,7 @@ abstract class AbstractProcessCommand extends Command
         $this->addOption(Option::OUTPUT_FORMAT, null, InputOption::VALUE_REQUIRED, 'Select output format', ConsoleOutputFormatter::NAME);
         $this->addOption(Option::DEBUG, null, InputOption::VALUE_NONE, 'Display debug output.');
         $this->addOption(Option::MEMORY_LIMIT, null, InputOption::VALUE_REQUIRED, 'Memory limit for process');
-        $this->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchaged files cache');
+        $this->addOption(Option::CLEAR_CACHE, null, InputOption::VALUE_NONE, 'Clear unchanged files cache');
         $this->addOption(Option::PARALLEL_PORT, null, InputOption::VALUE_REQUIRED);
         $this->addOption(Option::PARALLEL_IDENTIFIER, null, InputOption::VALUE_REQUIRED);
     }
