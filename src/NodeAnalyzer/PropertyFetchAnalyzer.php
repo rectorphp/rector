@@ -87,11 +87,13 @@ final class PropertyFetchAnalyzer
     }
     public function isLocalPropertyFetchName(Node $node, string $desiredPropertyName) : bool
     {
-        if (!$this->isLocalPropertyFetch($node)) {
+        if (!$node instanceof PropertyFetch && !$node instanceof StaticPropertyFetch) {
             return \false;
         }
-        /** @var PropertyFetch|StaticPropertyFetch $node */
-        return $this->nodeNameResolver->isName($node->name, $desiredPropertyName);
+        if (!$this->nodeNameResolver->isName($node->name, $desiredPropertyName)) {
+            return \false;
+        }
+        return $this->isLocalPropertyFetch($node);
     }
     public function countLocalPropertyFetchName(Class_ $class, string $propertyName) : int
     {
