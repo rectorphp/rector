@@ -327,11 +327,11 @@ final class NodeTypeResolver
             return \false;
         }
         $requiredClassReflection = $this->reflectionProvider->getClass($requiredClassName);
-        if (!$this->reflectionProvider->hasClass($resolvedClassName)) {
-            return \false;
-        }
-        $resolvedClassReflection = $this->reflectionProvider->getClass($resolvedClassName);
         if ($requiredClassReflection->isTrait()) {
+            if (!$this->reflectionProvider->hasClass($resolvedClassName)) {
+                return \false;
+            }
+            $resolvedClassReflection = $this->reflectionProvider->getClass($resolvedClassName);
             foreach ($resolvedClassReflection->getAncestors() as $ancestorClassReflection) {
                 if ($ancestorClassReflection->hasTraitUse($requiredClassName)) {
                     return \true;
