@@ -55,6 +55,13 @@ class TypeParser
             $type->setAttribute(Ast\Attribute::END_LINE, $endLine);
         }
         if ($this->useIndexAttributes) {
+            $tokensArray = $tokens->getTokens();
+            if ($tokensArray[$endIndex][Lexer::TYPE_OFFSET] === Lexer::TOKEN_CLOSE_PHPDOC) {
+                $endIndex--;
+                if ($tokensArray[$endIndex][Lexer::TYPE_OFFSET] === Lexer::TOKEN_HORIZONTAL_WS) {
+                    $endIndex--;
+                }
+            }
             $type->setAttribute(Ast\Attribute::START_INDEX, $startIndex);
             $type->setAttribute(Ast\Attribute::END_INDEX, $endIndex);
         }

@@ -29,6 +29,13 @@ class TokenIterator
         }
         $this->index++;
     }
+    /**
+     * @return list<array{string, int, int}>
+     */
+    public function getTokens() : array
+    {
+        return $this->tokens;
+    }
     public function currentTokenValue() : string
     {
         return $this->tokens[$this->index][Lexer::VALUE_OFFSET];
