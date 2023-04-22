@@ -84,13 +84,6 @@ final class BetterTokenIterator extends TokenIterator
     {
         return $this->privatesAccessor->getPrivateProperty($this, self::INDEX);
     }
-    /**
-     * @return array<int, array{string, int, int}>
-     */
-    public function getTokens() : array
-    {
-        return $this->privatesAccessor->getPrivateProperty($this, self::TOKENS);
-    }
     public function count() : int
     {
         return \count($this->getTokens());
