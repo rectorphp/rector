@@ -52,12 +52,18 @@ final class ParentClassMethodTypeOverrideGuard
         }
         /** @var string $methodName */
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        $parentClassReflections = \array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-        foreach ($parentClassReflections as $parentClassReflection) {
-            if (!$parentClassReflection->hasNativeMethod($methodName)) {
+        $parentClassReflection = $classReflection->getParentClass();
+        while ($parentClassReflection instanceof ClassReflection) {
+            if ($parentClassReflection->hasNativeMethod($methodName)) {
+                return $parentClassReflection->getNativeMethod($methodName);
+            }
+            $parentClassReflection = $parentClassReflection->getParentClass();
+        }
+        foreach ($classReflection->getInterfaces() as $interfaceReflection) {
+            if (!$interfaceReflection->hasNativeMethod($methodName)) {
                 continue;
             }
-            return $parentClassReflection->getNativeMethod($methodName);
+            return $interfaceReflection->getNativeMethod($methodName);
         }
         return null;
     }
