@@ -1584,7 +1584,6 @@ return array(
     'Rector\\Core\\ValueObject\\ProcessResult' => $baseDir . '/src/ValueObject/ProcessResult.php',
     'Rector\\Core\\ValueObject\\Reporting\\FileDiff' => $baseDir . '/src/ValueObject/Reporting/FileDiff.php',
     'Rector\\Core\\ValueObject\\SprintfStringAndArgs' => $baseDir . '/src/ValueObject/SprintfStringAndArgs.php',
-    'Rector\\Core\\ValueObject\\StaticNonPhpFileSuffixes' => $baseDir . '/src/ValueObject/StaticNonPhpFileSuffixes.php',
     'Rector\\Core\\ValueObject\\Visibility' => $baseDir . '/src/ValueObject/Visibility.php',
     'Rector\\DeadCode\\Comparator\\CurrentAndParentClassMethodComparator' => $baseDir . '/rules/DeadCode/Comparator/CurrentAndParentClassMethodComparator.php',
     'Rector\\DeadCode\\Comparator\\Parameter\\ParameterDefaultsComparator' => $baseDir . '/rules/DeadCode/Comparator/Parameter/ParameterDefaultsComparator.php',

@@ -17,6 +17,10 @@ use RectorPrefix202304\Symfony\Component\Filesystem\Filesystem;
 final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
+     * @var string[]
+     */
+    private const SUFFIXES = ['neon', 'yaml', 'xml', 'yml', 'twig', 'latte', 'blade.php', 'tpl'];
+    /**
      * @var NonPhpRectorInterface[]
      * @readonly
      */
@@ -89,7 +93,7 @@ final class NonPhpFileProcessor implements FileProcessorInterface
      */
     public function getSupportedFileExtensions() : array
     {
-        return StaticNonPhpFileSuffixes::SUFFIXES;
+        return self::SUFFIXES;
     }
     private function printFile(File $file, Configuration $configuration) : void
     {
