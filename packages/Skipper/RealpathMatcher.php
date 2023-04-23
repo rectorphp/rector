@@ -8,10 +8,10 @@ final class RealpathMatcher
     public function match(string $matchingPath, string $filePath) : bool
     {
         $realPathMatchingPath = \realpath($matchingPath);
-        $realpathFilePath = \realpath($filePath);
         if (!\is_string($realPathMatchingPath)) {
             return \false;
         }
+        $realpathFilePath = \realpath($filePath);
         if (!\is_string($realpathFilePath)) {
             return \false;
         }

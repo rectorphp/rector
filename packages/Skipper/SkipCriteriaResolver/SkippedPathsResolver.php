@@ -43,11 +43,11 @@ final class SkippedPathsResolver
             if (!\is_int($key)) {
                 continue;
             }
-            if (\file_exists($value)) {
+            if (\strpos((string) $value, '*') !== \false) {
                 $this->skippedPaths[] = $this->filePathHelper->normalizePathAndSchema($value);
                 continue;
             }
-            if (\strpos((string) $value, '*') !== \false) {
+            if (\file_exists($value)) {
                 $this->skippedPaths[] = $this->filePathHelper->normalizePathAndSchema($value);
             }
         }
