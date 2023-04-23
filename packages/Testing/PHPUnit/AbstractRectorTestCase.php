@@ -99,7 +99,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         $fixtureFileContents = FileSystem::read($fixtureFilePath);
         if (FixtureSplitter::containsSplit($fixtureFileContents)) {
             // changed content
-            [$inputFileContents, $expectedFileContents] = FixtureSplitter::split($fixtureFilePath);
+            [$inputFileContents, $expectedFileContents] = FixtureSplitter::splitFixtureFileContents($fixtureFileContents);
         } else {
             // no change
             $inputFileContents = $fixtureFileContents;

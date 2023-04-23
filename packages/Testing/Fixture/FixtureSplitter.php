@@ -5,7 +5,6 @@ namespace Rector\Testing\Fixture;
 
 use RectorPrefix202304\Nette\Utils\FileSystem;
 use RectorPrefix202304\Nette\Utils\Strings;
-use RectorPrefix202304\Webmozart\Assert\Assert;
 /**
  * @api
  */
@@ -27,6 +26,13 @@ final class FixtureSplitter
     public static function split(string $filePath) : array
     {
         $fixtureFileContents = FileSystem::read($filePath);
+        return Strings::split($fixtureFileContents, self::SPLIT_LINE_REGEX);
+    }
+    /**
+     * @return array<string, string>
+     */
+    public static function splitFixtureFileContents(string $fixtureFileContents) : array
+    {
         return Strings::split($fixtureFileContents, self::SPLIT_LINE_REGEX);
     }
 }
