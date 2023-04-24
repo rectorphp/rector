@@ -55,7 +55,11 @@ final class ClassMethodParamTypeCompleter
     public function complete(ClassMethod $classMethod, array $classParameterTypes, int $maxUnionTypes) : ?ClassMethod
     {
         $hasChanged = \false;
+        $totalTypes = \count($classParameterTypes);
         foreach ($classParameterTypes as $position => $argumentStaticType) {
+            if ($totalTypes > 1 && $argumentStaticType instanceof UnionType) {
+                return null;
+            }
             /** @var Type $argumentStaticType */
             if ($this->shouldSkipArgumentStaticType($classMethod, $argumentStaticType, $position, $maxUnionTypes)) {
                 continue;
