@@ -60,7 +60,7 @@ final class FileProcessor
         $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
         $file->changeNewStmts($newStmts);
         $this->affectedFilesCollector->removeFromList($file);
-        while ($otherTouchedFile = $this->affectedFilesCollector->getNext()) {
+        while (($otherTouchedFile = $this->affectedFilesCollector->getNext()) instanceof File) {
             $this->refactor($otherTouchedFile, $configuration);
         }
     }

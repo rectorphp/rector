@@ -109,9 +109,6 @@ CODE_SAMPLE
         if (!$varTagValueNode instanceof VarTagValueNode) {
             return null;
         }
-        if ($varTagValueNode->type === null) {
-            return null;
-        }
         $docType = $this->staticTypeMapper->mapPHPStanPhpDocTypeNodeToPHPStanType($varTagValueNode->type, $node);
         $updatedPhpDocType = $this->phpDocNullableTypeHelper->resolveUpdatedPhpDocTypeFromPhpDocTypeAndPhpParserType($docType, $phpParserType);
         if (!$updatedPhpDocType instanceof Type) {

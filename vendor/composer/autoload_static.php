@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2d334ac669fc6f05dccd2c404c3afeee
+class ComposerStaticInitee893ce96224bcc1cead867c7c1ab3fc
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -3094,9 +3094,11 @@ class ComposerStaticInit2d334ac669fc6f05dccd2c404c3afeee
         'Rector\\TypeDeclaration\\Rector\\Property\\VarAnnotationIncorrectNullableRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php',
         'Rector\\TypeDeclaration\\Rector\\StmtsAwareInterface\\DeclareStrictTypesRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/StmtsAwareInterface/DeclareStrictTypesRector.php',
         'Rector\\TypeDeclaration\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
+        'Rector\\TypeDeclaration\\Rector\\While_\\WhileNullableToInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/While_/WhileNullableToInstanceofRector.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
+        'Rector\\TypeDeclaration\\TypeAnalyzer\\NullableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/NullableTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\ReturnStrictTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/ReturnStrictTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\StrictReturnClassConstReturnTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/StrictReturnClassConstReturnTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
@@ -3148,9 +3150,9 @@ class ComposerStaticInit2d334ac669fc6f05dccd2c404c3afeee
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2d334ac669fc6f05dccd2c404c3afeee::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2d334ac669fc6f05dccd2c404c3afeee::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2d334ac669fc6f05dccd2c404c3afeee::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitee893ce96224bcc1cead867c7c1ab3fc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitee893ce96224bcc1cead867c7c1ab3fc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitee893ce96224bcc1cead867c7c1ab3fc::$classMap;
 
         }, null, ClassLoader::class);
     }

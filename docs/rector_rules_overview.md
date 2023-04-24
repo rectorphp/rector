@@ -1,4 +1,4 @@
-# 419 Rules Overview
+# 420 Rules Overview
 
 <br>
 
@@ -64,7 +64,7 @@
 
 - [Transform](#transform) (34)
 
-- [TypeDeclaration](#typedeclaration) (39)
+- [TypeDeclaration](#typedeclaration) (40)
 
 - [Visibility](#visibility) (3)
 
@@ -10104,6 +10104,27 @@ Add or remove null type from `@var` phpdoc typehint based on php property type d
 +     * @var DateTime[]|null
       */
      private ?array $dateTimes;
+ }
+```
+
+<br>
+
+### WhileNullableToInstanceofRector
+
+Change while null compare to strict instanceof check
+
+- class: [`Rector\TypeDeclaration\Rector\While_\WhileNullableToInstanceofRector`](../rules/TypeDeclaration/Rector/While_/WhileNullableToInstanceofRector.php)
+
+```diff
+ final class SomeClass
+ {
+     public function run(?SomeClass $someClass)
+     {
+-        while ($someClass !== null) {
++        while ($someClass instanceof SomeClass) {
+             // do something
+         }
+     }
  }
 ```
 

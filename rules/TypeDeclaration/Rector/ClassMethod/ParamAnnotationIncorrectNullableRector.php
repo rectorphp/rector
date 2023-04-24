@@ -154,9 +154,6 @@ CODE_SAMPLE
         $paramTagValueNodes = $phpDocNode->getParamTagValues();
         $paramTagWasUpdated = \false;
         foreach ($paramTagValueNodes as $paramTagValueNode) {
-            if ($paramTagValueNode->type === null) {
-                continue;
-            }
             $param = $this->paramAnalyzer->getParamByName($paramTagValueNode->parameterName, $node);
             if (!$param instanceof Param) {
                 continue;

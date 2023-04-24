@@ -452,7 +452,7 @@ final class BetterNodeFinder
             return $node;
         }
         $currentStmt = $node;
-        while ($currentStmt = $currentStmt->getAttribute(AttributeKey::PARENT_NODE)) {
+        while (($currentStmt = $currentStmt->getAttribute(AttributeKey::PARENT_NODE)) instanceof Node) {
             if ($currentStmt instanceof Stmt) {
                 return $currentStmt;
             }

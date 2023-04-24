@@ -47,7 +47,7 @@ final class MultiDirnameRector extends AbstractRector implements MinPhpVersionIn
         }
         $activeFuncCallNode = $node;
         $lastFuncCallNode = $node;
-        while ($activeFuncCallNode = $this->matchNestedDirnameFuncCall($activeFuncCallNode)) {
+        while (($activeFuncCallNode = $this->matchNestedDirnameFuncCall($activeFuncCallNode)) instanceof FuncCall) {
             $lastFuncCallNode = $activeFuncCallNode;
         }
         // nothing to improve

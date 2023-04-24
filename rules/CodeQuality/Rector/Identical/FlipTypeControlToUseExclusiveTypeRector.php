@@ -11,11 +11,9 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeCombinator;
-use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -23,9 +21,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer
+     */
+    private $nullableTypeAnalyzer;
+    public function __construct(NullableTypeAnalyzer $nullableTypeAnalyzer)
+    {
+        $this->nullableTypeAnalyzer = $nullableTypeAnalyzer;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Flip type control from null compare to use exclusive instanceof type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Flip type control from null compare to use exclusive instanceof object', [new CodeSample(<<<'CODE_SAMPLE'
 function process(?DateTime $dateTime)
 {
     if ($dateTime === null) {
@@ -59,36 +66,19 @@ CODE_SAMPLE
         if (!$expr instanceof Expr) {
             return null;
         }
-        $bareType = $this->matchBareNullableType($expr);
-        if (!$bareType instanceof Type) {
+        $nullableObjectType = $this->nullableTypeAnalyzer->resolveNullableObjectType($expr);
+        if (!$nullableObjectType instanceof ObjectType) {
             return null;
         }
-        return $this->processConvertToExclusiveType($bareType, $expr, $node);
-    }
-    private function matchBareNullableType(Expr $expr) : ?Type
-    {
-        $exprType = $this->getType($expr);
-        if (!$exprType instanceof UnionType) {
-            return null;
-        }
-        if (!TypeCombinator::containsNull($exprType)) {
-            return null;
-        }
-        if (\count($exprType->getTypes()) !== 2) {
-            return null;
-        }
-        return TypeCombinator::removeNull($exprType);
+        return $this->processConvertToExclusiveType($nullableObjectType, $expr, $node);
     }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\NotIdentical $binaryOp
-     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_|null
+     * @return \PhpParser\Node\Expr\BooleanNot|\PhpParser\Node\Expr\Instanceof_
      */
-    private function processConvertToExclusiveType(Type $type, Expr $expr, $binaryOp)
+    private function processConvertToExclusiveType(ObjectType $objectType, Expr $expr, $binaryOp)
     {
-        if (!$type instanceof ObjectType) {
-            return null;
-        }
-        $fullyQualifiedType = $type instanceof ShortenedObjectType ? $type->getFullyQualifiedName() : $type->getClassName();
+        $fullyQualifiedType = $objectType instanceof ShortenedObjectType ? $objectType->getFullyQualifiedName() : $objectType->getClassName();
         $instanceof = new Instanceof_($expr, new FullyQualified($fullyQualifiedType));
         if ($binaryOp instanceof NotIdentical) {
             return $instanceof;
