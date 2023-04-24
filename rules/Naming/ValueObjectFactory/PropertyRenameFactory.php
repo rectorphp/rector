@@ -8,9 +8,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
-/**
- * @see \Rector\Tests\Naming\ValueObjectFactory\PropertyRenameFactory\PropertyRenameFactoryTest
- */
 final class PropertyRenameFactory
 {
     /**

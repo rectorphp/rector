@@ -113,12 +113,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         }
         // write temp file
         FileSystem::write($inputFilePath, $inputFileContents);
-        if (!\is_file($inputFilePath)) {
-            // give enough time to write process
-            \sleep(3);
-            // write temp file
-            FileSystem::write($inputFilePath, $inputFileContents);
-        }
         $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath);
     }
     private function includePreloadFilesAndScoperAutoload() : void
