@@ -106,8 +106,11 @@ CODE_SAMPLE
         if ($this->shouldSkip($variableAndCallForeach, $expectedName)) {
             return null;
         }
-        $this->renameVariable($variableAndCallForeach, $expectedName);
-        return $node;
+        $hasRenamed = $this->variableRenamer->renameVariableInFunctionLike($variableAndCallForeach->getFunctionLike(), $variableAndCallForeach->getVariableName(), $expectedName, null);
+        if ($hasRenamed) {
+            return $node;
+        }
+        return null;
     }
     private function shouldSkip(VariableAndCallForeach $variableAndCallForeach, string $expectedName) : bool
     {
@@ -115,9 +118,5 @@ CODE_SAMPLE
             return \true;
         }
         return $this->breakingVariableRenameGuard->shouldSkipVariable($variableAndCallForeach->getVariableName(), $expectedName, $variableAndCallForeach->getFunctionLike(), $variableAndCallForeach->getVariable());
-    }
-    private function renameVariable(VariableAndCallForeach $variableAndCallForeach, string $expectedName) : void
-    {
-        $this->variableRenamer->renameVariableInFunctionLike($variableAndCallForeach->getFunctionLike(), $variableAndCallForeach->getVariableName(), $expectedName, null);
     }
 }

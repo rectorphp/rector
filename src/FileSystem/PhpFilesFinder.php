@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
-use Rector\Core\Util\StringUtils;
-use Rector\Core\ValueObject\StaticNonPhpFileSuffixes;
 final class PhpFilesFinder
 {
     /**

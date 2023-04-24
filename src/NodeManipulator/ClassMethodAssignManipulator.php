@@ -219,7 +219,10 @@ final class ClassMethodAssignManipulator
         $variables = $this->betterNodeFinder->findInstanceOf($classMethod, Variable::class);
         foreach ($variables as $variable) {
             $variableName = $this->nodeNameResolver->getName($variable);
-            if ($variableName === 'this' || $variableName === null) {
+            if ($variableName === 'this') {
+                continue;
+            }
+            if ($variableName === null) {
                 continue;
             }
             $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
