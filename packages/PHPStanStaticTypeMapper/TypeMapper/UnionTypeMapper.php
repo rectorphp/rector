@@ -251,6 +251,19 @@ final class UnionTypeMapper implements TypeMapperInterface
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return null;
         }
+        $identifierNames = [];
+        foreach ($phpParserUnionType->types as $type) {
+            if ($type instanceof Identifier) {
+                $identifierNames[] = $type->toString();
+            }
+        }
+        foreach ($phpParserUnionType->types as $key => $type) {
+            if ($type instanceof Identifier && \in_array('bool', $identifierNames, \true) && $type->toString() === 'false') {
+                unset($phpParserUnionType->types[$key]);
+                $phpParserUnionType->types = \array_values($phpParserUnionType->types);
+                return $phpParserUnionType;
+            }
+        }
         return $phpParserUnionType;
     }
     private function matchTypeForNullableUnionType(UnionType $unionType) : ?Type
@@ -286,9 +299,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         if ($phpParserUnionType instanceof PhpParserUnionType) {
             return $this->narrowBoolType($unionType, $phpParserUnionType, $typeKind);
-        }
-        if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
-            return new Identifier('bool');
         }
         $compatibleObjectTypeNode = $this->processResolveCompatibleObjectCandidates($unionType);
         if ($compatibleObjectTypeNode instanceof NullableType || $compatibleObjectTypeNode instanceof FullyQualified) {
@@ -447,11 +457,11 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     private function narrowBoolType(UnionType $unionType, PhpParserUnionType $phpParserUnionType, string $typeKind)
     {
+        // maybe all one type
+        if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
+            return new Identifier('bool');
+        }
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
-            // maybe all one type
-            if ($this->boolUnionTypeAnalyzer->isBoolUnionType($unionType)) {
-                return new Identifier('bool');
-            }
             return null;
         }
         if ($this->hasObjectAndStaticType($phpParserUnionType)) {
@@ -461,10 +471,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         if (!$unionType instanceof UnionType) {
             return $this->phpStanStaticTypeMapper->mapToPhpParserNode($unionType, $typeKind);
         }
-        // avoid infinite loop by compare early
-        if (\count($unionType->getTypes()) === \count($phpParserUnionType->types)) {
-            return $phpParserUnionType;
-        }
-        return null;
+        return $phpParserUnionType;
     }
 }
