@@ -251,6 +251,9 @@ final class UnionTypeMapper implements TypeMapperInterface
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return null;
         }
+        if (\count($phpParserUnionType->types) === 2) {
+            return $phpParserUnionType;
+        }
         $identifierNames = [];
         foreach ($phpParserUnionType->types as $type) {
             if ($type instanceof Identifier) {
@@ -263,13 +266,10 @@ final class UnionTypeMapper implements TypeMapperInterface
         if (!\in_array('false', $identifierNames, \true)) {
             return $phpParserUnionType;
         }
-        foreach ($phpParserUnionType->types as $key => $type) {
-            if ($type instanceof Identifier && $type->toString() === 'false') {
-                unset($phpParserUnionType->types[$key]);
-                $phpParserUnionType->types = \array_values($phpParserUnionType->types);
-                return $phpParserUnionType;
-            }
-        }
+        $phpParserUnionType->types = \array_filter($phpParserUnionType->types, static function (Node $node) : bool {
+            return !$node instanceof Identifier || $node->toString() !== 'false';
+        });
+        $phpParserUnionType->types = \array_values($phpParserUnionType->types);
         return $phpParserUnionType;
     }
     private function matchTypeForNullableUnionType(UnionType $unionType) : ?Type
