@@ -154,7 +154,8 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     public function resolveTypeWithNullablePHPParserUnionType(PhpParserUnionType $phpParserUnionType)
     {
-        if (\count($phpParserUnionType->types) === 2) {
+        $totalTypes = \count($phpParserUnionType->types);
+        if ($totalTypes === 2) {
             $phpParserUnionType->types = \array_values($phpParserUnionType->types);
             $firstType = $phpParserUnionType->types[0];
             $secondType = $phpParserUnionType->types[1];
@@ -162,12 +163,12 @@ final class UnionTypeMapper implements TypeMapperInterface
                 Assert::isAnyOf($firstType, [Name::class, Identifier::class]);
                 Assert::isAnyOf($secondType, [Name::class, Identifier::class]);
             } catch (InvalidArgumentException $exception) {
-                return $this->resolveUnionTypes($phpParserUnionType);
+                return $this->resolveUnionTypes($phpParserUnionType, $totalTypes);
             }
             $firstTypeValue = $firstType->toString();
             $secondTypeValue = $secondType->toString();
             if ($firstTypeValue === $secondTypeValue) {
-                return $this->resolveUnionTypes($phpParserUnionType);
+                return $this->resolveUnionTypes($phpParserUnionType, $totalTypes);
             }
             if ($firstTypeValue === 'null') {
                 return $this->resolveNullableType(new NullableType($secondType));
@@ -176,7 +177,7 @@ final class UnionTypeMapper implements TypeMapperInterface
                 return $this->resolveNullableType(new NullableType($firstType));
             }
         }
-        return $this->resolveUnionTypes($phpParserUnionType);
+        return $this->resolveUnionTypes($phpParserUnionType, $totalTypes);
     }
     /**
      * @return null|\PhpParser\Node\NullableType|PhpParserUnionType
@@ -246,12 +247,12 @@ final class UnionTypeMapper implements TypeMapperInterface
         }
         return new Identifier($type);
     }
-    private function resolveUnionTypes(PhpParserUnionType $phpParserUnionType) : ?PhpParserUnionType
+    private function resolveUnionTypes(PhpParserUnionType $phpParserUnionType, int $totalTypes) : ?PhpParserUnionType
     {
         if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
             return null;
         }
-        if (\count($phpParserUnionType->types) === 2) {
+        if ($totalTypes === 2) {
             return $phpParserUnionType;
         }
         $identifierNames = [];
