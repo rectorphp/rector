@@ -1718,6 +1718,7 @@ return array(
     'Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetParametersArrayToArrayCollectionRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeSetParametersArrayToArrayCollectionRector.php',
     'Rector\\Doctrine\\Rector\\MethodCall\\EntityAliasToClassConstantReferenceRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php',
     'Rector\\Doctrine\\Rector\\MethodCall\\ReplaceParentRepositoryCallsByRepositoryPropertyRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php',
+    'Rector\\Doctrine\\Rector\\Param\\ReplaceLifecycleEventArgsByDedicatedEventArgsRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php',
     'Rector\\Doctrine\\Rector\\Property\\ChangeBigIntEntityPropertyToIntTypeRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/ChangeBigIntEntityPropertyToIntTypeRector.php',
     'Rector\\Doctrine\\Rector\\Property\\CorrectDefaultTypesOnEntityPropertyRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector.php',
     'Rector\\Doctrine\\Rector\\Property\\DoctrineTargetEntityStringToClassConstantRector' => $vendorDir . '/rector/rector-doctrine/src/Rector/Property/DoctrineTargetEntityStringToClassConstantRector.php',

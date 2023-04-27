@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1059b3a7b4881f801c4e30b8ee7d67d7
+class ComposerStaticInitdc2bc17d1ebedac65d874213cdea182d
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1965,6 +1965,7 @@ class ComposerStaticInit1059b3a7b4881f801c4e30b8ee7d67d7
         'Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetParametersArrayToArrayCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeSetParametersArrayToArrayCollectionRector.php',
         'Rector\\Doctrine\\Rector\\MethodCall\\EntityAliasToClassConstantReferenceRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php',
         'Rector\\Doctrine\\Rector\\MethodCall\\ReplaceParentRepositoryCallsByRepositoryPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php',
+        'Rector\\Doctrine\\Rector\\Param\\ReplaceLifecycleEventArgsByDedicatedEventArgsRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php',
         'Rector\\Doctrine\\Rector\\Property\\ChangeBigIntEntityPropertyToIntTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/ChangeBigIntEntityPropertyToIntTypeRector.php',
         'Rector\\Doctrine\\Rector\\Property\\CorrectDefaultTypesOnEntityPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector.php',
         'Rector\\Doctrine\\Rector\\Property\\DoctrineTargetEntityStringToClassConstantRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Property/DoctrineTargetEntityStringToClassConstantRector.php',
@@ -3150,9 +3151,9 @@ class ComposerStaticInit1059b3a7b4881f801c4e30b8ee7d67d7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1059b3a7b4881f801c4e30b8ee7d67d7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1059b3a7b4881f801c4e30b8ee7d67d7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1059b3a7b4881f801c4e30b8ee7d67d7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdc2bc17d1ebedac65d874213cdea182d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdc2bc17d1ebedac65d874213cdea182d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdc2bc17d1ebedac65d874213cdea182d::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,4 +1,4 @@
-# 24 Rules Overview
+# 26 Rules Overview
 
 ## AddEntityIdByConditionRector
 
@@ -17,7 +17,12 @@ use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\Class_\AddEntityIdByConditionRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddEntityIdByConditionRector::class, [AddEntityIdByConditionRector::DETECTED_TRAITS => ['Knp\DoctrineBehaviors\Model\Translatable\Translation', 'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait']]);
+    $rectorConfig->ruleWithConfiguration(AddEntityIdByConditionRector::class, [
+        AddEntityIdByConditionRector::DETECTED_TRAITS => [
+            'Knp\DoctrineBehaviors\Model\Translatable\Translation',
+            'Knp\DoctrineBehaviors\Model\Translatable\TranslationTrait',
+        ],
+    ]);
 };
 ```
 
@@ -223,7 +228,11 @@ use Rector\Config\RectorConfig;
 use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => ['App' => 'App\Entity']]);
+    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [
+        EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
+            'App' => 'App\Entity',
+        ],
+    ]);
 };
 ```
 
@@ -449,6 +458,24 @@ Turns parent EntityRepository class to constructor dependency
 
 <br>
 
+## RemoveEmptyTableAttributeRector
+
+Remove empty Table attribute on entities because it's useless
+
+- class: [`Rector\Doctrine\Rector\Class_\RemoveEmptyTableAttributeRector`](../src/Rector/Class_/RemoveEmptyTableAttributeRector.php)
+
+```diff
+ use Doctrine\ORM\Mapping as ORM;
+
+-#[ORM\Table]
+ #[ORM\Entity]
+ class Product
+ {
+ }
+```
+
+<br>
+
 ## RemoveRedundantDefaultClassAnnotationValuesRector
 
 Removes redundant default values from Doctrine ORM annotations on class level
@@ -509,6 +536,28 @@ Removes repository class from `@Entity` annotation
   */
  class Product
  {
+ }
+```
+
+<br>
+
+## ReplaceLifecycleEventArgsByDedicatedEventArgsRector
+
+Replace `Doctrine\ORM\Event\LifecycleEventArgs` with specific event classes based on the function call
+
+- class: [`Rector\Doctrine\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEventArgsRector`](../src/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php)
+
+```diff
+-use Doctrine\ORM\Event\LifecycleEventArgs;
++use Doctrine\ORM\Event\PrePersistEventArgs;
+
+ class PrePersistExample
+ {
+-    public function prePersist(LifecycleEventArgs $args)
++    public function prePersist(PrePersistEventArgs $args)
+     {
+         // ...
+     }
  }
 ```
 
