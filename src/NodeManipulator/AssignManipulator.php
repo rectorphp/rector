@@ -98,7 +98,7 @@ final class AssignManipulator
                 $previousParent = $parentNode;
                 $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             }
-            if ($parentNode instanceof Assign) {
+            if ($parentNode instanceof Assign || $parentNode instanceof AssignOp || $parentNode instanceof PreDec || $parentNode instanceof PreInc || $parentNode instanceof PostDec || $parentNode instanceof PostInc) {
                 return $parentNode->var === $previousParent;
             }
         }
