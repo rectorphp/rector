@@ -19,10 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NarrowUnionTypeDocRector extends AbstractRector
 {
     /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
@@ -69,7 +65,7 @@ CODE_SAMPLE
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $params = $node->getParams();
-        $this->hasChanged = \false;
+        $hasChanged = \false;
         foreach ($params as $key => $param) {
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
@@ -79,15 +75,15 @@ CODE_SAMPLE
             }
             if ($this->unionTypeAnalyzer->isScalar($paramType)) {
                 $this->changeDocObjectScalar($key, $phpDocInfo);
-                $this->hasChanged = \true;
+                $hasChanged = \true;
                 continue;
             }
             if ($this->unionTypeAnalyzer->hasObjectWithoutClassType($paramType)) {
                 $this->changeDocObjectWithoutClassType($paramType, $key, $phpDocInfo);
-                $this->hasChanged = \true;
+                $hasChanged = \true;
             }
         }
-        if ($this->hasChanged) {
+        if ($hasChanged) {
             return $node;
         }
         return null;
