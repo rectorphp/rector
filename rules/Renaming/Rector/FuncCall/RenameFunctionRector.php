@@ -38,13 +38,13 @@ final class RenameFunctionRector extends AbstractRector implements ConfigurableR
      */
     public function refactor(Node $node) : ?Node
     {
+        // not to refactor here
+        $isVirtual = (bool) $node->name->getAttribute(AttributeKey::VIRTUAL_NODE);
+        if ($isVirtual) {
+            return null;
+        }
         foreach ($this->oldFunctionToNewFunction as $oldFunction => $newFunction) {
             if (!$this->isName($node, $oldFunction)) {
-                continue;
-            }
-            // not to refactor here
-            $isVirtual = (bool) $node->name->getAttribute(AttributeKey::VIRTUAL_NODE);
-            if ($isVirtual) {
                 continue;
             }
             $node->name = $this->createName($newFunction);
