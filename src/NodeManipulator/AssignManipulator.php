@@ -19,9 +19,7 @@ use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -31,17 +29,12 @@ final class AssignManipulator
     /**
      * @var array<class-string<Expr>>
      */
-    private const MODIFYING_NODE_TYPES = [AssignOp::class, PreDec::class, PostDec::class, PreInc::class, PostInc::class];
+    private const MODIFYING_NODE_TYPES = [Assign::class, AssignOp::class, PreDec::class, PostDec::class, PreInc::class, PostInc::class];
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
-     */
-    private $nodeComparator;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
@@ -57,10 +50,9 @@ final class AssignManipulator
      * @var \Rector\Core\Util\MultiInstanceofChecker
      */
     private $multiInstanceofChecker;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer, MultiInstanceofChecker $multiInstanceofChecker)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer, MultiInstanceofChecker $multiInstanceofChecker)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodeComparator = $nodeComparator;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->multiInstanceofChecker = $multiInstanceofChecker;
@@ -82,11 +74,9 @@ final class AssignManipulator
     public function isLeftPartOfAssign(Node $node) : bool
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Assign || $parentNode instanceof AssignOp) {
-            return $this->nodeComparator->areNodesEqual($parentNode->var, $node);
-        }
         if ($parentNode instanceof Node && $this->multiInstanceofChecker->isInstanceOf($parentNode, self::MODIFYING_NODE_TYPES)) {
-            return \true;
+            /** @var Assign|AssignOp|PreDec|PostDec|PreInc|PostInc $parentNode */
+            return $parentNode->var === $node;
         }
         if ($this->isOnArrayDestructuring($parentNode)) {
             return \true;
@@ -98,24 +88,10 @@ final class AssignManipulator
                 $previousParent = $parentNode;
                 $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             }
-            $item1Unpacked = self::MODIFYING_NODE_TYPES;
-            if ($parentNode instanceof Node && $this->multiInstanceofChecker->isInstanceOf($parentNode, \array_merge([Assign::class], $item1Unpacked))) {
+            if ($parentNode instanceof Node && $this->multiInstanceofChecker->isInstanceOf($parentNode, self::MODIFYING_NODE_TYPES)) {
                 /** @var Assign|AssignOp|PreDec|PostDec|PreInc|PostInc $parentNode */
                 return $parentNode->var === $previousParent;
             }
-        }
-        return \false;
-    }
-    public function isNodePartOfAssign(Node $node) : bool
-    {
-        $previousNode = $node;
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentNode instanceof Node && !$parentNode instanceof Expression) {
-            if ($parentNode instanceof Assign && $this->nodeComparator->areNodesEqual($parentNode->var, $previousNode)) {
-                return \true;
-            }
-            $previousNode = $parentNode;
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
         }
         return \false;
     }

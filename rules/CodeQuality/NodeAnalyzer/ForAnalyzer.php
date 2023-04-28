@@ -145,7 +145,7 @@ final class ForAnalyzer
         if (!$parentNode instanceof Node) {
             return \false;
         }
-        if ($this->assignManipulator->isNodePartOfAssign($parentNode)) {
+        if ($this->assignManipulator->isLeftPartOfAssign($arrayDimFetch)) {
             return \true;
         }
         return $this->isArgParentCount($parentNode);
