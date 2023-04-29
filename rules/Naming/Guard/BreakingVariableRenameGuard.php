@@ -134,7 +134,7 @@ final class BreakingVariableRenameGuard
         if ($this->isDateTimeAtNamingConvention($param)) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->find((array) $classMethod->getStmts(), function (Node $node) use($expectedName) : bool {
+        return (bool) $this->betterNodeFinder->findFirst((array) $classMethod->getStmts(), function (Node $node) use($expectedName) : bool {
             if (!$node instanceof Variable) {
                 return \false;
             }
