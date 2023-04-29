@@ -130,7 +130,9 @@ final class ApplicationFileProcessor
             // 2. PHPStan has to know about all files too
             $this->configurePHPStanNodeScopeResolver($filePaths, $configuration);
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
-            $this->fileDiffFileDecorator->decorate($files);
+            if ($configuration->shouldShowDiffs()) {
+                $this->fileDiffFileDecorator->decorate($files);
+            }
             $this->printFiles($files, $configuration);
         }
         $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = \array_merge($systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS], $this->systemErrors);
