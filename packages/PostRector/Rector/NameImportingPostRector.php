@@ -18,6 +18,7 @@ use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Naming\Naming\AliasNameResolver;
@@ -94,12 +95,8 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if (!$file instanceof File) {
             return null;
         }
-        $currentStmt = \current($file->getOldStmts());
-        if ($currentStmt instanceof InlineHTML) {
-            return null;
-        }
         $currentStmt = \current($file->getNewStmts());
-        if ($currentStmt instanceof InlineHTML) {
+        if ($currentStmt instanceof FileWithoutNamespace && \current($currentStmt->stmts) instanceof InlineHTML) {
             return null;
         }
         if ($node instanceof Name) {
