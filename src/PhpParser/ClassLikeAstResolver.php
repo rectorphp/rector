@@ -49,7 +49,6 @@ final class ClassLikeAstResolver
         if ($classReflection->isBuiltin()) {
             return null;
         }
-        $className = $classReflection->getName();
         $fileName = $classReflection->getFileName();
         // probably internal class
         if ($fileName === null) {
@@ -59,6 +58,7 @@ final class ClassLikeAstResolver
         if ($stmts === []) {
             return null;
         }
+        $className = $classReflection->getName();
         /** @var Class_|Trait_|Interface_|Enum_|null $classLike */
         $classLike = $this->betterNodeFinder->findFirst($stmts, function (Node $node) use($className) : bool {
             if (!$node instanceof ClassLike) {
