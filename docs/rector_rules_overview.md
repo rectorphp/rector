@@ -706,7 +706,7 @@ Replace magic property fetch using `__get()` and `__set()` with existing method 
 
 ### FlipTypeControlToUseExclusiveTypeRector
 
-Flip type control from null compare to use exclusive instanceof type
+Flip type control from null compare to use exclusive instanceof object
 
 - class: [`Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector`](../rules/CodeQuality/Rector/Identical/FlipTypeControlToUseExclusiveTypeRector.php)
 
