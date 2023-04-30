@@ -6,7 +6,7 @@ namespace Rector\Core\Application\FileProcessor;
 use RectorPrefix202304\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
-use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
+use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
@@ -52,9 +52,9 @@ final class PhpFileProcessor implements FileProcessorInterface
     private $rectorOutputStyle;
     /**
      * @readonly
-     * @var \Rector\Core\Application\FileDecorator\FileDiffFileDecorator
+     * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
-    private $fileDiffFileDecorator;
+    private $fileDiffFactory;
     /**
      * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
@@ -75,13 +75,13 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FileDiffFileDecorator $fileDiffFileDecorator, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
-        $this->fileDiffFileDecorator = $fileDiffFileDecorator;
+        $this->fileDiffFactory = $fileDiffFactory;
         $this->currentFileProvider = $currentFileProvider;
         $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
@@ -101,6 +101,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             return $systemErrorsAndFileDiffs;
         }
         // 2. change nodes with Rectors
+        $rectorWithLineChanges = null;
         do {
             $file->changeHasChanged(\false);
             $this->fileProcessor->refactor($file, $configuration);
@@ -111,7 +112,14 @@ final class PhpFileProcessor implements FileProcessorInterface
             // 4. print to file or string
             // important to detect if file has changed
             $this->printFile($file, $configuration);
+            if ($file->hasChanged()) {
+                $file->setFileDiff($this->fileDiffFactory->createTempFileDiff($file));
+                $rectorWithLineChanges = $file->getRectorWithLineChanges();
+            }
         } while ($file->hasChanged());
+        if ($configuration->shouldShowDiffs() && $rectorWithLineChanges !== null) {
+            $file->setFileDiff($this->fileDiffFactory->createFileDiffWithLineChanges($file, $file->getOriginalFileContent(), $file->getFileContent(), $rectorWithLineChanges));
+        }
         // return json here
         $fileDiff = $file->getFileDiff();
         if (!$fileDiff instanceof FileDiff) {
@@ -198,9 +206,6 @@ final class PhpFileProcessor implements FileProcessorInterface
             $this->formatPerservingPrinter->dumpFile($file->getFilePath(), $newContent);
         }
         $file->changeFileContent($newContent);
-        if ($configuration->shouldShowDiffs()) {
-            $this->fileDiffFileDecorator->decorate([$file]);
-        }
     }
     private function notifyFile(File $file) : void
     {
