@@ -95,9 +95,8 @@ CODE_SAMPLE
         if ($this->isObjectType($argumentValue, $this->objectType) || $this->isObjectType($argumentValue, $this->dataMapperObjectType)) {
             return null;
         }
-        $propertyPathAccessor = new New_(new FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataAccessor\\PropertyPathAccessor'));
-        $newArgumentValue = new New_(new FullyQualified(self::DATAMAPPER_CLASS), [new Arg($propertyPathAccessor)]);
-        $firstArg->value = $newArgumentValue;
+        $new = new New_(new FullyQualified('Symfony\\Component\\Form\\Extension\\Core\\DataAccessor\\PropertyPathAccessor'));
+        $firstArg->value = new New_(new FullyQualified(self::DATAMAPPER_CLASS), [new Arg($new)]);
         return $node;
     }
 }

@@ -2128,12 +2128,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "11347bccc8b4adf8c5a40eb6acfc49aeab0b790e"
+                "reference": "7ace160c8ab770c773aca150eda2f4eae5e4a0f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/11347bccc8b4adf8c5a40eb6acfc49aeab0b790e",
-                "reference": "11347bccc8b4adf8c5a40eb6acfc49aeab0b790e",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/7ace160c8ab770c773aca150eda2f4eae5e4a0f0",
+                "reference": "7ace160c8ab770c773aca150eda2f4eae5e4a0f0",
                 "shasum": ""
             },
             "require": {
@@ -2163,7 +2163,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-04-18T09:14:10+00:00",
+            "time": "2023-05-01T11:28:54+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2193,17 +2193,17 @@
         },
         {
             "name": "sebastian\/diff",
-            "version": "5.0.1",
-            "version_normalized": "5.0.1.0",
+            "version": "5.0.3",
+            "version_normalized": "5.0.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/sebastianbergmann\/diff.git",
-                "reference": "aae9a0a43bff37bd5d8d0311426c87bf36153f02"
+                "reference": "912dc2fbe3e3c1e7873313cc801b100b6c68c87b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/sebastianbergmann\/diff\/zipball\/aae9a0a43bff37bd5d8d0311426c87bf36153f02",
-                "reference": "aae9a0a43bff37bd5d8d0311426c87bf36153f02",
+                "url": "https:\/\/api.github.com\/repos\/sebastianbergmann\/diff\/zipball\/912dc2fbe3e3c1e7873313cc801b100b6c68c87b",
+                "reference": "912dc2fbe3e3c1e7873313cc801b100b6c68c87b",
                 "shasum": ""
             },
             "require": {
@@ -2213,7 +2213,7 @@
                 "phpunit\/phpunit": "^10.0",
                 "symfony\/process": "^4.2 || ^5"
             },
-            "time": "2023-03-23T05:12:41+00:00",
+            "time": "2023-05-01T07:48:21+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -2251,7 +2251,7 @@
             "support": {
                 "issues": "https:\/\/github.com\/sebastianbergmann\/diff\/issues",
                 "security": "https:\/\/github.com\/sebastianbergmann\/diff\/security\/policy",
-                "source": "https:\/\/github.com\/sebastianbergmann\/diff\/tree\/5.0.1"
+                "source": "https:\/\/github.com\/sebastianbergmann\/diff\/tree\/5.0.3"
             },
             "funding": [
                 {

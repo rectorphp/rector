@@ -6,8 +6,11 @@ namespace Rector\Symfony\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -21,9 +24,21 @@ final class RemoveUnusedRequestParamRector extends AbstractRector
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
+     * @readonly
+     * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
+     */
+    private $classChildAnalyzer;
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->classChildAnalyzer = $classChildAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -68,6 +83,9 @@ CODE_SAMPLE
         if (!$node->isPublic()) {
             return null;
         }
+        if ($node->isAbstract() || $this->hasAbstractParentClassMethod($node)) {
+            return null;
+        }
         if (!$this->controllerAnalyzer->isInsideController($node)) {
             return null;
         }
@@ -97,5 +115,13 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    private function hasAbstractParentClassMethod(ClassMethod $classMethod) : bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        return $this->classChildAnalyzer->hasAbstractParentClassMethod($classReflection, $this->getName($classMethod));
     }
 }

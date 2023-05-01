@@ -99,8 +99,7 @@ CODE_SAMPLE
             if ($param->type !== null) {
                 continue;
             }
-            $paramTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
-            $param->type = $paramTypeNode;
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
             $hasChanged = \true;
         }
         if (!$hasChanged) {
