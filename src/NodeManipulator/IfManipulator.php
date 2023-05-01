@@ -175,13 +175,12 @@ final class IfManipulator
         if (!$this->isIfWithoutElseAndElseIfs($currentIf)) {
             return [];
         }
-        $betterNodeFinderFindInstanceOf = $this->betterNodeFinder->findInstanceOf($currentIf->stmts, Return_::class);
-        if ($betterNodeFinderFindInstanceOf !== []) {
+        $return = $this->betterNodeFinder->findFirstInstanceOf($currentIf->stmts, Return_::class);
+        if ($return instanceof Return_) {
             return [];
         }
-        /** @var Exit_[] $exits */
-        $exits = $this->betterNodeFinder->findInstanceOf($currentIf->stmts, Exit_::class);
-        if ($exits !== []) {
+        $exit = $this->betterNodeFinder->findFirstInstanceOf($currentIf->stmts, Exit_::class);
+        if ($exit instanceof Exit_) {
             return [];
         }
         // last node is with the expression
