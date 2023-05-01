@@ -5,9 +5,9 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202304\Nette\Utils;
+namespace RectorPrefix202305\Nette\Utils;
 
-use RectorPrefix202304\Nette;
+use RectorPrefix202305\Nette;
 /**
  * Nette\Object behaviour mixin.
  * @deprecated

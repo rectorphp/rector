@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202304\Symfony\Component\DependencyInjection\Attribute;
+namespace RectorPrefix202305\Symfony\Component\DependencyInjection\Attribute;
 
-use RectorPrefix202304\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix202304\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202304\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix202305\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix202305\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202305\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * Attribute to tell a parameter how to be autowired.
  *

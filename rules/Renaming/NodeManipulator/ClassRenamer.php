@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\NodeManipulator;
 
-use RectorPrefix202304\Nette\Utils\Strings;
+use RectorPrefix202305\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\New_;

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Rector\Class_;
 
-use RectorPrefix202304\Nette\Utils\Strings;
+use RectorPrefix202305\Nette\Utils\Strings;
 use PhpParser\Builder\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;

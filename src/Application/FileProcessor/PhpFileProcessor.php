@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Application\FileProcessor;
 
-use RectorPrefix202304\Nette\Utils\Strings;
+use RectorPrefix202305\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;

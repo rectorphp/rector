@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202304;
+namespace RectorPrefix202305;
 
 use PHPStan\Type\ObjectType;
 use Rector\Config\RectorConfig;

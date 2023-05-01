@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Core\Kernel;
 
 use Rector\Core\Config\Loader\ConfigureCallMergingLoaderFactory;
-use RectorPrefix202304\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202304\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202304\Webmozart\Assert\Assert;
+use RectorPrefix202305\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202305\Webmozart\Assert\Assert;
 final class ContainerBuilderFactory
 {
     /**

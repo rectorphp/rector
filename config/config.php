@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202304;
+namespace RectorPrefix202305;
 
-use RectorPrefix202304\Composer\Semver\VersionParser;
-use RectorPrefix202304\Doctrine\Inflector\Inflector;
-use RectorPrefix202304\Doctrine\Inflector\Rules\English\InflectorFactory;
-use RectorPrefix202304\OndraM\CiDetector\CiDetector;
+use RectorPrefix202305\Composer\Semver\VersionParser;
+use RectorPrefix202305\Doctrine\Inflector\Inflector;
+use RectorPrefix202305\Doctrine\Inflector\Rules\English\InflectorFactory;
+use RectorPrefix202305\OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Lexer;
@@ -45,11 +45,11 @@ use Rector\PhpDocParser\PhpParser\SmartPhpParserFactory;
 use Rector\PSR4\Composer\PSR4NamespaceMatcher;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\Utils\Command\MissingInSetCommand;
-use RectorPrefix202304\Symfony\Component\Console\Application;
-use RectorPrefix202304\Symfony\Component\Console\Style\SymfonyStyle;
-use function RectorPrefix202304\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use RectorPrefix202304\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202304\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
+use RectorPrefix202305\Symfony\Component\Console\Application;
+use RectorPrefix202305\Symfony\Component\Console\Style\SymfonyStyle;
+use function RectorPrefix202305\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use RectorPrefix202305\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202305\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);

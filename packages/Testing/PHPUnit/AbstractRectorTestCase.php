@@ -4,11 +4,11 @@ declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use Iterator;
-use RectorPrefix202304\Nette\Utils\FileSystem;
-use RectorPrefix202304\Nette\Utils\Strings;
+use RectorPrefix202305\Nette\Utils\FileSystem;
+use RectorPrefix202305\Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
-use RectorPrefix202304\Psr\Container\ContainerInterface;
+use RectorPrefix202305\Psr\Container\ContainerInterface;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Autoloading\AdditionalAutoloader;

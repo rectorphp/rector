@@ -39,12 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202304\\Composer\\Semver\\": "src"
+            "RectorPrefix202305\\Composer\\Semver\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "RectorPrefix202304\\Composer\\Semver\\": "tests"
+            "RectorPrefix202305\\Composer\\Semver\\": "tests"
         }
     },
     "extra": {

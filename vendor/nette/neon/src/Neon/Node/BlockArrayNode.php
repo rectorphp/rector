@@ -5,7 +5,7 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202304\Nette\Neon\Node;
+namespace RectorPrefix202305\Nette\Neon\Node;
 
 /** @internal */
 final class BlockArrayNode extends ArrayNode

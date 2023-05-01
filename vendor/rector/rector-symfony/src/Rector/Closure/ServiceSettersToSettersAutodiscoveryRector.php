@@ -20,7 +20,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ClassNameAndFilePath;
-use RectorPrefix202304\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202305\Symfony\Component\Filesystem\Filesystem;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**

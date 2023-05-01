@@ -15,8 +15,8 @@ use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareCallableTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix202304\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202304\Webmozart\Assert\Assert;
+use RectorPrefix202305\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202305\Webmozart\Assert\Assert;
 /**
  * @implements TypeMapperInterface<ClosureType>
  */
