@@ -5,6 +5,7 @@ namespace Rector\Core\Application\FileProcessor;
 
 use RectorPrefix202305\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
+use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileProcessor;
@@ -57,6 +58,11 @@ final class PhpFileProcessor implements FileProcessorInterface
     private $fileDiffFactory;
     /**
      * @readonly
+     * @var \Rector\Caching\Detector\ChangedFilesDetector
+     */
+    private $changedFilesDetector;
+    /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
@@ -75,13 +81,14 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
         $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->fileDiffFactory = $fileDiffFactory;
+        $this->changedFilesDetector = $changedFilesDetector;
         $this->currentFileProvider = $currentFileProvider;
         $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
@@ -100,6 +107,7 @@ final class PhpFileProcessor implements FileProcessorInterface
             $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
             return $systemErrorsAndFileDiffs;
         }
+        $fileHasChanged = \false;
         // 2. change nodes with Rectors
         $rectorWithLineChanges = null;
         do {
@@ -112,11 +120,17 @@ final class PhpFileProcessor implements FileProcessorInterface
             // 4. print to file or string
             // important to detect if file has changed
             $this->printFile($file, $configuration);
-            if ($file->hasChanged()) {
+            $fileHasChangedInCurrentPass = $file->hasChanged();
+            if ($fileHasChangedInCurrentPass) {
                 $file->setFileDiff($this->fileDiffFactory->createTempFileDiff($file));
                 $rectorWithLineChanges = $file->getRectorWithLineChanges();
+                $fileHasChanged = \true;
             }
-        } while ($file->hasChanged());
+        } while ($fileHasChangedInCurrentPass);
+        // 5. add as cacheable if not changed at all
+        if (!$fileHasChanged) {
+            $this->changedFilesDetector->addCachableFile($file->getFilePath());
+        }
         if ($configuration->shouldShowDiffs() && $rectorWithLineChanges !== null) {
             $file->setFileDiff($this->fileDiffFactory->createFileDiffWithLineChanges($file, $file->getOriginalFileContent(), $file->getFileContent(), $rectorWithLineChanges));
         }
