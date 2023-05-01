@@ -153,8 +153,8 @@ CODE_SAMPLE
     private function haveNestedTernary(array $nodes) : bool
     {
         foreach ($nodes as $node) {
-            $betterNodeFinderFindInstanceOf = $this->betterNodeFinder->findInstanceOf($node, Ternary::class);
-            if ($betterNodeFinderFindInstanceOf !== []) {
+            $ternary = $this->betterNodeFinder->findFirstInstanceOf($node, Ternary::class);
+            if ($ternary instanceof Ternary) {
                 return \true;
             }
         }
