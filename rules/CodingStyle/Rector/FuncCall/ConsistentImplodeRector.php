@@ -89,7 +89,8 @@ CODE_SAMPLE
         /** @var Arg $arg0 */
         $arg0 = $node->args[0];
         $firstArgumentValue = $arg0->value;
-        if ($firstArgumentValue instanceof String_) {
+        $firstArgumentType = $this->getType($firstArgumentValue);
+        if ($firstArgumentType->isString()->yes()) {
             return null;
         }
         if (\count($node->args) !== 2) {
