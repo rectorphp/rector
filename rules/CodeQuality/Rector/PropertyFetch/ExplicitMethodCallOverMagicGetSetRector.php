@@ -139,6 +139,9 @@ CODE_SAMPLE
                 continue;
             }
             $methodReflection = $callerType->getMethod($possibleGetterMethodName, $scope);
+            if (!$methodReflection->isPublic()) {
+                continue;
+            }
             $variant = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
             $returnType = $variant->getReturnType();
             if (!$propertyType->isSuperTypeOf($returnType)->yes()) {
