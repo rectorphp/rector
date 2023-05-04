@@ -93,8 +93,7 @@ CODE_SAMPLE
         }
         // add conditional ternary
         $nullIdentical = new Identical($associativeValue, $this->nodeFactory->createNull());
-        $ternary = new Ternary($nullIdentical, null, $associativeValue);
-        $args[1]->value = $ternary;
+        $args[1]->value = new Ternary($nullIdentical, null, $associativeValue);
         return $node;
     }
 }

@@ -1,6 +1,20 @@
 CHANGELOG for 2.x
 =================
 
+## 2.10.0 (2023-05-02)
+
+*   Feature: Support Disjunctive Normal Form Types (DNF types) for PHP 8.2+.
+    (#237 by @nhedger)
+
+    Feature: Add full support for PHP 8.2.
+    (#233 by @WyriHaximus and #241 by @clue)
+
+*   Improve examples in documentation.
+    (#226 by @nhedger)
+
+*   Improve test suite and project setup and report failed assertions.
+    (#215 and #217 by @SimonFrings and #241 by @clue)
+
 * 2.9.0 (2022-02-11)
 
     *   Feature: Support union types and address deprecation of `ReflectionType::getClass()` (PHP 8+).

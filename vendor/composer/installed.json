@@ -821,17 +821,17 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.20.3",
-            "version_normalized": "1.20.3.0",
+            "version": "1.20.4",
+            "version_normalized": "1.20.4.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "6c04009f6cae6eda2f040745b6b846080ef069c2"
+                "reference": "7d568c87a9df9c5f7e8b5f075fc469aa8cb0a4cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/6c04009f6cae6eda2f040745b6b846080ef069c2",
-                "reference": "6c04009f6cae6eda2f040745b6b846080ef069c2",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/7d568c87a9df9c5f7e8b5f075fc469aa8cb0a4cd",
+                "reference": "7d568c87a9df9c5f7e8b5f075fc469aa8cb0a4cd",
                 "shasum": ""
             },
             "require": {
@@ -846,7 +846,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2023-04-25T09:01:03+00:00",
+            "time": "2023-05-02T09:19:37+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -863,7 +863,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.20.3"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.20.4"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
@@ -1524,26 +1524,26 @@
         },
         {
             "name": "react\/promise",
-            "version": "v2.9.0",
-            "version_normalized": "2.9.0.0",
+            "version": "v2.10.0",
+            "version_normalized": "2.10.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/promise.git",
-                "reference": "234f8fd1023c9158e2314fa9d7d0e6a83db42910"
+                "reference": "f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise\/zipball\/234f8fd1023c9158e2314fa9d7d0e6a83db42910",
-                "reference": "234f8fd1023c9158e2314fa9d7d0e6a83db42910",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise\/zipball\/f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38",
+                "reference": "f913fb8cceba1e6644b7b90c4bfb678ed8a3ef38",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.36"
+                "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.36"
             },
-            "time": "2022-02-11T10:27:51+00:00",
+            "time": "2023-05-02T15:15:43+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1587,16 +1587,12 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/promise\/issues",
-                "source": "https:\/\/github.com\/reactphp\/promise\/tree\/v2.9.0"
+                "source": "https:\/\/github.com\/reactphp\/promise\/tree\/v2.10.0"
             },
             "funding": [
                 {
-                    "url": "https:\/\/github.com\/WyriHaximus",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/clue",
-                    "type": "github"
+                    "url": "https:\/\/opencollective.com\/reactphp",
+                    "type": "open_collective"
                 }
             ],
             "install-path": "..\/react\/promise"
@@ -1989,12 +1985,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "23e55c64ba3ae187dad8f9453e520ca621dcae8d"
+                "reference": "3209c44703d4bef7614048ed2a5019665ec3a9f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/23e55c64ba3ae187dad8f9453e520ca621dcae8d",
-                "reference": "23e55c64ba3ae187dad8f9453e520ca621dcae8d",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/3209c44703d4bef7614048ed2a5019665ec3a9f2",
+                "reference": "3209c44703d4bef7614048ed2a5019665ec3a9f2",
                 "shasum": ""
             },
             "require": {
@@ -2018,7 +2014,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-03-29T01:48:05+00:00",
+            "time": "2023-05-04T13:13:06+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

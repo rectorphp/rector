@@ -117,8 +117,7 @@ final class PhpDocFromTypeDeclarationDecorator
         $returnType = $returnTagValueNode instanceof ReturnTagValueNode ? $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($returnTagValueNode, $functionLike->returnType) : $this->staticTypeMapper->mapPhpParserNodePHPStanType($functionLike->returnType);
         // if nullable is supported, downgrade to that one
         if ($this->isNullableSupportedAndPossible($returnType)) {
-            $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
-            $functionLike->returnType = $returnTypeNode;
+            $functionLike->returnType = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
             return;
         }
         $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnType);

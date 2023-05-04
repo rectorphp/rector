@@ -105,8 +105,7 @@ CODE_SAMPLE
         if (!$functionLikeReflection instanceof MethodReflection && !$functionLikeReflection instanceof FunctionReflection) {
             return null;
         }
-        $unnamedArgs = $this->unnamedArgumentResolver->resolveFromReflection($functionLikeReflection, $args);
-        $node->args = $unnamedArgs;
+        $node->args = $this->unnamedArgumentResolver->resolveFromReflection($functionLikeReflection, $args);
         return $node;
     }
     /**
