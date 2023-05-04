@@ -2320,7 +2320,7 @@ use Rector\Config\RectorConfig;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, [
-        'alphabetically',
+        OrderAttributesRector::ALPHABETICALLY,
     ]);
 };
 ```
