@@ -39,7 +39,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\HasOffsetTypeCorrector;
-use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
@@ -81,18 +80,13 @@ final class NodeTypeResolver
     private $accessoryNonEmptyStringTypeCorrector;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver
-     */
-    private $identifierTypeResolver;
-    /**
-     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */
-    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, HasOffsetTypeCorrector $hasOffsetTypeCorrector, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, IdentifierTypeResolver $identifierTypeResolver, RenamedClassesDataCollector $renamedClassesDataCollector, array $nodeTypeResolvers)
+    public function __construct(ObjectTypeSpecifier $objectTypeSpecifier, ClassAnalyzer $classAnalyzer, GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider, HasOffsetTypeCorrector $hasOffsetTypeCorrector, AccessoryNonEmptyStringTypeCorrector $accessoryNonEmptyStringTypeCorrector, RenamedClassesDataCollector $renamedClassesDataCollector, array $nodeTypeResolvers)
     {
         $this->objectTypeSpecifier = $objectTypeSpecifier;
         $this->classAnalyzer = $classAnalyzer;
@@ -100,7 +94,6 @@ final class NodeTypeResolver
         $this->reflectionProvider = $reflectionProvider;
         $this->hasOffsetTypeCorrector = $hasOffsetTypeCorrector;
         $this->accessoryNonEmptyStringTypeCorrector = $accessoryNonEmptyStringTypeCorrector;
-        $this->identifierTypeResolver = $identifierTypeResolver;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
             foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
@@ -188,16 +181,9 @@ final class NodeTypeResolver
                     return new NullType();
                 }
             }
-            if ($node instanceof Identifier) {
-                return $this->identifierTypeResolver->resolve($node);
-            }
             return new MixedType();
         }
         if (!$node instanceof Expr) {
-            // scalar type, e.g. from param type name
-            if ($node instanceof Identifier) {
-                return $this->identifierTypeResolver->resolve($node);
-            }
             return new MixedType();
         }
         // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
