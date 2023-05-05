@@ -8,7 +8,7 @@ namespace RectorPrefix202305\React\EventLoop;
 final class Loop
 {
     /**
-     * @var LoopInterface
+     * @var ?LoopInterface
      */
     private static $instance;
     /** @var bool */
@@ -74,7 +74,11 @@ final class Loop
      */
     public static function addReadStream($stream, $listener)
     {
-        self::get()->addReadStream($stream, $listener);
+        // create loop instance on demand (legacy PHP < 7 doesn't like ternaries in method calls)
+        if (self::$instance === null) {
+            self::get();
+        }
+        self::$instance->addReadStream($stream, $listener);
     }
     /**
      * [Advanced] Register a listener to be notified when a stream is ready to write.
@@ -87,7 +91,11 @@ final class Loop
      */
     public static function addWriteStream($stream, $listener)
     {
-        self::get()->addWriteStream($stream, $listener);
+        // create loop instance on demand (legacy PHP < 7 doesn't like ternaries in method calls)
+        if (self::$instance === null) {
+            self::get();
+        }
+        self::$instance->addWriteStream($stream, $listener);
     }
     /**
      * Remove the read event listener for the given stream.
@@ -98,7 +106,9 @@ final class Loop
      */
     public static function removeReadStream($stream)
     {
-        self::get()->removeReadStream($stream);
+        if (self::$instance !== null) {
+            self::$instance->removeReadStream($stream);
+        }
     }
     /**
      * Remove the write event listener for the given stream.
@@ -109,7 +119,9 @@ final class Loop
      */
     public static function removeWriteStream($stream)
     {
-        self::get()->removeWriteStream($stream);
+        if (self::$instance !== null) {
+            self::$instance->removeWriteStream($stream);
+        }
     }
     /**
      * Enqueue a callback to be invoked once after the given interval.
@@ -121,7 +133,11 @@ final class Loop
      */
     public static function addTimer($interval, $callback)
     {
-        return self::get()->addTimer($interval, $callback);
+        // create loop instance on demand (legacy PHP < 7 doesn't like ternaries in method calls)
+        if (self::$instance === null) {
+            self::get();
+        }
+        return self::$instance->addTimer($interval, $callback);
     }
     /**
      * Enqueue a callback to be invoked repeatedly after the given interval.
@@ -133,7 +149,11 @@ final class Loop
      */
     public static function addPeriodicTimer($interval, $callback)
     {
-        return self::get()->addPeriodicTimer($interval, $callback);
+        // create loop instance on demand (legacy PHP < 7 doesn't like ternaries in method calls)
+        if (self::$instance === null) {
+            self::get();
+        }
+        return self::$instance->addPeriodicTimer($interval, $callback);
     }
     /**
      * Cancel a pending timer.
@@ -144,7 +164,9 @@ final class Loop
      */
     public static function cancelTimer(TimerInterface $timer)
     {
-        return self::get()->cancelTimer($timer);
+        if (self::$instance !== null) {
+            self::$instance->cancelTimer($timer);
+        }
     }
     /**
      * Schedule a callback to be invoked on a future tick of the event loop.
@@ -155,7 +177,11 @@ final class Loop
      */
     public static function futureTick($listener)
     {
-        self::get()->futureTick($listener);
+        // create loop instance on demand (legacy PHP < 7 doesn't like ternaries in method calls)
+        if (self::$instance === null) {
+            self::get();
+        }
+        self::$instance->futureTick($listener);
     }
     /**
      * Register a listener to be notified when a signal has been caught by this process.
@@ -167,7 +193,11 @@ final class Loop
      */
     public static function addSignal($signal, $listener)
     {
-        self::get()->addSignal($signal, $listener);
+        // create loop instance on demand (legacy PHP < 7 doesn't like ternaries in method calls)
+        if (self::$instance === null) {
+            self::get();
+        }
+        self::$instance->addSignal($signal, $listener);
     }
     /**
      * Removes a previously added signal listener.
@@ -179,7 +209,9 @@ final class Loop
      */
     public static function removeSignal($signal, $listener)
     {
-        self::get()->removeSignal($signal, $listener);
+        if (self::$instance !== null) {
+            self::$instance->removeSignal($signal, $listener);
+        }
     }
     /**
      * Run the event loop until there are no more tasks to perform.
@@ -189,7 +221,11 @@ final class Loop
      */
     public static function run()
     {
-        self::get()->run();
+        // create loop instance on demand (legacy PHP < 7 doesn't like ternaries in method calls)
+        if (self::$instance === null) {
+            self::get();
+        }
+        self::$instance->run();
     }
     /**
      * Instruct a running event loop to stop.
@@ -200,6 +236,8 @@ final class Loop
     public static function stop()
     {
         self::$stopped = \true;
-        self::get()->stop();
+        if (self::$instance !== null) {
+            self::$instance->stop();
+        }
     }
 }

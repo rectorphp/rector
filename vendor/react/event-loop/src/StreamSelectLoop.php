@@ -241,7 +241,8 @@ final class StreamSelectLoop implements LoopInterface
             /** @var ?callable $previous */
             $previous = \set_error_handler(function ($errno, $errstr) use(&$previous) {
                 // suppress warnings that occur when `stream_select()` is interrupted by a signal
-                $eintr = \defined('SOCKET_EINTR') ? \SOCKET_EINTR : 4;
+                // PHP defines `EINTR` through `ext-sockets` or `ext-pcntl`, otherwise use common default (Linux & Mac)
+                $eintr = \defined('SOCKET_EINTR') ? \SOCKET_EINTR : (\defined('PCNTL_EINTR') ? \PCNTL_EINTR : 4);
                 if ($errno === \E_WARNING && \strpos($errstr, '[' . $eintr . ']: ') !== \false) {
                     return;
                 }

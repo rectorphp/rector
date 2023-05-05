@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.4.0 (2023-05-05)
+
+*   Feature: Improve performance of `Loop` by avoiding unneeded method calls.
+    (#266 by @clue)
+
+*   Feature: Support checking `EINTR` constant from `ext-pcntl` without `ext-sockets`.
+    (#265 by @clue)
+
+*   Minor documentation improvements.
+    (#254 by @nhedger)
+
+*   Improve test suite, run tests on PHP 8.2 and report failed assertions.
+    (#258 by @WyriHaximus, #264 by @clue and #251, #261 and #262 by @SimonFrings)
+
 ## 1.3.0 (2022-03-17)
 
 *   Feature: Improve default `StreamSelectLoop` to report any warnings for invalid streams.
