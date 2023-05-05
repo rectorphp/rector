@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita3d85d0220e4ded852f7ff0a91ee1f48
+class ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -70,7 +70,6 @@ class ComposerStaticInita3d85d0220e4ded852f7ff0a91ee1f48
         array (
             'PhpParser\\' => 10,
             'PHPStan\\PhpDocParser\\' => 21,
-            'PHPStan\\' => 8,
         ),
     );
 
@@ -246,10 +245,6 @@ class ComposerStaticInita3d85d0220e4ded852f7ff0a91ee1f48
         array (
             0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
         ),
-        'PHPStan\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src',
-        ),
     );
 
     public static $classMap = array (
@@ -327,29 +322,6 @@ class ComposerStaticInita3d85d0220e4ded852f7ff0a91ee1f48
         'PHPStan\\PhpDocParser\\Parser\\StringUnescaper' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/StringUnescaper.php',
         'PHPStan\\PhpDocParser\\Parser\\TokenIterator' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TokenIterator.php',
         'PHPStan\\PhpDocParser\\Parser\\TypeParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TypeParser.php',
-        'PHPStan\\PhpDoc\\PHPUnit\\MockObjectTypeNodeResolverExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/PhpDoc/PHPUnit/MockObjectTypeNodeResolverExtension.php',
-        'PHPStan\\Rules\\PHPUnit\\AnnotationHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AnnotationHelper.php',
-        'PHPStan\\Rules\\PHPUnit\\AssertRuleHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AssertRuleHelper.php',
-        'PHPStan\\Rules\\PHPUnit\\AssertSameBooleanExpectedRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AssertSameBooleanExpectedRule.php',
-        'PHPStan\\Rules\\PHPUnit\\AssertSameNullExpectedRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AssertSameNullExpectedRule.php',
-        'PHPStan\\Rules\\PHPUnit\\AssertSameWithCountRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/AssertSameWithCountRule.php',
-        'PHPStan\\Rules\\PHPUnit\\ClassCoversExistsRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ClassCoversExistsRule.php',
-        'PHPStan\\Rules\\PHPUnit\\ClassMethodCoversExistsRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ClassMethodCoversExistsRule.php',
-        'PHPStan\\Rules\\PHPUnit\\CoversHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/CoversHelper.php',
-        'PHPStan\\Rules\\PHPUnit\\DataProviderDeclarationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderDeclarationRule.php',
-        'PHPStan\\Rules\\PHPUnit\\DataProviderHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderHelper.php',
-        'PHPStan\\Rules\\PHPUnit\\DataProviderHelperFactory' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/DataProviderHelperFactory.php',
-        'PHPStan\\Rules\\PHPUnit\\MockMethodCallRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/MockMethodCallRule.php',
-        'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInClassAnnotationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInClassAnnotationRule.php',
-        'PHPStan\\Rules\\PHPUnit\\NoMissingSpaceInMethodAnnotationRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/NoMissingSpaceInMethodAnnotationRule.php',
-        'PHPStan\\Rules\\PHPUnit\\ShouldCallParentMethodsRule' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Rules/PHPUnit/ShouldCallParentMethodsRule.php',
-        'PHPStan\\Type\\PHPUnit\\Assert\\AssertFunctionTypeSpecifyingExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/Assert/AssertFunctionTypeSpecifyingExtension.php',
-        'PHPStan\\Type\\PHPUnit\\Assert\\AssertMethodTypeSpecifyingExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/Assert/AssertMethodTypeSpecifyingExtension.php',
-        'PHPStan\\Type\\PHPUnit\\Assert\\AssertStaticMethodTypeSpecifyingExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/Assert/AssertStaticMethodTypeSpecifyingExtension.php',
-        'PHPStan\\Type\\PHPUnit\\Assert\\AssertTypeSpecifyingExtensionHelper' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/Assert/AssertTypeSpecifyingExtensionHelper.php',
-        'PHPStan\\Type\\PHPUnit\\InvocationMockerDynamicReturnTypeExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/InvocationMockerDynamicReturnTypeExtension.php',
-        'PHPStan\\Type\\PHPUnit\\MockBuilderDynamicReturnTypeExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/MockBuilderDynamicReturnTypeExtension.php',
-        'PHPStan\\Type\\PHPUnit\\MockObjectDynamicReturnTypeExtension' => __DIR__ . '/..' . '/phpstan/phpstan-phpunit/src/Type/PHPUnit/MockObjectDynamicReturnTypeExtension.php',
         'PhpParser\\Builder' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Builder.php',
         'PhpParser\\BuilderFactory' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/BuilderFactory.php',
         'PhpParser\\BuilderHelpers' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/BuilderHelpers.php',
@@ -3152,9 +3124,9 @@ class ComposerStaticInita3d85d0220e4ded852f7ff0a91ee1f48
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita3d85d0220e4ded852f7ff0a91ee1f48::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita3d85d0220e4ded852f7ff0a91ee1f48::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita3d85d0220e4ded852f7ff0a91ee1f48::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb::$classMap;
 
         }, null, ClassLoader::class);
     }

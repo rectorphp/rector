@@ -48,5 +48,4 @@ return array(
     'RectorPrefix202305\\Clue\\React\\NDJson\\' => array($vendorDir . '/clue/ndjson-react/src'),
     'PhpParser\\' => array($vendorDir . '/nikic/php-parser/lib/PhpParser'),
     'PHPStan\\PhpDocParser\\' => array($vendorDir . '/phpstan/phpdoc-parser/src'),
-    'PHPStan\\' => array($vendorDir . '/phpstan/phpstan-phpunit/src'),
 );
