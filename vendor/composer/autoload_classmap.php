@@ -2614,6 +2614,7 @@ return array(
     'Rector\\Symfony\\Rector\\MethodCall\\ChangeStringCollectionOptionToConstantRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ContainerBuilderCompileEnvArgumentRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ContainerGetToConstructorInjectionRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ContainerGetToConstructorInjectionRector.php',
+    'Rector\\Symfony\\Rector\\MethodCall\\ConvertRenderTemplateShortNotationToBundleSyntaxRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ConvertRenderTemplateShortNotationToBundleSyntaxRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\DefinitionAliasSetPrivateToSetPublicRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/DefinitionAliasSetPrivateToSetPublicRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\FormBuilderSetDataMapperRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/FormBuilderSetDataMapperRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\FormIsValidRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/FormIsValidRector.php',

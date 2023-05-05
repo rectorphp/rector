@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb
+class ComposerStaticInitbef4244bb4d4752bdd0b9553b348ae46
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2856,6 +2856,7 @@ class ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb
         'Rector\\Symfony\\Rector\\MethodCall\\ChangeStringCollectionOptionToConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\ContainerBuilderCompileEnvArgumentRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\ContainerGetToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ContainerGetToConstructorInjectionRector.php',
+        'Rector\\Symfony\\Rector\\MethodCall\\ConvertRenderTemplateShortNotationToBundleSyntaxRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/ConvertRenderTemplateShortNotationToBundleSyntaxRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\DefinitionAliasSetPrivateToSetPublicRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/DefinitionAliasSetPrivateToSetPublicRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\FormBuilderSetDataMapperRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/FormBuilderSetDataMapperRector.php',
         'Rector\\Symfony\\Rector\\MethodCall\\FormIsValidRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/FormIsValidRector.php',
@@ -3124,9 +3125,9 @@ class ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdef1a712419aaa37ea20f1fb4d4e81bb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbef4244bb4d4752bdd0b9553b348ae46::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbef4244bb4d4752bdd0b9553b348ae46::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbef4244bb4d4752bdd0b9553b348ae46::$classMap;
 
         }, null, ClassLoader::class);
     }

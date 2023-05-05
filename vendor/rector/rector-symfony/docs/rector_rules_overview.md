@@ -1,4 +1,4 @@
-# 83 Rules Overview
+# 84 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -460,6 +460,24 @@ Change `$this->get("some_service");` to `@required` dependency in an abstract cl
      {
 -        $this->get('some_service')->apply();
 +        $this->someService->apply();
+     }
+ }
+```
+
+<br>
+
+## ConvertRenderTemplateShortNotationToBundleSyntaxRector
+
+Change Twig template short name to bundle syntax in render calls from controllers
+
+- class: [`Rector\Symfony\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector`](../src/Rector/MethodCall/ConvertRenderTemplateShortNotationToBundleSyntaxRector.php)
+
+```diff
+ class BaseController extends Controller {
+     function indexAction()
+     {
+-        $this->render('appBundle:Landing\Main:index.html.twig');
++        $this->render('@app/Landing/Main/index.html.twig');
      }
  }
 ```
