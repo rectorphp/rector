@@ -78,8 +78,10 @@ CODE_SAMPLE
         if ($this->shouldSkip($node, $scope)) {
             return null;
         }
-        /** @var Expr $assignVariable */
         $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
+        if (!$assignVariable instanceof Expr) {
+            return null;
+        }
         return new Assign($assignVariable, $node->expr);
     }
     private function shouldSkip(Foreach_ $foreach, Scope $scope) : bool
