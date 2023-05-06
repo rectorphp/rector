@@ -125,8 +125,8 @@ final class ParallelFileProcessor
                         }
                         $systemErrors[] = SystemError::decode($jsonError);
                     }
-                    foreach ($json[Bridge::FILE_DIFFS] as $jsonError) {
-                        $fileDiffs[] = FileDiff::decode($jsonError);
+                    foreach ($json[Bridge::FILE_DIFFS] as $jsonFileDiff) {
+                        $fileDiffs[] = FileDiff::decode($jsonFileDiff);
                     }
                     $postFileCallback($json[Bridge::FILES_COUNT]);
                     $systemErrorsCount += $json[Bridge::SYSTEM_ERRORS_COUNT];
