@@ -6,6 +6,7 @@ namespace Rector\Restoration\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -15,13 +16,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveFinalFromEntityRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private const ALLOWED_ANNOTATIONS = ['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable'];
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_ATTRIBUTES = ['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable'];
+    /**
      * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(VisibilityManipulator $visibilityManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
+     */
+    private $phpAttributeAnalyzer;
+    public function __construct(VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->visibilityManipulator = $visibilityManipulator;
+        $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -60,7 +75,7 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        if (!$phpDocInfo->hasByAnnotationClasses(['Doctrine\\ORM\\Mapping\\Entity', 'Doctrine\\ORM\\Mapping\\Embeddable'])) {
+        if (!$phpDocInfo->hasByAnnotationClasses(self::ALLOWED_ANNOTATIONS) && !$this->phpAttributeAnalyzer->hasPhpAttributes($node, self::ALLOWED_ATTRIBUTES)) {
             return null;
         }
         if (!$node->isFinal()) {
