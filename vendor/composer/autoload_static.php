@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2f4ad052e54c0e0c4358aed15203c363
+class ComposerStaticInit24fc5fd2b6218b109e4932a3a051625f
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1448,14 +1448,12 @@ class ComposerStaticInit2f4ad052e54c0e0c4358aed15203c363
         'Rector\\CodeQuality\\CompactConverter' => __DIR__ . '/../..' . '/rules/CodeQuality/CompactConverter.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ClassLikeAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ClassLikeAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ConstructorPropertyDefaultExprResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ConstructorPropertyDefaultExprResolver.php',
-        'Rector\\CodeQuality\\NodeAnalyzer\\ForAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ForAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ForeachAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ForeachAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\LocalPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/LocalPropertyAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ReturnAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ReturnAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\VariableDimFetchAssignResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/VariableDimFetchAssignResolver.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\VariableNameUsedNextAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/VariableNameUsedNextAnalyzer.php',
         'Rector\\CodeQuality\\NodeFactory\\ArrayFilterFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/ArrayFilterFactory.php',
-        'Rector\\CodeQuality\\NodeFactory\\ForeachFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/ForeachFactory.php',
         'Rector\\CodeQuality\\NodeFactory\\MissingPropertiesFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/MissingPropertiesFactory.php',
         'Rector\\CodeQuality\\NodeFactory\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/PropertyTypeDecorator.php',
         'Rector\\CodeQuality\\NodeManipulator\\ExprBoolCaster' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeManipulator/ExprBoolCaster.php',
@@ -1480,7 +1478,6 @@ class ComposerStaticInit2f4ad052e54c0e0c4358aed15203c363
         'Rector\\CodeQuality\\Rector\\Expression\\InlineIfToExplicitIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Expression/InlineIfToExplicitIfRector.php',
         'Rector\\CodeQuality\\Rector\\Expression\\TernaryFalseExpressionToIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Expression/TernaryFalseExpressionToIfRector.php',
         'Rector\\CodeQuality\\Rector\\For_\\ForRepeatedCountToOwnVariableRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/For_/ForRepeatedCountToOwnVariableRector.php',
-        'Rector\\CodeQuality\\Rector\\For_\\ForToForeachRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/For_/ForToForeachRector.php',
         'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachItemsAssignToEmptyArrayToAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Foreach_/ForeachItemsAssignToEmptyArrayToAssignRector.php',
         'Rector\\CodeQuality\\Rector\\Foreach_\\ForeachToInArrayRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Foreach_/ForeachToInArrayRector.php',
         'Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToArrayFilterRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Foreach_/SimplifyForeachToArrayFilterRector.php',
@@ -3127,9 +3124,9 @@ class ComposerStaticInit2f4ad052e54c0e0c4358aed15203c363
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2f4ad052e54c0e0c4358aed15203c363::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2f4ad052e54c0e0c4358aed15203c363::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2f4ad052e54c0e0c4358aed15203c363::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit24fc5fd2b6218b109e4932a3a051625f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit24fc5fd2b6218b109e4932a3a051625f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit24fc5fd2b6218b109e4932a3a051625f::$classMap;
 
         }, null, ClassLoader::class);
     }

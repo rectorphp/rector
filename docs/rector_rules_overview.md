@@ -1,4 +1,4 @@
-# 421 Rules Overview
+# 420 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (79)
+- [CodeQuality](#codequality) (78)
 
 - [CodingStyle](#codingstyle) (39)
 
@@ -801,30 +801,6 @@ Change `count()` in for function to own variable
 +        $itemsCount = count($items);
 +        for ($i = 5; $i <= $itemsCount; $i++) {
              echo $items[$i];
-         }
-     }
- }
-```
-
-<br>
-
-### ForToForeachRector
-
-Change `for()` to `foreach()` where useful
-
-- class: [`Rector\CodeQuality\Rector\For_\ForToForeachRector`](../rules/CodeQuality/Rector/For_/ForToForeachRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($tokens)
-     {
--        for ($i = 0, $c = count($tokens); $i < $c; ++$i) {
--            if ($tokens[$i][0] === T_STRING && $tokens[$i][1] === 'fn') {
-+        foreach ($tokens as $i => $token) {
-+            if ($token[0] === T_STRING && $token[1] === 'fn') {
-                 $tokens[$i][0] = self::T_FN;
-             }
          }
      }
  }
