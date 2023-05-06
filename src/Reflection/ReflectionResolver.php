@@ -31,6 +31,7 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use RectorPrefix202305\Symfony\Contracts\Service\Attribute\Required;
 final class ReflectionResolver
 {
@@ -151,8 +152,13 @@ final class ReflectionResolver
     public function resolveMethodReflectionFromStaticCall(StaticCall $staticCall) : ?MethodReflection
     {
         $objectType = $this->nodeTypeResolver->getType($staticCall->class);
-        /** @var array<class-string> $classNames */
-        $classNames = TypeUtils::getDirectClassNames($objectType);
+        if ($objectType instanceof ShortenedObjectType) {
+            /** @var array<class-string> $classNames */
+            $classNames = [$objectType->getFullyQualifiedName()];
+        } else {
+            /** @var array<class-string> $classNames */
+            $classNames = TypeUtils::getDirectClassNames($objectType);
+        }
         $methodName = $this->nodeNameResolver->getName($staticCall->name);
         if ($methodName === null) {
             return null;
