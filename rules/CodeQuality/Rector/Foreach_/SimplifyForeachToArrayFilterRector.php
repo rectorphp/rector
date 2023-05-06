@@ -123,7 +123,11 @@ CODE_SAMPLE
         if ($ifNode->else instanceof Else_) {
             return \true;
         }
-        return $ifNode->elseifs !== [];
+        if ($ifNode->elseifs !== []) {
+            return \true;
+        }
+        $type = $this->getType($foreach->expr);
+        return !$type->isArray()->yes();
     }
     private function shouldSkipForeachKeyUsage(If_ $if, Expr $expr) : bool
     {
