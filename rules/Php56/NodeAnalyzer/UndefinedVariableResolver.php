@@ -124,9 +124,14 @@ final class UndefinedVariableResolver
         $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($variable);
         return $currentStmt instanceof Stmt && $currentStmt->getAttribute(AttributeKey::IS_UNREACHABLE) === \true;
     }
-    private function issetOrUnsetOrEmptyParent(Node $parentNode) : bool
+    private function shouldSkipWithParent(Node $parentNode) : bool
     {
-        return \in_array(\get_class($parentNode), [Unset_::class, UnsetCast::class, Isset_::class, Empty_::class], \true);
+        if (\in_array(\get_class($parentNode), [Unset_::class, UnsetCast::class, Isset_::class, Empty_::class], \true)) {
+            return \true;
+        }
+        // when parent Node origNode is null, it means parent Node just reprinted, so it can't be verified
+        // so skip it
+        return !$parentNode->getAttribute(AttributeKey::ORIGINAL_NODE) instanceof Node;
     }
     private function isAsCoalesceLeftOrAssignOpCoalesceVar(Node $parentNode, Variable $variable) : bool
     {
@@ -150,7 +155,7 @@ final class UndefinedVariableResolver
         if ($this->isAssign($parentNode)) {
             return \true;
         }
-        if ($this->issetOrUnsetOrEmptyParent($parentNode)) {
+        if ($this->shouldSkipWithParent($parentNode)) {
             return \true;
         }
         // list() = | [$values] = defines variables as null
