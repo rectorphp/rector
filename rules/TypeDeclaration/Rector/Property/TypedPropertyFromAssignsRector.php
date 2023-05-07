@@ -11,7 +11,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -19,12 +18,13 @@ use Rector\Php74\Guard\MakePropertyTypedGuard;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\TypedPropertyFromAssignsRectorTest
  */
-final class TypedPropertyFromAssignsRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface
+final class TypedPropertyFromAssignsRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @api
@@ -61,18 +61,12 @@ final class TypedPropertyFromAssignsRector extends AbstractRector implements All
      * @var \Rector\Php74\Guard\MakePropertyTypedGuard
      */
     private $makePropertyTypedGuard;
-    /**
-     * @readonly
-     * @var \Rector\Core\Php\PhpVersionProvider
-     */
-    private $phpVersionProvider;
-    public function __construct(AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, PropertyTypeDecorator $propertyTypeDecorator, VarTagRemover $varTagRemover, MakePropertyTypedGuard $makePropertyTypedGuard, PhpVersionProvider $phpVersionProvider)
+    public function __construct(AllAssignNodePropertyTypeInferer $allAssignNodePropertyTypeInferer, PropertyTypeDecorator $propertyTypeDecorator, VarTagRemover $varTagRemover, MakePropertyTypedGuard $makePropertyTypedGuard)
     {
         $this->allAssignNodePropertyTypeInferer = $allAssignNodePropertyTypeInferer;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
         $this->varTagRemover = $varTagRemover;
         $this->makePropertyTypedGuard = $makePropertyTypedGuard;
-        $this->phpVersionProvider = $phpVersionProvider;
     }
     public function configure(array $configuration) : void
     {
@@ -111,12 +105,20 @@ CODE_SAMPLE
     {
         return [Property::class];
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
+    }
     /**
      * @param Property $node
      */
     public function refactor(Node $node) : ?Node
     {
         if (!$this->makePropertyTypedGuard->isLegal($node, $this->inlinePublic)) {
+            return null;
+        }
+        // non-private property can be anything with not inline public configured
+        if (!$node->isPrivate() && !$this->inlinePublic) {
             return null;
         }
         $inferredType = $this->allAssignNodePropertyTypeInferer->inferProperty($node);
@@ -127,18 +129,11 @@ CODE_SAMPLE
             return null;
         }
         $inferredType = $this->decorateTypeWithNullableIfDefaultPropertyNull($node, $inferredType);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $typeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($inferredType, TypeKind::PROPERTY);
         if ($typeNode === null) {
             return null;
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
-            return null;
-        }
-        // non-private property can be anything with not inline public configured
-        if (!$node->isPrivate() && !$this->inlinePublic) {
-            return null;
-        }
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($inferredType instanceof UnionType) {
             $this->propertyTypeDecorator->decoratePropertyUnionType($inferredType, $typeNode, $node, $phpDocInfo, \false);
         } else {
