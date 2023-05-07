@@ -8,18 +8,18 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PhpDocParser\PhpDocInfoAnalyzer;
 use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
 use Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\VarAnnotationIncorrectNullableRector\VarAnnotationIncorrectNullableRectorTest
  */
-final class VarAnnotationIncorrectNullableRector extends AbstractRector
+final class VarAnnotationIncorrectNullableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -38,20 +38,14 @@ final class VarAnnotationIncorrectNullableRector extends AbstractRector
     private $phpDocNestedAnnotationGuard;
     /**
      * @readonly
-     * @var \Rector\Core\Php\PhpVersionProvider
-     */
-    private $phpVersionProvider;
-    /**
-     * @readonly
      * @var \Rector\PhpDocParser\PhpDocInfoAnalyzer
      */
     private $phpDocInfoAnalyzer;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, PhpDocNullableTypeHelper $phpDocNullableTypeHelper, PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, PhpVersionProvider $phpVersionProvider, PhpDocInfoAnalyzer $phpDocInfoAnalyzer)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, PhpDocNullableTypeHelper $phpDocNullableTypeHelper, PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, PhpDocInfoAnalyzer $phpDocInfoAnalyzer)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->phpDocNullableTypeHelper = $phpDocNullableTypeHelper;
         $this->phpDocNestedAnnotationGuard = $phpDocNestedAnnotationGuard;
-        $this->phpVersionProvider = $phpVersionProvider;
         $this->phpDocInfoAnalyzer = $phpDocInfoAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -83,15 +77,16 @@ CODE_SAMPLE
     {
         return [Property::class];
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
+    }
     /**
      * @param Property $node
      */
     public function refactor(Node $node) : ?Node
     {
         if (\count($node->props) !== 1) {
-            return null;
-        }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             return null;
         }
         if (!$this->phpDocNestedAnnotationGuard->isPhpDocCommentCorrectlyParsed($node)) {

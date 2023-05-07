@@ -27,12 +27,13 @@ use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 use Rector\TypeDeclaration\TypeAnalyzer\ReturnStrictTypeAnalyzer;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector\ReturnTypeFromStrictTypedCallRectorTest
  */
-final class ReturnTypeFromStrictTypedCallRector extends AbstractRector
+final class ReturnTypeFromStrictTypedCallRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -105,6 +106,10 @@ CODE_SAMPLE
     public function getNodeTypes() : array
     {
         return [ClassMethod::class, Function_::class, Closure::class, ArrowFunction::class];
+    }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
      * @param ClassMethod|Function_|Closure|ArrowFunction $node
@@ -193,9 +198,6 @@ CODE_SAMPLE
      */
     private function isSkipped($node) : bool
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::SCALAR_TYPES)) {
-            return \true;
-        }
         if ($node instanceof ArrowFunction) {
             return $node->returnType !== null;
         }

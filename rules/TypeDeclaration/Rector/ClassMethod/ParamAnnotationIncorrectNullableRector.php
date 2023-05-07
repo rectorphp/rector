@@ -11,7 +11,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
@@ -20,12 +19,13 @@ use Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard;
 use Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper;
 use Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer;
 use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
+use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamAnnotationIncorrectNullableRector\ParamAnnotationIncorrectNullableRectorTest
  */
-final class ParamAnnotationIncorrectNullableRector extends AbstractRector
+final class ParamAnnotationIncorrectNullableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -49,21 +49,15 @@ final class ParamAnnotationIncorrectNullableRector extends AbstractRector
     private $paramPhpDocNodeFactory;
     /**
      * @readonly
-     * @var \Rector\Core\Php\PhpVersionProvider
-     */
-    private $phpVersionProvider;
-    /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
-    public function __construct(TypeComparator $typeComparator, PhpDocNullableTypeHelper $phpDocNullableTypeHelper, PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, ParamPhpDocNodeFactory $paramPhpDocNodeFactory, PhpVersionProvider $phpVersionProvider, ParamAnalyzer $paramAnalyzer)
+    public function __construct(TypeComparator $typeComparator, PhpDocNullableTypeHelper $phpDocNullableTypeHelper, PhpDocNestedAnnotationGuard $phpDocNestedAnnotationGuard, ParamPhpDocNodeFactory $paramPhpDocNodeFactory, ParamAnalyzer $paramAnalyzer)
     {
         $this->typeComparator = $typeComparator;
         $this->phpDocNullableTypeHelper = $phpDocNullableTypeHelper;
         $this->phpDocNestedAnnotationGuard = $phpDocNestedAnnotationGuard;
         $this->paramPhpDocNodeFactory = $paramPhpDocNodeFactory;
-        $this->phpVersionProvider = $phpVersionProvider;
         $this->paramAnalyzer = $paramAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -105,15 +99,16 @@ CODE_SAMPLE
     {
         return [ClassMethod::class, Function_::class];
     }
+    public function provideMinPhpVersion() : int
+    {
+        return PhpVersionFeature::TYPED_PROPERTIES;
+    }
     /**
      * @param ClassMethod|Function_ $node
      */
     public function refactor(Node $node) : ?Node
     {
         if ($node->getParams() === []) {
-            return null;
-        }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::TYPED_PROPERTIES)) {
             return null;
         }
         if (!$this->phpDocNestedAnnotationGuard->isPhpDocCommentCorrectlyParsed($node)) {
