@@ -120,6 +120,9 @@ CODE_SAMPLE
         if (\count($foreach->stmts) > 1) {
             return \true;
         }
+        if (!$foreach->stmts[0] instanceof If_) {
+            return \true;
+        }
         $nextNode = $foreach->getAttribute(AttributeKey::NEXT_NODE);
         if (!$nextNode instanceof Node) {
             return \true;
@@ -138,7 +141,7 @@ CODE_SAMPLE
         if ($foreachValueStaticType instanceof ObjectType) {
             return \true;
         }
-        return !$foreach->stmts[0] instanceof If_;
+        return \false;
     }
     private function shouldSkipIf(If_ $if) : bool
     {
