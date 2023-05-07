@@ -53,15 +53,13 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $leftType = $this->getType($node->left);
-        if ($leftType->isBoolean()->yes() && !$this->valueResolver->isTrueOrFalse($node->left)) {
+        if (!$this->valueResolver->isTrueOrFalse($node->left) && $this->getType($node->left)->isBoolean()->yes()) {
             return $this->processBoolTypeToNotBool($node, $node->left, $node->right);
         }
-        $rightType = $this->getType($node->right);
-        if (!$rightType->isBoolean()->yes()) {
+        if ($this->valueResolver->isTrueOrFalse($node->right)) {
             return null;
         }
-        if ($this->valueResolver->isTrueOrFalse($node->right)) {
+        if (!$this->getType($node->right)->isBoolean()->yes()) {
             return null;
         }
         return $this->processBoolTypeToNotBool($node, $node->right, $node->left);
@@ -86,9 +84,8 @@ CODE_SAMPLE
             if ($leftExpr instanceof BooleanNot) {
                 return $leftExpr->expr;
             }
-            $leftExprType = $this->getType($leftExpr);
             // keep as it is, readable enough
-            if ($leftExpr instanceof Variable && $leftExprType->isBoolean()->yes()) {
+            if ($leftExpr instanceof Variable && $this->getType($leftExpr)->isBoolean()->yes()) {
                 return null;
             }
             return new BooleanNot($leftExpr);
