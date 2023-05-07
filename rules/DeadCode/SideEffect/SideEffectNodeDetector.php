@@ -52,14 +52,14 @@ final class SideEffectNodeDetector
         if ($expr instanceof Assign) {
             return \true;
         }
-        $exprStaticType = $this->nodeTypeResolver->getType($expr);
-        if ($exprStaticType instanceof ConstantType) {
-            return \false;
-        }
         foreach (self::SIDE_EFFECT_NODE_TYPES as $sideEffectNodeType) {
             if ($expr instanceof $sideEffectNodeType) {
                 return \false;
             }
+        }
+        $exprStaticType = $this->nodeTypeResolver->getType($expr);
+        if ($exprStaticType instanceof ConstantType) {
+            return \false;
         }
         if ($expr instanceof FuncCall) {
             return !$this->pureFunctionDetector->detect($expr);
