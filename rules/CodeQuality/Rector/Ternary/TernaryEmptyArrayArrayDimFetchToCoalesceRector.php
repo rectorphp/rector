@@ -62,11 +62,11 @@ CODE_SAMPLE
         if (!$negagedExpr instanceof Empty_) {
             return null;
         }
-        $emptyExprType = $this->getType($negagedExpr->expr);
-        if (!$emptyExprType->isArray()->yes()) {
+        if (!$node->if instanceof ArrayDimFetch) {
             return null;
         }
-        if (!$node->if instanceof ArrayDimFetch) {
+        $emptyExprType = $this->getType($negagedExpr->expr);
+        if (!$emptyExprType->isArray()->yes()) {
             return null;
         }
         $dimFetchVar = $node->if->var;
