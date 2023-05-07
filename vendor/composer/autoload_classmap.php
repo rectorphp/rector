@@ -1327,7 +1327,6 @@ return array(
     'Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\NewlineBeforeNewAssignSetRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\OrderAttributesRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php',
-    'Rector\\CodingStyle\\Rector\\ClassMethod\\RemoveDoubleUnderscoreInMethodNameRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/RemoveDoubleUnderscoreInMethodNameRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\ReturnArrayClassMethodToYieldRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/ReturnArrayClassMethodToYieldRector.php',
     'Rector\\CodingStyle\\Rector\\ClassMethod\\UnSpreadOperatorRector' => $baseDir . '/rules/CodingStyle/Rector/ClassMethod/UnSpreadOperatorRector.php',
     'Rector\\CodingStyle\\Rector\\Class_\\AddArrayDefaultToArrayPropertyRector' => $baseDir . '/rules/CodingStyle/Rector/Class_/AddArrayDefaultToArrayPropertyRector.php',
