@@ -10,10 +10,10 @@ final class IterableTypeAnalyzer
 {
     public function detect(Type $type) : bool
     {
-        if ($type->isArray()->yes()) {
+        if ($type instanceof IterableType) {
             return \true;
         }
-        if ($type instanceof IterableType) {
+        if ($type->isArray()->yes()) {
             return \true;
         }
         if ($type instanceof UnionType) {
