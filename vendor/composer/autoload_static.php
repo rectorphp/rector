@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit52a3827c6463d92d419685a8496bb0f3
+class ComposerStaticInit966f676a276559bf92a7dc1baed7ed72
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1518,7 +1518,6 @@ class ComposerStaticInit52a3827c6463d92d419685a8496bb0f3
         'Rector\\CodeQuality\\Rector\\If_\\ExplicitBoolCompareRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/ExplicitBoolCompareRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\ShortenElseIfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/ShortenElseIfRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfElseToTernaryRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/SimplifyIfElseToTernaryRector.php',
-        'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfExactValueReturnValueRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/SimplifyIfExactValueReturnValueRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfNotNullReturnRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/SimplifyIfNotNullReturnRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfNullableReturnRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/SimplifyIfNullableReturnRector.php',
         'Rector\\CodeQuality\\Rector\\If_\\SimplifyIfReturnBoolRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/If_/SimplifyIfReturnBoolRector.php',
@@ -1589,7 +1588,6 @@ class ComposerStaticInit52a3827c6463d92d419685a8496bb0f3
         'Rector\\CodingStyle\\Rector\\Plus\\UseIncrementAssignRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Plus/UseIncrementAssignRector.php',
         'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\AddFalseDefaultToBoolPropertyRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/AddFalseDefaultToBoolPropertyRector.php',
-        'Rector\\CodingStyle\\Rector\\Property\\InlineSimplePropertyAnnotationRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/InlineSimplePropertyAnnotationRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\NullifyUnionNullableRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/NullifyUnionNullableRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\SplitGroupedPropertiesRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php',
         'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',
@@ -3124,9 +3122,9 @@ class ComposerStaticInit52a3827c6463d92d419685a8496bb0f3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit52a3827c6463d92d419685a8496bb0f3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit52a3827c6463d92d419685a8496bb0f3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit52a3827c6463d92d419685a8496bb0f3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit966f676a276559bf92a7dc1baed7ed72::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit966f676a276559bf92a7dc1baed7ed72::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit966f676a276559bf92a7dc1baed7ed72::$classMap;
 
         }, null, ClassLoader::class);
     }

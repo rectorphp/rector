@@ -1,4 +1,4 @@
-# 420 Rules Overview
+# 418 Rules Overview
 
 <br>
 
@@ -6,9 +6,9 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (78)
+- [CodeQuality](#codequality) (77)
 
-- [CodingStyle](#codingstyle) (39)
+- [CodingStyle](#codingstyle) (38)
 
 - [Compatibility](#compatibility) (1)
 
@@ -1404,23 +1404,6 @@ Changes if/else for same value as assign to ternary
 
 <br>
 
-### SimplifyIfExactValueReturnValueRector
-
-Changes compared to value and return of expr to direct return
-
-- class: [`Rector\CodeQuality\Rector\If_\SimplifyIfExactValueReturnValueRector`](../rules/CodeQuality/Rector/If_/SimplifyIfExactValueReturnValueRector.php)
-
-```diff
- $value = 'something';
--if ($value === 52) {
--    return 52;
--}
--
- return $value;
-```
-
-<br>
-
 ### SimplifyIfNotNullReturnRector
 
 Changes redundant null check to instant return
@@ -2138,51 +2121,6 @@ Refactor `func_get_args()` in to a variadic param
 +function run(...$args)
  {
 -    $args = \func_get_args();
- }
-```
-
-<br>
-
-### InlineSimplePropertyAnnotationRector
-
-Inline simple `@var` annotations (or other annotations) when they are the only thing in the phpdoc
-
-:wrench: **configure it!**
-
-- class: [`Rector\CodingStyle\Rector\Property\InlineSimplePropertyAnnotationRector`](../rules/CodingStyle/Rector/Property/InlineSimplePropertyAnnotationRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\CodingStyle\Rector\Property\InlineSimplePropertyAnnotationRector;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(InlineSimplePropertyAnnotationRector::class, [
-        'var',
-        'phpstan-var',
-    ]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
--    /**
--     * @phpstan-var string
--     */
-+    /** @phpstan-var string */
-     private const TEXT = 'text';
-
--    /**
--     * @var DateTime[]
--     */
-+    /** @var DateTime[] */
-     private ?array $dateTimes;
  }
 ```
 
@@ -5398,11 +5336,13 @@ Replace `each()` assign outside loop
 
 ```diff
  $array = ['b' => 1, 'a' => 2];
+
 -$eachedArray = each($array);
 +$eachedArray[1] = current($array);
 +$eachedArray['value'] = current($array);
 +$eachedArray[0] = key($array);
 +$eachedArray['key'] = key($array);
++
 +next($array);
 ```
 

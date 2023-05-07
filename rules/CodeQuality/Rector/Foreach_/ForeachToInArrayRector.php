@@ -138,10 +138,7 @@ CODE_SAMPLE
             return \true;
         }
         $foreachValueStaticType = $this->getType($foreach->expr);
-        if ($foreachValueStaticType instanceof ObjectType) {
-            return \true;
-        }
-        return \false;
+        return $foreachValueStaticType instanceof ObjectType;
     }
     private function shouldSkipIf(If_ $if) : bool
     {

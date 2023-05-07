@@ -6,7 +6,6 @@ namespace Rector\Core\NodeManipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\Exit_;
 use PhpParser\Node\Expr\Variable;
@@ -74,37 +73,6 @@ final class IfManipulator
             return null;
         }
         return $this->matchComparedAndReturnedNode($if->cond, $insideIfNode);
-    }
-    /**
-     * Matches:
-     *
-     * if (<$value> === null) {
-     *     return null;
-     * }
-     *
-     * if (<$value> === 53;) {
-     *     return 53;
-     * }
-     */
-    public function matchIfValueReturnValue(If_ $if) : ?Expr
-    {
-        if (\count($if->stmts) !== 1) {
-            return null;
-        }
-        $insideIfStmt = $if->stmts[0];
-        if (!$insideIfStmt instanceof Return_) {
-            return null;
-        }
-        if (!$if->cond instanceof Identical) {
-            return null;
-        }
-        if ($this->nodeComparator->areNodesEqual($if->cond->left, $insideIfStmt->expr)) {
-            return $if->cond->right;
-        }
-        if ($this->nodeComparator->areNodesEqual($if->cond->right, $insideIfStmt->expr)) {
-            return $if->cond->left;
-        }
-        return null;
     }
     /**
      * @return If_[]
