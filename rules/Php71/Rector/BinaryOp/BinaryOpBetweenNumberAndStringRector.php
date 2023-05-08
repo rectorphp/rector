@@ -107,15 +107,13 @@ CODE_SAMPLE
         if ($expr instanceof Line) {
             return \false;
         }
-        $value = null;
-        $exprStaticType = $this->getType($expr);
         if ($expr instanceof String_) {
-            $value = $expr->value;
-        } elseif ($exprStaticType instanceof ConstantStringType) {
-            $value = $exprStaticType->getValue();
-        } else {
-            return \false;
+            return !\is_numeric($expr->value);
         }
-        return !\is_numeric($value);
+        $exprStaticType = $this->getType($expr);
+        if ($exprStaticType instanceof ConstantStringType) {
+            return !\is_numeric($exprStaticType->getValue());
+        }
+        return \false;
     }
 }
