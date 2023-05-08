@@ -56,13 +56,11 @@ final class IsArrayAndDualCheckToAble
         if (!$this->nodeNameResolver->isName($funcCallExpr, 'is_array')) {
             return null;
         }
-        if (!isset($funcCallExpr->args[0])) {
+        if (!isset($funcCallExpr->getArgs()[0])) {
             return null;
         }
-        if (!$funcCallExpr->args[0] instanceof Arg) {
-            return null;
-        }
-        $firstExprNode = $funcCallExpr->args[0]->value;
+        $firstArg = $funcCallExpr->getArgs()[0];
+        $firstExprNode = $firstArg->value;
         if (!$this->nodeComparator->areNodesEqual($instanceofExpr->expr, $firstExprNode)) {
             return null;
         }

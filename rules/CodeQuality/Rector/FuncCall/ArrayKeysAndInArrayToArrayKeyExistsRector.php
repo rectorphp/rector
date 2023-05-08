@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
@@ -78,19 +77,13 @@ CODE_SAMPLE
     }
     private function createArrayKeyExists(FuncCall $inArrayFuncCall, FuncCall $arrayKeysFuncCall) : ?FuncCall
     {
-        if (!isset($inArrayFuncCall->args[0])) {
+        if (!isset($inArrayFuncCall->getArgs()[0])) {
             return null;
         }
-        if (!$inArrayFuncCall->args[0] instanceof Arg) {
+        if (!isset($arrayKeysFuncCall->getArgs()[0])) {
             return null;
         }
-        if (!isset($arrayKeysFuncCall->args[0])) {
-            return null;
-        }
-        if (!$arrayKeysFuncCall->args[0] instanceof Arg) {
-            return null;
-        }
-        $arguments = [$inArrayFuncCall->args[0], $arrayKeysFuncCall->args[0]];
+        $arguments = [$inArrayFuncCall->getArgs()[0], $arrayKeysFuncCall->getArgs()[0]];
         return new FuncCall(new Name('array_key_exists'), $arguments);
     }
     /**

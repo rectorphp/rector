@@ -68,13 +68,11 @@ CODE_SAMPLE
         if (!$this->isName($node, 'get_class')) {
             return null;
         }
-        if (!isset($node->args[0])) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
-            return null;
-        }
-        $firstArgValue = $node->args[0]->value;
+        $firstArg = $node->getArgs()[0];
+        $firstArgValue = $firstArg->value;
         if (!$scope->isInClass()) {
             return null;
         }
@@ -124,16 +122,13 @@ CODE_SAMPLE
         if (!$ternary->cond instanceof Identical) {
             return \false;
         }
-        if (!isset($funcCall->args[0])) {
+        if (!isset($funcCall->getArgs()[0])) {
             return \false;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
-            return \false;
-        }
-        if ($this->nodeComparator->areNodesEqual($ternary->cond->left, $funcCall->args[0]->value) && !$this->valueResolver->isNull($ternary->cond->right)) {
+        if ($this->nodeComparator->areNodesEqual($ternary->cond->left, $funcCall->getArgs()[0]->value) && !$this->valueResolver->isNull($ternary->cond->right)) {
             return \true;
         }
-        if (!$this->nodeComparator->areNodesEqual($ternary->cond->right, $funcCall->args[0]->value)) {
+        if (!$this->nodeComparator->areNodesEqual($ternary->cond->right, $funcCall->getArgs()[0]->value)) {
             return \false;
         }
         return !$this->valueResolver->isNull($ternary->cond->left);

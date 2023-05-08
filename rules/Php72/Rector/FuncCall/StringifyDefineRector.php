@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
@@ -72,21 +71,19 @@ CODE_SAMPLE
         if (!$this->isName($node, 'define')) {
             return null;
         }
-        if (!isset($node->args[0])) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
+        $firstArg = $node->getArgs()[0];
+        if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($firstArg->value)) {
             return null;
         }
-        if ($this->stringTypeAnalyzer->isStringOrUnionStringOnlyType($node->args[0]->value)) {
-            return null;
-        }
-        if ($node->args[0]->value instanceof ConstFetch) {
-            $nodeName = $this->getName($node->args[0]->value);
+        if ($firstArg->value instanceof ConstFetch) {
+            $nodeName = $this->getName($firstArg->value);
             if ($nodeName === null) {
                 return null;
             }
-            $node->args[0]->value = new String_($nodeName);
+            $firstArg->value = new String_($nodeName);
         }
         return $node;
     }

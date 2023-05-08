@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -33,14 +32,12 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
         if (!$this->isName($node, 'count')) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
-            return null;
-        }
-        if (!$node->args[0]->value instanceof FuncCall) {
+        $firstArg = $node->getArgs()[0];
+        if (!$firstArg->value instanceof FuncCall) {
             return null;
         }
         /** @var FuncCall $innerFuncCall */
-        $innerFuncCall = $node->args[0]->value;
+        $innerFuncCall = $firstArg->value;
         if (!$this->isName($innerFuncCall, 'func_get_args')) {
             return null;
         }

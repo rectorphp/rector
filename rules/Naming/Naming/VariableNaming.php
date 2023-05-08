@@ -163,13 +163,10 @@ final class VariableNaming
     }
     private function resolveBareFuncCallArgumentName(FuncCall $funcCall, string $fallbackName, string $suffix) : string
     {
-        if (!isset($funcCall->args[0])) {
+        if (!isset($funcCall->getArgs()[0])) {
             return '';
         }
-        if (!$funcCall->args[0] instanceof Arg) {
-            return '';
-        }
-        $argumentValue = $funcCall->args[0]->value;
+        $argumentValue = $funcCall->getArgs()[0]->value;
         if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
             $name = $this->nodeNameResolver->getName($argumentValue->name);
         } else {

@@ -72,14 +72,11 @@ CODE_SAMPLE
         }
         /** @var FuncCall $eachFuncCall */
         $eachFuncCall = $assign->expr;
-        if (!isset($eachFuncCall->args[0])) {
+        if (!isset($eachFuncCall->getArgs()[0])) {
             return null;
         }
-        if (!$eachFuncCall->args[0] instanceof Arg) {
-            return null;
-        }
-        $eachedVariable = $eachFuncCall->args[0]->value;
         $assignVariable = $assign->var;
+        $eachedVariable = $eachFuncCall->getArgs()[0]->value;
         return $this->createNewStmts($assignVariable, $eachedVariable);
     }
     private function shouldSkip(Assign $assign) : bool

@@ -176,9 +176,6 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($expr, 'iterator_to_array')) {
             return \false;
         }
-        if (!isset($expr->args[0])) {
-            return \false;
-        }
-        return $expr->args[0] instanceof Arg;
+        return isset($expr->getArgs()[0]);
     }
 }

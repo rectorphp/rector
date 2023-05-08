@@ -151,13 +151,11 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, 'count')) {
             return \true;
         }
-        if (!isset($funcCall->args[0])) {
+        if (!isset($funcCall->getArgs()[0])) {
             return \true;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
-            return \true;
-        }
-        if ($funcCall->args[0]->value instanceof ClassConstFetch) {
+        $firstArg = $funcCall->getArgs()[0];
+        if ($firstArg->value instanceof ClassConstFetch) {
             return \true;
         }
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);

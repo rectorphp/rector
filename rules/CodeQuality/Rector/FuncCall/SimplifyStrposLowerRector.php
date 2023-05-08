@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Core\Rector\AbstractRector;
@@ -34,22 +33,20 @@ final class SimplifyStrposLowerRector extends AbstractRector
         if (!$this->isName($node, 'strpos')) {
             return null;
         }
-        if (!isset($node->args[0])) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
-            return null;
-        }
-        if (!$node->args[0]->value instanceof FuncCall) {
+        $firstArg = $node->getArgs()[0];
+        if (!$firstArg->value instanceof FuncCall) {
             return null;
         }
         /** @var FuncCall $innerFuncCall */
-        $innerFuncCall = $node->args[0]->value;
+        $innerFuncCall = $firstArg->value;
         if (!$this->isName($innerFuncCall, 'strtolower')) {
             return null;
         }
         // pop 1 level up
-        $node->args[0] = $innerFuncCall->args[0];
+        $node->args[0] = $innerFuncCall->getArgs()[0];
         $node->name = new Name('stripos');
         return $node;
     }

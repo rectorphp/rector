@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\Greater;
@@ -57,14 +56,11 @@ CODE_SAMPLE
         if (!$this->isName($node, 'count')) {
             return null;
         }
-        if (!isset($node->args[0])) {
-            return null;
-        }
-        if (!$node->args[0] instanceof Arg) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
         /** @var Expr $expr */
-        $expr = $node->args[0]->value;
+        $expr = $node->getArgs()[0]->value;
         // not pass array type, skip
         if (!$this->isArray($expr)) {
             return null;
@@ -88,17 +84,15 @@ CODE_SAMPLE
         if (!$booleanNot->expr instanceof FuncCall) {
             return null;
         }
-        if (!$this->isName($booleanNot->expr, 'count')) {
+        $funcCall = $booleanNot->expr;
+        if (!$this->isName($funcCall, 'count')) {
             return null;
         }
-        if (!isset($booleanNot->expr->args[0])) {
-            return null;
-        }
-        if (!$booleanNot->expr->args[0] instanceof Arg) {
+        if (!isset($funcCall->getArgs()[0])) {
             return null;
         }
         /** @var Expr $expr */
-        $expr = $booleanNot->expr->args[0]->value;
+        $expr = $funcCall->getArgs()[0]->value;
         // not pass array type, skip
         if (!$this->isArray($expr)) {
             return null;
