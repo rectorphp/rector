@@ -1,4 +1,4 @@
-# 417 Rules Overview
+# 415 Rules Overview
 
 <br>
 
@@ -62,7 +62,7 @@
 
 - [Strict](#strict) (6)
 
-- [Transform](#transform) (33)
+- [Transform](#transform) (31)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -8171,42 +8171,6 @@ return static function (RectorConfig $rectorConfig): void {
 +class SomeClass implements SomeInterface
  {
  }
-```
-
-<br>
-
-### MethodCallToAnotherMethodCallWithArgumentsRector
-
-Turns old method call with specific types to new one with arguments
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector`](../rules/Transform/Rector/MethodCall/MethodCallToAnotherMethodCallWithArgumentsRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\MethodCall\MethodCallToAnotherMethodCallWithArgumentsRector;
-use Rector\Transform\ValueObject\MethodCallToAnotherMethodCallWithArguments;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MethodCallToAnotherMethodCallWithArgumentsRector::class, [
-        new MethodCallToAnotherMethodCallWithArguments('Nette\DI\ServiceDefinition', 'setInject', 'addTag', [
-            'inject',
-        ]),
-    ]);
-};
-```
-
-↓
-
-```diff
- $serviceDefinition = new Nette\DI\ServiceDefinition;
--$serviceDefinition->setInject();
-+$serviceDefinition->addTag('inject');
 ```
 
 <br>
