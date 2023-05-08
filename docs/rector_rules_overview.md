@@ -1,4 +1,4 @@
-# 418 Rules Overview
+# 417 Rules Overview
 
 <br>
 
@@ -62,7 +62,7 @@
 
 - [Strict](#strict) (6)
 
-- [Transform](#transform) (34)
+- [Transform](#transform) (33)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -4041,12 +4041,12 @@ Return early prepared value in ifs
      {
 -        $var = null;
 -
-         if (rand(0,1)) {
+         if (rand(0, 1)) {
 -            $var = 1;
 +            return 1;
          }
 
-         if (rand(0,1)) {
+         if (rand(0, 1)) {
 -            $var = 2;
 +            return 2;
          }
@@ -7860,57 +7860,6 @@ return static function (RectorConfig $rectorConfig): void {
 +class SomeClass implements SomeInterface
  {
      use SomeTrait;
- }
-```
-
-<br>
-
-### ArgumentFuncCallToMethodCallRector
-
-Move help facade-like function calls to constructor injection
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector`](../rules/Transform/Rector/FuncCall/ArgumentFuncCallToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\FuncCall\ArgumentFuncCallToMethodCallRector;
-use Rector\Transform\ValueObject\ArgumentFuncCallToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ArgumentFuncCallToMethodCallRector::class, [
-        new ArgumentFuncCallToMethodCall('view', 'Illuminate\Contracts\View\Factory', 'make'),
-    ]);
-};
-```
-
-↓
-
-```diff
- class SomeController
- {
-+    /**
-+     * @var \Illuminate\Contracts\View\Factory
-+     */
-+    private $viewFactory;
-+
-+    public function __construct(\Illuminate\Contracts\View\Factory $viewFactory)
-+    {
-+        $this->viewFactory = $viewFactory;
-+    }
-+
-     public function action()
-     {
--        $template = view('template.blade');
--        $viewFactory = view();
-+        $template = $this->viewFactory->make('template.blade');
-+        $viewFactory = $this->viewFactory;
-     }
  }
 ```
 
