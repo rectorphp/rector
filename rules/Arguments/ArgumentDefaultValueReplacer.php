@@ -85,11 +85,11 @@ final class ArgumentDefaultValueReplacer
         if (!$expr->args[$position] instanceof Arg) {
             return null;
         }
-        $argValue = $this->valueResolver->getValue($expr->args[$position]->value);
+        $argValue = $this->valueResolver->getValue($expr->getArgs()[$position]->value);
         if (\is_scalar($replaceArgumentDefaultValue->getValueBefore()) && $argValue === $replaceArgumentDefaultValue->getValueBefore()) {
             $expr->args[$position] = $this->normalizeValueToArgument($replaceArgumentDefaultValue->getValueAfter());
         } elseif (\is_array($replaceArgumentDefaultValue->getValueBefore())) {
-            $newArgs = $this->processArrayReplacement($expr->args, $replaceArgumentDefaultValue);
+            $newArgs = $this->processArrayReplacement($expr->getArgs(), $replaceArgumentDefaultValue);
             if (\is_array($newArgs)) {
                 $expr->args = $newArgs;
             }

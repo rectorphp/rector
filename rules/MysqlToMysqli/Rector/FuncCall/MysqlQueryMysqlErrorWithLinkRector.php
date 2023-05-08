@@ -80,7 +80,7 @@ CODE_SAMPLE
             if (!$this->isName($node, $oldFunction)) {
                 continue;
             }
-            $args = $node->args;
+            $args = $node->getArgs();
             if ($args === [] || !$this->isProbablyMysql($args[0]->value)) {
                 $connectionVariable = $this->findConnectionVariable($node);
                 $this->removeExistingConnectionParameter($node);

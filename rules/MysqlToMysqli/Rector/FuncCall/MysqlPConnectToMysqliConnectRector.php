@@ -58,8 +58,10 @@ CODE_SAMPLE
         if (!isset($node->getArgs()[0])) {
             return null;
         }
+        $args = $node->getArgs();
+        $firstArg = $args[0];
         $node->name = new Name('mysqli_connect');
-        $node->args[0]->value = $this->joinStringWithNode('p:', $node->getArgs()[0]->value);
+        $args[0]->value = $this->joinStringWithNode('p:', $firstArg->value);
         return $node;
     }
     /**

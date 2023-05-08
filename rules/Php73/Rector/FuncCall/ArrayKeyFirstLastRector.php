@@ -152,7 +152,7 @@ CODE_SAMPLE
                 if ($subNode->isFirstClassCallable()) {
                     return \true;
                 }
-                return $this->nodeComparator->areNodesEqual($subNode->args[0]->value, $funcCall->args[0]->value);
+                return $this->nodeComparator->areNodesEqual($subNode->getArgs()[0]->value, $funcCall->getArgs()[0]->value);
             });
             if ($hasPrevCallNext) {
                 return \true;

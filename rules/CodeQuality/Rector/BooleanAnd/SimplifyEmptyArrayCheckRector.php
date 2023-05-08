@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\BooleanAnd;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\Identical;
@@ -53,11 +52,10 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
         }
         /** @var FuncCall $isArrayExpr */
         $isArrayExpr = $twoNodeMatch->getFirstExpr();
-        /** @var Expr $firstArgValue */
-        $firstArgValue = $isArrayExpr->args[0]->value;
+        $firstArgValue = $isArrayExpr->getArgs()[0]->value;
         /** @var Empty_ $emptyOrNotIdenticalNode */
         $emptyOrNotIdenticalNode = $twoNodeMatch->getSecondExpr();
-        if ($emptyOrNotIdenticalNode->expr instanceof FuncCall && $this->nodeComparator->areNodesEqual($emptyOrNotIdenticalNode->expr->args[0]->value, $firstArgValue)) {
+        if ($emptyOrNotIdenticalNode->expr instanceof FuncCall && $this->nodeComparator->areNodesEqual($emptyOrNotIdenticalNode->expr->getArgs()[0]->value, $firstArgValue)) {
             return new Identical($emptyOrNotIdenticalNode->expr, new Array_());
         }
         if (!$this->nodeComparator->areNodesEqual($emptyOrNotIdenticalNode->expr, $firstArgValue)) {

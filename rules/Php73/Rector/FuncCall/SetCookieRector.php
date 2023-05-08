@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\VariadicPlaceholder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -86,17 +85,15 @@ CODE_SAMPLE
         return \false;
     }
     /**
-     * @return Arg[]|VariadicPlaceholder[]
+     * @return Arg[]
      */
     private function composeNewArgs(FuncCall $funcCall) : array
     {
-        $items = [];
-        $args = $funcCall->args;
-        $newArgs = [];
-        $newArgs[] = $args[0];
-        $newArgs[] = $args[1];
+        $args = $funcCall->getArgs();
+        $newArgs = [$args[0], $args[1]];
         unset($args[0]);
         unset($args[1]);
+        $items = [];
         foreach ($args as $idx => $arg) {
             $newKey = new String_(self::KNOWN_OPTIONS[$idx]);
             $items[] = new ArrayItem($arg->value, $newKey);

@@ -167,7 +167,8 @@ CODE_SAMPLE
         if ($trait instanceof Trait_) {
             return \true;
         }
-        if (!$funcCall->args[0]->value instanceof Variable) {
+        $firstArg = $funcCall->getArgs()[0];
+        if (!$firstArg->value instanceof Variable) {
             return \false;
         }
         $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
@@ -177,7 +178,7 @@ CODE_SAMPLE
                 return \true;
             }
         }
-        return $this->variableAnalyzer->isStaticOrGlobal($funcCall->args[0]->value);
+        return $this->variableAnalyzer->isStaticOrGlobal($firstArg->value);
     }
     private function castToArray(Expr $countedExpr, FuncCall $funcCall) : FuncCall
     {
