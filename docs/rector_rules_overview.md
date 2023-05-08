@@ -6,9 +6,9 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (77)
+- [CodeQuality](#codequality) (78)
 
-- [CodingStyle](#codingstyle) (38)
+- [CodingStyle](#codingstyle) (37)
 
 - [Compatibility](#compatibility) (1)
 
@@ -524,6 +524,31 @@ Change `array_push()` to direct variable assign
  $items = [];
 -array_push($items, $item);
 +$items[] = $item;
+```
+
+<br>
+
+### CleanupUnneededNullsafeOperatorRector
+
+Cleanup unneeded nullsafe operator
+
+- class: [`Rector\CodeQuality\Rector\NullsafeMethodCall\CleanupUnneededNullsafeOperatorRector`](../rules/CodeQuality/Rector/NullsafeMethodCall/CleanupUnneededNullsafeOperatorRector.php)
+
+```diff
+ class HelloWorld {
+     public function getString(): string
+     {
+          return 'hello world';
+     }
+ }
+
+ function get(): HelloWorld
+ {
+      return new HelloWorld();
+ }
+
+-echo get()?->getString();
++echo get()->getString();
 ```
 
 <br>
@@ -2351,26 +2376,6 @@ return static function (RectorConfig $rectorConfig): void {
      {
 -        $this->assertEquals('a', 'a');
 +        self::assertEquals('a', 'a');
-     }
- }
-```
-
-<br>
-
-### RemoveDoubleUnderscoreInMethodNameRector
-
-Non-magic PHP object methods cannot start with "__"
-
-- class: [`Rector\CodingStyle\Rector\ClassMethod\RemoveDoubleUnderscoreInMethodNameRector`](../rules/CodingStyle/Rector/ClassMethod/RemoveDoubleUnderscoreInMethodNameRector.php)
-
-```diff
- class SomeClass
- {
--    public function __getName($anotherObject)
-+    public function getName($anotherObject)
-     {
--        $anotherObject->__getSurname();
-+        $anotherObject->getSurname();
      }
  }
 ```

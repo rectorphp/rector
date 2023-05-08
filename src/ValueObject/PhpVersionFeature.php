@@ -351,6 +351,10 @@ final class PhpVersionFeature
     /**
      * @var int
      */
+    public const NULLSAFE_OPERATOR = \Rector\Core\ValueObject\PhpVersion::PHP_80;
+    /**
+     * @var int
+     */
     public const IS_ITERABLE = \Rector\Core\ValueObject\PhpVersion::PHP_71;
     /**
      * @var int

@@ -68,7 +68,7 @@ final class ReturnStrictTypeAnalyzer
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $call
      */
-    private function resolveMethodCallReturnNode($call) : ?Node
+    public function resolveMethodCallReturnNode($call) : ?Node
     {
         $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($methodReflection === null) {

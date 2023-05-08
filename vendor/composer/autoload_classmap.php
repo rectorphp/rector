@@ -1285,6 +1285,7 @@ return array(
     'Rector\\CodeQuality\\Rector\\LogicalAnd\\LogicalToBooleanRector' => $baseDir . '/rules/CodeQuality/Rector/LogicalAnd/LogicalToBooleanRector.php',
     'Rector\\CodeQuality\\Rector\\New_\\NewStaticToNewSelfRector' => $baseDir . '/rules/CodeQuality/Rector/New_/NewStaticToNewSelfRector.php',
     'Rector\\CodeQuality\\Rector\\NotEqual\\CommonNotEqualRector' => $baseDir . '/rules/CodeQuality/Rector/NotEqual/CommonNotEqualRector.php',
+    'Rector\\CodeQuality\\Rector\\NullsafeMethodCall\\CleanupUnneededNullsafeOperatorRector' => $baseDir . '/rules/CodeQuality/Rector/NullsafeMethodCall/CleanupUnneededNullsafeOperatorRector.php',
     'Rector\\CodeQuality\\Rector\\PropertyFetch\\ExplicitMethodCallOverMagicGetSetRector' => $baseDir . '/rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php',
     'Rector\\CodeQuality\\Rector\\Switch_\\SingularSwitchToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SingularSwitchToIfRector.php',
     'Rector\\CodeQuality\\Rector\\Switch_\\SwitchTrueToIfRector' => $baseDir . '/rules/CodeQuality/Rector/Switch_/SwitchTrueToIfRector.php',

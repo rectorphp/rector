@@ -90,7 +90,10 @@ CODE_SAMPLE
     private function refactorResetFuncCall(Ternary $ternary, FuncCall $resetFuncCall, Scope $scope) : void
     {
         $ternary->if = $ternary->cond;
-        $firstArgValue = $resetFuncCall->args[0]->value;
+        if ($resetFuncCall->isFirstClassCallable()) {
+            return;
+        }
+        $firstArgValue = $resetFuncCall->getArgs()[0]->value;
         $firstArgType = $scope->getType($firstArgValue);
         $falsyCompareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($firstArgType, $firstArgValue, $this->treatAsNonEmpty);
         if (!$falsyCompareExpr instanceof Expr) {
