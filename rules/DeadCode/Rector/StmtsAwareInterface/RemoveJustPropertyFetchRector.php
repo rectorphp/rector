@@ -197,14 +197,14 @@ CODE_SAMPLE
         if (!$assign->expr instanceof PropertyFetch) {
             return null;
         }
-        if ($this->isPropertyFetchCallerNode($assign->expr)) {
-            return null;
-        }
         // keep property fetch nesting
         if ($assign->expr->var instanceof PropertyFetch) {
             return null;
         }
         if (!$assign->var instanceof Variable) {
+            return null;
+        }
+        if ($this->isPropertyFetchCallerNode($assign->expr)) {
             return null;
         }
         return new PropertyFetchToVariableAssign($assign->var, $assign->expr);
