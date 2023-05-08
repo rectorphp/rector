@@ -187,7 +187,7 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($funcCall, 'strlen')) {
             return \false;
         }
-        if (!isset($funcCall->args[0])) {
+        if (!isset($funcCall->getArgs()[0])) {
             return \false;
         }
         if (!$funcCall->args[0] instanceof Arg) {

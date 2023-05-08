@@ -133,7 +133,7 @@ CODE_SAMPLE
             if (!$this->isName($subNode, 'key')) {
                 return \false;
             }
-            return $this->nodeComparator->areNodesEqual($resetOrEndFuncCall->args[0], $subNode->args[0]);
+            return $this->nodeComparator->areNodesEqual($resetOrEndFuncCall->getArgs()[0], $subNode->getArgs()[0]);
         });
     }
     private function hasPrevCallNext(StmtsAwareInterface $stmtsAware, int $nextKey, int $totalKeys, FuncCall $funcCall) : bool

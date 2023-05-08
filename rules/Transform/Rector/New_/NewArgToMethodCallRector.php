@@ -63,7 +63,7 @@ CODE_SAMPLE
             if (!$this->isObjectType($node->class, $newArgToMethodCall->getObjectType())) {
                 continue;
             }
-            if (!isset($node->args[0])) {
+            if (!isset($node->getArgs()[0])) {
                 return null;
             }
             if (!$node->args[0] instanceof Arg) {

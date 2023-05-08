@@ -69,7 +69,7 @@ CODE_SAMPLE
             return null;
         }
         // change the node
-        if (!isset($node->args[0])) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
         $firstArg = $node->args[0];

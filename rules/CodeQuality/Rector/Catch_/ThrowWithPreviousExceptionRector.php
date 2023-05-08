@@ -114,14 +114,15 @@ CODE_SAMPLE
             return null;
         }
         // exception is bundled
-        if (isset($new->args[$exceptionArgumentPosition])) {
+        if (isset($new->getArgs()[$exceptionArgumentPosition])) {
             return null;
         }
-        if (!isset($new->args[0])) {
+        if (!isset($new->getArgs()[0])) {
             // get previous message
-            $new->args[0] = new Arg(new MethodCall($catchedThrowableVariable, 'getMessage'));
+            $getMessageMethodCall = new MethodCall($catchedThrowableVariable, 'getMessage');
+            $new->args[0] = new Arg($getMessageMethodCall);
         }
-        if (!isset($new->args[1])) {
+        if (!isset($new->getArgs()[1])) {
             // get previous code
             $new->args[1] = new Arg(new MethodCall($catchedThrowableVariable, 'getCode'));
         }

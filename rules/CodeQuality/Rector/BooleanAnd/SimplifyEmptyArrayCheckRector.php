@@ -80,7 +80,7 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
                 if (!$this->isName($node, 'is_array')) {
                     return \false;
                 }
-                return isset($node->args[0]);
+                return isset($node->getArgs()[0]);
             },
             // empty(...)
             function (Node $node) : bool {
@@ -94,7 +94,7 @@ final class SimplifyEmptyArrayCheckRector extends AbstractRector
                     if (!$this->isName($node->expr, 'array_filter')) {
                         return \false;
                     }
-                    return isset($node->expr->args[0]);
+                    return isset($node->expr->getArgs()[0]);
                 }
                 return \true;
             }

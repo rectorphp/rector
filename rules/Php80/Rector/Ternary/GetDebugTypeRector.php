@@ -78,7 +78,7 @@ CODE_SAMPLE
         if ($ternary->cond->isFirstClassCallable()) {
             return \true;
         }
-        if (!isset($ternary->cond->args[0])) {
+        if (!isset($ternary->cond->getArgs()[0])) {
             return \true;
         }
         if (!$this->nodeNameResolver->isName($ternary->cond, 'is_object')) {
