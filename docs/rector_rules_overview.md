@@ -7907,49 +7907,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-### DimFetchAssignToMethodCallRector
-
-Change magic array access add to `$list[],` to explicit `$list->addMethod(...)`
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector`](../rules/Transform/Rector/Assign/DimFetchAssignToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Assign\DimFetchAssignToMethodCallRector;
-use Rector\Transform\ValueObject\DimFetchAssignToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DimFetchAssignToMethodCallRector::class, [
-        new DimFetchAssignToMethodCall('Nette\Application\Routers\RouteList', 'Nette\Application\Routers\Route', 'addRoute'),
-    ]);
-};
-```
-
-↓
-
-```diff
--use Nette\Application\Routers\Route;
- use Nette\Application\Routers\RouteList;
-
- class RouterFactory
- {
-     public static function createRouter()
-     {
-         $routeList = new RouteList();
--        $routeList[] = new Route('...');
-+        $routeList->addRoute('...');
-     }
- }
-```
-
-<br>
-
 ### FileGetContentsAndJsonDecodeToStaticCallRector
 
 Merge 2 function calls to static call

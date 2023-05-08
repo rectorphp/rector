@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit79475237490efa837c48b78044981fa4
+class ComposerStaticInitd445e688caf886e87b208e42156171fb
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2936,7 +2936,6 @@ class ComposerStaticInit79475237490efa837c48b78044981fa4
         'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => __DIR__ . '/../..' . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
         'Rector\\Transform\\NodeFactory\\PropertyFetchFactory' => __DIR__ . '/../..' . '/rules/Transform/NodeFactory/PropertyFetchFactory.php',
         'Rector\\Transform\\NodeTypeAnalyzer\\TypeProvidingExprFromClassResolver' => __DIR__ . '/../..' . '/rules/Transform/NodeTypeAnalyzer/TypeProvidingExprFromClassResolver.php',
-        'Rector\\Transform\\Rector\\Assign\\DimFetchAssignToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Assign/DimFetchAssignToMethodCallRector.php',
         'Rector\\Transform\\Rector\\Assign\\GetAndSetToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Assign/GetAndSetToMethodCallRector.php',
         'Rector\\Transform\\Rector\\Assign\\PropertyAssignToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Assign/PropertyAssignToMethodCallRector.php',
         'Rector\\Transform\\Rector\\Assign\\PropertyFetchToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/Assign/PropertyFetchToMethodCallRector.php',
@@ -2971,7 +2970,6 @@ class ComposerStaticInit79475237490efa837c48b78044981fa4
         'Rector\\Transform\\Rector\\String_\\ToStringToMethodCallRector' => __DIR__ . '/../..' . '/rules/Transform/Rector/String_/ToStringToMethodCallRector.php',
         'Rector\\Transform\\ValueObject\\AttributeKeyToClassConstFetch' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/AttributeKeyToClassConstFetch.php',
         'Rector\\Transform\\ValueObject\\ClassMethodReference' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/ClassMethodReference.php',
-        'Rector\\Transform\\ValueObject\\DimFetchAssignToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/DimFetchAssignToMethodCall.php',
         'Rector\\Transform\\ValueObject\\FuncCallToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/FuncCallToMethodCall.php',
         'Rector\\Transform\\ValueObject\\FuncCallToStaticCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/FuncCallToStaticCall.php',
         'Rector\\Transform\\ValueObject\\GetAndSetToMethodCall' => __DIR__ . '/../..' . '/rules/Transform/ValueObject/GetAndSetToMethodCall.php',
@@ -3119,9 +3117,9 @@ class ComposerStaticInit79475237490efa837c48b78044981fa4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit79475237490efa837c48b78044981fa4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit79475237490efa837c48b78044981fa4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit79475237490efa837c48b78044981fa4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd445e688caf886e87b208e42156171fb::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd445e688caf886e87b208e42156171fb::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd445e688caf886e87b208e42156171fb::$classMap;
 
         }, null, ClassLoader::class);
     }
