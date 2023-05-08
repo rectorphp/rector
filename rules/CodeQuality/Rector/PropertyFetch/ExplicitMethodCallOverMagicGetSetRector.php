@@ -20,6 +20,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symplify/phpstan-rules/blob/main/docs/rules_overview.md#explicitmethodcallovermagicgetsetrule
  *
+ * @inspired by \Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector
+ * @phpstan-rule https://github.com/symplify/phpstan-rules/blob/main/src/Rules/Explicit/ExplicitMethodCallOverMagicGetSetRule.php
+ *
  * @see \Rector\Tests\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector\ExplicitMethodCallOverMagicGetSetRectorTest
  */
 final class ExplicitMethodCallOverMagicGetSetRector extends AbstractScopeAwareRector
