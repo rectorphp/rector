@@ -1866,6 +1866,7 @@ return array(
     'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryAndToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryAndToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryOrToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryOrToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\StmtsAwareInterface\\ReturnEarlyIfVariableRector' => $baseDir . '/rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php',
+    'Rector\\EarlyReturn\\ValueObject\\BareSingleAssignIf' => $baseDir . '/rules/EarlyReturn/ValueObject/BareSingleAssignIf.php',
     'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => $baseDir . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
     'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => $baseDir . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
     'Rector\\FileSystemRector\\Contract\\AddedFileInterface' => $baseDir . '/packages/FileSystemRector/Contract/AddedFileInterface.php',
