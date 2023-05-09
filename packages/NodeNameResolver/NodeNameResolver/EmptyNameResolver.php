@@ -5,6 +5,7 @@ namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Empty_;
+use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 /**
  * @implements NodeNameResolverInterface<Empty_>
@@ -18,7 +19,7 @@ final class EmptyNameResolver implements NodeNameResolverInterface
     /**
      * @param Empty_ $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(Node $node, ?Scope $scope) : ?string
     {
         return 'empty';
     }

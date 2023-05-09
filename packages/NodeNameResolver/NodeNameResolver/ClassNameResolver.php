@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix202305\Symfony\Contracts\Service\Attribute\Required;
@@ -33,7 +34,7 @@ final class ClassNameResolver implements NodeNameResolverInterface
     /**
      * @param ClassLike $node
      */
-    public function resolve(Node $node) : ?string
+    public function resolve(Node $node, ?Scope $scope) : ?string
     {
         if ($node->namespacedName instanceof Name) {
             return $node->namespacedName->toString();

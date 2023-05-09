@@ -90,6 +90,6 @@ final class FilesystemIteratorSkipDotsRector extends AbstractRector implements M
             // can be anything
             return \true;
         }
-        return $this->classConstFetchNameResolver->resolve($expr) === 'FilesystemIterator::SKIP_DOTS';
+        return $this->classConstFetchNameResolver->resolve($expr, null) === 'FilesystemIterator::SKIP_DOTS';
     }
 }
