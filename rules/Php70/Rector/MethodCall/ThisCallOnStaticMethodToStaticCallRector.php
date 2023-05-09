@@ -6,6 +6,7 @@ namespace Rector\Php70\Rector\MethodCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\Php\PhpMethodReflection;
@@ -96,6 +97,9 @@ CODE_SAMPLE
             return null;
         }
         if (!$this->nodeNameResolver->isName($node->var, 'this')) {
+            return null;
+        }
+        if (!$node->name instanceof Identifier) {
             return null;
         }
         $methodName = $this->getName($node->name);
