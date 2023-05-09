@@ -62,8 +62,7 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethods)) {
             return null;
         }
-        /** @var FuncCall|Node $firstArgumentValue */
-        $firstArgumentValue = $node->args[0]->value;
+        $firstArgumentValue = $node->getArgs()[0]->value;
         if (!$firstArgumentValue instanceof FuncCall) {
             return null;
         }
@@ -80,11 +79,11 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
     private function moveFunctionArgumentsUp($node) : Node
     {
         /** @var FuncCall $isFunctionNode */
-        $isFunctionNode = $node->args[0]->value;
-        $firstArgumentValue = $isFunctionNode->args[0]->value;
+        $isFunctionNode = $node->getArgs()[0]->value;
+        $firstArgumentValue = $isFunctionNode->getArgs()[0]->value;
         $isFunctionName = $this->getName($isFunctionNode);
         $newArgs = [new Arg(new String_(self::OLD_FUNCTIONS_TO_TYPES[$isFunctionName])), new Arg($firstArgumentValue)];
-        $oldArguments = $node->args;
+        $oldArguments = $node->getArgs();
         unset($oldArguments[0]);
         $node->args = $this->appendArgs($newArgs, $oldArguments);
         return $node;

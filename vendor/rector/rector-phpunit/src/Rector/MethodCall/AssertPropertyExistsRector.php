@@ -70,19 +70,19 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
         }
-        $firstArgumentValue = $node->args[0]->value;
+        $firstArgumentValue = $node->getArgs()[0]->value;
         if (!$firstArgumentValue instanceof FuncCall) {
             return null;
         }
         if (!$this->isName($firstArgumentValue, 'property_exists')) {
             return null;
         }
-        $propertyExistsMethodCall = $node->args[0]->value;
+        $propertyExistsMethodCall = $node->getArgs()[0]->value;
         if (!$propertyExistsMethodCall instanceof FuncCall) {
             return null;
         }
-        $firstArgument = $propertyExistsMethodCall->args[0];
-        $secondArgument = $propertyExistsMethodCall->args[1];
+        $firstArgument = $propertyExistsMethodCall->getArgs()[0];
+        $secondArgument = $propertyExistsMethodCall->getArgs()[1];
         if ($firstArgument->value instanceof Variable) {
             $secondArg = new Variable($firstArgument->value->name);
             $map = self::RENAME_METHODS_WITH_OBJECT_MAP;
@@ -97,7 +97,7 @@ CODE_SAMPLE
         }
         unset($node->args[0]);
         $newArgs = $this->nodeFactory->createArgs([$secondArgument->value->value, $secondArg]);
-        $node->args = $this->appendArgs($newArgs, $node->args);
+        $node->args = $this->appendArgs($newArgs, $node->getArgs());
         $this->identifierManipulator->renameNodeWithMap($node, $map);
         return $node;
     }

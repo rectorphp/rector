@@ -73,19 +73,17 @@ CODE_SAMPLE
             return null;
         }
         // when second argument is string: do nothing
-        $secondArgType = $this->getType($node->args[1]->value);
+        $secondArgType = $this->getType($node->getArgs()[1]->value);
         if ($secondArgType instanceof StringType) {
             return null;
         }
         //when less then 5 arguments given: do nothing
-        if (!isset($node->args[4])) {
+        if (!isset($node->getArgs()[4])) {
             return null;
         }
-        if ($node->args[4]->value === null) {
-            return null;
-        }
+        $fourthArg = $node->getArgs()[4];
         //when 5th argument check identity is true: do nothing
-        if ($this->valueResolver->isValue($node->args[4]->value, \true)) {
+        if ($this->valueResolver->isValue($fourthArg->value, \true)) {
             return null;
         }
         /* here we search for element of array without identity check  and we can replace functions */

@@ -64,8 +64,8 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         if (!isset($node->args[1])) {
             return null;
         }
-        $firstArgument = $node->args[0];
-        $secondArgument = $node->args[1];
+        $firstArgument = $node->getArgs()[0];
+        $secondArgument = $node->getArgs()[1];
         $firstArgumentValue = $firstArgument->value;
         $secondArgumentValue = $secondArgument->value;
         if ($secondArgumentValue instanceof FuncCall) {
@@ -109,7 +109,7 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
      */
     private function moveFunctionArgumentsUp($node, FuncCall $funcCall, Arg $requiredArg) : void
     {
-        $node->args[1] = $funcCall->args[0];
+        $node->args[1] = $funcCall->getArgs()[0];
         $node->args[0] = $requiredArg;
     }
 }

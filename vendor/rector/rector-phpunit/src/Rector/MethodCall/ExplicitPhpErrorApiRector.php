@@ -96,10 +96,11 @@ CODE_SAMPLE
      */
     private function replaceExceptionWith($node, string $exceptionClass, string $explicitMethod) : ?Node
     {
-        if (!isset($node->args[0])) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
-        if (!$this->isClassConstReference($node->args[0]->value, $exceptionClass)) {
+        $firstArg = $node->getArgs()[0];
+        if (!$this->isClassConstReference($firstArg->value, $exceptionClass)) {
             return null;
         }
         return $this->assertCallFactory->createCallWithName($node, $explicitMethod);

@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\Core\NodeManipulator\ForeachManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -17,15 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class SimplifyForeachInstanceOfRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeManipulator\ForeachManipulator
-     */
-    private $foreachManipulator;
-    public function __construct(ForeachManipulator $foreachManipulator)
-    {
-        $this->foreachManipulator = $foreachManipulator;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Simplify unnecessary foreach check of instances', [new CodeSample(<<<'CODE_SAMPLE'
@@ -50,30 +41,31 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        /** @var MethodCall|StaticCall|null $matchedNode */
-        $matchedNode = $this->foreachManipulator->matchOnlyStmt($node, function (Node $node, Foreach_ $foreach) : ?Node {
-            if (!$node instanceof MethodCall && !$node instanceof StaticCall) {
-                return null;
-            }
-            if (!$this->isName($node->name, 'assertInstanceOf')) {
-                return null;
-            }
-            if (!$this->nodeComparator->areNodesEqual($foreach->valueVar, $node->args[1]->value)) {
-                return null;
-            }
-            return $node;
-        });
-        if ($matchedNode === null) {
+        if (\count($node->stmts) !== 1) {
+            return null;
+        }
+        $onlyStmt = $node->stmts[0];
+        if (!$onlyStmt instanceof Expression) {
+            return null;
+        }
+        $expr = $onlyStmt->expr;
+        if (!$expr instanceof MethodCall && !$expr instanceof StaticCall) {
+            return null;
+        }
+        if (!$this->isName($expr->name, 'assertInstanceOf')) {
+            return null;
+        }
+        if (!$this->nodeComparator->areNodesEqual($node->valueVar, $expr->getArgs()[1]->value)) {
             return null;
         }
         // skip if there is a custom message included; it might be per item
-        if (\count($matchedNode->getArgs()) === 3) {
+        if (\count($expr->getArgs()) === 3) {
             return null;
         }
-        $args = [$matchedNode->args[0], new Arg($node->expr)];
-        if ($matchedNode instanceof StaticCall) {
-            return new StaticCall($matchedNode->class, 'assertContainsOnlyInstancesOf', $args);
+        $newArgs = [$expr->getArgs()[0], new Arg($node->expr)];
+        if ($expr instanceof StaticCall) {
+            return new StaticCall($expr->class, 'assertContainsOnlyInstancesOf', $newArgs);
         }
-        return new MethodCall($matchedNode->var, 'assertContainsOnlyInstancesOf', $args);
+        return new MethodCall($expr->var, 'assertContainsOnlyInstancesOf', $newArgs);
     }
 }

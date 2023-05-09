@@ -58,7 +58,7 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethodNames)) {
             return null;
         }
-        $firstArgumentValue = $node->args[0]->value;
+        $firstArgumentValue = $node->getArgs()[0]->value;
         if (!$firstArgumentValue instanceof Instanceof_) {
             return null;
         }
@@ -71,7 +71,7 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
      */
     private function changeArgumentsOrder($node) : void
     {
-        $oldArguments = $node->args;
+        $oldArguments = $node->getArgs();
         /** @var Instanceof_ $comparison */
         $comparison = $oldArguments[0]->value;
         $argument = $comparison->expr;

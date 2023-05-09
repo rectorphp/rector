@@ -117,8 +117,8 @@ CODE_SAMPLE
             return $call;
         }
         $newMethodCall = $this->assertCallFactory->createCallWithName($call, 'assertEqualsIgnoringCase');
-        $newMethodCall->args[0] = $call->args[0];
-        $newMethodCall->args[1] = $call->args[1];
+        $newMethodCall->args[0] = $call->getArgs()[0];
+        $newMethodCall->args[1] = $call->getArgs()[1];
         if (!$this->valueResolver->isValue($args[2]->value, '')) {
             $newMethodCall->args[2] = $args[2];
         }

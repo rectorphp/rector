@@ -60,7 +60,7 @@ final class AssertResourceToClosedResourceRector extends AbstractRector
         if (!$this->isNames($node->name, $methodNames)) {
             return null;
         }
-        if (!isset($node->args[0])) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
         $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);

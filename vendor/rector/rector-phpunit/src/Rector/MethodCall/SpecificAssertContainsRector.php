@@ -73,7 +73,7 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertContains', 'assertNotContains'])) {
             return null;
         }
-        if (!$this->isPossiblyStringType($node->args[1]->value)) {
+        if (!$this->isPossiblyStringType($node->getArgs()[1]->value)) {
             return null;
         }
         $methodName = $this->getName($node->name);
