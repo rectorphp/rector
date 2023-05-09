@@ -134,13 +134,6 @@ final class UnionTypeMapper implements TypeMapperInterface
         if ($arrayNode !== null) {
             return $arrayNode;
         }
-        if ($this->boolUnionTypeAnalyzer->isNullableBoolUnionType($type) && !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES)) {
-            return $this->resolveNullableType(new NullableType(new Identifier('bool')));
-        }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_TYPES) && $this->isFalseBoolUnion($type)) {
-            // return new Bool
-            return new Identifier('bool');
-        }
         // special case for nullable
         $nullabledType = $this->matchTypeForNullableUnionType($type);
         if (!$nullabledType instanceof Type) {
@@ -435,19 +428,6 @@ final class UnionTypeMapper implements TypeMapperInterface
             return new ObjectType('Rector\\Core\\Contract\\Rector\\RectorInterface');
         }
         return $typeWithClassName;
-    }
-    private function isFalseBoolUnion(UnionType $unionType) : bool
-    {
-        if (\count($unionType->getTypes()) !== 2) {
-            return \false;
-        }
-        foreach ($unionType->getTypes() as $unionedType) {
-            if ($unionedType instanceof ConstantBooleanType) {
-                continue;
-            }
-            return \false;
-        }
-        return \true;
     }
     private function narrowIntegerType(UnionType $unionType) : ?Identifier
     {
