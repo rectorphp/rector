@@ -1,4 +1,4 @@
-# 414 Rules Overview
+# 413 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (78)
+- [CodeQuality](#codequality) (77)
 
 - [CodingStyle](#codingstyle) (37)
 
@@ -1343,13 +1343,16 @@ Simplify `is_array` and `empty` functions combination into a simple identical ch
 
 ### SimplifyEmptyCheckOnEmptyArrayRector
 
-Simplify `empty` functions calls on empty arrays
+Simplify `empty()` functions calls on empty arrays
 
 - class: [`Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector`](../rules/CodeQuality/Rector/Empty_/SimplifyEmptyCheckOnEmptyArrayRector.php)
 
 ```diff
--$array = []; if(empty($values))
-+$array = []; if([] === $values)
+ $array = [];
+
+-if (empty($values)) {
++if ([] === $values) {
+ }
 ```
 
 <br>
@@ -1543,25 +1546,6 @@ Simplify tautology ternary to value
 ```diff
 -$value = ($fullyQualifiedTypeHint !== $typeHint) ? $fullyQualifiedTypeHint : $typeHint;
 +$value = $fullyQualifiedTypeHint;
-```
-
-<br>
-
-### SimplifyUselessLastVariableAssignRector
-
-Removes the latest useless variable assigns before a variable will return.
-
-- class: [`Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessLastVariableAssignRector`](../rules/CodeQuality/Rector/FunctionLike/SimplifyUselessLastVariableAssignRector.php)
-
-```diff
- function ($b) {
--    $a = true;
-     if ($b === 1) {
-         return $b;
-     }
--    return $a;
-+    return true;
- };
 ```
 
 <br>
