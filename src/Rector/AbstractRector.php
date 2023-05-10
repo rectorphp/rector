@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
+use PHPStan\Internal\BytesHelper;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -209,15 +210,25 @@ CODE_SAMPLE;
         if ($this->shouldSkipCurrentNode($node)) {
             return null;
         }
+        $isDebug = $this->rectorOutputStyle->isDebug();
         $this->currentRectorProvider->changeCurrentRector($this);
         // for PHP doc info factory and change notifier
         $this->currentNodeProvider->setNode($node);
-        $this->printDebugCurrentFileAndRule();
+        if ($isDebug) {
+            $this->printCurrentFileAndRule();
+        }
         $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         if ($originalNode instanceof Node) {
             $this->changedNodeScopeRefresher->reIndexNodeAttributes($node);
         }
+        if ($isDebug) {
+            $startTime = \microtime(\true);
+            $previousMemory = \memory_get_peak_usage(\true);
+        }
         $refactoredNode = $this->refactor($node);
+        if ($isDebug) {
+            $this->printConsumptions($startTime, $previousMemory);
+        }
         // nothing to change or just removed via removeNode() → continue
         if ($refactoredNode === null) {
             return null;
@@ -226,6 +237,13 @@ CODE_SAMPLE;
             $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
+        return $this->postRefactorProcess($originalNode, $node, $refactoredNode);
+    }
+    /**
+     * @param \PhpParser\Node|mixed[] $refactoredNode
+     */
+    private function postRefactorProcess(?\PhpParser\Node $originalNode, Node $node, $refactoredNode) : Node
+    {
         $originalNode = $originalNode ?? $node;
         /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
@@ -400,14 +418,18 @@ CODE_SAMPLE;
         }
         $this->nodeConnectingTraverser->traverse($nodes);
     }
-    private function printDebugCurrentFileAndRule() : void
+    private function printCurrentFileAndRule() : void
     {
-        if (!$this->rectorOutputStyle->isDebug()) {
-            return;
-        }
         $relativeFilePath = $this->filePathHelper->relativePath($this->file->getFilePath());
         $this->rectorOutputStyle->writeln('[file] ' . $relativeFilePath);
         $this->rectorOutputStyle->writeln('[rule] ' . static::class);
+    }
+    private function printConsumptions(float $startTime, int $previousMemory) : void
+    {
+        $elapsedTime = \microtime(\true) - $startTime;
+        $currentTotalMemory = \memory_get_peak_usage(\true);
+        $consumed = \sprintf('--- consumed %s, total %s, took %.2f s', BytesHelper::bytes($currentTotalMemory - $previousMemory), BytesHelper::bytes($currentTotalMemory), $elapsedTime);
+        $this->rectorOutputStyle->writeln($consumed);
         $this->rectorOutputStyle->newLine(1);
     }
 }
