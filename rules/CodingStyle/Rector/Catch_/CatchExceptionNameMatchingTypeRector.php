@@ -90,10 +90,8 @@ CODE_SAMPLE
         if (!$node->var instanceof Variable) {
             return null;
         }
+        /** @var string $oldVariableName */
         $oldVariableName = $this->getName($node->var);
-        if (!\is_string($oldVariableName)) {
-            return null;
-        }
         $type = $node->types[0];
         $typeShortName = $this->nodeNameResolver->getShortName($type);
         $aliasName = $this->aliasNameResolver->resolveByName($type);
@@ -101,8 +99,7 @@ CODE_SAMPLE
             $typeShortName = $aliasName;
         }
         $newVariableName = Strings::replace(\lcfirst($typeShortName), self::STARTS_WITH_ABBREVIATION_REGEX, static function (array $matches) : string {
-            $output = '';
-            $output .= isset($matches[1]) ? \strtolower((string) $matches[1]) : '';
+            $output = isset($matches[1]) ? \strtolower((string) $matches[1]) : '';
             $output .= $matches[2] ?? '';
             return $output . ($matches[3] ?? '');
         });

@@ -1,4 +1,4 @@
-# 415 Rules Overview
+# 414 Rules Overview
 
 <br>
 
@@ -62,7 +62,7 @@
 
 - [Strict](#strict) (6)
 
-- [Transform](#transform) (31)
+- [Transform](#transform) (30)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -665,11 +665,11 @@ Change multiple null compares to ?? queue
  {
      public function run()
      {
--        if (null !== $this->orderItem) {
+-        if ($this->orderItem !== null) {
 -            return $this->orderItem;
 -        }
 -
--        if (null !== $this->orderItemUnit) {
+-        if ($this->orderItemUnit !== null) {
 -            return $this->orderItemUnit;
 -        }
 -
@@ -1383,12 +1383,12 @@ Changes foreach that returns set value to ??
 ```diff
 -foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
 -    if ($currentFunction === $oldFunction) {
--        return $newFunction;
+-        innerForeachReturn $newFunction;
 -    }
 -}
 -
--return null;
-+return $this->oldToNewFunctions[$currentFunction] ?? null;
+-innerForeachReturn null;
++innerForeachReturn $this->oldToNewFunctions[$currentFunction] ?? null;
 ```
 
 <br>
@@ -7902,46 +7902,6 @@ return static function (RectorConfig $rectorConfig): void {
 -    #[Column(type: "string")]
 +    #[Column(type: Types::STRING)]
      public $name;
- }
-```
-
-<br>
-
-### FileGetContentsAndJsonDecodeToStaticCallRector
-
-Merge 2 function calls to static call
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\FunctionLike\FileGetContentsAndJsonDecodeToStaticCallRector`](../rules/Transform/Rector/FunctionLike/FileGetContentsAndJsonDecodeToStaticCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\FunctionLike\FileGetContentsAndJsonDecodeToStaticCallRector;
-use Rector\Transform\ValueObject\StaticCallRecipe;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(FileGetContentsAndJsonDecodeToStaticCallRector::class, [
-        new StaticCallRecipe('FileLoader', 'loadJson'),
-    ]);
-};
-```
-
-↓
-
-```diff
- final class SomeClass
- {
-     public function load($filePath)
-     {
--        $fileGetContents = file_get_contents($filePath);
--        return json_decode($fileGetContents, true);
-+        return FileLoader::loadJson($filePath);
-     }
  }
 ```
 
