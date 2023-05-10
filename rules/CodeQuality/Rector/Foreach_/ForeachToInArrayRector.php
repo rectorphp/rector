@@ -14,10 +14,9 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\Comment\CommentsMerger;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeManipulator\BinaryOpManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php71\ValueObject\TwoNodeMatch;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -31,15 +30,9 @@ final class ForeachToInArrayRector extends AbstractRector
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
-     */
-    private $commentsMerger;
-    public function __construct(BinaryOpManipulator $binaryOpManipulator, CommentsMerger $commentsMerger)
+    public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;
-        $this->commentsMerger = $commentsMerger;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -62,55 +55,70 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Foreach_::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param Foreach_ $node
+     * @param StmtsAwareInterface $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->shouldSkipForeach($node)) {
+        if ($node->stmts === null) {
             return null;
         }
-        /** @var If_ $firstNodeInsideForeach */
-        $firstNodeInsideForeach = $node->stmts[0];
-        if ($this->shouldSkipIf($firstNodeInsideForeach)) {
-            return null;
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof Return_) {
+                continue;
+            }
+            $prevStmt = $node->stmts[$key - 1] ?? null;
+            if (!$prevStmt instanceof Foreach_) {
+                continue;
+            }
+            $return = $stmt;
+            $foreach = $prevStmt;
+            if ($this->shouldSkipForeach($foreach)) {
+                return null;
+            }
+            /** @var If_ $firstNodeInsideForeach */
+            $firstNodeInsideForeach = $foreach->stmts[0];
+            if ($this->shouldSkipIf($firstNodeInsideForeach)) {
+                return null;
+            }
+            /** @var Identical|Equal $ifCondition */
+            $ifCondition = $firstNodeInsideForeach->cond;
+            $twoNodeMatch = $this->matchNodes($ifCondition, $foreach->valueVar);
+            if (!$twoNodeMatch instanceof TwoNodeMatch) {
+                return null;
+            }
+            $comparedExpr = $twoNodeMatch->getSecondExpr();
+            if (!$this->isIfBodyABoolReturnNode($firstNodeInsideForeach)) {
+                return null;
+            }
+            $foreachReturn = $firstNodeInsideForeach->stmts[0];
+            if (!$foreachReturn instanceof Return_) {
+                return null;
+            }
+            if (!$return->expr instanceof Expr) {
+                return null;
+            }
+            if (!$this->valueResolver->isTrueOrFalse($return->expr)) {
+                return null;
+            }
+            if (!$foreachReturn->expr instanceof Expr) {
+                return null;
+            }
+            // cannot be "return true;" + "return true;"
+            if ($this->nodeComparator->areNodesEqual($return, $foreachReturn)) {
+                return null;
+            }
+            // 1. remove foreach
+            unset($node->stmts[$key - 1]);
+            // 2. make return of in_array()
+            $funcCall = $this->createInArrayFunction($comparedExpr, $ifCondition, $foreach);
+            $return = $this->createReturn($foreachReturn->expr, $funcCall);
+            $node->stmts[$key] = $return;
+            return $node;
         }
-        /** @var Identical|Equal $ifCondition */
-        $ifCondition = $firstNodeInsideForeach->cond;
-        $foreachValueVar = $node->valueVar;
-        $twoNodeMatch = $this->matchNodes($ifCondition, $foreachValueVar);
-        if (!$twoNodeMatch instanceof TwoNodeMatch) {
-            return null;
-        }
-        $comparedExpr = $twoNodeMatch->getSecondExpr();
-        if (!$this->isIfBodyABoolReturnNode($firstNodeInsideForeach)) {
-            return null;
-        }
-        $funcCall = $this->createInArrayFunction($comparedExpr, $ifCondition, $node);
-        /** @var Return_ $returnToRemove */
-        $returnToRemove = $node->getAttribute(AttributeKey::NEXT_NODE);
-        /** @var Return_ $return */
-        $return = $firstNodeInsideForeach->stmts[0];
-        if (!$returnToRemove->expr instanceof Expr) {
-            return null;
-        }
-        if (!$this->valueResolver->isTrueOrFalse($returnToRemove->expr)) {
-            return null;
-        }
-        $returnedExpr = $return->expr;
-        if (!$returnedExpr instanceof Expr) {
-            return null;
-        }
-        // cannot be "return true;" + "return true;"
-        if ($this->nodeComparator->areNodesEqual($return, $returnToRemove)) {
-            return null;
-        }
-        $this->removeNode($returnToRemove);
-        $return = $this->createReturn($returnedExpr, $funcCall);
-        $this->commentsMerger->keepChildren($return, $node);
-        return $return;
+        return null;
     }
     private function shouldSkipForeach(Foreach_ $foreach) : bool
     {
@@ -121,20 +129,6 @@ CODE_SAMPLE
             return \true;
         }
         if (!$foreach->stmts[0] instanceof If_) {
-            return \true;
-        }
-        $nextNode = $foreach->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof Node) {
-            return \true;
-        }
-        if (!$nextNode instanceof Return_) {
-            return \true;
-        }
-        $returnExpression = $nextNode->expr;
-        if (!$returnExpression instanceof Expr) {
-            return \true;
-        }
-        if (!$this->valueResolver->isTrueOrFalse($returnExpression)) {
             return \true;
         }
         $foreachValueStaticType = $this->getType($foreach->expr);

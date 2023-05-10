@@ -1483,7 +1483,6 @@ return array(
     'Rector\\Core\\NodeManipulator\\ClassMethodManipulator' => $baseDir . '/src/NodeManipulator/ClassMethodManipulator.php',
     'Rector\\Core\\NodeManipulator\\ClassMethodPropertyFetchManipulator' => $baseDir . '/src/NodeManipulator/ClassMethodPropertyFetchManipulator.php',
     'Rector\\Core\\NodeManipulator\\Dependency\\DependencyClassMethodDecorator' => $baseDir . '/src/NodeManipulator/Dependency/DependencyClassMethodDecorator.php',
-    'Rector\\Core\\NodeManipulator\\ForeachManipulator' => $baseDir . '/src/NodeManipulator/ForeachManipulator.php',
     'Rector\\Core\\NodeManipulator\\FuncCallManipulator' => $baseDir . '/src/NodeManipulator/FuncCallManipulator.php',
     'Rector\\Core\\NodeManipulator\\FunctionLikeManipulator' => $baseDir . '/src/NodeManipulator/FunctionLikeManipulator.php',
     'Rector\\Core\\NodeManipulator\\IfManipulator' => $baseDir . '/src/NodeManipulator/IfManipulator.php',
