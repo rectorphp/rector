@@ -18,9 +18,10 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\PhpParser\Comparing\ConditionSearcher;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\DeadCode\NodeAnalyzer\UsedVariableNameAnalyzer;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
@@ -31,7 +32,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector\RemoveUnusedVariableAssignRectorTest
  */
-final class RemoveUnusedVariableAssignRector extends AbstractRector
+final class RemoveUnusedVariableAssignRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -103,7 +104,7 @@ CODE_SAMPLE
     /**
      * @param Assign $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
@@ -117,8 +118,8 @@ CODE_SAMPLE
             return null;
         }
         // variable is used
-        if ($this->isUsed($node, $variable)) {
-            return $this->refactorUsedVariable($node);
+        if ($this->isUsed($node, $variable, $scope)) {
+            return $this->refactorUsedVariable($node, $scope);
         }
         if ($this->hasCallLikeInAssignExpr($node->expr)) {
             // keep the expr, can have side effect
@@ -166,9 +167,9 @@ CODE_SAMPLE
             return $node instanceof Variable;
         });
     }
-    private function isUsed(Assign $assign, Variable $variable) : bool
+    private function isUsed(Assign $assign, Variable $variable, Scope $scope) : bool
     {
-        $isUsedPrev = $this->isUsedInPreviousNode($variable);
+        $isUsedPrev = $scope->hasVariableType((string) $this->getName($variable))->yes();
         if ($isUsedPrev) {
             return \true;
         }
@@ -180,34 +181,28 @@ CODE_SAMPLE
         if (!$this->sideEffectNodeDetector->detectCallExpr($expr)) {
             return \false;
         }
-        return $this->isUsedInAssignExpr($expr, $assign);
-    }
-    private function isUsedInPreviousNode(Variable $variable) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $node) use($variable) : bool {
-            return $this->usedVariableNameAnalyzer->isVariableNamed($node, $variable);
-        });
+        return $this->isUsedInAssignExpr($expr, $assign, $scope);
     }
     /**
      * @param \PhpParser\Node\Expr\CallLike|\PhpParser\Node\Expr $expr
      */
-    private function isUsedInAssignExpr($expr, Assign $assign) : bool
+    private function isUsedInAssignExpr($expr, Assign $assign, Scope $scope) : bool
     {
         if (!$expr instanceof CallLike) {
-            return $this->isUsedInPreviousAssign($assign, $expr);
+            return $this->isUsedInPreviousAssign($assign, $expr, $scope);
         }
         if ($expr->isFirstClassCallable()) {
             return \false;
         }
         foreach ($expr->getArgs() as $arg) {
             $variable = $arg->value;
-            if ($this->isUsedInPreviousAssign($assign, $variable)) {
+            if ($this->isUsedInPreviousAssign($assign, $variable, $scope)) {
                 return \true;
             }
         }
         return \false;
     }
-    private function isUsedInPreviousAssign(Assign $assign, Expr $expr) : bool
+    private function isUsedInPreviousAssign(Assign $assign, Expr $expr, Scope $scope) : bool
     {
         if (!$expr instanceof Variable) {
             return \false;
@@ -216,11 +211,11 @@ CODE_SAMPLE
             return $node instanceof Assign && $this->usedVariableNameAnalyzer->isVariableNamed($node->var, $expr);
         });
         if ($previousAssign instanceof Assign) {
-            return $this->isUsed($assign, $expr);
+            return $this->isUsed($assign, $expr, $scope);
         }
         return \false;
     }
-    private function refactorUsedVariable(Assign $assign) : ?\PhpParser\Node\Expr
+    private function refactorUsedVariable(Assign $assign, Scope $scope) : ?\PhpParser\Node\Expr
     {
         $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof Expression) {
@@ -229,7 +224,7 @@ CODE_SAMPLE
         $if = $parentNode->getAttribute(AttributeKey::NEXT_NODE);
         // check if next node is if
         if (!$if instanceof If_) {
-            if ($assign->var instanceof Variable && !$this->isUsedInPreviousNode($assign->var) && !$this->exprUsedInNextNodeAnalyzer->isUsed($assign->var)) {
+            if ($assign->var instanceof Variable && !$scope->hasVariableType((string) $this->getName($assign->var))->yes() && !$this->exprUsedInNextNodeAnalyzer->isUsed($assign->var)) {
                 return $this->cleanCastedExpr($assign->expr);
             }
             return null;
