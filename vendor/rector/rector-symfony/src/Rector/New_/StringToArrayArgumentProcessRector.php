@@ -22,7 +22,7 @@ use RectorPrefix202305\Symfony\Component\Console\Input\StringInput;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/symfony/symfony/pull/27821/files
+ * @changelog https://github.com/symfony/symfony/pull/27821/files
  * @see \Rector\Symfony\Tests\Rector\New_\StringToArrayArgumentProcessRector\StringToArrayArgumentProcessRectorTest
  */
 final class StringToArrayArgumentProcessRector extends AbstractRector

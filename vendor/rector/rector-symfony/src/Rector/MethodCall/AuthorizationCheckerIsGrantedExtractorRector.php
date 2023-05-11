@@ -15,7 +15,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
+ * @changelog https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
  * @see \Rector\Symfony\Tests\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector\AuthorizationCheckerIsGrantedExtractorRectorTest
  */
 final class AuthorizationCheckerIsGrantedExtractorRector extends AbstractRector

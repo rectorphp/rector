@@ -75,7 +75,7 @@ CODE_SAMPLE
             return $this->refactorStaticCall($node);
         }
         // for client, the transitional dependency to browser-kit might be missing and cause fatal error on PHPStan reflection
-        // in most cases that should be skipped, @see https://github.com/rectorphp/rector/issues/7135
+        // in most cases that should be skipped, @changelog https://github.com/rectorphp/rector/issues/7135
         if ($this->reflectionProvider->hasClass('Symfony\\Component\\BrowserKit\\AbstractBrowser') && $this->isObjectType($node->var, new ObjectType('Symfony\\Component\\HttpKernel\\Client'))) {
             return $this->refactorClientMethodCall($node);
         }

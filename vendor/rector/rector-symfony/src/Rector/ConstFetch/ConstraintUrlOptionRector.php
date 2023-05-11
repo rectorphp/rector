@@ -4,12 +4,12 @@ declare (strict_types=1);
 namespace Rector\Symfony\Rector\ConstFetch;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Type\TypeWithClassName;
+use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -32,38 +32,41 @@ final class ConstraintUrlOptionRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [ConstFetch::class];
+        return [New_::class];
     }
     /**
-     * @param ConstFetch $node
+     * @param New_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node) : ?New_
     {
-        if (!$this->valueResolver->isTrue($node)) {
+        if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Validator\\Constraints\\Url'))) {
             return null;
         }
-        if (!$this->isInsideNewUrl($node)) {
-            return null;
+        foreach ($node->getArgs() as $arg) {
+            if (!$arg->value instanceof Array_) {
+                continue;
+            }
+            foreach ($arg->value->items as $arrayItem) {
+                if (!$arrayItem instanceof ArrayItem) {
+                    continue;
+                }
+                if (!$this->isCheckDNSKey($arrayItem)) {
+                    continue;
+                }
+                if (!$this->valueResolver->isTrue($arrayItem->value)) {
+                    return null;
+                }
+                $arrayItem->value = $this->nodeFactory->createClassConstFetch(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
+                return $node;
+            }
         }
-        $prevNode = $node->getAttribute(AttributeKey::PREVIOUS_NODE);
-        if (!$prevNode instanceof String_) {
-            return null;
-        }
-        if ($prevNode->value !== 'checkDNS') {
-            return null;
-        }
-        return $this->nodeFactory->createClassConstFetch(self::URL_CONSTRAINT_CLASS, 'CHECK_DNS_TYPE_ANY');
+        return null;
     }
-    private function isInsideNewUrl(ConstFetch $constFetch) : bool
+    private function isCheckDNSKey(ArrayItem $arrayItem) : bool
     {
-        $new = $this->betterNodeFinder->findParentType($constFetch, New_::class);
-        if (!$new instanceof New_) {
+        if (!$arrayItem->key instanceof Expr) {
             return \false;
         }
-        $newType = $this->getType($new);
-        if (!$newType instanceof TypeWithClassName) {
-            return \false;
-        }
-        return $newType->getClassName() === self::URL_CONSTRAINT_CLASS;
+        return $this->valueResolver->isValue($arrayItem->key, 'checkDNS');
     }
 }

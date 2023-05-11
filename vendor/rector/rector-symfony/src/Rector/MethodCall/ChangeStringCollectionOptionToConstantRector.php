@@ -17,9 +17,9 @@ use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://symfony.com/doc/2.8/form/form_collections.html
- * @see https://symfony.com/doc/3.0/form/form_collections.html
- * @see https://symfony2-document.readthedocs.io/en/latest/reference/forms/types/collection.html#type
+ * @changelog https://symfony.com/doc/2.8/form/form_collections.html
+ * @changelog https://symfony.com/doc/3.0/form/form_collections.html
+ * @changelog https://symfony2-document.readthedocs.io/en/latest/reference/forms/types/collection.html#type
  *
  * @see \Rector\Symfony\Tests\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector\ChangeStringCollectionOptionToConstantRectorTest
  */

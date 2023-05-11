@@ -14,9 +14,9 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/symfony/symfony/pull/21035
- * @see https://github.com/symfony/symfony/blob/4.4/src/Symfony/Bundle/FrameworkBundle/Templating/TemplateNameParser.php
- * @see https://symfony.com/doc/4.4/templates.html#bundle-templates
+ * @changelog https://github.com/symfony/symfony/pull/21035
+ * @changelog https://github.com/symfony/symfony/blob/4.4/src/Symfony/Bundle/FrameworkBundle/Templating/TemplateNameParser.php
+ * @changelog https://symfony.com/doc/4.4/templates.html#bundle-templates
  *
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */

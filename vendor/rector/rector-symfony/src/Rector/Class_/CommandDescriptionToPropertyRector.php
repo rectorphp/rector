@@ -18,7 +18,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://symfony.com/blog/new-in-symfony-5-3-lazy-command-description
+ * @changelog https://symfony.com/blog/new-in-symfony-5-3-lazy-command-description
  *
  * @see \Rector\Symfony\Tests\Rector\Class_\CommandDescriptionToPropertyRector\CommandDescriptionToPropertyRectorTest
  */

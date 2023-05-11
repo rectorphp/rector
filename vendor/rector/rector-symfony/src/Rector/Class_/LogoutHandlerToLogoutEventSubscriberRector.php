@@ -17,7 +17,7 @@ use Rector\Symfony\ValueObject\EventReferenceToMethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/symfony/symfony/pull/36243
+ * @changelog https://github.com/symfony/symfony/pull/36243
  *
  * @see \Rector\Symfony\Tests\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector\LogoutHandlerToLogoutEventSubscriberRectorTest
  */

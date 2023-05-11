@@ -23,7 +23,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/symfony/symfony/pull/33775/files
+ * @changelog https://github.com/symfony/symfony/pull/33775/files
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\ConsoleExecuteReturnIntRector\ConsoleExecuteReturnIntRectorTest
  */
 final class ConsoleExecuteReturnIntRector extends AbstractRector

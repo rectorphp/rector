@@ -5,25 +5,27 @@ namespace Rector\Symfony\Rector\New_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\ObjectType;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/symfony/symfony/pull/27476
+ * @changelog https://github.com/symfony/symfony/pull/27476
+ *
  * @see \Rector\Symfony\Tests\Rector\New_\RootNodeTreeBuilderRector\RootNodeTreeBuilderRectorTest
  */
 final class RootNodeTreeBuilderRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes  Process string argument to an array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes TreeBuilder with root() call to constructor passed root and getRootNode() call', [new CodeSample(<<<'CODE_SAMPLE'
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 $treeBuilder = new TreeBuilder();
@@ -44,56 +46,64 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [New_::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param New_ $node
+     * @param StmtsAwareInterface $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node->class, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+        if ($node->stmts === null) {
             return null;
         }
-        if (isset($node->args[1])) {
-            return null;
+        foreach ($node->stmts as $stmt) {
+            if (!$stmt instanceof Expression) {
+                continue;
+            }
+            if (!$stmt->expr instanceof Assign) {
+                continue;
+            }
+            $assign = $stmt->expr;
+            if (!$assign->expr instanceof New_) {
+                continue;
+            }
+            $new = $assign->expr;
+            // already has first arg
+            if (isset($new->getArgs()[1])) {
+                continue;
+            }
+            if (!$this->isObjectType($new->class, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+                continue;
+            }
+            $rootMethodCallNode = $this->getRootMethodCallNode($node);
+            if (!$rootMethodCallNode instanceof MethodCall) {
+                return null;
+            }
+            $firstArg = $rootMethodCallNode->getArgs()[0];
+            if (!$firstArg->value instanceof String_) {
+                return null;
+            }
+            [$new->args, $rootMethodCallNode->args] = [$rootMethodCallNode->getArgs(), $new->getArgs()];
+            $rootMethodCallNode->name = new Identifier('getRootNode');
+            return $node;
         }
-        $rootMethodCallNode = $this->getRootMethodCallNode($node);
-        if (!$rootMethodCallNode instanceof MethodCall) {
-            return null;
-        }
-        $firstArg = $rootMethodCallNode->args[0];
-        if (!$firstArg instanceof Arg) {
-            return null;
-        }
-        $rootNameNode = $firstArg->value;
-        if (!$rootNameNode instanceof String_) {
-            return null;
-        }
-        [$node->args, $rootMethodCallNode->args] = [$rootMethodCallNode->args, $node->args];
-        $rootMethodCallNode->name = new Identifier('getRootNode');
-        return $node;
+        return null;
     }
-    private function getRootMethodCallNode(New_ $new) : ?Node
+    private function getRootMethodCallNode(StmtsAwareInterface $stmtsAware) : ?Node
     {
-        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($new);
-        if (!$currentStmt instanceof Stmt) {
-            return null;
+        $methodCalls = $this->betterNodeFinder->findInstanceOf($stmtsAware, MethodCall::class);
+        foreach ($methodCalls as $methodCall) {
+            if (!$this->isName($methodCall->name, 'root')) {
+                continue;
+            }
+            if (!$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
+                continue;
+            }
+            if (!isset($methodCall->getArgs()[0])) {
+                continue;
+            }
+            return $methodCall;
         }
-        $nextExpression = $currentStmt->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$nextExpression instanceof Node) {
-            return null;
-        }
-        return $this->betterNodeFinder->findFirst([$nextExpression], function (Node $node) : bool {
-            if (!$node instanceof MethodCall) {
-                return \false;
-            }
-            if (!$this->isName($node->name, 'root')) {
-                return \false;
-            }
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder'))) {
-                return \false;
-            }
-            return isset($node->args[0]);
-        });
+        return null;
     }
 }

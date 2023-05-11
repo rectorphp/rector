@@ -22,7 +22,7 @@ use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://symfony.com/doc/current/console/commands_as_services.html
+ * @changelog https://symfony.com/doc/current/console/commands_as_services.html
  *
  * @see \Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\MakeCommandLazyRectorTest
  */

@@ -38,9 +38,9 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202305\Webmozart\Assert\Assert;
 /**
- * @see https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
- * @see https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
- * @see https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues/641
+ * @changelog https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
+ * @changelog https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
+ * @changelog https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues/641
  *
  * @see \Rector\Symfony\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */

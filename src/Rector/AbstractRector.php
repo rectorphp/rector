@@ -240,39 +240,6 @@ CODE_SAMPLE;
         return $this->postRefactorProcess($originalNode, $node, $refactoredNode);
     }
     /**
-     * @param \PhpParser\Node|mixed[] $refactoredNode
-     */
-    private function postRefactorProcess(?\PhpParser\Node $originalNode, Node $node, $refactoredNode) : Node
-    {
-        $originalNode = $originalNode ?? $node;
-        /** @var non-empty-array<Node>|Node $refactoredNode */
-        $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
-        $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
-        $this->file->addRectorClassWithLine($rectorWithLineChange);
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        /** @var MutatingScope|null $currentScope */
-        $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
-        $filePath = $this->file->getFilePath();
-        // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
-        $originalNodeHash = \spl_object_hash($originalNode);
-        if (\is_array($refactoredNode)) {
-            $firstNode = \current($refactoredNode);
-            $this->mirrorComments($firstNode, $originalNode);
-            $this->updateParentNodes($refactoredNode, $parentNode);
-            $this->connectNodes($refactoredNode, $node);
-            $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
-            $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
-            // will be replaced in leaveNode() the original node must be passed
-            return $originalNode;
-        }
-        $refactoredNode = $originalNode instanceof Stmt && $refactoredNode instanceof Expr ? new Expression($refactoredNode) : $refactoredNode;
-        $this->updateParentNodes($refactoredNode, $parentNode);
-        $this->connectNodes([$refactoredNode], $node);
-        $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
-        $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
-        return $refactoredNode;
-    }
-    /**
      * Replacing nodes in leaveNode() method avoids infinite recursion
      * see"infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
      */
@@ -344,6 +311,39 @@ CODE_SAMPLE;
     protected function removeNode(Node $node) : void
     {
         $this->nodeRemover->removeNode($node);
+    }
+    /**
+     * @param \PhpParser\Node|mixed[] $refactoredNode
+     */
+    private function postRefactorProcess(?\PhpParser\Node $originalNode, Node $node, $refactoredNode) : Node
+    {
+        $originalNode = $originalNode ?? $node;
+        /** @var non-empty-array<Node>|Node $refactoredNode */
+        $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
+        $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
+        $this->file->addRectorClassWithLine($rectorWithLineChange);
+        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        /** @var MutatingScope|null $currentScope */
+        $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
+        $filePath = $this->file->getFilePath();
+        // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
+        $originalNodeHash = \spl_object_hash($originalNode);
+        if (\is_array($refactoredNode)) {
+            $firstNode = \current($refactoredNode);
+            $this->mirrorComments($firstNode, $originalNode);
+            $this->updateParentNodes($refactoredNode, $parentNode);
+            $this->connectNodes($refactoredNode, $node);
+            $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
+            $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
+            // will be replaced in leaveNode() the original node must be passed
+            return $originalNode;
+        }
+        $refactoredNode = $originalNode instanceof Stmt && $refactoredNode instanceof Expr ? new Expression($refactoredNode) : $refactoredNode;
+        $this->updateParentNodes($refactoredNode, $parentNode);
+        $this->connectNodes([$refactoredNode], $node);
+        $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
+        $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
+        return $refactoredNode;
     }
     /**
      * @param mixed[]|\PhpParser\Node $node

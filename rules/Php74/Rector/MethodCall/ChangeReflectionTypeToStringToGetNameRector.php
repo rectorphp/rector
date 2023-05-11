@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\UnionType;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -127,7 +126,7 @@ CODE_SAMPLE
     private function refactorMethodCall(MethodCall $methodCall, Scope $scope) : ?Node
     {
         $this->collectCallByVariable($methodCall);
-        if ($this->shouldSkipMethodCall($methodCall, $scope)) {
+        if ($this->shouldSkipMethodCall($methodCall)) {
             return null;
         }
         if ($this->isReflectionParameterGetTypeMethodCall($methodCall)) {
@@ -166,7 +165,7 @@ CODE_SAMPLE
             $this->callsByVariable[$variableName][] = $methodName;
         }
     }
-    private function shouldSkipMethodCall(MethodCall $methodCall, Scope $scope) : bool
+    private function shouldSkipMethodCall(MethodCall $methodCall) : bool
     {
         // is to string retype?
         $parentNode = $methodCall->getAttribute(AttributeKey::PARENT_NODE);

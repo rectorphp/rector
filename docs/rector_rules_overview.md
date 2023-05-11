@@ -1,4 +1,4 @@
-# 413 Rules Overview
+# 412 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (77)
+- [CodeQuality](#codequality) (76)
 
 - [CodingStyle](#codingstyle) (37)
 
@@ -1606,26 +1606,6 @@ Change switch with only 1 check to if
          }
 
          return $result;
-     }
- }
-```
-
-<br>
-
-### SplitListAssignToSeparateLineRector
-
-Splits `[$a, $b] = [5, 10]` scalar assign to standalone lines
-
-- class: [`Rector\CodeQuality\Rector\Assign\SplitListAssignToSeparateLineRector`](../rules/CodeQuality/Rector/Assign/SplitListAssignToSeparateLineRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run(): void
-     {
--        [$a, $b] = [1, 2];
-+        $a = 1;
-+        $b = 2;
      }
  }
 ```

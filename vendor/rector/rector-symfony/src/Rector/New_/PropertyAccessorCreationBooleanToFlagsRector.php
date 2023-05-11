@@ -12,7 +12,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
+ * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#propertyaccess
  * @see \Rector\Symfony\Tests\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector\PropertyAccessorCreationBooleanToFlagsRectorTest
  */
 final class PropertyAccessorCreationBooleanToFlagsRector extends AbstractRector

@@ -35,7 +35,7 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
     private const CONSOLE_EVENTS_CLASS = 'Symfony\\Component\\Console\\ConsoleEvents';
     /**
      * @var string
-     * @see https://regex101.com/r/qiHZ4T/1
+     * @changelog https://regex101.com/r/qiHZ4T/1
      */
     private const LISTENER_MATCH_REGEX = '#^(.*?)(Listener)?$#';
     /**

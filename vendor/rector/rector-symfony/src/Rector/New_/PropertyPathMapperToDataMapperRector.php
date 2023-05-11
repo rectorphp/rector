@@ -11,7 +11,7 @@ use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
+ * @changelog https://github.com/symfony/symfony/blob/5.x/UPGRADE-5.2.md#form
  * @see \Rector\Symfony\Tests\Rector\New_\PropertyPathMapperToDataMapperRector\PropertyPathMapperToDataMapperRectorTest
  */
 final class PropertyPathMapperToDataMapperRector extends AbstractRector
