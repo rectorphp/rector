@@ -24,7 +24,7 @@ final class RandomFunctionRector extends AbstractRector implements MinPhpVersion
     private const OLD_TO_NEW_FUNCTION_NAMES = ['getrandmax' => 'mt_getrandmax', 'srand' => 'mt_srand', 'mt_rand' => 'random_int', 'rand' => 'random_int'];
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Changes rand, srand and getrandmax by new mt_* alternatives.', [new CodeSample('rand();', 'mt_rand();')]);
+        return new RuleDefinition('Changes rand, srand, mt_rand and getrandmax to newer alternatives.', [new CodeSample('rand();', 'random_int();')]);
     }
     /**
      * @return array<class-string<Node>>
