@@ -10,6 +10,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\UseUse;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Constant\RuntimeConstantReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
@@ -50,14 +51,14 @@ final class FullyQualifyStmtsAnalyzer
     /**
      * @param Stmt[] $stmts
      */
-    public function process(array $stmts) : void
+    public function process(array $stmts, Scope $scope) : void
     {
         // no need to
         if ($this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
             return;
         }
         // FQNize all class names
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) : ?FullyQualified {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, function (Node $node) use($scope) : ?FullyQualified {
             if (!$node instanceof Name) {
                 return null;
             }
@@ -65,7 +66,7 @@ final class FullyQualifyStmtsAnalyzer
             if (\in_array($name, [ObjectReference::STATIC, ObjectReference::PARENT, ObjectReference::SELF], \true)) {
                 return null;
             }
-            if ($this->isNativeConstant($node)) {
+            if ($this->isNativeConstant($node, $scope)) {
                 return null;
             }
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
@@ -79,13 +80,12 @@ final class FullyQualifyStmtsAnalyzer
             return new FullyQualified($name);
         });
     }
-    private function isNativeConstant(Name $name) : bool
+    private function isNativeConstant(Name $name, Scope $scope) : bool
     {
         $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof ConstFetch) {
             return \false;
         }
-        $scope = $name->getAttribute(AttributeKey::SCOPE);
         if (!$this->reflectionProvider->hasConstant($name, $scope)) {
             return \false;
         }

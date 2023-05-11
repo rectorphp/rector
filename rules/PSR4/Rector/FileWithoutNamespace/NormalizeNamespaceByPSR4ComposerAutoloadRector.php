@@ -8,9 +8,11 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
+use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer;
 use Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector;
@@ -19,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector\NormalizeNamespaceByPSR4ComposerAutoloadRectorTest
  */
-final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractRector
+final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -83,7 +85,7 @@ CODE_SAMPLE
      * @param FileWithoutNamespace|Namespace_ $node
      * @return Node|null|Stmt[]
      */
-    public function refactor(Node $node)
+    public function refactorWithScope(Node $node, Scope $scope)
     {
         if ($this->inlineHTMLAnalyzer->hasInlineHTML($node)) {
             return null;
@@ -101,10 +103,10 @@ CODE_SAMPLE
         }
         // to put declare_strict types on correct place
         if ($node instanceof FileWithoutNamespace) {
-            return $this->refactorFileWithoutNamespace($node, $expectedNamespace);
+            return $this->refactorFileWithoutNamespace($node, $expectedNamespace, $scope);
         }
         $node->name = new Name($expectedNamespace);
-        $this->fullyQualifyStmtsAnalyzer->process($node->stmts);
+        $this->fullyQualifyStmtsAnalyzer->process($node->stmts, $scope);
         return $node;
     }
     private function hasNamespaceInPreviousNamespace(Namespace_ $namespace) : bool
@@ -116,11 +118,10 @@ CODE_SAMPLE
     /**
      * @return Namespace_|Stmt[]
      */
-    private function refactorFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace)
+    private function refactorFileWithoutNamespace(FileWithoutNamespace $fileWithoutNamespace, string $expectedNamespace, Scope $scope)
     {
         $nodes = $fileWithoutNamespace->stmts;
         $declare = null;
-        $nodesWithStrictTypesThenNamespace = [];
         foreach ($nodes as $key => $fileWithoutNamespace) {
             if ($key > 0) {
                 break;
@@ -131,8 +132,7 @@ CODE_SAMPLE
             }
         }
         $namespace = new Namespace_(new Name($expectedNamespace), $nodes);
-        $nodesWithStrictTypesThenNamespace[] = $namespace;
-        $this->fullyQualifyStmtsAnalyzer->process($nodes);
+        $this->fullyQualifyStmtsAnalyzer->process($nodes, $scope);
         if ($declare instanceof Declare_) {
             return [$declare, $namespace];
         }
