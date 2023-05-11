@@ -66,7 +66,7 @@ final class CountableAnalyzer
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->constructorAssignDetector = $constructorAssignDetector;
     }
-    public function isCastableArrayType(Expr $expr, ArrayType $arrayType) : bool
+    public function isCastableArrayType(Expr $expr, ArrayType $arrayType, Scope $scope) : bool
     {
         if (!$this->propertyFetchAnalyzer->isPropertyFetch($expr)) {
             return \false;
@@ -96,7 +96,7 @@ final class CountableAnalyzer
         if (!\array_key_exists($propertyName, $propertiesDefaults)) {
             return \false;
         }
-        $phpPropertyReflection = $this->resolveProperty($expr, $classReflection, $propertyName);
+        $phpPropertyReflection = $classReflection->getProperty($propertyName, $scope);
         if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
             return \false;
         }
@@ -131,16 +131,5 @@ final class CountableAnalyzer
         }
         $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch->name);
         return $this->constructorAssignDetector->isPropertyAssigned($classLike, $propertyName);
-    }
-    /**
-     * @param \PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\PropertyFetch $propertyFetch
-     */
-    private function resolveProperty($propertyFetch, ClassReflection $classReflection, string $propertyName) : ?PropertyReflection
-    {
-        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            return null;
-        }
-        return $classReflection->getProperty($propertyName, $scope);
     }
 }
