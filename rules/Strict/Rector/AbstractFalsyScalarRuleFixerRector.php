@@ -9,7 +9,7 @@ use RectorPrefix202305\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector\BooleanInBooleanNotRuleFixerRectorTest
  *
- * @internal 
+ * @internal
  */
 abstract class AbstractFalsyScalarRuleFixerRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface
 {
