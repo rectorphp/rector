@@ -12,6 +12,7 @@ use PHPStan\Analyser\Scope;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeManipulator\Dependency\DependencyClassMethodDecorator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -22,7 +23,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Strict\Rector\ClassMethod\AddConstructorParentCallRector\AddConstructorParentCallRectorTest
  */
-final class AddConstructorParentCallRector extends AbstractRector
+final class AddConstructorParentCallRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -68,17 +69,13 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-        if (!$classLike instanceof Class_) {
-            return null;
-        }
         if (!$this->isName($node, MethodName::CONSTRUCT)) {
             return null;
         }
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
+        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
+        if (!$classLike instanceof Class_) {
             return null;
         }
         if ($this->hasParentCallOfMethod($node)) {

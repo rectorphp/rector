@@ -61,12 +61,8 @@ CODE_SAMPLE
     /**
      * @param Empty_|BooleanNot $node
      */
-    public function refactor(Node $node) : ?\PhpParser\Node\Expr
+    public function refactorWithScope(Node $node, Scope $scope) : ?\PhpParser\Node\Expr
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            return null;
-        }
         if ($node instanceof BooleanNot) {
             return $this->refactorBooleanNot($node, $scope);
         }

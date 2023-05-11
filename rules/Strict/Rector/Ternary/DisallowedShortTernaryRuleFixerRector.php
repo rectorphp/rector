@@ -63,12 +63,8 @@ CODE_SAMPLE
     /**
      * @param Ternary $node
      */
-    public function refactor(Node $node) : ?Ternary
+    public function refactorWithScope(Node $node, Scope $scope) : ?Ternary
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            return null;
-        }
         // skip non-short ternary
         if ($node->if instanceof Expr) {
             return null;

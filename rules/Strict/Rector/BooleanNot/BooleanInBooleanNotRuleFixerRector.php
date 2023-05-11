@@ -70,12 +70,8 @@ CODE_SAMPLE
     /**
      * @param BooleanNot $node
      */
-    public function refactor(Node $node) : ?Expr
+    public function refactorWithScope(Node $node, Scope $scope) : ?Expr
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            return null;
-        }
         $exprType = $scope->getType($node->expr);
         return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $node->expr, $this->treatAsNonEmpty);
     }
