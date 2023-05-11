@@ -50,7 +50,7 @@ final class TypeProvidingExprFromClassResolver
     /**
      * @return MethodCall|PropertyFetch|Variable|null
      */
-    public function resolveTypeProvidingExprFromClass(Class_ $class, ClassMethod $classMethod, ObjectType $objectType) : ?Expr
+    public function resolveTypeProvidingExprFromClass(Class_ $class, ClassMethod $classMethod, ObjectType $objectType, Scope $scope) : ?Expr
     {
         $className = (string) $this->nodeNameResolver->getName($class);
         // A. match a method
@@ -60,10 +60,6 @@ final class TypeProvidingExprFromClassResolver
             return $methodCallProvidingType;
         }
         // B. match existing property
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            return null;
-        }
         $propertyFetch = $this->resolvePropertyFetchProvidingType($classReflection, $scope, $objectType);
         if ($propertyFetch instanceof PropertyFetch) {
             return $propertyFetch;

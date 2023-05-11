@@ -7,8 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -17,7 +19,7 @@ use RectorPrefix202305\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\FuncCallToMethodCallRectorTest
  */
-final class FuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class FuncCallToMethodCallRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
      * @var FuncCallToMethodCall[]
@@ -74,7 +76,7 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (!$classLike instanceof Class_) {
@@ -91,7 +93,7 @@ CODE_SAMPLE
             if (!$this->isName($node->name, $funcNameToMethodCallName->getOldFuncName())) {
                 continue;
             }
-            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($classLike, $classMethod, $funcNameToMethodCallName->getNewObjectType());
+            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($classLike, $classMethod, $funcNameToMethodCallName->getNewObjectType(), $scope);
             return $this->nodeFactory->createMethodCall($expr, $funcNameToMethodCallName->getNewMethodName(), $node->args);
         }
         return null;

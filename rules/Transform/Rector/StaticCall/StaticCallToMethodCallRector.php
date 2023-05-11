@@ -10,9 +10,11 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -21,7 +23,7 @@ use RectorPrefix202305\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToMethodCallRector\StaticCallToMethodCallRectorTest
  */
-final class StaticCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
+final class StaticCallToMethodCallRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
      * @var StaticCallToMethodCall[]
@@ -82,7 +84,7 @@ CODE_SAMPLE
     /**
      * @param StaticCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if (!$classLike instanceof Class_) {
@@ -99,7 +101,7 @@ CODE_SAMPLE
             if ($classMethod->isStatic()) {
                 return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
             }
-            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassObjectType());
+            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassObjectType(), $scope);
             if ($staticCallToMethodCall->getMethodName() === '*') {
                 $methodName = $this->getName($node->name);
             } else {
