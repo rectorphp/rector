@@ -13,7 +13,8 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Rector\AbstractRector;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -21,7 +22,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector\RemoveDelegatingParentCallRectorTest
  */
-final class RemoveDelegatingParentCallRector extends AbstractRector
+final class RemoveDelegatingParentCallRector extends AbstractScopeAwareRector
 {
     /**
      * @var string[]
@@ -74,7 +75,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
         if ($this->shouldSkipClass($classLike)) {
@@ -92,7 +93,7 @@ CODE_SAMPLE
         if (!$staticCall instanceof StaticCall) {
             return null;
         }
-        if (!$this->currentAndParentClassMethodComparator->isParentCallMatching($node, $staticCall)) {
+        if (!$this->currentAndParentClassMethodComparator->isParentCallMatching($node, $staticCall, $scope)) {
             return null;
         }
         if ($this->shouldSkipWithAnnotationsOrAttributes($node)) {

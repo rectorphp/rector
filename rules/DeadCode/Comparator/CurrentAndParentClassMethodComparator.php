@@ -56,7 +56,7 @@ final class CurrentAndParentClassMethodComparator
         $this->nodeComparator = $nodeComparator;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isParentCallMatching(ClassMethod $classMethod, StaticCall $staticCall) : bool
+    public function isParentCallMatching(ClassMethod $classMethod, StaticCall $staticCall, Scope $scope) : bool
     {
         if (!$this->isSameMethodParentCall($classMethod, $staticCall)) {
             return \false;
@@ -67,7 +67,7 @@ final class CurrentAndParentClassMethodComparator
         if (!$this->parameterTypeComparator->isClassMethodIdenticalToParentStaticCall($classMethod, $staticCall)) {
             return \false;
         }
-        return !$this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall);
+        return !$this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall, $scope);
     }
     private function isSameMethodParentCall(ClassMethod $classMethod, StaticCall $staticCall) : bool
     {
@@ -103,7 +103,7 @@ final class CurrentAndParentClassMethodComparator
         }
         return \true;
     }
-    private function isParentClassMethodVisibilityOrDefaultOverride(ClassMethod $classMethod, StaticCall $staticCall) : bool
+    private function isParentClassMethodVisibilityOrDefaultOverride(ClassMethod $classMethod, StaticCall $staticCall, Scope $scope) : bool
     {
         $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
         if (!$classReflection instanceof ClassReflection) {
@@ -120,21 +120,17 @@ final class CurrentAndParentClassMethodComparator
             $nativeParentClassReflection = $parentClassReflection->getNativeReflection();
             $nativeParentClassMethodReflection = $nativeParentClassReflection->getMethod($methodName);
             if (!$nativeParentClassMethodReflection->isProtected()) {
-                return $this->isOverridingParentParameters($classMethod, $parentClassReflection, $methodName);
+                return $this->isOverridingParentParameters($classMethod, $parentClassReflection, $methodName, $scope);
             }
             if (!$nativeParentClassMethodReflection->isPublic()) {
-                return $this->isOverridingParentParameters($classMethod, $parentClassReflection, $methodName);
+                return $this->isOverridingParentParameters($classMethod, $parentClassReflection, $methodName, $scope);
             }
             return \true;
         }
         return \false;
     }
-    private function isOverridingParentParameters(ClassMethod $classMethod, ClassReflection $classReflection, string $methodName) : bool
+    private function isOverridingParentParameters(ClassMethod $classMethod, ClassReflection $classReflection, string $methodName, Scope $scope) : bool
     {
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
-            throw new ShouldNotHappenException();
-        }
         $extendedMethodReflection = $classReflection->getMethod($methodName, $scope);
         // 3rd party code
         if (!$extendedMethodReflection->isPrivate() && !$extendedMethodReflection->isPublic() && $classMethod->isPublic()) {
