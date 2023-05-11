@@ -1,4 +1,4 @@
-# 412 Rules Overview
+# 411 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (76)
 
-- [CodingStyle](#codingstyle) (37)
+- [CodingStyle](#codingstyle) (36)
 
 - [Compatibility](#compatibility) (1)
 
@@ -1991,46 +1991,6 @@ Changes various implode forms to consistent one
 +        $itemsAsStrings = implode('|', $items);
 
          $itemsAsStrings = implode('|', $items);
-     }
- }
-```
-
-<br>
-
-### ConsistentPregDelimiterRector
-
-Replace PREG delimiter with configured one
-
-:wrench: **configure it!**
-
-- class: [`Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector`](../rules/CodingStyle/Rector/FuncCall/ConsistentPregDelimiterRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\CodingStyle\Rector\FuncCall\ConsistentPregDelimiterRector;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ConsistentPregDelimiterRector::class, [
-        ConsistentPregDelimiterRector::DELIMITER => '#',
-    ]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        preg_match('~value~', $value);
--        preg_match_all('~value~im', $value);
-+        preg_match('#value#', $value);
-+        preg_match_all('#value#im', $value);
      }
  }
 ```

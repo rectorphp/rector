@@ -16,9 +16,9 @@ final class SetupCICommand extends Command
 {
     /**
      * @var string
-     * @see https://regex101.com/r/etcmog/1
+     * @see https://regex101.com/r/etcmog/2
      */
-    private const GITHUB_REPOSITORY_REGEX = '#github\\.com:(?<repository_name>.*?)\\.git#';
+    private const GITHUB_REPOSITORY_REGEX = '#github\\.com[:\\/](?<repository_name>.*?)\\.git#';
     /**
      * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
