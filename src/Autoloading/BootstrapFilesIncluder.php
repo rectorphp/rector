@@ -34,6 +34,10 @@ final class BootstrapFilesIncluder
         $this->parameterProvider = $parameterProvider;
         $this->phpStanExtensionsConfigResolver = $phpStanExtensionsConfigResolver;
     }
+    /**
+     * @var array<string, mixed>
+     */
+    private $configCache = [];
     public function includePHPStanExtensionsBoostrapFiles(?Container $container = null) : void
     {
         $extensionConfigFiles = $this->phpStanExtensionsConfigResolver->resolve();
@@ -67,7 +71,12 @@ final class BootstrapFilesIncluder
     {
         $absoluteBootstrapFilePaths = [];
         foreach ($extensionConfigFiles as $extensionConfigFile) {
-            $extensionConfigContents = Neon::decodeFile($extensionConfigFile);
+            if (!\array_key_exists($extensionConfigFile, $this->configCache)) {
+                $extensionConfigContents = Neon::decodeFile($extensionConfigFile);
+                $this->configCache[$extensionConfigFile] = $extensionConfigContents;
+            } else {
+                $extensionConfigContents = $this->configCache[$extensionConfigFile];
+            }
             $configDirectory = \dirname($extensionConfigFile);
             $bootstrapFiles = $extensionConfigContents['parameters']['bootstrapFiles'] ?? [];
             foreach ($bootstrapFiles as $bootstrapFile) {
