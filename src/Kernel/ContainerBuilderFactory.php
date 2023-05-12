@@ -26,7 +26,6 @@ final class ContainerBuilderFactory
     {
         Assert::allIsAOf($compilerPasses, CompilerPassInterface::class);
         Assert::allString($configFiles);
-        Assert::allFile($configFiles);
         $containerBuilder = new ContainerBuilder();
         $this->registerConfigFiles($containerBuilder, $configFiles);
         foreach ($compilerPasses as $compilerPass) {

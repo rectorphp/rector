@@ -62,11 +62,14 @@ abstract class AbstractTestCase extends TestCase
      */
     private function createConfigsHash(array $configFiles) : string
     {
-        Assert::allFile($configFiles);
         Assert::allString($configFiles);
         $configHash = '';
         foreach ($configFiles as $configFile) {
-            $configHash .= \md5_file($configFile);
+            $hash = \md5_file($configFile);
+            if ($hash === \false) {
+                throw new ShouldNotHappenException(\sprintf('File %s is not readable', $configFile));
+            }
+            $configHash .= $hash;
         }
         return $configHash;
     }
