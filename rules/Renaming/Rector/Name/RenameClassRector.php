@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Renaming\Helper\RenameClassCallbackHandler;

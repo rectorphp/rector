@@ -58,7 +58,7 @@ CODE_SAMPLE
         /** @var MutatingScope $scope */
         $tempVarName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($node->var, $scope, '_');
         $variable = new Variable($tempVarName);
-        $called = $node instanceof NullsafeMethodCall ? new MethodCall($variable, $node->name, $node->args) : new PropertyFetch($variable, $node->name);
+        $called = $node instanceof NullsafeMethodCall ? new MethodCall($variable, $node->name, $node->getArgs()) : new PropertyFetch($variable, $node->name);
         $assign = new Assign($variable, $node->var);
         return new Ternary($assign, $called, $this->nodeFactory->createNull());
     }

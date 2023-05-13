@@ -121,7 +121,7 @@ CODE_SAMPLE
         $class = $this->classFromAnonymousFactory->create($className, $node->class);
         $this->classes[] = $class;
         $this->namespacedNameDecorator->decorate($class);
-        return new New_(new Name($className), $node->args);
+        return new New_(new Name($className), $node->getArgs());
     }
     private function createAnonymousClassName() : string
     {

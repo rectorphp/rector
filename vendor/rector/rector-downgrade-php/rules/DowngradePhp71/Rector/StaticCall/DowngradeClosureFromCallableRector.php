@@ -67,14 +67,11 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        if (!isset($node->args[0])) {
-            return null;
-        }
-        if (!$node->args[0] instanceof Arg) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
         $tempVariable = $this->namedVariableFactory->createVariable($node, 'callable');
-        $expression = new Expression(new Assign($tempVariable, $node->args[0]->value));
+        $expression = new Expression(new Assign($tempVariable, $node->getArgs()[0]->value));
         $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
         $closure = new Closure();
         $closure->uses[] = new ClosureUse($tempVariable);

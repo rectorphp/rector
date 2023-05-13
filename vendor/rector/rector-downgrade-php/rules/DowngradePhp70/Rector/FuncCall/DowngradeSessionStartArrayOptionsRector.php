@@ -57,14 +57,11 @@ CODE_SAMPLE
         if ($this->shouldSkip($node)) {
             return null;
         }
-        if (!isset($node->args[0])) {
-            return null;
-        }
-        if (!$node->args[0] instanceof Arg) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
         /** @var Array_ $options */
-        $options = $node->args[0]->value;
+        $options = $node->getArgs()[0]->value;
         foreach ($options->items as $option) {
             if (!$option instanceof ArrayItem) {
                 return null;
@@ -88,12 +85,9 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, 'session_start')) {
             return \true;
         }
-        if (!isset($funcCall->args[0])) {
+        if (!isset($funcCall->getArgs()[0])) {
             return \true;
         }
-        if (!$funcCall->args[0] instanceof Arg) {
-            return \true;
-        }
-        return !$funcCall->args[0]->value instanceof Array_;
+        return !$funcCall->getArgs()[0]->value instanceof Array_;
     }
 }

@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp73\Rector\FuncCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
@@ -46,14 +45,11 @@ CODE_SAMPLE
         if (!$this->isName($node, 'is_countable')) {
             return null;
         }
-        if (!isset($node->args[0])) {
+        if (!isset($node->getArgs()[0])) {
             return null;
         }
-        if (!$node->args[0] instanceof Arg) {
-            return null;
-        }
-        $isArrayFuncCall = $this->nodeFactory->createFuncCall('is_array', $node->args);
-        $instanceof = new Instanceof_($node->args[0]->value, new FullyQualified('Countable'));
+        $isArrayFuncCall = $this->nodeFactory->createFuncCall('is_array', $node->getArgs());
+        $instanceof = new Instanceof_($node->getArgs()[0]->value, new FullyQualified('Countable'));
         return new BooleanOr($isArrayFuncCall, $instanceof);
     }
 }

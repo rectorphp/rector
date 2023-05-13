@@ -87,13 +87,7 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, self::DIRNAME)) {
             return null;
         }
-        if (!isset($funcCall->args[1])) {
-            return null;
-        }
-        if (!$funcCall->args[1] instanceof Arg) {
-            return null;
-        }
-        return $funcCall->args[1];
+        return $funcCall->getArgs()[1] ?? null;
     }
     private function getLevelsRealValue(Arg $levelsArg) : ?int
     {

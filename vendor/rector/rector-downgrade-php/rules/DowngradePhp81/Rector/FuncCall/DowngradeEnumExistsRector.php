@@ -92,7 +92,7 @@ CODE_SAMPLE
         $function = $this->createClosure();
         $expression = new Expression(new Assign($variable, $function));
         $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
-        return new FuncCall($variable, $node->args);
+        return new FuncCall($variable, $node->getArgs());
     }
     private function createClosure() : Closure
     {

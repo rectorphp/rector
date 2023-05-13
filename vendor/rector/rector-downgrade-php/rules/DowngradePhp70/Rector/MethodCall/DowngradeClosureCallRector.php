@@ -58,7 +58,7 @@ CODE_SAMPLE
             return null;
         }
         $methodCall = $this->createBindToCall($node);
-        $item1Unpacked = \array_slice($node->args, 1);
+        $item1Unpacked = \array_slice($node->getArgs(), 1);
         $args = \array_merge([new Arg($methodCall)], $item1Unpacked);
         return new FuncCall(new Name('call_user_func'), $args);
     }
