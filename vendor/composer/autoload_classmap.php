@@ -1991,6 +1991,7 @@ return array(
     'Rector\\NodeTypeResolver\\PHPStan\\ObjectWithoutClassTypeWithParentTypes' => $baseDir . '/packages/NodeTypeResolver/PHPStan/ObjectWithoutClassTypeWithParentTypes.php',
     'Rector\\NodeTypeResolver\\PHPStan\\ParametersAcceptorSelectorVariantsWrapper' => $baseDir . '/packages/NodeTypeResolver/PHPStan/ParametersAcceptorSelectorVariantsWrapper.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\AssignedToNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/AssignedToNodeVisitor.php',
+    'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ByRefVariableNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ByRefVariableNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StaticVariableNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StaticVariableNodeVisitor.php',
