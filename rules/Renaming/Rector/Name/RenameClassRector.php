@@ -10,9 +10,11 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Renaming\Helper\RenameClassCallbackHandler;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
@@ -22,7 +24,7 @@ use RectorPrefix202305\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameClassRectorTest
  */
-final class RenameClassRector extends AbstractRector implements ConfigurableRectorInterface
+final class RenameClassRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
      * @var string
@@ -87,14 +89,14 @@ CODE_SAMPLE
     /**
      * @param FunctionLike|Name|ClassLike|Expression|Namespace_|Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if ($oldToNewClasses !== []) {
-            return $this->classRenamer->renameNode($node, $oldToNewClasses);
+            return $this->classRenamer->renameNode($node, $oldToNewClasses, $scope);
         }
         if ($this->renameClassCallbackHandler->hasOldToNewClassCallbacks()) {
-            return $this->classRenamer->renameNode($node, $oldToNewClasses);
+            return $this->classRenamer->renameNode($node, $oldToNewClasses, $scope);
         }
         return null;
     }

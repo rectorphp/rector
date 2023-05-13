@@ -124,7 +124,7 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    public function renameNode(Node $node, array $oldToNewClasses) : ?Node
+    public function renameNode(Node $node, array $oldToNewClasses, ?Scope $scope) : ?Node
     {
         $oldToNewTypes = $this->createOldToNewTypes($node, $oldToNewClasses);
         $this->refactorPhpDoc($node, $oldToNewTypes, $oldToNewClasses);
@@ -135,7 +135,7 @@ final class ClassRenamer
             return $this->refactorNamespace($node, $oldToNewClasses);
         }
         if ($node instanceof ClassLike) {
-            return $this->refactorClassLike($node, $oldToNewClasses);
+            return $this->refactorClassLike($node, $oldToNewClasses, $scope);
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         if ($phpDocInfo->hasChanged()) {
@@ -267,10 +267,10 @@ final class ClassRenamer
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function refactorClassLike(ClassLike $classLike, array $oldToNewClasses) : ?Node
+    private function refactorClassLike(ClassLike $classLike, array $oldToNewClasses, ?Scope $scope) : ?Node
     {
         // rename interfaces
-        $this->renameClassImplements($classLike, $oldToNewClasses);
+        $this->renameClassImplements($classLike, $oldToNewClasses, $scope);
         $className = (string) $this->nodeNameResolver->getName($classLike);
         $newName = $oldToNewClasses[$className] ?? null;
         if ($newName === null) {
@@ -346,13 +346,11 @@ final class ClassRenamer
     /**
      * @param string[] $oldToNewClasses
      */
-    private function renameClassImplements(ClassLike $classLike, array $oldToNewClasses) : void
+    private function renameClassImplements(ClassLike $classLike, array $oldToNewClasses, ?Scope $scope) : void
     {
         if (!$classLike instanceof Class_) {
             return;
         }
-        /** @var Scope|null $scope */
-        $scope = $classLike->getAttribute(AttributeKey::SCOPE);
         $classLike->implements = \array_unique($classLike->implements);
         foreach ($classLike->implements as $key => $implementName) {
             $virtualNode = (bool) $implementName->getAttribute(AttributeKey::VIRTUAL_NODE);

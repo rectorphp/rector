@@ -5,6 +5,7 @@ namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Namespace_;
+use PHPStan\Analyser\Scope;
 use Rector\CodingStyle\Application\UseImportsRemover;
 use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
@@ -12,6 +13,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Rector\PostRectorDependencyInterface;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
 use Rector\Renaming\Rector\Name\RenameClassRector;
@@ -70,7 +72,11 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if ($oldToNewClasses === []) {
             return null;
         }
-        $result = $this->classRenamer->renameNode($node, $oldToNewClasses);
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
+        $originalNode = $originalNode ?? $node;
+        /** @var Scope|null $scope */
+        $scope = $originalNode->getAttribute(AttributeKey::SCOPE);
+        $result = $this->classRenamer->renameNode($node, $oldToNewClasses, $scope);
         if (!$this->rectorConfigProvider->shouldImportNames()) {
             return $result;
         }
