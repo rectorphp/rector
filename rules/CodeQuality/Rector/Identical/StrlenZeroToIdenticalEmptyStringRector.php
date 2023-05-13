@@ -4,12 +4,10 @@ declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,15 +16,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class StrlenZeroToIdenticalEmptyStringRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
-     */
-    private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
-    {
-        $this->argsAnalyzer = $argsAnalyzer;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Changes strlen comparison to 0 to direct empty string compare', [new CodeSample(<<<'CODE_SAMPLE'
@@ -74,16 +63,13 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, 'strlen')) {
             return null;
         }
+        if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
         if (!$this->valueResolver->isValue($expr, 0)) {
             return null;
         }
-        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCall->args, 0)) {
-            return null;
-        }
-        /** @var Arg $firstArg */
-        $firstArg = $funcCall->args[0];
-        /** @var Expr $variable */
-        $variable = $firstArg->value;
+        $variable = $funcCall->getArgs()[0]->value;
         // Needs string cast if variable type is not string
         // see https://github.com/rectorphp/rector/issues/6700
         $isStringType = $this->nodeTypeResolver->getNativeType($variable)->isString()->yes();

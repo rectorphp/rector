@@ -19,7 +19,6 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
@@ -68,15 +67,10 @@ final class TokenManipulator
     private $nodeComparator;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
-     */
-    private $argsAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, NodesToRemoveCollector $nodesToRemoveCollector, ValueResolver $valueResolver, NodeComparator $nodeComparator, ArgsAnalyzer $argsAnalyzer, BetterNodeFinder $betterNodeFinder)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, NodesToRemoveCollector $nodesToRemoveCollector, ValueResolver $valueResolver, NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -84,7 +78,6 @@ final class TokenManipulator
         $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->valueResolver = $valueResolver;
         $this->nodeComparator = $nodeComparator;
-        $this->argsAnalyzer = $argsAnalyzer;
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
@@ -194,11 +187,10 @@ final class TokenManipulator
             if (!$this->nodeNameResolver->isName($node, 'is_array')) {
                 return null;
             }
-            if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+            if ($node->isFirstClassCallable()) {
                 return null;
             }
-            /** @var Arg $firstArg */
-            $firstArg = $node->args[0];
+            $firstArg = $node->getArgs()[0];
             if (!$this->nodeComparator->areNodesEqual($firstArg->value, $singleTokenVariable)) {
                 return null;
             }
@@ -253,11 +245,10 @@ final class TokenManipulator
             if (!$this->nodeNameResolver->isName($node, 'token_name')) {
                 return null;
             }
-            if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
+            $firstArg = $node->getArgs()[0] ?? null;
+            if (!$firstArg instanceof Arg) {
                 return null;
             }
-            /** @var Arg $firstArg */
-            $firstArg = $node->args[0];
             $possibleTokenArray = $firstArg->value;
             if (!$possibleTokenArray instanceof ArrayDimFetch) {
                 return null;

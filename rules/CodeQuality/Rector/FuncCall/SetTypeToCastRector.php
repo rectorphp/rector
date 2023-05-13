@@ -16,7 +16,6 @@ use PhpParser\Node\Expr\Cast\Object_;
 use PhpParser\Node\Expr\Cast\String_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,15 +31,6 @@ final class SetTypeToCastRector extends AbstractRector
      * @var array<string, class-string<Cast>>
      */
     private const TYPE_TO_CAST = ['array' => Array_::class, 'bool' => Bool_::class, 'boolean' => Bool_::class, 'double' => Double::class, 'float' => Double::class, 'int' => Int_::class, 'integer' => Int_::class, 'object' => Object_::class, 'string' => String_::class];
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
-     */
-    private $argsAnalyzer;
-    public function __construct(ArgsAnalyzer $argsAnalyzer)
-    {
-        $this->argsAnalyzer = $argsAnalyzer;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Changes settype() to (type) where possible', [new CodeSample(<<<'CODE_SAMPLE'
@@ -82,38 +72,31 @@ CODE_SAMPLE
         if (!$this->isName($node, 'settype')) {
             return null;
         }
-        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 1)) {
+        if ($node->isFirstClassCallable()) {
             return null;
         }
-        /** @var Arg $secondArg */
-        $secondArg = $node->args[1];
-        $typeNode = $this->valueResolver->getValue($secondArg->value);
-        if (!\is_string($typeNode)) {
+        $typeValue = $this->valueResolver->getValue($node->getArgs()[1]->value);
+        if (!\is_string($typeValue)) {
             return null;
         }
-        $typeNode = \strtolower($typeNode);
-        if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
-            return null;
-        }
-        /** @var Arg $firstArg */
-        $firstArg = $node->args[0];
-        $varNode = $firstArg->value;
+        $typeValue = \strtolower($typeValue);
+        $variable = $node->getArgs()[0]->value;
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         // result of function or probably used
         if ($parentNode instanceof Expr || $parentNode instanceof Arg) {
             return null;
         }
-        if (isset(self::TYPE_TO_CAST[$typeNode])) {
-            $castClass = self::TYPE_TO_CAST[$typeNode];
-            $castNode = new $castClass($varNode);
+        if (isset(self::TYPE_TO_CAST[$typeValue])) {
+            $castClass = self::TYPE_TO_CAST[$typeValue];
+            $castNode = new $castClass($variable);
             if ($parentNode instanceof Expression) {
                 // bare expression? → assign
-                return new Assign($varNode, $castNode);
+                return new Assign($variable, $castNode);
             }
             return $castNode;
         }
-        if ($typeNode === 'null') {
-            return new Assign($varNode, $this->nodeFactory->createNull());
+        if ($typeValue === 'null') {
+            return new Assign($variable, $this->nodeFactory->createNull());
         }
         return $node;
     }

@@ -5,22 +5,22 @@ namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\VariadicPlaceholder;
 final class ArgsAnalyzer
 {
     /**
-     * @param Arg[]|VariadicPlaceholder[] $args
+     * @api
+     * @deprecated Use $node->getArgs()[x] instead
+     * @param Arg[] $args
      */
     public function isArgInstanceInArgsPosition(array $args, int $position) : bool
     {
-        if (!isset($args[$position])) {
-            return \false;
-        }
-        return $args[$position] instanceof Arg;
+        return isset($args[$position]);
     }
     /**
-     * @param Arg[]|VariadicPlaceholder[] $args
+     * @api
+     * @param Arg[] $args
      * @param int[] $positions
+     * @deprecated use count($node->getArgs() < X instead
      */
     public function isArgsInstanceInArgsPositions(array $args, array $positions) : bool
     {
@@ -28,10 +28,6 @@ final class ArgsAnalyzer
             if (!isset($args[$position])) {
                 return \false;
             }
-            if ($args[$position] instanceof Arg) {
-                continue;
-            }
-            return \false;
         }
         return \true;
     }

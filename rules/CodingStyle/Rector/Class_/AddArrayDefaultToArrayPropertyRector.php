@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\Class_;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp;
@@ -17,7 +16,6 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Type\Type;
 use Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer;
-use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -42,19 +40,13 @@ final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
     private $iterableTypeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
-     */
-    private $argsAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, IterableTypeAnalyzer $iterableTypeAnalyzer, ArgsAnalyzer $argsAnalyzer, VisibilityManipulator $visibilityManipulator)
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, IterableTypeAnalyzer $iterableTypeAnalyzer, VisibilityManipulator $visibilityManipulator)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->iterableTypeAnalyzer = $iterableTypeAnalyzer;
-        $this->argsAnalyzer = $argsAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -179,12 +171,7 @@ CODE_SAMPLE
                 if (!$this->isName($node, 'count')) {
                     return \false;
                 }
-                if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($node->args, 0)) {
-                    return \false;
-                }
-                /** @var Arg $firstArg */
-                $firstArg = $node->args[0];
-                $countedArgument = $firstArg->value;
+                $countedArgument = $node->getArgs()[0]->value;
                 if (!$countedArgument instanceof PropertyFetch) {
                     return \false;
                 }

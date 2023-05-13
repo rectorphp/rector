@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
-use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -39,18 +38,12 @@ final class PregMatchTypeCorrector
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
-     */
-    private $argsAnalyzer;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, ParentScopeFinder $parentScopeFinder, NodeComparator $nodeComparator, ArgsAnalyzer $argsAnalyzer)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, ParentScopeFinder $parentScopeFinder, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->parentScopeFinder = $parentScopeFinder;
         $this->nodeComparator = $nodeComparator;
-        $this->argsAnalyzer = $argsAnalyzer;
     }
     /**
      * Special case for "preg_match(), preg_match_all()" - with 3rd argument
@@ -74,14 +67,13 @@ final class PregMatchTypeCorrector
             if (!$funcCallNode instanceof FuncCall) {
                 continue;
             }
+            $thirdArg = $funcCallNode->getArgs()[2] ?? null;
+            if (!$thirdArg instanceof Arg) {
+                continue;
+            }
             if (!$this->nodeNameResolver->isNames($funcCallNode, ['preg_match', 'preg_match_all'])) {
                 continue;
             }
-            if (!$this->argsAnalyzer->isArgInstanceInArgsPosition($funcCallNode->args, 2)) {
-                continue;
-            }
-            /** @var Arg $thirdArg */
-            $thirdArg = $funcCallNode->args[2];
             // are the same variables
             if (!$this->nodeComparator->areNodesEqual($thirdArg->value, $expr)) {
                 continue;
