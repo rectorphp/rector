@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2a4aeebdd5f895f3a7e86e84c8968b46
+class ComposerStaticInita09fd079de12a5cf614a61a3d29b3e0f
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2234,6 +2234,7 @@ class ComposerStaticInit2a4aeebdd5f895f3a7e86e84c8968b46
         'Rector\\NodeTypeResolver\\PHPStan\\ObjectWithoutClassTypeWithParentTypes' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/ObjectWithoutClassTypeWithParentTypes.php',
         'Rector\\NodeTypeResolver\\PHPStan\\ParametersAcceptorSelectorVariantsWrapper' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/ParametersAcceptorSelectorVariantsWrapper.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\AssignedToNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/AssignedToNodeVisitor.php',
+        'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
@@ -3109,9 +3110,9 @@ class ComposerStaticInit2a4aeebdd5f895f3a7e86e84c8968b46
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2a4aeebdd5f895f3a7e86e84c8968b46::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2a4aeebdd5f895f3a7e86e84c8968b46::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2a4aeebdd5f895f3a7e86e84c8968b46::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita09fd079de12a5cf614a61a3d29b3e0f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita09fd079de12a5cf614a61a3d29b3e0f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita09fd079de12a5cf614a61a3d29b3e0f::$classMap;
 
         }, null, ClassLoader::class);
     }

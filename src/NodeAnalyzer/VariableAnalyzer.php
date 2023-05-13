@@ -8,7 +8,6 @@ use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Global_;
 use PhpParser\Node\Stmt\Static_;
 use PhpParser\Node\Stmt\StaticVar;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
@@ -33,21 +32,19 @@ final class VariableAnalyzer
     }
     public function isStaticOrGlobal(Variable $variable) : bool
     {
-        if ($this->isParentStaticOrGlobal($variable)) {
+        if ($variable->getAttribute(AttributeKey::IS_GLOBAL_VAR) === \true) {
+            return \true;
+        }
+        if ($this->isParentStatic($variable)) {
             return \true;
         }
         return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $node) use($variable) : bool {
-            if (!\in_array(\get_class($node), [Static_::class, Global_::class], \true)) {
+            if (!$node instanceof Static_) {
                 return \false;
             }
-            /**
-             * @var Static_|Global_ $node
-             * @var StaticVar[]|Variable[] $vars
-             */
             $vars = $node->vars;
             foreach ($vars as $var) {
-                $staticVarVariable = $var instanceof StaticVar ? $var->var : $var;
-                if ($this->nodeComparator->areNodesEqual($staticVarVariable, $variable)) {
+                if ($this->nodeComparator->areNodesEqual($var->var, $variable)) {
                     return \true;
                 }
             }
@@ -73,14 +70,11 @@ final class VariableAnalyzer
             return $parentNode instanceof AssignRef;
         });
     }
-    private function isParentStaticOrGlobal(Variable $variable) : bool
+    private function isParentStatic(Variable $variable) : bool
     {
         $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof Node) {
             return \false;
-        }
-        if ($parentNode instanceof Global_) {
-            return \true;
         }
         if (!$parentNode instanceof StaticVar) {
             return \false;
