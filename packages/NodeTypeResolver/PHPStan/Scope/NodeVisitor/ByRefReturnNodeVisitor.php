@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node;
-use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
@@ -35,7 +35,7 @@ final class ByRefReturnNodeVisitor extends NodeVisitorAbstract
             return null;
         }
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $subNode) {
-            if ($subNode instanceof CallLike || $subNode instanceof FunctionLike) {
+            if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$subNode instanceof Return_) {
