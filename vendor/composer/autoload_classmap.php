@@ -1971,7 +1971,6 @@ return array(
     'Rector\\NodeTypeResolver\\NodeTypeCorrector\\AccessoryNonEmptyStringTypeCorrector' => $baseDir . '/packages/NodeTypeResolver/NodeTypeCorrector/AccessoryNonEmptyStringTypeCorrector.php',
     'Rector\\NodeTypeResolver\\NodeTypeCorrector\\GenericClassStringTypeCorrector' => $baseDir . '/packages/NodeTypeResolver/NodeTypeCorrector/GenericClassStringTypeCorrector.php',
     'Rector\\NodeTypeResolver\\NodeTypeCorrector\\HasOffsetTypeCorrector' => $baseDir . '/packages/NodeTypeResolver/NodeTypeCorrector/HasOffsetTypeCorrector.php',
-    'Rector\\NodeTypeResolver\\NodeTypeCorrector\\PregMatchTypeCorrector' => $baseDir . '/packages/NodeTypeResolver/NodeTypeCorrector/PregMatchTypeCorrector.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\CastTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/CastTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\ClassAndInterfaceTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/ClassAndInterfaceTypeResolver.php',

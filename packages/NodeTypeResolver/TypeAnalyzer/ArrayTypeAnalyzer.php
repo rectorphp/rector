@@ -23,7 +23,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ArrayTypeAnalyzer
 {
@@ -39,11 +38,6 @@ final class ArrayTypeAnalyzer
     private $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeCorrector\PregMatchTypeCorrector
-     */
-    private $pregMatchTypeCorrector;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
@@ -57,11 +51,10 @@ final class ArrayTypeAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, PregMatchTypeCorrector $pregMatchTypeCorrector, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->pregMatchTypeCorrector = $pregMatchTypeCorrector;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
@@ -69,7 +62,6 @@ final class ArrayTypeAnalyzer
     public function isArrayType(Expr $expr) : bool
     {
         $nodeType = $this->nodeTypeResolver->getType($expr);
-        $nodeType = $this->pregMatchTypeCorrector->correct($expr, $nodeType);
         if ($this->isIntersectionArrayType($nodeType)) {
             return \true;
         }
