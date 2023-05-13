@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1a3a3ed36ea10c7719447923da5e656e
+class ComposerStaticInit435ac4da3d2d131c3524c8fe63432a3f
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1450,7 +1450,6 @@ class ComposerStaticInit1a3a3ed36ea10c7719447923da5e656e
         'Rector\\CodeQuality\\NodeAnalyzer\\ConstructorPropertyDefaultExprResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ConstructorPropertyDefaultExprResolver.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ForeachAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ForeachAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\LocalPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/LocalPropertyAnalyzer.php',
-        'Rector\\CodeQuality\\NodeAnalyzer\\ReturnAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ReturnAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\VariableDimFetchAssignResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/VariableDimFetchAssignResolver.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\VariableNameUsedNextAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/VariableNameUsedNextAnalyzer.php',
         'Rector\\CodeQuality\\NodeFactory\\ArrayFilterFactory' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeFactory/ArrayFilterFactory.php',
@@ -2233,6 +2232,7 @@ class ComposerStaticInit1a3a3ed36ea10c7719447923da5e656e
         'Rector\\NodeTypeResolver\\PHPStan\\ObjectWithoutClassTypeWithParentTypes' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/ObjectWithoutClassTypeWithParentTypes.php',
         'Rector\\NodeTypeResolver\\PHPStan\\ParametersAcceptorSelectorVariantsWrapper' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/ParametersAcceptorSelectorVariantsWrapper.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\AssignedToNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/AssignedToNodeVisitor.php',
+        'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ByRefReturnNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ByRefReturnNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ByRefVariableNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ByRefVariableNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
@@ -3111,9 +3111,9 @@ class ComposerStaticInit1a3a3ed36ea10c7719447923da5e656e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1a3a3ed36ea10c7719447923da5e656e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1a3a3ed36ea10c7719447923da5e656e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1a3a3ed36ea10c7719447923da5e656e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit435ac4da3d2d131c3524c8fe63432a3f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit435ac4da3d2d131c3524c8fe63432a3f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit435ac4da3d2d131c3524c8fe63432a3f::$classMap;
 
         }, null, ClassLoader::class);
     }

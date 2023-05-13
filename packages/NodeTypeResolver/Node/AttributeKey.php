@@ -182,4 +182,8 @@ final class AttributeKey
      * @var string
      */
     public const IS_BYREF_VAR = 'is_byref_var';
+    /**
+     * @var string
+     */
+    public const IS_BYREF_RETURN = 'is_byref_return';
 }

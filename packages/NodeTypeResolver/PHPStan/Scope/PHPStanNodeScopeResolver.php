@@ -50,6 +50,7 @@ use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\AssignedToNodeVisitor;
+use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ByRefReturnNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ByRefVariableNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\GlobalVariableNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
@@ -115,7 +116,7 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, AssignedToNodeVisitor $assignedToNodeVisitor, GlobalVariableNodeVisitor $globalVariableNodeVisitor, StaticVariableNodeVisitor $staticVariableNodeVisitor, ByRefVariableNodeVisitor $byRefVariableNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, ClassAnalyzer $classAnalyzer)
+    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, AssignedToNodeVisitor $assignedToNodeVisitor, GlobalVariableNodeVisitor $globalVariableNodeVisitor, StaticVariableNodeVisitor $staticVariableNodeVisitor, ByRefVariableNodeVisitor $byRefVariableNodeVisitor, ByRefReturnNodeVisitor $byRefReturnNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, ClassAnalyzer $classAnalyzer)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -132,6 +133,7 @@ final class PHPStanNodeScopeResolver
         $this->nodeTraverser->addVisitor($globalVariableNodeVisitor);
         $this->nodeTraverser->addVisitor($staticVariableNodeVisitor);
         $this->nodeTraverser->addVisitor($byRefVariableNodeVisitor);
+        $this->nodeTraverser->addVisitor($byRefReturnNodeVisitor);
     }
     /**
      * @param Stmt[] $stmts
