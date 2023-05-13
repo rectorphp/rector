@@ -36,9 +36,6 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
         $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
         if (!$currentScope instanceof MutatingScope) {
             $currentScope = $this->scopeAnalyzer->resolveScope($node, $this->file->getFilePath());
-            if ($currentScope instanceof MutatingScope) {
-                $this->changedNodeScopeRefresher->refresh($node, $currentScope, $this->file->getFilePath());
-            }
         }
         if (!$currentScope instanceof Scope) {
             /**

@@ -104,7 +104,7 @@ CODE_SAMPLE;
     /**
      * @var \Rector\Core\Application\ChangedNodeScopeRefresher
      */
-    protected $changedNodeScopeRefresher;
+    private $changedNodeScopeRefresher;
     /**
      * @var \Rector\PostRector\Collector\NodesToRemoveCollector
      */
