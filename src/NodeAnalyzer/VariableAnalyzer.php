@@ -8,8 +8,6 @@ use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Static_;
-use PhpParser\Node\Stmt\StaticVar;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,21 +33,7 @@ final class VariableAnalyzer
         if ($variable->getAttribute(AttributeKey::IS_GLOBAL_VAR) === \true) {
             return \true;
         }
-        if ($this->isParentStatic($variable)) {
-            return \true;
-        }
-        return (bool) $this->betterNodeFinder->findFirstPrevious($variable, function (Node $node) use($variable) : bool {
-            if (!$node instanceof Static_) {
-                return \false;
-            }
-            $vars = $node->vars;
-            foreach ($vars as $var) {
-                if ($this->nodeComparator->areNodesEqual($var->var, $variable)) {
-                    return \true;
-                }
-            }
-            return \false;
-        });
+        return $variable->getAttribute(AttributeKey::IS_STATIC_VAR) === \true;
     }
     public function isUsedByReference(Variable $variable) : bool
     {
@@ -69,18 +53,6 @@ final class VariableAnalyzer
             }
             return $parentNode instanceof AssignRef;
         });
-    }
-    private function isParentStatic(Variable $variable) : bool
-    {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
-            return \false;
-        }
-        if (!$parentNode instanceof StaticVar) {
-            return \false;
-        }
-        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        return $parentParentNode instanceof Static_;
     }
     private function isParamReferenced(Node $node, Variable $variable) : bool
     {

@@ -1994,6 +1994,7 @@ return array(
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\AssignedToNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/AssignedToNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
+    'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StaticVariableNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StaticVariableNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
     'Rector\\NodeTypeResolver\\PHPStan\\TypeHasher' => $baseDir . '/packages/NodeTypeResolver/PHPStan/TypeHasher.php',
