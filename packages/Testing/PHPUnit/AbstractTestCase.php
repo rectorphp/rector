@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use RectorPrefix202305\Psr\Container\ContainerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Kernel\RectorKernel;
+use Rector\Core\Util\FileHasher;
 use RectorPrefix202305\Webmozart\Assert\Assert;
 abstract class AbstractTestCase extends TestCase
 {
@@ -27,7 +28,8 @@ abstract class AbstractTestCase extends TestCase
      */
     protected function bootFromConfigFiles(array $configFiles) : void
     {
-        $configsHash = $this->createConfigsHash($configFiles);
+        $fileHasher = new FileHasher();
+        $configsHash = $fileHasher->hashFiles($configFiles);
         if (isset(self::$kernelsByHash[$configsHash])) {
             $rectorKernel = self::$kernelsByHash[$configsHash];
             self::$currentContainer = $rectorKernel->getContainer();
@@ -56,21 +58,5 @@ abstract class AbstractTestCase extends TestCase
             throw new ShouldNotHappenException($message);
         }
         return $object;
-    }
-    /**
-     * @param string[] $configFiles
-     */
-    private function createConfigsHash(array $configFiles) : string
-    {
-        Assert::allString($configFiles);
-        $configHash = '';
-        foreach ($configFiles as $configFile) {
-            $hash = \md5_file($configFile);
-            if ($hash === \false) {
-                throw new ShouldNotHappenException(\sprintf('File %s is not readable', $configFile));
-            }
-            $configHash .= $hash;
-        }
-        return $configHash;
     }
 }

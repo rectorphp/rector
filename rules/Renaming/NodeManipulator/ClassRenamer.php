@@ -27,6 +27,7 @@ use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Util\FileHasher;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeRemoval\NodeRemover;
@@ -106,7 +107,12 @@ final class ClassRenamer
      * @var \Rector\Renaming\Helper\RenameClassCallbackHandler
      */
     private $renameClassCallbackHandler;
-    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, NodeRemover $nodeRemover, ParameterProvider $parameterProvider, UseImportsResolver $useImportsResolver, RenameClassCallbackHandler $renameClassCallbackHandler)
+    /**
+     * @readonly
+     * @var \Rector\Core\Util\FileHasher
+     */
+    private $fileHasher;
+    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, NodeRemover $nodeRemover, ParameterProvider $parameterProvider, UseImportsResolver $useImportsResolver, RenameClassCallbackHandler $renameClassCallbackHandler, FileHasher $fileHasher)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -120,6 +126,7 @@ final class ClassRenamer
         $this->parameterProvider = $parameterProvider;
         $this->useImportsResolver = $useImportsResolver;
         $this->renameClassCallbackHandler = $renameClassCallbackHandler;
+        $this->fileHasher = $fileHasher;
     }
     /**
      * @param array<string, string> $oldToNewClasses
@@ -422,13 +429,8 @@ final class ClassRenamer
     private function createOldToNewTypes(Node $node, array $oldToNewClasses) : array
     {
         $oldToNewClasses = $this->resolveOldToNewClassCallbacks($node, $oldToNewClasses);
-        // md4 is faster then md5 https://php.watch/articles/php-hash-benchmark
-        $hashingAlgorithm = 'md4';
-        if (\PHP_VERSION_ID >= 80100) {
-            // if xxh128 is available use it, as it is way faster then md4 https://php.watch/articles/php-hash-benchmark
-            $hashingAlgorithm = 'xxh128';
-        }
-        $cacheKey = \hash($hashingAlgorithm, \serialize($oldToNewClasses));
+        $serialized = \serialize($oldToNewClasses);
+        $cacheKey = $this->fileHasher->hash($serialized);
         if (isset($this->oldToNewTypesByCacheKey[$cacheKey])) {
             return $this->oldToNewTypesByCacheKey[$cacheKey];
         }

@@ -6,6 +6,7 @@ namespace Rector\Caching\Detector;
 use Rector\Caching\Cache;
 use Rector\Caching\Config\FileHashComputer;
 use Rector\Caching\Enum\CacheKey;
+use Rector\Core\Util\FileHasher;
 /**
  * Inspired by https://github.com/symplify/symplify/pull/90/files#diff-72041b2e1029a08930e13d79d298ef11
  *
@@ -31,10 +32,16 @@ final class ChangedFilesDetector
      * @var \Rector\Caching\Cache
      */
     private $cache;
-    public function __construct(FileHashComputer $fileHashComputer, Cache $cache)
+    /**
+     * @readonly
+     * @var \Rector\Core\Util\FileHasher
+     */
+    private $fileHasher;
+    public function __construct(FileHashComputer $fileHashComputer, Cache $cache, FileHasher $fileHasher)
     {
         $this->fileHashComputer = $fileHashComputer;
         $this->cache = $cache;
+        $this->fileHasher = $fileHasher;
     }
     /**
      * @param string[] $dependentFiles
@@ -122,11 +129,11 @@ final class ChangedFilesDetector
     }
     private function getFilePathCacheKey(string $filePath) : string
     {
-        return \sha1($this->resolvePath($filePath));
+        return $this->fileHasher->hash($this->resolvePath($filePath));
     }
     private function hashFile(string $filePath) : string
     {
-        return (string) \sha1_file($this->resolvePath($filePath));
+        return $this->fileHasher->hashFiles([$this->resolvePath($filePath)]);
     }
     private function storeConfigurationDataHash(string $filePath, string $configurationHash) : void
     {

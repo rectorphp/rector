@@ -1530,6 +1530,7 @@ return array(
     'Rector\\Core\\StaticReflection\\DynamicSourceLocatorDecorator' => $baseDir . '/src/StaticReflection/DynamicSourceLocatorDecorator.php',
     'Rector\\Core\\Util\\ArrayChecker' => $baseDir . '/src/Util/ArrayChecker.php',
     'Rector\\Core\\Util\\ArrayParametersMerger' => $baseDir . '/src/Util/ArrayParametersMerger.php',
+    'Rector\\Core\\Util\\FileHasher' => $baseDir . '/src/Util/FileHasher.php',
     'Rector\\Core\\Util\\MemoryLimiter' => $baseDir . '/src/Util/MemoryLimiter.php',
     'Rector\\Core\\Util\\MultiInstanceofChecker' => $baseDir . '/src/Util/MultiInstanceofChecker.php',
     'Rector\\Core\\Util\\PhpVersionFactory' => $baseDir . '/src/Util/PhpVersionFactory.php',
