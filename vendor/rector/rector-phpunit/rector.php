@@ -16,6 +16,8 @@ return static function (RectorConfig $rectorConfig) : void {
         '*/Source/*',
         '*/Fixture/*',
         '*/Expected/*',
+        // buggy here
+        \Rector\CodeQuality\Rector\If_\ConsecutiveNullCompareReturnsToNullCoalesceQueueRector::class,
         // object types
         StringClassNameToClassConstantRector::class => [__DIR__ . '/src/Rector/MethodCall/UseSpecificWillMethodRector.php', __DIR__ . '/src/Rector/Class_/TestListenerToHooksRector.php', __DIR__ . '/src/NodeFactory/ConsecutiveAssertionFactory.php', __DIR__ . '/src/NodeAnalyzer/TestsNodeAnalyzer.php', __DIR__ . '/src/NodeFactory/DataProviderClassMethodFactory.php', __DIR__ . '/config'],
     ]);

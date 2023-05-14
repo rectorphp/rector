@@ -17,16 +17,5 @@ use Rector\PHPUnit\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector;
 use Rector\PHPUnit\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector;
 use Rector\PHPUnit\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(AssertNotOperatorRector::class);
-    $rectorConfig->rule(AssertComparisonToSpecificMethodRector::class);
-    $rectorConfig->rule(AssertTrueFalseToSpecificMethodRector::class);
-    $rectorConfig->rule(AssertSameBoolNullToSpecificMethodRector::class);
-    $rectorConfig->rule(AssertFalseStrposToContainsRector::class);
-    $rectorConfig->rule(AssertTrueFalseInternalTypeToSpecificMethodRector::class);
-    $rectorConfig->rule(AssertCompareToSpecificMethodRector::class);
-    $rectorConfig->rule(AssertIssetToSpecificMethodRector::class);
-    $rectorConfig->rule(AssertInstanceOfComparisonRector::class);
-    $rectorConfig->rule(AssertPropertyExistsRector::class);
-    $rectorConfig->rule(AssertRegExpRector::class);
-    $rectorConfig->rule(SimplifyForeachInstanceOfRector::class);
+    $rectorConfig->rules([AssertNotOperatorRector::class, AssertComparisonToSpecificMethodRector::class, AssertTrueFalseToSpecificMethodRector::class, AssertSameBoolNullToSpecificMethodRector::class, AssertFalseStrposToContainsRector::class, AssertTrueFalseInternalTypeToSpecificMethodRector::class, AssertCompareToSpecificMethodRector::class, AssertIssetToSpecificMethodRector::class, AssertInstanceOfComparisonRector::class, AssertPropertyExistsRector::class, AssertRegExpRector::class, SimplifyForeachInstanceOfRector::class]);
 };

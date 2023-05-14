@@ -1991,12 +1991,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "63d391e70b0c826346929589a519f0a12ca672fb"
+                "reference": "e41fa34b57b492846d2ef7ba9e5893cf6170ff29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/63d391e70b0c826346929589a519f0a12ca672fb",
-                "reference": "63d391e70b0c826346929589a519f0a12ca672fb",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/e41fa34b57b492846d2ef7ba9e5893cf6170ff29",
+                "reference": "e41fa34b57b492846d2ef7ba9e5893cf6170ff29",
                 "shasum": ""
             },
             "require": {
@@ -2007,25 +2007,25 @@
             },
             "require-dev": {
                 "phpstan\/extension-installer": "^1.2",
-                "phpstan\/phpstan": "^1.9.14",
+                "phpstan\/phpstan": "^1.10.15",
                 "phpstan\/phpstan-strict-rules": "^1.4.5",
                 "phpstan\/phpstan-webmozart-assert": "^1.2.2",
-                "phpunit\/phpunit": "^10.0",
+                "phpunit\/phpunit": "^10.1",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-debugging": "dev-main",
                 "rector\/rector-generator": "^0.6.14",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-ci": "^11.2.0",
-                "symplify\/easy-coding-standard": "^11.2",
-                "symplify\/phpstan-extensions": "^11.1",
-                "symplify\/phpstan-rules": "^11.2.3",
+                "symplify\/easy-coding-standard": "^11.3",
+                "symplify\/phpstan-extensions": "^11.2",
+                "symplify\/phpstan-rules": "^11.3",
                 "symplify\/rule-doc-generator": "^11.2",
                 "symplify\/vendor-patches": "^11.2.0",
-                "tomasvotruba\/cognitive-complexity": "^0.0.5",
-                "tomasvotruba\/type-coverage": "^0.0.9",
-                "tomasvotruba\/unused-public": "^0.0.34"
+                "tomasvotruba\/cognitive-complexity": "^0.1",
+                "tomasvotruba\/type-coverage": "^0.1",
+                "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-05-09T18:00:30+00:00",
+            "time": "2023-05-14T00:40:04+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

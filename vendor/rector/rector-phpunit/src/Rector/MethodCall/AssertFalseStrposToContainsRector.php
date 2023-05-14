@@ -20,7 +20,7 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const RENAME_METHODS_MAP = ['assertFalse' => 'assertNotContains', 'assertNotFalse' => 'assertContains'];
+    private const RENAME_METHODS_MAP = ['assertFalse' => 'assertStringNotContainsString', 'assertNotFalse' => 'assertStringContainsString'];
     /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
