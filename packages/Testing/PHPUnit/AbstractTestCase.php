@@ -8,7 +8,6 @@ use RectorPrefix202305\Psr\Container\ContainerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\Util\FileHasher;
-use RectorPrefix202305\Webmozart\Assert\Assert;
 abstract class AbstractTestCase extends TestCase
 {
     /**

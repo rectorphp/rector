@@ -9357,10 +9357,8 @@ Add "never" return-type for methods that never return anything
 ```diff
  final class SomeClass
  {
-+    /**
-+     * @return never
-+     */
-     public function run()
+-    public function run()
++    public function run(): never
      {
          throw new InvalidException();
      }
