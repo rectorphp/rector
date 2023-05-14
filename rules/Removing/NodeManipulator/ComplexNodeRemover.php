@@ -15,6 +15,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -71,12 +72,12 @@ final class ComplexNodeRemover
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->nodeComparator = $nodeComparator;
     }
-    public function removePropertyAndUsages(Class_ $class, Property $property, bool $removeAssignSideEffect) : bool
+    public function removePropertyAndUsages(Class_ $class, Property $property, bool $removeAssignSideEffect, Scope $scope) : bool
     {
         $propertyName = $this->nodeNameResolver->getName($property);
         $totalPropertyFetch = $this->propertyFetchAnalyzer->countLocalPropertyFetchName($class, $propertyName);
         $expressions = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use($removeAssignSideEffect, $propertyName, &$totalPropertyFetch, &$expressions) : ?Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use($removeAssignSideEffect, $propertyName, &$totalPropertyFetch, &$expressions, $scope) : ?Node {
             // here should be checked all expr like stmts that can hold assign, e.f. if, foreach etc. etc.
             if (!$node instanceof Expression) {
                 return null;
@@ -102,7 +103,7 @@ final class ComplexNodeRemover
             $currentTotalPropertyFetch = $totalPropertyFetch;
             foreach ($propertyFetches as $propertyFetch) {
                 if ($this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
-                    if (!$removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr)) {
+                    if (!$removeAssignSideEffect && $this->sideEffectNodeDetector->detect($assign->expr, $scope)) {
                         return null;
                     }
                     --$totalPropertyFetch;

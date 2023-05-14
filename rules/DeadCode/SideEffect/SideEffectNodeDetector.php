@@ -19,6 +19,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\Encapsed;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -47,7 +48,7 @@ final class SideEffectNodeDetector
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->pureFunctionDetector = $pureFunctionDetector;
     }
-    public function detect(Expr $expr) : bool
+    public function detect(Expr $expr, Scope $scope) : bool
     {
         if ($expr instanceof Assign) {
             return \true;
@@ -62,7 +63,7 @@ final class SideEffectNodeDetector
             return \false;
         }
         if ($expr instanceof FuncCall) {
-            return !$this->pureFunctionDetector->detect($expr);
+            return !$this->pureFunctionDetector->detect($expr, $scope);
         }
         if ($expr instanceof Variable || $expr instanceof ArrayDimFetch) {
             $variable = $this->resolveVariable($expr);
@@ -71,7 +72,7 @@ final class SideEffectNodeDetector
         }
         return \true;
     }
-    public function detectCallExpr(Node $node) : bool
+    public function detectCallExpr(Node $node, Scope $scope) : bool
     {
         if (!$node instanceof Expr) {
             return \false;
@@ -87,7 +88,7 @@ final class SideEffectNodeDetector
             return \true;
         }
         if ($node instanceof FuncCall) {
-            return !$this->pureFunctionDetector->detect($node);
+            return !$this->pureFunctionDetector->detect($node, $scope);
         }
         return \false;
     }

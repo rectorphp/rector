@@ -155,7 +155,7 @@ final class PropertyManipulator
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
-    public function isPropertyUsedInReadContext(Class_ $class, $propertyOrPromotedParam) : bool
+    public function isPropertyUsedInReadContext(Class_ $class, $propertyOrPromotedParam, Scope $scope) : bool
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($propertyOrPromotedParam);
         if ($this->isAllowedReadOnly($propertyOrPromotedParam, $phpDocInfo)) {
@@ -163,7 +163,7 @@ final class PropertyManipulator
         }
         $privatePropertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($class, $propertyOrPromotedParam);
         foreach ($privatePropertyFetches as $privatePropertyFetch) {
-            if ($this->readWritePropertyAnalyzer->isRead($privatePropertyFetch)) {
+            if ($this->readWritePropertyAnalyzer->isRead($privatePropertyFetch, $scope)) {
                 return \true;
             }
         }
@@ -172,11 +172,11 @@ final class PropertyManipulator
         if (!$classLike instanceof ClassLike) {
             return \false;
         }
-        return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (Node $node) : bool {
+        return (bool) $this->betterNodeFinder->findFirst($classLike->stmts, function (Node $node) use($scope) : bool {
             if (!$node instanceof PropertyFetch) {
                 return \false;
             }
-            if (!$this->readWritePropertyAnalyzer->isRead($node)) {
+            if (!$this->readWritePropertyAnalyzer->isRead($node, $scope)) {
                 return \false;
             }
             return $node->name instanceof Expr;
@@ -185,7 +185,7 @@ final class PropertyManipulator
     /**
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrParam
      */
-    public function isPropertyChangeableExceptConstructor($propertyOrParam) : bool
+    public function isPropertyChangeableExceptConstructor($propertyOrParam, Scope $scope) : bool
     {
         $class = $this->betterNodeFinder->findParentType($propertyOrParam, Class_::class);
         // does not have parent type ClassLike? Possibly parent is changed by other rule
@@ -201,7 +201,7 @@ final class PropertyManipulator
         }
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($class, $propertyOrParam);
         foreach ($propertyFetches as $propertyFetch) {
-            if ($this->isChangeableContext($propertyFetch)) {
+            if ($this->isChangeableContext($propertyFetch, $scope)) {
                 return \true;
             }
             // skip for constructor? it is allowed to set value in constructor method
@@ -220,11 +220,11 @@ final class PropertyManipulator
         }
         return \false;
     }
-    public function isPropertyChangeable(Class_ $class, Property $property) : bool
+    public function isPropertyChangeable(Class_ $class, Property $property, Scope $scope) : bool
     {
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($class, $property);
         foreach ($propertyFetches as $propertyFetch) {
-            if ($this->isChangeableContext($propertyFetch)) {
+            if ($this->isChangeableContext($propertyFetch, $scope)) {
                 return \true;
             }
             if ($this->assignManipulator->isLeftPartOfAssign($propertyFetch)) {
@@ -289,7 +289,7 @@ final class PropertyManipulator
     /**
      * @param \PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $propertyFetch
      */
-    private function isChangeableContext($propertyFetch) : bool
+    private function isChangeableContext($propertyFetch, Scope $scope) : bool
     {
         $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof Node) {
@@ -312,7 +312,7 @@ final class PropertyManipulator
             }
         }
         if ($parentNode instanceof ArrayDimFetch) {
-            return !$this->readWritePropertyAnalyzer->isRead($propertyFetch);
+            return !$this->readWritePropertyAnalyzer->isRead($propertyFetch, $scope);
         }
         return $parentNode instanceof Unset_;
     }

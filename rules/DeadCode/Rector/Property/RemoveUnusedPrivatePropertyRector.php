@@ -7,16 +7,18 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Removing\NodeManipulator\ComplexNodeRemover;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector\RemoveUnusedPrivatePropertyRectorTest
  */
-final class RemoveUnusedPrivatePropertyRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface
+final class RemoveUnusedPrivatePropertyRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface
 {
     /**
      * @api
@@ -76,7 +78,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $hasRemoved = \false;
         foreach ($node->stmts as $key => $property) {
@@ -86,12 +88,12 @@ CODE_SAMPLE
             if ($this->shouldSkipProperty($property)) {
                 continue;
             }
-            if ($this->propertyManipulator->isPropertyUsedInReadContext($node, $property)) {
+            if ($this->propertyManipulator->isPropertyUsedInReadContext($node, $property, $scope)) {
                 continue;
             }
             // use different variable to avoid re-assign back $hasRemoved to false
             // when already asssigned to true
-            $isRemoved = $this->complexNodeRemover->removePropertyAndUsages($node, $property, $this->removeAssignSideEffect);
+            $isRemoved = $this->complexNodeRemover->removePropertyAndUsages($node, $property, $this->removeAssignSideEffect, $scope);
             if ($isRemoved) {
                 $this->processRemoveSameLineComment($node, $property, $key);
                 $hasRemoved = \true;
