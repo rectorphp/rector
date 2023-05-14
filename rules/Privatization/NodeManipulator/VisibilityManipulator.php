@@ -101,6 +101,7 @@ final class VisibilityManipulator
         $this->replaceVisibilityFlag($node, Visibility::PRIVATE);
     }
     /**
+     * @api
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\ClassConst $node
      */
     public function removeFinal($node) : void

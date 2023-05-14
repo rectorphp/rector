@@ -14,7 +14,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @deprecated This split is deprecated as dangerous to rely on doblock strings. Instead, use strict type declaration rules.
+ * @deprecated This split is deprecated as dangerous to rely on docblock strings. Instead, use strict type declaration rules.
  */
 final class UnionTypesRector extends AbstractRector implements MinPhpVersionInterface
 {

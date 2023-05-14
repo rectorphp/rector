@@ -4,15 +4,12 @@ declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper\TypeAnalyzer;
 
 use PHPStan\Type\ArrayType;
-use PHPStan\Type\Constant\ConstantStringType;
 use PHPStan\Type\IterableType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Traversable;
 final class UnionTypeAnalyzer
 {
@@ -55,52 +52,6 @@ final class UnionTypeAnalyzer
             $typesWithClassNames[] = $unionedType;
         }
         return $typesWithClassNames;
-    }
-    public function hasObjectWithoutClassType(UnionType $unionType) : bool
-    {
-        $types = $unionType->getTypes();
-        foreach ($types as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    public function hasObjectWithoutClassTypeWithOnlyFullyQualifiedObjectType(UnionType $unionType) : bool
-    {
-        $types = $unionType->getTypes();
-        foreach ($types as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
-                continue;
-            }
-            if (!$type instanceof FullyQualifiedObjectType) {
-                return \false;
-            }
-        }
-        return \true;
-    }
-    public function isScalar(UnionType $unionType) : bool
-    {
-        $types = $unionType->getTypes();
-        if (\count($types) !== 4) {
-            return \false;
-        }
-        foreach ($types as $type) {
-            if ($type->isString()->yes() && !$type instanceof ConstantStringType) {
-                continue;
-            }
-            if ($type->isFloat()->yes()) {
-                continue;
-            }
-            if ($type->isInteger()->yes()) {
-                continue;
-            }
-            if ($type->isBoolean()->yes()) {
-                continue;
-            }
-            return \false;
-        }
-        return \true;
     }
     public function isNullable(UnionType $unionType, bool $checkTwoTypes = \false) : bool
     {
