@@ -21,7 +21,6 @@ use Rector\Php80\Rector\FuncCall\ClassOnObjectRector;
 use Rector\Php80\Rector\FuncCall\Php8ResourceReturnToObjectRector;
 use Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector;
 use Rector\Php80\Rector\FunctionLike\MixedTypeRector;
-use Rector\Php80\Rector\FunctionLike\UnionTypesRector;
 use Rector\Php80\Rector\Identical\StrEndsWithRector;
 use Rector\Php80\Rector\Identical\StrStartsWithRector;
 use Rector\Php80\Rector\NotIdentical\StrContainsRector;
@@ -31,7 +30,6 @@ use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->rule(UnionTypesRector::class);
     $rectorConfig->rule(StrContainsRector::class);
     $rectorConfig->rule(StrStartsWithRector::class);
     $rectorConfig->rule(StrEndsWithRector::class);
