@@ -49,12 +49,7 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\AssignedToNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ByRefReturnNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ByRefVariableNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\GlobalVariableNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\RemoveDeepChainMethodCallNodeVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\StaticVariableNodeVisitor;
+use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 use RectorPrefix202305\Webmozart\Assert\Assert;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
@@ -116,7 +111,10 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
-    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, RemoveDeepChainMethodCallNodeVisitor $removeDeepChainMethodCallNodeVisitor, AssignedToNodeVisitor $assignedToNodeVisitor, GlobalVariableNodeVisitor $globalVariableNodeVisitor, StaticVariableNodeVisitor $staticVariableNodeVisitor, ByRefVariableNodeVisitor $byRefVariableNodeVisitor, ByRefReturnNodeVisitor $byRefReturnNodeVisitor, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, ClassAnalyzer $classAnalyzer)
+    /**
+     * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
+     */
+    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, array $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, ClassAnalyzer $classAnalyzer)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -128,12 +126,9 @@ final class PHPStanNodeScopeResolver
         $this->betterNodeFinder = $betterNodeFinder;
         $this->classAnalyzer = $classAnalyzer;
         $this->nodeTraverser = new NodeTraverser();
-        $this->nodeTraverser->addVisitor($removeDeepChainMethodCallNodeVisitor);
-        $this->nodeTraverser->addVisitor($assignedToNodeVisitor);
-        $this->nodeTraverser->addVisitor($globalVariableNodeVisitor);
-        $this->nodeTraverser->addVisitor($staticVariableNodeVisitor);
-        $this->nodeTraverser->addVisitor($byRefVariableNodeVisitor);
-        $this->nodeTraverser->addVisitor($byRefReturnNodeVisitor);
+        foreach ($nodeVisitors as $nodeVisitor) {
+            $this->nodeTraverser->addVisitor($nodeVisitor);
+        }
     }
     /**
      * @param Stmt[] $stmts

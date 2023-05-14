@@ -11,7 +11,8 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-final class ByRefVariableNodeVisitor extends NodeVisitorAbstract
+use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
+final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements ScopeResolverNodeVisitorInterface
 {
     /**
      * @readonly
