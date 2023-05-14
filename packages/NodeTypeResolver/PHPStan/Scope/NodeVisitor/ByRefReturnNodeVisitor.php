@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;

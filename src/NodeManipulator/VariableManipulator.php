@@ -75,15 +75,11 @@ final class VariableManipulator
     /**
      * @return Assign[]
      */
-    public function collectScalarOrArrayAssignsOfVariable(ClassMethod $classMethod) : array
+    public function collectScalarOrArrayAssignsOfVariable(ClassMethod $classMethod, Class_ $class) : array
     {
-        $currentClass = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$currentClass instanceof Class_) {
-            return [];
-        }
-        $currentClassName = (string) $this->nodeNameResolver->getName($currentClass);
+        $currentClassName = (string) $this->nodeNameResolver->getName($class);
         $assignsOfArrayToVariable = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use(&$assignsOfArrayToVariable, $currentClass, $currentClassName) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->getStmts(), function (Node $node) use(&$assignsOfArrayToVariable, $class, $currentClassName) {
             if (!$node instanceof Assign) {
                 return null;
             }
@@ -102,7 +98,7 @@ final class VariableManipulator
             if ($node->expr instanceof ConstFetch) {
                 return null;
             }
-            if ($node->expr instanceof ClassConstFetch && $this->isOutsideClass($node->expr, $currentClass, $currentClassName)) {
+            if ($node->expr instanceof ClassConstFetch && $this->isOutsideClass($node->expr, $class, $currentClassName)) {
                 return null;
             }
             $assignsOfArrayToVariable[] = $node;

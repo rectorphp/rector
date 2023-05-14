@@ -15,6 +15,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Encapsed;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
@@ -26,7 +27,6 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\Util\ArrayChecker;
-use Rector\Core\ValueObject\Application\File;
 use Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -96,9 +96,9 @@ final class ClassMethodAssignManipulator
     /**
      * @return Assign[]
      */
-    public function collectReadyOnlyAssignScalarVariables(ClassMethod $classMethod, File $file) : array
+    public function collectReadyOnlyAssignScalarVariables(ClassMethod $classMethod, Class_ $class) : array
     {
-        $assignsOfScalarOrArrayToVariable = $this->variableManipulator->collectScalarOrArrayAssignsOfVariable($classMethod);
+        $assignsOfScalarOrArrayToVariable = $this->variableManipulator->collectScalarOrArrayAssignsOfVariable($classMethod, $class);
         // filter out [$value] = $array, array destructing
         $readOnlyVariableAssigns = $this->arrayDestructVariableFilter->filterOut($assignsOfScalarOrArrayToVariable, $classMethod);
         $readOnlyVariableAssigns = $this->filterOutReferencedVariables($readOnlyVariableAssigns, $classMethod);

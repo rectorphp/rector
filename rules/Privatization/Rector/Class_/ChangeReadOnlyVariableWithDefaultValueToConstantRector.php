@@ -30,6 +30,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeReadOnlyVariableWithDefaultValueToConstantRector extends AbstractRector
 {
     /**
+     * @var string[]
+     */
+    private $addedConstantNames = [];
+    /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\ClassMethodAssignManipulator
      */
@@ -105,70 +109,12 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $readOnlyVariableAssigns = $this->collectReadOnlyVariableAssigns($node);
-        $readOnlyVariableAssigns = $this->filterOutUniqueNames($readOnlyVariableAssigns);
-        if ($readOnlyVariableAssigns === []) {
-            return null;
-        }
-        foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
-            $classMethod = $this->betterNodeFinder->findParentType($readOnlyVariableAssign, ClassMethod::class);
-            if (!$classMethod instanceof ClassMethod) {
-                throw new ShouldNotHappenException();
-            }
-            $methodName = $this->getName($classMethod);
-            $classMethod = $node->getMethod($methodName);
-            if (!$classMethod instanceof ClassMethod) {
-                throw new ShouldNotHappenException();
-            }
-            $this->refactorClassMethod($classMethod, $node, $readOnlyVariableAssigns);
+        $this->addedConstantNames = [];
+        foreach ($node->getMethods() as $classMethod) {
+            $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables($classMethod, $node);
+            $this->refactorClassMethod($classMethod, $node, $readOnlyVariableAssignScalarVariables);
         }
         return $node;
-    }
-    /**
-     * @return Assign[]
-     */
-    private function collectReadOnlyVariableAssigns(Class_ $class) : array
-    {
-        $readOnlyVariables = [];
-        foreach ($class->getMethods() as $classMethod) {
-            if ($this->isFoundByRefParam($classMethod)) {
-                return [];
-            }
-            $readOnlyVariableAssignScalarVariables = $this->classMethodAssignManipulator->collectReadyOnlyAssignScalarVariables($classMethod, $this->file);
-            $readOnlyVariables = \array_merge($readOnlyVariables, $readOnlyVariableAssignScalarVariables);
-        }
-        return $readOnlyVariables;
-    }
-    /**
-     * @param Assign[] $assigns
-     * @return Assign[]
-     */
-    private function filterOutUniqueNames(array $assigns) : array
-    {
-        $assignsByName = $this->collectAssignsByName($assigns);
-        $assignsWithUniqueName = [];
-        foreach ($assignsByName as $assigns) {
-            $count = \count($assigns);
-            if ($count > 1) {
-                continue;
-            }
-            $assignsWithUniqueName = \array_merge($assignsWithUniqueName, $assigns);
-        }
-        return $assignsWithUniqueName;
-    }
-    /**
-     * @param Assign[] $assigns
-     * @return array<string, Assign[]>
-     */
-    private function collectAssignsByName(array $assigns) : array
-    {
-        $assignsByName = [];
-        foreach ($assigns as $assign) {
-            /** @var string $variableName */
-            $variableName = $this->getName($assign->var);
-            $assignsByName[$variableName][] = $assign;
-        }
-        return $assignsByName;
     }
     /**
      * @param Assign[] $readOnlyVariableAssigns
@@ -176,7 +122,6 @@ CODE_SAMPLE
     private function refactorClassMethod(ClassMethod $classMethod, Class_ $class, array $readOnlyVariableAssigns) : void
     {
         foreach ($readOnlyVariableAssigns as $readOnlyVariableAssign) {
-            /** @var Variable|ClassConstFetch $variable */
             $variable = $readOnlyVariableAssign->var;
             // already overridden
             if (!$variable instanceof Variable) {
@@ -184,33 +129,29 @@ CODE_SAMPLE
             }
             $variableName = $this->getName($variable);
             if ($variableName === null) {
-                throw new ShouldNotHappenException();
+                continue;
             }
-            foreach ($classMethod->getParams() as $param) {
-                if ($this->nodeNameResolver->isName($param->var, $variableName)) {
-                    continue 2;
-                }
+            if ($this->isVariableParamName($classMethod, $variableName)) {
+                continue;
             }
             $parentAssign = $readOnlyVariableAssign->getAttribute(AttributeKey::PARENT_NODE);
             if (!$parentAssign instanceof Expression) {
                 continue;
             }
+            $constantName = $this->constantNaming->createFromVariable($variable);
+            if ($constantName === null) {
+                continue;
+            }
+            if (\in_array($constantName, $this->addedConstantNames, \true)) {
+                continue;
+            }
+            $this->addedConstantNames[] = $constantName;
             $this->removeNode($readOnlyVariableAssign);
             $classConst = $this->createPrivateClassConst($variable, $readOnlyVariableAssign->expr);
             // replace $variable usage in the code with constant
             $this->propertyToAddCollector->addConstantToClass($class, $classConst);
             $this->replaceVariableWithClassConstFetch($classMethod, $variableName, $classConst);
         }
-    }
-    private function isFoundByRefParam(ClassMethod $classMethod) : bool
-    {
-        $params = $classMethod->getParams();
-        foreach ($params as $param) {
-            if ($param->byRef) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function createPrivateClassConst(Variable $variable, Expr $expr) : ClassConst
     {
@@ -242,5 +183,14 @@ CODE_SAMPLE
             // replace with constant fetch
             return new ClassConstFetch(new Name('self'), new Identifier($constantName));
         });
+    }
+    private function isVariableParamName(ClassMethod $classMethod, string $variableName) : bool
+    {
+        foreach ($classMethod->getParams() as $param) {
+            if ($this->nodeNameResolver->isName($param->var, $variableName)) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
