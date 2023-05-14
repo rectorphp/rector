@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;

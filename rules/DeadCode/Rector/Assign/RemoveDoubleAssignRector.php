@@ -17,7 +17,6 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;

@@ -11,7 +11,6 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\PropertyManipulator;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Privatization\NodeFactory\ClassConstantFactory;
 use Rector\Privatization\NodeReplacer\PropertyFetchWithConstFetchReplacer;

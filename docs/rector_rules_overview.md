@@ -1,4 +1,4 @@
-# 411 Rules Overview
+# 410 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (76)
 
-- [CodingStyle](#codingstyle) (36)
+- [CodingStyle](#codingstyle) (35)
 
 - [Compatibility](#compatibility) (1)
 
@@ -2169,71 +2169,6 @@ Changes already typed Type|null to ?Type
 
 -    private null|stdClass $property;
 +    private ?stdClass $property;
- }
-```
-
-<br>
-
-### OrderAttributesRector
-
-Order attributes by desired names
-
-:wrench: **configure it!**
-
-- class: [`Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector`](../rules/CodingStyle/Rector/ClassMethod/OrderAttributesRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, [
-        'First',
-        'Second',
-    ]);
-};
-```
-
-↓
-
-```diff
-+#[First]
- #[Second]
--#[First]
- class Someclass
- {
- }
-```
-
-<br>
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\CodingStyle\Rector\ClassMethod\OrderAttributesRector;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(OrderAttributesRector::class, [
-        'alphabetically',
-    ]);
-};
-```
-
-↓
-
-```diff
-+#[AAttribute]
- #[BAttribute]
--#[AAttribute]
- class Someclass
- {
  }
 ```
 

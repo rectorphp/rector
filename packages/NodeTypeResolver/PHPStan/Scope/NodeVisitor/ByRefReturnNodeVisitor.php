@@ -10,8 +10,8 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class ByRefReturnNodeVisitor extends NodeVisitorAbstract implements ScopeResolverNodeVisitorInterface
 {
     /**
