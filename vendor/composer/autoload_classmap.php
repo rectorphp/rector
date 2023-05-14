@@ -2445,7 +2445,6 @@ return array(
     'Rector\\Renaming\\ValueObject\\RenameProperty' => $baseDir . '/rules/Renaming/ValueObject/RenameProperty.php',
     'Rector\\Renaming\\ValueObject\\RenameStaticMethod' => $baseDir . '/rules/Renaming/ValueObject/RenameStaticMethod.php',
     'Rector\\Renaming\\ValueObject\\RenamedNamespace' => $baseDir . '/rules/Renaming/ValueObject/RenamedNamespace.php',
-    'Rector\\Restoration\\Rector\\ClassConstFetch\\MissingClassConstantReferenceToStringRector' => $baseDir . '/rules/Restoration/Rector/ClassConstFetch/MissingClassConstantReferenceToStringRector.php',
     'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => $baseDir . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
     'Rector\\Set\\Contract\\SetListInterface' => $baseDir . '/packages/Set/Contract/SetListInterface.php',
     'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => $vendorDir . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
