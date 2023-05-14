@@ -8,15 +8,16 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
 use PHPStan\BetterReflection\Reflection\Adapter\ReflectionProperty;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Core\ValueObject\Visibility;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Php81\Enum\AttributeName;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -28,7 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php82\Rector\Class_\ReadOnlyClassRector\ReadOnlyClassRectorTest
  */
-final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionInterface
+final class ReadOnlyClassRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -47,20 +48,14 @@ final class ReadOnlyClassRector extends AbstractRector implements MinPhpVersionI
     private $phpAttributeAnalyzer;
     /**
      * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
-     */
-    private $reflectionResolver;
-    /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator, PhpAttributeAnalyzer $phpAttributeAnalyzer, ReflectionProvider $reflectionProvider)
     {
         $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;
-        $this->reflectionResolver = $reflectionResolver;
         $this->reflectionProvider = $reflectionProvider;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -95,12 +90,14 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($this->shouldSkip($node)) {
+        if ($this->shouldSkip($node, $scope)) {
             return null;
         }
         $this->visibilityManipulator->makeReadonly($node);
+        // invoke reprint with correct readonly newline
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         if ($constructClassMethod instanceof ClassMethod) {
             foreach ($constructClassMethod->getParams() as $param) {
@@ -119,9 +116,9 @@ CODE_SAMPLE
     /**
      * @return ClassReflection[]
      */
-    private function resolveParentClassReflections(Class_ $class) : array
+    private function resolveParentClassReflections(Scope $scope) : array
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return [];
         }
@@ -140,12 +137,12 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function shouldSkip(Class_ $class) : bool
+    private function shouldSkip(Class_ $class, Scope $scope) : bool
     {
         if ($this->shouldSkipClass($class)) {
             return \true;
         }
-        $parents = $this->resolveParentClassReflections($class);
+        $parents = $this->resolveParentClassReflections($scope);
         if (!$class->isFinal()) {
             return !$this->isExtendsReadonlyClass($parents);
         }
