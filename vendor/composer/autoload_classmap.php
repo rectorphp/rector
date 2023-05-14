@@ -2448,7 +2448,6 @@ return array(
     'Rector\\Renaming\\ValueObject\\RenamedNamespace' => $baseDir . '/rules/Renaming/ValueObject/RenamedNamespace.php',
     'Rector\\Restoration\\Rector\\ClassConstFetch\\MissingClassConstantReferenceToStringRector' => $baseDir . '/rules/Restoration/Rector/ClassConstFetch/MissingClassConstantReferenceToStringRector.php',
     'Rector\\Restoration\\Rector\\ClassLike\\UpdateFileNameByClassNameFileSystemRector' => $baseDir . '/rules/Restoration/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector.php',
-    'Rector\\Restoration\\Rector\\Class_\\RemoveFinalFromEntityRector' => $baseDir . '/rules/Restoration/Rector/Class_/RemoveFinalFromEntityRector.php',
     'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => $baseDir . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
     'Rector\\Set\\Contract\\SetListInterface' => $baseDir . '/packages/Set/Contract/SetListInterface.php',
     'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => $vendorDir . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',

@@ -1,4 +1,4 @@
-# 410 Rules Overview
+# 409 Rules Overview
 
 <br>
 
@@ -58,7 +58,7 @@
 
 - [Renaming](#renaming) (11)
 
-- [Restoration](#restoration) (4)
+- [Restoration](#restoration) (3)
 
 - [Strict](#strict) (6)
 
@@ -7384,26 +7384,6 @@ Convert missing class reference to string
 -        return NonExistingClass::class;
 +        return 'NonExistingClass';
      }
- }
-```
-
-<br>
-
-### RemoveFinalFromEntityRector
-
-Remove final from Doctrine entities
-
-- class: [`Rector\Restoration\Rector\Class_\RemoveFinalFromEntityRector`](../rules/Restoration/Rector/Class_/RemoveFinalFromEntityRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
--final class SomeClass
-+class SomeClass
- {
  }
 ```
 

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitef8919fd4ad7d9ffc328fd9d160bb2ee
+class ComposerStaticInit5334ed6dce4a35a0df9c8e69b44ad504
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2690,7 +2690,6 @@ class ComposerStaticInitef8919fd4ad7d9ffc328fd9d160bb2ee
         'Rector\\Renaming\\ValueObject\\RenamedNamespace' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenamedNamespace.php',
         'Rector\\Restoration\\Rector\\ClassConstFetch\\MissingClassConstantReferenceToStringRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassConstFetch/MissingClassConstantReferenceToStringRector.php',
         'Rector\\Restoration\\Rector\\ClassLike\\UpdateFileNameByClassNameFileSystemRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector.php',
-        'Rector\\Restoration\\Rector\\Class_\\RemoveFinalFromEntityRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Class_/RemoveFinalFromEntityRector.php',
         'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
         'Rector\\Set\\Contract\\SetListInterface' => __DIR__ . '/../..' . '/packages/Set/Contract/SetListInterface.php',
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
@@ -3110,9 +3109,9 @@ class ComposerStaticInitef8919fd4ad7d9ffc328fd9d160bb2ee
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitef8919fd4ad7d9ffc328fd9d160bb2ee::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitef8919fd4ad7d9ffc328fd9d160bb2ee::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitef8919fd4ad7d9ffc328fd9d160bb2ee::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5334ed6dce4a35a0df9c8e69b44ad504::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5334ed6dce4a35a0df9c8e69b44ad504::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5334ed6dce4a35a0df9c8e69b44ad504::$classMap;
 
         }, null, ClassLoader::class);
     }
