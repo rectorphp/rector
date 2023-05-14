@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\NullableType;
@@ -183,6 +184,10 @@ CODE_SAMPLE
         if ($this->nodeTypeResolver->isNullableType($property)) {
             $objectType = $this->getType($property);
             $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType, TypeKind::PARAM);
+        }
+        if ($param->default instanceof Expr && $this->valueResolver->isNull($param->default)) {
+            $paramType = $this->getType($param);
+            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
         }
     }
     private function decorateParamWithPropertyPhpDocInfo(ClassMethod $classMethod, Property $property, Param $param, string $paramName) : void
