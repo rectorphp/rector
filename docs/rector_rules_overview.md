@@ -1,4 +1,4 @@
-# 409 Rules Overview
+# 408 Rules Overview
 
 <br>
 
@@ -58,7 +58,7 @@
 
 - [Renaming](#renaming) (11)
 
-- [Restoration](#restoration) (3)
+- [Restoration](#restoration) (2)
 
 - [Strict](#strict) (6)
 
@@ -7384,22 +7384,6 @@ Convert missing class reference to string
 -        return NonExistingClass::class;
 +        return 'NonExistingClass';
      }
- }
-```
-
-<br>
-
-### UpdateFileNameByClassNameFileSystemRector
-
-Rename file to respect class name
-
-- class: [`Rector\Restoration\Rector\ClassLike\UpdateFileNameByClassNameFileSystemRector`](../rules/Restoration/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector.php)
-
-```diff
--// app/SomeClass.php
-+// app/AnotherClass.php
- class AnotherClass
- {
  }
 ```
 

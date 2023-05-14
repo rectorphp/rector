@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdc63d1d77983e59462b2fefb99369e9f
+class ComposerStaticInit4c19a11cec9502c9c4467a6cbcd5d90c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1783,7 +1783,6 @@ class ComposerStaticInitdc63d1d77983e59462b2fefb99369e9f
         'Rector\\Core\\ValueObjectFactory\\Application\\FileFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/Application/FileFactory.php',
         'Rector\\Core\\ValueObjectFactory\\ProcessResultFactory' => __DIR__ . '/../..' . '/src/ValueObjectFactory/ProcessResultFactory.php',
         'Rector\\Core\\ValueObject\\Application\\File' => __DIR__ . '/../..' . '/src/ValueObject/Application/File.php',
-        'Rector\\Core\\ValueObject\\Application\\MovedFile' => __DIR__ . '/../..' . '/src/ValueObject/Application/MovedFile.php',
         'Rector\\Core\\ValueObject\\Bootstrap\\BootstrapConfigs' => __DIR__ . '/../..' . '/src/ValueObject/Bootstrap/BootstrapConfigs.php',
         'Rector\\Core\\ValueObject\\Configuration' => __DIR__ . '/../..' . '/src/ValueObject/Configuration.php',
         'Rector\\Core\\ValueObject\\Error\\SystemError' => __DIR__ . '/../..' . '/src/ValueObject/Error/SystemError.php',
@@ -2689,7 +2688,6 @@ class ComposerStaticInitdc63d1d77983e59462b2fefb99369e9f
         'Rector\\Renaming\\ValueObject\\RenameStaticMethod' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameStaticMethod.php',
         'Rector\\Renaming\\ValueObject\\RenamedNamespace' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenamedNamespace.php',
         'Rector\\Restoration\\Rector\\ClassConstFetch\\MissingClassConstantReferenceToStringRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassConstFetch/MissingClassConstantReferenceToStringRector.php',
-        'Rector\\Restoration\\Rector\\ClassLike\\UpdateFileNameByClassNameFileSystemRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/ClassLike/UpdateFileNameByClassNameFileSystemRector.php',
         'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
         'Rector\\Set\\Contract\\SetListInterface' => __DIR__ . '/../..' . '/packages/Set/Contract/SetListInterface.php',
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
@@ -3109,9 +3107,9 @@ class ComposerStaticInitdc63d1d77983e59462b2fefb99369e9f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdc63d1d77983e59462b2fefb99369e9f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdc63d1d77983e59462b2fefb99369e9f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdc63d1d77983e59462b2fefb99369e9f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4c19a11cec9502c9c4467a6cbcd5d90c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4c19a11cec9502c9c4467a6cbcd5d90c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4c19a11cec9502c9c4467a6cbcd5d90c::$classMap;
 
         }, null, ClassLoader::class);
     }
