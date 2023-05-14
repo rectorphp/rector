@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Php80\Rector\Class_;
 
-use PhpParser\Node\Expr;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
