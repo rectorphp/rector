@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit77e6a482da193fd652cfd0c58417d900
+class ComposerStaticInita45dccfe8a7ea22904f9b8ba9f59e519
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2687,7 +2687,6 @@ class ComposerStaticInit77e6a482da193fd652cfd0c58417d900
         'Rector\\Renaming\\ValueObject\\RenameProperty' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameProperty.php',
         'Rector\\Renaming\\ValueObject\\RenameStaticMethod' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameStaticMethod.php',
         'Rector\\Renaming\\ValueObject\\RenamedNamespace' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenamedNamespace.php',
-        'Rector\\Restoration\\Rector\\Property\\MakeTypedPropertyNullableIfCheckedRector' => __DIR__ . '/../..' . '/rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php',
         'Rector\\Set\\Contract\\SetListInterface' => __DIR__ . '/../..' . '/packages/Set/Contract/SetListInterface.php',
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
@@ -3106,9 +3105,9 @@ class ComposerStaticInit77e6a482da193fd652cfd0c58417d900
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit77e6a482da193fd652cfd0c58417d900::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit77e6a482da193fd652cfd0c58417d900::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit77e6a482da193fd652cfd0c58417d900::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita45dccfe8a7ea22904f9b8ba9f59e519::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita45dccfe8a7ea22904f9b8ba9f59e519::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita45dccfe8a7ea22904f9b8ba9f59e519::$classMap;
 
         }, null, ClassLoader::class);
     }

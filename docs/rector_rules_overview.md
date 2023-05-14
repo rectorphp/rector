@@ -1,4 +1,4 @@
-# 408 Rules Overview
+# 406 Rules Overview
 
 <br>
 
@@ -57,8 +57,6 @@
 - [RemovingStatic](#removingstatic) (1)
 
 - [Renaming](#renaming) (11)
-
-- [Restoration](#restoration) (2)
 
 - [Strict](#strict) (6)
 
@@ -7339,50 +7337,6 @@ return static function (RectorConfig $rectorConfig): void {
      {
 -        return 'ROLE_PREVIOUS_ADMIN';
 +        return 'IS_IMPERSONATOR';
-     }
- }
-```
-
-<br>
-
-## Restoration
-
-### MakeTypedPropertyNullableIfCheckedRector
-
-Make typed property nullable if checked
-
-- class: [`Rector\Restoration\Rector\Property\MakeTypedPropertyNullableIfCheckedRector`](../rules/Restoration/Rector/Property/MakeTypedPropertyNullableIfCheckedRector.php)
-
-```diff
- final class SomeClass
- {
--    private AnotherClass $anotherClass;
-+    private ?AnotherClass $anotherClass = null;
-
-     public function run()
-     {
-         if ($this->anotherClass === null) {
-             $this->anotherClass = new AnotherClass;
-         }
-     }
- }
-```
-
-<br>
-
-### MissingClassConstantReferenceToStringRector
-
-Convert missing class reference to string
-
-- class: [`Rector\Restoration\Rector\ClassConstFetch\MissingClassConstantReferenceToStringRector`](../rules/Restoration/Rector/ClassConstFetch/MissingClassConstantReferenceToStringRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        return NonExistingClass::class;
-+        return 'NonExistingClass';
      }
  }
 ```
