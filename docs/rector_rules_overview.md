@@ -1163,9 +1163,6 @@ Remove `sprintf()` wrapper if not needed
  {
      public function run()
      {
--        $value = sprintf('%s', 'hi');
-+        $value = 'hi';
-
          $welcome = 'hello';
 -        $value = sprintf('%s', $welcome);
 +        $value = $welcome;
@@ -1989,8 +1986,6 @@ Changes various implode forms to consistent one
 -        $itemsAsStrings = implode($items, '|');
 +        $itemsAsStrings = implode('', $items);
 +        $itemsAsStrings = implode('|', $items);
-
-         $itemsAsStrings = implode('|', $items);
      }
  }
 ```
@@ -4850,13 +4845,13 @@ Changes PHP 4 style constructor to __construct.
 
 ### RandomFunctionRector
 
-Changes rand, srand and getrandmax by new mt_* alternatives.
+Changes rand, srand, mt_rand and getrandmax to newer alternatives.
 
 - class: [`Rector\Php70\Rector\FuncCall\RandomFunctionRector`](../rules/Php70/Rector/FuncCall/RandomFunctionRector.php)
 
 ```diff
 -rand();
-+mt_rand();
++random_int();
 ```
 
 <br>
