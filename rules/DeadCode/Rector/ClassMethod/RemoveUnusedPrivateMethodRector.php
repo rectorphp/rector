@@ -8,8 +8,10 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer;
@@ -18,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector\RemoveUnusedPrivateMethodRectorTest
  */
-final class RemoveUnusedPrivateMethodRector extends AbstractRector
+final class RemoveUnusedPrivateMethodRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -72,12 +74,12 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node)) {
+        if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $scope)) {
             return null;
         }
         if ($this->hasDynamicMethodCallOnFetchThis($node)) {

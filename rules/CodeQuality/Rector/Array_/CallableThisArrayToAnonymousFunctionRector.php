@@ -96,7 +96,7 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
+        $arrayCallable = $this->arrayCallableMethodMatcher->match($node, $scope);
         if (!$arrayCallable instanceof ArrayCallable) {
             return null;
         }

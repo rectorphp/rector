@@ -8,9 +8,11 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
@@ -22,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see PHP 8.1 way to handle functions/filters https://github.com/symfony/symfony/blob/e0ad2eead3513a558c09d8aa3ae9e867fb10b419/src/Symfony/Bridge/Twig/Extension/CodeExtension.php#L41-L52
  */
-final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractRector
+final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -95,7 +97,7 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if (!$this->nodeTypeResolver->isObjectTypes($node, [new ObjectType('Twig_ExtensionInterface'), new ObjectType('Twig\\Extension\\ExtensionInterface')])) {
             return null;
@@ -103,26 +105,26 @@ CODE_SAMPLE
         $hasFunctionsChanged = \false;
         $getFunctionsClassMethod = $node->getMethod('getFunctions');
         if ($getFunctionsClassMethod instanceof ClassMethod) {
-            $hasFunctionsChanged = $this->refactorClassMethod($node, $getFunctionsClassMethod);
+            $hasFunctionsChanged = $this->refactorClassMethod($node, $getFunctionsClassMethod, $scope);
         }
         $hasFiltersChanged = \false;
         $getFiltersClassMethod = $node->getMethod('getFilters');
         if ($getFiltersClassMethod instanceof ClassMethod) {
-            $hasFiltersChanged = $this->refactorClassMethod($node, $getFiltersClassMethod);
+            $hasFiltersChanged = $this->refactorClassMethod($node, $getFiltersClassMethod, $scope);
         }
         if ($hasFiltersChanged || $hasFunctionsChanged) {
             return $node;
         }
         return null;
     }
-    private function refactorClassMethod(Class_ $class, ClassMethod $classMethod) : bool
+    private function refactorClassMethod(Class_ $class, ClassMethod $classMethod, Scope $scope) : bool
     {
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($classMethod, function (Node $node) use(&$hasChanged, $class) : ?Node {
+        $this->traverseNodesWithCallable($classMethod, function (Node $node) use(&$hasChanged, $class, $scope) : ?Node {
             if (!$node instanceof Array_) {
                 return null;
             }
-            $arrayCallable = $this->arrayCallableMethodMatcher->match($node);
+            $arrayCallable = $this->arrayCallableMethodMatcher->match($node, $scope);
             if (!$arrayCallable instanceof ArrayCallable) {
                 return null;
             }
