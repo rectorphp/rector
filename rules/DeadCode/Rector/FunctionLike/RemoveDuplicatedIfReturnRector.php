@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\FunctionLike;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -18,7 +17,6 @@ use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DeadCode\NodeCollector\ModifiedVariableNamesCollector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -100,10 +98,10 @@ CODE_SAMPLE
         if ($ifWithOnlyReturnsByHash === []) {
             return null;
         }
-        $hasRemovedNode = \false;
+        $hasChanged = \false;
         foreach ($ifWithOnlyReturnsByHash as $ifWithOnlyReturns) {
             $isBool = $this->isBoolVarIfCondReturnTrueNextReturnBoolVar($ifWithOnlyReturns);
-            if (!$isBool && \count($ifWithOnlyReturns) < 2) {
+            if (\count($ifWithOnlyReturns) < 2) {
                 continue;
             }
             if (!$isBool) {
@@ -112,10 +110,10 @@ CODE_SAMPLE
             }
             foreach ($ifWithOnlyReturns as $ifWithOnlyReturn) {
                 $this->removeNode($ifWithOnlyReturn);
-                $hasRemovedNode = \true;
+                $hasChanged = \true;
             }
         }
-        if ($hasRemovedNode) {
+        if ($hasChanged) {
             return $node;
         }
         return null;
@@ -128,35 +126,15 @@ CODE_SAMPLE
         if (\count($ifWithOnlyReturns) > 1) {
             return \false;
         }
-        /** @var Expr $cond */
         $cond = $ifWithOnlyReturns[0]->cond;
         if (!\in_array(\get_class($cond), [Variable::class, PropertyFetch::class, StaticPropertyFetch::class], \true)) {
             return \false;
         }
         $type = $this->nodeTypeResolver->getType($cond);
-        if (!$type->isBoolean()->yes()) {
-            return \false;
-        }
-        $nextNode = $ifWithOnlyReturns[0]->getAttribute(AttributeKey::NEXT_NODE);
-        if (!$nextNode instanceof Return_) {
-            return \false;
-        }
-        $expr = $nextNode->expr;
-        if (!$expr instanceof Expr) {
-            return \false;
-        }
-        if (!$this->nodeComparator->areNodesEqual($expr, $cond)) {
-            return \false;
-        }
-        /** @var Return_ $returnStmt */
-        $returnStmt = $ifWithOnlyReturns[0]->stmts[0];
-        if (!$returnStmt->expr instanceof Expr) {
-            return \false;
-        }
-        return $this->valueResolver->isValue($returnStmt->expr, \true);
+        return $type->isBoolean()->yes();
     }
     /**
-     * @return If_[][]
+     * @return array<string, If_[]>
      */
     private function collectDuplicatedIfWithOnlyReturnByHash(FunctionLike $functionLike) : array
     {
