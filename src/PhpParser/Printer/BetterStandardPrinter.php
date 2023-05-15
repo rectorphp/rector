@@ -167,10 +167,26 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     protected function p(Node $node, $parentFormatPreserved = \false) : string
     {
         $content = parent::p($node, $parentFormatPreserved);
-        if ($node instanceof Expr) {
-            $content = $this->resolveContentOnExpr($node, $content);
-        }
         return $node->getAttribute(AttributeKey::WRAPPED_IN_PARENTHESES) === \true ? '(' . $content . ')' : $content;
+    }
+    protected function pExpr_ArrowFunction(ArrowFunction $arrowFunction) : string
+    {
+        if (!$arrowFunction->hasAttribute(AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED)) {
+            return parent::pExpr_ArrowFunction($arrowFunction);
+        }
+        $expr = $arrowFunction->expr;
+        /** @var Comment[] $comments */
+        $comments = $expr->getAttribute(AttributeKey::COMMENTS) ?? [];
+        if ($comments === []) {
+            return parent::pExpr_ArrowFunction($arrowFunction);
+        }
+        $indent = \str_repeat($this->tabOrSpaceIndentCharacter, $this->indentLevel) . \str_repeat($this->tabOrSpaceIndentCharacter, $this->rectorConfigProvider->getIndentSize());
+        $text = "\n" . $indent;
+        foreach ($comments as $key => $comment) {
+            $commentText = $key > 0 ? $indent . $comment->getText() : $comment->getText();
+            $text .= $commentText . "\n";
+        }
+        return $this->pAttrGroups($arrowFunction->attrGroups, \true) . ($arrowFunction->static ? 'static ' : '') . 'fn' . ($arrowFunction->byRef ? '&' : '') . '(' . $this->pCommaSeparated($arrowFunction->params) . ')' . ($arrowFunction->returnType !== null ? ': ' . $this->p($arrowFunction->returnType) : '') . ' =>' . $text . $indent . $this->p($arrowFunction->expr);
     }
     /**
      * This allows to use both spaces and tabs vs. original space-only
@@ -445,29 +461,6 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     private function shouldPrintNewRawValue($lNumber) : bool
     {
         return $lNumber->getAttribute(AttributeKey::REPRINT_RAW_VALUE) === \true;
-    }
-    private function resolveContentOnExpr(Expr $expr, string $content) : string
-    {
-        $parentNode = $expr->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof ArrowFunction) {
-            return $content;
-        }
-        if ($parentNode->expr !== $expr) {
-            return $content;
-        }
-        if (!$parentNode->hasAttribute(AttributeKey::COMMENT_CLOSURE_RETURN_MIRRORED)) {
-            return $content;
-        }
-        /** @var Comment[] $comments */
-        $comments = $expr->getAttribute(AttributeKey::COMMENTS) ?? [];
-        if ($comments === []) {
-            return $content;
-        }
-        $text = '';
-        foreach ($comments as $comment) {
-            $text .= $comment->getText() . "\n";
-        }
-        return $content = $text . $content;
     }
     /**
      * @param Node[] $stmts
