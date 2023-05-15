@@ -23,9 +23,7 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer;
 use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -113,23 +111,8 @@ CODE_SAMPLE
         if (!$binaryOp instanceof BinaryOp) {
             return null;
         }
-        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
-        // avoid duplicated ifs when combined with ChangeOrIfReturnToEarlyReturnRector
-        if ($this->shouldSkip($conditionStaticType, $binaryOp, $nextNode)) {
-            return null;
-        }
         $node->cond = $binaryOp;
         return $node;
-    }
-    private function shouldSkip(Type $conditionStaticType, BinaryOp $binaryOp, ?Node $nextNode) : bool
-    {
-        if (!$conditionStaticType->isString()->yes()) {
-            return \false;
-        }
-        if (!$binaryOp instanceof BooleanOr) {
-            return \false;
-        }
-        return !$nextNode instanceof Node;
     }
     private function resolveNewConditionNode(Expr $expr, bool $isNegated) : ?BinaryOp
     {
