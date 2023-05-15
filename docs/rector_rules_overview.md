@@ -1,4 +1,4 @@
-# 405 Rules Overview
+# 403 Rules Overview
 
 <br>
 
@@ -60,9 +60,9 @@
 
 - [Strict](#strict) (6)
 
-- [Transform](#transform) (30)
+- [Transform](#transform) (29)
 
-- [TypeDeclaration](#typedeclaration) (40)
+- [TypeDeclaration](#typedeclaration) (39)
 
 - [Visibility](#visibility) (3)
 
@@ -8617,41 +8617,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-### ToStringToMethodCallRector
-
-Turns defined code uses of `"__toString()"` method  to specific method calls.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\String_\ToStringToMethodCallRector`](../rules/Transform/Rector/String_/ToStringToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\String_\ToStringToMethodCallRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ToStringToMethodCallRector::class, [
-        'SomeObject' => 'getPath',
-    ]);
-};
-```
-
-↓
-
-```diff
- $someValue = new SomeObject;
--$result = (string) $someValue;
--$result = $someValue->__toString();
-+$result = $someValue->getPath();
-+$result = $someValue->getPath();
-```
-
-<br>
-
 ### UnsetAndIssetToMethodCallRector
 
 Turns defined `__isset`/`__unset` calls to specific method calls.
@@ -9133,33 +9098,6 @@ Change `empty()` on nullable object to instanceof check
          }
 
          return true;
-     }
- }
-```
-
-<br>
-
-### FalseReturnClassMethodToNullableRector
-
-Change class method that returns false as invalid state, to nullable
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\FalseReturnClassMethodToNullableRector`](../rules/TypeDeclaration/Rector/ClassMethod/FalseReturnClassMethodToNullableRector.php)
-
-```diff
- class SomeClass
- {
--    /**
--     * @return false|int
--     */
--    public function run(int $number)
-+    public function run(int $number): ?int
-     {
-         if ($number === 10) {
--            return false;
-+            return null;
-         }
-
-         return $number;
      }
  }
 ```
