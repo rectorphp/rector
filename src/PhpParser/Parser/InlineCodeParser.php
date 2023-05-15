@@ -7,14 +7,14 @@ use RectorPrefix202305\Nette\Utils\FileSystem;
 use RectorPrefix202305\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Util\StringUtils;
-use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Core\ValueObject\Application\File;
 final class InlineCodeParser
 {
     /**
@@ -67,11 +67,17 @@ final class InlineCodeParser
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
-    public function __construct(NodePrinterInterface $nodePrinter, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\Provider\CurrentFileProvider
+     */
+    private $currentFileProvider;
+    public function __construct(NodePrinterInterface $nodePrinter, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver, CurrentFileProvider $currentFileProvider)
     {
         $this->nodePrinter = $nodePrinter;
         $this->simplePhpParser = $simplePhpParser;
         $this->valueResolver = $valueResolver;
+        $this->currentFileProvider = $currentFileProvider;
     }
     /**
      * @return Stmt[]
@@ -132,9 +138,11 @@ final class InlineCodeParser
         if ($concat->left instanceof Concat && $concat->right instanceof String_ && \strncmp($concat->right->value, '$', \strlen('$')) === 0) {
             $concat->right->value = '.' . $concat->right->value;
         }
-        if ($concat->right instanceof String_ && \strncmp($concat->right->value, '($', \strlen('($')) === 0) {
-            $node = $concat->getAttribute(AttributeKey::NEXT_NODE);
-            if ($node instanceof Variable) {
+        $file = $this->currentFileProvider->getFile();
+        if ($concat->right instanceof String_ && \strncmp($concat->right->value, '($', \strlen('($')) === 0 && $file instanceof File) {
+            $oldTokens = $file->getOldTokens();
+            $endTokenPos = $concat->right->getEndTokenPos();
+            if (isset($oldTokens[$endTokenPos][1]) && \strncmp((string) $oldTokens[$endTokenPos][1], "'(\$", \strlen("'(\$")) === 0) {
                 $concat->right->value .= '.';
             }
         }

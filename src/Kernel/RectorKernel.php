@@ -14,7 +14,7 @@ final class RectorKernel
     /**
      * @var string
      */
-    private const CACHE_KEY = 'v7';
+    private const CACHE_KEY = 'v8';
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
      */
@@ -52,11 +52,7 @@ final class RectorKernel
         if ($configFiles === []) {
             return $this->buildContainer([]);
         }
-        if ($this->dumpFileCache) {
-            $container = $this->buildCachedContainer($configFiles);
-        } else {
-            $container = $this->buildContainer($configFiles);
-        }
+        $container = $this->dumpFileCache ? $this->buildCachedContainer($configFiles) : $this->buildContainer($configFiles);
         return $this->container = $container;
     }
     /**
