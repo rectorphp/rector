@@ -1340,7 +1340,6 @@ return array(
     'Rector\\CodingStyle\\Rector\\MethodCall\\PreferThisOrSelfMethodCallRector' => $baseDir . '/rules/CodingStyle/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php',
     'Rector\\CodingStyle\\Rector\\Plus\\UseIncrementAssignRector' => $baseDir . '/rules/CodingStyle/Rector/Plus/UseIncrementAssignRector.php',
     'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => $baseDir . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
-    'Rector\\CodingStyle\\Rector\\Property\\AddFalseDefaultToBoolPropertyRector' => $baseDir . '/rules/CodingStyle/Rector/Property/AddFalseDefaultToBoolPropertyRector.php',
     'Rector\\CodingStyle\\Rector\\Property\\NullifyUnionNullableRector' => $baseDir . '/rules/CodingStyle/Rector/Property/NullifyUnionNullableRector.php',
     'Rector\\CodingStyle\\Rector\\Property\\SplitGroupedPropertiesRector' => $baseDir . '/rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php',
     'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => $baseDir . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',

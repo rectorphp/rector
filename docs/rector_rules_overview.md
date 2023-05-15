@@ -1,4 +1,4 @@
-# 406 Rules Overview
+# 405 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (76)
 
-- [CodingStyle](#codingstyle) (35)
+- [CodingStyle](#codingstyle) (34)
 
 - [Compatibility](#compatibility) (1)
 
@@ -1860,25 +1860,6 @@ Adds array default value to property to prevent foreach over null error
 -        return $this->values === null;
 +        return $this->values === [];
      }
- }
-```
-
-<br>
-
-### AddFalseDefaultToBoolPropertyRector
-
-Add false default to bool properties, to prevent null compare errors
-
-- class: [`Rector\CodingStyle\Rector\Property\AddFalseDefaultToBoolPropertyRector`](../rules/CodingStyle/Rector/Property/AddFalseDefaultToBoolPropertyRector.php)
-
-```diff
- class SomeClass
- {
-     /**
-      * @var bool
-      */
--    private $isDisabled;
-+    private $isDisabled = false;
  }
 ```
 
