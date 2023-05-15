@@ -13,6 +13,7 @@ use Rector\Core\Console\ExitCode;
 use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\Util\MemoryLimiter;
 use Rector\Core\Validation\EmptyConfigurableRectorChecker;
@@ -140,6 +141,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         $optionClearCache = (bool) $input->getOption(Option::CLEAR_CACHE);
         if ($optionDebug || $optionClearCache) {
             $this->changedFilesDetector->clear();
+            RectorKernel::clearCache();
         }
     }
     /**

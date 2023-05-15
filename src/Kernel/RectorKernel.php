@@ -3,57 +3,61 @@
 declare (strict_types=1);
 namespace Rector\Core\Kernel;
 
-use Rector\Core\Config\Loader\ConfigureCallMergingLoaderFactory;
-use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
-use Rector\Core\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
-use Rector\Core\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
-use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
-use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
-use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Rector\Core\Util\FileHasher;
+use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202305\Webmozart\Assert\Assert;
 final class RectorKernel
 {
     /**
-     * @readonly
-     * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
+     * @var string
      */
-    private $configureCallValuesCollector;
+    private const CACHE_KEY = 'v7';
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
      */
     private $container = null;
+    /**
+     * @var bool
+     */
+    private $dumpFileCache = \false;
+    /**
+     * @var string|null
+     */
+    private static $defaultFilesHash;
     public function __construct()
     {
-        $this->configureCallValuesCollector = new ConfigureCallValuesCollector();
-    }
-    /**
-     * @api used in tests
-     */
-    public function create() : ContainerInterface
-    {
-        return $this->createFromConfigs([]);
+        // while running tests we use different DI containers a lot,
+        // therefore make sure we don't compile them over and over again.
+        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            $this->dumpFileCache = \true;
+        }
     }
     /**
      * @param string[] $configFiles
+     * @api used in tests
      */
-    public function createFromConfigs(array $configFiles) : ContainerBuilder
+    public function createBuilder(array $configFiles = []) : ContainerBuilder
     {
-        $defaultConfigFiles = $this->createDefaultConfigFiles();
-        $configFiles = \array_merge($defaultConfigFiles, $configFiles);
-        $compilerPasses = $this->createCompilerPasses();
-        $configureCallMergingLoaderFactory = new ConfigureCallMergingLoaderFactory($this->configureCallValuesCollector);
-        $containerBuilderFactory = new \Rector\Core\Kernel\ContainerBuilderFactory($configureCallMergingLoaderFactory);
-        $containerBuilder = $containerBuilderFactory->create($configFiles, $compilerPasses);
-        // @see https://symfony.com/blog/new-in-symfony-4-4-dependency-injection-improvements-part-1
-        $containerBuilder->setParameter('container.dumper.inline_factories', \true);
-        // to fix reincluding files again
-        $containerBuilder->setParameter('container.dumper.inline_class_loader', \false);
-        $containerBuilder->compile();
-        $this->container = $containerBuilder;
-        return $containerBuilder;
+        return $this->buildContainer($configFiles);
+    }
+    /**
+     * @param string[] $configFiles
+     * @api used in tests
+     */
+    public function createFromConfigs(array $configFiles) : ContainerInterface
+    {
+        if ($configFiles === []) {
+            return $this->buildContainer([]);
+        }
+        if ($this->dumpFileCache) {
+            $container = $this->buildCachedContainer($configFiles);
+        } else {
+            $container = $this->buildContainer($configFiles);
+        }
+        return $this->container = $container;
     }
     /**
      * @api used in tests
@@ -65,21 +69,10 @@ final class RectorKernel
         }
         return $this->container;
     }
-    /**
-     * @return CompilerPassInterface[]
-     */
-    private function createCompilerPasses() : array
+    public static function clearCache() : void
     {
-        return [
-            // must run before AutowireArrayParameterCompilerPass, as the autowired array cannot contain removed services
-            new RemoveSkippedRectorsCompilerPass(),
-            // autowire Rectors by default (mainly for tests)
-            new AutowireRectorCompilerPass(),
-            new MakeRectorsPublicCompilerPass(),
-            // add all merged arguments of Rector services
-            new MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector),
-            new AutowireArrayParameterCompilerPass(),
-        ];
+        $cachedContainerBuilder = new \Rector\Core\Kernel\CachedContainerBuilder(self::getCacheDir(), self::CACHE_KEY);
+        $cachedContainerBuilder->clearCache();
     }
     /**
      * @return string[]
@@ -87,5 +80,45 @@ final class RectorKernel
     private function createDefaultConfigFiles() : array
     {
         return [__DIR__ . '/../../config/config.php'];
+    }
+    /**
+     * @param string[] $configFiles
+     */
+    private function createConfigsHash(array $configFiles) : string
+    {
+        $fileHasher = new FileHasher();
+        if (self::$defaultFilesHash === null) {
+            self::$defaultFilesHash = $fileHasher->hashFiles($this->createDefaultConfigFiles());
+        }
+        Assert::allString($configFiles);
+        $configHash = $fileHasher->hashFiles($configFiles);
+        return self::$defaultFilesHash . $configHash;
+    }
+    /**
+     * @param string[] $configFiles
+     */
+    private function buildContainer(array $configFiles) : ContainerBuilder
+    {
+        $defaultConfigFiles = $this->createDefaultConfigFiles();
+        $configFiles = \array_merge($defaultConfigFiles, $configFiles);
+        $containerBuilderBuilder = new \Rector\Core\Kernel\ContainerBuilderBuilder();
+        return $this->container = $containerBuilderBuilder->build($configFiles);
+    }
+    /**
+     * @param string[] $configFiles
+     */
+    private function buildCachedContainer(array $configFiles) : ContainerInterface
+    {
+        $hash = $this->createConfigsHash($configFiles);
+        $cachedContainerBuilder = new \Rector\Core\Kernel\CachedContainerBuilder(self::getCacheDir(), self::CACHE_KEY);
+        return $cachedContainerBuilder->build($configFiles, $hash, function (array $configFiles) : ContainerBuilder {
+            return $this->buildContainer($configFiles);
+        });
+    }
+    private static function getCacheDir() : string
+    {
+        // we use the system temp dir only in our test-suite as we cannot reliably use it anywhere
+        // see https://github.com/rectorphp/rector/issues/7700
+        return \sys_get_temp_dir() . '/rector/';
     }
 }

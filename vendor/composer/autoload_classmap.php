@@ -1440,6 +1440,8 @@ return array(
     'Rector\\Core\\FileSystem\\FilesystemTweaker' => $baseDir . '/src/FileSystem/FilesystemTweaker.php',
     'Rector\\Core\\FileSystem\\InitFilePathsResolver' => $baseDir . '/src/FileSystem/InitFilePathsResolver.php',
     'Rector\\Core\\FileSystem\\PhpFilesFinder' => $baseDir . '/src/FileSystem/PhpFilesFinder.php',
+    'Rector\\Core\\Kernel\\CachedContainerBuilder' => $baseDir . '/src/Kernel/CachedContainerBuilder.php',
+    'Rector\\Core\\Kernel\\ContainerBuilderBuilder' => $baseDir . '/src/Kernel/ContainerBuilderBuilder.php',
     'Rector\\Core\\Kernel\\ContainerBuilderFactory' => $baseDir . '/src/Kernel/ContainerBuilderFactory.php',
     'Rector\\Core\\Kernel\\RectorKernel' => $baseDir . '/src/Kernel/RectorKernel.php',
     'Rector\\Core\\Logging\\CurrentRectorProvider' => $baseDir . '/src/Logging/CurrentRectorProvider.php',
