@@ -62,7 +62,7 @@ final class CurrentAndParentClassMethodComparator
         if (!$this->areArgsAndParamsEqual($staticCall->args, $classMethod->params)) {
             return \false;
         }
-        if (!$this->parameterTypeComparator->isClassMethodIdenticalToParentStaticCall($classMethod, $staticCall)) {
+        if (!$this->parameterTypeComparator->isClassMethodIdenticalToParentStaticCall($classMethod, $staticCall, $scope)) {
             return \false;
         }
         return !$this->isParentClassMethodVisibilityOrDefaultOverride($classMethod, $staticCall, $scope);

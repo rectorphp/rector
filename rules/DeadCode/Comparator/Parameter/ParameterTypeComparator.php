@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Comparator\Parameter;
 
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\MethodParameterTypeResolver;
 final class ParameterTypeComparator
 {
@@ -17,10 +18,10 @@ final class ParameterTypeComparator
     {
         $this->methodParameterTypeResolver = $methodParameterTypeResolver;
     }
-    public function isClassMethodIdenticalToParentStaticCall(ClassMethod $classMethod, StaticCall $staticCall) : bool
+    public function isClassMethodIdenticalToParentStaticCall(ClassMethod $classMethod, StaticCall $staticCall, Scope $scope) : bool
     {
-        $currentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByClassMethod($classMethod);
-        $parentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByStaticCall($staticCall);
+        $currentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByClassMethod($classMethod, $scope);
+        $parentParameterTypes = $this->methodParameterTypeResolver->provideParameterTypesByStaticCall($staticCall, $scope);
         foreach ($currentParameterTypes as $key => $currentParameterType) {
             if (!isset($parentParameterTypes[$key])) {
                 continue;
