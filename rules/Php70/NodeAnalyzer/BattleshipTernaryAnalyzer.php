@@ -33,9 +33,6 @@ final class BattleshipTernaryAnalyzer
      */
     public function isGreaterLowerCompareReturnOneAndMinusOne(Ternary $ternary, ComparedExprs $comparedExprs) : ?string
     {
-        if (!$ternary->if instanceof Expr) {
-            return null;
-        }
         if ($ternary->cond instanceof Greater) {
             return $this->evaluateGreater($ternary->cond, $ternary, $comparedExprs);
         }
@@ -56,19 +53,16 @@ final class BattleshipTernaryAnalyzer
         if (!$ternary->if instanceof Expr) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($greater->left, $comparedExprs->getFirstExpr())) {
+        if ($this->nodeComparator->areNodesEqual($greater->left, $comparedExprs->getFirstExpr()) && $this->nodeComparator->areNodesEqual($greater->right, $comparedExprs->getSecondExpr())) {
+            return $this->evaluateTernaryDesc($ternary);
+        }
+        if (!$this->nodeComparator->areNodesEqual($greater->right, $comparedExprs->getFirstExpr())) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($greater->right, $comparedExprs->getSecondExpr())) {
+        if (!$this->nodeComparator->areNodesEqual($greater->left, $comparedExprs->getSecondExpr())) {
             return null;
         }
-        if ($this->isValueOneAndMinusOne($ternary->if, $ternary->else)) {
-            return BattleshipCompareOrder::DESC;
-        }
-        if ($this->isValueOneAndMinusOne($ternary->else, $ternary->if)) {
-            return BattleshipCompareOrder::ASC;
-        }
-        return null;
+        return $this->evaluateTernaryAsc($ternary);
     }
     /**
      * We look for:
@@ -82,10 +76,30 @@ final class BattleshipTernaryAnalyzer
         if (!$ternary->if instanceof Expr) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($smaller->left, $comparedExprs->getFirstExpr())) {
+        if ($this->nodeComparator->areNodesEqual($smaller->left, $comparedExprs->getFirstExpr()) && $this->nodeComparator->areNodesEqual($smaller->right, $comparedExprs->getSecondExpr())) {
+            return $this->evaluateTernaryAsc($ternary);
+        }
+        if (!$this->nodeComparator->areNodesEqual($smaller->right, $comparedExprs->getFirstExpr())) {
             return null;
         }
-        if (!$this->nodeComparator->areNodesEqual($smaller->right, $comparedExprs->getSecondExpr())) {
+        if (!$this->nodeComparator->areNodesEqual($smaller->left, $comparedExprs->getSecondExpr())) {
+            return null;
+        }
+        return $this->evaluateTernaryDesc($ternary);
+    }
+    private function isValueOneAndMinusOne(Expr $firstExpr, Expr $seconcExpr) : bool
+    {
+        if (!$this->valueResolver->isValue($firstExpr, 1)) {
+            return \false;
+        }
+        return $this->valueResolver->isValue($seconcExpr, -1);
+    }
+    /**
+     * @return BattleshipCompareOrder::*|null
+     */
+    private function evaluateTernaryAsc(Ternary $ternary) : ?string
+    {
+        if (!$ternary->if instanceof Expr) {
             return null;
         }
         if ($this->isValueOneAndMinusOne($ternary->if, $ternary->else)) {
@@ -96,11 +110,20 @@ final class BattleshipTernaryAnalyzer
         }
         return null;
     }
-    private function isValueOneAndMinusOne(Expr $firstExpr, Expr $seconcExpr) : bool
+    /**
+     * @return BattleshipCompareOrder::*|null
+     */
+    private function evaluateTernaryDesc(Ternary $ternary) : ?string
     {
-        if (!$this->valueResolver->isValue($firstExpr, 1)) {
-            return \false;
+        if (!$ternary->if instanceof Expr) {
+            return null;
         }
-        return $this->valueResolver->isValue($seconcExpr, -1);
+        if ($this->isValueOneAndMinusOne($ternary->if, $ternary->else)) {
+            return BattleshipCompareOrder::DESC;
+        }
+        if ($this->isValueOneAndMinusOne($ternary->else, $ternary->if)) {
+            return BattleshipCompareOrder::ASC;
+        }
+        return null;
     }
 }
