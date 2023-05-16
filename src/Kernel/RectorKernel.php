@@ -35,7 +35,7 @@ final class RectorKernel
         if (!StaticPHPUnitEnvironment::isPHPUnitRun()) {
             return;
         }
-        if (VersionResolver::PACKAGE_VERSION !== '@package_version@') {
+        if ($this->isPrefixedBuild()) {
             return;
         }
         $this->dumpFileCache = \true;
@@ -121,5 +121,9 @@ final class RectorKernel
         // we use the system temp dir only in our test-suite as we cannot reliably use it anywhere
         // see https://github.com/rectorphp/rector/issues/7700
         return \sys_get_temp_dir() . '/rector/';
+    }
+    private function isPrefixedBuild() : bool
+    {
+        return VersionResolver::PACKAGE_VERSION !== '@package_version@';
     }
 }
