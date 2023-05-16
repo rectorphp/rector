@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbecc49e92c90914d9f48d7a2c7da99f5
+class ComposerStaticInit527c958222df83203b5281f72b24c52b
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2413,8 +2413,10 @@ class ComposerStaticInitbecc49e92c90914d9f48d7a2c7da99f5
         'Rector\\Php56\\NodeAnalyzer\\UndefinedVariableResolver' => __DIR__ . '/../..' . '/rules/Php56/NodeAnalyzer/UndefinedVariableResolver.php',
         'Rector\\Php56\\Rector\\FuncCall\\PowToExpRector' => __DIR__ . '/../..' . '/rules/Php56/Rector/FuncCall/PowToExpRector.php',
         'Rector\\Php56\\Rector\\FunctionLike\\AddDefaultValueForUndefinedVariableRector' => __DIR__ . '/../..' . '/rules/Php56/Rector/FunctionLike/AddDefaultValueForUndefinedVariableRector.php',
+        'Rector\\Php70\\Enum\\BattleshipCompareOrder' => __DIR__ . '/../..' . '/rules/Php70/Enum/BattleshipCompareOrder.php',
         'Rector\\Php70\\EregToPcreTransformer' => __DIR__ . '/../..' . '/rules/Php70/EregToPcreTransformer.php',
         'Rector\\Php70\\Exception\\InvalidEregException' => __DIR__ . '/../..' . '/rules/Php70/Exception/InvalidEregException.php',
+        'Rector\\Php70\\NodeAnalyzer\\BattleshipTernaryAnalyzer' => __DIR__ . '/../..' . '/rules/Php70/NodeAnalyzer/BattleshipTernaryAnalyzer.php',
         'Rector\\Php70\\NodeAnalyzer\\Php4ConstructorClassMethodAnalyzer' => __DIR__ . '/../..' . '/rules/Php70/NodeAnalyzer/Php4ConstructorClassMethodAnalyzer.php',
         'Rector\\Php70\\Rector\\Assign\\ListSplitStringRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Assign/ListSplitStringRector.php',
         'Rector\\Php70\\Rector\\Assign\\ListSwapArrayOrderRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Assign/ListSwapArrayOrderRector.php',
@@ -2434,6 +2436,7 @@ class ComposerStaticInitbecc49e92c90914d9f48d7a2c7da99f5
         'Rector\\Php70\\Rector\\Ternary\\TernaryToNullCoalescingRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Ternary/TernaryToNullCoalescingRector.php',
         'Rector\\Php70\\Rector\\Ternary\\TernaryToSpaceshipRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Ternary/TernaryToSpaceshipRector.php',
         'Rector\\Php70\\Rector\\Variable\\WrapVariableVariableNameInCurlyBracesRector' => __DIR__ . '/../..' . '/rules/Php70/Rector/Variable/WrapVariableVariableNameInCurlyBracesRector.php',
+        'Rector\\Php70\\ValueObject\\ComparedExprs' => __DIR__ . '/../..' . '/rules/Php70/ValueObject/ComparedExprs.php',
         'Rector\\Php71\\IsArrayAndDualCheckToAble' => __DIR__ . '/../..' . '/rules/Php71/IsArrayAndDualCheckToAble.php',
         'Rector\\Php71\\NodeAnalyzer\\CountableAnalyzer' => __DIR__ . '/../..' . '/rules/Php71/NodeAnalyzer/CountableAnalyzer.php',
         'Rector\\Php71\\Rector\\Assign\\AssignArrayToStringRector' => __DIR__ . '/../..' . '/rules/Php71/Rector/Assign/AssignArrayToStringRector.php',
@@ -3103,9 +3106,9 @@ class ComposerStaticInitbecc49e92c90914d9f48d7a2c7da99f5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbecc49e92c90914d9f48d7a2c7da99f5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbecc49e92c90914d9f48d7a2c7da99f5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbecc49e92c90914d9f48d7a2c7da99f5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit527c958222df83203b5281f72b24c52b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit527c958222df83203b5281f72b24c52b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit527c958222df83203b5281f72b24c52b::$classMap;
 
         }, null, ClassLoader::class);
     }
