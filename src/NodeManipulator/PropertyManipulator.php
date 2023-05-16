@@ -308,7 +308,7 @@ final class PropertyManipulator
             }
             $caller = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
             if ($caller instanceof MethodCall || $caller instanceof StaticCall) {
-                return $this->isFoundByRefParam($caller);
+                return $this->isFoundByRefParam($caller, $scope);
             }
         }
         if ($parentNode instanceof ArrayDimFetch) {
@@ -319,14 +319,10 @@ final class PropertyManipulator
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
      */
-    private function isFoundByRefParam($node) : bool
+    private function isFoundByRefParam($node, Scope $scope) : bool
     {
         $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($node);
         if ($functionLikeReflection === null) {
-            return \false;
-        }
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
             return \false;
         }
         $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionLikeReflection, $node, $scope);
