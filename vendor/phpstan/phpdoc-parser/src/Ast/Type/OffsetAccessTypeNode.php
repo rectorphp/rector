@@ -18,6 +18,9 @@ class OffsetAccessTypeNode implements \PHPStan\PhpDocParser\Ast\Type\TypeNode
     }
     public function __toString() : string
     {
+        if ($this->type instanceof \PHPStan\PhpDocParser\Ast\Type\CallableTypeNode || $this->type instanceof \PHPStan\PhpDocParser\Ast\Type\ConstTypeNode || $this->type instanceof \PHPStan\PhpDocParser\Ast\Type\NullableTypeNode) {
+            return '(' . $this->type . ')[' . $this->offset . ']';
+        }
         return $this->type . '[' . $this->offset . ']';
     }
 }

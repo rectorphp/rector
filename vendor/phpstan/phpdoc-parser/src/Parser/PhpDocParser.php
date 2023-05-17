@@ -252,7 +252,7 @@ class PhpDocParser
      */
     private function parseParamTagValue(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\PhpDocTagValueNode
     {
-        if ($tokens->isCurrentTokenType(Lexer::TOKEN_REFERENCE) || $tokens->isCurrentTokenType(Lexer::TOKEN_VARIADIC) || $tokens->isCurrentTokenType(Lexer::TOKEN_VARIABLE)) {
+        if ($tokens->isCurrentTokenType(Lexer::TOKEN_REFERENCE, Lexer::TOKEN_VARIADIC, Lexer::TOKEN_VARIABLE)) {
             $type = null;
         } else {
             $type = $this->typeParser->parse($tokens);

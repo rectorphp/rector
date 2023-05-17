@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038
+class ComposerStaticInit69afbb16f5a209e6e69a4b3d1ee730e9
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -322,6 +322,9 @@ class ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038
         'PHPStan\\PhpDocParser\\Parser\\StringUnescaper' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/StringUnescaper.php',
         'PHPStan\\PhpDocParser\\Parser\\TokenIterator' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TokenIterator.php',
         'PHPStan\\PhpDocParser\\Parser\\TypeParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TypeParser.php',
+        'PHPStan\\PhpDocParser\\Printer\\DiffElem' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Printer/DiffElem.php',
+        'PHPStan\\PhpDocParser\\Printer\\Differ' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Printer/Differ.php',
+        'PHPStan\\PhpDocParser\\Printer\\Printer' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Printer/Printer.php',
         'PhpParser\\Builder' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/Builder.php',
         'PhpParser\\BuilderFactory' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/BuilderFactory.php',
         'PhpParser\\BuilderHelpers' => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser/BuilderHelpers.php',
@@ -2239,6 +2242,7 @@ class ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StaticVariableNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StaticVariableNodeVisitor.php',
+        'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StmtKeyNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StmtKeyNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\ScopeFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/ScopeFactory.php',
         'Rector\\NodeTypeResolver\\PHPStan\\TypeHasher' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/TypeHasher.php',
@@ -3109,9 +3113,9 @@ class ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit69afbb16f5a209e6e69a4b3d1ee730e9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit69afbb16f5a209e6e69a4b3d1ee730e9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit69afbb16f5a209e6e69a4b3d1ee730e9::$classMap;
 
         }, null, ClassLoader::class);
     }

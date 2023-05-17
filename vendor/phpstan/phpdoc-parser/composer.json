@@ -6,6 +6,7 @@
         "php": "^7.2 || ^8.0"
     },
     "require-dev": {
+        "nikic\/php-parser": "^4.15",
         "php-parallel-lint\/php-parallel-lint": "^1.2",
         "phpstan\/extension-installer": "^1.0",
         "phpstan\/phpstan": "^1.5",

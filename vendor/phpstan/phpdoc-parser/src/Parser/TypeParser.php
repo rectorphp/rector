@@ -7,6 +7,7 @@ use LogicException;
 use PHPStan\PhpDocParser\Ast;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use function in_array;
+use function str_replace;
 use function strpos;
 use function trim;
 class TypeParser
@@ -549,7 +550,7 @@ class TypeParser
         $startIndex = $tokens->currentTokenIndex();
         $startLine = $tokens->currentTokenLine();
         if ($tokens->isCurrentTokenType(Lexer::TOKEN_INTEGER)) {
-            $key = new Ast\ConstExpr\ConstExprIntegerNode($tokens->currentTokenValue());
+            $key = new Ast\ConstExpr\ConstExprIntegerNode(str_replace('_', '', $tokens->currentTokenValue()));
             $tokens->next();
         } elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_SINGLE_QUOTED_STRING)) {
             if ($this->quoteAwareConstExprString) {
