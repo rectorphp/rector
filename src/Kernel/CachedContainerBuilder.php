@@ -43,11 +43,10 @@ final class CachedContainerBuilder
         if (\file_exists($file)) {
             require_once $file;
             $className = '\\' . __NAMESPACE__ . '\\' . $className;
-            $cachedContainer = new $className();
-            if (!$cachedContainer instanceof ContainerInterface) {
+            $container = new $className();
+            if (!$container instanceof ContainerInterface) {
                 throw new ShouldNotHappenException();
             }
-            $container = new \Rector\Core\Kernel\CacheInvalidatingContainer($cachedContainer);
         } else {
             $container = $containerBuilderCallback($configFiles);
             $phpDumper = new PhpDumper($container);
