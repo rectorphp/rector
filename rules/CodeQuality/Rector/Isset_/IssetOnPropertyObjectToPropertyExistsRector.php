@@ -7,14 +7,17 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
+use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
+use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -73,44 +76,48 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Isset_::class];
+        return [Isset_::class, BooleanNot::class];
     }
     /**
-     * @param Isset_ $node
+     * @param Isset_|BooleanNot $node
      */
     public function refactor(Node $node) : ?Node
     {
-        $newNodes = [];
-        foreach ($node->vars as $issetVar) {
-            if (!$issetVar instanceof PropertyFetch) {
-                continue;
+        $isNegated = \false;
+        if ($node instanceof BooleanNot) {
+            if ($node->expr instanceof Isset_) {
+                $isNegated = \true;
+                $isset = $node->expr;
+            } else {
+                return null;
             }
-            // Ignore dynamically accessed properties ($o->$p)
-            if ($issetVar->name instanceof Variable) {
+        } else {
+            $isset = $node;
+        }
+        $newNodes = [];
+        foreach ($isset->vars as $issetExpr) {
+            if (!$issetExpr instanceof PropertyFetch) {
                 continue;
             }
             // has property PHP 7.4 type?
-            if ($this->hasPropertyTypeDeclaration($issetVar)) {
+            if ($this->shouldSkipForPropertyTypeDeclaration($issetExpr)) {
                 continue;
             }
-            $propertyFetchName = $this->getName($issetVar->name);
-            if ($propertyFetchName === null) {
+            // Ignore dynamically accessed properties ($o->$p)
+            $propertyFetchName = $this->getName($issetExpr->name);
+            if (!\is_string($propertyFetchName)) {
                 continue;
             }
-            $propertyFetchVarType = $this->getType($issetVar->var);
-            if ($propertyFetchVarType instanceof TypeWithClassName) {
-                if ($propertyFetchVarType->getClassName() === 'stdClass') {
-                    continue;
-                }
-                if (!$this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {
-                    continue;
-                }
-                $classReflection = $this->reflectionProvider->getClass($propertyFetchVarType->getClassName());
-                if (!$classReflection->hasProperty($propertyFetchName) || $classReflection->isBuiltin()) {
-                    $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($issetVar->var, $propertyFetchName, $issetVar);
-                } else {
-                    $newNodes[] = $this->createNotIdenticalToNull($issetVar);
-                }
+            $classReflection = $this->matchPropertyTypeClassReflection($issetExpr);
+            if (!$classReflection instanceof ClassReflection) {
+                continue;
+            }
+            if (!$classReflection->hasProperty($propertyFetchName) || $classReflection->isBuiltin()) {
+                $newNodes[] = $this->replaceToPropertyExistsWithNullCheck($issetExpr->var, $propertyFetchName, $issetExpr);
+            } elseif ($isNegated) {
+                $newNodes[] = $this->createIdenticalToNull($issetExpr);
+            } else {
+                $newNodes[] = $this->createNotIdenticalToNull($issetExpr);
             }
         }
         return $this->nodeFactory->createReturnBooleanAnd($newNodes);
@@ -125,12 +132,42 @@ CODE_SAMPLE
     {
         return new NotIdentical($propertyFetch, $this->nodeFactory->createNull());
     }
-    private function hasPropertyTypeDeclaration(PropertyFetch $propertyFetch) : bool
+    private function shouldSkipForPropertyTypeDeclaration(PropertyFetch $propertyFetch) : bool
     {
         $phpPropertyReflection = $this->reflectionResolver->resolvePropertyReflectionFromPropertyFetch($propertyFetch);
         if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
             return \false;
         }
-        return !$phpPropertyReflection->getNativeType() instanceof MixedType;
+        $propertyType = $phpPropertyReflection->getNativeType();
+        if ($propertyType instanceof MixedType) {
+            return \false;
+        }
+        if (!TypeCombinator::containsNull($propertyType)) {
+            return \true;
+        }
+        $nativeReflectionProperty = $phpPropertyReflection->getNativeReflection();
+        if (!$nativeReflectionProperty->hasDefaultValue()) {
+            return \true;
+        }
+        $defaultValueExpr = $nativeReflectionProperty->getDefaultValueExpression();
+        return !$this->valueResolver->isNull($defaultValueExpr);
+    }
+    private function createIdenticalToNull(PropertyFetch $propertyFetch) : Identical
+    {
+        return new Identical($propertyFetch, $this->nodeFactory->createNull());
+    }
+    private function matchPropertyTypeClassReflection(PropertyFetch $propertyFetch) : ?ClassReflection
+    {
+        $propertyFetchVarType = $this->getType($propertyFetch->var);
+        if (!$propertyFetchVarType instanceof TypeWithClassName) {
+            return null;
+        }
+        if ($propertyFetchVarType->getClassName() === 'stdClass') {
+            return null;
+        }
+        if (!$this->reflectionProvider->hasClass($propertyFetchVarType->getClassName())) {
+            return null;
+        }
+        return $this->reflectionProvider->getClass($propertyFetchVarType->getClassName());
     }
 }

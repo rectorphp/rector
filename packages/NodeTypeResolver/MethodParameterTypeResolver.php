@@ -10,7 +10,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\Native\NativeMethodReflection;
 use PHPStan\Type\Type;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 final class MethodParameterTypeResolver
 {
