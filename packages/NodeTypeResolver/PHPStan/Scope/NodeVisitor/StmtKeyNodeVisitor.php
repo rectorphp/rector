@@ -52,8 +52,8 @@ final class StmtKeyNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             return null;
         }
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        // parent node of Stmt must be StmtsAwareInterface, except on top level namespace or file without namespace
-        if (!$parentNode instanceof StmtsAwareInterface) {
+        // parent node of Stmt must be Node, except on top level namespace or file without namespace
+        if (!$parentNode instanceof Node) {
             // on __construct(), $file not yet a File object
             $file = $this->currentFileProvider->getFile();
             if ($file instanceof File) {
@@ -62,6 +62,9 @@ final class StmtKeyNodeVisitor extends NodeVisitorAbstract implements ScopeResol
                     $childStmt->setAttribute(AttributeKey::STMT_KEY, $key);
                 }
             }
+            return null;
+        }
+        if (!$parentNode instanceof StmtsAwareInterface) {
             return null;
         }
         // re-index stmt key under parent node
