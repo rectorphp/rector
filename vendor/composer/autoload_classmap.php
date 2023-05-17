@@ -2190,6 +2190,7 @@ return array(
     'Rector\\Php70\\Rector\\List_\\EmptyListRector' => $baseDir . '/rules/Php70/Rector/List_/EmptyListRector.php',
     'Rector\\Php70\\Rector\\MethodCall\\ThisCallOnStaticMethodToStaticCallRector' => $baseDir . '/rules/Php70/Rector/MethodCall/ThisCallOnStaticMethodToStaticCallRector.php',
     'Rector\\Php70\\Rector\\StaticCall\\StaticCallOnNonStaticToInstanceCallRector' => $baseDir . '/rules/Php70/Rector/StaticCall/StaticCallOnNonStaticToInstanceCallRector.php',
+    'Rector\\Php70\\Rector\\StmtsAwareInterface\\IfIssetToCoalescingRector' => $baseDir . '/rules/Php70/Rector/StmtsAwareInterface/IfIssetToCoalescingRector.php',
     'Rector\\Php70\\Rector\\Switch_\\ReduceMultipleDefaultSwitchRector' => $baseDir . '/rules/Php70/Rector/Switch_/ReduceMultipleDefaultSwitchRector.php',
     'Rector\\Php70\\Rector\\Ternary\\TernaryToNullCoalescingRector' => $baseDir . '/rules/Php70/Rector/Ternary/TernaryToNullCoalescingRector.php',
     'Rector\\Php70\\Rector\\Ternary\\TernaryToSpaceshipRector' => $baseDir . '/rules/Php70/Rector/Ternary/TernaryToSpaceshipRector.php',

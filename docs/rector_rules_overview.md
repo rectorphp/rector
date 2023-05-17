@@ -1,4 +1,4 @@
-# 403 Rules Overview
+# 404 Rules Overview
 
 <br>
 
@@ -34,7 +34,7 @@
 
 - [Php56](#php56) (2)
 
-- [Php70](#php70) (18)
+- [Php70](#php70) (19)
 
 - [Php71](#php71) (9)
 
@@ -4675,6 +4675,31 @@ Change typehint from `Exception` to `Throwable`.
 
 <br>
 
+### IfIssetToCoalescingRector
+
+Change if with isset and return to coalesce
+
+- class: [`Rector\Php70\Rector\StmtsAwareInterface\IfIssetToCoalescingRector`](../rules/Php70/Rector/StmtsAwareInterface/IfIssetToCoalescingRector.php)
+
+```diff
+ class SomeClass
+ {
+     private $items = [];
+
+     public function resolve($key)
+     {
+-        if (isset($this->items[$key])) {
+-            return $this->items[$key];
+-        }
+-
+-        return 'fallback value';
++        return $this->items[$key] ?? 'fallback value';
+     }
+ }
+```
+
+<br>
+
 ### IfToSpaceshipRector
 
 Changes if/else to spaceship <=> where useful
@@ -4682,20 +4707,14 @@ Changes if/else to spaceship <=> where useful
 - class: [`Rector\Php70\Rector\If_\IfToSpaceshipRector`](../rules/Php70/Rector/If_/IfToSpaceshipRector.php)
 
 ```diff
- class SomeClass
- {
-     public function run()
-     {
-         usort($languages, function ($a, $b) {
--            if ($a[0] === $b[0]) {
--                return 0;
--            }
+ usort($languages, function ($first, $second) {
+-if ($first[0] === $second[0]) {
+-    return 0;
+-}
 -
--            return ($a[0] < $b[0]) ? 1 : -1;
-+            return $b[0] <=> $a[0];
-         });
-     }
- }
+-return ($first[0] < $second[0]) ? 1 : -1;
++return $second[0] <=> $first[0];
+ });
 ```
 
 <br>
