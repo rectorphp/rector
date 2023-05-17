@@ -52,13 +52,7 @@ abstract class AbstractTestCase extends TestCase
         if (!self::$currentContainer instanceof ContainerInterface) {
             throw new ShouldNotHappenException('First, create container with "boot()" or "bootWithConfigFileInfos([...])"');
         }
-        try {
-            $object = self::$currentContainer->get($type);
-        } catch (Throwable $throwable) {
-            // clear compiled container cache, to trigger re-discovery
-            RectorKernel::clearCache();
-            throw $throwable;
-        }
+        $object = self::$currentContainer->get($type);
         if ($object === null) {
             $message = \sprintf('Service "%s" was not found', $type);
             throw new ShouldNotHappenException($message);

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitffaf51aaa75e8d7fc0afb2a0fce8027f
+class ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1669,6 +1669,7 @@ class ComposerStaticInitffaf51aaa75e8d7fc0afb2a0fce8027f
         'Rector\\Core\\Enum\\ObjectReference' => __DIR__ . '/../..' . '/src/Enum/ObjectReference.php',
         'Rector\\Core\\Error\\ExceptionCorrector' => __DIR__ . '/../..' . '/src/Error/ExceptionCorrector.php',
         'Rector\\Core\\Exception\\Cache\\CachingException' => __DIR__ . '/../..' . '/src/Exception/Cache/CachingException.php',
+        'Rector\\Core\\Exception\\Cache\\StaleContainerCacheException' => __DIR__ . '/../..' . '/src/Exception/Cache/StaleContainerCacheException.php',
         'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => __DIR__ . '/../..' . '/src/Exception/Configuration/InvalidConfigurationException.php',
         'Rector\\Core\\Exception\\DeprecatedException' => __DIR__ . '/../..' . '/src/Exception/DeprecatedException.php',
         'Rector\\Core\\Exception\\NotImplementedYetException' => __DIR__ . '/../..' . '/src/Exception/NotImplementedYetException.php',
@@ -1682,6 +1683,7 @@ class ComposerStaticInitffaf51aaa75e8d7fc0afb2a0fce8027f
         'Rector\\Core\\FileSystem\\FilesystemTweaker' => __DIR__ . '/../..' . '/src/FileSystem/FilesystemTweaker.php',
         'Rector\\Core\\FileSystem\\InitFilePathsResolver' => __DIR__ . '/../..' . '/src/FileSystem/InitFilePathsResolver.php',
         'Rector\\Core\\FileSystem\\PhpFilesFinder' => __DIR__ . '/../..' . '/src/FileSystem/PhpFilesFinder.php',
+        'Rector\\Core\\Kernel\\CacheInvalidatingContainer' => __DIR__ . '/../..' . '/src/Kernel/CacheInvalidatingContainer.php',
         'Rector\\Core\\Kernel\\CachedContainerBuilder' => __DIR__ . '/../..' . '/src/Kernel/CachedContainerBuilder.php',
         'Rector\\Core\\Kernel\\ContainerBuilderBuilder' => __DIR__ . '/../..' . '/src/Kernel/ContainerBuilderBuilder.php',
         'Rector\\Core\\Kernel\\ContainerBuilderFactory' => __DIR__ . '/../..' . '/src/Kernel/ContainerBuilderFactory.php',
@@ -3107,9 +3109,9 @@ class ComposerStaticInitffaf51aaa75e8d7fc0afb2a0fce8027f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitffaf51aaa75e8d7fc0afb2a0fce8027f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitffaf51aaa75e8d7fc0afb2a0fce8027f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitffaf51aaa75e8d7fc0afb2a0fce8027f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitce9bd5d9736aa9f6d20437d66b845038::$classMap;
 
         }, null, ClassLoader::class);
     }
