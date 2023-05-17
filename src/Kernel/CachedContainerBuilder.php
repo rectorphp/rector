@@ -7,7 +7,7 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerInterface;
 use RectorPrefix202305\Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use RectorPrefix202305\Symplify\SmartFileSystem\SmartFileSystem;
+use RectorPrefix202305\Symfony\Component\Filesystem\Filesystem;
 /**
  * see https://symfony.com/doc/current/components/dependency_injection/compilation.html#dumping-the-configuration-for-performance
  */
@@ -37,16 +37,17 @@ final class CachedContainerBuilder
      */
     public function build(array $configFiles, string $hash, callable $containerBuilderCallback) : ContainerInterface
     {
-        $smartFileSystem = new SmartFileSystem();
+        $filesystem = new Filesystem();
         $className = 'RectorKernel' . $hash;
         $file = $this->cacheDir . 'kernel-' . $this->cacheKey . '-' . $hash . '.php';
         if (\file_exists($file)) {
             require_once $file;
             $className = '\\' . __NAMESPACE__ . '\\' . $className;
-            $container = new $className();
-            if (!$container instanceof ContainerInterface) {
+            $cachedContainer = new $className();
+            if (!$cachedContainer instanceof ContainerInterface) {
                 throw new ShouldNotHappenException();
             }
+            $container = new \Rector\Core\Kernel\CacheInvalidatingContainer($cachedContainer);
         } else {
             $container = $containerBuilderCallback($configFiles);
             $phpDumper = new PhpDumper($container);
@@ -54,7 +55,7 @@ final class CachedContainerBuilder
             if (!\is_string($dumpedContainer)) {
                 throw new ShouldNotHappenException();
             }
-            $smartFileSystem->dumpFile($file, $dumpedContainer);
+            $filesystem->dumpFile($file, $dumpedContainer);
         }
         return $container;
     }
@@ -67,7 +68,7 @@ final class CachedContainerBuilder
         if ($cacheFiles === \false) {
             return;
         }
-        $smartFileSystem = new SmartFileSystem();
-        $smartFileSystem->remove($cacheFiles);
+        $filesystem = new Filesystem();
+        $filesystem->remove($cacheFiles);
     }
 }
