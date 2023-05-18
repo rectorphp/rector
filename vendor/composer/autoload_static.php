@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3f1ddc210878d1ed27b647798f3d882f
+class ComposerStaticInit776e005b801980c9063d26a20bc95ed1
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1679,6 +1679,7 @@ class ComposerStaticInit3f1ddc210878d1ed27b647798f3d882f
         'Rector\\Core\\Exception\\Reflection\\InvalidPrivatePropertyTypeException' => __DIR__ . '/../..' . '/src/Exception/Reflection/InvalidPrivatePropertyTypeException.php',
         'Rector\\Core\\Exception\\Reflection\\MissingPrivatePropertyException' => __DIR__ . '/../..' . '/src/Exception/Reflection/MissingPrivatePropertyException.php',
         'Rector\\Core\\Exception\\ShouldNotHappenException' => __DIR__ . '/../..' . '/src/Exception/ShouldNotHappenException.php',
+        'Rector\\Core\\Exception\\StopSearchException' => __DIR__ . '/../..' . '/src/Exception/StopSearchException.php',
         'Rector\\Core\\Exception\\VersionException' => __DIR__ . '/../..' . '/src/Exception/VersionException.php',
         'Rector\\Core\\FileSystem\\FileAndDirectoryFilter' => __DIR__ . '/../..' . '/src/FileSystem/FileAndDirectoryFilter.php',
         'Rector\\Core\\FileSystem\\FilePathHelper' => __DIR__ . '/../..' . '/src/FileSystem/FilePathHelper.php',
@@ -3113,9 +3114,9 @@ class ComposerStaticInit3f1ddc210878d1ed27b647798f3d882f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3f1ddc210878d1ed27b647798f3d882f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3f1ddc210878d1ed27b647798f3d882f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3f1ddc210878d1ed27b647798f3d882f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit776e005b801980c9063d26a20bc95ed1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit776e005b801980c9063d26a20bc95ed1::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit776e005b801980c9063d26a20bc95ed1::$classMap;
 
         }, null, ClassLoader::class);
     }

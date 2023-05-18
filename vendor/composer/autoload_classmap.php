@@ -1437,6 +1437,7 @@ return array(
     'Rector\\Core\\Exception\\Reflection\\InvalidPrivatePropertyTypeException' => $baseDir . '/src/Exception/Reflection/InvalidPrivatePropertyTypeException.php',
     'Rector\\Core\\Exception\\Reflection\\MissingPrivatePropertyException' => $baseDir . '/src/Exception/Reflection/MissingPrivatePropertyException.php',
     'Rector\\Core\\Exception\\ShouldNotHappenException' => $baseDir . '/src/Exception/ShouldNotHappenException.php',
+    'Rector\\Core\\Exception\\StopSearchException' => $baseDir . '/src/Exception/StopSearchException.php',
     'Rector\\Core\\Exception\\VersionException' => $baseDir . '/src/Exception/VersionException.php',
     'Rector\\Core\\FileSystem\\FileAndDirectoryFilter' => $baseDir . '/src/FileSystem/FileAndDirectoryFilter.php',
     'Rector\\Core\\FileSystem\\FilePathHelper' => $baseDir . '/src/FileSystem/FilePathHelper.php',

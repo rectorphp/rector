@@ -30,6 +30,7 @@ use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\Exception\StopSearchException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
@@ -333,16 +334,15 @@ final class BetterNodeFinder
     public function findFirstNext(Node $node, callable $filter) : ?Node
     {
         $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        $nextNode = $this->resolveNextNode($node, $parentNode);
-        if ($nextNode instanceof Node) {
-            if ($nextNode instanceof Return_ && !$nextNode->expr instanceof Expr && !$parentNode instanceof Case_) {
-                return null;
-            }
-            $found = $this->findFirst($nextNode, $filter);
-            if ($found instanceof Node) {
-                return $found;
-            }
-            return $this->findFirstNext($nextNode, $filter);
+        $newStmts = $this->resolveNewStmts($parentNode);
+        try {
+            $foundNode = $this->findFirstInlinedNext($node, $filter, $newStmts, $parentNode);
+        } catch (StopSearchException $exception) {
+            return null;
+        }
+        // we found what we need
+        if ($foundNode instanceof Node) {
+            return $foundNode;
         }
         if ($parentNode instanceof Return_ || $parentNode instanceof FunctionLike) {
             return null;
@@ -478,24 +478,37 @@ final class BetterNodeFinder
         }
         return null;
     }
-    private function resolveNextNode(Node $node, ?Node $parentNode) : ?Node
+    /**
+     * Only search in next Node/Stmt
+     *
+     * @param Stmt[] $newStmts
+     * @param callable(Node $node): bool $filter
+     */
+    private function findFirstInlinedNext(Node $node, callable $filter, array $newStmts, ?Node $parentNode) : ?Node
     {
         if (!$parentNode instanceof Node) {
-            $newStmts = $this->resolveNewStmts($parentNode);
-            return $this->resolveNodeFromFile($newStmts, $node, \false);
-        }
-        if ($node instanceof Stmt) {
+            $nextNode = $this->resolveNodeFromFile($newStmts, $node, \false);
+        } elseif ($node instanceof Stmt) {
             if (!$parentNode instanceof StmtsAwareInterface) {
-                return null;
-            }
-            if ($parentNode->stmts === null) {
                 return null;
             }
             // todo: use +1 key once all next node attribute reference and NodeConnectingVisitor removed
             // left with add SlimNodeConnectingVisitor for only lookup parent
-            return $node->getAttribute(AttributeKey::NEXT_NODE);
+            $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        } else {
+            $nextNode = $this->resolveNextNodeFromOtherNode($node);
         }
-        return $this->resolveNextNodeFromOtherNode($node);
+        if (!$nextNode instanceof Node) {
+            return null;
+        }
+        if ($nextNode instanceof Return_ && !$nextNode->expr instanceof Expr && !$parentNode instanceof Case_) {
+            throw new StopSearchException();
+        }
+        $found = $this->findFirst($nextNode, $filter);
+        if ($found instanceof Node) {
+            return $found;
+        }
+        return $this->findFirstInlinedNext($nextNode, $filter, $newStmts, $parentNode);
     }
     /**
      * @return Stmt[]
