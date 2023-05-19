@@ -489,7 +489,7 @@ final class BetterNodeFinder
         if ($stmtsAware->stmts[$key - 1]->getStartTokenPos() !== $stmt->getStartTokenPos()) {
             return $stmtsAware->stmts[$key + 1] ?? null;
         }
-        return $stmt;
+        return $stmtsAware->stmts[$key] ?? null;
     }
     /**
      * Only search in next Node/Stmt
