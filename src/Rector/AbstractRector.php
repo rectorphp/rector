@@ -198,10 +198,7 @@ CODE_SAMPLE;
         $this->file = $file;
         return parent::beforeTraverse($nodes);
     }
-    /**
-     * @return Node|null
-     */
-    public final function enterNode(Node $node)
+    public final function enterNode(Node $node) : ?Node
     {
         $nodeClass = \get_class($node);
         if (!$this->isMatchingNodeType($nodeClass)) {

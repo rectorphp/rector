@@ -1,4 +1,4 @@
-# 404 Rules Overview
+# 405 Rules Overview
 
 <br>
 
@@ -62,7 +62,7 @@
 
 - [Transform](#transform) (29)
 
-- [TypeDeclaration](#typedeclaration) (39)
+- [TypeDeclaration](#typedeclaration) (40)
 
 - [Visibility](#visibility) (3)
 
@@ -9079,6 +9079,29 @@ Change && and || between nullable objects to instanceof compares
      }
 
      return 'no';
+ }
+```
+
+<br>
+
+### BoolReturnTypeFromStrictScalarReturnsRector
+
+Change return type based on strict returns type operations
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromStrictScalarReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromStrictScalarReturnsRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function resolve($first, $second)
++    public function resolve($first, $second): bool
+     {
+         if ($first) {
+             return false;
+         }
+
+         return $first > $second;
+     }
  }
 ```
 
