@@ -5,6 +5,7 @@ namespace Rector\Naming\ValueObjectFactory;
 
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\Error;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -32,6 +33,9 @@ final class ParamRenameFactory
     }
     public function createFromResolvedExpectedName(Param $param, string $expectedName) : ?ParamRename
     {
+        if ($param->var instanceof Error) {
+            return null;
+        }
         /** @var ClassMethod|Function_|Closure|ArrowFunction|null $functionLike */
         $functionLike = $this->betterNodeFinder->findParentType($param, FunctionLike::class);
         if ($functionLike === null) {

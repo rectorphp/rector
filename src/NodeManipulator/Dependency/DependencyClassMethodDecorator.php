@@ -5,6 +5,7 @@ namespace Rector\Core\NodeManipulator\Dependency;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -179,8 +180,8 @@ final class DependencyClassMethodDecorator
             }
         }
         if ($name !== $newName) {
-            $param->var = clone $param->var;
-            $param->var->name = $name;
+            // $param->var = clone $param->var;
+            $param->var = new Variable($name);
         }
     }
     private function areMaybeTypesEqual(?Type $type1, ?Type $type2) : bool

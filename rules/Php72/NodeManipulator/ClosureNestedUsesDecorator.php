@@ -63,6 +63,9 @@ final class ClosureNestedUsesDecorator
     private function collectUsesEqual(Closure $closure, array $uses, Variable $useVariable) : array
     {
         foreach ($closure->params as $param) {
+            if (!$param->var instanceof Variable) {
+                continue;
+            }
             if ($this->nodeComparator->areNodesEqual($param->var, $useVariable)) {
                 $uses[] = new ClosureUse($param->var);
             }

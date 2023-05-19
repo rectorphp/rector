@@ -5,6 +5,7 @@ namespace Rector\Php80\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
@@ -166,7 +167,8 @@ CODE_SAMPLE
                 $paramTagValueNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
             }
             // property name has higher priority
-            $param->var->name = $this->getName($property);
+            $paramName = $this->getName($property);
+            $param->var = new Variable($paramName);
             $param->flags = $property->flags;
             // Copy over attributes of the "old" property
             $param->attrGroups = \array_merge($param->attrGroups, $property->attrGroups);

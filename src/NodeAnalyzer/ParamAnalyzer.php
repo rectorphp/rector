@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\Error;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
@@ -68,6 +69,9 @@ final class ParamAnalyzer
     public function isParamUsedInClassMethod(ClassMethod $classMethod, Param $param) : bool
     {
         $isParamUsed = \false;
+        if ($param->var instanceof Error) {
+            return \false;
+        }
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use(&$isParamUsed, $param) : ?int {
             if ($isParamUsed) {
                 return NodeTraverser::STOP_TRAVERSAL;
