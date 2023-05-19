@@ -85,12 +85,9 @@ final class AssignManipulator
             /**
              * @var Assign|AssignOp|PreDec|PostDec|PreInc|PostInc $parentNode
              *
-             * Compare start token pos to ensure php_doc_info info not be checked
+             * Compare same node to ensure php_doc_info info not be checked
              */
-            if ($parentNode->var->getStartTokenPos() !== $node->getStartTokenPos()) {
-                return \false;
-            }
-            return $this->nodeComparator->areNodesEqual($parentNode->var, $node);
+            return $this->nodeComparator->areSameNode($parentNode->var, $node);
         }
         if ($this->isOnArrayDestructuring($parentNode)) {
             return \true;
