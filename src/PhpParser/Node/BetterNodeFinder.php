@@ -507,7 +507,7 @@ final class BetterNodeFinder
     private function findFirstInlinedNext(Node $node, callable $filter, array $newStmts, ?Node $parentNode) : ?Node
     {
         if (!$parentNode instanceof Node) {
-            $nextNode = $this->resolveNodeFromFile($newStmts, $node, \false);
+            $nextNode = $this->resolveNextNodeFromFile($newStmts, $node);
         } elseif ($node instanceof Stmt) {
             if (!$parentNode instanceof StmtsAwareInterface) {
                 return null;
@@ -571,16 +571,31 @@ final class BetterNodeFinder
     /**
      * @param Stmt[] $newStmts
      */
-    private function resolveNodeFromFile(array $newStmts, Node $node, bool $isPrevious = \true) : ?Node
+    private function resolvePreviousNodeFromFile(array $newStmts, Node $node) : ?Node
     {
         if (!$node instanceof Namespace_ && !$node instanceof FileWithoutNamespace) {
             return null;
         }
         $currentStmtKey = $node->getAttribute(AttributeKey::STMT_KEY);
-        $stmtKey = $isPrevious ? $currentStmtKey - 1 : $currentStmtKey + 1;
-        if ($isPrevious) {
-            return $newStmts[$stmtKey] ?? null;
+        $stmtKey = $currentStmtKey - 1;
+        if ($node instanceof FileWithoutNamespace) {
+            $stmtKey = $stmtKey === -1 ? 0 : $stmtKey;
         }
+        if (isset($newStmts[$stmtKey]) && $newStmts[$stmtKey]->getStartTokenPos() === $node->getStartFilePos()) {
+            return null;
+        }
+        return $newStmts[$stmtKey] ?? null;
+    }
+    /**
+     * @param Stmt[] $newStmts
+     */
+    private function resolveNextNodeFromFile(array $newStmts, Node $node) : ?Node
+    {
+        if (!$node instanceof Namespace_ && !$node instanceof FileWithoutNamespace) {
+            return null;
+        }
+        $currentStmtKey = $node->getAttribute(AttributeKey::STMT_KEY);
+        $stmtKey = $currentStmtKey + 1;
         if (!isset($newStmts[$currentStmtKey - 1])) {
             return $newStmts[$stmtKey] ?? null;
         }
@@ -661,7 +676,7 @@ final class BetterNodeFinder
     private function findFirstInlinedPrevious(Node $node, callable $filter, array $newStmts, ?Node $parentNode) : ?Node
     {
         if (!$parentNode instanceof Node) {
-            $previousNode = $this->resolveNodeFromFile($newStmts, $node);
+            $previousNode = $this->resolvePreviousNodeFromFile($newStmts, $node);
         } elseif ($node instanceof Stmt) {
             if (!$parentNode instanceof StmtsAwareInterface) {
                 return null;
