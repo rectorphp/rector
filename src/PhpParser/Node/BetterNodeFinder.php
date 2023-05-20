@@ -549,9 +549,8 @@ final class BetterNodeFinder
     }
     /**
      * @param callable(Node $node): bool $filter
-     * @param \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\ClassLike|\PhpParser\Node\Stmt\Declare_ $stmtsAware
      */
-    private function findFirstInTopLevelStmtsAware($stmtsAware, callable $filter) : ?Node
+    private function findFirstInTopLevelStmtsAware(StmtsAwareInterface $stmtsAware, callable $filter) : ?Node
     {
         $nodes = [];
         if ($stmtsAware instanceof Foreach_) {
@@ -691,10 +690,10 @@ final class BetterNodeFinder
                 return null;
             }
             $currentStmtKey = $node->getAttribute(AttributeKey::STMT_KEY);
-            /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
-            if (!isset($parentNode->stmts[$currentStmtKey - 1])) {
+            if ($parentNode instanceof StmtsAwareInterface && !isset($parentNode->stmts[$currentStmtKey - 1])) {
                 return $this->findFirstInTopLevelStmtsAware($parentNode, $filter);
             }
+            /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
             $previousNode = $parentNode->stmts[$currentStmtKey - 1] ?? null;
         } else {
             $previousNode = $this->resolvePreviousNodeFromOtherNode($node);
