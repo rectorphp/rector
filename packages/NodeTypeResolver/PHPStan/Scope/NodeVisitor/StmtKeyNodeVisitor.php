@@ -52,10 +52,6 @@ final class StmtKeyNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         if (!$node instanceof StmtsAwareInterface) {
             return null;
         }
-        // covered on beforeTraverse() as top level node handling
-        if ($node instanceof FileWithoutNamespace) {
-            return null;
-        }
         if ($node->stmts === null) {
             return null;
         }
