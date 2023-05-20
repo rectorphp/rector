@@ -478,11 +478,8 @@ final class BetterNodeFinder
         }
         return null;
     }
-    private function resolveNeighborNextStmt(StmtsAwareInterface $stmtsAware, Stmt $stmt, ?int $key) : ?Node
+    private function resolveNeighborNextStmt(StmtsAwareInterface $stmtsAware, Stmt $stmt, int $key) : ?Node
     {
-        if ($key === null) {
-            $key = 0;
-        }
         if (!isset($stmtsAware->stmts[$key - 1])) {
             return $stmtsAware->stmts[$key + 1] ?? null;
         }
