@@ -10,10 +10,11 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\NodeManipulator\StmtsManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -74,49 +75,46 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StmtsAwareInterface::class];
+        return [If_::class];
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param If_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(Node $node) : ?StmtsAwareInterface
+    public function refactor(Node $node) : ?array
     {
-        if ($node->stmts === null) {
+        $nextNode = $node->getAttribute(AttributeKey::NEXT_NODE);
+        if (!$nextNode instanceof Return_) {
             return null;
         }
-        foreach ($node->stmts as $key => $stmt) {
-            if (!$stmt instanceof Return_) {
-                continue;
-            }
-            if (!$stmt->expr instanceof Expr) {
-                continue;
-            }
-            $previousStmt = $node->stmts[$key - 1] ?? null;
-            if (!$previousStmt instanceof If_) {
-                continue;
-            }
-            $if = $previousStmt;
-            if (!$this->ifManipulator->isIfAndElseWithSameVariableAssignAsLastStmts($if, $stmt->expr)) {
-                continue;
-            }
-            \end($if->stmts);
-            $lastIfStmtKey = \key($if->stmts);
-            /** @var Assign $assign */
-            $assign = $this->stmtsManipulator->getUnwrappedLastStmt($if->stmts);
-            $returnLastIf = new Return_($assign->expr);
-            $this->mirrorComments($returnLastIf, $assign);
-            $if->stmts[$lastIfStmtKey] = $returnLastIf;
-            /** @var Else_ $else */
-            $else = $if->else;
-            /** @var array<int, Stmt> $elseStmts */
-            $elseStmts = $else->stmts;
-            /** @var Assign $assign */
-            $assign = $this->stmtsManipulator->getUnwrappedLastStmt($elseStmts);
-            $this->mirrorComments($stmt, $assign);
-            $if->else = null;
-            $stmt->expr = $assign->expr;
-            return $node;
+        if (!$nextNode->expr instanceof Expr) {
+            return null;
         }
-        return null;
+        if (!$this->ifManipulator->isIfAndElseWithSameVariableAssignAsLastStmts($node, $nextNode->expr)) {
+            return null;
+        }
+        \end($node->stmts);
+        $lastIfStmtKey = \key($node->stmts);
+        /** @var Assign $assign */
+        $assign = $this->stmtsManipulator->getUnwrappedLastStmt($node->stmts);
+        $returnLastIf = new Return_($assign->expr);
+        $this->mirrorComments($returnLastIf, $assign);
+        $node->stmts[$lastIfStmtKey] = $returnLastIf;
+        $else = $node->else;
+        if (!$else instanceof Else_) {
+            throw new ShouldNotHappenException();
+        }
+        /** @var array<int, Stmt> $elseStmts */
+        $elseStmts = $else->stmts;
+        /** @var Assign $assign */
+        $assign = $this->stmtsManipulator->getUnwrappedLastStmt($elseStmts);
+        \end($elseStmts);
+        $lastElseStmtKey = \key($elseStmts);
+        $returnLastElse = new Return_($assign->expr);
+        $this->mirrorComments($returnLastElse, $assign);
+        $elseStmts[$lastElseStmtKey] = $returnLastElse;
+        $node->else = null;
+        $this->removeNode($nextNode);
+        return \array_merge([$node], $elseStmts);
     }
 }
