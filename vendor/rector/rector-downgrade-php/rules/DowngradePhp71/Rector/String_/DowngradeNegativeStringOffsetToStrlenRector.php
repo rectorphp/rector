@@ -58,7 +58,7 @@ CODE_SAMPLE
      */
     private function processForStringOrVariableOrProperty($expr) : ?Expr
     {
-        $nextNode = $expr->getAttribute(AttributeKey::NEXT_NODE);
+        $nextNode = $this->betterNodeFinder->resolveNextNode($expr);
         if (!$nextNode instanceof UnaryMinus) {
             return null;
         }
