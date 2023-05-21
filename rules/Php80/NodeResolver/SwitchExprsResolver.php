@@ -29,9 +29,13 @@ final class SwitchExprsResolver
             if (!$this->isValidCase($case)) {
                 return [];
             }
-            if ($case->stmts === [] && $case->cond instanceof Expr) {
-                $collectionEmptyCasesCond[$key] = $case->cond;
+            if ($case->stmts !== []) {
+                continue;
             }
+            if (!$case->cond instanceof Expr) {
+                continue;
+            }
+            $collectionEmptyCasesCond[$key] = $case->cond;
         }
         foreach ($newSwitch->cases as $key => $case) {
             if ($case->stmts === []) {
