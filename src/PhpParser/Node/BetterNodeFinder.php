@@ -632,7 +632,7 @@ final class BetterNodeFinder
         if ($startTokenPos < 0) {
             return null;
         }
-        $nodes = $node->getStartTokenPos() === $startTokenPos ? [] : $this->find($currentStmt, static function (Node $subNode) use($startTokenPos) : bool {
+        $nodes = $this->find($currentStmt, static function (Node $subNode) use($startTokenPos) : bool {
             return $subNode->getEndTokenPos() < $startTokenPos;
         });
         if ($nodes === []) {
@@ -661,7 +661,7 @@ final class BetterNodeFinder
         if ($endTokenPos < 0) {
             return null;
         }
-        $nextNode = $node->getEndTokenPos() === $endTokenPos ? null : $this->findFirst($currentStmt, static function (Node $subNode) use($endTokenPos) : bool {
+        $nextNode = $this->findFirst($currentStmt, static function (Node $subNode) use($endTokenPos) : bool {
             return $subNode->getStartTokenPos() > $endTokenPos;
         });
         if (!$nextNode instanceof Node) {
