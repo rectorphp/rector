@@ -521,7 +521,7 @@ final class BetterNodeFinder
             /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
             $nextNode = $this->resolveNeighborNextStmt($parentNode, $node, $currentStmtKey);
         } else {
-            $nextNode = $this->resolveNextNodeFromOtherNode($node);
+            $nextNode = $this->resolveNextNode($node);
         }
         if (!$nextNode instanceof Node) {
             return null;
@@ -618,9 +618,11 @@ final class BetterNodeFinder
         return $newStmts[$currentStmtKey];
     }
     /**
-     * Resolve previous node from not an Stmt, eg: Expr, Identifier, Name, etc
+     * @api
+     *
+     * Resolve previous node from any Node, eg: Expr, Identifier, Name, etc
      */
-    private function resolvePreviousNodeFromOtherNode(Node $node) : ?Node
+    public function resolvePreviousNode(Node $node) : ?Node
     {
         $currentStmt = $this->resolveCurrentStatement($node);
         // just added
@@ -647,9 +649,11 @@ final class BetterNodeFinder
         return \end($nodes);
     }
     /**
-     * Resolve next node from not an Stmt, eg: Expr, Identifier, Name, etc
+     * @api
+     *
+     * Resolve next node from any Node, eg: Expr, Identifier, Name, etc
      */
-    private function resolveNextNodeFromOtherNode(Node $node) : ?Node
+    public function resolveNextNode(Node $node) : ?Node
     {
         $currentStmt = $this->resolveCurrentStatement($node);
         // just added
@@ -696,7 +700,7 @@ final class BetterNodeFinder
             /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
             $previousNode = $parentNode->stmts[$currentStmtKey - 1] ?? null;
         } else {
-            $previousNode = $this->resolvePreviousNodeFromOtherNode($node);
+            $previousNode = $this->resolvePreviousNode($node);
         }
         if (!$previousNode instanceof Node) {
             return null;

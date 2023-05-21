@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Parser;
 
+use PhpParser\Node\Expr\Variable;
 use RectorPrefix202305\Nette\Utils\FileSystem;
 use RectorPrefix202305\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
@@ -11,10 +12,9 @@ use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Util\StringUtils;
-use Rector\Core\ValueObject\Application\File;
 final class InlineCodeParser
 {
     /**
@@ -69,15 +69,15 @@ final class InlineCodeParser
     private $valueResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Provider\CurrentFileProvider
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
-    private $currentFileProvider;
-    public function __construct(NodePrinterInterface $nodePrinter, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver, CurrentFileProvider $currentFileProvider)
+    private $betterNodeFinder;
+    public function __construct(NodePrinterInterface $nodePrinter, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodePrinter = $nodePrinter;
         $this->simplePhpParser = $simplePhpParser;
         $this->valueResolver = $valueResolver;
-        $this->currentFileProvider = $currentFileProvider;
+        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @return Stmt[]
@@ -138,11 +138,9 @@ final class InlineCodeParser
         if ($concat->left instanceof Concat && $concat->right instanceof String_ && \strncmp($concat->right->value, '$', \strlen('$')) === 0) {
             $concat->right->value = '.' . $concat->right->value;
         }
-        $file = $this->currentFileProvider->getFile();
-        if ($concat->right instanceof String_ && \strncmp($concat->right->value, '($', \strlen('($')) === 0 && $file instanceof File) {
-            $oldTokens = $file->getOldTokens();
-            $endTokenPos = $concat->right->getEndTokenPos();
-            if (isset($oldTokens[$endTokenPos][1]) && \strncmp((string) $oldTokens[$endTokenPos][1], "'(\$", \strlen("'(\$")) === 0) {
+        if ($concat->right instanceof String_ && \strncmp($concat->right->value, '($', \strlen('($')) === 0) {
+            $node = $this->betterNodeFinder->resolveNextNode($concat);
+            if ($node instanceof Variable) {
                 $concat->right->value .= '.';
             }
         }
