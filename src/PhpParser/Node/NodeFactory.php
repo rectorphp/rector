@@ -40,13 +40,11 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeDecorator\PropertyTypeDecorator;
 use Rector\Core\ValueObject\MethodName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -76,20 +74,14 @@ final class NodeFactory
     private $staticTypeMapper;
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\CurrentNodeProvider
-     */
-    private $currentNodeProvider;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeDecorator\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
-    public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentNodeProvider $currentNodeProvider, PropertyTypeDecorator $propertyTypeDecorator)
+    public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->builderFactory = $builderFactory;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->currentNodeProvider = $currentNodeProvider;
         $this->propertyTypeDecorator = $propertyTypeDecorator;
     }
     /**
@@ -323,17 +315,7 @@ final class NodeFactory
      */
     public function createClassConstFetchFromName(Name $className, string $constantName) : ClassConstFetch
     {
-        $classConstFetch = $this->builderFactory->classConstFetch($className, $constantName);
-        $classNameString = $className->toString();
-        if (\in_array($classNameString, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
-            $currentNode = $this->currentNodeProvider->getNode();
-            if ($currentNode instanceof Node) {
-                $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $className);
-            }
-        } else {
-            $classConstFetch->class->setAttribute(AttributeKey::RESOLVED_NAME, $classNameString);
-        }
-        return $classConstFetch;
+        return $this->builderFactory->classConstFetch($className, $constantName);
     }
     /**
      * @param array<NotIdentical|BooleanAnd|Identical> $newNodes

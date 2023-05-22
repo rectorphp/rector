@@ -53,6 +53,9 @@ final class AttributeKey
      */
     public const ORIGINAL_NAME = 'originalName';
     /**
+     * @api
+     * @deprecated Use $node->namespacedName instead
+     *
      * Internal php-parser name. @see \PhpParser\NodeVisitor\NameResolver
      * Do not change this even if you want!
      *
