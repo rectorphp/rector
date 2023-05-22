@@ -5,9 +5,7 @@ namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -114,9 +112,6 @@ CODE_SAMPLE
         if ($parentNode instanceof Assign) {
             return $this->nodeFactory->createFalse();
         }
-        if ($parentNode instanceof ArrowFunction && $this->nodeComparator->areNodesEqual($parentNode->expr, $node)) {
-            return $this->processArrowFunction($parentNode, $node);
-        }
         if (!$parentNode instanceof Expression) {
             return null;
         }
@@ -172,17 +167,5 @@ CODE_SAMPLE
             return \false;
         }
         return !$classMethod->isPrivate();
-    }
-    /**
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\ConstFetch
-     */
-    private function processArrowFunction(ArrowFunction $arrowFunction, MethodCall $methodCall)
-    {
-        $parentParentNode = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentParentNode instanceof Expression) {
-            $this->removeNode($arrowFunction);
-            return $methodCall;
-        }
-        return $this->nodeFactory->createFalse();
     }
 }
