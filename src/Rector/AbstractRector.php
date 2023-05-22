@@ -198,7 +198,7 @@ CODE_SAMPLE;
         $this->file = $file;
         return parent::beforeTraverse($nodes);
     }
-    public final function enterNode(Node $node) : ?Node
+    public final function enterNode(Node $node)
     {
         $nodeClass = \get_class($node);
         if (!$this->isMatchingNodeType($nodeClass)) {
@@ -225,6 +225,10 @@ CODE_SAMPLE;
         $refactoredNode = $this->refactor($node);
         if ($isDebug) {
             $this->printConsumptions($startTime, $previousMemory);
+        }
+        // @see NodeTravser::* codes, e.g. removal of node of stopping the traversing
+        if (\is_int($refactoredNode)) {
+            return $refactoredNode;
         }
         // nothing to change or just removed via removeNode() → continue
         if ($refactoredNode === null) {

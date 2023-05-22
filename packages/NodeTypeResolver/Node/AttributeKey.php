@@ -63,6 +63,9 @@ final class AttributeKey
      */
     public const RESOLVED_NAME = 'resolvedName';
     /**
+     * @deprecated Refactor to a custom visitors/parent node instead,
+     * @see https://phpstan.org/blog/preprocessing-ast-for-custom-rules
+     *
      * @internal of php-parser, do not change
      * @see https://github.com/nikic/PHP-Parser/pull/681/files
      * @var string

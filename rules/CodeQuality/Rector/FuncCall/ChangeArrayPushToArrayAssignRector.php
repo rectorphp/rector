@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -38,8 +39,8 @@ CODE_SAMPLE
         return [Expression::class];
     }
     /**
-     * @param Expression[] $node
-     * @param Expression[]|null $node
+     * @param Expression $node
+     * @return Stmt[]|null
      */
     public function refactor(Node $node) : ?array
     {
