@@ -23,7 +23,6 @@ use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -82,41 +81,28 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [Expression::class, If_::class, Assign::class];
     }
     /**
-     * @param MethodCall $node
+     * @param Expression|If_|Assign $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope)
     {
-        if ($this->shouldSkip($node)) {
+        if ($node instanceof If_) {
+            return $this->refactorIf($node, $scope);
+        }
+        if ($node instanceof Expression) {
+            $this->refactorExpression($node, $scope);
             return null;
         }
-        $type = $scope->getType($node->var);
-        if (!$type instanceof TypeWithClassName) {
+        if (!$node->expr instanceof MethodCall) {
             return null;
         }
-        $classLike = $this->resolveClassLike($node);
-        if (!$classLike instanceof ClassLike) {
+        if (!$this->shouldRemoveMethodCall($node->expr, $scope)) {
             return null;
         }
-        /** @var Class_|Trait_|Interface_|Enum_ $classLike */
-        if ($this->shouldSkipClassMethod($classLike, $node, $type)) {
-            return null;
-        }
-        // if->cond cannot removed, it has to be replaced with false, see https://3v4l.org/U9S9i
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof If_ && $parentNode->cond === $node) {
-            return $this->nodeFactory->createFalse();
-        }
-        if ($parentNode instanceof Assign) {
-            return $this->nodeFactory->createFalse();
-        }
-        if (!$parentNode instanceof Expression) {
-            return null;
-        }
-        $this->removeNode($node);
-        return null;
+        $node->expr = $this->nodeFactory->createFalse();
+        return $node;
     }
     private function resolveClassLike(MethodCall $methodCall) : ?ClassLike
     {
@@ -126,7 +112,7 @@ CODE_SAMPLE
         }
         return $this->reflectionAstResolver->resolveClassFromName($classReflection->getName());
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function shouldSkipMethodCall(MethodCall $methodCall) : bool
     {
         if ($this->callAnalyzer->isObjectCall($methodCall->var)) {
             return \true;
@@ -167,5 +153,47 @@ CODE_SAMPLE
             return \false;
         }
         return !$classMethod->isPrivate();
+    }
+    private function shouldRemoveMethodCall(MethodCall $methodCall, Scope $scope) : bool
+    {
+        if ($this->shouldSkipMethodCall($methodCall)) {
+            return \false;
+        }
+        $type = $scope->getType($methodCall->var);
+        if (!$type instanceof TypeWithClassName) {
+            return \false;
+        }
+        $classLike = $this->resolveClassLike($methodCall);
+        if (!$classLike instanceof ClassLike) {
+            return \false;
+        }
+        /** @var Class_|Trait_|Interface_|Enum_ $classLike */
+        return !$this->shouldSkipClassMethod($classLike, $methodCall, $type);
+    }
+    /**
+     * If->cond cannot removed,
+     * it has to be replaced with false, see https://3v4l.org/U9S9i
+     */
+    private function refactorIf(If_ $if, Scope $scope) : ?If_
+    {
+        if (!$if->cond instanceof MethodCall) {
+            return null;
+        }
+        if (!$this->shouldRemoveMethodCall($if->cond, $scope)) {
+            return null;
+        }
+        $if->cond = $this->nodeFactory->createFalse();
+        return $if;
+    }
+    private function refactorExpression(Expression $expression, Scope $scope) : void
+    {
+        if (!$expression->expr instanceof MethodCall) {
+            return;
+        }
+        $methodCall = $expression->expr;
+        if (!$this->shouldRemoveMethodCall($methodCall, $scope)) {
+            return;
+        }
+        $this->removeNode($expression);
     }
 }
