@@ -8,15 +8,14 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassConst;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\Naming\Naming\AliasNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -27,7 +26,7 @@ use RectorPrefix202305\Webmozart\Assert\Assert;
  *
  * @see \Rector\Tests\Php55\Rector\String_\StringClassNameToClassConstantRector\StringClassNameToClassConstantRectorTest
  */
-final class StringClassNameToClassConstantRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
+final class StringClassNameToClassConstantRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
      * @var string[]
@@ -38,15 +37,9 @@ final class StringClassNameToClassConstantRector extends AbstractRector implemen
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
-    /**
-     * @readonly
-     * @var \Rector\Naming\Naming\AliasNameResolver
-     */
-    private $aliasNameResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, AliasNameResolver $aliasNameResolver)
+    public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;
-        $this->aliasNameResolver = $aliasNameResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -88,7 +81,7 @@ CODE_SAMPLE
     /**
      * @param String_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $classLikeName = $node->value;
         // remove leading slash
@@ -100,10 +93,7 @@ CODE_SAMPLE
             return null;
         }
         $fullyQualified = new FullyQualified($classLikeName);
-        $name = clone $fullyQualified;
-        $name->setAttribute(AttributeKey::PARENT_NODE, $node->getAttribute(AttributeKey::PARENT_NODE));
-        $aliasName = $this->aliasNameResolver->resolveByName($name);
-        $fullyQualifiedOrAliasName = \is_string($aliasName) ? new Name($aliasName) : $fullyQualified;
+        $fullyQualifiedOrAliasName = new FullyQualified($scope->resolveName($fullyQualified));
         if ($classLikeName !== $node->value) {
             $preSlashCount = \strlen($node->value) - \strlen($classLikeName);
             $preSlash = \str_repeat('\\', $preSlashCount);
