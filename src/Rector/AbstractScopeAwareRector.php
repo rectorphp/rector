@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Rector;
 
 use PhpParser\Node;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ScopeAwarePhpRectorInterface;
@@ -26,7 +27,7 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
     }
     /**
      * Process Node of matched type with its PHPStan scope
-     * @return Node|Node[]|null
+     * @return Node|Node[]|null|NodeTraverser::*
      */
     public function refactor(Node $node)
     {
