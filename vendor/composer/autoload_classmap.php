@@ -1861,7 +1861,6 @@ return array(
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeIfElseValueAssignToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeIfElseValueAssignToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeNestedIfsToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeNestedIfsToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeOrIfContinueToMultiContinueRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeOrIfContinueToMultiContinueRector.php',
-    'Rector\\EarlyReturn\\Rector\\If_\\ChangeOrIfReturnToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeOrIfReturnToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\RemoveAlwaysElseRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/RemoveAlwaysElseRector.php',
     'Rector\\EarlyReturn\\Rector\\Return_\\PreparedValueToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/Return_/PreparedValueToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryAndToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryAndToEarlyReturnRector.php',

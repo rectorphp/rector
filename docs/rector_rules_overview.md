@@ -1,4 +1,4 @@
-# 405 Rules Overview
+# 404 Rules Overview
 
 <br>
 
@@ -16,7 +16,7 @@
 
 - [DependencyInjection](#dependencyinjection) (2)
 
-- [EarlyReturn](#earlyreturn) (11)
+- [EarlyReturn](#earlyreturn) (10)
 
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
@@ -3829,32 +3829,6 @@ Changes if || to early return
              $car->setWheel($newCar->wheel);
              $car->setFuel($newCar->fuel);
          }
-     }
- }
-```
-
-<br>
-
-### ChangeOrIfReturnToEarlyReturnRector
-
-Changes if || with return to early return
-
-- class: [`Rector\EarlyReturn\Rector\If_\ChangeOrIfReturnToEarlyReturnRector`](../rules/EarlyReturn/Rector/If_/ChangeOrIfReturnToEarlyReturnRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($a, $b)
-     {
--        if ($a || $b) {
-+        if ($a) {
-+            return null;
-+        }
-+        if ($b) {
-             return null;
-         }
-
-         return 'another';
      }
  }
 ```

@@ -479,6 +479,68 @@ final class BetterNodeFinder
         }
         return null;
     }
+    /**
+     * @api
+     *
+     * Resolve previous node from any Node, eg: Expr, Identifier, Name, etc
+     */
+    public function resolvePreviousNode(Node $node) : ?Node
+    {
+        $currentStmt = $this->resolveCurrentStatement($node);
+        // just added
+        if (!$currentStmt instanceof Stmt) {
+            return null;
+        }
+        // just added
+        $startTokenPos = $node->getStartTokenPos();
+        if ($startTokenPos < 0) {
+            return null;
+        }
+        $nodes = $currentStmt->getStartTokenPos() === $startTokenPos ? [] : $this->find($currentStmt, static function (Node $subNode) use($startTokenPos) : bool {
+            return $subNode->getEndTokenPos() < $startTokenPos;
+        });
+        if ($nodes === []) {
+            $parentNode = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$this->isAllowedParentNode($parentNode)) {
+                return null;
+            }
+            $currentStmtKey = $currentStmt->getAttribute(AttributeKey::STMT_KEY);
+            /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
+            return $parentNode->stmts[$currentStmtKey - 1] ?? null;
+        }
+        return \end($nodes);
+    }
+    /**
+     * @api
+     *
+     * Resolve next node from any Node, eg: Expr, Identifier, Name, etc
+     */
+    public function resolveNextNode(Node $node) : ?Node
+    {
+        $currentStmt = $this->resolveCurrentStatement($node);
+        // just added
+        if (!$currentStmt instanceof Stmt) {
+            return null;
+        }
+        // just added
+        $endTokenPos = $node->getEndTokenPos();
+        if ($endTokenPos < 0) {
+            return null;
+        }
+        $nextNode = $currentStmt->getEndTokenPos() === $endTokenPos ? null : $this->findFirst($currentStmt, static function (Node $subNode) use($endTokenPos) : bool {
+            return $subNode->getStartTokenPos() > $endTokenPos;
+        });
+        if (!$nextNode instanceof Node) {
+            $parentNode = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
+            if (!$this->isAllowedParentNode($parentNode)) {
+                return null;
+            }
+            $currentStmtKey = $currentStmt->getAttribute(AttributeKey::STMT_KEY);
+            /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
+            return $this->resolveNeighborNextStmt($parentNode, $currentStmt, $currentStmtKey);
+        }
+        return $nextNode;
+    }
     private function isAllowedParentNode(?Node $node) : bool
     {
         return $node instanceof StmtsAwareInterface || $node instanceof ClassLike || $node instanceof Declare_;
@@ -616,68 +678,6 @@ final class BetterNodeFinder
             return null;
         }
         return $newStmts[$currentStmtKey];
-    }
-    /**
-     * @api
-     *
-     * Resolve previous node from any Node, eg: Expr, Identifier, Name, etc
-     */
-    public function resolvePreviousNode(Node $node) : ?Node
-    {
-        $currentStmt = $this->resolveCurrentStatement($node);
-        // just added
-        if (!$currentStmt instanceof Stmt) {
-            return null;
-        }
-        // just added
-        $startTokenPos = $node->getStartTokenPos();
-        if ($startTokenPos < 0) {
-            return null;
-        }
-        $nodes = $currentStmt->getStartTokenPos() === $startTokenPos ? [] : $this->find($currentStmt, static function (Node $subNode) use($startTokenPos) : bool {
-            return $subNode->getEndTokenPos() < $startTokenPos;
-        });
-        if ($nodes === []) {
-            $parentNode = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$this->isAllowedParentNode($parentNode)) {
-                return null;
-            }
-            $currentStmtKey = $currentStmt->getAttribute(AttributeKey::STMT_KEY);
-            /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
-            return $parentNode->stmts[$currentStmtKey - 1] ?? null;
-        }
-        return \end($nodes);
-    }
-    /**
-     * @api
-     *
-     * Resolve next node from any Node, eg: Expr, Identifier, Name, etc
-     */
-    public function resolveNextNode(Node $node) : ?Node
-    {
-        $currentStmt = $this->resolveCurrentStatement($node);
-        // just added
-        if (!$currentStmt instanceof Stmt) {
-            return null;
-        }
-        // just added
-        $endTokenPos = $node->getEndTokenPos();
-        if ($endTokenPos < 0) {
-            return null;
-        }
-        $nextNode = $currentStmt->getEndTokenPos() === $endTokenPos ? null : $this->findFirst($currentStmt, static function (Node $subNode) use($endTokenPos) : bool {
-            return $subNode->getStartTokenPos() > $endTokenPos;
-        });
-        if (!$nextNode instanceof Node) {
-            $parentNode = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$this->isAllowedParentNode($parentNode)) {
-                return null;
-            }
-            $currentStmtKey = $currentStmt->getAttribute(AttributeKey::STMT_KEY);
-            /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
-            return $this->resolveNeighborNextStmt($parentNode, $currentStmt, $currentStmtKey);
-        }
-        return $nextNode;
     }
     /**
      * Only search in previous Node/Stmt

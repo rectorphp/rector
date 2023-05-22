@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Parser;
 
-use PhpParser\Node\Expr\Variable;
 use RectorPrefix202305\Nette\Utils\FileSystem;
 use RectorPrefix202305\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
