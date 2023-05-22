@@ -6,13 +6,17 @@ namespace Rector\CodingStyle\Rector\Catch_;
 use RectorPrefix202305\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Catch_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
+use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\TryCatch;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\AliasNameResolver;
 use Rector\Naming\Naming\PropertyNaming;
@@ -79,10 +83,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StmtsAwareInterface::class];
+        return [ClassMethod::class, Function_::class, Closure::class, FileWithoutNamespace::class, Namespace_::class];
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param ClassMethod|Function_|Closure|FileWithoutNamespace|Namespace_ $node
      */
     public function refactor(Node $node) : ?Node
     {
