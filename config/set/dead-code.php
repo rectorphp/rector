@@ -29,7 +29,6 @@ use Rector\DeadCode\Rector\For_\RemoveDeadIfForeachForRector;
 use Rector\DeadCode\Rector\For_\RemoveDeadLoopRector;
 use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
-use Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
@@ -80,7 +79,6 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveEmptyTestMethodRector::class,
         RemoveDeadTryCatchRector::class,
         RemoveUnusedVariableAssignRector::class,
-        RemoveDuplicatedIfReturnRector::class,
         RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
         RemoveEmptyMethodCallRector::class,
         RemoveDeadConditionAboveReturnRector::class,

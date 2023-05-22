@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeManipulator;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
@@ -92,7 +91,7 @@ final class IfManipulator
         if (!$this->hasOnlyStmtOfType($currentIf, Return_::class)) {
             return [];
         }
-        // last node is with the return value
+        // last if is with the return value
         $ifs[] = $currentIf;
         return $ifs;
     }
@@ -151,22 +150,19 @@ final class IfManipulator
         if ($exit instanceof Exit_) {
             return [];
         }
-        // last node is with the expression
+        // last if is with the expression
         $ifs[] = $currentIf;
         return $ifs;
     }
     /**
      * @param class-string<Stmt> $stmtClass
      */
-    public function isIfWithOnly(Node $node, string $stmtClass) : bool
+    public function isIfWithOnly(If_ $if, string $stmtClass) : bool
     {
-        if (!$node instanceof If_) {
+        if (!$this->isIfWithoutElseAndElseIfs($if)) {
             return \false;
         }
-        if (!$this->isIfWithoutElseAndElseIfs($node)) {
-            return \false;
-        }
-        return $this->hasOnlyStmtOfType($node, $stmtClass);
+        return $this->hasOnlyStmtOfType($if, $stmtClass);
     }
     public function isIfWithOnlyOneStmt(If_ $if) : bool
     {

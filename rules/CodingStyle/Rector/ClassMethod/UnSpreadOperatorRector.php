@@ -15,7 +15,6 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use Rector\CodingStyle\NodeAnalyzer\SpreadVariablesCollector;
 use Rector\CodingStyle\Reflection\VendorLocationDetector;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer;

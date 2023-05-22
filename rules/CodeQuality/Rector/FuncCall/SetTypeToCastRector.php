@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\FuncCall;
 
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Arg;
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\Cast\Array_;

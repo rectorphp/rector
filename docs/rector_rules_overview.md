@@ -1,4 +1,4 @@
-# 404 Rules Overview
+# 403 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [Compatibility](#compatibility) (1)
 
-- [DeadCode](#deadcode) (48)
+- [DeadCode](#deadcode) (47)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -2950,32 +2950,6 @@ Remove duplicated key in defined arrays.
               case '...':
                   return 5;
          }
-     }
- }
-```
-
-<br>
-
-### RemoveDuplicatedIfReturnRector
-
-Remove duplicated if stmt with return in function/method body
-
-- class: [`Rector\DeadCode\Rector\FunctionLike\RemoveDuplicatedIfReturnRector`](../rules/DeadCode/Rector/FunctionLike/RemoveDuplicatedIfReturnRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($value)
-     {
-         if ($value) {
-             return true;
-         }
-
-         $value2 = 100;
--
--        if ($value) {
--            return true;
--        }
      }
  }
 ```
