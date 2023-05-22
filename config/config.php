@@ -12,7 +12,7 @@ use PhpParser\ConstExprEvaluator;
 use PhpParser\Lexer;
 use PhpParser\NodeFinder;
 use PhpParser\NodeVisitor\CloningVisitor;
-use PhpParser\NodeVisitor\NodeConnectingVisitor;
+use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
 use PHPStan\Dependency\DependencyResolver;
@@ -108,7 +108,7 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(SimpleCallableNodeTraverser::class);
     $services->set(BuilderFactory::class);
     $services->set(CloningVisitor::class);
-    $services->set(NodeConnectingVisitor::class);
+    $services->set(ParentConnectingVisitor::class);
     $services->set(NodeFinder::class);
     $services->set(RectorConsoleOutputStyle::class)->factory([service(RectorConsoleOutputStyleFactory::class), 'create']);
     $services->set(Parser::class)->factory([service(PHPStanServicesFactory::class), 'createPHPStanParser']);
