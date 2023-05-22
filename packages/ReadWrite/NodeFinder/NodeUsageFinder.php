@@ -61,8 +61,8 @@ final class NodeUsageFinder
             if (!$this->nodeNameResolver->isName($node, $variableName)) {
                 return \false;
             }
-            $assignedTo = $node->getAttribute(AttributeKey::ASSIGNED_TO);
-            return !$assignedTo instanceof Node;
+            $assignedTo = $node->getAttribute(AttributeKey::IS_ASSIGNED_TO);
+            return $assignedTo === null;
         });
     }
     public function findPreviousForeachNodeUsage(Foreach_ $foreach, Expr $expr) : ?Node

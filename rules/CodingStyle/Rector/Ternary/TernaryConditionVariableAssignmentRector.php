@@ -63,8 +63,8 @@ CODE_SAMPLE
         if ($nodeIfVar->name !== $nodeElseVar->name) {
             return null;
         }
-        $assignedTo = $node->getAttribute(AttributeKey::ASSIGNED_TO);
-        if ($assignedTo instanceof Node) {
+        $assignedTo = $node->getAttribute(AttributeKey::IS_ASSIGNED_TO);
+        if ($assignedTo === \true) {
             return null;
         }
         $node->if = $nodeIf->expr;
