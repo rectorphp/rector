@@ -1242,7 +1242,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToArrayFilterRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/SimplifyForeachToArrayFilterRector.php',
     'Rector\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachToCoalescingRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/SimplifyForeachToCoalescingRector.php',
     'Rector\\CodeQuality\\Rector\\Foreach_\\UnusedForeachValueToArrayKeysRector' => $baseDir . '/rules/CodeQuality/Rector/Foreach_/UnusedForeachValueToArrayKeysRector.php',
-    'Rector\\CodeQuality\\Rector\\FuncCall\\AddPregQuoteDelimiterRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/AddPregQuoteDelimiterRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\ArrayKeysAndInArrayToArrayKeyExistsRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\ArrayMergeOfNonArraysToSimpleArrayRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/ArrayMergeOfNonArraysToSimpleArrayRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\BoolvalToTypeCastRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/BoolvalToTypeCastRector.php',

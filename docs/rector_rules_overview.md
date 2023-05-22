@@ -1,4 +1,4 @@
-# 403 Rules Overview
+# 402 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (76)
+- [CodeQuality](#codequality) (75)
 
 - [CodingStyle](#codingstyle) (34)
 
@@ -324,19 +324,6 @@ include/require to absolute path. This Rector might introduce backwards incompat
          require $variable;
      }
  }
-```
-
-<br>
-
-### AddPregQuoteDelimiterRector
-
-Add preg_quote delimiter when missing
-
-- class: [`Rector\CodeQuality\Rector\FuncCall\AddPregQuoteDelimiterRector`](../rules/CodeQuality/Rector/FuncCall/AddPregQuoteDelimiterRector.php)
-
-```diff
--'#' . preg_quote('name') . '#';
-+'#' . preg_quote('name', '#') . '#';
 ```
 
 <br>
