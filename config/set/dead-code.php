@@ -8,7 +8,6 @@ use Rector\Config\RectorConfig;
 use Rector\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector;
 use Rector\DeadCode\Rector\Assign\RemoveDoubleAssignRector;
 use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
-use Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
@@ -70,7 +69,6 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveConcatAutocastRector::class,
         SimplifyUselessVariableRector::class,
         RemoveDelegatingParentCallRector::class,
-        RemoveDuplicatedInstanceOfRector::class,
         RemoveDuplicatedCaseInSwitchRector::class,
         RemoveNullPropertyInitializationRector::class,
         RemoveUnreachableStatementRector::class,
