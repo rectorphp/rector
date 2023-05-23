@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PHPStan\Analyser\Scope;
+use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\Php\ReservedKeywordAnalyzer;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
@@ -35,10 +36,16 @@ final class RemoveUnusedVariableAssignRector extends AbstractScopeAwareRector
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;
-    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
+     */
+    private $variableAnalyzer;
+    public function __construct(ReservedKeywordAnalyzer $reservedKeywordAnalyzer, SideEffectNodeDetector $sideEffectNodeDetector, VariableAnalyzer $variableAnalyzer)
     {
         $this->reservedKeywordAnalyzer = $reservedKeywordAnalyzer;
         $this->sideEffectNodeDetector = $sideEffectNodeDetector;
+        $this->variableAnalyzer = $variableAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -184,6 +191,12 @@ CODE_SAMPLE
                 continue;
             }
             if ($this->reservedKeywordAnalyzer->isNativeVariable($variableName)) {
+                continue;
+            }
+            if ($this->variableAnalyzer->isStaticOrGlobal($assign->var)) {
+                continue;
+            }
+            if ($this->variableAnalyzer->isUsedByReference($assign->var)) {
                 continue;
             }
             $assignedVariableNamesByStmtPosition[$key] = $variableName;
