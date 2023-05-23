@@ -340,11 +340,23 @@ CODE_SAMPLE;
             return $originalNode;
         }
         $refactoredNode = $originalNode instanceof Stmt && $refactoredNode instanceof Expr ? new Expression($refactoredNode) : $refactoredNode;
+        $this->mapStmtKey($originalNode, $refactoredNode);
         $this->updateParentNodes($refactoredNode, $parentNode);
         $this->nodeConnectingTraverser->traverse([$refactoredNode]);
         $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
         $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
         return $refactoredNode;
+    }
+    private function mapStmtKey(Node $originalNode, Node $refactoredNode) : void
+    {
+        if ($originalNode instanceof Stmt) {
+            $refactoredNode->setAttribute(AttributeKey::STMT_KEY, $originalNode->getAttribute(AttributeKey::STMT_KEY));
+            return;
+        }
+        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($originalNode);
+        if ($currentStmt instanceof Stmt) {
+            $refactoredNode->setAttribute(AttributeKey::STMT_KEY, $currentStmt->getAttribute(AttributeKey::STMT_KEY));
+        }
     }
     /**
      * @param mixed[]|\PhpParser\Node $node

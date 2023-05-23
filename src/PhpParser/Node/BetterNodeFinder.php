@@ -487,16 +487,11 @@ final class BetterNodeFinder
     public function resolvePreviousNode(Node $node) : ?Node
     {
         $currentStmt = $this->resolveCurrentStatement($node);
-        // just added
         if (!$currentStmt instanceof Stmt) {
             return null;
         }
-        // just added
         $startTokenPos = $node->getStartTokenPos();
-        if ($startTokenPos < 0) {
-            return null;
-        }
-        $nodes = $currentStmt->getStartTokenPos() === $startTokenPos ? [] : $this->find($currentStmt, static function (Node $subNode) use($startTokenPos) : bool {
+        $nodes = $startTokenPos < 0 || $currentStmt->getStartTokenPos() === $startTokenPos ? [] : $this->find($currentStmt, static function (Node $subNode) use($startTokenPos) : bool {
             return $subNode->getEndTokenPos() < $startTokenPos;
         });
         if ($nodes === []) {
@@ -518,16 +513,11 @@ final class BetterNodeFinder
     public function resolveNextNode(Node $node) : ?Node
     {
         $currentStmt = $this->resolveCurrentStatement($node);
-        // just added
         if (!$currentStmt instanceof Stmt) {
             return null;
         }
-        // just added
         $endTokenPos = $node->getEndTokenPos();
-        if ($endTokenPos < 0) {
-            return null;
-        }
-        $nextNode = $currentStmt->getEndTokenPos() === $endTokenPos ? null : $this->findFirst($currentStmt, static function (Node $subNode) use($endTokenPos) : bool {
+        $nextNode = $endTokenPos < 0 || $currentStmt->getEndTokenPos() === $endTokenPos ? null : $this->findFirst($currentStmt, static function (Node $subNode) use($endTokenPos) : bool {
             return $subNode->getStartTokenPos() > $endTokenPos;
         });
         if (!$nextNode instanceof Node) {
