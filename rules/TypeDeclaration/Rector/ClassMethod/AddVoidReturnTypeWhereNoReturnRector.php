@@ -172,10 +172,6 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        $node = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$node instanceof Class_) {
-            return \false;
-        }
-        return $node->isFinal();
+        return $classReflection->isFinalByKeyword();
     }
 }
