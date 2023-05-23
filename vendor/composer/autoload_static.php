@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbd1c9a152ba5ac575455804a7122ce5f
+class ComposerStaticInit67af263d55e6ae38829253b8878b98ed
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1744,7 +1744,6 @@ class ComposerStaticInitbd1c9a152ba5ac575455804a7122ce5f
         'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\TypeToCallReflectionResolverRegistry' => __DIR__ . '/../..' . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/TypeToCallReflectionResolverRegistry.php',
         'Rector\\Core\\PhpParser\\AstResolver' => __DIR__ . '/../..' . '/src/PhpParser/AstResolver.php',
         'Rector\\Core\\PhpParser\\ClassLikeAstResolver' => __DIR__ . '/../..' . '/src/PhpParser/ClassLikeAstResolver.php',
-        'Rector\\Core\\PhpParser\\Comparing\\ConditionSearcher' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/ConditionSearcher.php',
         'Rector\\Core\\PhpParser\\Comparing\\NodeComparator' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/NodeComparator.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\LocalConstantFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalConstantFinder.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
@@ -2491,7 +2490,6 @@ class ComposerStaticInitbd1c9a152ba5ac575455804a7122ce5f
         'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
         'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',
-        'Rector\\Php74\\Tokenizer\\FollowedByCurlyBracketAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/FollowedByCurlyBracketAnalyzer.php',
         'Rector\\Php74\\Tokenizer\\ParenthesizedNestedTernaryAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/ParenthesizedNestedTernaryAnalyzer.php',
         'Rector\\Php80\\AttributeDecorator\\JMSAccesorOrderAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/JMSAccesorOrderAttributeDecorator.php',
         'Rector\\Php80\\AttributeDecorator\\JMSAccessTypeAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/JMSAccessTypeAttributeDecorator.php',
@@ -3111,9 +3109,9 @@ class ComposerStaticInitbd1c9a152ba5ac575455804a7122ce5f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbd1c9a152ba5ac575455804a7122ce5f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbd1c9a152ba5ac575455804a7122ce5f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbd1c9a152ba5ac575455804a7122ce5f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit67af263d55e6ae38829253b8878b98ed::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit67af263d55e6ae38829253b8878b98ed::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit67af263d55e6ae38829253b8878b98ed::$classMap;
 
         }, null, ClassLoader::class);
     }
