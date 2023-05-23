@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit79faf09d907f46e89d9cb7b01693ec27
+class ComposerStaticInitbbae854da20153f8cf5d9bd84366c876
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1876,7 +1876,6 @@ class ComposerStaticInit79faf09d907f46e89d9cb7b01693ec27
         'Rector\\DeadCode\\TypeNodeAnalyzer\\MixedArrayTypeNodeAnalyzer' => __DIR__ . '/../..' . '/rules/DeadCode/TypeNodeAnalyzer/MixedArrayTypeNodeAnalyzer.php',
         'Rector\\DeadCode\\UselessIfCondBeforeForeachDetector' => __DIR__ . '/../..' . '/rules/DeadCode/UselessIfCondBeforeForeachDetector.php',
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
-        'Rector\\DeadCode\\ValueObject\\PropertyFetchToVariableAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/PropertyFetchToVariableAssign.php',
         'Rector\\DeadCode\\ValueObject\\TargetRemoveClassMethod' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/TargetRemoveClassMethod.php',
         'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
@@ -3107,9 +3106,9 @@ class ComposerStaticInit79faf09d907f46e89d9cb7b01693ec27
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit79faf09d907f46e89d9cb7b01693ec27::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit79faf09d907f46e89d9cb7b01693ec27::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit79faf09d907f46e89d9cb7b01693ec27::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbbae854da20153f8cf5d9bd84366c876::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbbae854da20153f8cf5d9bd84366c876::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbbae854da20153f8cf5d9bd84366c876::$classMap;
 
         }, null, ClassLoader::class);
     }

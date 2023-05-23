@@ -1634,7 +1634,6 @@ return array(
     'Rector\\DeadCode\\TypeNodeAnalyzer\\MixedArrayTypeNodeAnalyzer' => $baseDir . '/rules/DeadCode/TypeNodeAnalyzer/MixedArrayTypeNodeAnalyzer.php',
     'Rector\\DeadCode\\UselessIfCondBeforeForeachDetector' => $baseDir . '/rules/DeadCode/UselessIfCondBeforeForeachDetector.php',
     'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => $baseDir . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
-    'Rector\\DeadCode\\ValueObject\\PropertyFetchToVariableAssign' => $baseDir . '/rules/DeadCode/ValueObject/PropertyFetchToVariableAssign.php',
     'Rector\\DeadCode\\ValueObject\\TargetRemoveClassMethod' => $baseDir . '/rules/DeadCode/ValueObject/TargetRemoveClassMethod.php',
     'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => $baseDir . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
     'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => $baseDir . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
