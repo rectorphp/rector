@@ -18,7 +18,6 @@ use PHPStan\Type\Type;
 use Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -114,24 +113,22 @@ CODE_SAMPLE
     {
         $propertyNames = [];
         $this->traverseNodesWithCallable($class, function (Node $node) use(&$propertyNames) {
-            if (!$node instanceof PropertyProperty) {
+            if (!$node instanceof Property) {
                 return null;
             }
-            if ($node->default instanceof Expr) {
-                return null;
+            foreach ($node->props as $propertyProperty) {
+                if ($propertyProperty->default instanceof Expr) {
+                    continue;
+                }
+                $varType = $this->resolveVarType($node);
+                if (!$this->iterableTypeAnalyzer->detect($varType)) {
+                    continue;
+                }
+                if ($this->visibilityManipulator->isReadonly($node)) {
+                    return null;
+                }
+                $propertyNames[] = $this->getName($propertyProperty);
             }
-            $varType = $this->resolveVarType($node);
-            if (!$this->iterableTypeAnalyzer->detect($varType)) {
-                return null;
-            }
-            $property = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$property instanceof Property) {
-                return null;
-            }
-            if ($this->visibilityManipulator->isReadonly($property)) {
-                return null;
-            }
-            $propertyNames[] = $this->getName($node);
             return null;
         });
         return $propertyNames;
@@ -202,11 +199,9 @@ CODE_SAMPLE
             return $node;
         });
     }
-    private function resolveVarType(PropertyProperty $propertyProperty) : Type
+    private function resolveVarType(Property $property) : Type
     {
-        /** @var Property $propertyNode */
-        $propertyNode = $propertyProperty->getAttribute(AttributeKey::PARENT_NODE);
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($propertyNode);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         return $phpDocInfo->getVarType();
     }
     /**
