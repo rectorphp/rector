@@ -97,8 +97,16 @@ final class ChangedNodeScopeRefresher
     }
     public function reIndexNodeAttributes(Node $node) : void
     {
-        if (($node instanceof ClassLike || $node instanceof StmtsAwareInterface || $node instanceof Declare_) && $node->stmts !== null) {
-            $node->stmts = \array_values($node->stmts);
+        if ($this->hasArrayStmtsNode($node)) {
+            /**
+             * @var StmtsAwareInterface|ClassLike|Declare_ $node
+             * @var Stmt[] $stmts
+             */
+            $stmts = $node->stmts;
+            $node->stmts = \array_values($stmts);
+            foreach ($node->stmts as $key => $stmt) {
+                $stmt->setAttribute(AttributeKey::STMT_KEY, $key);
+            }
         }
         if ($node instanceof FunctionLike) {
             /** @var ClassMethod|Function_|Closure $node */
@@ -120,6 +128,10 @@ final class ChangedNodeScopeRefresher
         if ($node instanceof Switch_) {
             $node->cases = \array_values($node->cases);
         }
+    }
+    private function hasArrayStmtsNode(Node $node) : bool
+    {
+        return ($node instanceof ClassLike || $node instanceof StmtsAwareInterface || $node instanceof Declare_) && $node->stmts !== null;
     }
     /**
      * @return Stmt[]
