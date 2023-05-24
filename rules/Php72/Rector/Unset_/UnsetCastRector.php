@@ -6,10 +6,10 @@ namespace Rector\Php72\Rector\Unset_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\Unset_;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -41,27 +41,34 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Unset_::class, Assign::class];
+        return [Unset_::class, Assign::class, Expression::class];
     }
     /**
-     * @param Unset_|Assign $node
+     * @param Unset_|Assign|Expression $node
      */
     public function refactor(Node $node) : ?Node
     {
         if ($node instanceof Assign) {
-            if ($node->expr instanceof Unset_) {
-                $unset = $node->expr;
-                if ($this->nodeComparator->areNodesEqual($node->var, $unset->expr)) {
-                    return $this->nodeFactory->createFuncCall('unset', [$node->var]);
-                }
-            }
-            return null;
+            return $this->refactorAssign($node);
         }
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Expression) {
+        if ($node instanceof Expression) {
+            if (!$node->expr instanceof Unset_) {
+                return null;
+            }
             $this->removeNode($node);
             return null;
         }
         return $this->nodeFactory->createNull();
+    }
+    private function refactorAssign(Assign $assign) : ?FuncCall
+    {
+        if (!$assign->expr instanceof Unset_) {
+            return null;
+        }
+        $unset = $assign->expr;
+        if (!$this->nodeComparator->areNodesEqual($assign->var, $unset->expr)) {
+            return null;
+        }
+        return $this->nodeFactory->createFuncCall('unset', [$assign->var]);
     }
 }
