@@ -13,8 +13,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\AssignManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -30,15 +28,9 @@ final class ListEachRector extends AbstractRector implements MinPhpVersionInterf
      * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(AssignManipulator $assignManipulator, NodesToAddCollector $nodesToAddCollector)
+    public function __construct(AssignManipulator $assignManipulator)
     {
         $this->assignManipulator = $assignManipulator;
-        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function provideMinPhpVersion() : int
     {
@@ -61,20 +53,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Assign::class];
+        return [Expression::class];
     }
     /**
-     * @param Assign $node
+     * @param Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
-        if ($this->shouldSkip($node)) {
+        if (!$node->expr instanceof Assign) {
+            return null;
+        }
+        $assign = $node->expr;
+        if ($this->shouldSkipAssign($assign)) {
             return null;
         }
         /** @var List_ $listNode */
-        $listNode = $node->var;
+        $listNode = $assign->var;
         /** @var FuncCall $eachFuncCall */
-        $eachFuncCall = $node->expr;
+        $eachFuncCall = $assign->expr;
         // only key: list($key, ) = each($values);
         if ($listNode->items[0] instanceof ArrayItem && !$listNode->items[1] instanceof ArrayItem) {
             $keyFuncCall = $this->nodeFactory->createFuncCall('key', $eachFuncCall->args);
@@ -83,10 +79,11 @@ CODE_SAMPLE
         // only value: list(, $value) = each($values);
         if ($listNode->items[1] instanceof ArrayItem && !$listNode->items[0] instanceof ArrayItem) {
             $nextFuncCall = $this->nodeFactory->createFuncCall('next', $eachFuncCall->args);
-            $this->nodesToAddCollector->addNodeAfterNode($nextFuncCall, $node);
+            //            $this->nodesToAddCollector->addNodeAfterNode($nextFuncCall, $assign);
             $currentFuncCall = $this->nodeFactory->createFuncCall('current', $eachFuncCall->args);
             $secondArrayItem = $listNode->items[1];
-            return new Assign($secondArrayItem->value, $currentFuncCall);
+            $currentAssign = new Assign($secondArrayItem->value, $currentFuncCall);
+            return [new Expression($currentAssign), new Expression($nextFuncCall)];
         }
         // both: list($key, $value) = each($values);
         $currentFuncCall = $this->nodeFactory->createFuncCall('current', $eachFuncCall->args);
@@ -94,25 +91,21 @@ CODE_SAMPLE
         if (!$secondArrayItem instanceof ArrayItem) {
             throw new ShouldNotHappenException();
         }
-        $assign = new Assign($secondArrayItem->value, $currentFuncCall);
-        $this->nodesToAddCollector->addNodeAfterNode($assign, $node);
+        $currentAssign = new Assign($secondArrayItem->value, $currentFuncCall);
+        //        $this->nodesToAddCollector->addNodeAfterNode($assign, $assign);
         $nextFuncCall = $this->nodeFactory->createFuncCall('next', $eachFuncCall->args);
-        $this->nodesToAddCollector->addNodeAfterNode($nextFuncCall, $node);
+        //        $this->nodesToAddCollector->addNodeAfterNode($nextFuncCall, $node);
         $keyFuncCall = $this->nodeFactory->createFuncCall('key', $eachFuncCall->args);
         $firstArrayItem = $listNode->items[0];
         if (!$firstArrayItem instanceof ArrayItem) {
             throw new ShouldNotHappenException();
         }
-        return new Assign($firstArrayItem->value, $keyFuncCall);
+        $keyAssign = new Assign($firstArrayItem->value, $keyFuncCall);
+        return [new Expression($keyAssign), new Expression($currentAssign), new Expression($nextFuncCall)];
     }
-    private function shouldSkip(Assign $assign) : bool
+    private function shouldSkipAssign(Assign $assign) : bool
     {
         if (!$this->assignManipulator->isListToEachAssign($assign)) {
-            return \true;
-        }
-        // assign should be top level, e.g. not in a while loop
-        $parentNode = $assign->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Expression) {
             return \true;
         }
         /** @var List_ $listNode */
