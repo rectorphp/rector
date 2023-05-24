@@ -77,18 +77,24 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Param::class];
+        return [ClassMethod::class];
     }
     /**
-     * @param Param $node
+     * @param ClassMethod $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof ClassMethod) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getParams() as $param) {
+            $changedParam = $this->decorateParamWithType($node, $param, $scope);
+            if ($changedParam instanceof Param) {
+                $hasChanged = \true;
+            }
         }
-        return $this->decorateParamWithType($parentNode, $node, $scope);
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
