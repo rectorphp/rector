@@ -88,8 +88,7 @@ if (\PHP_VERSION_ID < 80000) {
         }
     }
     if (\function_exists('stream_get_wrappers') && \in_array('phpvfscomposer', \stream_get_wrappers(), \true) || \function_exists('stream_wrapper_register') && \stream_wrapper_register('phpvfscomposer', 'RectorPrefix202305\\Composer\\BinProxyWrapper')) {
-        include "phpvfscomposer://" . __DIR__ . '/..' . '/nette/neon/bin/neon-lint';
-        exit(0);
+        return include "phpvfscomposer://" . __DIR__ . '/..' . '/nette/neon/bin/neon-lint';
     }
 }
-include __DIR__ . '/..' . '/nette/neon/bin/neon-lint';
+return include __DIR__ . '/..' . '/nette/neon/bin/neon-lint';

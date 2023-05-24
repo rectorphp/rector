@@ -112,9 +112,8 @@ if (PHP_VERSION_ID < 80000) {
         (function_exists('stream_get_wrappers') && in_array('phpvfscomposer', stream_get_wrappers(), true))
         || (function_exists('stream_wrapper_register') && stream_wrapper_register('phpvfscomposer', 'Composer\BinProxyWrapper'))
     ) {
-        include("phpvfscomposer://" . __DIR__ . '/..'.'/phpstan/phpstan/phpstan.phar');
-        exit(0);
+        return include("phpvfscomposer://" . __DIR__ . '/..'.'/phpstan/phpstan/phpstan.phar');
     }
 }
 
-include __DIR__ . '/..'.'/phpstan/phpstan/phpstan.phar';
+return include __DIR__ . '/..'.'/phpstan/phpstan/phpstan.phar';
