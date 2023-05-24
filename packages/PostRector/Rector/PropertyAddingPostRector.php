@@ -62,7 +62,6 @@ final class PropertyAddingPostRector extends \Rector\PostRector\Rector\AbstractP
         if ($this->classAnalyzer->isAnonymousClass($node)) {
             return null;
         }
-        $this->addConstants($node);
         $this->addProperties($node);
         $this->addPropertiesWithoutConstructor($node);
         return $node;
@@ -89,13 +88,6 @@ class SomeClass
 }
 CODE_SAMPLE
 )]);
-    }
-    private function addConstants(Class_ $class) : void
-    {
-        $constants = $this->propertyToAddCollector->getConstantsByClass($class);
-        foreach ($constants as $constantName => $nodeConst) {
-            $this->classInsertManipulator->addConstantToClass($class, $constantName, $nodeConst);
-        }
     }
     private function addProperties(Class_ $class) : void
     {

@@ -1,4 +1,4 @@
-# 402 Rules Overview
+# 398 Rules Overview
 
 <br>
 
@@ -6,13 +6,13 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (75)
+- [CodeQuality](#codequality) (74)
 
 - [CodingStyle](#codingstyle) (34)
 
 - [Compatibility](#compatibility) (1)
 
-- [DeadCode](#deadcode) (47)
+- [DeadCode](#deadcode) (46)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -50,7 +50,7 @@
 
 - [Php82](#php82) (3)
 
-- [Privatization](#privatization) (7)
+- [Privatization](#privatization) (6)
 
 - [Removing](#removing) (6)
 
@@ -60,7 +60,7 @@
 
 - [Strict](#strict) (6)
 
-- [Transform](#transform) (29)
+- [Transform](#transform) (28)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -719,38 +719,6 @@ Make if conditions more explicit
 +        if (count($items) === 0) {
              return 'no items';
          }
-     }
- }
-```
-
-<br>
-
-### ExplicitMethodCallOverMagicGetSetRector
-
-Replace magic property fetch using `__get()` and `__set()` with existing method get*()/set*() calls
-
-- class: [`Rector\CodeQuality\Rector\PropertyFetch\ExplicitMethodCallOverMagicGetSetRector`](../rules/CodeQuality/Rector/PropertyFetch/ExplicitMethodCallOverMagicGetSetRector.php)
-
-```diff
- class MagicCallsObject
- {
-     // adds magic __get() and __set() methods
-     use \Nette\SmartObject;
-
-     private $name;
-
-     public function getName()
-     {
-         return $this->name;
-     }
- }
-
- class SomeClass
- {
-     public function run(MagicObject $magicObject)
-     {
--        return $magicObject->name;
-+        return $magicObject->getName();
      }
  }
 ```
@@ -2937,28 +2905,6 @@ Remove duplicated key in defined arrays.
               case '...':
                   return 5;
          }
-     }
- }
-```
-
-<br>
-
-### RemoveDuplicatedInstanceOfRector
-
-Remove duplicated instanceof in one call
-
-- class: [`Rector\DeadCode\Rector\BinaryOp\RemoveDuplicatedInstanceOfRector`](../rules/DeadCode/Rector/BinaryOp/RemoveDuplicatedInstanceOfRector.php)
-
-```diff
- class SomeClass
- {
--    public function run($value)
-+    public function run($value): void
-     {
--        $isIt = $value instanceof A || $value instanceof A;
--        $isIt = $value instanceof A && $value instanceof A;
-+        $isIt = $value instanceof A;
-+        $isIt = $value instanceof A;
      }
  }
 ```
@@ -5506,6 +5452,7 @@ Change curly based array and string to square bracket
  $string = 'test';
 -echo $string{0};
 +echo $string[0];
+
  $array = ['test'];
 -echo $array{0};
 +echo $array[0];
@@ -6517,39 +6464,6 @@ Change property with read only status with default value to constant
 -        foreach ($this->magicMethods as $magicMethod) {
 +        foreach (self::MAGIC_METHODS as $magicMethod) {
              echo $magicMethod;
-         }
-     }
- }
-```
-
-<br>
-
-### ChangeReadOnlyVariableWithDefaultValueToConstantRector
-
-Change variable with read only status with default value to constant
-
-- class: [`Rector\Privatization\Rector\Class_\ChangeReadOnlyVariableWithDefaultValueToConstantRector`](../rules/Privatization/Rector/Class_/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php)
-
-```diff
- class SomeClass
- {
-+    /**
-+     * @var string[]
-+     */
-+    private const REPLACEMENTS = [
-+        'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',
-+        'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation',
-+    ];
-+
-     public function run()
-     {
--        $replacements = [
--            'PHPUnit\Framework\TestCase\Notice' => 'expectNotice',
--            'PHPUnit\Framework\TestCase\Deprecated' => 'expectDeprecation',
--        ];
--
--        foreach ($replacements as $class => $method) {
-+        foreach (self::REPLACEMENTS as $class => $method) {
          }
      }
  }
@@ -7770,40 +7684,6 @@ return static function (RectorConfig $rectorConfig): void {
 ```diff
 -view("...", []);
 +SomeClass::render("...", []);
-```
-
-<br>
-
-### GetAndSetToMethodCallRector
-
-Turns defined `__get`/`__set` to specific method calls.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector`](../rules/Transform/Rector/Assign/GetAndSetToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Assign\GetAndSetToMethodCallRector;
-use Rector\Transform\ValueObject\GetAndSetToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(GetAndSetToMethodCallRector::class, [
-        new GetAndSetToMethodCall('SomeContainer', 'addService', 'getService'),
-    ]);
-};
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--$container->someService = $someService;
-+$container->setService("someService", $someService);
 ```
 
 <br>

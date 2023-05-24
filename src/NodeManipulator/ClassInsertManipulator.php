@@ -12,7 +12,6 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Type\Type;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 final class ClassInsertManipulator
@@ -26,15 +25,9 @@ final class ClassInsertManipulator
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
-    public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
+    public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @api
@@ -51,13 +44,6 @@ final class ClassInsertManipulator
             return;
         }
         $class->stmts[] = $stmt;
-    }
-    public function addConstantToClass(Class_ $class, string $constantName, ClassConst $classConst) : void
-    {
-        if ($this->hasClassConstant($class, $constantName)) {
-            return;
-        }
-        $this->addAsFirstMethod($class, $classConst);
     }
     /**
      * @api
@@ -130,15 +116,6 @@ final class ClassInsertManipulator
                 return \true;
             }
             $previousElement = $classStmt;
-        }
-        return \false;
-    }
-    private function hasClassConstant(Class_ $class, string $constantName) : bool
-    {
-        foreach ($class->getConstants() as $classConst) {
-            if ($this->nodeNameResolver->isName($classConst, $constantName)) {
-                return \true;
-            }
         }
         return \false;
     }

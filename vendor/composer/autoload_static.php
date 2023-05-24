@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d
+class ComposerStaticInit971cef4e61efaf671602226c86632e0f
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1387,7 +1387,6 @@ class ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d
         'Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocTagRemover' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTagRemover.php',
         'Rector\\BetterPhpDocParser\\PhpDocManipulator\\PhpDocTypeChanger' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocManipulator/PhpDocTypeChanger.php',
         'Rector\\BetterPhpDocParser\\PhpDocManipulator\\PropertyDocBlockManipulator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocManipulator/PropertyDocBlockManipulator.php',
-        'Rector\\BetterPhpDocParser\\PhpDocManipulator\\VarAnnotationManipulator' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocManipulator/VarAnnotationManipulator.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeFinder\\PhpDocNodeByTypeFinder' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeFinder/PhpDocNodeByTypeFinder.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeMapper' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeMapper.php',
         'Rector\\BetterPhpDocParser\\PhpDocNodeVisitor\\ArrayTypePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDocNodeVisitor/ArrayTypePhpDocNodeVisitor.php',
@@ -1713,7 +1712,6 @@ class ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d
         'Rector\\Core\\NodeDecorator\\CreatedByRuleDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/CreatedByRuleDecorator.php',
         'Rector\\Core\\NodeDecorator\\MixPhpHtmlDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/MixPhpHtmlDecorator.php',
         'Rector\\Core\\NodeDecorator\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/PropertyTypeDecorator.php',
-        'Rector\\Core\\NodeManipulator\\ArrayDestructVariableFilter' => __DIR__ . '/../..' . '/src/NodeManipulator/ArrayDestructVariableFilter.php',
         'Rector\\Core\\NodeManipulator\\ArrayManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ArrayManipulator.php',
         'Rector\\Core\\NodeManipulator\\AssignManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/AssignManipulator.php',
         'Rector\\Core\\NodeManipulator\\BinaryOpManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/BinaryOpManipulator.php',
@@ -1732,7 +1730,6 @@ class ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d
         'Rector\\Core\\NodeManipulator\\PropertyFetchAssignManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/PropertyFetchAssignManipulator.php',
         'Rector\\Core\\NodeManipulator\\PropertyManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/PropertyManipulator.php',
         'Rector\\Core\\NodeManipulator\\StmtsManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/StmtsManipulator.php',
-        'Rector\\Core\\NodeManipulator\\VariableManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/VariableManipulator.php',
         'Rector\\Core\\NonPhpFile\\NonPhpFileProcessor' => __DIR__ . '/../..' . '/src/NonPhpFile/NonPhpFileProcessor.php',
         'Rector\\Core\\NonPhpFile\\Rector\\RenameClassNonPhpRector' => __DIR__ . '/../..' . '/src/NonPhpFile/Rector/RenameClassNonPhpRector.php',
         'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ClosureTypeToCallReflectionResolver' => __DIR__ . '/../..' . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ClosureTypeToCallReflectionResolver.php',
@@ -2628,7 +2625,6 @@ class ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d
         'Rector\\Privatization\\NodeReplacer\\PropertyFetchWithConstFetchReplacer' => __DIR__ . '/../..' . '/rules/Privatization/NodeReplacer/PropertyFetchWithConstFetchReplacer.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
         'Rector\\Privatization\\Rector\\Class_\\ChangeGlobalVariablesToPropertiesRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php',
-        'Rector\\Privatization\\Rector\\Class_\\ChangeReadOnlyVariableWithDefaultValueToConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/ChangeReadOnlyVariableWithDefaultValueToConstantRector.php',
         'Rector\\Privatization\\Rector\\Class_\\FinalizeClassesWithoutChildrenRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php',
         'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
         'Rector\\Privatization\\Rector\\Property\\ChangeReadOnlyPropertyWithDefaultValueToConstantRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/ChangeReadOnlyPropertyWithDefaultValueToConstantRector.php',
@@ -3102,9 +3098,9 @@ class ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5d020b628e489ed7fa420d2cee09c72d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit971cef4e61efaf671602226c86632e0f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit971cef4e61efaf671602226c86632e0f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit971cef4e61efaf671602226c86632e0f::$classMap;
 
         }, null, ClassLoader::class);
     }

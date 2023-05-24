@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Variable;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class ExprUsedInNextNodeAnalyzer
 {
@@ -23,10 +23,10 @@ final class ExprUsedInNextNodeAnalyzer
         $this->betterNodeFinder = $betterNodeFinder;
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
     }
-    public function isUsed(Expr $expr) : bool
+    public function isUsed(Variable $variable) : bool
     {
-        return (bool) $this->betterNodeFinder->findFirstNext($expr, function (Node $node) use($expr) : bool {
-            return $this->exprUsedInNodeAnalyzer->isUsed($node, $expr);
+        return (bool) $this->betterNodeFinder->findFirstNext($variable, function (Node $node) use($variable) : bool {
+            return $this->exprUsedInNodeAnalyzer->isUsed($node, $variable);
         });
     }
 }
