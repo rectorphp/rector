@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
@@ -46,7 +45,6 @@ use Rector\Caching\FileSystem\DependencyResolver;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -104,18 +102,13 @@ final class PHPStanNodeScopeResolver
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
      * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
      */
-    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, array $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, ClassAnalyzer $classAnalyzer)
+    public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, array $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
     {
         $this->changedFilesDetector = $changedFilesDetector;
         $this->dependencyResolver = $dependencyResolver;
@@ -124,7 +117,6 @@ final class PHPStanNodeScopeResolver
         $this->scopeFactory = $scopeFactory;
         $this->privatesAccessor = $privatesAccessor;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->classAnalyzer = $classAnalyzer;
         $this->nodeTraverser = new NodeTraverser();
         foreach ($nodeVisitors as $nodeVisitor) {
@@ -222,21 +214,17 @@ final class PHPStanNodeScopeResolver
     }
     private function setChildOfUnreachableStatementNodeAttribute(Stmt $stmt) : void
     {
-        if ($stmt->getAttribute(AttributeKey::IS_UNREACHABLE) === \true) {
+        if ($stmt->getAttribute(AttributeKey::IS_UNREACHABLE) !== \true) {
             return;
         }
-        $parentStmt = $stmt->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentStmt instanceof Node) {
+        if (!$stmt instanceof StmtsAwareInterface) {
             return;
         }
-        if ($parentStmt instanceof Closure) {
-            $parentStmt = $this->betterNodeFinder->resolveCurrentStatement($parentStmt);
-        }
-        if (!$parentStmt instanceof Stmt) {
+        if ($stmt->stmts === null) {
             return;
         }
-        if ($parentStmt->getAttribute(AttributeKey::IS_UNREACHABLE) === \true) {
-            $stmt->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
+        foreach ($stmt->stmts as $childStmt) {
+            $childStmt->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
         }
     }
     private function processArray(Array_ $array, MutatingScope $mutatingScope) : void
