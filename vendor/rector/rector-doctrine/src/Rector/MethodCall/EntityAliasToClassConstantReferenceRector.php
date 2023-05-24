@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Rector\MethodCall;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Type\ObjectType;
@@ -64,18 +65,18 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'getRepository')) {
             return null;
         }
-        if (!isset($node->args[0])) {
+        $firstArg = $node->getArgs()[0] ?? null;
+        if (!$firstArg instanceof Arg) {
             return null;
         }
-        if (!$node->args[0]->value instanceof String_) {
+        if (!$firstArg->value instanceof String_) {
             return null;
         }
-        /** @var String_ $stringNode */
-        $stringNode = $node->args[0]->value;
+        $stringNode = $firstArg->value;
         if (!$this->isAliasWithConfiguredEntity($stringNode->value)) {
             return null;
         }
-        $node->args[0]->value = $this->nodeFactory->createClassConstReference($this->convertAliasToFqn($node->args[0]->value->value));
+        $firstArg->value = $this->nodeFactory->createClassConstReference($this->convertAliasToFqn($stringNode->value));
         return $node;
     }
     /**

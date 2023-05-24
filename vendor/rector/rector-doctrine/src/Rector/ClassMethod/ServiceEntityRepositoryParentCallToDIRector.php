@@ -8,15 +8,17 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Doctrine\NodeFactory\RepositoryNodeFactory;
 use Rector\Doctrine\Type\RepositoryTypeFactory;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -54,19 +56,13 @@ final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    /**
-     * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
-     */
-    private $reflectionResolver;
-    public function __construct(RepositoryNodeFactory $repositoryNodeFactory, RepositoryTypeFactory $repositoryTypeFactory, PropertyToAddCollector $propertyToAddCollector, ClassDependencyManipulator $classDependencyManipulator, PropertyNaming $propertyNaming, ReflectionResolver $reflectionResolver)
+    public function __construct(RepositoryNodeFactory $repositoryNodeFactory, RepositoryTypeFactory $repositoryTypeFactory, PropertyToAddCollector $propertyToAddCollector, ClassDependencyManipulator $classDependencyManipulator, PropertyNaming $propertyNaming)
     {
         $this->repositoryNodeFactory = $repositoryNodeFactory;
         $this->repositoryTypeFactory = $repositoryTypeFactory;
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->propertyNaming = $propertyNaming;
-        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -88,15 +84,12 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class ProjectRepository extends ServiceEntityRepository
 {
-    /**
-     * @var \Doctrine\ORM\EntityManagerInterface
-     */
-    private $entityManager;
+    private \Doctrine\ORM\EntityManagerInterface $entityManager;
 
     /**
      * @var \Doctrine\ORM\EntityRepository<Project>
      */
-    private $repository;
+    private \Doctrine\ORM\EntityRepository $repository;
 
     public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
     {
@@ -112,53 +105,50 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      *
      * For reference, possible manager registry param types:
+     *
      * - Doctrine\Common\Persistence\ManagerRegistry
      * - Doctrine\Persistence\ManagerRegistry
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->shouldSkipClassMethod($node)) {
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
             return null;
         }
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
+        $classScope = $node->getAttribute(AttributeKey::SCOPE);
+        if (!$classScope instanceof Scope) {
+            return null;
+        }
+        $classReflection = $classScope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
+        if (!$classReflection->isSubclassOf('Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository')) {
             return null;
         }
         // 1. remove parent::__construct()
-        $entityReferenceExpr = $this->removeParentConstructAndCollectEntityReference($node);
+        $entityReferenceExpr = $this->removeParentConstructAndCollectEntityReference($constructClassMethod);
         if (!$entityReferenceExpr instanceof Expr) {
             return null;
         }
         // 2. remove params
-        $node->params = [];
+        $constructClassMethod->params = [];
         // 3. add $entityManager->getRepository() fetch assign
         $repositoryAssign = $this->repositoryNodeFactory->createRepositoryAssign($entityReferenceExpr);
         $entityManagerObjectType = new ObjectType('Doctrine\\ORM\\EntityManagerInterface');
-        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($class, 'entityManager', $entityManagerObjectType, $repositoryAssign);
-        $this->addRepositoryProperty($class, $entityReferenceExpr);
+        $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($node, 'entityManager', $entityManagerObjectType, $repositoryAssign);
+        $this->addRepositoryProperty($node, $entityReferenceExpr);
         // 5. add param + add property, dependency
         $propertyName = $this->propertyNaming->fqnToVariableName($entityManagerObjectType);
         $propertyMetadata = new PropertyMetadata($propertyName, $entityManagerObjectType, Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
+        $this->propertyToAddCollector->addPropertyToClass($node, $propertyMetadata);
         return $node;
-    }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
-    {
-        if (!$this->isName($classMethod, MethodName::CONSTRUCT)) {
-            return \true;
-        }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
-            // fresh node or possibly trait/interface
-            return \true;
-        }
-        return !$classReflection->isSubclassOf('Doctrine\\Bundle\\DoctrineBundle\\Repository\\ServiceEntityRepository');
     }
     private function removeParentConstructAndCollectEntityReference(ClassMethod $classMethod) : ?Expr
     {
@@ -170,14 +160,18 @@ CODE_SAMPLE
             if (!$this->isName($node->class, 'parent')) {
                 return null;
             }
-            $entityReferenceExpr = $node->args[1]->value;
+            $entityReferenceExpr = $node->getArgs()[1]->value;
             $this->removeNode($node);
         });
         return $entityReferenceExpr;
     }
     private function addRepositoryProperty(Class_ $class, Expr $entityReferenceExpr) : void
     {
+        if ($class->getProperty('repository') instanceof Property) {
+            return;
+        }
         $genericObjectType = $this->repositoryTypeFactory->createRepositoryPropertyType($entityReferenceExpr);
-        $this->propertyToAddCollector->addPropertyWithoutConstructorToClass('repository', $genericObjectType, $class);
+        $property = $this->nodeFactory->createPrivatePropertyFromNameAndType('repository', $genericObjectType);
+        \array_splice($class->stmts, 0, 0, [$property]);
     }
 }

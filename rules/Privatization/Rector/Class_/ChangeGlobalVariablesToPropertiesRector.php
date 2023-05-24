@@ -10,9 +10,10 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Global_;
+use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
-use Rector\PostRector\Collector\PropertyToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -27,15 +28,6 @@ final class ChangeGlobalVariablesToPropertiesRector extends AbstractRector
      * @var string[]
      */
     private $globalVariableNames = [];
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\PropertyToAddCollector
-     */
-    private $propertyToAddCollector;
-    public function __construct(PropertyToAddCollector $propertyToAddCollector)
-    {
-        $this->propertyToAddCollector = $propertyToAddCollector;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change global $variables to private properties', [new CodeSample(<<<'CODE_SAMPLE'
@@ -89,9 +81,12 @@ CODE_SAMPLE
         if ($this->globalVariableNames === []) {
             return null;
         }
+        // @todo find ideal property position
+        $globalProperties = [];
         foreach ($this->globalVariableNames as $globalVariableName) {
-            $this->propertyToAddCollector->addPropertyWithoutConstructorToClass($globalVariableName, null, $node);
+            $globalProperties[] = new Property(Class_::MODIFIER_PRIVATE, [new PropertyProperty($globalVariableName)]);
         }
+        \array_splice($node->stmts, 0, 0, $globalProperties);
         return $node;
     }
     private function collectGlobalVariableNamesAndRefactorToPropertyFetch(Class_ $class, ClassMethod $classMethod) : void

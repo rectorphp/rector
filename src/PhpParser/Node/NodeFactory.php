@@ -36,8 +36,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Enum\ObjectReference;
@@ -166,17 +164,6 @@ final class NodeFactory
             }
         }
         return $param->getNode();
-    }
-    public function createPublicInjectPropertyFromNameAndType(string $name, ?Type $type) : Property
-    {
-        $propertyBuilder = new PropertyBuilder($name);
-        $propertyBuilder->makePublic();
-        $property = $propertyBuilder->getNode();
-        $this->propertyTypeDecorator->decorate($property, $type);
-        // add @inject
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $phpDocInfo->addPhpDocTagNode(new PhpDocTagNode('@inject', new GenericTagValueNode('')));
-        return $property;
     }
     public function createPrivatePropertyFromNameAndType(string $name, ?Type $type) : Property
     {

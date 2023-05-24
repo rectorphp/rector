@@ -119,7 +119,7 @@ CODE_SAMPLE
             if ($this->isObjectType($class, new ObjectType('Doctrine\\ORM\\EntityRepository'))) {
                 return null;
             }
-            $firstArgValue = $parentMethodCall->args[0]->value;
+            $firstArgValue = $parentMethodCall->getArgs()[0]->value;
             $repositoryPropertyName = $this->resolveRepositoryName($firstArgValue);
             $repositoryType = $this->guessRepositoryType($firstArgValue);
             $objectType = new ObjectType($repositoryType);

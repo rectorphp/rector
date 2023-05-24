@@ -6,6 +6,7 @@ namespace Rector\Doctrine\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\ClassDependencyManipulator;
@@ -103,7 +104,9 @@ CODE_SAMPLE
         $subtractableType = $this->entityObjectTypeResolver->resolveFromRepositoryClass($node);
         $genericObjectType = new GenericObjectType('Doctrine\\ORM\\EntityRepository', [$subtractableType]);
         // add $repository property
-        $this->classInsertManipulator->addPropertyToClass($node, 'repository', $genericObjectType);
+        if (!$node->getProperty('repository') instanceof Property) {
+            $this->classInsertManipulator->addPropertyToClass($node, 'repository', $genericObjectType);
+        }
         // add $entityManager and assign to constuctor
         $repositoryAssign = $this->repositoryAssignFactory->create($node);
         $this->classDependencyManipulator->addConstructorDependencyWithCustomAssign($node, 'entityManager', new ObjectType('Doctrine\\ORM\\EntityManagerInterface'), $repositoryAssign);

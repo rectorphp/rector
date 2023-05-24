@@ -155,13 +155,6 @@ final class ClassDependencyManipulator
         }
         $classMethod->stmts = \array_merge($stmts, (array) $classMethod->stmts);
     }
-    public function addInjectProperty(Class_ $class, PropertyMetadata $propertyMetadata) : void
-    {
-        if ($this->propertyPresenceChecker->hasClassContextProperty($class, $propertyMetadata)) {
-            return;
-        }
-        $this->classInsertManipulator->addInjectPropertyToClass($class, $propertyMetadata);
-    }
     private function addPromotedProperty(Class_ $class, PropertyMetadata $propertyMetadata) : void
     {
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);

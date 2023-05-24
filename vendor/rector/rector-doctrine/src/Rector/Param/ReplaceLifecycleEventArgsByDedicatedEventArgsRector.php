@@ -5,6 +5,7 @@ namespace Rector\Doctrine\Rector\Param;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
@@ -17,6 +18,9 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class ReplaceLifecycleEventArgsByDedicatedEventArgsRector extends AbstractRector
 {
+    /**
+     * @var array<string, class-string>
+     */
     private const EVENT_CLASSES = ['prePersist' => 'Doctrine\\ORM\\Event\\PrePersistEventArgs', 'preUpdate' => 'Doctrine\\ORM\\Event\\PreUpdateEventArgs', 'preRemove' => 'Doctrine\\ORM\\Event\\PreRemoveEventArgs', 'postPersist' => 'Doctrine\\ORM\\Event\\PostPersistEventArgs', 'postUpdate' => 'Doctrine\\ORM\\Event\\PostUpdateEventArgs', 'postRemove' => 'Doctrine\\ORM\\Event\\PostRemoveEventArgs', 'postLoad' => 'Doctrine\\ORM\\Event\\PostLoadEventArgs'];
     public function getRuleDefinition() : RuleDefinition
     {
@@ -50,7 +54,7 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Node\Param::class];
+        return [Param::class];
     }
     /**
      * @param Node\Param $node

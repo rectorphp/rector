@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Doctrine\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Identifier;
@@ -67,7 +66,8 @@ CODE_SAMPLE
             return null;
         }
         $node->name = new Identifier('with');
-        $node->args[0] = new Arg(new ArrayItem($node->args[0]->value, null, \false, [], \true));
+        $firstArg = $node->getArgs()[0];
+        $firstArg->value = new ArrayItem($firstArg->value, null, \false, [], \true);
         return $node;
     }
 }

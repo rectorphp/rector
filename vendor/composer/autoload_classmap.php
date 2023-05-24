@@ -2366,7 +2366,6 @@ return array(
     'Rector\\PostRector\\Contract\\Rector\\ComplementaryRectorInterface' => $baseDir . '/packages/PostRector/Contract/Rector/ComplementaryRectorInterface.php',
     'Rector\\PostRector\\Contract\\Rector\\PostRectorDependencyInterface' => $baseDir . '/packages/PostRector/Contract/Rector/PostRectorDependencyInterface.php',
     'Rector\\PostRector\\Contract\\Rector\\PostRectorInterface' => $baseDir . '/packages/PostRector/Contract/Rector/PostRectorInterface.php',
-    'Rector\\PostRector\\NodeAnalyzer\\NetteInjectDetector' => $baseDir . '/packages/PostRector/NodeAnalyzer/NetteInjectDetector.php',
     'Rector\\PostRector\\Rector\\AbstractPostRector' => $baseDir . '/packages/PostRector/Rector/AbstractPostRector.php',
     'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => $baseDir . '/packages/PostRector/Rector/ClassRenamingPostRector.php',
     'Rector\\PostRector\\Rector\\NameImportingPostRector' => $baseDir . '/packages/PostRector/Rector/NameImportingPostRector.php',
