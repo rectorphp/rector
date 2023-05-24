@@ -123,23 +123,6 @@ final class PropertyFetchAnalyzer
             return $this->isLocalPropertyFetchName($node, $propertyName);
         });
     }
-    public function isPropertyToSelf(PropertyFetch $propertyFetch) : bool
-    {
-        if (!$this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
-            return \false;
-        }
-        $class = $this->betterNodeFinder->findParentType($propertyFetch, Class_::class);
-        if (!$class instanceof Class_) {
-            return \false;
-        }
-        foreach ($class->getProperties() as $property) {
-            if (!$this->nodeNameResolver->areNamesEqual($property->props[0], $propertyFetch)) {
-                continue;
-            }
-            return \true;
-        }
-        return \false;
-    }
     public function isPropertyFetch(Node $node) : bool
     {
         if ($node instanceof PropertyFetch) {
