@@ -2207,7 +2207,6 @@ return array(
     'Rector\\Php72\\Rector\\Assign\\ReplaceEachAssignmentWithKeyCurrentRector' => $baseDir . '/rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php',
     'Rector\\Php72\\Rector\\FuncCall\\CreateFunctionToAnonymousFunctionRector' => $baseDir . '/rules/Php72/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector.php',
     'Rector\\Php72\\Rector\\FuncCall\\GetClassOnNullRector' => $baseDir . '/rules/Php72/Rector/FuncCall/GetClassOnNullRector.php',
-    'Rector\\Php72\\Rector\\FuncCall\\IsObjectOnIncompleteClassRector' => $baseDir . '/rules/Php72/Rector/FuncCall/IsObjectOnIncompleteClassRector.php',
     'Rector\\Php72\\Rector\\FuncCall\\ParseStrWithResultArgumentRector' => $baseDir . '/rules/Php72/Rector/FuncCall/ParseStrWithResultArgumentRector.php',
     'Rector\\Php72\\Rector\\FuncCall\\StringifyDefineRector' => $baseDir . '/rules/Php72/Rector/FuncCall/StringifyDefineRector.php',
     'Rector\\Php72\\Rector\\FuncCall\\StringsAssertNakedRector' => $baseDir . '/rules/Php72/Rector/FuncCall/StringsAssertNakedRector.php',

@@ -12,10 +12,8 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202305\Webmozart\Assert\Assert;
@@ -132,11 +130,6 @@ CODE_SAMPLE
     private function transformArrayToYieldsOnMethodNode(ClassMethod $classMethod, Array_ $array) : void
     {
         $yieldNodes = $this->nodeTransformer->transformArrayToYields($array);
-        // remove whole return node
-        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
-            throw new ShouldNotHappenException();
-        }
         $this->removeReturnTag($classMethod);
         // change return typehint
         $classMethod->returnType = new FullyQualified('Iterator');
