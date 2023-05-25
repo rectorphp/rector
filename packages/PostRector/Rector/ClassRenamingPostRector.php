@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
-use PhpParser\Node\Stmt;
 use PhpParser\Node;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Analyser\Scope;
 use Rector\CodingStyle\Application\UseImportsRemover;

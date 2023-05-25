@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Foreach_;
 
-use PhpParser\Node\Stmt;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Analyser\Scope;
