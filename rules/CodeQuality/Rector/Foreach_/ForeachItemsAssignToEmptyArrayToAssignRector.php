@@ -3,16 +3,18 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Foreach_;
 
+use PhpParser\Node\Stmt;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use PHPStan\Analyser\Scope;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeNestingScope\ValueObject\ControlStructure;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,17 +24,11 @@ final class ForeachItemsAssignToEmptyArrayToAssignRector extends AbstractScopeAw
 {
     /**
      * @readonly
-     * @var \Rector\ReadWrite\NodeFinder\NodeUsageFinder
-     */
-    private $nodeUsageFinder;
-    /**
-     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
-    public function __construct(NodeUsageFinder $nodeUsageFinder, ForeachAnalyzer $foreachAnalyzer)
+    public function __construct(ForeachAnalyzer $foreachAnalyzer)
     {
-        $this->nodeUsageFinder = $nodeUsageFinder;
         $this->foreachAnalyzer = $foreachAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -68,50 +64,78 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Foreach_::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param Foreach_ $node
+     * @param StmtsAwareInterface $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($this->shouldSkip($node, $scope)) {
+        if ($node->stmts === null) {
             return null;
         }
-        $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($node);
-        if (!$assignVariable instanceof Expr) {
-            return null;
+        $emptyArrayVariables = [];
+        foreach ($node->stmts as $key => $stmt) {
+            $variableName = $this->matchEmptyArrayVariableAssign($stmt);
+            if (\is_string($variableName)) {
+                $emptyArrayVariables[] = $variableName;
+            }
+            if (!$stmt instanceof Foreach_) {
+                continue;
+            }
+            if ($this->shouldSkip($stmt, $emptyArrayVariables)) {
+                continue;
+            }
+            $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($stmt);
+            if (!$assignVariable instanceof Expr) {
+                continue;
+            }
+            $directAssign = new Assign($assignVariable, $stmt->expr);
+            $node->stmts[$key] = new Expression($directAssign);
+            return $node;
         }
-        return new Assign($assignVariable, $node->expr);
+        return null;
     }
-    private function shouldSkip(Foreach_ $foreach, Scope $scope) : bool
+    /**
+     * @param string[] $emptyArrayVariables
+     */
+    private function shouldSkip(Foreach_ $foreach, array $emptyArrayVariables) : bool
     {
         $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($foreach);
         if (!$assignVariable instanceof Expr) {
             return \true;
         }
+        $foreachedExprType = $this->getType($foreach->expr);
+        // only arrays, not traversable/iterable
+        if (!$foreachedExprType->isArray()->yes()) {
+            return \true;
+        }
         if ($this->shouldSkipAsPartOfOtherLoop($foreach)) {
             return \true;
         }
-        $node = $this->nodeUsageFinder->findPreviousForeachNodeUsage($foreach, $assignVariable);
-        if (!$node instanceof Node) {
-            return \true;
-        }
-        $previousDeclarationParentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$previousDeclarationParentNode instanceof Assign) {
-            return \true;
-        }
-        // must be empty array, otherwise it will false override
-        $defaultValue = $this->valueResolver->getValue($previousDeclarationParentNode->expr);
-        if ($defaultValue !== []) {
-            return \true;
-        }
-        $type = $scope->getType($foreach->expr);
-        return !$type->isArray()->yes();
+        return !$this->isNames($assignVariable, $emptyArrayVariables);
     }
     private function shouldSkipAsPartOfOtherLoop(Foreach_ $foreach) : bool
     {
         $foreachParent = $this->betterNodeFinder->findParentByTypes($foreach, ControlStructure::LOOP_NODES);
         return $foreachParent instanceof Node;
+    }
+    private function matchEmptyArrayVariableAssign(Stmt $stmt) : ?string
+    {
+        if (!$stmt instanceof Expression) {
+            return null;
+        }
+        if (!$stmt->expr instanceof Assign) {
+            return null;
+        }
+        $assign = $stmt->expr;
+        if (!$assign->var instanceof Variable) {
+            return null;
+        }
+        // must be assign of empty array
+        if (!$this->valueResolver->isValue($assign->expr, [])) {
+            return null;
+        }
+        return $this->getName($assign->var);
     }
 }

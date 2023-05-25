@@ -1947,7 +1947,6 @@ return array(
     'Rector\\NodeNameResolver\\NodeNameResolver\\VariableNameResolver' => $baseDir . '/packages/NodeNameResolver/NodeNameResolver/VariableNameResolver.php',
     'Rector\\NodeNameResolver\\Regex\\RegexPatternDetector' => $baseDir . '/packages/NodeNameResolver/Regex/RegexPatternDetector.php',
     'Rector\\NodeNestingScope\\ContextAnalyzer' => $baseDir . '/packages/NodeNestingScope/ContextAnalyzer.php',
-    'Rector\\NodeNestingScope\\NodeFinder\\ScopeAwareNodeFinder' => $baseDir . '/packages/NodeNestingScope/NodeFinder/ScopeAwareNodeFinder.php',
     'Rector\\NodeNestingScope\\ParentScopeFinder' => $baseDir . '/packages/NodeNestingScope/ParentScopeFinder.php',
     'Rector\\NodeNestingScope\\ScopeNestingComparator' => $baseDir . '/packages/NodeNestingScope/ScopeNestingComparator.php',
     'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => $baseDir . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',
