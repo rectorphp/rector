@@ -89,32 +89,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [Assign::class];
     }
     /**
-     * @param FuncCall $node
+     * @param Assign $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeNameResolver->isName($node, 'token_get_all')) {
+        if (!$node->expr instanceof FuncCall) {
             return null;
         }
-        $this->refactorTokensVariable($node);
-        return $this->nodeFactory->createStaticCall('PhpToken', 'tokenize', $node->args);
-    }
-    private function refactorTokensVariable(FuncCall $funcCall) : void
-    {
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Assign) {
-            return;
+        $funcCall = $node->expr;
+        if (!$this->nodeNameResolver->isName($funcCall, 'token_get_all')) {
+            return null;
         }
+        $this->refactorTokensVariable($funcCall, $node->var);
+        $node->expr = $this->nodeFactory->createStaticCall('PhpToken', 'tokenize', $funcCall->getArgs());
+        return $node;
+    }
+    private function refactorTokensVariable(FuncCall $funcCall, Expr $assignedToExpr) : void
+    {
         /** @var ClassMethod|Function_|null $classMethodOrFunction */
         $classMethodOrFunction = $this->betterNodeFinder->findParentByTypes($funcCall, [ClassMethod::class, Function_::class]);
         if ($classMethodOrFunction === null) {
             return;
         }
         // dummy approach, improve when needed
-        $this->replaceGetNameOrGetValue($classMethodOrFunction, $parentNode->var);
+        $this->replaceGetNameOrGetValue($classMethodOrFunction, $assignedToExpr);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
