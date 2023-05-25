@@ -50,13 +50,9 @@ final class ClassMethodManipulator
         }
         return $classMethod->isProtected();
     }
-    public function hasParentMethodOrInterfaceMethod(ClassMethod $classMethod, ?string $methodName = null) : bool
+    public function hasParentMethodOrInterfaceMethod(Class_ $class, string $methodName) : bool
     {
-        $methodName = $methodName ?? $this->nodeNameResolver->getName($classMethod->name);
-        if ($methodName === null) {
-            return \false;
-        }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }

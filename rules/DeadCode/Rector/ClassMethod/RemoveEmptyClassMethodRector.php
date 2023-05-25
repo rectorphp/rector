@@ -85,7 +85,7 @@ CODE_SAMPLE
         if ($this->shouldSkipNonFinalNonPrivateClassMethod($classLike, $node)) {
             return null;
         }
-        if ($this->shouldSkipClassMethod($node)) {
+        if ($this->shouldSkipClassMethod($classLike, $node)) {
             return null;
         }
         $this->removeNode($node);
@@ -104,12 +104,12 @@ CODE_SAMPLE
         }
         return $classMethod->isPublic();
     }
-    private function shouldSkipClassMethod(ClassMethod $classMethod) : bool
+    private function shouldSkipClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
         if ($this->classMethodManipulator->isNamedConstructor($classMethod)) {
             return \true;
         }
-        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($classMethod)) {
+        if ($this->classMethodManipulator->hasParentMethodOrInterfaceMethod($class, $classMethod->name->toString())) {
             return \true;
         }
         if ($this->paramAnalyzer->hasPropertyPromotion($classMethod->params)) {

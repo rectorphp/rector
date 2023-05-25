@@ -82,11 +82,11 @@ CODE_SAMPLE
         }
         return new PreDec($node->var);
     }
-    private function refactorExpression(Expression $node) : ?Expression
+    private function refactorExpression(Expression $expression) : ?Expression
     {
-        if ($node->expr instanceof PostInc || $node->expr instanceof PostDec) {
-            $node->expr = $this->processPrePost($node->expr);
-            return $node;
+        if ($expression->expr instanceof PostInc || $expression->expr instanceof PostDec) {
+            $expression->expr = $this->processPrePost($expression->expr);
+            return $expression;
         }
         return null;
     }
