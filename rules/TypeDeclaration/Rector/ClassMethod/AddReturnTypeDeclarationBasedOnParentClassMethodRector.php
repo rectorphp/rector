@@ -6,7 +6,6 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
@@ -16,7 +15,6 @@ use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -90,21 +88,32 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->nodeNameResolver->isName($node, MethodName::CONSTRUCT)) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->isName($classMethod, MethodName::CONSTRUCT)) {
+                continue;
+            }
+            $parentClassMethodReturnType = $this->getReturnTypeRecursive($classMethod);
+            if (!$parentClassMethodReturnType instanceof Type) {
+                continue;
+            }
+            $changedClassMethod = $this->processClassMethodReturnType($node, $classMethod, $parentClassMethodReturnType);
+            if (!$changedClassMethod instanceof ClassMethod) {
+                continue;
+            }
+            $hasChanged = \true;
         }
-        $parentClassMethodReturnType = $this->getReturnTypeRecursive($node);
-        if (!$parentClassMethodReturnType instanceof Type) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        return $this->processClassMethodReturnType($node, $parentClassMethodReturnType);
+        return null;
     }
     private function getReturnTypeRecursive(ClassMethod $classMethod) : ?Type
     {
@@ -125,14 +134,10 @@ CODE_SAMPLE
         }
         return $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
     }
-    private function processClassMethodReturnType(ClassMethod $classMethod, Type $parentType) : ?ClassMethod
+    private function processClassMethodReturnType(Class_ $class, ClassMethod $classMethod, Type $parentType) : ?ClassMethod
     {
         if ($parentType instanceof MixedType) {
-            $parentNode = $classMethod->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$parentNode instanceof Class_ && !$parentNode instanceof Interface_) {
-                return null;
-            }
-            $className = (string) $this->nodeNameResolver->getName($parentNode);
+            $className = (string) $this->nodeNameResolver->getName($class);
             $currentObjectType = new ObjectType($className);
             if (!$parentType->equals($currentObjectType) && $classMethod->returnType !== null) {
                 return null;
