@@ -9,14 +9,12 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -75,7 +73,8 @@ CODE_SAMPLE
             return $this->processMysqliSelectDb($assign, $funcCall);
         }
         if ($this->isName($funcCall, 'mysql_fetch_field')) {
-            return $this->processMysqlFetchField($assign, $funcCall);
+            $this->processMysqlFetchField($funcCall);
+            return $node;
         }
         if ($this->isName($funcCall, 'mysql_result')) {
             return $this->processMysqlResult($assign, $funcCall);
@@ -114,10 +113,10 @@ CODE_SAMPLE
         unset($funcCall->args[1]);
         return [new Expression($funcCall), new Expression($mysqliQueryAssign)];
     }
-    private function processMysqlFetchField(Assign $assign, FuncCall $funcCall) : Assign
+    private function processMysqlFetchField(FuncCall $funcCall) : void
     {
-        $funcCall->name = isset($funcCall->args[1]) ? new Name('mysqli_fetch_field_direct') : new Name('mysqli_fetch_field');
-        return $assign;
+        $hasExactField = isset($funcCall->args[1]);
+        $funcCall->name = new Name($hasExactField ? 'mysqli_fetch_field_direct' : 'mysqli_fetch_field');
     }
     /**
      * @return Stmt[]
@@ -140,14 +139,6 @@ CODE_SAMPLE
     {
         foreach (self::FIELD_TO_FIELD_DIRECT as $funcName => $property) {
             if (!$this->isName($funcCall, $funcName)) {
-                continue;
-            }
-            // @todo remove
-            $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof PropertyFetch) {
-                continue;
-            }
-            if ($parentNode instanceof StaticPropertyFetch) {
                 continue;
             }
             $funcCall->name = new Name('mysqli_fetch_field_direct');
