@@ -16,6 +16,9 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Contract\Collector\NodeCollectorInterface;
+/**
+ * @deprecated
+ */
 final class NodesToAddCollector implements NodeCollectorInterface
 {
     /**
