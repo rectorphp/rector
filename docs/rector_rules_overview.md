@@ -1,4 +1,4 @@
-# 398 Rules Overview
+# 396 Rules Overview
 
 <br>
 
@@ -36,9 +36,9 @@
 
 - [Php70](#php70) (19)
 
-- [Php71](#php71) (9)
+- [Php71](#php71) (8)
 
-- [Php72](#php72) (10)
+- [Php72](#php72) (9)
 
 - [Php73](#php73) (9)
 
@@ -4944,41 +4944,6 @@ Remove extra parameters
 
 <br>
 
-### ReservedObjectRector
-
-Changes reserved "Object" name to "<Smart>Object" where <Smart> can be configured
-
-:wrench: **configure it!**
-
-- class: [`Rector\Php71\Rector\Name\ReservedObjectRector`](../rules/Php71/Rector/Name/ReservedObjectRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Php71\Rector\Name\ReservedObjectRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReservedObjectRector::class, [
-        'ReservedObject' => 'SmartObject',
-        'Object' => 'AnotherSmartObject',
-    ]);
-};
-```
-
-↓
-
-```diff
--class Object
-+class SmartObject
- {
- }
-```
-
-<br>
-
 ## Php72
 
 ### CreateFunctionToAnonymousFunctionRector
@@ -5018,20 +4983,6 @@ Null is no more allowed in `get_class()`
 +        return $value !== null ? get_class($value) : self::class;
      }
  }
-```
-
-<br>
-
-### IsObjectOnIncompleteClassRector
-
-Incomplete class returns inverted bool on `is_object()`
-
-- class: [`Rector\Php72\Rector\FuncCall\IsObjectOnIncompleteClassRector`](../rules/Php72/Rector/FuncCall/IsObjectOnIncompleteClassRector.php)
-
-```diff
- $incompleteObject = new __PHP_Incomplete_Class;
--$isObject = is_object($incompleteObject);
-+$isObject = ! is_object($incompleteObject);
 ```
 
 <br>

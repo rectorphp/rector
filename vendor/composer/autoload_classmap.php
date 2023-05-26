@@ -2198,7 +2198,6 @@ return array(
     'Rector\\Php71\\Rector\\FuncCall\\CountOnNullRector' => $baseDir . '/rules/Php71/Rector/FuncCall/CountOnNullRector.php',
     'Rector\\Php71\\Rector\\FuncCall\\RemoveExtraParametersRector' => $baseDir . '/rules/Php71/Rector/FuncCall/RemoveExtraParametersRector.php',
     'Rector\\Php71\\Rector\\List_\\ListToArrayDestructRector' => $baseDir . '/rules/Php71/Rector/List_/ListToArrayDestructRector.php',
-    'Rector\\Php71\\Rector\\Name\\ReservedObjectRector' => $baseDir . '/rules/Php71/Rector/Name/ReservedObjectRector.php',
     'Rector\\Php71\\Rector\\TryCatch\\MultiExceptionCatchRector' => $baseDir . '/rules/Php71/Rector/TryCatch/MultiExceptionCatchRector.php',
     'Rector\\Php71\\ValueObject\\TwoNodeMatch' => $baseDir . '/rules/Php71/ValueObject/TwoNodeMatch.php',
     'Rector\\Php72\\NodeFactory\\AnonymousFunctionFactory' => $baseDir . '/rules/Php72/NodeFactory/AnonymousFunctionFactory.php',
