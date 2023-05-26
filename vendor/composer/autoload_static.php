@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit61ee1830501953aa5a9001bfeccfa071
+class ComposerStaticInit9bfab5c1618d3a21d5425da8b46f0591
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2127,7 +2127,6 @@ class ComposerStaticInit61ee1830501953aa5a9001bfeccfa071
         'Rector\\Naming\\Matcher\\CallMatcher' => __DIR__ . '/../..' . '/rules/Naming/Matcher/CallMatcher.php',
         'Rector\\Naming\\Matcher\\ForeachMatcher' => __DIR__ . '/../..' . '/rules/Naming/Matcher/ForeachMatcher.php',
         'Rector\\Naming\\Matcher\\VariableAndCallAssignMatcher' => __DIR__ . '/../..' . '/rules/Naming/Matcher/VariableAndCallAssignMatcher.php',
-        'Rector\\Naming\\NamespaceMatcher' => __DIR__ . '/../..' . '/rules/Naming/NamespaceMatcher.php',
         'Rector\\Naming\\NamingConvention\\NamingConventionAnalyzer' => __DIR__ . '/../..' . '/rules/Naming/NamingConvention/NamingConventionAnalyzer.php',
         'Rector\\Naming\\Naming\\AliasNameResolver' => __DIR__ . '/../..' . '/rules/Naming/Naming/AliasNameResolver.php',
         'Rector\\Naming\\Naming\\ConflictingNameResolver' => __DIR__ . '/../..' . '/rules/Naming/Naming/ConflictingNameResolver.php',
@@ -2240,7 +2239,6 @@ class ComposerStaticInit61ee1830501953aa5a9001bfeccfa071
         'Rector\\NodeTypeResolver\\PhpDocNodeVisitor\\UnderscoreRenamePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDocNodeVisitor/UnderscoreRenamePhpDocNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockClassRenamer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockClassRenamer.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockNameImporter' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockNameImporter.php',
-        'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockNamespaceRenamer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockNamespaceRenamer.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\NodeAnalyzer\\DocBlockTagReplacer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/NodeAnalyzer/DocBlockTagReplacer.php',
         'Rector\\NodeTypeResolver\\PhpDoc\\PhpDocTypeRenamer' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PhpDoc/PhpDocTypeRenamer.php',
         'Rector\\NodeTypeResolver\\Reflection\\BetterReflection\\RectorBetterReflectionSourceLocatorFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
@@ -2666,7 +2664,6 @@ class ComposerStaticInit61ee1830501953aa5a9001bfeccfa071
         'Rector\\Renaming\\Rector\\FuncCall\\RenameFunctionRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/FuncCall/RenameFunctionRector.php',
         'Rector\\Renaming\\Rector\\MethodCall\\RenameMethodRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/MethodCall/RenameMethodRector.php',
         'Rector\\Renaming\\Rector\\Name\\RenameClassRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/Name/RenameClassRector.php',
-        'Rector\\Renaming\\Rector\\Namespace_\\RenameNamespaceRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/Namespace_/RenameNamespaceRector.php',
         'Rector\\Renaming\\Rector\\PropertyFetch\\RenamePropertyRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/PropertyFetch/RenamePropertyRector.php',
         'Rector\\Renaming\\Rector\\StaticCall\\RenameStaticMethodRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/StaticCall/RenameStaticMethodRector.php',
         'Rector\\Renaming\\Rector\\String_\\RenameStringRector' => __DIR__ . '/../..' . '/rules/Renaming/Rector/String_/RenameStringRector.php',
@@ -2679,7 +2676,6 @@ class ComposerStaticInit61ee1830501953aa5a9001bfeccfa071
         'Rector\\Renaming\\ValueObject\\RenameClassConstFetch' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameClassConstFetch.php',
         'Rector\\Renaming\\ValueObject\\RenameProperty' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameProperty.php',
         'Rector\\Renaming\\ValueObject\\RenameStaticMethod' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenameStaticMethod.php',
-        'Rector\\Renaming\\ValueObject\\RenamedNamespace' => __DIR__ . '/../..' . '/rules/Renaming/ValueObject/RenamedNamespace.php',
         'Rector\\Set\\Contract\\SetListInterface' => __DIR__ . '/../..' . '/packages/Set/Contract/SetListInterface.php',
         'Rector\\Set\\ValueObject\\DowngradeLevelSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeLevelSetList.php',
         'Rector\\Set\\ValueObject\\DowngradeSetList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Set/ValueObject/DowngradeSetList.php',
@@ -3093,9 +3089,9 @@ class ComposerStaticInit61ee1830501953aa5a9001bfeccfa071
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit61ee1830501953aa5a9001bfeccfa071::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit61ee1830501953aa5a9001bfeccfa071::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit61ee1830501953aa5a9001bfeccfa071::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9bfab5c1618d3a21d5425da8b46f0591::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9bfab5c1618d3a21d5425da8b46f0591::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9bfab5c1618d3a21d5425da8b46f0591::$classMap;
 
         }, null, ClassLoader::class);
     }
