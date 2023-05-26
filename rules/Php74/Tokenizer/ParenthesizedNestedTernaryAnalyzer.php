@@ -14,6 +14,11 @@ final class ParenthesizedNestedTernaryAnalyzer
         $endTokenPos = $ternary->getEndTokenPos();
         $hasOpenParentheses = isset($oldTokens[$startTokenPos]) && $oldTokens[$startTokenPos] === '(';
         $hasCloseParentheses = isset($oldTokens[$endTokenPos]) && $oldTokens[$endTokenPos] === ')';
+        if ($hasOpenParentheses || $hasCloseParentheses) {
+            return \true;
+        }
+        $hasOpenParentheses = isset($oldTokens[$startTokenPos - 1]) && $oldTokens[$startTokenPos - 1] === '(';
+        $hasCloseParentheses = isset($oldTokens[$endTokenPos + 1]) && $oldTokens[$endTokenPos + 1] === ')';
         return $hasOpenParentheses || $hasCloseParentheses;
     }
 }
