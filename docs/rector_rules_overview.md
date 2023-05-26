@@ -42,7 +42,7 @@
 
 - [Php73](#php73) (9)
 
-- [Php74](#php74) (14)
+- [Php74](#php74) (13)
 
 - [Php80](#php80) (20)
 
@@ -5339,33 +5339,6 @@ Change `array_merge()` to spread operator
 -            is_array($iter2) ? $iter2 : iterator_to_array($iter2)
 -        );
 +        $anotherValues = [...$iter1, ...$iter2];
-     }
- }
-```
-
-<br>
-
-### ChangeReflectionTypeToStringToGetNameRector
-
-Change string calls on ReflectionType
-
-- class: [`Rector\Php74\Rector\MethodCall\ChangeReflectionTypeToStringToGetNameRector`](../rules/Php74/Rector/MethodCall/ChangeReflectionTypeToStringToGetNameRector.php)
-
-```diff
- class SomeClass
- {
-     public function go(ReflectionFunction $reflectionFunction)
-     {
-         $parameterReflection = $reflectionFunction->getParameters()[0];
-
--        $paramType = (string) $parameterReflection->getType();
-+        $paramType = (string) ($parameterReflection->getType() ? $parameterReflection->getType()->getName() : null);
-
--        $stringValue = 'hey' . $reflectionFunction->getReturnType();
-+        $stringValue = 'hey' . ($reflectionFunction->getReturnType() ? $reflectionFunction->getReturnType()->getName() : null);
-
-         // keep
-         return $reflectionFunction->getReturnType();
      }
  }
 ```

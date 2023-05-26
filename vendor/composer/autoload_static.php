@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfddc3b52116436b11ff580f5f26c1af4
+class ComposerStaticInit7eb270c59c5094c5b30576afe1545268
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2475,7 +2475,6 @@ class ComposerStaticInitfddc3b52116436b11ff580f5f26c1af4
         'Rector\\Php74\\Rector\\FuncCall\\MbStrrposEncodingArgumentPositionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/MbStrrposEncodingArgumentPositionRector.php',
         'Rector\\Php74\\Rector\\FuncCall\\MoneyFormatToNumberFormatRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/FuncCall/MoneyFormatToNumberFormatRector.php',
         'Rector\\Php74\\Rector\\LNumber\\AddLiteralSeparatorToNumberRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/LNumber/AddLiteralSeparatorToNumberRector.php',
-        'Rector\\Php74\\Rector\\MethodCall\\ChangeReflectionTypeToStringToGetNameRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/MethodCall/ChangeReflectionTypeToStringToGetNameRector.php',
         'Rector\\Php74\\Rector\\Property\\RestoreDefaultNullToNullableTypePropertyRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Property/RestoreDefaultNullToNullableTypePropertyRector.php',
         'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
         'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',
@@ -3094,9 +3093,9 @@ class ComposerStaticInitfddc3b52116436b11ff580f5f26c1af4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfddc3b52116436b11ff580f5f26c1af4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfddc3b52116436b11ff580f5f26c1af4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfddc3b52116436b11ff580f5f26c1af4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7eb270c59c5094c5b30576afe1545268::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7eb270c59c5094c5b30576afe1545268::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7eb270c59c5094c5b30576afe1545268::$classMap;
 
         }, null, ClassLoader::class);
     }
