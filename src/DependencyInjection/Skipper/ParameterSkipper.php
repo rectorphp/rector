@@ -66,10 +66,10 @@ final class ParameterSkipper
         if (!$reflectionParameter->getType() instanceof ReflectionType) {
             return \false;
         }
-        $reflectionParameterType = $reflectionParameter->getType();
-        if (!$reflectionParameterType instanceof ReflectionNamedType) {
+        $parameterReflectionType = $reflectionParameter->getType();
+        if (!$parameterReflectionType instanceof ReflectionNamedType) {
             return \false;
         }
-        return $reflectionParameterType->getName() === 'array';
+        return $parameterReflectionType->getName() === 'array';
     }
 }

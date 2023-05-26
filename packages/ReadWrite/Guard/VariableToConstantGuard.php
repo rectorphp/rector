@@ -38,11 +38,11 @@ final class VariableToConstantGuard
     }
     public function isReadArg(Arg $arg) : bool
     {
-        $parentParent = $arg->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentParent instanceof FuncCall) {
+        $parentParentNode = $arg->getAttribute(AttributeKey::PARENT_NODE);
+        if (!$parentParentNode instanceof FuncCall) {
             return \true;
         }
-        $functionNameString = $this->nodeNameResolver->getName($parentParent);
+        $functionNameString = $this->nodeNameResolver->getName($parentParentNode);
         if ($functionNameString === null) {
             return \true;
         }
@@ -65,7 +65,7 @@ final class VariableToConstantGuard
             // no reference always only write
             return \true;
         }
-        $argumentPosition = $this->getArgumentPosition($parentParent, $arg);
+        $argumentPosition = $this->getArgumentPosition($parentParentNode, $arg);
         return !\in_array($argumentPosition, $referenceParametersPositions, \true);
     }
     /**

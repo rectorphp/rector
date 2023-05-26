@@ -48,9 +48,9 @@ final class PrivatesAccessor
      */
     public function getPrivateProperty(object $object, string $propertyName)
     {
-        $propertyReflection = $this->resolvePropertyReflection($object, $propertyName);
-        $propertyReflection->setAccessible(\true);
-        return $propertyReflection->getValue($object);
+        $reflectionProperty = $this->resolvePropertyReflection($object, $propertyName);
+        $reflectionProperty->setAccessible(\true);
+        return $reflectionProperty->getValue($object);
     }
     /**
      * @template T of object
@@ -72,9 +72,9 @@ final class PrivatesAccessor
      */
     public function setPrivateProperty(object $object, string $propertyName, $value) : void
     {
-        $propertyReflection = $this->resolvePropertyReflection($object, $propertyName);
-        $propertyReflection->setAccessible(\true);
-        $propertyReflection->setValue($object, $value);
+        $reflectionProperty = $this->resolvePropertyReflection($object, $propertyName);
+        $reflectionProperty->setAccessible(\true);
+        $reflectionProperty->setValue($object, $value);
     }
     private function createAccessibleMethodReflection(object $object, string $methodName) : ReflectionMethod
     {

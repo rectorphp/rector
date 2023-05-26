@@ -219,12 +219,12 @@ CODE_SAMPLE
      */
     private function getTypeFromClassMethodYield(Array_ $classMethodYieldArrayNode)
     {
-        $arrayTypes = $this->nodeTypeResolver->getType($classMethodYieldArrayNode);
+        $arrayType = $this->nodeTypeResolver->getType($classMethodYieldArrayNode);
         // impossible to resolve
-        if (!$arrayTypes instanceof ConstantArrayType) {
+        if (!$arrayType instanceof ConstantArrayType) {
             return new MixedType();
         }
-        return $arrayTypes;
+        return $arrayType;
     }
     /**
      * @return Type[]

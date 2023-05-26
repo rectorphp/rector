@@ -186,9 +186,7 @@ final class UndefinedVariableResolver
     }
     private function isAfterSwitchCaseWithParentCase(Variable $variable) : bool
     {
-        $previousSwitch = $this->betterNodeFinder->findFirstPrevious($variable, static function (Node $subNode) : bool {
-            return $subNode instanceof Switch_;
-        });
+        $previousSwitch = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [Switch_::class]);
         if (!$previousSwitch instanceof Switch_) {
             return \false;
         }

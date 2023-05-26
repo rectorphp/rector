@@ -118,9 +118,9 @@ final class TypeProvidingExprFromClassResolver
      */
     private function getClassMethodReflections(ClassReflection $classReflection) : array
     {
-        $nativeClassReflection = $classReflection->getNativeReflection();
+        $nativeReflection = $classReflection->getNativeReflection();
         $methodReflections = [];
-        foreach ($nativeClassReflection->getMethods() as $reflectionMethod) {
+        foreach ($nativeReflection->getMethods() as $reflectionMethod) {
             $methodReflections[] = $classReflection->getNativeMethod($reflectionMethod->getName());
         }
         return $methodReflections;

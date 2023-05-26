@@ -184,12 +184,12 @@ final class PHPStanNodeScopeResolver
             }
             if ($node instanceof Trait_) {
                 $traitName = $this->resolveClassName($node);
-                $traitReflectionClass = $this->reflectionProvider->getClass($traitName);
+                $traitClassReflection = $this->reflectionProvider->getClass($traitName);
                 $traitScope = clone $mutatingScope;
                 $scopeContext = $this->privatesAccessor->getPrivatePropertyOfClass($traitScope, self::CONTEXT, ScopeContext::class);
                 $traitContext = clone $scopeContext;
                 // before entering the class/trait again, we have to tell scope no class was set, otherwise it crashes
-                $this->privatesAccessor->setPrivatePropertyOfClass($traitContext, 'classReflection', $traitReflectionClass, ClassReflection::class);
+                $this->privatesAccessor->setPrivatePropertyOfClass($traitContext, 'classReflection', $traitClassReflection, ClassReflection::class);
                 $this->privatesAccessor->setPrivatePropertyOfClass($traitScope, self::CONTEXT, $traitContext, ScopeContext::class);
                 $node->setAttribute(AttributeKey::SCOPE, $traitScope);
                 $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);

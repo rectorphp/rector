@@ -321,7 +321,9 @@ final class BetterNodeFinder
     /**
      * @api
      * @template T of Node
+     *
      * @param array<class-string<T>> $types
+     * @return T|null
      */
     public function findFirstPreviousOfTypes(Node $mainNode, array $types) : ?Node
     {

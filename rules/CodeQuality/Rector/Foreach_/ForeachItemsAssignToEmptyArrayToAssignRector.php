@@ -101,8 +101,8 @@ CODE_SAMPLE
      */
     private function shouldSkip(Foreach_ $foreach, array $emptyArrayVariables) : bool
     {
-        $assignVariable = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($foreach);
-        if (!$assignVariable instanceof Expr) {
+        $assignVariableExpr = $this->foreachAnalyzer->matchAssignItemsOnlyForeachArrayVariable($foreach);
+        if (!$assignVariableExpr instanceof Expr) {
             return \true;
         }
         $foreachedExprType = $this->getType($foreach->expr);
@@ -113,7 +113,7 @@ CODE_SAMPLE
         if ($this->shouldSkipAsPartOfOtherLoop($foreach)) {
             return \true;
         }
-        return !$this->isNames($assignVariable, $emptyArrayVariables);
+        return !$this->isNames($assignVariableExpr, $emptyArrayVariables);
     }
     private function shouldSkipAsPartOfOtherLoop(Foreach_ $foreach) : bool
     {

@@ -66,27 +66,27 @@ final class UseImportNameMatcher
     private function resolveName(string $prefix, string $tag, UseUse $useUse) : string
     {
         // useuse can be renamed on the fly, so just in case, use the original one
-        $originalUseUse = $useUse->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if (!$originalUseUse instanceof UseUse) {
+        $originalUseUseNode = $useUse->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (!$originalUseUseNode instanceof UseUse) {
             throw new ShouldNotHappenException();
         }
-        if (!$originalUseUse->alias instanceof Identifier) {
-            return $prefix . $originalUseUse->name->toString();
+        if (!$originalUseUseNode->alias instanceof Identifier) {
+            return $prefix . $originalUseUseNode->name->toString();
         }
-        $unaliasedShortClass = Strings::substring($tag, Strings::length($originalUseUse->alias->toString()));
+        $unaliasedShortClass = Strings::substring($tag, Strings::length($originalUseUseNode->alias->toString()));
         if (\strncmp($unaliasedShortClass, '\\', \strlen('\\')) === 0) {
-            return $prefix . $originalUseUse->name . $unaliasedShortClass;
+            return $prefix . $originalUseUseNode->name . $unaliasedShortClass;
         }
-        return $prefix . $originalUseUse->name . '\\' . $unaliasedShortClass;
+        return $prefix . $originalUseUseNode->name . '\\' . $unaliasedShortClass;
     }
     private function isUseMatchingName(string $tag, UseUse $useUse) : bool
     {
         // useuse can be renamed on the fly, so just in case, use the original one
-        $originalUseUse = $useUse->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if (!$originalUseUse instanceof UseUse) {
+        $originalUseUseNode = $useUse->getAttribute(AttributeKey::ORIGINAL_NODE);
+        if (!$originalUseUseNode instanceof UseUse) {
             return \false;
         }
-        $shortName = $originalUseUse->alias instanceof Identifier ? $originalUseUse->alias->name : $originalUseUse->name->getLast();
+        $shortName = $originalUseUseNode->alias instanceof Identifier ? $originalUseUseNode->alias->name : $originalUseUseNode->name->getLast();
         $shortNamePattern = \preg_quote($shortName, '#');
         $pattern = \sprintf(self::SHORT_NAME_REGEX, $shortNamePattern);
         return StringUtils::isMatch($tag, $pattern);
