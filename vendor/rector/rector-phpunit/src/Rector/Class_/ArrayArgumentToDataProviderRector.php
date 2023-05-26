@@ -207,11 +207,11 @@ CODE_SAMPLE
     }
     private function createDataProviderMethodName(MethodCall $methodCall) : ?string
     {
-        $methodNode = $this->betterNodeFinder->findParentType($methodCall, ClassMethod::class);
-        if (!$methodNode instanceof ClassMethod) {
+        $classMethod = $this->betterNodeFinder->findParentType($methodCall, ClassMethod::class);
+        if (!$classMethod instanceof ClassMethod) {
             return null;
         }
-        $classMethodName = $this->getName($methodNode);
+        $classMethodName = $this->getName($classMethod);
         return 'provideDataFor' . \ucfirst($classMethodName);
     }
     /**
