@@ -89,16 +89,11 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isLegalClass($node)) {
-            return null;
-        }
-        $params = $this->matchConstructorParams($node);
+        $params = $this->resolveParams($node);
         if ($params === []) {
             return null;
         }
-        if ($this->isOverrideAbstractMethod($node)) {
-            return null;
-        }
+        $hasChanged = \false;
         foreach ($params as $param) {
             /** @var string $paramName */
             $paramName = $this->getName($param->var);
@@ -121,13 +116,34 @@ CODE_SAMPLE
                 $param->default = $coalesce->right;
                 $this->removeNode($toPropertyAssign);
                 $this->processPropertyPromotion($node, $param, $paramName);
+                $hasChanged = \true;
             }
         }
-        return $node;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::NEW_INITIALIZERS;
+    }
+    /**
+     * @return Param[]
+     */
+    private function resolveParams(ClassMethod $classMethod) : array
+    {
+        if (!$this->isLegalClass($classMethod)) {
+            return [];
+        }
+        $params = $this->matchConstructorParams($classMethod);
+        if ($params === []) {
+            return [];
+        }
+        if ($this->isOverrideAbstractMethod($classMethod)) {
+            return [];
+        }
+        return $params;
     }
     private function isOverrideAbstractMethod(ClassMethod $classMethod) : bool
     {
