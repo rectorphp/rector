@@ -24,7 +24,6 @@ use Rector\EarlyReturn\NodeAnalyzer\SimpleScalarAnalyzer;
 use Rector\EarlyReturn\NodeFactory\InvertedIfFactory;
 use Rector\NodeCollector\BinaryOpConditionsCollector;
 use Rector\NodeNestingScope\ContextAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -214,20 +213,13 @@ CODE_SAMPLE
         if ($this->ifAndAnalyzer->isIfAndWithInstanceof($if->cond)) {
             return \true;
         }
-        return !$this->isLastIfOrBeforeLastReturn($if, $nexStmt);
+        return !$this->isLastIfOrBeforeLastReturn($nexStmt);
     }
-    private function isLastIfOrBeforeLastReturn(If_ $if, ?Stmt $nextStmt) : bool
+    private function isLastIfOrBeforeLastReturn(?Stmt $nextStmt) : bool
     {
-        if ($nextStmt instanceof Node) {
-            return $nextStmt instanceof Return_;
+        if (!$nextStmt instanceof Stmt) {
+            return \true;
         }
-        $parentNode = $if->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
-            return \false;
-        }
-        if ($parentNode instanceof If_) {
-            return $this->isLastIfOrBeforeLastReturn($parentNode, $nextStmt);
-        }
-        return \true;
+        return $nextStmt instanceof Return_;
     }
 }
