@@ -12,6 +12,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -40,11 +41,17 @@ final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends Abstract
      * @var \Rector\Privatization\Guard\ParentPropertyLookupGuard
      */
     private $parentPropertyLookupGuard;
-    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, VarTagRemover $varTagRemover, ParentPropertyLookupGuard $parentPropertyLookupGuard)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(GetterTypeDeclarationPropertyTypeInferer $getterTypeDeclarationPropertyTypeInferer, VarTagRemover $varTagRemover, ParentPropertyLookupGuard $parentPropertyLookupGuard, ReflectionResolver $reflectionResolver)
     {
         $this->getterTypeDeclarationPropertyTypeInferer = $getterTypeDeclarationPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
         $this->parentPropertyLookupGuard = $parentPropertyLookupGuard;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -162,6 +169,7 @@ CODE_SAMPLE
             // has too many properties
             return \true;
         }
-        return !$this->parentPropertyLookupGuard->isLegal($property, $class);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        return !$this->parentPropertyLookupGuard->isLegal($property, $classReflection);
     }
 }
