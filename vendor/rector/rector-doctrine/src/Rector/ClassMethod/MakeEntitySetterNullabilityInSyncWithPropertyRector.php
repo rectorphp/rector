@@ -104,8 +104,8 @@ CODE_SAMPLE
             return null;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $manyToOneAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\ManyToOne');
-        if (!$manyToOneAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\ManyToOne');
+        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
             return null;
         }
         $param = $node->params[0];

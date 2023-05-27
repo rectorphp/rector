@@ -5,11 +5,9 @@ namespace Rector\Doctrine\Rector\Param;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -50,32 +48,38 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @return array<class-string<Node\Param>>
+     * @return array<class-string<ClassMethod>>
      */
     public function getNodeTypes() : array
     {
-        return [Param::class];
+        return [ClassMethod::class];
     }
     /**
-     * @param Node\Param $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isObjectType($node, new ObjectType('Doctrine\\ORM\\Event\\LifecycleEventArgs'))) {
+        if ($node->params === []) {
             return null;
         }
-        if ($this->isObjectType($node, new ObjectType('Doctrine\\ORM\\Event\\PrePersistEventArgs')) || $this->isObjectType($node, new ObjectType('Doctrine\\ORM\\Event\\PreUpdateEventArgs')) || $this->isObjectType($node, new ObjectType('Doctrine\\ORM\\Event\\PreRemoveEventArgs')) || $this->isObjectType($node, new ObjectType('Doctrine\\ORM\\Event\\PostPersistEventArgs')) || $this->isObjectType($node, new ObjectType('Doctrine\\ORM\\Event\\PostUpdateEventArgs')) || $this->isObjectType($node, new ObjectType('Doctrine\\ORM\\Event\\PostRemoveEventArgs')) || $this->isObjectType($node, new ObjectType('Doctrine\\ORM\\Event\\PostLoadEventArgs'))) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->params as $param) {
+            if (!$this->isObjectType($param, new ObjectType('Doctrine\\ORM\\Event\\LifecycleEventArgs'))) {
+                continue;
+            }
+            if ($this->isObjectType($param, new ObjectType('Doctrine\\ORM\\Event\\PrePersistEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\\ORM\\Event\\PreUpdateEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\\ORM\\Event\\PreRemoveEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\\ORM\\Event\\PostPersistEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\\ORM\\Event\\PostUpdateEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\\ORM\\Event\\PostRemoveEventArgs')) || $this->isObjectType($param, new ObjectType('Doctrine\\ORM\\Event\\PostLoadEventArgs'))) {
+                continue;
+            }
+            $eventClass = self::EVENT_CLASSES[$node->name->name] ?? null;
+            if ($eventClass === null) {
+                continue;
+            }
+            $param->type = new FullyQualified($eventClass);
+            $hasChanged = \true;
         }
-        $classMethod = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$classMethod instanceof ClassMethod) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        $eventClass = self::EVENT_CLASSES[$classMethod->name->name] ?? null;
-        if ($eventClass === null) {
-            return null;
-        }
-        $node->type = new FullyQualified($eventClass);
-        return $node;
+        return null;
     }
 }

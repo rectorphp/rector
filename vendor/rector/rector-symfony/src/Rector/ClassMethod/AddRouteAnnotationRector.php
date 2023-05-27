@@ -135,8 +135,8 @@ CODE_SAMPLE
         $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getPath(), 'path', String_::KIND_DOUBLE_QUOTED);
         $arrayItemNodes[] = new ArrayItemNode($symfonyRouteMetadata->getName(), 'name', String_::KIND_DOUBLE_QUOTED);
         if ($symfonyRouteMetadata->getRequirements() !== []) {
-            $requriementsCurlyList = $this->createCurlyQuoted($symfonyRouteMetadata->getRequirements());
-            $arrayItemNodes[] = new ArrayItemNode($requriementsCurlyList, 'requirements');
+            $curlyListNode = $this->createCurlyQuoted($symfonyRouteMetadata->getRequirements());
+            $arrayItemNodes[] = new ArrayItemNode($curlyListNode, 'requirements');
         }
         $optionsWithoutDefaultCompilerClass = $symfonyRouteMetadata->getOptionsWithoutDefaultCompilerClass();
         if ($optionsWithoutDefaultCompilerClass !== []) {
