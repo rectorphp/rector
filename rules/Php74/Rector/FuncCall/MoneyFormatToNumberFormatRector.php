@@ -15,12 +15,12 @@ use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -32,28 +32,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoneyFormatToNumberFormatRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @var string[]
-     */
-    private const FORMATS = ['%i'];
-    /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    /**
-     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    public function __construct(ArgsAnalyzer $argsAnalyzer, NodesToAddCollector $nodesToAddCollector, VariableNaming $variableNaming)
+    public function __construct(ArgsAnalyzer $argsAnalyzer, VariableNaming $variableNaming)
     {
         $this->argsAnalyzer = $argsAnalyzer;
-        $this->nodesToAddCollector = $nodesToAddCollector;
         $this->variableNaming = $variableNaming;
     }
     public function provideMinPhpVersion() : int
@@ -76,42 +66,59 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [Expression::class, Return_::class];
     }
     /**
-     * @param FuncCall $node
+     * @param Expression|Return_ $node
+     * @return Stmt[]|null
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?array
     {
-        if (!$this->isName($node, 'money_format')) {
+        $funcCall = $this->matchFunCall($node);
+        if (!$funcCall instanceof FuncCall) {
             return null;
         }
-        $args = $node->getArgs();
+        if (!$this->isName($funcCall, 'money_format')) {
+            return null;
+        }
+        $args = $funcCall->getArgs();
         if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;
         }
         $formatValue = $args[0]->value;
-        foreach (self::FORMATS as $format) {
-            if ($this->valueResolver->isValue($formatValue, $format)) {
-                return $this->resolveNumberFormat($node, $args[1]->value, $scope);
-            }
-        }
-        return null;
-    }
-    private function resolveNumberFormat(FuncCall $funcCall, Expr $expr, Scope $scope) : ?FuncCall
-    {
-        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($funcCall);
-        if (!$currentStmt instanceof Stmt) {
+        if (!$this->valueResolver->isValue($formatValue, '%i')) {
             return null;
         }
+        return $this->resolveNumberFormat($funcCall, $args[1]->value, $scope, $node);
+    }
+    /**
+     * @return Stmt[]
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $stmt
+     */
+    private function resolveNumberFormat(FuncCall $funcCall, Expr $expr, Scope $scope, $stmt) : array
+    {
         $newValue = $this->nodeFactory->createFuncCall('round', [$expr, new LNumber(2), new ConstFetch(new Name('PHP_ROUND_HALF_ODD'))]);
-        $variable = new Variable($this->variableNaming->createCountedValueName('roundedValue', $scope));
-        $this->nodesToAddCollector->addNodeBeforeNode(new Expression(new Assign($variable, $newValue)), $currentStmt);
+        $countedVariableName = $this->variableNaming->createCountedValueName('roundedValue', $scope);
+        $variable = new Variable($countedVariableName);
         $funcCall->name = new Name('number_format');
-        $funcCall->args[0] = new Arg($variable);
-        $funcCall->args[1] = new Arg(new LNumber(2));
-        $funcCall->args[2] = new Arg(new String_('.'));
-        $funcCall->args[3] = new Arg(new String_(''));
-        return $funcCall;
+        $funcCall->args = [new Arg($variable), new Arg(new LNumber(2)), new Arg(new String_('.')), new Arg(new String_(''))];
+        return [new Expression(new Assign($variable, $newValue)), $stmt];
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     */
+    private function matchFunCall($node) : ?\PhpParser\Node\Expr\FuncCall
+    {
+        if ($node->expr instanceof Assign) {
+            $assign = $node->expr;
+            if ($assign->expr instanceof FuncCall) {
+                return $assign->expr;
+            }
+            return null;
+        }
+        if ($node->expr instanceof FuncCall) {
+            return $node->expr;
+        }
+        return null;
     }
 }
