@@ -8,7 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
@@ -24,7 +23,6 @@ use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
@@ -356,46 +354,6 @@ final class BetterNodeFinder
         return null;
     }
     /**
-     * @api
-     * @return Expr[]
-     * @param \PhpParser\Node\Expr|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Stmt\Property|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
-     */
-    public function findSameNamedExprs($expr) : array
-    {
-        // assign of empty string to something
-        $scopeNode = $this->findParentScope($expr);
-        if (!$scopeNode instanceof Node) {
-            return [];
-        }
-        if ($expr instanceof Variable) {
-            $exprName = $this->nodeNameResolver->getName($expr);
-            if ($exprName === null) {
-                return [];
-            }
-            /** @var Variable[] $variables */
-            $variables = $this->find($scopeNode, function (Node $node) use($exprName) : bool {
-                return $node instanceof Variable && $this->nodeNameResolver->isName($node, $exprName);
-            });
-            return $variables;
-        }
-        if ($expr instanceof Property) {
-            $singleProperty = $expr->props[0];
-            $exprName = $this->nodeNameResolver->getName($singleProperty->name);
-        } elseif ($expr instanceof StaticPropertyFetch || $expr instanceof PropertyFetch) {
-            $exprName = $this->nodeNameResolver->getName($expr->name);
-        } else {
-            return [];
-        }
-        if ($exprName === null) {
-            return [];
-        }
-        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->find($scopeNode, function (Node $node) use($exprName) : bool {
-            return ($node instanceof PropertyFetch || $node instanceof StaticPropertyFetch) && $this->nodeNameResolver->isName($node->name, $exprName);
-        });
-        return $propertyFetches;
-    }
-    /**
      * @template T of Node
      * @param array<class-string<T>>|class-string<T> $types
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
@@ -678,12 +636,5 @@ final class BetterNodeFinder
         return $this->nodeFinder->findFirst($nodes, function (Node $node) use($type, $name) : bool {
             return $node instanceof $type && $this->nodeNameResolver->isName($node, $name);
         });
-    }
-    /**
-     * @return Closure|Function_|ClassMethod|Class_|Namespace_|null
-     */
-    private function findParentScope(Node $node)
-    {
-        return $this->findParentByTypes($node, [Closure::class, Function_::class, ClassMethod::class, Class_::class, Namespace_::class]);
     }
 }
