@@ -98,15 +98,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class, Param::class];
+        return [Property::class, ClassMethod::class];
     }
     /**
-     * @param Property|Param $node
+     * @param Property|ClassMethod $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($node instanceof Param) {
-            return $this->refactorParam($node, $scope);
+        if ($node instanceof ClassMethod) {
+            $hasChanged = \false;
+            foreach ($node->params as $param) {
+                $justChanged = $this->refactorParam($node, $param, $scope);
+                // different variable to ensure $hasChanged not replaced
+                if ($justChanged instanceof Param) {
+                    $hasChanged = \true;
+                }
+            }
+            if ($hasChanged) {
+                return $node;
+            }
+            return null;
         }
         return $this->refactorProperty($node, $scope);
     }
@@ -159,7 +170,7 @@ CODE_SAMPLE
         }
         return $property;
     }
-    private function refactorParam(Param $param, Scope $scope) : ?\PhpParser\Node\Param
+    private function refactorParam(ClassMethod $classMethod, Param $param, Scope $scope) : ?\PhpParser\Node\Param
     {
         if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
             return null;
@@ -174,7 +185,7 @@ CODE_SAMPLE
         if ($this->visibilityManipulator->isReadonly($param)) {
             return null;
         }
-        if ($this->paramAnalyzer->isParamReassign($param)) {
+        if ($this->paramAnalyzer->isParamReassign($classMethod, $param)) {
             return null;
         }
         if ($this->isPromotedPropertyAssigned($param)) {
