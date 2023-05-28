@@ -14,9 +14,9 @@ use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -33,15 +33,6 @@ final class DowngradeListReferenceAssignmentRector extends AbstractRector
      * @var int
      */
     private const ANY = 1;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(NodesToAddCollector $nodesToAddCollector)
-    {
-        $this->nodesToAddCollector = $nodesToAddCollector;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Convert the list reference assignment to its equivalent PHP 7.2 code', [new CodeSample(<<<'CODE_SAMPLE'
@@ -83,28 +74,37 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [List_::class, Array_::class];
+        return [Expression::class];
     }
     /**
-     * @param List_|Array_ $node
+     * @param Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
-        if (!$this->shouldRefactor($node)) {
+        if (!$node->expr instanceof Assign) {
             return null;
         }
-        // Get all the params passed by reference
-        /** @var Assign $parentNode */
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $assign = $node->expr;
+        if ($assign->var instanceof Array_ || $assign->var instanceof List_) {
+            $arrayOrList = $assign->var;
+        } else {
+            return null;
+        }
+        if (!$assign->expr instanceof Variable) {
+            return null;
+        }
+        if ($this->shouldSkipAssign($assign, $arrayOrList)) {
+            return null;
+        }
         /** @var Variable $exprVariable */
-        $exprVariable = $parentNode->expr;
+        $exprVariable = $assign->expr;
         // Count number of params by ref on the right side, to remove them later on
-        $rightSideRemovableParamsCount = $this->countRightSideMostParamsByRefOrEmpty($node->items);
+        $rightSideRemovableParamsCount = $this->countRightSideMostParamsByRefOrEmpty($arrayOrList->items);
         // Add new nodes to do the assignment by reference
-        $newNodes = $this->createAssignRefArrayFromListReferences($node->items, $exprVariable, []);
-        $this->nodesToAddCollector->addNodesAfterNode($newNodes, $node);
+        $newNodes = $this->createAssignRefArrayFromListReferences($arrayOrList->items, $exprVariable, []);
         // Remove the stale params right-most-side
-        return $this->removeStaleParams($node, $rightSideRemovableParamsCount);
+        $this->removeStaleParams($arrayOrList, $rightSideRemovableParamsCount);
+        return \array_merge([$node], $newNodes);
     }
     /**
      * Remove the right-side-most params by reference or empty from `list()`,
@@ -117,7 +117,7 @@ CODE_SAMPLE
     {
         $nodeItemsCount = \count($node->items);
         if ($rightSideRemovableParamsCount === $nodeItemsCount) {
-            // Remove the parent Assign node
+            // Remove the parent Assign arrayOrList
             /** @var Assign $parentNode */
             $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
             $this->removeNode($parentNode);
@@ -129,22 +129,14 @@ CODE_SAMPLE
         return $node;
     }
     /**
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
+     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $arrayOrList
      */
-    private function shouldRefactor($node) : bool
+    private function shouldSkipAssign(Assign $assign, $arrayOrList) : bool
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        // Check it follows `list(...) = $foo`
-        if (!$parentNode instanceof Assign) {
-            return \false;
+        if (!$assign->expr instanceof Variable) {
+            return \true;
         }
-        if ($parentNode->var !== $node) {
-            return \false;
-        }
-        if (!$parentNode->expr instanceof Variable) {
-            return \false;
-        }
-        return $this->hasAnyItemByRef($node->items);
+        return !$this->hasAnyItemByRef($arrayOrList->items);
     }
     /**
      * Count the number of params by reference placed at the end
@@ -182,7 +174,7 @@ CODE_SAMPLE
     /**
      * @param (ArrayItem|null)[] $listItems
      * @param (int|string)[] $nestedArrayIndexes
-     * @return AssignRef[]
+     * @return Node\Stmt[]
      */
     private function createAssignRefArrayFromListReferences(array $listItems, Variable $exprVariable, array $nestedArrayIndexes) : array
     {
@@ -201,9 +193,9 @@ CODE_SAMPLE
             if ($listItem->value instanceof Variable) {
                 /** @var Variable $itemVariable */
                 $itemVariable = $listItem->value;
-                // Remove the reference in the present node
+                // Remove the reference in the present arrayOrList
                 $listItem->byRef = \false;
-                // In its place, assign the value by reference on a new node
+                // In its place, assign the value by reference on a new arrayOrList
                 $assignVariable = new Variable($itemVariable->name);
                 $newNodes[] = $this->createAssignRefWithArrayDimFetch($assignVariable, $exprVariable, $nestedArrayIndexes, $key);
                 continue;
@@ -258,7 +250,7 @@ CODE_SAMPLE
      * @param (string|int)[] $nestedArrayIndexes The path to build nested lists
      * @param string|int $arrayIndex
      */
-    private function createAssignRefWithArrayDimFetch(Variable $assignVariable, Variable $exprVariable, array $nestedArrayIndexes, $arrayIndex) : AssignRef
+    private function createAssignRefWithArrayDimFetch(Variable $assignVariable, Variable $exprVariable, array $nestedArrayIndexes, $arrayIndex) : Expression
     {
         $nestedExprVariable = $exprVariable;
         foreach ($nestedArrayIndexes as $nestedArrayIndex) {
@@ -267,7 +259,8 @@ CODE_SAMPLE
         }
         $expr = BuilderHelpers::normalizeValue($arrayIndex);
         $arrayDimFetch = new ArrayDimFetch($nestedExprVariable, $expr);
-        return new AssignRef($assignVariable, $arrayDimFetch);
+        $assignRef = new AssignRef($assignVariable, $arrayDimFetch);
+        return new Expression($assignRef);
     }
     /**
      * @param array<ArrayItem|null> $arrayItems
