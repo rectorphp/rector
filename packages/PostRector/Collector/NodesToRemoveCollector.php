@@ -60,6 +60,9 @@ final class NodesToRemoveCollector implements NodeCollectorInterface
         $this->nodeComparator = $nodeComparator;
         $this->currentFileProvider = $currentFileProvider;
     }
+    /**
+     * @deprecated Use direct return of changes Stmt instead
+     */
     public function addNodeToRemove(Node $node) : void
     {
         /** Node|null $parentNode */
