@@ -1,4 +1,4 @@
-# 394 Rules Overview
+# 393 Rules Overview
 
 <br>
 
@@ -44,7 +44,7 @@
 
 - [Php74](#php74) (13)
 
-- [Php80](#php80) (20)
+- [Php80](#php80) (19)
 
 - [Php81](#php81) (12)
 
@@ -5981,37 +5981,6 @@ Add `Stringable` interface to classes with `__toString()` method
 +    public function __toString(): string
      {
          return 'I can stringz';
-     }
- }
-```
-
-<br>
-
-### TokenGetAllToObjectRector
-
-Convert `token_get_all` to `PhpToken::tokenize`
-
-- class: [`Rector\Php80\Rector\FuncCall\TokenGetAllToObjectRector`](../rules/Php80/Rector/FuncCall/TokenGetAllToObjectRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        $tokens = token_get_all($code);
--        foreach ($tokens as $token) {
--            if (is_array($token)) {
--               $name = token_name($token[0]);
--               $text = $token[1];
--            } else {
--               $name = null;
--               $text = $token;
--            }
-+        $tokens = \PhpToken::tokenize($code);
-+        foreach ($tokens as $phpToken) {
-+           $name = $phpToken->getTokenName();
-+           $text = $phpToken->text;
-         }
      }
  }
 ```
