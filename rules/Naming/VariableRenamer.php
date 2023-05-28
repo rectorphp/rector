@@ -11,12 +11,12 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
+use PhpParser\NodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\PhpDoc\VarTagValueNodeRenamer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class VariableRenamer
 {
@@ -63,17 +63,16 @@ final class VariableRenamer
             $isRenamingActive = \true;
         }
         $hasRenamed = \false;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use($oldName, $expectedName, $assign, &$isRenamingActive, &$hasRenamed) : ?Variable {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->getStmts(), function (Node $node) use($oldName, $expectedName, $assign, &$isRenamingActive, &$hasRenamed) {
+            // skip param names
+            if ($node instanceof Param) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
             if ($assign instanceof Assign && $node === $assign) {
                 $isRenamingActive = \true;
                 return null;
             }
             if (!$node instanceof Variable) {
-                return null;
-            }
-            // skip param names
-            $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Param) {
                 return null;
             }
             // TODO: Remove in next PR (with above param check?),
