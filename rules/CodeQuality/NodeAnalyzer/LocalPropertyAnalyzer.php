@@ -21,7 +21,6 @@ use Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -83,31 +82,51 @@ final class LocalPropertyAnalyzer
     {
         $fetchedLocalPropertyNameToTypes = [];
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->getMethods(), function (Node $node) use(&$fetchedLocalPropertyNameToTypes) : ?int {
-            // skip anonymous classes and inner function
-            if ($node instanceof Class_ || $node instanceof Function_) {
+            if ($this->shouldSkip($node)) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            // skip closure call
-            if ($node instanceof MethodCall && $node->var instanceof Closure) {
+            if (($node instanceof Assign || $node instanceof ArrayDimFetch) && $node->var instanceof PropertyFetch) {
+                $propertyName = $this->resolvePropertyName($node->var);
+                if ($propertyName === null) {
+                    return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                }
+                if ($node instanceof Assign) {
+                    $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->nodeTypeResolver->getType($node->expr);
+                    return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                }
+                $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->arrayDimFetchTypeResolver->resolve($node);
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if (!$node instanceof PropertyFetch) {
-                return null;
-            }
-            if (!$this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
-                return null;
-            }
-            if ($this->shouldSkipPropertyFetch($node)) {
-                return null;
-            }
-            $propertyName = $this->nodeNameResolver->getName($node->name);
+            $propertyName = $this->resolvePropertyName($node);
             if ($propertyName === null) {
                 return null;
             }
-            $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->resolvePropertyFetchType($node);
+            $fetchedLocalPropertyNameToTypes[$propertyName][] = new MixedType();
             return null;
         });
         return $this->normalizeToSingleType($fetchedLocalPropertyNameToTypes);
+    }
+    private function shouldSkip(Node $node) : bool
+    {
+        // skip anonymous classes and inner function
+        if ($node instanceof Class_ || $node instanceof Function_) {
+            return \true;
+        }
+        // skip closure call
+        return $node instanceof MethodCall && $node->var instanceof Closure;
+    }
+    private function resolvePropertyName(Node $node) : ?string
+    {
+        if (!$node instanceof PropertyFetch) {
+            return null;
+        }
+        if (!$this->propertyFetchAnalyzer->isLocalPropertyFetch($node)) {
+            return null;
+        }
+        if ($this->shouldSkipPropertyFetch($node)) {
+            return null;
+        }
+        return $this->nodeNameResolver->getName($node->name);
     }
     private function shouldSkipPropertyFetch(PropertyFetch $propertyFetch) : bool
     {
@@ -122,18 +141,6 @@ final class LocalPropertyAnalyzer
             return \true;
         }
         return $this->isPartOfClosureBindTo($propertyFetch);
-    }
-    private function resolvePropertyFetchType(PropertyFetch $propertyFetch) : Type
-    {
-        $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
-        // possible get type
-        if ($parentNode instanceof Assign) {
-            return $this->nodeTypeResolver->getType($parentNode->expr);
-        }
-        if ($parentNode instanceof ArrayDimFetch) {
-            return $this->arrayDimFetchTypeResolver->resolve($parentNode);
-        }
-        return new MixedType();
     }
     /**
      * @param array<string, Type[]> $propertyNameToTypes
