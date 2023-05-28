@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Privatization\Rector\Property;
 
-use PHPStan\Reflection\ClassReflection;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;

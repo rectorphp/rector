@@ -1,4 +1,4 @@
-# 396 Rules Overview
+# 394 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [RemovingStatic](#removingstatic) (1)
 
-- [Renaming](#renaming) (11)
+- [Renaming](#renaming) (10)
 
 - [Strict](#strict) (6)
 
@@ -4042,16 +4042,16 @@ Rename variable to match method return type
 ```diff
  class SomeClass
  {
- public function run()
- {
--    $a = $this->getRunner();
-+    $runner = $this->getRunner();
- }
+     public function run()
+     {
+-        $a = $this->getRunner();
++        $runner = $this->getRunner();
+     }
 
- public function getRunner(): Runner
- {
-     return new Runner();
- }
+     public function getRunner(): Runner
+     {
+         return new Runner();
+     }
  }
 ```
 
@@ -6976,38 +6976,6 @@ return static function (RectorConfig $rectorConfig): void {
  $someObject = new SomeExampleClass;
 -$someObject->oldMethod();
 +$someObject->newMethod();
-```
-
-<br>
-
-### RenameNamespaceRector
-
-Replaces old namespace by new one.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Renaming\Rector\Namespace_\RenameNamespaceRector`](../rules/Renaming/Rector/Namespace_/RenameNamespaceRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Renaming\Rector\Namespace_\RenameNamespaceRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RenameNamespaceRector::class, [
-        'SomeOldNamespace' => 'SomeNewNamespace',
-    ]);
-};
-```
-
-↓
-
-```diff
--$someObject = new SomeOldNamespace\SomeClass;
-+$someObject = new SomeNewNamespace\SomeClass;
 ```
 
 <br>

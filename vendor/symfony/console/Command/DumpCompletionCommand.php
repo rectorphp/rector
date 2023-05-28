@@ -89,7 +89,7 @@ EOH
         $commandName = \basename($_SERVER['argv'][0]);
         if ($input->getOption('debug')) {
             $this->tailDebugLog($commandName, $output);
-            return self::SUCCESS;
+            return 0;
         }
         $shell = $input->getArgument('shell') ?? self::guessShell();
         $completionFile = __DIR__ . '/../Resources/completion.' . $shell;
@@ -103,10 +103,10 @@ EOH
             } else {
                 $output->writeln(\sprintf('<error>Shell not detected, Symfony shell completion only supports "%s").</>', \implode('", "', $supportedShells)));
             }
-            return self::INVALID;
+            return 2;
         }
         $output->write(\str_replace(['{{ COMMAND_NAME }}', '{{ VERSION }}'], [$commandName, CompleteCommand::COMPLETION_API_VERSION], \file_get_contents($completionFile)));
-        return self::SUCCESS;
+        return 0;
     }
     private static function guessShell() : string
     {
