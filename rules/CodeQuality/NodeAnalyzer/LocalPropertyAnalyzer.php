@@ -11,14 +11,13 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -37,11 +36,6 @@ final class LocalPropertyAnalyzer
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
-     */
-    private $classAnalyzer;
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -72,10 +66,9 @@ final class LocalPropertyAnalyzer
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassAnalyzer $classAnalyzer, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver, NodeTypeResolver $nodeTypeResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, TypeFactory $typeFactory)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, ArrayDimFetchTypeResolver $arrayDimFetchTypeResolver, NodeTypeResolver $nodeTypeResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer, TypeFactory $typeFactory)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->classAnalyzer = $classAnalyzer;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->arrayDimFetchTypeResolver = $arrayDimFetchTypeResolver;
@@ -89,10 +82,13 @@ final class LocalPropertyAnalyzer
     public function resolveFetchedPropertiesToTypesFromClass(Class_ $class) : array
     {
         $fetchedLocalPropertyNameToTypes = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $node) use(&$fetchedLocalPropertyNameToTypes) : ?int {
-            // skip anonymous class scope
-            $isAnonymousClass = $this->classAnalyzer->isAnonymousClass($node);
-            if ($isAnonymousClass) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->getMethods(), function (Node $node) use(&$fetchedLocalPropertyNameToTypes) : ?int {
+            // skip anonymous classes and inner function
+            if ($node instanceof Class_ || $node instanceof Function_) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            // skip closure call
+            if ($node instanceof MethodCall && $node->var instanceof Closure) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof PropertyFetch) {
@@ -106,10 +102,6 @@ final class LocalPropertyAnalyzer
             }
             $propertyName = $this->nodeNameResolver->getName($node->name);
             if ($propertyName === null) {
-                return null;
-            }
-            $parentFunctionLike = $this->betterNodeFinder->findParentType($node, FunctionLike::class);
-            if (!$parentFunctionLike instanceof ClassMethod) {
                 return null;
             }
             $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->resolvePropertyFetchType($node);
