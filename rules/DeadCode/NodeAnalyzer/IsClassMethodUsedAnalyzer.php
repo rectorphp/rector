@@ -67,12 +67,8 @@ final class IsClassMethodUsedAnalyzer
         $this->callCollectionAnalyzer = $callCollectionAnalyzer;
         $this->reflectionResolver = $reflectionResolver;
     }
-    public function isClassMethodUsed(ClassMethod $classMethod, Scope $scope) : bool
+    public function isClassMethodUsed(Class_ $class, ClassMethod $classMethod, Scope $scope) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$class instanceof Class_) {
-            return \true;
-        }
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
         // 1. direct normal calls
         if ($this->isClassMethodCalledInLocalMethodCall($class, $classMethodName)) {

@@ -68,23 +68,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
-        if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $scope)) {
-            return null;
-        }
         if ($this->hasDynamicMethodCallOnFetchThis($node)) {
             return null;
         }
-        $this->removeNode($node);
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->shouldSkip($classMethod)) {
+                continue;
+            }
+            if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $classMethod, $scope)) {
+                continue;
+            }
+            $this->removeNode($classMethod);
+            $hasChanged = \true;
+        }
+        if ($hasChanged) {
+            return $node;
+        }
         return null;
     }
     private function shouldSkip(ClassMethod $classMethod) : bool
@@ -113,14 +120,10 @@ CODE_SAMPLE
         }
         return $classReflection->hasMethod(MethodName::CALL);
     }
-    private function hasDynamicMethodCallOnFetchThis(ClassMethod $classMethod) : bool
+    private function hasDynamicMethodCallOnFetchThis(Class_ $class) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$class instanceof Class_) {
-            return \false;
-        }
-        foreach ($class->getMethods() as $method) {
-            $isFound = (bool) $this->betterNodeFinder->findFirst((array) $method->getStmts(), function (Node $subNode) : bool {
+        foreach ($class->getMethods() as $classMethod) {
+            $isFound = (bool) $this->betterNodeFinder->findFirst((array) $classMethod->getStmts(), function (Node $subNode) : bool {
                 if (!$subNode instanceof MethodCall) {
                     return \false;
                 }

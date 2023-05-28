@@ -17,7 +17,6 @@ use PHPStan\Reflection\Php\PhpPropertyReflection;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeFactory\NamedVariableFactory;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -37,16 +36,10 @@ final class DowngradeThisInClosureRector extends AbstractRector
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(NamedVariableFactory $namedVariableFactory, ReflectionResolver $reflectionResolver, NodesToAddCollector $nodesToAddCollector)
+    public function __construct(NamedVariableFactory $namedVariableFactory, ReflectionResolver $reflectionResolver)
     {
         $this->namedVariableFactory = $namedVariableFactory;
         $this->reflectionResolver = $reflectionResolver;
-        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -88,22 +81,29 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Closure::class];
+        return [Expression::class];
     }
     /**
-     * @param Closure $node
+     * @param Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
+        if (!$node->expr instanceof Assign) {
+            return null;
+        }
+        $assign = $node->expr;
+        if (!$assign->expr instanceof Closure) {
+            return null;
+        }
+        $closure = $assign->expr;
         $closureParentFunctionLike = $this->betterNodeFinder->findParentByTypes($node, [ClassMethod::class, Function_::class]);
         /** @var PropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->resolvePropertyFetches($node, $closureParentFunctionLike);
+        $propertyFetches = $this->resolvePropertyFetches($closure, $closureParentFunctionLike);
         if ($propertyFetches === []) {
             return null;
         }
         $selfVariable = $this->namedVariableFactory->createVariable($node, 'self');
         $expression = new Expression(new Assign($selfVariable, new Variable('this')));
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
         $this->traverseNodesWithCallable($node, static function (Node $subNode) use($selfVariable) : ?Closure {
             if (!$subNode instanceof Closure) {
                 return null;
@@ -114,7 +114,7 @@ CODE_SAMPLE
         foreach ($propertyFetches as $propertyFetch) {
             $propertyFetch->var = $selfVariable;
         }
-        return $node;
+        return [$expression, $node];
     }
     /**
      * @return PropertyFetch[]
