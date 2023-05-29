@@ -595,6 +595,9 @@ final class Printer
             $result .= $originalTokens->getContentBetween($pos, $subStartPos);
             $mapKey = get_class($node) . '->' . $subNodeName;
             $parenthesesNeeded = isset($this->parenthesesMap[$mapKey]) && in_array(get_class($subNode), $this->parenthesesMap[$mapKey], \true);
+            if ($subNode->getAttribute(Attribute::ORIGINAL_NODE) !== null) {
+                $parenthesesNeeded = $parenthesesNeeded && !in_array(get_class($subNode->getAttribute(Attribute::ORIGINAL_NODE)), $this->parenthesesMap[$mapKey], \true);
+            }
             $addParentheses = $parenthesesNeeded && !$originalTokens->hasParentheses($subStartPos, $subEndPos);
             if ($addParentheses) {
                 $result .= '(';
