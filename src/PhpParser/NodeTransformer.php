@@ -59,19 +59,20 @@ final class NodeTransformer
      */
     public function transformArrayToYields(Array_ $array) : array
     {
-        $yieldNodes = [];
+        $yields = [];
         foreach ($array->items as $arrayItem) {
             if (!$arrayItem instanceof ArrayItem) {
                 continue;
             }
-            $expressionNode = new Expression(new Yield_($arrayItem->value, $arrayItem->key));
+            $yield = new Yield_($arrayItem->value, $arrayItem->key);
+            $expression = new Expression($yield);
             $arrayItemComments = $arrayItem->getComments();
             if ($arrayItemComments !== []) {
-                $expressionNode->setAttribute(AttributeKey::COMMENTS, $arrayItemComments);
+                $expression->setAttribute(AttributeKey::COMMENTS, $arrayItemComments);
             }
-            $yieldNodes[] = $expressionNode;
+            $yields[] = $expression;
         }
-        return $yieldNodes;
+        return $yields;
     }
     /**
      * @api symfony

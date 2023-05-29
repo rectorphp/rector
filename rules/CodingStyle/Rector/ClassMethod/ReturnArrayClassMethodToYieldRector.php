@@ -9,11 +9,11 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202305\Webmozart\Assert\Assert;
@@ -34,15 +34,9 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
      * @var \Rector\Core\PhpParser\NodeTransformer
      */
     private $nodeTransformer;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
-     */
-    private $commentsMerger;
-    public function __construct(NodeTransformer $nodeTransformer, CommentsMerger $commentsMerger)
+    public function __construct(NodeTransformer $nodeTransformer)
     {
         $this->nodeTransformer = $nodeTransformer;
-        $this->commentsMerger = $commentsMerger;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -53,7 +47,9 @@ final class SomeTest implements TestCase
 {
     public static function provideData()
     {
-        return [['some text']];
+        return [
+            ['some text']
+        ];
     }
 }
 CODE_SAMPLE
@@ -82,6 +78,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->stmts === null) {
+            return null;
+        }
         $hasChanged = \false;
         foreach ($this->methodsToYields as $methodToYield) {
             if (!$this->isName($node, $methodToYield->getMethod())) {
@@ -94,8 +93,12 @@ CODE_SAMPLE
             if (!$arrayNode instanceof Array_) {
                 continue;
             }
+            // keep comments of 1st array item
+            $firstComment = $node->stmts[0]->getAttribute(AttributeKey::COMMENTS);
             $this->transformArrayToYieldsOnMethodNode($node, $arrayNode);
-            $this->commentsMerger->keepParent($node, $arrayNode);
+            if (\is_array($firstComment)) {
+                $node->stmts[0]->setAttribute(AttributeKey::COMMENTS, \array_merge($firstComment, (array) $node->stmts[0]->getAttribute(AttributeKey::COMMENTS)));
+            }
             $hasChanged = \true;
         }
         if (!$hasChanged) {
@@ -129,7 +132,7 @@ CODE_SAMPLE
     }
     private function transformArrayToYieldsOnMethodNode(ClassMethod $classMethod, Array_ $array) : void
     {
-        $yieldNodes = $this->nodeTransformer->transformArrayToYields($array);
+        $yields = $this->nodeTransformer->transformArrayToYields($array);
         $this->removeReturnTag($classMethod);
         // change return typehint
         $classMethod->returnType = new FullyQualified('Iterator');
@@ -139,7 +142,7 @@ CODE_SAMPLE
             }
             unset($classMethod->stmts[$key]);
         }
-        $classMethod->stmts = \array_merge((array) $classMethod->stmts, $yieldNodes);
+        $classMethod->stmts = \array_merge((array) $classMethod->stmts, $yields);
     }
     private function removeReturnTag(ClassMethod $classMethod) : void
     {
