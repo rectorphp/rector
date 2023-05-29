@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
@@ -119,36 +118,11 @@ final class ComplexNodeRemover
             return \false;
         }
         $this->removeConstructorDependency($class, $propertyName);
-        $this->nodeRemover->removeNodes($expressions);
+        foreach ($expressions as $expression) {
+            $this->nodeRemover->removeNode($expression);
+        }
         $this->nodeRemover->removeNode($property);
         return \true;
-    }
-    /**
-     * @param Param[] $params
-     * @param int[] $paramKeysToBeRemoved
-     * @return int[]
-     */
-    public function processRemoveParamWithKeys(array $params, array $paramKeysToBeRemoved) : array
-    {
-        $totalKeys = \count($params) - 1;
-        $removedParamKeys = [];
-        foreach ($paramKeysToBeRemoved as $paramKeyToBeRemoved) {
-            $startNextKey = $paramKeyToBeRemoved + 1;
-            for ($nextKey = $startNextKey; $nextKey <= $totalKeys; ++$nextKey) {
-                if (!isset($params[$nextKey])) {
-                    // no next param, break the inner loop, remove the param
-                    break;
-                }
-                if (\in_array($nextKey, $paramKeysToBeRemoved, \true)) {
-                    // keep searching next key not in $paramKeysToBeRemoved
-                    continue;
-                }
-                return [];
-            }
-            $this->nodeRemover->removeNode($params[$paramKeyToBeRemoved]);
-            $removedParamKeys[] = $paramKeyToBeRemoved;
-        }
-        return $removedParamKeys;
     }
     private function removeConstructorDependency(Class_ $class, string $propertyName) : void
     {
@@ -186,7 +160,12 @@ final class ComplexNodeRemover
         if ($paramKeysToBeRemoved === []) {
             return;
         }
-        $this->processRemoveParamWithKeys($classMethod->getParams(), $paramKeysToBeRemoved);
+        foreach (\array_keys($classMethod->params) as $key) {
+            if (!\in_array($key, $paramKeysToBeRemoved, \true)) {
+                continue;
+            }
+            unset($classMethod->params[$key]);
+        }
     }
     /**
      * @return StaticPropertyFetch[]|PropertyFetch[]

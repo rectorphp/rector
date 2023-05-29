@@ -38,13 +38,4 @@ final class NodeRemover
         $this->nodesToRemoveCollector->addNodeToRemove($node);
         $this->rectorChangeCollector->notifyNodeFileInfo($node);
     }
-    /**
-     * @param Node[] $nodes
-     */
-    public function removeNodes(array $nodes) : void
-    {
-        foreach ($nodes as $node) {
-            $this->removeNode($node);
-        }
-    }
 }
