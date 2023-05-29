@@ -313,7 +313,9 @@ use Rector\DowngradePhp80\Rector\Class_\DowngradeAttributeToAnnotationRector;
 use Rector\DowngradePhp80\ValueObject\DowngradeAttributeToAnnotation;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DowngradeAttributeToAnnotationRector::class, [new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route')]);
+    $rectorConfig->ruleWithConfiguration(DowngradeAttributeToAnnotationRector::class, [
+        new DowngradeAttributeToAnnotation('Symfony\Component\Routing\Annotation\Route'),
+    ]);
 };
 ```
 
@@ -879,12 +881,9 @@ Extract keys in list to its own variable assignment
 ```diff
  class SomeClass
  {
-     public function run(): void
+-    public function run(array $data): void
++    public function run(): void
      {
-         $data = [
-             ["id" => 1, "name" => 'Tom'],
-             ["id" => 2, "name" => 'Fred'],
-         ];
 -        list("id" => $id1, "name" => $name1) = $data[0];
 +        $id1 = $data[0]["id"];
 +        $name1 = $data[0]["name"];
@@ -1257,7 +1256,18 @@ use Rector\Config\RectorConfig;
 use Rector\DowngradePhp72\Rector\ClassMethod\DowngradeParameterTypeWideningRector;
 
 return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DowngradeParameterTypeWideningRector::class, ['ContainerInterface' => ['set', 'get', 'has', 'initialized'], 'SomeContainerInterface' => ['set', 'has']]);
+    $rectorConfig->ruleWithConfiguration(DowngradeParameterTypeWideningRector::class, [
+        'ContainerInterface' => [
+            'set',
+            'get',
+            'has',
+            'initialized',
+        ],
+        'SomeContainerInterface' => [
+            'set',
+            'has',
+        ],
+    ]);
 };
 ```
 

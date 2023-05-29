@@ -11,13 +11,13 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\List_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -35,35 +35,25 @@ final class DowngradeKeysInListRector extends AbstractRector
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(InflectorSingularResolver $inflectorSingularResolver, VariableNaming $variableNaming, NodesToAddCollector $nodesToAddCollector)
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver, VariableNaming $variableNaming)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
         $this->variableNaming = $variableNaming;
-        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [List_::class, Array_::class];
+        return [Expression::class, Foreach_::class];
     }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Extract keys in list to its own variable assignment', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
-    public function run(): void
+    public function run(array $data): void
     {
-        $data = [
-            ["id" => 1, "name" => 'Tom'],
-            ["id" => 2, "name" => 'Fred'],
-        ];
         list("id" => $id1, "name" => $name1) = $data[0];
     }
 }
@@ -73,10 +63,6 @@ class SomeClass
 {
     public function run(): void
     {
-        $data = [
-            ["id" => 1, "name" => 'Tom'],
-            ["id" => 2, "name" => 'Fred'],
-        ];
         $id1 = $data[0]["id"];
         $name1 = $data[0]["name"];
     }
@@ -85,78 +71,100 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param List_|Array_ $node
+     * @param Expression|Foreach_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
-            return null;
-        }
-        $parentExpression = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentExpression instanceof Node) {
-            return null;
-        }
-        $assignExpressions = $this->processExtractToItsOwnVariable($node, $parentNode, $parentExpression);
-        if ($assignExpressions === []) {
-            return null;
-        }
-        if ($parentNode instanceof Assign) {
-            $this->mirrorComments($assignExpressions[0], $parentExpression);
-            $this->nodesToAddCollector->addNodesBeforeNode($assignExpressions, $node);
-            $this->removeNode($parentExpression);
-            return $node;
-        }
-        if ($parentNode instanceof Foreach_) {
-            $defaultValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($parentNode->expr));
-            $scope = $parentNode->getAttribute(AttributeKey::SCOPE);
-            $newValueVar = $this->variableNaming->createCountedValueName($defaultValueVar, $scope);
-            $parentNode->valueVar = new Variable($newValueVar);
-            $stmts = $parentNode->stmts;
-            if ($stmts === []) {
-                $parentNode->stmts = $assignExpressions;
-            } else {
-                $this->nodesToAddCollector->addNodesBeforeNode($assignExpressions, $parentNode->stmts[0]);
+        if ($node instanceof Expression) {
+            if ($node->expr instanceof Assign) {
+                return $this->refactorAssignExpression($node);
             }
-            return $parentNode->valueVar;
+            return null;
         }
-        return null;
+        return $this->refactorForeach($node);
     }
     /**
-     * @return Expression[]
-     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $node
+     * @return Stmt[]
+     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $listOrArray
      */
-    private function processExtractToItsOwnVariable($node, Node $parent, Node $parentExpression) : array
+    private function refactorArrayOrList($listOrArray, Assign $assign) : array
     {
-        $items = $node->items;
-        $assignExpressions = [];
+        $items = $listOrArray->items;
+        $assignStmts = [];
         foreach ($items as $item) {
             if (!$item instanceof ArrayItem) {
                 return [];
             }
-            /** keyed and not keyed cannot be mixed, return early */
+            // keyed and not keyed cannot be mixed, return early
             if (!$item->key instanceof Expr) {
                 return [];
             }
-            if ($parentExpression instanceof Expression && $parent instanceof Assign && $parent->var === $node) {
-                $assignExpressions[] = new Expression(new Assign($item->value, new ArrayDimFetch($parent->expr, $item->key)));
-            }
-            if (!$parent instanceof Foreach_) {
-                continue;
-            }
-            if ($parent->valueVar !== $node) {
-                continue;
-            }
-            $assignExpressions[] = $this->getExpressionFromForeachValue($parent, $item);
+            $assignStmts[] = new Expression(new Assign($item->value, new ArrayDimFetch($assign->expr, $item->key)));
         }
-        return $assignExpressions;
+        return $assignStmts;
     }
-    private function getExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem) : Expression
+    /**
+     * @return Stmt[]|null
+     * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $listOrArray
+     */
+    private function refactorForeachToOwnVariables($listOrArray, Foreach_ $foreach) : ?array
+    {
+        $items = $listOrArray->items;
+        $assignStmts = [];
+        foreach ($items as $item) {
+            if (!$item instanceof ArrayItem) {
+                return null;
+            }
+            // keyed and not keyed cannot be mixed, return early
+            if (!$item->key instanceof Expr) {
+                return null;
+            }
+            $assignStmts[] = $this->createExpressionFromForeachValue($foreach, $item);
+        }
+        return $assignStmts;
+    }
+    private function createExpressionFromForeachValue(Foreach_ $foreach, ArrayItem $arrayItem) : Expression
     {
         $defaultValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
         $scope = $foreach->getAttribute(AttributeKey::SCOPE);
         $newValueVar = $this->variableNaming->createCountedValueName($defaultValueVar, $scope);
         $assign = new Assign($arrayItem->value, new ArrayDimFetch(new Variable($newValueVar), $arrayItem->key));
         return new Expression($assign);
+    }
+    /**
+     * @param Expression<Assign> $expression
+     * @return Stmt[]|null
+     */
+    private function refactorAssignExpression(Expression $expression) : ?array
+    {
+        /** @var Assign $assign */
+        $assign = $expression->expr;
+        if (!$assign->var instanceof List_ && !$assign->var instanceof Array_) {
+            return null;
+        }
+        $assignedArrayOrList = $assign->var;
+        $assignExpressions = $this->refactorArrayOrList($assignedArrayOrList, $assign);
+        if ($assignExpressions === []) {
+            return null;
+        }
+        $this->mirrorComments($assignExpressions[0], $expression);
+        return $assignExpressions;
+    }
+    private function refactorForeach(Foreach_ $foreach) : ?Foreach_
+    {
+        if (!$foreach->valueVar instanceof List_ && !$foreach->valueVar instanceof Array_) {
+            return null;
+        }
+        $assignedArrayOrList = $foreach->valueVar;
+        $defaultValueVar = $this->inflectorSingularResolver->resolve((string) $this->getName($foreach->expr));
+        $scope = $foreach->getAttribute(AttributeKey::SCOPE);
+        $newValueVar = $this->variableNaming->createCountedValueName($defaultValueVar, $scope);
+        $foreach->valueVar = new Variable($newValueVar);
+        $assignExpressions = $this->refactorForeachToOwnVariables($assignedArrayOrList, $foreach);
+        if ($assignExpressions === null) {
+            return null;
+        }
+        $foreach->stmts = \array_merge($assignExpressions, $foreach->stmts);
+        return $foreach;
     }
 }

@@ -173,7 +173,7 @@ CODE_SAMPLE
             // Copy over attributes of the "old" property
             $param->attrGroups = \array_merge($param->attrGroups, $property->attrGroups);
             $this->processNullableType($property, $param);
-            $this->phpDocTypeChanger->copyPropertyDocToParam($property, $param);
+            $this->phpDocTypeChanger->copyPropertyDocToParam($constructClassMethod, $property, $param);
         }
         return $node;
     }

@@ -195,7 +195,7 @@ final class PhpDocTypeChanger
         }
         return \in_array((string) $typeNode, self::ALLOWED_IDENTIFIER_TYPENODE_TYPES, \true);
     }
-    public function copyPropertyDocToParam(Property $property, Param $param) : void
+    public function copyPropertyDocToParam(ClassMethod $classMethod, Property $property, Param $param) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
         if (!$phpDocInfo instanceof PhpDocInfo) {
@@ -209,11 +209,7 @@ final class PhpDocTypeChanger
         if ($varTagValueNode->description !== '') {
             return;
         }
-        $parentNode = $param->getAttribute(AttributeKey::PARENT_NODE);
         $paramVarName = $this->nodeNameResolver->getName($param->var);
-        if (!$parentNode instanceof ClassMethod) {
-            return;
-        }
         if (!$this->isAllowed($varTagValueNode->type)) {
             return;
         }
@@ -222,7 +218,7 @@ final class PhpDocTypeChanger
         }
         $phpDocInfo->removeByType(VarTagValueNode::class);
         $param->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
-        $phpDocInfo = $parentNode->getAttribute(AttributeKey::PHP_DOC_INFO);
+        $phpDocInfo = $classMethod->getAttribute(AttributeKey::PHP_DOC_INFO);
         $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTagValueNode, $property);
         $this->changeParamType($phpDocInfo, $paramType, $param, $paramVarName);
         $this->processKeepComments($property, $param);
