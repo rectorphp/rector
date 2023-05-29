@@ -69,7 +69,7 @@ final class IssetDimFetchCleaner
                     continue;
                 }
                 // is required or optional?
-                if ($this->isRequiredIsset($isset, $if)) {
+                if ($this->isRequiredIsset($if)) {
                     // contains exception? → required param → skip
                     continue;
                 }
@@ -124,12 +124,8 @@ final class IssetDimFetchCleaner
         }
         return $this->valueResolver->getValue($expr->dim);
     }
-    private function isRequiredIsset(Isset_ $isset, If_ $if) : bool
+    private function isRequiredIsset(If_ $if) : bool
     {
-        $parrentNode = $isset->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parrentNode instanceof BooleanNot) {
-            return \false;
-        }
         return $this->betterNodeFinder->hasInstancesOf($if->stmts, [Throw_::class, ThrowStmt::class]);
     }
 }
