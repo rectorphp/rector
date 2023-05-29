@@ -17,7 +17,6 @@ use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -114,9 +113,11 @@ CODE_SAMPLE
             return null;
         }
         $name = $firstArg->value->value;
-        $mapping = $attribute->args[$optionsIndex]->value;
-        $exprValue = $attribute->args[$exprIndex]->value;
-        $newArguments = $this->getNewArguments($mapping, $exprValue);
+        $mappingArg = $attribute->args[$optionsIndex] ?? null;
+        $mappingExpr = $mappingArg instanceof Arg ? $mappingArg->value : null;
+        $exprArg = $attribute->args[$exprIndex] ?? null;
+        $exprValue = $exprArg instanceof Arg ? $exprArg->value : null;
+        $newArguments = $this->getNewArguments($mappingExpr, $exprValue);
         if ($newArguments === []) {
             return null;
         }
@@ -129,7 +130,6 @@ CODE_SAMPLE
         }
         $attribute->args = \array_merge($attribute->args, $newArguments);
         $attribute->name = new FullyQualified(SymfonyAnnotation::MAP_ENTITY_CLASS);
-        // $node = $attribute->getAttribute(AttributeKey::PARENT_NODE);
         $this->addMapEntityAttribute($classMethod, $name, $attributeGroup);
         return $attribute;
     }
