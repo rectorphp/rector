@@ -43,12 +43,7 @@ final class RectifiedAnalyzer
         if ($originalNode instanceof Node) {
             return \false;
         }
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
-            return \false;
-        }
-        $parentOriginalNode = $parentNode->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($parentOriginalNode instanceof Node) {
+        if ($node->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
             return \false;
         }
         /**
