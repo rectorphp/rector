@@ -105,9 +105,9 @@ CODE_SAMPLE
             return null;
         }
         $defaultDescription = $this->resolveDefaultDescription($node);
-        $array = $this->commandHelper->getCommandAliasesValueFromAttributeOrSetter($node);
+        $alisesArray = $this->commandHelper->resolveCommandAliasesFromAttributeOrSetter($node);
         $constFetch = $this->commandHelper->getCommandHiddenValueFromAttributeOrSetter($node);
-        return $this->replaceAsCommandAttribute($node, $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $array, $constFetch));
+        return $this->replaceAsCommandAttribute($node, $this->createAttributeGroupAsCommand($defaultName, $defaultDescription, $alisesArray, $constFetch));
     }
     private function createAttributeGroupAsCommand(string $defaultName, ?string $defaultDescription, ?Array_ $array, ?ConstFetch $constFetch) : AttributeGroup
     {
