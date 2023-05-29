@@ -8,6 +8,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -152,18 +153,24 @@ CODE_SAMPLE
     }
     private function removeParentConstructAndCollectEntityReference(ClassMethod $classMethod) : ?Expr
     {
-        $entityReferenceExpr = null;
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$entityReferenceExpr) {
-            if (!$node instanceof StaticCall) {
-                return null;
+        if ($classMethod->stmts === null) {
+            return null;
+        }
+        foreach ($classMethod->stmts as $key => $stmt) {
+            if (!$stmt instanceof Expression) {
+                continue;
             }
-            if (!$this->isName($node->class, 'parent')) {
-                return null;
+            if (!$stmt->expr instanceof StaticCall) {
+                continue;
             }
-            $entityReferenceExpr = $node->getArgs()[1]->value;
-            $this->removeNode($node);
-        });
-        return $entityReferenceExpr;
+            $staticCall = $stmt->expr;
+            if (!$this->isName($staticCall->class, 'parent')) {
+                continue;
+            }
+            unset($classMethod->stmts[$key]);
+            return $staticCall->getArgs()[1]->value;
+        }
+        return null;
     }
     private function addRepositoryProperty(Class_ $class, Expr $entityReferenceExpr) : void
     {
