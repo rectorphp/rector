@@ -141,9 +141,9 @@ CODE_SAMPLE
         /** @var Variable $paramVariable */
         $paramVariable = $classMethod->params[0]->var;
         $optionalParamNames = $this->issetDimFetchCleaner->resolveOptionalParamNames($classMethod, $paramVariable);
-        $this->issetDimFetchCleaner->removeArrayDimFetchIssets($classMethod, $paramVariable);
         $assignsToPropertyFetch = $this->assignPropertyFetchAnalyzer->resolveAssignToPropertyFetch($classMethod);
         $this->replaceAssignsByParam($assignsToPropertyFetch);
+        $this->issetDimFetchCleaner->removeArrayDimFetchIssets($classMethod, $paramVariable);
         $classMethod->params = $this->paramFactory->createFromAssignsToPropertyFetch($assignsToPropertyFetch, $optionalParamNames);
         // include assigns for optional params - these do not have assign in the root, as they're hidden in if isset/check
         // so we have to add them
