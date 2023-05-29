@@ -16,5 +16,9 @@ final class SymfonyAnnotation
     /**
      * @var string
      */
-    public const MAP_ENTITY_CLASS = 'Symfony\\Bridge\\Doctrine\\Attribute\\MapEntity';
+    public const MAP_ENTITY = 'Symfony\\Bridge\\Doctrine\\Attribute\\MapEntity';
+    /**
+     * @var string
+     */
+    public const AS_COMMAND = 'Symfony\\Component\\Console\\Attribute\\AsCommand';
 }

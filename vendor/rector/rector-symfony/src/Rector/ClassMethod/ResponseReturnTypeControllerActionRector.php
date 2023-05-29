@@ -97,7 +97,7 @@ CODE_SAMPLE
         if (!$this->hasReturn($node)) {
             return null;
         }
-        if ($this->attrinationFinder->hasByOne($node, SensioAttribute::SENSIO_TEMPLATE) || $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
+        if ($this->attrinationFinder->hasByOne($node, SensioAttribute::TEMPLATE) || $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
             $node->returnType = new NullableType(new Identifier('array'));
             return $node;
         }

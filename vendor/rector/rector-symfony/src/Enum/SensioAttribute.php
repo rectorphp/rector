@@ -8,17 +8,17 @@ final class SensioAttribute
     /**
      * @var string
      */
-    public const PARAM_CONVERTER_CLASS = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter';
+    public const PARAM_CONVERTER = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\ParamConverter';
     /**
      * @var string
      */
-    public const ENTITY_CLASS = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Entity';
+    public const ENTITY = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Entity';
     /**
      * @var string
      */
-    public const SENSIO_METHOD = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Method';
+    public const METHOD = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Method';
     /**
      * @var string
      */
-    public const SENSIO_TEMPLATE = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template';
+    public const TEMPLATE = 'Sensio\\Bundle\\FrameworkExtraBundle\\Configuration\\Template';
 }
