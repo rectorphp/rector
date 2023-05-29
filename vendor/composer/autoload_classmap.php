@@ -2493,6 +2493,7 @@ return array(
     'Rector\\Symfony\\Contract\\Tag\\TagInterface' => $vendorDir . '/rector/rector-symfony/src/Contract/Tag/TagInterface.php',
     'Rector\\Symfony\\DataProvider\\ServiceMapProvider' => $vendorDir . '/rector/rector-symfony/src/DataProvider/ServiceMapProvider.php',
     'Rector\\Symfony\\DataProvider\\ServiceNameToTypeUniqueProvider' => $vendorDir . '/rector/rector-symfony/src/DataProvider/ServiceNameToTypeUniqueProvider.php',
+    'Rector\\Symfony\\Enum\\SensioAttribute' => $vendorDir . '/rector/rector-symfony/src/Enum/SensioAttribute.php',
     'Rector\\Symfony\\Enum\\SymfonyAnnotation' => $vendorDir . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
     'Rector\\Symfony\\Exception\\InvalidConfigurationException' => $vendorDir . '/rector/rector-symfony/src/Exception/InvalidConfigurationException.php',
     'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => $vendorDir . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',

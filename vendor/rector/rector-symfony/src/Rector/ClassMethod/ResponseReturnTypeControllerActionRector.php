@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Doctrine\NodeAnalyzer\AttrinationFinder;
+use Rector\Symfony\Enum\SensioAttribute;
 use Rector\Symfony\Enum\SymfonyAnnotation;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -96,7 +97,7 @@ CODE_SAMPLE
         if (!$this->hasReturn($node)) {
             return null;
         }
-        if ($this->attrinationFinder->hasByOne($node, SymfonyAnnotation::SENSIO_TEMPLATE) || $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
+        if ($this->attrinationFinder->hasByOne($node, SensioAttribute::SENSIO_TEMPLATE) || $this->attrinationFinder->hasByOne($node, SymfonyAnnotation::TWIG_TEMPLATE)) {
             $node->returnType = new NullableType(new Identifier('array'));
             return $node;
         }
