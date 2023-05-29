@@ -66,21 +66,25 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $arrayItemsWithDuplicatedKey = $this->getArrayItemsWithDuplicatedKey($node);
-        if ($arrayItemsWithDuplicatedKey === []) {
+        $duplicatedKeysArrayItems = $this->resolveDuplicateKeysArrayItems($node);
+        if ($duplicatedKeysArrayItems === []) {
             return null;
         }
-        foreach ($arrayItemsWithDuplicatedKey as $arrayItemWithDuplicatedKey) {
-            // keep last item
-            \array_pop($arrayItemWithDuplicatedKey);
-            $this->nodeRemover->removeNodes($arrayItemWithDuplicatedKey);
+        foreach ($node->items as $key => $arrayItem) {
+            if (!$arrayItem instanceof ArrayItem) {
+                continue;
+            }
+            if (!$this->isArrayItemDuplicated($duplicatedKeysArrayItems, $arrayItem)) {
+                continue;
+            }
+            unset($node->items[$key]);
         }
         return $node;
     }
     /**
-     * @return ArrayItem[][]
+     * @return ArrayItem[]
      */
-    private function getArrayItemsWithDuplicatedKey(Array_ $array) : array
+    private function resolveDuplicateKeysArrayItems(Array_ $array) : array
     {
         $arrayItemsByKeys = [];
         foreach ($array->items as $arrayItem) {
@@ -96,12 +100,12 @@ CODE_SAMPLE
         return $this->filterItemsWithSameKey($arrayItemsByKeys);
     }
     /**
-     * @param ArrayItem[][] $arrayItemsByKeys
-     * @return ArrayItem[][]
+     * @param array<mixed, ArrayItem[]> $arrayItemsByKeys
+     * @return array<ArrayItem>
      */
     private function filterItemsWithSameKey(array $arrayItemsByKeys) : array
     {
-        $result = [];
+        $duplicatedArrayItems = [];
         foreach ($arrayItemsByKeys as $arrayItems) {
             if (\count($arrayItems) <= 1) {
                 continue;
@@ -112,8 +116,17 @@ CODE_SAMPLE
             if ($this->multiInstanceofChecker->isInstanceOf($currentArrayItemKey, self::ALLOWED_KEY_DUPLICATES)) {
                 continue;
             }
-            $result[] = $arrayItems;
+            // keep last one
+            \array_pop($arrayItems);
+            $duplicatedArrayItems = \array_merge($duplicatedArrayItems, $arrayItems);
         }
-        return $result;
+        return $duplicatedArrayItems;
+    }
+    /**
+     * @param ArrayItem[] $duplicatedKeysArrayItems
+     */
+    private function isArrayItemDuplicated(array $duplicatedKeysArrayItems, ArrayItem $arrayItem) : bool
+    {
+        return \in_array($arrayItem, $duplicatedKeysArrayItems, \true);
     }
 }
