@@ -85,16 +85,17 @@ final class LocalPropertyAnalyzer
             if ($this->shouldSkip($node)) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if (($node instanceof Assign || $node instanceof ArrayDimFetch) && $node->var instanceof PropertyFetch) {
-                $propertyName = $this->resolvePropertyName($node->var);
+            if ($node instanceof Assign && ($node->var instanceof PropertyFetch || $node->var instanceof ArrayDimFetch)) {
+                $propertyFetch = $node->var;
+                $propertyName = $this->resolvePropertyName($propertyFetch instanceof ArrayDimFetch ? $propertyFetch->var : $propertyFetch);
                 if ($propertyName === null) {
                     return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
-                if ($node instanceof Assign) {
-                    $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->nodeTypeResolver->getType($node->expr);
+                if ($propertyFetch instanceof ArrayDimFetch) {
+                    $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->arrayDimFetchTypeResolver->resolve($propertyFetch, $node);
                     return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
-                $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->arrayDimFetchTypeResolver->resolve($node);
+                $fetchedLocalPropertyNameToTypes[$propertyName][] = $this->nodeTypeResolver->getType($node->expr);
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             $propertyName = $this->resolvePropertyName($node);
