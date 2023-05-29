@@ -95,7 +95,7 @@ final class UseImportsAdder
         if ($stmts === []) {
             return;
         }
-        if ($stmts[$indexStmt] instanceof Use_) {
+        if (isset($stmts[$indexStmt]) && $stmts[$indexStmt] instanceof Use_) {
             $comments = (array) $stmts[$indexStmt]->getAttribute(AttributeKey::COMMENTS);
             if ($comments !== []) {
                 $newUses[0]->setAttribute(AttributeKey::COMMENTS, $stmts[$indexStmt]->getAttribute(AttributeKey::COMMENTS));

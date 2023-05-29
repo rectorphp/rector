@@ -12,7 +12,6 @@ use Rector\Renaming\ValueObject\RenameClassConstFetch;
 use Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector;
 use Rector\Symfony\Rector\ClassMethod\GetRequestRector;
 use Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector;
-use Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector;
 use Rector\Symfony\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector;
 use Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector;
 use Rector\Symfony\Rector\MethodCall\OptionNameRector;
@@ -30,7 +29,6 @@ return static function (RectorConfig $rectorConfig) : void {
         // forms
         FormTypeInstanceToClassConstRector::class,
         StringFormTypeToClassRector::class,
-        CascadeValidationFormBuilderRector::class,
         RemoveDefaultGetBlockPrefixRector::class,
         // forms - collection
         ChangeStringCollectionOptionToConstantRector::class,

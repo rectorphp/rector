@@ -2583,7 +2583,6 @@ return array(
     'Rector\\Symfony\\Rector\\FuncCall\\ReplaceServiceArgumentRector' => $vendorDir . '/rector/rector-symfony/src/Rector/FuncCall/ReplaceServiceArgumentRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\AddViolationToBuildViolationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/AddViolationToBuildViolationRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\AuthorizationCheckerIsGrantedExtractorRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/AuthorizationCheckerIsGrantedExtractorRector.php',
-    'Rector\\Symfony\\Rector\\MethodCall\\CascadeValidationFormBuilderRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/CascadeValidationFormBuilderRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ChangeStringCollectionOptionToConstantRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php',
     'Rector\\Symfony\\Rector\\MethodCall\\ContainerBuilderCompileEnvArgumentRector' => $vendorDir . '/rector/rector-symfony/src/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector.php',
