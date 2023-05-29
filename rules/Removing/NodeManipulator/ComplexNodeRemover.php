@@ -165,25 +165,28 @@ final class ComplexNodeRemover
     /**
      * @param int[] $paramKeysToBeRemoved
      */
-    public function processRemoveParamWithKeys(ClassMethod $classMethod, array $paramKeysToBeRemoved) : void
+    public function processRemoveParamWithKeys(ClassMethod $classMethod, array $paramKeysToBeRemoved) : bool
     {
         $totalKeys = \count($classMethod->params) - 1;
+        $hasRemoved = \false;
         foreach ($paramKeysToBeRemoved as $paramKeyToBeRemoved) {
             $startNextKey = $paramKeyToBeRemoved + 1;
             for ($nextKey = $startNextKey; $nextKey <= $totalKeys; ++$nextKey) {
                 if (!isset($classMethod->params[$nextKey])) {
                     // no next param, break the inner loop, remove the param
                     unset($classMethod->params[$paramKeyToBeRemoved]);
-                    return;
+                    return \true;
                 }
                 if (\in_array($nextKey, $paramKeysToBeRemoved, \true)) {
                     // keep searching next key not in $paramKeysToBeRemoved
                     continue;
                 }
-                return;
+                return $hasRemoved;
             }
             unset($classMethod->params[$paramKeyToBeRemoved]);
+            $hasRemoved = \true;
         }
+        return $hasRemoved;
     }
     /**
      * @return StaticPropertyFetch[]|PropertyFetch[]

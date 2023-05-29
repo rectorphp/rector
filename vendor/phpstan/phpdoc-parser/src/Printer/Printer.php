@@ -401,7 +401,7 @@ final class Printer
                     }
                     $delayedAdd = [];
                 }
-                $parenthesesNeeded = isset($this->parenthesesListMap[$mapKey]) && in_array(get_class($newNode), $this->parenthesesListMap[$mapKey], \true);
+                $parenthesesNeeded = isset($this->parenthesesListMap[$mapKey]) && in_array(get_class($newNode), $this->parenthesesListMap[$mapKey], \true) && !in_array(get_class($originalNode), $this->parenthesesListMap[$mapKey], \true);
                 $addParentheses = $parenthesesNeeded && !$originalTokens->hasParentheses($itemStartPos, $itemEndPos);
                 if ($addParentheses) {
                     $result .= '(';
