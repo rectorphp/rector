@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7977ba338c257f0b70710b3404e69e00
+class ComposerStaticInitf1683014dc82e46c87167ac2cba04155
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1885,7 +1885,6 @@ class ComposerStaticInit7977ba338c257f0b70710b3404e69e00
         'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',
         'Rector\\Doctrine\\NodeAnalyzer\\ConstructorAssignPropertyAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/ConstructorAssignPropertyAnalyzer.php',
         'Rector\\Doctrine\\NodeAnalyzer\\EntityObjectTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/EntityObjectTypeResolver.php',
-        'Rector\\Doctrine\\NodeAnalyzer\\MethodCallNameOnTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/MethodCallNameOnTypeResolver.php',
         'Rector\\Doctrine\\NodeAnalyzer\\SetterClassMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/SetterClassMethodAnalyzer.php',
         'Rector\\Doctrine\\NodeAnalyzer\\TargetEntityResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/TargetEntityResolver.php',
         'Rector\\Doctrine\\NodeFactory\\ArrayCollectionAssignFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/ArrayCollectionAssignFactory.php',
@@ -1898,7 +1897,6 @@ class ComposerStaticInit7977ba338c257f0b70710b3404e69e00
         'Rector\\Doctrine\\NodeFactory\\ValueAssignFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/ValueAssignFactory.php',
         'Rector\\Doctrine\\NodeManipulator\\ColumnPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ColumnPropertyTypeResolver.php',
         'Rector\\Doctrine\\NodeManipulator\\ConstructorManipulator' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ConstructorManipulator.php',
-        'Rector\\Doctrine\\NodeManipulator\\DependencyRemover' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/DependencyRemover.php',
         'Rector\\Doctrine\\NodeManipulator\\DoctrineItemDefaultValueManipulator' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/DoctrineItemDefaultValueManipulator.php',
         'Rector\\Doctrine\\NodeManipulator\\IssetDimFetchCleaner' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/IssetDimFetchCleaner.php',
         'Rector\\Doctrine\\NodeManipulator\\NullabilityColumnPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/NullabilityColumnPropertyTypeResolver.php',
@@ -1913,7 +1911,6 @@ class ComposerStaticInit7977ba338c257f0b70710b3404e69e00
         'Rector\\Doctrine\\Rector\\Class_\\AddEntityIdByConditionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/AddEntityIdByConditionRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\ClassAnnotationToNamedArgumentConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/ClassAnnotationToNamedArgumentConstructorRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\InitializeDefaultEntityCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/InitializeDefaultEntityCollectionRector.php',
-        'Rector\\Doctrine\\Rector\\Class_\\ManagerRegistryGetManagerToEntityManagerRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/ManagerRegistryGetManagerToEntityManagerRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\MoveCurrentDateTimeDefaultInEntityToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/MoveCurrentDateTimeDefaultInEntityToConstructorRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\MoveRepositoryFromParentToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\RemoveEmptyTableAttributeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/RemoveEmptyTableAttributeRector.php',
@@ -3086,9 +3083,9 @@ class ComposerStaticInit7977ba338c257f0b70710b3404e69e00
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7977ba338c257f0b70710b3404e69e00::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7977ba338c257f0b70710b3404e69e00::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7977ba338c257f0b70710b3404e69e00::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf1683014dc82e46c87167ac2cba04155::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf1683014dc82e46c87167ac2cba04155::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf1683014dc82e46c87167ac2cba04155::$classMap;
 
         }, null, ClassLoader::class);
     }

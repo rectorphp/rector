@@ -129,7 +129,7 @@ CODE_SAMPLE
             $paramName = $this->getName($paramNode->var);
             $propertyMetadata = new PropertyMetadata($paramName, $paramType, Class_::MODIFIER_PRIVATE);
             $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
-            $this->nodeRemover->removeParam($classMethod, $key);
+            unset($classMethod->params[$key]);
             $this->variablesToPropertyFetchCollection->addVariableNameAndType($paramName, $paramType);
         }
     }

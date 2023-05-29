@@ -1855,19 +1855,16 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "bc6805cc485416b82f0e6fb09f815f07e083f8ba"
+                "reference": "cafabaf07ebd7a6ff5e69abe2c99b7ab277fdee6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/bc6805cc485416b82f0e6fb09f815f07e083f8ba",
-                "reference": "bc6805cc485416b82f0e6fb09f815f07e083f8ba",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/cafabaf07ebd7a6ff5e69abe2c99b7ab277fdee6",
+                "reference": "cafabaf07ebd7a6ff5e69abe2c99b7ab277fdee6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
-            },
-            "conflict": {
-                "rector\/rector": "<0.11"
             },
             "require-dev": {
                 "doctrine\/orm": "^2.10",
@@ -1877,24 +1874,22 @@
                 "phpstan\/phpstan-webmozart-assert": "^1.0",
                 "phpunit\/phpunit": "^10.0",
                 "rector\/phpstan-rules": "^0.6",
-                "rector\/rector-debugging": "dev-main",
-                "rector\/rector-generator": "^0.6.10",
+                "rector\/rector-generator": "^0.6",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-ci": "^11.2",
                 "symplify\/easy-coding-standard": "^11.2",
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.1",
                 "symplify\/rule-doc-generator": "^11.1",
-                "symplify\/vendor-patches": "^11.1"
+                "symplify\/vendor-patches": "^11.1",
+                "tomasvotruba\/type-coverage": "^0.2.0",
+                "tomasvotruba\/unused-public": "^0.1.10"
             },
-            "time": "2023-05-26T23:58:12+00:00",
+            "time": "2023-05-29T08:18:21+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
                 "enable-patching": true,
-                "branch-alias": {
-                    "dev-main": "0.11-dev"
-                },
                 "rector": {
                     "includes": [
                         "config\/config.php"
@@ -1992,12 +1987,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "659f0153a4de3c48fa6da7cc755679d74bb9f26d"
+                "reference": "edbdd0e70f2a99e163e3c9b675ffb4c743bc8cb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/659f0153a4de3c48fa6da7cc755679d74bb9f26d",
-                "reference": "659f0153a4de3c48fa6da7cc755679d74bb9f26d",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/edbdd0e70f2a99e163e3c9b675ffb4c743bc8cb7",
+                "reference": "edbdd0e70f2a99e163e3c9b675ffb4c743bc8cb7",
                 "shasum": ""
             },
             "require": {
@@ -2026,7 +2021,7 @@
                 "tomasvotruba\/type-coverage": "^0.1",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-05-28T14:09:34+00:00",
+            "time": "2023-05-29T08:30:48+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
