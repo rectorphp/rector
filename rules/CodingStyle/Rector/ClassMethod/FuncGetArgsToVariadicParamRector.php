@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
@@ -51,7 +52,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->params !== []) {
+        if ($node->params !== [] || $node->stmts === null) {
             return null;
         }
         /** @var Expression<Assign>|null $expression */
@@ -59,18 +60,27 @@ CODE_SAMPLE
         if (!$expression instanceof Expression) {
             return null;
         }
-        /** @var Assign $assign */
-        $assign = $expression->expr;
-        if ($assign->var instanceof Variable) {
-            $variableName = $this->getName($assign->var);
-            if ($variableName === null) {
-                return null;
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof Expression) {
+                continue;
             }
-            $this->removeNode($assign);
-            return $this->applyVariadicParams($node, $variableName);
+            if (!$stmt->expr instanceof Assign) {
+                continue;
+            }
+            $assign = $stmt->expr;
+            if (!$this->isFuncGetArgsFuncCall($assign->expr)) {
+                continue;
+            }
+            if ($assign->var instanceof Variable) {
+                /** @var string $variableName */
+                $variableName = $this->getName($assign->var);
+                unset($node->stmts[$key]);
+                return $this->applyVariadicParams($node, $variableName);
+            }
+            $assign->expr = new Variable('args');
+            return $this->applyVariadicParams($node, 'args');
         }
-        $assign->expr = new Variable('args');
-        return $this->applyVariadicParams($node, 'args');
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
@@ -83,8 +93,7 @@ CODE_SAMPLE
     private function applyVariadicParams($node, string $variableName)
     {
         $param = $this->createVariadicParam($variableName);
-        $variableParam = $param->var;
-        if ($variableParam instanceof Variable && $this->hasFunctionOrClosureInside($node, $variableParam)) {
+        if ($param->var instanceof Variable && $this->hasFunctionOrClosureInside($node, $param->var)) {
             return null;
         }
         $node->params[] = $param;
@@ -141,5 +150,12 @@ CODE_SAMPLE
     {
         $variable = new Variable($variableName);
         return new Param($variable, null, null, \false, \true);
+    }
+    private function isFuncGetArgsFuncCall(Expr $expr) : bool
+    {
+        if (!$expr instanceof FuncCall) {
+            return \false;
+        }
+        return $this->isName($expr, 'func_get_args');
     }
 }
