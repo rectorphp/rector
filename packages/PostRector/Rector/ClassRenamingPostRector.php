@@ -98,7 +98,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
             return $result;
         }
         $removedUses = $this->renamedClassesDataCollector->getOldClasses();
-        $this->useImportsRemover->removeImportsFromStmts($this->rootNode->stmts, $removedUses);
+        $this->rootNode->stmts = $this->useImportsRemover->removeImportsFromStmts($this->rootNode->stmts, $removedUses);
         return $result;
     }
     public function getRuleDefinition() : RuleDefinition
