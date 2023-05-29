@@ -1,4 +1,4 @@
-# 26 Rules Overview
+# 25 Rules Overview
 
 ## AddEntityIdByConditionRector
 
@@ -359,43 +359,6 @@ Make nullability in setter class method with respect to property
 
 <br>
 
-## ManagerRegistryGetManagerToEntityManagerRector
-
-Changes ManagerRegistry intermediate calls directly to EntityManager calls
-
-- class: [`Rector\Doctrine\Rector\Class_\ManagerRegistryGetManagerToEntityManagerRector`](../src/Rector/Class_/ManagerRegistryGetManagerToEntityManagerRector.php)
-
-```diff
--use Doctrine\Common\Persistence\ManagerRegistry;
-+use Doctrine\ORM\EntityManagerInterface;
-
- class CustomRepository
- {
-     /**
--     * @var ManagerRegistry
-+     * @var EntityManagerInterface
-      */
--    private $managerRegistry;
-+    private $entityManager;
-
--    public function __construct(ManagerRegistry $managerRegistry)
-+    public function __construct(EntityManagerInterface $entityManager)
-     {
--        $this->managerRegistry = $managerRegistry;
-+        $this->entityManager = $entityManager;
-     }
-
-     public function run()
-     {
--        $entityManager = $this->managerRegistry->getManager();
--        $someRepository = $entityManager->getRepository('Some');
-+        $someRepository = $this->entityManager->getRepository('Some');
-     }
- }
-```
-
-<br>
-
 ## MoveCurrentDateTimeDefaultInEntityToConstructorRector
 
 Move default value for entity property to constructor, the safest place
@@ -465,6 +428,8 @@ Remove empty Table attribute on entities because it's useless
 - class: [`Rector\Doctrine\Rector\Class_\RemoveEmptyTableAttributeRector`](../src/Rector/Class_/RemoveEmptyTableAttributeRector.php)
 
 ```diff
+ <?php
+
  use Doctrine\ORM\Mapping as ORM;
 
 -#[ORM\Table]
@@ -597,15 +562,12 @@ Change ServiceEntityRepository to dependency injection, with repository property
  final class ProjectRepository extends ServiceEntityRepository
  {
 -    public function __construct(ManagerRegistry $registry)
-+    /**
-+     * @var \Doctrine\ORM\EntityManagerInterface
-+     */
-+    private $entityManager;
++    private \Doctrine\ORM\EntityManagerInterface $entityManager;
 +
 +    /**
 +     * @var \Doctrine\ORM\EntityRepository<Project>
 +     */
-+    private $repository;
++    private \Doctrine\ORM\EntityRepository $repository;
 +
 +    public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
      {

@@ -16,18 +16,24 @@ final class RemoveEmptyTableAttributeRector extends AbstractRector
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition("Remove empty Table attribute on entities because it's useless", [new CodeSample(<<<'CODE_SAMPLE'
-use Doctrine\ORM\Mapping as ORM;
+<?php
 
-#[ORM\Table]
-#[ORM\Entity]
+namespace RectorPrefix202305;
+
+use RectorPrefix202305\Doctrine\ORM\Mapping as ORM;
+#[\Doctrine\ORM\Mapping\Table]
+#[\Doctrine\ORM\Mapping\Entity]
 class Product
 {
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-use Doctrine\ORM\Mapping as ORM;
+<?php
 
-#[ORM\Entity]
+namespace RectorPrefix202305;
+
+use RectorPrefix202305\Doctrine\ORM\Mapping as ORM;
+#[\Doctrine\ORM\Mapping\Entity]
 class Product
 {
 }
@@ -46,23 +52,23 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $removed = \false;
-        foreach ($node->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attribute) {
+        $hasChanged = \false;
+        foreach ($node->attrGroups as $attrGroupKey => $attrGroup) {
+            foreach ($attrGroup->attrs as $key => $attribute) {
                 if (!$this->nodeNameResolver->isName($attribute, 'Doctrine\\ORM\\Mapping\\Table')) {
                     continue;
                 }
                 if ($attribute->args !== []) {
                     continue;
                 }
-                $this->removeNode($attribute);
+                unset($attrGroup->attrs[$key]);
+                $hasChanged = \true;
             }
             if ($attrGroup->attrs === []) {
-                $this->removeNode($attrGroup);
-                $removed = \true;
+                unset($node->attrGroups[$attrGroupKey]);
             }
         }
-        if ($removed) {
+        if ($hasChanged) {
             return $node;
         }
         return null;
