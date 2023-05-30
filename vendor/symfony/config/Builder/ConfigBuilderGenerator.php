@@ -363,9 +363,9 @@ public function NAME($value): static
                 $comment .= ' * @default ' . (null === $default ? 'null' : \var_export($default, \true)) . "\n";
             }
             if ($node instanceof EnumNode) {
-                $comment .= \sprintf(' * @param ParamConfigurator|%s $value', \implode('|', \array_map(function ($a) {
-                    return \var_export($a, \true);
-                }, $node->getValues()))) . "\n";
+                $comment .= \sprintf(' * @param ParamConfigurator|%s $value', \implode('|', \array_unique(\array_map(function ($a) {
+                    return !$a instanceof \UnitEnum ? \var_export($a, \true) : '\\' . \ltrim(\var_export($a, \true), '\\');
+                }, $node->getValues())))) . "\n";
             } else {
                 $parameterTypes = $this->getParameterTypes($node);
                 $comment .= ' * @param ParamConfigurator|' . \implode('|', $parameterTypes) . ' $value' . "\n";

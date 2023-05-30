@@ -96,6 +96,7 @@ abstract class BaseNode implements NodeInterface
         self::$placeholders = [];
     }
     /**
+     * @return void
      * @param mixed $value
      */
     public function setAttribute(string $key, $value)
@@ -118,16 +119,24 @@ abstract class BaseNode implements NodeInterface
     {
         return $this->attributes;
     }
+    /**
+     * @return void
+     */
     public function setAttributes(array $attributes)
     {
         $this->attributes = $attributes;
     }
+    /**
+     * @return void
+     */
     public function removeAttribute(string $key)
     {
         unset($this->attributes[$key]);
     }
     /**
      * Sets an info message.
+     *
+     * @return void
      */
     public function setInfo(string $info)
     {
@@ -142,6 +151,8 @@ abstract class BaseNode implements NodeInterface
     }
     /**
      * Sets the example configuration for this node.
+     *
+     * @return void
      * @param string|mixed[] $example
      */
     public function setExample($example)
@@ -158,6 +169,8 @@ abstract class BaseNode implements NodeInterface
     }
     /**
      * Adds an equivalent value.
+     *
+     * @return void
      * @param mixed $originalValue
      * @param mixed $equivalentValue
      */
@@ -167,6 +180,8 @@ abstract class BaseNode implements NodeInterface
     }
     /**
      * Set this node as required.
+     *
+     * @return void
      */
     public function setRequired(bool $boolean)
     {
@@ -175,12 +190,14 @@ abstract class BaseNode implements NodeInterface
     /**
      * Sets this node as deprecated.
      *
+     * You can use %node% and %path% placeholders in your message to display,
+     * respectively, the node name and its complete path.
+     *
      * @param string $package The name of the composer package that is triggering the deprecation
      * @param string $version The version of the package that introduced the deprecation
      * @param string $message the deprecation message to use
      *
-     * You can use %node% and %path% placeholders in your message to display,
-     * respectively, the node name and its complete path
+     * @return void
      */
     public function setDeprecated(string $package, string $version, string $message = 'The child node "%node%" at path "%path%" is deprecated.')
     {
@@ -188,6 +205,8 @@ abstract class BaseNode implements NodeInterface
     }
     /**
      * Sets if this node can be overridden.
+     *
+     * @return void
      */
     public function setAllowOverwrite(bool $allow)
     {
@@ -197,6 +216,8 @@ abstract class BaseNode implements NodeInterface
      * Sets the closures used for normalization.
      *
      * @param \Closure[] $closures An array of Closures used for normalization
+     *
+     * @return void
      */
     public function setNormalizationClosures(array $closures)
     {
@@ -206,6 +227,8 @@ abstract class BaseNode implements NodeInterface
      * Sets the list of types supported by normalization.
      *
      * see ExprBuilder::TYPE_* constants.
+     *
+     * @return void
      */
     public function setNormalizedTypes(array $types)
     {
@@ -224,6 +247,8 @@ abstract class BaseNode implements NodeInterface
      * Sets the closures used for final validation.
      *
      * @param \Closure[] $closures An array of Closures used for final validation
+     *
+     * @return void
      */
     public function setFinalValidationClosures(array $closures)
     {
@@ -382,6 +407,8 @@ abstract class BaseNode implements NodeInterface
     }
     /**
      * Validates the type of a Node.
+     *
+     * @return void
      *
      * @throws InvalidTypeException when the value is invalid
      * @param mixed $value

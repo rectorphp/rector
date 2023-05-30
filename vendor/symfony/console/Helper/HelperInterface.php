@@ -19,6 +19,8 @@ interface HelperInterface
 {
     /**
      * Sets the helper set associated with this helper.
+     *
+     * @return void
      */
     public function setHelperSet(?HelperSet $helperSet);
     /**

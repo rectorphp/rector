@@ -78,7 +78,7 @@ class ApplicationDescription
         }
         return $this->commands[$name] ?? $this->aliases[$name];
     }
-    private function inspectApplication()
+    private function inspectApplication() : void
     {
         $this->commands = [];
         $this->namespaces = [];

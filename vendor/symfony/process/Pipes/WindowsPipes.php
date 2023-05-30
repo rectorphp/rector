@@ -142,7 +142,7 @@ class WindowsPipes extends AbstractPipes
     {
         return $this->pipes && $this->fileHandles;
     }
-    public function close()
+    public function close() : void
     {
         parent::close();
         foreach ($this->fileHandles as $type => $handle) {

@@ -26,7 +26,7 @@ use RectorPrefix202305\Symfony\Component\Console\Input\InputOption;
  */
 class TextDescriptor extends Descriptor
 {
-    protected function describeInputArgument(InputArgument $argument, array $options = [])
+    protected function describeInputArgument(InputArgument $argument, array $options = []) : void
     {
         if (null !== $argument->getDefault() && (!\is_array($argument->getDefault()) || \count($argument->getDefault()))) {
             $default = \sprintf('<comment> [default: %s]</comment>', $this->formatDefaultValue($argument->getDefault()));
@@ -44,7 +44,7 @@ class TextDescriptor extends Descriptor
             $default
         ), $options);
     }
-    protected function describeInputOption(InputOption $option, array $options = [])
+    protected function describeInputOption(InputOption $option, array $options = []) : void
     {
         if ($option->acceptValue() && null !== $option->getDefault() && (!\is_array($option->getDefault()) || \count($option->getDefault()))) {
             $default = \sprintf('<comment> [default: %s]</comment>', $this->formatDefaultValue($option->getDefault()));
@@ -71,7 +71,7 @@ class TextDescriptor extends Descriptor
             $option->isArray() ? '<comment> (multiple values allowed)</comment>' : ''
         ), $options);
     }
-    protected function describeInputDefinition(InputDefinition $definition, array $options = [])
+    protected function describeInputDefinition(InputDefinition $definition, array $options = []) : void
     {
         $totalWidth = $this->calculateTotalWidthForOptions($definition->getOptions());
         foreach ($definition->getArguments() as $argument) {
@@ -105,7 +105,7 @@ class TextDescriptor extends Descriptor
             }
         }
     }
-    protected function describeCommand(Command $command, array $options = [])
+    protected function describeCommand(Command $command, array $options = []) : void
     {
         $command->mergeApplicationDefinition(\false);
         if ($description = $command->getDescription()) {
@@ -135,7 +135,7 @@ class TextDescriptor extends Descriptor
             $this->writeText("\n");
         }
     }
-    protected function describeApplication(Application $application, array $options = [])
+    protected function describeApplication(Application $application, array $options = []) : void
     {
         $describedNamespace = $options['namespace'] ?? null;
         $description = new ApplicationDescription($application, $describedNamespace);
@@ -194,7 +194,7 @@ class TextDescriptor extends Descriptor
             $this->writeText("\n");
         }
     }
-    private function writeText(string $content, array $options = [])
+    private function writeText(string $content, array $options = []) : void
     {
         $this->write(isset($options['raw_text']) && $options['raw_text'] ? \strip_tags($content) : $content, isset($options['raw_output']) ? !$options['raw_output'] : \true);
     }

@@ -19,6 +19,7 @@ use RectorPrefix202305\Symfony\Component\Config\Definition\Exception\InvalidType
 class FloatNode extends NumericNode
 {
     /**
+     * @return void
      * @param mixed $value
      */
     protected function validateType($value)

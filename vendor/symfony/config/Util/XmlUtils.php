@@ -212,6 +212,9 @@ class XmlUtils
                 return $value;
         }
     }
+    /**
+     * @return array
+     */
     protected static function getXmlErrors(bool $internalErrors)
     {
         $errors = [];

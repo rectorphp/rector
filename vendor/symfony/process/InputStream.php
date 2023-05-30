@@ -21,11 +21,13 @@ use RectorPrefix202305\Symfony\Component\Process\Exception\RuntimeException;
 class InputStream implements \IteratorAggregate
 {
     /** @var callable|null */
-    private $onEmpty = null;
+    private $onEmpty;
     private $input = [];
     private $open = \true;
     /**
      * Sets a callback that is called when the write buffer becomes empty.
+     *
+     * @return void
      */
     public function onEmpty(callable $onEmpty = null)
     {
@@ -36,6 +38,8 @@ class InputStream implements \IteratorAggregate
     *
      * @param mixed $input The input to append as scalar,
                                                               stream resource or \Traversable
+    *
+    * @return void
     */
     public function write($input)
     {
@@ -49,6 +53,8 @@ class InputStream implements \IteratorAggregate
     }
     /**
      * Closes the write buffer.
+     *
+     * @return void
      */
     public function close()
     {
@@ -56,6 +62,8 @@ class InputStream implements \IteratorAggregate
     }
     /**
      * Tells whether the write buffer is closed or not.
+     *
+     * @return bool
      */
     public function isClosed()
     {

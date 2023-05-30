@@ -49,6 +49,9 @@ class AsciiSlugger implements SluggerInterface, LocaleAwareInterface
         $this->defaultLocale = $defaultLocale;
         $this->symbolsMap = $symbolsMap ?? $this->symbolsMap;
     }
+    /**
+     * @return void
+     */
     public function setLocale(string $locale)
     {
         $this->defaultLocale = $locale;

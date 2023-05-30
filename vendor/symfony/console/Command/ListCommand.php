@@ -23,6 +23,9 @@ use RectorPrefix202305\Symfony\Component\Console\Output\OutputInterface;
  */
 class ListCommand extends Command
 {
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->setName('list')->setDefinition([new InputArgument('namespace', InputArgument::OPTIONAL, 'The namespace name', null, function () {

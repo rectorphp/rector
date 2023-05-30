@@ -13,6 +13,7 @@ namespace RectorPrefix202305\Symfony\Component\Console\Helper;
 use RectorPrefix202305\Symfony\Component\Console\Descriptor\DescriptorInterface;
 use RectorPrefix202305\Symfony\Component\Console\Descriptor\JsonDescriptor;
 use RectorPrefix202305\Symfony\Component\Console\Descriptor\MarkdownDescriptor;
+use RectorPrefix202305\Symfony\Component\Console\Descriptor\ReStructuredTextDescriptor;
 use RectorPrefix202305\Symfony\Component\Console\Descriptor\TextDescriptor;
 use RectorPrefix202305\Symfony\Component\Console\Descriptor\XmlDescriptor;
 use RectorPrefix202305\Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -30,7 +31,7 @@ class DescriptorHelper extends Helper
     private $descriptors = [];
     public function __construct()
     {
-        $this->register('txt', new TextDescriptor())->register('xml', new XmlDescriptor())->register('json', new JsonDescriptor())->register('md', new MarkdownDescriptor());
+        $this->register('txt', new TextDescriptor())->register('xml', new XmlDescriptor())->register('json', new JsonDescriptor())->register('md', new MarkdownDescriptor())->register('rst', new ReStructuredTextDescriptor());
     }
     /**
      * Describes an object if supported.
@@ -38,6 +39,8 @@ class DescriptorHelper extends Helper
      * Available options are:
      * * format: string, the output format name
      * * raw_text: boolean, sets output type as raw
+     *
+     * @return void
      *
      * @throws InvalidArgumentException when the given format is not supported
      */

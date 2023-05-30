@@ -19,6 +19,8 @@ interface OutputFormatterInterface
 {
     /**
      * Sets the decorated flag.
+     *
+     * @return void
      */
     public function setDecorated(bool $decorated);
     /**
@@ -27,6 +29,8 @@ interface OutputFormatterInterface
     public function isDecorated() : bool;
     /**
      * Sets a new style.
+     *
+     * @return void
      */
     public function setStyle(string $name, OutputFormatterStyleInterface $style);
     /**

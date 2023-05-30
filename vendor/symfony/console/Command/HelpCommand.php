@@ -27,6 +27,9 @@ class HelpCommand extends Command
      * @var \Symfony\Component\Console\Command\Command
      */
     private $command;
+    /**
+     * @return void
+     */
     protected function configure()
     {
         $this->ignoreValidationErrors();
@@ -47,6 +50,9 @@ To display the list of available commands, please use the <info>list</info> comm
 EOF
 );
     }
+    /**
+     * @return void
+     */
     public function setCommand(Command $command)
     {
         $this->command = $command;

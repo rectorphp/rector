@@ -36,6 +36,8 @@ abstract class FileLoader extends Loader
     }
     /**
      * Sets the current directory.
+     *
+     * @return void
      */
     public function setCurrentDir(string $dir)
     {
@@ -56,6 +58,8 @@ abstract class FileLoader extends Loader
      * @param bool                 $ignoreErrors   Whether to ignore import errors or not
      * @param string|null          $sourceResource The original resource importing the new resource
      * @param string|mixed[] $exclude Glob patterns to exclude from the import
+     *
+     * @return mixed
      *
      * @throws LoaderLoadException
      * @throws FileLoaderImportCircularReferenceException
@@ -89,7 +93,7 @@ abstract class FileLoader extends Loader
      * @internal
      * @param mixed[]|\Symfony\Component\Config\Resource\GlobResource $resource
      */
-    protected function glob(string $pattern, bool $recursive, &$resource = null, bool $ignoreErrors = \false, bool $forExclusion = \false, array $excluded = [])
+    protected function glob(string $pattern, bool $recursive, &$resource = null, bool $ignoreErrors = \false, bool $forExclusion = \false, array $excluded = []) : iterable
     {
         if (\strlen($pattern) === ($i = \strcspn($pattern, '*?{['))) {
             $prefix = $pattern;
@@ -118,6 +122,7 @@ abstract class FileLoader extends Loader
     }
     /**
      * @param mixed $resource
+     * @return mixed
      */
     private function doImport($resource, string $type = null, bool $ignoreErrors = \false, string $sourceResource = null)
     {

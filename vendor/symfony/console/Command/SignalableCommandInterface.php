@@ -23,6 +23,9 @@ interface SignalableCommandInterface
     public function getSubscribedSignals() : array;
     /**
      * The method will be called when the application is signaled.
+     *
+     * @param int|false $previousExitCode
+     * @return int|false The exit code to return or false to continue the normal execution
      */
-    public function handleSignal(int $signal) : void;
+    public function handleSignal(int $signal);
 }

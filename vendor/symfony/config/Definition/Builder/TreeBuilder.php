@@ -44,6 +44,9 @@ class TreeBuilder implements NodeParentInterface
         }
         return $this->tree = $this->root->getNode(\true);
     }
+    /**
+     * @return void
+     */
     public function setPathSeparator(string $separator)
     {
         // unset last built as changing path separator changes all nodes

@@ -96,6 +96,8 @@ class InputArgument
     /**
      * Sets the default value.
      *
+     * @return void
+     *
      * @throws LogicException When incorrect default value is given
      * @param string|bool|int|float|mixed[] $default
      */

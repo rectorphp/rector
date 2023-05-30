@@ -95,6 +95,8 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
      * @param string              $content  The content to write in the cache
      * @param ResourceInterface[] $metadata An array of metadata
      *
+     * @return void
+     *
      * @throws \RuntimeException When cache file can't be written
      */
     public function write(string $content, array $metadata = null)
@@ -127,6 +129,9 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
     {
         return $this->file . '.meta';
     }
+    /**
+     * @return mixed
+     */
     private function safelyUnserialize(string $file)
     {
         $meta = \false;
@@ -154,7 +159,7 @@ class ResourceCheckerConfigCache implements ConfigCacheInterface
     /**
      * @internal
      */
-    public static function handleUnserializeCallback(string $class)
+    public static function handleUnserializeCallback(string $class) : void
     {
         \trigger_error('Class not found: ' . $class);
     }

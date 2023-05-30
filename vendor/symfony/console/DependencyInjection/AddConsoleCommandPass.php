@@ -27,6 +27,9 @@ use RectorPrefix202305\Symfony\Component\DependencyInjection\TypedReference;
  */
 class AddConsoleCommandPass implements CompilerPassInterface
 {
+    /**
+     * @return void
+     */
     public function process(ContainerBuilder $container)
     {
         $commandServices = $container->findTaggedServiceIds('console.command', \true);

@@ -61,16 +61,25 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
     {
         return new ConsoleSectionOutput($this->getStream(), $this->consoleSectionOutputs, $this->getVerbosity(), $this->isDecorated(), $this->getFormatter());
     }
+    /**
+     * @return void
+     */
     public function setDecorated(bool $decorated)
     {
         parent::setDecorated($decorated);
         $this->stderr->setDecorated($decorated);
     }
+    /**
+     * @return void
+     */
     public function setFormatter(OutputFormatterInterface $formatter)
     {
         parent::setFormatter($formatter);
         $this->stderr->setFormatter($formatter);
     }
+    /**
+     * @return void
+     */
     public function setVerbosity(int $level)
     {
         parent::setVerbosity($level);
@@ -80,6 +89,9 @@ class ConsoleOutput extends StreamOutput implements ConsoleOutputInterface
     {
         return $this->stderr;
     }
+    /**
+     * @return void
+     */
     public function setErrorOutput(OutputInterface $error)
     {
         $this->stderr = $error;

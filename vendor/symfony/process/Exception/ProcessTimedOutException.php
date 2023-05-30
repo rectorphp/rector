@@ -28,19 +28,28 @@ class ProcessTimedOutException extends RuntimeException
         $this->timeoutType = $timeoutType;
         parent::__construct(\sprintf('The process "%s" exceeded the timeout of %s seconds.', $process->getCommandLine(), $this->getExceededTimeout()));
     }
+    /**
+     * @return Process
+     */
     public function getProcess()
     {
         return $this->process;
     }
+    /**
+     * @return bool
+     */
     public function isGeneralTimeout()
     {
         return self::TYPE_GENERAL === $this->timeoutType;
     }
+    /**
+     * @return bool
+     */
     public function isIdleTimeout()
     {
         return self::TYPE_IDLE === $this->timeoutType;
     }
-    public function getExceededTimeout()
+    public function getExceededTimeout() : ?float
     {
         switch ($this->timeoutType) {
             case self::TYPE_GENERAL:

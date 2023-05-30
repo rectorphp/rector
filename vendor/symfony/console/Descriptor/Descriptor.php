@@ -25,10 +25,10 @@ use RectorPrefix202305\Symfony\Component\Console\Output\OutputInterface;
 abstract class Descriptor implements DescriptorInterface
 {
     /**
-     * @var OutputInterface
+     * @var \Symfony\Component\Console\Output\OutputInterface
      */
     protected $output;
-    public function describe(OutputInterface $output, object $object, array $options = [])
+    public function describe(OutputInterface $output, object $object, array $options = []) : void
     {
         $this->output = $output;
         switch (\true) {
@@ -51,31 +51,28 @@ abstract class Descriptor implements DescriptorInterface
                 throw new InvalidArgumentException(\sprintf('Object of type "%s" is not describable.', \get_debug_type($object)));
         }
     }
-    /**
-     * Writes content to output.
-     */
-    protected function write(string $content, bool $decorated = \false)
+    protected function write(string $content, bool $decorated = \false) : void
     {
         $this->output->write($content, \false, $decorated ? OutputInterface::OUTPUT_NORMAL : OutputInterface::OUTPUT_RAW);
     }
     /**
      * Describes an InputArgument instance.
      */
-    protected abstract function describeInputArgument(InputArgument $argument, array $options = []);
+    protected abstract function describeInputArgument(InputArgument $argument, array $options = []) : void;
     /**
      * Describes an InputOption instance.
      */
-    protected abstract function describeInputOption(InputOption $option, array $options = []);
+    protected abstract function describeInputOption(InputOption $option, array $options = []) : void;
     /**
      * Describes an InputDefinition instance.
      */
-    protected abstract function describeInputDefinition(InputDefinition $definition, array $options = []);
+    protected abstract function describeInputDefinition(InputDefinition $definition, array $options = []) : void;
     /**
      * Describes a Command instance.
      */
-    protected abstract function describeCommand(Command $command, array $options = []);
+    protected abstract function describeCommand(Command $command, array $options = []) : void;
     /**
      * Describes an Application instance.
      */
-    protected abstract function describeApplication(Application $application, array $options = []);
+    protected abstract function describeApplication(Application $application, array $options = []) : void;
 }

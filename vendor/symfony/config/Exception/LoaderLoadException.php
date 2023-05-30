@@ -69,6 +69,7 @@ class LoaderLoadException extends \Exception
         parent::__construct($message, $code, $previous);
     }
     /**
+     * @return string
      * @param mixed $var
      */
     protected function varToString($var)

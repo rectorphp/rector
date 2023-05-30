@@ -173,6 +173,7 @@ class InputOption
         return self::VALUE_NEGATABLE === (self::VALUE_NEGATABLE & $this->mode);
     }
     /**
+     * @return void
      * @param string|bool|int|float|mixed[] $default
      */
     public function setDefault($default = null)

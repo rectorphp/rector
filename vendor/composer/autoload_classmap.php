@@ -748,6 +748,7 @@ return array(
     'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\DescriptorInterface' => $vendorDir . '/symfony/console/Descriptor/DescriptorInterface.php',
     'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\JsonDescriptor' => $vendorDir . '/symfony/console/Descriptor/JsonDescriptor.php',
     'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\MarkdownDescriptor' => $vendorDir . '/symfony/console/Descriptor/MarkdownDescriptor.php',
+    'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\ReStructuredTextDescriptor' => $vendorDir . '/symfony/console/Descriptor/ReStructuredTextDescriptor.php',
     'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\TextDescriptor' => $vendorDir . '/symfony/console/Descriptor/TextDescriptor.php',
     'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\XmlDescriptor' => $vendorDir . '/symfony/console/Descriptor/XmlDescriptor.php',
     'RectorPrefix202305\\Symfony\\Component\\Console\\Exception\\CommandNotFoundException' => $vendorDir . '/symfony/console/Exception/CommandNotFoundException.php',

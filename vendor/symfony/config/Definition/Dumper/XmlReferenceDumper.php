@@ -31,10 +31,16 @@ class XmlReferenceDumper
      * @var string|null
      */
     private $reference;
+    /**
+     * @return string
+     */
     public function dump(ConfigurationInterface $configuration, string $namespace = null)
     {
         return $this->dumpNode($configuration->getConfigTreeBuilder()->buildTree(), $namespace);
     }
+    /**
+     * @return string
+     */
     public function dumpNode(NodeInterface $node, string $namespace = null)
     {
         $this->reference = '';
@@ -43,7 +49,7 @@ class XmlReferenceDumper
         $this->reference = null;
         return $ref;
     }
-    private function writeNode(NodeInterface $node, int $depth = 0, bool $root = \false, string $namespace = null)
+    private function writeNode(NodeInterface $node, int $depth = 0, bool $root = \false, string $namespace = null) : void
     {
         $rootName = $root ? 'config' : $node->getName();
         $rootNamespace = $namespace ?: ($root ? 'http://example.org/schema/dic/' . $node->getName() : null);
@@ -103,7 +109,7 @@ class XmlReferenceDumper
                                 $prototypeValue = 'true|false';
                                 break;
                             case EnumNode::class:
-                                $prototypeValue = \implode('|', \array_map('json_encode', $prototype->getValues()));
+                                $prototypeValue = $prototype->getPermissibleValues('|');
                                 break;
                             default:
                                 $prototypeValue = 'value';
@@ -140,7 +146,7 @@ class XmlReferenceDumper
                     $comments[] = \sprintf('Deprecated (%s)', ($deprecation['package'] || $deprecation['version'] ? "Since {$deprecation['package']} {$deprecation['version']}: " : '') . $deprecation['message']);
                 }
                 if ($child instanceof EnumNode) {
-                    $comments[] = 'One of ' . \implode('; ', \array_map('json_encode', $child->getValues()));
+                    $comments[] = 'One of ' . $child->getPermissibleValues('; ');
                 }
                 if (\count($comments)) {
                     $rootAttributeComments[$name] = \implode(";\n", $comments);
@@ -218,7 +224,7 @@ class XmlReferenceDumper
     /**
      * Outputs a single config reference line.
      */
-    private function writeLine(string $text, int $indent = 0)
+    private function writeLine(string $text, int $indent = 0) : void
     {
         $indent = \strlen($text) + $indent;
         $format = '%' . $indent . 's';

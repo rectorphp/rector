@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitaa7e2bb479e471e9f78c2d7a46b45331
+class ComposerStaticInit0ea88f9b1da4440ccfa80f19914a6ed3
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -990,6 +990,7 @@ class ComposerStaticInitaa7e2bb479e471e9f78c2d7a46b45331
         'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\DescriptorInterface' => __DIR__ . '/..' . '/symfony/console/Descriptor/DescriptorInterface.php',
         'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\JsonDescriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/JsonDescriptor.php',
         'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\MarkdownDescriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/MarkdownDescriptor.php',
+        'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\ReStructuredTextDescriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/ReStructuredTextDescriptor.php',
         'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\TextDescriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/TextDescriptor.php',
         'RectorPrefix202305\\Symfony\\Component\\Console\\Descriptor\\XmlDescriptor' => __DIR__ . '/..' . '/symfony/console/Descriptor/XmlDescriptor.php',
         'RectorPrefix202305\\Symfony\\Component\\Console\\Exception\\CommandNotFoundException' => __DIR__ . '/..' . '/symfony/console/Exception/CommandNotFoundException.php',
@@ -3067,9 +3068,9 @@ class ComposerStaticInitaa7e2bb479e471e9f78c2d7a46b45331
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitaa7e2bb479e471e9f78c2d7a46b45331::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitaa7e2bb479e471e9f78c2d7a46b45331::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitaa7e2bb479e471e9f78c2d7a46b45331::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0ea88f9b1da4440ccfa80f19914a6ed3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0ea88f9b1da4440ccfa80f19914a6ed3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0ea88f9b1da4440ccfa80f19914a6ed3::$classMap;
 
         }, null, ClassLoader::class);
     }

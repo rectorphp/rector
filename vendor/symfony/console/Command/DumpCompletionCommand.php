@@ -36,7 +36,7 @@ final class DumpCompletionCommand extends Command
      * @var mixed[]
      */
     private $supportedShells;
-    protected function configure()
+    protected function configure() : void
     {
         $fullCommand = $_SERVER['PHP_SELF'];
         $commandName = \basename($fullCommand);

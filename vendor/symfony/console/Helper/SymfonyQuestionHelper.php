@@ -23,6 +23,9 @@ use RectorPrefix202305\Symfony\Component\Console\Style\SymfonyStyle;
  */
 class SymfonyQuestionHelper extends QuestionHelper
 {
+    /**
+     * @return void
+     */
     protected function writePrompt(OutputInterface $output, Question $question)
     {
         $text = OutputFormatter::escapeTrailingBackslash($question->getQuestion());
@@ -60,6 +63,9 @@ class SymfonyQuestionHelper extends QuestionHelper
         }
         $output->write($prompt);
     }
+    /**
+     * @return void
+     */
     protected function writeError(OutputInterface $output, \Exception $error)
     {
         if ($output instanceof SymfonyStyle) {

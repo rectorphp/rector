@@ -26,6 +26,7 @@ use RectorPrefix202305\Symfony\Component\Config\Definition\Exception\InvalidType
 class ScalarNode extends VariableNode
 {
     /**
+     * @return void
      * @param mixed $value
      */
     protected function validateType($value)

@@ -20,6 +20,9 @@ use RectorPrefix202305\Symfony\Component\Console\Input\InputInterface;
 abstract class InputAwareHelper extends Helper implements InputAwareInterface
 {
     protected $input;
+    /**
+     * @return void
+     */
     public function setInput(InputInterface $input)
     {
         $this->input = $input;

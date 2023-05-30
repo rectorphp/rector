@@ -19,6 +19,7 @@ use RectorPrefix202305\Symfony\Component\Config\Definition\Exception\InvalidType
 class BooleanNode extends ScalarNode
 {
     /**
+     * @return void
      * @param mixed $value
      */
     protected function validateType($value)

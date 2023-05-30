@@ -26,22 +26,22 @@ use RectorPrefix202305\Symfony\Component\Console\Output\OutputInterface;
  */
 class MarkdownDescriptor extends Descriptor
 {
-    public function describe(OutputInterface $output, object $object, array $options = [])
+    public function describe(OutputInterface $output, object $object, array $options = []) : void
     {
         $decorated = $output->isDecorated();
         $output->setDecorated(\false);
         parent::describe($output, $object, $options);
         $output->setDecorated($decorated);
     }
-    protected function write(string $content, bool $decorated = \true)
+    protected function write(string $content, bool $decorated = \true) : void
     {
         parent::write($content, $decorated);
     }
-    protected function describeInputArgument(InputArgument $argument, array $options = [])
+    protected function describeInputArgument(InputArgument $argument, array $options = []) : void
     {
         $this->write('#### `' . ($argument->getName() ?: '<none>') . "`\n\n" . ($argument->getDescription() ? \preg_replace('/\\s*[\\r\\n]\\s*/', "\n", $argument->getDescription()) . "\n\n" : '') . '* Is required: ' . ($argument->isRequired() ? 'yes' : 'no') . "\n" . '* Is array: ' . ($argument->isArray() ? 'yes' : 'no') . "\n" . '* Default: `' . \str_replace("\n", '', \var_export($argument->getDefault(), \true)) . '`');
     }
-    protected function describeInputOption(InputOption $option, array $options = [])
+    protected function describeInputOption(InputOption $option, array $options = []) : void
     {
         $name = '--' . $option->getName();
         if ($option->isNegatable()) {
@@ -52,15 +52,13 @@ class MarkdownDescriptor extends Descriptor
         }
         $this->write('#### `' . $name . '`' . "\n\n" . ($option->getDescription() ? \preg_replace('/\\s*[\\r\\n]\\s*/', "\n", $option->getDescription()) . "\n\n" : '') . '* Accept value: ' . ($option->acceptValue() ? 'yes' : 'no') . "\n" . '* Is value required: ' . ($option->isValueRequired() ? 'yes' : 'no') . "\n" . '* Is multiple: ' . ($option->isArray() ? 'yes' : 'no') . "\n" . '* Is negatable: ' . ($option->isNegatable() ? 'yes' : 'no') . "\n" . '* Default: `' . \str_replace("\n", '', \var_export($option->getDefault(), \true)) . '`');
     }
-    protected function describeInputDefinition(InputDefinition $definition, array $options = [])
+    protected function describeInputDefinition(InputDefinition $definition, array $options = []) : void
     {
         if ($showArguments = \count($definition->getArguments()) > 0) {
             $this->write('### Arguments');
             foreach ($definition->getArguments() as $argument) {
                 $this->write("\n\n");
-                if (null !== ($describeInputArgument = $this->describeInputArgument($argument))) {
-                    $this->write($describeInputArgument);
-                }
+                $this->describeInputArgument($argument);
             }
         }
         if (\count($definition->getOptions()) > 0) {
@@ -70,13 +68,11 @@ class MarkdownDescriptor extends Descriptor
             $this->write('### Options');
             foreach ($definition->getOptions() as $option) {
                 $this->write("\n\n");
-                if (null !== ($describeInputOption = $this->describeInputOption($option))) {
-                    $this->write($describeInputOption);
-                }
+                $this->describeInputOption($option);
             }
         }
     }
-    protected function describeCommand(Command $command, array $options = [])
+    protected function describeCommand(Command $command, array $options = []) : void
     {
         if ($options['short'] ?? \false) {
             $this->write('`' . $command->getName() . "`\n" . \str_repeat('-', Helper::width($command->getName()) + 2) . "\n\n" . ($command->getDescription() ? $command->getDescription() . "\n\n" : '') . '### Usage' . "\n\n" . \array_reduce($command->getAliases(), function ($carry, $usage) {
@@ -98,7 +94,7 @@ class MarkdownDescriptor extends Descriptor
             $this->describeInputDefinition($definition);
         }
     }
-    protected function describeApplication(Application $application, array $options = [])
+    protected function describeApplication(Application $application, array $options = []) : void
     {
         $describedNamespace = $options['namespace'] ?? null;
         $description = new ApplicationDescription($application, $describedNamespace);
@@ -116,9 +112,7 @@ class MarkdownDescriptor extends Descriptor
         }
         foreach ($description->getCommands() as $command) {
             $this->write("\n\n");
-            if (null !== ($describeCommand = $this->describeCommand($command, $options))) {
-                $this->write($describeCommand);
-            }
+            $this->describeCommand($command, $options);
         }
     }
     private function getApplicationTitle(Application $application) : string

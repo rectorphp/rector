@@ -46,6 +46,9 @@ abstract class Output implements OutputInterface
         $this->formatter = $formatter ?? new OutputFormatter();
         $this->formatter->setDecorated($decorated);
     }
+    /**
+     * @return void
+     */
     public function setFormatter(OutputFormatterInterface $formatter)
     {
         $this->formatter = $formatter;
@@ -54,6 +57,9 @@ abstract class Output implements OutputInterface
     {
         return $this->formatter;
     }
+    /**
+     * @return void
+     */
     public function setDecorated(bool $decorated)
     {
         $this->formatter->setDecorated($decorated);
@@ -62,6 +68,9 @@ abstract class Output implements OutputInterface
     {
         return $this->formatter->isDecorated();
     }
+    /**
+     * @return void
+     */
     public function setVerbosity(int $level)
     {
         $this->verbosity = $level;
@@ -87,6 +96,7 @@ abstract class Output implements OutputInterface
         return self::VERBOSITY_DEBUG <= $this->verbosity;
     }
     /**
+     * @return void
      * @param string|mixed[] $messages
      */
     public function writeln($messages, int $options = self::OUTPUT_NORMAL)
@@ -94,6 +104,7 @@ abstract class Output implements OutputInterface
         $this->write($messages, \true, $options);
     }
     /**
+     * @return void
      * @param string|mixed[] $messages
      */
     public function write($messages, bool $newline = \false, int $options = self::OUTPUT_NORMAL)
@@ -124,6 +135,8 @@ abstract class Output implements OutputInterface
     }
     /**
      * Writes a message to the output.
+     *
+     * @return void
      */
     protected abstract function doWrite(string $message, bool $newline);
 }

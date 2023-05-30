@@ -27,7 +27,6 @@ class EnumNodeDefinition extends ScalarNodeDefinition
      */
     public function values(array $values)
     {
-        $values = \array_unique($values);
         if (!$values) {
             throw new \InvalidArgumentException('->values() must be called with at least one value.');
         }
