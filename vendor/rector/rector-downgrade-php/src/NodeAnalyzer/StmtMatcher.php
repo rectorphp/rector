@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\NodeAnalyzer;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class StmtMatcher
 {
@@ -19,7 +19,7 @@ final class StmtMatcher
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
-     * @param \PhpParser\Node\Stmt|mixed[] $stmt
+     * @param \PhpParser\Node|mixed[] $stmt
      */
     public function matchFuncCallNamed($stmt, string $functionName) : ?FuncCall
     {
