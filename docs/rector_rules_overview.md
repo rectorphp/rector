@@ -1,4 +1,4 @@
-# 393 Rules Overview
+# 391 Rules Overview
 
 <br>
 
@@ -50,7 +50,7 @@
 
 - [Php82](#php82) (3)
 
-- [Privatization](#privatization) (6)
+- [Privatization](#privatization) (5)
 
 - [Removing](#removing) (6)
 
@@ -60,7 +60,7 @@
 
 - [Strict](#strict) (6)
 
-- [Transform](#transform) (28)
+- [Transform](#transform) (27)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -2219,7 +2219,9 @@ return static function (RectorConfig $rectorConfig): void {
  {
      public static function provideData()
      {
--        return [['some text']];
+-        return [
+-            ['some text']
+-        ];
 +        yield ['some text'];
      }
  }
@@ -6334,36 +6336,6 @@ Change global `$variables` to private properties
 
 <br>
 
-### ChangeReadOnlyPropertyWithDefaultValueToConstantRector
-
-Change property with read only status with default value to constant
-
-- class: [`Rector\Privatization\Rector\Property\ChangeReadOnlyPropertyWithDefaultValueToConstantRector`](../rules/Privatization/Rector/Property/ChangeReadOnlyPropertyWithDefaultValueToConstantRector.php)
-
-```diff
- class SomeClass
- {
-     /**
-      * @var string[]
-      */
--    private $magicMethods = [
-+    private const MAGIC_METHODS = [
-         '__toString',
-         '__wakeup',
-     ];
-
-     public function run()
-     {
--        foreach ($this->magicMethods as $magicMethod) {
-+        foreach (self::MAGIC_METHODS as $magicMethod) {
-             echo $magicMethod;
-         }
-     }
- }
-```
-
-<br>
-
 ### FinalizeClassesWithoutChildrenRector
 
 Finalize every class that has no children
@@ -7835,49 +7807,6 @@ return static function (RectorConfig $rectorConfig): void {
 -        $validator->validate(1000);
 +        $this->validator->validate(1000);
      }
- }
-```
-
-<br>
-
-### NewToMethodCallRector
-
-Replaces creating object instances with "new" keyword with factory method.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\New_\NewToMethodCallRector`](../rules/Transform/Rector/New_/NewToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\New_\NewToMethodCallRector;
-use Rector\Transform\ValueObject\NewToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(NewToMethodCallRector::class, [
-        new NewToMethodCall('MyClass', 'MyClassFactory', 'create'),
-    ]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-+	/**
-+	 * @var \MyClassFactory
-+	 */
-+	private $myClassFactory;
-+
- 	public function example() {
--		new MyClass($argument);
-+		$this->myClassFactory->create($argument);
- 	}
  }
 ```
 
