@@ -1,4 +1,4 @@
-# 115 Rules Overview
+# 107 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -16,25 +16,6 @@ Replace arrow functions with anonymous functions
 +        $callable = function ($matches) use ($delimiter) {
 +            return $delimiter . strtolower($matches[1]);
 +        };
-     }
- }
-```
-
-<br>
-
-## DirConstToFileConstRector
-
-Refactor __DIR__ to dirname(__FILE__)
-
-- class: [`Rector\DowngradePhp53\Rector\Dir\DirConstToFileConstRector`](../rules/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        return __DIR__;
-+        return dirname(__FILE__);
      }
  }
 ```
@@ -338,19 +319,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-## DowngradeBinaryNotationRector
-
-Downgrade binary notation for integers
-
-- class: [`Rector\DowngradePhp54\Rector\LNumber\DowngradeBinaryNotationRector`](../rules/DowngradePhp54/Rector/LNumber/DowngradeBinaryNotationRector.php)
-
-```diff
--$a = 0b11111100101;
-+$a = 2021;
-```
-
-<br>
-
 ## DowngradeBoolvalRector
 
 Replace `boolval()` by type casting to boolean
@@ -360,27 +328,6 @@ Replace `boolval()` by type casting to boolean
 ```diff
 -$bool = boolval($value);
 +$bool = (bool) $value;
-```
-
-<br>
-
-## DowngradeCallableTypeDeclarationRector
-
-Remove the "callable" param type, add a `@param` tag instead
-
-- class: [`Rector\DowngradePhp54\Rector\FunctionLike\DowngradeCallableTypeDeclarationRector`](../rules/DowngradePhp54/Rector/FunctionLike/DowngradeCallableTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function someFunction(callable $callback)
-+    /**
-+     * @param callable $callback
-+     */
-+    public function someFunction($callback)
-     {
-     }
- }
 ```
 
 <br>
@@ -743,40 +690,6 @@ Changes `fread()` or `fwrite()` compare to false to negation check
 -fwrite($fp, '1') === false;
 +!fread($handle, $length);
 +!fwrite($fp, '1');
-```
-
-<br>
-
-## DowngradeIndirectCallByArrayRector
-
-Downgrade indirect method call by array variable
-
-- class: [`Rector\DowngradePhp54\Rector\FuncCall\DowngradeIndirectCallByArrayRector`](../rules/DowngradePhp54/Rector/FuncCall/DowngradeIndirectCallByArrayRector.php)
-
-```diff
- class Hello {
-     public static function world($x) {
-         echo "Hello, $x\n";
-     }
- }
-
- $func = array('Hello','world');
--$func('you');
-+call_user_func($func, 'you');
-```
-
-<br>
-
-## DowngradeInstanceMethodCallRector
-
-Downgrade instance and method call/property access
-
-- class: [`Rector\DowngradePhp54\Rector\MethodCall\DowngradeInstanceMethodCallRector`](../rules/DowngradePhp54/Rector/MethodCall/DowngradeInstanceMethodCallRector.php)
-
-```diff
--echo (new \ReflectionClass('\\stdClass'))->getName();
-+$object = new \ReflectionClass('\\stdClass');
-+echo $object->getName();
 ```
 
 <br>
@@ -1450,6 +1363,7 @@ Remove PREG_UNMATCHED_AS_NULL from preg_match and set null value on empty string
      {
 -        preg_match('/(a)(b)*(c)/', 'ac', $matches, PREG_UNMATCHED_AS_NULL);
 +        preg_match('/(a)(b)*(c)/', 'ac', $matches);
++
 +        array_walk_recursive($matches, function (&$value) {
 +            if ($value === '') {
 +                $value = null;
@@ -1768,27 +1682,6 @@ Change spaceship with check equal, and ternary to result 0, -1, 1
 
 <br>
 
-## DowngradeStaticClosureRector
-
-Remove static from closure
-
-- class: [`Rector\DowngradePhp54\Rector\Closure\DowngradeStaticClosureRector`](../rules/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        return static function () {
-+        return function () {
-             return true;
-         };
-     }
- }
-```
-
-<br>
-
 ## DowngradeStaticTypeDeclarationRector
 
 Remove "static" return and param type, add a `"@param` `$this"` and `"@return` `$this"` tag instead
@@ -1958,33 +1851,6 @@ Convert 2nd param to `strip_tags` from array to string
 -        strip_tags($string, getTags());
 +        $expr = getTags();
 +        strip_tags($string, is_array($expr) ? '<' . implode('><', $expr) . '>' : $expr);
-     }
- }
-```
-
-<br>
-
-## DowngradeThisInClosureRector
-
-Downgrade `$this->` inside Closure to use assigned `$self` = `$this` before Closure
-
-- class: [`Rector\DowngradePhp54\Rector\Closure\DowngradeThisInClosureRector`](../rules/DowngradePhp54/Rector/Closure/DowngradeThisInClosureRector.php)
-
-```diff
- class SomeClass
- {
-     public $property = 'test';
-
-     public function run()
-     {
--        $function = function () {
--            echo $this->property;
-+        $self = $this;
-+        $function = function () use ($self) {
-+            echo $self->property;
-         };
-
-         $function();
      }
  }
 ```
@@ -2273,19 +2139,6 @@ Convert setcookie option array to arguments
 ```diff
 -setcookie('name', $value, ['expires' => 360]);
 +setcookie('name', $value, 360);
-```
-
-<br>
-
-## ShortArrayToLongArrayRector
-
-Replace short arrays by long arrays
-
-- class: [`Rector\DowngradePhp54\Rector\Array_\ShortArrayToLongArrayRector`](../rules/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php)
-
-```diff
--$a = [1, 2, 3];
-+$a = array(1, 2, 3);
 ```
 
 <br>
