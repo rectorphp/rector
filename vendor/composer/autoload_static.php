@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8f34c76300074b94259007e366c44d78
+class ComposerStaticInit278213f2a7fd0ce52d2ba688502d318d
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1941,10 +1941,6 @@ class ComposerStaticInit8f34c76300074b94259007e366c44d78
         'Rector\\Doctrine\\ValueObject\\ArgName' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/ArgName.php',
         'Rector\\Doctrine\\ValueObject\\AssignToPropertyFetch' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/AssignToPropertyFetch.php',
         'Rector\\Doctrine\\ValueObject\\DefaultAnnotationArgValue' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/DefaultAnnotationArgValue.php',
-        'Rector\\DowngradePhp55\\Rector\\ClassConstFetch\\DowngradeClassConstantToStringRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php',
-        'Rector\\DowngradePhp55\\Rector\\Foreach_\\DowngradeForeachListRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp55/Rector/Foreach_/DowngradeForeachListRector.php',
-        'Rector\\DowngradePhp55\\Rector\\FuncCall\\DowngradeBoolvalRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp55/Rector/FuncCall/DowngradeBoolvalRector.php',
-        'Rector\\DowngradePhp55\\Rector\\Isset_\\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp55/Rector/Isset_/DowngradeArbitraryExpressionArgsToEmptyAndIssetRector.php',
         'Rector\\DowngradePhp56\\NodeManipulator\\ArgManipulator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp56/NodeManipulator/ArgManipulator.php',
         'Rector\\DowngradePhp56\\NodeManipulator\\UnpackedArgList' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp56/NodeManipulator/UnpackedArgList.php',
         'Rector\\DowngradePhp56\\Rector\\CallLike\\DowngradeArgumentUnpackingRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp56/Rector/CallLike/DowngradeArgumentUnpackingRector.php',
@@ -3071,9 +3067,9 @@ class ComposerStaticInit8f34c76300074b94259007e366c44d78
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8f34c76300074b94259007e366c44d78::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8f34c76300074b94259007e366c44d78::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8f34c76300074b94259007e366c44d78::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit278213f2a7fd0ce52d2ba688502d318d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit278213f2a7fd0ce52d2ba688502d318d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit278213f2a7fd0ce52d2ba688502d318d::$classMap;
 
         }, null, ClassLoader::class);
     }
