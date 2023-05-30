@@ -3,16 +3,11 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp72\NodeAnalyzer;
 
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RegexFuncAnalyzer
 {
     /**
@@ -24,66 +19,27 @@ final class RegexFuncAnalyzer
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
-     */
-    private $nodeComparator;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
-     */
-    private $valueResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, ValueResolver $valueResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeComparator = $nodeComparator;
-        $this->valueResolver = $valueResolver;
     }
-    public function isRegexFunctionNames(FuncCall $funcCall) : bool
+    public function matchRegexFuncCall(FuncCall $funcCall) : ?FuncCall
     {
         if ($this->nodeNameResolver->isNames($funcCall, self::REGEX_FUNCTION_NAMES)) {
-            return \true;
+            return $funcCall;
         }
         $variable = $funcCall->name;
         if (!$variable instanceof Variable) {
-            return \false;
+            return null;
         }
-        /** @var Assign|null $assignExprVariable */
-        $assignExprVariable = $this->betterNodeFinder->findFirstPrevious($funcCall, function (Node $node) use($variable) : bool {
-            if (!$node instanceof Assign) {
-                return \false;
-            }
-            return $this->nodeComparator->areNodesEqual($node->var, $variable);
-        });
-        if (!$assignExprVariable instanceof Assign) {
-            return \false;
-        }
-        $expr = $assignExprVariable->expr;
-        if (!$expr instanceof Ternary) {
-            return \false;
-        }
-        if (!$expr->if instanceof Expr) {
-            return \false;
-        }
-        return $this->hasPregMatchFunction($expr);
-    }
-    private function hasPregMatchFunction(Ternary $ternary) : bool
-    {
-        foreach (self::REGEX_FUNCTION_NAMES as $regexFunctionName) {
-            if ($ternary->if instanceof Expr && $this->valueResolver->isValue($ternary->if, $regexFunctionName)) {
-                return \true;
-            }
-            if ($this->valueResolver->isValue($ternary->else, $regexFunctionName)) {
-                return \true;
+        /** @var Scope $scope */
+        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
+        $variableType = $scope->getType($variable);
+        foreach ($variableType->getConstantStrings() as $constantStringType) {
+            if (\in_array($constantStringType->getValue(), self::REGEX_FUNCTION_NAMES, \true)) {
+                return $funcCall;
             }
         }
-        return \false;
+        return null;
     }
 }

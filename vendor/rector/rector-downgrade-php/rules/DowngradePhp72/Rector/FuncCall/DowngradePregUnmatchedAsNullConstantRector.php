@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp72\Rector\FuncCall;
 
-use RectorPrefix202305\Nette\NotImplementedException;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
@@ -16,16 +15,14 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer;
 use Rector\DowngradePhp72\NodeManipulator\BitwiseFlagCleaner;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -53,59 +50,55 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      * @var \Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer
      */
     private $regexFuncAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(IfManipulator $ifManipulator, BitwiseFlagCleaner $bitwiseFlagCleaner, RegexFuncAnalyzer $regexFuncAnalyzer, NodesToAddCollector $nodesToAddCollector)
+    public function __construct(IfManipulator $ifManipulator, BitwiseFlagCleaner $bitwiseFlagCleaner, RegexFuncAnalyzer $regexFuncAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;
         $this->bitwiseFlagCleaner = $bitwiseFlagCleaner;
         $this->regexFuncAnalyzer = $regexFuncAnalyzer;
-        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, ClassConst::class];
+        return [Expression::class, ClassConst::class, If_::class];
     }
     /**
-     * @param FuncCall|ClassConst $node
+     * @param Expression|ClassConst|If_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
         if ($node instanceof ClassConst) {
             return $this->refactorClassConst($node);
         }
-        if (!$this->regexFuncAnalyzer->isRegexFunctionNames($node)) {
+        $funcCall = $this->matchRegexFuncCall($node);
+        if (!$funcCall instanceof FuncCall) {
             return null;
         }
-        $args = $node->getArgs();
+        $args = $funcCall->getArgs();
+        $variable = $args[2]->value;
+        if (!$variable instanceof Variable) {
+            return null;
+        }
         if (!isset($args[3])) {
             return null;
         }
-        $flags = $args[3]->value;
-        /** @var Variable $variable */
-        $variable = $args[2]->value;
-        if ($flags instanceof BitwiseOr) {
-            $this->bitwiseFlagCleaner->cleanFuncCall($node, $flags, self::UNMATCHED_NULL_FLAG, null);
-            if (!$this->nodeComparator->areNodesEqual($flags, $args[3]->value)) {
-                return $this->handleEmptyStringToNullMatch($node, $variable);
+        $flagsExpr = $args[3]->value;
+        if ($flagsExpr instanceof BitwiseOr) {
+            $this->bitwiseFlagCleaner->cleanFuncCall($funcCall, $flagsExpr, self::UNMATCHED_NULL_FLAG, null);
+            if ($this->nodeComparator->areNodesEqual($flagsExpr, $args[3]->value)) {
+                return null;
             }
+            return $this->handleEmptyStringToNullMatch($funcCall, $variable, $node);
+        }
+        if (!$flagsExpr instanceof ConstFetch) {
             return null;
         }
-        if (!$flags instanceof ConstFetch) {
+        if (!$this->isName($flagsExpr, self::UNMATCHED_NULL_FLAG)) {
             return null;
         }
-        if (!$this->isName($flags, self::UNMATCHED_NULL_FLAG)) {
-            return null;
-        }
-        $node = $this->handleEmptyStringToNullMatch($node, $variable);
-        unset($node->args[3]);
-        return $node;
+        unset($funcCall->args[3]);
+        return $this->handleEmptyStringToNullMatch($funcCall, $variable, $node);
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -124,6 +117,7 @@ class SomeClass
     public function run()
     {
         preg_match('/(a)(b)*(c)/', 'ac', $matches);
+
         array_walk_recursive($matches, function (&$value) {
             if ($value === '') {
                 $value = null;
@@ -148,77 +142,61 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable) : FuncCall
+    /**
+     * @return Stmt|Stmt[]|null
+     */
+    private function handleEmptyStringToNullMatch(FuncCall $funcCall, Variable $variable, Node $node)
     {
-        $closure = new Closure();
         $variablePass = new Variable('value');
-        $param = new Param($variablePass);
-        $param->byRef = \true;
-        $closure->params = [$param];
         $assign = new Assign($variablePass, $this->nodeFactory->createNull());
         $if = $this->ifManipulator->createIfStmt(new Identical($variablePass, new String_('')), new Expression($assign));
-        $closure->stmts[0] = $if;
+        $param = new Param($variablePass, null, null, \true);
+        $closure = new Closure(['params' => [$param], 'stmts' => [$if]]);
         $arguments = $this->nodeFactory->createArgs([$variable, $closure]);
-        $replaceEmptyStringToNull = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
-        return $this->processReplace($funcCall, $replaceEmptyStringToNull);
+        $arrayWalkRecursiveFuncCall = $this->nodeFactory->createFuncCall('array_walk_recursive', $arguments);
+        return $this->processReplace($funcCall, $arrayWalkRecursiveFuncCall, $node);
     }
-    private function processReplace(FuncCall $funcCall, FuncCall $replaceEmptyStringToNull) : FuncCall
+    /**
+     * @return Stmt|Stmt[]|null
+     */
+    private function processReplace(FuncCall $funcCall, FuncCall $replaceEmptyStringToNull, Stmt $stmt)
     {
-        $parentNode = $funcCall->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Expression) {
-            $this->nodesToAddCollector->addNodeAfterNode($replaceEmptyStringToNull, $funcCall);
-            return $funcCall;
+        if ($stmt instanceof If_ && $stmt->cond === $funcCall) {
+            return $this->processInIf($stmt, $replaceEmptyStringToNull);
         }
-        if ($parentNode instanceof If_ && $parentNode->cond === $funcCall) {
-            return $this->processInIf($parentNode, $funcCall, $replaceEmptyStringToNull);
-        }
-        if (!$parentNode instanceof Node) {
-            throw new NotImplementedException();
-        }
-        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof BooleanNot && $parentParentNode instanceof If_) {
-            return $this->processInIf($parentParentNode, $funcCall, $replaceEmptyStringToNull);
-        }
-        if ($parentNode instanceof Assign && $parentNode->expr === $funcCall) {
-            return $this->processInAssign($parentNode, $funcCall, $replaceEmptyStringToNull);
-        }
-        if (!$parentNode instanceof Identical) {
-            throw new NotImplementedYetException();
-        }
-        if (!$parentParentNode instanceof If_) {
-            throw new NotImplementedYetException();
-        }
-        return $this->processInIf($parentParentNode, $funcCall, $replaceEmptyStringToNull);
+        return [$stmt, new Expression($replaceEmptyStringToNull)];
     }
-    private function processInAssign(Assign $assign, FuncCall $funcCall, FuncCall $replaceEmptyStringToNull) : FuncCall
-    {
-        $this->nodesToAddCollector->addNodeAfterNode(new Expression($replaceEmptyStringToNull), $assign);
-        return $funcCall;
-    }
-    private function processInIf(If_ $if, FuncCall $funcCall, FuncCall $replaceEmptyStringToNull) : FuncCall
+    private function processInIf(If_ $if, FuncCall $funcCall) : ?Stmt
     {
         $cond = $if->cond;
-        if (!$cond instanceof Identical && !$cond instanceof BooleanNot) {
-            $this->handleNotInIdenticalAndBooleanNot($if, $replaceEmptyStringToNull);
-        }
         if ($cond instanceof Identical) {
-            $valueCompare = $cond->left === $funcCall ? $cond->right : $cond->left;
-            if ($this->valueResolver->isFalse($valueCompare)) {
-                $this->nodesToAddCollector->addNodeAfterNode($replaceEmptyStringToNull, $if);
-            }
+            return null;
         }
         if ($cond instanceof BooleanNot) {
-            $this->nodesToAddCollector->addNodeAfterNode($replaceEmptyStringToNull, $if);
+            return null;
         }
-        return $funcCall;
+        return $this->handleNotInIdenticalAndBooleanNot($if, $funcCall);
     }
-    private function handleNotInIdenticalAndBooleanNot(If_ $if, FuncCall $funcCall) : void
+    private function handleNotInIdenticalAndBooleanNot(If_ $if, FuncCall $funcCall) : Stmt
     {
         if ($if->stmts !== []) {
-            $firstStmt = $if->stmts[0];
-            $this->nodesToAddCollector->addNodeBeforeNode($funcCall, $firstStmt);
-            return;
+            return $if->stmts[0];
         }
         $if->stmts[0] = new Expression($funcCall);
+        return $if;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\If_ $stmt
+     */
+    private function matchRegexFuncCall($stmt) : ?FuncCall
+    {
+        $funcCalls = $this->betterNodeFinder->findInstancesOf($stmt, [FuncCall::class]);
+        foreach ($funcCalls as $funcCall) {
+            if (!$this->regexFuncAnalyzer->matchRegexFuncCall($funcCall) instanceof FuncCall) {
+                continue;
+            }
+            return $funcCall;
+        }
+        return null;
     }
 }

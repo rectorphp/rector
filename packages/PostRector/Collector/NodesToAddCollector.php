@@ -24,10 +24,6 @@ final class NodesToAddCollector implements NodeCollectorInterface
     /**
      * @var Stmt[][]
      */
-    private $nodesToAddAfter = [];
-    /**
-     * @var Stmt[][]
-     */
     private $nodesToAddBefore = [];
     /**
      * @readonly
@@ -58,7 +54,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
     }
     public function isActive() : bool
     {
-        return $this->nodesToAddAfter !== [] || $this->nodesToAddBefore !== [];
+        return $this->nodesToAddBefore !== [];
     }
     /**
      * @deprecated
@@ -78,44 +74,12 @@ final class NodesToAddCollector implements NodeCollectorInterface
         $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
     /**
-     * @api Used in downgrade still
-     * @deprecated
-     * Better return created nodes right in refactor() method to keep context
-     * @internal
-     */
-    public function addNodeAfterNode(Node $addedNode, Node $positionNode) : void
-    {
-        if ($positionNode->getAttributes() === []) {
-            $message = \sprintf('Switch arguments in "%s()" method', __METHOD__);
-            throw new ShouldNotHappenException($message);
-        }
-        /** @var MutatingScope|null $currentScope */
-        $currentScope = $positionNode->getAttribute(AttributeKey::SCOPE);
-        $this->changedNodeScopeRefresher->refresh($addedNode, $currentScope);
-        $position = $this->resolveNearestStmtPosition($positionNode);
-        $this->nodesToAddAfter[$position][] = $this->wrapToExpression($addedNode);
-        $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
-    }
-    /**
-     * @return Stmt[]
-     */
-    public function getNodesToAddAfterNode(Node $node) : array
-    {
-        $position = \spl_object_hash($node);
-        return $this->nodesToAddAfter[$position] ?? [];
-    }
-    /**
      * @return Stmt[]
      */
     public function getNodesToAddBeforeNode(Node $node) : array
     {
         $position = \spl_object_hash($node);
         return $this->nodesToAddBefore[$position] ?? [];
-    }
-    public function clearNodesToAddAfter(Node $node) : void
-    {
-        $objectHash = \spl_object_hash($node);
-        unset($this->nodesToAddAfter[$objectHash]);
     }
     public function clearNodesToAddBefore(Node $node) : void
     {

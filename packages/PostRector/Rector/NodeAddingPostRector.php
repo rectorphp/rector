@@ -39,11 +39,6 @@ final class NodeAddingPostRector extends \Rector\PostRector\Rector\AbstractPostR
     public function leaveNode(Node $node)
     {
         $newNodes = [$node];
-        $nodesToAddAfter = $this->nodesToAddCollector->getNodesToAddAfterNode($node);
-        if ($nodesToAddAfter !== []) {
-            $this->nodesToAddCollector->clearNodesToAddAfter($node);
-            $newNodes = \array_merge($newNodes, $nodesToAddAfter);
-        }
         $nodesToAddBefore = $this->nodesToAddCollector->getNodesToAddBeforeNode($node);
         if ($nodesToAddBefore !== []) {
             $this->nodesToAddCollector->clearNodesToAddBefore($node);
