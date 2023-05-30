@@ -144,9 +144,8 @@ class ArgvInput extends Input
     {
         $c = \count($this->arguments);
         // if input is expecting another argument, add it
-        \reset($all);
-        // if input is expecting another argument, add it
         if ($this->definition->hasArgument($c)) {
+            \reset($all);
             $arg = $this->definition->getArgument($c);
             $this->arguments[$arg->getName()] = $arg->isArray() ? [$token] : $token;
             // if last argument isArray(), append token to last argument
