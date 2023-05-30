@@ -1699,7 +1699,6 @@ return array(
     'Rector\\Doctrine\\ValueObject\\ArgName' => $vendorDir . '/rector/rector-doctrine/src/ValueObject/ArgName.php',
     'Rector\\Doctrine\\ValueObject\\AssignToPropertyFetch' => $vendorDir . '/rector/rector-doctrine/src/ValueObject/AssignToPropertyFetch.php',
     'Rector\\Doctrine\\ValueObject\\DefaultAnnotationArgValue' => $vendorDir . '/rector/rector-doctrine/src/ValueObject/DefaultAnnotationArgValue.php',
-    'Rector\\DowngradePhp53\\Rector\\Dir\\DirConstToFileConstRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp53/Rector/Dir/DirConstToFileConstRector.php',
     'Rector\\DowngradePhp54\\Rector\\Array_\\ShortArrayToLongArrayRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp54/Rector/Array_/ShortArrayToLongArrayRector.php',
     'Rector\\DowngradePhp54\\Rector\\Closure\\DowngradeStaticClosureRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp54/Rector/Closure/DowngradeStaticClosureRector.php',
     'Rector\\DowngradePhp54\\Rector\\Closure\\DowngradeThisInClosureRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp54/Rector/Closure/DowngradeThisInClosureRector.php',

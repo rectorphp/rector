@@ -229,6 +229,8 @@ CODE_SAMPLE;
             $startTime = \microtime(\true);
             $previousMemory = \memory_get_peak_usage(\true);
         }
+        // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         $refactoredNode = $this->refactor($node);
         if ($isDebug) {
             $this->printConsumptions($startTime, $previousMemory);
@@ -245,7 +247,6 @@ CODE_SAMPLE;
             $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         return $this->postRefactorProcess($originalNode, $node, $refactoredNode);
     }
     /**

@@ -12,10 +12,6 @@ final class DowngradeSetList implements SetListInterface
     /**
      * @var string
      */
-    public const PHP_53 = __DIR__ . '/../../../config/set/downgrade-php53.php';
-    /**
-     * @var string
-     */
     public const PHP_54 = __DIR__ . '/../../../config/set/downgrade-php54.php';
     /**
      * @var string
