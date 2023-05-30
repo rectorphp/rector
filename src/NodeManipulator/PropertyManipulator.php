@@ -212,19 +212,6 @@ final class PropertyManipulator
         }
         return \false;
     }
-    public function isPropertyChangeable(Class_ $class, Property $property, Scope $scope) : bool
-    {
-        $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($class, $property);
-        foreach ($propertyFetches as $propertyFetch) {
-            if ($this->isChangeableContext($propertyFetch, $scope)) {
-                return \true;
-            }
-            if ($this->assignManipulator->isLeftPartOfAssign($propertyFetch)) {
-                return \true;
-            }
-        }
-        return \false;
-    }
     public function resolveExistingClassPropertyNameByType(Class_ $class, ObjectType $objectType) : ?string
     {
         foreach ($class->getProperties() as $property) {
