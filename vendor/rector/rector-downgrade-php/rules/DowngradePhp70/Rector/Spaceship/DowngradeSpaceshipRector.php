@@ -71,27 +71,21 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
-        if ($node instanceof If_ && $node->cond instanceof Spaceship) {
-            $spaceship = $node->cond;
-        } elseif ($node instanceof Return_ && $node->expr instanceof Spaceship) {
-            $spaceship = $node->expr;
-        } else {
+        $hasFound = \false;
+        $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
+        $this->traverseNodesWithCallable($node, static function (Node $node) use(&$hasFound, $assignVariable) : ?FuncCall {
+            if (!$node instanceof Spaceship) {
+                return null;
+            }
+            $hasFound = \true;
+            return new FuncCall($assignVariable, [new Arg($node->left), new Arg($node->right)]);
+        });
+        if ($hasFound === \false) {
             return null;
         }
         $anonymousFunction = $this->createAnonymousFunction();
-        $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
-        $assignExpression = $this->getAssignExpression($anonymousFunction, $assignVariable);
-        $compareFuncCall = new FuncCall($assignVariable, [new Arg($spaceship->left), new Arg($spaceship->right)]);
-        if ($node instanceof Return_) {
-            $node->expr = $compareFuncCall;
-        } elseif ($node instanceof If_) {
-            $node->cond = $compareFuncCall;
-        }
+        $assignExpression = new Expression(new Assign($assignVariable, $anonymousFunction));
         return [$assignExpression, $node];
-    }
-    private function getAssignExpression(Closure $closure, Variable $variable) : Expression
-    {
-        return new Expression(new Assign($variable, $closure));
     }
     private function createAnonymousFunction() : Closure
     {
