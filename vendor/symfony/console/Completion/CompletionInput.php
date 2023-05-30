@@ -95,8 +95,8 @@ final class CompletionInput extends ArgvInput
             }
             $argumentValue = $this->arguments[$argumentName];
             $this->completionName = $argumentName;
+            \end($argumentValue);
             if (\is_array($argumentValue)) {
-                \end($argumentValue);
                 $this->completionValue = $argumentValue ? $argumentValue[\key($argumentValue)] : null;
             } else {
                 $this->completionValue = $argumentValue;

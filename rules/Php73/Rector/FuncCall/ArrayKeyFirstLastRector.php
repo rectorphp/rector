@@ -87,6 +87,7 @@ CODE_SAMPLE
         if ($stmtsAware->stmts === null) {
             return null;
         }
+        /** @var int $totalKeys */
         \end($stmtsAware->stmts);
         /** @var int $totalKeys */
         $totalKeys = \key($stmtsAware->stmts);

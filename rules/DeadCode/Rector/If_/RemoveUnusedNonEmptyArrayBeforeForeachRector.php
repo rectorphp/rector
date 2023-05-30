@@ -161,6 +161,7 @@ CODE_SAMPLE
         if ($stmtsAware->stmts === null) {
             return null;
         }
+        /** @var int $lastKey */
         \end($stmtsAware->stmts);
         /** @var int $lastKey */
         $lastKey = \key($stmtsAware->stmts);

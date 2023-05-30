@@ -60,8 +60,9 @@ final class ConfigureCallValuesCollector
     {
         foreach ($configureValues as $configureValue) {
             // is nested or unnested value?
+            \reset($configureValue);
+            // is nested or unnested value?
             if (\is_array($configureValue) && \count($configureValue) === 1) {
-                \reset($configureValue);
                 $firstKey = \key($configureValue);
                 if (\is_string($firstKey) && \is_array($configureValue[$firstKey])) {
                     // has class some public constants?
