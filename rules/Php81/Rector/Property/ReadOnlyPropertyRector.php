@@ -98,28 +98,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class, ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param Property|ClassMethod $node
+     * @param Class_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($node instanceof ClassMethod) {
-            $hasChanged = \false;
-            foreach ($node->params as $param) {
-                $justChanged = $this->refactorParam($node, $param, $scope);
-                // different variable to ensure $hasChanged not replaced
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            foreach ($classMethod->params as $param) {
+                $justChanged = $this->refactorParam($node, $classMethod, $param, $scope);
+                // different variable to ensure $hasRemoved not replaced
                 if ($justChanged instanceof Param) {
                     $hasChanged = \true;
                 }
             }
-            if ($hasChanged) {
-                return $node;
-            }
-            return null;
         }
-        return $this->refactorProperty($node, $scope);
+        foreach ($node->getProperties() as $property) {
+            $changedProperty = $this->refactorProperty($node, $property, $scope);
+            if ($changedProperty instanceof Property) {
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
@@ -136,7 +141,7 @@ CODE_SAMPLE
         }
         return $class->isReadonly();
     }
-    private function refactorProperty(Property $property, Scope $scope) : ?Property
+    private function refactorProperty(Class_ $class, Property $property, Scope $scope) : ?Property
     {
         // 1. is property read-only?
         if ($property->isReadonly()) {
@@ -154,7 +159,7 @@ CODE_SAMPLE
         if (!$this->visibilityManipulator->hasVisibility($property, Visibility::PRIVATE)) {
             return null;
         }
-        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($property, $scope)) {
+        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($class, $property, $scope)) {
             return null;
         }
         if ($this->propertyFetchAssignManipulator->isAssignedMultipleTimesInConstructor($property)) {
@@ -170,7 +175,7 @@ CODE_SAMPLE
         }
         return $property;
     }
-    private function refactorParam(ClassMethod $classMethod, Param $param, Scope $scope) : ?\PhpParser\Node\Param
+    private function refactorParam(Class_ $class, ClassMethod $classMethod, Param $param, Scope $scope) : ?\PhpParser\Node\Param
     {
         if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
             return null;
@@ -179,7 +184,7 @@ CODE_SAMPLE
             return null;
         }
         // promoted property?
-        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($param, $scope)) {
+        if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($class, $param, $scope)) {
             return null;
         }
         if ($this->visibilityManipulator->isReadonly($param)) {
