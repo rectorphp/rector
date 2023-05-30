@@ -16,11 +16,11 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeFactory\NamedVariableFactory;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -38,23 +38,17 @@ final class DowngradeSpaceshipRector extends AbstractRector
      * @var \Rector\NodeFactory\NamedVariableFactory
      */
     private $namedVariableFactory;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(IfManipulator $ifManipulator, NamedVariableFactory $namedVariableFactory, NodesToAddCollector $nodesToAddCollector)
+    public function __construct(IfManipulator $ifManipulator, NamedVariableFactory $namedVariableFactory)
     {
         $this->ifManipulator = $ifManipulator;
         $this->namedVariableFactory = $namedVariableFactory;
-        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Spaceship::class];
+        return [Return_::class, If_::class];
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -73,30 +67,43 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param Spaceship $node
+     * @param Return_|If_ $node
      */
-    public function refactor(Node $node) : FuncCall
+    public function refactor(Node $node)
     {
-        $leftVariableParam = new Variable('left');
-        $rightVariableParam = new Variable('right');
-        $anonymousFunction = new Closure();
-        $leftParam = new Param($leftVariableParam);
-        $rightParam = new Param($rightVariableParam);
-        $anonymousFunction->params = [$leftParam, $rightParam];
-        $if = $this->ifManipulator->createIfStmt(new Identical($leftVariableParam, $rightVariableParam), new Return_(new LNumber(0)));
-        $anonymousFunction->stmts[0] = $if;
-        $smaller = new Smaller($leftVariableParam, $rightVariableParam);
-        $ternaryIf = new LNumber(-1);
-        $ternaryElse = new LNumber(1);
-        $ternary = new Ternary($smaller, $ternaryIf, $ternaryElse);
-        $anonymousFunction->stmts[1] = new Return_($ternary);
+        if ($node instanceof If_ && $node->cond instanceof Spaceship) {
+            $spaceship = $node->cond;
+        } elseif ($node instanceof Return_ && $node->expr instanceof Spaceship) {
+            $spaceship = $node->expr;
+        } else {
+            return null;
+        }
+        $anonymousFunction = $this->createAnonymousFunction();
         $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
         $assignExpression = $this->getAssignExpression($anonymousFunction, $assignVariable);
-        $this->nodesToAddCollector->addNodeBeforeNode($assignExpression, $node);
-        return new FuncCall($assignVariable, [new Arg($node->left), new Arg($node->right)]);
+        $compareFuncCall = new FuncCall($assignVariable, [new Arg($spaceship->left), new Arg($spaceship->right)]);
+        if ($node instanceof Return_) {
+            $node->expr = $compareFuncCall;
+        } elseif ($node instanceof If_) {
+            $node->cond = $compareFuncCall;
+        }
+        return [$assignExpression, $node];
     }
     private function getAssignExpression(Closure $closure, Variable $variable) : Expression
     {
         return new Expression(new Assign($variable, $closure));
+    }
+    private function createAnonymousFunction() : Closure
+    {
+        $leftVariableParam = new Variable('left');
+        $rightVariableParam = new Variable('right');
+        $leftParam = new Param($leftVariableParam);
+        $rightParam = new Param($rightVariableParam);
+        $if = $this->ifManipulator->createIfStmt(new Identical($leftVariableParam, $rightVariableParam), new Return_(new LNumber(0)));
+        $smaller = new Smaller($leftVariableParam, $rightVariableParam);
+        $ternaryIf = new LNumber(-1);
+        $ternaryElse = new LNumber(1);
+        $ternary = new Ternary($smaller, $ternaryIf, $ternaryElse);
+        return new Closure(['params' => [$leftParam, $rightParam], 'stmts' => [$if, new Return_($ternary)]]);
     }
 }
