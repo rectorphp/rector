@@ -224,10 +224,7 @@ CODE_SAMPLE;
         if ($isDebug) {
             $this->printCurrentFileAndRule();
         }
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($originalNode instanceof Node) {
-            $this->changedNodeScopeRefresher->reIndexNodeAttributes($node);
-        }
+        $this->changedNodeScopeRefresher->reIndexNodeAttributes($node);
         if ($isDebug) {
             $startTime = \microtime(\true);
             $previousMemory = \memory_get_peak_usage(\true);
@@ -248,6 +245,7 @@ CODE_SAMPLE;
             $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
         return $this->postRefactorProcess($originalNode, $node, $refactoredNode);
     }
     /**
