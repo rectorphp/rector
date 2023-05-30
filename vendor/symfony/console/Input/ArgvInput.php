@@ -145,7 +145,6 @@ class ArgvInput extends Input
         $c = \count($this->arguments);
         // if input is expecting another argument, add it
         if ($this->definition->hasArgument($c)) {
-            \reset($all);
             $arg = $this->definition->getArgument($c);
             $this->arguments[$arg->getName()] = $arg->isArray() ? [$token] : $token;
             // if last argument isArray(), append token to last argument
@@ -154,6 +153,7 @@ class ArgvInput extends Input
             $this->arguments[$arg->getName()][] = $token;
             // unexpected argument
         } else {
+            \reset($all);
             $all = $this->definition->getArguments();
             $symfonyCommandName = null;
             if (($inputArgument = $all[$key = \key($all)] ?? null) && 'command' === $inputArgument->getName()) {

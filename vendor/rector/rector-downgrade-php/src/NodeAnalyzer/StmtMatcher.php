@@ -18,7 +18,10 @@ final class StmtMatcher
     {
         $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function matchFuncCallNamed(Stmt $stmt, string $functionName) : ?FuncCall
+    /**
+     * @param \PhpParser\Node\Stmt|mixed[] $stmt
+     */
+    public function matchFuncCallNamed($stmt, string $functionName) : ?FuncCall
     {
         /** @var FuncCall[] $funcCalls */
         $funcCalls = $this->betterNodeFinder->findInstancesOf($stmt, [FuncCall::class]);

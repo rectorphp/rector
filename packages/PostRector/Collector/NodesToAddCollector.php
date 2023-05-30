@@ -57,6 +57,7 @@ final class NodesToAddCollector implements NodeCollectorInterface
         return $this->nodesToAddBefore !== [];
     }
     /**
+     * @api
      * @deprecated
      * @internal Return created nodes right in refactor() method to keep context instead.
      */
@@ -85,19 +86,6 @@ final class NodesToAddCollector implements NodeCollectorInterface
     {
         $objectHash = \spl_object_hash($node);
         unset($this->nodesToAddBefore[$objectHash]);
-    }
-    /**
-     * @deprecated
-     * @api downgrade
-     * @deprecated Return created nodes right in refactor() method to keep context instead.
-     * @param Node[] $newNodes
-     */
-    public function addNodesBeforeNode(array $newNodes, Node $positionNode) : void
-    {
-        foreach ($newNodes as $newNode) {
-            $this->addNodeBeforeNode($newNode, $positionNode);
-        }
-        $this->rectorChangeCollector->notifyNodeFileInfo($positionNode);
     }
     private function resolveNearestStmtPosition(Node $node) : string
     {
