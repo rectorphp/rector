@@ -99,7 +99,7 @@ CODE_SAMPLE
      * @param Node[] $nodes
      * @return Node[]
      */
-    public function afterTraverse(array $nodes)
+    public function afterTraverse(array $nodes) : array
     {
         if ($this->classes === []) {
             return $nodes;

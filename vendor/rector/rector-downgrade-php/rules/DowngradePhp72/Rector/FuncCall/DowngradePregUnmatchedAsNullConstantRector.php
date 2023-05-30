@@ -65,6 +65,7 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
     }
     /**
      * @param Expression|ClassConst|If_ $node
+     * @return Stmt[]|ClassConst|null
      */
     public function refactor(Node $node)
     {
