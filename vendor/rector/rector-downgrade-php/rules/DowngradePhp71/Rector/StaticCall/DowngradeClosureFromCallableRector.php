@@ -14,7 +14,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeFactory\NamedVariableFactory;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -29,57 +28,60 @@ final class DowngradeClosureFromCallableRector extends AbstractRector
      * @var \Rector\NodeFactory\NamedVariableFactory
      */
     private $namedVariableFactory;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(NamedVariableFactory $namedVariableFactory, NodesToAddCollector $nodesToAddCollector)
+    public function __construct(NamedVariableFactory $namedVariableFactory)
     {
         $this->namedVariableFactory = $namedVariableFactory;
-        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [Expression::class];
     }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Converts Closure::fromCallable() to compatible alternative.', [new CodeSample(<<<'CODE_SAMPLE'
-\Closure::fromCallable('callable');
+$someClosure = \Closure::fromCallable('callable');
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
 $callable = 'callable';
-function () use ($callable) {
+$someClosure = function () use ($callable) {
     return $callable(...func_get_args());
 };
 CODE_SAMPLE
 )]);
     }
     /**
-     * @param StaticCall $node
+     * @param Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
-        if ($this->shouldSkip($node)) {
+        if (!$node->expr instanceof Assign) {
             return null;
         }
-        if (!isset($node->getArgs()[0])) {
+        $assign = $node->expr;
+        if (!$assign->expr instanceof StaticCall) {
             return null;
         }
-        $tempVariable = $this->namedVariableFactory->createVariable($node, 'callable');
-        $expression = new Expression(new Assign($tempVariable, $node->getArgs()[0]->value));
-        $this->nodesToAddCollector->addNodeBeforeNode($expression, $node);
+        $staticCall = $assign->expr;
+        if ($this->shouldSkipStaticCall($staticCall)) {
+            return null;
+        }
+        if (!isset($staticCall->getArgs()[0])) {
+            return null;
+        }
+        $tempVariable = $this->namedVariableFactory->createVariable($staticCall, 'callable');
+        $assignExpression = new Expression(new Assign($tempVariable, $staticCall->getArgs()[0]->value));
+        $innerFuncCall = new FuncCall($tempVariable, [new Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);
         $closure = new Closure();
         $closure->uses[] = new ClosureUse($tempVariable);
-        $innerFuncCall = new FuncCall($tempVariable, [new Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);
         $closure->stmts[] = new Return_($innerFuncCall);
-        return $closure;
+        $assign->expr = $closure;
+        return [$assignExpression, new Expression($assign)];
+        //        return $closure;
     }
-    private function shouldSkip(StaticCall $staticCall) : bool
+    private function shouldSkipStaticCall(StaticCall $staticCall) : bool
     {
         if (!$this->nodeNameResolver->isName($staticCall->class, 'Closure')) {
             return \true;

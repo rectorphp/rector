@@ -77,17 +77,10 @@ final class UndefinedVariableResolver
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use(&$undefinedVariables) : ?int {
             // entering new scope - break!
             if ($node instanceof FunctionLike && !$node instanceof ArrowFunction) {
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if ($node instanceof Foreach_) {
                 // handled above
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-            /**
-             * The Node that doesn't have origNode attribute yet
-             * means the Node is a replacement below other changed node
-             */
-            if (!$node->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof Variable) {
