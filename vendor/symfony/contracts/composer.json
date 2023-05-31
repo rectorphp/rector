@@ -42,13 +42,6 @@
         "symfony\/service-contracts": "self.version",
         "symfony\/translation-contracts": "self.version"
     },
-    "suggest": {
-        "symfony\/cache-implementation": "",
-        "symfony\/event-dispatcher-implementation": "",
-        "symfony\/http-client-implementation": "",
-        "symfony\/service-implementation": "",
-        "symfony\/translation-implementation": ""
-    },
     "autoload": {
         "psr-4": {
             "RectorPrefix202305\\Symfony\\Contracts\\": ""
@@ -63,7 +56,7 @@
     "minimum-stability": "dev",
     "extra": {
         "branch-alias": {
-            "dev-main": "3.3-dev"
+            "dev-main": "3.4-dev"
         }
     }
 }

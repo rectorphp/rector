@@ -1079,6 +1079,7 @@ return array(
     'RectorPrefix202305\\Symfony\\Contracts\\Service\\ServiceSubscriberInterface' => $vendorDir . '/symfony/contracts/Service/ServiceSubscriberInterface.php',
     'RectorPrefix202305\\Symfony\\Contracts\\Service\\ServiceSubscriberTrait' => $vendorDir . '/symfony/contracts/Service/ServiceSubscriberTrait.php',
     'RectorPrefix202305\\Symfony\\Contracts\\Service\\Test\\ServiceLocatorTest' => $vendorDir . '/symfony/contracts/Service/Test/ServiceLocatorTest.php',
+    'RectorPrefix202305\\Symfony\\Contracts\\Service\\Test\\ServiceLocatorTestCase' => $vendorDir . '/symfony/contracts/Service/Test/ServiceLocatorTestCase.php',
     'RectorPrefix202305\\Symfony\\Contracts\\Translation\\LocaleAwareInterface' => $vendorDir . '/symfony/contracts/Translation/LocaleAwareInterface.php',
     'RectorPrefix202305\\Symfony\\Contracts\\Translation\\Test\\TranslatorTest' => $vendorDir . '/symfony/contracts/Translation/Test/TranslatorTest.php',
     'RectorPrefix202305\\Symfony\\Contracts\\Translation\\TranslatableInterface' => $vendorDir . '/symfony/contracts/Translation/TranslatableInterface.php',

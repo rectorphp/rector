@@ -1920,12 +1920,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "36f54614208d563d290d2c8eb5e4dba92c053a1a"
+                "reference": "b9b87e1cc777a055d6e1c883a6fb541384f43da1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/36f54614208d563d290d2c8eb5e4dba92c053a1a",
-                "reference": "36f54614208d563d290d2c8eb5e4dba92c053a1a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/b9b87e1cc777a055d6e1c883a6fb541384f43da1",
+                "reference": "b9b87e1cc777a055d6e1c883a6fb541384f43da1",
                 "shasum": ""
             },
             "require": {
@@ -1949,7 +1949,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-05-30T15:48:28+00:00",
+            "time": "2023-05-31T00:12:23+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2365,17 +2365,17 @@
         },
         {
             "name": "symfony\/contracts",
-            "version": "v3.2.1",
-            "version_normalized": "3.2.1.0",
+            "version": "v3.3.0",
+            "version_normalized": "3.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/contracts.git",
-                "reference": "8ec95320f72fd012bf6335498c8f6c8d64957346"
+                "reference": "9e4b5e4e44e7620475dbceecf7c72c3883f3ea35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/contracts\/zipball\/8ec95320f72fd012bf6335498c8f6c8d64957346",
-                "reference": "8ec95320f72fd012bf6335498c8f6c8d64957346",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/contracts\/zipball\/9e4b5e4e44e7620475dbceecf7c72c3883f3ea35",
+                "reference": "9e4b5e4e44e7620475dbceecf7c72c3883f3ea35",
                 "shasum": ""
             },
             "require": {
@@ -2398,18 +2398,11 @@
             "require-dev": {
                 "symfony\/polyfill-intl-idn": "^1.10"
             },
-            "suggest": {
-                "symfony\/cache-implementation": "",
-                "symfony\/event-dispatcher-implementation": "",
-                "symfony\/http-client-implementation": "",
-                "symfony\/service-implementation": "",
-                "symfony\/translation-implementation": ""
-            },
-            "time": "2023-03-01T10:32:47+00:00",
+            "time": "2023-05-30T17:17:10+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "3.3-dev"
+                    "dev-main": "3.4-dev"
                 }
             },
             "installation-source": "dist",
@@ -2449,7 +2442,7 @@
                 "standards"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/contracts\/tree\/v3.2.1"
+                "source": "https:\/\/github.com\/symfony\/contracts\/tree\/v3.3.0"
             },
             "funding": [
                 {

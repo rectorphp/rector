@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
@@ -37,7 +38,7 @@ final class DowngradeClosureFromCallableRector extends AbstractRector
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class];
+        return [Expression::class, Return_::class];
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -53,10 +54,14 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param Expression $node
+     * @param Expression|Return_ $node
+     * @return Stmt[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?array
     {
+        if ($node instanceof Return_) {
+            return $this->refactorReturn($node);
+        }
         if (!$node->expr instanceof Assign) {
             return null;
         }
@@ -79,7 +84,30 @@ CODE_SAMPLE
         $closure->stmts[] = new Return_($innerFuncCall);
         $assign->expr = $closure;
         return [$assignExpression, new Expression($assign)];
-        //        return $closure;
+    }
+    /**
+     * @return Stmt[]|null
+     */
+    private function refactorReturn(Return_ $return) : ?array
+    {
+        if (!$return->expr instanceof StaticCall) {
+            return null;
+        }
+        $staticCall = $return->expr;
+        if ($this->shouldSkipStaticCall($staticCall)) {
+            return null;
+        }
+        if (!isset($staticCall->getArgs()[0])) {
+            return null;
+        }
+        $tempVariable = $this->namedVariableFactory->createVariable($staticCall, 'callable');
+        $assignExpression = new Expression(new Assign($tempVariable, $staticCall->getArgs()[0]->value));
+        $innerFuncCall = new FuncCall($tempVariable, [new Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);
+        $closure = new Closure();
+        $closure->uses[] = new ClosureUse($tempVariable);
+        $closure->stmts[] = new Return_($innerFuncCall);
+        $return->expr = $closure;
+        return [$assignExpression, $return];
     }
     private function shouldSkipStaticCall(StaticCall $staticCall) : bool
     {

@@ -66,9 +66,9 @@ interface HttpClientInterface
         'no_proxy' => null,
         // string - a comma separated list of hosts that do not require a proxy to be reached
         'timeout' => null,
-        // float - the idle timeout - defaults to ini_get('default_socket_timeout')
+        // float - the idle timeout (in seconds) - defaults to ini_get('default_socket_timeout')
         'max_duration' => 0,
-        // float - the maximum execution time for the request+response as a whole;
+        // float - the maximum execution time (in seconds) for the request+response as a whole;
         //   a value lower than or equal to 0 means it is unlimited
         'bindto' => '0',
         // string - the interface or the local socket to bind to
@@ -83,6 +83,8 @@ interface HttpClientInterface
         'ciphers' => null,
         'peer_fingerprint' => null,
         'capture_peer_cert_chain' => \false,
+        'crypto_method' => \STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT,
+        // STREAM_CRYPTO_METHOD_TLSv*_CLIENT - minimum TLS version
         'extra' => [],
     ];
     /**
