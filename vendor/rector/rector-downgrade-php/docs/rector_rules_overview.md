@@ -1,4 +1,4 @@
-# 107 Rules Overview
+# 98 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -67,24 +67,9 @@ Remove anonymous class
 
 <br>
 
-## DowngradeArbitraryExpressionArgsToEmptyAndIssetRector
-
-Downgrade arbitrary expression arguments to `empty()` and `isset()`
-
-- class: [`Rector\DowngradePhp55\Rector\Isset_\DowngradeArbitraryExpressionArgsToEmptyAndIssetRector`](../rules/DowngradePhp55/Rector/Isset_/DowngradeArbitraryExpressionArgsToEmptyAndIssetRector.php)
-
-```diff
--if (isset(some_function())) {
-+if (some_function() !== null) {
-     // ...
- }
-```
-
-<br>
-
 ## DowngradeArbitraryExpressionsSupportRector
 
-Replace arbitrary expressions used with new or instanceof.
+Replace arbitrary expressions used with new or instanceof
 
 - class: [`Rector\DowngradePhp80\Rector\New_\DowngradeArbitraryExpressionsSupportRector`](../rules/DowngradePhp80/Rector/New_/DowngradeArbitraryExpressionsSupportRector.php)
 
@@ -96,25 +81,6 @@ Replace arbitrary expressions used with new or instanceof.
 -$object = new (getObjectClassName());
 +$className = getObjectClassName();
 +$object = new $className();
-```
-
-<br>
-
-## DowngradeArgumentUnpackingRector
-
-Replace argument unpacking by `call_user_func_array()`
-
-- class: [`Rector\DowngradePhp56\Rector\CallLike\DowngradeArgumentUnpackingRector`](../rules/DowngradePhp56/Rector/CallLike/DowngradeArgumentUnpackingRector.php)
-
-```diff
- class SomeClass
- {
-     public function run(array $items)
-     {
--        some_function(...$items);
-+        call_user_func_array('some_function', $items);
-     }
- }
 ```
 
 <br>
@@ -135,30 +101,6 @@ Unset nullable callback on array_filter
 +        var_dump(array_filter($data));
      }
  }
-```
-
-<br>
-
-## DowngradeArrayFilterUseConstantRector
-
-Replace use ARRAY_FILTER_USE_BOTH and ARRAY_FILTER_USE_KEY to loop to filter it
-
-- class: [`Rector\DowngradePhp56\Rector\FuncCall\DowngradeArrayFilterUseConstantRector`](../rules/DowngradePhp56/Rector/FuncCall/DowngradeArrayFilterUseConstantRector.php)
-
-```diff
- $arr = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4];
-
--var_dump(array_filter($arr, function($v, $k) {
--    return $k == 'b' || $v == 4;
--}, ARRAY_FILTER_USE_BOTH));
-+$result = [];
-+foreach ($arr as $k => $v) {
-+    if ($v === 4 || $k === 'b') {
-+        $result[$k] = $v;
-+    }
-+}
-+
-+var_dump($result);
 ```
 
 <br>
@@ -319,19 +261,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-## DowngradeBoolvalRector
-
-Replace `boolval()` by type casting to boolean
-
-- class: [`Rector\DowngradePhp55\Rector\FuncCall\DowngradeBoolvalRector`](../rules/DowngradePhp55/Rector/FuncCall/DowngradeBoolvalRector.php)
-
-```diff
--$bool = boolval($value);
-+$bool = (bool) $value;
-```
-
-<br>
-
 ## DowngradeCatchThrowableRector
 
 Make catch clauses catching `Throwable` also catch `Exception` to support exception hierarchies in PHP 5.
@@ -345,28 +274,6 @@ Make catch clauses catching `Throwable` also catch `Exception` to support except
      handle();
 +} catch (\Exception $exception) {
 +    handle();
- }
-```
-
-<br>
-
-## DowngradeClassConstantToStringRector
-
-Replace <class>::class constant by string class names
-
-- class: [`Rector\DowngradePhp55\Rector\ClassConstFetch\DowngradeClassConstantToStringRector`](../rules/DowngradePhp55/Rector/ClassConstFetch/DowngradeClassConstantToStringRector.php)
-
-```diff
- class AnotherClass
- {
- }
- class SomeClass
- {
-     public function run()
-     {
--        return \AnotherClass::class;
-+        return 'AnotherClass';
-     }
  }
 ```
 
@@ -431,9 +338,9 @@ Converts `Closure::fromCallable()` to compatible alternative.
 - class: [`Rector\DowngradePhp71\Rector\StaticCall\DowngradeClosureFromCallableRector`](../rules/DowngradePhp71/Rector/StaticCall/DowngradeClosureFromCallableRector.php)
 
 ```diff
--\Closure::fromCallable('callable');
+-$someClosure = \Closure::fromCallable('callable');
 +$callable = 'callable';
-+function () use ($callable) {
++$someClosure = function () use ($callable) {
 +    return $callable(...func_get_args());
 +};
 ```
@@ -588,32 +495,6 @@ Downgrade enum to constant list class
 
 <br>
 
-## DowngradeExponentialAssignmentOperatorRector
-
-Remove exponential assignment operator **=
-
-- class: [`Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialAssignmentOperatorRector`](../rules/DowngradePhp56/Rector/Pow/DowngradeExponentialAssignmentOperatorRector.php)
-
-```diff
--$a **= 3;
-+$a = pow($a, 3);
-```
-
-<br>
-
-## DowngradeExponentialOperatorRector
-
-Changes ** (exp) operator to pow(val, val2)
-
-- class: [`Rector\DowngradePhp56\Rector\Pow\DowngradeExponentialOperatorRector`](../rules/DowngradePhp56/Rector/Pow/DowngradeExponentialOperatorRector.php)
-
-```diff
--1**2;
-+pow(1, 2);
-```
-
-<br>
-
 ## DowngradeFinalizePublicClassConstantRector
 
 Remove final from class constants
@@ -659,22 +540,6 @@ Remove indentation from heredoc/nowdoc
 +FROM `table`
 +WHERE `column` = true;
 +SQL;
-```
-
-<br>
-
-## DowngradeForeachListRector
-
-Downgrade `list()` support in foreach constructs
-
-- class: [`Rector\DowngradePhp55\Rector\Foreach_\DowngradeForeachListRector`](../rules/DowngradePhp55/Rector/Foreach_/DowngradeForeachListRector.php)
-
-```diff
--foreach ($array as $key => list($item1, $item2)) {
-+foreach ($array as $key => arrayItem) {
-+    list($item1, $item2) = $arrayItem;
-     var_dump($item1, $item2);
- }
 ```
 
 <br>
@@ -2072,21 +1937,6 @@ Remove parentheses around expressions allowed by Uniform variable syntax RFC whe
 +$f::$foo;
 +$f::foo();
 +$f();
-```
-
-<br>
-
-## DowngradeUseFunctionRector
-
-Replace imports of functions and constants
-
-- class: [`Rector\DowngradePhp56\Rector\Use_\DowngradeUseFunctionRector`](../rules/DowngradePhp56/Rector/Use_/DowngradeUseFunctionRector.php)
-
-```diff
--use function Foo\Bar\baz;
--
--$var = baz();
-+$var = \Foo\Bar\baz();
 ```
 
 <br>
