@@ -16,8 +16,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Enum\ObjectReference;
@@ -98,18 +100,15 @@ final class PropertyFetchAnalyzer
     public function countLocalPropertyFetchName(Class_ $class, string $propertyName) : int
     {
         $total = 0;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->stmts, function (Node $subNode) use($class, $propertyName, &$total) : ?Node {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($class->getMethods(), function (Node $subNode) use($propertyName, &$total) {
+            // skip anonymous classes and inner function
+            if ($subNode instanceof Class_ || $subNode instanceof Function_) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
             if (!$this->isLocalPropertyFetchName($subNode, $propertyName)) {
                 return null;
             }
-            $parentClassLike = $this->betterNodeFinder->findParentType($subNode, ClassLike::class);
-            // property fetch in Trait cannot get parent ClassLike
-            if (!$parentClassLike instanceof ClassLike) {
-                ++$total;
-            }
-            if ($parentClassLike === $class) {
-                ++$total;
-            }
+            ++$total;
             return $subNode;
         });
         return $total;
