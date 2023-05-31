@@ -103,6 +103,22 @@ CODE_SAMPLE
         }
         return null;
     }
+    private function processInsertFuncCallExpression(StmtsAwareInterface $stmtsAware, Expression $expression, FuncCall $funcCall) : StmtsAwareInterface
+    {
+        if ($stmtsAware->stmts === null) {
+            return $stmtsAware;
+        }
+        foreach ($stmtsAware->stmts as $key => $stmt) {
+            $hasFuncCall = $this->betterNodeFinder->findFirst($stmt, static function (Node $node) use($funcCall) : bool {
+                return $node === $funcCall;
+            });
+            if ($hasFuncCall instanceof Node) {
+                \array_splice($stmtsAware->stmts, $key, 0, [$expression]);
+                return $stmtsAware;
+            }
+        }
+        return $stmtsAware;
+    }
     /**
      * @return Stmt[]|StmtsAwareInterface|null
      * @param \PhpParser\Node\Stmt\Expression|\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmt
@@ -126,8 +142,7 @@ CODE_SAMPLE
             $firstArg->value = $array;
         }
         if ($stmt instanceof StmtsAwareInterface && $isPartOfCond === \false) {
-            $stmt->stmts = \array_merge([$resetFuncCallExpression], (array) $stmt->stmts);
-            return $stmt;
+            return $this->processInsertFuncCallExpression($stmt, $resetFuncCallExpression, $funcCall);
         }
         $newStmts[] = $resetFuncCallExpression;
         $newStmts[] = $stmt;
@@ -157,8 +172,7 @@ CODE_SAMPLE
             $firstArg->value = $array;
         }
         if ($stmt instanceof StmtsAwareInterface && $isPartOfCond === \false) {
-            $stmt->stmts = \array_merge([$endFuncCallExpression], (array) $stmt->stmts);
-            return $stmt;
+            return $this->processInsertFuncCallExpression($stmt, $endFuncCallExpression, $funcCall);
         }
         $newStmts[] = $stmt;
         return $newStmts;

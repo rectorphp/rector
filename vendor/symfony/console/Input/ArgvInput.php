@@ -159,9 +159,9 @@ class ArgvInput extends Input
             $this->arguments[$arg->getName()][] = $token;
             // unexpected argument
         } else {
-            \reset($all);
             $all = $this->definition->getArguments();
             $symfonyCommandName = null;
+            \reset($all);
             if (($inputArgument = $all[$key = \key($all)] ?? null) && 'command' === $inputArgument->getName()) {
                 $symfonyCommandName = $this->arguments['command'] ?? null;
                 unset($all[$key]);
