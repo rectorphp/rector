@@ -162,7 +162,7 @@ CODE_SAMPLE
         if ($this->propertyManipulator->isPropertyChangeableExceptConstructor($class, $property, $scope)) {
             return null;
         }
-        if ($this->propertyFetchAssignManipulator->isAssignedMultipleTimesInConstructor($property)) {
+        if ($this->propertyFetchAssignManipulator->isAssignedMultipleTimesInConstructor($class, $property)) {
             return null;
         }
         if ($this->shouldSkipInReadonlyClass($property)) {

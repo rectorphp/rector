@@ -6,13 +6,11 @@ namespace Rector\Core\NodeManipulator;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\NodeTraverser;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -30,28 +28,18 @@ final class PropertyFetchAssignManipulator
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
-    public function isAssignedMultipleTimesInConstructor(Property $property) : bool
+    public function isAssignedMultipleTimesInConstructor(Class_ $class, Property $property) : bool
     {
-        $classLike = $this->betterNodeFinder->findParentType($property, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
-            return \false;
-        }
-        $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
+        $classMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
