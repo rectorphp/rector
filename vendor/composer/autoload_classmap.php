@@ -1900,7 +1900,6 @@ return array(
     'Rector\\NodeAnalyzer\\MethodCallTypeAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/src/NodeAnalyzer/MethodCallTypeAnalyzer.php',
     'Rector\\NodeAnalyzer\\StmtMatcher' => $vendorDir . '/rector/rector-downgrade-php/src/NodeAnalyzer/StmtMatcher.php',
     'Rector\\NodeCollector\\BinaryOpConditionsCollector' => $baseDir . '/packages/NodeCollector/BinaryOpConditionsCollector.php',
-    'Rector\\NodeCollector\\BinaryOpTreeRootLocator' => $baseDir . '/packages/NodeCollector/BinaryOpTreeRootLocator.php',
     'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => $baseDir . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
     'Rector\\NodeCollector\\ScopeResolver\\ParentClassScopeResolver' => $baseDir . '/packages/NodeCollector/ScopeResolver/ParentClassScopeResolver.php',
     'Rector\\NodeCollector\\StaticAnalyzer' => $baseDir . '/packages/NodeCollector/StaticAnalyzer.php',
