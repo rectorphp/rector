@@ -49,7 +49,7 @@ final class RouteRequiredParamNameToTypesResolver
         }
         $paramsToTypes = [];
         foreach ($paramsToRegexes as $paramName => $paramRegex) {
-            if ($paramRegex === '\\d+') {
+            if (\in_array($paramRegex, ['\\d+', '\\d'], \true)) {
                 $paramsToTypes[$paramName] = new IntegerType();
                 continue;
             }
