@@ -142,45 +142,48 @@ CODE_SAMPLE
     }
     private function resolveDefaultName(Class_ $class) : ?string
     {
-        $defaultName = null;
-        $property = $class->getProperty('defaultName');
-        // Get DefaultName from property
-        if ($property instanceof Property) {
-            $defaultName = $this->getValueFromProperty($property);
+        foreach ($class->stmts as $key => $stmt) {
+            if (!$stmt instanceof Property) {
+                continue;
+            }
+            if (!$this->isName($stmt->props[0], 'defaultName')) {
+                continue;
+            }
+            $defaultName = $this->getValueFromProperty($stmt);
             if ($defaultName !== null) {
-                $this->removeNode($property);
+                // remove property
+                unset($class->stmts[$key]);
+                return $defaultName;
             }
         }
-        // Get DefaultName from attribute
-        if ($defaultName === null && $this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAnnotation::AS_COMMAND)) {
-            $defaultNameFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 0);
-            if (\is_string($defaultNameFromArgument)) {
-                $defaultName = $defaultNameFromArgument;
-            }
-        }
-        return $defaultName;
+        return $this->defaultDefaultNameFromAttribute($class);
     }
     private function resolveDefaultDescription(Class_ $class) : ?string
     {
-        $defaultDescription = null;
-        $property = $class->getProperty('defaultDescription');
-        if ($property instanceof Property) {
-            $defaultDescription = $this->getValueFromProperty($property);
+        foreach ($class->stmts as $key => $stmt) {
+            if (!$stmt instanceof Property) {
+                continue;
+            }
+            if (!$this->isName($stmt, 'defaultDescription')) {
+                continue;
+            }
+            $defaultDescription = $this->getValueFromProperty($stmt);
             if ($defaultDescription !== null) {
-                $this->removeNode($property);
+                unset($class->stmts[$key]);
+                return $defaultDescription;
             }
         }
-        return $this->resolveDefaultDescriptionFromAttribute($class, $defaultDescription);
+        return $this->resolveDefaultDescriptionFromAttribute($class);
     }
-    private function resolveDefaultDescriptionFromAttribute(Class_ $class, ?string $defaultDescription) : ?string
+    private function resolveDefaultDescriptionFromAttribute(Class_ $class) : ?string
     {
-        if ($defaultDescription === null && $this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAnnotation::AS_COMMAND)) {
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAnnotation::AS_COMMAND)) {
             $defaultDescriptionFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 1);
             if (\is_string($defaultDescriptionFromArgument)) {
-                $defaultDescription = $defaultDescriptionFromArgument;
+                return $defaultDescriptionFromArgument;
             }
         }
-        return $defaultDescription;
+        return null;
     }
     private function replaceAsCommandAttribute(Class_ $class, AttributeGroup $createAttributeGroup) : ?Class_
     {
@@ -223,5 +226,16 @@ CODE_SAMPLE
             $replacedAsCommandAttribute = \true;
         }
         return $replacedAsCommandAttribute;
+    }
+    private function defaultDefaultNameFromAttribute(Class_ $class) : ?string
+    {
+        if (!$this->phpAttributeAnalyzer->hasPhpAttribute($class, SymfonyAnnotation::AS_COMMAND)) {
+            return null;
+        }
+        $defaultNameFromArgument = $this->attributeValueResolver->getArgumentValueFromAttribute($class, 0);
+        if (\is_string($defaultNameFromArgument)) {
+            return $defaultNameFromArgument;
+        }
+        return null;
     }
 }
