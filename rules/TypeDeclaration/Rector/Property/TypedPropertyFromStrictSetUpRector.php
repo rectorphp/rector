@@ -37,7 +37,7 @@ final class SomeClass extends TestCase
 {
     private $value;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->value = 1000;
     }
@@ -50,7 +50,7 @@ final class SomeClass extends TestCase
 {
     private int $value;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->value = 1000;
     }

@@ -9211,7 +9211,7 @@ Add strict typed property based on `setUp()` strict typed assigns in TestCase
 -    private $value;
 +    private int $value;
 
-     public function setUp()
+     protected function setUp()
      {
          $this->value = 1000;
      }
