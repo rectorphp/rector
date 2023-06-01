@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PSR4\Composer;
 
-use RectorPrefix202305\Nette\Utils\Strings;
+use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\ValueObject\Application\File;

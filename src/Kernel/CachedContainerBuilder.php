@@ -4,10 +4,10 @@ declare (strict_types=1);
 namespace Rector\Core\Kernel;
 
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Dumper\PhpDumper;
-use RectorPrefix202305\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Dumper\PhpDumper;
+use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
 /**
  * see https://symfony.com/doc/current/components/dependency_injection/compilation.html#dumping-the-configuration-for-performance
  */

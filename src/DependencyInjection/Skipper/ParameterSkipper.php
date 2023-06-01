@@ -8,8 +8,8 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
-use RectorPrefix202305\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202306\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
 final class ParameterSkipper
 {
     /**

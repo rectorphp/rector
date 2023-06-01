@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Formatter;
 
-use RectorPrefix202305\SebastianBergmann\Diff\Differ;
-use RectorPrefix202305\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
-use RectorPrefix202305\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
+use RectorPrefix202306\SebastianBergmann\Diff\Differ;
+use RectorPrefix202306\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
+use RectorPrefix202306\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 final class ConsoleDiffer
 {
     /**

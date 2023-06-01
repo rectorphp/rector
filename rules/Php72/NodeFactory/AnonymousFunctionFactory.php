@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix202305\Nette\Utils\Strings;
+use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;

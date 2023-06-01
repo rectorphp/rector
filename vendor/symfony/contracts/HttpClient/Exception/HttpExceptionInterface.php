@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202305\Symfony\Contracts\HttpClient\Exception;
+namespace RectorPrefix202306\Symfony\Contracts\HttpClient\Exception;
 
-use RectorPrefix202305\Symfony\Contracts\HttpClient\ResponseInterface;
+use RectorPrefix202306\Symfony\Contracts\HttpClient\ResponseInterface;
 /**
  * Base interface for HTTP-related exceptions.
  *

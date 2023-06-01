@@ -5,10 +5,10 @@
  * Copyright (c) 2004 David Grudl (https://davidgrudl.com)
  */
 declare (strict_types=1);
-namespace RectorPrefix202305\Nette\Neon\Node;
+namespace RectorPrefix202306\Nette\Neon\Node;
 
-use RectorPrefix202305\Nette\Neon;
-use RectorPrefix202305\Nette\Neon\Node;
+use RectorPrefix202306\Nette\Neon;
+use RectorPrefix202306\Nette\Neon\Node;
 /** @internal */
 final class EntityChainNode extends Node
 {

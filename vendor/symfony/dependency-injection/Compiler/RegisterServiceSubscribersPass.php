@@ -8,19 +8,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202305\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202305\Psr\Container\ContainerInterface as PsrContainerInterface;
-use RectorPrefix202305\Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Argument\BoundArgument;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\TypedReference;
-use RectorPrefix202305\Symfony\Component\HttpFoundation\Session\SessionInterface;
-use RectorPrefix202305\Symfony\Contracts\Service\ServiceProviderInterface;
-use RectorPrefix202305\Symfony\Contracts\Service\ServiceSubscriberInterface;
+use RectorPrefix202306\Psr\Container\ContainerInterface as PsrContainerInterface;
+use RectorPrefix202306\Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\BoundArgument;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix202306\Symfony\Component\HttpFoundation\Session\SessionInterface;
+use RectorPrefix202306\Symfony\Contracts\Service\ServiceProviderInterface;
+use RectorPrefix202306\Symfony\Contracts\Service\ServiceSubscriberInterface;
 /**
  * Compiler pass to register tagged services that require a service locator.
  *

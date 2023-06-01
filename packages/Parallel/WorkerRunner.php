@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Parallel;
 
-use RectorPrefix202305\Clue\React\NDJson\Decoder;
-use RectorPrefix202305\Clue\React\NDJson\Encoder;
-use RectorPrefix202305\Nette\Utils\FileSystem;
+use RectorPrefix202306\Clue\React\NDJson\Decoder;
+use RectorPrefix202306\Clue\React\NDJson\Encoder;
+use RectorPrefix202306\Nette\Utils\FileSystem;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
@@ -19,9 +19,9 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202305\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202305\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202305\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix202306\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix202306\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix202306\Symplify\EasyParallel\Enum\ReactEvent;
 use Throwable;
 final class WorkerRunner
 {

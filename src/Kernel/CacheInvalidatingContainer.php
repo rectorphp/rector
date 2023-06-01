@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\Kernel;
 
 use Rector\Core\Exception\Cache\StaleContainerCacheException;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerInterface;
 use Throwable;
 use UnitEnum;
 final class CacheInvalidatingContainer implements ContainerInterface

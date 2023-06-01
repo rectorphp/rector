@@ -8,17 +8,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202305\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ExpressionLanguage;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202305\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ExpressionLanguage;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202306\Symfony\Component\ExpressionLanguage\Expression;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  */

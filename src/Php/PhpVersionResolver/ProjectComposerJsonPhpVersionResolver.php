@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Core\Php\PhpVersionResolver;
 
-use RectorPrefix202305\Composer\Semver\VersionParser;
-use RectorPrefix202305\Nette\Utils\FileSystem;
-use RectorPrefix202305\Nette\Utils\Json;
+use RectorPrefix202306\Composer\Semver\VersionParser;
+use RectorPrefix202306\Nette\Utils\FileSystem;
+use RectorPrefix202306\Nette\Utils\Json;
 use Rector\Core\Util\PhpVersionFactory;
 /**
  * @see \Rector\Core\Tests\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver\ProjectComposerJsonPhpVersionResolverTest

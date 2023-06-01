@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Renaming\Rector\FileWithoutNamespace;
 
-use RectorPrefix202305\Nette\Utils\Strings;
+use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
@@ -19,7 +19,7 @@ use Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer;
 use Rector\Renaming\ValueObject\PseudoNamespaceToNamespace;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202305\Webmozart\Assert\Assert;
+use RectorPrefix202306\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Renaming\Rector\FileWithoutNamespace\PseudoNamespaceToNamespaceRector\PseudoNamespaceToNamespaceRectorTest
  */

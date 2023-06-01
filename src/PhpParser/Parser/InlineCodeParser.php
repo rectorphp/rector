@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Parser;
 
-use RectorPrefix202305\Nette\Utils\FileSystem;
-use RectorPrefix202305\Nette\Utils\Strings;
+use RectorPrefix202306\Nette\Utils\FileSystem;
+use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\Variable;

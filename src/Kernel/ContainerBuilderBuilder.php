@@ -10,8 +10,8 @@ use Rector\Core\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
 final class ContainerBuilderBuilder
 {
     /**

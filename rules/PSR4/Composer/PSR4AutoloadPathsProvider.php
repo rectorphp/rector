@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\PSR4\Composer;
 
-use RectorPrefix202305\Nette\Utils\FileSystem;
-use RectorPrefix202305\Nette\Utils\Json;
+use RectorPrefix202306\Nette\Utils\FileSystem;
+use RectorPrefix202306\Nette\Utils\Json;
 final class PSR4AutoloadPathsProvider
 {
     /**

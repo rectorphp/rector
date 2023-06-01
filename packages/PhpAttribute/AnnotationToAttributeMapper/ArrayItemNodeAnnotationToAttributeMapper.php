@@ -13,8 +13,8 @@ use Rector\Core\Validation\RectorAssert;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix202305\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202305\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202306\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements AnnotationToAttributeMapperInterface<ArrayItemNode>
  */

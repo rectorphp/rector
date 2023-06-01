@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php55;
 
-use RectorPrefix202305\Nette\Utils\Strings;
+use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\String_;

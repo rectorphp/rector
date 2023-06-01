@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202305;
+namespace RectorPrefix202306;
 
 /*
  * This file is part of Evenement.
@@ -12,14 +12,14 @@ namespace RectorPrefix202305;
  * file that was distributed with this source code.
  */
 const ITERATIONS = 10000000;
-use RectorPrefix202305\Evenement\EventEmitter;
+use RectorPrefix202306\Evenement\EventEmitter;
 require __DIR__ . '/../vendor/autoload.php';
 $emitter = new EventEmitter();
 $emitter->on('event', function () {
 });
 $start = \microtime(\true);
-for ($i = 0; $i < \RectorPrefix202305\ITERATIONS; $i++) {
+for ($i = 0; $i < \RectorPrefix202306\ITERATIONS; $i++) {
     $emitter->emit('event');
 }
 $time = \microtime(\true) - $start;
-echo 'Emitting ', \number_format(\RectorPrefix202305\ITERATIONS), ' events took: ', \number_format($time, 2), 's', \PHP_EOL;
+echo 'Emitting ', \number_format(\RectorPrefix202306\ITERATIONS), ' events took: ', \number_format($time, 2), 's', \PHP_EOL;

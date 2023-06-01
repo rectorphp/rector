@@ -20,9 +20,9 @@ use Rector\Core\Validation\EmptyConfigurableRectorChecker;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\ProcessResult;
 use Rector\Core\ValueObjectFactory\ProcessResultFactory;
-use RectorPrefix202305\Symfony\Component\Console\Application;
-use RectorPrefix202305\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202305\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202306\Symfony\Component\Console\Application;
+use RectorPrefix202306\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202306\Symfony\Component\Console\Output\OutputInterface;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**

@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -50,8 +51,14 @@ final class RouteRequiredParamNameToTypesResolver
         foreach ($paramsToRegexes as $paramName => $paramRegex) {
             if ($paramRegex === '\\d+') {
                 $paramsToTypes[$paramName] = new IntegerType();
+                continue;
             }
-            // @todo add for string/bool as well
+            if ($paramRegex === '\\w+') {
+                $paramsToTypes[$paramName] = new StringType();
+                continue;
+            }
+            // fallback to string or improve later
+            $paramsToTypes[$paramName] = new StringType();
         }
         return $paramsToTypes;
     }

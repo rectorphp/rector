@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202305\OndraM\CiDetector\Ci;
+namespace RectorPrefix202306\OndraM\CiDetector\Ci;
 
-use RectorPrefix202305\OndraM\CiDetector\CiDetector;
-use RectorPrefix202305\OndraM\CiDetector\Env;
-use RectorPrefix202305\OndraM\CiDetector\TrinaryLogic;
+use RectorPrefix202306\OndraM\CiDetector\CiDetector;
+use RectorPrefix202306\OndraM\CiDetector\Env;
+use RectorPrefix202306\OndraM\CiDetector\TrinaryLogic;
 class GitHubActions extends AbstractCi
 {
     public const GITHUB_BASE_URL = 'https://github.com';

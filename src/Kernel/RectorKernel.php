@@ -7,9 +7,9 @@ use Rector\Core\Application\VersionResolver;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Util\FileHasher;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202305\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202305\Webmozart\Assert\Assert;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202306\Webmozart\Assert\Assert;
 final class RectorKernel
 {
     /**

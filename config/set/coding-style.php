@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202305;
+namespace RectorPrefix202306;
 
 use Rector\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector;
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;

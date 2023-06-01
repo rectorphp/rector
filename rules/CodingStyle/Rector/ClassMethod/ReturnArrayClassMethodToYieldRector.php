@@ -16,7 +16,7 @@ use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202305\Webmozart\Assert\Assert;
+use RectorPrefix202306\Webmozart\Assert\Assert;
 /**
  * @changelog https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
  * @changelog https://3v4l.org/5PJid
