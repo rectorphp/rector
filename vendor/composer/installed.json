@@ -821,23 +821,24 @@
         },
         {
             "name": "phpstan\/phpdoc-parser",
-            "version": "1.21.3",
-            "version_normalized": "1.21.3.0",
+            "version": "1.22.0",
+            "version_normalized": "1.22.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpdoc-parser.git",
-                "reference": "b0c366dd2cea79407d635839d25423ba07c55dd6"
+                "reference": "ec58baf7b3c7f1c81b3b00617c953249fb8cf30c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/b0c366dd2cea79407d635839d25423ba07c55dd6",
-                "reference": "b0c366dd2cea79407d635839d25423ba07c55dd6",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpdoc-parser\/zipball\/ec58baf7b3c7f1c81b3b00617c953249fb8cf30c",
+                "reference": "ec58baf7b3c7f1c81b3b00617c953249fb8cf30c",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0"
             },
             "require-dev": {
+                "doctrine\/annotations": "^2.0",
                 "nikic\/php-parser": "^4.15",
                 "php-parallel-lint\/php-parallel-lint": "^1.2",
                 "phpstan\/extension-installer": "^1.0",
@@ -847,7 +848,7 @@
                 "phpunit\/phpunit": "^9.5",
                 "symfony\/process": "^5.2"
             },
-            "time": "2023-05-29T19:31:28+00:00",
+            "time": "2023-06-01T12:35:21+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -864,7 +865,7 @@
             "description": "PHPDoc parser with support for nullable, intersection and generic types",
             "support": {
                 "issues": "https:\/\/github.com\/phpstan\/phpdoc-parser\/issues",
-                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.21.3"
+                "source": "https:\/\/github.com\/phpstan\/phpdoc-parser\/tree\/1.22.0"
             },
             "install-path": "..\/phpstan\/phpdoc-parser"
         },
@@ -2059,12 +2060,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "fbd87013a48448fbc21df3c5f7fca49b2046ba40"
+                "reference": "13f7cc4888f1e318766ceb2212a1dc0a31012b41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/fbd87013a48448fbc21df3c5f7fca49b2046ba40",
-                "reference": "fbd87013a48448fbc21df3c5f7fca49b2046ba40",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/13f7cc4888f1e318766ceb2212a1dc0a31012b41",
+                "reference": "13f7cc4888f1e318766ceb2212a1dc0a31012b41",
                 "shasum": ""
             },
             "require": {
@@ -2094,7 +2095,7 @@
                 "tomasvotruba\/type-coverage": "^0.0.9",
                 "tomasvotruba\/unused-public": "^0.0.34"
             },
-            "time": "2023-06-01T16:00:18+00:00",
+            "time": "2023-06-01T16:05:52+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

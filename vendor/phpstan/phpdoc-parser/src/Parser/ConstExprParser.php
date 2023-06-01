@@ -136,20 +136,13 @@ class ConstExprParser
      */
     private function enrichWithAttributes(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens, Ast\ConstExpr\ConstExprNode $node, int $startLine, int $startIndex) : Ast\ConstExpr\ConstExprNode
     {
-        $endLine = $tokens->currentTokenLine();
-        $endIndex = $tokens->currentTokenIndex();
         if ($this->useLinesAttributes) {
             $node->setAttribute(Ast\Attribute::START_LINE, $startLine);
-            $node->setAttribute(Ast\Attribute::END_LINE, $endLine);
+            $node->setAttribute(Ast\Attribute::END_LINE, $tokens->currentTokenLine());
         }
         if ($this->useIndexAttributes) {
-            $tokensArray = $tokens->getTokens();
-            $endIndex--;
-            if ($tokensArray[$endIndex][Lexer::TYPE_OFFSET] === Lexer::TOKEN_HORIZONTAL_WS) {
-                $endIndex--;
-            }
             $node->setAttribute(Ast\Attribute::START_INDEX, $startIndex);
-            $node->setAttribute(Ast\Attribute::END_INDEX, $endIndex);
+            $node->setAttribute(Ast\Attribute::END_INDEX, $tokens->endIndexOfLastRelevantToken());
         }
         return $node;
     }

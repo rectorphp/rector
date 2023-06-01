@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite64ea2605e4cf1002a60a3421b5e8329
+class ComposerStaticInit01745356043e4be75950b3ce39d012e4
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -272,6 +272,11 @@ class ComposerStaticInite64ea2605e4cf1002a60a3421b5e8329
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagPropertyValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagPropertyValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\DeprecatedTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/DeprecatedTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineAnnotation' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineAnnotation.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineArgument' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineArgument.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineArray' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineArray.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineArrayItem' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineArrayItem.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ExtendsTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ExtendsTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\GenericTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/GenericTagValueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ImplementsTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ImplementsTagValueNode.php',
@@ -3061,9 +3066,9 @@ class ComposerStaticInite64ea2605e4cf1002a60a3421b5e8329
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite64ea2605e4cf1002a60a3421b5e8329::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite64ea2605e4cf1002a60a3421b5e8329::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite64ea2605e4cf1002a60a3421b5e8329::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit01745356043e4be75950b3ce39d012e4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit01745356043e4be75950b3ce39d012e4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit01745356043e4be75950b3ce39d012e4::$classMap;
 
         }, null, ClassLoader::class);
     }

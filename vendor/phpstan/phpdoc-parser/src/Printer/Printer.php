@@ -11,6 +11,11 @@ use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagMethodValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagPropertyValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\AssertTagValueNode;
+use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineAnnotation;
+use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineArgument;
+use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineArray;
+use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineArrayItem;
+use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ExtendsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ImplementsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\MethodTagValueNode;
@@ -83,13 +88,13 @@ final class Printer
      *
      * @var array<string, string>
      */
-    private $listInsertionMap = [PhpDocNode::class . '->children' => "\n * ", UnionTypeNode::class . '->types' => '|', IntersectionTypeNode::class . '->types' => '&', ArrayShapeNode::class . '->items' => ', ', ObjectShapeNode::class . '->items' => ', ', CallableTypeNode::class . '->parameters' => ', ', GenericTypeNode::class . '->genericTypes' => ', ', ConstExprArrayNode::class . '->items' => ', ', MethodTagValueNode::class . '->parameters' => ', '];
+    private $listInsertionMap = [PhpDocNode::class . '->children' => "\n * ", UnionTypeNode::class . '->types' => '|', IntersectionTypeNode::class . '->types' => '&', ArrayShapeNode::class . '->items' => ', ', ObjectShapeNode::class . '->items' => ', ', CallableTypeNode::class . '->parameters' => ', ', GenericTypeNode::class . '->genericTypes' => ', ', ConstExprArrayNode::class . '->items' => ', ', MethodTagValueNode::class . '->parameters' => ', ', DoctrineArray::class . '->items' => ', ', DoctrineAnnotation::class . '->arguments' => ', '];
     /**
      * [$find, $extraLeft, $extraRight]
      *
      * @var array<string, array{string|null, string, string}>
      */
-    private $emptyListInsertionMap = [CallableTypeNode::class . '->parameters' => ['(', '', ''], ArrayShapeNode::class . '->items' => ['{', '', ''], ObjectShapeNode::class . '->items' => ['{', '', '']];
+    private $emptyListInsertionMap = [CallableTypeNode::class . '->parameters' => ['(', '', ''], ArrayShapeNode::class . '->items' => ['{', '', ''], ObjectShapeNode::class . '->items' => ['{', '', ''], DoctrineArray::class . '->items' => ['{', '', ''], DoctrineAnnotation::class . '->arguments' => ['(', '', '']];
     /** @var array<string, list<class-string<TypeNode>>> */
     private $parenthesesMap = [CallableTypeNode::class . '->returnType' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class], ArrayTypeNode::class . '->type' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class, ConstTypeNode::class, NullableTypeNode::class], OffsetAccessTypeNode::class . '->type' => [CallableTypeNode::class, UnionTypeNode::class, IntersectionTypeNode::class, ConstTypeNode::class, NullableTypeNode::class]];
     /** @var array<string, list<class-string<TypeNode>>> */
@@ -121,6 +126,9 @@ final class Printer
             return $node->text;
         }
         if ($node instanceof PhpDocTagNode) {
+            if ($node->value instanceof DoctrineTagValueNode) {
+                return $this->print($node->value);
+            }
             return trim(sprintf('%s %s', $node->name, $this->print($node->value)));
         }
         if ($node instanceof PhpDocTagValueNode) {
@@ -145,6 +153,18 @@ final class Printer
             $isVariadic = $node->isVariadic ? '...' : '';
             $isOptional = $node->isOptional ? '=' : '';
             return trim("{$type}{$isReference}{$isVariadic}{$node->parameterName}") . $isOptional;
+        }
+        if ($node instanceof DoctrineAnnotation) {
+            return (string) $node;
+        }
+        if ($node instanceof DoctrineArgument) {
+            return (string) $node;
+        }
+        if ($node instanceof DoctrineArray) {
+            return (string) $node;
+        }
+        if ($node instanceof DoctrineArrayItem) {
+            return (string) $node;
         }
         throw new LogicException(sprintf('Unknown node type %s', get_class($node)));
     }
