@@ -24,13 +24,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocClassRenamer;
 use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
 use Rector\CodingStyle\Naming\ClassNaming;
-use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\FileHasher;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeRemoval\NodeRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
@@ -89,16 +86,6 @@ final class ClassRenamer
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\NodeRemoval\NodeRemover
-     */
-    private $nodeRemover;
-    /**
-     * @readonly
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
-    /**
-     * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
@@ -112,7 +99,7 @@ final class ClassRenamer
      * @var \Rector\Core\Util\FileHasher
      */
     private $fileHasher;
-    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, NodeRemover $nodeRemover, ParameterProvider $parameterProvider, UseImportsResolver $useImportsResolver, RenameClassCallbackHandler $renameClassCallbackHandler, FileHasher $fileHasher)
+    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, RenameClassCallbackHandler $renameClassCallbackHandler, FileHasher $fileHasher)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -122,8 +109,6 @@ final class ClassRenamer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->reflectionProvider = $reflectionProvider;
-        $this->nodeRemover = $nodeRemover;
-        $this->parameterProvider = $parameterProvider;
         $this->useImportsResolver = $useImportsResolver;
         $this->renameClassCallbackHandler = $renameClassCallbackHandler;
         $this->fileHasher = $fileHasher;
@@ -215,33 +200,7 @@ final class ClassRenamer
             // also they might cause some rename
             return null;
         }
-        $last = $name->getLast();
-        $newFullyQualified = new FullyQualified($newName);
-        $newNameLastName = $newFullyQualified->getLast();
-        $importNames = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
-        if ($this->shouldRemoveUseName($last, $newNameLastName, $importNames)) {
-            $this->removeUseName($name);
-        }
         return new FullyQualified($newName);
-    }
-    private function removeUseName(Name $oldName) : void
-    {
-        $uses = $this->betterNodeFinder->findFirstPrevious($oldName, function (Node $node) use($oldName) : bool {
-            return $node instanceof UseUse && $this->nodeNameResolver->areNamesEqual($node, $oldName);
-        });
-        if (!$uses instanceof UseUse) {
-            return;
-        }
-        if ($uses->alias instanceof Identifier) {
-            return;
-        }
-        // ios the only one? Remove whole use instead to avoid "use ;" constructions
-        $parentUse = $uses->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentUse instanceof Use_ && \count($parentUse->uses) === 1) {
-            $this->nodeRemover->removeNode($parentUse);
-        } else {
-            $this->nodeRemover->removeNode($uses);
-        }
     }
     /**
      * @param array<string, string> $oldToNewClasses
@@ -416,10 +375,6 @@ final class ClassRenamer
             }
         }
         return \true;
-    }
-    private function shouldRemoveUseName(string $last, string $newNameLastName, bool $importNames) : bool
-    {
-        return $last === $newNameLastName && $importNames;
     }
     /**
      * @param array<string, string> $oldToNewClasses
