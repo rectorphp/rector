@@ -5,15 +5,14 @@ namespace Rector\Symfony\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\StringType;
-use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -24,15 +23,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class CommandDescriptionToPropertyRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
-     */
-    private $exprAnalyzer;
-    public function __construct(ExprAnalyzer $exprAnalyzer)
-    {
-        $this->exprAnalyzer = $exprAnalyzer;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Symfony Command description setters are moved to properties', [new CodeSample(<<<'CODE_SAMPLE'
@@ -40,7 +30,6 @@ use Symfony\Component\Console\Command\Command
 
 final class SunshineCommand extends Command
 {
-    protected static $defaultName = 'sunshine';
     public function configure()
     {
         $this->setDescription('sunshine description');
@@ -52,8 +41,8 @@ use Symfony\Component\Console\Command\Command
 
 final class SunshineCommand extends Command
 {
-    protected static $defaultName = 'sunshine';
     protected static $defaultDescription = 'sunshine description';
+
     public function configure()
     {
     }
@@ -76,83 +65,93 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
             return null;
         }
+        // already set → skip
         $defaultNameProperty = $node->getProperty('defaultDescription');
         if ($defaultNameProperty instanceof Property) {
             return null;
         }
-        $commandDescription = $this->resolveCommandDescription($node);
-        if (!$commandDescription instanceof Expr) {
+        $commandDescriptionString = $this->resolveCommandDescriptionFromSetDescription($node);
+        if (!$commandDescriptionString instanceof String_) {
             return null;
         }
-        if ($this->exprAnalyzer->isDynamicExpr($commandDescription)) {
-            return null;
-        }
-        $defaultDescriptionProperty = $this->createStaticProtectedPropertyWithDefault('defaultDescription', $commandDescription);
+        $defaultDescriptionProperty = $this->createStaticProtectedPropertyWithDefault($commandDescriptionString);
         return $this->addDefaultDescriptionProperty($node, $defaultDescriptionProperty);
     }
-    private function resolveCommandDescription(Class_ $class) : ?Node
+    private function resolveCommandDescriptionFromSetDescription(Class_ $class) : ?String_
     {
-        return $this->resolveCommandDescriptionFromSetDescription($class);
-    }
-    private function resolveCommandDescriptionFromSetDescription(Class_ $class) : ?Node
-    {
-        $commandDescription = null;
         $classMethod = $class->getMethod('configure');
-        if (!$classMethod instanceof ClassMethod) {
+        if (!$classMethod instanceof ClassMethod || $classMethod->stmts === null) {
             return null;
         }
-        $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$commandDescription) {
-            if (!$node instanceof MethodCall) {
+        foreach ($classMethod->stmts as $key => $stmt) {
+            if (!$stmt instanceof Expression) {
+                continue;
+            }
+            if (!$stmt->expr instanceof MethodCall) {
+                continue;
+            }
+            $methodCall = $stmt->expr;
+            if ($methodCall->var instanceof Variable) {
+                return $this->resolveFromNonFluentMethodCall($methodCall, $classMethod, $key);
+            }
+            $string = null;
+            $this->traverseNodesWithCallable($stmt, function (Node $node) use(&$string) {
+                if ($node instanceof MethodCall && $this->isName($node->name, 'setDescription')) {
+                    $string = $this->matchFirstArgString($node);
+                    // remove nested call
+                    return $node->var;
+                }
                 return null;
-            }
-            if ($node->isFirstClassCallable()) {
-                return null;
-            }
-            if (!$this->isName($node->name, 'setDescription')) {
-                return null;
-            }
-            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\Console\\Command\\Command'))) {
-                return null;
-            }
-            /** @var Arg $arg */
-            $arg = $node->getArgs()[0];
-            if (!$this->getType($arg->value) instanceof StringType) {
-                return null;
-            }
-            $commandDescription = $arg->value;
-            // is chain call? → remove by variable nulling
-            if ($node->var instanceof MethodCall) {
-                return $node->var;
-            }
-            $this->removeNode($node);
-            return NodeTraverser::STOP_TRAVERSAL;
-        });
-        return $commandDescription;
+            });
+            return $string;
+        }
+        return null;
     }
-    private function createStaticProtectedPropertyWithDefault(string $name, Node $node) : Property
+    private function createStaticProtectedPropertyWithDefault(String_ $string) : Property
     {
-        $property = new \PhpParser\Builder\Property($name);
+        $property = new \PhpParser\Builder\Property('defaultDescription');
         $property->makeProtected();
         $property->makeStatic();
-        $property->setDefault($node);
+        $property->setDefault($string);
         return $property->getNode();
     }
     private function addDefaultDescriptionProperty(Class_ $class, Property $defaultDescriptionProperty) : Node
     {
         // When we have property defaultName insert defaultDescription after it.
-        if ($class->getProperty('defaultName') instanceof Property) {
-            foreach ($class->stmts as $key => $value) {
-                if (!$value instanceof Property) {
-                    continue;
-                }
-                if ($value->props[0]->name->name === 'defaultName') {
-                    \array_splice($class->stmts, ++$key, 0, [$defaultDescriptionProperty]);
-                    break;
-                }
+        foreach ($class->stmts as $key => $stmt) {
+            if (!$stmt instanceof Property) {
+                continue;
             }
-        } else {
-            $class->stmts = \array_merge([$defaultDescriptionProperty], $class->stmts);
+            if ($this->isName($stmt, 'defaultName')) {
+                \array_splice($class->stmts, ++$key, 0, [$defaultDescriptionProperty]);
+                return $class;
+            }
         }
+        $class->stmts = \array_merge([$defaultDescriptionProperty], $class->stmts);
         return $class;
+    }
+    private function matchFirstArgString(MethodCall $methodCall) : ?\PhpParser\Node\Scalar\String_
+    {
+        $arg = $methodCall->getArgs()[0] ?? null;
+        if (!$arg instanceof Arg) {
+            return null;
+        }
+        if (!$arg->value instanceof String_) {
+            return null;
+        }
+        return $arg->value;
+    }
+    private function resolveFromNonFluentMethodCall(MethodCall $methodCall, ClassMethod $classMethod, int $key) : ?String_
+    {
+        if (!$this->isName($methodCall->name, 'setDescription')) {
+            return null;
+        }
+        $string = $this->matchFirstArgString($methodCall);
+        if (!$string instanceof String_) {
+            return null;
+        }
+        // cleanup fluent call
+        unset($classMethod->stmts[$key]);
+        return $string;
     }
 }

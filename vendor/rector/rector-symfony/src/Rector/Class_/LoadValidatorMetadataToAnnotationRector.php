@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Symfony\NodeAnalyzer\Annotations\ClassAnnotationAssertResolver;
 use Rector\Symfony\NodeAnalyzer\Annotations\MethodCallAnnotationAssertResolver;
 use Rector\Symfony\NodeAnalyzer\Annotations\PropertyAnnotationAssertResolver;
@@ -90,29 +91,30 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $loadValidatorMetadataClassMethod = $node->getMethod('loadValidatorMetadata');
-        if (!$loadValidatorMetadataClassMethod instanceof ClassMethod) {
+        if (!$loadValidatorMetadataClassMethod instanceof ClassMethod || $loadValidatorMetadataClassMethod->stmts === null) {
             return null;
         }
-        foreach ((array) $loadValidatorMetadataClassMethod->stmts as $stmtKey => $classStmt) {
+        foreach ($loadValidatorMetadataClassMethod->stmts as $key => $methodStmt) {
             // 1. class
-            $doctrineAnnotationTagValueNode = $this->classAnnotationAssertResolver->resolve($classStmt);
+            $doctrineAnnotationTagValueNode = $this->classAnnotationAssertResolver->resolve($methodStmt);
             if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-                $this->refactorClassAnnotation($node, $doctrineAnnotationTagValueNode, $loadValidatorMetadataClassMethod, $stmtKey);
+                $this->refactorClassAnnotation($node, $doctrineAnnotationTagValueNode, $loadValidatorMetadataClassMethod, $key);
             }
             // 2. class methods
-            $classMethodAndAnnotation = $this->methodCallAnnotationAssertResolver->resolve($classStmt);
+            $classMethodAndAnnotation = $this->methodCallAnnotationAssertResolver->resolve($methodStmt);
             if ($classMethodAndAnnotation instanceof ClassMethodAndAnnotation) {
-                $this->refactorClassMethodAndAnnotation($node, $classMethodAndAnnotation, $loadValidatorMetadataClassMethod, $stmtKey);
+                $this->refactorClassMethodAndAnnotation($node, $classMethodAndAnnotation, $loadValidatorMetadataClassMethod, $key);
             }
             // 3. properties
-            $propertyAndAnnotation = $this->propertyAnnotationAssertResolver->resolve($classStmt);
+            $propertyAndAnnotation = $this->propertyAnnotationAssertResolver->resolve($methodStmt);
             if ($propertyAndAnnotation instanceof PropertyAndAnnotation) {
-                $this->refactorPropertyAndAnnotation($node, $propertyAndAnnotation, $loadValidatorMetadataClassMethod, $stmtKey);
+                $this->refactorPropertyAndAnnotation($node, $propertyAndAnnotation, $loadValidatorMetadataClassMethod, $key);
             }
         }
         // remove empty class method
-        if ((array) $loadValidatorMetadataClassMethod->stmts === []) {
-            $this->removeNode($loadValidatorMetadataClassMethod);
+        if ($loadValidatorMetadataClassMethod->stmts === []) {
+            $classMethodStmtKey = $loadValidatorMetadataClassMethod->getAttribute(AttributeKey::STMT_KEY);
+            unset($node->stmts[$classMethodStmtKey]);
         }
         return $node;
     }
