@@ -48,7 +48,7 @@ class HelloTest extends TestCase
      */
     private $propesizedObject;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->propesizedObject = $this->prophesize(SomeClass::class);
     }
@@ -62,7 +62,7 @@ class HelloTest extends TestCase
      */
     private $propesizedObject;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->propesizedObject = $this->prophesize(SomeClass::class);
     }

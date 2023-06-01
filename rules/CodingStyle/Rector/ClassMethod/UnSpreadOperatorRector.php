@@ -125,6 +125,9 @@ CODE_SAMPLE
     }
     private function refactorMethodCall(MethodCall $methodCall, Scope $scope) : ?MethodCall
     {
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromMethodCall($methodCall);
         if (!$methodReflection instanceof MethodReflection) {
             return null;

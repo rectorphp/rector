@@ -730,7 +730,7 @@ Add correct `@var` to ObjectProphecy instances based on `$this->prophesize()` ca
       */
      private $propesizedObject;
 
-     public function setUp(): void
+     protected function setUp(): void
      {
          $this->propesizedObject = $this->prophesize(SomeClass::class);
      }
