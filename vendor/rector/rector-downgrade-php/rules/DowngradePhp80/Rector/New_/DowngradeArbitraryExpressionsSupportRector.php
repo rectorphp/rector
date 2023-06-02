@@ -127,7 +127,6 @@ CODE_SAMPLE
             if ($isAllowed) {
                 continue;
             }
-            \RectorPrefix202306\print_node($newOrInstanceof->class);
             if ($this->isAssign($newOrInstanceof->class)) {
                 /** @var Assign|AssignRef|AssignOp $exprAssign */
                 $exprAssign = $newOrInstanceof->class;
