@@ -7,8 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast\Array_;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
@@ -16,6 +21,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
@@ -119,6 +125,19 @@ CODE_SAMPLE
         }
         return $stmtsAware;
     }
+    private function resolveVariableFromCallLikeScope(CallLike $callLike, ?Scope $scope) : Variable
+    {
+        /** @var MethodCall|FuncCall|StaticCall|New_|NullsafeMethodCall $callLike */
+        if ($callLike instanceof New_) {
+            $variableName = (string) $this->nodeNameResolver->getName($callLike->class);
+        } else {
+            $variableName = (string) $this->nodeNameResolver->getName($callLike->name);
+        }
+        if ($variableName === '') {
+            $variableName = 'array';
+        }
+        return new Variable($this->variableNaming->createCountedValueName($variableName, $scope));
+    }
     /**
      * @return Stmt[]|StmtsAwareInterface|null
      * @param \PhpParser\Node\Stmt\Expression|\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmt
@@ -132,6 +151,10 @@ CODE_SAMPLE
         $originalArray = $args[0]->value;
         $array = $this->resolveCastedArray($originalArray);
         $newStmts = [];
+        if ($originalArray instanceof CallLike) {
+            $scope = $originalArray->getAttribute(AttributeKey::SCOPE);
+            $array = $this->resolveVariableFromCallLikeScope($originalArray, $scope);
+        }
         if ($originalArray !== $array) {
             $newStmts[] = new Expression(new Assign($array, $originalArray));
         }
@@ -163,6 +186,10 @@ CODE_SAMPLE
         $originalArray = $firstArg->value;
         $array = $this->resolveCastedArray($originalArray);
         $newStmts = [];
+        if ($originalArray instanceof CallLike) {
+            $scope = $originalArray->getAttribute(AttributeKey::SCOPE);
+            $array = $this->resolveVariableFromCallLikeScope($originalArray, $scope);
+        }
         if ($originalArray !== $array) {
             $newStmts[] = new Expression(new Assign($array, $originalArray));
         }
