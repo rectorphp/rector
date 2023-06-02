@@ -5,11 +5,13 @@ namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
@@ -80,6 +82,9 @@ CODE_SAMPLE
             if (\is_string($variableName)) {
                 $emptyArrayVariables[] = $variableName;
             }
+            if ($this->isAppend($stmt, $emptyArrayVariables)) {
+                return null;
+            }
             if (!$stmt instanceof Foreach_) {
                 continue;
             }
@@ -95,6 +100,26 @@ CODE_SAMPLE
             return $node;
         }
         return null;
+    }
+    /**
+     * @param string[] $emptyArrayVariables
+     */
+    private function isAppend(Stmt $stmt, array $emptyArrayVariables) : bool
+    {
+        $isAppend = \false;
+        $this->traverseNodesWithCallable($stmt, function (Node $subNode) use($emptyArrayVariables, &$isAppend) : ?int {
+            if ($subNode instanceof Foreach_) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($subNode instanceof Assign && $subNode->var instanceof ArrayDimFetch) {
+                $isAppend = $this->isNames($subNode->var->var, $emptyArrayVariables);
+                if ($isAppend) {
+                    return NodeTraverser::STOP_TRAVERSAL;
+                }
+            }
+            return null;
+        });
+        return $isAppend;
     }
     /**
      * @param string[] $emptyArrayVariables
