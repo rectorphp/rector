@@ -22,8 +22,8 @@
         "symplify\/vendor-patches": "^11.1",
         "rector\/rector-generator": "^0.6",
         "symplify\/easy-ci": "^11.2",
-        "tomasvotruba\/unused-public": "^0.1.10",
-        "tomasvotruba\/type-coverage": "^0.2.0"
+        "tomasvotruba\/unused-public": "^0.1",
+        "tomasvotruba\/type-coverage": "^0.2"
     },
     "autoload": {
         "psr-4": {

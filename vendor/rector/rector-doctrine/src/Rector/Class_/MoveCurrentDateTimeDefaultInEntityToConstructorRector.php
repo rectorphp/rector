@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -123,7 +124,11 @@ CODE_SAMPLE
         if (!$typeArrayItemNode instanceof ArrayItemNode) {
             return;
         }
-        if ($typeArrayItemNode->value !== 'datetime') {
+        $typeValue = $typeArrayItemNode->value;
+        if ($typeValue instanceof StringNode) {
+            $typeValue = $typeValue->value;
+        }
+        if ($typeValue !== 'datetime') {
             return;
         }
         $node = $this->constructorAssignPropertyAnalyzer->resolveConstructorAssign($property);

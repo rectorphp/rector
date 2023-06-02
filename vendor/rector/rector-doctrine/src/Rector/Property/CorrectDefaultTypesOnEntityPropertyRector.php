@@ -13,6 +13,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\PropertyProperty;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -81,6 +82,9 @@ CODE_SAMPLE
             return null;
         }
         $typeValue = $typeArrayItemNode->value;
+        if ($typeValue instanceof StringNode) {
+            $typeValue = $typeValue->value;
+        }
         if (!\is_string($typeValue)) {
             return null;
         }

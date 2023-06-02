@@ -10,6 +10,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -101,12 +102,24 @@ final class JMSDITypeResolver
     private function resolveServiceName(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, Property $property) : string
     {
         $serviceNameParameter = $doctrineAnnotationTagValueNode->getValue('serviceName');
-        if ($serviceNameParameter instanceof ArrayItemNode && \is_string($serviceNameParameter->value)) {
-            return $serviceNameParameter->value;
+        if ($serviceNameParameter instanceof ArrayItemNode) {
+            $serviceNameParameterValue = $serviceNameParameter->value;
+            if ($serviceNameParameterValue instanceof StringNode) {
+                $serviceNameParameterValue = $serviceNameParameterValue->value;
+            }
+            if (\is_string($serviceNameParameterValue)) {
+                return $serviceNameParameterValue;
+            }
         }
         $arrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
-        if ($arrayItemNode instanceof ArrayItemNode && \is_string($arrayItemNode->value)) {
-            return $arrayItemNode->value;
+        if ($arrayItemNode instanceof ArrayItemNode) {
+            $arrayItemNodeValue = $arrayItemNode->value;
+            if ($arrayItemNodeValue instanceof StringNode) {
+                $arrayItemNodeValue = $arrayItemNodeValue->value;
+            }
+            if (\is_string($arrayItemNodeValue)) {
+                return $arrayItemNodeValue;
+            }
         }
         return $this->nodeNameResolver->getName($property);
     }

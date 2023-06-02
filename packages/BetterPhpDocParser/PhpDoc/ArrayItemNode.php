@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDoc;
 
-use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Stringable;

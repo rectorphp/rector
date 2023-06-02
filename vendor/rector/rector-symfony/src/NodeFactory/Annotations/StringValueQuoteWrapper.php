@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeFactory\Annotations;
 
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
 final class StringValueQuoteWrapper
@@ -17,13 +18,13 @@ final class StringValueQuoteWrapper
         $this->arrayParser = $arrayParser;
     }
     /**
-     * @return mixed|CurlyListNode|string
+     * @return mixed|CurlyListNode|StringNode
      * @param mixed $value
      */
     public function wrap($value, ?string $key)
     {
         if (\is_string($value)) {
-            return '"' . $value . '"';
+            return new StringNode($value);
         }
         if (\is_array($value)) {
             return $this->wrapArray($value, $key);
@@ -41,7 +42,7 @@ final class StringValueQuoteWrapper
                 if (\is_numeric($nestedValue)) {
                     continue;
                 }
-                $value[$nestedKey] = '"' . $nestedValue . '"';
+                $value[$nestedKey] = new StringNode($nestedValue);
             }
         }
         $arrayItemNodes = $this->arrayParser->createArrayFromValues($value);

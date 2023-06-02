@@ -15,6 +15,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
@@ -116,10 +117,14 @@ final class ColumnPropertyTypeResolver
         if (!$typeArrayItemNode instanceof ArrayItemNode) {
             return new MixedType();
         }
-        if (!\is_string($typeArrayItemNode->value)) {
+        $typeValue = $typeArrayItemNode->value;
+        if ($typeValue instanceof StringNode) {
+            $typeValue = $typeValue->value;
+        }
+        if (!\is_string($typeValue)) {
             return null;
         }
-        return $this->createPHPStanTypeFromDoctrineStringType($typeArrayItemNode->value, $isNullable);
+        return $this->createPHPStanTypeFromDoctrineStringType($typeValue, $isNullable);
     }
     private function createPHPStanTypeFromDoctrineStringType(string $type, bool $isNullable) : Type
     {
