@@ -5,6 +5,7 @@ namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node\Expr\ClassConstFetch;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\Core\PhpParser\Node\NodeFactory;
 final class AnnotationTargetResolver
 {
@@ -39,7 +40,10 @@ final class AnnotationTargetResolver
         $classConstFetches = [];
         foreach ($targetValues as $targetValue) {
             foreach (self::TARGET_TO_CONSTANT_MAP as $target => $constant) {
-                if ($target !== $targetValue->value) {
+                if (!$targetValue->value instanceof StringNode) {
+                    continue;
+                }
+                if ($target !== $targetValue->value->value) {
                     continue;
                 }
                 $classConstFetches[] = $this->nodeFactory->createClassConstFetch('Attribute', $constant);

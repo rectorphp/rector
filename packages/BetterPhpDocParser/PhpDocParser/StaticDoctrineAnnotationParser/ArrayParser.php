@@ -7,6 +7,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
 use PHPStan\PhpDocParser\Lexer\Lexer;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParserTest
@@ -143,25 +144,29 @@ final class ArrayParser
         return null;
     }
     /**
-     * @param mixed $key
-     * @param mixed $value
+     * @param mixed $rawKey
+     * @param mixed $rawValue
      */
-    private function createArrayItemFromKeyAndValue($key, $value) : ArrayItemNode
+    private function createArrayItemFromKeyAndValue($rawKey, $rawValue) : ArrayItemNode
     {
-        $valueQuoteKind = $this->resolveQuoteKind($value);
-        if (\is_string($value) && $valueQuoteKind === String_::KIND_DOUBLE_QUOTED) {
+        $valueQuoteKind = $this->resolveQuoteKind($rawValue);
+        if (\is_string($rawValue) && $valueQuoteKind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
-            $value = \trim($value, '"');
+            $value = new StringNode(\substr($rawValue, 1, \strlen($rawValue) - 2));
+        } else {
+            $value = $rawValue;
         }
-        $keyQuoteKind = $this->resolveQuoteKind($key);
-        if (\is_string($key) && $keyQuoteKind === String_::KIND_DOUBLE_QUOTED) {
+        $keyQuoteKind = $this->resolveQuoteKind($rawKey);
+        if (\is_string($rawKey) && $keyQuoteKind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
-            $key = \trim($key, '"');
+            $key = new StringNode(\substr($rawKey, 1, \strlen($rawKey) - 2));
+        } else {
+            $key = $rawKey;
         }
         if ($key !== null) {
-            return new ArrayItemNode($value, $key, $valueQuoteKind, $keyQuoteKind);
+            return new ArrayItemNode($value, $key);
         }
-        return new ArrayItemNode($value, null, $valueQuoteKind, $keyQuoteKind);
+        return new ArrayItemNode($value);
     }
     /**
      * @param mixed $value

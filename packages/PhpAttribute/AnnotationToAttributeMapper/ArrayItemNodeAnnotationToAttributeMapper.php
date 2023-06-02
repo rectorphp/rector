@@ -9,6 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\Core\Validation\RectorAssert;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
@@ -49,19 +50,8 @@ final class ArrayItemNodeAnnotationToAttributeMapper implements AnnotationToAttr
             return new ArrayItem(new String_($valueExpr), null);
         }
         if ($arrayItemNode->key !== null) {
-            switch ($arrayItemNode->kindKeyQuoted) {
-                case String_::KIND_SINGLE_QUOTED:
-                    $keyValue = "'" . $arrayItemNode->key . "'";
-                    break;
-                case String_::KIND_DOUBLE_QUOTED:
-                    $keyValue = '"' . $arrayItemNode->key . '"';
-                    break;
-                default:
-                    $keyValue = $arrayItemNode->key;
-                    break;
-            }
             /** @var Expr $keyExpr */
-            $keyExpr = $this->annotationToAttributeMapper->map($keyValue);
+            $keyExpr = $this->annotationToAttributeMapper->map($arrayItemNode->key);
         } else {
             if ($this->hasNoParenthesesAnnotation($arrayItemNode)) {
                 try {
@@ -79,7 +69,7 @@ final class ArrayItemNodeAnnotationToAttributeMapper implements AnnotationToAttr
     }
     private function hasNoParenthesesAnnotation(ArrayItemNode $arrayItemNode) : bool
     {
-        if (\is_int($arrayItemNode->kindValueQuoted)) {
+        if ($arrayItemNode->value instanceof StringNode) {
             return \false;
         }
         if (!\is_string($arrayItemNode->value)) {

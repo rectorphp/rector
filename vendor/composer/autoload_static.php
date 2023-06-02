@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd75f49d13210b47c08efbef08539e2b9
+class ComposerStaticInitcf48d20d0276ea83626472d23bf244a0
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1413,6 +1413,7 @@ class ComposerStaticInitd75f49d13210b47c08efbef08539e2b9
         'Rector\\BetterPhpDocParser\\PhpDoc\\ArrayItemNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDoc/ArrayItemNode.php',
         'Rector\\BetterPhpDocParser\\PhpDoc\\DoctrineAnnotationTagValueNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDoc/DoctrineAnnotationTagValueNode.php',
         'Rector\\BetterPhpDocParser\\PhpDoc\\SpacelessPhpDocTagNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDoc/SpacelessPhpDocTagNode.php',
+        'Rector\\BetterPhpDocParser\\PhpDoc\\StringNode' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/PhpDoc/StringNode.php',
         'Rector\\BetterPhpDocParser\\Printer\\DocBlockInliner' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/DocBlockInliner.php',
         'Rector\\BetterPhpDocParser\\Printer\\EmptyPhpDocDetector' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/EmptyPhpDocDetector.php',
         'Rector\\BetterPhpDocParser\\Printer\\PhpDocInfoPrinter' => __DIR__ . '/../..' . '/packages/BetterPhpDocParser/Printer/PhpDocInfoPrinter.php',
@@ -2548,6 +2549,7 @@ class ComposerStaticInitd75f49d13210b47c08efbef08539e2b9
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\CurlyListNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/CurlyListNodeAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\DoctrineAnnotationAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/DoctrineAnnotationAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\StringAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/StringAnnotationToAttributeMapper.php',
+        'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\StringNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/StringNodeAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AttributeArrayNameInliner' => __DIR__ . '/../..' . '/packages/PhpAttribute/AttributeArrayNameInliner.php',
         'Rector\\PhpAttribute\\Contract\\AnnotationToAttributeMapperInterface' => __DIR__ . '/../..' . '/packages/PhpAttribute/Contract/AnnotationToAttributeMapperInterface.php',
         'Rector\\PhpAttribute\\Enum\\DocTagNodeState' => __DIR__ . '/../..' . '/packages/PhpAttribute/Enum/DocTagNodeState.php',
@@ -3066,9 +3068,9 @@ class ComposerStaticInitd75f49d13210b47c08efbef08539e2b9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd75f49d13210b47c08efbef08539e2b9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd75f49d13210b47c08efbef08539e2b9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd75f49d13210b47c08efbef08539e2b9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcf48d20d0276ea83626472d23bf244a0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcf48d20d0276ea83626472d23bf244a0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcf48d20d0276ea83626472d23bf244a0::$classMap;
 
         }, null, ClassLoader::class);
     }
