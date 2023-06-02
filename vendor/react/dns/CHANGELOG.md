@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.11.0 (2023-06-02)
+
+*   Feature: Include timeout logic to avoid dependency on reactphp/promise-timer.
+    (#213 by @clue)
+
+*   Improve test suite and project setup and report failed assertions.
+    (#210 by @clue, #212 by @WyriHaximus and #209 and #211 by @SimonFrings)
+
 ## 1.10.0 (2022-09-08)
 
 *   Feature: Full support for PHP 8.2 release.

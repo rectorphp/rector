@@ -1307,36 +1307,36 @@
         },
         {
             "name": "react\/dns",
-            "version": "v1.10.0",
-            "version_normalized": "1.10.0.0",
+            "version": "v1.11.0",
+            "version_normalized": "1.11.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/dns.git",
-                "reference": "a5427e7dfa47713e438016905605819d101f238c"
+                "reference": "3be0fc8f1eb37d6875cd6f0c6c7d0be81435de9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/dns\/zipball\/a5427e7dfa47713e438016905605819d101f238c",
-                "reference": "a5427e7dfa47713e438016905605819d101f238c",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/dns\/zipball\/3be0fc8f1eb37d6875cd6f0c6c7d0be81435de9f",
+                "reference": "3be0fc8f1eb37d6875cd6f0c6c7d0be81435de9f",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
                 "react\/cache": "^1.0 || ^0.6 || ^0.5",
                 "react\/event-loop": "^1.2",
-                "react\/promise": "^3.0 || ^2.7 || ^1.2.1",
-                "react\/promise-timer": "^1.9"
+                "react\/promise": "^3.0 || ^2.7 || ^1.2.1"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.3 || ^4.8.35",
-                "react\/async": "^4 || ^3 || ^2"
+                "phpunit\/phpunit": "^9.5 || ^4.8.35",
+                "react\/async": "^4 || ^3 || ^2",
+                "react\/promise-timer": "^1.9"
             },
-            "time": "2022-09-08T12:22:46+00:00",
+            "time": "2023-06-02T12:45:26+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202306\\React\\Dns\\": "src"
+                    "RectorPrefix202306\\React\\Dns\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1374,16 +1374,12 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/dns\/issues",
-                "source": "https:\/\/github.com\/reactphp\/dns\/tree\/v1.10.0"
+                "source": "https:\/\/github.com\/reactphp\/dns\/tree\/v1.11.0"
             },
             "funding": [
                 {
-                    "url": "https:\/\/github.com\/WyriHaximus",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/clue",
-                    "type": "github"
+                    "url": "https:\/\/opencollective.com\/reactphp",
+                    "type": "open_collective"
                 }
             ],
             "install-path": "..\/react\/dns"
