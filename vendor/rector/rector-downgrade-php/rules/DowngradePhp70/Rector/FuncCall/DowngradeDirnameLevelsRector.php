@@ -55,7 +55,8 @@ CODE_SAMPLE
     }
     private function getLevelsRealValue(FuncCall $funcCall) : ?int
     {
-        $levelsArg = $funcCall->getArgs()[1] ?? null;
+        $args = $funcCall->getArgs();
+        $levelsArg = $args[1] ?? null;
         if (!$levelsArg instanceof Arg) {
             return null;
         }

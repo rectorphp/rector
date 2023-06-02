@@ -125,10 +125,11 @@ CODE_SAMPLE
      */
     private function refactorArrayKeyFirst(FuncCall $funcCall, $stmt, bool $isPartOfCond)
     {
-        if (!isset($funcCall->getArgs()[0])) {
+        $args = $funcCall->getArgs();
+        if (!isset($args[0])) {
             return null;
         }
-        $originalArray = $funcCall->getArgs()[0]->value;
+        $originalArray = $args[0]->value;
         $array = $this->resolveCastedArray($originalArray);
         $newStmts = [];
         if ($originalArray !== $array) {
@@ -138,7 +139,7 @@ CODE_SAMPLE
         $resetFuncCallExpression = new Expression($resetFuncCall);
         $funcCall->name = new Name('key');
         if ($originalArray !== $array) {
-            $firstArg = $funcCall->getArgs()[0];
+            $firstArg = $args[0];
             $firstArg->value = $array;
         }
         if ($stmt instanceof StmtsAwareInterface && $isPartOfCond === \false) {
@@ -154,7 +155,8 @@ CODE_SAMPLE
      */
     private function refactorArrayKeyLast(FuncCall $funcCall, $stmt, bool $isPartOfCond)
     {
-        $firstArg = $funcCall->getArgs()[0] ?? null;
+        $args = $funcCall->getArgs();
+        $firstArg = $args[0] ?? null;
         if (!$firstArg instanceof Arg) {
             return null;
         }

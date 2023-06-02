@@ -66,10 +66,14 @@ CODE_SAMPLE
         if (!$this->isNames($funcCall, ['setcookie', 'setrawcookie'])) {
             return \true;
         }
-        if (\count($funcCall->getArgs()) < 3) {
+        if ($funcCall->isFirstClassCallable()) {
             return \true;
         }
-        $thirdArg = $funcCall->getArgs()[2];
+        $args = $funcCall->getArgs();
+        if (\count($args) < 3) {
+            return \true;
+        }
+        $thirdArg = $args[2];
         return !$thirdArg->value instanceof Array_;
     }
     /**
@@ -78,13 +82,14 @@ CODE_SAMPLE
     private function composeNewArgs(FuncCall $funcCall) : array
     {
         $this->highestIndex = 1;
-        if (\count($funcCall->getArgs()) < 3) {
+        $args = $funcCall->getArgs();
+        if (\count($args) < 3) {
             return [];
         }
-        $firstArg = $funcCall->getArgs()[0];
-        $secondArg = $funcCall->getArgs()[1];
+        $firstArg = $args[0];
+        $secondArg = $args[1];
         $newArgs = [$firstArg, $secondArg];
-        $thirdArg = $funcCall->getArgs()[2];
+        $thirdArg = $args[2];
         /** @var Array_ $optionsArray */
         $optionsArray = $thirdArg->value;
         foreach ($optionsArray->items as $arrayItem) {

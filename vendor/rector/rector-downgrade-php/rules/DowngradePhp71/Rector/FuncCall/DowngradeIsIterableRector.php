@@ -55,10 +55,11 @@ CODE_SAMPLE
         if (!$this->isName($node, 'is_iterable')) {
             return null;
         }
-        if (!isset($node->getArgs()[0])) {
+        $args = $node->getArgs();
+        if (!isset($args[0])) {
             return null;
         }
-        $expr = $node->getArgs()[0]->value;
+        $expr = $args[0]->value;
         $funcCall = $this->nodeFactory->createFuncCall('is_array', [$expr]);
         $instanceof = new Instanceof_($expr, new FullyQualified('Traversable'));
         return new BooleanOr($funcCall, $instanceof);

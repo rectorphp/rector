@@ -46,9 +46,10 @@ final class FunctionExistsFunCallAnalyzer
         }
         /** @var FuncCall $functionExists */
         $functionExists = $firstParentIf->cond;
-        if (!isset($functionExists->getArgs()[0])) {
+        $args = $functionExists->getArgs();
+        if (!isset($args[0])) {
             return \false;
         }
-        return $this->valueResolver->isValue($functionExists->getArgs()[0]->value, $functionName);
+        return $this->valueResolver->isValue($args[0]->value, $functionName);
     }
 }

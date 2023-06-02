@@ -86,7 +86,8 @@ CODE_SAMPLE
         if (!$this->isNotDirectlyCallableInPhp5($node->name)) {
             return null;
         }
-        $args = \array_merge([new Arg($node->name)], $node->getArgs());
+        $args = $node->getArgs();
+        $args = \array_merge([new Arg($node->name)], $args);
         return new FuncCall(new Name('call_user_func'), $args);
     }
     private function isNotDirectlyCallableInPhp5(Expr $expr) : bool

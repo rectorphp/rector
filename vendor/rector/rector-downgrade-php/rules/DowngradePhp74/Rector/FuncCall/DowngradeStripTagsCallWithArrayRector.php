@@ -99,7 +99,8 @@ CODE_SAMPLE
         if ($this->shouldSkipFuncCall($node)) {
             return null;
         }
-        $secondArg = $node->getArgs()[1];
+        $args = $node->getArgs();
+        $secondArg = $args[1];
         $allowableTagsParam = $secondArg->value;
         if ($allowableTagsParam instanceof Array_) {
             // If it is an array, convert it to string
@@ -131,11 +132,12 @@ CODE_SAMPLE
         if (\count($funcCall->args) < 2) {
             return \true;
         }
-        if (!isset($funcCall->getArgs()[1])) {
+        $args = $funcCall->getArgs();
+        if (!isset($args[1])) {
             return \true;
         }
         // Process anything other than String and null (eg: variables, function calls)
-        $allowableTagsParam = $funcCall->getArgs()[1]->value;
+        $allowableTagsParam = $args[1]->value;
         // Skip for string
         if ($allowableTagsParam instanceof String_) {
             return \true;

@@ -78,10 +78,11 @@ final class ObjectToResourceReturn
                 if (!$this->nodeNameResolver->isName($subNode->name, 'is_resource')) {
                     return \false;
                 }
-                if (!isset($subNode->getArgs()[0])) {
+                $args = $subNode->getArgs();
+                if (!isset($args[0])) {
                     return \false;
                 }
-                return $this->nodeComparator->areNodesEqual($subNode->getArgs()[0], $expr);
+                return $this->nodeComparator->areNodesEqual($args[0], $expr);
             });
         }
         return \false;

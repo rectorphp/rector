@@ -119,7 +119,8 @@ CODE_SAMPLE
         $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
         $assign = new Assign($variable, $function);
         $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
-        return new FuncCall($variable, $node->getArgs());
+        $args = $node->getArgs();
+        return new FuncCall($variable, $args);
     }
     private function createClosure() : Closure
     {

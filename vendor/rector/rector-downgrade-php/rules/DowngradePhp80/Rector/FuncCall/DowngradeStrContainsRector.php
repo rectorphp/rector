@@ -57,11 +57,12 @@ CODE_SAMPLE
         if (!$funcCall instanceof FuncCall) {
             return null;
         }
-        if (\count($funcCall->getArgs()) < 2) {
+        $args = $funcCall->getArgs();
+        if (\count($args) < 2) {
             return null;
         }
-        $haystack = $funcCall->getArgs()[0]->value;
-        $needle = $funcCall->getArgs()[1]->value;
+        $haystack = $args[0]->value;
+        $needle = $args[1]->value;
         $funcCall = $this->nodeFactory->createFuncCall('strpos', [$haystack, $needle]);
         if ($node instanceof BooleanNot) {
             return new Identical($funcCall, $this->nodeFactory->createFalse());
