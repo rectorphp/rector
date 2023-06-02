@@ -54,6 +54,9 @@ CODE_SAMPLE
         if (!$this->isName($node, 'dirname')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (\count($node->args) !== 1) {
             return null;
         }

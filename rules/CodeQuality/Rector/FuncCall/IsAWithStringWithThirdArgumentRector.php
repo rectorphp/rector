@@ -51,6 +51,9 @@ CODE_SAMPLE
         if (!$this->isName($node, 'is_a')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (isset($node->getArgs()[2])) {
             return null;
         }

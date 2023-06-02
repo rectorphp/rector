@@ -84,6 +84,9 @@ CODE_SAMPLE
         if ($classReflection instanceof ClassReflection && $classReflection->getName() !== 'PHPUnit\\Framework\\TestCase') {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         // narrow args to one
         if (\count($node->args) > 1) {
             $node->args = [$node->getArgs()[0]];

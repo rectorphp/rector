@@ -142,6 +142,9 @@ CODE_SAMPLE
      */
     private function resolveCount(bool $isNegated, FuncCall $funcCall)
     {
+        if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
         $countedType = $this->getType($funcCall->getArgs()[0]->value);
         if ($countedType->isArray()->yes()) {
             return null;

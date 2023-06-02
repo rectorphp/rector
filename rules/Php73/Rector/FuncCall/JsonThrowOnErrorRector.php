@@ -66,6 +66,9 @@ CODE_SAMPLE
         if (!$this->isNames($funcCall, ['json_encode', 'json_decode'])) {
             return \true;
         }
+        if ($funcCall->isFirstClassCallable()) {
+            return \true;
+        }
         if ($funcCall->args === null) {
             return \true;
         }

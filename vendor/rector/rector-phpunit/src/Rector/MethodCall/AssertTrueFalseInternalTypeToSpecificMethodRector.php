@@ -62,6 +62,9 @@ final class AssertTrueFalseInternalTypeToSpecificMethodRector extends AbstractRe
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethods)) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArgumentValue = $node->getArgs()[0]->value;
         if (!$firstArgumentValue instanceof FuncCall) {
             return null;

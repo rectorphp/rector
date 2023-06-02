@@ -56,6 +56,9 @@ final class AssertFalseStrposToContainsRector extends AbstractRector
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethodName)) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArgumentValue = $node->getArgs()[0]->value;
         if ($firstArgumentValue instanceof StaticCall) {
             return null;

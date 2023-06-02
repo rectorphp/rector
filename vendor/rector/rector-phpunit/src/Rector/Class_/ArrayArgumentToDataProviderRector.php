@@ -155,6 +155,9 @@ CODE_SAMPLE
         if (!$this->isMethodCallMatch($methodCall, $arrayArgumentToDataProvider)) {
             return;
         }
+        if ($methodCall->isFirstClassCallable()) {
+            return;
+        }
         if (\count($methodCall->getArgs()) !== 1) {
             throw new ShouldNotHappenException();
         }

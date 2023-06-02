@@ -32,6 +32,9 @@ final class SimplifyFuncGetArgsCountRector extends AbstractRector
         if (!$this->isName($node, 'count')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArg = $node->getArgs()[0];
         if (!$firstArg->value instanceof FuncCall) {
             return null;

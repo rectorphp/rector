@@ -81,6 +81,9 @@ final class EregToPregMatchRector extends AbstractRector implements MinPhpVersio
         if (!isset(self::OLD_NAMES_TO_NEW_ONES[$functionName])) {
             return \true;
         }
+        if ($funcCall->isFirstClassCallable()) {
+            return \true;
+        }
         return !isset($funcCall->getArgs()[0]);
     }
     private function processStringPattern(FuncCall $funcCall, String_ $string, string $functionName) : void

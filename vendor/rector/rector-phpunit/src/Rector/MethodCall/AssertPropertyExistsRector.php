@@ -70,6 +70,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArgumentValue = $node->getArgs()[0]->value;
         if (!$firstArgumentValue instanceof FuncCall) {
             return null;

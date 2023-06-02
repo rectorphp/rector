@@ -86,6 +86,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertEquals', 'assertNotEquals'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         // 1. refactor to "assertEqualsIgnoringCase()"
         $newMethodCall = $this->processAssertEqualsIgnoringCase($node);
         if ($newMethodCall !== null) {

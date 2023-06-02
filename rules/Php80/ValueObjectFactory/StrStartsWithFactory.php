@@ -9,6 +9,9 @@ final class StrStartsWithFactory
 {
     public function createFromFuncCall(FuncCall $funcCall, bool $isPositive) : ?StrStartsWith
     {
+        if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
         if (\count($funcCall->getArgs()) < 2) {
             return null;
         }

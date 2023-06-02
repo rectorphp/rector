@@ -56,6 +56,9 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $hasChanged = \false;
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         foreach ($this->removeMethodCallParams as $removeMethodCallParam) {
             if (!$this->isName($node->name, $removeMethodCallParam->getMethodName())) {
                 continue;

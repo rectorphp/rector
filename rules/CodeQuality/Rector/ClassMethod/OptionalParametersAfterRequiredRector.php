@@ -114,6 +114,9 @@ CODE_SAMPLE
         if ($new->args === []) {
             return null;
         }
+        if ($new->isFirstClassCallable()) {
+            return null;
+        }
         $methodReflection = $this->reflectionResolver->resolveMethodReflectionFromNew($new);
         if (!$methodReflection instanceof MethodReflection) {
             return null;
@@ -131,6 +134,9 @@ CODE_SAMPLE
      */
     private function refactorMethodCall($methodCall, Scope $scope)
     {
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
         $methodReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($methodCall);
         if (!$methodReflection instanceof MethodReflection) {
             return null;

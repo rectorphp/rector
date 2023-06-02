@@ -12,6 +12,9 @@ final class ArgumentMover
      */
     public function removeFirst($node) : void
     {
+        if ($node->isFirstClassCallable()) {
+            return;
+        }
         $methodArguments = $node->getArgs();
         \array_shift($methodArguments);
         $node->args = $methodArguments;

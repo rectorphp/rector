@@ -153,6 +153,9 @@ CODE_SAMPLE
         if (!$this->isName($expr, 'count')) {
             return null;
         }
+        if ($expr->isFirstClassCallable()) {
+            return null;
+        }
         $firstArg = $expr->getArgs()[0];
         return $firstArg->value;
     }

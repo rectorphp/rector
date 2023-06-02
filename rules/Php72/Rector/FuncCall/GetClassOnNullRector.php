@@ -80,6 +80,9 @@ CODE_SAMPLE
             if (!$this->isName($node, 'get_class')) {
                 return null;
             }
+            if ($node->isFirstClassCallable()) {
+                return null;
+            }
             $firstArg = $node->getArgs()[0] ?? null;
             if (!$firstArg instanceof Arg) {
                 return null;

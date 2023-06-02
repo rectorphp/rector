@@ -29,6 +29,9 @@ final class ExpectExceptionFactory
         if (!$this->testsNodeAnalyzer->isInPHPUnitMethodCallName($methodCall, 'assertInstanceOf')) {
             return null;
         }
+        if ($methodCall->isFirstClassCallable()) {
+            return null;
+        }
         $argumentVariableName = $this->nodeNameResolver->getName($methodCall->getArgs()[1]->value);
         if ($argumentVariableName === null) {
             return null;

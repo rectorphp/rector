@@ -33,6 +33,9 @@ final class SimplifyStrposLowerRector extends AbstractRector
         if (!$this->isName($node, 'strpos')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (!isset($node->getArgs()[0])) {
             return null;
         }

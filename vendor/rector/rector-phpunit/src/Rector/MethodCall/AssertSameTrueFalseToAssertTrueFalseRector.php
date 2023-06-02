@@ -74,6 +74,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertSame', 'assertEqual', 'assertNotSame', 'assertNotEqual'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArg = $node->getArgs()[0];
         if ($this->valueResolver->isTrue($firstArg->value)) {
             $this->argumentMover->removeFirst($node);

@@ -58,6 +58,9 @@ final class AssertInstanceOfComparisonRector extends AbstractRector
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, $oldMethodNames)) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArgumentValue = $node->getArgs()[0]->value;
         if (!$firstArgumentValue instanceof Instanceof_) {
             return null;

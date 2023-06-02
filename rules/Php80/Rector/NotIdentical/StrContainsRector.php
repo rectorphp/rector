@@ -72,6 +72,9 @@ CODE_SAMPLE
         if (!$funcCall instanceof FuncCall) {
             return null;
         }
+        if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
         if (isset($funcCall->getArgs()[2])) {
             $secondArg = $funcCall->getArgs()[2];
             if ($this->isName($funcCall->name, 'strpos') && $this->isPositiveInteger($secondArg->value)) {

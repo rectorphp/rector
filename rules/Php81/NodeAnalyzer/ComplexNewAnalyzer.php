@@ -32,6 +32,9 @@ final class ComplexNewAnalyzer
         if (!$new->class instanceof FullyQualified) {
             return \true;
         }
+        if ($new->isFirstClassCallable()) {
+            return \false;
+        }
         $args = $new->getArgs();
         foreach ($args as $arg) {
             $value = $arg->value;

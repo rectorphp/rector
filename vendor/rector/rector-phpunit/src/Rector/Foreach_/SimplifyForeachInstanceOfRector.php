@@ -55,6 +55,9 @@ CODE_SAMPLE
         if (!$this->isName($expr->name, 'assertInstanceOf')) {
             return null;
         }
+        if ($expr->isFirstClassCallable()) {
+            return null;
+        }
         if (!$this->nodeComparator->areNodesEqual($node->valueVar, $expr->getArgs()[1]->value)) {
             return null;
         }

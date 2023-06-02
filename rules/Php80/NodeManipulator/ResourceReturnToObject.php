@@ -195,6 +195,9 @@ final class ResourceReturnToObject
         if (!$this->nodeNameResolver->isName($funcCall, 'is_resource')) {
             return \true;
         }
+        if ($funcCall->isFirstClassCallable()) {
+            return \true;
+        }
         if (!isset($funcCall->getArgs()[0])) {
             return \true;
         }

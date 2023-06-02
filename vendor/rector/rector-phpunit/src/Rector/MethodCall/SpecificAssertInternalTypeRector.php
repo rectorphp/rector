@@ -73,6 +73,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertInternalType', 'assertNotInternalType'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $typeNode = $node->getArgs()[0]->value;
         if (!$typeNode instanceof String_) {
             return null;

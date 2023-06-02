@@ -62,6 +62,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (!$this->isName($node, 'call_user_func')) {
             return null;
         }

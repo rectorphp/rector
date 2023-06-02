@@ -55,6 +55,9 @@ CODE_SAMPLE
         if (!$this->isName($node, 'mysql_pconnect')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (!isset($node->getArgs()[0])) {
             return null;
         }

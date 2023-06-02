@@ -72,6 +72,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertContains', 'assertNotContains'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         // when second argument is string: do nothing
         $secondArgType = $this->getType($node->getArgs()[1]->value);
         if ($secondArgType instanceof StringType) {

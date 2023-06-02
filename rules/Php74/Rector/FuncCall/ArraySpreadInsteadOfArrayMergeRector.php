@@ -176,6 +176,9 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($expr, 'iterator_to_array')) {
             return \false;
         }
+        if ($expr->isFirstClassCallable()) {
+            return \false;
+        }
         return isset($expr->getArgs()[0]);
     }
 }

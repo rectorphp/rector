@@ -81,6 +81,9 @@ CODE_SAMPLE
         if (!$this->isName($funcCall, 'money_format')) {
             return null;
         }
+        if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
         $args = $funcCall->getArgs();
         if ($this->argsAnalyzer->hasNamedArg($args)) {
             return null;

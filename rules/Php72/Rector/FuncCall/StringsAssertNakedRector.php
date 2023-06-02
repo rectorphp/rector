@@ -67,6 +67,9 @@ CODE_SAMPLE
         if (!$this->isName($node, 'assert')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArg = $node->getArgs()[0];
         $firstArgValue = $firstArg->value;
         if (!$firstArgValue instanceof String_) {

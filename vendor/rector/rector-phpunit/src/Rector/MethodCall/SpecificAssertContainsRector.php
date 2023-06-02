@@ -73,6 +73,9 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertContains', 'assertNotContains'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (!$this->isPossiblyStringType($node->getArgs()[1]->value)) {
             return null;
         }

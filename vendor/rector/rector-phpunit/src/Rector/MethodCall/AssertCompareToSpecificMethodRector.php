@@ -60,6 +60,9 @@ final class AssertCompareToSpecificMethodRector extends AbstractRector
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertSame', 'assertNotSame', 'assertEquals', 'assertNotEquals'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         // we need 2 args
         if (!isset($node->args[1])) {
             return null;

@@ -53,6 +53,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, ['assertTrue', 'assertFalse', 'assertNotTrue', 'assertNotFalse'])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (!isset($node->args[0])) {
             return null;
         }

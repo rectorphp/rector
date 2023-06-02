@@ -82,6 +82,9 @@ CODE_SAMPLE
         }
         /** @var FuncCall $eachFuncCall */
         $eachFuncCall = $assignNode->expr;
+        if ($eachFuncCall->isFirstClassCallable()) {
+            return null;
+        }
         /** @var List_ $listNode */
         $listNode = $assignNode->var;
         if (!isset($eachFuncCall->getArgs()[0])) {

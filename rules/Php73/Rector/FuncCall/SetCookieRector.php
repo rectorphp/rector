@@ -72,6 +72,9 @@ CODE_SAMPLE
         if (!$this->isNames($funcCall, ['setcookie', 'setrawcookie'])) {
             return \true;
         }
+        if ($funcCall->isFirstClassCallable()) {
+            return \true;
+        }
         $argsCount = \count($funcCall->args);
         if ($argsCount <= 2) {
             return \true;

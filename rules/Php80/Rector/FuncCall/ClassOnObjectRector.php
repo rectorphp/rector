@@ -56,6 +56,9 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($node, 'get_class')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (!isset($node->getArgs()[0])) {
             return new ClassConstFetch(new Name('self'), 'class');
         }

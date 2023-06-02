@@ -123,6 +123,9 @@ CODE_SAMPLE
         if (!$this->isName($expr->name, 'prophesize')) {
             return null;
         }
+        if ($expr->isFirstClassCallable()) {
+            return null;
+        }
         return $expr->getArgs()[0];
     }
     /**

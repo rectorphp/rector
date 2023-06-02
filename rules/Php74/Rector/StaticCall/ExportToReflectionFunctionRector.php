@@ -60,6 +60,9 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'export')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArg = $node->getArgs()[0] ?? null;
         if (!$firstArg instanceof Arg) {
             return null;

@@ -126,12 +126,18 @@ CODE_SAMPLE
     }
     private function resolveKeyFuncCall(Stmt $nextStmt, FuncCall $resetOrEndFuncCall) : ?FuncCall
     {
+        if ($resetOrEndFuncCall->isFirstClassCallable()) {
+            return null;
+        }
         /** @var FuncCall|null */
         return $this->betterNodeFinder->findFirst($nextStmt, function (Node $subNode) use($resetOrEndFuncCall) : bool {
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
             if (!$this->isName($subNode, 'key')) {
+                return \false;
+            }
+            if ($subNode->isFirstClassCallable()) {
                 return \false;
             }
             return $this->nodeComparator->areNodesEqual($resetOrEndFuncCall->getArgs()[0], $subNode->getArgs()[0]);

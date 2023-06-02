@@ -57,6 +57,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         foreach ($this->methodCallsToFuncCalls as $methodCallToFuncCall) {
             if (!$this->isName($node->name, $methodCallToFuncCall->getMethodName())) {
                 continue;

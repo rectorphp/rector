@@ -74,6 +74,9 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'expects')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (\count($node->args) !== 1) {
             return null;
         }

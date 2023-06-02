@@ -62,9 +62,9 @@ CODE_SAMPLE
         if (!\in_array($methodName, self::VAL_FUNCTION_NAMES, \true)) {
             return null;
         }
-        //        if (! isset($node->getArgs[0])) {
-        //            return null;
-        //        }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArg = $node->getArgs()[0];
         $double = new Double($firstArg->value);
         $double->setAttribute(AttributeKey::KIND, Double::KIND_FLOAT);

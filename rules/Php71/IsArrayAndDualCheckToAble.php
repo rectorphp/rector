@@ -56,6 +56,9 @@ final class IsArrayAndDualCheckToAble
         if (!$this->nodeNameResolver->isName($funcCallExpr, 'is_array')) {
             return null;
         }
+        if ($funcCallExpr->isFirstClassCallable()) {
+            return null;
+        }
         if (!isset($funcCallExpr->getArgs()[0])) {
             return null;
         }

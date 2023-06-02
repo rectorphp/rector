@@ -81,6 +81,9 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, [self::ASSERT_TRUE, self::ASSERT_FALSE])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $firstArgumentValue = $node->getArgs()[0]->value;
         // is property access
         if (!$firstArgumentValue instanceof Isset_) {

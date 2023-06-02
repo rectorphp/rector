@@ -76,6 +76,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         foreach (self::FUNCTION_RENAME_MAP as $oldFunction => $newFunction) {
             if (!$this->isName($node, $oldFunction)) {
                 continue;

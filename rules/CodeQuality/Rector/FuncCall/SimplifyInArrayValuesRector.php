@@ -33,6 +33,9 @@ final class SimplifyInArrayValuesRector extends AbstractRector
         if (!$this->isName($node, 'in_array')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         if (!isset($node->args[1])) {
             return null;
         }

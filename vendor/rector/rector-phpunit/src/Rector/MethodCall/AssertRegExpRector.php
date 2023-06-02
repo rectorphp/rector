@@ -65,6 +65,9 @@ final class AssertRegExpRector extends AbstractRector
         if (!$this->testsNodeAnalyzer->isPHPUnitMethodCallNames($node, [self::ASSERT_SAME, self::ASSERT_EQUALS, self::ASSERT_NOT_SAME, self::ASSERT_NOT_EQUALS])) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         /** @var FuncCall|Node $secondArgumentValue */
         $secondArgumentValue = $node->getArgs()[1]->value;
         if (!$secondArgumentValue instanceof FuncCall) {

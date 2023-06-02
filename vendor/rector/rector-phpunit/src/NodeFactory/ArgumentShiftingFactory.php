@@ -9,6 +9,9 @@ final class ArgumentShiftingFactory
 {
     public function removeAllButFirstArgMethodCall(MethodCall $methodCall, string $methodName) : void
     {
+        if ($methodCall->isFirstClassCallable()) {
+            return;
+        }
         $methodCall->name = new Identifier($methodName);
         foreach (\array_keys($methodCall->getArgs()) as $i) {
             // keep first arg

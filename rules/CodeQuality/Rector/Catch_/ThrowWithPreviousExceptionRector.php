@@ -113,6 +113,9 @@ CODE_SAMPLE
         if ($exceptionArgumentPosition === null) {
             return null;
         }
+        if ($new->isFirstClassCallable()) {
+            return null;
+        }
         // exception is bundled
         if (isset($new->getArgs()[$exceptionArgumentPosition])) {
             return null;

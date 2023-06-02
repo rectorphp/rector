@@ -79,6 +79,9 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     private function isStrlenWithNeedleExpr(StrStartsWith $strStartsWith) : bool
     {
         $substrFuncCall = $strStartsWith->getFuncCall();
+        if ($substrFuncCall->isFirstClassCallable()) {
+            return \false;
+        }
         $firstArg = $substrFuncCall->getArgs()[1];
         if (!$this->valueResolver->isValue($firstArg->value, 0)) {
             return \false;
@@ -98,15 +101,15 @@ final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterf
     private function isHardcodedStringWithLNumberLength(StrStartsWith $strStartsWith) : bool
     {
         $substrFuncCall = $strStartsWith->getFuncCall();
+        if ($substrFuncCall->isFirstClassCallable()) {
+            return \false;
+        }
         $secondArg = $substrFuncCall->getArgs()[1];
         if (!$this->valueResolver->isValue($secondArg->value, 0)) {
             return \false;
         }
         $hardcodedStringNeedle = $strStartsWith->getNeedleExpr();
         if (!$hardcodedStringNeedle instanceof String_) {
-            return \false;
-        }
-        if ($substrFuncCall->isFirstClassCallable()) {
             return \false;
         }
         if (\count($substrFuncCall->getArgs()) < 3) {

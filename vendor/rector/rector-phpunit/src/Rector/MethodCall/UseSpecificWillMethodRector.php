@@ -77,6 +77,9 @@ CODE_SAMPLE
         if (!$this->isName($node->name, 'will')) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $callArgs = $node->getArgs();
         if (!$callArgs[0]->value instanceof MethodCall) {
             return null;
