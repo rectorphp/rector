@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc1d060a906be2f5bc0826fa39b85b245
+class ComposerStaticInitd84de2cf53039de1be8691008b648fd4
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1707,7 +1707,6 @@ class ComposerStaticInitc1d060a906be2f5bc0826fa39b85b245
         'Rector\\Core\\NodeAnalyzer\\DoctrineEntityAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/DoctrineEntityAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\EnumAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/EnumAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ExprAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ExprAnalyzer.php',
-        'Rector\\Core\\NodeAnalyzer\\InlineHTMLAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/InlineHTMLAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ParamAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ParamAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\PromotedPropertyParamCleaner' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PromotedPropertyParamCleaner.php',
         'Rector\\Core\\NodeAnalyzer\\PropertyAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PropertyAnalyzer.php',
@@ -3067,9 +3066,9 @@ class ComposerStaticInitc1d060a906be2f5bc0826fa39b85b245
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc1d060a906be2f5bc0826fa39b85b245::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc1d060a906be2f5bc0826fa39b85b245::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc1d060a906be2f5bc0826fa39b85b245::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd84de2cf53039de1be8691008b648fd4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd84de2cf53039de1be8691008b648fd4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd84de2cf53039de1be8691008b648fd4::$classMap;
 
         }, null, ClassLoader::class);
     }

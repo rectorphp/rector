@@ -1465,7 +1465,6 @@ return array(
     'Rector\\Core\\NodeAnalyzer\\DoctrineEntityAnalyzer' => $baseDir . '/src/NodeAnalyzer/DoctrineEntityAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\EnumAnalyzer' => $baseDir . '/src/NodeAnalyzer/EnumAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ExprAnalyzer' => $baseDir . '/src/NodeAnalyzer/ExprAnalyzer.php',
-    'Rector\\Core\\NodeAnalyzer\\InlineHTMLAnalyzer' => $baseDir . '/src/NodeAnalyzer/InlineHTMLAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\ParamAnalyzer' => $baseDir . '/src/NodeAnalyzer/ParamAnalyzer.php',
     'Rector\\Core\\NodeAnalyzer\\PromotedPropertyParamCleaner' => $baseDir . '/src/NodeAnalyzer/PromotedPropertyParamCleaner.php',
     'Rector\\Core\\NodeAnalyzer\\PropertyAnalyzer' => $baseDir . '/src/NodeAnalyzer/PropertyAnalyzer.php',

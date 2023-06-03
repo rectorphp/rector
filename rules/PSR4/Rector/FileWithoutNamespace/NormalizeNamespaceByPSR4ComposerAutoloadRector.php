@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Analyser\Scope;
-use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
@@ -32,16 +31,10 @@ final class NormalizeNamespaceByPSR4ComposerAutoloadRector extends AbstractScope
      * @var \Rector\PSR4\NodeManipulator\FullyQualifyStmtsAnalyzer
      */
     private $fullyQualifyStmtsAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer
-     */
-    private $inlineHTMLAnalyzer;
-    public function __construct(PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher, FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer, InlineHTMLAnalyzer $inlineHTMLAnalyzer)
+    public function __construct(PSR4AutoloadNamespaceMatcherInterface $psr4AutoloadNamespaceMatcher, FullyQualifyStmtsAnalyzer $fullyQualifyStmtsAnalyzer)
     {
         $this->psr4AutoloadNamespaceMatcher = $psr4AutoloadNamespaceMatcher;
         $this->fullyQualifyStmtsAnalyzer = $fullyQualifyStmtsAnalyzer;
-        $this->inlineHTMLAnalyzer = $inlineHTMLAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -86,9 +79,6 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope)
     {
-        if ($this->inlineHTMLAnalyzer->hasInlineHTML($node)) {
-            return null;
-        }
         $expectedNamespace = $this->psr4AutoloadNamespaceMatcher->getExpectedNamespace($this->file, $node);
         if ($expectedNamespace === null) {
             return null;

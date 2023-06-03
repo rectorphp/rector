@@ -107,6 +107,10 @@ final class PhpFileProcessor implements FileProcessorInterface
             $systemErrorsAndFileDiffs[Bridge::SYSTEM_ERRORS] = $parsingSystemErrors;
             return $systemErrorsAndFileDiffs;
         }
+        // skip HTML nodes, as unexpected
+        if ($file->hasInlineHTMLNode()) {
+            return $systemErrorsAndFileDiffs;
+        }
         $fileHasChanged = \false;
         // 2. change nodes with Rectors
         $rectorWithLineChanges = null;

@@ -72,7 +72,7 @@ if (!$stack) {
 			try {
 				$r = isset($row['class']) ? new \ReflectionMethod($row['class'], $row['function']) : new \ReflectionFunction($row['function']);
 				$params = $r->getParameters();
-			} catch (\Exception $exception) {
+			} catch (\Exception) {
 				$params = [];
 			}
 			foreach ($row['args'] as $k => $v) {

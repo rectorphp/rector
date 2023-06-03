@@ -13,7 +13,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Function_;
-use Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php56\NodeAnalyzer\UndefinedVariableResolver;
@@ -33,15 +32,9 @@ final class AddDefaultValueForUndefinedVariableRector extends AbstractRector imp
      * @var \Rector\Php56\NodeAnalyzer\UndefinedVariableResolver
      */
     private $undefinedVariableResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\InlineHTMLAnalyzer
-     */
-    private $inlineHTMLAnalyzer;
-    public function __construct(UndefinedVariableResolver $undefinedVariableResolver, InlineHTMLAnalyzer $inlineHTMLAnalyzer)
+    public function __construct(UndefinedVariableResolver $undefinedVariableResolver)
     {
         $this->undefinedVariableResolver = $undefinedVariableResolver;
-        $this->inlineHTMLAnalyzer = $inlineHTMLAnalyzer;
     }
     public function provideMinPhpVersion() : int
     {
@@ -88,9 +81,6 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->inlineHTMLAnalyzer->hasInlineHTML($node)) {
-            return null;
-        }
         if ($node->stmts === null) {
             return null;
         }
