@@ -42,8 +42,6 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpDocParser\PhpParser\SmartPhpParser;
 use Rector\PhpDocParser\PhpParser\SmartPhpParserFactory;
-use Rector\PSR4\Composer\PSR4NamespaceMatcher;
-use Rector\PSR4\Contract\PSR4AutoloadNamespaceMatcherInterface;
 use Rector\Utils\Command\MissingInSetCommand;
 use Rector\Utils\Command\OutsideAnySetCommand;
 use RectorPrefix202306\Symfony\Component\Console\Application;
@@ -87,8 +85,6 @@ return static function (RectorConfig $rectorConfig) : void {
         __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/RectorBetterReflectionSourceLocatorFactory.php',
         __DIR__ . '/../packages/NodeTypeResolver/Reflection/BetterReflection/SourceLocatorProvider/DynamicSourceLocatorProvider.php',
     ]);
-    // psr-4
-    $services->alias(PSR4AutoloadNamespaceMatcherInterface::class, PSR4NamespaceMatcher::class);
     $services->load('Rector\\', __DIR__ . '/../rules')->exclude([__DIR__ . '/../rules/*/ValueObject/*', __DIR__ . '/../rules/*/Rector/*', __DIR__ . '/../rules/*/Contract/*', __DIR__ . '/../rules/*/Exception/*', __DIR__ . '/../rules/*/Enum/*']);
     $services->set(Filesystem::class);
     // use faster in-memory cache in CI.

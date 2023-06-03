@@ -1,4 +1,4 @@
-# 391 Rules Overview
+# 390 Rules Overview
 
 <br>
 
@@ -22,7 +22,7 @@
 
 - [Naming](#naming) (6)
 
-- [PSR4](#psr4) (2)
+- [PSR4](#psr4) (1)
 
 - [Php52](#php52) (2)
 
@@ -4104,38 +4104,6 @@ Change multiple classes in one file to standalone PSR-4 classes.
 +use Exception;
 
  final class SecondException extends Exception
- {
- }
-```
-
-<br>
-
-### NormalizeNamespaceByPSR4ComposerAutoloadRector
-
-Adds namespace to namespace-less files or correct namespace to match PSR-4 in `composer.json` autoload section. Run with combination with "Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector"
-
-- class: [`Rector\PSR4\Rector\FileWithoutNamespace\NormalizeNamespaceByPSR4ComposerAutoloadRector`](../rules/PSR4/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php)
-
-- with `composer.json`:
-
-```json
-{
-    "autoload": {
-        "psr-4": {
-            "App\\CustomNamespace\\": "src"
-        }
-    }
-}
-```
-
-↓
-
-```diff
- // src/SomeClass.php
-
-+namespace App\CustomNamespace;
-+
- class SomeClass
  {
  }
 ```

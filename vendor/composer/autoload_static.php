@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd84de2cf53039de1be8691008b648fd4
+class ComposerStaticInit14084fdb3a7d29db8393e29bc7ca4896
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2357,13 +2357,8 @@ class ComposerStaticInitd84de2cf53039de1be8691008b648fd4
         'Rector\\PHPUnit\\ValueObject\\DataProviderClassMethodRecipe' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/DataProviderClassMethodRecipe.php',
         'Rector\\PHPUnit\\ValueObject\\FunctionNameWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/FunctionNameWithAssertMethods.php',
         'Rector\\PHPUnit\\ValueObject\\ParamAndArg' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ParamAndArg.php',
-        'Rector\\PSR4\\Composer\\PSR4AutoloadPathsProvider' => __DIR__ . '/../..' . '/rules/PSR4/Composer/PSR4AutoloadPathsProvider.php',
-        'Rector\\PSR4\\Composer\\PSR4NamespaceMatcher' => __DIR__ . '/../..' . '/rules/PSR4/Composer/PSR4NamespaceMatcher.php',
-        'Rector\\PSR4\\Contract\\PSR4AutoloadNamespaceMatcherInterface' => __DIR__ . '/../..' . '/rules/PSR4/Contract/PSR4AutoloadNamespaceMatcherInterface.php',
         'Rector\\PSR4\\FileInfoAnalyzer\\FileInfoDeletionAnalyzer' => __DIR__ . '/../..' . '/rules/PSR4/FileInfoAnalyzer/FileInfoDeletionAnalyzer.php',
-        'Rector\\PSR4\\NodeManipulator\\FullyQualifyStmtsAnalyzer' => __DIR__ . '/../..' . '/rules/PSR4/NodeManipulator/FullyQualifyStmtsAnalyzer.php',
         'Rector\\PSR4\\NodeManipulator\\NamespaceManipulator' => __DIR__ . '/../..' . '/rules/PSR4/NodeManipulator/NamespaceManipulator.php',
-        'Rector\\PSR4\\Rector\\FileWithoutNamespace\\NormalizeNamespaceByPSR4ComposerAutoloadRector' => __DIR__ . '/../..' . '/rules/PSR4/Rector/FileWithoutNamespace/NormalizeNamespaceByPSR4ComposerAutoloadRector.php',
         'Rector\\PSR4\\Rector\\Namespace_\\MultipleClassFileToPsr4ClassesRector' => __DIR__ . '/../..' . '/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php',
         'Rector\\Parallel\\Application\\ParallelFileProcessor' => __DIR__ . '/../..' . '/packages/Parallel/Application/ParallelFileProcessor.php',
         'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => __DIR__ . '/../..' . '/packages/Parallel/Command/WorkerCommandLineFactory.php',
@@ -3066,9 +3061,9 @@ class ComposerStaticInitd84de2cf53039de1be8691008b648fd4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd84de2cf53039de1be8691008b648fd4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd84de2cf53039de1be8691008b648fd4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd84de2cf53039de1be8691008b648fd4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit14084fdb3a7d29db8393e29bc7ca4896::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit14084fdb3a7d29db8393e29bc7ca4896::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit14084fdb3a7d29db8393e29bc7ca4896::$classMap;
 
         }, null, ClassLoader::class);
     }
