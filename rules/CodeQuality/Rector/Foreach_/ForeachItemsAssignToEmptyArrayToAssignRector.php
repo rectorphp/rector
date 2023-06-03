@@ -82,10 +82,10 @@ CODE_SAMPLE
             if (\is_string($variableName)) {
                 $emptyArrayVariables[] = $variableName;
             }
-            if ($this->isAppend($stmt, $emptyArrayVariables)) {
-                return null;
-            }
             if (!$stmt instanceof Foreach_) {
+                if ($this->isAppend($stmt, $emptyArrayVariables)) {
+                    return null;
+                }
                 continue;
             }
             if ($this->shouldSkip($stmt, $emptyArrayVariables)) {
@@ -108,9 +108,6 @@ CODE_SAMPLE
     {
         $isAppend = \false;
         $this->traverseNodesWithCallable($stmt, function (Node $subNode) use($emptyArrayVariables, &$isAppend) : ?int {
-            if ($subNode instanceof Foreach_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
             if ($subNode instanceof Assign && $subNode->var instanceof ArrayDimFetch) {
                 $isAppend = $this->isNames($subNode->var->var, $emptyArrayVariables);
                 if ($isAppend) {
