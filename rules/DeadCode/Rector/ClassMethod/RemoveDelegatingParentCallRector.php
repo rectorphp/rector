@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
@@ -70,45 +69,51 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if ($this->shouldSkipClass($classLike)) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
-        $onlyStmt = $this->matchClassMethodOnlyStmt($node);
-        if ($onlyStmt === null) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof ClassMethod) {
+                continue;
+            }
+            $onlyStmt = $this->matchClassMethodOnlyStmt($stmt);
+            if ($onlyStmt === null) {
+                continue;
+            }
+            // are both return?
+            if ($this->isMethodReturnType($stmt, 'void') && !$onlyStmt instanceof Return_) {
+                continue;
+            }
+            $staticCall = $this->matchStaticCall($onlyStmt);
+            if (!$staticCall instanceof StaticCall) {
+                continue;
+            }
+            if (!$this->currentAndParentClassMethodComparator->isParentCallMatching($stmt, $staticCall, $scope)) {
+                continue;
+            }
+            if ($this->shouldSkipWithAnnotationsOrAttributes($stmt)) {
+                continue;
+            }
+            // the method is just delegation, nothing extra → remove it
+            unset($node->stmts[$key]);
+            $hasChanged = \true;
         }
-        // are both return?
-        if ($this->isMethodReturnType($node, 'void') && !$onlyStmt instanceof Return_) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        $staticCall = $this->matchStaticCall($onlyStmt);
-        if (!$staticCall instanceof StaticCall) {
-            return null;
-        }
-        if (!$this->currentAndParentClassMethodComparator->isParentCallMatching($node, $staticCall, $scope)) {
-            return null;
-        }
-        if ($this->shouldSkipWithAnnotationsOrAttributes($node)) {
-            return null;
-        }
-        // the method is just delegation, nothing extra
-        $this->removeNode($node);
         return null;
     }
-    private function shouldSkipClass(?ClassLike $classLike) : bool
+    private function shouldSkipClass(Class_ $class) : bool
     {
-        if (!$classLike instanceof Class_) {
-            return \true;
-        }
-        return !$classLike->extends instanceof Name;
+        return !$class->extends instanceof Name;
     }
     private function isMethodReturnType(ClassMethod $classMethod, string $type) : bool
     {
