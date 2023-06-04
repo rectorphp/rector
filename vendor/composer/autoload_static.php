@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcd0163760a7033769508443e609964ae
+class ComposerStaticInit960df4dc54c2f3ff405a23f52f0c2f45
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1457,7 +1457,6 @@ class ComposerStaticInitcd0163760a7033769508443e609964ae
         'Rector\\ChangesReporting\\ValueObject\\RectorWithLineChange' => __DIR__ . '/../..' . '/packages/ChangesReporting/ValueObject/RectorWithLineChange.php',
         'Rector\\CodeQuality\\CompactConverter' => __DIR__ . '/../..' . '/rules/CodeQuality/CompactConverter.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ClassLikeAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ClassLikeAnalyzer.php',
-        'Rector\\CodeQuality\\NodeAnalyzer\\ConstructorPropertyDefaultExprResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ConstructorPropertyDefaultExprResolver.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\ForeachAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/ForeachAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\LocalPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/LocalPropertyAnalyzer.php',
         'Rector\\CodeQuality\\NodeAnalyzer\\VariableDimFetchAssignResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/NodeAnalyzer/VariableDimFetchAssignResolver.php',
@@ -1543,7 +1542,6 @@ class ComposerStaticInitcd0163760a7033769508443e609964ae
         'Rector\\CodeQuality\\Rector\\Ternary\\UnnecessaryTernaryExpressionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Ternary/UnnecessaryTernaryExpressionRector.php',
         'Rector\\CodeQuality\\TypeResolver\\ArrayDimFetchTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/ArrayDimFetchTypeResolver.php',
         'Rector\\CodeQuality\\TypeResolver\\AssignVariableTypeResolver' => __DIR__ . '/../..' . '/rules/CodeQuality/TypeResolver/AssignVariableTypeResolver.php',
-        'Rector\\CodeQuality\\ValueObject\\DefaultPropertyExprAssign' => __DIR__ . '/../..' . '/rules/CodeQuality/ValueObject/DefaultPropertyExprAssign.php',
         'Rector\\CodeQuality\\ValueObject\\KeyAndExpr' => __DIR__ . '/../..' . '/rules/CodeQuality/ValueObject/KeyAndExpr.php',
         'Rector\\CodingStyle\\Application\\UseImportsAdder' => __DIR__ . '/../..' . '/rules/CodingStyle/Application/UseImportsAdder.php',
         'Rector\\CodingStyle\\Application\\UseImportsRemover' => __DIR__ . '/../..' . '/rules/CodingStyle/Application/UseImportsRemover.php',
@@ -3062,9 +3060,9 @@ class ComposerStaticInitcd0163760a7033769508443e609964ae
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcd0163760a7033769508443e609964ae::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcd0163760a7033769508443e609964ae::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcd0163760a7033769508443e609964ae::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit960df4dc54c2f3ff405a23f52f0c2f45::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit960df4dc54c2f3ff405a23f52f0c2f45::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit960df4dc54c2f3ff405a23f52f0c2f45::$classMap;
 
         }, null, ClassLoader::class);
     }
