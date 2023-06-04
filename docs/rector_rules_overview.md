@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (74)
+- [CodeQuality](#codequality) (73)
 
 - [CodingStyle](#codingstyle) (34)
 
@@ -1069,34 +1069,6 @@ Move required parameters after optional ones
 -    public function run($optional = 1, $required)
 +    public function run($required, $optional = 1)
      {
-     }
- }
-```
-
-<br>
-
-### RemoveAlwaysTrueConditionSetInConstructorRector
-
-If conditions is always true, perform the content right away
-
-- class: [`Rector\CodeQuality\Rector\FunctionLike\RemoveAlwaysTrueConditionSetInConstructorRector`](../rules/CodeQuality/Rector/FunctionLike/RemoveAlwaysTrueConditionSetInConstructorRector.php)
-
-```diff
- final class SomeClass
- {
-     private $value;
-
-     public function __construct(stdClass $value)
-     {
-         $this->value = $value;
-     }
-
-     public function go()
-     {
--        if ($this->value) {
--            return 'yes';
--        }
-+        return 'yes';
      }
  }
 ```

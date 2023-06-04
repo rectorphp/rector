@@ -1267,7 +1267,6 @@ return array(
     'Rector\\CodeQuality\\Rector\\FuncCall\\SingleInArrayToCompareRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/SingleInArrayToCompareRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\StrvalToTypeCastRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/StrvalToTypeCastRector.php',
     'Rector\\CodeQuality\\Rector\\FuncCall\\UnwrapSprintfOneArgumentRector' => $baseDir . '/rules/CodeQuality/Rector/FuncCall/UnwrapSprintfOneArgumentRector.php',
-    'Rector\\CodeQuality\\Rector\\FunctionLike\\RemoveAlwaysTrueConditionSetInConstructorRector' => $baseDir . '/rules/CodeQuality/Rector/FunctionLike/RemoveAlwaysTrueConditionSetInConstructorRector.php',
     'Rector\\CodeQuality\\Rector\\FunctionLike\\SimplifyUselessVariableRector' => $baseDir . '/rules/CodeQuality/Rector/FunctionLike/SimplifyUselessVariableRector.php',
     'Rector\\CodeQuality\\Rector\\Identical\\BooleanNotIdenticalToNotIdenticalRector' => $baseDir . '/rules/CodeQuality/Rector/Identical/BooleanNotIdenticalToNotIdenticalRector.php',
     'Rector\\CodeQuality\\Rector\\Identical\\FlipTypeControlToUseExclusiveTypeRector' => $baseDir . '/rules/CodeQuality/Rector/Identical/FlipTypeControlToUseExclusiveTypeRector.php',
