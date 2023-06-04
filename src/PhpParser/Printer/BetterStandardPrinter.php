@@ -109,8 +109,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
         if (\count($newStmts) !== \count($origStmts) && !StringUtils::isMatch($content, self::NEWLINE_END_REGEX)) {
             $content .= $this->nl;
         }
-        $content = $this->cleanSurplusTag($content);
-        return $this->cleanEndWithPHPOpenTag($content);
+        return $content;
     }
     /**
      * @param \PhpParser\Node|mixed[]|null $node
@@ -410,28 +409,6 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     protected function pParam(Param $param) : string
     {
         return $this->pAttrGroups($param->attrGroups) . $this->pModifiers($param->flags) . ($param->type instanceof Node ? $this->p($param->type) . ' ' : '') . ($param->byRef ? '&' : '') . ($param->variadic ? '...' : '') . $this->p($param->var) . ($param->default instanceof Expr ? ' = ' . $this->p($param->default) : '');
-    }
-    private function cleanEndWithPHPOpenTag(string $content) : string
-    {
-        if (\substr_compare($content, "<?php \n", -\strlen("<?php \n")) === 0) {
-            return \substr($content, 0, -7);
-        }
-        if (\substr_compare($content, '<?php ', -\strlen('<?php ')) === 0) {
-            return \substr($content, 0, -6);
-        }
-        return $content;
-    }
-    private function cleanSurplusTag(string $content) : string
-    {
-        $content = \str_replace('<?php', '<?php', $content);
-        $content = \str_replace('?>', '?>', $content);
-        if (\strncmp($content, "?>\n", \strlen("?>\n")) === 0) {
-            return \substr($content, 3);
-        }
-        if (\strncmp($content, "<?php\n\n?>", \strlen("<?php\n\n?>")) === 0) {
-            return \substr($content, 10);
-        }
-        return $content;
     }
     /**
      * @param \PhpParser\Node\Scalar\LNumber|\PhpParser\Node\Scalar\DNumber $lNumber
