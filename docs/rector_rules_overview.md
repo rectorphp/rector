@@ -1,4 +1,4 @@
-# 390 Rules Overview
+# 389 Rules Overview
 
 <br>
 
@@ -9,8 +9,6 @@
 - [CodeQuality](#codequality) (74)
 
 - [CodingStyle](#codingstyle) (34)
-
-- [Compatibility](#compatibility) (1)
 
 - [DeadCode](#deadcode) (46)
 
@@ -2497,39 +2495,6 @@ Wrap encapsed variables in curly braces
  {
 -    echo "Hello $world!";
 +    echo "Hello {$world}!";
- }
-```
-
-<br>
-
-## Compatibility
-
-### AttributeCompatibleAnnotationRector
-
-Change annotation to attribute compatible form, see https://tomasvotruba.com/blog/doctrine-annotations-and-attributes-living-together-in-peace/
-
-- class: [`Rector\Compatibility\Rector\Class_\AttributeCompatibleAnnotationRector`](../rules/Compatibility/Rector/Class_/AttributeCompatibleAnnotationRector.php)
-
-```diff
--use Doctrine\Common\Annotations\Annotation\Required;
-+use Doctrine\Common\Annotations\Annotation\NamedArgumentConstructor;
-
- /**
-  * @annotation
-+ * @NamedArgumentConstructor
-  */
- class SomeAnnotation
- {
-     /**
--     * @var string[]
--     * @Required()
-+     * @param string[] $enum
-      */
--    public array $enum;
-+    public function __construct(
-+        public array $enum
-+    ) {
-+    }
  }
 ```
 

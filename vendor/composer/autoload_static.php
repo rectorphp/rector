@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit82ed4196913b5b07441c4b4a2e9a4b7c
+class ComposerStaticInit66e33d12c7cef6d358659906bd886349
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1604,10 +1604,6 @@ class ComposerStaticInit82ed4196913b5b07441c4b4a2e9a4b7c
         'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => __DIR__ . '/../..' . '/packages/Comments/NodeDocBlock/DocBlockUpdater.php',
         'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => __DIR__ . '/../..' . '/packages/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
         'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => __DIR__ . '/../..' . '/packages/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
-        'Rector\\Compatibility\\NodeAnalyzer\\RequiredAnnotationPropertyAnalyzer' => __DIR__ . '/../..' . '/rules/Compatibility/NodeAnalyzer/RequiredAnnotationPropertyAnalyzer.php',
-        'Rector\\Compatibility\\NodeFactory\\ConstructorClassMethodFactory' => __DIR__ . '/../..' . '/rules/Compatibility/NodeFactory/ConstructorClassMethodFactory.php',
-        'Rector\\Compatibility\\Rector\\Class_\\AttributeCompatibleAnnotationRector' => __DIR__ . '/../..' . '/rules/Compatibility/Rector/Class_/AttributeCompatibleAnnotationRector.php',
-        'Rector\\Compatibility\\ValueObject\\PropertyWithPhpDocInfo' => __DIR__ . '/../..' . '/rules/Compatibility/ValueObject/PropertyWithPhpDocInfo.php',
         'Rector\\Config\\RectorConfig' => __DIR__ . '/../..' . '/packages/Config/RectorConfig.php',
         'Rector\\Core\\Application\\ApplicationFileProcessor' => __DIR__ . '/../..' . '/src/Application/ApplicationFileProcessor.php',
         'Rector\\Core\\Application\\ChangedNodeScopeRefresher' => __DIR__ . '/../..' . '/src/Application/ChangedNodeScopeRefresher.php',
@@ -3060,9 +3056,9 @@ class ComposerStaticInit82ed4196913b5b07441c4b4a2e9a4b7c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit82ed4196913b5b07441c4b4a2e9a4b7c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit82ed4196913b5b07441c4b4a2e9a4b7c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit82ed4196913b5b07441c4b4a2e9a4b7c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit66e33d12c7cef6d358659906bd886349::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit66e33d12c7cef6d358659906bd886349::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit66e33d12c7cef6d358659906bd886349::$classMap;
 
         }, null, ClassLoader::class);
     }

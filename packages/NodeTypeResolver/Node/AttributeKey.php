@@ -55,16 +55,6 @@ final class AttributeKey
      */
     public const ORIGINAL_NAME = 'originalName';
     /**
-     * @api
-     * @deprecated Use $node->namespacedName instead
-     *
-     * Internal php-parser name. @see \PhpParser\NodeVisitor\NameResolver
-     * Do not change this even if you want!
-     *
-     * @var string
-     */
-    public const RESOLVED_NAME = 'resolvedName';
-    /**
      * @deprecated Refactor to a custom visitors/parent node instead,
      * @see https://phpstan.org/blog/preprocessing-ast-for-custom-rules
      *
@@ -73,24 +63,6 @@ final class AttributeKey
      * @var string
      */
     public const PARENT_NODE = 'parent';
-    /**
-     * @api
-     * @internal of php-parser, do not change
-     * @deprecated Use StmtsAwareInterface instead
-     *
-     * @see https://github.com/nikic/PHP-Parser/pull/681/files
-     * @var string
-     */
-    public const PREVIOUS_NODE = 'previous';
-    /**
-     * @api
-     * @internal of php-parser, do not change
-     * @deprecated Use StmtsAwareInterface instead
-     *
-     * @see https://github.com/nikic/PHP-Parser/pull/681/files
-     * @var string
-     */
-    public const NEXT_NODE = 'next';
     /**
      * Internal php-parser name.
      * Do not change this even if you want!
