@@ -15,7 +15,7 @@ final class RectorKernel
     /**
      * @var string
      */
-    private const CACHE_KEY = 'v53';
+    private const CACHE_KEY = 'v54';
     /**
      * @var \Symfony\Component\DependencyInjection\ContainerInterface|null
      */
