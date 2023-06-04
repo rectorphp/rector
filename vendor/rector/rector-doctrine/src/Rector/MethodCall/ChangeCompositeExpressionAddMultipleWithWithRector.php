@@ -65,6 +65,9 @@ CODE_SAMPLE
         if (!$this->nodeTypeResolver->isObjectType($node->var, new ObjectType('Doctrine\\DBAL\\Query\\Expression\\CompositeExpression'))) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         $node->name = new Identifier('with');
         $firstArg = $node->getArgs()[0];
         $firstArg->value = new ArrayItem($firstArg->value, null, \false, [], \true);

@@ -78,6 +78,9 @@ CODE_SAMPLE
         if (!$this->isNames($node->name, self::ENTITY_REPOSITORY_PUBLIC_METHODS)) {
             return null;
         }
+        if ($node->isFirstClassCallable()) {
+            return null;
+        }
         // is it getRepository(), replace it with DI property
         if ($node->var instanceof MethodCall && $this->isName($node->var->name, 'getRepository')) {
             return $this->refactorGetRepositoryMethodCall($node);
