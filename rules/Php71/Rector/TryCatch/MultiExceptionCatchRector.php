@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\Php71\Rector\TryCatch;
 
 use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Rector\AbstractRector;
@@ -64,55 +62,28 @@ CODE_SAMPLE
         if (\count($node->catches) < 2) {
             return null;
         }
-        $catchKeysByContent = $this->collectCatchKeysByContent($node);
-        $hasRemovedCatch = \false;
-        /** @var Catch_[] $catchKeys */
-        foreach ($catchKeysByContent as $catchKeys) {
-            // no duplicates
-            $count = \count($catchKeys);
-            if ($count < 2) {
+        $printedCatches = [];
+        $hasChanged = \false;
+        foreach ($node->catches as $key => $catch) {
+            $currentPrintedCatch = $this->nodePrinter->print($catch->stmts);
+            // already duplicated catch → remove it and join the type
+            if (\in_array($currentPrintedCatch, $printedCatches, \true)) {
+                // merge type to existing type
+                $existingCatchKey = \array_search($currentPrintedCatch, $printedCatches, \true);
+                $node->catches[$existingCatchKey]->types[] = $catch->types[0];
+                unset($node->catches[$key]);
+                $hasChanged = \true;
                 continue;
             }
-            $collectedTypes = $this->collectTypesFromCatchedByIds($catchKeys);
-            /** @var Catch_ $firstCatch */
-            $firstCatch = \array_shift($catchKeys);
-            $firstCatch->types = $collectedTypes;
-            foreach ($catchKeys as $catchKey) {
-                $this->removeNode($catchKey);
-                $hasRemovedCatch = \true;
-            }
+            $printedCatches[$key] = $currentPrintedCatch;
         }
-        if (!$hasRemovedCatch) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        return $node;
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::MULTI_EXCEPTION_CATCH;
-    }
-    /**
-     * @return array<string, Catch_[]>
-     */
-    private function collectCatchKeysByContent(TryCatch $tryCatch) : array
-    {
-        $catchKeysByContent = [];
-        foreach ($tryCatch->catches as $catch) {
-            $catchContent = $this->nodePrinter->print($catch->stmts);
-            $catchKeysByContent[$catchContent][] = $catch;
-        }
-        return $catchKeysByContent;
-    }
-    /**
-     * @param Catch_[] $catches
-     * @return Name[]
-     */
-    private function collectTypesFromCatchedByIds(array $catches) : array
-    {
-        $collectedTypes = [];
-        foreach ($catches as $catch) {
-            $collectedTypes = \array_merge($collectedTypes, $catch->types);
-        }
-        return $collectedTypes;
     }
 }
