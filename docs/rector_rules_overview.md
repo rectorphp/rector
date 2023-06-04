@@ -1,4 +1,4 @@
-# 389 Rules Overview
+# 386 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (73)
+- [CodeQuality](#codequality) (72)
 
 - [CodingStyle](#codingstyle) (34)
 
@@ -42,7 +42,7 @@
 
 - [Php74](#php74) (13)
 
-- [Php80](#php80) (19)
+- [Php80](#php80) (18)
 
 - [Php81](#php81) (12)
 
@@ -1013,26 +1013,6 @@ Change OR, AND to ||, && with more common understanding
 -if ($f = false or true) {
 +if (($f = false) || true) {
      return $f;
- }
-```
-
-<br>
-
-### NarrowUnionTypeDocRector
-
-Changes docblock by narrowing type
-
-- class: [`Rector\CodeQuality\Rector\ClassMethod\NarrowUnionTypeDocRector`](../rules/CodeQuality/Rector/ClassMethod/NarrowUnionTypeDocRector.php)
-
-```diff
- class SomeClass {
-     /**
--     * @param object|DateTime $message
-+     * @param DateTime $message
-      */
-     public function getMessage(object $message)
-     {
-     }
  }
 ```
 
@@ -5888,28 +5868,6 @@ Add `Stringable` interface to classes with `__toString()` method
 +    public function __toString(): string
      {
          return 'I can stringz';
-     }
- }
-```
-
-<br>
-
-### UnionTypesRector
-
-Change docs types to union types, where possible (properties are covered by TypedPropertiesRector)
-
-- class: [`Rector\Php80\Rector\FunctionLike\UnionTypesRector`](../rules/Php80/Rector/FunctionLike/UnionTypesRector.php)
-
-```diff
- class SomeClass
- {
--    /**
--     * @param array|int $number
--     * @return bool|float
--     */
--    public function go($number)
-+    public function go(array|int $number): bool|float
-     {
      }
  }
 ```
