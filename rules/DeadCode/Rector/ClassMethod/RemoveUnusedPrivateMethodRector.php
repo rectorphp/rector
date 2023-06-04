@@ -78,19 +78,22 @@ CODE_SAMPLE
         if ($this->hasDynamicMethodCallOnFetchThis($node)) {
             return null;
         }
+        if ($node->getMethods() === []) {
+            return null;
+        }
         $hasChanged = \false;
-        $classReflection = null;
-        foreach ($node->getMethods() as $classMethod) {
-            if (!$classReflection instanceof ClassReflection) {
-                $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-            }
-            if ($this->shouldSkip($classMethod, $classReflection)) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof ClassMethod) {
                 continue;
             }
-            if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $classMethod, $scope)) {
+            if ($this->shouldSkip($stmt, $classReflection)) {
                 continue;
             }
-            $this->removeNode($classMethod);
+            if ($this->isClassMethodUsedAnalyzer->isClassMethodUsed($node, $stmt, $scope)) {
+                continue;
+            }
+            unset($node->stmts[$key]);
             $hasChanged = \true;
         }
         if ($hasChanged) {
