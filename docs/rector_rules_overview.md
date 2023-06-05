@@ -1,4 +1,4 @@
-# 384 Rules Overview
+# 383 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodingStyle](#codingstyle) (34)
 
-- [DeadCode](#deadcode) (45)
+- [DeadCode](#deadcode) (44)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -2908,27 +2908,6 @@ Remove variable just to assign value or return value
 -
 -        $this->temporaryValue = $result;
 +        $this->temporaryValue = 100;
-     }
- }
-```
-
-<br>
-
-### RemoveLastReturnRector
-
-Remove very last `return` that has no meaning
-
-- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveLastReturnRector`](../rules/DeadCode/Rector/ClassMethod/RemoveLastReturnRector.php)
-
-```diff
- function some_function($value)
- {
-     if ($value === 1000) {
-         return;
-     }
-
-     if ($value) {
--        return;
      }
  }
 ```

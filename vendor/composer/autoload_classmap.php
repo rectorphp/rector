@@ -1583,7 +1583,6 @@ return array(
     'Rector\\DeadCode\\Rector\\ClassLike\\RemoveAnnotationRector' => $baseDir . '/rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveDelegatingParentCallRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
-    'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveLastReturnRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveLastReturnRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodParameterRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodParameterRector.php',
     'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodRector' => $baseDir . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodRector.php',

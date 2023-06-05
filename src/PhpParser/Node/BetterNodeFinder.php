@@ -205,6 +205,7 @@ final class BetterNodeFinder
         return \false;
     }
     /**
+     * @api used in Symfony
      * @template T of Node
      *
      * @param Stmt[] $nodes
