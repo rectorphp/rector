@@ -235,13 +235,13 @@ CODE_SAMPLE;
             $previousMemory = \memory_get_peak_usage(\true);
         }
         // ensure origNode pulled before refactor to avoid changed during refactor, ref https://3v4l.org/YMEGN
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
+        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $node;
         $refactoredNode = $this->refactor($node);
         if ($isDebug) {
             $this->printConsumptions($startTime, $previousMemory);
         }
         // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
-        if ($refactoredNode === NodeTraverser::REMOVE_NODE && $originalNode instanceof Node) {
+        if ($refactoredNode === NodeTraverser::REMOVE_NODE) {
             $this->toBeRemovedNodeHash = \spl_object_hash($originalNode);
             // notify this rule changing code
             $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
@@ -249,6 +249,10 @@ CODE_SAMPLE;
             return $originalNode;
         }
         if (\is_int($refactoredNode)) {
+            $this->createdByRuleDecorator->decorate($node, $originalNode, static::class);
+            // notify this rule changing code
+            $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
+            $this->file->addRectorClassWithLine($rectorWithLineChange);
             return $refactoredNode;
         }
         // nothing to change or just removed via removeNode() → continue
@@ -341,10 +345,8 @@ CODE_SAMPLE;
     /**
      * @param \PhpParser\Node|mixed[]|int $refactoredNode
      */
-    private function postRefactorProcess(?\PhpParser\Node $originalNode, Node $node, $refactoredNode) : Node
+    private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode) : Node
     {
-        // node is removed, nothing to post process
-        $originalNode = $originalNode ?? $node;
         /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
         $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
