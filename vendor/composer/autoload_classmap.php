@@ -2657,7 +2657,6 @@ return array(
     'Rector\\Transform\\Rector\\MethodCall\\MethodCallToStaticCallRector' => $baseDir . '/rules/Transform/Rector/MethodCall/MethodCallToStaticCallRector.php',
     'Rector\\Transform\\Rector\\MethodCall\\ReplaceParentCallByPropertyCallRector' => $baseDir . '/rules/Transform/Rector/MethodCall/ReplaceParentCallByPropertyCallRector.php',
     'Rector\\Transform\\Rector\\New_\\NewArgToMethodCallRector' => $baseDir . '/rules/Transform/Rector/New_/NewArgToMethodCallRector.php',
-    'Rector\\Transform\\Rector\\New_\\NewToConstructorInjectionRector' => $baseDir . '/rules/Transform/Rector/New_/NewToConstructorInjectionRector.php',
     'Rector\\Transform\\Rector\\New_\\NewToStaticCallRector' => $baseDir . '/rules/Transform/Rector/New_/NewToStaticCallRector.php',
     'Rector\\Transform\\Rector\\StaticCall\\StaticCallToFuncCallRector' => $baseDir . '/rules/Transform/Rector/StaticCall/StaticCallToFuncCallRector.php',
     'Rector\\Transform\\Rector\\StaticCall\\StaticCallToMethodCallRector' => $baseDir . '/rules/Transform/Rector/StaticCall/StaticCallToMethodCallRector.php',
