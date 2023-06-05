@@ -11,7 +11,7 @@ use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -63,49 +63,36 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StmtsAwareInterface::class];
+        return [For_::class, If_::class, Foreach_::class];
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param For_|If_|Foreach_ $node
+     * @return \PhpParser\Node|null|int
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
-        if ($node->stmts === null) {
-            return null;
-        }
-        $hasChanged = \false;
-        foreach ($node->stmts as $key => $stmt) {
-            if ($stmt instanceof If_) {
-                $if = $stmt;
-                if ($if->stmts !== []) {
-                    continue;
-                }
-                if ($if->elseifs !== []) {
-                    continue;
-                }
-                // useless if ()
-                if (!$if->else instanceof Else_) {
-                    if ($this->hasNodeSideEffect($if->cond)) {
-                        continue;
-                    }
-                    unset($node->stmts[$key]);
-                    $hasChanged = \true;
-                    continue;
-                }
-                $if->cond = $this->conditionInverter->createInvertedCondition($if->cond);
-                $if->stmts = $if->else->stmts;
-                $if->else = null;
-                $hasChanged = \true;
-                continue;
+        if ($node instanceof If_) {
+            if ($node->stmts !== []) {
+                return null;
             }
-            // nothing to "for"
-            if (($stmt instanceof For_ || $stmt instanceof Foreach_) && $stmt->stmts === []) {
-                unset($node->stmts[$key]);
-                $hasChanged = \true;
+            if ($node->elseifs !== []) {
+                return null;
             }
-        }
-        if ($hasChanged) {
+            // useless if ()
+            if (!$node->else instanceof Else_) {
+                if ($this->hasNodeSideEffect($node->cond)) {
+                    return null;
+                }
+                return NodeTraverser::REMOVE_NODE;
+            }
+            $node->cond = $this->conditionInverter->createInvertedCondition($node->cond);
+            $node->stmts = $node->else->stmts;
+            $node->else = null;
             return $node;
+        }
+        // nothing to "for"
+        if ($node->stmts === []) {
+            return NodeTraverser::REMOVE_NODE;
         }
         return null;
     }

@@ -47,14 +47,11 @@ final class ConstructorAssignPropertyAnalyzer
         }
         /** @var string $propertyName */
         $propertyName = $this->nodeNameResolver->getName($property);
-        return $this->betterNodeFinder->findFirst((array) $constructClassMethod->stmts, function (Node $node) use($propertyName) : ?Assign {
+        return $this->betterNodeFinder->findFirst((array) $constructClassMethod->stmts, function (Node $node) use($propertyName) : bool {
             if (!$node instanceof Assign) {
-                return null;
+                return \false;
             }
-            if (!$this->propertyFetchAnalyzer->isLocalPropertyFetchName($node->var, $propertyName)) {
-                return null;
-            }
-            return $node;
+            return $this->propertyFetchAnalyzer->isLocalPropertyFetchName($node->var, $propertyName);
         });
     }
 }

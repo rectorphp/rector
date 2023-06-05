@@ -6,6 +6,7 @@ namespace Rector\Php70\Rector\Break_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNestingScope\ContextAnalyzer;
@@ -72,8 +73,9 @@ CODE_SAMPLE
     }
     /**
      * @param Break_ $node
+     * @return \PhpParser\Node\Stmt\Return_|null|int
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
         if ($this->contextAnalyzer->isInLoop($node)) {
             return null;
@@ -84,7 +86,6 @@ CODE_SAMPLE
         if ($this->contextAnalyzer->isInIf($node)) {
             return new Return_();
         }
-        $this->removeNode($node);
-        return null;
+        return NodeTraverser::REMOVE_NODE;
     }
 }

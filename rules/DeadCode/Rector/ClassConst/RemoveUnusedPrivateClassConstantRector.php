@@ -5,6 +5,7 @@ namespace Rector\DeadCode\Rector\ClassConst;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassConst;
+use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeAnalyzer\EnumAnalyzer;
 use Rector\Core\NodeManipulator\ClassConstManipulator;
@@ -70,7 +71,7 @@ CODE_SAMPLE
     /**
      * @param ClassConst $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node) : ?int
     {
         if ($this->shouldSkipClassConst($node)) {
             return null;
@@ -82,8 +83,7 @@ CODE_SAMPLE
         if ($this->classConstManipulator->hasClassConstFetch($node, $classReflection)) {
             return null;
         }
-        $this->removeNode($node);
-        return null;
+        return NodeTraverser::REMOVE_NODE;
     }
     private function shouldSkipClassConst(ClassConst $classConst) : bool
     {

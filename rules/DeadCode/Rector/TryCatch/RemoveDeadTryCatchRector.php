@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Throw_;
 use PhpParser\Node\Stmt\TryCatch;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -52,7 +53,7 @@ CODE_SAMPLE
     }
     /**
      * @param TryCatch $node
-     * @return Stmt[]|null|TryCatch
+     * @return Stmt[]|null|TryCatch|int
      */
     public function refactor(Node $node)
     {
@@ -62,8 +63,7 @@ CODE_SAMPLE
             return null;
         }
         if ($this->isEmpty($node->stmts)) {
-            $this->removeNode($node);
-            return null;
+            return NodeTraverser::REMOVE_NODE;
         }
         if (\count($node->catches) !== 1) {
             return null;

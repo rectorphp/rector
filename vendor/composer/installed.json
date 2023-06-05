@@ -871,17 +871,17 @@
         },
         {
             "name": "phpstan\/phpstan",
-            "version": "1.10.15",
-            "version_normalized": "1.10.15.0",
+            "version": "1.10.16",
+            "version_normalized": "1.10.16.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/phpstan\/phpstan.git",
-                "reference": "762c4dac4da6f8756eebb80e528c3a47855da9bd"
+                "reference": "352bdbb960bb523e3d71b834862589f910921c23"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/762c4dac4da6f8756eebb80e528c3a47855da9bd",
-                "reference": "762c4dac4da6f8756eebb80e528c3a47855da9bd",
+                "url": "https:\/\/api.github.com\/repos\/phpstan\/phpstan\/zipball\/352bdbb960bb523e3d71b834862589f910921c23",
+                "reference": "352bdbb960bb523e3d71b834862589f910921c23",
                 "shasum": ""
             },
             "require": {
@@ -890,7 +890,7 @@
             "conflict": {
                 "phpstan\/phpstan-shim": "*"
             },
-            "time": "2023-05-09T15:28:01+00:00",
+            "time": "2023-06-05T08:21:46+00:00",
             "bin": [
                 "phpstan",
                 "phpstan.phar"
@@ -1852,12 +1852,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "c6666a43f71d4922da41a5da42770f2523844286"
+                "reference": "08503e7da4f587cb27211ecc3f0726a6ac367998"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/c6666a43f71d4922da41a5da42770f2523844286",
-                "reference": "c6666a43f71d4922da41a5da42770f2523844286",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/08503e7da4f587cb27211ecc3f0726a6ac367998",
+                "reference": "08503e7da4f587cb27211ecc3f0726a6ac367998",
                 "shasum": ""
             },
             "require": {
@@ -1882,7 +1882,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-04T10:42:02+00:00",
+            "time": "2023-06-05T09:07:54+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2056,12 +2056,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "5c0d61c8c0563057f01cf88998465e480d536747"
+                "reference": "1ad0ae7d9cc161537963a79af2add5d81d3436f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/5c0d61c8c0563057f01cf88998465e480d536747",
-                "reference": "5c0d61c8c0563057f01cf88998465e480d536747",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/1ad0ae7d9cc161537963a79af2add5d81d3436f2",
+                "reference": "1ad0ae7d9cc161537963a79af2add5d81d3436f2",
                 "shasum": ""
             },
             "require": {
@@ -2091,7 +2091,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-02T09:45:32+00:00",
+            "time": "2023-06-05T09:03:48+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

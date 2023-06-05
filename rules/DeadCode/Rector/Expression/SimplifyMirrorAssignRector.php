@@ -6,6 +6,7 @@ namespace Rector\DeadCode\Rector\Expression;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -37,16 +38,15 @@ CODE_SAMPLE
     /**
      * @param Expression $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node) : ?int
     {
         if (!$node->expr instanceof Assign) {
             return null;
         }
-        /** @var Assign $assignNode */
-        $assignNode = $node->expr;
-        if ($this->nodeComparator->areNodesEqual($assignNode->var, $assignNode->expr)) {
-            $this->removeNode($node);
+        $assign = $node->expr;
+        if (!$this->nodeComparator->areNodesEqual($assign->var, $assign->expr)) {
+            return null;
         }
-        return null;
+        return NodeTraverser::REMOVE_NODE;
     }
 }

@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\Unset_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -45,8 +46,9 @@ CODE_SAMPLE
     }
     /**
      * @param Unset_|Assign|Expression $node
+     * @return int|null|\PhpParser\Node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
         if ($node instanceof Assign) {
             return $this->refactorAssign($node);
@@ -55,8 +57,7 @@ CODE_SAMPLE
             if (!$node->expr instanceof Unset_) {
                 return null;
             }
-            $this->removeNode($node);
-            return null;
+            return NodeTraverser::REMOVE_NODE;
         }
         return $this->nodeFactory->createNull();
     }
