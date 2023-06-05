@@ -337,6 +337,9 @@ CODE_SAMPLE;
         }
         return $currentArgs;
     }
+    /**
+     * @deprecated Return NodeTraverser::REMOVE_NODE or array of changed nodes instead
+     */
     protected function removeNode(Node $node) : void
     {
         $this->nodeRemover->removeNode($node);

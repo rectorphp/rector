@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Stmt;
@@ -27,7 +26,6 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeFinder;
-use PhpParser\NodeTraverser;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\StopSearchException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
@@ -38,7 +36,6 @@ use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix202306\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
@@ -72,22 +69,16 @@ final class BetterNodeFinder
     private $multiInstanceofChecker;
     /**
      * @readonly
-     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
-     */
-    private $simpleCallableNodeTraverser;
-    /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, ClassAnalyzer $classAnalyzer, MultiInstanceofChecker $multiInstanceofChecker, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, CurrentFileProvider $currentFileProvider)
+    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, ClassAnalyzer $classAnalyzer, MultiInstanceofChecker $multiInstanceofChecker, CurrentFileProvider $currentFileProvider)
     {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
         $this->classAnalyzer = $classAnalyzer;
         $this->multiInstanceofChecker = $multiInstanceofChecker;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->currentFileProvider = $currentFileProvider;
     }
     /**
@@ -251,36 +242,6 @@ final class BetterNodeFinder
     public function findFirst($nodes, callable $filter) : ?Node
     {
         return $this->nodeFinder->findFirst($nodes, $filter);
-    }
-    /**
-     * @return Assign[]
-     */
-    public function findClassMethodAssignsToLocalProperty(ClassMethod $classMethod, string $propertyName) : array
-    {
-        /** @var Assign[] $assigns */
-        $assigns = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use($propertyName, &$assigns) {
-            // skip anonymous classes and inner function
-            if ($node instanceof Class_ || $node instanceof Function_) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-            }
-            if (!$node instanceof Assign) {
-                return null;
-            }
-            if (!$node->var instanceof PropertyFetch) {
-                return null;
-            }
-            $propertyFetch = $node->var;
-            if (!$this->nodeNameResolver->isName($propertyFetch->var, 'this')) {
-                return null;
-            }
-            if (!$this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
-                return null;
-            }
-            $assigns[] = $node;
-            return $node;
-        });
-        return $assigns;
     }
     /**
      * @api symfony

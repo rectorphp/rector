@@ -2262,6 +2262,7 @@ return array(
     'Rector\\Php80\\ValueObject\\PropertyPromotionCandidate' => $baseDir . '/rules/Php80/ValueObject/PropertyPromotionCandidate.php',
     'Rector\\Php80\\ValueObject\\StrStartsWith' => $baseDir . '/rules/Php80/ValueObject/StrStartsWith.php',
     'Rector\\Php81\\Enum\\AttributeName' => $baseDir . '/rules/Php81/Enum/AttributeName.php',
+    'Rector\\Php81\\NodeAnalyzer\\CoalesePropertyAssignMatcher' => $baseDir . '/rules/Php81/NodeAnalyzer/CoalesePropertyAssignMatcher.php',
     'Rector\\Php81\\NodeAnalyzer\\ComplexNewAnalyzer' => $baseDir . '/rules/Php81/NodeAnalyzer/ComplexNewAnalyzer.php',
     'Rector\\Php81\\NodeAnalyzer\\EnumConstListClassDetector' => $baseDir . '/rules/Php81/NodeAnalyzer/EnumConstListClassDetector.php',
     'Rector\\Php81\\NodeFactory\\EnumFactory' => $baseDir . '/rules/Php81/NodeFactory/EnumFactory.php',
