@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -127,10 +128,11 @@ CODE_SAMPLE
         if (!$this->isObjectType($node, new ObjectType('PHPUnit\\Framework\\TestListener'))) {
             return null;
         }
-        foreach ($node->implements as $implement) {
-            if ($this->isName($implement, 'PHPUnit\\Framework\\TestListener')) {
-                $this->removeNode($implement);
+        foreach ($node->implements as $key => $implement) {
+            if (!$this->isName($implement, 'PHPUnit\\Framework\\TestListener')) {
+                continue;
             }
+            unset($node->implements[$key]);
         }
         foreach ($node->getMethods() as $classMethod) {
             $this->processClassMethod($node, $classMethod);
@@ -146,7 +148,8 @@ CODE_SAMPLE
             }
             // remove empty methods
             if ($classMethod->stmts === [] || $classMethod->stmts === null) {
-                $this->removeNode($classMethod);
+                $stmtKey = $classMethod->getAttribute(AttributeKey::STMT_KEY);
+                unset($class->stmts[$stmtKey]);
             } else {
                 $class->implements[] = new FullyQualified($hookClassAndMethod[0]);
                 $classMethod->name = new Identifier($hookClassAndMethod[1]);

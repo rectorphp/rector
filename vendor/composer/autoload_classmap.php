@@ -2337,7 +2337,6 @@ return array(
     'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => $baseDir . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
     'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => $baseDir . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
     'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => $baseDir . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
-    'Rector\\Privatization\\Rector\\Class_\\ChangeGlobalVariablesToPropertiesRector' => $baseDir . '/rules/Privatization/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php',
     'Rector\\Privatization\\Rector\\Class_\\FinalizeClassesWithoutChildrenRector' => $baseDir . '/rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php',
     'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => $baseDir . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
     'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => $baseDir . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',

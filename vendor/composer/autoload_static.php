@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4c14e8bace132daaa89443888a4a21a7
+class ComposerStaticInitfb0b90262d71df9386a64cc41fa2a02c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2579,7 +2579,6 @@ class ComposerStaticInit4c14e8bace132daaa89443888a4a21a7
         'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
-        'Rector\\Privatization\\Rector\\Class_\\ChangeGlobalVariablesToPropertiesRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php',
         'Rector\\Privatization\\Rector\\Class_\\FinalizeClassesWithoutChildrenRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Class_/FinalizeClassesWithoutChildrenRector.php',
         'Rector\\Privatization\\Rector\\MethodCall\\PrivatizeLocalGetterToPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/MethodCall/PrivatizeLocalGetterToPropertyRector.php',
         'Rector\\Privatization\\Rector\\Property\\PrivatizeFinalClassPropertyRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/Property/PrivatizeFinalClassPropertyRector.php',
@@ -3049,9 +3048,9 @@ class ComposerStaticInit4c14e8bace132daaa89443888a4a21a7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4c14e8bace132daaa89443888a4a21a7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4c14e8bace132daaa89443888a4a21a7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4c14e8bace132daaa89443888a4a21a7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfb0b90262d71df9386a64cc41fa2a02c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfb0b90262d71df9386a64cc41fa2a02c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfb0b90262d71df9386a64cc41fa2a02c::$classMap;
 
         }, null, ClassLoader::class);
     }

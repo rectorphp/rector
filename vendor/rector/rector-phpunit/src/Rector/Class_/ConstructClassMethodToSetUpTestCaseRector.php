@@ -14,6 +14,7 @@ use PhpParser\Node\Stmt\Expression;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPUnit\NodeAnalyzer\SetUpMethodDecorator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -118,7 +119,8 @@ CODE_SAMPLE
             $this->setUpMethodDecorator->decorate($constructClassMethod);
             $this->visibilityManipulator->makeProtected($constructClassMethod);
         } else {
-            $this->removeNode($constructClassMethod);
+            $stmtKey = $constructClassMethod->getAttribute(AttributeKey::STMT_KEY);
+            unset($node->stmts[$stmtKey]);
             $setUpClassMethod->stmts = \array_merge((array) $setUpClassMethod->stmts, $addedStmts);
         }
         return $node;

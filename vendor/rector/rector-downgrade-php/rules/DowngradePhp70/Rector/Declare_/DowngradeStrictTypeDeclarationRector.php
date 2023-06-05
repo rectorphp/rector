@@ -5,6 +5,7 @@ namespace Rector\DowngradePhp70\Rector\Declare_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Declare_;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -34,13 +35,12 @@ CODE_SAMPLE
     /**
      * @param Declare_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node) : ?int
     {
         if ($this->shouldSkip($node)) {
             return null;
         }
-        $this->removeNode($node);
-        return $node;
+        return NodeTraverser::REMOVE_NODE;
     }
     private function shouldSkip(Declare_ $declare) : bool
     {

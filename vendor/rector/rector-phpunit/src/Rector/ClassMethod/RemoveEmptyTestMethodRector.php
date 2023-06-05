@@ -5,6 +5,7 @@ namespace Rector\PHPUnit\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -55,7 +56,7 @@ CODE_SAMPLE
     /**
      * @param ClassMethod $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node) : ?int
     {
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
@@ -69,7 +70,6 @@ CODE_SAMPLE
         if ($node->stmts !== []) {
             return null;
         }
-        $this->removeNode($node);
-        return null;
+        return NodeTraverser::REMOVE_NODE;
     }
 }
