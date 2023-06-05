@@ -6,6 +6,7 @@ namespace Rector\Removing\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\Node\Stmt\TraitUse;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -47,17 +48,24 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $classHasChanged = \false;
-        foreach ($node->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $trait) {
+        $hasChanged = \false;
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof TraitUse) {
+                continue;
+            }
+            foreach ($stmt->traits as $traitKey => $trait) {
                 if (!$this->isNames($trait, $this->traitsToRemove)) {
                     continue;
                 }
-                $this->removeNode($traitUse);
-                $classHasChanged = \true;
+                unset($stmt->traits[$traitKey]);
+                $hasChanged = \true;
+            }
+            // remove empty trait uses
+            if ($stmt->traits === []) {
+                unset($node->stmts[$key]);
             }
         }
-        if ($classHasChanged) {
+        if ($hasChanged) {
             return $node;
         }
         return null;
