@@ -97,8 +97,8 @@ CODE_SAMPLE
         if ($node->attrGroups !== []) {
             return null;
         }
-        $hasRemovedProperty = \false;
-        foreach ($constructClassMethod->getParams() as $param) {
+        $hasChanged = \false;
+        foreach ($constructClassMethod->params as $key => $param) {
             // only private local scope; removing public property might be dangerous
             if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
                 continue;
@@ -118,10 +118,10 @@ CODE_SAMPLE
                 continue;
             }
             // remove param
-            $this->removeNode($param);
-            $hasRemovedProperty = \true;
+            unset($constructClassMethod->params[$key]);
+            $hasChanged = \true;
         }
-        if ($hasRemovedProperty) {
+        if ($hasChanged) {
             return $node;
         }
         return null;
