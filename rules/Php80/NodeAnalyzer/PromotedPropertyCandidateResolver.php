@@ -15,7 +15,6 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
 final class PromotedPropertyCandidateResolver
@@ -50,12 +49,8 @@ final class PromotedPropertyCandidateResolver
     /**
      * @return PropertyPromotionCandidate[]
      */
-    public function resolveFromClass(Class_ $class) : array
+    public function resolveFromClass(Class_ $class, ClassMethod $constructClassMethod) : array
     {
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
-            return [];
-        }
         $propertyPromotionCandidates = [];
         foreach ($class->getProperties() as $property) {
             $propertyCount = \count($property->props);
@@ -77,13 +72,13 @@ final class PromotedPropertyCandidateResolver
         $firstParamAsVariable = $this->resolveFirstParamUses($constructClassMethod);
         // match property name to assign in constructor
         foreach ((array) $constructClassMethod->stmts as $stmt) {
-            if ($stmt instanceof Expression) {
-                $stmt = $stmt->expr;
-            }
-            if (!$stmt instanceof Assign) {
+            if (!$stmt instanceof Expression) {
                 continue;
             }
-            $assign = $stmt;
+            if (!$stmt->expr instanceof Assign) {
+                continue;
+            }
+            $assign = $stmt->expr;
             // promoted property must use non-static property only
             if (!$assign->var instanceof PropertyFetch) {
                 continue;
@@ -103,7 +98,7 @@ final class PromotedPropertyCandidateResolver
             if ($this->shouldSkipParam($matchedParam, $assignedExpr, $firstParamAsVariable)) {
                 continue;
             }
-            return new PropertyPromotionCandidate($property, $assign, $matchedParam);
+            return new PropertyPromotionCandidate($property, $matchedParam, $stmt);
         }
         return null;
     }

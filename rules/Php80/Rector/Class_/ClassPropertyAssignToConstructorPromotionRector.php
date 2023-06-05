@@ -133,12 +133,14 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
-        $promotionCandidates = $this->promotedPropertyCandidateResolver->resolveFromClass($node);
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        if (!$constructClassMethod instanceof ClassMethod) {
+            return null;
+        }
+        $promotionCandidates = $this->promotedPropertyCandidateResolver->resolveFromClass($node, $constructClassMethod);
         if ($promotionCandidates === []) {
             return null;
         }
-        /** @var ClassMethod $constructClassMethod */
-        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
         $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($constructClassMethod);
         foreach ($promotionCandidates as $promotionCandidate) {
             // does property have some useful annotations?
@@ -150,8 +152,11 @@ CODE_SAMPLE
             if (!$this->makePropertyPromotionGuard->isLegal($node, $property, $param, $this->inlinePublic)) {
                 continue;
             }
-            $this->removeNode($property);
-            $this->removeNode($promotionCandidate->getAssign());
+            $propertyStmtKey = $property->getAttribute(AttributeKey::STMT_KEY);
+            unset($node->stmts[$propertyStmtKey]);
+            // remove assign
+            $assignStmtPosition = $promotionCandidate->getStmtPosition();
+            unset($constructClassMethod->stmts[$assignStmtPosition]);
             $property = $promotionCandidate->getProperty();
             $paramName = $this->getName($param);
             // rename also following calls
