@@ -1,4 +1,4 @@
-# 386 Rules Overview
+# 384 Rules Overview
 
 <br>
 
@@ -6,11 +6,11 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (72)
+- [CodeQuality](#codequality) (71)
 
 - [CodingStyle](#codingstyle) (34)
 
-- [DeadCode](#deadcode) (46)
+- [DeadCode](#deadcode) (45)
 
 - [DependencyInjection](#dependencyinjection) (2)
 
@@ -361,23 +361,6 @@ Change `array_key_exists()` ternary to coalescing
 -        $result = array_key_exists($keyToMatch, $values) ? $values[$keyToMatch] : null;
 +        $result = $values[$keyToMatch] ?? null;
      }
- }
-```
-
-<br>
-
-### ArrayKeysAndInArrayToArrayKeyExistsRector
-
-Replace `array_keys()` and `in_array()` to `array_key_exists()`
-
-- class: [`Rector\CodeQuality\Rector\FuncCall\ArrayKeysAndInArrayToArrayKeyExistsRector`](../rules/CodeQuality/Rector/FuncCall/ArrayKeysAndInArrayToArrayKeyExistsRector.php)
-
-```diff
- function run($packageName, $values)
- {
--    $keys = array_keys($values);
--    return in_array($packageName, $keys, true);
-+    return array_key_exists($packageName, $values);
  }
 ```
 
@@ -2615,18 +2598,14 @@ Remove if, foreach and for that does not do anything
 ```diff
  class SomeClass
  {
-     public function run($someObject)
+     public function run($value)
      {
-         $value = 5;
 -        if ($value) {
 -        }
 -
-         if ($someObject->run()) {
+-        foreach ($values as $value) {
 -        }
 -
--        foreach ($values as $value) {
-         }
-
          return $value;
      }
  }
@@ -3362,43 +3341,6 @@ Removes unneeded `$value` = `$value` assigns
 ```diff
  function run() {
 -    $result = $result;
- }
-```
-
-<br>
-
-### TargetRemoveClassMethodRector
-
-Remove defined class method
-
-:wrench: **configure it!**
-
-- class: [`Rector\DeadCode\Rector\Class_\TargetRemoveClassMethodRector`](../rules/DeadCode/Rector/Class_/TargetRemoveClassMethodRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\Class_\TargetRemoveClassMethodRector;
-use Rector\DeadCode\ValueObject\TargetRemoveClassMethod;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(TargetRemoveClassMethodRector::class, [
-        new TargetRemoveClassMethod('SomeClass', 'run'),
-    ]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
--    public function run()
--    {
--    }
  }
 ```
 
