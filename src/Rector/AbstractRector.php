@@ -10,6 +10,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
+use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Internal\BytesHelper;
@@ -159,6 +160,10 @@ CODE_SAMPLE;
      */
     private $nodeConnectingTraverser;
     /**
+     * @var string|null
+     */
+    private $toBeRemovedNodeHash;
+    /**
      * @required
      */
     public function autowire(NodesToRemoveCollector $nodesToRemoveCollector, NodeRemover $nodeRemover, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, RectorOutputStyle $rectorOutputStyle, FilePathHelper $filePathHelper, DocBlockUpdater $docBlockUpdater, NodeConnectingTraverser $nodeConnectingTraverser) : void
@@ -235,7 +240,11 @@ CODE_SAMPLE;
         if ($isDebug) {
             $this->printConsumptions($startTime, $previousMemory);
         }
-        // @see NodeTravser::* codes, e.g. removal of node of stopping the traversing
+        // @see NodeTraverser::* codes, e.g. removal of node of stopping the traversing
+        if ($refactoredNode === NodeTraverser::REMOVE_NODE && $originalNode instanceof Node) {
+            $this->toBeRemovedNodeHash = \spl_object_hash($originalNode);
+            return $originalNode;
+        }
         if (\is_int($refactoredNode)) {
             return $refactoredNode;
         }
@@ -255,6 +264,10 @@ CODE_SAMPLE;
      */
     public function leaveNode(Node $node)
     {
+        if ($this->toBeRemovedNodeHash !== null && $this->toBeRemovedNodeHash === \spl_object_hash($node)) {
+            $this->toBeRemovedNodeHash = null;
+            return NodeConnectingTraverser::REMOVE_NODE;
+        }
         $objectHash = \spl_object_hash($node);
         // update parents relations!!!
         return $this->nodesToReturn[$objectHash] ?? $node;
@@ -323,10 +336,14 @@ CODE_SAMPLE;
         $this->nodeRemover->removeNode($node);
     }
     /**
-     * @param \PhpParser\Node|mixed[] $refactoredNode
+     * @param \PhpParser\Node|mixed[]|int $refactoredNode
      */
     private function postRefactorProcess(?\PhpParser\Node $originalNode, Node $node, $refactoredNode) : Node
     {
+        // node is removed, nothing to post process
+        if (\is_int($refactoredNode)) {
+            return $originalNode ?? $node;
+        }
         $originalNode = $originalNode ?? $node;
         /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
