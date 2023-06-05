@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit235df547e969478b4de18a8fbf52548b
+class ComposerStaticInit3a11c776258046af5ada1aa5e6635840
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2694,6 +2694,7 @@ class ComposerStaticInit235df547e969478b4de18a8fbf52548b
         'Rector\\Strict\\Rector\\If_\\BooleanInIfConditionRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/If_/BooleanInIfConditionRuleFixerRector.php',
         'Rector\\Strict\\Rector\\Ternary\\BooleanInTernaryOperatorRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/Ternary/BooleanInTernaryOperatorRuleFixerRector.php',
         'Rector\\Strict\\Rector\\Ternary\\DisallowedShortTernaryRuleFixerRector' => __DIR__ . '/../..' . '/rules/Strict/Rector/Ternary/DisallowedShortTernaryRuleFixerRector.php',
+        'Rector\\Symfony\\Annotation\\AnnotationAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/Annotation/AnnotationAnalyzer.php',
         'Rector\\Symfony\\ApplicationMetadata\\ListenerServiceDefinitionProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/ApplicationMetadata/ListenerServiceDefinitionProvider.php',
         'Rector\\Symfony\\Bridge\\NodeAnalyzer\\ControllerMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/Bridge/NodeAnalyzer/ControllerMethodAnalyzer.php',
         'Rector\\Symfony\\Bridge\\Symfony\\ContainerServiceProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/Bridge/Symfony/ContainerServiceProvider.php',
@@ -2706,6 +2707,7 @@ class ComposerStaticInit235df547e969478b4de18a8fbf52548b
         'Rector\\Symfony\\DataProvider\\ServiceNameToTypeUniqueProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/DataProvider/ServiceNameToTypeUniqueProvider.php',
         'Rector\\Symfony\\Enum\\SensioAttribute' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SensioAttribute.php',
         'Rector\\Symfony\\Enum\\SymfonyAnnotation' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyAnnotation.php',
+        'Rector\\Symfony\\Enum\\SymfonyClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/Enum/SymfonyClass.php',
         'Rector\\Symfony\\Exception\\InvalidConfigurationException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/InvalidConfigurationException.php',
         'Rector\\Symfony\\Exception\\XmlContainerNotExistsException' => __DIR__ . '/..' . '/rector/rector-symfony/src/Exception/XmlContainerNotExistsException.php',
         'Rector\\Symfony\\FormHelper\\FormTypeStringToTypeProvider' => __DIR__ . '/..' . '/rector/rector-symfony/src/FormHelper/FormTypeStringToTypeProvider.php',
@@ -2828,7 +2830,6 @@ class ComposerStaticInit235df547e969478b4de18a8fbf52548b
         'Rector\\Symfony\\Rector\\New_\\PropertyPathMapperToDataMapperRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/New_/PropertyPathMapperToDataMapperRector.php',
         'Rector\\Symfony\\Rector\\New_\\RootNodeTreeBuilderRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/New_/RootNodeTreeBuilderRector.php',
         'Rector\\Symfony\\Rector\\New_\\StringToArrayArgumentProcessRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/New_/StringToArrayArgumentProcessRector.php',
-        'Rector\\Symfony\\Rector\\Property\\JMSInjectPropertyToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Property/JMSInjectPropertyToConstructorInjectionRector.php',
         'Rector\\Symfony\\Rector\\Return_\\SimpleFunctionAndFilterRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Return_/SimpleFunctionAndFilterRector.php',
         'Rector\\Symfony\\Rector\\StaticCall\\AddMessageToEqualsResponseCodeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticCall/AddMessageToEqualsResponseCodeRector.php',
         'Rector\\Symfony\\Rector\\StaticCall\\BinaryFileResponseCreateToNewInstanceRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/StaticCall/BinaryFileResponseCreateToNewInstanceRector.php',
@@ -2848,7 +2849,6 @@ class ComposerStaticInit235df547e969478b4de18a8fbf52548b
         'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
         'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',
         'Rector\\Symfony\\TypeAnalyzer\\ControllerAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ControllerAnalyzer.php',
-        'Rector\\Symfony\\TypeAnalyzer\\JMSDITypeResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/JMSDITypeResolver.php',
         'Rector\\Symfony\\TypeDeclaration\\ReturnTypeDeclarationUpdater' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeDeclaration/ReturnTypeDeclarationUpdater.php',
         'Rector\\Symfony\\ValueObjectFactory\\ServiceMapFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObjectFactory/ServiceMapFactory.php',
         'Rector\\Symfony\\ValueObject\\ClassNameAndFilePath' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ClassNameAndFilePath.php',
@@ -3051,9 +3051,9 @@ class ComposerStaticInit235df547e969478b4de18a8fbf52548b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit235df547e969478b4de18a8fbf52548b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit235df547e969478b4de18a8fbf52548b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit235df547e969478b4de18a8fbf52548b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3a11c776258046af5ada1aa5e6635840::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3a11c776258046af5ada1aa5e6635840::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3a11c776258046af5ada1aa5e6635840::$classMap;
 
         }, null, ClassLoader::class);
     }

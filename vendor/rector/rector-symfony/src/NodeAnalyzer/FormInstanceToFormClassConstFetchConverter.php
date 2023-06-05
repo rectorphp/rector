@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\Variable;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
-use Rector\NodeRemoval\NodeRemover;
 use Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover;
 use Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
 final class FormInstanceToFormClassConstFetchConverter
@@ -36,18 +35,12 @@ final class FormInstanceToFormClassConstFetchConverter
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\NodeRemoval\NodeRemover
-     */
-    private $nodeRemover;
-    public function __construct(CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, NodeFactory $nodeFactory, FormTypeClassResolver $formTypeClassResolver, BetterNodeFinder $betterNodeFinder, NodeRemover $nodeRemover)
+    public function __construct(CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, NodeFactory $nodeFactory, FormTypeClassResolver $formTypeClassResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->createFormTypeOptionsArgMover = $createFormTypeOptionsArgMover;
         $this->nodeFactory = $nodeFactory;
         $this->formTypeClassResolver = $formTypeClassResolver;
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeRemover = $nodeRemover;
     }
     public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition) : ?MethodCall
     {
@@ -66,11 +59,6 @@ final class FormInstanceToFormClassConstFetchConverter
             if (!$methodCall instanceof MethodCall) {
                 throw new ShouldNotHappenException();
             }
-        }
-        // remove previous assign
-        $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($argValue);
-        if ($previousAssign instanceof Assign) {
-            $this->nodeRemover->removeNode($previousAssign);
         }
         $classConstFetch = $this->nodeFactory->createClassConstReference($formClassName);
         $currentArg = $methodCall->getArgs()[$position];

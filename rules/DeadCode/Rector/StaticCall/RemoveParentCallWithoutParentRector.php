@@ -11,7 +11,6 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
@@ -81,51 +80,51 @@ CODE_SAMPLE
         if ($this->shouldSkipClass($node)) {
             return null;
         }
-        $class = $node;
+        $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
-            $this->traverseNodesWithCallable($classMethod, function (Node $node) use($class) {
-                // skip nested anonmyous class
-                if ($node instanceof Class_) {
-                    return NodeTraverser::STOP_TRAVERSAL;
+            if ($classMethod->stmts === null) {
+                continue;
+            }
+            foreach ($classMethod->stmts as $key => $stmt) {
+                if (!$stmt instanceof Expression) {
+                    continue;
                 }
-                if ($node instanceof Assign) {
-                    return $this->refactorAssign($node, $class);
+                if ($stmt->expr instanceof StaticCall && $this->isParentStaticCall($stmt->expr)) {
+                    if ($this->doesCalledMethodExistInParent($stmt->expr, $node)) {
+                        continue;
+                    }
+                    unset($classMethod->stmts[$key]);
+                    $hasChanged = \true;
                 }
-                if ($node instanceof Expression) {
-                    $this->refactorExpression($node, $class);
-                    return null;
+                if ($stmt->expr instanceof Assign) {
+                    $assign = $stmt->expr;
+                    if ($assign->expr instanceof StaticCall && $this->isParentStaticCall($assign->expr)) {
+                        $staticCall = $assign->expr;
+                        // is valid call
+                        if ($this->doesCalledMethodExistInParent($staticCall, $node)) {
+                            continue;
+                        }
+                        $assign->expr = $this->nodeFactory->createNull();
+                        $hasChanged = \true;
+                    }
                 }
-                return null;
-            });
+            }
+        }
+        if ($hasChanged) {
+            return $node;
         }
         return null;
-    }
-    public function refactorAssign(Assign $assign, Class_ $class) : ?Assign
-    {
-        if (!$this->isParentStaticCall($assign->expr)) {
-            return null;
-        }
-        /** @var StaticCall $staticCall */
-        $staticCall = $assign->expr;
-        // is valid call
-        if ($this->doesCalledMethodExistInParent($staticCall, $class)) {
-            return null;
-        }
-        $assign->expr = $this->nodeFactory->createNull();
-        return $assign;
     }
     private function isParentStaticCall(Expr $expr) : bool
     {
         if (!$expr instanceof StaticCall) {
             return \false;
         }
-        if (!$expr->class instanceof Name) {
-            return \false;
-        }
         return $this->isName($expr->class, ObjectReference::PARENT);
     }
     private function shouldSkipClass(Class_ $class) : bool
     {
+        // skip cases when parent class reflection is not found
         if ($class->extends instanceof FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString())) {
             return \true;
         }
@@ -142,19 +141,5 @@ CODE_SAMPLE
             return \false;
         }
         return $this->classMethodManipulator->hasParentMethodOrInterfaceMethod($class, $calledMethodName);
-    }
-    private function refactorExpression(Expression $expression, Class_ $class) : void
-    {
-        if (!$expression->expr instanceof StaticCall) {
-            return;
-        }
-        if (!$this->isParentStaticCall($expression->expr)) {
-            return;
-        }
-        // is valid call
-        if ($this->doesCalledMethodExistInParent($expression->expr, $class)) {
-            return;
-        }
-        $this->removeNode($expression);
     }
 }

@@ -8,6 +8,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -125,11 +126,14 @@ CODE_SAMPLE
         $assignExpressions = $this->buildFormOptionAssignsFactory->createDimFetchAssignsFromParamNames($paramNames);
         $buildFormClassMethod->stmts = \array_merge($assignExpressions, (array) $buildFormClassMethod->stmts);
         // 2. remove properties
-        foreach ($node->getProperties() as $property) {
-            if (!$this->isNames($property, $paramNames)) {
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof Property) {
                 continue;
             }
-            $this->removeNode($property);
+            if (!$this->isNames($stmt, $paramNames)) {
+                continue;
+            }
+            unset($node->stmts[$key]);
         }
         // 3. cleanup ctor
         $this->constructorDependencyRemover->removeParamsByName($constructorClassMethod, $paramNames);

@@ -5,7 +5,6 @@ namespace Rector\Php70\Rector\Switch_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -65,37 +64,20 @@ CODE_SAMPLE
             }
             $defaultCases[$key] = $case;
         }
-        if (\count($defaultCases) < 2) {
+        $defaultCaseCount = \count($defaultCases);
+        if ($defaultCaseCount < 2) {
             return null;
         }
-        $this->removeExtraDefaultCases($node->cases, $defaultCases);
+        foreach ($node->cases as $key => $case) {
+            if ($case->cond instanceof Expr) {
+                continue;
+            }
+            // remove previous default cases
+            if ($defaultCaseCount > 1) {
+                unset($node->cases[$key]);
+                --$defaultCaseCount;
+            }
+        }
         return $node;
-    }
-    /**
-     * @param Case_[] $cases
-     * @param Case_[] $defaultCases
-     */
-    private function removeExtraDefaultCases(array $cases, array $defaultCases) : void
-    {
-        // keep only last
-        \array_pop($defaultCases);
-        foreach ($defaultCases as $key => $defaultCase) {
-            $this->keepStatementsToParentCase($cases, $defaultCase, $key);
-            $this->removeNode($defaultCase);
-        }
-    }
-    /**
-     * @param Case_[] $cases
-     */
-    private function keepStatementsToParentCase(array $cases, Case_ $case, int $key) : void
-    {
-        if (!isset($cases[$key - 1])) {
-            return;
-        }
-        $previousCase = $cases[$key - 1];
-        if ($previousCase->stmts === []) {
-            $previousCase->stmts = $case->stmts;
-            $case->stmts = [];
-        }
     }
 }
