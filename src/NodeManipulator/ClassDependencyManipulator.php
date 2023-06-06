@@ -24,7 +24,6 @@ use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 final class ClassDependencyManipulator
@@ -66,11 +65,6 @@ final class ClassDependencyManipulator
     private $nodeNameResolver;
     /**
      * @readonly
-     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-    /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer
      */
     private $autowiredClassMethodOrPropertyAnalyzer;
@@ -84,7 +78,7 @@ final class ClassDependencyManipulator
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassMethodAssignManipulator $classMethodAssignManipulator, NodeFactory $nodeFactory, \Rector\Core\NodeManipulator\StmtsManipulator $stmtsManipulator, PhpVersionProvider $phpVersionProvider, PropertyPresenceChecker $propertyPresenceChecker, NodeNameResolver $nodeNameResolver, NodesToRemoveCollector $nodesToRemoveCollector, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, DependencyClassMethodDecorator $dependencyClassMethodDecorator, ReflectionResolver $reflectionResolver)
+    public function __construct(\Rector\Core\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\Core\NodeManipulator\ClassMethodAssignManipulator $classMethodAssignManipulator, NodeFactory $nodeFactory, \Rector\Core\NodeManipulator\StmtsManipulator $stmtsManipulator, PhpVersionProvider $phpVersionProvider, PropertyPresenceChecker $propertyPresenceChecker, NodeNameResolver $nodeNameResolver, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, DependencyClassMethodDecorator $dependencyClassMethodDecorator, ReflectionResolver $reflectionResolver)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->classMethodAssignManipulator = $classMethodAssignManipulator;
@@ -93,7 +87,6 @@ final class ClassDependencyManipulator
         $this->phpVersionProvider = $phpVersionProvider;
         $this->propertyPresenceChecker = $propertyPresenceChecker;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
         $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
         $this->dependencyClassMethodDecorator = $dependencyClassMethodDecorator;
         $this->reflectionResolver = $reflectionResolver;
@@ -233,9 +226,6 @@ final class ClassDependencyManipulator
         }
         // only if the property does not exist yet
         $existingProperty = $class->getProperty($propertyMetadata->getName());
-        if (!$existingProperty instanceof Property) {
-            return \true;
-        }
-        return $this->nodesToRemoveCollector->isNodeRemoved($existingProperty);
+        return !$existingProperty instanceof Property;
     }
 }

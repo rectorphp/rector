@@ -25,7 +25,6 @@ use PhpParser\Node\Stmt\While_;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -37,15 +36,6 @@ final class NewlineAfterStatementRector extends AbstractRector
      * @var array<class-string<Node>>
      */
     private const STMTS_TO_HAVE_NEXT_NEWLINE = [ClassMethod::class, Function_::class, Property::class, If_::class, Foreach_::class, Do_::class, While_::class, For_::class, ClassConst::class, TryCatch::class, Class_::class, Trait_::class, Interface_::class, Switch_::class];
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-    public function __construct(NodesToRemoveCollector $nodesToRemoveCollector)
-    {
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add new line after statements to tidify code', [new CodeSample(<<<'CODE_SAMPLE'
@@ -121,9 +111,6 @@ CODE_SAMPLE
             if ($rangeLine > 1) {
                 continue;
             }
-            if ($this->isRemoved($stmt)) {
-                continue;
-            }
             \array_splice($node->stmts, $key + 1, 0, [new Nop()]);
             $hasChanged = \true;
             return $this->processAddNewLine($node, $hasChanged, $key + 2);
@@ -161,10 +148,6 @@ CODE_SAMPLE
             return \true;
         }
         return !isset($comments[0]);
-    }
-    private function isRemoved(Stmt $stmt) : bool
-    {
-        return $this->nodesToRemoveCollector->isNodeRemoved($stmt);
     }
     private function shouldSkip(Stmt $stmt) : bool
     {

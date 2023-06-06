@@ -31,7 +31,7 @@ final class JsonOutputFormatter implements OutputFormatterInterface
     }
     public function report(ProcessResult $processResult, Configuration $configuration) : void
     {
-        $errorsJson = ['totals' => ['changed_files' => \count($processResult->getFileDiffs()), 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount(), 'removed_node_count' => $processResult->getRemovedNodeCount()]];
+        $errorsJson = ['totals' => ['changed_files' => \count($processResult->getFileDiffs()), 'removed_and_added_files_count' => $processResult->getRemovedAndAddedFilesCount()]];
         $fileDiffs = $processResult->getFileDiffs();
         \ksort($fileDiffs);
         foreach ($fileDiffs as $fileDiff) {

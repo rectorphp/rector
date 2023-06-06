@@ -15,7 +15,6 @@ use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-use Rector\PostRector\Collector\NodesToRemoveCollector;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 final class ConstructorAssignDetector
@@ -49,19 +48,13 @@ final class ConstructorAssignDetector
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToRemoveCollector
-     */
-    private $nodesToRemoveCollector;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer, NodesToRemoveCollector $nodesToRemoveCollector)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
-        $this->nodesToRemoveCollector = $nodesToRemoveCollector;
     }
     public function isPropertyAssigned(ClassLike $classLike, string $propertyName) : bool
     {
@@ -73,9 +66,6 @@ final class ConstructorAssignDetector
         $this->decorateFirstLevelStatementAttribute($initializeClassMethods);
         foreach ($initializeClassMethods as $initializeClassMethod) {
             $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $initializeClassMethod->stmts, function (Node $node) use($propertyName, &$isAssignedInConstructor) : ?int {
-                if ($node instanceof Expression && $this->nodesToRemoveCollector->isNodeRemoved($node)) {
-                    return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
-                }
                 $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
                 if (!$expr instanceof Expr) {
                     return null;

@@ -115,21 +115,12 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $message = \sprintf('%d files were removed', $processResult->getRemovedFilesCount());
             $this->rectorOutputStyle->note($message);
         }
-        $this->reportRemovedNodes($processResult);
     }
     private function normalizePathsToRelativeWithLine(string $errorMessage) : string
     {
         $regex = '#' . \preg_quote(\getcwd(), '#') . '/#';
         $errorMessage = Strings::replace($errorMessage, $regex);
         return Strings::replace($errorMessage, self::ON_LINE_REGEX);
-    }
-    private function reportRemovedNodes(ProcessResult $processResult) : void
-    {
-        if ($processResult->getRemovedNodeCount() === 0) {
-            return;
-        }
-        $message = \sprintf('%d nodes were removed', $processResult->getRemovedNodeCount());
-        $this->rectorOutputStyle->warning($message);
     }
     private function createSuccessMessage(ProcessResult $processResult, Configuration $configuration) : string
     {

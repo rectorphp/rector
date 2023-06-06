@@ -175,14 +175,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_BREAKING_REMOVAL_NODE = 'is_breaking_removal_node';
-    /**
-     * @var string
-     */
-    public const CHILD_OF_NODE_TYPE = 'child_of_node_type';
-    /**
-     * @var string
-     */
     public const IS_BEING_ASSIGNED = 'is_being_assigned';
     /**
      * @var string

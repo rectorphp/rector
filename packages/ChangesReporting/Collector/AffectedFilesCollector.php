@@ -10,6 +10,9 @@ final class AffectedFilesCollector
      * @var array<string, File>
      */
     private $affectedFiles = [];
+    /**
+     * @api
+     */
     public function addFile(File $file) : void
     {
         $this->affectedFiles[$file->getFilePath()] = $file;

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee
+class ComposerStaticInit083184dffc36c4cc84f04a206cac4e3f
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2164,8 +2164,6 @@ class ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee
         'Rector\\NodeNestingScope\\ParentScopeFinder' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ParentScopeFinder.php',
         'Rector\\NodeNestingScope\\ScopeNestingComparator' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ScopeNestingComparator.php',
         'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => __DIR__ . '/../..' . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',
-        'Rector\\NodeRemoval\\BreakingRemovalGuard' => __DIR__ . '/../..' . '/packages/NodeRemoval/BreakingRemovalGuard.php',
-        'Rector\\NodeRemoval\\NodeRemover' => __DIR__ . '/../..' . '/packages/NodeRemoval/NodeRemover.php',
         'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
         'Rector\\NodeTypeResolver\\Contract\\SourceLocatorProviderInterface' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/Contract/SourceLocatorProviderInterface.php',
         'Rector\\NodeTypeResolver\\DependencyInjection\\BleedingEdgeIncludePurifier' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/DependencyInjection/BleedingEdgeIncludePurifier.php',
@@ -2196,7 +2194,6 @@ class ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee
         'Rector\\NodeTypeResolver\\PHPStan\\ParametersAcceptorSelectorVariantsWrapper' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/ParametersAcceptorSelectorVariantsWrapper.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\Contract\\NodeVisitor\\ScopeResolverNodeVisitorInterface' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/Contract/NodeVisitor/ScopeResolverNodeVisitorInterface.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\AssignedToNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/AssignedToNodeVisitor.php',
-        'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\BreakingRemovalGuardNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/BreakingRemovalGuardNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ByRefReturnNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ByRefReturnNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ByRefVariableNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ByRefVariableNodeVisitor.php',
         'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
@@ -2562,7 +2559,6 @@ class ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee
         'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/AttributeKey.php',
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/packages/PostRector/Application/PostFileProcessor.php',
         'Rector\\PostRector\\Collector\\NodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToAddCollector.php',
-        'Rector\\PostRector\\Collector\\NodesToRemoveCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToRemoveCollector.php',
         'Rector\\PostRector\\Collector\\PropertyToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/PropertyToAddCollector.php',
         'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/UseNodesToAddCollector.php',
         'Rector\\PostRector\\Contract\\Collector\\NodeCollectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Collector/NodeCollectorInterface.php',
@@ -2573,7 +2569,6 @@ class ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee
         'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/ClassRenamingPostRector.php',
         'Rector\\PostRector\\Rector\\NameImportingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NameImportingPostRector.php',
         'Rector\\PostRector\\Rector\\NodeAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NodeAddingPostRector.php',
-        'Rector\\PostRector\\Rector\\NodeRemovingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NodeRemovingPostRector.php',
         'Rector\\PostRector\\Rector\\PropertyAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/PropertyAddingPostRector.php',
         'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UnusedImportRemovingPostRector.php',
         'Rector\\PostRector\\Rector\\UseAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UseAddingPostRector.php',
@@ -3049,9 +3044,9 @@ class ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0a78a899db7d2a4fb6eee1e8ee40bcee::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit083184dffc36c4cc84f04a206cac4e3f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit083184dffc36c4cc84f04a206cac4e3f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit083184dffc36c4cc84f04a206cac4e3f::$classMap;
 
         }, null, ClassLoader::class);
     }
