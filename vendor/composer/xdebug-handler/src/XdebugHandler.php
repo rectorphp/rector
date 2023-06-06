@@ -237,10 +237,7 @@ class XdebugHandler
                 $cmd = '"' . $cmd . '"';
             }
         }
-        if (\is_array($cmd)) {
-            $cmd = \implode(' ', $cmd);
-        }
-        $process = \proc_open($cmd, [], $pipes);
+        $process = \proc_open(\is_array($cmd) ? \implode(' ', $cmd) : $cmd, [], $pipes);
         if (\is_resource($process)) {
             $exitCode = \proc_close($process);
         }

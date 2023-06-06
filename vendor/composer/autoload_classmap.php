@@ -1804,7 +1804,6 @@ return array(
     'Rector\\DowngradePhp81\\Rector\\Array_\\DowngradeArraySpreadStringKeyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Array_/DowngradeArraySpreadStringKeyRector.php',
     'Rector\\DowngradePhp81\\Rector\\ClassConst\\DowngradeFinalizePublicClassConstantRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/ClassConst/DowngradeFinalizePublicClassConstantRector.php',
     'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeArrayIsListRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FuncCall/DowngradeArrayIsListRector.php',
-    'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeEnumExistsRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FuncCall/DowngradeEnumExistsRector.php',
     'Rector\\DowngradePhp81\\Rector\\FuncCall\\DowngradeFirstClassCallableSyntaxRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FuncCall/DowngradeFirstClassCallableSyntaxRector.php',
     'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNeverTypeDeclarationRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FunctionLike/DowngradeNeverTypeDeclarationRector.php',
     'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradeNewInInitializerRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FunctionLike/DowngradeNewInInitializerRector.php',
