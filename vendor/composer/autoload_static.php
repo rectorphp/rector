@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbe589ca49a688c18b0ab940e8d069855
+class ComposerStaticInit666e0794451117e2dd2ae873fa4b1c9f
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2562,7 +2562,6 @@ class ComposerStaticInitbe589ca49a688c18b0ab940e8d069855
         'Rector\\PhpDocParser\\TypeAnalyzer\\ClassMethodReturnTypeResolver' => __DIR__ . '/../..' . '/packages/PhpDocParser/TypeAnalyzer/ClassMethodReturnTypeResolver.php',
         'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => __DIR__ . '/../..' . '/packages/PhpDocParser/ValueObject/AttributeKey.php',
         'Rector\\PostRector\\Application\\PostFileProcessor' => __DIR__ . '/../..' . '/packages/PostRector/Application/PostFileProcessor.php',
-        'Rector\\PostRector\\Collector\\NodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/NodesToAddCollector.php',
         'Rector\\PostRector\\Collector\\PropertyToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/PropertyToAddCollector.php',
         'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => __DIR__ . '/../..' . '/packages/PostRector/Collector/UseNodesToAddCollector.php',
         'Rector\\PostRector\\Contract\\Collector\\NodeCollectorInterface' => __DIR__ . '/../..' . '/packages/PostRector/Contract/Collector/NodeCollectorInterface.php',
@@ -2572,7 +2571,6 @@ class ComposerStaticInitbe589ca49a688c18b0ab940e8d069855
         'Rector\\PostRector\\Rector\\AbstractPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/AbstractPostRector.php',
         'Rector\\PostRector\\Rector\\ClassRenamingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/ClassRenamingPostRector.php',
         'Rector\\PostRector\\Rector\\NameImportingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NameImportingPostRector.php',
-        'Rector\\PostRector\\Rector\\NodeAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/NodeAddingPostRector.php',
         'Rector\\PostRector\\Rector\\PropertyAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/PropertyAddingPostRector.php',
         'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UnusedImportRemovingPostRector.php',
         'Rector\\PostRector\\Rector\\UseAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UseAddingPostRector.php',
@@ -3050,9 +3048,9 @@ class ComposerStaticInitbe589ca49a688c18b0ab940e8d069855
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbe589ca49a688c18b0ab940e8d069855::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbe589ca49a688c18b0ab940e8d069855::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbe589ca49a688c18b0ab940e8d069855::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit666e0794451117e2dd2ae873fa4b1c9f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit666e0794451117e2dd2ae873fa4b1c9f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit666e0794451117e2dd2ae873fa4b1c9f::$classMap;
 
         }, null, ClassLoader::class);
     }
