@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symplify\\RuleDocGenerator\\' => array($vendorDir . '/symplify/rule-doc-generator-contracts/src'),
-    'Symfony\\Polyfill\\Php81\\' => array($vendorDir . '/symfony/polyfill-php81'),
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'Rector\\Utils\\' => array($baseDir . '/utils'),

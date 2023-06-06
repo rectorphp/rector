@@ -881,7 +881,23 @@ class ContainerBuilder extends Container implements TaggedContainerInterface
         if (null !== $id && $definition->isShared() && (isset($this->services[$id]) || isset($this->privates[$id])) && ($tryProxy || !$definition->isLazy())) {
             return $this->services[$id] ?? $this->privates[$id];
         }
-        if (!\array_is_list($arguments)) {
+        $arrayIsList = function (array $array) : bool {
+            if (\function_exists('array_is_list')) {
+                return \array_is_list($array);
+            }
+            if ($array === []) {
+                return \true;
+            }
+            $current_key = 0;
+            foreach ($array as $key => $noop) {
+                if ($key !== $current_key) {
+                    return \false;
+                }
+                ++$current_key;
+            }
+            return \true;
+        };
+        if (!$arrayIsList($arguments)) {
             $arguments = \array_combine(\array_map(function ($k) {
                 return \preg_replace('/^.*\\$/', '', $k);
             }, \array_keys($arguments)), $arguments);

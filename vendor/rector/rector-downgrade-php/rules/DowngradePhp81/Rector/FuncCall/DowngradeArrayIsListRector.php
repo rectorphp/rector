@@ -5,11 +5,15 @@ namespace Rector\DowngradePhp81\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
@@ -84,16 +88,16 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class];
+        return [Expression::class, If_::class, Return_::class];
     }
     /**
-     * @param Expression $node
+     * @param Expression|If_|Return_ $node
      * @return Stmt[]|null
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?array
     {
         /** @var FuncCall[] $funcCalls */
-        $funcCalls = $this->betterNodeFinder->findInstanceOf($node, FuncCall::class);
+        $funcCalls = $node instanceof If_ ? $this->betterNodeFinder->findInstanceOf($node->cond, FuncCall::class) : $this->betterNodeFinder->findInstanceOf($node, FuncCall::class);
         if ($funcCalls === []) {
             return null;
         }
@@ -105,9 +109,31 @@ CODE_SAMPLE
             $function = $this->createClosure();
             $expression = new Expression(new Assign($variable, $function));
             $funcCall->name = $variable;
+            $this->applyUseClosure($node, $variable);
             return [$expression, $node];
         }
         return null;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Return_ $expression
+     */
+    private function applyUseClosure($expression, Variable $variable) : void
+    {
+        $expr = $expression instanceof If_ ? $expression->cond : $expression->expr;
+        if (!$expr instanceof CallLike) {
+            return;
+        }
+        if (!$this->shouldSkip($expr)) {
+            return;
+        }
+        if ($expr->isFirstClassCallable()) {
+            return;
+        }
+        foreach ($expr->getArgs() as $arg) {
+            if ($arg->value instanceof Closure) {
+                $arg->value->uses[] = new ClosureUse($variable);
+            }
+        }
     }
     private function createClosure() : Closure
     {
@@ -124,15 +150,18 @@ CODE_SAMPLE
         $this->cachedClosure = $expr;
         return $expr;
     }
-    private function shouldSkip(FuncCall $funcCall) : bool
+    private function shouldSkip(CallLike $callLike) : bool
     {
-        if (!$this->nodeNameResolver->isName($funcCall, 'array_is_list')) {
+        if (!$callLike instanceof FuncCall) {
+            return \false;
+        }
+        if (!$this->nodeNameResolver->isName($callLike, 'array_is_list')) {
             return \true;
         }
-        if ($this->functionExistsFunCallAnalyzer->detect($funcCall, 'array_is_list')) {
+        if ($this->functionExistsFunCallAnalyzer->detect($callLike, 'array_is_list')) {
             return \true;
         }
-        $args = $funcCall->getArgs();
+        $args = $callLike->getArgs();
         return \count($args) !== 1;
     }
 }
