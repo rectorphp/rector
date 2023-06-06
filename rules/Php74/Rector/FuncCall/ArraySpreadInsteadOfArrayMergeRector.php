@@ -110,9 +110,7 @@ CODE_SAMPLE
                 return null;
             }
             if ($value instanceof Array_) {
-                $item0Unpacked = $array->items;
-                $item1Unpacked = $value->items;
-                $array->items = \array_merge($item0Unpacked, $item1Unpacked);
+                $array->items = \array_merge($array->items, $value->items);
                 continue;
             }
             $value = $this->resolveValue($value);

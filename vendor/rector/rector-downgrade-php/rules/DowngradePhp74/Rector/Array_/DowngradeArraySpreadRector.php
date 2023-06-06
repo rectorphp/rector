@@ -77,8 +77,13 @@ class SomeClass
 
     public function runWithIterable()
     {
-        $item0Unpacked = new ArrayIterator(['durian', 'kiwi']);
-        $fruits = array_merge(['banana', 'orange'], is_array($item0Unpacked) ? $item0Unpacked : iterator_to_array($item0Unpacked), ['watermelon']);
+        $fruits = array_merge(
+            ['banana', 'orange'],
+            is_array(new ArrayIterator(['durian', 'kiwi'])) ?
+                new ArrayIterator(['durian', 'kiwi']) :
+                iterator_to_array(new ArrayIterator(['durian', 'kiwi'])),
+            ['watermelon']
+        );
     }
 }
 CODE_SAMPLE
@@ -102,14 +107,8 @@ CODE_SAMPLE
         if (!$this->arraySpreadAnalyzer->isArrayWithUnpack($node)) {
             return null;
         }
-        $shouldIncrement = (bool) $this->betterNodeFinder->findFirstNext($node, function (Node $subNode) : bool {
-            if (!$subNode instanceof Array_) {
-                return \false;
-            }
-            return $this->arraySpreadAnalyzer->isArrayWithUnpack($subNode);
-        });
         /** @var MutatingScope $scope */
-        return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope, $this->file, $shouldIncrement);
+        return $this->arrayMergeFromArraySpreadFactory->createFromArray($node, $scope, $this->file);
     }
     private function refactorUnderClassConst(ClassConst $classConst) : ?ClassConst
     {

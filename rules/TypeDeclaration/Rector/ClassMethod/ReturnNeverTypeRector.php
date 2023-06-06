@@ -93,8 +93,7 @@ CODE_SAMPLE
         if ($hasReturn) {
             return \true;
         }
-        $item1Unpacked = ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES;
-        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, \array_merge([Yield_::class], $item1Unpacked));
+        $hasNotNeverNodes = $this->betterNodeFinder->hasInstancesOfInFunctionLikeScoped($node, \array_merge([Yield_::class], ControlStructure::CONDITIONAL_NODE_SCOPE_TYPES));
         if ($hasNotNeverNodes) {
             return \true;
         }

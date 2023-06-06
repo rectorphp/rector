@@ -59,8 +59,7 @@ CODE_SAMPLE
         }
         $methodCall = $this->createBindToCall($node);
         $args = $node->getArgs();
-        $item1Unpacked = \array_slice($args, 1);
-        $args = \array_merge([new Arg($methodCall)], $item1Unpacked);
+        $args = \array_merge([new Arg($methodCall)], \array_slice($args, 1));
         return new FuncCall(new Name('call_user_func'), $args);
     }
     private function shouldSkip(MethodCall $methodCall) : bool

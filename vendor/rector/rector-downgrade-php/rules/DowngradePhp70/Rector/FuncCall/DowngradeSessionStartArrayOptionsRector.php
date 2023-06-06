@@ -10,9 +10,11 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
 use Rector\Core\Rector\AbstractRector;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -20,22 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeSessionStartArrayOptionsRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(NodesToAddCollector $nodesToAddCollector)
-    {
-        $this->nodesToAddCollector = $nodesToAddCollector;
-    }
-    /**
-     * @return array<class-string<Node>>
-     */
-    public function getNodeTypes() : array
-    {
-        return [FuncCall::class];
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Move array option of session_start($options) to before statement\'s ini_set()', [new CodeSample(<<<'CODE_SAMPLE'
@@ -50,36 +36,49 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param FuncCall $node
+     * @return array<class-string<Node>>
      */
-    public function refactor(Node $node) : ?Node
+    public function getNodeTypes() : array
     {
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
-        $args = $node->getArgs();
-        if (!isset($args[0])) {
-            return null;
-        }
-        /** @var Array_ $options */
-        $options = $args[0]->value;
-        foreach ($options->items as $option) {
-            if (!$option instanceof ArrayItem) {
-                return null;
+        return [Expression::class, Return_::class, If_::class];
+    }
+    /**
+     * @param Expression|Return_|If_ $node
+     * @return Stmt[]|null
+     */
+    public function refactor(Node $node) : ?array
+    {
+        $funcCalls = $this->betterNodeFinder->findInstanceOf($node, FuncCall::class);
+        $nodesToReturn = [];
+        foreach ($funcCalls as $funcCall) {
+            if ($this->shouldSkip($funcCall)) {
+                continue;
             }
-            if (!$option->key instanceof String_) {
-                return null;
+            $firstArg = $funcCall->getArgs()[0] ?? null;
+            if (!$firstArg instanceof Arg) {
+                continue;
             }
-            if (!$this->valueResolver->isTrueOrFalse($option->value) && !$option->value instanceof String_) {
-                return null;
+            /** @var Array_ $options */
+            $options = $firstArg->value;
+            foreach ($options->items as $option) {
+                if (!$option instanceof ArrayItem) {
+                    continue;
+                }
+                if (!$option->key instanceof String_) {
+                    continue;
+                }
+                if (!$this->valueResolver->isTrueOrFalse($option->value) && !$option->value instanceof String_) {
+                    continue;
+                }
+                $initSetFuncCall = $this->createInitSetFuncCall($option, $option->key);
+                unset($funcCall->args[0]);
+                $nodesToReturn[] = new Expression($initSetFuncCall);
             }
-            $sessionKey = new String_('session.' . $option->key->value);
-            $funcName = new Name('ini_set');
-            $iniSet = new FuncCall($funcName, [new Arg($sessionKey), new Arg($option->value)]);
-            $this->nodesToAddCollector->addNodeBeforeNode(new Expression($iniSet), $node);
         }
-        unset($node->args[0]);
-        return $node;
+        if ($nodesToReturn !== []) {
+            return \array_merge($nodesToReturn, [$node]);
+        }
+        return null;
     }
     private function shouldSkip(FuncCall $funcCall) : bool
     {
@@ -91,5 +90,11 @@ CODE_SAMPLE
             return \true;
         }
         return !$args[0]->value instanceof Array_;
+    }
+    private function createInitSetFuncCall(ArrayItem $arrayItem, String_ $string) : FuncCall
+    {
+        $sessionKey = new String_('session.' . $string->value);
+        $funcName = new Name('ini_set');
+        return new FuncCall($funcName, [new Arg($sessionKey), new Arg($arrayItem->value)]);
     }
 }

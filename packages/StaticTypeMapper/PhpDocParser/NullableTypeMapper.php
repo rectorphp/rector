@@ -45,8 +45,7 @@ final class NullableTypeMapper implements PhpDocTypeMapperInterface
         if ($typeNode->type instanceof IdentifierTypeNode) {
             $type = $this->identifierTypeMapper->mapToPHPStanType($typeNode->type, $node, $nameScope);
             if ($type instanceof UnionType) {
-                $item1Unpacked = $type->getTypes();
-                return new UnionType(\array_merge([new NullType()], $item1Unpacked));
+                return new UnionType(\array_merge([new NullType()], $type->getTypes()));
             }
             return new UnionType([new NullType(), $type]);
         }

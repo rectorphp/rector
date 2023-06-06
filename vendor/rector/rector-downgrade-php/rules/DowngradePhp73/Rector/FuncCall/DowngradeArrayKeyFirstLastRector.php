@@ -88,8 +88,7 @@ CODE_SAMPLE
     public function refactor(Node $node)
     {
         if ($node instanceof If_ || $node instanceof ElseIf_) {
-            $item1Unpacked = $node->stmts;
-            $scopeStmt = \array_merge([$node->cond], $item1Unpacked);
+            $scopeStmt = \array_merge([$node->cond], $node->stmts);
         } elseif ($node instanceof Else_) {
             $scopeStmt = $node->stmts;
         } else {

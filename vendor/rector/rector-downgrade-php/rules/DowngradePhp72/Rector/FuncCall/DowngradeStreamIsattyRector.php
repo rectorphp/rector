@@ -8,14 +8,15 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\PostRector\Collector\NodesToAddCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -44,17 +45,11 @@ final class DowngradeStreamIsattyRector extends AbstractScopeAwareRector
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
-    public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming, NodesToAddCollector $nodesToAddCollector)
+    public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming)
     {
         $this->inlineCodeParser = $inlineCodeParser;
         $this->functionExistsFunCallAnalyzer = $functionExistsFunCallAnalyzer;
         $this->variableNaming = $variableNaming;
-        $this->nodesToAddCollector = $nodesToAddCollector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -102,25 +97,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [Expression::class, Return_::class];
     }
     /**
-     * @param FuncCall $node
+     * @param Expression|Stmt\Return_ $node
+     * @return Stmt[]
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?array
     {
-        if (!$this->isName($node, 'stream_isatty')) {
-            return null;
+        /** @var FuncCall[] $funcCalls */
+        $funcCalls = $this->betterNodeFinder->findInstanceOf($node, FuncCall::class);
+        foreach ($funcCalls as $funcCall) {
+            if (!$this->isName($funcCall, 'stream_isatty')) {
+                continue;
+            }
+            if ($this->functionExistsFunCallAnalyzer->detect($funcCall, 'stream_isatty')) {
+                continue;
+            }
+            $function = $this->createClosure();
+            $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
+            $assign = new Assign($variable, $function);
+            $funcCall->name = $variable;
+            return [new Expression($assign), $node];
         }
-        if ($this->functionExistsFunCallAnalyzer->detect($node, 'stream_isatty')) {
-            return null;
-        }
-        $function = $this->createClosure();
-        $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
-        $assign = new Assign($variable, $function);
-        $this->nodesToAddCollector->addNodeBeforeNode($assign, $node);
-        $args = $node->getArgs();
-        return new FuncCall($variable, $args);
+        return null;
     }
     private function createClosure() : Closure
     {

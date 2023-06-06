@@ -46,8 +46,7 @@ final class RenameClassCallbackHandler extends NodeVisitorAbstract
      */
     public function addOldToNewClassCallbacks(array $oldToNewClassCallbacks) : void
     {
-        $item0Unpacked = $this->oldToNewClassCallbacks;
-        $this->oldToNewClassCallbacks = \array_merge($item0Unpacked, $oldToNewClassCallbacks);
+        $this->oldToNewClassCallbacks = \array_merge($this->oldToNewClassCallbacks, $oldToNewClassCallbacks);
     }
     /**
      * @return array<string, string>

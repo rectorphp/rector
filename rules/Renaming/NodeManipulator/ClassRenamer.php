@@ -403,7 +403,6 @@ final class ClassRenamer
      */
     private function resolveOldToNewClassCallbacks(Node $node, array $oldToNewClasses) : array
     {
-        $item1Unpacked = $this->renameClassCallbackHandler->getOldToNewClassesFromNode($node);
-        return \array_merge($oldToNewClasses, $item1Unpacked);
+        return \array_merge($oldToNewClasses, $this->renameClassCallbackHandler->getOldToNewClassesFromNode($node));
     }
 }

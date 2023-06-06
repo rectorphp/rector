@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
@@ -19,40 +18,12 @@ use PHPStan\Type\IterableType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\ValueObject\Application\File;
 use Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer;
-use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\NodesToAddCollector;
 final class ArrayMergeFromArraySpreadFactory
 {
-    /**
-     * @var bool
-     */
-    private $shouldIncrement = \false;
-    /**
-     * Handle different result in CI
-     *
-     * @var array<string, int>
-     */
-    private $lastPositionCurrentFile = [];
-    /**
-     * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
-     */
-    private $variableNaming;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\NodesToAddCollector
-     */
-    private $nodesToAddCollector;
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -63,30 +34,17 @@ final class ArrayMergeFromArraySpreadFactory
      * @var \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer
      */
     private $arraySpreadAnalyzer;
-    public function __construct(VariableNaming $variableNaming, BetterNodeFinder $betterNodeFinder, NodesToAddCollector $nodesToAddCollector, NodeNameResolver $nodeNameResolver, ArraySpreadAnalyzer $arraySpreadAnalyzer)
+    public function __construct(NodeNameResolver $nodeNameResolver, ArraySpreadAnalyzer $arraySpreadAnalyzer)
     {
-        $this->variableNaming = $variableNaming;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodesToAddCollector = $nodesToAddCollector;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->arraySpreadAnalyzer = $arraySpreadAnalyzer;
     }
-    public function createFromArray(Array_ $array, MutatingScope $mutatingScope, File $file, ?bool $shouldIncrement = null) : ?Node
+    public function createFromArray(Array_ $array, MutatingScope $mutatingScope, File $file) : ?Node
     {
         if (!$this->arraySpreadAnalyzer->isArrayWithUnpack($array)) {
             return null;
         }
-        if ($shouldIncrement !== null) {
-            $this->shouldIncrement = $shouldIncrement;
-        } else {
-            $this->shouldIncrement = (bool) $this->betterNodeFinder->findFirstNext($array, function (Node $subNode) : bool {
-                if (!$subNode instanceof Array_) {
-                    return \false;
-                }
-                return $this->arraySpreadAnalyzer->isArrayWithUnpack($subNode);
-            });
-        }
-        $newArrayItems = $this->disolveArrayItems($array, $mutatingScope, $file);
+        $newArrayItems = $this->disolveArrayItems($array);
         return $this->createArrayMergeFuncCall($newArrayItems, $mutatingScope);
     }
     /**
@@ -97,17 +55,12 @@ final class ArrayMergeFromArraySpreadFactory
      *    to be added once the next spread is found, or at the end
      * @return ArrayItem[]
      */
-    private function disolveArrayItems(Array_ $array, MutatingScope $mutatingScope, File $file) : array
+    private function disolveArrayItems(Array_ $array) : array
     {
         $newItems = [];
         $accumulatedItems = [];
-        foreach ($array->items as $position => $item) {
+        foreach ($array->items as $item) {
             if ($item instanceof ArrayItem && $item->unpack) {
-                // Spread operator found
-                if (!$item->value instanceof Variable) {
-                    // If it is a not variable, transform it to a variable
-                    $item->value = $this->createVariableFromNonVariable($array, $item, $position, $mutatingScope, $file);
-                }
                 if ($accumulatedItems !== []) {
                     // If previous items were in the new array, add them first
                     $newItems[] = $this->createArrayItemFromArray($accumulatedItems);
@@ -141,31 +94,6 @@ final class ArrayMergeFromArraySpreadFactory
             return new Arg($arrayItem);
         }, $arrayItems);
         return new FuncCall(new Name('array_merge'), $args);
-    }
-    /**
-     * If it is a variable, we add it directly
-     * Otherwise it could be a function, method, ternary, traversable, etc
-     * We must then first extract it into a variable,
-     * as to invoke it only once and avoid potential bugs,
-     * such as a method executing some side-effect
-     */
-    private function createVariableFromNonVariable(Array_ $array, ArrayItem $arrayItem, int $position, MutatingScope $mutatingScope, File $file) : Variable
-    {
-        // The variable name will be item0Unpacked, item1Unpacked, etc,
-        // depending on their position.
-        // The number can't be at the end of the var name, or it would
-        // conflict with the counter (for if that name is already taken)
-        $filePath = $file->getFilePath();
-        $position = $this->lastPositionCurrentFile[$filePath] ?? $position;
-        $variableName = $this->variableNaming->resolveFromNodeWithScopeCountAndFallbackName($array, $mutatingScope, 'item' . $position . 'Unpacked');
-        if ($this->shouldIncrement) {
-            $this->lastPositionCurrentFile[$filePath] = ++$position;
-        }
-        // Assign the value to the variable, and replace the element with the variable
-        $newVariable = new Variable($variableName);
-        $newVariableAssign = new Assign($newVariable, $arrayItem->value);
-        $this->nodesToAddCollector->addNodeBeforeNode($newVariableAssign, $array);
-        return $newVariable;
     }
     /**
      * @param array<ArrayItem|null> $items
