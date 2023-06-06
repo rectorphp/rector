@@ -1205,7 +1205,6 @@ return array(
     'Rector\\Caching\\ValueObject\\Storage\\MemoryCacheStorage' => $baseDir . '/packages/Caching/ValueObject/Storage/MemoryCacheStorage.php',
     'Rector\\ChangesReporting\\Annotation\\AnnotationExtractor' => $baseDir . '/packages/ChangesReporting/Annotation/AnnotationExtractor.php',
     'Rector\\ChangesReporting\\Annotation\\RectorsChangelogResolver' => $baseDir . '/packages/ChangesReporting/Annotation/RectorsChangelogResolver.php',
-    'Rector\\ChangesReporting\\Collector\\AffectedFilesCollector' => $baseDir . '/packages/ChangesReporting/Collector/AffectedFilesCollector.php',
     'Rector\\ChangesReporting\\Collector\\RectorChangeCollector' => $baseDir . '/packages/ChangesReporting/Collector/RectorChangeCollector.php',
     'Rector\\ChangesReporting\\Contract\\Output\\OutputFormatterInterface' => $baseDir . '/packages/ChangesReporting/Contract/Output/OutputFormatterInterface.php',
     'Rector\\ChangesReporting\\Output\\ConsoleOutputFormatter' => $baseDir . '/packages/ChangesReporting/Output/ConsoleOutputFormatter.php',
