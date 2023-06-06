@@ -18,7 +18,12 @@ final class AssignedToNodeVisitor extends NodeVisitorAbstract implements ScopeRe
         if (!$node instanceof Assign) {
             return null;
         }
+        $node->var->setAttribute(AttributeKey::IS_BEING_ASSIGNED, \true);
         $node->expr->setAttribute(AttributeKey::IS_ASSIGNED_TO, \true);
+        if ($node->expr instanceof Assign) {
+            $node->var->setAttribute(AttributeKey::IS_MULTI_ASSIGN, \true);
+            $node->expr->setAttribute(AttributeKey::IS_MULTI_ASSIGN, \true);
+        }
         return null;
     }
 }

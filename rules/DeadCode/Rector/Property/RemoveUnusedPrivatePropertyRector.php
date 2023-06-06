@@ -4,56 +4,43 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
+use PhpParser\Node\Stmt\TraitUse;
+use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
-use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
-use Rector\Core\NodeManipulator\PropertyManipulator;
+use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
+use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Removing\NodeManipulator\ComplexNodeRemover;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector\RemoveUnusedPrivatePropertyRectorTest
  */
-final class RemoveUnusedPrivatePropertyRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface
+final class RemoveUnusedPrivatePropertyRector extends AbstractScopeAwareRector
 {
     /**
-     * @api
-     * @var string
+     * @readonly
+     * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
-    public const REMOVE_ASSIGN_SIDE_EFFECT = 'remove_assign_side_effect';
-    /**
-     * Default to true, which apply remove assign even has side effect.
-     * Set to false will allow to skip when assign has side effect.
-     * @var bool
-     */
-    private $removeAssignSideEffect = \true;
+    private $propertyFetchFinder;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\PropertyManipulator
+     * @var \Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer
      */
-    private $propertyManipulator;
-    /**
-     * @readonly
-     * @var \Rector\Removing\NodeManipulator\ComplexNodeRemover
-     */
-    private $complexNodeRemover;
-    public function __construct(PropertyManipulator $propertyManipulator, ComplexNodeRemover $complexNodeRemover)
+    private $propertyWriteonlyAnalyzer;
+    public function __construct(PropertyFetchFinder $propertyFetchFinder, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer)
     {
-        $this->propertyManipulator = $propertyManipulator;
-        $this->complexNodeRemover = $complexNodeRemover;
-    }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration) : void
-    {
-        $this->removeAssignSideEffect = $configuration[self::REMOVE_ASSIGN_SIDE_EFFECT] ?? (bool) \current($configuration);
+        $this->propertyFetchFinder = $propertyFetchFinder;
+        $this->propertyWriteonlyAnalyzer = $propertyWriteonlyAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Remove unused private properties', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused private properties', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     private $property;
@@ -64,7 +51,7 @@ class SomeClass
 {
 }
 CODE_SAMPLE
-, [self::REMOVE_ASSIGN_SIDE_EFFECT => \true])]);
+)]);
     }
     /**
      * @return array<class-string<Node>>
@@ -78,6 +65,9 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
+        if ($this->shouldSkipClass($node)) {
+            return null;
+        }
         $hasChanged = \false;
         foreach ($node->stmts as $key => $stmt) {
             if (!$stmt instanceof Property) {
@@ -86,23 +76,76 @@ CODE_SAMPLE
             if ($this->shouldSkipProperty($stmt)) {
                 continue;
             }
-            if ($this->propertyManipulator->isPropertyUsedInReadContext($node, $stmt, $scope)) {
+            if (!$this->shouldRemoveProperty($node, $stmt)) {
                 continue;
             }
-            // use different variable to avoid re-assign back $hasRemoved to false
-            // when already asssigned to true
-            $isRemoved = $this->complexNodeRemover->removePropertyAndUsages($node, $stmt, $this->removeAssignSideEffect, $scope, $key);
-            if ($isRemoved) {
-                $hasChanged = \true;
-            }
+            // remove property
+            unset($node->stmts[$key]);
+            $propertyName = $this->getName($stmt);
+            $this->removePropertyAssigns($node, $propertyName);
+            $hasChanged = \true;
         }
-        return $hasChanged ? $node : null;
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     private function shouldSkipProperty(Property $property) : bool
     {
+        // has some attribute logic
+        if ($property->attrGroups !== []) {
+            return \true;
+        }
         if (\count($property->props) !== 1) {
             return \true;
         }
-        return !$property->isPrivate();
+        if (!$property->isPrivate()) {
+            return \true;
+        }
+        // has some possible magic
+        if ($property->isStatic()) {
+            return \true;
+        }
+        $propertyPhpDocInfo = $this->phpDocInfoFactory->createFromNode($property);
+        if (!$propertyPhpDocInfo instanceof PhpDocInfo) {
+            return \false;
+        }
+        // skip as might contain important metadata
+        return $propertyPhpDocInfo->hasByType(DoctrineAnnotationTagValueNode::class);
+    }
+    private function shouldRemoveProperty(Class_ $class, Property $property) : bool
+    {
+        $propertyName = $this->getName($property);
+        $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($class, $propertyName);
+        if ($propertyFetches === []) {
+            return \true;
+        }
+        return $this->propertyWriteonlyAnalyzer->arePropertyFetchesExclusivelyBeingAssignedTo($propertyFetches);
+    }
+    private function shouldSkipClass(Class_ $class) : bool
+    {
+        foreach ($class->stmts as $stmt) {
+            // unclear what property can be used there
+            if ($stmt instanceof TraitUse) {
+                return \true;
+            }
+        }
+        return $this->propertyWriteonlyAnalyzer->hasClassDynamicPropertyNames($class);
+    }
+    private function removePropertyAssigns(Class_ $class, string $propertyName) : void
+    {
+        $this->traverseNodesWithCallable($class, function (Node $node) use($propertyName) : ?int {
+            if (!$node instanceof Expression) {
+                return null;
+            }
+            if (!$node->expr instanceof Assign) {
+                return null;
+            }
+            $assign = $node->expr;
+            if (!$this->propertyFetchFinder->isLocalPropertyFetchByName($assign->var, $propertyName)) {
+                return null;
+            }
+            return NodeTraverser::REMOVE_NODE;
+        });
     }
 }

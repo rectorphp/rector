@@ -35,15 +35,15 @@ final class ByRefReturnNodeVisitor extends NodeVisitorAbstract implements ScopeR
         if ($stmts === null) {
             return null;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $subNode) {
-            if ($subNode instanceof Class_ || $subNode instanceof FunctionLike) {
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $node) {
+            if ($node instanceof Class_ || $node instanceof FunctionLike) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if (!$subNode instanceof Return_) {
+            if (!$node instanceof Return_) {
                 return null;
             }
-            $subNode->setAttribute(AttributeKey::IS_BYREF_RETURN, \true);
-            return $subNode;
+            $node->setAttribute(AttributeKey::IS_BYREF_RETURN, \true);
+            return $node;
         });
         return null;
     }

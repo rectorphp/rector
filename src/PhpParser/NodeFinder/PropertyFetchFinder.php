@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\NodeFinder;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -21,10 +22,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class PropertyFetchFinder
 {
-    /**
-     * @var string
-     */
-    private const THIS = 'this';
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
@@ -65,7 +62,7 @@ final class PropertyFetchFinder
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
     /**
-     * @return PropertyFetch[]|StaticPropertyFetch[]
+     * @return array<PropertyFetch|StaticPropertyFetch>
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param $propertyOrPromotedParam
      */
     public function findPrivatePropertyFetches(Class_ $class, $propertyOrPromotedParam) : array
@@ -120,6 +117,16 @@ final class PropertyFetchFinder
         }
         return $propertyArrayDimFetches;
     }
+    public function isLocalPropertyFetchByName(Expr $expr, string $propertyName) : bool
+    {
+        if (!$expr instanceof PropertyFetch) {
+            return \false;
+        }
+        if (!$this->nodeNameResolver->isName($expr->name, $propertyName)) {
+            return \false;
+        }
+        return $this->nodeNameResolver->isName($expr->var, 'this');
+    }
     /**
      * @param Stmt[] $stmts
      * @return PropertyFetch[]|StaticPropertyFetch[]
@@ -162,11 +169,8 @@ final class PropertyFetchFinder
     {
         // early check if property fetch name is not equals with property name
         // so next check is check var name and var type only
-        if (!$this->nodeNameResolver->isName($propertyFetch->name, $propertyName)) {
+        if (!$this->isLocalPropertyFetchByName($propertyFetch, $propertyName)) {
             return \false;
-        }
-        if ($this->nodeNameResolver->isName($propertyFetch->var, self::THIS)) {
-            return \true;
         }
         $propertyFetchVarType = $this->nodeTypeResolver->getType($propertyFetch->var);
         if (!$propertyFetchVarType instanceof TypeWithClassName) {

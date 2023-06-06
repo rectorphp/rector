@@ -7,13 +7,14 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\TraitUse;
 use PHPStan\Analyser\Scope;
-use Rector\Core\NodeManipulator\PropertyManipulator;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Core\ValueObject\Visibility;
+use Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -30,19 +31,19 @@ final class RemoveUnusedPromotedPropertyRector extends AbstractScopeAwareRector 
     private $propertyFetchFinder;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\PropertyManipulator
-     */
-    private $propertyManipulator;
-    /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(PropertyFetchFinder $propertyFetchFinder, PropertyManipulator $propertyManipulator, VisibilityManipulator $visibilityManipulator)
+    /**
+     * @readonly
+     * @var \Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer
+     */
+    private $propertyWriteonlyAnalyzer;
+    public function __construct(PropertyFetchFinder $propertyFetchFinder, VisibilityManipulator $visibilityManipulator, PropertyWriteonlyAnalyzer $propertyWriteonlyAnalyzer)
     {
         $this->propertyFetchFinder = $propertyFetchFinder;
-        $this->propertyManipulator = $propertyManipulator;
         $this->visibilityManipulator = $visibilityManipulator;
+        $this->propertyWriteonlyAnalyzer = $propertyWriteonlyAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -93,8 +94,7 @@ CODE_SAMPLE
         if (!$constructClassMethod instanceof ClassMethod) {
             return null;
         }
-        // is attribute? skip it
-        if ($node->attrGroups !== []) {
+        if ($this->shouldSkipClass($node)) {
             return null;
         }
         $hasChanged = \false;
@@ -103,12 +103,12 @@ CODE_SAMPLE
             if (!$this->visibilityManipulator->hasVisibility($param, Visibility::PRIVATE)) {
                 continue;
             }
-            if ($this->propertyManipulator->isPropertyUsedInReadContext($node, $param, $scope)) {
-                continue;
-            }
             $paramName = $this->getName($param);
             $propertyFetches = $this->propertyFetchFinder->findLocalPropertyFetchesByName($node, $paramName);
             if ($propertyFetches !== []) {
+                continue;
+            }
+            if (!$this->propertyWriteonlyAnalyzer->arePropertyFetchesExclusivelyBeingAssignedTo($propertyFetches)) {
                 continue;
             }
             // is variable used? only remove property, keep param
@@ -129,5 +129,17 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::PROPERTY_PROMOTION;
+    }
+    private function shouldSkipClass(Class_ $class) : bool
+    {
+        if ($class->attrGroups !== []) {
+            return \true;
+        }
+        foreach ($class->stmts as $stmt) {
+            if ($stmt instanceof TraitUse) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }

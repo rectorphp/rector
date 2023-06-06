@@ -6,6 +6,7 @@ namespace Rector\Php81\Rector\Property;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
@@ -106,6 +107,10 @@ CODE_SAMPLE
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $hasChanged = \false;
+        // skip "clone $this" cases, as can create unexpected write to local constructor property
+        if ($this->hasCloneThis($node)) {
+            return null;
+        }
         foreach ($node->getMethods() as $classMethod) {
             foreach ($classMethod->params as $param) {
                 $justChanged = $this->refactorParam($node, $classMethod, $param, $scope);
@@ -226,5 +231,17 @@ CODE_SAMPLE
             return null;
         });
         return $isAssigned;
+    }
+    private function hasCloneThis(Class_ $class) : bool
+    {
+        return (bool) $this->betterNodeFinder->findFirst($class, function (Node $node) : bool {
+            if (!$node instanceof Clone_) {
+                return \false;
+            }
+            if (!$node->expr instanceof Variable) {
+                return \false;
+            }
+            return $this->isName($node->expr, 'this');
+        });
     }
 }
