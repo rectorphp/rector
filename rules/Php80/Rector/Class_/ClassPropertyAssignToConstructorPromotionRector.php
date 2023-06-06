@@ -15,6 +15,8 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\UnionType;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
+use PHPStan\Type\MixedType;
+use PHPStan\Type\TypeCombinator;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
@@ -25,6 +27,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\Naming\VariableRenamer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Php80\Guard\MakePropertyPromotionGuard;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
@@ -83,7 +86,12 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      * @var \Rector\Php80\Guard\MakePropertyPromotionGuard
      */
     private $makePropertyPromotionGuard;
-    public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, VarTagRemover $varTagRemover, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, MakePropertyPromotionGuard $makePropertyPromotionGuard)
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
+     */
+    private $typeComparator;
+    public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, VarTagRemover $varTagRemover, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, MakePropertyPromotionGuard $makePropertyPromotionGuard, TypeComparator $typeComparator)
     {
         $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;
         $this->variableRenamer = $variableRenamer;
@@ -91,6 +99,7 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
         $this->paramAnalyzer = $paramAnalyzer;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->makePropertyPromotionGuard = $makePropertyPromotionGuard;
+        $this->typeComparator = $typeComparator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -177,7 +186,7 @@ CODE_SAMPLE
             $param->flags = $property->flags;
             // Copy over attributes of the "old" property
             $param->attrGroups = \array_merge($param->attrGroups, $property->attrGroups);
-            $this->processNullableType($property, $param);
+            $this->processUnionType($property, $param);
             $this->phpDocTypeChanger->copyPropertyDocToParam($constructClassMethod, $property, $param);
         }
         return $node;
@@ -186,16 +195,31 @@ CODE_SAMPLE
     {
         return PhpVersionFeature::PROPERTY_PROMOTION;
     }
-    private function processNullableType(Property $property, Param $param) : void
+    private function processUnionType(Property $property, Param $param) : void
     {
-        if ($this->nodeTypeResolver->isNullableType($property)) {
-            $objectType = $this->getType($property);
-            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($objectType, TypeKind::PARAM);
+        if ($property->type instanceof Node) {
+            $param->type = $property->type;
+            return;
         }
-        if ($param->default instanceof Expr && $this->valueResolver->isNull($param->default)) {
-            $paramType = $this->getType($param);
-            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
+        if (!$param->default instanceof Expr) {
+            return;
         }
+        if (!$param->type instanceof Node) {
+            return;
+        }
+        $defaultType = $this->getType($param->default);
+        $paramType = $this->getType($param->type);
+        if ($this->typeComparator->isSubtype($defaultType, $paramType)) {
+            return;
+        }
+        if ($this->typeComparator->areTypesEqual($defaultType, $paramType)) {
+            return;
+        }
+        if ($paramType instanceof MixedType) {
+            return;
+        }
+        $paramType = TypeCombinator::union($paramType, $defaultType);
+        $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramType, TypeKind::PARAM);
     }
     private function decorateParamWithPropertyPhpDocInfo(ClassMethod $classMethod, Property $property, Param $param, string $paramName) : void
     {

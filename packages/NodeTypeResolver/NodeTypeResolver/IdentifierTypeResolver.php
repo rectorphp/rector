@@ -5,10 +5,15 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
+use PHPStan\Type\ArrayType;
 use PHPStan\Type\BooleanType;
+use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use PHPStan\Type\IterableType;
 use PHPStan\Type\MixedType;
+use PHPStan\Type\NullType;
+use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
@@ -26,20 +31,39 @@ final class IdentifierTypeResolver implements NodeTypeResolverInterface
     }
     /**
      * @param Identifier $node
-     * @return StringType|BooleanType|IntegerType|FloatType|MixedType
+     * @return StringType|BooleanType|ConstantBooleanType|NullType|ObjectWithoutClassType|ArrayType|IterableType|IntegerType|FloatType|MixedType
      */
     public function resolve(Node $node) : Type
     {
-        if ($node->toLowerString() === 'string') {
+        $lowerString = $node->toLowerString();
+        if ($lowerString === 'string') {
             return new StringType();
         }
-        if ($node->toLowerString() === 'bool') {
+        if ($lowerString === 'bool') {
             return new BooleanType();
         }
-        if ($node->toLowerString() === 'int') {
+        if ($lowerString === 'false') {
+            return new ConstantBooleanType(\false);
+        }
+        if ($lowerString === 'true') {
+            return new ConstantBooleanType(\true);
+        }
+        if ($lowerString === 'null') {
+            return new NullType();
+        }
+        if ($lowerString === 'object') {
+            return new ObjectWithoutClassType();
+        }
+        if ($lowerString === 'array') {
+            return new ArrayType(new MixedType(), new MixedType());
+        }
+        if ($lowerString === 'int') {
             return new IntegerType();
         }
-        if ($node->toLowerString() === 'float') {
+        if ($lowerString === 'iterable') {
+            return new IterableType(new MixedType(), new MixedType());
+        }
+        if ($lowerString === 'float') {
             return new FloatType();
         }
         return new MixedType();
