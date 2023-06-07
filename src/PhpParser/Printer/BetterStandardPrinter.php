@@ -425,7 +425,7 @@ final class BetterStandardPrinter extends Standard implements NodePrinterInterfa
     {
         $stmts = \array_values($stmts);
         if (\count($stmts) === 1 && $stmts[0] instanceof FileWithoutNamespace) {
-            return $this->resolveNewStmts($stmts[0]->stmts);
+            return $stmts[0]->stmts;
         }
         return $stmts;
     }
