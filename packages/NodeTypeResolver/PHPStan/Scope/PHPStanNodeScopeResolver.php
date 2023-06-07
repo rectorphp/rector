@@ -145,13 +145,18 @@ final class PHPStanNodeScopeResolver
          * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
          */
         Assert::allIsInstanceOf($stmts, Stmt::class);
-        $this->nodeTraverser->traverse($stmts);
+        $isInitFileWithoutNamespace = \false;
         if (!$isScopeRefreshing && !\current($stmts) instanceof FileWithoutNamespace) {
             $stmts = $this->fileWithoutNamespaceNodeTraverser->traverse($stmts);
             $currentStmt = \current($stmts);
             if ($currentStmt instanceof FileWithoutNamespace) {
+                $this->nodeTraverser->traverse($stmts);
                 $stmts = $currentStmt->stmts;
+                $isInitFileWithoutNamespace = \true;
             }
+        }
+        if (!$isInitFileWithoutNamespace) {
+            $this->nodeTraverser->traverse($stmts);
         }
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254

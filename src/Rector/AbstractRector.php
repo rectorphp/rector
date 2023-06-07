@@ -193,9 +193,6 @@ CODE_SAMPLE;
                 $childStmt->setAttribute(AttributeKey::STMT_KEY, $key);
                 continue;
             }
-            foreach ($childStmt->stmts as $keyChildStmt => $childStmtStmt) {
-                $childStmtStmt->setAttribute(AttributeKey::STMT_KEY, $keyChildStmt);
-            }
         }
         return parent::beforeTraverse($nodes);
     }
