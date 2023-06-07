@@ -4,14 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a
+class ComposerStaticInit602763358f418ecf9eade927db0f6c3b
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
-        '972fda704d680a3a53c68e34e193cb22' => __DIR__ . '/..' . '/react/promise-timer/src/functions_include.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
         '2324d0e5cadd603331d27de142371f0b' => __DIR__ . '/..' . '/symfony/contracts/Deprecation/function.php',
         'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
@@ -47,7 +46,6 @@ class ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a
             'RectorPrefix202306\\Symfony\\Component\\Config\\' => 44,
             'RectorPrefix202306\\React\\Stream\\' => 32,
             'RectorPrefix202306\\React\\Socket\\' => 32,
-            'RectorPrefix202306\\React\\Promise\\Timer\\' => 39,
             'RectorPrefix202306\\React\\Promise\\' => 33,
             'RectorPrefix202306\\React\\EventLoop\\' => 35,
             'RectorPrefix202306\\React\\Dns\\' => 29,
@@ -164,10 +162,6 @@ class ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a
         'RectorPrefix202306\\React\\Socket\\' => 
         array (
             0 => __DIR__ . '/..' . '/react/socket/src',
-        ),
-        'RectorPrefix202306\\React\\Promise\\Timer\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/react/promise-timer/src',
         ),
         'RectorPrefix202306\\React\\Promise\\' => 
         array (
@@ -832,7 +826,6 @@ class ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a
         'RectorPrefix202306\\React\\Promise\\PromiseInterface' => __DIR__ . '/..' . '/react/promise/src/PromiseInterface.php',
         'RectorPrefix202306\\React\\Promise\\PromisorInterface' => __DIR__ . '/..' . '/react/promise/src/PromisorInterface.php',
         'RectorPrefix202306\\React\\Promise\\RejectedPromise' => __DIR__ . '/..' . '/react/promise/src/RejectedPromise.php',
-        'RectorPrefix202306\\React\\Promise\\Timer\\TimeoutException' => __DIR__ . '/..' . '/react/promise-timer/src/TimeoutException.php',
         'RectorPrefix202306\\React\\Promise\\UnhandledRejectionException' => __DIR__ . '/..' . '/react/promise/src/UnhandledRejectionException.php',
         'RectorPrefix202306\\React\\Socket\\Connection' => __DIR__ . '/..' . '/react/socket/src/Connection.php',
         'RectorPrefix202306\\React\\Socket\\ConnectionInterface' => __DIR__ . '/..' . '/react/socket/src/ConnectionInterface.php',
@@ -1736,7 +1729,6 @@ class ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a
         'Rector\\Core\\PhpParser\\AstResolver' => __DIR__ . '/../..' . '/src/PhpParser/AstResolver.php',
         'Rector\\Core\\PhpParser\\ClassLikeAstResolver' => __DIR__ . '/../..' . '/src/PhpParser/ClassLikeAstResolver.php',
         'Rector\\Core\\PhpParser\\Comparing\\NodeComparator' => __DIR__ . '/../..' . '/src/PhpParser/Comparing/NodeComparator.php',
-        'Rector\\Core\\PhpParser\\NodeFinder\\LocalConstantFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalConstantFinder.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\LocalMethodCallFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/LocalMethodCallFinder.php',
         'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => __DIR__ . '/../..' . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
         'Rector\\Core\\PhpParser\\NodeTransformer' => __DIR__ . '/../..' . '/src/PhpParser/NodeTransformer.php',
@@ -1758,7 +1750,6 @@ class ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a
         'Rector\\Core\\PhpParser\\ValueObject\\StmtsAndTokens' => __DIR__ . '/../..' . '/src/PhpParser/ValueObject/StmtsAndTokens.php',
         'Rector\\Core\\Php\\PhpVersionProvider' => __DIR__ . '/../..' . '/src/Php/PhpVersionProvider.php',
         'Rector\\Core\\Php\\PhpVersionResolver\\ProjectComposerJsonPhpVersionResolver' => __DIR__ . '/../..' . '/src/Php/PhpVersionResolver/ProjectComposerJsonPhpVersionResolver.php',
-        'Rector\\Core\\Php\\Regex\\RegexPatternArgumentManipulator' => __DIR__ . '/../..' . '/src/Php/Regex/RegexPatternArgumentManipulator.php',
         'Rector\\Core\\Php\\ReservedKeywordAnalyzer' => __DIR__ . '/../..' . '/src/Php/ReservedKeywordAnalyzer.php',
         'Rector\\Core\\ProcessAnalyzer\\RectifiedAnalyzer' => __DIR__ . '/../..' . '/src/ProcessAnalyzer/RectifiedAnalyzer.php',
         'Rector\\Core\\Provider\\CurrentFileProvider' => __DIR__ . '/../..' . '/src/Provider/CurrentFileProvider.php',
@@ -3040,9 +3031,9 @@ class ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7c4d2c8edb8f8b085b66dc49e6d0a50a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit602763358f418ecf9eade927db0f6c3b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit602763358f418ecf9eade927db0f6c3b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit602763358f418ecf9eade927db0f6c3b::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -5,10 +5,7 @@ namespace Rector\Php73\Rector\FuncCall;
 
 use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\Php\Regex\RegexPatternArgumentManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\StringUtils;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -39,19 +36,6 @@ final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersio
      * @see https://regex101.com/r/TBVme9/9
      */
     private const RIGHT_HAND_UNESCAPED_DASH_REGEX = '#(?<!\\[)(?<!\\\\)-(\\\\(w|s|d)[.*]?)\\]#i';
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
-     * @readonly
-     * @var \Rector\Core\Php\Regex\RegexPatternArgumentManipulator
-     */
-    private $regexPatternArgumentManipulator;
-    public function __construct(RegexPatternArgumentManipulator $regexPatternArgumentManipulator)
-    {
-        $this->regexPatternArgumentManipulator = $regexPatternArgumentManipulator;
-    }
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::ESCAPE_DASH_IN_REGEX;
@@ -71,43 +55,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, StaticCall::class];
+        return [String_::class];
     }
     /**
-     * @param FuncCall|StaticCall $node
+     * @param String_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        $regexArguments = $this->regexPatternArgumentManipulator->matchCallArgumentWithRegexPattern($node);
-        if ($regexArguments === []) {
+        $stringKind = $node->getAttribute(AttributeKey::KIND);
+        if (\in_array($stringKind, [String_::KIND_HEREDOC, String_::KIND_NOWDOC], \true)) {
             return null;
         }
-        foreach ($regexArguments as $regexArgument) {
-            if (StringUtils::isMatch($regexArgument->value, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX)) {
-                continue;
-            }
-            $this->escapeStringNode($regexArgument);
-        }
-        if (!$this->hasChanged) {
+        if (StringUtils::isMatch($node->value, self::THREE_BACKSLASH_FOR_ESCAPE_NEXT_REGEX)) {
             return null;
         }
-        return $node;
-    }
-    private function escapeStringNode(String_ $string) : void
-    {
-        $stringValue = $string->value;
+        $stringValue = $node->value;
         if (StringUtils::isMatch($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX)) {
-            $string->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX, '$1\\-');
+            $node->value = Strings::replace($stringValue, self::LEFT_HAND_UNESCAPED_DASH_REGEX, '$1\\-');
             // helped needed to skip re-escaping regular expression
-            $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, \true);
-            $this->hasChanged = \true;
-            return;
+            $node->setAttribute(AttributeKey::IS_REGULAR_PATTERN, \true);
+            return $node;
         }
         if (StringUtils::isMatch($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_REGEX)) {
-            $string->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_REGEX, '\\-$1]');
+            $node->value = Strings::replace($stringValue, self::RIGHT_HAND_UNESCAPED_DASH_REGEX, '\\-$1]');
             // helped needed to skip re-escaping regular expression
-            $string->setAttribute(AttributeKey::IS_REGULAR_PATTERN, \true);
-            $this->hasChanged = \true;
+            $node->setAttribute(AttributeKey::IS_REGULAR_PATTERN, \true);
+            return $node;
         }
+        return null;
     }
 }

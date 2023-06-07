@@ -28,7 +28,6 @@ return array(
     'RectorPrefix202306\\Symfony\\Component\\Config\\' => array($vendorDir . '/symfony/config'),
     'RectorPrefix202306\\React\\Stream\\' => array($vendorDir . '/react/stream/src'),
     'RectorPrefix202306\\React\\Socket\\' => array($vendorDir . '/react/socket/src'),
-    'RectorPrefix202306\\React\\Promise\\Timer\\' => array($vendorDir . '/react/promise-timer/src'),
     'RectorPrefix202306\\React\\Promise\\' => array($vendorDir . '/react/promise/src'),
     'RectorPrefix202306\\React\\EventLoop\\' => array($vendorDir . '/react/event-loop/src'),
     'RectorPrefix202306\\React\\Dns\\' => array($vendorDir . '/react/dns/src'),

@@ -1535,121 +1535,35 @@
             "install-path": "..\/react\/promise"
         },
         {
-            "name": "react\/promise-timer",
-            "version": "v1.9.0",
-            "version_normalized": "1.9.0.0",
-            "source": {
-                "type": "git",
-                "url": "https:\/\/github.com\/reactphp\/promise-timer.git",
-                "reference": "aa7a73c74b8d8c0f622f5982ff7b0351bc29e495"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/promise-timer\/zipball\/aa7a73c74b8d8c0f622f5982ff7b0351bc29e495",
-                "reference": "aa7a73c74b8d8c0f622f5982ff7b0351bc29e495",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3",
-                "react\/event-loop": "^1.2",
-                "react\/promise": "^3.0 || ^2.7.0 || ^1.2.1"
-            },
-            "require-dev": {
-                "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.35"
-            },
-            "time": "2022-06-13T13:41:03+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "src\/functions_include.php"
-                ],
-                "psr-4": {
-                    "RectorPrefix202306\\React\\Promise\\Timer\\": "src\/"
-                }
-            },
-            "notification-url": "https:\/\/packagist.org\/downloads\/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christian L\u00fcck",
-                    "email": "christian@clue.engineering",
-                    "homepage": "https:\/\/clue.engineering\/"
-                },
-                {
-                    "name": "Cees-Jan Kiewiet",
-                    "email": "reactphp@ceesjankiewiet.nl",
-                    "homepage": "https:\/\/wyrihaximus.net\/"
-                },
-                {
-                    "name": "Jan Sorgalla",
-                    "email": "jsorgalla@gmail.com",
-                    "homepage": "https:\/\/sorgalla.com\/"
-                },
-                {
-                    "name": "Chris Boden",
-                    "email": "cboden@gmail.com",
-                    "homepage": "https:\/\/cboden.dev\/"
-                }
-            ],
-            "description": "A trivial implementation of timeouts for Promises, built on top of ReactPHP.",
-            "homepage": "https:\/\/github.com\/reactphp\/promise-timer",
-            "keywords": [
-                "async",
-                "event-loop",
-                "promise",
-                "reactphp",
-                "timeout",
-                "timer"
-            ],
-            "support": {
-                "issues": "https:\/\/github.com\/reactphp\/promise-timer\/issues",
-                "source": "https:\/\/github.com\/reactphp\/promise-timer\/tree\/v1.9.0"
-            },
-            "funding": [
-                {
-                    "url": "https:\/\/github.com\/WyriHaximus",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/clue",
-                    "type": "github"
-                }
-            ],
-            "install-path": "..\/react\/promise-timer"
-        },
-        {
             "name": "react\/socket",
-            "version": "v1.12.0",
-            "version_normalized": "1.12.0.0",
+            "version": "v1.13.0",
+            "version_normalized": "1.13.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/socket.git",
-                "reference": "81e1b4d7f5450ebd8d2e9a95bb008bb15ca95a7b"
+                "reference": "cff482bbad5848ecbe8b57da57e4e213b03619aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/socket\/zipball\/81e1b4d7f5450ebd8d2e9a95bb008bb15ca95a7b",
-                "reference": "81e1b4d7f5450ebd8d2e9a95bb008bb15ca95a7b",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/socket\/zipball\/cff482bbad5848ecbe8b57da57e4e213b03619aa",
+                "reference": "cff482bbad5848ecbe8b57da57e4e213b03619aa",
                 "shasum": ""
             },
             "require": {
                 "evenement\/evenement": "^3.0 || ^2.0 || ^1.0",
                 "php": ">=5.3.0",
-                "react\/dns": "^1.8",
+                "react\/dns": "^1.11",
                 "react\/event-loop": "^1.2",
                 "react\/promise": "^3 || ^2.6 || ^1.2.1",
-                "react\/promise-timer": "^1.9",
                 "react\/stream": "^1.2"
             },
             "require-dev": {
-                "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.35",
+                "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.35",
                 "react\/async": "^4 || ^3 || ^2",
-                "react\/promise-stream": "^1.4"
+                "react\/promise-stream": "^1.4",
+                "react\/promise-timer": "^1.9"
             },
-            "time": "2022-08-25T12:32:25+00:00",
+            "time": "2023-06-07T10:28:34+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -1693,16 +1607,12 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/socket\/issues",
-                "source": "https:\/\/github.com\/reactphp\/socket\/tree\/v1.12.0"
+                "source": "https:\/\/github.com\/reactphp\/socket\/tree\/v1.13.0"
             },
             "funding": [
                 {
-                    "url": "https:\/\/github.com\/WyriHaximus",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/clue",
-                    "type": "github"
+                    "url": "https:\/\/opencollective.com\/reactphp",
+                    "type": "open_collective"
                 }
             ],
             "install-path": "..\/react\/socket"

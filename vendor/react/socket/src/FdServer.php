@@ -79,7 +79,7 @@ final class FdServer extends EventEmitter implements ServerInterface
             $fd = (int) $m[1];
         }
         if (!\is_int($fd) || $fd < 0 || $fd >= \PHP_INT_MAX) {
-            throw new \InvalidArgumentException('Invalid FD number given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : 22);
+            throw new \InvalidArgumentException('Invalid FD number given (EINVAL)', \defined('SOCKET_EINVAL') ? \SOCKET_EINVAL : (\defined('PCNTL_EINVAL') ? \PCNTL_EINVAL : 22));
         }
         $this->loop = $loop ?: Loop::get();
         $errno = 0;
