@@ -157,6 +157,9 @@ CODE_SAMPLE
             return null;
         }
         $firstArg = $expr->getArgs()[0];
+        if (!$this->isArray($firstArg->value)) {
+            return null;
+        }
         return $firstArg->value;
     }
     private function isZeroLNumber(Expr $expr) : bool
