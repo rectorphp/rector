@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
@@ -158,6 +159,10 @@ CODE_SAMPLE
         }
         $isStaticMethod = $this->staticAnalyzer->isStaticMethod($classReflection, $methodName);
         if ($isStaticMethod) {
+            return \true;
+        }
+        $reflection = $scope->getClassReflection();
+        if ($reflection instanceof ClassReflection && $reflection->isSubclassOf($className)) {
             return \true;
         }
         $className = $this->getName($staticCall->class);
