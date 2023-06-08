@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitadc6d620a4da23db1ecee1592688832f
+class ComposerStaticIniteba99b089a008fa8685ebae07df294c6
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2574,14 +2574,12 @@ class ComposerStaticInitadc6d620a4da23db1ecee1592688832f
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrncmpMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrncmpMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\StrposMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/StrposMatchAndRefactor.php',
         'Rector\\Php80\\MatchAndRefactor\\StrStartsWithMatchAndRefactor\\SubstrMatchAndRefactor' => __DIR__ . '/../..' . '/rules/Php80/MatchAndRefactor/StrStartsWithMatchAndRefactor/SubstrMatchAndRefactor.php',
-        'Rector\\Php80\\NodeAnalyzer\\AnnotationTargetResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/AnnotationTargetResolver.php',
         'Rector\\Php80\\NodeAnalyzer\\MatchSwitchAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/MatchSwitchAnalyzer.php',
         'Rector\\Php80\\NodeAnalyzer\\PhpAttributeAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PhpAttributeAnalyzer.php',
         'Rector\\Php80\\NodeAnalyzer\\PromotedPropertyCandidateResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PromotedPropertyCandidateResolver.php',
         'Rector\\Php80\\NodeAnalyzer\\PromotedPropertyResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/PromotedPropertyResolver.php',
         'Rector\\Php80\\NodeAnalyzer\\SwitchAnalyzer' => __DIR__ . '/../..' . '/rules/Php80/NodeAnalyzer/SwitchAnalyzer.php',
         'Rector\\Php80\\NodeFactory\\AttrGroupsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/AttrGroupsFactory.php',
-        'Rector\\Php80\\NodeFactory\\AttributeFlagFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/AttributeFlagFactory.php',
         'Rector\\Php80\\NodeFactory\\MatchArmsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchArmsFactory.php',
         'Rector\\Php80\\NodeFactory\\MatchFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/MatchFactory.php',
         'Rector\\Php80\\NodeFactory\\NestedAttrGroupsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/NestedAttrGroupsFactory.php',
@@ -2598,7 +2596,6 @@ class ComposerStaticInitadc6d620a4da23db1ecee1592688832f
         'Rector\\Php80\\Rector\\ClassMethod\\SetStateToStaticRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/ClassMethod/SetStateToStaticRector.php',
         'Rector\\Php80\\Rector\\Class_\\AnnotationToAttributeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/AnnotationToAttributeRector.php',
         'Rector\\Php80\\Rector\\Class_\\ClassPropertyAssignToConstructorPromotionRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php',
-        'Rector\\Php80\\Rector\\Class_\\DoctrineAnnotationClassToAttributeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/DoctrineAnnotationClassToAttributeRector.php',
         'Rector\\Php80\\Rector\\Class_\\StringableForToStringRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/StringableForToStringRector.php',
         'Rector\\Php80\\Rector\\FuncCall\\ClassOnObjectRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/ClassOnObjectRector.php',
         'Rector\\Php80\\Rector\\FuncCall\\Php8ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/Php8ResourceReturnToObjectRector.php',
@@ -3147,9 +3144,9 @@ class ComposerStaticInitadc6d620a4da23db1ecee1592688832f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitadc6d620a4da23db1ecee1592688832f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitadc6d620a4da23db1ecee1592688832f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitadc6d620a4da23db1ecee1592688832f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticIniteba99b089a008fa8685ebae07df294c6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticIniteba99b089a008fa8685ebae07df294c6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticIniteba99b089a008fa8685ebae07df294c6::$classMap;
 
         }, null, ClassLoader::class);
     }

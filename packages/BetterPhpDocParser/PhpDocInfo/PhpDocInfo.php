@@ -250,20 +250,6 @@ final class PhpDocInfo
     {
         return $this->getByAnnotationClasses($annotationsClasses) instanceof DoctrineAnnotationTagValueNode;
     }
-    /**
-     * @param string[] $desiredClasses
-     */
-    public function findOneByAnnotationClasses(array $desiredClasses) : ?DoctrineAnnotationTagValueNode
-    {
-        foreach ($desiredClasses as $desiredClass) {
-            $doctrineAnnotationTagValueNode = $this->findOneByAnnotationClass($desiredClass);
-            if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-                continue;
-            }
-            return $doctrineAnnotationTagValueNode;
-        }
-        return null;
-    }
     public function findOneByAnnotationClass(string $desiredClass) : ?DoctrineAnnotationTagValueNode
     {
         $foundTagValueNodes = $this->findByAnnotationClass($desiredClass);

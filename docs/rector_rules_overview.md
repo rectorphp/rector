@@ -1,4 +1,4 @@
-# 376 Rules Overview
+# 374 Rules Overview
 
 <br>
 
@@ -40,7 +40,7 @@
 
 - [Php74](#php74) (13)
 
-- [Php80](#php80) (18)
+- [Php80](#php80) (17)
 
 - [Php81](#php81) (11)
 
@@ -56,7 +56,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (26)
+- [Transform](#transform) (25)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -5335,47 +5335,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-### DoctrineAnnotationClassToAttributeRector
-
-Refactor Doctrine `@annotation` annotated class to a PHP 8.0 attribute class
-
-:wrench: **configure it!**
-
-- class: [`Rector\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector`](../rules/Php80/Rector/Class_/DoctrineAnnotationClassToAttributeRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Php80\Rector\Class_\DoctrineAnnotationClassToAttributeRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(DoctrineAnnotationClassToAttributeRector::class, [
-        DoctrineAnnotationClassToAttributeRector::REMOVE_ANNOTATIONS => true,
-    ]);
-};
-```
-
-↓
-
-```diff
--use Doctrine\Common\Annotations\Annotation\Target;
-+use Attribute;
-
--/**
-- * @Annotation
-- * @Target({"METHOD"})
-- */
-+#[Attribute(Attribute::TARGET_METHOD)]
- class SomeAnnotation
- {
- }
-```
-
-<br>
-
 ### FinalPrivateToPrivateVisibilityRector
 
 Changes method visibility from final private to only private
@@ -7476,42 +7435,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 -$bare = $object->bareProperty;
 +$bare = $object->getConfig('someArg');
-```
-
-<br>
-
-### RemoveAllowDynamicPropertiesAttributeRector
-
-Remove the `AllowDynamicProperties` attribute from all classes
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\Class_\RemoveAllowDynamicPropertiesAttributeRector`](../rules/Transform/Rector/Class_/RemoveAllowDynamicPropertiesAttributeRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Class_\RemoveAllowDynamicPropertiesAttributeRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveAllowDynamicPropertiesAttributeRector::class, [
-        'Example\*',
-    ]);
-};
-```
-
-↓
-
-```diff
- namespace Example\Domain;
-
--#[AllowDynamicProperties]
- class SomeObject {
-     public string $someProperty = 'hello world';
- }
 ```
 
 <br>
