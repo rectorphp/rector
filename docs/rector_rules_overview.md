@@ -1,4 +1,4 @@
-# 372 Rules Overview
+# 371 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (23)
+- [Transform](#transform) (22)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -950,7 +950,7 @@ Change unsafe new `static()` to new `self()`
 - class: [`Rector\CodeQuality\Rector\New_\NewStaticToNewSelfRector`](../rules/CodeQuality/Rector/New_/NewStaticToNewSelfRector.php)
 
 ```diff
- class SomeClass
+ final class SomeClass
  {
      public function build()
      {
@@ -7195,46 +7195,6 @@ return static function (RectorConfig $rectorConfig): void {
      {
 -        return $this->anotherDependency->process('value');
 +        return StaticCaller::anotherMethod('value');
-     }
- }
-```
-
-<br>
-
-### NewArgToMethodCallRector
-
-Change new with specific argument to method call
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\New_\NewArgToMethodCallRector`](../rules/Transform/Rector/New_/NewArgToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\New_\NewArgToMethodCallRector;
-use Rector\Transform\ValueObject\NewArgToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(NewArgToMethodCallRector::class, [
-        new NewArgToMethodCall('Dotenv', true, 'usePutenv'),
-    ]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        $dotenv = new Dotenv(true);
-+        $dotenv = new Dotenv();
-+        $dotenv->usePutenv();
      }
  }
 ```
