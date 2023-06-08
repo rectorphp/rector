@@ -33,10 +33,10 @@ final class ConsoleApplication extends Application
         SetupCICommand $setupCICommand,
         ListRulesCommand $listRulesCommand,
         // dev
-        ?MissingInSetCommand $missingInSetCommand = null,
-        ?OutsideAnySetCommand $outsideAnySetCommand = null,
-        ?GenerateCommand $generateCommand = null,
-        ?InitRecipeCommand $initRecipeCommand = null
+        MissingInSetCommand $missingInSetCommand = null,
+        OutsideAnySetCommand $outsideAnySetCommand = null,
+        GenerateCommand $generateCommand = null,
+        InitRecipeCommand $initRecipeCommand = null
     )
     {
         parent::__construct(self::NAME, VersionResolver::PACKAGE_VERSION);
