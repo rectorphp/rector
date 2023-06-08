@@ -6,19 +6,17 @@ namespace Rector\ReadWrite\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use Rector\Core\Exception\NotImplementedYetException;
 use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
+use Rector\ReadWrite\ReadNodeAnalyzer\LocalPropertyFetchReadNodeAnalyzer;
+use Rector\ReadWrite\ReadNodeAnalyzer\VariableReadNodeAnalyzer;
 final class ReadExprAnalyzer
 {
     /**
      * @var ReadNodeAnalyzerInterface[]
-     * @readonly
      */
-    private $readNodeAnalyzers;
-    /**
-     * @param ReadNodeAnalyzerInterface[] $readNodeAnalyzers
-     */
-    public function __construct(array $readNodeAnalyzers)
+    private $readNodeAnalyzers = [];
+    public function __construct(VariableReadNodeAnalyzer $variableReadNodeAnalyzer, LocalPropertyFetchReadNodeAnalyzer $localPropertyFetchReadNodeAnalyzer)
     {
-        $this->readNodeAnalyzers = $readNodeAnalyzers;
+        $this->readNodeAnalyzers = [$variableReadNodeAnalyzer, $localPropertyFetchReadNodeAnalyzer];
     }
     /**
      * Is the value read or used for read purpose (at least, not only)
