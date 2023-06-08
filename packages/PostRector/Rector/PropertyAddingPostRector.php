@@ -36,10 +36,6 @@ final class PropertyAddingPostRector extends \Rector\PostRector\Rector\AbstractP
         $this->propertyToAddCollector = $propertyToAddCollector;
         $this->classAnalyzer = $classAnalyzer;
     }
-    public function getPriority() : int
-    {
-        return 900;
-    }
     public function enterNode(Node $node) : ?Node
     {
         if (!$node instanceof Class_) {

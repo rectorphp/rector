@@ -19,12 +19,18 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
+use Rector\Naming\AssignVariableNameResolver\NewAssignVariableNameResolver;
+use Rector\Naming\AssignVariableNameResolver\PropertyFetchAssignVariableNameResolver;
 use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix202306\Symfony\Component\String\UnicodeString;
 final class VariableNaming
 {
+    /**
+     * @var AssignVariableNameResolverInterface[]
+     */
+    private $assignVariableNameResolvers = [];
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -35,19 +41,11 @@ final class VariableNaming
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    /**
-     * @var AssignVariableNameResolverInterface[]
-     * @readonly
-     */
-    private $assignVariableNameResolvers;
-    /**
-     * @param AssignVariableNameResolverInterface[] $assignVariableNameResolvers
-     */
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, array $assignVariableNameResolvers)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, PropertyFetchAssignVariableNameResolver $propertyFetchAssignVariableNameResolver, NewAssignVariableNameResolver $newAssignVariableNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->assignVariableNameResolvers = $assignVariableNameResolvers;
+        $this->assignVariableNameResolvers = [$propertyFetchAssignVariableNameResolver, $newAssignVariableNameResolver];
     }
     /**
      * @api

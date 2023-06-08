@@ -82,11 +82,6 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         }
         return $this->resolveNodesWithImportedUses($nodes, $useImportTypes, $functionUseImportTypes, $namespace);
     }
-    public function getPriority() : int
-    {
-        // must be after name importing
-        return 500;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Add unique use imports collected during Rector run', [new CodeSample(<<<'CODE_SAMPLE'

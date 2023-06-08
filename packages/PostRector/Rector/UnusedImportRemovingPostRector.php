@@ -74,14 +74,6 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
         $node->stmts = \array_values($node->stmts);
         return $node;
     }
-    /**
-     * The higher, the later
-     */
-    public function getPriority() : int
-    {
-        // run this last
-        return 100;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Removes unused import names', [new CodeSample(<<<'CODE_SAMPLE'

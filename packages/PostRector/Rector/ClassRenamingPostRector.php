@@ -52,11 +52,6 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         $this->rectorConfigProvider = $rectorConfigProvider;
         $this->useImportsRemover = $useImportsRemover;
     }
-    public function getPriority() : int
-    {
-        // must be run before name importing, so new names are imported
-        return 650;
-    }
     /**
      * @param Stmt[] $nodes
      * @return Stmt[]

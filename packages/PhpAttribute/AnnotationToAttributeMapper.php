@@ -10,6 +10,14 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpAttribute\AnnotationToAttributeMapper\ArrayAnnotationToAttributeMapper;
+use Rector\PhpAttribute\AnnotationToAttributeMapper\ArrayItemNodeAnnotationToAttributeMapper;
+use Rector\PhpAttribute\AnnotationToAttributeMapper\ClassConstFetchAnnotationToAttributeMapper;
+use Rector\PhpAttribute\AnnotationToAttributeMapper\ConstExprNodeAnnotationToAttributeMapper;
+use Rector\PhpAttribute\AnnotationToAttributeMapper\CurlyListNodeAnnotationToAttributeMapper;
+use Rector\PhpAttribute\AnnotationToAttributeMapper\DoctrineAnnotationAnnotationToAttributeMapper;
+use Rector\PhpAttribute\AnnotationToAttributeMapper\StringAnnotationToAttributeMapper;
+use Rector\PhpAttribute\AnnotationToAttributeMapper\StringNodeAnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 /**
@@ -19,15 +27,21 @@ final class AnnotationToAttributeMapper
 {
     /**
      * @var AnnotationToAttributeMapperInterface[]
-     * @readonly
      */
-    private $annotationToAttributeMappers;
-    /**
-     * @param AnnotationToAttributeMapperInterface[] $annotationToAttributeMappers
-     */
-    public function __construct(array $annotationToAttributeMappers)
+    private $annotationToAttributeMappers = [];
+    public function __construct(
+        // private readonly array $annotationToAttributeMappers,
+        ArrayAnnotationToAttributeMapper $arrayAnnotationToAttributeMapper,
+        ArrayItemNodeAnnotationToAttributeMapper $arrayItemNodeAnnotationToAttributeMapper,
+        ClassConstFetchAnnotationToAttributeMapper $classConstFetchAnnotationToAttributeMapper,
+        ConstExprNodeAnnotationToAttributeMapper $constExprNodeAnnotationToAttributeMapper,
+        CurlyListNodeAnnotationToAttributeMapper $curlyListNodeAnnotationToAttributeMapper,
+        DoctrineAnnotationAnnotationToAttributeMapper $doctrineAnnotationAnnotationToAttributeMapper,
+        StringAnnotationToAttributeMapper $stringAnnotationToAttributeMapper,
+        StringNodeAnnotationToAttributeMapper $stringNodeAnnotationToAttributeMapper
+    )
     {
-        $this->annotationToAttributeMappers = $annotationToAttributeMappers;
+        $this->annotationToAttributeMappers = [$arrayAnnotationToAttributeMapper, $arrayItemNodeAnnotationToAttributeMapper, $classConstFetchAnnotationToAttributeMapper, $constExprNodeAnnotationToAttributeMapper, $curlyListNodeAnnotationToAttributeMapper, $doctrineAnnotationAnnotationToAttributeMapper, $stringAnnotationToAttributeMapper, $stringNodeAnnotationToAttributeMapper];
     }
     /**
      * @return Expr|DocTagNodeState::REMOVE_ARRAY
