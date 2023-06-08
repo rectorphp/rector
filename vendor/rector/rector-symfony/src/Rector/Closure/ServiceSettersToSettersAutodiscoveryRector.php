@@ -31,11 +31,6 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Symfony\Rector\Closure\MinimalSharedStringSolver
-     */
-    private $minimalSharedStringSolver;
-    /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
      */
     private $symfonyPhpClosureDetector;
@@ -49,6 +44,11 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;
+    /**
+     * @readonly
+     * @var \Rector\Symfony\Rector\Closure\MinimalSharedStringSolver
+     */
+    private $minimalSharedStringSolver;
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, ReflectionProvider $reflectionProvider, Filesystem $filesystem)
     {
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;

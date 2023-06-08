@@ -10,14 +10,14 @@ use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
 final class MergeImportedRectorConfigureCallValuesCompilerPass implements CompilerPassInterface
 {
     /**
-     * @var string
-     */
-    private const CONFIGURE_METHOD_NAME = 'configure';
-    /**
      * @readonly
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;
+    /**
+     * @var string
+     */
+    private const CONFIGURE_METHOD_NAME = 'configure';
     public function __construct(ConfigureCallValuesCollector $configureCallValuesCollector)
     {
         $this->configureCallValuesCollector = $configureCallValuesCollector;

@@ -21,10 +21,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ChangeMethodVisibilityRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
-     * @var ChangeMethodVisibility[]
-     */
-    private $methodVisibilities = [];
-    /**
      * @readonly
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
@@ -34,6 +30,10 @@ final class ChangeMethodVisibilityRector extends AbstractScopeAwareRector implem
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
+    /**
+     * @var ChangeMethodVisibility[]
+     */
+    private $methodVisibilities = [];
     public function __construct(ParentClassScopeResolver $parentClassScopeResolver, VisibilityManipulator $visibilityManipulator)
     {
         $this->parentClassScopeResolver = $parentClassScopeResolver;

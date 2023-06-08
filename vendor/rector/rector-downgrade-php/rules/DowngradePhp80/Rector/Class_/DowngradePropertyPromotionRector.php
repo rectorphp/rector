@@ -17,7 +17,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeManipulator\ClassInsertManipulator;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -33,11 +32,6 @@ final class DowngradePropertyPromotionRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-    /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
@@ -46,9 +40,8 @@ final class DowngradePropertyPromotionRector extends AbstractRector
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger, BetterStandardPrinter $betterStandardPrinter)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, BetterStandardPrinter $betterStandardPrinter)
     {
-        $this->classInsertManipulator = $classInsertManipulator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->betterStandardPrinter = $betterStandardPrinter;
     }
@@ -154,7 +147,7 @@ CODE_SAMPLE
     private function resolvePropertiesFromPromotedParams(array $promotedParams, Class_ $class) : array
     {
         $properties = $this->createPropertiesFromParams($promotedParams);
-        $this->classInsertManipulator->addPropertiesToClass($class, $properties);
+        $class->stmts = \array_merge($properties, $class->stmts);
         return $properties;
     }
     /**

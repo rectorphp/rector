@@ -30,10 +30,6 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class PropertyFetchAnalyzer
 {
     /**
-     * @var string
-     */
-    private const THIS = 'this';
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
@@ -53,6 +49,10 @@ final class PropertyFetchAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
+    /**
+     * @var string
+     */
+    private const THIS = 'this';
     public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;

@@ -22,14 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private const ENTITY_REPOSITORY_PUBLIC_METHODS = ['createQueryBuilder', 'createResultSetMappingBuilder', 'clear', 'find', 'findBy', 'findAll', 'findOneBy', 'count', 'getClassName', 'matching'];
-    /**
      * @readonly
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
+    /**
+     * @var string[]
+     */
+    private const ENTITY_REPOSITORY_PUBLIC_METHODS = ['createQueryBuilder', 'createResultSetMappingBuilder', 'clear', 'find', 'findBy', 'findAll', 'findOneBy', 'count', 'getClassName', 'matching'];
     public function __construct(PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyToAddCollector = $propertyToAddCollector;

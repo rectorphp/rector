@@ -18,14 +18,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePhp72JsonConstRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private const CONSTANTS = ['JSON_INVALID_UTF8_IGNORE', 'JSON_INVALID_UTF8_SUBSTITUTE'];
-    /**
      * @readonly
      * @var \Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner
      */
     private $jsonConstCleaner;
+    /**
+     * @var string[]
+     */
+    private const CONSTANTS = ['JSON_INVALID_UTF8_IGNORE', 'JSON_INVALID_UTF8_SUBSTITUTE'];
     public function __construct(JsonConstCleaner $jsonConstCleaner)
     {
         $this->jsonConstCleaner = $jsonConstCleaner;

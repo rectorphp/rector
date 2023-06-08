@@ -29,10 +29,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StringableForToStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @var string
-     */
-    private const STRINGABLE = 'Stringable';
-    /**
      * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
@@ -47,6 +43,10 @@ final class StringableForToStringRector extends AbstractRector implements MinPhp
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
+    /**
+     * @var string
+     */
+    private const STRINGABLE = 'Stringable';
     public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReturnTypeInferer $returnTypeInferer, ClassAnalyzer $classAnalyzer)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;

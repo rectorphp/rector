@@ -28,10 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MixedTypeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
@@ -46,6 +42,10 @@ final class MixedTypeRector extends AbstractRector implements MinPhpVersionInter
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(ReflectionResolver $reflectionResolver, ClassChildAnalyzer $classChildAnalyzer, ParamTagRemover $paramTagRemover)
     {
         $this->reflectionResolver = $reflectionResolver;

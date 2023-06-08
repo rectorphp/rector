@@ -22,10 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenamePropertyToMatchTypeRector extends AbstractRector
 {
     /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer
      */
@@ -45,6 +41,10 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
      * @var \Rector\Naming\PropertyRenamer\PropertyPromotionRenamer
      */
     private $propertyPromotionRenamer;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(MatchTypePropertyRenamer $matchTypePropertyRenamer, PropertyRenameFactory $propertyRenameFactory, MatchPropertyTypeExpectedNameResolver $matchPropertyTypeExpectedNameResolver, PropertyPromotionRenamer $propertyPromotionRenamer)
     {
         $this->matchTypePropertyRenamer = $matchTypePropertyRenamer;

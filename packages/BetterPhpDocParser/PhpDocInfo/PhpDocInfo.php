@@ -40,23 +40,6 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocInfo
 {
     /**
-     * @var array<class-string<PhpDocTagValueNode>, string>
-     */
-    private const TAGS_TYPES_TO_NAMES = [ReturnTagValueNode::class => '@return', ParamTagValueNode::class => '@param', VarTagValueNode::class => '@var', MethodTagValueNode::class => '@method', PropertyTagValueNode::class => '@property'];
-    /**
-     * @var bool
-     */
-    private $isSingleLine = \false;
-    /**
-     * @readonly
-     * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
-     */
-    private $originalPhpDocNode;
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
      */
@@ -96,6 +79,23 @@ final class PhpDocInfo
      * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
      */
     private $phpDocNodeByTypeFinder;
+    /**
+     * @var array<class-string<PhpDocTagValueNode>, string>
+     */
+    private const TAGS_TYPES_TO_NAMES = [ReturnTagValueNode::class => '@return', ParamTagValueNode::class => '@param', VarTagValueNode::class => '@var', MethodTagValueNode::class => '@method', PropertyTagValueNode::class => '@property'];
+    /**
+     * @var bool
+     */
+    private $isSingleLine = \false;
+    /**
+     * @readonly
+     * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
+     */
+    private $originalPhpDocNode;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator, StaticTypeMapper $staticTypeMapper, \PhpParser\Node $node, AnnotationNaming $annotationNaming, CurrentNodeProvider $currentNodeProvider, RectorChangeCollector $rectorChangeCollector, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
     {
         $this->phpDocNode = $phpDocNode;

@@ -20,14 +20,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeReadonlyPropertyRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const TAGNAME = 'readonly';
-    /**
      * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
+    /**
+     * @var string
+     */
+    private const TAGNAME = 'readonly';
     public function __construct(VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;

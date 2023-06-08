@@ -37,14 +37,6 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ClassRenamer
 {
     /**
-     * @var string[]
-     */
-    private $alreadyProcessedClasses = [];
-    /**
-     * @var array<string, OldToNewType[]>
-     */
-    private $oldToNewTypesByCacheKey = [];
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
@@ -99,6 +91,14 @@ final class ClassRenamer
      * @var \Rector\Core\Util\FileHasher
      */
     private $fileHasher;
+    /**
+     * @var string[]
+     */
+    private $alreadyProcessedClasses = [];
+    /**
+     * @var array<string, OldToNewType[]>
+     */
+    private $oldToNewTypesByCacheKey = [];
     public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, RenameClassCallbackHandler $renameClassCallbackHandler, FileHasher $fileHasher)
     {
         $this->betterNodeFinder = $betterNodeFinder;

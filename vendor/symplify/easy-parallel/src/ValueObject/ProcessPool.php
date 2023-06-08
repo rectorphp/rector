@@ -13,14 +13,14 @@ use RectorPrefix202306\Symplify\EasyParallel\Exception\ParallelShouldNotHappenEx
 final class ProcessPool
 {
     /**
-     * @var array<string, ParallelProcess>
-     */
-    private $processes = [];
-    /**
      * @readonly
      * @var \React\Socket\TcpServer
      */
     private $tcpServer;
+    /**
+     * @var array<string, ParallelProcess>
+     */
+    private $processes = [];
     public function __construct(TcpServer $tcpServer)
     {
         $this->tcpServer = $tcpServer;

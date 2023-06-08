@@ -9,14 +9,23 @@ use PHPStan\Php\PhpVersion;
 use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
-use Rector\NodeTypeResolver\Contract\SourceLocatorProviderInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use RectorPrefix202306\Webmozart\Assert\Assert;
 /**
  * @api phpstan external
  */
-final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterface
+final class DynamicSourceLocatorProvider
 {
+    /**
+     * @readonly
+     * @var \PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher
+     */
+    private $fileNodesFetcher;
+    /**
+     * @readonly
+     * @var \PHPStan\Php\PhpVersion
+     */
+    private $phpVersion;
     /**
      * @var string[]
      */
@@ -29,16 +38,6 @@ final class DynamicSourceLocatorProvider implements SourceLocatorProviderInterfa
      * @var \PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator|null
      */
     private $aggregateSourceLocator;
-    /**
-     * @readonly
-     * @var \PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher
-     */
-    private $fileNodesFetcher;
-    /**
-     * @readonly
-     * @var \PHPStan\Php\PhpVersion
-     */
-    private $phpVersion;
     public function __construct(FileNodesFetcher $fileNodesFetcher, PhpVersion $phpVersion)
     {
         $this->fileNodesFetcher = $fileNodesFetcher;

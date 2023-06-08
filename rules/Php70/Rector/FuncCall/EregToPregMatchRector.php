@@ -29,14 +29,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class EregToPregMatchRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @var array<string, string>
-     */
-    private const OLD_NAMES_TO_NEW_ONES = ['ereg' => 'preg_match', 'eregi' => 'preg_match', 'ereg_replace' => 'preg_replace', 'eregi_replace' => 'preg_replace', 'split' => 'preg_split', 'spliti' => 'preg_split'];
-    /**
      * @readonly
      * @var \Rector\Php70\EregToPcreTransformer
      */
     private $eregToPcreTransformer;
+    /**
+     * @var array<string, string>
+     */
+    private const OLD_NAMES_TO_NEW_ONES = ['ereg' => 'preg_match', 'eregi' => 'preg_match', 'ereg_replace' => 'preg_replace', 'eregi_replace' => 'preg_replace', 'split' => 'preg_split', 'spliti' => 'preg_split'];
     public function __construct(EregToPcreTransformer $eregToPcreTransformer)
     {
         $this->eregToPcreTransformer = $eregToPcreTransformer;

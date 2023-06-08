@@ -28,11 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayShapeFromConstantArrayReturnRector extends AbstractScopeAwareRector
 {
     /**
-     * @see https://regex101.com/r/WvUD0m/2
-     * @var string
-     */
-    private const SKIPPED_CHAR_REGEX = '#\\W#u';
-    /**
      * @readonly
      * @var \Rector\PhpDocParser\TypeAnalyzer\ClassMethodReturnTypeResolver
      */
@@ -42,6 +37,11 @@ final class ArrayShapeFromConstantArrayReturnRector extends AbstractScopeAwareRe
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
+    /**
+     * @see https://regex101.com/r/WvUD0m/2
+     * @var string
+     */
+    private const SKIPPED_CHAR_REGEX = '#\\W#u';
     public function __construct(ClassMethodReturnTypeResolver $classMethodReturnTypeResolver, PhpDocTypeChanger $phpDocTypeChanger)
     {
         $this->classMethodReturnTypeResolver = $classMethodReturnTypeResolver;

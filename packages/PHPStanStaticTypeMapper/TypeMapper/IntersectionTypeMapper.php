@@ -24,10 +24,6 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class IntersectionTypeMapper implements TypeMapperInterface
 {
     /**
-     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
-     */
-    private $phpStanStaticTypeMapper;
-    /**
      * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
@@ -37,6 +33,10 @@ final class IntersectionTypeMapper implements TypeMapperInterface
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
+     */
+    private $phpStanStaticTypeMapper;
     public function __construct(PhpVersionProvider $phpVersionProvider, ReflectionProvider $reflectionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;

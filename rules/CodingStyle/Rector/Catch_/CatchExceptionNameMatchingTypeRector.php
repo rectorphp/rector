@@ -30,11 +30,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CatchExceptionNameMatchingTypeRector extends AbstractRector
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/xmfMAX/1
-     */
-    private const STARTS_WITH_ABBREVIATION_REGEX = '#^([A-Za-z]+?)([A-Z]{1}[a-z]{1})([A-Za-z]*)#';
-    /**
      * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
@@ -44,6 +39,11 @@ final class CatchExceptionNameMatchingTypeRector extends AbstractRector
      * @var \Rector\Naming\Naming\AliasNameResolver
      */
     private $aliasNameResolver;
+    /**
+     * @var string
+     * @see https://regex101.com/r/xmfMAX/1
+     */
+    private const STARTS_WITH_ABBREVIATION_REGEX = '#^([A-Za-z]+?)([A-Z]{1}[a-z]{1})([A-Za-z]*)#';
     public function __construct(PropertyNaming $propertyNaming, AliasNameResolver $aliasNameResolver)
     {
         $this->propertyNaming = $propertyNaming;

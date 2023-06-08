@@ -42,21 +42,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector implements MinPhpVersionInterface, AllowEmptyConfigurableRectorInterface
 {
     /**
-     * @api
-     * @var string
-     */
-    public const INLINE_PUBLIC = 'inline_public';
-    /**
-     * Default to false, which only apply changes:
-     *
-     *  – private modifier property
-     *  - protected/public modifier property when property typed
-     *
-     * Set to true will allow change whether property is typed or not as far as not forbidden, eg: callable type, null type, etc.
-     * @var bool
-     */
-    private $inlinePublic = \false;
-    /**
      * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver
      */
@@ -91,6 +76,21 @@ final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRect
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
+    /**
+     * @api
+     * @var string
+     */
+    public const INLINE_PUBLIC = 'inline_public';
+    /**
+     * Default to false, which only apply changes:
+     *
+     *  – private modifier property
+     *  - protected/public modifier property when property typed
+     *
+     * Set to true will allow change whether property is typed or not as far as not forbidden, eg: callable type, null type, etc.
+     * @var bool
+     */
+    private $inlinePublic = \false;
     public function __construct(PromotedPropertyCandidateResolver $promotedPropertyCandidateResolver, VariableRenamer $variableRenamer, VarTagRemover $varTagRemover, ParamAnalyzer $paramAnalyzer, PhpDocTypeChanger $phpDocTypeChanger, MakePropertyPromotionGuard $makePropertyPromotionGuard, TypeComparator $typeComparator)
     {
         $this->promotedPropertyCandidateResolver = $promotedPropertyCandidateResolver;

@@ -21,10 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
     /**
-     * @var class-string[]
-     */
-    private const TO_MANY_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany'];
-    /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
@@ -44,6 +40,10 @@ final class InitializeDefaultEntityCollectionRector extends AbstractRector
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
+    /**
+     * @var class-string[]
+     */
+    private const TO_MANY_ANNOTATION_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany', 'Doctrine\\ORM\\Mapping\\ManyToMany'];
     public function __construct(ClassDependencyManipulator $classDependencyManipulator, ArrayCollectionAssignFactory $arrayCollectionAssignFactory, AttrinationFinder $attrinationFinder, ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->classDependencyManipulator = $classDependencyManipulator;

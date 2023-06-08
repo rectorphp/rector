@@ -17,19 +17,6 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class AssertCallAnalyzer
 {
     /**
-     * @var int
-     */
-    private const MAX_NESTED_METHOD_CALL_LEVEL = 5;
-    /**
-     * @var array<string, bool>
-     */
-    private $containsAssertCallByClassMethod = [];
-    /**
-     * This should prevent segfaults while going too deep into to parsed code. Without it, it might end-up with segfault
-     * @var int
-     */
-    private $classMethodNestingLevel = 0;
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
@@ -54,6 +41,19 @@ final class AssertCallAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
+    /**
+     * @var int
+     */
+    private const MAX_NESTED_METHOD_CALL_LEVEL = 5;
+    /**
+     * @var array<string, bool>
+     */
+    private $containsAssertCallByClassMethod = [];
+    /**
+     * This should prevent segfaults while going too deep into to parsed code. Without it, it might end-up with segfault
+     * @var int
+     */
+    private $classMethodNestingLevel = 0;
     public function __construct(AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->astResolver = $astResolver;

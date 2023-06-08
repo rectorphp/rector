@@ -22,14 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfElseToTernaryRector extends AbstractRector
 {
     /**
-     * @var int
-     */
-    private const LINE_LENGTH_LIMIT = 120;
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
+    /**
+     * @var int
+     */
+    private const LINE_LENGTH_LIMIT = 120;
     public function __construct(BetterStandardPrinter $betterStandardPrinter)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;

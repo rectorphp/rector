@@ -20,10 +20,6 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
 {
     /**
-     * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
-     */
-    private $annotationToAttributeMapper;
-    /**
      * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
@@ -33,6 +29,10 @@ final class DoctrineAnnotationAnnotationToAttributeMapper implements AnnotationT
      * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
     private $attributeArrayNameInliner;
+    /**
+     * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
+     */
+    private $annotationToAttributeMapper;
     public function __construct(PhpVersionProvider $phpVersionProvider, AttributeArrayNameInliner $attributeArrayNameInliner)
     {
         $this->phpVersionProvider = $phpVersionProvider;

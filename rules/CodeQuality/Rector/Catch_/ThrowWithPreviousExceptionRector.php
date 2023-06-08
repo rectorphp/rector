@@ -29,14 +29,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ThrowWithPreviousExceptionRector extends AbstractRector
 {
     /**
-     * @var int
-     */
-    private const DEFAULT_EXCEPTION_ARGUMENT_POSITION = 2;
-    /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var int
+     */
+    private const DEFAULT_EXCEPTION_ARGUMENT_POSITION = 2;
     public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;

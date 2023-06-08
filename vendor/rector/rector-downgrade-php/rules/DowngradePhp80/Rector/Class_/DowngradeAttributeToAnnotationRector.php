@@ -28,6 +28,11 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class DowngradeAttributeToAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
+     * @var \Rector\NodeFactory\DoctrineAnnotationFactory
+     */
+    private $doctrineAnnotationFactory;
+    /**
      * @var string[]
      */
     private const SKIPPED_ATTRIBUTES = ['Attribute', 'ReturnTypeWillChange'];
@@ -39,11 +44,6 @@ final class DowngradeAttributeToAnnotationRector extends AbstractRector implemen
      * @var bool
      */
     private $isDowngraded = \false;
-    /**
-     * @readonly
-     * @var \Rector\NodeFactory\DoctrineAnnotationFactory
-     */
-    private $doctrineAnnotationFactory;
     public function __construct(DoctrineAnnotationFactory $doctrineAnnotationFactory)
     {
         $this->doctrineAnnotationFactory = $doctrineAnnotationFactory;

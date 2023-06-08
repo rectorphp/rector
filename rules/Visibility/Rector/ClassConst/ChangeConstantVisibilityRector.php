@@ -19,14 +19,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ChangeConstantVisibilityRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var ChangeConstantVisibility[]
-     */
-    private $classConstantVisibilityChanges = [];
-    /**
      * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
+    /**
+     * @var ChangeConstantVisibility[]
+     */
+    private $classConstantVisibilityChanges = [];
     public function __construct(VisibilityManipulator $visibilityManipulator)
     {
         $this->visibilityManipulator = $visibilityManipulator;

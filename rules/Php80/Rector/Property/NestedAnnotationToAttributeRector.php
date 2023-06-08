@@ -36,10 +36,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class NestedAnnotationToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @var NestedAnnotationToAttribute[]
-     */
-    private $nestedAnnotationsToAttributes = [];
-    /**
      * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
@@ -59,6 +55,10 @@ final class NestedAnnotationToAttributeRector extends AbstractRector implements 
      * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
+    /**
+     * @var NestedAnnotationToAttribute[]
+     */
+    private $nestedAnnotationsToAttributes = [];
     public function __construct(UseImportsResolver $useImportsResolver, PhpDocTagRemover $phpDocTagRemover, NestedAttrGroupsFactory $nestedAttrGroupsFactory, UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->useImportsResolver = $useImportsResolver;

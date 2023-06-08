@@ -10,14 +10,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
     /**
-     * @var object|null
-     */
-    private $container;
-    /**
      * @readonly
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;
+    /**
+     * @var object|null
+     */
+    private $container;
     public function __construct(RectorConfigProvider $rectorConfigProvider)
     {
         $this->rectorConfigProvider = $rectorConfigProvider;

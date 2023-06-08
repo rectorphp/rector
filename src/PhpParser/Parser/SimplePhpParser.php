@@ -12,14 +12,14 @@ final class SimplePhpParser
 {
     /**
      * @readonly
-     * @var \PhpParser\Parser
-     */
-    private $phpParser;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeTraverser\NodeConnectingTraverser
      */
     private $nodeConnectingTraverser;
+    /**
+     * @readonly
+     * @var \PhpParser\Parser
+     */
+    private $phpParser;
     public function __construct(NodeConnectingTraverser $nodeConnectingTraverser)
     {
         $this->nodeConnectingTraverser = $nodeConnectingTraverser;

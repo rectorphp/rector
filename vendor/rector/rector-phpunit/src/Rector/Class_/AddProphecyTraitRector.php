@@ -4,8 +4,9 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\NodeManipulator\ClassInsertManipulator;
+use PhpParser\Node\Stmt\TraitUse;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -21,15 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddProphecyTraitRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const PROPHECY_TRAIT = 'Prophecy\\PhpUnit\\ProphecyTrait';
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
-     */
-    private $classInsertManipulator;
-    /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\ClassManipulator
      */
@@ -39,9 +31,12 @@ final class AddProphecyTraitRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(ClassInsertManipulator $classInsertManipulator, ClassManipulator $classManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @var string
+     */
+    private const PROPHECY_TRAIT = 'Prophecy\\PhpUnit\\ProphecyTrait';
+    public function __construct(ClassManipulator $classManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
-        $this->classInsertManipulator = $classInsertManipulator;
         $this->classManipulator = $classManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
     }
@@ -89,7 +84,8 @@ CODE_SAMPLE
         if ($this->shouldSkipClass($node)) {
             return null;
         }
-        $this->classInsertManipulator->addAsFirstTrait($node, self::PROPHECY_TRAIT);
+        $traitUse = new TraitUse([new FullyQualified(self::PROPHECY_TRAIT)]);
+        $node->stmts = \array_merge([$traitUse], $node->stmts);
         return $node;
     }
     private function shouldSkipClass(Class_ $class) : bool

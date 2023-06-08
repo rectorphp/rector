@@ -9,10 +9,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class CountableTypeAnalyzer
 {
     /**
-     * @var ObjectType[]
-     */
-    private $countableObjectTypes = [];
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
@@ -22,6 +18,10 @@ final class CountableTypeAnalyzer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
+    /**
+     * @var ObjectType[]
+     */
+    private $countableObjectTypes = [];
     public function __construct(\Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer $arrayTypeAnalyzer, NodeTypeResolver $nodeTypeResolver)
     {
         $this->arrayTypeAnalyzer = $arrayTypeAnalyzer;

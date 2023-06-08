@@ -27,6 +27,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DoctrineTargetEntityStringToClassConstantRector extends AbstractRector
 {
     /**
+     * @readonly
+     * @var \Rector\Doctrine\PhpDocParser\DoctrineClassAnnotationMatcher
+     */
+    private $doctrineClassAnnotationMatcher;
+    /**
+     * @readonly
+     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
+     */
+    private $attributeFinder;
+    /**
      * @var string
      */
     private const ATTRIBUTE_NAME__TARGET_ENTITY = 'targetEntity';
@@ -38,16 +48,6 @@ final class DoctrineTargetEntityStringToClassConstantRector extends AbstractRect
      * @var array<class-string<OneToMany|ManyToOne|OneToOne|ManyToMany|Embedded>, string>
      */
     private const VALID_DOCTRINE_CLASSES = ['Doctrine\\ORM\\Mapping\\OneToMany' => self::ATTRIBUTE_NAME__TARGET_ENTITY, 'Doctrine\\ORM\\Mapping\\ManyToOne' => self::ATTRIBUTE_NAME__TARGET_ENTITY, 'Doctrine\\ORM\\Mapping\\OneToOne' => self::ATTRIBUTE_NAME__TARGET_ENTITY, 'Doctrine\\ORM\\Mapping\\ManyToMany' => self::ATTRIBUTE_NAME__TARGET_ENTITY, 'Doctrine\\ORM\\Mapping\\Embedded' => self::ATTRIBUTE_NAME__CLASS];
-    /**
-     * @readonly
-     * @var \Rector\Doctrine\PhpDocParser\DoctrineClassAnnotationMatcher
-     */
-    private $doctrineClassAnnotationMatcher;
-    /**
-     * @readonly
-     * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
-     */
-    private $attributeFinder;
     public function __construct(DoctrineClassAnnotationMatcher $doctrineClassAnnotationMatcher, AttributeFinder $attributeFinder)
     {
         $this->doctrineClassAnnotationMatcher = $doctrineClassAnnotationMatcher;

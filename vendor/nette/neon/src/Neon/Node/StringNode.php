@@ -12,11 +12,11 @@ use RectorPrefix202306\Nette\Neon\Node;
 /** @internal */
 final class StringNode extends Node
 {
-    private const EscapeSequences = ['t' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\f", 'b' => "\x08", '"' => '"', '\\' => '\\', '/' => '/', '_' => " "];
     /**
      * @var string
      */
     public $value;
+    private const EscapeSequences = ['t' => "\t", 'n' => "\n", 'r' => "\r", 'f' => "\f", 'b' => "\x08", '"' => '"', '\\' => '\\', '/' => '/', '_' => " "];
     public function __construct(string $value)
     {
         $this->value = $value;

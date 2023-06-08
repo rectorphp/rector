@@ -14,12 +14,6 @@ use Rector\Symfony\DataProvider\ServiceMapProvider;
 use Rector\Symfony\ValueObject\ServiceDefinition;
 final class MessengerHelper
 {
-    public const MESSAGE_HANDLER_INTERFACE = 'Symfony\\Component\\Messenger\\Handler\\MessageHandlerInterface';
-    public const AS_MESSAGE_HANDLER_ATTRIBUTE = 'Symfony\\Component\\Messenger\\Attribute\\AsMessageHandler';
-    /**
-     * @var string
-     */
-    private $messengerTagName = 'messenger.message_handler';
     /**
      * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
@@ -35,6 +29,12 @@ final class MessengerHelper
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;
+    public const MESSAGE_HANDLER_INTERFACE = 'Symfony\\Component\\Messenger\\Handler\\MessageHandlerInterface';
+    public const AS_MESSAGE_HANDLER_ATTRIBUTE = 'Symfony\\Component\\Messenger\\Attribute\\AsMessageHandler';
+    /**
+     * @var string
+     */
+    private $messengerTagName = 'messenger.message_handler';
     public function __construct(PhpAttributeGroupFactory $phpAttributeGroupFactory, AttributeArrayNameInliner $attributeArrayNameInliner, ServiceMapProvider $serviceMapProvider)
     {
         $this->phpAttributeGroupFactory = $phpAttributeGroupFactory;

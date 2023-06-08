@@ -13,10 +13,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class RenameClassCallbackHandler extends NodeVisitorAbstract
 {
     /**
-     * @var array<callable(ClassLike, NodeNameResolver, ReflectionProvider): ?string>
-     */
-    private $oldToNewClassCallbacks = [];
-    /**
      * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
@@ -31,6 +27,10 @@ final class RenameClassCallbackHandler extends NodeVisitorAbstract
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var array<callable(ClassLike, NodeNameResolver, ReflectionProvider): ?string>
+     */
+    private $oldToNewClassCallbacks = [];
     public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;

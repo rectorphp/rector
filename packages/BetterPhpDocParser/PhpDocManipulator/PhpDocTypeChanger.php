@@ -37,14 +37,6 @@ use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 final class PhpDocTypeChanger
 {
     /**
-     * @var array<class-string<Node>>
-     */
-    private const ALLOWED_TYPES = [GenericTypeNode::class, SpacingAwareArrayTypeNode::class, SpacingAwareCallableTypeNode::class, ArrayShapeNode::class];
-    /**
-     * @var string[]
-     */
-    private const ALLOWED_IDENTIFIER_TYPENODE_TYPES = ['class-string'];
-    /**
      * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
@@ -79,6 +71,14 @@ final class PhpDocTypeChanger
      * @var \Rector\BetterPhpDocParser\Guard\NewPhpDocFromPHPStanTypeGuard
      */
     private $newPhpDocFromPHPStanTypeGuard;
+    /**
+     * @var array<class-string<Node>>
+     */
+    private const ALLOWED_TYPES = [GenericTypeNode::class, SpacingAwareArrayTypeNode::class, SpacingAwareCallableTypeNode::class, ArrayShapeNode::class];
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_IDENTIFIER_TYPENODE_TYPES = ['class-string'];
     public function __construct(StaticTypeMapper $staticTypeMapper, TypeComparator $typeComparator, ParamPhpDocNodeFactory $paramPhpDocNodeFactory, NodeNameResolver $nodeNameResolver, CommentsMerger $commentsMerger, PhpDocInfoFactory $phpDocInfoFactory, NewPhpDocFromPHPStanTypeGuard $newPhpDocFromPHPStanTypeGuard)
     {
         $this->staticTypeMapper = $staticTypeMapper;

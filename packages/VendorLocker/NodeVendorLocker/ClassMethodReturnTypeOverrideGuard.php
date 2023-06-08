@@ -26,10 +26,6 @@ use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 final class ClassMethodReturnTypeOverrideGuard
 {
     /**
-     * @var array<class-string, array<string>>
-     */
-    private const CHAOTIC_CLASS_METHOD_NAMES = ['PhpParser\\NodeVisitor' => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse']];
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
@@ -74,6 +70,10 @@ final class ClassMethodReturnTypeOverrideGuard
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;
+    /**
+     * @var array<class-string, array<string>>
+     */
+    private const CHAOTIC_CLASS_METHOD_NAMES = ['PhpParser\\NodeVisitor' => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse']];
     public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper)
     {
         $this->nodeNameResolver = $nodeNameResolver;

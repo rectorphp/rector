@@ -51,11 +51,6 @@ use ReflectionParameter;
 final class AnonymousFunctionFactory
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/jkLLlM/2
-     */
-    private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\\d+)#';
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
@@ -105,6 +100,11 @@ final class AnonymousFunctionFactory
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;
+    /**
+     * @var string
+     * @see https://regex101.com/r/jkLLlM/2
+     */
+    private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\\d+)#';
     public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, ClosureNestedUsesDecorator $closureNestedUsesDecorator, AstResolver $astResolver, PrivatesAccessor $privatesAccessor, InlineCodeParser $inlineCodeParser)
     {
         $this->nodeNameResolver = $nodeNameResolver;

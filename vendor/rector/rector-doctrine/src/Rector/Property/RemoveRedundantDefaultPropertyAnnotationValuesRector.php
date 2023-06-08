@@ -24,10 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveRedundantDefaultPropertyAnnotationValuesRector extends AbstractRector
 {
     /**
-     * @var DefaultAnnotationArgValue[]
-     */
-    private $defaultAnnotationArgValues = [];
-    /**
      * @readonly
      * @var \Rector\Doctrine\NodeManipulator\DoctrineItemDefaultValueManipulator
      */
@@ -42,6 +38,10 @@ final class RemoveRedundantDefaultPropertyAnnotationValuesRector extends Abstrac
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeCleaner
      */
     private $attributeCleaner;
+    /**
+     * @var DefaultAnnotationArgValue[]
+     */
+    private $defaultAnnotationArgValues = [];
     public function __construct(DoctrineItemDefaultValueManipulator $doctrineItemDefaultValueManipulator, AttributeFinder $attributeFinder, AttributeCleaner $attributeCleaner)
     {
         $this->doctrineItemDefaultValueManipulator = $doctrineItemDefaultValueManipulator;

@@ -10,6 +10,11 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class AnnotationTargetResolver
 {
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Node\NodeFactory
+     */
+    private $nodeFactory;
+    /**
      * @see https://github.com/doctrine/annotations/blob/e6e7b7d5b45a2f2abc5460cc6396480b2b1d321f/lib/Doctrine/Common/Annotations/Annotation/Target.php#L24-L29
      * @var array<string, string>
      */
@@ -22,11 +27,6 @@ final class AnnotationTargetResolver
         // special case
         'ANNOTATION' => 'TARGET_CLASS',
     ];
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\NodeFactory
-     */
-    private $nodeFactory;
     public function __construct(NodeFactory $nodeFactory)
     {
         $this->nodeFactory = $nodeFactory;

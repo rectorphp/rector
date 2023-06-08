@@ -19,10 +19,6 @@ use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 final class TypeNormalizer
 {
     /**
-     * @var NestedArrayType[]
-     */
-    private $collectedNestedArrayTypes = [];
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
@@ -32,6 +28,10 @@ final class TypeNormalizer
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
+    /**
+     * @var NestedArrayType[]
+     */
+    private $collectedNestedArrayTypes = [];
     public function __construct(TypeFactory $typeFactory, PrivatesAccessor $privatesAccessor)
     {
         $this->typeFactory = $typeFactory;

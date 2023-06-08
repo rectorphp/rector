@@ -25,10 +25,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AnnotationWithValueToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @var AnnotationWithValueToAttribute[]
-     */
-    private $annotationWithValueToAttributes = [];
-    /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
@@ -38,6 +34,10 @@ final class AnnotationWithValueToAttributeRector extends AbstractRector implemen
      * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
+    /**
+     * @var AnnotationWithValueToAttribute[]
+     */
+    private $annotationWithValueToAttributes = [];
     public function __construct(PhpDocTagRemover $phpDocTagRemover, PhpAttributeGroupFactory $phpAttributeGroupFactory)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;

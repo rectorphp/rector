@@ -23,6 +23,21 @@ use Throwable;
 final class ParallelProcess
 {
     /**
+     * @readonly
+     * @var string
+     */
+    private $command;
+    /**
+     * @readonly
+     * @var \React\EventLoop\LoopInterface
+     */
+    private $loop;
+    /**
+     * @readonly
+     * @var int
+     */
+    private $timetoutInSeconds;
+    /**
      * @var \React\ChildProcess\Process
      */
     private $process;
@@ -46,21 +61,6 @@ final class ParallelProcess
      * @var \React\EventLoop\TimerInterface|null
      */
     private $timer;
-    /**
-     * @readonly
-     * @var string
-     */
-    private $command;
-    /**
-     * @readonly
-     * @var \React\EventLoop\LoopInterface
-     */
-    private $loop;
-    /**
-     * @readonly
-     * @var int
-     */
-    private $timetoutInSeconds;
     public function __construct(string $command, LoopInterface $loop, int $timetoutInSeconds)
     {
         $this->command = $command;

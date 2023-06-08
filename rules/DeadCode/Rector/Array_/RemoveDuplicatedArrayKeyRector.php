@@ -21,10 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDuplicatedArrayKeyRector extends AbstractRector
 {
     /**
-     * @var array<class-string<Expr>>
-     */
-    private const ALLOWED_KEY_DUPLICATES = [PreInc::class, PreDec::class];
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
@@ -34,6 +30,10 @@ final class RemoveDuplicatedArrayKeyRector extends AbstractRector
      * @var \Rector\Core\Util\MultiInstanceofChecker
      */
     private $multiInstanceofChecker;
+    /**
+     * @var array<class-string<Expr>>
+     */
+    private const ALLOWED_KEY_DUPLICATES = [PreInc::class, PreDec::class];
     public function __construct(BetterStandardPrinter $betterStandardPrinter, MultiInstanceofChecker $multiInstanceofChecker)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;

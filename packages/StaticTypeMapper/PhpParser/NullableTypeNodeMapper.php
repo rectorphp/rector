@@ -17,14 +17,14 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class NullableTypeNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
-     * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
-     */
-    private $phpParserNodeMapper;
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
+    /**
+     * @var \Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper
+     */
+    private $phpParserNodeMapper;
     public function __construct(TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;

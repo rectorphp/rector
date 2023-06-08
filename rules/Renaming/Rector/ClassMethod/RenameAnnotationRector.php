@@ -22,14 +22,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class RenameAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var RenameAnnotationInterface[]
-     */
-    private $renameAnnotations = [];
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer
      */
     private $docBlockTagReplacer;
+    /**
+     * @var RenameAnnotationInterface[]
+     */
+    private $renameAnnotations = [];
     public function __construct(DocBlockTagReplacer $docBlockTagReplacer)
     {
         $this->docBlockTagReplacer = $docBlockTagReplacer;

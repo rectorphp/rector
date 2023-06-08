@@ -25,14 +25,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class StaticCallToMethodCallRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
-     * @var StaticCallToMethodCall[]
-     */
-    private $staticCallsToMethodCalls = [];
-    /**
      * @readonly
      * @var \Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer
      */
     private $funcCallStaticCallToMethodCallAnalyzer;
+    /**
+     * @var StaticCallToMethodCall[]
+     */
+    private $staticCallsToMethodCalls = [];
     public function __construct(FuncCallStaticCallToMethodCallAnalyzer $funcCallStaticCallToMethodCallAnalyzer)
     {
         $this->funcCallStaticCallToMethodCallAnalyzer = $funcCallStaticCallToMethodCallAnalyzer;

@@ -27,14 +27,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class VersionCompareFuncCallToConstantRector extends AbstractRector
 {
     /**
-     * @var array<string, class-string<BinaryOp>>
-     */
-    private const OPERATOR_TO_COMPARISON = ['=' => Identical::class, '==' => Identical::class, 'eq' => Identical::class, '!=' => NotIdentical::class, '<>' => NotIdentical::class, 'ne' => NotIdentical::class, '>' => Greater::class, 'gt' => Greater::class, '<' => Smaller::class, 'lt' => Smaller::class, '>=' => GreaterOrEqual::class, 'ge' => GreaterOrEqual::class, '<=' => SmallerOrEqual::class, 'le' => SmallerOrEqual::class];
-    /**
      * @readonly
      * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;
+    /**
+     * @var array<string, class-string<BinaryOp>>
+     */
+    private const OPERATOR_TO_COMPARISON = ['=' => Identical::class, '==' => Identical::class, 'eq' => Identical::class, '!=' => NotIdentical::class, '<>' => NotIdentical::class, 'ne' => NotIdentical::class, '>' => Greater::class, 'gt' => Greater::class, '<' => Smaller::class, 'lt' => Smaller::class, '>=' => GreaterOrEqual::class, 'ge' => GreaterOrEqual::class, '<=' => SmallerOrEqual::class, 'le' => SmallerOrEqual::class];
     public function __construct(PhpVersionFactory $phpVersionFactory)
     {
         $this->phpVersionFactory = $phpVersionFactory;

@@ -20,12 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ExceptionAnnotationRector extends AbstractRector
 {
     /**
-     * In reversed order, which they should be called in code.
-     *
-     * @var array<string, string>
-     */
-    private const ANNOTATION_TO_METHOD = ['expectedExceptionMessageRegExp' => 'expectExceptionMessageRegExp', 'expectedExceptionMessage' => 'expectExceptionMessage', 'expectedExceptionCode' => 'expectExceptionCode', 'expectedException' => 'expectException'];
-    /**
      * @readonly
      * @var \Rector\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory
      */
@@ -40,6 +34,12 @@ final class ExceptionAnnotationRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
+    /**
+     * In reversed order, which they should be called in code.
+     *
+     * @var array<string, string>
+     */
+    private const ANNOTATION_TO_METHOD = ['expectedExceptionMessageRegExp' => 'expectExceptionMessageRegExp', 'expectedExceptionMessage' => 'expectExceptionMessage', 'expectedExceptionCode' => 'expectExceptionCode', 'expectedException' => 'expectException'];
     public function __construct(ExpectExceptionMethodCallFactory $expectExceptionMethodCallFactory, PhpDocTagRemover $phpDocTagRemover, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->expectExceptionMethodCallFactory = $expectExceptionMethodCallFactory;

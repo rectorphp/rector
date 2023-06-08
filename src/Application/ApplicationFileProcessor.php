@@ -26,14 +26,6 @@ use RectorPrefix202306\Symplify\EasyParallel\ScheduleFactory;
 final class ApplicationFileProcessor
 {
     /**
-     * @var string
-     */
-    private const ARGV = 'argv';
-    /**
-     * @var SystemError[]
-     */
-    private $systemErrors = [];
-    /**
      * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
@@ -93,6 +85,14 @@ final class ApplicationFileProcessor
      * @readonly
      */
     private $fileProcessors = [];
+    /**
+     * @var string
+     */
+    private const ARGV = 'argv';
+    /**
+     * @var SystemError[]
+     */
+    private $systemErrors = [];
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */

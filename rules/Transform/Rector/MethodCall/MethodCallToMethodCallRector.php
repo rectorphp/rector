@@ -26,10 +26,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class MethodCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var MethodCallToMethodCall[]
-     */
-    private $methodCallsToMethodsCalls = [];
-    /**
      * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
@@ -44,6 +40,10 @@ final class MethodCallToMethodCallRector extends AbstractRector implements Confi
      * @var \Rector\PostRector\Collector\PropertyToAddCollector
      */
     private $propertyToAddCollector;
+    /**
+     * @var MethodCallToMethodCall[]
+     */
+    private $methodCallsToMethodsCalls = [];
     public function __construct(PropertyNaming $propertyNaming, PropertyPresenceChecker $propertyPresenceChecker, PropertyToAddCollector $propertyToAddCollector)
     {
         $this->propertyNaming = $propertyNaming;

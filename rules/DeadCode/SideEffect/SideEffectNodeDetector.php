@@ -26,14 +26,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SideEffectNodeDetector
 {
     /**
-     * @var array<class-string<Expr>>
-     */
-    private const SIDE_EFFECT_NODE_TYPES = [Encapsed::class, New_::class, Concat::class, PropertyFetch::class];
-    /**
-     * @var array<class-string<Expr>>
-     */
-    private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [MethodCall::class, New_::class, NullsafeMethodCall::class, StaticCall::class];
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
@@ -43,6 +35,14 @@ final class SideEffectNodeDetector
      * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
     private $pureFunctionDetector;
+    /**
+     * @var array<class-string<Expr>>
+     */
+    private const SIDE_EFFECT_NODE_TYPES = [Encapsed::class, New_::class, Concat::class, PropertyFetch::class];
+    /**
+     * @var array<class-string<Expr>>
+     */
+    private const CALL_EXPR_SIDE_EFFECT_NODE_TYPES = [MethodCall::class, New_::class, NullsafeMethodCall::class, StaticCall::class];
     public function __construct(NodeTypeResolver $nodeTypeResolver, \Rector\DeadCode\SideEffect\PureFunctionDetector $pureFunctionDetector)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

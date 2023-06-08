@@ -8,10 +8,6 @@ use Rector\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 final class NestedAnnotationToAttribute implements AnnotationToAttributeInterface
 {
     /**
-     * @var AnnotationPropertyToAttributeClass[]
-     */
-    private $annotationPropertiesToAttributeClasses = [];
-    /**
      * @readonly
      * @var string
      */
@@ -21,6 +17,10 @@ final class NestedAnnotationToAttribute implements AnnotationToAttributeInterfac
      * @var bool
      */
     private $removeOriginal = \false;
+    /**
+     * @var AnnotationPropertyToAttributeClass[]
+     */
+    private $annotationPropertiesToAttributeClasses = [];
     /**
      * @param array<string, string>|string[]|AnnotationPropertyToAttributeClass[] $annotationPropertiesToAttributeClasses
      */

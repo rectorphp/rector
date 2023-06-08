@@ -28,10 +28,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class AssignManipulator
 {
     /**
-     * @var array<class-string<Expr>>
-     */
-    private const MODIFYING_NODE_TYPES = [Assign::class, AssignOp::class, PreDec::class, PostDec::class, PreInc::class, PostInc::class];
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
@@ -56,6 +52,10 @@ final class AssignManipulator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
+    /**
+     * @var array<class-string<Expr>>
+     */
+    private const MODIFYING_NODE_TYPES = [Assign::class, AssignOp::class, PreDec::class, PostDec::class, PreInc::class, PostInc::class];
     public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, PropertyFetchAnalyzer $propertyFetchAnalyzer, MultiInstanceofChecker $multiInstanceofChecker, NodeComparator $nodeComparator)
     {
         $this->nodeNameResolver = $nodeNameResolver;

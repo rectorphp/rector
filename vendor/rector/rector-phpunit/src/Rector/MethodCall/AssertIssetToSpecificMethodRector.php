@@ -28,14 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssertIssetToSpecificMethodRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const ASSERT_TRUE = 'assertTrue';
-    /**
-     * @var string
-     */
-    private const ASSERT_FALSE = 'assertFalse';
-    /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
      */
@@ -55,6 +47,14 @@ final class AssertIssetToSpecificMethodRector extends AbstractRector
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var string
+     */
+    private const ASSERT_TRUE = 'assertTrue';
+    /**
+     * @var string
+     */
+    private const ASSERT_FALSE = 'assertFalse';
     public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer, AstResolver $astResolver, ReflectionProvider $reflectionProvider)
     {
         $this->identifierManipulator = $identifierManipulator;

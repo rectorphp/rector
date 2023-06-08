@@ -9,10 +9,6 @@ use Rector\Core\Configuration\Parameter\ParameterProvider;
 final class SkippedClassResolver
 {
     /**
-     * @var array<string, string[]|null>
-     */
-    private $skippedClasses = [];
-    /**
      * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
@@ -22,6 +18,10 @@ final class SkippedClassResolver
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var array<string, string[]|null>
+     */
+    private $skippedClasses = [];
     public function __construct(ParameterProvider $parameterProvider, ReflectionProvider $reflectionProvider)
     {
         $this->parameterProvider = $parameterProvider;

@@ -20,6 +20,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class Php8ResourceReturnToObjectRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
+     * @var \Rector\Php80\NodeManipulator\ResourceReturnToObject
+     */
+    private $resourceReturnToObject;
+    /**
      * @var array<string, string>
      */
     private const COLLECTION_FUNCTION_TO_RETURN_OBJECT = [
@@ -78,11 +83,6 @@ final class Php8ResourceReturnToObjectRector extends AbstractRector implements M
         'inflate_init' => 'InflateContext',
         'deflate_init' => 'DeflateContext',
     ];
-    /**
-     * @readonly
-     * @var \Rector\Php80\NodeManipulator\ResourceReturnToObject
-     */
-    private $resourceReturnToObject;
     public function __construct(ResourceReturnToObject $resourceReturnToObject)
     {
         $this->resourceReturnToObject = $resourceReturnToObject;

@@ -28,14 +28,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AddParamTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var AddParamTypeDeclaration[]
-     */
-    private $addParamTypeDeclarations = [];
-    /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
@@ -45,6 +37,14 @@ final class AddParamTypeDeclarationRector extends AbstractRector implements Conf
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
+    /**
+     * @var AddParamTypeDeclaration[]
+     */
+    private $addParamTypeDeclarations = [];
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(TypeComparator $typeComparator, PhpVersionProvider $phpVersionProvider)
     {
         $this->typeComparator = $typeComparator;

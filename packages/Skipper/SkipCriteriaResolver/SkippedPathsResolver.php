@@ -12,10 +12,6 @@ use Rector\Core\FileSystem\FilePathHelper;
 final class SkippedPathsResolver
 {
     /**
-     * @var string[]
-     */
-    private $skippedPaths = [];
-    /**
      * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
@@ -25,6 +21,10 @@ final class SkippedPathsResolver
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;
+    /**
+     * @var string[]
+     */
+    private $skippedPaths = [];
     public function __construct(ParameterProvider $parameterProvider, FilePathHelper $filePathHelper)
     {
         $this->parameterProvider = $parameterProvider;

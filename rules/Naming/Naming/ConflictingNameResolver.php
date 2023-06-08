@@ -15,10 +15,6 @@ use Rector\Naming\PhpArray\ArrayFilter;
 final class ConflictingNameResolver
 {
     /**
-     * @var array<string, string[]>
-     */
-    private $conflictingVariableNamesByClassMethod = [];
-    /**
      * @readonly
      * @var \Rector\Naming\PhpArray\ArrayFilter
      */
@@ -43,6 +39,10 @@ final class ConflictingNameResolver
      * @var \Rector\Core\NodeManipulator\FunctionLikeManipulator
      */
     private $functionLikeManipulator;
+    /**
+     * @var array<string, string[]>
+     */
+    private $conflictingVariableNamesByClassMethod = [];
     public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, \Rector\Naming\Naming\ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, FunctionLikeManipulator $functionLikeManipulator)
     {
         $this->arrayFilter = $arrayFilter;

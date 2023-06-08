@@ -33,11 +33,6 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class BreakingVariableRenameGuard
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/1pKLgf/1
-     */
-    public const AT_NAMING_REGEX = '#[\\w+]At$#';
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
@@ -67,6 +62,11 @@ final class BreakingVariableRenameGuard
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var string
+     * @see https://regex101.com/r/1pKLgf/1
+     */
+    public const AT_NAMING_REGEX = '#[\\w+]At$#';
     public function __construct(BetterNodeFinder $betterNodeFinder, ConflictingNameResolver $conflictingNameResolver, NodeTypeResolver $nodeTypeResolver, OverridenExistingNamesResolver $overridenExistingNamesResolver, TypeUnwrapper $typeUnwrapper, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;

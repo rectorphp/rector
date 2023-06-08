@@ -27,11 +27,6 @@ use Throwable;
 final class PhpFileProcessor implements FileProcessorInterface
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/xP2MGa/1
-     */
-    private const OPEN_TAG_SPACED_REGEX = '#^(?<open_tag_spaced>[^\\S\\r\\n]+\\<\\?php)#m';
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Printer\FormatPerservingPrinter
      */
@@ -81,6 +76,11 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
+    /**
+     * @var string
+     * @see https://regex101.com/r/xP2MGa/1
+     */
+    private const OPEN_TAG_SPACED_REGEX = '#^(?<open_tag_spaced>[^\\S\\r\\n]+\\<\\?php)#m';
     public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, SymfonyStyle $symfonyStyle)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;

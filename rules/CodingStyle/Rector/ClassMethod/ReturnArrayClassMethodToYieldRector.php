@@ -26,14 +26,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ReturnArrayClassMethodToYieldRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var ReturnArrayClassMethodToyield[]
-     */
-    private $methodsToYields = [];
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\NodeTransformer
      */
     private $nodeTransformer;
+    /**
+     * @var ReturnArrayClassMethodToyield[]
+     */
+    private $methodsToYields = [];
     public function __construct(NodeTransformer $nodeTransformer)
     {
         $this->nodeTransformer = $nodeTransformer;

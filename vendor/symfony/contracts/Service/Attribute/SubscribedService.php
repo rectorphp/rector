@@ -25,8 +25,6 @@ use RectorPrefix202306\Symfony\Contracts\Service\ServiceSubscriberTrait;
 #[\Attribute(\Attribute::TARGET_METHOD)]
 final class SubscribedService
 {
-    /** @var object[] */
-    public $attributes;
     /**
      * @var string|null
      */
@@ -39,6 +37,8 @@ final class SubscribedService
      * @var bool
      */
     public $nullable = \false;
+    /** @var object[] */
+    public $attributes;
     /**
      * @param string|null       $key        The key to use for the service
      * @param class-string|null $type       The service class

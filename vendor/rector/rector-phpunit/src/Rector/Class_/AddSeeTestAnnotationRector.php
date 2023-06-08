@@ -20,10 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddSeeTestAnnotationRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const SEE = 'see';
-    /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
@@ -38,6 +34,10 @@ final class AddSeeTestAnnotationRector extends AbstractRector
      * @var \Rector\PHPUnit\Naming\TestClassNameResolver
      */
     private $testClassNameResolver;
+    /**
+     * @var string
+     */
+    private const SEE = 'see';
     public function __construct(ReflectionProvider $reflectionProvider, PhpDocTagRemover $phpDocTagRemover, TestClassNameResolver $testClassNameResolver)
     {
         $this->reflectionProvider = $reflectionProvider;

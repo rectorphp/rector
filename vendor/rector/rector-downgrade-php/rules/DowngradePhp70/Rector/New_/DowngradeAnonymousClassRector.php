@@ -19,14 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeAnonymousClassRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const ANONYMOUS_CLASS_PREFIX = 'Anonymous__';
-    /**
-     * @var Class_[]
-     */
-    private $classes = [];
-    /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
@@ -41,6 +33,14 @@ final class DowngradeAnonymousClassRector extends AbstractRector
      * @var \Rector\NodeManipulator\NamespacedNameDecorator
      */
     private $namespacedNameDecorator;
+    /**
+     * @var string
+     */
+    private const ANONYMOUS_CLASS_PREFIX = 'Anonymous__';
+    /**
+     * @var Class_[]
+     */
+    private $classes = [];
     public function __construct(ClassAnalyzer $classAnalyzer, ClassFromAnonymousFactory $classFromAnonymousFactory, NamespacedNameDecorator $namespacedNameDecorator)
     {
         $this->classAnalyzer = $classAnalyzer;

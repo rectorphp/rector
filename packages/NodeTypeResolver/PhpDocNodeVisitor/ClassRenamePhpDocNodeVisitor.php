@@ -29,10 +29,6 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
-     * @var OldToNewType[]
-     */
-    private $oldToNewTypes = [];
-    /**
      * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
@@ -62,6 +58,10 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;
+    /**
+     * @var OldToNewType[]
+     */
+    private $oldToNewTypes = [];
     public function __construct(StaticTypeMapper $staticTypeMapper, CurrentNodeProvider $currentNodeProvider, UseImportsResolver $useImportsResolver, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, RectorConfigProvider $rectorConfigProvider)
     {
         $this->staticTypeMapper = $staticTypeMapper;

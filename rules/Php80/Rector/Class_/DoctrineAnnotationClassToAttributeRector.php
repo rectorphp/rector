@@ -39,15 +39,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class DoctrineAnnotationClassToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @api
-     * @var string
-     */
-    public const REMOVE_ANNOTATIONS = 'remove_annotations';
-    /**
-     * @var bool
-     */
-    private $shouldRemoveAnnotations = \true;
-    /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
@@ -77,6 +68,15 @@ final class DoctrineAnnotationClassToAttributeRector extends AbstractRector impl
      * @var \Rector\Php80\NodeAnalyzer\AnnotationTargetResolver
      */
     private $annotationTargetResolver;
+    /**
+     * @api
+     * @var string
+     */
+    public const REMOVE_ANNOTATIONS = 'remove_annotations';
+    /**
+     * @var bool
+     */
+    private $shouldRemoveAnnotations = \true;
     public function __construct(PhpDocTagRemover $phpDocTagRemover, AttributeFlagFactory $attributeFlagFactory, PhpAttributeGroupFactory $phpAttributeGroupFactory, PhpAttributeAnalyzer $phpAttributeAnalyzer, PropertyToAddCollector $propertyToAddCollector, AnnotationTargetResolver $annotationTargetResolver)
     {
         $this->phpDocTagRemover = $phpDocTagRemover;

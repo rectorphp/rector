@@ -25,10 +25,6 @@ use Throwable;
 final class WorkerRunner
 {
     /**
-     * @var string
-     */
-    private const RESULT = 'result';
-    /**
      * @readonly
      * @var \Rector\Core\Util\ArrayParametersMerger
      */
@@ -63,6 +59,10 @@ final class WorkerRunner
      * @readonly
      */
     private $fileProcessors = [];
+    /**
+     * @var string
+     */
+    private const RESULT = 'result';
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */

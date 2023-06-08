@@ -28,14 +28,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConsoleExecuteReturnIntRector extends AbstractRector
 {
     /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer
      */
     private $terminatedNodeAnalyzer;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(TerminatedNodeAnalyzer $terminatedNodeAnalyzer)
     {
         $this->terminatedNodeAnalyzer = $terminatedNodeAnalyzer;

@@ -20,10 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
 {
     /**
-     * @var ConstantWithAssertMethods[]
-     */
-    private $constantWithAssertMethods = [];
-    /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
      */
@@ -38,6 +34,10 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
+    /**
+     * @var ConstantWithAssertMethods[]
+     */
+    private $constantWithAssertMethods = [];
     public function __construct(IdentifierManipulator $identifierManipulator, ArgumentMover $argumentMover, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;

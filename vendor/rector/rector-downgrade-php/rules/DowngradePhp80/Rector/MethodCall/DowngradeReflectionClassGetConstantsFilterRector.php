@@ -33,10 +33,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeReflectionClassGetConstantsFilterRector extends AbstractRector
 {
     /**
-     * @var array<string, string>
-     */
-    private const MAP_CONSTANT_TO_METHOD = ['IS_PUBLIC' => 'isPublic', 'IS_PROTECTED' => 'isProtected', 'IS_PRIVATE' => 'isPrivate'];
-    /**
      * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
@@ -51,6 +47,10 @@ final class DowngradeReflectionClassGetConstantsFilterRector extends AbstractRec
      * @var \Rector\NodeCollector\BinaryOpConditionsCollector
      */
     private $binaryOpConditionsCollector;
+    /**
+     * @var array<string, string>
+     */
+    private const MAP_CONSTANT_TO_METHOD = ['IS_PUBLIC' => 'isPublic', 'IS_PROTECTED' => 'isProtected', 'IS_PRIVATE' => 'isPrivate'];
     public function __construct(VariableNaming $variableNaming, IfManipulator $ifManipulator, BinaryOpConditionsCollector $binaryOpConditionsCollector)
     {
         $this->variableNaming = $variableNaming;

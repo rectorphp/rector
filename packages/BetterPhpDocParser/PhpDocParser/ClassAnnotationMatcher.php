@@ -19,10 +19,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassAnnotationMatcher
 {
     /**
-     * @var array<string, string>
-     */
-    private $fullyQualifiedNameByHash = [];
-    /**
      * @readonly
      * @var \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher
      */
@@ -37,6 +33,10 @@ final class ClassAnnotationMatcher
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var array<string, string>
+     */
+    private $fullyQualifiedNameByHash = [];
     public function __construct(UseImportNameMatcher $useImportNameMatcher, UseImportsResolver $useImportsResolver, ReflectionProvider $reflectionProvider)
     {
         $this->useImportNameMatcher = $useImportNameMatcher;

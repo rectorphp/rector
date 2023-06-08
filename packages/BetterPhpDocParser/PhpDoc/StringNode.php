@@ -10,11 +10,11 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Stringable;
 final class StringNode implements PhpDocTagValueNode
 {
-    use NodeAttributes;
     /**
      * @var string
      */
     public $value;
+    use NodeAttributes;
     public function __construct(string $value)
     {
         $this->value = $value;

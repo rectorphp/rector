@@ -11,14 +11,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
 {
     /**
-     * @var SymfonyRouteMetadata[]
-     */
-    private $symfonyRouteMetadatas = [];
-    /**
      * @readonly
      * @var \Rector\Symfony\Bridge\Symfony\ContainerServiceProvider
      */
     private $containerServiceProvider;
+    /**
+     * @var SymfonyRouteMetadata[]
+     */
+    private $symfonyRouteMetadatas = [];
     public function __construct(ContainerServiceProvider $containerServiceProvider)
     {
         $this->containerServiceProvider = $containerServiceProvider;

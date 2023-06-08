@@ -22,14 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GetRequestRector extends AbstractRector
 {
     /**
-     * @var string
-     */
-    private const REQUEST_CLASS = 'Symfony\\Component\\HttpFoundation\\Request';
-    /**
-     * @var string|null
-     */
-    private $requestVariableAndParamName;
-    /**
      * @readonly
      * @var \Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer
      */
@@ -39,6 +31,14 @@ final class GetRequestRector extends AbstractRector
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
+    /**
+     * @var string
+     */
+    private const REQUEST_CLASS = 'Symfony\\Component\\HttpFoundation\\Request';
+    /**
+     * @var string|null
+     */
+    private $requestVariableAndParamName;
     public function __construct(ControllerMethodAnalyzer $controllerMethodAnalyzer, ControllerAnalyzer $controllerAnalyzer)
     {
         $this->controllerMethodAnalyzer = $controllerMethodAnalyzer;

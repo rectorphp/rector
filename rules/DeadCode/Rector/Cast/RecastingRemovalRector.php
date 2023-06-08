@@ -40,10 +40,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RecastingRemovalRector extends AbstractRector
 {
     /**
-     * @var array<class-string<Node>, class-string<Type>>
-     */
-    private const CAST_CLASS_TO_NODE_TYPE = [String_::class => StringType::class, Bool_::class => BooleanType::class, Array_::class => ArrayType::class, Int_::class => IntegerType::class, Object_::class => ObjectType::class, Double::class => FloatType::class];
-    /**
      * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
@@ -63,6 +59,10 @@ final class RecastingRemovalRector extends AbstractRector
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
+    /**
+     * @var array<class-string<Node>, class-string<Type>>
+     */
+    private const CAST_CLASS_TO_NODE_TYPE = [String_::class => StringType::class, Bool_::class => BooleanType::class, Array_::class => ArrayType::class, Int_::class => IntegerType::class, Object_::class => ObjectType::class, Double::class => FloatType::class];
     public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, ReflectionResolver $reflectionResolver, ExprAnalyzer $exprAnalyzer, AstResolver $astResolver)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;

@@ -22,10 +22,6 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocInfoFactory
 {
     /**
-     * @var array<string, PhpDocInfo>
-     */
-    private $phpDocInfosByObjectHash = [];
-    /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocNodeMapper
      */
@@ -65,6 +61,10 @@ final class PhpDocInfoFactory
      * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
      */
     private $phpDocNodeByTypeFinder;
+    /**
+     * @var array<string, PhpDocInfo>
+     */
+    private $phpDocInfosByObjectHash = [];
     public function __construct(PhpDocNodeMapper $phpDocNodeMapper, CurrentNodeProvider $currentNodeProvider, Lexer $lexer, BetterPhpDocParser $betterPhpDocParser, StaticTypeMapper $staticTypeMapper, AnnotationNaming $annotationNaming, RectorChangeCollector $rectorChangeCollector, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
     {
         $this->phpDocNodeMapper = $phpDocNodeMapper;

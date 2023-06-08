@@ -9,14 +9,14 @@ use ReflectionMethod;
 final class ParameterTypeResolver
 {
     /**
-     * @var array<string, string>
-     */
-    private $resolvedParameterTypesCached = [];
-    /**
      * @readonly
      * @var \Rector\Core\DependencyInjection\DocBlock\ParamTypeDocBlockResolver
      */
     private $paramTypeDocBlockResolver;
+    /**
+     * @var array<string, string>
+     */
+    private $resolvedParameterTypesCached = [];
     public function __construct(ParamTypeDocBlockResolver $paramTypeDocBlockResolver)
     {
         $this->paramTypeDocBlockResolver = $paramTypeDocBlockResolver;

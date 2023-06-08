@@ -13,15 +13,15 @@ use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class ContextAnalyzer
 {
     /**
-     * Nodes that break the scope they way up, e.g. class method
-     * @var array<class-string<FunctionLike>>
-     */
-    private const BREAK_NODES = [FunctionLike::class, ClassMethod::class];
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
+    /**
+     * Nodes that break the scope they way up, e.g. class method
+     * @var array<class-string<FunctionLike>>
+     */
+    private const BREAK_NODES = [FunctionLike::class, ClassMethod::class];
     public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;

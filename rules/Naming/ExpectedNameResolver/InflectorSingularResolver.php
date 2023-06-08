@@ -12,6 +12,11 @@ use Rector\Core\Util\StringUtils;
 final class InflectorSingularResolver
 {
     /**
+     * @readonly
+     * @var \Doctrine\Inflector\Inflector
+     */
+    private $inflector;
+    /**
      * @var array<string, string>
      */
     private const SINGULARIZE_MAP = ['news' => 'new'];
@@ -29,11 +34,6 @@ final class InflectorSingularResolver
      * @var string
      */
     private const CAMELCASE = 'camelcase';
-    /**
-     * @readonly
-     * @var \Doctrine\Inflector\Inflector
-     */
-    private $inflector;
     public function __construct(Inflector $inflector)
     {
         $this->inflector = $inflector;

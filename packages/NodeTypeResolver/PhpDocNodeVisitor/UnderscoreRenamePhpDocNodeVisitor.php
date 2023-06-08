@@ -13,10 +13,6 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
@@ -31,6 +27,10 @@ final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var \PhpParser\Node
      */
     private $phpNode;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(StaticTypeMapper $staticTypeMapper, PseudoNamespaceToNamespace $pseudoNamespaceToNamespace, \PhpParser\Node $phpNode)
     {
         $this->staticTypeMapper = $staticTypeMapper;

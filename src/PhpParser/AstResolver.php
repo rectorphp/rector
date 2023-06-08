@@ -42,13 +42,6 @@ use Rector\PhpDocParser\PhpParser\SmartPhpParser;
 final class AstResolver
 {
     /**
-     * Parsing files is very heavy performance, so this will help to leverage it
-     * The value can be also null, when no statements could be parsed from the file.
-     *
-     * @var array<string, Stmt[]|null>
-     */
-    private $parsedFileNodes = [];
-    /**
      * @readonly
      * @var \Rector\PhpDocParser\PhpParser\SmartPhpParser
      */
@@ -88,6 +81,13 @@ final class AstResolver
      * @var \Rector\Core\PhpParser\ClassLikeAstResolver
      */
     private $classLikeAstResolver;
+    /**
+     * Parsing files is very heavy performance, so this will help to leverage it
+     * The value can be also null, when no statements could be parsed from the file.
+     *
+     * @var array<string, Stmt[]|null>
+     */
+    private $parsedFileNodes = [];
     public function __construct(SmartPhpParser $smartPhpParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, NodeTypeResolver $nodeTypeResolver, \Rector\Core\PhpParser\ClassLikeAstResolver $classLikeAstResolver)
     {
         $this->smartPhpParser = $smartPhpParser;

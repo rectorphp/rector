@@ -61,15 +61,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class PHPStanNodeScopeResolver
 {
     /**
-     * @var string
-     */
-    private const CONTEXT = 'context';
-    /**
-     * @readonly
-     * @var \PhpParser\NodeTraverser
-     */
-    private $nodeTraverser;
-    /**
      * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
@@ -114,6 +105,15 @@ final class PHPStanNodeScopeResolver
      * @var \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
      */
     private $fileWithoutNamespaceNodeTraverser;
+    /**
+     * @var string
+     */
+    private const CONTEXT = 'context';
+    /**
+     * @readonly
+     * @var \PhpParser\NodeTraverser
+     */
+    private $nodeTraverser;
     /**
      * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
      */

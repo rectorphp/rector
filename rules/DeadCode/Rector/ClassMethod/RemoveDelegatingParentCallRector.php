@@ -24,14 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDelegatingParentCallRector extends AbstractScopeAwareRector
 {
     /**
-     * @var string[]
-     */
-    private const ALLOWED_ANNOTATIONS = ['Route', 'required'];
-    /**
-     * @var string[]
-     */
-    private const ALLOWED_ATTRIBUTES = ['Symfony\\Component\\Routing\\Annotation\\Route', 'Symfony\\Contracts\\Service\\Attribute\\Required'];
-    /**
      * @readonly
      * @var \Rector\DeadCode\Comparator\CurrentAndParentClassMethodComparator
      */
@@ -41,6 +33,14 @@ final class RemoveDelegatingParentCallRector extends AbstractScopeAwareRector
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_ANNOTATIONS = ['Route', 'required'];
+    /**
+     * @var string[]
+     */
+    private const ALLOWED_ATTRIBUTES = ['Symfony\\Component\\Routing\\Annotation\\Route', 'Symfony\\Contracts\\Service\\Attribute\\Required'];
     public function __construct(CurrentAndParentClassMethodComparator $currentAndParentClassMethodComparator, PhpAttributeAnalyzer $phpAttributeAnalyzer)
     {
         $this->currentAndParentClassMethodComparator = $currentAndParentClassMethodComparator;

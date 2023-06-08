@@ -13,14 +13,14 @@ use Rector\Parallel\ValueObject\Bridge;
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
     /**
-     * @var string
-     */
-    public const NAME = 'json';
-    /**
      * @readonly
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
+    /**
+     * @var string
+     */
+    public const NAME = 'json';
     public function __construct(RectorsChangelogResolver $rectorsChangelogResolver)
     {
         $this->rectorsChangelogResolver = $rectorsChangelogResolver;

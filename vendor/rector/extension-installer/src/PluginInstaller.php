@@ -14,6 +14,30 @@ use RectorPrefix202306\Composer\Util\Filesystem as ComposerFilesystem;
 final class PluginInstaller
 {
     /**
+     * @var \Rector\RectorInstaller\Filesystem
+     */
+    private $filesystem;
+    /**
+     * @var \Composer\Repository\InstalledRepositoryInterface
+     */
+    private $localRepository;
+    /**
+     * @var \Composer\IO\IOInterface
+     */
+    private $io;
+    /**
+     * @var \Composer\Installer\InstallationManager
+     */
+    private $installationManager;
+    /**
+     * @var ComposerFilesystem
+     */
+    private $composerFilesystem;
+    /**
+     * @var string
+     */
+    private $configurationFile;
+    /**
      * @var string
      */
     public const RECTOR_EXTENSION_TYPE = 'rector-extension';
@@ -45,30 +69,6 @@ final class GeneratedConfig
 }
 
 CODE_SAMPLE;
-    /**
-     * @var \Rector\RectorInstaller\Filesystem
-     */
-    private $filesystem;
-    /**
-     * @var \Composer\Repository\InstalledRepositoryInterface
-     */
-    private $localRepository;
-    /**
-     * @var \Composer\IO\IOInterface
-     */
-    private $io;
-    /**
-     * @var \Composer\Installer\InstallationManager
-     */
-    private $installationManager;
-    /**
-     * @var ComposerFilesystem
-     */
-    private $composerFilesystem;
-    /**
-     * @var string
-     */
-    private $configurationFile;
     public function __construct(\Rector\RectorInstaller\Filesystem $filesystem, InstalledRepositoryInterface $localRepository, IOInterface $io, InstallationManager $installationManager, ComposerFilesystem $composerFilesystem, string $configurationFile)
     {
         $this->filesystem = $filesystem;

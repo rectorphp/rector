@@ -28,10 +28,6 @@ use RectorPrefix202306\Symfony\Component\String\UnicodeString;
 final class VariableNaming
 {
     /**
-     * @var AssignVariableNameResolverInterface[]
-     */
-    private $assignVariableNameResolvers = [];
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
@@ -41,6 +37,10 @@ final class VariableNaming
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
+    /**
+     * @var AssignVariableNameResolverInterface[]
+     */
+    private $assignVariableNameResolvers = [];
     public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, PropertyFetchAssignVariableNameResolver $propertyFetchAssignVariableNameResolver, NewAssignVariableNameResolver $newAssignVariableNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;

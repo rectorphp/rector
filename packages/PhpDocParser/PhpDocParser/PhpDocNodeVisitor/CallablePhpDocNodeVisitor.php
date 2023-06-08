@@ -7,14 +7,14 @@ use PHPStan\PhpDocParser\Ast\Node;
 final class CallablePhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
-     * @var callable(Node, string|null): (int|null|Node)
-     */
-    private $callable;
-    /**
      * @readonly
      * @var string|null
      */
     private $docContent;
+    /**
+     * @var callable(Node, string|null): (int|null|Node)
+     */
+    private $callable;
     /**
      * @param callable(Node $callable, string|null $docContent): (int|null|Node) $callable
      */

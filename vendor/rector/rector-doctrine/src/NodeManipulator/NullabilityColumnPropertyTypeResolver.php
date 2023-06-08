@@ -15,10 +15,6 @@ use Rector\Doctrine\NodeAnalyzer\AttributeFinder;
 final class NullabilityColumnPropertyTypeResolver
 {
     /**
-     * @var string
-     */
-    private const COLUMN_CLASS = 'Doctrine\\ORM\\Mapping\\Column';
-    /**
      * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
@@ -33,6 +29,10 @@ final class NullabilityColumnPropertyTypeResolver
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
+    /**
+     * @var string
+     */
+    private const COLUMN_CLASS = 'Doctrine\\ORM\\Mapping\\Column';
     /**
      * @see https://www.doctrine-project.org/projects/doctrine-orm/en/2.6/reference/basic-mapping.html#doctrine-mapping-types
      */

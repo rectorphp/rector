@@ -11,15 +11,15 @@ use RectorPrefix202306\Nette\Neon\Node;
 /** @internal */
 final class LiteralNode extends Node
 {
+    /**
+     * @var mixed
+     */
+    public $value;
     private const SimpleTypes = ['true' => \true, 'True' => \true, 'TRUE' => \true, 'yes' => \true, 'Yes' => \true, 'YES' => \true, 'false' => \false, 'False' => \false, 'FALSE' => \false, 'no' => \false, 'No' => \false, 'NO' => \false, 'null' => null, 'Null' => null, 'NULL' => null];
     private const PatternDatetime = '#\\d\\d\\d\\d-\\d\\d?-\\d\\d?(?:(?:[Tt]| ++)\\d\\d?:\\d\\d:\\d\\d(?:\\.\\d*+)? *+(?:Z|[-+]\\d\\d?(?::?\\d\\d)?)?)?$#DA';
     private const PatternHex = '#0x[0-9a-fA-F]++$#DA';
     private const PatternOctal = '#0o[0-7]++$#DA';
     private const PatternBinary = '#0b[0-1]++$#DA';
-    /**
-     * @var mixed
-     */
-    public $value;
     /**
      * @param mixed $value
      */

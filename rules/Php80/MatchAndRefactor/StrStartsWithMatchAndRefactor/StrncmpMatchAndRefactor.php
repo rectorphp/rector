@@ -20,10 +20,6 @@ use Rector\Php80\ValueObjectFactory\StrStartsWithFactory;
 final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**
-     * @var string
-     */
-    private const FUNCTION_NAME = 'strncmp';
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
@@ -43,6 +39,10 @@ final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInter
      * @var \Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory
      */
     private $strStartsWithFuncCallFactory;
+    /**
+     * @var string
+     */
+    private const FUNCTION_NAME = 'strncmp';
     public function __construct(NodeNameResolver $nodeNameResolver, StrStartsWithFactory $strStartsWithFactory, NodeComparator $nodeComparator, StrStartsWithFuncCallFactory $strStartsWithFuncCallFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;

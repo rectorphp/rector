@@ -43,10 +43,6 @@ use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
 final class NodeTypeResolver
 {
     /**
-     * @var array<class-string<Node>, NodeTypeResolverInterface>
-     */
-    private $nodeTypeResolvers = [];
-    /**
      * @readonly
      * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
@@ -76,6 +72,10 @@ final class NodeTypeResolver
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
+    /**
+     * @var array<class-string<Node>, NodeTypeResolverInterface>
+     */
+    private $nodeTypeResolvers = [];
     /**
      * @param NodeTypeResolverInterface[] $nodeTypeResolvers
      */

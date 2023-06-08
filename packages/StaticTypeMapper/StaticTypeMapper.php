@@ -34,10 +34,6 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 final class StaticTypeMapper
 {
     /**
-     * @var array<string, string>
-     */
-    private const STANDALONE_MAPS = ['false' => 'bool'];
-    /**
      * @readonly
      * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
@@ -62,6 +58,10 @@ final class StaticTypeMapper
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var array<string, string>
+     */
+    private const STANDALONE_MAPS = ['false' => 'bool'];
     public function __construct(NameScopeFactory $nameScopeFactory, PHPStanStaticTypeMapper $phpStanStaticTypeMapper, PhpDocTypeMapper $phpDocTypeMapper, PhpParserNodeMapper $phpParserNodeMapper, NodeNameResolver $nodeNameResolver)
     {
         $this->nameScopeFactory = $nameScopeFactory;

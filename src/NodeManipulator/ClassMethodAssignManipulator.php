@@ -12,10 +12,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassMethodAssignManipulator
 {
     /**
-     * @var array<string, string[]>
-     */
-    private $alreadyAddedClassMethodNames = [];
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
@@ -25,6 +21,10 @@ final class ClassMethodAssignManipulator
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var array<string, string[]>
+     */
+    private $alreadyAddedClassMethodNames = [];
     public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver)
     {
         $this->nodeFactory = $nodeFactory;

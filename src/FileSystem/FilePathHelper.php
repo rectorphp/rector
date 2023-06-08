@@ -12,6 +12,11 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class FilePathHelper
 {
     /**
+     * @readonly
+     * @var \Symfony\Component\Filesystem\Filesystem
+     */
+    private $filesystem;
+    /**
      * @see https://regex101.com/r/d4F5Fm/1
      * @var string
      */
@@ -25,11 +30,6 @@ final class FilePathHelper
      * @var string
      */
     private const SCHEME_UNDEFINED = 'undefined';
-    /**
-     * @readonly
-     * @var \Symfony\Component\Filesystem\Filesystem
-     */
-    private $filesystem;
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;

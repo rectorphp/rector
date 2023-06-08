@@ -20,10 +20,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class BootstrapFilesIncluder
 {
     /**
-     * @var array<string, mixed>
-     */
-    private $configCache = [];
-    /**
      * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
@@ -33,6 +29,10 @@ final class BootstrapFilesIncluder
      * @var \Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver
      */
     private $phpStanExtensionsConfigResolver;
+    /**
+     * @var array<string, mixed>
+     */
+    private $configCache = [];
     public function __construct(ParameterProvider $parameterProvider, PHPStanExtensionsConfigResolver $phpStanExtensionsConfigResolver)
     {
         $this->parameterProvider = $parameterProvider;

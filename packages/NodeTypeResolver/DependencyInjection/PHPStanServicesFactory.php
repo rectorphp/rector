@@ -26,11 +26,6 @@ final class PHPStanServicesFactory
 {
     /**
      * @readonly
-     * @var \PHPStan\DependencyInjection\Container
-     */
-    private $container;
-    /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
@@ -39,6 +34,11 @@ final class PHPStanServicesFactory
      * @var \Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver
      */
     private $phpStanExtensionsConfigResolver;
+    /**
+     * @readonly
+     * @var \PHPStan\DependencyInjection\Container
+     */
+    private $container;
     public function __construct(ParameterProvider $parameterProvider, \Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver $phpStanExtensionsConfigResolver, \Rector\NodeTypeResolver\DependencyInjection\BleedingEdgeIncludePurifier $bleedingEdgeIncludePurifier)
     {
         $this->parameterProvider = $parameterProvider;

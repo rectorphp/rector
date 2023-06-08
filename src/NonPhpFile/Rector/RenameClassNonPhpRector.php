@@ -15,6 +15,11 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class RenameClassNonPhpRector implements NonPhpRectorInterface, ConfigurableRuleInterface, ConfigurableRectorInterface, ComplementaryRectorInterface
 {
     /**
+     * @readonly
+     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
+     */
+    private $renamedClassesDataCollector;
+    /**
      * @see https://regex101.com/r/HKUFJD/7
      * for "?<!" @see https://stackoverflow.com/a/3735908/1348344
      * @var string
@@ -30,11 +35,6 @@ final class RenameClassNonPhpRector implements NonPhpRectorInterface, Configurab
      * @var array<string, string>
      */
     private $renameClasses = [];
-    /**
-     * @readonly
-     * @var \Rector\Core\Configuration\RenamedClassesDataCollector
-     */
-    private $renamedClassesDataCollector;
     public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;

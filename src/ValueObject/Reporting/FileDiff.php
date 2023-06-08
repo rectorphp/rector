@@ -12,15 +12,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class FileDiff implements SerializableInterface
 {
     /**
-     * @var string
-     * @se https://regex101.com/r/AUPIX4/1
-     */
-    private const FIRST_LINE_REGEX = '#@@(.*?)(?<' . self::FIRST_LINE_KEY . '>\\d+)(.*?)@@#';
-    /**
-     * @var string
-     */
-    private const FIRST_LINE_KEY = 'first_line';
-    /**
      * @readonly
      * @var string
      */
@@ -40,6 +31,15 @@ final class FileDiff implements SerializableInterface
      * @readonly
      */
     private $rectorsWithLineChanges = [];
+    /**
+     * @var string
+     * @se https://regex101.com/r/AUPIX4/1
+     */
+    private const FIRST_LINE_REGEX = '#@@(.*?)(?<' . self::FIRST_LINE_KEY . '>\\d+)(.*?)@@#';
+    /**
+     * @var string
+     */
+    private const FIRST_LINE_KEY = 'first_line';
     /**
      * @param RectorWithLineChange[] $rectorsWithLineChanges
      */

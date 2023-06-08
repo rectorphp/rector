@@ -15,14 +15,6 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UseNodesToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @var array<string, FullyQualifiedObjectType[]>
-     */
-    private $functionUseImportTypesInFilePath = [];
-    /**
-     * @var array<string, FullyQualifiedObjectType[]>
-     */
-    private $useImportTypesInFilePath = [];
-    /**
      * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
@@ -32,6 +24,14 @@ final class UseNodesToAddCollector implements NodeCollectorInterface
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
+    /**
+     * @var array<string, FullyQualifiedObjectType[]>
+     */
+    private $functionUseImportTypesInFilePath = [];
+    /**
+     * @var array<string, FullyQualifiedObjectType[]>
+     */
+    private $useImportTypesInFilePath = [];
     public function __construct(CurrentFileProvider $currentFileProvider, UseImportsResolver $useImportsResolver)
     {
         $this->currentFileProvider = $currentFileProvider;

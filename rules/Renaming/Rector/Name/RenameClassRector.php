@@ -26,10 +26,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class RenameClassRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
-     * @var string
-     */
-    public const CALLBACKS = '#callbacks#';
-    /**
      * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
@@ -44,6 +40,10 @@ final class RenameClassRector extends AbstractScopeAwareRector implements Config
      * @var \Rector\Renaming\Helper\RenameClassCallbackHandler
      */
     private $renameClassCallbackHandler;
+    /**
+     * @var string
+     */
+    public const CALLBACKS = '#callbacks#';
     public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ClassRenamer $classRenamer, RenameClassCallbackHandler $renameClassCallbackHandler)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;

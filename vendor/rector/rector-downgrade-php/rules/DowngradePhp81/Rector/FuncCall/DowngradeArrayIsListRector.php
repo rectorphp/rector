@@ -30,10 +30,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeArrayIsListRector extends AbstractScopeAwareRector
 {
     /**
-     * @var \PhpParser\Node\Expr\Closure|null
-     */
-    private $cachedClosure;
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
@@ -48,6 +44,10 @@ final class DowngradeArrayIsListRector extends AbstractScopeAwareRector
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
+    /**
+     * @var \PhpParser\Node\Expr\Closure|null
+     */
+    private $cachedClosure;
     public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming)
     {
         $this->inlineCodeParser = $inlineCodeParser;

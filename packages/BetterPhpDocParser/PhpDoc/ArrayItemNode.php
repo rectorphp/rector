@@ -8,7 +8,6 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Stringable;
 final class ArrayItemNode implements PhpDocTagValueNode
 {
-    use NodeAttributes;
     /**
      * @var mixed
      */
@@ -17,6 +16,7 @@ final class ArrayItemNode implements PhpDocTagValueNode
      * @var mixed
      */
     public $key = null;
+    use NodeAttributes;
     /**
      * @param mixed $value
      * @param mixed $key

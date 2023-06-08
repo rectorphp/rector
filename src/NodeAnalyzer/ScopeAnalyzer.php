@@ -16,14 +16,14 @@ use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 final class ScopeAnalyzer
 {
     /**
-     * @var array<class-string<Node>>
-     */
-    private const NO_SCOPE_NODES = [Name::class, Identifier::class, Param::class, Arg::class];
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
      */
     private $scopeFactory;
+    /**
+     * @var array<class-string<Node>>
+     */
+    private const NO_SCOPE_NODES = [Name::class, Identifier::class, Param::class, Arg::class];
     public function __construct(ScopeFactory $scopeFactory)
     {
         $this->scopeFactory = $scopeFactory;

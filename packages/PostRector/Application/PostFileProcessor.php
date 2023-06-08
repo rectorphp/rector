@@ -19,10 +19,6 @@ use Rector\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
     /**
-     * @var PostRectorInterface[]
-     */
-    private $postRectors = [];
-    /**
      * @readonly
      * @var \Rector\Skipper\Skipper\Skipper
      */
@@ -37,6 +33,10 @@ final class PostFileProcessor
      * @var \Rector\Core\Logging\CurrentRectorProvider
      */
     private $currentRectorProvider;
+    /**
+     * @var PostRectorInterface[]
+     */
+    private $postRectors = [];
     public function __construct(
         Skipper $skipper,
         CurrentFileProvider $currentFileProvider,

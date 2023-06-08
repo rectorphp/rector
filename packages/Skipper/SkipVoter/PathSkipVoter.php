@@ -9,10 +9,6 @@ use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 final class PathSkipVoter implements SkipVoterInterface
 {
     /**
-     * @var array<string, bool>
-     */
-    private $skippedFiles = [];
-    /**
      * @readonly
      * @var \Rector\Skipper\Matcher\FileInfoMatcher
      */
@@ -22,6 +18,10 @@ final class PathSkipVoter implements SkipVoterInterface
      * @var \Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
+    /**
+     * @var array<string, bool>
+     */
+    private $skippedFiles = [];
     public function __construct(FileInfoMatcher $fileInfoMatcher, SkippedPathsResolver $skippedPathsResolver)
     {
         $this->fileInfoMatcher = $fileInfoMatcher;

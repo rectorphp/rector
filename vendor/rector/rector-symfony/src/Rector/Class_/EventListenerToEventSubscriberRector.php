@@ -22,6 +22,21 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class EventListenerToEventSubscriberRector extends AbstractRector
 {
     /**
+     * @readonly
+     * @var \Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider
+     */
+    private $listenerServiceDefinitionProvider;
+    /**
+     * @readonly
+     * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
+     */
+    private $getSubscribedEventsClassMethodFactory;
+    /**
+     * @readonly
+     * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
+     */
+    private $classAnalyzer;
+    /**
      * @var string
      */
     private const EVENT_SUBSCRIBER_INTERFACE = 'Symfony\\Component\\EventDispatcher\\EventSubscriberInterface';
@@ -42,21 +57,6 @@ final class EventListenerToEventSubscriberRector extends AbstractRector
      * @var EventNameToClassAndConstant[]
      */
     private $eventNamesToClassConstants = [];
-    /**
-     * @readonly
-     * @var \Rector\Symfony\ApplicationMetadata\ListenerServiceDefinitionProvider
-     */
-    private $listenerServiceDefinitionProvider;
-    /**
-     * @readonly
-     * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
-     */
-    private $getSubscribedEventsClassMethodFactory;
-    /**
-     * @readonly
-     * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
-     */
-    private $classAnalyzer;
     public function __construct(ListenerServiceDefinitionProvider $listenerServiceDefinitionProvider, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer)
     {
         $this->listenerServiceDefinitionProvider = $listenerServiceDefinitionProvider;

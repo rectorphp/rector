@@ -11,13 +11,13 @@ namespace RectorPrefix202306\Nette\Neon;
 final class TokenStream
 {
     /**
-     * @var int
-     */
-    private $pos = 0;
-    /**
      * @var mixed[]
      */
     public $tokens;
+    /**
+     * @var int
+     */
+    private $pos = 0;
     public function __construct(array $tokens)
     {
         /** @var Token[] */

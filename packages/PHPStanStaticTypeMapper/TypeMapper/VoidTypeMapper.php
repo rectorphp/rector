@@ -19,14 +19,14 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 final class VoidTypeMapper implements TypeMapperInterface
 {
     /**
-     * @var string
-     */
-    private const VOID = 'void';
-    /**
      * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
+    /**
+     * @var string
+     */
+    private const VOID = 'void';
     public function __construct(PhpVersionProvider $phpVersionProvider)
     {
         $this->phpVersionProvider = $phpVersionProvider;

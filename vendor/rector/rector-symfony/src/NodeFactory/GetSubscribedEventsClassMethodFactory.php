@@ -31,10 +31,6 @@ use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 final class GetSubscribedEventsClassMethodFactory
 {
     /**
-     * @var string
-     */
-    private const GET_SUBSCRIBED_EVENTS_METHOD_NAME = 'getSubscribedEvents';
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
@@ -64,6 +60,10 @@ final class GetSubscribedEventsClassMethodFactory
      * @var \Rector\Symfony\NodeFactory\EventReferenceFactory
      */
     private $eventReferenceFactory;
+    /**
+     * @var string
+     */
+    private const GET_SUBSCRIBED_EVENTS_METHOD_NAME = 'getSubscribedEvents';
     public function __construct(NodeFactory $nodeFactory, VisibilityManipulator $visibilityManipulator, PhpVersionProvider $phpVersionProvider, PhpDocInfoFactory $phpDocInfoFactory, PhpDocTypeChanger $phpDocTypeChanger, \Rector\Symfony\NodeFactory\EventReferenceFactory $eventReferenceFactory)
     {
         $this->nodeFactory = $nodeFactory;

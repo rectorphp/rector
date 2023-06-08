@@ -39,6 +39,16 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class BetterStandardPrinter extends Standard
 {
     /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    /**
+     * @readonly
+     * @var \Rector\Core\Configuration\RectorConfigProvider
+     */
+    private $rectorConfigProvider;
+    /**
      * @var string
      * @see https://regex101.com/r/jUFizd/1
      */
@@ -69,16 +79,6 @@ final class BetterStandardPrinter extends Standard
      * @var string
      */
     private $tabOrSpaceIndentCharacter = ' ';
-    /**
-     * @readonly
-     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
-     */
-    private $docBlockUpdater;
-    /**
-     * @readonly
-     * @var \Rector\Core\Configuration\RectorConfigProvider
-     */
-    private $rectorConfigProvider;
     /**
      * @param mixed[] $options
      */

@@ -21,14 +21,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
 {
     /**
-     * @var FunctionNameWithAssertMethods[]
-     */
-    private $functionNameWithAssertMethods = [];
-    /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
+    /**
+     * @var FunctionNameWithAssertMethods[]
+     */
+    private $functionNameWithAssertMethods = [];
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;

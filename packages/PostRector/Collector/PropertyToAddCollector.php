@@ -13,14 +13,14 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 final class PropertyToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @var array<string, PropertyMetadata[]>
-     */
-    private $propertiesByClass = [];
-    /**
      * @readonly
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
+    /**
+     * @var array<string, PropertyMetadata[]>
+     */
+    private $propertiesByClass = [];
     public function __construct(RectorChangeCollector $rectorChangeCollector)
     {
         $this->rectorChangeCollector = $rectorChangeCollector;

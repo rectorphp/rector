@@ -22,10 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector implements PostRectorDependencyInterface
 {
     /**
-     * @var \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_|null
-     */
-    private $rootNode = null;
-    /**
      * @readonly
      * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
@@ -45,6 +41,10 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\CodingStyle\Application\UseImportsRemover
      */
     private $useImportsRemover;
+    /**
+     * @var \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_|null
+     */
+    private $rootNode = null;
     public function __construct(ClassRenamer $classRenamer, RenamedClassesDataCollector $renamedClassesDataCollector, RectorConfigProvider $rectorConfigProvider, UseImportsRemover $useImportsRemover)
     {
         $this->classRenamer = $classRenamer;

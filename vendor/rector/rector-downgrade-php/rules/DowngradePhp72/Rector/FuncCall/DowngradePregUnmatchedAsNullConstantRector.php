@@ -31,11 +31,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 {
     /**
-     * @see https://www.php.net/manual/en/function.preg-match.php
-     * @var string
-     */
-    private const UNMATCHED_NULL_FLAG = 'PREG_UNMATCHED_AS_NULL';
-    /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
@@ -50,6 +45,11 @@ final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
      * @var \Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer
      */
     private $regexFuncAnalyzer;
+    /**
+     * @see https://www.php.net/manual/en/function.preg-match.php
+     * @var string
+     */
+    private const UNMATCHED_NULL_FLAG = 'PREG_UNMATCHED_AS_NULL';
     public function __construct(IfManipulator $ifManipulator, BitwiseFlagCleaner $bitwiseFlagCleaner, RegexFuncAnalyzer $regexFuncAnalyzer)
     {
         $this->ifManipulator = $ifManipulator;

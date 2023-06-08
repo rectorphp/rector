@@ -24,14 +24,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeUnnecessarilyParenthesizedExpressionRector extends AbstractRector
 {
     /**
-     * @var array<class-string<Expr>>
-     */
-    private const PARENTHESIZABLE_NODES = [ArrayDimFetch::class, PropertyFetch::class, MethodCall::class, StaticPropertyFetch::class, StaticCall::class, FuncCall::class];
-    /**
      * @readonly
      * @var \Rector\DowngradePhp70\Tokenizer\WrappedInParenthesesAnalyzer
      */
     private $wrappedInParenthesesAnalyzer;
+    /**
+     * @var array<class-string<Expr>>
+     */
+    private const PARENTHESIZABLE_NODES = [ArrayDimFetch::class, PropertyFetch::class, MethodCall::class, StaticPropertyFetch::class, StaticCall::class, FuncCall::class];
     public function __construct(WrappedInParenthesesAnalyzer $wrappedInParenthesesAnalyzer)
     {
         $this->wrappedInParenthesesAnalyzer = $wrappedInParenthesesAnalyzer;

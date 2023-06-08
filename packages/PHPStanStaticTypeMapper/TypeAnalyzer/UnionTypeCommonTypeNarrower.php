@@ -21,12 +21,6 @@ use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
 final class UnionTypeCommonTypeNarrower
 {
     /**
-     * Key = the winner Array = the group of types matched
-     *
-     * @var array<string, array<class-string<Node>|class-string<\PHPStan\PhpDocParser\Ast\Node>|class-string<RectorInterface>>>
-     */
-    private const PRIORITY_TYPES = [ClassLike::class => [ClassLike::class], FunctionLike::class => [FunctionLike::class], BinaryOp::class => [BinaryOp::class, Expr::class], Expr::class => [Node::class, Expr::class], Stmt::class => [Node::class, Stmt::class], PhpDocTagValueNode::class => [PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class], Node::class => [Node::class], RectorInterface::class => [RectorInterface::class]];
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector
      */
@@ -36,6 +30,12 @@ final class UnionTypeCommonTypeNarrower
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * Key = the winner Array = the group of types matched
+     *
+     * @var array<string, array<class-string<Node>|class-string<\PHPStan\PhpDocParser\Ast\Node>|class-string<RectorInterface>>>
+     */
+    private const PRIORITY_TYPES = [ClassLike::class => [ClassLike::class], FunctionLike::class => [FunctionLike::class], BinaryOp::class => [BinaryOp::class, Expr::class], Expr::class => [Node::class, Expr::class], Stmt::class => [Node::class, Stmt::class], PhpDocTagValueNode::class => [PhpDocTagValueNode::class, \PHPStan\PhpDocParser\Ast\Node::class], Node::class => [Node::class], RectorInterface::class => [RectorInterface::class]];
     public function __construct(GenericClassStringTypeCorrector $genericClassStringTypeCorrector, ReflectionProvider $reflectionProvider)
     {
         $this->genericClassStringTypeCorrector = $genericClassStringTypeCorrector;

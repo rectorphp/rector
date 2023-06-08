@@ -22,6 +22,11 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParseFileRector extends AbstractRector
 {
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
+     */
+    private $betterStandardPrinter;
+    /**
      * @var string
      * @changelog https://regex101.com/r/ZaY42i/1
      */
@@ -36,11 +41,6 @@ final class ParseFileRector extends AbstractRector
      * @changelog https://regex101.com/r/JmNhZj/1
      */
     private const YAML_SUFFIX_REGEX = '#\\.(yml|yaml)$#';
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
-     */
-    private $betterStandardPrinter;
     public function __construct(BetterStandardPrinter $betterStandardPrinter)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;

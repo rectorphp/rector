@@ -15,15 +15,15 @@ use RectorPrefix202306\Symfony\Component\Process\Process;
 final class SetupCICommand extends Command
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/etcmog/2
-     */
-    private const GITHUB_REPOSITORY_REGEX = '#github\\.com[:\\/](?<repository_name>.*?)\\.git#';
-    /**
      * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
+    /**
+     * @var string
+     * @see https://regex101.com/r/etcmog/2
+     */
+    private const GITHUB_REPOSITORY_REGEX = '#github\\.com[:\\/](?<repository_name>.*?)\\.git#';
     public function __construct(SymfonyStyle $symfonyStyle)
     {
         $this->symfonyStyle = $symfonyStyle;

@@ -15,10 +15,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class OverridenExistingNamesResolver
 {
     /**
-     * @var array<string, array<int, string>>
-     */
-    private $overridenExistingVariableNamesByClassMethod = [];
-    /**
      * @readonly
      * @var \Rector\Naming\PhpArray\ArrayFilter
      */
@@ -33,6 +29,10 @@ final class OverridenExistingNamesResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var array<string, array<int, string>>
+     */
+    private $overridenExistingVariableNamesByClassMethod = [];
     public function __construct(ArrayFilter $arrayFilter, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
     {
         $this->arrayFilter = $arrayFilter;

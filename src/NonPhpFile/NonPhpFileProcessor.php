@@ -16,10 +16,6 @@ use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
 final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
-     * @var string[]
-     */
-    private const SUFFIXES = ['neon', 'yaml', 'xml', 'yml', 'twig', 'latte', 'blade.php', 'tpl'];
-    /**
      * @var NonPhpRectorInterface[]
      * @readonly
      */
@@ -39,6 +35,10 @@ final class NonPhpFileProcessor implements FileProcessorInterface
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;
+    /**
+     * @var string[]
+     */
+    private const SUFFIXES = ['neon', 'yaml', 'xml', 'yml', 'twig', 'latte', 'blade.php', 'tpl'];
     /**
      * @param NonPhpRectorInterface[] $nonPhpRectors
      */

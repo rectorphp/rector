@@ -22,10 +22,6 @@ use RectorPrefix202306\Symfony\Component\DependencyInjection\ParameterBag\Parame
 class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
 {
     /**
-     * @var \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface
-     */
-    private $bag;
-    /**
      * @var bool
      */
     private $resolveArrays = \true;
@@ -33,6 +29,10 @@ class ResolveParameterPlaceHoldersPass extends AbstractRecursivePass
      * @var bool
      */
     private $throwOnResolveException = \true;
+    /**
+     * @var \Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface
+     */
+    private $bag;
     public function __construct(bool $resolveArrays = \true, bool $throwOnResolveException = \true)
     {
         $this->resolveArrays = $resolveArrays;

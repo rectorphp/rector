@@ -23,10 +23,6 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
@@ -36,6 +32,10 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
     public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;

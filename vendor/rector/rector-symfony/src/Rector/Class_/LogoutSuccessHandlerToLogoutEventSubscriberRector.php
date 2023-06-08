@@ -24,11 +24,6 @@ final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRe
 {
     /**
      * @readonly
-     * @var \PHPStan\Type\ObjectType
-     */
-    private $successHandlerObjectType;
-    /**
-     * @readonly
      * @var \Rector\Symfony\NodeFactory\OnSuccessLogoutClassMethodFactory
      */
     private $onSuccessLogoutClassMethodFactory;
@@ -42,6 +37,11 @@ final class LogoutSuccessHandlerToLogoutEventSubscriberRector extends AbstractRe
      * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
+    /**
+     * @readonly
+     * @var \PHPStan\Type\ObjectType
+     */
+    private $successHandlerObjectType;
     public function __construct(OnSuccessLogoutClassMethodFactory $onSuccessLogoutClassMethodFactory, GetSubscribedEventsClassMethodFactory $getSubscribedEventsClassMethodFactory, ClassAnalyzer $classAnalyzer)
     {
         $this->onSuccessLogoutClassMethodFactory = $onSuccessLogoutClassMethodFactory;

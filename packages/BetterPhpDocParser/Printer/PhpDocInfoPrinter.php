@@ -27,6 +27,26 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocInfoPrinter
 {
     /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\Printer\EmptyPhpDocDetector
+     */
+    private $emptyPhpDocDetector;
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\Printer\DocBlockInliner
+     */
+    private $docBlockInliner;
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\Printer\RemoveNodesStartAndEndResolver
+     */
+    private $removeNodesStartAndEndResolver;
+    /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor
+     */
+    private $changedPhpDocNodeVisitor;
+    /**
      * @var string
      * @see https://regex101.com/r/Ab0Vey/1
      */
@@ -71,26 +91,6 @@ final class PhpDocInfoPrinter
      * @var \Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser
      */
     private $changedPhpDocNodeTraverser;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\Printer\EmptyPhpDocDetector
-     */
-    private $emptyPhpDocDetector;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\Printer\DocBlockInliner
-     */
-    private $docBlockInliner;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\Printer\RemoveNodesStartAndEndResolver
-     */
-    private $removeNodesStartAndEndResolver;
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor
-     */
-    private $changedPhpDocNodeVisitor;
     public function __construct(\Rector\BetterPhpDocParser\Printer\EmptyPhpDocDetector $emptyPhpDocDetector, \Rector\BetterPhpDocParser\Printer\DocBlockInliner $docBlockInliner, \Rector\BetterPhpDocParser\Printer\RemoveNodesStartAndEndResolver $removeNodesStartAndEndResolver, ChangedPhpDocNodeVisitor $changedPhpDocNodeVisitor)
     {
         $this->emptyPhpDocDetector = $emptyPhpDocDetector;

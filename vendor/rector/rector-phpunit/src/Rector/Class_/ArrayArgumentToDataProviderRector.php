@@ -39,19 +39,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ArrayArgumentToDataProviderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @api
-     * @var string
-     */
-    public const ARRAY_ARGUMENTS_TO_DATA_PROVIDERS = 'array_arguments_to_data_providers';
-    /**
-     * @var ArrayArgumentToDataProvider[]
-     */
-    private $arrayArgumentsToDataProviders = [];
-    /**
-     * @var DataProviderClassMethodRecipe[]
-     */
-    private $dataProviderClassMethodRecipes = [];
-    /**
      * @readonly
      * @var \Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory
      */
@@ -66,6 +53,19 @@ final class ArrayArgumentToDataProviderRector extends AbstractRector implements 
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
+    /**
+     * @api
+     * @var string
+     */
+    public const ARRAY_ARGUMENTS_TO_DATA_PROVIDERS = 'array_arguments_to_data_providers';
+    /**
+     * @var ArrayArgumentToDataProvider[]
+     */
+    private $arrayArgumentsToDataProviders = [];
+    /**
+     * @var DataProviderClassMethodRecipe[]
+     */
+    private $dataProviderClassMethodRecipes = [];
     public function __construct(DataProviderClassMethodFactory $dataProviderClassMethodFactory, ParamAndArgFromArrayResolver $paramAndArgFromArrayResolver, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->dataProviderClassMethodFactory = $dataProviderClassMethodFactory;

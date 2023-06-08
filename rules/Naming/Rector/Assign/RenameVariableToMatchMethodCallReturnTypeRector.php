@@ -24,11 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRector
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/JG5w9j/1
-     */
-    private const OR_BETWEEN_WORDS_REGEX = '#[a-z]Or[A-Z]#';
-    /**
      * @readonly
      * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
@@ -58,6 +53,11 @@ final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRect
      * @var \Rector\Naming\VariableRenamer
      */
     private $variableRenamer;
+    /**
+     * @var string
+     * @see https://regex101.com/r/JG5w9j/1
+     */
+    private const OR_BETWEEN_WORDS_REGEX = '#[a-z]Or[A-Z]#';
     public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, NamingConventionAnalyzer $namingConventionAnalyzer, VarTagValueNodeRenamer $varTagValueNodeRenamer, VariableAndCallAssignMatcher $variableAndCallAssignMatcher, VariableRenamer $variableRenamer)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;

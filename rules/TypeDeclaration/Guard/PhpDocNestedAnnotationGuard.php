@@ -11,17 +11,17 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PhpDocNestedAnnotationGuard
 {
     /**
+     * @readonly
+     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
+     */
+    private $phpDocInfoFactory;
+    /**
      * Regex is used to count annotations including nested annotations
      *
      * @see https://regex101.com/r/G7wODT/1
      * @var string
      */
     private const SIMPLE_ANNOTATION_REGEX = '/@[A-z]+\\(?/i';
-    /**
-     * @readonly
-     * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
-     */
-    private $phpDocInfoFactory;
     public function __construct(PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;

@@ -18,10 +18,6 @@ use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 final class VariableToConstantGuard
 {
     /**
-     * @var array<string, array<int>>
-     */
-    private $referencePositionsByFunctionName = [];
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
@@ -31,6 +27,10 @@ final class VariableToConstantGuard
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var array<string, array<int>>
+     */
+    private $referencePositionsByFunctionName = [];
     public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;

@@ -28,14 +28,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class StringClassNameToClassConstantRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @var string[]
-     */
-    private $classesToSkip = [];
-    /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var string[]
+     */
+    private $classesToSkip = [];
     public function __construct(ReflectionProvider $reflectionProvider)
     {
         $this->reflectionProvider = $reflectionProvider;

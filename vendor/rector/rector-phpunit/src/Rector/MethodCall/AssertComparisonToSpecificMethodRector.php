@@ -31,10 +31,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssertComparisonToSpecificMethodRector extends AbstractRector
 {
     /**
-     * @var BinaryOpWithAssertMethod[]
-     */
-    private $binaryOpWithAssertMethods = [];
-    /**
      * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
      */
@@ -44,6 +40,10 @@ final class AssertComparisonToSpecificMethodRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
+    /**
+     * @var BinaryOpWithAssertMethod[]
+     */
+    private $binaryOpWithAssertMethods = [];
     public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;

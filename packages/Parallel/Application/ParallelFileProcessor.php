@@ -36,14 +36,6 @@ use Throwable;
 final class ParallelFileProcessor
 {
     /**
-     * @var int
-     */
-    private const SYSTEM_ERROR_LIMIT = 50;
-    /**
-     * @var \Symplify\EasyParallel\ValueObject\ProcessPool|null
-     */
-    private $processPool = null;
-    /**
      * @readonly
      * @var \Rector\Parallel\Command\WorkerCommandLineFactory
      */
@@ -53,6 +45,14 @@ final class ParallelFileProcessor
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
+    /**
+     * @var int
+     */
+    private const SYSTEM_ERROR_LIMIT = 50;
+    /**
+     * @var \Symplify\EasyParallel\ValueObject\ProcessPool|null
+     */
+    private $processPool = null;
     public function __construct(WorkerCommandLineFactory $workerCommandLineFactory, ParameterProvider $parameterProvider)
     {
         $this->workerCommandLineFactory = $workerCommandLineFactory;

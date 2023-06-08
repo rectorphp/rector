@@ -26,6 +26,11 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class PseudoNamespaceToNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer
+     */
+    private $phpDocTypeRenamer;
+    /**
      * @see https://regex101.com/r/chvLgs/1/
      * @var string
      */
@@ -38,11 +43,6 @@ final class PseudoNamespaceToNamespaceRector extends AbstractRector implements C
      * @var string|null
      */
     private $newNamespace;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer
-     */
-    private $phpDocTypeRenamer;
     public function __construct(PhpDocTypeRenamer $phpDocTypeRenamer)
     {
         $this->phpDocTypeRenamer = $phpDocTypeRenamer;

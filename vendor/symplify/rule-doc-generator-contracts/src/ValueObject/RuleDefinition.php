@@ -11,6 +11,11 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 final class RuleDefinition
 {
     /**
+     * @readonly
+     * @var string
+     */
+    private $description;
+    /**
      * @var string|null
      */
     private $ruleClass;
@@ -22,11 +27,6 @@ final class RuleDefinition
      * @var CodeSampleInterface[]
      */
     private $codeSamples = [];
-    /**
-     * @readonly
-     * @var string
-     */
-    private $description;
     /**
      * @param CodeSampleInterface[] $codeSamples
      */

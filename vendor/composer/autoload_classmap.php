@@ -2041,7 +2041,6 @@ return array(
     'Rector\\NodeNestingScope\\ScopeNestingComparator' => $baseDir . '/packages/NodeNestingScope/ScopeNestingComparator.php',
     'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => $baseDir . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',
     'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => $baseDir . '/packages/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
-    'Rector\\NodeTypeResolver\\Contract\\SourceLocatorProviderInterface' => $baseDir . '/packages/NodeTypeResolver/Contract/SourceLocatorProviderInterface.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\BleedingEdgeIncludePurifier' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/BleedingEdgeIncludePurifier.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanExtensionsConfigResolver' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/PHPStanExtensionsConfigResolver.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php',

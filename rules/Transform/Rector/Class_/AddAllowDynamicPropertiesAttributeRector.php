@@ -27,10 +27,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @var array<array-key, string>
-     */
-    private $transformOnNamespaces = [];
-    /**
      * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
@@ -50,6 +46,10 @@ final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector impl
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var array<array-key, string>
+     */
+    private $transformOnNamespaces = [];
     public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionProvider $reflectionProvider)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;

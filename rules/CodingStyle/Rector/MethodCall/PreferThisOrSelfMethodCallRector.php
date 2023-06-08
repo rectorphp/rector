@@ -23,6 +23,11 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class PreferThisOrSelfMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
+    /**
      * @var string
      */
     private const THIS = 'this';
@@ -30,11 +35,6 @@ final class PreferThisOrSelfMethodCallRector extends AbstractRector implements C
      * @var array<string, PreferenceSelfThis::*>
      */
     private $typeToPreference = [];
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
-     */
-    private $astResolver;
     public function __construct(AstResolver $astResolver)
     {
         $this->astResolver = $astResolver;

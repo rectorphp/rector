@@ -25,14 +25,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GetClassToInstanceOfRector extends AbstractRector
 {
     /**
-     * @var string[]
-     */
-    private const NO_NAMESPACED_CLASSNAMES = ['self', 'static'];
-    /**
      * @readonly
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
+    /**
+     * @var string[]
+     */
+    private const NO_NAMESPACED_CLASSNAMES = ['self', 'static'];
     public function __construct(BinaryOpManipulator $binaryOpManipulator)
     {
         $this->binaryOpManipulator = $binaryOpManipulator;

@@ -20,10 +20,6 @@ use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 final class ConstructorAssignDetector
 {
     /**
-     * @var string
-     */
-    private const IS_FIRST_LEVEL_STATEMENT = 'first_level_stmt';
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
@@ -48,6 +44,10 @@ final class ConstructorAssignDetector
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
+    /**
+     * @var string
+     */
+    private const IS_FIRST_LEVEL_STATEMENT = 'first_level_stmt';
     public function __construct(NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

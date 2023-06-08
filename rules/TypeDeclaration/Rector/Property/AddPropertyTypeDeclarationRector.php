@@ -22,14 +22,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AddPropertyTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var AddPropertyTypeDeclaration[]
-     */
-    private $addPropertyTypeDeclarations = [];
-    /**
      * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
+    /**
+     * @var AddPropertyTypeDeclaration[]
+     */
+    private $addPropertyTypeDeclarations = [];
     public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;

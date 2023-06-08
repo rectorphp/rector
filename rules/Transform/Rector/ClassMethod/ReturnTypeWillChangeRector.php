@@ -26,10 +26,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ReturnTypeWillChangeRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @var ClassMethodReference[]
-     */
-    private $returnTypeChangedClassMethodReferences = [];
-    /**
      * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
@@ -44,6 +40,10 @@ final class ReturnTypeWillChangeRector extends AbstractRector implements AllowEm
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
+    /**
+     * @var ClassMethodReference[]
+     */
+    private $returnTypeChangedClassMethodReferences = [];
     public function __construct(PhpAttributeAnalyzer $phpAttributeAnalyzer, PhpAttributeGroupFactory $phpAttributeGroupFactory, ReflectionResolver $reflectionResolver)
     {
         $this->phpAttributeAnalyzer = $phpAttributeAnalyzer;

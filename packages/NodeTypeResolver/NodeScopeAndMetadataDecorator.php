@@ -14,14 +14,14 @@ final class NodeScopeAndMetadataDecorator
 {
     /**
      * @readonly
-     * @var \PhpParser\NodeTraverser
-     */
-    private $nodeTraverser;
-    /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
      */
     private $phpStanNodeScopeResolver;
+    /**
+     * @readonly
+     * @var \PhpParser\NodeTraverser
+     */
+    private $nodeTraverser;
     public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ParentConnectingVisitor $parentConnectingVisitor, FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;

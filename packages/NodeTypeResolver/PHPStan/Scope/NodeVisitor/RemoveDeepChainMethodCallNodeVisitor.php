@@ -20,6 +20,11 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract imp
 {
     /**
      * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @readonly
      * @var int
      */
     private $nestedChainMethodCallLimit;
@@ -27,11 +32,6 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract imp
      * @var \PhpParser\Node\Stmt\Expression|null
      */
     private $removingExpression;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
     public function __construct(BetterNodeFinder $betterNodeFinder, ParameterProvider $parameterProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;

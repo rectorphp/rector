@@ -24,11 +24,6 @@ final class ResponseStatusCodeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \PHPStan\Type\ObjectType
-     */
-    private $responseObjectType;
-    /**
-     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
@@ -37,6 +32,11 @@ final class ResponseStatusCodeRector extends AbstractRector
      * @var \Rector\Symfony\NodeAnalyzer\LiteralCallLikeConstFetchReplacer
      */
     private $literalCallLikeConstFetchReplacer;
+    /**
+     * @readonly
+     * @var \PHPStan\Type\ObjectType
+     */
+    private $responseObjectType;
     public function __construct(ControllerAnalyzer $controllerAnalyzer, LiteralCallLikeConstFetchReplacer $literalCallLikeConstFetchReplacer)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;

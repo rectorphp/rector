@@ -25,10 +25,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameParamToMatchTypeRector extends AbstractRector
 {
     /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
@@ -53,6 +49,10 @@ final class RenameParamToMatchTypeRector extends AbstractRector
      * @var \Rector\Naming\ParamRenamer\ParamRenamer
      */
     private $paramRenamer;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(BreakingVariableRenameGuard $breakingVariableRenameGuard, ExpectedNameResolver $expectedNameResolver, MatchParamTypeExpectedNameResolver $matchParamTypeExpectedNameResolver, ParamRenameFactory $paramRenameFactory, ParamRenamer $paramRenamer)
     {
         $this->breakingVariableRenameGuard = $breakingVariableRenameGuard;

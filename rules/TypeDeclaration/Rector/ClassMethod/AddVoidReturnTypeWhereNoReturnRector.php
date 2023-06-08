@@ -28,15 +28,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implements MinPhpVersionInterface, AllowEmptyConfigurableRectorInterface
 {
     /**
-     * @api
-     * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code being processed.
-     */
-    public const USE_PHPDOC = 'use_phpdoc';
-    /**
-     * @var bool
-     */
-    private $usePhpdoc = \false;
-    /**
      * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\SilentVoidResolver
      */
@@ -56,6 +47,15 @@ final class AddVoidReturnTypeWhereNoReturnRector extends AbstractRector implemen
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
+    /**
+     * @api
+     * @var string using phpdoc instead of a native void type can ease the migration path for consumers of code being processed.
+     */
+    public const USE_PHPDOC = 'use_phpdoc';
+    /**
+     * @var bool
+     */
+    private $usePhpdoc = \false;
     public function __construct(SilentVoidResolver $silentVoidResolver, ClassMethodReturnVendorLockResolver $classMethodReturnVendorLockResolver, PhpDocTypeChanger $phpDocTypeChanger, ReflectionResolver $reflectionResolver)
     {
         $this->silentVoidResolver = $silentVoidResolver;

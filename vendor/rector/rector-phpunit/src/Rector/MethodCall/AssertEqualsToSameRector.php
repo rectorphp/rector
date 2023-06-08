@@ -24,6 +24,16 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssertEqualsToSameRector extends AbstractRector
 {
     /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
+     */
+    private $identifierManipulator;
+    /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
+     */
+    private $testsNodeAnalyzer;
+    /**
      * @var array<string, string>
      */
     private const RENAME_METHODS_MAP = ['assertEquals' => 'assertSame', 'assertNotEquals' => 'assertNotSame'];
@@ -35,16 +45,6 @@ final class AssertEqualsToSameRector extends AbstractRector
      * @var array<class-string<Type>>
      */
     private const SCALAR_TYPES = [FloatType::class, IntegerType::class, StringType::class, ConstantArrayType::class];
-    /**
-     * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
-     */
-    private $identifierManipulator;
-    /**
-     * @readonly
-     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
-     */
-    private $testsNodeAnalyzer;
     public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;

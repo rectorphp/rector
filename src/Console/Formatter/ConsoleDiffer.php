@@ -10,14 +10,14 @@ final class ConsoleDiffer
 {
     /**
      * @readonly
-     * @var \SebastianBergmann\Diff\Differ
-     */
-    private $differ;
-    /**
-     * @readonly
      * @var \Rector\Core\Console\Formatter\ColorConsoleDiffFormatter
      */
     private $colorConsoleDiffFormatter;
+    /**
+     * @readonly
+     * @var \SebastianBergmann\Diff\Differ
+     */
+    private $differ;
     public function __construct(\Rector\Core\Console\Formatter\ColorConsoleDiffFormatter $colorConsoleDiffFormatter)
     {
         $this->colorConsoleDiffFormatter = $colorConsoleDiffFormatter;

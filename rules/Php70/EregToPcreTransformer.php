@@ -13,6 +13,11 @@ use Rector\Php70\Exception\InvalidEregException;
 final class EregToPcreTransformer
 {
     /**
+     * @readonly
+     * @var string
+     */
+    private $pcreDelimiter = '#';
+    /**
      * @var array<string, string>
      */
     private const CHARACTER_CLASS_MAP = [
@@ -54,11 +59,6 @@ final class EregToPcreTransformer
      * @var array<string, string>
      */
     private $cache = [];
-    /**
-     * @readonly
-     * @var string
-     */
-    private $pcreDelimiter = '#';
     /**
      * Change this via services configuratoin in rector.php if you need it
      * Single type is chosen to prevent every regular with different delimiter.

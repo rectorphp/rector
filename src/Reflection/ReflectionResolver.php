@@ -36,10 +36,6 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class ReflectionResolver
 {
     /**
-     * @var \Rector\Core\PhpParser\AstResolver
-     */
-    private $astResolver;
-    /**
      * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
@@ -69,6 +65,10 @@ final class ReflectionResolver
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
+    /**
+     * @var \Rector\Core\PhpParser\AstResolver
+     */
+    private $astResolver;
     public function __construct(ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, TypeToCallReflectionResolverRegistry $typeToCallReflectionResolverRegistry, ClassAnalyzer $classAnalyzer)
     {
         $this->reflectionProvider = $reflectionProvider;

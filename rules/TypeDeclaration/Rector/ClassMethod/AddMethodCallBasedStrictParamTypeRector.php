@@ -19,10 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
 {
     /**
-     * @var int
-     */
-    private const MAX_UNION_TYPES = 3;
-    /**
      * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver
      */
@@ -37,6 +33,10 @@ final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
      * @var \Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder
      */
     private $localMethodCallFinder;
+    /**
+     * @var int
+     */
+    private const MAX_UNION_TYPES = 3;
     public function __construct(CallTypesResolver $callTypesResolver, ClassMethodParamTypeCompleter $classMethodParamTypeCompleter, LocalMethodCallFinder $localMethodCallFinder)
     {
         $this->callTypesResolver = $callTypesResolver;

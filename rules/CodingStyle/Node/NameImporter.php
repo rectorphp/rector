@@ -24,10 +24,6 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class NameImporter
 {
     /**
-     * @var string[]
-     */
-    private $aliasedUses = [];
-    /**
      * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\AliasUsesResolver
      */
@@ -57,6 +53,10 @@ final class NameImporter
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var string[]
+     */
+    private $aliasedUses = [];
     public function __construct(AliasUsesResolver $aliasUsesResolver, ClassNameImportSkipper $classNameImportSkipper, ParameterProvider $parameterProvider, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector, ReflectionProvider $reflectionProvider)
     {
         $this->aliasUsesResolver = $aliasUsesResolver;

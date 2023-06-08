@@ -36,14 +36,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ArgumentAdderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @var ArgumentAdder[]
-     */
-    private $addedArguments = [];
-    /**
-     * @var bool
-     */
-    private $haveArgumentsChanged = \false;
-    /**
      * @readonly
      * @var \Rector\Arguments\NodeAnalyzer\ArgumentAddingScope
      */
@@ -63,6 +55,14 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
+    /**
+     * @var ArgumentAdder[]
+     */
+    private $addedArguments = [];
+    /**
+     * @var bool
+     */
+    private $haveArgumentsChanged = \false;
     public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->argumentAddingScope = $argumentAddingScope;

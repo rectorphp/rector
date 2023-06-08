@@ -20,10 +20,6 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class OnSuccessLogoutClassMethodFactory
 {
     /**
-     * @var string
-     */
-    private const LOGOUT_EVENT = 'logoutEvent';
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
@@ -43,6 +39,10 @@ final class OnSuccessLogoutClassMethodFactory
      * @var \Rector\Symfony\NodeFactory\BareLogoutClassMethodFactory
      */
     private $bareLogoutClassMethodFactory;
+    /**
+     * @var string
+     */
+    private const LOGOUT_EVENT = 'logoutEvent';
     public function __construct(NodeFactory $nodeFactory, NodeNameResolver $nodeNameResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, \Rector\Symfony\NodeFactory\BareLogoutClassMethodFactory $bareLogoutClassMethodFactory)
     {
         $this->nodeFactory = $nodeFactory;

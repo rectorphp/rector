@@ -12,6 +12,11 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ArgumentAddingScope
 {
     /**
+     * @readonly
+     * @var \Rector\NodeNameResolver\NodeNameResolver
+     */
+    private $nodeNameResolver;
+    /**
      * @api
      * @var string
      */
@@ -26,11 +31,6 @@ final class ArgumentAddingScope
      * @var string
      */
     public const SCOPE_CLASS_METHOD = 'class_method';
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;

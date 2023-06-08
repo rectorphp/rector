@@ -18,14 +18,14 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class UnionTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
-     * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
-     */
-    private $phpDocTypeMapper;
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
+    /**
+     * @var \Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper
+     */
+    private $phpDocTypeMapper;
     public function __construct(TypeFactory $typeFactory)
     {
         $this->typeFactory = $typeFactory;

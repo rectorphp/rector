@@ -9,14 +9,14 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ContainerAwareAnalyzer
 {
     /**
-     * @var ObjectType[]
-     */
-    private $getMethodAwareObjectTypes = [];
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
+    /**
+     * @var ObjectType[]
+     */
+    private $getMethodAwareObjectTypes = [];
     public function __construct(NodeTypeResolver $nodeTypeResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

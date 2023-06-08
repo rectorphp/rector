@@ -17,11 +17,6 @@ use ReflectionClass;
 final class PhpVersionProvider
 {
     /**
-     * @var string
-     * @see https://regex101.com/r/qBMnbl/1
-     */
-    private const VALID_PHP_VERSION_REGEX = '#^\\d{5,6}$#';
-    /**
      * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
@@ -31,6 +26,11 @@ final class PhpVersionProvider
      * @var \Rector\Core\Php\PhpVersionResolver\ProjectComposerJsonPhpVersionResolver
      */
     private $projectComposerJsonPhpVersionResolver;
+    /**
+     * @var string
+     * @see https://regex101.com/r/qBMnbl/1
+     */
+    private const VALID_PHP_VERSION_REGEX = '#^\\d{5,6}$#';
     public function __construct(ParameterProvider $parameterProvider, ProjectComposerJsonPhpVersionResolver $projectComposerJsonPhpVersionResolver)
     {
         $this->parameterProvider = $parameterProvider;

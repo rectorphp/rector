@@ -27,10 +27,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends AbstractRector
 {
     /**
-     * @var bool
-     */
-    private $hasChanged = \false;
-    /**
      * @readonly
      * @var \Rector\Doctrine\NodeManipulator\ConstructorManipulator
      */
@@ -45,6 +41,10 @@ final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends Abstra
      * @var \Rector\Doctrine\NodeAnalyzer\ConstructorAssignPropertyAnalyzer
      */
     private $constructorAssignPropertyAnalyzer;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(ConstructorManipulator $constructorManipulator, ValueAssignFactory $valueAssignFactory, ConstructorAssignPropertyAnalyzer $constructorAssignPropertyAnalyzer)
     {
         $this->constructorManipulator = $constructorManipulator;

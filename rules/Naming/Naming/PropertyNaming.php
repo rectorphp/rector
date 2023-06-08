@@ -24,6 +24,16 @@ use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 final class PropertyNaming
 {
     /**
+     * @readonly
+     * @var \Rector\Naming\RectorNamingInflector
+     */
+    private $rectorNamingInflector;
+    /**
+     * @readonly
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
+     */
+    private $nodeTypeResolver;
+    /**
      * @var string[]
      */
     private const EXCLUDED_CLASSES = ['#Closure#', '#^Spl#', '#FileInfo#', '#^std#', '#Iterator#', '#SimpleXML#'];
@@ -45,16 +55,6 @@ final class PropertyNaming
      * @var string
      */
     private const GET_PREFIX_REGEX = '#^get(?<root_name>[A-Z].+)#';
-    /**
-     * @readonly
-     * @var \Rector\Naming\RectorNamingInflector
-     */
-    private $rectorNamingInflector;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    private $nodeTypeResolver;
     public function __construct(RectorNamingInflector $rectorNamingInflector, NodeTypeResolver $nodeTypeResolver)
     {
         $this->rectorNamingInflector = $rectorNamingInflector;

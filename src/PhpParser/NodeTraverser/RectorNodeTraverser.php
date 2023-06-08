@@ -10,10 +10,6 @@ use Rector\VersionBonding\PhpVersionedFilter;
 final class RectorNodeTraverser extends NodeTraverser
 {
     /**
-     * @var bool
-     */
-    private $areNodeVisitorsPrepared = \false;
-    /**
      * @var PhpRectorInterface[]
      * @readonly
      */
@@ -23,6 +19,10 @@ final class RectorNodeTraverser extends NodeTraverser
      * @var \Rector\VersionBonding\PhpVersionedFilter
      */
     private $phpVersionedFilter;
+    /**
+     * @var bool
+     */
+    private $areNodeVisitorsPrepared = \false;
     /**
      * @param PhpRectorInterface[] $phpRectors
      */

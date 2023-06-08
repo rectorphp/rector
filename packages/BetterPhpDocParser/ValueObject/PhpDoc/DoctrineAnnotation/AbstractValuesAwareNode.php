@@ -10,11 +10,6 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
 {
-    use NodeAttributes;
-    /**
-     * @var bool
-     */
-    protected $hasChanged = \false;
     /**
      * @var ArrayItemNode[]
      */
@@ -27,6 +22,11 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
      * @var string|null
      */
     protected $silentKey;
+    use NodeAttributes;
+    /**
+     * @var bool
+     */
+    protected $hasChanged = \false;
     /**
      * @param ArrayItemNode[] $values Must be public so node traverser can go through them
      */

@@ -11,14 +11,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RegexFuncAnalyzer
 {
     /**
-     * @var string[]
-     */
-    private const REGEX_FUNCTION_NAMES = ['preg_match', 'preg_match_all'];
-    /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
+    /**
+     * @var string[]
+     */
+    private const REGEX_FUNCTION_NAMES = ['preg_match', 'preg_match_all'];
     public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;

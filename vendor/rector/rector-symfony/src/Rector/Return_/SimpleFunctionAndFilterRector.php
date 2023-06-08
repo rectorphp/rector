@@ -28,14 +28,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimpleFunctionAndFilterRector extends AbstractRector
 {
     /**
-     * @var array<string, class-string>>
-     */
-    private const OLD_TO_NEW_CLASSES = ['Twig_Function_Method' => 'Twig_SimpleFunction', 'Twig_Filter_Method' => 'Twig_SimpleFilter'];
-    /**
      * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
+    /**
+     * @var array<string, class-string>>
+     */
+    private const OLD_TO_NEW_CLASSES = ['Twig_Function_Method' => 'Twig_SimpleFunction', 'Twig_Filter_Method' => 'Twig_SimpleFilter'];
     public function __construct(ReflectionResolver $reflectionResolver)
     {
         $this->reflectionResolver = $reflectionResolver;

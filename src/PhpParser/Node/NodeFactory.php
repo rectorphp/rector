@@ -52,10 +52,6 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class NodeFactory
 {
     /**
-     * @var string
-     */
-    private const THIS = 'this';
-    /**
      * @readonly
      * @var \PhpParser\BuilderFactory
      */
@@ -75,6 +71,10 @@ final class NodeFactory
      * @var \Rector\Core\NodeDecorator\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
+    /**
+     * @var string
+     */
+    private const THIS = 'this';
     public function __construct(BuilderFactory $builderFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, PropertyTypeDecorator $propertyTypeDecorator)
     {
         $this->builderFactory = $builderFactory;

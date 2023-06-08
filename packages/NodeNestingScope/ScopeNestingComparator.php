@@ -14,10 +14,6 @@ use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class ScopeNestingComparator
 {
     /**
-     * @var Expr[]
-     */
-    private $doubleIfBranchExprs = [];
-    /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
@@ -27,6 +23,10 @@ final class ScopeNestingComparator
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
+    /**
+     * @var Expr[]
+     */
+    private $doubleIfBranchExprs = [];
     public function __construct(BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;

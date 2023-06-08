@@ -16,10 +16,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class TestsNodeAnalyzer
 {
     /**
-     * @var string[]
-     */
-    private const TEST_CASE_OBJECT_CLASSES = ['PHPUnit\\Framework\\TestCase', 'PHPUnit_Framework_TestCase'];
-    /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
@@ -39,6 +35,10 @@ final class TestsNodeAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
+    /**
+     * @var string[]
+     */
+    private const TEST_CASE_OBJECT_CLASSES = ['PHPUnit\\Framework\\TestCase', 'PHPUnit_Framework_TestCase'];
     public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

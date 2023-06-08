@@ -14,15 +14,6 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
     /**
-     * @var string
-     */
-    public const NAME = 'console';
-    /**
-     * @var string
-     * @see https://regex101.com/r/q8I66g/1
-     */
-    private const ON_LINE_REGEX = '# on line #';
-    /**
      * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
@@ -32,6 +23,15 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;
+    /**
+     * @var string
+     */
+    public const NAME = 'console';
+    /**
+     * @var string
+     * @see https://regex101.com/r/q8I66g/1
+     */
+    private const ON_LINE_REGEX = '# on line #';
     public function __construct(OutputStyleInterface $rectorOutputStyle, RectorsChangelogResolver $rectorsChangelogResolver)
     {
         $this->rectorOutputStyle = $rectorOutputStyle;
