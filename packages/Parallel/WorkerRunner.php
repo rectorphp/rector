@@ -8,7 +8,6 @@ use RectorPrefix202306\Clue\React\NDJson\Encoder;
 use RectorPrefix202306\Nette\Utils\FileSystem;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Application\ApplicationFileProcessor;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -51,11 +50,6 @@ final class WorkerRunner
     private $rectorConsoleOutputStyle;
     /**
      * @readonly
-     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor
-     */
-    private $removedAndAddedFilesProcessor;
-    /**
-     * @readonly
      * @var \Rector\Core\Application\ApplicationFileProcessor
      */
     private $applicationFileProcessor;
@@ -72,13 +66,12 @@ final class WorkerRunner
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, ApplicationFileProcessor $applicationFileProcessor, ChangedFilesDetector $changedFilesDetector, array $fileProcessors = [])
+    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle, ApplicationFileProcessor $applicationFileProcessor, ChangedFilesDetector $changedFilesDetector, array $fileProcessors = [])
     {
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->currentFileProvider = $currentFileProvider;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->rectorConsoleOutputStyle = $rectorConsoleOutputStyle;
-        $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->applicationFileProcessor = $applicationFileProcessor;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->fileProcessors = $fileProcessors;
@@ -123,7 +116,6 @@ final class WorkerRunner
                     $this->invalidateFile($file);
                 }
             }
-            $this->removedAndAddedFilesProcessor->run($configuration);
             /**
              * this invokes all listeners listening $decoder->on(...) @see \Symplify\EasyParallel\Enum\ReactEvent::DATA
              */

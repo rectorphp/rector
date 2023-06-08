@@ -6,7 +6,6 @@ namespace Rector\Core\Application;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Application\FileDecorator\FileDiffFileDecorator;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Contract\Console\OutputStyleInterface;
@@ -44,11 +43,6 @@ final class ApplicationFileProcessor
      * @var \Rector\Core\Application\FileDecorator\FileDiffFileDecorator
      */
     private $fileDiffFileDecorator;
-    /**
-     * @readonly
-     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesProcessor
-     */
-    private $removedAndAddedFilesProcessor;
     /**
      * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
@@ -102,11 +96,10 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, RemovedAndAddedFilesProcessor $removedAndAddedFilesProcessor, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, array $fileProcessors = [])
+    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, array $fileProcessors = [])
     {
         $this->filesystem = $filesystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;
-        $this->removedAndAddedFilesProcessor = $removedAndAddedFilesProcessor;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->fileFactory = $fileFactory;
         $this->nodeScopeResolver = $nodeScopeResolver;
@@ -179,7 +172,6 @@ final class ApplicationFileProcessor
                 $this->rectorOutputStyle->progressAdvance();
             }
         }
-        $this->removedAndAddedFilesProcessor->run($configuration);
         return $systemErrorsAndFileDiffs;
     }
     /**

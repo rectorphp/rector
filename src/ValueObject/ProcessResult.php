@@ -22,25 +22,13 @@ final class ProcessResult
      */
     private $fileDiffs;
     /**
-     * @readonly
-     * @var int
-     */
-    private $addedFilesCount;
-    /**
-     * @readonly
-     * @var int
-     */
-    private $removedFilesCount;
-    /**
      * @param FileDiff[] $fileDiffs
      * @param SystemError[] $systemErrors
      */
-    public function __construct(array $systemErrors, array $fileDiffs, int $addedFilesCount, int $removedFilesCount)
+    public function __construct(array $systemErrors, array $fileDiffs)
     {
         $this->systemErrors = $systemErrors;
         $this->fileDiffs = $fileDiffs;
-        $this->addedFilesCount = $addedFilesCount;
-        $this->removedFilesCount = $removedFilesCount;
         Assert::allIsAOf($fileDiffs, FileDiff::class);
         Assert::allIsAOf($systemErrors, SystemError::class);
     }
@@ -57,17 +45,5 @@ final class ProcessResult
     public function getErrors() : array
     {
         return $this->systemErrors;
-    }
-    public function getAddedFilesCount() : int
-    {
-        return $this->addedFilesCount;
-    }
-    public function getRemovedFilesCount() : int
-    {
-        return $this->removedFilesCount;
-    }
-    public function getRemovedAndAddedFilesCount() : int
-    {
-        return $this->removedFilesCount + $this->addedFilesCount;
     }
 }

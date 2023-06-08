@@ -10,7 +10,6 @@ use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
 use RectorPrefix202306\Psr\Container\ContainerInterface;
 use Rector\Core\Application\ApplicationFileProcessor;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\ConfigurationFactory;
@@ -23,14 +22,8 @@ use Rector\Testing\Contract\RectorTestInterface;
 use Rector\Testing\Fixture\FixtureFileFinder;
 use Rector\Testing\Fixture\FixtureFileUpdater;
 use Rector\Testing\Fixture\FixtureSplitter;
-use Rector\Testing\PHPUnit\Behavior\MovingFilesTrait;
 abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTestCase implements RectorTestInterface
 {
-    use MovingFilesTrait;
-    /**
-     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
-     */
-    protected $removedAndAddedFilesCollector;
     /**
      * @var \Psr\Container\ContainerInterface|null
      */
@@ -61,9 +54,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
         $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
-        // restore added and removed files to 0
-        $this->removedAndAddedFilesCollector = $this->getService(RemovedAndAddedFilesCollector::class);
-        $this->removedAndAddedFilesCollector->reset();
         /** @var AdditionalAutoloader $additionalAutoloader */
         $additionalAutoloader = $this->getService(AdditionalAutoloader::class);
         $additionalAutoloader->autoloadPaths();
@@ -79,7 +69,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             FileSystem::delete($this->inputFilePath);
         }
         // free memory and trigger gc to reduce memory peak consumption on windows
-        unset($this->applicationFileProcessor, $this->parameterProvider, $this->dynamicSourceLocatorProvider, $this->removedAndAddedFilesCollector);
+        unset($this->applicationFileProcessor, $this->parameterProvider, $this->dynamicSourceLocatorProvider);
         \gc_collect_cycles();
     }
     /**
@@ -133,10 +123,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFilePath]);
         $changedContent = $this->processFilePath($originalFilePath, $inputFileContents);
-        // file is removed, we cannot compare it
-        if ($this->removedAndAddedFilesCollector->isFileRemoved($originalFilePath)) {
-            return;
-        }
         $fixtureFilename = \basename($fixtureFilePath);
         $failureMessage = \sprintf('Failed on fixture file "%s"', $fixtureFilename);
         try {

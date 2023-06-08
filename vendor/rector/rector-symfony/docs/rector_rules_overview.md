@@ -1,4 +1,4 @@
-# 84 Rules Overview
+# 81 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -113,35 +113,6 @@ Change deprecated `BinaryFileResponse::create()` to use `__construct()` instead
      {
 -        $binaryFile = BinaryFileResponse::create();
 +        $binaryFile = new BinaryFileResponse(null);
-     }
- }
-```
-
-<br>
-
-## CascadeValidationFormBuilderRector
-
-Change "cascade_validation" option to specific node attribute
-
-- class: [`Rector\Symfony\Rector\MethodCall\CascadeValidationFormBuilderRector`](../src/Rector/MethodCall/CascadeValidationFormBuilderRector.php)
-
-```diff
- class SomeController
- {
-     public function someMethod()
-     {
--        $form = $this->createFormBuilder($article, ['cascade_validation' => true])
--            ->add('author', new AuthorType())
-+        $form = $this->createFormBuilder($article)
-+            ->add('author', new AuthorType(), [
-+                'constraints' => new \Symfony\Component\Validator\Constraints\Valid(),
-+            ])
-             ->getForm();
-     }
-
-     protected function createFormBuilder()
-     {
-         return new FormBuilder();
      }
  }
 ```
@@ -286,8 +257,8 @@ Symfony Command description setters are moved to properties
 
  final class SunshineCommand extends Command
  {
-     protected static $defaultName = 'sunshine';
 +    protected static $defaultDescription = 'sunshine description';
++
      public function configure()
      {
 -        $this->setDescription('sunshine description');
@@ -339,11 +310,13 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 
 ## ConsoleExecuteReturnIntRector
 
-Returns int from Command::execute command
+Returns int from `Command::execute()` command
 
 - class: [`Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector`](../src/Rector/ClassMethod/ConsoleExecuteReturnIntRector.php)
 
 ```diff
+ use Symfony\Component\Console\Command\Command;
+
  class SomeCommand extends Command
  {
 -    public function execute(InputInterface $input, OutputInterface $output)
@@ -785,59 +758,6 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 
 <br>
 
-## InvokableControllerRector
-
-Change god controller to single-action invokable controllers
-
-- class: [`Rector\Symfony\Rector\Class_\InvokableControllerRector`](../src/Rector/Class_/InvokableControllerRector.php)
-
-```diff
- use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
--final class SomeController extends Controller
-+final class SomeDetailController extends Controller
- {
--    public function detailAction()
-+    public function __invoke()
-     {
-     }
-+}
-
--    public function listAction()
-+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-+
-+final class SomeListController extends Controller
-+{
-+    public function __invoke()
-     {
-     }
- }
-```
-
-<br>
-
-## JMSInjectPropertyToConstructorInjectionRector
-
-Turns properties with `@inject` to private properties and constructor injection
-
-- class: [`Rector\Symfony\Rector\Property\JMSInjectPropertyToConstructorInjectionRector`](../src/Rector/Property/JMSInjectPropertyToConstructorInjectionRector.php)
-
-```diff
- /**
-  * @var SomeService
-- * @inject
-  */
--public $someService;
-+private $someService;
-+
-+public function __construct(SomeService $someService)
-+{
-+    $this->someService = $someService;
-+}
-```
-
-<br>
-
 ## KernelTestCaseContainerPropertyDeprecationRector
 
 Simplify use of assertions in WebTestCase
@@ -1014,16 +934,13 @@ Change TwigExtension function/filter magic closures to inlined and clear callabl
      {
          return [
 -            new TwigFunction('resolve', [$this, 'resolve']);
-+            new TwigFunction('resolve', function ($values) {
-+                return $value + 100;
-+            }),
++            new TwigFunction('resolve', $this->resolve(...)),
          ];
--    }
--
--
--    private function resolve($value)
--    {
--        return $value + 100;
+     }
+
+     private function resolve($value)
+     {
+         return $value + 100;
      }
  }
 ```
@@ -1158,16 +1075,18 @@ Replace ParamConverter attribute with mappings with the MapEntity attribute
 - class: [`Rector\Symfony\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector`](../src/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php)
 
 ```diff
++use Symfony\Bridge\Doctrine\Attribute\MapEntity;
++
  class SomeController
  {
-     #[Route('/blog/{date}/{slug}/comments/{comment_slug}')]
 -    #[ParamConverter('post', options: ['mapping' => ['date' => 'date', 'slug' => 'slug']])]
 -    #[ParamConverter('comment', options: ['mapping' => ['comment_slug' => 'slug']])]
      public function showComment(
--        Post $post,
--        Comment $comment
-+        #[\Symfony\Bridge\Doctrine\Attribute\MapEntity(mapping: ['date' => 'date', 'slug' => 'slug'])] Post $post,
-+        #[\Symfony\Bridge\Doctrine\Attribute\MapEntity(mapping: ['comment_slug' => 'slug'])] Comment $comment
++        #[MapEntity(mapping: ['date' => 'date', 'slug' => 'slug'])]
+         Post $post,
+
++        #[MapEntity(mapping: ['comment_slug' => 'slug'])]
+         Comment $comment
      ) {
      }
  }
@@ -1517,7 +1436,7 @@ Turns status code numbers to constants
 
 ## RootNodeTreeBuilderRector
 
-Changes  Process string argument to an array
+Changes TreeBuilder with `root()` call to constructor passed root and `getRootNode()` call
 
 - class: [`Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector`](../src/Rector/New_/RootNodeTreeBuilderRector.php)
 
@@ -1788,12 +1707,17 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
 - class: [`Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector`](../src/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php)
 
 ```diff
--/**
-- * @Template()
-- */
- public function indexAction()
+ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+
+ final class SomeController
  {
-+    return $this->render('index.html.twig');
+-    /**
+-     * @Template()
+-     */
+     public function indexAction()
+     {
++        return $this->render('index.html.twig');
+     }
  }
 ```
 

@@ -45,12 +45,12 @@ final class DowngradePropertyPromotionRector extends AbstractRector
      * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
-    private $nodePrinter;
-    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger, BetterStandardPrinter $nodePrinter)
+    private $betterStandardPrinter;
+    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->nodePrinter = $nodePrinter;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -135,7 +135,7 @@ CODE_SAMPLE
     }
     private function setParamAttrGroupAsComment(Param $param) : void
     {
-        $attrGroupsPrint = $this->nodePrinter->print($param->attrGroups);
+        $attrGroupsPrint = $this->betterStandardPrinter->print($param->attrGroups);
         $comments = $param->getAttribute(AttributeKey::COMMENTS);
         if (\is_array($comments)) {
             /** @var Comment[] $comments */

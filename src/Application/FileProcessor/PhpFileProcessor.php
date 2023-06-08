@@ -9,7 +9,6 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
 use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
 use Rector\Core\Application\FileProcessor;
-use Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -42,11 +41,6 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @var \Rector\Core\Application\FileProcessor
      */
     private $fileProcessor;
-    /**
-     * @readonly
-     * @var \Rector\Core\Application\FileSystem\RemovedAndAddedFilesCollector
-     */
-    private $removedAndAddedFilesCollector;
     /**
      * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
@@ -87,11 +81,10 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, RemovedAndAddedFilesCollector $removedAndAddedFilesCollector, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, SymfonyStyle $symfonyStyle)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, SymfonyStyle $symfonyStyle)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
-        $this->removedAndAddedFilesCollector = $removedAndAddedFilesCollector;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->fileDiffFactory = $fileDiffFactory;
         $this->changedFilesDetector = $changedFilesDetector;
@@ -195,11 +188,6 @@ final class PhpFileProcessor implements FileProcessorInterface
     }
     private function printFile(File $file, Configuration $configuration) : void
     {
-        $filePath = $file->getFilePath();
-        if ($this->removedAndAddedFilesCollector->isFileRemoved($filePath)) {
-            // skip, because this file exists no more
-            return;
-        }
         // only save to string first, no need to print to file when not needed
         $newContent = $this->formatPerservingPrinter->printParsedStmstAndTokensToString($file);
         /**

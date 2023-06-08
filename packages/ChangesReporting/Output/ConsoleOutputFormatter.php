@@ -43,7 +43,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $this->reportFileDiffs($processResult->getFileDiffs());
         }
         $this->reportErrors($processResult->getErrors());
-        $this->reportRemovedFilesAndNodes($processResult);
         if ($processResult->getErrors() !== []) {
             return;
         }
@@ -105,17 +104,6 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
             $this->rectorOutputStyle->error($message);
         }
     }
-    private function reportRemovedFilesAndNodes(ProcessResult $processResult) : void
-    {
-        if ($processResult->getAddedFilesCount() !== 0) {
-            $message = \sprintf('%d files were added', $processResult->getAddedFilesCount());
-            $this->rectorOutputStyle->note($message);
-        }
-        if ($processResult->getRemovedFilesCount() !== 0) {
-            $message = \sprintf('%d files were removed', $processResult->getRemovedFilesCount());
-            $this->rectorOutputStyle->note($message);
-        }
-    }
     private function normalizePathsToRelativeWithLine(string $errorMessage) : string
     {
         $regex = '#' . \preg_quote(\getcwd(), '#') . '/#';
@@ -124,7 +112,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     }
     private function createSuccessMessage(ProcessResult $processResult, Configuration $configuration) : string
     {
-        $changeCount = \count($processResult->getFileDiffs()) + $processResult->getRemovedAndAddedFilesCount();
+        $changeCount = \count($processResult->getFileDiffs());
         if ($changeCount === 0) {
             return 'Rector is done!';
         }

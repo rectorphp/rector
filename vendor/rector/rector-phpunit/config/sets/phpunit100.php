@@ -5,8 +5,7 @@ namespace RectorPrefix202306;
 
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\Class_\StaticDataProviderClassMethodRector;
-use Rector\PHPUnit\Rector\ClassLike\RemoveTestSuffixFromAbstractTestClassesRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->import(__DIR__ . '/annotations-to-attributes.php');
-    $rectorConfig->rules([StaticDataProviderClassMethodRector::class, RemoveTestSuffixFromAbstractTestClassesRector::class]);
+    $rectorConfig->rules([StaticDataProviderClassMethodRector::class]);
 };

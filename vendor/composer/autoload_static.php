@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
+class ComposerStaticInit3a657346ede49eb0ff0b32be246cb366
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1757,8 +1757,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\Core\\Application\\FileDecorator\\FileDiffFileDecorator' => __DIR__ . '/../..' . '/src/Application/FileDecorator/FileDiffFileDecorator.php',
         'Rector\\Core\\Application\\FileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor.php',
         'Rector\\Core\\Application\\FileProcessor\\PhpFileProcessor' => __DIR__ . '/../..' . '/src/Application/FileProcessor/PhpFileProcessor.php',
-        'Rector\\Core\\Application\\FileSystem\\RemovedAndAddedFilesCollector' => __DIR__ . '/../..' . '/src/Application/FileSystem/RemovedAndAddedFilesCollector.php',
-        'Rector\\Core\\Application\\FileSystem\\RemovedAndAddedFilesProcessor' => __DIR__ . '/../..' . '/src/Application/FileSystem/RemovedAndAddedFilesProcessor.php',
         'Rector\\Core\\Application\\VersionResolver' => __DIR__ . '/../..' . '/src/Application/VersionResolver.php',
         'Rector\\Core\\Autoloading\\AdditionalAutoloader' => __DIR__ . '/../..' . '/src/Autoloading/AdditionalAutoloader.php',
         'Rector\\Core\\Autoloading\\BootstrapFilesIncluder' => __DIR__ . '/../..' . '/src/Autoloading/BootstrapFilesIncluder.php',
@@ -1901,8 +1899,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\Core\\PhpParser\\Parser\\SimplePhpParser' => __DIR__ . '/../..' . '/src/PhpParser/Parser/SimplePhpParser.php',
         'Rector\\Core\\PhpParser\\Printer\\BetterStandardPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/BetterStandardPrinter.php',
         'Rector\\Core\\PhpParser\\Printer\\FormatPerservingPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/FormatPerservingPrinter.php',
-        'Rector\\Core\\PhpParser\\Printer\\NeighbourClassLikePrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/NeighbourClassLikePrinter.php',
-        'Rector\\Core\\PhpParser\\Printer\\NodesWithFileDestinationPrinter' => __DIR__ . '/../..' . '/src/PhpParser/Printer/NodesWithFileDestinationPrinter.php',
         'Rector\\Core\\PhpParser\\ValueObject\\StmtsAndTokens' => __DIR__ . '/../..' . '/src/PhpParser/ValueObject/StmtsAndTokens.php',
         'Rector\\Core\\Php\\PhpVersionProvider' => __DIR__ . '/../..' . '/src/Php/PhpVersionProvider.php',
         'Rector\\Core\\Php\\PhpVersionResolver\\ProjectComposerJsonPhpVersionResolver' => __DIR__ . '/../..' . '/src/Php/PhpVersionResolver/ProjectComposerJsonPhpVersionResolver.php',
@@ -2215,11 +2211,7 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\EarlyReturn\\ValueObject\\BareSingleAssignIf' => __DIR__ . '/../..' . '/rules/EarlyReturn/ValueObject/BareSingleAssignIf.php',
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
-        'Rector\\FileSystemRector\\Contract\\AddedFileInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/AddedFileInterface.php',
-        'Rector\\FileSystemRector\\Contract\\FileWithNodesInterface' => __DIR__ . '/../..' . '/packages/FileSystemRector/Contract/FileWithNodesInterface.php',
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
-        'Rector\\FileSystemRector\\ValueObject\\AddedFileWithContent' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithContent.php',
-        'Rector\\FileSystemRector\\ValueObject\\AddedFileWithNodes' => __DIR__ . '/../..' . '/packages/FileSystemRector/ValueObject/AddedFileWithNodes.php',
         'Rector\\MysqlToMysqli\\Rector\\Assign\\MysqlAssignToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/Assign/MysqlAssignToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlFuncCallToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlFuncCallToMysqliRector.php',
         'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlPConnectToMysqliConnectRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php',
@@ -2429,7 +2421,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\PHPUnit\\NodeManipulator\\ParamAndArgFromArrayResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/ParamAndArgFromArrayResolver.php',
         'Rector\\PHPUnit\\PhpDoc\\DataProviderMethodRenamer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/DataProviderMethodRenamer.php',
         'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
-        'Rector\\PHPUnit\\Rector\\ClassLike\\RemoveTestSuffixFromAbstractTestClassesRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassLike/RemoveTestSuffixFromAbstractTestClassesRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\CreateMockToAnonymousClassRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/CreateMockToAnonymousClassRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\DataProviderAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php',
@@ -2486,9 +2477,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\PHPUnit\\ValueObject\\DataProviderClassMethodRecipe' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/DataProviderClassMethodRecipe.php',
         'Rector\\PHPUnit\\ValueObject\\FunctionNameWithAssertMethods' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/FunctionNameWithAssertMethods.php',
         'Rector\\PHPUnit\\ValueObject\\ParamAndArg' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/ParamAndArg.php',
-        'Rector\\PSR4\\FileInfoAnalyzer\\FileInfoDeletionAnalyzer' => __DIR__ . '/../..' . '/rules/PSR4/FileInfoAnalyzer/FileInfoDeletionAnalyzer.php',
-        'Rector\\PSR4\\NodeManipulator\\NamespaceManipulator' => __DIR__ . '/../..' . '/rules/PSR4/NodeManipulator/NamespaceManipulator.php',
-        'Rector\\PSR4\\Rector\\Namespace_\\MultipleClassFileToPsr4ClassesRector' => __DIR__ . '/../..' . '/rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php',
         'Rector\\Parallel\\Application\\ParallelFileProcessor' => __DIR__ . '/../..' . '/packages/Parallel/Application/ParallelFileProcessor.php',
         'Rector\\Parallel\\Command\\WorkerCommandLineFactory' => __DIR__ . '/../..' . '/packages/Parallel/Command/WorkerCommandLineFactory.php',
         'Rector\\Parallel\\ValueObject\\Bridge' => __DIR__ . '/../..' . '/packages/Parallel/ValueObject/Bridge.php',
@@ -2856,11 +2844,9 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\Symfony\\NodeAnalyzer\\FormOptionsArrayMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormOptionsArrayMatcher.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormType\\CreateFormTypeOptionsArgMover' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormType/CreateFormTypeOptionsArgMover.php',
         'Rector\\Symfony\\NodeAnalyzer\\FormType\\FormTypeClassResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/FormType/FormTypeClassResolver.php',
-        'Rector\\Symfony\\NodeAnalyzer\\InvokableAnalyzer\\ActiveClassElementsClassMethodResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/InvokableAnalyzer/ActiveClassElementsClassMethodResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\LiteralCallLikeConstFetchReplacer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/LiteralCallLikeConstFetchReplacer.php',
         'Rector\\Symfony\\NodeAnalyzer\\RouteRequiredParamNameToTypesResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/RouteRequiredParamNameToTypesResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\ServiceTypeMethodCallResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ServiceTypeMethodCallResolver.php',
-        'Rector\\Symfony\\NodeAnalyzer\\SymfonyControllerFilter' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyControllerFilter.php',
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyPhpClosureDetector' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyPhpClosureDetector.php',
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php',
         'Rector\\Symfony\\NodeFactory\\Annotations\\DoctrineAnnotationFromNewFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/Annotations/DoctrineAnnotationFromNewFactory.php',
@@ -2872,9 +2858,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\Symfony\\NodeFactory\\FormType\\BuildFormOptionAssignsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/FormType/BuildFormOptionAssignsFactory.php',
         'Rector\\Symfony\\NodeFactory\\FormType\\ConfigureDefaultsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/FormType/ConfigureDefaultsFactory.php',
         'Rector\\Symfony\\NodeFactory\\GetSubscribedEventsClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/GetSubscribedEventsClassMethodFactory.php',
-        'Rector\\Symfony\\NodeFactory\\InvokableControllerClassFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableControllerClassFactory.php',
-        'Rector\\Symfony\\NodeFactory\\InvokableControllerNameFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableControllerNameFactory.php',
-        'Rector\\Symfony\\NodeFactory\\InvokableController\\ActiveClassElementsFilter' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/InvokableController/ActiveClassElementsFilter.php',
         'Rector\\Symfony\\NodeFactory\\OnLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnSuccessLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\RequiredClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/RequiredClassMethodFactory.php',
@@ -2883,7 +2866,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\Symfony\\NodeManipulator\\ClassManipulator' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeManipulator/ClassManipulator.php',
         'Rector\\Symfony\\NodeRemover\\ConstructorDependencyRemover' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeRemover/ConstructorDependencyRemover.php',
         'Rector\\Symfony\\PhpDocNode\\SymfonyRouteTagValueNodeFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/PhpDocNode/SymfonyRouteTagValueNodeFactory.php',
-        'Rector\\Symfony\\Printer\\NeighbourClassLikePrinter' => __DIR__ . '/..' . '/rector/rector-symfony/src/Printer/NeighbourClassLikePrinter.php',
         'Rector\\Symfony\\Rector\\BinaryOp\\ResponseStatusCodeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/BinaryOp/ResponseStatusCodeRector.php',
         'Rector\\Symfony\\Rector\\ClassConstFetch\\ConsoleExceptionToErrorEventConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\ActionSuffixRemoverRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/ActionSuffixRemoverRector.php',
@@ -2908,7 +2890,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\Symfony\\Rector\\Class_\\ContainerGetToRequiredDependencyAbstractClassRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/ContainerGetToRequiredDependencyAbstractClassRector.php',
         'Rector\\Symfony\\Rector\\Class_\\EventListenerToEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/EventListenerToEventSubscriberRector.php',
         'Rector\\Symfony\\Rector\\Class_\\FormTypeWithDependencyToOptionsRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/FormTypeWithDependencyToOptionsRector.php',
-        'Rector\\Symfony\\Rector\\Class_\\InvokableControllerRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/InvokableControllerRector.php',
         'Rector\\Symfony\\Rector\\Class_\\LoadValidatorMetadataToAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php',
         'Rector\\Symfony\\Rector\\Class_\\LogoutHandlerToLogoutEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/LogoutHandlerToLogoutEventSubscriberRector.php',
         'Rector\\Symfony\\Rector\\Class_\\LogoutSuccessHandlerToLogoutEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php',
@@ -2988,7 +2969,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodName' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodName.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodNameWithPriority' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodNameWithPriority.php',
         'Rector\\Symfony\\ValueObject\\IntlBundleClassToNewClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/IntlBundleClassToNewClass.php',
-        'Rector\\Symfony\\ValueObject\\InvokableController\\ActiveClassElements' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/InvokableController/ActiveClassElements.php',
         'Rector\\Symfony\\ValueObject\\ReplaceServiceArgument' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ReplaceServiceArgument.php',
         'Rector\\Symfony\\ValueObject\\ServiceDefinition' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceDefinition.php',
         'Rector\\Symfony\\ValueObject\\ServiceMap\\ServiceMap' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceMap/ServiceMap.php',
@@ -3005,7 +2985,6 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
         'Rector\\Testing\\PHPUnit\\AbstractLazyTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractLazyTestCase.php',
         'Rector\\Testing\\PHPUnit\\AbstractRectorTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractRectorTestCase.php',
         'Rector\\Testing\\PHPUnit\\AbstractTestCase' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/AbstractTestCase.php',
-        'Rector\\Testing\\PHPUnit\\Behavior\\MovingFilesTrait' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/Behavior/MovingFilesTrait.php',
         'Rector\\Testing\\PHPUnit\\StaticPHPUnitEnvironment' => __DIR__ . '/../..' . '/packages/Testing/PHPUnit/StaticPHPUnitEnvironment.php',
         'Rector\\Testing\\TestingParser\\TestingParser' => __DIR__ . '/../..' . '/packages/Testing/TestingParser/TestingParser.php',
         'Rector\\Transform\\NodeAnalyzer\\FuncCallStaticCallToMethodCallAnalyzer' => __DIR__ . '/../..' . '/rules/Transform/NodeAnalyzer/FuncCallStaticCallToMethodCallAnalyzer.php',
@@ -3180,9 +3159,9 @@ class ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit039be9eb7fad82232ccfbd1567a3b09a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3a657346ede49eb0ff0b32be246cb366::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3a657346ede49eb0ff0b32be246cb366::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3a657346ede49eb0ff0b32be246cb366::$classMap;
 
         }, null, ClassLoader::class);
     }

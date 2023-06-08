@@ -96,10 +96,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const PSR_4 = __DIR__ . '/../../../config/set/psr-4.php';
-    /**
-     * @var string
-     */
     public const TYPE_DECLARATION = __DIR__ . '/../../../config/set/type-declaration.php';
     /**
      * @var string
