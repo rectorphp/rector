@@ -11,6 +11,9 @@ use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\Php80\Contract\StrStartWithMatchAndRefactorInterface;
+use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\StrncmpMatchAndRefactor;
+use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\StrposMatchAndRefactor;
+use Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor\SubstrMatchAndRefactor;
 use Rector\Php80\ValueObject\StrStartsWith;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -27,15 +30,11 @@ final class StrStartsWithRector extends AbstractRector implements MinPhpVersionI
 {
     /**
      * @var StrStartWithMatchAndRefactorInterface[]
-     * @readonly
      */
-    private $strStartWithMatchAndRefactors;
-    /**
-     * @param StrStartWithMatchAndRefactorInterface[] $strStartWithMatchAndRefactors
-     */
-    public function __construct(array $strStartWithMatchAndRefactors)
+    private $strStartWithMatchAndRefactors = [];
+    public function __construct(StrncmpMatchAndRefactor $strncmpMatchAndRefactor, SubstrMatchAndRefactor $substrMatchAndRefactor, StrposMatchAndRefactor $strposMatchAndRefactor)
     {
-        $this->strStartWithMatchAndRefactors = $strStartWithMatchAndRefactors;
+        $this->strStartWithMatchAndRefactors = [$strncmpMatchAndRefactor, $substrMatchAndRefactor, $strposMatchAndRefactor];
     }
     public function provideMinPhpVersion() : int
     {

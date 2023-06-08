@@ -42,7 +42,7 @@ final class WorkerCommand extends \Rector\Core\Console\Command\AbstractProcessCo
     protected function configure() : void
     {
         $this->setName('worker');
-        $this->setDescription('(Internal) Support for parallel process');
+        $this->setDescription('[INTERNAL] Support for parallel process');
         parent::configure();
     }
     protected function execute(InputInterface $input, OutputInterface $output) : int

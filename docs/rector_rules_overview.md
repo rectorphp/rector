@@ -1,4 +1,4 @@
-# 383 Rules Overview
+# 377 Rules Overview
 
 <br>
 
@@ -12,15 +12,13 @@
 
 - [DeadCode](#deadcode) (44)
 
-- [DependencyInjection](#dependencyinjection) (2)
+- [DependencyInjection](#dependencyinjection) (1)
 
 - [EarlyReturn](#earlyreturn) (10)
 
 - [MysqlToMysqli](#mysqltomysqli) (4)
 
 - [Naming](#naming) (6)
-
-- [PSR4](#psr4) (1)
 
 - [Php52](#php52) (2)
 
@@ -44,11 +42,11 @@
 
 - [Php80](#php80) (18)
 
-- [Php81](#php81) (12)
+- [Php81](#php81) (11)
 
 - [Php82](#php82) (3)
 
-- [Privatization](#privatization) (5)
+- [Privatization](#privatization) (4)
 
 - [Removing](#removing) (6)
 
@@ -56,9 +54,9 @@
 
 - [Renaming](#renaming) (10)
 
-- [Strict](#strict) (6)
+- [Strict](#strict) (5)
 
-- [Transform](#transform) (27)
+- [Transform](#transform) (26)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -651,30 +649,13 @@ Change multiple null compares to ?? queue
 
 Replaces static::* access to private constants with self::*
 
-:wrench: **configure it!**
-
 - class: [`Rector\CodeQuality\Rector\ClassConstFetch\ConvertStaticPrivateConstantToSelfRector`](../rules/CodeQuality/Rector/ClassConstFetch/ConvertStaticPrivateConstantToSelfRector.php)
 
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\CodeQuality\Rector\ClassConstFetch\ConvertStaticPrivateConstantToSelfRector;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ConvertStaticPrivateConstantToSelfRector::class, [
-        ConvertStaticPrivateConstantToSelfRector::ENABLE_FOR_NON_FINAL_CLASSES => false,
-    ]);
-};
-```
-
-↓
-
 ```diff
- final class Foo {
+ final class Foo
+ {
      private const BAR = 'bar';
+
      public function run()
      {
 -        $bar = static::BAR;
@@ -2971,26 +2952,7 @@ Remove unused parent call with no parent class
 
 Remove unneeded PHP_VERSION_ID conditional checks
 
-:wrench: **configure it!**
-
 - class: [`Rector\DeadCode\Rector\ConstFetch\RemovePhpVersionIdCheckRector`](../rules/DeadCode/Rector/ConstFetch/RemovePhpVersionIdCheckRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\ConstFetch\RemovePhpVersionIdCheckRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemovePhpVersionIdCheckRector::class, [
-        80000,
-    ]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -3155,26 +3117,7 @@ Remove unused private method
 
 Remove unused private properties
 
-:wrench: **configure it!**
-
 - class: [`Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector`](../rules/DeadCode/Rector/Property/RemoveUnusedPrivatePropertyRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\Property\RemoveUnusedPrivatePropertyRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveUnusedPrivatePropertyRector::class, [
-        RemoveUnusedPrivatePropertyRector::REMOVE_ASSIGN_SIDE_EFFECT => true,
-    ]);
-};
-```
-
-↓
 
 ```diff
  class SomeClass
@@ -3368,31 +3311,6 @@ Remove php version checks if they are passed
 <br>
 
 ## DependencyInjection
-
-### ActionInjectionToConstructorInjectionRector
-
-Turns action injection in Controllers to constructor injection
-
-- class: [`Rector\DependencyInjection\Rector\Class_\ActionInjectionToConstructorInjectionRector`](../rules/DependencyInjection/Rector/Class_/ActionInjectionToConstructorInjectionRector.php)
-
-```diff
- final class SomeController
- {
--    public function default(ProductRepository $productRepository)
-+    public function __construct(
-+        private ProductRepository $productRepository
-+    ) {
-+    }
-+
-+    public function default()
-     {
--        $products = $productRepository->fetchAll();
-+        $products = $this->productRepository->fetchAll();
-     }
- }
-```
-
-<br>
 
 ### AddMethodParentCallRector
 
@@ -3913,36 +3831,6 @@ Rename variable to match new ClassType
 +        $dreamSearch = new DreamSearch();
 +        $dreamSearch->advance();
      }
- }
-```
-
-<br>
-
-## PSR4
-
-### MultipleClassFileToPsr4ClassesRector
-
-Change multiple classes in one file to standalone PSR-4 classes.
-
-- class: [`Rector\PSR4\Rector\Namespace_\MultipleClassFileToPsr4ClassesRector`](../rules/PSR4/Rector/Namespace_/MultipleClassFileToPsr4ClassesRector.php)
-
-```diff
-+// new file: "app/Exceptions/FirstException.php"
- namespace App\Exceptions;
-
- use Exception;
-
- final class FirstException extends Exception
- {
- }
-+
-+// new file: "app/Exceptions/SecondException.php"
-+namespace App\Exceptions;
-+
-+use Exception;
-
- final class SecondException extends Exception
- {
  }
 ```
 
@@ -5797,26 +5685,6 @@ Add `Stringable` interface to classes with `__toString()` method
 
 ## Php81
 
-### ConstantListClassToEnumRector
-
-Upgrade constant list classes to full blown enum
-
-- class: [`Rector\Php81\Rector\Class_\ConstantListClassToEnumRector`](../rules/Php81/Rector/Class_/ConstantListClassToEnumRector.php)
-
-```diff
--class Direction
-+enum Direction
- {
--    public const LEFT = 'left';
-+    case LEFT;
-
--    public const RIGHT = 'right';
-+    case RIGHT;
- }
-```
-
-<br>
-
 ### FinalizePublicClassConstantRector
 
 Add final to constants that does not have children
@@ -6091,34 +5959,6 @@ Change deprecated utf8_decode and utf8_encode to mb_convert_encoding
 <br>
 
 ## Privatization
-
-### ChangeGlobalVariablesToPropertiesRector
-
-Change global `$variables` to private properties
-
-- class: [`Rector\Privatization\Rector\Class_\ChangeGlobalVariablesToPropertiesRector`](../rules/Privatization/Rector/Class_/ChangeGlobalVariablesToPropertiesRector.php)
-
-```diff
- class SomeClass
- {
-+    private $variable;
-     public function go()
-     {
--        global $variable;
--        $variable = 5;
-+        $this->variable = 5;
-     }
-
-     public function run()
-     {
--        global $variable;
--        var_dump($variable);
-+        var_dump($this->variable);
-     }
- }
-```
-
-<br>
 
 ### FinalizeClassesWithoutChildrenRector
 
@@ -6810,27 +6650,6 @@ return static function (RectorConfig $rectorConfig): void {
 <br>
 
 ## Strict
-
-### AddConstructorParentCallRector
-
-Fixer for PHPStan reports by strict type rule - "PHPStan\Rules\Classes\RequireParentConstructCallRule"
-
-- class: [`Rector\Strict\Rector\ClassMethod\AddConstructorParentCallRector`](../rules/Strict/Rector/ClassMethod/AddConstructorParentCallRector.php)
-
-```diff
- class SunshineCommand extends ParentClassWithConstructor
- {
--    public function __construct()
-+    public function __construct(ParentDependency $parentDependency)
-     {
-         $value = 5;
-+
-+        parent::__construct($parentDependency);
-     }
- }
-```
-
-<br>
 
 ### BooleanInBooleanNotRuleFixerRector
 
@@ -7541,55 +7360,6 @@ return static function (RectorConfig $rectorConfig): void {
 -        $dotenv = new Dotenv(true);
 +        $dotenv = new Dotenv();
 +        $dotenv->usePutenv();
-     }
- }
-```
-
-<br>
-
-### NewToConstructorInjectionRector
-
-Change defined new type to constructor injection
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\New_\NewToConstructorInjectionRector`](../rules/Transform/Rector/New_/NewToConstructorInjectionRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\New_\NewToConstructorInjectionRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(NewToConstructorInjectionRector::class, [
-        'Validator',
-    ]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-+    /**
-+     * @var Validator
-+     */
-+    private $validator;
-+
-+    public function __construct(Validator $validator)
-+    {
-+        $this->validator = $validator;
-+    }
-+
-     public function run()
-     {
--        $validator = new Validator();
--        $validator->validate(1000);
-+        $this->validator->validate(1000);
      }
  }
 ```

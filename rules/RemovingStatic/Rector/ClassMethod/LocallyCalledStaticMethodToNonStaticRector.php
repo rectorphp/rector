@@ -7,10 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -78,22 +77,29 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, StaticCall::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod|StaticCall $node
+     * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node) : ?Class_
     {
-        if ($node instanceof ClassMethod) {
-            if (!$node->isPrivate()) {
-                return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if (!$classMethod->isPrivate()) {
+                continue;
             }
-            return $this->refactorClassMethod($node);
+            $changedClassMethod = $this->refactorClassMethod($node, $classMethod);
+            if ($changedClassMethod instanceof ClassMethod) {
+                $hasChanged = \true;
+            }
         }
-        return $this->refactorStaticCall($node);
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
-    private function refactorClassMethod(ClassMethod $classMethod) : ?ClassMethod
+    private function refactorClassMethod(Class_ $class, ClassMethod $classMethod) : ?ClassMethod
     {
         if (!$classMethod->isStatic()) {
             return null;
@@ -105,47 +111,58 @@ CODE_SAMPLE
         if ($this->classMethodVisibilityGuard->isClassMethodVisibilityGuardedByParent($classMethod, $classReflection)) {
             return null;
         }
+        if ($this->isClassMethodCalledInAnotherStaticClassMethod($class, $classMethod)) {
+            return null;
+        }
+        // replace all the calls
+        $classMethodName = $this->getName($classMethod);
+        $this->traverseNodesWithCallable($class, function (Node $node) use($classMethodName) : ?MethodCall {
+            if (!$node instanceof StaticCall) {
+                return null;
+            }
+            if (!$this->isName($node->class, 'self')) {
+                return null;
+            }
+            if (!$this->isName($node->name, $classMethodName)) {
+                return null;
+            }
+            return new MethodCall(new Variable('this'), $classMethodName);
+        });
         // change static calls to non-static ones, but only if in non-static method!!!
         $this->visibilityManipulator->makeNonStatic($classMethod);
         return $classMethod;
     }
-    private function refactorStaticCall(StaticCall $staticCall) : ?MethodCall
+    /**
+     * If the static class method is called in another static class method,
+     * we should keep it to avoid calling $this in static
+     */
+    private function isClassMethodCalledInAnotherStaticClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
-        $classLike = $this->betterNodeFinder->findParentType($staticCall, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
-            return null;
-        }
-        /** @var ClassMethod[] $classMethods */
-        $classMethods = $this->betterNodeFinder->findInstanceOf($classLike, ClassMethod::class);
-        foreach ($classMethods as $classMethod) {
-            if (!$this->isClassMethodMatchingStaticCall($classMethod, $staticCall)) {
+        $currentClassMethodName = $this->getName($classMethod);
+        $isInsideStaticClassMethod = \false;
+        // check if called stati call somewhere in class, but only in static methods
+        foreach ($class->getMethods() as $checkedClassMethod) {
+            // not a problem
+            if (!$checkedClassMethod->isStatic()) {
                 continue;
             }
-            if ($this->isInStaticClassMethod($staticCall)) {
-                continue;
+            $this->traverseNodesWithCallable($checkedClassMethod, function (Node $node) use($currentClassMethodName, &$isInsideStaticClassMethod) : ?StaticCall {
+                if (!$node instanceof StaticCall) {
+                    return null;
+                }
+                if (!$this->isName($node->class, 'self')) {
+                    return null;
+                }
+                if (!$this->isName($node->name, $currentClassMethodName)) {
+                    return null;
+                }
+                $isInsideStaticClassMethod = \true;
+                return $node;
+            });
+            if ($isInsideStaticClassMethod) {
+                return $isInsideStaticClassMethod;
             }
-            $thisVariable = new Variable('this');
-            return new MethodCall($thisVariable, $staticCall->name, $staticCall->args);
         }
-        return null;
-    }
-    private function isInStaticClassMethod(StaticCall $staticCall) : bool
-    {
-        $locationClassMethod = $this->betterNodeFinder->findParentType($staticCall, ClassMethod::class);
-        if (!$locationClassMethod instanceof ClassMethod) {
-            return \false;
-        }
-        return $locationClassMethod->isStatic();
-    }
-    private function isClassMethodMatchingStaticCall(ClassMethod $classMethod, StaticCall $staticCall) : bool
-    {
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
-            return \false;
-        }
-        $className = (string) $this->nodeNameResolver->getName($classLike);
-        $objectType = new ObjectType($className);
-        $callerType = $this->nodeTypeResolver->getType($staticCall->class);
-        return $objectType->equals($callerType);
+        return \false;
     }
 }
