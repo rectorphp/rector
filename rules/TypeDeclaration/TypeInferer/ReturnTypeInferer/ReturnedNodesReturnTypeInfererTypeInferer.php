@@ -18,9 +18,9 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VoidType;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
@@ -64,9 +64,9 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
     private $reflectionAstResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
-    private $nodePrinter;
+    private $betterStandardPrinter;
     /**
      * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
@@ -77,7 +77,7 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(SilentVoidResolver $silentVoidResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, TypeFactory $typeFactory, SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower, AstResolver $reflectionAstResolver, NodePrinterInterface $nodePrinter, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(SilentVoidResolver $silentVoidResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, TypeFactory $typeFactory, SplArrayFixedTypeNarrower $splArrayFixedTypeNarrower, AstResolver $reflectionAstResolver, BetterStandardPrinter $betterStandardPrinter, ReflectionResolver $reflectionResolver, BetterNodeFinder $betterNodeFinder)
     {
         $this->silentVoidResolver = $silentVoidResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -85,7 +85,7 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
         $this->typeFactory = $typeFactory;
         $this->splArrayFixedTypeNarrower = $splArrayFixedTypeNarrower;
         $this->reflectionAstResolver = $reflectionAstResolver;
-        $this->nodePrinter = $nodePrinter;
+        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->reflectionResolver = $reflectionResolver;
         $this->betterNodeFinder = $betterNodeFinder;
     }
@@ -200,8 +200,8 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
         if (!$classMethod instanceof ClassMethod) {
             return new MixedType();
         }
-        $classMethodCacheKey = $this->nodePrinter->print($classMethod);
-        $functionLikeCacheKey = $this->nodePrinter->print($originalFunctionLike);
+        $classMethodCacheKey = $this->betterStandardPrinter->print($classMethod);
+        $functionLikeCacheKey = $this->betterStandardPrinter->print($originalFunctionLike);
         if ($classMethodCacheKey === $functionLikeCacheKey) {
             return new MixedType();
         }

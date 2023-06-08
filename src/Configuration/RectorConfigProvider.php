@@ -43,7 +43,7 @@ final class RectorConfigProvider
     }
     public function getIndentChar() : string
     {
-        return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::INDENT_CHAR);
+        return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::INDENT_CHAR, ' ');
     }
     public function getIndentSize() : int
     {

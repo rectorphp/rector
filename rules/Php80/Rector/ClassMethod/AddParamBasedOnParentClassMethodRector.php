@@ -14,8 +14,8 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\MethodReflection;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -42,14 +42,14 @@ final class AddParamBasedOnParentClassMethodRector extends AbstractRector implem
     private $astResolver;
     /**
      * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
-    private $nodePrinter;
-    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, AstResolver $astResolver, NodePrinterInterface $nodePrinter)
+    private $betterStandardPrinter;
+    public function __construct(ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->astResolver = $astResolver;
-        $this->nodePrinter = $nodePrinter;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
     public function provideMinPhpVersion() : int
     {
@@ -179,14 +179,14 @@ CODE_SAMPLE
             }
             $paramDefault = $parentClassMethodParam->default;
             if ($paramDefault instanceof Expr) {
-                $printParamDefault = $this->nodePrinter->print($paramDefault);
+                $printParamDefault = $this->betterStandardPrinter->print($paramDefault);
                 $paramDefault = new ConstFetch(new Name($printParamDefault));
             }
             $paramName = $this->nodeNameResolver->getName($parentClassMethodParam);
             $paramType = $this->resolveParamType($parentClassMethodParam);
             $node->params[$key] = new Param(new Variable($paramName), $paramDefault, $paramType, $parentClassMethodParam->byRef, $parentClassMethodParam->variadic, [], $parentClassMethodParam->flags);
             if ($parentClassMethodParam->attrGroups !== []) {
-                $attrGroupsAsComment = $this->nodePrinter->print($parentClassMethodParam->attrGroups);
+                $attrGroupsAsComment = $this->betterStandardPrinter->print($parentClassMethodParam->attrGroups);
                 $node->params[$key]->setAttribute(AttributeKey::COMMENTS, [new Comment($attrGroupsAsComment)]);
             }
         }

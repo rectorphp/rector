@@ -36,10 +36,12 @@ final class ParameterProvider
     /**
      * @api
      */
-    public function provideStringParameter(string $name) : string
+    public function provideStringParameter(string $name, ?string $default = null) : string
     {
-        $this->ensureParameterIsSet($name);
-        return (string) $this->parameters[$name];
+        if ($default === null) {
+            $this->ensureParameterIsSet($name);
+        }
+        return (string) ($this->parameters[$name] ?? $default);
     }
     /**
      * @api

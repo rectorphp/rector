@@ -260,6 +260,8 @@ final class BetterNodeFinder
         });
     }
     /**
+     * @deprecated Use nodes directly
+     *
      * Search in previous Node/Stmt, when no Node found, lookup previous Stmt of Parent Node
      *
      * @param callable(Node $node): bool $filter

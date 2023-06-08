@@ -10,7 +10,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -24,12 +24,12 @@ final class ListSwapArrayOrderRector extends AbstractRector implements MinPhpVer
 {
     /**
      * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
-    private $nodePrinter;
-    public function __construct(NodePrinterInterface $nodePrinter)
+    private $betterStandardPrinter;
+    public function __construct(BetterStandardPrinter $betterStandardPrinter)
     {
-        $this->nodePrinter = $nodePrinter;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -58,7 +58,7 @@ final class ListSwapArrayOrderRector extends AbstractRector implements MinPhpVer
                 continue;
             }
             if ($arrayItem->value instanceof ArrayDimFetch && !$arrayItem->value->dim instanceof Expr) {
-                $printedVariables[] = $this->nodePrinter->print($arrayItem->value->var);
+                $printedVariables[] = $this->betterStandardPrinter->print($arrayItem->value->var);
             } else {
                 return null;
             }

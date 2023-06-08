@@ -11,9 +11,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\Encapsed;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Util\StringUtils;
 final class InlineCodeParser
 {
@@ -54,9 +54,9 @@ final class InlineCodeParser
     private const BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX = '#(?<!")(?<backreference>\\$\\d+)#';
     /**
      * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
-    private $nodePrinter;
+    private $betterStandardPrinter;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Parser\SimplePhpParser
@@ -72,9 +72,9 @@ final class InlineCodeParser
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodePrinterInterface $nodePrinter, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder)
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, \Rector\Core\PhpParser\Parser\SimplePhpParser $simplePhpParser, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder)
     {
-        $this->nodePrinter = $nodePrinter;
+        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->simplePhpParser = $simplePhpParser;
         $this->valueResolver = $valueResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -111,7 +111,7 @@ final class InlineCodeParser
         if ($expr instanceof Concat) {
             return $this->resolveConcatValue($expr);
         }
-        return $this->nodePrinter->print($expr);
+        return $this->betterStandardPrinter->print($expr);
     }
     private function resolveEncapsedValue(Encapsed $encapsed) : string
     {
@@ -125,7 +125,7 @@ final class InlineCodeParser
             }
             $value .= $partValue;
         }
-        $printedExpr = $isRequirePrint ? $this->nodePrinter->print($encapsed) : $value;
+        $printedExpr = $isRequirePrint ? $this->betterStandardPrinter->print($encapsed) : $value;
         // remove "
         $printedExpr = \trim($printedExpr, '""');
         // use \$ → $

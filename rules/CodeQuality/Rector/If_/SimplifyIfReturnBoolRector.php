@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\BetterPhpDocParser\Comment\CommentsMerger;
 use Rector\CodeQuality\NodeManipulator\ExprBoolCaster;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -35,14 +35,14 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
     private $exprBoolCaster;
     /**
      * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
-    private $nodePrinter;
-    public function __construct(CommentsMerger $commentsMerger, ExprBoolCaster $exprBoolCaster, NodePrinterInterface $nodePrinter)
+    private $betterStandardPrinter;
+    public function __construct(CommentsMerger $commentsMerger, ExprBoolCaster $exprBoolCaster, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->commentsMerger = $commentsMerger;
         $this->exprBoolCaster = $exprBoolCaster;
-        $this->nodePrinter = $nodePrinter;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -129,7 +129,7 @@ CODE_SAMPLE
         if (!$this->valueResolver->isFalse($returnedExpr)) {
             return !$this->valueResolver->isTrueOrFalse($return->expr);
         }
-        $condString = $this->nodePrinter->print($if->cond);
+        $condString = $this->betterStandardPrinter->print($if->cond);
         if (\strpos($condString, '!=') === \false) {
             return !$this->valueResolver->isTrueOrFalse($return->expr);
         }

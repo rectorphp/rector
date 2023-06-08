@@ -5,7 +5,7 @@ namespace Rector\Php71\Rector\TryCatch;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\TryCatch;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -20,12 +20,12 @@ final class MultiExceptionCatchRector extends AbstractRector implements MinPhpVe
 {
     /**
      * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
-    private $nodePrinter;
-    public function __construct(NodePrinterInterface $nodePrinter)
+    private $betterStandardPrinter;
+    public function __construct(BetterStandardPrinter $betterStandardPrinter)
     {
-        $this->nodePrinter = $nodePrinter;
+        $this->betterStandardPrinter = $betterStandardPrinter;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -65,7 +65,7 @@ CODE_SAMPLE
         $printedCatches = [];
         $hasChanged = \false;
         foreach ($node->catches as $key => $catch) {
-            $currentPrintedCatch = $this->nodePrinter->print($catch->stmts);
+            $currentPrintedCatch = $this->betterStandardPrinter->print($catch->stmts);
             // already duplicated catch → remove it and join the type
             if (\in_array($currentPrintedCatch, $printedCatches, \true)) {
                 // merge type to existing type

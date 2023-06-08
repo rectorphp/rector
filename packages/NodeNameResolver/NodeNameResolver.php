@@ -16,7 +16,6 @@ use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-use Rector\NodeNameResolver\Error\InvalidNameNodeReporter;
 use Rector\NodeNameResolver\Regex\RegexPatternDetector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeNameResolver
@@ -44,11 +43,6 @@ final class NodeNameResolver
     private $classNaming;
     /**
      * @readonly
-     * @var \Rector\NodeNameResolver\Error\InvalidNameNodeReporter
-     */
-    private $invalidNameNodeReporter;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;
@@ -60,11 +54,10 @@ final class NodeNameResolver
     /**
      * @param NodeNameResolverInterface[] $nodeNameResolvers
      */
-    public function __construct(RegexPatternDetector $regexPatternDetector, ClassNaming $classNaming, InvalidNameNodeReporter $invalidNameNodeReporter, CallAnalyzer $callAnalyzer, array $nodeNameResolvers = [])
+    public function __construct(RegexPatternDetector $regexPatternDetector, ClassNaming $classNaming, CallAnalyzer $callAnalyzer, array $nodeNameResolvers = [])
     {
         $this->regexPatternDetector = $regexPatternDetector;
         $this->classNaming = $classNaming;
-        $this->invalidNameNodeReporter = $invalidNameNodeReporter;
         $this->callAnalyzer = $callAnalyzer;
         $this->nodeNameResolvers = $nodeNameResolvers;
     }
@@ -132,11 +125,8 @@ final class NodeNameResolver
         if (\is_string($namespacedName)) {
             return $namespacedName;
         }
-        if ($node instanceof MethodCall || $node instanceof StaticCall) {
-            if ($this->isCallOrIdentifier($node->name)) {
-                return null;
-            }
-            $this->invalidNameNodeReporter->reportInvalidNodeForName($node);
+        if (($node instanceof MethodCall || $node instanceof StaticCall) && $this->isCallOrIdentifier($node->name)) {
+            return null;
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         $resolvedName = $this->resolveNodeName($node, $scope);

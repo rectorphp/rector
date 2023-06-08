@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Util\MultiInstanceofChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -26,17 +26,17 @@ final class RemoveDuplicatedArrayKeyRector extends AbstractRector
     private const ALLOWED_KEY_DUPLICATES = [PreInc::class, PreDec::class];
     /**
      * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
-    private $nodePrinter;
+    private $betterStandardPrinter;
     /**
      * @readonly
      * @var \Rector\Core\Util\MultiInstanceofChecker
      */
     private $multiInstanceofChecker;
-    public function __construct(NodePrinterInterface $nodePrinter, MultiInstanceofChecker $multiInstanceofChecker)
+    public function __construct(BetterStandardPrinter $betterStandardPrinter, MultiInstanceofChecker $multiInstanceofChecker)
     {
-        $this->nodePrinter = $nodePrinter;
+        $this->betterStandardPrinter = $betterStandardPrinter;
         $this->multiInstanceofChecker = $multiInstanceofChecker;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -94,7 +94,7 @@ CODE_SAMPLE
             if (!$arrayItem->key instanceof Expr) {
                 continue;
             }
-            $keyValue = $this->nodePrinter->print($arrayItem->key);
+            $keyValue = $this->betterStandardPrinter->print($arrayItem->key);
             $arrayItemsByKeys[$keyValue][] = $arrayItem;
         }
         return $this->filterItemsWithSameKey($arrayItemsByKeys);
