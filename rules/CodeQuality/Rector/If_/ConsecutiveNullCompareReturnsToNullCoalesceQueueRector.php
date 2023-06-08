@@ -87,6 +87,9 @@ CODE_SAMPLE
             if (!$comparedExpr instanceof Expr) {
                 continue;
             }
+            if (!isset($node->stmts[$key + 1])) {
+                return null;
+            }
             $coalescingExprs[] = $comparedExpr;
             $ifKeys[] = $key;
         }
@@ -95,8 +98,9 @@ CODE_SAMPLE
             return null;
         }
         // remove last return null
-        $throwExpr = null;
+        $appendExpr = null;
         $hasChanged = \false;
+        $originalStmts = $node->stmts;
         foreach ($node->stmts as $key => $stmt) {
             if (\in_array($key, $ifKeys, \true)) {
                 unset($node->stmts[$key]);
@@ -108,15 +112,21 @@ CODE_SAMPLE
             }
             if ($stmt instanceof Throw_) {
                 unset($node->stmts[$key]);
-                $throwExpr = new ExprThrow_($stmt->expr);
+                $appendExpr = new ExprThrow_($stmt->expr);
                 continue;
             }
             if (!$this->isReturnNull($stmt)) {
-                continue;
+                if ($stmt instanceof Return_ && $stmt->expr instanceof Expr) {
+                    unset($node->stmts[$key]);
+                    $appendExpr = $stmt->expr;
+                    continue;
+                }
+                $node->stmts = $originalStmts;
+                return $node;
             }
             unset($node->stmts[$key]);
         }
-        $node->stmts[] = $this->createCealesceReturn($coalescingExprs, $throwExpr);
+        $node->stmts[] = $this->createCealesceReturn($coalescingExprs, $appendExpr);
         return $node;
     }
     public function provideMinPhpVersion() : int
@@ -136,7 +146,7 @@ CODE_SAMPLE
     /**
      * @param Expr[] $coalescingExprs
      */
-    private function createCealesceReturn(array $coalescingExprs, ?Expr $throwExpr) : Return_
+    private function createCealesceReturn(array $coalescingExprs, ?Expr $appendExpr) : Return_
     {
         /** @var Expr $leftExpr */
         $leftExpr = \array_shift($coalescingExprs);
@@ -146,8 +156,8 @@ CODE_SAMPLE
         foreach ($coalescingExprs as $coalescingExpr) {
             $coalesce = new Coalesce($coalesce, $coalescingExpr);
         }
-        if ($throwExpr instanceof Expr) {
-            return new Return_(new Coalesce($coalesce, $throwExpr));
+        if ($appendExpr instanceof Expr) {
+            return new Return_(new Coalesce($coalesce, $appendExpr));
         }
         return new Return_($coalesce);
     }
