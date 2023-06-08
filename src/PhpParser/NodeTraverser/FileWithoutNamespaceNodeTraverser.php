@@ -19,6 +19,7 @@ final class FileWithoutNamespaceNodeTraverser extends NodeTraverser
     public function __construct(NodeFinder $nodeFinder)
     {
         $this->nodeFinder = $nodeFinder;
+        parent::__construct();
     }
     /**
      * @template TNode as Node

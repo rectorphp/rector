@@ -30,6 +30,7 @@ final class RectorNodeTraverser extends NodeTraverser
     {
         $this->phpRectors = $phpRectors;
         $this->phpVersionedFilter = $phpVersionedFilter;
+        parent::__construct();
     }
     /**
      * @template TNode as Node

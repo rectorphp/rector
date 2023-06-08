@@ -72,6 +72,9 @@ CODE_SAMPLE
     public function refactorWithScope(Node $node, Scope $scope) : ?Expr
     {
         $exprType = $scope->getType($node->expr);
+        if ($exprType->isBoolean()->yes()) {
+            return null;
+        }
         return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $node->expr, $this->treatAsNonEmpty);
     }
 }

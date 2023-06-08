@@ -16,6 +16,8 @@ use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
 use RectorPrefix202306\Symfony\Component\DependencyInjection\Reference;
 /**
+ * @deprecated Make the required services explicit, for faster autowire
+ *
  * @inspiration https://github.com/nette/di/pull/178
  * @see \Rector\Core\Tests\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPassTest
  */
@@ -85,7 +87,8 @@ final class AutowireArrayParameterCompilerPass implements CompilerPassInterface
         $resolvedClassName = $parameterBag->resolveValue($definition->getClass());
         // skip 3rd party classes, they're autowired by own config
         $excludedNamespacePattern = '#^(' . \implode('|', self::EXCLUDED_NAMESPACES) . ')\\\\#';
-        if (Strings::match($resolvedClassName, $excludedNamespacePattern)) {
+        $excludedNamespaceMatch = Strings::match($resolvedClassName, $excludedNamespacePattern);
+        if ($excludedNamespaceMatch !== null) {
             return \true;
         }
         if (\in_array($resolvedClassName, self::EXCLUDED_FATAL_CLASSES, \true)) {
@@ -106,7 +109,7 @@ final class AutowireArrayParameterCompilerPass implements CompilerPassInterface
         }
         /** @var ReflectionMethod $constructorReflectionMethod */
         $constructorReflectionMethod = $reflectionClass->getConstructor();
-        return !$constructorReflectionMethod->getParameters();
+        return $constructorReflectionMethod->getParameters() === [];
     }
     private function processParameters(ContainerBuilder $containerBuilder, ReflectionMethod $reflectionMethod, Definition $definition) : void
     {

@@ -17,10 +17,12 @@ use Rector\Core\Exception\Cache\CachingException;
 final class FileCacheStorage implements CacheStorageInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $directory;
     /**
+     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;
@@ -55,7 +57,7 @@ final class FileCacheStorage implements CacheStorageInterface
         $cacheFilePaths = $this->getCacheFilePaths($key);
         $this->filesystem->mkdir($cacheFilePaths->getFirstDirectory());
         $this->filesystem->mkdir($cacheFilePaths->getSecondDirectory());
-        $path = $cacheFilePaths->getFilePath();
+        $filePath = $cacheFilePaths->getFilePath();
         $tmpPath = \sprintf('%s/%s.tmp', $this->directory, Random::generate());
         $errorBefore = \error_get_last();
         $exported = @\var_export(new CacheItem($variableKey, $data), \true);
@@ -65,13 +67,13 @@ final class FileCacheStorage implements CacheStorageInterface
         }
         // for performance reasons we don't use SmartFileSystem
         FileSystem::write($tmpPath, \sprintf("<?php declare(strict_types = 1);\n\nreturn %s;", $exported));
-        $renameSuccess = @\rename($tmpPath, $path);
+        $renameSuccess = @\rename($tmpPath, $filePath);
         if ($renameSuccess) {
             return;
         }
         @\unlink($tmpPath);
-        if (\DIRECTORY_SEPARATOR === '/' || !\file_exists($path)) {
-            throw new CachingException(\sprintf('Could not write data to cache file %s.', $path));
+        if (\DIRECTORY_SEPARATOR === '/' || !\file_exists($filePath)) {
+            throw new CachingException(\sprintf('Could not write data to cache file %s.', $filePath));
         }
     }
     public function clean(string $key) : void

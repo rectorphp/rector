@@ -184,11 +184,13 @@ final class PropertyNaming
     private function removeInterfaceSuffixPrefix(string $className, string $category) : string
     {
         // suffix
-        if (Strings::match($className, '#' . $category . '$#i')) {
+        $iSuffixMatch = Strings::match($className, '#' . $category . '$#i');
+        if ($iSuffixMatch !== null) {
             return Strings::substring($className, 0, -\strlen($category));
         }
         // prefix
-        if (Strings::match($className, '#^' . $category . '#i')) {
+        $iPrefixMatch = Strings::match($className, '#^' . $category . '#i');
+        if ($iPrefixMatch !== null) {
             return Strings::substring($className, \strlen($category));
         }
         // starts with "I\W+"?

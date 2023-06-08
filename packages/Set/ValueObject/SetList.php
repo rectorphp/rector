@@ -24,6 +24,10 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
+    public const STRICT_BOOLEANS = __DIR__ . '/../../../config/set/strict-booleans.php';
+    /**
+     * @var string
+     */
     public const GMAGICK_TO_IMAGICK = __DIR__ . '/../../../config/set/gmagick-to-imagick.php';
     /**
      * @var string

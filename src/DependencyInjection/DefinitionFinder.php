@@ -21,6 +21,7 @@ final class DefinitionFinder
         $definitions = [];
         $containerBuilderDefinitions = $containerBuilder->getDefinitions();
         foreach ($containerBuilderDefinitions as $name => $definition) {
+            /** @var Definition $definition */
             $class = $definition->getClass() ?: $name;
             if (!$this->doesClassExists($class)) {
                 continue;
