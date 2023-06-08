@@ -1,4 +1,4 @@
-# 374 Rules Overview
+# 373 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (25)
+- [Transform](#transform) (24)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -7675,42 +7675,6 @@ return static function (RectorConfig $rectorConfig): void {
 +        return [\Yet\AnotherClass::CONSTANT => 'compile'];
      }
  }
-```
-
-<br>
-
-### UnsetAndIssetToMethodCallRector
-
-Turns defined `__isset`/`__unset` calls to specific method calls.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector`](../rules/Transform/Rector/Isset_/UnsetAndIssetToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\Isset_\UnsetAndIssetToMethodCallRector;
-use Rector\Transform\ValueObject\UnsetAndIssetToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(UnsetAndIssetToMethodCallRector::class, [
-        new UnsetAndIssetToMethodCall('SomeContainer', 'hasService', 'removeService'),
-    ]);
-};
-```
-
-↓
-
-```diff
- $container = new SomeContainer;
--isset($container["someKey"]);
--unset($container["someKey"]);
-+$container->hasService("someKey");
-+$container->removeService("someKey");
 ```
 
 <br>
