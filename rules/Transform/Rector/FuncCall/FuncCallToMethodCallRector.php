@@ -6,10 +6,8 @@ namespace Rector\Transform\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
 use Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -18,7 +16,7 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\FuncCallToMethodCallRectorTest
  */
-final class FuncCallToMethodCallRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
+final class FuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
      * @readonly
@@ -70,30 +68,39 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class];
+        return [Class_::class];
     }
     /**
-     * @param FuncCall $node
+     * @param Class_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
-            return null;
-        }
-        $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
-        if (!$classMethod instanceof ClassMethod) {
-            return null;
-        }
-        if ($classMethod->isStatic()) {
-            return null;
-        }
-        foreach ($this->funcNameToMethodCallNames as $funcNameToMethodCallName) {
-            if (!$this->isName($node->name, $funcNameToMethodCallName->getOldFuncName())) {
+        $hasChanged = \false;
+        $class = $node;
+        foreach ($node->getMethods() as $classMethod) {
+            if ($classMethod->isStatic()) {
                 continue;
             }
-            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($classLike, $classMethod, $funcNameToMethodCallName->getNewObjectType(), $scope);
-            return $this->nodeFactory->createMethodCall($expr, $funcNameToMethodCallName->getNewMethodName(), $node->args);
+            if ($classMethod->isAbstract()) {
+                continue;
+            }
+            $this->traverseNodesWithCallable($classMethod, function (Node $node) use($class, $classMethod, &$hasChanged) : ?Node {
+                if (!$node instanceof FuncCall) {
+                    return null;
+                }
+                foreach ($this->funcNameToMethodCallNames as $funcNameToMethodCallName) {
+                    if (!$this->isName($node->name, $funcNameToMethodCallName->getOldFuncName())) {
+                        continue;
+                    }
+                    $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($class, $classMethod, $funcNameToMethodCallName->getNewObjectType());
+                    $hasChanged = \true;
+                    return $this->nodeFactory->createMethodCall($expr, $funcNameToMethodCallName->getNewMethodName(), $node->args);
+                }
+                return null;
+            });
+        }
+        if ($hasChanged) {
+            return $node;
         }
         return null;
     }

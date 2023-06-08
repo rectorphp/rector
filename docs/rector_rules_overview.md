@@ -1,4 +1,4 @@
-# 373 Rules Overview
+# 372 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [Strict](#strict) (5)
 
-- [Transform](#transform) (24)
+- [Transform](#transform) (23)
 
 - [TypeDeclaration](#typedeclaration) (40)
 
@@ -7111,51 +7111,6 @@ return static function (RectorConfig $rectorConfig): void {
      {
 -        return $this->render('some_template');
 +        return view('some_template');
-     }
- }
-```
-
-<br>
-
-### MethodCallToMethodCallRector
-
-Change method one method from one service to a method call to in another service
-
-:wrench: **configure it!**
-
-- class: [`Rector\Transform\Rector\MethodCall\MethodCallToMethodCallRector`](../rules/Transform/Rector/MethodCall/MethodCallToMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Transform\Rector\MethodCall\MethodCallToMethodCallRector;
-use Rector\Transform\ValueObject\MethodCallToMethodCall;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(MethodCallToMethodCallRector::class, [
-        new MethodCallToMethodCall('FirstDependency', 'go', 'SecondDependency', 'away'),
-    ]);
-};
-```
-
-↓
-
-```diff
- class SomeClass
- {
-     public function __construct(
--        private FirstDependency $firstDependency
-+        private SecondDependency $secondDependency
-     ) {
-     }
-
-     public function run()
-     {
--        $this->firstDependency->go();
-+        $this->secondDependency->away();
      }
  }
 ```

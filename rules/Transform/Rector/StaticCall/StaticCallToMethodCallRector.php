@@ -100,7 +100,7 @@ CODE_SAMPLE
             if ($classMethod->isStatic()) {
                 return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
             }
-            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassObjectType(), $scope);
+            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassObjectType());
             if ($staticCallToMethodCall->getMethodName() === '*') {
                 $methodName = $this->getName($node->name);
             } else {

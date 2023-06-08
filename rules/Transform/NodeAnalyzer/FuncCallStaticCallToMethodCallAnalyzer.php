@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
@@ -63,9 +62,9 @@ final class FuncCallStaticCallToMethodCallAnalyzer
     /**
      * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\Variable
      */
-    public function matchTypeProvidingExpr(Class_ $class, ClassMethod $classMethod, ObjectType $objectType, Scope $scope)
+    public function matchTypeProvidingExpr(Class_ $class, ClassMethod $classMethod, ObjectType $objectType)
     {
-        $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($class, $classMethod, $objectType, $scope);
+        $expr = $this->typeProvidingExprFromClassResolver->resolveTypeProvidingExprFromClass($class, $classMethod, $objectType);
         if ($expr instanceof Expr) {
             if ($expr instanceof Variable) {
                 $this->addClassMethodParamForVariable($expr, $objectType, $classMethod);
