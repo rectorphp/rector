@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\NodeTraverser;
 use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\NodeManipulator\ClassMethodManipulator;
 use Rector\Core\Rector\AbstractRector;
@@ -63,33 +62,40 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
-    public function refactor(Node $node) : ?int
+    public function refactor(Node $node) : ?Class_
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof ClassMethod) {
+                continue;
+            }
+            if ($stmt->stmts !== null && $stmt->stmts !== []) {
+                continue;
+            }
+            if ($stmt->isAbstract()) {
+                continue;
+            }
+            if ($stmt->isFinal() && !$node->isFinal()) {
+                continue;
+            }
+            if ($this->shouldSkipNonFinalNonPrivateClassMethod($node, $stmt)) {
+                continue;
+            }
+            if ($this->shouldSkipClassMethod($node, $stmt)) {
+                continue;
+            }
+            unset($node->stmts[$key]);
+            $hasChanged = \true;
         }
-        if ($node->stmts !== null && $node->stmts !== []) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        if ($node->isAbstract()) {
-            return null;
-        }
-        if ($node->isFinal() && !$classLike->isFinal()) {
-            return null;
-        }
-        if ($this->shouldSkipNonFinalNonPrivateClassMethod($classLike, $node)) {
-            return null;
-        }
-        if ($this->shouldSkipClassMethod($classLike, $node)) {
-            return null;
-        }
-        return NodeTraverser::REMOVE_NODE;
+        return null;
     }
     private function shouldSkipNonFinalNonPrivateClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {

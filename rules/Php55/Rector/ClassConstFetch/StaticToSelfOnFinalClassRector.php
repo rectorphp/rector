@@ -5,8 +5,6 @@ namespace Rector\Php55\Rector\ClassConstFetch;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractRector;
@@ -48,33 +46,34 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassConstFetch::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassConstFetch $node
+     * @param Class_ $node
      */
-    public function refactor(Node $node) : ?ClassConstFetch
+    public function refactor(Node $node) : ?Class_
     {
-        if (!$node->class instanceof Name) {
+        if (!$node->isFinal()) {
             return null;
         }
-        if (!$node->name instanceof Identifier) {
-            return null;
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) : ?ClassConstFetch {
+            if (!$node instanceof ClassConstFetch) {
+                return null;
+            }
+            if (!$this->isName($node->class, ObjectReference::STATIC)) {
+                return null;
+            }
+            if (!$this->isName($node->name, 'class')) {
+                return null;
+            }
+            $hasChanged = \true;
+            return $this->nodeFactory->createSelfFetchConstant('class');
+        });
+        if ($hasChanged) {
+            return $node;
         }
-        if ($node->class->toString() !== ObjectReference::STATIC) {
-            return null;
-        }
-        if ($node->name->toString() !== 'class') {
-            return null;
-        }
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
-        if (!$class->isFinal()) {
-            return null;
-        }
-        return $this->nodeFactory->createSelfFetchConstant('class');
+        return null;
     }
     public function provideMinPhpVersion() : int
     {
