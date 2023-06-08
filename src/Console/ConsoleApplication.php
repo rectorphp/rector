@@ -11,12 +11,7 @@ use Rector\Core\Console\Command\ListRulesCommand;
 use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\Console\Command\SetupCICommand;
 use Rector\Core\Console\Command\WorkerCommand;
-use Rector\RectorGenerator\Command\GenerateCommand;
-use Rector\RectorGenerator\Command\InitRecipeCommand;
-use Rector\Utils\Command\MissingInSetCommand;
-use Rector\Utils\Command\OutsideAnySetCommand;
 use RectorPrefix202306\Symfony\Component\Console\Application;
-use RectorPrefix202306\Symfony\Component\Console\Command\Command;
 use RectorPrefix202306\Symfony\Component\Console\Input\InputDefinition;
 use RectorPrefix202306\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202306\Symfony\Component\Console\Input\InputOption;
@@ -27,32 +22,10 @@ final class ConsoleApplication extends Application
      * @var string
      */
     private const NAME = 'Rector';
-    public function __construct(
-        ProcessCommand $processCommand,
-        WorkerCommand $workerCommand,
-        SetupCICommand $setupCICommand,
-        ListRulesCommand $listRulesCommand,
-        // dev
-        MissingInSetCommand $missingInSetCommand = null,
-        OutsideAnySetCommand $outsideAnySetCommand = null,
-        GenerateCommand $generateCommand = null,
-        InitRecipeCommand $initRecipeCommand = null
-    )
+    public function __construct(ProcessCommand $processCommand, WorkerCommand $workerCommand, SetupCICommand $setupCICommand, ListRulesCommand $listRulesCommand)
     {
         parent::__construct(self::NAME, VersionResolver::PACKAGE_VERSION);
         $this->addCommands([$processCommand, $workerCommand, $setupCICommand, $listRulesCommand]);
-        if ($missingInSetCommand instanceof Command) {
-            $this->add($missingInSetCommand);
-        }
-        if ($outsideAnySetCommand instanceof Command) {
-            $this->add($outsideAnySetCommand);
-        }
-        if ($generateCommand instanceof Command) {
-            $this->add($generateCommand);
-        }
-        if ($initRecipeCommand instanceof Command) {
-            $this->add($initRecipeCommand);
-        }
         $this->setDefaultCommand('process');
     }
     public function doRun(InputInterface $input, OutputInterface $output) : int

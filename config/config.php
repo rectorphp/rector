@@ -129,8 +129,12 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(ScopeFactory::class)->factory([service(PHPStanServicesFactory::class), 'createScopeFactory']);
     $services->set(TypeNodeResolver::class)->factory([service(PHPStanServicesFactory::class), 'createTypeNodeResolver']);
     $services->set(DynamicSourceLocatorProvider::class)->factory([service(PHPStanServicesFactory::class), 'createDynamicSourceLocatorProvider']);
-    $services->set(MissingInSetCommand::class);
-    $services->set(OutsideAnySetCommand::class);
+    // add commands optinally
+    if (\class_exists(MissingInSetCommand::class)) {
+        $services->set(Application::class)->call('add', [service(MissingInSetCommand::class)])->call('add', [service(OutsideAnySetCommand::class)]);
+        $services->set(MissingInSetCommand::class);
+        $services->set(OutsideAnySetCommand::class);
+    }
     // phpdoc parser
     $services->set(SmartPhpParser::class)->factory([service(SmartPhpParserFactory::class), 'create']);
     $services->set(ConstExprEvaluator::class);
