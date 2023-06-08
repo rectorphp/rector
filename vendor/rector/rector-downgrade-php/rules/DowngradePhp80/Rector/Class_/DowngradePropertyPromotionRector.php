@@ -16,9 +16,9 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Contract\PhpParser\NodePrinterInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\ClassInsertManipulator;
+use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,10 +43,10 @@ final class DowngradePropertyPromotionRector extends AbstractRector
     private $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\Core\Contract\PhpParser\NodePrinterInterface
+     * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $nodePrinter;
-    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger, NodePrinterInterface $nodePrinter)
+    public function __construct(ClassInsertManipulator $classInsertManipulator, PhpDocTypeChanger $phpDocTypeChanger, BetterStandardPrinter $nodePrinter)
     {
         $this->classInsertManipulator = $classInsertManipulator;
         $this->phpDocTypeChanger = $phpDocTypeChanger;

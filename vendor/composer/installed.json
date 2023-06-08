@@ -1827,12 +1827,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "854a6c0b10227a88285f3d7a589dff00405af66a"
+                "reference": "14860dd37f5661712e67645396fa763a76a4c883"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/854a6c0b10227a88285f3d7a589dff00405af66a",
-                "reference": "854a6c0b10227a88285f3d7a589dff00405af66a",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/14860dd37f5661712e67645396fa763a76a4c883",
+                "reference": "14860dd37f5661712e67645396fa763a76a4c883",
                 "shasum": ""
             },
             "require": {
@@ -1856,7 +1856,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-06T22:56:00+00:00",
+            "time": "2023-06-08T14:06:06+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1894,12 +1894,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "134c91c098f84352c7a83b172177b5b949fc4a3d"
+                "reference": "8ad9e0a7e4bcea434a308a941abd4d6209404ba6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/134c91c098f84352c7a83b172177b5b949fc4a3d",
-                "reference": "134c91c098f84352c7a83b172177b5b949fc4a3d",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/8ad9e0a7e4bcea434a308a941abd4d6209404ba6",
+                "reference": "8ad9e0a7e4bcea434a308a941abd4d6209404ba6",
                 "shasum": ""
             },
             "require": {
@@ -1928,7 +1928,7 @@
                 "tomasvotruba\/type-coverage": "^0.1",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-05T14:16:02+00:00",
+            "time": "2023-06-08T13:52:20+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1966,12 +1966,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "36d3cb5f9cd561d8fdb39e560c78f5faa87385b5"
+                "reference": "8f55ac30b0fbd8e06438ebd760ff5ee08605ec2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/36d3cb5f9cd561d8fdb39e560c78f5faa87385b5",
-                "reference": "36d3cb5f9cd561d8fdb39e560c78f5faa87385b5",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/8f55ac30b0fbd8e06438ebd760ff5ee08605ec2c",
+                "reference": "8f55ac30b0fbd8e06438ebd760ff5ee08605ec2c",
                 "shasum": ""
             },
             "require": {
@@ -2001,7 +2001,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-05T12:52:41+00:00",
+            "time": "2023-06-08T14:05:29+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2025,7 +2025,7 @@
             "description": "Rector upgrades rules for Symfony Framework",
             "support": {
                 "issues": "https:\/\/github.com\/rectorphp\/rector-symfony\/issues",
-                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/0.15.0"
+                "source": "https:\/\/github.com\/rectorphp\/rector-symfony\/tree\/main"
             },
             "install-path": "..\/rector\/rector-symfony"
         },

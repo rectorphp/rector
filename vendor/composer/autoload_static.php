@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit153c77e4f691c76307309b78b5f1a5c1
+class ComposerStaticInitbf3dc70aa8de2efcbba716a03552bd8d
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1860,10 +1860,8 @@ class ComposerStaticInit153c77e4f691c76307309b78b5f1a5c1
         'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
         'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php',
-        'Rector\\DependencyInjection\\Collector\\VariablesToPropertyFetchCollection' => __DIR__ . '/../..' . '/rules/DependencyInjection/Collector/VariablesToPropertyFetchCollection.php',
         'Rector\\DependencyInjection\\NodeManipulator\\PropertyConstructorInjectionManipulator' => __DIR__ . '/../..' . '/rules/DependencyInjection/NodeManipulator/PropertyConstructorInjectionManipulator.php',
         'Rector\\DependencyInjection\\Rector\\ClassMethod\\AddMethodParentCallRector' => __DIR__ . '/../..' . '/rules/DependencyInjection/Rector/ClassMethod/AddMethodParentCallRector.php',
-        'Rector\\DependencyInjection\\Rector\\Class_\\ActionInjectionToConstructorInjectionRector' => __DIR__ . '/../..' . '/rules/DependencyInjection/Rector/Class_/ActionInjectionToConstructorInjectionRector.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AssignPropertyFetchAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AssignPropertyFetchAnalyzer.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttributeCleaner' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeCleaner.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttributeFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeFinder.php',
@@ -3031,9 +3029,9 @@ class ComposerStaticInit153c77e4f691c76307309b78b5f1a5c1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit153c77e4f691c76307309b78b5f1a5c1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit153c77e4f691c76307309b78b5f1a5c1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit153c77e4f691c76307309b78b5f1a5c1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbf3dc70aa8de2efcbba716a03552bd8d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbf3dc70aa8de2efcbba716a03552bd8d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbf3dc70aa8de2efcbba716a03552bd8d::$classMap;
 
         }, null, ClassLoader::class);
     }

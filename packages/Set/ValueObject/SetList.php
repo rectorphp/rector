@@ -12,10 +12,6 @@ final class SetList implements SetListInterface
     /**
      * @var string
      */
-    public const ACTION_INJECTION_TO_CONSTRUCTOR_INJECTION = __DIR__ . '/../../../config/set/action-injection-to-constructor-injection.php';
-    /**
-     * @var string
-     */
     public const CODE_QUALITY = __DIR__ . '/../../../config/set/code-quality.php';
     /**
      * @var string
