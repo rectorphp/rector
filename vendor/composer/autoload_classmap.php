@@ -2320,8 +2320,6 @@ return array(
     'Rector\\Php74\\Rector\\StaticCall\\ExportToReflectionFunctionRector' => $baseDir . '/rules/Php74/Rector/StaticCall/ExportToReflectionFunctionRector.php',
     'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => $baseDir . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',
     'Rector\\Php74\\Tokenizer\\ParenthesizedNestedTernaryAnalyzer' => $baseDir . '/rules/Php74/Tokenizer/ParenthesizedNestedTernaryAnalyzer.php',
-    'Rector\\Php80\\AttributeDecorator\\JMSAccesorOrderAttributeDecorator' => $baseDir . '/rules/Php80/AttributeDecorator/JMSAccesorOrderAttributeDecorator.php',
-    'Rector\\Php80\\AttributeDecorator\\JMSAccessTypeAttributeDecorator' => $baseDir . '/rules/Php80/AttributeDecorator/JMSAccessTypeAttributeDecorator.php',
     'Rector\\Php80\\AttributeDecorator\\SensioParamConverterAttributeDecorator' => $baseDir . '/rules/Php80/AttributeDecorator/SensioParamConverterAttributeDecorator.php',
     'Rector\\Php80\\Contract\\AttributeDecoratorInterface' => $baseDir . '/rules/Php80/Contract/AttributeDecoratorInterface.php',
     'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => $baseDir . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
