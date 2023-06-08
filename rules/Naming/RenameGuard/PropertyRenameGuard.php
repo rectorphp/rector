@@ -3,29 +3,45 @@
 declare (strict_types=1);
 namespace Rector\Naming\RenameGuard;
 
-use Rector\Naming\Contract\Guard\ConflictingNameGuardInterface;
+use PHPStan\Type\ObjectType;
+use Rector\Naming\Guard\DateTimeAtNamingConventionGuard;
+use Rector\Naming\Guard\HasMagicGetSetGuard;
 use Rector\Naming\ValueObject\PropertyRename;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 final class PropertyRenameGuard
 {
     /**
-     * @var ConflictingNameGuardInterface[]
      * @readonly
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $conflictingNameGuards;
+    private $nodeTypeResolver;
     /**
-     * @param ConflictingNameGuardInterface[] $conflictingNameGuards
+     * @readonly
+     * @var \Rector\Naming\Guard\DateTimeAtNamingConventionGuard
      */
-    public function __construct(array $conflictingNameGuards)
+    private $dateTimeAtNamingConventionGuard;
+    /**
+     * @readonly
+     * @var \Rector\Naming\Guard\HasMagicGetSetGuard
+     */
+    private $hasMagicGetSetGuard;
+    public function __construct(NodeTypeResolver $nodeTypeResolver, DateTimeAtNamingConventionGuard $dateTimeAtNamingConventionGuard, HasMagicGetSetGuard $hasMagicGetSetGuard)
     {
-        $this->conflictingNameGuards = $conflictingNameGuards;
+        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->dateTimeAtNamingConventionGuard = $dateTimeAtNamingConventionGuard;
+        $this->hasMagicGetSetGuard = $hasMagicGetSetGuard;
     }
     public function shouldSkip(PropertyRename $propertyRename) : bool
     {
-        foreach ($this->conflictingNameGuards as $conflictingNameGuard) {
-            if ($conflictingNameGuard->isConflicting($propertyRename)) {
-                return \true;
-            }
+        if (!$propertyRename->isPrivateProperty()) {
+            return \true;
         }
-        return \false;
+        if ($this->nodeTypeResolver->isObjectType($propertyRename->getProperty(), new ObjectType('Ramsey\\Uuid\\UuidInterface'))) {
+            return \true;
+        }
+        if ($this->dateTimeAtNamingConventionGuard->isConflicting($propertyRename)) {
+            return \true;
+        }
+        return $this->hasMagicGetSetGuard->isConflicting($propertyRename);
     }
 }

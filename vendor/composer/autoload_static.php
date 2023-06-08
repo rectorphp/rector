@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4b67b5c863bbc3cd571bb69b173d515d
+class ComposerStaticInit05bcc7b6328f02400b6b6ea70d4c9d88
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2216,7 +2216,6 @@ class ComposerStaticInit4b67b5c863bbc3cd571bb69b173d515d
         'Rector\\Naming\\AssignVariableNameResolver\\NewAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/NewAssignVariableNameResolver.php',
         'Rector\\Naming\\AssignVariableNameResolver\\PropertyFetchAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/PropertyFetchAssignVariableNameResolver.php',
         'Rector\\Naming\\Contract\\AssignVariableNameResolverInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/AssignVariableNameResolverInterface.php',
-        'Rector\\Naming\\Contract\\Guard\\ConflictingNameGuardInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/Guard/ConflictingNameGuardInterface.php',
         'Rector\\Naming\\Contract\\RenameParamValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameParamValueObjectInterface.php',
         'Rector\\Naming\\Contract\\RenamePropertyValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenamePropertyValueObjectInterface.php',
         'Rector\\Naming\\Contract\\RenameValueObjectInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/RenameValueObjectInterface.php',
@@ -2226,9 +2225,7 @@ class ComposerStaticInit4b67b5c863bbc3cd571bb69b173d515d
         'Rector\\Naming\\Guard\\BreakingVariableRenameGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/BreakingVariableRenameGuard.php',
         'Rector\\Naming\\Guard\\DateTimeAtNamingConventionGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/DateTimeAtNamingConventionGuard.php',
         'Rector\\Naming\\Guard\\HasMagicGetSetGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/HasMagicGetSetGuard.php',
-        'Rector\\Naming\\Guard\\NotPrivatePropertyGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/NotPrivatePropertyGuard.php',
         'Rector\\Naming\\Guard\\PropertyConflictingNameGuard\\MatchPropertyTypeConflictingNameGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/PropertyConflictingNameGuard/MatchPropertyTypeConflictingNameGuard.php',
-        'Rector\\Naming\\Guard\\RamseyUuidInterfaceGuard' => __DIR__ . '/../..' . '/rules/Naming/Guard/RamseyUuidInterfaceGuard.php',
         'Rector\\Naming\\Matcher\\CallMatcher' => __DIR__ . '/../..' . '/rules/Naming/Matcher/CallMatcher.php',
         'Rector\\Naming\\Matcher\\ForeachMatcher' => __DIR__ . '/../..' . '/rules/Naming/Matcher/ForeachMatcher.php',
         'Rector\\Naming\\Matcher\\VariableAndCallAssignMatcher' => __DIR__ . '/../..' . '/rules/Naming/Matcher/VariableAndCallAssignMatcher.php',
@@ -2671,7 +2668,6 @@ class ComposerStaticInit4b67b5c863bbc3cd571bb69b173d515d
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CallablePhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CallablePhpDocNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\CloningPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/CloningPhpDocNodeVisitor.php',
         'Rector\\PhpDocParser\\PhpDocParser\\PhpDocNodeVisitor\\ParentConnectingPhpDocNodeVisitor' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/PhpDocNodeVisitor/ParentConnectingPhpDocNodeVisitor.php',
-        'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\Ast\\PhpDoc\\SimplePhpDocNode' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/ValueObject/Ast/PhpDoc/SimplePhpDocNode.php',
         'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
         'Rector\\PhpDocParser\\PhpParser\\SmartPhpParser' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpParser/SmartPhpParser.php',
         'Rector\\PhpDocParser\\PhpParser\\SmartPhpParserFactory' => __DIR__ . '/../..' . '/packages/PhpDocParser/PhpParser/SmartPhpParserFactory.php',
@@ -3152,9 +3148,9 @@ class ComposerStaticInit4b67b5c863bbc3cd571bb69b173d515d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4b67b5c863bbc3cd571bb69b173d515d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4b67b5c863bbc3cd571bb69b173d515d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4b67b5c863bbc3cd571bb69b173d515d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit05bcc7b6328f02400b6b6ea70d4c9d88::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit05bcc7b6328f02400b6b6ea70d4c9d88::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit05bcc7b6328f02400b6b6ea70d4c9d88::$classMap;
 
         }, null, ClassLoader::class);
     }

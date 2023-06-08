@@ -8,32 +8,17 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionType;
-use RectorPrefix202306\Symfony\Component\Config\Loader\LoaderInterface;
 use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
 final class ParameterSkipper
 {
-    /**
-     * Classes that create circular dependencies
-     *
-     * @var class-string<LoaderInterface>[]|string[]
-     */
-    private const DEFAULT_EXCLUDED_FATAL_CLASSES = ['Symfony\\Component\\Form\\FormExtensionInterface', 'Symfony\\Component\\Asset\\PackageInterface', 'Symfony\\Component\\Config\\Loader\\LoaderInterface', 'Symfony\\Component\\VarDumper\\Dumper\\ContextProvider\\ContextProviderInterface', 'EasyCorp\\Bundle\\EasyAdminBundle\\Form\\Type\\Configurator\\TypeConfiguratorInterface', 'Sonata\\CoreBundle\\Model\\Adapter\\AdapterInterface', 'Sonata\\Doctrine\\Adapter\\AdapterChain', 'Sonata\\Twig\\Extension\\TemplateExtension'];
-    /**
-     * @var string[]
-     */
-    private $excludedFatalClasses = [];
     /**
      * @readonly
      * @var \Rector\Core\DependencyInjection\TypeResolver\ParameterTypeResolver
      */
     private $parameterTypeResolver;
-    /**
-     * @param string[] $excludedFatalClasses
-     */
-    public function __construct(ParameterTypeResolver $parameterTypeResolver, array $excludedFatalClasses = [])
+    public function __construct(ParameterTypeResolver $parameterTypeResolver)
     {
         $this->parameterTypeResolver = $parameterTypeResolver;
-        $this->excludedFatalClasses = \array_merge(self::DEFAULT_EXCLUDED_FATAL_CLASSES, $excludedFatalClasses);
     }
     public function shouldSkipParameter(ReflectionMethod $reflectionMethod, Definition $definition, ReflectionParameter $reflectionParameter) : bool
     {
@@ -49,10 +34,8 @@ final class ParameterSkipper
         if ($parameterType === null) {
             return \true;
         }
-        if (\in_array($parameterType, $this->excludedFatalClasses, \true)) {
-            return \true;
-        }
-        if (!\class_exists($parameterType) && !\interface_exists($parameterType)) {
+        // autowire only rector classes
+        if (\strncmp($parameterType, 'Rector\\', \strlen('Rector\\')) !== 0) {
             return \true;
         }
         // prevent circular dependency
