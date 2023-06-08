@@ -1544,7 +1544,6 @@ return array(
     'Rector\\Core\\Contract\\Processor\\FileProcessorInterface' => $baseDir . '/src/Contract/Processor/FileProcessorInterface.php',
     'Rector\\Core\\Contract\\Rector\\AllowEmptyConfigurableRectorInterface' => $baseDir . '/src/Contract/Rector/AllowEmptyConfigurableRectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\ConfigurableRectorInterface' => $baseDir . '/src/Contract/Rector/ConfigurableRectorInterface.php',
-    'Rector\\Core\\Contract\\Rector\\DeprecatedRectorInterface' => $baseDir . '/src/Contract/Rector/DeprecatedRectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\NonPhpRectorInterface' => $baseDir . '/src/Contract/Rector/NonPhpRectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\PhpRectorInterface' => $baseDir . '/src/Contract/Rector/PhpRectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\RectorInterface' => $baseDir . '/src/Contract/Rector/RectorInterface.php',
