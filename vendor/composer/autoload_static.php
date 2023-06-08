@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf6e38368b6f7aea085b973b36344b57d
+class ComposerStaticInit92e784fdb40f0a66f208716c00fafcdf
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1523,10 +1523,8 @@ class ComposerStaticInitf6e38368b6f7aea085b973b36344b57d
         'Rector\\Arguments\\Rector\\ClassMethod\\ReplaceArgumentDefaultValueRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/ClassMethod/ReplaceArgumentDefaultValueRector.php',
         'Rector\\Arguments\\Rector\\FuncCall\\FunctionArgumentDefaultValueReplacerRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/FuncCall/FunctionArgumentDefaultValueReplacerRector.php',
         'Rector\\Arguments\\Rector\\FuncCall\\SwapFuncCallArgumentsRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/FuncCall/SwapFuncCallArgumentsRector.php',
-        'Rector\\Arguments\\Rector\\MethodCall\\RemoveMethodCallParamRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php',
         'Rector\\Arguments\\Rector\\MethodCall\\SwapMethodCallArgumentsRector' => __DIR__ . '/../..' . '/rules/Arguments/Rector/MethodCall/SwapMethodCallArgumentsRector.php',
         'Rector\\Arguments\\ValueObject\\ArgumentAdder' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ArgumentAdder.php',
-        'Rector\\Arguments\\ValueObject\\RemoveMethodCallParam' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/RemoveMethodCallParam.php',
         'Rector\\Arguments\\ValueObject\\ReplaceArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\ReplaceFuncCallArgumentDefaultValue' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/ReplaceFuncCallArgumentDefaultValue.php',
         'Rector\\Arguments\\ValueObject\\SwapFuncCallArguments' => __DIR__ . '/../..' . '/rules/Arguments/ValueObject/SwapFuncCallArguments.php',
@@ -3159,9 +3157,9 @@ class ComposerStaticInitf6e38368b6f7aea085b973b36344b57d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf6e38368b6f7aea085b973b36344b57d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf6e38368b6f7aea085b973b36344b57d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf6e38368b6f7aea085b973b36344b57d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit92e784fdb40f0a66f208716c00fafcdf::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit92e784fdb40f0a66f208716c00fafcdf::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit92e784fdb40f0a66f208716c00fafcdf::$classMap;
 
         }, null, ClassLoader::class);
     }
