@@ -10,9 +10,9 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\PropertyNaming;
-use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -32,18 +32,18 @@ final class GetHelperControllerToServiceRector extends AbstractRector
     private $controllerAnalyzer;
     /**
      * @readonly
-     * @var \Rector\PostRector\Collector\PropertyToAddCollector
+     * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
-    private $propertyToAddCollector;
+    private $classDependencyManipulator;
     /**
      * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(ControllerAnalyzer $controllerAnalyzer, PropertyToAddCollector $propertyToAddCollector, PropertyNaming $propertyNaming)
+    public function __construct(ControllerAnalyzer $controllerAnalyzer, ClassDependencyManipulator $classDependencyManipulator, PropertyNaming $propertyNaming)
     {
         $this->controllerAnalyzer = $controllerAnalyzer;
-        $this->propertyToAddCollector = $propertyToAddCollector;
+        $this->classDependencyManipulator = $classDependencyManipulator;
         $this->propertyNaming = $propertyNaming;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -83,51 +83,59 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [Class_::class];
     }
     /**
-     * @param MethodCall $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->controllerAnalyzer->isController($node->var)) {
+        if (!$this->controllerAnalyzer->isController($node)) {
             return null;
         }
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
+        $propertyMetadatas = [];
+        $this->traverseNodesWithCallable($node, function (Node $node) use(&$propertyMetadatas) {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if (!$this->isName($node->var, 'this')) {
+                return null;
+            }
+            if ($this->isName($node->name, 'getDoctrine')) {
+                $entityManagerPropertyMetadata = $this->createManagerRegistryPropertyMetadata();
+                $propertyMetadatas[] = $entityManagerPropertyMetadata;
+                return $this->nodeFactory->createPropertyFetch('this', $entityManagerPropertyMetadata->getName());
+            }
+            if ($this->isName($node->name, 'dispatchMessage')) {
+                $eventDispatcherPropertyMetadata = $this->createMessageBusPropertyMetadata();
+                $propertyMetadatas[] = $eventDispatcherPropertyMetadata;
+                $thisVariable = new Variable('this');
+                $node->var = new PropertyFetch($thisVariable, new Identifier($eventDispatcherPropertyMetadata->getName()));
+                $node->name = new Identifier('dispatch');
+                return $node;
+            }
+            return null;
+        });
+        if ($propertyMetadatas === []) {
             return null;
         }
-        if ($this->isName($node->name, 'getDoctrine')) {
-            return $this->refactorGetDoctrine($class);
+        foreach ($propertyMetadatas as $propertyMetadata) {
+            $this->classDependencyManipulator->addConstructorDependency($node, $propertyMetadata);
         }
-        if ($this->isName($node->name, 'dispatchMessage')) {
-            return $this->refactorDispatchMessage($class, $node);
-        }
-        return null;
+        return $node;
     }
-    /**
-     * @return \PhpParser\Node|\PhpParser\Node\Expr\MethodCall
-     */
-    private function refactorDispatchMessage(Class_ $class, MethodCall $methodCall)
+    private function createMessageBusPropertyMetadata() : PropertyMetadata
     {
         $propertyName = $this->propertyNaming->fqnToVariableName('Symfony\\Component\\Messenger\\MessageBusInterface');
         // add dependency
         $propertyObjectType = new ObjectType('Symfony\\Component\\Messenger\\MessageBusInterface');
-        $propertyMetadata = new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
-        $thisVariable = new Variable('this');
-        $methodCall->var = new PropertyFetch($thisVariable, $propertyName);
-        $methodCall->name = new Identifier('dispatch');
-        return $methodCall;
+        return new PropertyMetadata($propertyName, $propertyObjectType);
     }
-    private function refactorGetDoctrine(Class_ $class) : PropertyFetch
+    private function createManagerRegistryPropertyMetadata() : PropertyMetadata
     {
         $propertyName = $this->propertyNaming->fqnToVariableName('Doctrine\\Persistence\\ManagerRegistry');
         // add dependency
         $propertyObjectType = new ObjectType('Doctrine\\Persistence\\ManagerRegistry');
-        $propertyMetadata = new PropertyMetadata($propertyName, $propertyObjectType, Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
-        $thisVariable = new Variable('this');
-        return new PropertyFetch($thisVariable, $propertyName);
+        return new PropertyMetadata($propertyName, $propertyObjectType);
     }
 }

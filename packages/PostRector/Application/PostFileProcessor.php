@@ -12,7 +12,6 @@ use Rector\PostRector\Contract\Rector\PostRectorDependencyInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\PostRector\Rector\ClassRenamingPostRector;
 use Rector\PostRector\Rector\NameImportingPostRector;
-use Rector\PostRector\Rector\PropertyAddingPostRector;
 use Rector\PostRector\Rector\UnusedImportRemovingPostRector;
 use Rector\PostRector\Rector\UseAddingPostRector;
 use Rector\Skipper\Skipper\Skipper;
@@ -44,7 +43,6 @@ final class PostFileProcessor
         // set order here
         UseAddingPostRector $useAddingPostRector,
         NameImportingPostRector $nameImportingPostRector,
-        PropertyAddingPostRector $propertyAddingPostRector,
         ClassRenamingPostRector $classRenamingPostRector,
         UnusedImportRemovingPostRector $unusedImportRemovingPostRector
     )
@@ -53,8 +51,6 @@ final class PostFileProcessor
         $this->currentFileProvider = $currentFileProvider;
         $this->currentRectorProvider = $currentRectorProvider;
         $this->postRectors = [
-            // priority: 900
-            $propertyAddingPostRector,
             // priority: 650
             $classRenamingPostRector,
             // priority: 600

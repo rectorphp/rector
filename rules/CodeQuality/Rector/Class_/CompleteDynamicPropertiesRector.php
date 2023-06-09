@@ -180,7 +180,7 @@ CODE_SAMPLE
             if ($classReflection->hasProperty($propertyToComplete)) {
                 continue;
             }
-            $propertyMetadata = new PropertyMetadata($propertyToComplete, new ObjectType($className), Class_::MODIFIER_PRIVATE);
+            $propertyMetadata = new PropertyMetadata($propertyToComplete, new ObjectType($className));
             $hasClassContextProperty = $this->propertyPresenceChecker->hasClassContextProperty($class, $propertyMetadata);
             if ($hasClassContextProperty) {
                 continue;

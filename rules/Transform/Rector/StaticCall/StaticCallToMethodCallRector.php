@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
@@ -78,40 +77,46 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StaticCall::class];
+        return [Class_::class];
     }
     /**
-     * @param StaticCall $node
+     * @param Class_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
-            return null;
+        $class = $node;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            $this->traverseNodesWithCallable($classMethod, function (Node $node) use($class, $classMethod, &$hasChanged) {
+                if (!$node instanceof StaticCall) {
+                    return null;
+                }
+                foreach ($this->staticCallsToMethodCalls as $staticCallToMethodCall) {
+                    if (!$staticCallToMethodCall->isStaticCallMatch($node)) {
+                        continue;
+                    }
+                    if ($classMethod->isStatic()) {
+                        return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
+                    }
+                    $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($class, $classMethod, $staticCallToMethodCall->getClassObjectType());
+                    if ($staticCallToMethodCall->getMethodName() === '*') {
+                        $methodName = $this->getName($node->name);
+                    } else {
+                        $methodName = $staticCallToMethodCall->getMethodName();
+                    }
+                    if (!\is_string($methodName)) {
+                        throw new ShouldNotHappenException();
+                    }
+                    $hasChanged = \true;
+                    return new MethodCall($expr, $methodName, $node->args);
+                }
+                return $node;
+            });
         }
-        $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
-        if (!$classMethod instanceof ClassMethod) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        foreach ($this->staticCallsToMethodCalls as $staticCallToMethodCall) {
-            if (!$staticCallToMethodCall->isStaticCallMatch($node)) {
-                continue;
-            }
-            if ($classMethod->isStatic()) {
-                return $this->refactorToInstanceCall($node, $staticCallToMethodCall);
-            }
-            $expr = $this->funcCallStaticCallToMethodCallAnalyzer->matchTypeProvidingExpr($classLike, $classMethod, $staticCallToMethodCall->getClassObjectType());
-            if ($staticCallToMethodCall->getMethodName() === '*') {
-                $methodName = $this->getName($node->name);
-            } else {
-                $methodName = $staticCallToMethodCall->getMethodName();
-            }
-            if (!\is_string($methodName)) {
-                throw new ShouldNotHappenException();
-            }
-            return new MethodCall($expr, $methodName, $node->args);
-        }
-        return $node;
+        return null;
     }
     /**
      * @param mixed[] $configuration

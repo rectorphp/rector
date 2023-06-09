@@ -5,9 +5,12 @@ namespace Rector\Symfony\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
+use Rector\Core\NodeManipulator\ClassDependencyManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,10 +31,16 @@ final class ContainerGetToConstructorInjectionRector extends AbstractRector
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
-    public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
+     */
+    private $classDependencyManipulator;
+    public function __construct(DependencyInjectionMethodCallAnalyzer $dependencyInjectionMethodCallAnalyzer, TestsNodeAnalyzer $testsNodeAnalyzer, ClassDependencyManipulator $classDependencyManipulator)
     {
         $this->dependencyInjectionMethodCallAnalyzer = $dependencyInjectionMethodCallAnalyzer;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->classDependencyManipulator = $classDependencyManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -69,22 +78,41 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [Class_::class];
     }
     /**
-     * @param MethodCall $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isName($node->name, 'get')) {
-            return null;
-        }
-        if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\DependencyInjection\\ContainerInterface'))) {
-            return null;
-        }
         if ($this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        return $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($node);
+        $class = $node;
+        $propertyMetadatas = [];
+        $this->traverseNodesWithCallable($class, function (Node $node) use($class, &$propertyMetadatas) : ?Node {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if (!$this->isName($node->name, 'get')) {
+                return null;
+            }
+            if (!$this->isObjectType($node->var, new ObjectType('Symfony\\Component\\DependencyInjection\\ContainerInterface'))) {
+                return null;
+            }
+            $propertyMetadata = $this->dependencyInjectionMethodCallAnalyzer->replaceMethodCallWithPropertyFetchAndDependency($class, $node);
+            if (!$propertyMetadata instanceof PropertyMetadata) {
+                return null;
+            }
+            $propertyMetadatas[] = $propertyMetadata;
+            return $this->nodeFactory->createPropertyFetch('this', $propertyMetadata->getName());
+        });
+        if ($propertyMetadatas === []) {
+            return null;
+        }
+        foreach ($propertyMetadatas as $propertyMetadata) {
+            $this->classDependencyManipulator->addConstructorDependency($class, $propertyMetadata);
+        }
+        return $node;
     }
 }

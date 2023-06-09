@@ -4,17 +4,13 @@ declare (strict_types=1);
 namespace Rector\Symfony\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\ObjectType;
 use Rector\Core\NodeManipulator\PropertyManipulator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
-use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 final class DependencyInjectionMethodCallAnalyzer
 {
@@ -30,21 +26,6 @@ final class DependencyInjectionMethodCallAnalyzer
     private $serviceTypeMethodCallResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\NodeFactory
-     */
-    private $nodeFactory;
-    /**
-     * @readonly
-     * @var \Rector\PostRector\Collector\PropertyToAddCollector
-     */
-    private $propertyToAddCollector;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver
      */
     private $promotedPropertyResolver;
@@ -58,25 +39,18 @@ final class DependencyInjectionMethodCallAnalyzer
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
-    public function __construct(PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, NodeFactory $nodeFactory, PropertyToAddCollector $propertyToAddCollector, BetterNodeFinder $betterNodeFinder, PromotedPropertyResolver $promotedPropertyResolver, NodeNameResolver $nodeNameResolver, PropertyManipulator $propertyManipulator)
+    public function __construct(PropertyNaming $propertyNaming, \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver $serviceTypeMethodCallResolver, PromotedPropertyResolver $promotedPropertyResolver, NodeNameResolver $nodeNameResolver, PropertyManipulator $propertyManipulator)
     {
         $this->propertyNaming = $propertyNaming;
         $this->serviceTypeMethodCallResolver = $serviceTypeMethodCallResolver;
-        $this->nodeFactory = $nodeFactory;
-        $this->propertyToAddCollector = $propertyToAddCollector;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->promotedPropertyResolver = $promotedPropertyResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyManipulator = $propertyManipulator;
     }
-    public function replaceMethodCallWithPropertyFetchAndDependency(MethodCall $methodCall) : ?PropertyFetch
+    public function replaceMethodCallWithPropertyFetchAndDependency(Class_ $class, MethodCall $methodCall) : ?PropertyMetadata
     {
         $serviceType = $this->serviceTypeMethodCallResolver->resolve($methodCall);
         if (!$serviceType instanceof ObjectType) {
-            return null;
-        }
-        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
-        if (!$class instanceof Class_) {
             return null;
         }
         $resolvedPropertyNameByType = $this->propertyManipulator->resolveExistingClassPropertyNameByType($class, $serviceType);
@@ -86,9 +60,7 @@ final class DependencyInjectionMethodCallAnalyzer
             $propertyName = $this->propertyNaming->fqnToVariableName($serviceType);
             $propertyName = $this->resolveNewPropertyNameWhenExists($class, $propertyName, $propertyName);
         }
-        $propertyMetadata = new PropertyMetadata($propertyName, $serviceType, Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($class, $propertyMetadata);
-        return $this->nodeFactory->createPropertyFetch('this', $propertyName);
+        return new PropertyMetadata($propertyName, $serviceType);
     }
     private function resolveNewPropertyNameWhenExists(Class_ $class, string $originalPropertyName, string $propertyName, int $count = 1) : string
     {

@@ -18,7 +18,6 @@ use Rector\Symfony\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRect
 use Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector;
 use Rector\Symfony\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToNewRector;
-use Rector\Transform\ValueObject\NewArgToMethodCall;
 use Rector\Transform\ValueObject\StaticCallToNew;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;

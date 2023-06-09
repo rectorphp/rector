@@ -20,7 +20,6 @@ use Rector\Doctrine\NodeFactory\RepositoryNodeFactory;
 use Rector\Doctrine\Type\RepositoryTypeFactory;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PostRector\Collector\PropertyToAddCollector;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -44,11 +43,6 @@ final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
     private $repositoryTypeFactory;
     /**
      * @readonly
-     * @var \Rector\PostRector\Collector\PropertyToAddCollector
-     */
-    private $propertyToAddCollector;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
@@ -57,11 +51,10 @@ final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
-    public function __construct(RepositoryNodeFactory $repositoryNodeFactory, RepositoryTypeFactory $repositoryTypeFactory, PropertyToAddCollector $propertyToAddCollector, ClassDependencyManipulator $classDependencyManipulator, PropertyNaming $propertyNaming)
+    public function __construct(RepositoryNodeFactory $repositoryNodeFactory, RepositoryTypeFactory $repositoryTypeFactory, ClassDependencyManipulator $classDependencyManipulator, PropertyNaming $propertyNaming)
     {
         $this->repositoryNodeFactory = $repositoryNodeFactory;
         $this->repositoryTypeFactory = $repositoryTypeFactory;
-        $this->propertyToAddCollector = $propertyToAddCollector;
         $this->classDependencyManipulator = $classDependencyManipulator;
         $this->propertyNaming = $propertyNaming;
     }
@@ -147,8 +140,9 @@ CODE_SAMPLE
         $this->addRepositoryProperty($node, $entityReferenceExpr);
         // 5. add param + add property, dependency
         $propertyName = $this->propertyNaming->fqnToVariableName($entityManagerObjectType);
-        $propertyMetadata = new PropertyMetadata($propertyName, $entityManagerObjectType, Class_::MODIFIER_PRIVATE);
-        $this->propertyToAddCollector->addPropertyToClass($node, $propertyMetadata);
+        // add property as first element
+        $propertyMetadata = new PropertyMetadata($propertyName, $entityManagerObjectType);
+        $this->classDependencyManipulator->addConstructorDependency($node, $propertyMetadata);
         return $node;
     }
     private function removeParentConstructAndCollectEntityReference(ClassMethod $classMethod) : ?Expr
@@ -183,6 +177,6 @@ CODE_SAMPLE
         }
         $genericObjectType = $this->repositoryTypeFactory->createRepositoryPropertyType($entityReferenceExpr);
         $property = $this->nodeFactory->createPrivatePropertyFromNameAndType('repository', $genericObjectType);
-        \array_splice($class->stmts, 0, 0, [$property]);
+        $class->stmts = \array_merge([$property], $class->stmts);
     }
 }
