@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Php55\Rector\FuncCall;
 
-use PHPStan\Analyser\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;

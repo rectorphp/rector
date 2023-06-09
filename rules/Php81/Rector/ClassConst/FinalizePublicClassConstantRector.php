@@ -3,12 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Php81\Rector\ClassConst;
 
+use PHPStan\Analyser\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PHPStan\Reflection\ReflectionProvider;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
@@ -20,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php81\Rector\ClassConst\FinalizePublicClassConstantRector\FinalizePublicClassConstantRectorTest
  */
-final class FinalizePublicClassConstantRector extends AbstractRector implements MinPhpVersionInterface
+final class FinalizePublicClassConstantRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
      * @readonly
@@ -34,19 +33,13 @@ final class FinalizePublicClassConstantRector extends AbstractRector implements 
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
-     */
-    private $classAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReflectionProvider $reflectionProvider, ClassAnalyzer $classAnalyzer, VisibilityManipulator $visibilityManipulator)
+    public function __construct(FamilyRelationsAnalyzer $familyRelationsAnalyzer, ReflectionProvider $reflectionProvider, VisibilityManipulator $visibilityManipulator)
     {
         $this->familyRelationsAnalyzer = $familyRelationsAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
-        $this->classAnalyzer = $classAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -70,34 +63,41 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassConst::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassConst $node
+     * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
-        if ($class->isFinal()) {
-            return null;
-        }
-        if (!$node->isPublic()) {
-            return null;
-        }
         if ($node->isFinal()) {
             return null;
         }
-        if ($this->classAnalyzer->isAnonymousClass($class)) {
+        if (!$scope->isInClass()) {
             return null;
         }
-        if ($this->isClassHasChildren($class)) {
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection->isAnonymous()) {
             return null;
         }
-        $this->visibilityManipulator->makeFinal($node);
-        return $node;
+        $hasChanged = \false;
+        foreach ($node->getConstants() as $classConst) {
+            if (!$classConst->isPublic()) {
+                continue;
+            }
+            if ($classConst->isFinal()) {
+                continue;
+            }
+            if ($this->isClassHasChildren($node)) {
+                continue;
+            }
+            $hasChanged = \true;
+            $this->visibilityManipulator->makeFinal($classConst);
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     public function provideMinPhpVersion() : int
     {

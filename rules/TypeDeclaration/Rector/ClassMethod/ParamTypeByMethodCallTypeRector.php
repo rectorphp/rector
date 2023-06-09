@@ -14,13 +14,13 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\UnionType;
 use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
@@ -46,17 +46,11 @@ final class ParamTypeByMethodCallTypeRector extends AbstractScopeAwareRector
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
-    /**
-     * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
-     */
-    private $reflectionResolver;
-    public function __construct(CallerParamMatcher $callerParamMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, ReflectionResolver $reflectionResolver)
+    public function __construct(CallerParamMatcher $callerParamMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard)
     {
         $this->callerParamMatcher = $callerParamMatcher;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
-        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -109,30 +103,32 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($this->shouldSkipClassMethod($node)) {
-            return null;
-        }
-        /** @var array<StaticCall|MethodCall|FuncCall> $callers */
-        $callers = $this->betterNodeFinder->findInstancesOf((array) $node->stmts, [StaticCall::class, MethodCall::class, FuncCall::class]);
         $hasChanged = \false;
-        foreach ($node->params as $param) {
-            if ($this->shouldSkipParam($param, $node)) {
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->shouldSkipClassMethod($classMethod)) {
                 continue;
             }
-            foreach ($callers as $caller) {
-                $paramType = $this->callerParamMatcher->matchCallParamType($caller, $param, $scope);
-                if ($paramType === null) {
+            /** @var array<StaticCall|MethodCall|FuncCall> $callers */
+            $callers = $this->betterNodeFinder->findInstancesOf($classMethod, [StaticCall::class, MethodCall::class, FuncCall::class]);
+            foreach ($classMethod->params as $param) {
+                if ($this->shouldSkipParam($param, $classMethod)) {
                     continue;
                 }
-                $this->mirrorParamType($param, $paramType);
-                $hasChanged = \true;
+                foreach ($callers as $caller) {
+                    $paramType = $this->callerParamMatcher->matchCallParamType($caller, $param, $scope);
+                    if ($paramType === null) {
+                        continue;
+                    }
+                    $this->mirrorParamType($param, $paramType);
+                    $hasChanged = \true;
+                }
             }
         }
         if ($hasChanged) {
@@ -145,14 +141,7 @@ CODE_SAMPLE
         if ($classMethod->params === []) {
             return \true;
         }
-        if ($this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod)) {
-            return \true;
-        }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
-            return \true;
-        }
-        return !$classReflection->isClass();
+        return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType $paramType
@@ -162,8 +151,8 @@ CODE_SAMPLE
         // mimic type
         $newParamType = $paramType;
         $this->simpleCallableNodeTraverser->traverseNodesWithCallable($newParamType, static function (Node $node) {
-            // original attributes have to removed to avoid tokens crashing from origin positions
-            $node->setAttributes([]);
+            // original node has to removed to avoid tokens crashing from origin positions
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
             return null;
         });
         $decoratedParam->type = $newParamType;
