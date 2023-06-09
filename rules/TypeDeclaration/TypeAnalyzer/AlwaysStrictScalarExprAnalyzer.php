@@ -45,7 +45,7 @@ final class AlwaysStrictScalarExprAnalyzer
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
     }
-    public function matchStrictScalarExpr(Expr $expr) : ?Type
+    public function matchStrictScalarExpr(Expr $expr, Scope $scope) : ?Type
     {
         if ($expr instanceof Concat) {
             return new StringType();
@@ -67,7 +67,7 @@ final class AlwaysStrictScalarExprAnalyzer
             return null;
         }
         if ($expr instanceof FuncCall) {
-            return $this->resolveFuncCallType($expr);
+            return $this->resolveFuncCallType($expr, $scope);
         }
         return null;
     }
@@ -111,7 +111,7 @@ final class AlwaysStrictScalarExprAnalyzer
         }
         return null;
     }
-    private function resolveFuncCallType(FuncCall $funcCall) : ?Type
+    private function resolveFuncCallType(FuncCall $funcCall, Scope $scope) : ?Type
     {
         if (!$funcCall->name instanceof Name) {
             return null;
@@ -121,10 +121,6 @@ final class AlwaysStrictScalarExprAnalyzer
         }
         $functionReflection = $this->reflectionProvider->getFunction($funcCall->name, null);
         if (!$functionReflection instanceof NativeFunctionReflection) {
-            return null;
-        }
-        $scope = $funcCall->getAttribute(AttributeKey::SCOPE);
-        if (!$scope instanceof Scope) {
             return null;
         }
         $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($functionReflection, $funcCall, $scope);
