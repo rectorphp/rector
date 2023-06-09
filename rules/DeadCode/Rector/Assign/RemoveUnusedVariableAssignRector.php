@@ -102,7 +102,9 @@ CODE_SAMPLE
             $currentStmt = $classMethodStmts[$stmtPosition];
             /** @var Assign $assign */
             $assign = $currentStmt->expr;
-            if ($this->hasCallLikeInAssignExpr($assign, $scope)) {
+            /** @var Scope $assignScope */
+            $assignScope = $assign->getAttribute(AttributeKey::SCOPE);
+            if ($this->hasCallLikeInAssignExpr($assign, $assignScope)) {
                 // clean safely
                 $cleanAssignedExpr = $this->cleanCastedExpr($assign->expr);
                 $node->stmts[$stmtPosition] = new Expression($cleanAssignedExpr);

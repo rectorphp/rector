@@ -3,9 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Php81\Rector\ClassConst;
 
+use PHPStan\Analyser\Scope;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
