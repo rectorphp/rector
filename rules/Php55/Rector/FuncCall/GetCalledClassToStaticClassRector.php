@@ -5,10 +5,9 @@ namespace Rector\Php55\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Stmt\Class_;
+use PHPStan\Analyser\Scope;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
-use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -18,17 +17,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://3v4l.org/dJgXd
  * @see \Rector\Tests\Php55\Rector\FuncCall\GetCalledClassToStaticClassRector\GetCalledClassToStaticClassRectorTest
  */
-final class GetCalledClassToStaticClassRector extends AbstractRector implements MinPhpVersionInterface
+final class GetCalledClassToStaticClassRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
-     */
-    private $classAnalyzer;
-    public function __construct(ClassAnalyzer $classAnalyzer)
-    {
-        $this->classAnalyzer = $classAnalyzer;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change get_called_class() to static::class on non-final class', [new CodeSample(<<<'CODE_SAMPLE'
@@ -61,19 +51,19 @@ CODE_SAMPLE
     /**
      * @param FuncCall $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if (!$this->isName($node, 'get_called_class')) {
             return null;
         }
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
-            return $this->nodeFactory->createClassConstFetch(ObjectReference::STATIC, 'class');
-        }
-        if ($this->classAnalyzer->isAnonymousClass($class)) {
+        if (!$scope->isInClass()) {
             return null;
         }
-        if (!$class->isFinal()) {
+        $classReflection = $scope->getClassReflection();
+        if ($classReflection->isAnonymous()) {
+            return null;
+        }
+        if (!$classReflection->isFinal()) {
             return $this->nodeFactory->createClassConstFetch(ObjectReference::STATIC, 'class');
         }
         return null;

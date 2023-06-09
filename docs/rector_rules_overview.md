@@ -1,4 +1,4 @@
-# 371 Rules Overview
+# 370 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodingStyle](#codingstyle) (34)
 
-- [DeadCode](#deadcode) (44)
+- [DeadCode](#deadcode) (43)
 
 - [DependencyInjection](#dependencyinjection) (1)
 
@@ -2673,24 +2673,6 @@ Remove operation with 1 and 0, that have no effect on the value
 +        $value = 5;
 +        $value = 5;
      }
- }
-```
-
-<br>
-
-### RemoveDelegatingParentCallRector
-
-Removed dead parent call, that does not change anything
-
-- class: [`Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector`](../rules/DeadCode/Rector/ClassMethod/RemoveDelegatingParentCallRector.php)
-
-```diff
- class SomeClass
- {
--    public function prettyPrint(array $stmts): string
--    {
--        return parent::prettyPrint($stmts);
--    }
  }
 ```
 

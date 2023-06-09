@@ -9,7 +9,8 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
-use Rector\Core\Rector\AbstractRector;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -23,7 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\Php80\Rector\ClassConstFetch\ClassOnThisVariableObjectRector\ClassOnThisVariableObjectRectorTest
  */
-final class ClassOnThisVariableObjectRector extends AbstractRector implements MinPhpVersionInterface
+final class ClassOnThisVariableObjectRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     public function getRuleDefinition() : RuleDefinition
     {
@@ -52,23 +53,30 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassConstFetch::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassConstFetch $node
+     * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
+        $className = $node->isFinal() ? 'self' : 'static';
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged, $className) : ?ClassConstFetch {
+            if (!$node instanceof ClassConstFetch) {
+                return null;
+            }
+            if ($this->shouldSkip($node)) {
+                return null;
+            }
+            $node->class = new Name($className);
+            $hasChanged = \true;
+            return $node;
+        });
+        if ($hasChanged) {
+            return $node;
         }
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
-        $className = $class->isFinal() ? 'self' : 'static';
-        $node->class = new Name($className);
-        return $node;
+        return null;
     }
     public function provideMinPhpVersion() : int
     {

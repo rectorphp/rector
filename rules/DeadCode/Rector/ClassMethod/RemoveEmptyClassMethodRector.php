@@ -125,8 +125,7 @@ CODE_SAMPLE
             return \true;
         }
         if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {
-            $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-            return $class instanceof Class_ && $class->extends instanceof FullyQualified;
+            return $class->extends instanceof FullyQualified;
         }
         return $this->nodeNameResolver->isName($classMethod, MethodName::INVOKE);
     }
