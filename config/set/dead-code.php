@@ -11,7 +11,6 @@ use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\BooleanAnd\RemoveAndTrueRector;
 use Rector\DeadCode\Rector\Cast\RecastingRemovalRector;
 use Rector\DeadCode\Rector\ClassConst\RemoveUnusedPrivateClassConstantRector;
-use Rector\DeadCode\Rector\ClassMethod\RemoveDelegatingParentCallRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
@@ -68,7 +67,6 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveAndTrueRector::class,
         RemoveConcatAutocastRector::class,
         SimplifyUselessVariableRector::class,
-        RemoveDelegatingParentCallRector::class,
         RemoveDuplicatedCaseInSwitchRector::class,
         RemoveNullPropertyInitializationRector::class,
         RemoveUnreachableStatementRector::class,

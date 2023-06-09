@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitac7d8fb677a63fa82d05400cd485ba11
+class ComposerStaticInit51c321187b76c9986a7613d6daf92167
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1929,9 +1929,6 @@ class ComposerStaticInitac7d8fb677a63fa82d05400cd485ba11
         'Rector\\Core\\ValueObject\\Reporting\\FileDiff' => __DIR__ . '/../..' . '/src/ValueObject/Reporting/FileDiff.php',
         'Rector\\Core\\ValueObject\\SprintfStringAndArgs' => __DIR__ . '/../..' . '/src/ValueObject/SprintfStringAndArgs.php',
         'Rector\\Core\\ValueObject\\Visibility' => __DIR__ . '/../..' . '/src/ValueObject/Visibility.php',
-        'Rector\\DeadCode\\Comparator\\CurrentAndParentClassMethodComparator' => __DIR__ . '/../..' . '/rules/DeadCode/Comparator/CurrentAndParentClassMethodComparator.php',
-        'Rector\\DeadCode\\Comparator\\Parameter\\ParameterDefaultsComparator' => __DIR__ . '/../..' . '/rules/DeadCode/Comparator/Parameter/ParameterDefaultsComparator.php',
-        'Rector\\DeadCode\\Comparator\\Parameter\\ParameterTypeComparator' => __DIR__ . '/../..' . '/rules/DeadCode/Comparator/Parameter/ParameterTypeComparator.php',
         'Rector\\DeadCode\\ConditionEvaluator' => __DIR__ . '/../..' . '/rules/DeadCode/ConditionEvaluator.php',
         'Rector\\DeadCode\\ConditionResolver' => __DIR__ . '/../..' . '/rules/DeadCode/ConditionResolver.php',
         'Rector\\DeadCode\\Contract\\ConditionInterface' => __DIR__ . '/../..' . '/rules/DeadCode/Contract/ConditionInterface.php',
@@ -1961,7 +1958,6 @@ class ComposerStaticInitac7d8fb677a63fa82d05400cd485ba11
         'Rector\\DeadCode\\Rector\\Cast\\RecastingRemovalRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/Cast/RecastingRemovalRector.php',
         'Rector\\DeadCode\\Rector\\ClassConst\\RemoveUnusedPrivateClassConstantRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassConst/RemoveUnusedPrivateClassConstantRector.php',
         'Rector\\DeadCode\\Rector\\ClassLike\\RemoveAnnotationRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassLike/RemoveAnnotationRector.php',
-        'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveDelegatingParentCallRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveDelegatingParentCallRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveEmptyClassMethodRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveEmptyClassMethodRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedConstructorParamRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedConstructorParamRector.php',
         'Rector\\DeadCode\\Rector\\ClassMethod\\RemoveUnusedPrivateMethodParameterRector' => __DIR__ . '/../..' . '/rules/DeadCode/Rector/ClassMethod/RemoveUnusedPrivateMethodParameterRector.php',
@@ -2292,7 +2288,6 @@ class ComposerStaticInitac7d8fb677a63fa82d05400cd485ba11
         'Rector\\NodeTypeResolver\\DependencyInjection\\BleedingEdgeIncludePurifier' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/DependencyInjection/BleedingEdgeIncludePurifier.php',
         'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanExtensionsConfigResolver' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/DependencyInjection/PHPStanExtensionsConfigResolver.php',
         'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanServicesFactory' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/DependencyInjection/PHPStanServicesFactory.php',
-        'Rector\\NodeTypeResolver\\MethodParameterTypeResolver' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/MethodParameterTypeResolver.php',
         'Rector\\NodeTypeResolver\\NodeScopeAndMetadataDecorator' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeScopeAndMetadataDecorator.php',
         'Rector\\NodeTypeResolver\\NodeTypeCorrector\\AccessoryNonEmptyStringTypeCorrector' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeTypeCorrector/AccessoryNonEmptyStringTypeCorrector.php',
         'Rector\\NodeTypeResolver\\NodeTypeCorrector\\GenericClassStringTypeCorrector' => __DIR__ . '/../..' . '/packages/NodeTypeResolver/NodeTypeCorrector/GenericClassStringTypeCorrector.php',
@@ -3133,9 +3128,9 @@ class ComposerStaticInitac7d8fb677a63fa82d05400cd485ba11
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitac7d8fb677a63fa82d05400cd485ba11::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitac7d8fb677a63fa82d05400cd485ba11::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitac7d8fb677a63fa82d05400cd485ba11::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit51c321187b76c9986a7613d6daf92167::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit51c321187b76c9986a7613d6daf92167::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit51c321187b76c9986a7613d6daf92167::$classMap;
 
         }, null, ClassLoader::class);
     }
