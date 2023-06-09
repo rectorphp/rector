@@ -10,10 +10,13 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ClosureUse;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Switch_;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeFactory\NamedVariableFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -29,16 +32,22 @@ final class DowngradeClosureFromCallableRector extends AbstractRector
      * @var \Rector\NodeFactory\NamedVariableFactory
      */
     private $namedVariableFactory;
-    public function __construct(NamedVariableFactory $namedVariableFactory)
+    /**
+     * @readonly
+     * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
+     */
+    private $exprInTopStmtMatcher;
+    public function __construct(NamedVariableFactory $namedVariableFactory, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->namedVariableFactory = $namedVariableFactory;
+        $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class, Return_::class];
+        return [StmtsAwareInterface::class, Switch_::class, Return_::class, Expression::class, Echo_::class];
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -54,62 +63,36 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param Expression|Return_ $node
-     * @return Stmt[]|null
+     * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
+     * @return Node[]|null
      */
     public function refactor(Node $node) : ?array
     {
-        if ($node instanceof Return_) {
-            return $this->refactorReturn($node);
-        }
-        if (!$node->expr instanceof Assign) {
+        $expr = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
+            if (!$subNode instanceof StaticCall) {
+                return \false;
+            }
+            if ($this->shouldSkipStaticCall($subNode)) {
+                return \false;
+            }
+            $args = $subNode->getArgs();
+            return isset($args[0]);
+        });
+        if (!$expr instanceof StaticCall) {
             return null;
         }
-        $assign = $node->expr;
-        if (!$assign->expr instanceof StaticCall) {
-            return null;
-        }
-        $staticCall = $assign->expr;
-        if ($this->shouldSkipStaticCall($staticCall)) {
-            return null;
-        }
-        $args = $staticCall->getArgs();
-        if (!isset($args[0])) {
-            return null;
-        }
-        $tempVariable = $this->namedVariableFactory->createVariable($staticCall, 'callable');
-        $assignExpression = new Expression(new Assign($tempVariable, $args[0]->value));
+        $tempVariable = $this->namedVariableFactory->createVariable($expr, 'callable');
+        $assignExpression = new Expression(new Assign($tempVariable, $expr->getArgs()[0]->value));
         $innerFuncCall = new FuncCall($tempVariable, [new Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);
         $closure = new Closure();
         $closure->uses[] = new ClosureUse($tempVariable);
         $closure->stmts[] = new Return_($innerFuncCall);
-        $assign->expr = $closure;
-        return [$assignExpression, new Expression($assign)];
-    }
-    /**
-     * @return Stmt[]|null
-     */
-    private function refactorReturn(Return_ $return) : ?array
-    {
-        if (!$return->expr instanceof StaticCall) {
-            return null;
-        }
-        $staticCall = $return->expr;
-        if ($this->shouldSkipStaticCall($staticCall)) {
-            return null;
-        }
-        $args = $staticCall->getArgs();
-        if (!isset($args[0])) {
-            return null;
-        }
-        $tempVariable = $this->namedVariableFactory->createVariable($staticCall, 'callable');
-        $assignExpression = new Expression(new Assign($tempVariable, $args[0]->value));
-        $innerFuncCall = new FuncCall($tempVariable, [new Arg($this->nodeFactory->createFuncCall('func_get_args'), \false, \true)]);
-        $closure = new Closure();
-        $closure->uses[] = new ClosureUse($tempVariable);
-        $closure->stmts[] = new Return_($innerFuncCall);
-        $return->expr = $closure;
-        return [$assignExpression, $return];
+        $this->traverseNodesWithCallable($node, static function (Node $subNode) use($expr, $closure) {
+            if ($subNode === $expr) {
+                return $closure;
+            }
+        });
+        return [$assignExpression, $node];
     }
     private function shouldSkipStaticCall(StaticCall $staticCall) : bool
     {
