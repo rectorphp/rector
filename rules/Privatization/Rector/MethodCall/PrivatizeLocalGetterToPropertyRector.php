@@ -59,32 +59,40 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [Class_::class];
     }
     /**
-     * @param MethodCall $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$node->var instanceof Variable) {
-            return null;
+        $class = $node;
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($node, function (Node $node) use($class, &$hasChanged) : ?PropertyFetch {
+            if (!$node instanceof MethodCall) {
+                return null;
+            }
+            if (!$node->var instanceof Variable) {
+                return null;
+            }
+            if (!$this->nodeNameResolver->isName($node->var, 'this')) {
+                return null;
+            }
+            $methodName = $this->getName($node->name);
+            if ($methodName === null) {
+                return null;
+            }
+            $classMethod = $class->getMethod($methodName);
+            if (!$classMethod instanceof ClassMethod) {
+                return null;
+            }
+            $hasChanged = \true;
+            return $this->matchLocalPropertyFetchInGetterMethod($classMethod);
+        });
+        if ($hasChanged) {
+            return $node;
         }
-        if (!$this->nodeNameResolver->isName($node->var, 'this')) {
-            return null;
-        }
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
-            return null;
-        }
-        $methodName = $this->getName($node->name);
-        if ($methodName === null) {
-            return null;
-        }
-        $classMethod = $classLike->getMethod($methodName);
-        if (!$classMethod instanceof ClassMethod) {
-            return null;
-        }
-        return $this->matchLocalPropertyFetchInGetterMethod($classMethod);
+        return null;
     }
     private function matchLocalPropertyFetchInGetterMethod(ClassMethod $classMethod) : ?PropertyFetch
     {

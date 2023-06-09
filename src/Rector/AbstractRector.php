@@ -231,7 +231,7 @@ CODE_SAMPLE;
             $this->file->addRectorClassWithLine($rectorWithLineChange);
             return $refactoredNode;
         }
-        // nothing to change or just removed via removeNode() → continue
+        // nothing to change → continue
         if ($refactoredNode === null) {
             return null;
         }

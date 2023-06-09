@@ -62,7 +62,7 @@ final class ArgumentAdderRector extends AbstractRector implements ConfigurableRe
     /**
      * @var bool
      */
-    private $haveArgumentsChanged = \false;
+    private $hasChanged = \false;
     public function __construct(ArgumentAddingScope $argumentAddingScope, ChangedArgumentsDetector $changedArgumentsDetector, AstResolver $astResolver, BetterStandardPrinter $betterStandardPrinter)
     {
         $this->argumentAddingScope = $argumentAddingScope;
@@ -101,25 +101,23 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class, ClassMethod::class];
+        return [MethodCall::class, StaticCall::class, Class_::class];
     }
     /**
-     * @param MethodCall|StaticCall|ClassMethod $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
+     * @param MethodCall|StaticCall|Class_ $node
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\Class_|null
      */
     public function refactor(Node $node)
     {
-        $this->haveArgumentsChanged = \false;
-        foreach ($this->addedArguments as $addedArgument) {
-            if (!$this->isName($node->name, $addedArgument->getMethod())) {
-                continue;
+        $this->hasChanged = \false;
+        if ($node instanceof MethodCall || $node instanceof StaticCall) {
+            $this->refactorCall($node);
+        } else {
+            foreach ($node->getMethods() as $classMethod) {
+                $this->refactorClassMethod($node, $classMethod);
             }
-            if (!$this->isObjectTypeMatch($node, $addedArgument->getObjectType())) {
-                continue;
-            }
-            $this->processPositionWithDefaultValues($node, $addedArgument);
         }
-        if ($this->haveArgumentsChanged) {
+        if ($this->hasChanged) {
             return $node;
         }
         return null;
@@ -133,21 +131,14 @@ CODE_SAMPLE
         $this->addedArguments = $configuration;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function isObjectTypeMatch($node, ObjectType $objectType) : bool
+    private function isObjectTypeMatch($call, ObjectType $objectType) : bool
     {
-        if ($node instanceof MethodCall) {
-            return $this->isObjectType($node->var, $objectType);
+        if ($call instanceof MethodCall) {
+            return $this->isObjectType($call->var, $objectType);
         }
-        if ($node instanceof StaticCall) {
-            return $this->isObjectType($node->class, $objectType);
-        }
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
-            return \false;
-        }
-        return $this->isObjectType($classLike, $objectType);
+        return $this->isObjectType($call->class, $objectType);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
@@ -181,7 +172,7 @@ CODE_SAMPLE
         }
         $this->fillGapBetweenWithDefaultValue($methodCall, $position);
         $methodCall->args[$position] = $arg;
-        $this->haveArgumentsChanged = \true;
+        $this->hasChanged = \true;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
@@ -255,7 +246,7 @@ CODE_SAMPLE
             $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($type, TypeKind::PARAM);
         }
         $classMethod->params[$position] = $param;
-        $this->haveArgumentsChanged = \true;
+        $this->hasChanged = \true;
     }
     private function processStaticCall(StaticCall $staticCall, int $position, ArgumentAdder $argumentAdder) : void
     {
@@ -271,6 +262,33 @@ CODE_SAMPLE
         }
         $this->fillGapBetweenWithDefaultValue($staticCall, $position);
         $staticCall->args[$position] = new Arg(new Variable($argumentName));
-        $this->haveArgumentsChanged = \true;
+        $this->hasChanged = \true;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     */
+    private function refactorCall($call) : void
+    {
+        foreach ($this->addedArguments as $addedArgument) {
+            if (!$this->isName($call->name, $addedArgument->getMethod())) {
+                continue;
+            }
+            if (!$this->isObjectTypeMatch($call, $addedArgument->getObjectType())) {
+                continue;
+            }
+            $this->processPositionWithDefaultValues($call, $addedArgument);
+        }
+    }
+    private function refactorClassMethod(Class_ $class, ClassMethod $classMethod) : void
+    {
+        foreach ($this->addedArguments as $addedArgument) {
+            if (!$this->isName($classMethod, $addedArgument->getMethod())) {
+                continue;
+            }
+            if (!$this->isObjectType($class, $addedArgument->getObjectType())) {
+                continue;
+            }
+            $this->processPositionWithDefaultValues($classMethod, $addedArgument);
+        }
     }
 }

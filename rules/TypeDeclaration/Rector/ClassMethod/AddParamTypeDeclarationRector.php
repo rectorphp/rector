@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Type\MixedType;
@@ -75,29 +74,29 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class, Interface_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_|Interface_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
-        }
-        /** @var ClassLike $classLike */
-        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-        foreach ($this->addParamTypeDeclarations as $addParamTypeDeclaration) {
-            if (!$this->isName($node, $addParamTypeDeclaration->getMethodName())) {
+        foreach ($node->getMethods() as $classMethod) {
+            if ($this->shouldSkip($node, $classMethod)) {
                 continue;
             }
-            if (!$this->isObjectType($classLike, $addParamTypeDeclaration->getObjectType())) {
-                continue;
+            foreach ($this->addParamTypeDeclarations as $addParamTypeDeclaration) {
+                if (!$this->isName($classMethod, $addParamTypeDeclaration->getMethodName())) {
+                    continue;
+                }
+                if (!$this->isObjectType($node, $addParamTypeDeclaration->getObjectType())) {
+                    continue;
+                }
+                $this->refactorClassMethodWithTypehintByParameterPosition($classMethod, $addParamTypeDeclaration);
             }
-            $this->refactorClassMethodWithTypehintByParameterPosition($node, $addParamTypeDeclaration);
-        }
-        if (!$this->hasChanged) {
-            return null;
+            if (!$this->hasChanged) {
+                return null;
+            }
         }
         return $node;
     }
@@ -109,26 +108,20 @@ CODE_SAMPLE
         Assert::allIsAOf($configuration, AddParamTypeDeclaration::class);
         $this->addParamTypeDeclarations = $configuration;
     }
-    private function shouldSkip(ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classLike
+     */
+    private function shouldSkip($classLike, ClassMethod $classMethod) : bool
     {
         // skip class methods without args
         if ($classMethod->params === []) {
             return \true;
         }
-        $classLike = $this->betterNodeFinder->findParentByTypes($classMethod, [Class_::class, Interface_::class]);
-        if (!$classLike instanceof ClassLike) {
-            return \true;
-        }
         // skip class without parents/interfaces
-        if ($classLike instanceof Class_) {
-            if ($classLike->implements !== []) {
-                return \false;
-            }
-            return !$classLike->extends instanceof Name;
+        if ($classLike instanceof Class_ && $classLike->implements !== []) {
+            return \false;
         }
-        // skip interface without parents
-        /** @var Interface_ $classLike */
-        return !(bool) $classLike->extends;
+        return !$classLike->extends instanceof Name;
     }
     private function refactorClassMethodWithTypehintByParameterPosition(ClassMethod $classMethod, AddParamTypeDeclaration $addParamTypeDeclaration) : void
     {
