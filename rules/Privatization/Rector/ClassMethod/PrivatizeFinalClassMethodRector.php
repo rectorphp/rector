@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
@@ -17,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector\PrivatizeFinalClassMethodRectorTest
  */
-final class PrivatizeFinalClassMethodRector extends AbstractRector
+final class PrivatizeFinalClassMethodRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -64,16 +65,12 @@ CODE_SAMPLE
     /**
      * @param Class_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if (!$node->isFinal()) {
             return null;
         }
-        $classScope = $node->getAttribute(AttributeKey::SCOPE);
-        if (!$classScope instanceof Scope) {
-            return null;
-        }
-        $classReflection = $classScope->getClassReflection();
+        $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
