@@ -54,24 +54,22 @@ final class TopStmtAndExprMatcher
         }
         $nodes = [];
         if ($stmt instanceof Foreach_) {
-            $nodes = [$stmt->expr, $stmt->keyVar, $stmt->valueVar];
+            // keyVar can be null, so need to be filtered only Expr
+            $nodes = \array_filter([$stmt->expr, $stmt->keyVar, $stmt->valueVar]);
         }
         if ($stmt instanceof For_) {
-            $nodes = [$stmt->init, $stmt->cond, $stmt->loop];
+            $nodes = \array_merge($stmt->init, $stmt->cond, $stmt->loop);
         }
         if ($this->multiInstanceofChecker->isInstanceOf($stmt, [If_::class, While_::class, Do_::class, Switch_::class])) {
             /** @var If_|While_|Do_|Switch_ $stmt */
             $nodes = [$stmt->cond];
         }
-        foreach ($nodes as $node) {
-            // For top level Expr can be array of Expr in each property
-            if (!$node instanceof Node && !\is_array($node)) {
-                continue;
-            }
-            $expr = $this->resolveExpr($stmt, $node, $filter);
-            if ($expr instanceof Expr) {
-                return new StmtAndExpr($stmt, $expr);
-            }
+        if ($stmt instanceof Echo_) {
+            $nodes = $stmt->exprs;
+        }
+        $expr = $this->resolveExpr($stmt, $nodes, $filter);
+        if ($expr instanceof Expr) {
+            return new StmtAndExpr($stmt, $expr);
         }
         $stmtAndExpr = $this->resolveFromChildCond($stmt, $filter);
         if ($stmtAndExpr instanceof StmtAndExpr) {

@@ -8,15 +8,19 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Analyser\Scope;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
 use Rector\Naming\Naming\VariableNaming;
+use Rector\NodeAnalyzer\TopStmtAndExprMatcher;
+use Rector\ValueObject\StmtAndExpr;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -42,14 +46,20 @@ final class DowngradeStreamIsattyRector extends AbstractScopeAwareRector
      */
     private $variableNaming;
     /**
+     * @readonly
+     * @var \Rector\NodeAnalyzer\TopStmtAndExprMatcher
+     */
+    private $topStmtAndExprMatcher;
+    /**
      * @var \PhpParser\Node\Expr\Closure|null
      */
     private $cachedClosure;
-    public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming)
+    public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming, TopStmtAndExprMatcher $topStmtAndExprMatcher)
     {
         $this->inlineCodeParser = $inlineCodeParser;
         $this->functionExistsFunCallAnalyzer = $functionExistsFunCallAnalyzer;
         $this->variableNaming = $variableNaming;
+        $this->topStmtAndExprMatcher = $topStmtAndExprMatcher;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -97,30 +107,34 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class, Return_::class];
+        return [StmtsAwareInterface::class, Switch_::class, Return_::class, Expression::class, Echo_::class];
     }
     /**
-     * @param Expression|Stmt\Return_ $node
-     * @return Stmt[]
+     * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
+     * @return Node[]|null
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?array
     {
-        /** @var FuncCall[] $funcCalls */
-        $funcCalls = $this->betterNodeFinder->findInstanceOf($node, FuncCall::class);
-        foreach ($funcCalls as $funcCall) {
-            if (!$this->isName($funcCall, 'stream_isatty')) {
-                continue;
+        $stmtAndExpr = $this->topStmtAndExprMatcher->match($node, function (Node $subNode) : bool {
+            if (!$subNode instanceof FuncCall) {
+                return \false;
             }
-            if ($this->functionExistsFunCallAnalyzer->detect($funcCall, 'stream_isatty')) {
-                continue;
+            if (!$this->isName($subNode, 'stream_isatty')) {
+                return \false;
             }
-            $function = $this->createClosure();
-            $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
-            $assign = new Assign($variable, $function);
-            $funcCall->name = $variable;
-            return [new Expression($assign), $node];
+            return !$this->functionExistsFunCallAnalyzer->detect($subNode, 'stream_isatty');
+        });
+        if (!$stmtAndExpr instanceof StmtAndExpr) {
+            return null;
         }
-        return null;
+        $stmt = $stmtAndExpr->getStmt();
+        /** @var FuncCall $expr */
+        $expr = $stmtAndExpr->getExpr();
+        $function = $this->createClosure();
+        $variable = new Variable($this->variableNaming->createCountedValueName('streamIsatty', $scope));
+        $assign = new Assign($variable, $function);
+        $expr->name = $variable;
+        return [new Expression($assign), $stmt];
     }
     private function createClosure() : Closure
     {
