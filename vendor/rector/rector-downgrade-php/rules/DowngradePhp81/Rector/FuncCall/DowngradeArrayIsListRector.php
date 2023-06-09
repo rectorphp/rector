@@ -20,8 +20,7 @@ use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeAnalyzer\TopStmtAndExprMatcher;
-use Rector\ValueObject\StmtAndExpr;
+use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -48,19 +47,19 @@ final class DowngradeArrayIsListRector extends AbstractScopeAwareRector
     private $variableNaming;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\TopStmtAndExprMatcher
+     * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
      */
-    private $topStmtAndExprMatcher;
+    private $exprInTopStmtMatcher;
     /**
      * @var \PhpParser\Node\Expr\Closure|null
      */
     private $cachedClosure;
-    public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming, TopStmtAndExprMatcher $topStmtAndExprMatcher)
+    public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->inlineCodeParser = $inlineCodeParser;
         $this->functionExistsFunCallAnalyzer = $functionExistsFunCallAnalyzer;
         $this->variableNaming = $variableNaming;
-        $this->topStmtAndExprMatcher = $topStmtAndExprMatcher;
+        $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -104,23 +103,20 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?array
     {
-        $stmtAndExpr = $this->topStmtAndExprMatcher->match($node, function (Node $subNode) : bool {
+        $expr = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
             return !$this->shouldSkip($subNode);
         });
-        if (!$stmtAndExpr instanceof StmtAndExpr) {
+        if (!$expr instanceof FuncCall) {
             return null;
         }
-        $stmt = $stmtAndExpr->getStmt();
-        /** @var FuncCall $expr */
-        $expr = $stmtAndExpr->getExpr();
         $variable = new Variable($this->variableNaming->createCountedValueName('arrayIsList', $scope));
         $function = $this->createClosure();
         $expression = new Expression(new Assign($variable, $function));
         $expr->name = $variable;
-        return [$expression, $stmt];
+        return [$expression, $node];
     }
     private function createClosure() : Closure
     {

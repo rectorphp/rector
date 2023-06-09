@@ -21,12 +21,11 @@ use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\ValueObject\StmtAndExpr;
 /**
- * To resolve Stmt and Expr in top stmtInterface from early Expr attribute
+ * To resolve Expr in top Stmt from early Expr attribute
  * so the usage can append code before the Stmt
  */
-final class TopStmtAndExprMatcher
+final class ExprInTopStmtMatcher
 {
     /**
      * @readonly
@@ -47,7 +46,7 @@ final class TopStmtAndExprMatcher
      * @param callable(Node $node): bool $filter
      * @param \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    public function match($stmt, callable $filter) : ?\Rector\ValueObject\StmtAndExpr
+    public function match($stmt, callable $filter) : ?\PhpParser\Node\Expr
     {
         if ($stmt instanceof Closure) {
             return null;
@@ -58,7 +57,9 @@ final class TopStmtAndExprMatcher
             $nodes = \array_filter([$stmt->expr, $stmt->keyVar, $stmt->valueVar]);
         }
         if ($stmt instanceof For_) {
-            $nodes = \array_merge($stmt->init, $stmt->cond, $stmt->loop);
+            $nodes = $stmt->init;
+            $nodes = \array_merge($nodes, $stmt->cond);
+            $nodes = \array_merge($nodes, $stmt->loop);
         }
         if ($this->multiInstanceofChecker->isInstanceOf($stmt, [If_::class, While_::class, Do_::class, Switch_::class])) {
             /** @var If_|While_|Do_|Switch_ $stmt */
@@ -67,13 +68,15 @@ final class TopStmtAndExprMatcher
         if ($stmt instanceof Echo_) {
             $nodes = $stmt->exprs;
         }
-        $expr = $this->resolveExpr($stmt, $nodes, $filter);
-        if ($expr instanceof Expr) {
-            return new StmtAndExpr($stmt, $expr);
+        foreach ($nodes as $node) {
+            $expr = $this->resolveExpr($stmt, $node, $filter);
+            if ($expr instanceof Expr) {
+                return $expr;
+            }
         }
-        $stmtAndExpr = $this->resolveFromChildCond($stmt, $filter);
-        if ($stmtAndExpr instanceof StmtAndExpr) {
-            return $stmtAndExpr;
+        $expr = $this->resolveFromChildCond($stmt, $filter);
+        if ($expr instanceof Expr) {
+            return $expr;
         }
         return $this->resolveOnReturnOrExpression($stmt, $filter);
     }
@@ -81,7 +84,7 @@ final class TopStmtAndExprMatcher
      * @param callable(Node $node): bool $filter
      * @param \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function resolveOnReturnOrExpression($stmt, callable $filter) : ?StmtAndExpr
+    private function resolveOnReturnOrExpression($stmt, callable $filter) : ?Expr
     {
         if (!$stmt instanceof Return_ && !$stmt instanceof Expression) {
             return null;
@@ -89,11 +92,7 @@ final class TopStmtAndExprMatcher
         if (!$stmt->expr instanceof Expr) {
             return null;
         }
-        $expr = $this->resolveExpr($stmt, $stmt->expr, $filter);
-        if ($expr instanceof Expr) {
-            return new StmtAndExpr($stmt, $expr);
-        }
-        return null;
+        return $this->resolveExpr($stmt, $stmt->expr, $filter);
     }
     /**
      * @param mixed[]|\PhpParser\Node\Expr $exprs
@@ -120,7 +119,7 @@ final class TopStmtAndExprMatcher
      * @param callable(Node $node): bool $filter
      * @param \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function resolveFromChildCond($stmt, callable $filter) : ?\Rector\ValueObject\StmtAndExpr
+    private function resolveFromChildCond($stmt, callable $filter) : ?\PhpParser\Node\Expr
     {
         if (!$stmt instanceof If_ && !$stmt instanceof Switch_) {
             return null;
@@ -132,7 +131,7 @@ final class TopStmtAndExprMatcher
             }
             $expr = $this->resolveExpr($stmt, $stmt->cond, $filter);
             if ($expr instanceof Expr) {
-                return new StmtAndExpr($stmt, $expr);
+                return $expr;
             }
         }
         return null;
