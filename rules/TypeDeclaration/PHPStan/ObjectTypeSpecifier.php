@@ -26,6 +26,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface;
+use Rector\TypeDeclaration\PHPStan\TypeSpecifier\SameNamespacedTypeSpecifier;
+use Rector\TypeDeclaration\PHPStan\TypeSpecifier\SelfStaticParentTypeSpecifier;
 final class ObjectTypeSpecifier
 {
     /**
@@ -40,17 +42,13 @@ final class ObjectTypeSpecifier
     private $useImportsResolver;
     /**
      * @var TypeWithClassTypeSpecifierInterface[]
-     * @readonly
      */
-    private $typeWithClassTypeSpecifiers;
-    /**
-     * @param TypeWithClassTypeSpecifierInterface[] $typeWithClassTypeSpecifiers
-     */
-    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, array $typeWithClassTypeSpecifiers)
+    private $typeWithClassTypeSpecifiers = [];
+    public function __construct(ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, SelfStaticParentTypeSpecifier $selfStaticParentTypeSpecifier, SameNamespacedTypeSpecifier $sameNamespacedTypeSpecifier)
     {
         $this->reflectionProvider = $reflectionProvider;
         $this->useImportsResolver = $useImportsResolver;
-        $this->typeWithClassTypeSpecifiers = $typeWithClassTypeSpecifiers;
+        $this->typeWithClassTypeSpecifiers = [$selfStaticParentTypeSpecifier, $sameNamespacedTypeSpecifier];
     }
     /**
      * @return \PHPStan\Type\TypeWithClassName|\Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType|\PHPStan\Type\UnionType|\PHPStan\Type\MixedType

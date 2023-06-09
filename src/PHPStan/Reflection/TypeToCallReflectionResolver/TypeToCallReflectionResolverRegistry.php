@@ -12,26 +12,22 @@ final class TypeToCallReflectionResolverRegistry
 {
     /**
      * @var TypeToCallReflectionResolverInterface[]
-     * @readonly
      */
-    private $resolvers;
-    /**
-     * @param TypeToCallReflectionResolverInterface[] $resolvers
-     */
-    public function __construct(array $resolvers)
+    private $typeToCallReflectionResolvers = [];
+    public function __construct(\Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\ClosureTypeToCallReflectionResolver $closureTypeToCallReflectionResolver, \Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\ConstantArrayTypeToCallReflectionResolver $constantArrayTypeToCallReflectionResolver, \Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\ConstantStringTypeToCallReflectionResolver $constantStringTypeToCallReflectionResolver, \Rector\Core\PHPStan\Reflection\TypeToCallReflectionResolver\ObjectTypeToCallReflectionResolver $objectTypeToCallReflectionResolver)
     {
-        $this->resolvers = $resolvers;
+        $this->typeToCallReflectionResolvers = [$closureTypeToCallReflectionResolver, $constantArrayTypeToCallReflectionResolver, $constantStringTypeToCallReflectionResolver, $objectTypeToCallReflectionResolver];
     }
     /**
      * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null
      */
     public function resolve(Type $type, Scope $scope)
     {
-        foreach ($this->resolvers as $resolver) {
-            if (!$resolver->supports($type)) {
+        foreach ($this->typeToCallReflectionResolvers as $typeToCallReflectionResolver) {
+            if (!$typeToCallReflectionResolver->supports($type)) {
                 continue;
             }
-            return $resolver->resolve($type, $scope);
+            return $typeToCallReflectionResolver->resolve($type, $scope);
         }
         return null;
     }
