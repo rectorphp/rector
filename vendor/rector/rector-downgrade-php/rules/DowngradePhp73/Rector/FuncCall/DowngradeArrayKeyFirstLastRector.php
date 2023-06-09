@@ -16,16 +16,15 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\ElseIf_;
+use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\If_;
+use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
-use Rector\NodeAnalyzer\StmtMatcher;
+use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -43,13 +42,13 @@ final class DowngradeArrayKeyFirstLastRector extends AbstractRector
     private $variableNaming;
     /**
      * @readonly
-     * @var \Rector\NodeAnalyzer\StmtMatcher
+     * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
      */
-    private $stmtMatcher;
-    public function __construct(VariableNaming $variableNaming, StmtMatcher $stmtMatcher)
+    private $exprInTopStmtMatcher;
+    public function __construct(VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->variableNaming = $variableNaming;
-        $this->stmtMatcher = $stmtMatcher;
+        $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -79,50 +78,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Expression::class, If_::class, ElseIf_::class, Else_::class];
+        return [StmtsAwareInterface::class, Switch_::class, Return_::class, Expression::class, Echo_::class];
     }
     /**
-     * @param Expression|If_|Stmt\Else_|Stmt\ElseIf_ $node
-     * @return Stmt[]|StmtsAwareInterface|null
+     * @param StmtsAwareInterface|Switch_|Return_|Expression|Echo_ $node
+     * @return Node[]|null
      */
-    public function refactor(Node $node)
+    public function refactor(Node $node) : ?array
     {
-        if ($node instanceof If_ || $node instanceof ElseIf_) {
-            $scopeStmt = \array_merge([$node->cond], $node->stmts);
-        } elseif ($node instanceof Else_) {
-            $scopeStmt = $node->stmts;
-        } else {
-            $scopeStmt = $node;
+        $exprArrayKeyFirst = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
+            if (!$subNode instanceof FuncCall) {
+                return \false;
+            }
+            return $this->isName($subNode, 'array_key_first');
+        });
+        if ($exprArrayKeyFirst instanceof FuncCall) {
+            return $this->refactorArrayKeyFirst($exprArrayKeyFirst, $node);
         }
-        $isPartOfCond = \false;
-        if ($node instanceof If_ || $node instanceof ElseIf_) {
-            $isPartOfCond = $this->stmtMatcher->matchFuncCallNamed([$node->cond], 'array_key_first') || $this->stmtMatcher->matchFuncCallNamed([$node->cond], 'array_key_last');
-        }
-        $funcCall = $this->stmtMatcher->matchFuncCallNamed($scopeStmt, 'array_key_first');
-        if ($funcCall instanceof FuncCall) {
-            return $this->refactorArrayKeyFirst($funcCall, $node, $isPartOfCond);
-        }
-        $funcCall = $this->stmtMatcher->matchFuncCallNamed($scopeStmt, 'array_key_last');
-        if ($funcCall instanceof FuncCall) {
-            return $this->refactorArrayKeyLast($funcCall, $node, $isPartOfCond);
+        $exprArrayKeyLast = $this->exprInTopStmtMatcher->match($node, function (Node $subNode) : bool {
+            if (!$subNode instanceof FuncCall) {
+                return \false;
+            }
+            return $this->isName($subNode, 'array_key_last');
+        });
+        if ($exprArrayKeyLast instanceof FuncCall) {
+            return $this->refactorArrayKeyLast($exprArrayKeyLast, $node);
         }
         return null;
-    }
-    private function processInsertFuncCallExpression(StmtsAwareInterface $stmtsAware, Expression $expression, FuncCall $funcCall) : StmtsAwareInterface
-    {
-        if ($stmtsAware->stmts === null) {
-            return $stmtsAware;
-        }
-        foreach ($stmtsAware->stmts as $key => $stmt) {
-            $hasFuncCall = $this->betterNodeFinder->findFirst($stmt, static function (Node $node) use($funcCall) : bool {
-                return $node === $funcCall;
-            });
-            if ($hasFuncCall instanceof Node) {
-                \array_splice($stmtsAware->stmts, $key, 0, [$expression]);
-                return $stmtsAware;
-            }
-        }
-        return $stmtsAware;
     }
     private function resolveVariableFromCallLikeScope(CallLike $callLike, ?Scope $scope) : Variable
     {
@@ -138,10 +120,10 @@ CODE_SAMPLE
         return new Variable($this->variableNaming->createCountedValueName($variableName, $scope));
     }
     /**
-     * @return Stmt[]|StmtsAwareInterface|null
-     * @param \PhpParser\Node\Stmt\Expression|\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmt
+     * @return Node[]|null
+     * @param \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function refactorArrayKeyFirst(FuncCall $funcCall, $stmt, bool $isPartOfCond)
+    private function refactorArrayKeyFirst(FuncCall $funcCall, $stmt) : ?array
     {
         $args = $funcCall->getArgs();
         if (!isset($args[0])) {
@@ -164,18 +146,15 @@ CODE_SAMPLE
             $firstArg = $args[0];
             $firstArg->value = $array;
         }
-        if ($stmt instanceof StmtsAwareInterface && $isPartOfCond === \false) {
-            return $this->processInsertFuncCallExpression($stmt, $resetFuncCallExpression, $funcCall);
-        }
         $newStmts[] = $resetFuncCallExpression;
         $newStmts[] = $stmt;
         return $newStmts;
     }
     /**
-     * @return Stmt[]|StmtsAwareInterface|null
-     * @param \PhpParser\Node\Stmt\Expression|\Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface $stmt
+     * @return Node[]|null
+     * @param \Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface|\PhpParser\Node\Stmt\Switch_|\PhpParser\Node\Stmt\Return_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Echo_ $stmt
      */
-    private function refactorArrayKeyLast(FuncCall $funcCall, $stmt, bool $isPartOfCond)
+    private function refactorArrayKeyLast(FuncCall $funcCall, $stmt) : ?array
     {
         $args = $funcCall->getArgs();
         $firstArg = $args[0] ?? null;
@@ -198,9 +177,6 @@ CODE_SAMPLE
         $funcCall->name = new Name('key');
         if ($originalArray !== $array) {
             $firstArg->value = $array;
-        }
-        if ($stmt instanceof StmtsAwareInterface && $isPartOfCond === \false) {
-            return $this->processInsertFuncCallExpression($stmt, $endFuncCallExpression, $funcCall);
         }
         $newStmts[] = $stmt;
         return $newStmts;
