@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
@@ -82,22 +81,21 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope)
     {
+        if (!$scope->isInClass()) {
+            return null;
+        }
         if (!$this->php4ConstructorClassMethodAnalyzer->detect($node, $scope)) {
             return null;
         }
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
-            return null;
-        }
+        $classReflection = $scope->getClassReflection();
         // process parent call references first
         $this->processClassMethodStatementsForParentConstructorCalls($node, $scope);
         // not PSR-4 constructor
-        if (!$this->nodeNameResolver->areNamesEqual($classLike, $node)) {
+        if (!$this->nodeNameResolver->isName($node, $classReflection->getName())) {
             return null;
         }
-        $classMethod = $classLike->getMethod(MethodName::CONSTRUCT);
         // does it already have a __construct method?
-        if (!$classMethod instanceof ClassMethod) {
+        if (!$classReflection->hasConstructor()) {
             $node->name = new Identifier(MethodName::CONSTRUCT);
         }
         $classMethodStmts = $node->stmts;
