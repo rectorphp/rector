@@ -24,7 +24,8 @@ use PhpParser\Node\Stmt\Echo_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
-use Rector\Core\Rector\AbstractRector;
+use PHPStan\Analyser\Scope;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -34,7 +35,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector\DowngradeMatchToSwitchRectorTest
  */
-final class DowngradeMatchToSwitchRector extends AbstractRector
+final class DowngradeMatchToSwitchRector extends AbstractScopeAwareRector
 {
     /**
      * @readonly
@@ -92,7 +93,7 @@ CODE_SAMPLE
     /**
      * @param Echo_|Expression|Return_ $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $match = $this->betterNodeFinder->findFirst($node, static function (Node $subNode) : bool {
             return $subNode instanceof Match_;
@@ -100,8 +101,11 @@ CODE_SAMPLE
         if (!$match instanceof Match_) {
             return null;
         }
-        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($match);
-        if ($currentStmt !== $node) {
+        $matchScope = $match->getAttribute(AttributeKey::SCOPE);
+        if (!$matchScope instanceof Scope) {
+            return null;
+        }
+        if ($matchScope->getParentScope() !== $scope->getParentScope()) {
             return null;
         }
         $switchCases = $this->createSwitchCasesFromMatchArms($node, $match);

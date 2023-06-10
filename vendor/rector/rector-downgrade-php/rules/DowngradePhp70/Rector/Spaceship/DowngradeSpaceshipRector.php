@@ -72,7 +72,7 @@ CODE_SAMPLE
     public function refactor(Node $node)
     {
         $hasFound = \false;
-        $assignVariable = $this->namedVariableFactory->createVariable($node, 'battleShipcompare');
+        $assignVariable = $this->namedVariableFactory->createVariable('battleShipcompare', $node);
         $this->traverseNodesWithCallable($node, static function (Node $node) use(&$hasFound, $assignVariable) : ?FuncCall {
             if (!$node instanceof Spaceship) {
                 return null;
