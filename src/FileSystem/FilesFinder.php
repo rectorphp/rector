@@ -109,11 +109,15 @@ final class FilesFinder
             foreach ($excludePaths as $excludePath) {
                 // make the path work accross different OSes
                 $excludePath = \str_replace('\\', '/', $excludePath);
-                if (StringUtils::isMatch($realPath, '#' . \preg_quote($excludePath, '#') . '#')) {
+                if (\fnmatch($this->normalizeForFnmatch($excludePath), $realPath)) {
                     return \false;
                 }
-                $excludePath = $this->normalizeForFnmatch($excludePath);
-                if (\fnmatch($excludePath, $realPath)) {
+                if (\strpos($excludePath, '**') !== \false) {
+                    // prevent matching a fnmatch pattern as a regex
+                    // which is a waste of resources
+                    continue;
+                }
+                if (StringUtils::isMatch($realPath, '#' . \preg_quote($excludePath, '#') . '#')) {
                     return \false;
                 }
             }
@@ -126,13 +130,8 @@ final class FilesFinder
      */
     private function normalizeForFnmatch(string $path) : string
     {
-        // ends with *
-        if (StringUtils::isMatch($path, AsteriskMatch::ONLY_ENDS_WITH_ASTERISK_REGEX)) {
-            return '*' . $path;
-        }
-        // starts with *
-        if (StringUtils::isMatch($path, AsteriskMatch::ONLY_STARTS_WITH_ASTERISK_REGEX)) {
-            return $path . '*';
+        if (\substr_compare($path, '*', -\strlen('*')) === 0 || \strncmp($path, '*', \strlen('*')) === 0) {
+            return '*' . \trim($path, '*') . '*';
         }
         return $path;
     }

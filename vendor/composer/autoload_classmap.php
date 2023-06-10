@@ -2488,7 +2488,6 @@ return array(
     'Rector\\Set\\ValueObject\\LevelSetList' => $baseDir . '/packages/Set/ValueObject/LevelSetList.php',
     'Rector\\Set\\ValueObject\\SetList' => $baseDir . '/packages/Set/ValueObject/SetList.php',
     'Rector\\Skipper\\Contract\\SkipVoterInterface' => $baseDir . '/packages/Skipper/Contract/SkipVoterInterface.php',
-    'Rector\\Skipper\\Enum\\AsteriskMatch' => $baseDir . '/packages/Skipper/Enum/AsteriskMatch.php',
     'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => $baseDir . '/packages/Skipper/FileSystem/FnMatchPathNormalizer.php',
     'Rector\\Skipper\\Fnmatcher' => $baseDir . '/packages/Skipper/Fnmatcher.php',
     'Rector\\Skipper\\Matcher\\FileInfoMatcher' => $baseDir . '/packages/Skipper/Matcher/FileInfoMatcher.php',

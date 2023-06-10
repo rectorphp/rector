@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit21d6b9af003758ae5bffca4702025ed1
+class ComposerStaticInitfbf6a0b18adc08aaadd70b1954c0c104
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2739,7 +2739,6 @@ class ComposerStaticInit21d6b9af003758ae5bffca4702025ed1
         'Rector\\Set\\ValueObject\\LevelSetList' => __DIR__ . '/../..' . '/packages/Set/ValueObject/LevelSetList.php',
         'Rector\\Set\\ValueObject\\SetList' => __DIR__ . '/../..' . '/packages/Set/ValueObject/SetList.php',
         'Rector\\Skipper\\Contract\\SkipVoterInterface' => __DIR__ . '/../..' . '/packages/Skipper/Contract/SkipVoterInterface.php',
-        'Rector\\Skipper\\Enum\\AsteriskMatch' => __DIR__ . '/../..' . '/packages/Skipper/Enum/AsteriskMatch.php',
         'Rector\\Skipper\\FileSystem\\FnMatchPathNormalizer' => __DIR__ . '/../..' . '/packages/Skipper/FileSystem/FnMatchPathNormalizer.php',
         'Rector\\Skipper\\Fnmatcher' => __DIR__ . '/../..' . '/packages/Skipper/Fnmatcher.php',
         'Rector\\Skipper\\Matcher\\FileInfoMatcher' => __DIR__ . '/../..' . '/packages/Skipper/Matcher/FileInfoMatcher.php',
@@ -3128,9 +3127,9 @@ class ComposerStaticInit21d6b9af003758ae5bffca4702025ed1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit21d6b9af003758ae5bffca4702025ed1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit21d6b9af003758ae5bffca4702025ed1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit21d6b9af003758ae5bffca4702025ed1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfbf6a0b18adc08aaadd70b1954c0c104::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfbf6a0b18adc08aaadd70b1954c0c104::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfbf6a0b18adc08aaadd70b1954c0c104::$classMap;
 
         }, null, ClassLoader::class);
     }
