@@ -27,7 +27,6 @@ use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use Rector\Core\NodeAnalyzer\VariableAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -50,20 +49,14 @@ final class UndefinedVariableResolver
     private $nodeComparator;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder, VariableAnalyzer $variableAnalyzer)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, VariableAnalyzer $variableAnalyzer)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeComparator = $nodeComparator;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->variableAnalyzer = $variableAnalyzer;
     }
     /**
@@ -74,7 +67,8 @@ final class UndefinedVariableResolver
     {
         $undefinedVariables = [];
         $checkedVariables = [];
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use(&$undefinedVariables, &$checkedVariables) : ?int {
+        $currentStmt = null;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $node->stmts, function (Node $node) use(&$undefinedVariables, &$checkedVariables, &$currentStmt) : ?int {
             // entering new scope - break!
             if ($node instanceof FunctionLike && !$node instanceof ArrowFunction) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
@@ -86,6 +80,9 @@ final class UndefinedVariableResolver
             $checkedVariables = $this->resolveCheckedVariables($node, $checkedVariables);
             if ($node instanceof Case_) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($node instanceof Stmt) {
+                $currentStmt = $node;
             }
             if (!$node instanceof Variable) {
                 return null;
@@ -101,7 +98,7 @@ final class UndefinedVariableResolver
             if ($this->shouldSkipVariable($node, $variableName, $checkedVariables)) {
                 return null;
             }
-            if ($this->hasVariableTypeOrCurrentStmtUnreachable($node, $variableName)) {
+            if ($this->hasVariableTypeOrCurrentStmtUnreachable($node, $variableName, $currentStmt)) {
                 return null;
             }
             /** @var string $variableName */
@@ -174,7 +171,7 @@ final class UndefinedVariableResolver
         }
         return $checkedVariables;
     }
-    private function hasVariableTypeOrCurrentStmtUnreachable(Variable $variable, ?string $variableName) : bool
+    private function hasVariableTypeOrCurrentStmtUnreachable(Variable $variable, ?string $variableName, ?Stmt $currentStmt) : bool
     {
         if (!\is_string($variableName)) {
             return \true;
@@ -185,7 +182,6 @@ final class UndefinedVariableResolver
         if ($scope->hasVariableType($variableName)->yes()) {
             return \true;
         }
-        $currentStmt = $this->betterNodeFinder->resolveCurrentStatement($variable);
         return $currentStmt instanceof Stmt && $currentStmt->getAttribute(AttributeKey::IS_UNREACHABLE) === \true;
     }
     /**
