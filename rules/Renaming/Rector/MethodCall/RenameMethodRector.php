@@ -9,8 +9,8 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -71,34 +71,17 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class, ClassMethod::class];
+        return [MethodCall::class, StaticCall::class, Class_::class, Interface_::class];
     }
     /**
-     * @param MethodCall|StaticCall|ClassMethod $node
+     * @param MethodCall|StaticCall|Class_|Interface_ $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $classReflection = $scope->getClassReflection();
-        foreach ($this->methodCallRenames as $methodCallRename) {
-            if (!$this->isName($node->name, $methodCallRename->getOldMethod())) {
-                continue;
-            }
-            if ($this->shouldKeepForParentInterface($methodCallRename, $node, $classReflection)) {
-                continue;
-            }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $methodCallRename->getObjectType())) {
-                continue;
-            }
-            if ($this->shouldSkipClassMethod($node, $methodCallRename)) {
-                continue;
-            }
-            $node->name = new Identifier($methodCallRename->getNewMethod());
-            if ($methodCallRename instanceof MethodCallRenameWithArrayKey && !$node instanceof ClassMethod) {
-                return new ArrayDimFetch($node, BuilderHelpers::normalizeValue($methodCallRename->getArrayKey()));
-            }
-            return $node;
+        if ($node instanceof Class_ || $node instanceof Interface_) {
+            return $this->refactorClass($node, $scope);
         }
-        return null;
+        return $this->refactorMethodCallAndStaticCall($node);
     }
     /**
      * @param mixed[] $configuration
@@ -109,47 +92,37 @@ CODE_SAMPLE
         $this->methodCallRenames = $configuration;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
      */
-    private function shouldSkipClassMethod($node, MethodCallRenameInterface $methodCallRename) : bool
+    private function shouldSkipClassMethod($call, MethodCallRenameInterface $methodCallRename) : bool
     {
-        if (!$node instanceof ClassMethod) {
-            $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($node);
-            if (!$classReflection instanceof ClassReflection) {
-                return \false;
-            }
-            $targetClass = $methodCallRename->getClass();
-            if (!$this->reflectionProvider->hasClass($targetClass)) {
-                return \false;
-            }
-            $targetClassReflection = $this->reflectionProvider->getClass($targetClass);
-            if ($classReflection->getName() === $targetClassReflection->getName()) {
-                return \false;
-            }
-            // different with configured ClassLike source? it is a child, which may has old and new exists
-            if (!$classReflection->hasMethod($methodCallRename->getOldMethod())) {
-                return \false;
-            }
-            return $classReflection->hasMethod($methodCallRename->getNewMethod());
-        }
-        return $this->shouldSkipForAlreadyExistingClassMethod($node, $methodCallRename);
-    }
-    private function shouldSkipForAlreadyExistingClassMethod(ClassMethod $classMethod, MethodCallRenameInterface $methodCallRename) : bool
-    {
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classReflection = $this->reflectionResolver->resolveClassReflectionSourceObject($call);
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        return (bool) $classLike->getMethod($methodCallRename->getNewMethod());
+        $targetClass = $methodCallRename->getClass();
+        if (!$this->reflectionProvider->hasClass($targetClass)) {
+            return \false;
+        }
+        $targetClassReflection = $this->reflectionProvider->getClass($targetClass);
+        if ($classReflection->getName() === $targetClassReflection->getName()) {
+            return \false;
+        }
+        // different with configured ClassLike source? it is a child, which may has old and new exists
+        if (!$classReflection->hasMethod($methodCallRename->getOldMethod())) {
+            return \false;
+        }
+        return $classReflection->hasMethod($methodCallRename->getNewMethod());
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classOrInternace
      */
-    private function shouldKeepForParentInterface(MethodCallRenameInterface $methodCallRename, $node, ?ClassReflection $classReflection) : bool
+    private function hasClassNewClassMethod($classOrInternace, MethodCallRenameInterface $methodCallRename) : bool
     {
-        if (!$node instanceof ClassMethod) {
-            return \false;
-        }
+        return (bool) $classOrInternace->getMethod($methodCallRename->getNewMethod());
+    }
+    private function shouldKeepForParentInterface(MethodCallRenameInterface $methodCallRename, ?ClassReflection $classReflection) : bool
+    {
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
@@ -158,5 +131,63 @@ CODE_SAMPLE
             return \false;
         }
         return $this->classManipulator->hasParentMethodOrInterface($methodCallRename->getObjectType(), $methodCallRename->getOldMethod(), $methodCallRename->getNewMethod());
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_ $classOrInterface
+     * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|null
+     */
+    private function refactorClass($classOrInterface, Scope $scope)
+    {
+        if (!$scope->isInClass()) {
+            return null;
+        }
+        $classReflection = $scope->getClassReflection();
+        $hasChanged = \false;
+        foreach ($classOrInterface->getMethods() as $classMethod) {
+            foreach ($this->methodCallRenames as $methodCallRename) {
+                if (!$this->isName($classMethod->name, $methodCallRename->getOldMethod())) {
+                    continue;
+                }
+                if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($classMethod, $methodCallRename->getObjectType())) {
+                    continue;
+                }
+                if ($this->shouldKeepForParentInterface($methodCallRename, $classReflection)) {
+                    continue;
+                }
+                if ($this->hasClassNewClassMethod($classOrInterface, $methodCallRename)) {
+                    continue;
+                }
+                $classMethod->name = new Identifier($methodCallRename->getNewMethod());
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
+            return $classOrInterface;
+        }
+        return null;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     * @return \PhpParser\Node\Expr\ArrayDimFetch|null|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall
+     */
+    private function refactorMethodCallAndStaticCall($call)
+    {
+        foreach ($this->methodCallRenames as $methodCallRename) {
+            if (!$this->isName($call->name, $methodCallRename->getOldMethod())) {
+                continue;
+            }
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($call, $methodCallRename->getObjectType())) {
+                continue;
+            }
+            if ($this->shouldSkipClassMethod($call, $methodCallRename)) {
+                continue;
+            }
+            $call->name = new Identifier($methodCallRename->getNewMethod());
+            if ($methodCallRename instanceof MethodCallRenameWithArrayKey) {
+                return new ArrayDimFetch($call, BuilderHelpers::normalizeValue($methodCallRename->getArrayKey()));
+            }
+            return $call;
+        }
+        return null;
     }
 }

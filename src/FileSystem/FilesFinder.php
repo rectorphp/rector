@@ -5,7 +5,6 @@ namespace Rector\Core\FileSystem;
 
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Core\Util\StringUtils;
-use Rector\Skipper\Enum\AsteriskMatch;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 use RectorPrefix202306\Symfony\Component\Finder\Finder;
 use RectorPrefix202306\Symfony\Component\Finder\SplFileInfo;
