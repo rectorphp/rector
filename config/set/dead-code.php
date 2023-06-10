@@ -29,6 +29,7 @@ use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector;
+use Rector\DeadCode\Rector\If_\RemoveTypedPropertyDeadInstanceOfRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\If_\SimplifyIfElseWithSameContentRector;
 use Rector\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector;
@@ -78,6 +79,7 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveDeadConditionAboveReturnRector::class,
         RemoveUnusedConstructorParamRector::class,
         RemoveDeadInstanceOfRector::class,
+        RemoveTypedPropertyDeadInstanceOfRector::class,
         RemoveDeadLoopRector::class,
         RemoveUnusedPrivateMethodParameterRector::class,
         // docblock
