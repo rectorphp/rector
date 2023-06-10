@@ -90,6 +90,10 @@ final class UndefinedVariableResolver
             if (!$node instanceof Variable) {
                 return null;
             }
+            // after variable variable, the variable name got unpredictable, just stop
+            if ($node->name instanceof Variable) {
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
             if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
                 return null;
             }
@@ -203,9 +207,6 @@ final class UndefinedVariableResolver
         if ($this->variableAnalyzer->isStaticOrGlobal($variable)) {
             return \true;
         }
-        $checkedVariables = \array_filter($checkedVariables, static function (string $variableName) : bool {
-            return $variableName !== '';
-        });
         return \in_array($variableName, $checkedVariables, \true);
     }
     private function isDifferentWithOriginalNodeOrNoScope(Variable $variable) : bool
