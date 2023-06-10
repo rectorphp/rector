@@ -100,46 +100,49 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
-    public function refactor(Node $node) : ?ClassMethod
+    public function refactor(Node $node)
     {
-        if (!$node->isPublic()) {
-            return null;
-        }
-        if ($node->getParams() === []) {
-            return null;
-        }
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $dataProviderPhpDocTagNode = $this->resolveDataProviderPhpDocTagNode($node);
-        if (!$dataProviderPhpDocTagNode instanceof PhpDocTagNode) {
-            return null;
-        }
         $hasChanged = \false;
-        foreach ($node->getParams() as $param) {
-            if ($param->type instanceof Node) {
+        foreach ($node->getMethods() as $classMethod) {
+            if (!$classMethod->isPublic()) {
                 continue;
             }
-            $paramTypeDeclaration = $this->inferParam($param, $dataProviderPhpDocTagNode);
-            if ($paramTypeDeclaration instanceof MixedType) {
+            if ($classMethod->getParams() === []) {
                 continue;
             }
-            $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramTypeDeclaration, TypeKind::PARAM);
-            $hasChanged = \true;
+            $dataProviderPhpDocTagNode = $this->resolveDataProviderPhpDocTagNode($classMethod);
+            if (!$dataProviderPhpDocTagNode instanceof PhpDocTagNode) {
+                return null;
+            }
+            $hasChanged = \false;
+            foreach ($classMethod->getParams() as $param) {
+                if ($param->type instanceof Node) {
+                    continue;
+                }
+                $paramTypeDeclaration = $this->inferParam($node, $param, $dataProviderPhpDocTagNode);
+                if ($paramTypeDeclaration instanceof MixedType) {
+                    continue;
+                }
+                $param->type = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($paramTypeDeclaration, TypeKind::PARAM);
+                $hasChanged = \true;
+            }
         }
         if ($hasChanged) {
             return $node;
         }
         return null;
     }
-    private function inferParam(Param $param, PhpDocTagNode $dataProviderPhpDocTagNode) : Type
+    private function inferParam(Class_ $class, Param $param, PhpDocTagNode $dataProviderPhpDocTagNode) : Type
     {
-        $dataProviderClassMethod = $this->resolveDataProviderClassMethod($param, $dataProviderPhpDocTagNode);
+        $dataProviderClassMethod = $this->resolveDataProviderClassMethod($class, $dataProviderPhpDocTagNode);
         if (!$dataProviderClassMethod instanceof ClassMethod) {
             return new MixedType();
         }
@@ -156,12 +159,8 @@ CODE_SAMPLE
         $yields = $this->betterNodeFinder->findInstanceOf((array) $dataProviderClassMethod->stmts, Yield_::class);
         return $this->resolveYieldStaticArrayTypeByParameterPosition($yields, $parameterPosition);
     }
-    private function resolveDataProviderClassMethod(Param $param, PhpDocTagNode $dataProviderPhpDocTagNode) : ?ClassMethod
+    private function resolveDataProviderClassMethod(Class_ $class, PhpDocTagNode $dataProviderPhpDocTagNode) : ?ClassMethod
     {
-        $class = $this->betterNodeFinder->findParentType($param, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
         if (!$dataProviderPhpDocTagNode->value instanceof GenericTagValueNode) {
             return null;
         }

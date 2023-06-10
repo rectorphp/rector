@@ -14,10 +14,10 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Interface_;
 use PhpParser\Node\Stmt\Trait_;
+use PhpParser\NodeTraverser;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\TypeWithClassName;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\Rector\AbstractRector;
@@ -80,48 +80,33 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StmtsAwareInterface::class];
+        return [If_::class, Expression::class];
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param If_|Expression $node
      */
     public function refactor(Node $node)
     {
-        if ($node->stmts === null) {
-            return null;
+        if ($node instanceof If_) {
+            return $this->refactorIf($node);
         }
-        $hasChanged = \false;
-        foreach ($node->stmts as $key => $stmt) {
-            if ($stmt instanceof If_) {
-                $if = $this->refactorIf($stmt);
-                if ($if instanceof If_) {
-                    $hasChanged = \true;
-                    continue;
-                }
+        if ($node->expr instanceof Assign) {
+            $assign = $node->expr;
+            if (!$assign->expr instanceof MethodCall) {
+                return null;
             }
-            if (!$stmt instanceof Expression) {
-                continue;
+            if (!$this->shouldRemoveMethodCall($assign->expr)) {
+                return null;
             }
-            if ($stmt->expr instanceof Assign && $stmt->expr->expr instanceof MethodCall) {
-                $methodCall = $stmt->expr->expr;
-                if (!$this->shouldRemoveMethodCall($methodCall)) {
-                    continue;
-                }
-                $stmt->expr->expr = $this->nodeFactory->createFalse();
-                $hasChanged = \true;
-                continue;
-            }
-            if ($stmt->expr instanceof MethodCall) {
-                $methodCall = $stmt->expr;
-                if (!$this->shouldRemoveMethodCall($methodCall)) {
-                    continue;
-                }
-                unset($node->stmts[$key]);
-                $hasChanged = \true;
-            }
-        }
-        if ($hasChanged) {
+            $assign->expr = $this->nodeFactory->createFalse();
             return $node;
+        }
+        if ($node->expr instanceof MethodCall) {
+            $methodCall = $node->expr;
+            if (!$this->shouldRemoveMethodCall($methodCall)) {
+                return null;
+            }
+            return NodeTraverser::REMOVE_NODE;
         }
         return null;
     }
