@@ -77,7 +77,6 @@ final class UndefinedVariableResolver
                 // handled above
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            $checkedVariables = $this->resolveCheckedVariables($node, $checkedVariables);
             if ($node instanceof Case_) {
                 return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
@@ -85,6 +84,7 @@ final class UndefinedVariableResolver
                 $currentStmt = $node;
             }
             if (!$node instanceof Variable) {
+                $checkedVariables = $this->resolveCheckedVariables($node, $checkedVariables);
                 return null;
             }
             // after variable variable, the variable name got unpredictable, just stop
