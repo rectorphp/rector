@@ -1,4 +1,4 @@
-# 370 Rules Overview
+# 369 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodingStyle](#codingstyle) (34)
 
-- [DeadCode](#deadcode) (43)
+- [DeadCode](#deadcode) (42)
 
 - [DependencyInjection](#dependencyinjection) (1)
 
@@ -2746,27 +2746,6 @@ Remove empty class methods not required by parents
 -    {
 -    }
  }
-```
-
-<br>
-
-### RemoveEmptyMethodCallRector
-
-Remove empty method call
-
-- class: [`Rector\DeadCode\Rector\MethodCall\RemoveEmptyMethodCallRector`](../rules/DeadCode/Rector/MethodCall/RemoveEmptyMethodCallRector.php)
-
-```diff
- class SomeClass
- {
-     public function callThis()
-     {
-     }
- }
-
--$some = new SomeClass();
--$some->callThis();
-+$some = new SomeClass();
 ```
 
 <br>
