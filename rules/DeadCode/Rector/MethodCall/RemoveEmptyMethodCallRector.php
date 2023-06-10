@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\MethodCall;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
@@ -134,14 +133,6 @@ CODE_SAMPLE
         }
         return $this->reflectionAstResolver->resolveClassFromName($classReflection->getName());
     }
-    private function shouldSkipMethodCall(MethodCall $methodCall) : bool
-    {
-        if ($this->callAnalyzer->isObjectCall($methodCall->var)) {
-            return \true;
-        }
-        $parentArg = $this->betterNodeFinder->findParentType($methodCall, Arg::class);
-        return $parentArg instanceof Arg;
-    }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
      */
@@ -178,7 +169,7 @@ CODE_SAMPLE
     }
     private function shouldRemoveMethodCall(MethodCall $methodCall) : bool
     {
-        if ($this->shouldSkipMethodCall($methodCall)) {
+        if ($this->callAnalyzer->isObjectCall($methodCall->var)) {
             return \false;
         }
         $callerType = $this->getType($methodCall->var);
