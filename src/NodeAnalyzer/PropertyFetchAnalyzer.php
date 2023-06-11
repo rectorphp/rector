@@ -12,17 +12,18 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ThisType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -50,15 +51,21 @@ final class PropertyFetchAnalyzer
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
      * @var string
      */
     private const THIS = 'this';
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, NodeTypeResolver $nodeTypeResolver, ReflectionResolver $reflectionResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
         $this->astResolver = $astResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function isLocalPropertyFetch(Node $node) : bool
     {
@@ -67,9 +74,9 @@ final class PropertyFetchAnalyzer
         }
         $variableType = $node instanceof PropertyFetch ? $this->nodeTypeResolver->getType($node->var) : $this->nodeTypeResolver->getType($node->class);
         if ($variableType instanceof FullyQualifiedObjectType) {
-            $currentClassLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-            if ($currentClassLike instanceof ClassLike) {
-                return $this->nodeNameResolver->isName($currentClassLike, $variableType->getClassName());
+            $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+            if ($classReflection instanceof ClassReflection) {
+                return $classReflection->getName() === $variableType->getClassName();
             }
             return \false;
         }
@@ -137,11 +144,14 @@ final class PropertyFetchAnalyzer
             if (!$callerClassMethod instanceof ClassMethod) {
                 continue;
             }
-            $callerClass = $this->betterNodeFinder->findParentType($callerClassMethod, Class_::class);
-            if (!$callerClass instanceof Class_) {
+            $callerClassReflection = $this->reflectionResolver->resolveClassReflection($callerClassMethod);
+            if (!$callerClassReflection instanceof ClassReflection) {
                 continue;
             }
-            $callerClassName = (string) $this->nodeNameResolver->getName($callerClass);
+            if (!$callerClassReflection->isClass()) {
+                continue;
+            }
+            $callerClassName = $callerClassReflection->getName();
             $isFound = $this->isPropertyAssignFoundInClassMethod($classLike, $className, $callerClassName, $callerClassMethod, $propertyName);
             if ($isFound) {
                 return \true;
