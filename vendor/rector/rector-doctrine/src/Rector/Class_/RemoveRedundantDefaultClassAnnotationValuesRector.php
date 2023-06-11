@@ -16,7 +16,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveRedundantDefaultClassAnnotationValuesRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\DoctrineItemDefaultValueManipulator
      */
     private $doctrineItemDefaultValueManipulator;

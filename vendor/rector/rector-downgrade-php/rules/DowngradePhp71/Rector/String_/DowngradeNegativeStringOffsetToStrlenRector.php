@@ -4,17 +4,12 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp71\Rector\String_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Scalar\LNumber;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -26,13 +21,13 @@ final class DowngradeNegativeStringOffsetToStrlenRector extends AbstractRector
     {
         return new RuleDefinition('Downgrade negative string offset to strlen', [new CodeSample(<<<'CODE_SAMPLE'
 echo 'abcdef'[-2];
-echo strpos('aabbcc', 'b', -3);
-echo strpos($var, 'b', -3);
+
+echo strpos($value, 'b', -3);
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-echo 'abcdef'[strlen('abcdef') - 2];
-echo strpos('aabbcc', 'b', strlen('aabbcc') - 3);
-echo strpos($var, 'b', strlen($var) - 3);
+echo substr('abcdef', -2, 1);
+
+echo strpos($value, 'b', strlen($value) - 3);
 CODE_SAMPLE
 )]);
     }
@@ -41,44 +36,21 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [FuncCall::class, String_::class, Variable::class, PropertyFetch::class, StaticPropertyFetch::class];
+        return [FuncCall::class, ArrayDimFetch::class];
     }
     /**
-     * @param FuncCall|String_|Variable|PropertyFetch|StaticPropertyFetch $node
+     * @param FuncCall|ArrayDimFetch $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof FuncCall) {
-            return $this->processForFuncCall($node);
+        if ($node instanceof ArrayDimFetch) {
+            return $this->refactorArrayDimFetch($node);
         }
-        return $this->processForStringOrVariableOrProperty($node);
-    }
-    /**
-     * @param \PhpParser\Node\Scalar\String_|\PhpParser\Node\Expr\Variable|\PhpParser\Node\Expr\PropertyFetch|\PhpParser\Node\Expr\StaticPropertyFetch $expr
-     */
-    private function processForStringOrVariableOrProperty($expr) : ?Expr
-    {
-        $nextNode = $this->betterNodeFinder->resolveNextNode($expr);
-        if (!$nextNode instanceof UnaryMinus) {
-            return null;
-        }
-        $parentOfNextNode = $nextNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentOfNextNode instanceof ArrayDimFetch) {
-            return null;
-        }
-        if (!$this->nodeComparator->areNodesEqual($parentOfNextNode->dim, $nextNode)) {
-            return null;
-        }
-        /** @var UnaryMinus $dim */
-        $dim = $parentOfNextNode->dim;
-        $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$expr]);
-        $parentOfNextNode->dim = new Minus($strlenFuncCall, $dim->expr);
-        return $expr;
+        return $this->processForFuncCall($node);
     }
     private function processForFuncCall(FuncCall $funcCall) : ?FuncCall
     {
-        $name = $this->getName($funcCall);
-        if ($name !== 'strpos') {
+        if (!$this->isName($funcCall, 'strpos')) {
             return null;
         }
         $args = $funcCall->getArgs();
@@ -92,5 +64,17 @@ CODE_SAMPLE
         $strlenFuncCall = $this->nodeFactory->createFuncCall('strlen', [$args[0]]);
         $thirdArg->value = new Minus($strlenFuncCall, $thirdArg->value->expr);
         return $funcCall;
+    }
+    private function refactorArrayDimFetch(ArrayDimFetch $arrayDimFetch) : ?FuncCall
+    {
+        if (!$arrayDimFetch->dim instanceof UnaryMinus) {
+            return null;
+        }
+        $unaryMinus = $arrayDimFetch->dim;
+        if (!$unaryMinus->expr instanceof LNumber) {
+            return null;
+        }
+        $lNumber = $unaryMinus->expr;
+        return $this->nodeFactory->createFuncCall('substr', [$arrayDimFetch->var, new LNumber(-$lNumber->value), new LNumber(1)]);
     }
 }

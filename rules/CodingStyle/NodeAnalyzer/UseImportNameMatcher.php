@@ -17,12 +17,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class UseImportNameMatcher
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;

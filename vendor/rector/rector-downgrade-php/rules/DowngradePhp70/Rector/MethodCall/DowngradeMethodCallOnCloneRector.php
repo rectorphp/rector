@@ -22,7 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeMethodCallOnCloneRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;

@@ -19,7 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeMixedTypeDeclarationRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PhpDocDecorator\PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;

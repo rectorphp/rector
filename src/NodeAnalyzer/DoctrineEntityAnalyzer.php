@@ -11,7 +11,6 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 final class DoctrineEntityAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
@@ -41,7 +40,7 @@ final class DoctrineEntityAnalyzer
         }
         foreach (self::DOCTRINE_MAPPING_CLASSES as $doctrineMappingClass) {
             // skip entities
-            if ((\method_exists($nativeReflectionClass, 'getAttributes') ? $nativeReflectionClass->getAttributes($doctrineMappingClass) : []) !== []) {
+            if ($nativeReflectionClass->getAttributes($doctrineMappingClass) !== []) {
                 return \true;
             }
         }

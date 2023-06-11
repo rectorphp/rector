@@ -9,12 +9,10 @@ use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 final class EmptyConfigurableRectorChecker
 {
     /**
-     * @readonly
      * @var \Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector
      */
     private $emptyConfigurableRectorCollector;
     /**
-     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;

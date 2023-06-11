@@ -13,7 +13,6 @@ use Rector\Core\Reflection\ReflectionResolver;
 final class ExclusiveNativeCallLikeReturnMatcher
 {
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

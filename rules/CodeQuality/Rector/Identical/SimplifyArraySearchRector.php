@@ -20,7 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyArraySearchRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;

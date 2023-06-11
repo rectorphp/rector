@@ -6,13 +6,11 @@ namespace Rector\Core\ValueObject\Bootstrap;
 final class BootstrapConfigs
 {
     /**
-     * @readonly
      * @var string|null
      */
     private $mainConfigFile;
     /**
      * @var string[]
-     * @readonly
      */
     private $setConfigFiles;
     /**

@@ -19,17 +19,14 @@ use Rector\Php80\ValueObject\MatchResult;
 final class MatchFactory
 {
     /**
-     * @readonly
      * @var \Rector\Php80\NodeFactory\MatchArmsFactory
      */
     private $matchArmsFactory;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer
      */
     private $matchSwitchAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

@@ -27,22 +27,18 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final class PhpDocInfoPrinter
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Printer\EmptyPhpDocDetector
      */
     private $emptyPhpDocDetector;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Printer\DocBlockInliner
      */
     private $docBlockInliner;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Printer\RemoveNodesStartAndEndResolver
      */
     private $removeNodesStartAndEndResolver;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocNodeVisitor\ChangedPhpDocNodeVisitor
      */
     private $changedPhpDocNodeVisitor;

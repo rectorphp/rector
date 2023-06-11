@@ -21,12 +21,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ContainerGetNameToTypeInTestsRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver
      */
     private $serviceTypeMethodCallResolver;

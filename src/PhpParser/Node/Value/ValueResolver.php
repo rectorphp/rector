@@ -33,32 +33,26 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ValueResolver
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ConstFetchAnalyzer
      */
     private $constFetchAnalyzer;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

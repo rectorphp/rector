@@ -25,7 +25,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NullifyUnionNullableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper
      */
     private $unionTypeMapper;

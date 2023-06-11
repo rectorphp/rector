@@ -13,7 +13,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ArrayDimFetchTypeResolver
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

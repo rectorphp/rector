@@ -29,27 +29,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromStrictConstructorRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\TrustedClassMethodPropertyTypeInferer
      */
     private $trustedClassMethodPropertyTypeInferer;
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard
      */
     private $propertyTypeOverrideGuard;

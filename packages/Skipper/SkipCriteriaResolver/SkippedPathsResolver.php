@@ -12,12 +12,10 @@ use Rector\Core\FileSystem\FilePathHelper;
 final class SkippedPathsResolver
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;

@@ -10,7 +10,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;

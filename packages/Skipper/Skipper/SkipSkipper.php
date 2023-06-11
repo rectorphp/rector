@@ -7,7 +7,6 @@ use Rector\Skipper\Matcher\FileInfoMatcher;
 final class SkipSkipper
 {
     /**
-     * @readonly
      * @var \Rector\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;

@@ -14,12 +14,10 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AdditionalAutoloader
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @readonly
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;

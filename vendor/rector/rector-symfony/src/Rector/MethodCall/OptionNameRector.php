@@ -19,12 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class OptionNameRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
     private $formAddMethodCallAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher
      */
     private $formOptionsArrayMatcher;

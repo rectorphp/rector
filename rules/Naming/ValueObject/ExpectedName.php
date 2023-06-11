@@ -6,12 +6,10 @@ namespace Rector\Naming\ValueObject;
 final class ExpectedName
 {
     /**
-     * @readonly
      * @var string
      */
     private $name;
     /**
-     * @readonly
      * @var string
      */
     private $singularized;

@@ -33,27 +33,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeInstanceToClassConstRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormInstanceToFormClassConstFetchConverter
      */
     private $formInstanceToFormClassConstFetchConverter;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
     private $formAddMethodCallAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher
      */
     private $formOptionsArrayMatcher;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer
      */
     private $formCollectionAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;

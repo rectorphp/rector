@@ -24,7 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemovePhpVersionIdCheckRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

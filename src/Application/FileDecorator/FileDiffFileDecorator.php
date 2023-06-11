@@ -8,7 +8,6 @@ use Rector\Core\ValueObject\Application\File;
 final class FileDiffFileDecorator
 {
     /**
-     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;

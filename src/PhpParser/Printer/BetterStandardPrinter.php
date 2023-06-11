@@ -39,12 +39,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class BetterStandardPrinter extends Standard
 {
     /**
-     * @readonly
      * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
     private $docBlockUpdater;
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;

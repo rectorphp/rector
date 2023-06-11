@@ -7,7 +7,6 @@ use Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
 final class ComposerJsonAwareCodeSample extends AbstractCodeSample
 {
     /**
-     * @readonly
      * @var string
      */
     private $composerJson;

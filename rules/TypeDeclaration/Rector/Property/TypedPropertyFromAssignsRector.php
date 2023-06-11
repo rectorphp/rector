@@ -27,22 +27,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromAssignsRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer
      */
     private $allAssignNodePropertyTypeInferer;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
     /**
-     * @readonly
      * @var \Rector\Php74\Guard\MakePropertyTypedGuard
      */
     private $makePropertyTypedGuard;

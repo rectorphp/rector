@@ -10,14 +10,9 @@ namespace Rector\Caching\ValueObject;
 final class CacheItem
 {
     /**
-     * @readonly
      * @var string
      */
     private $variableKey;
-    /**
-     * @readonly
-     * @var mixed
-     */
     private $data;
     /**
      * @param mixed $data

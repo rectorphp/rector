@@ -14,17 +14,14 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PropertyDecorator
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;

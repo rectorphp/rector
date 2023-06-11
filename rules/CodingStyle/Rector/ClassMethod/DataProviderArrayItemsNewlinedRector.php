@@ -18,7 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DataProviderArrayItemsNewlinedRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

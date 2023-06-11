@@ -36,12 +36,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeArrayKeyFirstLastRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     /**
-     * @readonly
      * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
      */
     private $exprInTopStmtMatcher;

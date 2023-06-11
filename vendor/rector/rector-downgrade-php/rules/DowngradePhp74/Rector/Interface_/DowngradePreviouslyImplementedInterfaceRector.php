@@ -16,7 +16,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePreviouslyImplementedInterfaceRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;

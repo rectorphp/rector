@@ -9,7 +9,6 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 final class PhpVersionedFilter
 {
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

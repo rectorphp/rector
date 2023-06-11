@@ -27,27 +27,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedNonEmptyArrayBeforeForeachRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\NodeManipulator\CountManipulator
      */
     private $countManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
-     * @readonly
      * @var \Rector\DeadCode\UselessIfCondBeforeForeachDetector
      */
     private $uselessIfCondBeforeForeachDetector;
     /**
-     * @readonly
      * @var \Rector\Core\Php\ReservedKeywordAnalyzer
      */
     private $reservedKeywordAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;

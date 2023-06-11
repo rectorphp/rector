@@ -22,7 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer
      */
     private $nullableTypeAnalyzer;

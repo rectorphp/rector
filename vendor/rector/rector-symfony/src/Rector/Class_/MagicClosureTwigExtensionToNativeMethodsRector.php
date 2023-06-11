@@ -26,7 +26,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MagicClosureTwigExtensionToNativeMethodsRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
      */
     private $arrayCallableMethodMatcher;

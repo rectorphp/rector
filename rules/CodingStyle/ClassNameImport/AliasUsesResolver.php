@@ -12,12 +12,10 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class AliasUsesResolver
 {
     /**
-     * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\UseImportsTraverser
      */
     private $useImportsTraverser;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

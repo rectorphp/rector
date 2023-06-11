@@ -22,17 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ContainerGetToConstructorInjectionRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\DependencyInjectionMethodCallAnalyzer
      */
     private $dependencyInjectionMethodCallAnalyzer;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;

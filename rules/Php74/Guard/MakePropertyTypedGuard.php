@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Property;
 final class MakePropertyTypedGuard
 {
     /**
-     * @readonly
      * @var \Rector\Php74\Guard\PropertyTypeChangeGuard
      */
     private $propertyTypeChangeGuard;

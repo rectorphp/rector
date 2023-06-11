@@ -14,12 +14,10 @@ use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
 final class ShortClassExpander
 {
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;

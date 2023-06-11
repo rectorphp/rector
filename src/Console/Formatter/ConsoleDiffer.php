@@ -9,7 +9,6 @@ use RectorPrefix202306\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 final class ConsoleDiffer
 {
     /**
-     * @readonly
      * @var \Rector\Core\Console\Formatter\ColorConsoleDiffFormatter
      */
     private $colorConsoleDiffFormatter;

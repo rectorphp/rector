@@ -22,22 +22,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnAnnotationIncorrectNullableRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper
      */
     private $phpDocNullableTypeHelper;
     /**
-     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard
      */
     private $phpDocNestedAnnotationGuard;

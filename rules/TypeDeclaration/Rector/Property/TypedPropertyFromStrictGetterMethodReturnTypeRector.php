@@ -27,22 +27,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromStrictGetterMethodReturnTypeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer
      */
     private $getterTypeDeclarationPropertyTypeInferer;
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
     /**
-     * @readonly
      * @var \Rector\Privatization\Guard\ParentPropertyLookupGuard
      */
     private $parentPropertyLookupGuard;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

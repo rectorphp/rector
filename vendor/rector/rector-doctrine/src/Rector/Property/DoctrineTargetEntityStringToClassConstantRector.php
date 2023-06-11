@@ -27,12 +27,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DoctrineTargetEntityStringToClassConstantRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Doctrine\PhpDocParser\DoctrineClassAnnotationMatcher
      */
     private $doctrineClassAnnotationMatcher;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;

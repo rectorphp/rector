@@ -9,22 +9,18 @@ use Rector\Core\Validation\RectorAssert;
 final class ArgumentAdder
 {
     /**
-     * @readonly
      * @var string
      */
     private $class;
     /**
-     * @readonly
      * @var string
      */
     private $method;
     /**
-     * @readonly
      * @var int
      */
     private $position;
     /**
-     * @readonly
      * @var string|null
      */
     private $argumentName;
@@ -33,12 +29,10 @@ final class ArgumentAdder
      */
     private $argumentDefaultValue = null;
     /**
-     * @readonly
      * @var \PHPStan\Type\Type|null
      */
-    private $argumentType = null;
+    private $argumentType;
     /**
-     * @readonly
      * @var string|null
      */
     private $scope;

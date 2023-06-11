@@ -32,22 +32,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReadOnlyClassRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

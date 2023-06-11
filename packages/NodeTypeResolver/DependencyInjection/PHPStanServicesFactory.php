@@ -25,12 +25,10 @@ use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
 final class PHPStanServicesFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver
      */
     private $phpStanExtensionsConfigResolver;

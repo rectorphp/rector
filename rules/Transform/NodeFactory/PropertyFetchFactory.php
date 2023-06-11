@@ -10,7 +10,6 @@ use Rector\Naming\Naming\PropertyNaming;
 final class PropertyFetchFactory
 {
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;

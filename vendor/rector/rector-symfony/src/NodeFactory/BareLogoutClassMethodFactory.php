@@ -14,12 +14,10 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 final class BareLogoutClassMethodFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

@@ -36,27 +36,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeCovariantReturnTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;
     /**
-     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
     private $unionTypeAnalyzer;

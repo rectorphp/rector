@@ -22,12 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeFromStrictBoolReturnExprRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\StrictBoolReturnTypeAnalyzer
      */
     private $strictBoolReturnTypeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;

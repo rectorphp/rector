@@ -20,17 +20,14 @@ use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
 final class GenericClassStringTypeNormalizer
 {
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer
      */
     private $detailedTypeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer
      */
     private $unionTypeAnalyzer;

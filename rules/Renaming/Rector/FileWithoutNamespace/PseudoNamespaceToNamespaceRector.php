@@ -26,7 +26,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class PseudoNamespaceToNamespaceRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\PhpDocTypeRenamer
      */
     private $phpDocTypeRenamer;

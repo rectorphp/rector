@@ -31,32 +31,26 @@ use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 final class GetSubscribedEventsClassMethodFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeFactory\EventReferenceFactory
      */
     private $eventReferenceFactory;

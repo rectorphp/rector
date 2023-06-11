@@ -28,7 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StringToArrayArgumentProcessRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeTransformer
      */
     private $nodeTransformer;

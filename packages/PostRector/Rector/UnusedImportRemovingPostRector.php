@@ -22,17 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;

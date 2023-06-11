@@ -28,12 +28,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArrayShapeFromConstantArrayReturnRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\TypeAnalyzer\ClassMethodReturnTypeResolver
      */
     private $classMethodReturnTypeResolver;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;

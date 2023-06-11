@@ -17,7 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePhp80ResourceReturnToObjectRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn
      */
     private $objectToResourceReturn;

@@ -7,7 +7,6 @@ use PHPStan\Type\StaticType;
 final class SimpleStaticType extends StaticType
 {
     /**
-     * @readonly
      * @var string
      */
     private $className;

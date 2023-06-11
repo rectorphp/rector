@@ -15,7 +15,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUselessReturnTagRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ReturnTagRemover
      */
     private $returnTagRemover;

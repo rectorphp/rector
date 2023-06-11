@@ -18,22 +18,18 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class ToManyRelationPropertyTypeResolver
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Doctrine\PhpDoc\ShortClassExpander
      */
     private $shortClassExpander;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

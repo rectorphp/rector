@@ -10,12 +10,10 @@ use Rector\Core\Util\Reflection\PrivatesAccessor;
 final class TokenIteratorFactory
 {
     /**
-     * @readonly
      * @var \PHPStan\PhpDocParser\Lexer\Lexer
      */
     private $lexer;
     /**
-     * @readonly
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;

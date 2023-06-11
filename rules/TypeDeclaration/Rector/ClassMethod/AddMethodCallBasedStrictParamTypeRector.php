@@ -20,17 +20,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddMethodCallBasedStrictParamTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver
      */
     private $callTypesResolver;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter
      */
     private $classMethodParamTypeCompleter;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder
      */
     private $localMethodCallFinder;

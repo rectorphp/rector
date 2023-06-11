@@ -27,22 +27,18 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AddAllowDynamicPropertiesAttributeRector extends AbstractRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

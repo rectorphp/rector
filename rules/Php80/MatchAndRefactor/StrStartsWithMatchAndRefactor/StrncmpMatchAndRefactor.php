@@ -20,22 +20,18 @@ use Rector\Php80\ValueObjectFactory\StrStartsWithFactory;
 final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Php80\ValueObjectFactory\StrStartsWithFactory
      */
     private $strStartsWithFactory;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory
      */
     private $strStartsWithFuncCallFactory;

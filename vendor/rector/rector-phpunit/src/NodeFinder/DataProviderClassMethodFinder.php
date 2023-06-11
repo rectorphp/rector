@@ -13,17 +13,14 @@ use Rector\Core\Reflection\ReflectionResolver;
 final class DataProviderClassMethodFinder
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

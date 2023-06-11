@@ -20,7 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromDoctrineCollectionRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Doctrine\TypeAnalyzer\DoctrineCollectionTypeAnalyzer
      */
     private $doctrineCollectionTypeAnalyzer;

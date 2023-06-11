@@ -19,7 +19,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class FuncCallToMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer
      */
     private $funcCallStaticCallToMethodCallAnalyzer;

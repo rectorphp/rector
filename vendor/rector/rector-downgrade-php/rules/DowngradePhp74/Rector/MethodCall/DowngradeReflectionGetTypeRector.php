@@ -5,13 +5,14 @@ namespace Rector\DowngradePhp74\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,7 +22,7 @@ final class DowngradeReflectionGetTypeRector extends AbstractRector
 {
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Downgrade reflection $refleciton->getType() method call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Downgrade reflection $reflection->getType() method call', [new CodeSample(<<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(ReflectionProperty $reflectionProperty)
@@ -54,31 +55,41 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [MethodCall::class, Instanceof_::class, FuncCall::class];
     }
     /**
-     * @param MethodCall $node
+     * @param MethodCall|Instanceof_|FuncCall $node
+     * @return \PhpParser\Node|null|int
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
+        if ($node instanceof Instanceof_) {
+            return $this->checkInstanceof($node);
+        }
+        if ($node instanceof FuncCall) {
+            return $this->checkFuncCall($node);
+        }
         if (!$this->isName($node->name, 'getType')) {
             return null;
         }
         if (!$this->isObjectType($node->var, new ObjectType('ReflectionProperty'))) {
             return null;
         }
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Instanceof_) {
-            return null;
-        }
         $args = [new Arg($node->var), new Arg(new String_('getType'))];
-        $ternary = new Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, $this->nodeFactory->createNull());
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Ternary) {
-            return $ternary;
+        return new Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, $this->nodeFactory->createNull());
+    }
+    private function checkInstanceof(Instanceof_ $instanceof) : ?int
+    {
+        // skip instance of on call
+        if ($instanceof->expr instanceof MethodCall) {
+            return NodeTraverser::STOP_TRAVERSAL;
         }
-        if (!$this->nodeComparator->areNodesEqual($parentNode, $ternary)) {
-            return $ternary;
+        return null;
+    }
+    private function checkFuncCall(FuncCall $funcCall) : ?int
+    {
+        if ($this->isName($funcCall, 'method_exists')) {
+            return NodeTraverser::STOP_TRAVERSAL;
         }
         return null;
     }

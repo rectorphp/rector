@@ -22,7 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceParentRepositoryCallsByRepositoryPropertyRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;

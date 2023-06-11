@@ -3,11 +3,17 @@
 declare (strict_types=1);
 namespace Rector\DowngradePhp73\Rector\ConstFetch;
 
+use RectorPrefix202306\Nette\Utils\Json;
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner;
+use Rector\Enum\JsonConstant;
+use Rector\NodeAnalyzer\DefineFuncCallAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -18,17 +24,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePhp73JsonConstRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DowngradePhp72\NodeManipulator\JsonConstCleaner
      */
     private $jsonConstCleaner;
     /**
-     * @var string[]
+     * @var \Rector\NodeAnalyzer\DefineFuncCallAnalyzer
      */
-    private const CONSTANTS = ['JSON_THROW_ON_ERROR'];
-    public function __construct(JsonConstCleaner $jsonConstCleaner)
+    private $defineFuncCallAnalyzer;
+    public function __construct(JsonConstCleaner $jsonConstCleaner, DefineFuncCallAnalyzer $defineFuncCallAnalyzer)
     {
         $this->jsonConstCleaner = $jsonConstCleaner;
+        $this->defineFuncCallAnalyzer = $defineFuncCallAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -45,13 +51,20 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ConstFetch::class, BitwiseOr::class];
+        return [ConstFetch::class, BitwiseOr::class, FuncCall::class];
     }
     /**
-     * @param ConstFetch|BitwiseOr $node
+     * @param ConstFetch|BitwiseOr|FuncCall $node
+     * @return int|null|\PhpParser\Node\Expr
      */
-    public function refactor(Node $node) : ?Node
+    public function refactor(Node $node)
     {
-        return $this->jsonConstCleaner->clean($node, self::CONSTANTS);
+        if ($node instanceof FuncCall) {
+            if ($this->defineFuncCallAnalyzer->isDefinedWithConstants($node, [JsonConstant::THROW_ON_ERROR])) {
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
+            return null;
+        }
+        return $this->jsonConstCleaner->clean($node, [JsonConstant::THROW_ON_ERROR]);
     }
 }

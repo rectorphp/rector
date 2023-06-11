@@ -20,7 +20,6 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class CallAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

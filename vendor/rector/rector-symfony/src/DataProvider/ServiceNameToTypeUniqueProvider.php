@@ -6,7 +6,6 @@ namespace Rector\Symfony\DataProvider;
 final class ServiceNameToTypeUniqueProvider
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;

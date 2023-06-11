@@ -49,77 +49,62 @@ use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 final class PropertyManipulator
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\ReadWrite\Guard\VariableToConstantGuard
      */
     private $variableToConstantGuard;
     /**
-     * @readonly
      * @var \Rector\ReadWrite\NodeAnalyzer\ReadWritePropertyAnalyzer
      */
     private $readWritePropertyAnalyzer;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
     private $propertyFetchFinder;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver
      */
     private $promotedPropertyResolver;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\Util\MultiInstanceofChecker
      */
     private $multiInstanceofChecker;

@@ -10,7 +10,6 @@ use Rector\PhpAttribute\NodeFactory\PhpNestedAttributeGroupFactory;
 final class NestedAttrGroupsFactory
 {
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\PhpNestedAttributeGroupFactory
      */
     private $phpNestedAttributeGroupFactory;

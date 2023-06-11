@@ -20,7 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class Php81ResourceReturnToObjectRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Php80\NodeManipulator\ResourceReturnToObject
      */
     private $resourceReturnToObject;

@@ -8,7 +8,6 @@ use RectorPrefix202306\Nette\Utils\Strings;
 final class RectorNamingInflector
 {
     /**
-     * @readonly
      * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;

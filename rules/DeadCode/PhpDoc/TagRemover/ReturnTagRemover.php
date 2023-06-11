@@ -10,7 +10,6 @@ use Rector\DeadCode\PhpDoc\DeadReturnTagValueNodeAnalyzer;
 final class ReturnTagRemover
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\DeadReturnTagValueNodeAnalyzer
      */
     private $deadReturnTagValueNodeAnalyzer;

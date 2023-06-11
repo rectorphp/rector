@@ -12,7 +12,6 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocTypeRenamer
 {
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;

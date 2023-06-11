@@ -10,7 +10,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class StmtMethodCallMatcher
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

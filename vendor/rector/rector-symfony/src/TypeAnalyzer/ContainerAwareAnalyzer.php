@@ -9,7 +9,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ContainerAwareAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

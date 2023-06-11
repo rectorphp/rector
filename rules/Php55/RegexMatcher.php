@@ -11,7 +11,6 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class RegexMatcher
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite2344e7f695ffca0f67f4f7d8d961212
+class ComposerStaticInit65a1d0bd1db1a79af5b6a3531e0274a3
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2199,6 +2199,7 @@ class ComposerStaticInite2344e7f695ffca0f67f4f7d8d961212
         'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryOrToEarlyReturnRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryOrToEarlyReturnRector.php',
         'Rector\\EarlyReturn\\Rector\\StmtsAwareInterface\\ReturnEarlyIfVariableRector' => __DIR__ . '/../..' . '/rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php',
         'Rector\\EarlyReturn\\ValueObject\\BareSingleAssignIf' => __DIR__ . '/../..' . '/rules/EarlyReturn/ValueObject/BareSingleAssignIf.php',
+        'Rector\\Enum\\JsonConstant' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/Enum/JsonConstant.php',
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
@@ -2253,6 +2254,7 @@ class ComposerStaticInite2344e7f695ffca0f67f4f7d8d961212
         'Rector\\Naming\\ValueObject\\VariableAndCallForeach' => __DIR__ . '/../..' . '/rules/Naming/ValueObject/VariableAndCallForeach.php',
         'Rector\\Naming\\VariableRenamer' => __DIR__ . '/../..' . '/rules/Naming/VariableRenamer.php',
         'Rector\\NodeAnalyzer\\CoalesceAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/CoalesceAnalyzer.php',
+        'Rector\\NodeAnalyzer\\DefineFuncCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/DefineFuncCallAnalyzer.php',
         'Rector\\NodeAnalyzer\\ExprInTopStmtMatcher' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/ExprInTopStmtMatcher.php',
         'Rector\\NodeAnalyzer\\MethodCallTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/MethodCallTypeAnalyzer.php',
         'Rector\\NodeCollector\\BinaryOpConditionsCollector' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpConditionsCollector.php',
@@ -3127,9 +3129,9 @@ class ComposerStaticInite2344e7f695ffca0f67f4f7d8d961212
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite2344e7f695ffca0f67f4f7d8d961212::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite2344e7f695ffca0f67f4f7d8d961212::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite2344e7f695ffca0f67f4f7d8d961212::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit65a1d0bd1db1a79af5b6a3531e0274a3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit65a1d0bd1db1a79af5b6a3531e0274a3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit65a1d0bd1db1a79af5b6a3531e0274a3::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -20,32 +20,26 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class MatchPropertyTypeExpectedNameResolver
 {
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;

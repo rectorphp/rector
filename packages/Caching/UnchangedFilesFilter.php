@@ -7,7 +7,6 @@ use Rector\Caching\Detector\ChangedFilesDetector;
 final class UnchangedFilesFilter
 {
     /**
-     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;

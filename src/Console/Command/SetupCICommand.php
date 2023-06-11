@@ -15,7 +15,6 @@ use RectorPrefix202306\Symfony\Component\Process\Process;
 final class SetupCICommand extends Command
 {
     /**
-     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;

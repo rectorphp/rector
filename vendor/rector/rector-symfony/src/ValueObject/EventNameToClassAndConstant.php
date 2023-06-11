@@ -6,17 +6,14 @@ namespace Rector\Symfony\ValueObject;
 final class EventNameToClassAndConstant
 {
     /**
-     * @readonly
      * @var string
      */
     private $eventName;
     /**
-     * @readonly
      * @var string
      */
     private $eventClass;
     /**
-     * @readonly
      * @var string
      */
     private $eventConstant;

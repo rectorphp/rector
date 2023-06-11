@@ -12,17 +12,14 @@ use Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\AlwaysStrictReturnAna
 final class StrictReturnClassConstReturnTypeAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\AlwaysStrictReturnAnalyzer
      */
     private $alwaysStrictReturnAnalyzer;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

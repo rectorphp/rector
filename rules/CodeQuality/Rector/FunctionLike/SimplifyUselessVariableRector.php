@@ -28,17 +28,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyUselessVariableRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;

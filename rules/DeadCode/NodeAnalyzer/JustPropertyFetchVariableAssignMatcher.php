@@ -14,7 +14,6 @@ use Rector\DeadCode\ValueObject\VariableAndPropertyFetchAssign;
 final class JustPropertyFetchVariableAssignMatcher
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

@@ -39,32 +39,26 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeFromReturnNewRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\StrictReturnNewAnalyzer
      */
     private $strictReturnNewAnalyzer;
     /**
-     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;

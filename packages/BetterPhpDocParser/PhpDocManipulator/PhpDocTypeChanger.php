@@ -37,37 +37,30 @@ use Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory;
 final class PhpDocTypeChanger
 {
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
     private $commentsMerger;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Guard\NewPhpDocFromPHPStanTypeGuard
      */
     private $newPhpDocFromPHPStanTypeGuard;

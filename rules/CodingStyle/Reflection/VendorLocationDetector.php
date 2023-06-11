@@ -8,7 +8,6 @@ use Rector\Core\FileSystem\FilePathHelper;
 final class VendorLocationDetector
 {
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;

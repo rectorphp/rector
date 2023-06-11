@@ -16,7 +16,6 @@ final class PhpParserNodeMapper
 {
     /**
      * @var PhpParserNodeMapperInterface[]
-     * @readonly
      */
     private $phpParserNodeMappers;
     /**

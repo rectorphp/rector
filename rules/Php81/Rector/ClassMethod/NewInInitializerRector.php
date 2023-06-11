@@ -28,17 +28,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NewInInitializerRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Php81\NodeAnalyzer\CoalesePropertyAssignMatcher
      */
     private $coalesePropertyAssignMatcher;

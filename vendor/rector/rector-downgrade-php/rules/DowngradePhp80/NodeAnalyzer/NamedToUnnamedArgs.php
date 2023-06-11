@@ -17,12 +17,10 @@ use ReflectionFunction;
 final class NamedToUnnamedArgs
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\DowngradePhp80\Reflection\DefaultParameterValueResolver
      */
     private $defaultParameterValueResolver;

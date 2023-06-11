@@ -19,12 +19,10 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 final class StaticDoctrineAnnotationParser
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser
      */
     private $plainValueParser;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser
      */
     private $arrayParser;

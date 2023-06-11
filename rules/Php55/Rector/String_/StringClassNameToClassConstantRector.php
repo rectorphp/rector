@@ -28,7 +28,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class StringClassNameToClassConstantRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

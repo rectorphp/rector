@@ -25,32 +25,26 @@ use Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer;
 final class DeadParamTagValueNodeAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
     /**
-     * @readonly
      * @var \Rector\DeadCode\TypeNodeAnalyzer\GenericTypeNodeAnalyzer
      */
     private $genericTypeNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer
      */
     private $mixedArrayTypeNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;

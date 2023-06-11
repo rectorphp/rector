@@ -6,17 +6,14 @@ namespace Rector\Transform\ValueObject;
 final class MethodCallToFuncCall
 {
     /**
-     * @readonly
      * @var string
      */
     private $objectType;
     /**
-     * @readonly
      * @var string
      */
     private $methodName;
     /**
-     * @readonly
      * @var string
      */
     private $functionName;

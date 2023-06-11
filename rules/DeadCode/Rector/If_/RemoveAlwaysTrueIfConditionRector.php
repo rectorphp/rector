@@ -26,12 +26,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveAlwaysTrueIfConditionRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;

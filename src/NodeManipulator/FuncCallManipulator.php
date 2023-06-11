@@ -9,7 +9,6 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class FuncCallManipulator
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

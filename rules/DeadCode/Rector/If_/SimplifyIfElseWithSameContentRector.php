@@ -18,7 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfElseWithSameContentRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

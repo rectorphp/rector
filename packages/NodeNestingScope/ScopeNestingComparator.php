@@ -14,12 +14,10 @@ use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class ScopeNestingComparator
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

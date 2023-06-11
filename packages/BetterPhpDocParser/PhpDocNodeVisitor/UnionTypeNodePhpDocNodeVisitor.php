@@ -17,12 +17,10 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 final class UnionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider
      */
     private $currentTokenIteratorProvider;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;

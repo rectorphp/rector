@@ -15,17 +15,14 @@ use Rector\TypeDeclaration\NodeAnalyzer\ReturnFilter\ExclusiveNativeCallLikeRetu
 final class StrictNativeFunctionReturnTypeAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnFilter\ExclusiveNativeCallLikeReturnMatcher
      */
     private $exclusiveNativeCallLikeReturnMatcher;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;

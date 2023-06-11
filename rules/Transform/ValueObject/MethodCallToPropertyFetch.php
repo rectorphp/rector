@@ -8,17 +8,14 @@ use Rector\Core\Validation\RectorAssert;
 final class MethodCallToPropertyFetch
 {
     /**
-     * @readonly
      * @var string
      */
     private $oldType;
     /**
-     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
-     * @readonly
      * @var string
      */
     private $newProperty;

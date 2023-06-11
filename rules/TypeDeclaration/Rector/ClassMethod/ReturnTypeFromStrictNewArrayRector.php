@@ -37,17 +37,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnTypeFromStrictNewArrayRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
     /**
-     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;

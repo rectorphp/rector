@@ -6,17 +6,14 @@ namespace Rector\PHPStanStaticTypeMapper\ValueObject;
 final class UnionTypeAnalysis
 {
     /**
-     * @readonly
      * @var bool
      */
     private $isNullableType;
     /**
-     * @readonly
      * @var bool
      */
     private $hasIterable;
     /**
-     * @readonly
      * @var bool
      */
     private $hasArray;

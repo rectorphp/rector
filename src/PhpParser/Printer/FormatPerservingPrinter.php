@@ -12,12 +12,10 @@ use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
 final class FormatPerservingPrinter
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     /**
-     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;

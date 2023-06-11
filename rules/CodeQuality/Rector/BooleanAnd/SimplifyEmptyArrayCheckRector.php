@@ -22,7 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyEmptyArrayCheckRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;

@@ -25,38 +25,31 @@ use Throwable;
 final class WorkerRunner
 {
     /**
-     * @readonly
      * @var \Rector\Core\Util\ArrayParametersMerger
      */
     private $arrayParametersMerger;
     /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @readonly
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
     /**
-     * @readonly
      * @var \Rector\Core\Console\Style\RectorConsoleOutputStyle
      */
     private $rectorConsoleOutputStyle;
     /**
-     * @readonly
      * @var \Rector\Core\Application\ApplicationFileProcessor
      */
     private $applicationFileProcessor;
     /**
-     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
      * @var FileProcessorInterface[]
-     * @readonly
      */
     private $fileProcessors = [];
     /**

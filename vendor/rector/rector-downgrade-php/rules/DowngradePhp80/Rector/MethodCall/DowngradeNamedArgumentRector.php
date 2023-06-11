@@ -23,17 +23,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNamedArgumentRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\DowngradePhp80\NodeAnalyzer\UnnamedArgumentResolver
      */
     private $unnamedArgumentResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;

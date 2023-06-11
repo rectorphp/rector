@@ -24,12 +24,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ProphecyPHPDocRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator
      */
     private $classMethodPropertyFetchManipulator;

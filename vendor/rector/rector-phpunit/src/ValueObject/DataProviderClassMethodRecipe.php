@@ -8,13 +8,11 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class DataProviderClassMethodRecipe
 {
     /**
-     * @readonly
      * @var string
      */
     private $methodName;
     /**
      * @var Arg[]
-     * @readonly
      */
     private $args;
     /**

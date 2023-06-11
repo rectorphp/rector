@@ -12,7 +12,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class FileWithoutNamespaceNodeTraverser extends NodeTraverser
 {
     /**
-     * @readonly
      * @var \PhpParser\NodeFinder
      */
     private $nodeFinder;

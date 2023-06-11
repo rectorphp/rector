@@ -12,12 +12,10 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class DateTimeAtNamingConventionGuard
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;

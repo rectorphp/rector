@@ -13,12 +13,10 @@ final class ProcessResult
 {
     /**
      * @var SystemError[]
-     * @readonly
      */
     private $systemErrors;
     /**
      * @var FileDiff[]
-     * @readonly
      */
     private $fileDiffs;
     /**

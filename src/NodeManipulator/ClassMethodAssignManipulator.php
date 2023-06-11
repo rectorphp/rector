@@ -12,12 +12,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassMethodAssignManipulator
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

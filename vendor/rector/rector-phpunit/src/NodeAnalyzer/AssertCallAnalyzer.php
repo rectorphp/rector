@@ -17,27 +17,22 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class AssertCallAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

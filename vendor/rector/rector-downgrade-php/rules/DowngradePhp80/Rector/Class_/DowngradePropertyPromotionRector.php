@@ -31,12 +31,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePropertyPromotionRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

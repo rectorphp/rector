@@ -22,12 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyConditionsRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;

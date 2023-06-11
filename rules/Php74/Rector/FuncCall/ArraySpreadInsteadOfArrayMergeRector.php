@@ -28,12 +28,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

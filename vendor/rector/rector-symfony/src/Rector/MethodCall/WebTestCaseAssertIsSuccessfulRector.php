@@ -23,17 +23,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class WebTestCaseAssertIsSuccessfulRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer
      */
     private $symfonyTestCaseAnalyzer;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;

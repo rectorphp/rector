@@ -14,7 +14,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class NewAssignVariableNameResolver implements AssignVariableNameResolverInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

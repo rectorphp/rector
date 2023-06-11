@@ -12,7 +12,6 @@ use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
 final class ParameterSkipper
 {
     /**
-     * @readonly
      * @var \Rector\Core\DependencyInjection\TypeResolver\ParameterTypeResolver
      */
     private $parameterTypeResolver;

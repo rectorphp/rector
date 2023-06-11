@@ -11,17 +11,14 @@ use Rector\Core\Util\Reflection\PrivatesAccessor;
 final class DependencyResolver
 {
     /**
-     * @readonly
      * @var \PHPStan\Analyser\NodeScopeResolver
      */
     private $nodeScopeResolver;
     /**
-     * @readonly
      * @var PHPStanDependencyResolver
      */
     private $phpStanDependencyResolver;
     /**
-     * @readonly
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;

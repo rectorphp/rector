@@ -26,22 +26,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class OptionalParametersAfterRequiredRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\Php80\NodeResolver\RequireOptionalParamResolver
      */
     private $requireOptionalParamResolver;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeResolver\ArgumentSorter
      */
     private $argumentSorter;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
      */
     private $vendorLocationDetector;

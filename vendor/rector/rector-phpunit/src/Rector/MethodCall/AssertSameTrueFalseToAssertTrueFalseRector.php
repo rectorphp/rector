@@ -17,12 +17,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssertSameTrueFalseToAssertTrueFalseRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeManipulator\ArgumentMover
      */
     private $argumentMover;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

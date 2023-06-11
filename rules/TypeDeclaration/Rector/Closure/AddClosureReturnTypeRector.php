@@ -19,7 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddClosureReturnTypeRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;

@@ -14,22 +14,18 @@ use RectorPrefix202306\Symfony\Component\Finder\SplFileInfo;
 final class FilesFinder
 {
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\FilesystemTweaker
      */
     private $filesystemTweaker;
     /**
-     * @readonly
      * @var \Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;
     /**
-     * @readonly
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\FileAndDirectoryFilter
      */
     private $fileAndDirectoryFilter;

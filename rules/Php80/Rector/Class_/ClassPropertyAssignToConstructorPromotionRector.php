@@ -42,37 +42,30 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassPropertyAssignToConstructorPromotionRector extends AbstractRector implements MinPhpVersionInterface, AllowEmptyConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyCandidateResolver
      */
     private $promotedPropertyCandidateResolver;
     /**
-     * @readonly
      * @var \Rector\Naming\VariableRenamer
      */
     private $variableRenamer;
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\Php80\Guard\MakePropertyPromotionGuard
      */
     private $makePropertyPromotionGuard;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;

@@ -21,7 +21,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

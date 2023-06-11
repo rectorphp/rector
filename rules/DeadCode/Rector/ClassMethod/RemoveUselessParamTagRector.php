@@ -16,7 +16,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUselessParamTagRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\ParamTagRemover
      */
     private $paramTagRemover;

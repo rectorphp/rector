@@ -25,17 +25,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveJustVariableAssignRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;
     /**
-     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNextNodeAnalyzer
      */
     private $exprUsedInNextNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
     private $commentsMerger;

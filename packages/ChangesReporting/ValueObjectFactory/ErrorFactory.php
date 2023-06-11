@@ -10,12 +10,10 @@ use Rector\Core\ValueObject\Error\SystemError;
 final class ErrorFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\Error\ExceptionCorrector
      */
     private $exceptionCorrector;
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;

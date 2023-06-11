@@ -15,12 +15,10 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class EntityIdNodeFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

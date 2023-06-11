@@ -13,7 +13,6 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class ParentScopeFinder
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

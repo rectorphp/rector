@@ -19,17 +19,14 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class CollectionTypeResolver
 {
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
     private $nameScopeFactory;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Doctrine\PhpDoc\ShortClassExpander
      */
     private $shortClassExpander;

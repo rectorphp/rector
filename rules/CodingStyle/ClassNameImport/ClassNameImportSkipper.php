@@ -17,16 +17,13 @@ final class ClassNameImportSkipper
 {
     /**
      * @var ClassNameImportSkipVoterInterface[]
-     * @readonly
      */
     private $classNameImportSkipVoters;
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;

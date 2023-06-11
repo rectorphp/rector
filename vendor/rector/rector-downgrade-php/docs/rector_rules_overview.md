@@ -1,4 +1,4 @@
-# 98 Rules Overview
+# 97 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -117,9 +117,11 @@ Replace `array_is_list()` function
 +    if (function_exists('array_is_list')) {
 +        return array_is_list($array);
 +    }
++
 +    if ($array === []) {
 +        return true;
 +    }
++
 +    $current_key = 0;
 +    foreach ($array as $key => $noop) {
 +        if ($key !== $current_key) {
@@ -127,6 +129,7 @@ Replace `array_is_list()` function
 +        }
 +        ++$current_key;
 +    }
++
 +    return true;
 +};
 +$arrayIsList([1 => 'apple', 'orange']);
@@ -194,8 +197,13 @@ Replace array spread with array_merge function
      public function runWithIterable()
      {
 -        $fruits = ['banana', 'orange', ...new ArrayIterator(['durian', 'kiwi']), 'watermelon'];
-+        $item0Unpacked = new ArrayIterator(['durian', 'kiwi']);
-+        $fruits = array_merge(['banana', 'orange'], is_array($item0Unpacked) ? $item0Unpacked : iterator_to_array($item0Unpacked), ['watermelon']);
++        $fruits = array_merge(
++            ['banana', 'orange'],
++            is_array(new ArrayIterator(['durian', 'kiwi'])) ?
++                new ArrayIterator(['durian', 'kiwi']) :
++                iterator_to_array(new ArrayIterator(['durian', 'kiwi'])),
++            ['watermelon']
++        );
      }
  }
 ```
@@ -456,25 +464,6 @@ Replace the 2nd argument of `dirname()`
 
 <br>
 
-## DowngradeEnumExistsRector
-
-Replace `enum_exists()` function
-
-- class: [`Rector\DowngradePhp81\Rector\FuncCall\DowngradeEnumExistsRector`](../rules/DowngradePhp81/Rector/FuncCall/DowngradeEnumExistsRector.php)
-
-```diff
--enum_exists('SomeEnum', true);
-+$enumExists = function (string $enum, bool $autoload = true) : bool {
-+    if (function_exists('enum_exists')) {
-+        return enum_exists($enum, $autoload);
-+    }
-+    return $autoload && class_exists($enum) && false;
-+};
-+$enumExists('SomeEnum', true);
-```
-
-<br>
-
 ## DowngradeEnumToConstantListClassRector
 
 Downgrade enum to constant list class
@@ -566,8 +555,8 @@ Add `instanceof Exception` check as a fallback to `instanceof Throwable` to supp
 - class: [`Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector`](../rules/DowngradePhp70/Rector/Instanceof_/DowngradeInstanceofThrowableRector.php)
 
 ```diff
--return $e instanceof \Throwable;
-+return ($throwable = $e) instanceof \Throwable || $throwable instanceof \Exception;
+-return $exception instanceof \Throwable;
++return $exception instanceof \Throwable || $exception instanceof \Exception;
 ```
 
 <br>
@@ -821,11 +810,10 @@ Downgrade negative string offset to strlen
 
 ```diff
 -echo 'abcdef'[-2];
--echo strpos('aabbcc', 'b', -3);
--echo strpos($var, 'b', -3);
-+echo 'abcdef'[strlen('abcdef') - 2];
-+echo strpos('aabbcc', 'b', strlen('aabbcc') - 3);
-+echo strpos($var, 'b', strlen($var) - 3);
++echo substr('abcdef', -2, 1);
+
+-echo strpos($value, 'b', -3);
++echo strpos($value, 'b', strlen($value) - 3);
 ```
 
 <br>
@@ -1266,14 +1254,8 @@ Change array command argument on proc_open to implode spaced string
 - class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeProcOpenArrayCommandArgRector`](../rules/DowngradePhp74/Rector/FuncCall/DowngradeProcOpenArrayCommandArgRector.php)
 
 ```diff
- function (array|string $command)
- {
-+    if (is_array($command)) {
-+        $command = implode(" ", $command);
-+    }
-+
-     $process = proc_open($command, $descriptorspec, $pipes, null, null, ['suppress_errors' => true]);
- }
+-return proc_open($command, $descriptorspec, $pipes);
++return proc_open(is_array($command) ? implode(' ', $command) : $command, $descriptorspec, $pipes);
 ```
 
 <br>
@@ -1428,7 +1410,7 @@ Remove reflection `getAttributes()` class method code
 
 ## DowngradeReflectionGetTypeRector
 
-Downgrade reflection `$refleciton->getType()` method call
+Downgrade reflection `$reflection->getType()` method call
 
 - class: [`Rector\DowngradePhp74\Rector\MethodCall\DowngradeReflectionGetTypeRector`](../rules/DowngradePhp74/Rector/MethodCall/DowngradeReflectionGetTypeRector.php)
 
@@ -1694,7 +1676,7 @@ Add "string" return on current `__toString()` method when parent method has stri
 
 ## DowngradeStripTagsCallWithArrayRector
 
-Convert 2nd param to `strip_tags` from array to string
+Convert 2nd argument in `strip_tags()` from array to string
 
 - class: [`Rector\DowngradePhp74\Rector\FuncCall\DowngradeStripTagsCallWithArrayRector`](../rules/DowngradePhp74/Rector/FuncCall/DowngradeStripTagsCallWithArrayRector.php)
 
@@ -1711,11 +1693,6 @@ Convert 2nd param to `strip_tags` from array to string
          $tags = ['a', 'p'];
 -        strip_tags($string, $tags);
 +        strip_tags($string, $tags !== null && is_array($tags) ? '<' . implode('><', $tags) . '>' : $tags);
-
-         // Default case (eg: function call): externalize to var, then if array, change to string
--        strip_tags($string, getTags());
-+        $expr = getTags();
-+        strip_tags($string, is_array($expr) ? '<' . implode('><', $expr) . '>' : $expr);
      }
  }
 ```

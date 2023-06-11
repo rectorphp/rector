@@ -21,32 +21,26 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ParentPropertyLookupGuard
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;

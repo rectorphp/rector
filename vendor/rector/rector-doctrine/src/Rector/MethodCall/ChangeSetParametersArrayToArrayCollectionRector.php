@@ -26,12 +26,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeSetParametersArrayToArrayCollectionRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\ArrayTypeAnalyzer
      */
     private $arrayTypeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Defluent\NodeAnalyzer\FluentChainMethodCallNodeAnalyzer
      */
     private $fluentChainMethodCallNodeAnalyzer;

@@ -24,7 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeClosureCallRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\NodeAnalyzer\MethodCallTypeAnalyzer
      */
     private $methodCallTypeAnalyzer;

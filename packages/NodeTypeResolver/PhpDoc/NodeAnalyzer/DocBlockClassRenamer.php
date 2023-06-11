@@ -10,7 +10,6 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final class DocBlockClassRenamer
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\ClassRenamePhpDocNodeVisitor
      */
     private $classRenamePhpDocNodeVisitor;

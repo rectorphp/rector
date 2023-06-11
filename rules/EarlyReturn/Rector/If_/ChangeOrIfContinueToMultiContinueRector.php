@@ -18,7 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;

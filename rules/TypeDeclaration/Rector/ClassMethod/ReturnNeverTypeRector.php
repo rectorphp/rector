@@ -30,7 +30,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnNeverTypeRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;

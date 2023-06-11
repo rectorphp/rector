@@ -39,17 +39,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ArrayArgumentToDataProviderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory
      */
     private $dataProviderClassMethodFactory;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver
      */
     private $paramAndArgFromArrayResolver;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

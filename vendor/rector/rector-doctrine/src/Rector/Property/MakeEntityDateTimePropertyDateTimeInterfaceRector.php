@@ -21,7 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MakeEntityDateTimePropertyDateTimeInterfaceRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\PropertyTypeManipulator
      */
     private $propertyTypeManipulator;

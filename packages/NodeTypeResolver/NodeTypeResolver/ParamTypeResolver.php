@@ -31,22 +31,18 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class ParamTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

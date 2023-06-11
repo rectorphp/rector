@@ -18,7 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FinalPrivateToPrivateVisibilityRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

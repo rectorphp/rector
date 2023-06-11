@@ -8,17 +8,14 @@ use Rector\Symfony\Contract\EventReferenceToMethodNameInterface;
 final class EventReferenceToMethodNameWithPriority implements EventReferenceToMethodNameInterface
 {
     /**
-     * @readonly
      * @var \PhpParser\Node\Expr\ClassConstFetch
      */
     private $classConstFetch;
     /**
-     * @readonly
      * @var string
      */
     private $methodName;
     /**
-     * @readonly
      * @var int
      */
     private $priority;

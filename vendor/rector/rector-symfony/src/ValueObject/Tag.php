@@ -7,13 +7,11 @@ use Rector\Symfony\Contract\Tag\TagInterface;
 final class Tag implements TagInterface
 {
     /**
-     * @readonly
      * @var string
      */
     private $name;
     /**
      * @var array<string, mixed>
-     * @readonly
      */
     private $data = [];
     /**

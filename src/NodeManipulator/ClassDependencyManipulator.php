@@ -29,52 +29,42 @@ use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 final class ClassDependencyManipulator
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassMethodAssignManipulator
      */
     private $classMethodAssignManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\StmtsManipulator
      */
     private $stmtsManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyPresenceChecker
      */
     private $propertyPresenceChecker;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer
      */
     private $autowiredClassMethodOrPropertyAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\Dependency\DependencyClassMethodDecorator
      */
     private $dependencyClassMethodDecorator;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

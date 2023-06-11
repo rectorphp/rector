@@ -10,7 +10,6 @@ use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 final class PropertyAssignMatcher
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;

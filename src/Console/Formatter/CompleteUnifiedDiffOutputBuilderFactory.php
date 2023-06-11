@@ -12,7 +12,6 @@ use RectorPrefix202306\SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 final class CompleteUnifiedDiffOutputBuilderFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;

@@ -22,17 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FinalizePublicClassConstantRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer
      */
     private $familyRelationsAnalyzer;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

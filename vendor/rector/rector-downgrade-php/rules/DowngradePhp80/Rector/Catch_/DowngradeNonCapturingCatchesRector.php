@@ -19,7 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNonCapturingCatchesRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;

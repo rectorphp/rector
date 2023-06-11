@@ -28,12 +28,10 @@ use RectorPrefix202306\Symfony\Component\String\UnicodeString;
 final class VariableNaming
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

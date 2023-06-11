@@ -7,12 +7,10 @@ use Rector\Core\Validation\RectorAssert;
 final class RemoveFuncCallArg
 {
     /**
-     * @readonly
      * @var string
      */
     private $function;
     /**
-     * @readonly
      * @var int
      */
     private $argumentPosition;

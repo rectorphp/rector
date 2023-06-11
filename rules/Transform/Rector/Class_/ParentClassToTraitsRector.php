@@ -25,7 +25,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ParentClassToTraitsRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;

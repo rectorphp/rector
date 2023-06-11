@@ -22,22 +22,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector implements PostRectorDependencyInterface
 {
     /**
-     * @readonly
      * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
     private $classRenamer;
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;
     /**
-     * @readonly
      * @var \Rector\CodingStyle\Application\UseImportsRemover
      */
     private $useImportsRemover;

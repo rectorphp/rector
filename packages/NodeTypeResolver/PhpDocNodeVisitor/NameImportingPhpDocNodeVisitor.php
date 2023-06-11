@@ -26,32 +26,26 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
      */
     private $classNameImportSkipper;
     /**
-     * @readonly
      * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
     /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

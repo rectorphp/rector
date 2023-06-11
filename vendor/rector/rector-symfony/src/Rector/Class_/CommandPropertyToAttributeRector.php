@@ -31,27 +31,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CommandPropertyToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver
      */
     private $attributeValueResolver;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Command\SetAliasesMethodCallExtractor
      */
     private $setAliasesMethodCallExtractor;

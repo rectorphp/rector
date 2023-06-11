@@ -9,7 +9,6 @@ use Stringable;
 final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
 {
     /**
-     * @readonly
      * @var string
      */
     private $preposition;

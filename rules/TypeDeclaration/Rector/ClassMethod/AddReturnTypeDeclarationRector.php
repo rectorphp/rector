@@ -26,12 +26,10 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AddReturnTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
-     * @readonly
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;

@@ -32,22 +32,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer
      */
     private $allAssignNodePropertyTypeInferer;

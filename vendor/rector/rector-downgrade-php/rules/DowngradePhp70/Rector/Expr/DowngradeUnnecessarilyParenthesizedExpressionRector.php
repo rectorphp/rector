@@ -24,7 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeUnnecessarilyParenthesizedExpressionRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DowngradePhp70\Tokenizer\WrappedInParenthesesAnalyzer
      */
     private $wrappedInParenthesesAnalyzer;

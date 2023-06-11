@@ -37,27 +37,22 @@ use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
 final class IdentifierTypeMapper implements PhpDocTypeMapperInterface
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier
      */
     private $objectTypeSpecifier;
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper
      */
     private $scalarStringToTypeMapper;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

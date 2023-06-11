@@ -14,17 +14,14 @@ use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
 final class SetterTypeDeclarationPropertyTypeInferer
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer
      */
     private $classMethodAndPropertyAnalyzer;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;

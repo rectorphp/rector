@@ -26,17 +26,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class RenameClassRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
-     * @readonly
      * @var \Rector\Renaming\NodeManipulator\ClassRenamer
      */
     private $classRenamer;
     /**
-     * @readonly
      * @var \Rector\Renaming\Helper\RenameClassCallbackHandler
      */
     private $renameClassCallbackHandler;

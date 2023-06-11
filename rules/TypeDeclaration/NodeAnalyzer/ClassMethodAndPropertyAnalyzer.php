@@ -13,7 +13,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassMethodAndPropertyAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

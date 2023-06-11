@@ -19,7 +19,6 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class ClassMethodOrClassConstTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

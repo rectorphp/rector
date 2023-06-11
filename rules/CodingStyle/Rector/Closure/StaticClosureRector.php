@@ -15,7 +15,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StaticClosureRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\CodingStyle\Guard\StaticGuard
      */
     private $staticGuard;

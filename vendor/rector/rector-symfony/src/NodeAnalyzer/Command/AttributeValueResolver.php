@@ -12,7 +12,6 @@ use Rector\Symfony\Enum\SymfonyAnnotation;
 final class AttributeValueResolver
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

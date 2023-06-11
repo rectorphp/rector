@@ -16,7 +16,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnreachableStatementRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer
      */
     private $terminatedNodeAnalyzer;

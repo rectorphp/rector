@@ -8,25 +8,21 @@ use RectorPrefix202306\Symplify\EasyParallel\Contract\SerializableInterface;
 final class SystemError implements SerializableInterface
 {
     /**
-     * @readonly
      * @var string
      */
     private $message;
     /**
-     * @readonly
      * @var string|null
      */
-    private $relativeFilePath = null;
+    private $relativeFilePath;
     /**
-     * @readonly
      * @var int|null
      */
-    private $line = null;
+    private $line;
     /**
-     * @readonly
      * @var string|null
      */
-    private $rectorClass = null;
+    private $rectorClass;
     public function __construct(string $message, ?string $relativeFilePath = null, ?int $line = null, ?string $rectorClass = null)
     {
         $this->message = $message;

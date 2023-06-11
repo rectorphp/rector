@@ -15,21 +15,17 @@ final class ConfigInitializer
 {
     /**
      * @var RectorInterface[]
-     * @readonly
      */
     private $rectors;
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\InitFilePathsResolver
      */
     private $initFilePathsResolver;
     /**
-     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

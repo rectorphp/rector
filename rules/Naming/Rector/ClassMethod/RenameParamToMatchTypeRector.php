@@ -25,27 +25,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameParamToMatchTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
     private $breakingVariableRenameGuard;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
     private $expectedNameResolver;
     /**
-     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver
      */
     private $matchParamTypeExpectedNameResolver;
     /**
-     * @readonly
      * @var \Rector\Naming\ValueObjectFactory\ParamRenameFactory
      */
     private $paramRenameFactory;
     /**
-     * @readonly
      * @var \Rector\Naming\ParamRenamer\ParamRenamer
      */
     private $paramRenamer;

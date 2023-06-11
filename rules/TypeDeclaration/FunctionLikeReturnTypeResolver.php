@@ -10,7 +10,6 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class FunctionLikeReturnTypeResolver
 {
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;

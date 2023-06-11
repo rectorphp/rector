@@ -19,12 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PrivatizeFinalClassMethodRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard
      */
     private $classMethodVisibilityGuard;
     /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

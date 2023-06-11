@@ -18,27 +18,22 @@ use Rector\Symfony\Enum\SymfonyAnnotation;
 final class SetAliasesMethodCallExtractor
 {
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Command\AttributeValueResolver
      */
     private $attributeValueResolver;

@@ -32,22 +32,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ServiceEntityRepositoryParentCallToDIRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeFactory\RepositoryNodeFactory
      */
     private $repositoryNodeFactory;
     /**
-     * @readonly
      * @var \Rector\Doctrine\Type\RepositoryTypeFactory
      */
     private $repositoryTypeFactory;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;

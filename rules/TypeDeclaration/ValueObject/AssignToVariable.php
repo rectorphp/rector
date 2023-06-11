@@ -7,12 +7,10 @@ use PhpParser\Node\Expr;
 final class AssignToVariable
 {
     /**
-     * @readonly
      * @var string
      */
     private $variableName;
     /**
-     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $assignedExpr;

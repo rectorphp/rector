@@ -28,7 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeArbitraryExpressionsSupportRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\NodeFactory\NamedVariableFactory
      */
     private $namedVariableFactory;

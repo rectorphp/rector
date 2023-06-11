@@ -31,12 +31,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

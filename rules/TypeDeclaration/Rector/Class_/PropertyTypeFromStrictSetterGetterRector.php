@@ -27,17 +27,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PropertyTypeFromStrictSetterGetterRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\GetterTypeDeclarationPropertyTypeInferer
      */
     private $getterTypeDeclarationPropertyTypeInferer;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\SetterTypeDeclarationPropertyTypeInferer
      */
     private $setterTypeDeclarationPropertyTypeInferer;
     /**
-     * @readonly
      * @var \Rector\Php74\Guard\MakePropertyTypedGuard
      */
     private $makePropertyTypedGuard;

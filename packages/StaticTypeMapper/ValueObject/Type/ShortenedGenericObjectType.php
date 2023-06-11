@@ -13,7 +13,6 @@ final class ShortenedGenericObjectType extends GenericObjectType
 {
     /**
      * @var class-string
-     * @readonly
      */
     private $fullyQualifiedName;
     /**

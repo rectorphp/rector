@@ -8,13 +8,11 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ParentClassToTraits
 {
     /**
-     * @readonly
      * @var string
      */
     private $parentType;
     /**
      * @var string[]
-     * @readonly
      */
     private $traitNames;
     /**

@@ -10,7 +10,6 @@ use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
 final class MergeImportedRectorConfigureCallValuesCompilerPass implements CompilerPassInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;

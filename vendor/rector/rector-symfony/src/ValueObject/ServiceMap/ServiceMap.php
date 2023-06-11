@@ -10,7 +10,6 @@ final class ServiceMap
 {
     /**
      * @var ServiceDefinition[]
-     * @readonly
      */
     private $services;
     /**

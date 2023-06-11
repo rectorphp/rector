@@ -28,7 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BinaryOpBetweenNumberAndStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;

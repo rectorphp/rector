@@ -20,12 +20,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StringFormTypeToClassRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
     private $formAddMethodCallAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Symfony\FormHelper\FormTypeStringToTypeProvider
      */
     private $formTypeStringToTypeProvider;

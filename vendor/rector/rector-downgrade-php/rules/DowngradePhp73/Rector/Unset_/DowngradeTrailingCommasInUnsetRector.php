@@ -16,7 +16,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeTrailingCommasInUnsetRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DowngradePhp73\Tokenizer\FollowedByCommaAnalyzer
      */
     private $followedByCommaAnalyzer;

@@ -15,17 +15,14 @@ use Rector\Core\Util\FileHasher;
 final class ChangedFilesDetector
 {
     /**
-     * @readonly
      * @var \Rector\Caching\Config\FileHashComputer
      */
     private $fileHashComputer;
     /**
-     * @readonly
      * @var \Rector\Caching\Cache
      */
     private $cache;
     /**
-     * @readonly
      * @var \Rector\Core\Util\FileHasher
      */
     private $fileHasher;

@@ -16,12 +16,10 @@ use Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper;
 final class ExpectExceptionMethodCallFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\PhpDoc\PhpDocValueToNodeMapper
      */
     private $phpDocValueToNodeMapper;

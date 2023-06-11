@@ -19,12 +19,10 @@ use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
 {
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\Naming\NameScopeFactory
      */
     private $nameScopeFactory;
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser
      */
     private $phpDocNodeTraverser;

@@ -14,7 +14,6 @@ use RectorPrefix202306\Symfony\Component\DependencyInjection\Loader\PhpFileLoade
 final class ConfigurableCallValuesCollectingPhpFileLoader extends PhpFileLoader
 {
     /**
-     * @readonly
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;

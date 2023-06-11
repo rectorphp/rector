@@ -15,27 +15,22 @@ use Rector\PostRector\ValueObject\PropertyMetadata;
 final class DependencyInjectionMethodCallAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver
      */
     private $serviceTypeMethodCallResolver;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PromotedPropertyResolver
      */
     private $promotedPropertyResolver;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;

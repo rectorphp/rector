@@ -18,18 +18,15 @@ use RectorPrefix202306\Symfony\Component\Console\Output\OutputInterface;
 final class ListRulesCommand extends Command
 {
     /**
-     * @readonly
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;
     /**
-     * @readonly
      * @var \Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
     private $skippedClassResolver;
     /**
      * @var RectorInterface[]
-     * @readonly
      */
     private $rectors;
     /**

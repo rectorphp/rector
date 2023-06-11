@@ -22,17 +22,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReturnBinaryOrToEarlyReturnRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\AssignAndBinaryMap
      */
     private $assignAndBinaryMap;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;

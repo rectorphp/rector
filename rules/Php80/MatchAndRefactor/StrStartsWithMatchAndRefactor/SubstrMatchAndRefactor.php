@@ -20,22 +20,18 @@ use Rector\Php80\ValueObject\StrStartsWith;
 final class SubstrMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
-     * @readonly
      * @var \Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory
      */
     private $strStartsWithFuncCallFactory;

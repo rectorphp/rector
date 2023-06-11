@@ -10,7 +10,6 @@ use PHPStan\Type\Type;
 final class MissingPropertiesFactory
 {
     /**
-     * @readonly
      * @var \Rector\CodeQuality\NodeFactory\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;

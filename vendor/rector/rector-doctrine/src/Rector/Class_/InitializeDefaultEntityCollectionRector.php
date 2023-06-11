@@ -21,22 +21,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class InitializeDefaultEntityCollectionRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeFactory\ArrayCollectionAssignFactory
      */
     private $arrayCollectionAssignFactory;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
      */
     private $attrinationFinder;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;

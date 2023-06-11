@@ -30,7 +30,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssignArrayToStringRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
     private $propertyFetchFinder;

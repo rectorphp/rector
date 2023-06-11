@@ -11,17 +11,14 @@ use Rector\Core\Validation\RectorAssert;
 final class ArrayCallableDynamicMethod
 {
     /**
-     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $callerExpr;
     /**
-     * @readonly
      * @var string
      */
     private $class;
     /**
-     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $method;

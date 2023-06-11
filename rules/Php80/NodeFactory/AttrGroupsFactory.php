@@ -10,7 +10,6 @@ use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
 final class AttrGroupsFactory
 {
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;

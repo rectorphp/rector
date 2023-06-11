@@ -13,7 +13,6 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 final class SetUpMethodDecorator
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

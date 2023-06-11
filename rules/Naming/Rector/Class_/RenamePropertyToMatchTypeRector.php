@@ -22,22 +22,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenamePropertyToMatchTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Naming\PropertyRenamer\MatchTypePropertyRenamer
      */
     private $matchTypePropertyRenamer;
     /**
-     * @readonly
      * @var \Rector\Naming\ValueObjectFactory\PropertyRenameFactory
      */
     private $propertyRenameFactory;
     /**
-     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver
      */
     private $matchPropertyTypeExpectedNameResolver;
     /**
-     * @readonly
      * @var \Rector\Naming\PropertyRenamer\PropertyPromotionRenamer
      */
     private $propertyPromotionRenamer;

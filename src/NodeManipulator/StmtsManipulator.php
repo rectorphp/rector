@@ -12,12 +12,10 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class StmtsManipulator
 {
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;

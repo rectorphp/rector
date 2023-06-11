@@ -27,52 +27,42 @@ use Throwable;
 final class PhpFileProcessor implements FileProcessorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\FormatPerservingPrinter
      */
     private $formatPerservingPrinter;
     /**
-     * @readonly
      * @var \Rector\Core\Application\FileProcessor
      */
     private $fileProcessor;
     /**
-     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
     /**
-     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;
     /**
-     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @readonly
      * @var \Rector\PostRector\Application\PostFileProcessor
      */
     private $postFileProcessor;
     /**
-     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\ErrorFactory
      */
     private $errorFactory;
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;
     /**
-     * @readonly
      * @var \Symfony\Component\Console\Style\SymfonyStyle
      */
     private $symfonyStyle;

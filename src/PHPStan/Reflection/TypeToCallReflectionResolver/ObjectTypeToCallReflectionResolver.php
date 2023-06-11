@@ -18,7 +18,6 @@ use Rector\Core\ValueObject\MethodName;
 final class ObjectTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
 {
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

@@ -12,7 +12,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class DoctrineAnnotationFromNewFactory
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationKeyToValuesResolver
      */
     private $doctrineAnnotationKeyToValuesResolver;

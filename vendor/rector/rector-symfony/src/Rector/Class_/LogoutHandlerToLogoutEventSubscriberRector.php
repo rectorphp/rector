@@ -24,17 +24,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LogoutHandlerToLogoutEventSubscriberRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeFactory\OnLogoutClassMethodFactory
      */
     private $onLogoutClassMethodFactory;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeFactory\GetSubscribedEventsClassMethodFactory
      */
     private $getSubscribedEventsClassMethodFactory;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;

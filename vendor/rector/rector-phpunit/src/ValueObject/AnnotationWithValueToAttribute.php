@@ -6,18 +6,15 @@ namespace Rector\PHPUnit\ValueObject;
 final class AnnotationWithValueToAttribute
 {
     /**
-     * @readonly
      * @var string
      */
     private $annotationName;
     /**
-     * @readonly
      * @var string
      */
     private $attributeClass;
     /**
      * @var array<mixed, mixed>
-     * @readonly
      */
     private $valueMap = [];
     /**

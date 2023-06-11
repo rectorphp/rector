@@ -25,12 +25,10 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class AnnotationWithValueToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;

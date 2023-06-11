@@ -19,12 +19,10 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class ArgumentDefaultValueReplacer
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

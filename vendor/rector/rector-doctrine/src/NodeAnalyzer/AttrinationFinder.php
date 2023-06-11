@@ -17,12 +17,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 final class AttrinationFinder
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;

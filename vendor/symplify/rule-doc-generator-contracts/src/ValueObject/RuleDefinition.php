@@ -11,7 +11,6 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 final class RuleDefinition
 {
     /**
-     * @readonly
      * @var string
      */
     private $description;

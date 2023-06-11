@@ -24,7 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CleanupUnneededNullsafeOperatorRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\ReturnStrictTypeAnalyzer
      */
     private $returnStrictTypeAnalyzer;

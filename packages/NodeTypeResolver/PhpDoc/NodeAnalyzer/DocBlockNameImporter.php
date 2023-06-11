@@ -10,7 +10,6 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final class DocBlockNameImporter
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor
      */
     private $nameImportingPhpDocNodeVisitor;

@@ -24,32 +24,26 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class NameImporter
 {
     /**
-     * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\AliasUsesResolver
      */
     private $aliasUsesResolver;
     /**
-     * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
      */
     private $classNameImportSkipper;
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @readonly
      * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

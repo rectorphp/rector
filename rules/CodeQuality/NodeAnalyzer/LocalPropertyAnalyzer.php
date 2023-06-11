@@ -27,37 +27,30 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class LocalPropertyAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver
      */
     private $arrayDimFetchTypeResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

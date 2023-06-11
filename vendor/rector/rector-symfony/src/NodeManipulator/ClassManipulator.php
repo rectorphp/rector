@@ -8,7 +8,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassManipulator
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

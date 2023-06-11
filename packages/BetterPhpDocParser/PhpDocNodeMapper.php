@@ -16,23 +16,19 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNod
 final class PhpDocNodeMapper
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider
      */
     private $currentTokenIteratorProvider;
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor
      */
     private $parentConnectingPhpDocNodeVisitor;
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor
      */
     private $cloningPhpDocNodeVisitor;
     /**
      * @var BasePhpDocNodeVisitorInterface[]
-     * @readonly
      */
     private $phpDocNodeVisitors;
     /**

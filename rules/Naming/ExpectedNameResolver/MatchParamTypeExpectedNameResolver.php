@@ -11,12 +11,10 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class MatchParamTypeExpectedNameResolver
 {
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;

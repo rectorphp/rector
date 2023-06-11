@@ -30,22 +30,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyForeachToArrayFilterRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\CodeQuality\NodeFactory\ArrayFilterFactory
      */
     private $arrayFilterFactory;
     /**
-     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer
      */
     private $readExprAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

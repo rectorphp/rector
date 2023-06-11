@@ -9,7 +9,6 @@ use ReflectionMethod;
 final class ParameterTypeResolver
 {
     /**
-     * @readonly
      * @var \Rector\Core\DependencyInjection\DocBlock\ParamTypeDocBlockResolver
      */
     private $paramTypeDocBlockResolver;

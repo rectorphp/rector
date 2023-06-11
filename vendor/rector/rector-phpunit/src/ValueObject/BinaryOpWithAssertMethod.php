@@ -6,17 +6,14 @@ namespace Rector\PHPUnit\ValueObject;
 final class BinaryOpWithAssertMethod
 {
     /**
-     * @readonly
      * @var string
      */
     private $binaryOpClass;
     /**
-     * @readonly
      * @var string
      */
     private $assetMethodName;
     /**
-     * @readonly
      * @var string
      */
     private $notAssertMethodName;

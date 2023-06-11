@@ -26,12 +26,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class SideEffectNodeDetector
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
     private $pureFunctionDetector;

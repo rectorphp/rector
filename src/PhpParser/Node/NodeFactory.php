@@ -52,22 +52,18 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class NodeFactory
 {
     /**
-     * @readonly
      * @var \PhpParser\BuilderFactory
      */
     private $builderFactory;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @readonly
      * @var \Rector\Core\NodeDecorator\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;

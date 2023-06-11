@@ -22,7 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfElseToTernaryRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

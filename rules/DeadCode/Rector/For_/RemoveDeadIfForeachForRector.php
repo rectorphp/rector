@@ -22,7 +22,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDeadIfForeachForRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
      */
     private $conditionInverter;

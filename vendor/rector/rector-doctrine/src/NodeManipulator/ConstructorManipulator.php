@@ -13,12 +13,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ConstructorManipulator
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassInsertManipulator
      */
     private $classInsertManipulator;

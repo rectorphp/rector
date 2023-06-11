@@ -6,13 +6,11 @@ namespace Rector\Renaming\ValueObject;
 final class PseudoNamespaceToNamespace
 {
     /**
-     * @readonly
      * @var string
      */
     private $namespacePrefix;
     /**
      * @var string[]
-     * @readonly
      */
     private $excludedClasses = [];
     /**

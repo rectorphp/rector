@@ -10,7 +10,6 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class EmptyReturnNodeFinder
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

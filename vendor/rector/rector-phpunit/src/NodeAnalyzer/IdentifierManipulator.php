@@ -20,7 +20,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class IdentifierManipulator
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

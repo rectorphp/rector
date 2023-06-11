@@ -22,22 +22,18 @@ use Rector\TypeDeclaration\ValueObject\AssignToVariable;
 final class StrictReturnNewAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;

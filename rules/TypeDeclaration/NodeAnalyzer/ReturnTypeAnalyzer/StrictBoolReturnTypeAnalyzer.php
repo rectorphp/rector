@@ -11,12 +11,10 @@ use Rector\TypeDeclaration\TypeAnalyzer\AlwaysStrictBoolExprAnalyzer;
 final class StrictBoolReturnTypeAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\AlwaysStrictBoolExprAnalyzer
      */
     private $alwaysStrictBoolExprAnalyzer;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\AlwaysStrictReturnAnalyzer
      */
     private $alwaysStrictReturnAnalyzer;

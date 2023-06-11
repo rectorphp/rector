@@ -17,12 +17,10 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class DynamicSourceLocatorProvider
 {
     /**
-     * @readonly
      * @var \PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher
      */
     private $fileNodesFetcher;
     /**
-     * @readonly
      * @var \PHPStan\Php\PhpVersion
      */
     private $phpVersion;

@@ -10,7 +10,6 @@ final class ObjectWithoutClassTypeWithParentTypes extends ObjectWithoutClassType
 {
     /**
      * @var TypeWithClassName[]
-     * @readonly
      */
     private $parentTypes;
     /**

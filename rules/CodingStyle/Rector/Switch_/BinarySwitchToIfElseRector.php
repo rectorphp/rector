@@ -23,12 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BinarySwitchToIfElseRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Renaming\NodeManipulator\SwitchManipulator
      */
     private $switchManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;

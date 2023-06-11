@@ -31,17 +31,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradePregUnmatchedAsNullConstantRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
-     * @readonly
      * @var \Rector\DowngradePhp72\NodeManipulator\BitwiseFlagCleaner
      */
     private $bitwiseFlagCleaner;
     /**
-     * @readonly
      * @var \Rector\DowngradePhp72\NodeAnalyzer\RegexFuncAnalyzer
      */
     private $regexFuncAnalyzer;

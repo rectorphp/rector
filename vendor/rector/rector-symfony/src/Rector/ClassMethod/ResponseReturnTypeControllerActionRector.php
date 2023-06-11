@@ -24,12 +24,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ResponseReturnTypeControllerActionRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
      */
     private $attrinationFinder;

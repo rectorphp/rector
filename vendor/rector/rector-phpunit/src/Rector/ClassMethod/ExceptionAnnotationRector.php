@@ -20,17 +20,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ExceptionAnnotationRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\ExpectExceptionMethodCallFactory
      */
     private $expectExceptionMethodCallFactory;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

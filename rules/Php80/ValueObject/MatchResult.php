@@ -7,12 +7,10 @@ use PhpParser\Node\Expr\Match_;
 final class MatchResult
 {
     /**
-     * @readonly
      * @var \PhpParser\Node\Expr\Match_
      */
     private $match;
     /**
-     * @readonly
      * @var bool
      */
     private $shouldRemoveNextStmt;

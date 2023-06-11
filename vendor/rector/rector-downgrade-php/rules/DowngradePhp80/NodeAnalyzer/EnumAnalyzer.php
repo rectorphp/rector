@@ -17,12 +17,10 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class EnumAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

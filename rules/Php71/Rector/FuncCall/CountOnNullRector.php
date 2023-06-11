@@ -41,22 +41,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CountOnNullRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\TypeAnalyzer\CountableTypeAnalyzer
      */
     private $countableTypeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Php71\NodeAnalyzer\CountableAnalyzer
      */
     private $countableAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

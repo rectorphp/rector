@@ -20,7 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class UnusedForeachValueToArrayKeysRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\ExprUsedInNodeAnalyzer
      */
     private $exprUsedInNodeAnalyzer;

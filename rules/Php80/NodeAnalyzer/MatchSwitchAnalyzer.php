@@ -21,22 +21,18 @@ use Rector\Php80\ValueObject\CondAndExpr;
 final class MatchSwitchAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\SwitchAnalyzer
      */
     private $switchAnalyzer;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

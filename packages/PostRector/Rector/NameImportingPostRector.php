@@ -30,47 +30,38 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @readonly
      * @var \Rector\CodingStyle\Node\NameImporter
      */
     private $nameImporter;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter
      */
     private $docBlockNameImporter;
     /**
-     * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
      */
     private $classNameImportSkipper;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\AliasNameResolver
      */
     private $aliasNameResolver;

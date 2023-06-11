@@ -13,17 +13,14 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class RenameClassCallbackHandler extends NodeVisitorAbstract
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

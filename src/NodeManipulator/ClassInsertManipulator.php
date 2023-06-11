@@ -14,7 +14,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassInsertManipulator
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

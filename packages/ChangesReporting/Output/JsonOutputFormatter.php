@@ -13,7 +13,6 @@ use Rector\Parallel\ValueObject\Bridge;
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
     /**
-     * @readonly
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;

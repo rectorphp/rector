@@ -12,23 +12,19 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class FileDiff implements SerializableInterface
 {
     /**
-     * @readonly
      * @var string
      */
     private $relativeFilePath;
     /**
-     * @readonly
      * @var string
      */
     private $diff;
     /**
-     * @readonly
      * @var string
      */
     private $diffConsoleFormatted;
     /**
      * @var RectorWithLineChange[]
-     * @readonly
      */
     private $rectorsWithLineChanges = [];
     /**

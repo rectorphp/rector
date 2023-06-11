@@ -14,17 +14,14 @@ use Rector\TypeDeclaration\TypeAnalyzer\AlwaysStrictScalarExprAnalyzer;
 final class StrictScalarReturnTypeAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnTypeAnalyzer\AlwaysStrictReturnAnalyzer
      */
     private $alwaysStrictReturnAnalyzer;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\AlwaysStrictScalarExprAnalyzer
      */
     private $alwaysStrictScalarExprAnalyzer;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

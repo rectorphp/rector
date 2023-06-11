@@ -7,12 +7,10 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 final class PropertyAndAnnotation
 {
     /**
-     * @readonly
      * @var string
      */
     private $property;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     private $doctrineAnnotationTagValueNode;

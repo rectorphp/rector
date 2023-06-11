@@ -22,12 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeByParentCallTypeRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher
      */
     private $callerParamMatcher;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

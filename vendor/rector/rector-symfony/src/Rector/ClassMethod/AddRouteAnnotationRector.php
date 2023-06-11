@@ -24,17 +24,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddRouteAnnotationRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterface
      */
     private $symfonyRoutesProvider;
     /**
-     * @readonly
      * @var \Rector\Symfony\PhpDocNode\SymfonyRouteTagValueNodeFactory
      */
     private $symfonyRouteTagValueNodeFactory;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser
      */
     private $arrayParser;

@@ -8,17 +8,14 @@ use Rector\Core\Validation\RectorAssert;
 final class ReplaceParentCallByPropertyCall
 {
     /**
-     * @readonly
      * @var string
      */
     private $class;
     /**
-     * @readonly
      * @var string
      */
     private $method;
     /**
-     * @readonly
      * @var string
      */
     private $property;

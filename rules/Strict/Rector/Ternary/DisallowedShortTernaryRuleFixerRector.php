@@ -21,7 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DisallowedShortTernaryRuleFixerRector extends AbstractFalsyScalarRuleFixerRector
 {
     /**
-     * @readonly
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
     private $exactCompareFactory;

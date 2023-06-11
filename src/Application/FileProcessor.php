@@ -11,22 +11,18 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 final class FileProcessor
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
     private $rectorParser;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser
      */
     private $rectorNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
      */
     private $fileWithoutNamespaceNodeTraverser;

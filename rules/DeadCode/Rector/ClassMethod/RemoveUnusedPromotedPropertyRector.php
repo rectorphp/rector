@@ -25,17 +25,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPromotedPropertyRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
     private $propertyFetchFinder;
     /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
     /**
-     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer
      */
     private $propertyWriteonlyAnalyzer;

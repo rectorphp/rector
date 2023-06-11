@@ -28,17 +28,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeContravariantArgumentTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

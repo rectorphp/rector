@@ -22,42 +22,34 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocInfoFactory
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocNodeMapper
      */
     private $phpDocNodeMapper;
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;
     /**
-     * @readonly
      * @var \PHPStan\PhpDocParser\Lexer\Lexer
      */
     private $lexer;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser
      */
     private $betterPhpDocParser;
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
      */
     private $annotationNaming;
     /**
-     * @readonly
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
      */
     private $phpDocNodeByTypeFinder;

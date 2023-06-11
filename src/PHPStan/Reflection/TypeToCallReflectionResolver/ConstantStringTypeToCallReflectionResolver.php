@@ -20,7 +20,6 @@ use Rector\Core\Contract\PHPStan\Reflection\TypeToCallReflectionResolver\TypeToC
 final class ConstantStringTypeToCallReflectionResolver implements TypeToCallReflectionResolverInterface
 {
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

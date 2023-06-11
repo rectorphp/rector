@@ -6,17 +6,14 @@ namespace Rector\Symfony\Utils\ValueObject;
 final class ReturnTypeChange
 {
     /**
-     * @readonly
      * @var string
      */
     private $class;
     /**
-     * @readonly
      * @var string
      */
     private $method;
     /**
-     * @readonly
      * @var string
      */
     private $returnType;

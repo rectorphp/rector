@@ -28,12 +28,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ExprInTopStmtMatcher
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\Core\Util\MultiInstanceofChecker
      */
     private $multiInstanceofChecker;

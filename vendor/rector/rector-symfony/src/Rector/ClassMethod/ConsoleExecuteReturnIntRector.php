@@ -28,7 +28,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ConsoleExecuteReturnIntRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\TerminatedNodeAnalyzer
      */
     private $terminatedNodeAnalyzer;

@@ -15,7 +15,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUselessVarTagRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover
      */
     private $varTagRemover;

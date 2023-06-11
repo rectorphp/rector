@@ -25,12 +25,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class NewTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;

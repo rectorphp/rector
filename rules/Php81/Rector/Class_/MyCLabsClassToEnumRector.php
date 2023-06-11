@@ -21,7 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MyCLabsClassToEnumRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Php81\NodeFactory\EnumFactory
      */
     private $enumFactory;

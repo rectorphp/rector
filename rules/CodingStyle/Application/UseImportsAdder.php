@@ -19,12 +19,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UseImportsAdder
 {
     /**
-     * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\UsedImportsResolver
      */
     private $usedImportsResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;

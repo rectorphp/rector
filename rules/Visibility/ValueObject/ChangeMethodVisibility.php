@@ -7,17 +7,14 @@ use Rector\Core\Validation\RectorAssert;
 final class ChangeMethodVisibility
 {
     /**
-     * @readonly
      * @var string
      */
     private $class;
     /**
-     * @readonly
      * @var string
      */
     private $method;
     /**
-     * @readonly
      * @var int
      */
     private $visibility;

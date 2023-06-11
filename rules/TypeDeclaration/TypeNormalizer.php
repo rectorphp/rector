@@ -19,12 +19,10 @@ use Rector\TypeDeclaration\ValueObject\NestedArrayType;
 final class TypeNormalizer
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
-     * @readonly
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;

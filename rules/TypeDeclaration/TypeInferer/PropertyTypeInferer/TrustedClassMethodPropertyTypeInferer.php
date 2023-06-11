@@ -40,57 +40,46 @@ use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 final class TrustedClassMethodPropertyTypeInferer
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassMethodPropertyFetchManipulator
      */
     private $classMethodPropertyFetchManipulator;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer
      */
     private $assignToPropertyTypeInferer;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;

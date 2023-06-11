@@ -21,12 +21,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\UsedImportsResolver
      */
     private $usedImportsResolver;

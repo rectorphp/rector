@@ -7,12 +7,10 @@ use Rector\Caching\UnchangedFilesFilter;
 final class PhpFilesFinder
 {
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\FilesFinder
      */
     private $filesFinder;
     /**
-     * @readonly
      * @var \Rector\Caching\UnchangedFilesFilter
      */
     private $unchangedFilesFilter;

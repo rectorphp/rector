@@ -17,12 +17,10 @@ use Rector\Symfony\BundleClassResolver;
 final class TemplateGuesser
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\BundleClassResolver
      */
     private $bundleClassResolver;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

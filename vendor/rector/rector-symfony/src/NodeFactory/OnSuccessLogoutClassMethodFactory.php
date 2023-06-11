@@ -20,22 +20,18 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class OnSuccessLogoutClassMethodFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeFactory\BareLogoutClassMethodFactory
      */
     private $bareLogoutClassMethodFactory;

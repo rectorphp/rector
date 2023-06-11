@@ -21,7 +21,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ReplaceArgumentDefaultValueRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Arguments\ArgumentDefaultValueReplacer
      */
     private $argumentDefaultValueReplacer;

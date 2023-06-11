@@ -6,17 +6,14 @@ namespace Rector\Caching\ValueObject;
 final class CacheFilePaths
 {
     /**
-     * @readonly
      * @var string
      */
     private $firstDirectory;
     /**
-     * @readonly
      * @var string
      */
     private $secondDirectory;
     /**
-     * @readonly
      * @var string
      */
     private $filePath;

@@ -12,7 +12,6 @@ use Rector\Core\NodeManipulator\FuncCallManipulator;
 final class ArrayFromCompactFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\FuncCallManipulator
      */
     private $funcCallManipulator;

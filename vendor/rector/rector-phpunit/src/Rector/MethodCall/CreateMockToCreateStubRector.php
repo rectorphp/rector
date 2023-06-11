@@ -22,12 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CreateMockToCreateStubRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\MethodCallManipulator
      */
     private $methodCallManipulator;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

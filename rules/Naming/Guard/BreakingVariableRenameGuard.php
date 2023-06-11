@@ -33,32 +33,26 @@ use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 final class BreakingVariableRenameGuard
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\ConflictingNameResolver
      */
     private $conflictingNameResolver;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\OverridenExistingNamesResolver
      */
     private $overridenExistingNamesResolver;
     /**
-     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper
      */
     private $typeUnwrapper;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

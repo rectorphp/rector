@@ -23,12 +23,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeArraySpreadStringKeyRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory
      */
     private $arrayMergeFromArraySpreadFactory;
     /**
-     * @readonly
      * @var \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer
      */
     private $arraySpreadAnalyzer;

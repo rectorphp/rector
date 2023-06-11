@@ -17,21 +17,17 @@ final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
      * @var NonPhpRectorInterface[]
-     * @readonly
      */
     private $nonPhpRectors;
     /**
-     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;
     /**
-     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
-     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;

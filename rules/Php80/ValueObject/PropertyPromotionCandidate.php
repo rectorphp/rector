@@ -10,17 +10,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyPromotionCandidate
 {
     /**
-     * @readonly
      * @var \PhpParser\Node\Stmt\Property
      */
     private $property;
     /**
-     * @readonly
      * @var \PhpParser\Node\Param
      */
     private $param;
     /**
-     * @readonly
      * @var \PhpParser\Node\Stmt\Expression
      */
     private $expression;

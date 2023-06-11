@@ -7,22 +7,18 @@ use PHPStan\Type\ObjectType;
 final class ArrayArgumentToDataProvider
 {
     /**
-     * @readonly
      * @var string
      */
     private $class;
     /**
-     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
-     * @readonly
      * @var string
      */
     private $newMethod;
     /**
-     * @readonly
      * @var string
      */
     private $variableName;

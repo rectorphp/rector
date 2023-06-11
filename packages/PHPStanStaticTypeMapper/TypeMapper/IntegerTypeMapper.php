@@ -18,7 +18,6 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class IntegerTypeMapper implements TypeMapperInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

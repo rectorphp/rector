@@ -11,7 +11,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class NamingConventionAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

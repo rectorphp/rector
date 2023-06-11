@@ -27,12 +27,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ThisCallOnStaticMethodToStaticCallRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeCollector\StaticAnalyzer
      */
     private $staticAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

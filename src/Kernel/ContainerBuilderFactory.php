@@ -10,7 +10,6 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ContainerBuilderFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\Config\Loader\ConfigureCallMergingLoaderFactory
      */
     private $configureCallMergingLoaderFactory;

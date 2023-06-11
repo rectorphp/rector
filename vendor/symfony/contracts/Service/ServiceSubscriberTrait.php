@@ -30,7 +30,7 @@ trait ServiceSubscriberTrait
             if (self::class !== $method->getDeclaringClass()->name) {
                 continue;
             }
-            if (!($attribute = (\method_exists($method, 'getAttributes') ? $method->getAttributes(SubscribedService::class) : [])[0] ?? null)) {
+            if (!($attribute = $method->getAttributes(SubscribedService::class)[0] ?? null)) {
                 continue;
             }
             if ($method->isStatic() || $method->isAbstract() || $method->isGenerator() || $method->isInternal() || $method->getNumberOfRequiredParameters()) {

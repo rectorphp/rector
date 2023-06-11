@@ -6,12 +6,10 @@ namespace Rector\ValueObject;
 final class ClassMethodWillChangeReturnType
 {
     /**
-     * @readonly
      * @var string
      */
     private $className;
     /**
-     * @readonly
      * @var string
      */
     private $methodName;

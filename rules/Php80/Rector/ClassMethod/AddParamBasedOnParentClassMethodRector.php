@@ -31,17 +31,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddParamBasedOnParentClassMethodRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\VendorLocker\ParentClassMethodTypeOverrideGuard
      */
     private $parentClassMethodTypeOverrideGuard;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

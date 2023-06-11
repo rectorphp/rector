@@ -9,7 +9,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ParamAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

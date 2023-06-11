@@ -15,12 +15,10 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class UseNodesToAddCollector implements NodeCollectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;

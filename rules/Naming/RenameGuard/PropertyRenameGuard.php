@@ -11,17 +11,14 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class PropertyRenameGuard
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Naming\Guard\DateTimeAtNamingConventionGuard
      */
     private $dateTimeAtNamingConventionGuard;
     /**
-     * @readonly
      * @var \Rector\Naming\Guard\HasMagicGetSetGuard
      */
     private $hasMagicGetSetGuard;

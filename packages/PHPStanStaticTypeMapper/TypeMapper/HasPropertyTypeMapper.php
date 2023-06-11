@@ -15,7 +15,6 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class HasPropertyTypeMapper implements TypeMapperInterface
 {
     /**
-     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper
      */
     private $objectWithoutClassTypeMapper;

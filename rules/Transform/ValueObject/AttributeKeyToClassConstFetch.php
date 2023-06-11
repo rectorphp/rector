@@ -6,23 +6,19 @@ namespace Rector\Transform\ValueObject;
 final class AttributeKeyToClassConstFetch
 {
     /**
-     * @readonly
      * @var string
      */
     private $attributeClass;
     /**
-     * @readonly
      * @var string
      */
     private $attributeKey;
     /**
-     * @readonly
      * @var string
      */
     private $constantClass;
     /**
      * @var array<string, string>
-     * @readonly
      */
     private $valuesToConstantsMap;
     /**

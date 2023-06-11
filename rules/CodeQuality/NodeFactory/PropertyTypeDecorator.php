@@ -11,17 +11,14 @@ use Rector\Privatization\TypeManipulator\TypeNormalizer;
 final class PropertyTypeDecorator
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Privatization\TypeManipulator\TypeNormalizer
      */
     private $typeNormalizer;

@@ -11,12 +11,10 @@ use RectorPrefix202306\Symfony\Component\Console\Input\InputInterface;
 final class ConfigurationFactory
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;

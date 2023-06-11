@@ -22,22 +22,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class VarAnnotationIncorrectNullableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper
      */
     private $phpDocNullableTypeHelper;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard
      */
     private $phpDocNestedAnnotationGuard;
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\PhpDocInfoAnalyzer
      */
     private $phpDocInfoAnalyzer;

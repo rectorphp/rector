@@ -33,52 +33,42 @@ use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 final class AssignToPropertyTypeInferer
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
      */
     private $constructorAssignDetector;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\Matcher\PropertyAssignMatcher
      */
     private $propertyAssignMatcher;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector
      */
     private $propertyDefaultAssignDetector;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector
      */
     private $nullTypeAssignDetector;
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;

@@ -8,17 +8,14 @@ use Rector\Core\Validation\RectorAssert;
 final class ArrayCallable
 {
     /**
-     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $callerExpr;
     /**
-     * @readonly
      * @var string
      */
     private $class;
     /**
-     * @readonly
      * @var string
      */
     private $method;

@@ -24,17 +24,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyIfReturnBoolRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Comment\CommentsMerger
      */
     private $commentsMerger;
     /**
-     * @readonly
      * @var \Rector\CodeQuality\NodeManipulator\ExprBoolCaster
      */
     private $exprBoolCaster;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

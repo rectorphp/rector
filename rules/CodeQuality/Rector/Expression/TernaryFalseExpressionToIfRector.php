@@ -19,7 +19,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TernaryFalseExpressionToIfRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;

@@ -7,17 +7,14 @@ use PhpParser\Node\Stmt\UseUse;
 final class UseAliasMetadata
 {
     /**
-     * @readonly
      * @var string
      */
     private $shortAttributeName;
     /**
-     * @readonly
      * @var string
      */
     private $useImportName;
     /**
-     * @readonly
      * @var \PhpParser\Node\Stmt\UseUse
      */
     private $useUse;

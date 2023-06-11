@@ -26,22 +26,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromToOneRelationTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\ToOneRelationPropertyTypeResolver
      */
     private $toOneRelationPropertyTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

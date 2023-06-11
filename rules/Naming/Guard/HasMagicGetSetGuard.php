@@ -8,7 +8,6 @@ use Rector\Naming\ValueObject\PropertyRename;
 final class HasMagicGetSetGuard
 {
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

@@ -21,7 +21,6 @@ use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 final class TypeFactory
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\TypeHasher
      */
     private $typeHasher;

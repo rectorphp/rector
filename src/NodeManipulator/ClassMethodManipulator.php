@@ -12,12 +12,10 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassMethodManipulator
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

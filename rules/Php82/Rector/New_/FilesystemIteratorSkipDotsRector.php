@@ -24,7 +24,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FilesystemIteratorSkipDotsRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver\ClassConstFetchNameResolver
      */
     private $classConstFetchNameResolver;

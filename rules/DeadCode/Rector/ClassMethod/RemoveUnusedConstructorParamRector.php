@@ -18,12 +18,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedConstructorParamRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Removing\NodeManipulator\ComplexNodeRemover
      */
     private $complexNodeRemover;

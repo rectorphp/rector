@@ -8,12 +8,10 @@ use Rector\Core\Validation\RectorAssert;
 final class ReturnArrayClassMethodToYield
 {
     /**
-     * @readonly
      * @var string
      */
     private $type;
     /**
-     * @readonly
      * @var string
      */
     private $method;

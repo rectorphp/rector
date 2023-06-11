@@ -15,7 +15,6 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 final class PhpDocClassRenamer
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
     private $classAnnotationMatcher;

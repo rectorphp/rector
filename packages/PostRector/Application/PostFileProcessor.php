@@ -18,17 +18,14 @@ use Rector\Skipper\Skipper\Skipper;
 final class PostFileProcessor
 {
     /**
-     * @readonly
      * @var \Rector\Skipper\Skipper\Skipper
      */
     private $skipper;
     /**
-     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
     /**
-     * @readonly
      * @var \Rector\Core\Logging\CurrentRectorProvider
      */
     private $currentRectorProvider;

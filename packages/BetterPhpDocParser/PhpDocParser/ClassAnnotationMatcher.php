@@ -19,17 +19,14 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassAnnotationMatcher
 {
     /**
-     * @readonly
      * @var \Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher
      */
     private $useImportNameMatcher;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

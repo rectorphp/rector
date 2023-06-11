@@ -22,12 +22,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ExplicitPhpErrorApiRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeFactory\AssertCallFactory
      */
     private $assertCallFactory;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

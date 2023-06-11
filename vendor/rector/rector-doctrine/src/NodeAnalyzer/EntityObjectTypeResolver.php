@@ -20,17 +20,14 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class EntityObjectTypeResolver
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @readonly
      * @var \Rector\Doctrine\TypeAnalyzer\TypeFinder
      */
     private $typeFinder;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

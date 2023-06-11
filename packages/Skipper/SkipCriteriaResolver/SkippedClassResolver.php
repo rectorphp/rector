@@ -9,12 +9,10 @@ use Rector\Core\Configuration\Parameter\ParameterProvider;
 final class SkippedClassResolver
 {
     /**
-     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

@@ -29,12 +29,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeSpaceshipRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
-     * @readonly
      * @var \Rector\NodeFactory\NamedVariableFactory
      */
     private $namedVariableFactory;

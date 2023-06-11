@@ -17,7 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeTypedPropertyRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\NodeManipulator\PropertyDecorator
      */
     private $propertyDecorator;

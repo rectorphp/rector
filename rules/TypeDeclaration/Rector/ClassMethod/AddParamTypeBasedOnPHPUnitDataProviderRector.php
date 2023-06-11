@@ -32,12 +32,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddParamTypeBasedOnPHPUnitDataProviderRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Type\TypeFactory
      */
     private $typeFactory;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

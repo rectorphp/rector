@@ -13,17 +13,14 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 final class DynamicSourceLocatorDecorator
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
      */
     private $dynamicSourceLocatorProvider;
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\PhpFilesFinder
      */
     private $phpFilesFinder;
     /**
-     * @readonly
      * @var \Rector\Core\FileSystem\FileAndDirectoryFilter
      */
     private $fileAndDirectoryFilter;

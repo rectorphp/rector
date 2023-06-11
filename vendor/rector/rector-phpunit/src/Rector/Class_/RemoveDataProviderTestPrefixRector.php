@@ -21,17 +21,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDataProviderTestPrefixRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeFinder\DataProviderClassMethodFinder
      */
     private $dataProviderClassMethodFinder;
     /**
-     * @readonly
      * @var \Rector\PHPUnit\PhpDoc\DataProviderMethodRenamer
      */
     private $dataProviderMethodRenamer;

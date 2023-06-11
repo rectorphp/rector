@@ -9,17 +9,14 @@ use Rector\Skipper\RealpathMatcher;
 final class FileInfoMatcher
 {
     /**
-     * @readonly
      * @var \Rector\Skipper\FileSystem\FnMatchPathNormalizer
      */
     private $fnMatchPathNormalizer;
     /**
-     * @readonly
      * @var \Rector\Skipper\Fnmatcher
      */
     private $fnmatcher;
     /**
-     * @readonly
      * @var \Rector\Skipper\RealpathMatcher
      */
     private $realpathMatcher;

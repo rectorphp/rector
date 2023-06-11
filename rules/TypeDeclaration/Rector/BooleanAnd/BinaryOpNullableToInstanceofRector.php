@@ -21,7 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class BinaryOpNullableToInstanceofRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer
      */
     private $nullableTypeAnalyzer;

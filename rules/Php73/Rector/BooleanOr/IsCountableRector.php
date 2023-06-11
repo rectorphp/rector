@@ -19,12 +19,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class IsCountableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Php71\IsArrayAndDualCheckToAble
      */
     private $isArrayAndDualCheckToAble;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

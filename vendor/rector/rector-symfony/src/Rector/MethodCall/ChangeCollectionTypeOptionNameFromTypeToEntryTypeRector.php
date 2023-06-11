@@ -23,17 +23,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer
      */
     private $formAddMethodCallAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher
      */
     private $formOptionsArrayMatcher;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer
      */
     private $formCollectionAnalyzer;

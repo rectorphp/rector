@@ -20,7 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeNeverTypeDeclarationRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\PhpDocDecorator\PhpDocFromTypeDeclarationDecorator
      */
     private $phpDocFromTypeDeclarationDecorator;

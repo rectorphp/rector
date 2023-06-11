@@ -17,7 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeFlexibleHeredocSyntaxRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DowngradePhp73\Tokenizer\FollowedByNewlineOnlyMaybeWithSemicolonAnalyzer
      */
     private $followedByNewlineOnlyMaybeWithSemicolonAnalyzer;

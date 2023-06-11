@@ -11,17 +11,14 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassManipulator
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\FamilyTree\NodeAnalyzer\ClassChildAnalyzer
      */
     private $classChildAnalyzer;

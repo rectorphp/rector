@@ -33,7 +33,6 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class LivingCodeManipulator
 {
     /**
-     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

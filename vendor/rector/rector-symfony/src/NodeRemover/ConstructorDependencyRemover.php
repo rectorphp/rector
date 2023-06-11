@@ -12,7 +12,6 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ConstructorDependencyRemover
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

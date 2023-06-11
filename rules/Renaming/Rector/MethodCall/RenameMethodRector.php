@@ -30,17 +30,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class RenameMethodRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassManipulator
      */
     private $classManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

@@ -29,7 +29,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class EregToPregMatchRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Php70\EregToPcreTransformer
      */
     private $eregToPcreTransformer;

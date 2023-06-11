@@ -13,12 +13,10 @@ use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 final class AlwaysStrictReturnAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer
      */
     private $returnAnalyzer;

@@ -27,7 +27,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveDoubleAssignRector extends AbstractScopeAwareRector
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\SideEffect\SideEffectNodeDetector
      */
     private $sideEffectNodeDetector;

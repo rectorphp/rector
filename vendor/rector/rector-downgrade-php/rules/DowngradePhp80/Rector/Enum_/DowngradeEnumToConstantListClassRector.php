@@ -29,17 +29,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeEnumToConstantListClassRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\NodeFactory\ClassFromEnumFactory
      */
     private $classFromEnumFactory;
     /**
-     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
-     * @readonly
      * @var \Rector\DowngradePhp80\NodeAnalyzer\EnumAnalyzer
      */
     private $enumAnalyzer;

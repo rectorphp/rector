@@ -18,7 +18,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class SimplifyDeMorganBinaryRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;

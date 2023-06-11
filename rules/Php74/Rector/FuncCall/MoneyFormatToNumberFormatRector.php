@@ -32,12 +32,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoneyFormatToNumberFormatRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ArgsAnalyzer
      */
     private $argsAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;

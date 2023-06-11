@@ -36,22 +36,18 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ArgumentAdderRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
-     * @readonly
      * @var \Rector\Arguments\NodeAnalyzer\ArgumentAddingScope
      */
     private $argumentAddingScope;
     /**
-     * @readonly
      * @var \Rector\Arguments\NodeAnalyzer\ChangedArgumentsDetector
      */
     private $changedArgumentsDetector;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;

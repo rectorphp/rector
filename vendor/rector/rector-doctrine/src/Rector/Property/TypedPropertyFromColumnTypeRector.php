@@ -25,27 +25,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TypedPropertyFromColumnTypeRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\TypeDeclaration\NodeTypeAnalyzer\PropertyTypeDecorator
      */
     private $propertyTypeDecorator;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\ColumnPropertyTypeResolver
      */
     private $columnPropertyTypeResolver;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
-     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\NullabilityColumnPropertyTypeResolver
      */
     private $nullabilityColumnPropertyTypeResolver;
     /**
-     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

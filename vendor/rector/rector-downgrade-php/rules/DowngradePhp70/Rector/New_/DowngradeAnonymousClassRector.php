@@ -19,17 +19,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeAnonymousClassRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
-     * @readonly
      * @var \Rector\DowngradePhp70\NodeFactory\ClassFromAnonymousFactory
      */
     private $classFromAnonymousFactory;
     /**
-     * @readonly
      * @var \Rector\NodeManipulator\NamespacedNameDecorator
      */
     private $namespacedNameDecorator;

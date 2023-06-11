@@ -21,23 +21,19 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NodeNameResolver
 {
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\Regex\RegexPatternDetector
      */
     private $regexPatternDetector;
     /**
-     * @readonly
      * @var \Rector\CodingStyle\Naming\ClassNaming
      */
     private $classNaming;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;
     /**
      * @var NodeNameResolverInterface[]
-     * @readonly
      */
     private $nodeNameResolvers = [];
     /**

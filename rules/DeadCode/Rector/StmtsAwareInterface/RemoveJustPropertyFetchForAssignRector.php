@@ -20,7 +20,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveJustPropertyFetchForAssignRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\JustPropertyFetchVariableAssignMatcher
      */
     private $justPropertyFetchVariableAssignMatcher;

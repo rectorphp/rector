@@ -9,7 +9,6 @@ use Rector\Symfony\TypeAnalyzer\ControllerAnalyzer;
 final class ControllerMethodAnalyzer
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;

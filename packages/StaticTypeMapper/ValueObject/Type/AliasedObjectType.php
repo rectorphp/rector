@@ -16,7 +16,6 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class AliasedObjectType extends ObjectType
 {
     /**
-     * @readonly
      * @var string
      */
     private $fullyQualifiedClass;

@@ -35,22 +35,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReadOnlyPropertyRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\PropertyManipulator
      */
     private $propertyManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\NodeManipulator\PropertyFetchAssignManipulator
      */
     private $propertyFetchAssignManipulator;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;
     /**
-     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

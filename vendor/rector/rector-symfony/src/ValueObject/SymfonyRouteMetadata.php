@@ -6,48 +6,39 @@ namespace Rector\Symfony\ValueObject;
 final class SymfonyRouteMetadata
 {
     /**
-     * @readonly
      * @var string
      */
     private $name;
     /**
-     * @readonly
      * @var string
      */
     private $path;
     /**
      * @var array<string, mixed>
-     * @readonly
      */
     private $defaults;
     /**
      * @var array<string, mixed>
-     * @readonly
      */
     private $requirements;
     /**
-     * @readonly
      * @var string
      */
     private $host;
     /**
      * @var string[]
-     * @readonly
      */
     private $schemes;
     /**
      * @var string[]
-     * @readonly
      */
     private $methods;
     /**
-     * @readonly
      * @var string
      */
     private $condition;
     /**
      * @var array<string, mixed>
-     * @readonly
      */
     private $options;
     /**

@@ -25,17 +25,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ContainerGetToRequiredDependencyAbstractClassRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver
      */
     private $serviceTypeMethodCallResolver;
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeFactory\RequiredClassMethodFactory
      */
     private $requiredClassMethodFactory;
     /**
-     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ContainerAwareAnalyzer
      */
     private $containerAwareAnalyzer;

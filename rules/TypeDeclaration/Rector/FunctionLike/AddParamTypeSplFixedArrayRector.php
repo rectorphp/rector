@@ -21,7 +21,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddParamTypeSplFixedArrayRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;

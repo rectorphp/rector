@@ -24,27 +24,22 @@ use Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector;
 final class PhpNestedAttributeGroupFactory
 {
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\AnnotationToAttributeMapper
      */
     private $annotationToAttributeMapper;
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\AttributeNameFactory
      */
     private $attributeNameFactory;
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\NamedArgsFactory
      */
     private $namedArgsFactory;
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeAnalyzer\ExprParameterReflectionTypeCorrector
      */
     private $exprParameterReflectionTypeCorrector;
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
     private $attributeArrayNameInliner;

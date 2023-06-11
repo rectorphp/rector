@@ -24,22 +24,18 @@ use Rector\Core\Util\StringUtils;
 final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
     private $classAnnotationMatcher;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser
      */
     private $staticDoctrineAnnotationParser;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory
      */
     private $tokenIteratorFactory;
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\Attributes\AttributeMirrorer
      */
     private $attributeMirrorer;

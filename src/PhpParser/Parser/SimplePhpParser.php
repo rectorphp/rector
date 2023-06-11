@@ -11,7 +11,6 @@ use Rector\Core\PhpParser\NodeTraverser\NodeConnectingTraverser;
 final class SimplePhpParser
 {
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\NodeTraverser\NodeConnectingTraverser
      */
     private $nodeConnectingTraverser;

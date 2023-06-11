@@ -17,12 +17,10 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ServiceSetStringNameToClassNameRector extends AbstractRector
 {
     /**
-     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
      */
     private $symfonyPhpClosureDetector;
     /**
-     * @readonly
      * @var \Rector\Symfony\DataProvider\ServiceNameToTypeUniqueProvider
      */
     private $serviceNameToTypeUniqueProvider;

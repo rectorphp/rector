@@ -33,22 +33,18 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class UndefinedVariableResolver
 {
     /**
-     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
     /**
-     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\VariableAnalyzer
      */
     private $variableAnalyzer;

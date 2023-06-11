@@ -10,7 +10,6 @@ use Rector\Naming\ValueObject\ParamRename;
 final class PropertyDocBlockManipulator
 {
     /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

@@ -15,17 +15,14 @@ use Rector\Symfony\ValueObject\ServiceDefinition;
 final class MessengerHelper
 {
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory
      */
     private $phpAttributeGroupFactory;
     /**
-     * @readonly
      * @var \Rector\PhpAttribute\AttributeArrayNameInliner
      */
     private $attributeArrayNameInliner;
     /**
-     * @readonly
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;

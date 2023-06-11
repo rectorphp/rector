@@ -11,7 +11,6 @@ use Rector\Php74\Guard\PropertyTypeChangeGuard;
 final class MakePropertyPromotionGuard
 {
     /**
-     * @readonly
      * @var \Rector\Php74\Guard\PropertyTypeChangeGuard
      */
     private $propertyTypeChangeGuard;
