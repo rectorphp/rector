@@ -27,7 +27,7 @@ final class PhpFilesFinder
      */
     public function findInPaths(array $paths) : array
     {
-        $filePaths = $this->filesFinder->findInDirectoriesAndFiles($paths, ['php']);
+        $filePaths = $this->filesFinder->findInDirectoriesAndFiles($paths, ['php'], \false);
         // filter out non-PHP files
         foreach ($filePaths as $key => $filePath) {
             /**

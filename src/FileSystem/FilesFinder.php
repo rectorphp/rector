@@ -45,25 +45,28 @@ final class FilesFinder
      * @param string[] $suffixes
      * @return string[]
      */
-    public function findInDirectoriesAndFiles(array $source, array $suffixes = []) : array
+    public function findInDirectoriesAndFiles(array $source, array $suffixes = [], bool $sortByName = \true) : array
     {
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         $filePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
         $directories = $this->fileAndDirectoryFilter->filterDirectories($filesAndDirectories);
         $currentAndDependentFilePaths = $this->unchangedFilesFilter->filterAndJoinWithDependentFileInfos($filePaths);
-        return \array_merge($currentAndDependentFilePaths, $this->findInDirectories($directories, $suffixes));
+        return \array_merge($currentAndDependentFilePaths, $this->findInDirectories($directories, $suffixes, $sortByName));
     }
     /**
      * @param string[] $directories
      * @param string[] $suffixes
      * @return string[]
      */
-    private function findInDirectories(array $directories, array $suffixes) : array
+    private function findInDirectories(array $directories, array $suffixes, bool $sortByName = \true) : array
     {
         if ($directories === []) {
             return [];
         }
-        $finder = Finder::create()->files()->size('> 0')->in($directories)->sortByName();
+        $finder = Finder::create()->files()->size('> 0')->in($directories);
+        if ($sortByName) {
+            $finder->sortByName();
+        }
         if ($suffixes !== []) {
             $suffixesPattern = $this->normalizeSuffixesToPattern($suffixes);
             $finder->name($suffixesPattern);
