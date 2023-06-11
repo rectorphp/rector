@@ -1,4 +1,4 @@
-# 369 Rules Overview
+# 370 Rules Overview
 
 <br>
 
@@ -10,7 +10,7 @@
 
 - [CodingStyle](#codingstyle) (34)
 
-- [DeadCode](#deadcode) (42)
+- [DeadCode](#deadcode) (43)
 
 - [DependencyInjection](#dependencyinjection) (1)
 
@@ -2562,16 +2562,13 @@ Remove dead instanceof check on type hinted variable
 - class: [`Rector\DeadCode\Rector\If_\RemoveDeadInstanceOfRector`](../rules/DeadCode/Rector/If_/RemoveDeadInstanceOfRector.php)
 
 ```diff
- final class SomeClass
+ function run(stdClass $stdClass)
  {
-     public function go(stdClass $stdClass)
-     {
--        if (! $stdClass instanceof stdClass) {
--            return false;
--        }
+-    if (! $stdClass instanceof stdClass) {
+-        return false;
+-    }
 -
-         return true;
-     }
+     return true;
  }
 ```
 
@@ -2886,6 +2883,36 @@ Remove unneeded PHP_VERSION_ID conditional checks
 -        }
 -
          echo 'do something';
+     }
+ }
+```
+
+<br>
+
+### RemoveTypedPropertyDeadInstanceOfRector
+
+Remove dead instanceof check on type hinted property
+
+- class: [`Rector\DeadCode\Rector\If_\RemoveTypedPropertyDeadInstanceOfRector`](../rules/DeadCode/Rector/If_/RemoveTypedPropertyDeadInstanceOfRector.php)
+
+```diff
+ final class SomeClass
+ {
+     private $someObject;
+
+     public function __construct($someObject)
+     {
+         $this->someObject = $someObject;
+     }
+
+     public function run()
+     {
+-        if ($this->someObject instanceof SomeObject) {
+-            return true;
+-        }
+-
+-        return false;
++        return true;
      }
  }
 ```
