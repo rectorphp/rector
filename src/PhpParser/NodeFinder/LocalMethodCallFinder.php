@@ -36,18 +36,14 @@ final class LocalMethodCallFinder
     /**
      * @return MethodCall[]
      */
-    public function match(ClassMethod $classMethod) : array
+    public function match(Class_ $class, ClassMethod $classMethod) : array
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$class instanceof Class_) {
-            return [];
-        }
         $className = $this->nodeNameResolver->getName($class);
         if (!\is_string($className)) {
             return [];
         }
         /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstanceOf($class, MethodCall::class);
+        $methodCalls = $this->betterNodeFinder->findInstanceOf($class->getMethods(), MethodCall::class);
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
         $matchingMethodCalls = [];
         foreach ($methodCalls as $methodCall) {

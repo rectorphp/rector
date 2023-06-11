@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Core\Rector\AbstractRector;
@@ -78,21 +79,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->params === []) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $method) {
+            if ($method->params === []) {
+                continue;
+            }
+            if (!$method->isPrivate()) {
+                continue;
+            }
+            $methodCalls = $this->localMethodCallFinder->match($node, $method);
+            $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($methodCalls);
+            $classMethod = $this->classMethodParamTypeCompleter->complete($method, $classMethodParameterTypes, self::MAX_UNION_TYPES);
+            if ($classMethod instanceof ClassMethod) {
+                $hasChanged = \true;
+            }
         }
-        if (!$node->isPrivate()) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        $methodCalls = $this->localMethodCallFinder->match($node);
-        $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($methodCalls);
-        return $this->classMethodParamTypeCompleter->complete($node, $classMethodParameterTypes, self::MAX_UNION_TYPES);
+        return null;
     }
 }
