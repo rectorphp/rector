@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class JsonConstCleaner
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

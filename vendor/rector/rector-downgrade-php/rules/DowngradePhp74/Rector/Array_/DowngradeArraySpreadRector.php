@@ -29,14 +29,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeArraySpreadRector extends AbstractScopeAwareRector
 {
     /**
+     * @readonly
      * @var \Rector\DowngradePhp81\NodeFactory\ArrayMergeFromArraySpreadFactory
      */
     private $arrayMergeFromArraySpreadFactory;
     /**
+     * @readonly
      * @var \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer
      */
     private $arraySpreadAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

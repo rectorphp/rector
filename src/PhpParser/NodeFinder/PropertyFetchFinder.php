@@ -24,26 +24,32 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class PropertyFetchFinder
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
@@ -155,10 +161,7 @@ final class PropertyFetchFinder
         if (!$classReflection instanceof ClassReflection || !$classReflection->isClass()) {
             return \false;
         }
-        if ($classReflection->getName() === $this->nodeNameResolver->getName($class)) {
-            return \false;
-        }
-        return !$hasTrait;
+        return $classReflection->getName() !== $this->nodeNameResolver->getName($class) && !$hasTrait;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class

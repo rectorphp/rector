@@ -13,6 +13,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class LiteralCallLikeConstFetchReplacer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

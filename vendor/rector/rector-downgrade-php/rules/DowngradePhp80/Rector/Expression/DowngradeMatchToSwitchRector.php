@@ -4,30 +4,15 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Expression;
 
 use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp\BooleanOr;
+use PhpParser\Node\Expr\BinaryOp\Identical;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Match_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\MatchArm;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Case_;
-use PhpParser\Node\Stmt\Echo_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
-use PHPStan\Analyser\Scope;
-use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php72\NodeFactory\AnonymousFunctionFactory;
+use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Name;
+use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -35,16 +20,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\Expression\DowngradeMatchToSwitchRector\DowngradeMatchToSwitchRectorTest
  */
-final class DowngradeMatchToSwitchRector extends AbstractScopeAwareRector
+final class DowngradeMatchToSwitchRector extends AbstractRector
 {
-    /**
-     * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
-     */
-    private $anonymousFunctionFactory;
-    public function __construct(AnonymousFunctionFactory $anonymousFunctionFactory)
-    {
-        $this->anonymousFunctionFactory = $anonymousFunctionFactory;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Downgrade match() to switch()', [new CodeSample(<<<'CODE_SAMPLE'
@@ -65,18 +42,7 @@ class SomeClass
 {
     public function run()
     {
-        switch ($statusCode) {
-            case 200:
-            case 300:
-                $message = null;
-                break;
-            case 400:
-                $message = 'not found';
-                break;
-            default:
-                $message = 'unknown status code';
-                break;
-        }
+        $message = ($statusCode === 200 || $statusCode === 300 ? null : $statusCode === 400 ? 'not found' : 'unknown status code';
     }
 }
 CODE_SAMPLE
@@ -87,121 +53,56 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Echo_::class, Expression::class, Return_::class];
+        return [Match_::class];
     }
     /**
-     * @param Echo_|Expression|Return_ $node
+     * @param Match_ $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?Node
+    public function refactor(Node $node) : ?Ternary
     {
-        $match = $this->betterNodeFinder->findFirst($node, static function (Node $subNode) : bool {
-            return $subNode instanceof Match_;
-        });
-        if (!$match instanceof Match_) {
-            return null;
+        $reversedMatchArms = \array_reverse($node->arms);
+        $defaultExpr = $this->matchDefaultExpr($node);
+        $defaultExpr = $defaultExpr ?: new ConstFetch(new Name('null'));
+        $firstTernary = null;
+        $currentTernary = null;
+        foreach ($reversedMatchArms as $matchArm) {
+            if ($matchArm->conds === null) {
+                continue;
+            }
+            $cond = $this->createCond($matchArm->conds, $node);
+            $currentTernary = new Ternary($cond, $matchArm->body, $firstTernary ?: $defaultExpr);
+            if ($firstTernary === null) {
+                $firstTernary = $currentTernary;
+            }
         }
-        $matchScope = $match->getAttribute(AttributeKey::SCOPE);
-        if (!$matchScope instanceof Scope) {
-            return null;
-        }
-        if ($matchScope->getParentScope() !== $scope->getParentScope()) {
-            return null;
-        }
-        $switchCases = $this->createSwitchCasesFromMatchArms($node, $match);
-        $switch = new Switch_($match->cond, $switchCases);
-        $parentMatch = $match->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentMatch instanceof ArrowFunction) {
-            return $this->refactorInArrowFunction($parentMatch, $match, $node);
-        }
-        if ($parentMatch instanceof ArrayItem) {
-            $parentMatch->value = new FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
-            return $node;
-        }
-        return $switch;
+        return $currentTernary;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
-     * @return \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_|null
-     */
-    private function refactorInArrowFunction(ArrowFunction $arrowFunction, Match_ $match, $node)
+    private function matchDefaultExpr(Match_ $match) : ?Expr
     {
-        $parentOfParentMatch = $arrowFunction->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentOfParentMatch instanceof Node) {
-            return null;
-        }
-        /**
-         * Yes, Pass Match_ object itself to Return_
-         * Let the Rule revisit the Match_ after the ArrowFunction converted to Closure_
-         */
-        $stmts = [new Return_($match)];
-        $closure = $this->anonymousFunctionFactory->create($arrowFunction->params, $stmts, $arrowFunction->returnType, $arrowFunction->static);
-        if ($parentOfParentMatch instanceof Arg && $parentOfParentMatch->value === $arrowFunction) {
-            $parentOfParentMatch->value = $closure;
-            return $node;
-        }
-        if (($parentOfParentMatch instanceof Assign || $parentOfParentMatch instanceof Expression || $parentOfParentMatch instanceof Return_) && $parentOfParentMatch->expr === $arrowFunction) {
-            $parentOfParentMatch->expr = $closure;
-            return $node;
-        }
-        if ($parentOfParentMatch instanceof FuncCall && $parentOfParentMatch->name === $arrowFunction) {
-            $parentOfParentMatch->name = $closure;
-            return $node;
+        foreach ($match->arms as $matchArm) {
+            if ($matchArm->conds === null) {
+                return $matchArm->body;
+            }
         }
         return null;
     }
     /**
-     * @return Case_[]
-     * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
+     * @param Expr[] $condExprs
+     * @return \PhpParser\Node\Expr\BinaryOp\Identical|\PhpParser\Node\Expr\BinaryOp\BooleanOr
      */
-    private function createSwitchCasesFromMatchArms($node, Match_ $match) : array
+    private function createCond(array $condExprs, Match_ $match)
     {
-        $switchCases = [];
-        $parentNode = $match->getAttribute(AttributeKey::PARENT_NODE);
-        foreach ($match->arms as $matchArm) {
-            if (\count((array) $matchArm->conds) > 1) {
-                $lastCase = null;
-                foreach ((array) $matchArm->conds as $matchArmCond) {
-                    $lastCase = new Case_($matchArmCond);
-                    $switchCases[] = $lastCase;
-                }
-                /** @var Case_ $lastCase */
-                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
+        $cond = null;
+        foreach ($condExprs as $condExpr) {
+            if ($cond instanceof Node) {
+                $cond = new BooleanOr($cond, new Identical($match->cond, $condExpr));
             } else {
-                $stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
-                $switchCases[] = new Case_($matchArm->conds[0] ?? null, $stmts);
+                $cond = new Identical($match->cond, $condExpr);
             }
         }
-        return $switchCases;
-    }
-    /**
-     * @return Stmt[]
-     * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
-     */
-    private function createSwitchStmts($node, MatchArm $matchArm, ?Node $parentNode) : array
-    {
-        $stmts = [];
-        if ($parentNode instanceof ArrayItem) {
-            $stmts[] = new Return_($matchArm->body);
-        } elseif ($matchArm->body instanceof Throw_) {
-            $stmts[] = new Expression($matchArm->body);
-        } elseif ($node instanceof Return_) {
-            $stmts[] = new Return_($matchArm->body);
-        } elseif ($node instanceof Echo_) {
-            $stmts[] = new Echo_([$matchArm->body]);
-            $stmts[] = new Break_();
-        } elseif ($node->expr instanceof Assign) {
-            $stmts[] = new Expression(new Assign($node->expr->var, $matchArm->body));
-            $stmts[] = new Break_();
-        } elseif ($node->expr instanceof Match_) {
-            $stmts[] = new Expression($matchArm->body);
-            $stmts[] = new Break_();
-        } elseif ($node->expr instanceof CallLike) {
-            /** @var FuncCall|MethodCall|New_|NullsafeMethodCall|StaticCall $call */
-            $call = clone $node->expr;
-            $call->args = [new Arg($matchArm->body)];
-            $stmts[] = new Expression($call);
-            $stmts[] = new Break_();
+        if (!$cond instanceof Expr) {
+            throw new ShouldNotHappenException();
         }
-        return $stmts;
+        return $cond;
     }
 }

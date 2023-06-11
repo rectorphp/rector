@@ -41,26 +41,32 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class TemplateAnnotationToThisRenderRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ArrayUnionResponseTypeAnalyzer
      */
     private $arrayUnionResponseTypeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeDeclaration\ReturnTypeDeclarationUpdater
      */
     private $returnTypeDeclarationUpdater;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFactory\ThisRenderFactory
      */
     private $thisRenderFactory;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFinder\EmptyReturnNodeFinder
      */
     private $emptyReturnNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Symfony\Annotation\AnnotationAnalyzer
      */
     private $annotationAnalyzer;

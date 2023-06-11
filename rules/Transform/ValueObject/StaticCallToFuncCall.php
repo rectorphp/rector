@@ -8,14 +8,17 @@ use Rector\Core\Validation\RectorAssert;
 final class StaticCallToFuncCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var string
      */
     private $function;

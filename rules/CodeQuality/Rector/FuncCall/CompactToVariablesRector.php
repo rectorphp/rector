@@ -25,6 +25,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CompactToVariablesRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\CodeQuality\CompactConverter
      */
     private $compactConverter;

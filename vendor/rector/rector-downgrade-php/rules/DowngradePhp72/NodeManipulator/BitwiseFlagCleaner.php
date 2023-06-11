@@ -12,6 +12,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class BitwiseFlagCleaner
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

@@ -7,6 +7,7 @@ use Symplify\RuleDocGenerator\ValueObject\AbstractCodeSample;
 final class ExtraFileCodeSample extends AbstractCodeSample
 {
     /**
+     * @readonly
      * @var string
      */
     private $extraFile;

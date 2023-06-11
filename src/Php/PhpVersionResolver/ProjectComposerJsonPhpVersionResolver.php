@@ -13,10 +13,12 @@ use Rector\Core\Util\PhpVersionFactory;
 final class ProjectComposerJsonPhpVersionResolver
 {
     /**
+     * @readonly
      * @var \Composer\Semver\VersionParser
      */
     private $versionParser;
     /**
+     * @readonly
      * @var \Rector\Core\Util\PhpVersionFactory
      */
     private $phpVersionFactory;

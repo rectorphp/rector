@@ -12,6 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class DocBlockUpdater
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter
      */
     private $phpDocInfoPrinter;
@@ -34,6 +35,20 @@ final class DocBlockUpdater
         }
         // this is needed to remove duplicated // commentsAsText
         $node->setDocComment(new Doc($phpDoc));
+    }
+    public function updateRefactoredNodeWithPhpDocInfo(Node $node) : void
+    {
+        // nothing to change? don't save it
+        $phpDocInfo = $this->resolveChangedPhpDocInfo($node);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return;
+        }
+        $phpDocNode = $phpDocInfo->getPhpDocNode();
+        if ($phpDocNode->children === []) {
+            $this->setCommentsAttribute($node);
+            return;
+        }
+        $node->setDocComment(new Doc((string) $phpDocNode));
     }
     private function setCommentsAttribute(Node $node) : void
     {

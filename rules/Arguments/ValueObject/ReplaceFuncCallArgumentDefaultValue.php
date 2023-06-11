@@ -7,14 +7,24 @@ use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 final class ReplaceFuncCallArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $function;
     /**
+     * @readonly
      * @var int
      */
     private $position;
+    /**
+     * @readonly
+     * @var mixed
+     */
     private $valueBefore;
+    /**
+     * @readonly
+     * @var mixed
+     */
     private $valueAfter;
     /**
      * @param mixed $valueBefore

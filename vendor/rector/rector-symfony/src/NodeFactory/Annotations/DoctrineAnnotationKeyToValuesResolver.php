@@ -10,10 +10,12 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class DoctrineAnnotationKeyToValuesResolver
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFactory\Annotations\StringValueQuoteWrapper
      */
     private $stringValueQuoteWrapper;

@@ -26,6 +26,7 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ReturnArrayClassMethodToYieldRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\NodeTransformer
      */
     private $nodeTransformer;

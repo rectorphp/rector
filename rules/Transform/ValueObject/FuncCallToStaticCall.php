@@ -7,14 +7,17 @@ use Rector\Core\Validation\RectorAssert;
 final class FuncCallToStaticCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldFuncName;
     /**
+     * @readonly
      * @var string
      */
     private $newClassName;
     /**
+     * @readonly
      * @var string
      */
     private $newMethodName;

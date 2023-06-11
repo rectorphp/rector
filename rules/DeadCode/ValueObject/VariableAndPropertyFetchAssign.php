@@ -8,10 +8,12 @@ use PhpParser\Node\Expr\Variable;
 final class VariableAndPropertyFetchAssign
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Variable
      */
     private $variable;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\PropertyFetch
      */
     private $propertyFetch;

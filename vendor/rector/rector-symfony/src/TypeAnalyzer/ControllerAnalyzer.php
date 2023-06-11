@@ -16,6 +16,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ControllerAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

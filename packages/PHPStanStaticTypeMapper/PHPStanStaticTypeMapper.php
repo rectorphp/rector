@@ -18,12 +18,13 @@ final class PHPStanStaticTypeMapper
 {
     /**
      * @var TypeMapperInterface[]
+     * @readonly
      */
     private $typeMappers;
     /**
      * @param TypeMapperInterface[] $typeMappers
      */
-    public function __construct(array $typeMappers)
+    public function __construct(iterable $typeMappers)
     {
         $this->typeMappers = $typeMappers;
     }

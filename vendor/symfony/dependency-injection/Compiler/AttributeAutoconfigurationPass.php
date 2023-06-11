@@ -80,7 +80,7 @@ final class AttributeAutoconfigurationPass extends AbstractRecursivePass
         $instanceof = $value->getInstanceofConditionals();
         $conditionals = $instanceof[$classReflector->getName()] ?? new ChildDefinition('');
         if ($this->classAttributeConfigurators) {
-            foreach ($classReflector->getAttributes() as $attribute) {
+            foreach (\method_exists($classReflector, 'getAttributes') ? $classReflector->getAttributes() : [] as $attribute) {
                 if ($configurator = $this->classAttributeConfigurators[$attribute->getName()] ?? null) {
                     $configurator($conditionals, $attribute->newInstance(), $classReflector);
                 }
@@ -94,7 +94,7 @@ final class AttributeAutoconfigurationPass extends AbstractRecursivePass
             }
             if ($constructorReflector) {
                 foreach ($constructorReflector->getParameters() as $parameterReflector) {
-                    foreach ($parameterReflector->getAttributes() as $attribute) {
+                    foreach (\method_exists($parameterReflector, 'getAttributes') ? $parameterReflector->getAttributes() : [] as $attribute) {
                         if ($configurator = $this->parameterAttributeConfigurators[$attribute->getName()] ?? null) {
                             $configurator($conditionals, $attribute->newInstance(), $parameterReflector);
                         }
@@ -108,7 +108,7 @@ final class AttributeAutoconfigurationPass extends AbstractRecursivePass
                     continue;
                 }
                 if ($this->methodAttributeConfigurators) {
-                    foreach ($methodReflector->getAttributes() as $attribute) {
+                    foreach (\method_exists($methodReflector, 'getAttributes') ? $methodReflector->getAttributes() : [] as $attribute) {
                         if ($configurator = $this->methodAttributeConfigurators[$attribute->getName()] ?? null) {
                             $configurator($conditionals, $attribute->newInstance(), $methodReflector);
                         }
@@ -116,7 +116,7 @@ final class AttributeAutoconfigurationPass extends AbstractRecursivePass
                 }
                 if ($this->parameterAttributeConfigurators) {
                     foreach ($methodReflector->getParameters() as $parameterReflector) {
-                        foreach ($parameterReflector->getAttributes() as $attribute) {
+                        foreach (\method_exists($parameterReflector, 'getAttributes') ? $parameterReflector->getAttributes() : [] as $attribute) {
                             if ($configurator = $this->parameterAttributeConfigurators[$attribute->getName()] ?? null) {
                                 $configurator($conditionals, $attribute->newInstance(), $parameterReflector);
                             }
@@ -130,7 +130,7 @@ final class AttributeAutoconfigurationPass extends AbstractRecursivePass
                 if ($propertyReflector->isStatic()) {
                     continue;
                 }
-                foreach ($propertyReflector->getAttributes() as $attribute) {
+                foreach (\method_exists($propertyReflector, 'getAttributes') ? $propertyReflector->getAttributes() : [] as $attribute) {
                     if ($configurator = $this->propertyAttributeConfigurators[$attribute->getName()] ?? null) {
                         $configurator($conditionals, $attribute->newInstance(), $propertyReflector);
                     }

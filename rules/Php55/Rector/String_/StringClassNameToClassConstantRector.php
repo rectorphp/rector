@@ -16,6 +16,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\Php55\NodeVisitor\ClassConstStringValueNodeVisitor;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -28,9 +29,14 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class StringClassNameToClassConstantRector extends AbstractScopeAwareRector implements AllowEmptyConfigurableRectorInterface, MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
+    /**
+     * @var string
+     */
+    private const IS_UNDER_CLASS_CONST = 'is_under_class_const';
     /**
      * @var string[]
      */
@@ -78,18 +84,23 @@ CODE_SAMPLE
     }
     /**
      * @param String_|FuncCall|ClassConst $node
+     * @return \PhpParser\Node\Expr\BinaryOp\Concat|\PhpParser\Node\Expr\ClassConstFetch|null|int
      */
     public function refactorWithScope(Node $node, Scope $scope)
     {
         // allow class strings to be part of class const arrays, as probably on purpose
         if ($node instanceof ClassConst) {
-            return NodeTraverser::STOP_TRAVERSAL;
+            $this->fillIsUnderClassConstAttribute($node);
+            return null;
         }
         // keep allowed string as condition
         if ($node instanceof FuncCall) {
             if ($this->isName($node, 'is_a')) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
             }
+            return null;
+        }
+        if ($node->getAttribute(self::IS_UNDER_CLASS_CONST) === \true) {
             return null;
         }
         $classLikeName = $node->value;
@@ -122,6 +133,12 @@ CODE_SAMPLE
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::CLASSNAME_CONSTANT;
+    }
+    private function fillIsUnderClassConstAttribute(ClassConst $classConst) : void
+    {
+        $nodeTraverser = new NodeTraverser();
+        $nodeTraverser->addVisitor(new ClassConstStringValueNodeVisitor());
+        $nodeTraverser->traverse([$classConst]);
     }
     private function shouldSkip(string $classLikeName) : bool
     {

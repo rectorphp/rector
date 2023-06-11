@@ -22,10 +22,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateMethodRector extends AbstractScopeAwareRector
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\IsClassMethodUsedAnalyzer
      */
     private $isClassMethodUsedAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

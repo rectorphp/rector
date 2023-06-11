@@ -7,6 +7,7 @@ use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 final class Cache
 {
     /**
+     * @readonly
      * @var \Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface
      */
     private $cacheStorage;

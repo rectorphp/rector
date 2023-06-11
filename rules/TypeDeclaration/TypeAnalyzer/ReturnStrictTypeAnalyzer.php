@@ -21,14 +21,17 @@ use Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper;
 final class ReturnStrictTypeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\TypeNodeUnwrapper
      */
     private $typeNodeUnwrapper;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;

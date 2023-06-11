@@ -13,6 +13,7 @@ use Rector\Php70\Exception\InvalidEregException;
 final class EregToPcreTransformer
 {
     /**
+     * @readonly
      * @var string
      */
     private $pcreDelimiter = '#';

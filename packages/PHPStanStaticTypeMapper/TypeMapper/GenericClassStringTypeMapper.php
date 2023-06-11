@@ -23,6 +23,7 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class GenericClassStringTypeMapper implements TypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

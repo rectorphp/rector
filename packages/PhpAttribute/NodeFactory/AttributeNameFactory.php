@@ -13,6 +13,7 @@ use Rector\PhpAttribute\ValueObject\UseAliasMetadata;
 final class AttributeNameFactory
 {
     /**
+     * @readonly
      * @var \Rector\PhpAttribute\UseAliasNameMatcher
      */
     private $useAliasNameMatcher;

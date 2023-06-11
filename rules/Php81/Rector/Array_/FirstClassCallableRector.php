@@ -32,10 +32,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FirstClassCallableRector extends AbstractScopeAwareRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeCollector\NodeAnalyzer\ArrayCallableMethodMatcher
      */
     private $arrayCallableMethodMatcher;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

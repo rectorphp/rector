@@ -8,14 +8,17 @@ use Rector\Core\Validation\RectorAssert;
 final class AddPropertyTypeDeclaration
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $propertyName;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $type;

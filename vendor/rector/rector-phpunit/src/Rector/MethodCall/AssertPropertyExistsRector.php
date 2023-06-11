@@ -21,10 +21,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AssertPropertyExistsRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator
      */
     private $identifierManipulator;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;

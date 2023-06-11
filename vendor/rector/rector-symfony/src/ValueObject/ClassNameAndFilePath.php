@@ -6,10 +6,12 @@ namespace Rector\Symfony\ValueObject;
 class ClassNameAndFilePath
 {
     /**
+     * @readonly
      * @var string
      */
     private $className;
     /**
+     * @readonly
      * @var string
      */
     private $filePath;

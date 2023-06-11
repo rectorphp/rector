@@ -21,18 +21,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MessageHandlerInterfaceToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\Helper\MessengerHelper
      */
     private $messengerHelper;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeManipulator\ClassManipulator
      */
     private $classManipulator;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;

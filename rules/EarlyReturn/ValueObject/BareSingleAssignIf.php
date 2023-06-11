@@ -9,10 +9,12 @@ use PhpParser\Node\Stmt\If_;
 final class BareSingleAssignIf
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Stmt\If_
      */
     private $if;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Assign
      */
     private $assign;

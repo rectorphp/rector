@@ -15,14 +15,17 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
 final class FileInfoParser
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator
      */
     private $nodeScopeAndMetadataDecorator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
      */
     private $fileWithoutNamespaceNodeTraverser;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
     private $rectorParser;

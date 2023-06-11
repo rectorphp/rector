@@ -22,6 +22,7 @@ use Rector\Core\ValueObject\PhpVersionFeature;
 final class ArrayFilterFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

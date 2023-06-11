@@ -24,10 +24,12 @@ use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 final class PropertyNaming
 {
     /**
+     * @readonly
      * @var \Rector\Naming\RectorNamingInflector
      */
     private $rectorNamingInflector;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

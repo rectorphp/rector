@@ -29,10 +29,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeClosureFromCallableRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\NodeFactory\NamedVariableFactory
      */
     private $namedVariableFactory;
     /**
+     * @readonly
      * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
      */
     private $exprInTopStmtMatcher;

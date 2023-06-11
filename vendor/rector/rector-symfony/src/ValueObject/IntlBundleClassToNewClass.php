@@ -8,15 +8,18 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class IntlBundleClassToNewClass
 {
     /**
+     * @readonly
      * @var string
      */
     private $oldClass;
     /**
+     * @readonly
      * @var string
      */
     private $newClass;
     /**
      * @var array<string, string>
+     * @readonly
      */
     private $oldToNewMethods;
     /**

@@ -15,22 +15,27 @@ use Rector\Naming\PhpArray\ArrayFilter;
 final class ConflictingNameResolver
 {
     /**
+     * @readonly
      * @var \Rector\Naming\PhpArray\ArrayFilter
      */
     private $arrayFilter;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
     private $expectedNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver
      */
     private $matchParamTypeExpectedNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\FunctionLikeManipulator
      */
     private $functionLikeManipulator;

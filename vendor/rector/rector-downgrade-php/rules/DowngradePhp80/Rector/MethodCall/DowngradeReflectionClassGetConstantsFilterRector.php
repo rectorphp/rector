@@ -33,14 +33,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeReflectionClassGetConstantsFilterRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;
     /**
+     * @readonly
      * @var \Rector\NodeCollector\BinaryOpConditionsCollector
      */
     private $binaryOpConditionsCollector;

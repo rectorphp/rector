@@ -25,10 +25,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ChangeNestedForeachIfsToEarlyContinueRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
      */
     private $conditionInverter;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\IfManipulator
      */
     private $ifManipulator;

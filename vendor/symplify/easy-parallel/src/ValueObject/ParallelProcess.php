@@ -23,14 +23,17 @@ use Throwable;
 final class ParallelProcess
 {
     /**
+     * @readonly
      * @var string
      */
     private $command;
     /**
+     * @readonly
      * @var \React\EventLoop\LoopInterface
      */
     private $loop;
     /**
+     * @readonly
      * @var int
      */
     private $timetoutInSeconds;

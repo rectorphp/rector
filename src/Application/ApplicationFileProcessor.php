@@ -26,53 +26,65 @@ use RectorPrefix202306\Symplify\EasyParallel\ScheduleFactory;
 final class ApplicationFileProcessor
 {
     /**
+     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;
     /**
+     * @readonly
      * @var \Rector\Core\Application\FileDecorator\FileDiffFileDecorator
      */
     private $fileDiffFileDecorator;
     /**
+     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
     /**
+     * @readonly
      * @var \Rector\Core\ValueObjectFactory\Application\FileFactory
      */
     private $fileFactory;
     /**
+     * @readonly
      * @var \PHPStan\Analyser\NodeScopeResolver
      */
     private $nodeScopeResolver;
     /**
+     * @readonly
      * @var \Rector\Core\Util\ArrayParametersMerger
      */
     private $arrayParametersMerger;
     /**
+     * @readonly
      * @var \Rector\Parallel\Application\ParallelFileProcessor
      */
     private $parallelFileProcessor;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Symplify\EasyParallel\ScheduleFactory
      */
     private $scheduleFactory;
     /**
+     * @readonly
      * @var \Symplify\EasyParallel\CpuCoreCountProvider
      */
     private $cpuCoreCountProvider;
     /**
+     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
      * @var FileProcessorInterface[]
+     * @readonly
      */
-    private $fileProcessors = [];
+    private $fileProcessors;
     /**
      * @var string
      */
@@ -84,7 +96,7 @@ final class ApplicationFileProcessor
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, array $fileProcessors = [])
+    public function __construct(Filesystem $filesystem, FileDiffFileDecorator $fileDiffFileDecorator, OutputStyleInterface $rectorOutputStyle, FileFactory $fileFactory, NodeScopeResolver $nodeScopeResolver, ArrayParametersMerger $arrayParametersMerger, ParallelFileProcessor $parallelFileProcessor, ParameterProvider $parameterProvider, ScheduleFactory $scheduleFactory, CpuCoreCountProvider $cpuCoreCountProvider, ChangedFilesDetector $changedFilesDetector, iterable $fileProcessors)
     {
         $this->filesystem = $filesystem;
         $this->fileDiffFileDecorator = $fileDiffFileDecorator;

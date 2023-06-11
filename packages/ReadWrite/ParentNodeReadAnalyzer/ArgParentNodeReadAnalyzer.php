@@ -11,6 +11,7 @@ use Rector\ReadWrite\Guard\VariableToConstantGuard;
 final class ArgParentNodeReadAnalyzer implements ParentNodeReadAnalyzerInterface
 {
     /**
+     * @readonly
      * @var \Rector\ReadWrite\Guard\VariableToConstantGuard
      */
     private $variableToConstantGuard;

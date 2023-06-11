@@ -13,6 +13,7 @@ use RectorPrefix202306\Symplify\EasyParallel\Exception\ParallelShouldNotHappenEx
 final class ProcessPool
 {
     /**
+     * @readonly
      * @var \React\Socket\TcpServer
      */
     private $tcpServer;

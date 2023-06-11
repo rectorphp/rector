@@ -7,14 +7,17 @@ use Rector\Core\Validation\RectorAssert;
 final class StringToClassConstant
 {
     /**
+     * @readonly
      * @var string
      */
     private $string;
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $constant;

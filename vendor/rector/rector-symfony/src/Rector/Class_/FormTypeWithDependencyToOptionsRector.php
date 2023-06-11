@@ -25,14 +25,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class FormTypeWithDependencyToOptionsRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFactory\FormType\BuildFormOptionAssignsFactory
      */
     private $buildFormOptionAssignsFactory;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeRemover\ConstructorDependencyRemover
      */
     private $constructorDependencyRemover;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFactory\FormType\ConfigureDefaultsFactory
      */
     private $configureDefaultsFactory;

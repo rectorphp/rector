@@ -7,27 +7,33 @@ use Rector\Symfony\Contract\Tag\TagInterface;
 final class ServiceDefinition
 {
     /**
+     * @readonly
      * @var string
      */
     private $id;
     /**
+     * @readonly
      * @var string|null
      */
     private $class;
     /**
+     * @readonly
      * @var bool
      */
     private $isPublic;
     /**
+     * @readonly
      * @var bool
      */
     private $isSynthetic;
     /**
+     * @readonly
      * @var string|null
      */
     private $alias;
     /**
      * @var TagInterface[]
+     * @readonly
      */
     private $tags;
     /**

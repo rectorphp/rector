@@ -8,17 +8,24 @@ use Rector\Core\Validation\RectorAssert;
 final class ArgumentRemover
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var int
      */
     private $position;
+    /**
+     * @readonly
+     * @var mixed
+     */
     private $value;
     /**
      * @param mixed $value

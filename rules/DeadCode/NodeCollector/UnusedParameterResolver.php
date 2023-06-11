@@ -9,6 +9,7 @@ use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 final class UnusedParameterResolver
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;

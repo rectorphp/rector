@@ -13,10 +13,12 @@ use Rector\Symfony\ValueObjectFactory\ServiceMapFactory;
 final class ServiceMapProvider
 {
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Rector\Symfony\ValueObjectFactory\ServiceMapFactory
      */
     private $serviceMapFactory;

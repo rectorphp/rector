@@ -29,18 +29,22 @@ use Rector\ReadWrite\ParentNodeReadAnalyzer\IncDecParentNodeReadAnalyzer;
 final class ReadWritePropertyAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
     /**
+     * @readonly
      * @var \Rector\ReadWrite\NodeAnalyzer\ReadExprAnalyzer
      */
     private $readExprAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\DeadCode\SideEffect\PureFunctionDetector
      */
     private $pureFunctionDetector;

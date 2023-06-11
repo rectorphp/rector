@@ -30,6 +30,9 @@ class Autoconfigure
      * @var mixed[]|null
      */
     public $bind;
+    /**
+     * @var bool|string|null
+     */
     public $lazy = null;
     /**
      * @var bool|null
@@ -47,6 +50,9 @@ class Autoconfigure
      * @var mixed[]|null
      */
     public $properties;
+    /**
+     * @var mixed[]|string|null
+     */
     public $configurator = null;
     /**
      * @param bool|string|null $lazy

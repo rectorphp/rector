@@ -24,26 +24,32 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameVariableToMatchMethodCallReturnTypeRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Naming\Guard\BreakingVariableRenameGuard
      */
     private $breakingVariableRenameGuard;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\ExpectedNameResolver
      */
     private $expectedNameResolver;
     /**
+     * @readonly
      * @var \Rector\Naming\NamingConvention\NamingConventionAnalyzer
      */
     private $namingConventionAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Naming\PhpDoc\VarTagValueNodeRenamer
      */
     private $varTagValueNodeRenamer;
     /**
+     * @readonly
      * @var \Rector\Naming\Matcher\VariableAndCallAssignMatcher
      */
     private $variableAndCallAssignMatcher;
     /**
+     * @readonly
      * @var \Rector\Naming\VariableRenamer
      */
     private $variableRenamer;

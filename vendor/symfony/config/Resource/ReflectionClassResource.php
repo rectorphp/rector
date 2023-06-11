@@ -135,7 +135,7 @@ class ReflectionClassResource implements SelfCheckingResourceInterface
         if (!$class->isInterface()) {
             $defaults = $class->getDefaultProperties();
             foreach ($class->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED) as $p) {
-                foreach ($p->getAttributes() as $a) {
+                foreach (\method_exists($p, 'getAttributes') ? $p->getAttributes() : [] as $a) {
                     $attributes[] = [$a->getName(), (string) $a];
                 }
                 (yield \print_r($attributes, \true));
@@ -149,14 +149,14 @@ class ReflectionClassResource implements SelfCheckingResourceInterface
             }
         }
         foreach ($class->getMethods(\ReflectionMethod::IS_PUBLIC | \ReflectionMethod::IS_PROTECTED) as $m) {
-            foreach ($m->getAttributes() as $a) {
+            foreach (\method_exists($m, 'getAttributes') ? $m->getAttributes() : [] as $a) {
                 $attributes[] = [$a->getName(), (string) $a];
             }
             (yield \print_r($attributes, \true));
             $attributes = [];
             $defaults = [];
             foreach ($m->getParameters() as $p) {
-                foreach ($p->getAttributes() as $a) {
+                foreach (\method_exists($p, 'getAttributes') ? $p->getAttributes() : [] as $a) {
                     $attributes[] = [$a->getName(), (string) $a];
                 }
                 (yield \print_r($attributes, \true));

@@ -10,14 +10,17 @@ use Rector\Skipper\Skipper\SkipSkipper;
 final class ClassSkipVoter implements SkipVoterInterface
 {
     /**
+     * @readonly
      * @var \Rector\Skipper\Skipper\SkipSkipper
      */
     private $skipSkipper;
     /**
+     * @readonly
      * @var \Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
     private $skippedClassResolver;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

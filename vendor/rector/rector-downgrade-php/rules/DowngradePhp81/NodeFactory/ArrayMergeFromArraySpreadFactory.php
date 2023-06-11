@@ -25,10 +25,12 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ArrayMergeFromArraySpreadFactory
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\DowngradePhp81\NodeAnalyzer\ArraySpreadAnalyzer
      */
     private $arraySpreadAnalyzer;

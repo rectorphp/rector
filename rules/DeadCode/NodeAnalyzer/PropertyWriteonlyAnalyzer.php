@@ -13,6 +13,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PropertyWriteonlyAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

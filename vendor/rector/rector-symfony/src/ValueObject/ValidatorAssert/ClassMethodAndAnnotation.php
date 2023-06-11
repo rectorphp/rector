@@ -8,9 +8,11 @@ final class ClassMethodAndAnnotation
 {
     /**
      * @var string[]
+     * @readonly
      */
     private $possibleMethodNames;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode
      */
     private $doctrineAnnotationTagValueNode;

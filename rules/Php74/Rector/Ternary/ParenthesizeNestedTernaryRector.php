@@ -20,6 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParenthesizeNestedTernaryRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Php74\Tokenizer\ParenthesizedNestedTernaryAnalyzer
      */
     private $parenthesizedNestedTernaryAnalyzer;

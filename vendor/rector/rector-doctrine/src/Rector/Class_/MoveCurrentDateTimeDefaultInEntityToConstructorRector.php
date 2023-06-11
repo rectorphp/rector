@@ -27,14 +27,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class MoveCurrentDateTimeDefaultInEntityToConstructorRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\ConstructorManipulator
      */
     private $constructorManipulator;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeFactory\ValueAssignFactory
      */
     private $valueAssignFactory;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\ConstructorAssignPropertyAnalyzer
      */
     private $constructorAssignPropertyAnalyzer;

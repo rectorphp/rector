@@ -18,14 +18,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RenameForeachValueVariableToMatchExprVariableRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Naming\ExpectedNameResolver\InflectorSingularResolver
      */
     private $inflectorSingularResolver;
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
      */
     private $foreachAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;

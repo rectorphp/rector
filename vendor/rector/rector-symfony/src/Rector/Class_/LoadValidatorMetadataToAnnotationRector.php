@@ -26,14 +26,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class LoadValidatorMetadataToAnnotationRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Annotations\MethodCallAnnotationAssertResolver
      */
     private $methodCallAnnotationAssertResolver;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Annotations\PropertyAnnotationAssertResolver
      */
     private $propertyAnnotationAssertResolver;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Annotations\ClassAnnotationAssertResolver
      */
     private $classAnnotationAssertResolver;

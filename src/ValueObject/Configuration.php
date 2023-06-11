@@ -7,49 +7,60 @@ use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 final class Configuration
 {
     /**
+     * @readonly
      * @var bool
      */
     private $isDryRun = \false;
     /**
+     * @readonly
      * @var bool
      */
     private $showProgressBar = \true;
     /**
+     * @readonly
      * @var bool
      */
     private $shouldClearCache = \false;
     /**
+     * @readonly
      * @var string
      */
     private $outputFormat = ConsoleOutputFormatter::NAME;
     /**
      * @var string[]
+     * @readonly
      */
     private $fileExtensions = ['php'];
     /**
      * @var string[]
+     * @readonly
      */
     private $paths = [];
     /**
+     * @readonly
      * @var bool
      */
     private $showDiffs = \true;
     /**
+     * @readonly
      * @var string|null
      */
-    private $parallelPort;
+    private $parallelPort = null;
     /**
+     * @readonly
      * @var string|null
      */
-    private $parallelIdentifier;
+    private $parallelIdentifier = null;
     /**
+     * @readonly
      * @var bool
      */
     private $isParallel = \false;
     /**
+     * @readonly
      * @var string|null
      */
-    private $memoryLimit;
+    private $memoryLimit = null;
     /**
      * @param string[] $fileExtensions
      * @param string[] $paths

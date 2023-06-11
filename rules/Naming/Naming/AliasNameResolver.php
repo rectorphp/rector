@@ -8,6 +8,7 @@ use PhpParser\Node\Name;
 final class AliasNameResolver
 {
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;

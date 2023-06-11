@@ -8,6 +8,7 @@ use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
 final class DoctrineClassAnnotationMatcher
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
     private $classAnnotationMatcher;

@@ -7,10 +7,12 @@ use PHPStan\Type\Type;
 final class TernaryIfElseTypes
 {
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $firstType;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $secondType;

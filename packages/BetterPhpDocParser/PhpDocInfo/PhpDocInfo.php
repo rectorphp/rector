@@ -40,34 +40,42 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocInfo
 {
     /**
+     * @readonly
      * @var \PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode
      */
     private $phpDocNode;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator
      */
     private $betterTokenIterator;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \PhpParser\Node
      */
     private $node;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
      */
     private $annotationNaming;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder
      */
     private $phpDocNodeByTypeFinder;

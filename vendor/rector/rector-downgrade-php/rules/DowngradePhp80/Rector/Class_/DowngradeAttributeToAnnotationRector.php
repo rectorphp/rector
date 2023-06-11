@@ -28,6 +28,7 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class DowngradeAttributeToAnnotationRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeFactory\DoctrineAnnotationFactory
      */
     private $doctrineAnnotationFactory;

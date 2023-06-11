@@ -23,18 +23,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\AssertCallAnalyzer
      */
     private $assertCallAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\MockedVariableAnalyzer
      */
     private $mockedVariableAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer
      */
     private $phpAttributeAnalyzer;

@@ -8,15 +8,18 @@ use Rector\Core\Validation\RectorAssert;
 final class SwapMethodCallArguments
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
      * @var array<int, int>
+     * @readonly
      */
     private $order;
     /**

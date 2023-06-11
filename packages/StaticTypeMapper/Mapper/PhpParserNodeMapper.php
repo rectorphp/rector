@@ -16,12 +16,13 @@ final class PhpParserNodeMapper
 {
     /**
      * @var PhpParserNodeMapperInterface[]
+     * @readonly
      */
     private $phpParserNodeMappers;
     /**
      * @param PhpParserNodeMapperInterface[] $phpParserNodeMappers
      */
-    public function __construct(array $phpParserNodeMappers)
+    public function __construct(iterable $phpParserNodeMappers)
     {
         $this->phpParserNodeMappers = $phpParserNodeMappers;
     }

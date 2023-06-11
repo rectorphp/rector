@@ -17,10 +17,12 @@ use Rector\Core\Exception\Cache\CachingException;
 final class FileCacheStorage implements CacheStorageInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $directory;
     /**
+     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;

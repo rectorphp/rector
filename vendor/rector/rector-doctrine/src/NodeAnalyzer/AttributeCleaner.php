@@ -17,10 +17,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class AttributeCleaner
 {
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

@@ -11,10 +11,12 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class DeadVarTagValueNodeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;

@@ -36,14 +36,17 @@ use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 final class ChangedNodeScopeRefresher
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver
      */
     private $phpStanNodeScopeResolver;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ScopeAnalyzer
      */
     private $scopeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;

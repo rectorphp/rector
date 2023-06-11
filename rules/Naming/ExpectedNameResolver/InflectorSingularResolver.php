@@ -12,6 +12,7 @@ use Rector\Core\Util\StringUtils;
 final class InflectorSingularResolver
 {
     /**
+     * @readonly
      * @var \Doctrine\Inflector\Inflector
      */
     private $inflector;

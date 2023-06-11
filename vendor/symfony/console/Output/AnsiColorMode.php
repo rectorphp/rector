@@ -32,25 +32,11 @@ class AnsiColorMode
         $r = $color >> 16 & 255;
         $g = $color >> 8 & 255;
         $b = $color & 255;
-        switch ($this) {
-            case self::Ansi4:
-                return (string) $this->convertFromRGB($r, $g, $b);
-            case self::Ansi8:
-                return '8;5;' . (string) $this->convertFromRGB($r, $g, $b);
-            case self::Ansi24:
-                return \sprintf('8;2;%d;%d;%d', $r, $g, $b);
-        }
+        return $this === self::Ansi4 ? (string) $this->convertFromRGB($r, $g, $b) : ($this === self::Ansi24 ? \sprintf('8;2;%d;%d;%d', $r, $g, $b) : null);
     }
     private function convertFromRGB(int $r, int $g, int $b) : int
     {
-        switch ($this) {
-            case self::Ansi4:
-                return $this->degradeHexColorToAnsi4($r, $g, $b);
-            case self::Ansi8:
-                return $this->degradeHexColorToAnsi8($r, $g, $b);
-            default:
-                throw new InvalidArgumentException("RGB cannot be converted to {$this->name}.");
-        }
+        return $this === self::Ansi4 ? $this->degradeHexColorToAnsi4($r, $g, $b) : ($this === self::Ansi8 ? $this->degradeHexColorToAnsi8($r, $g, $b) : throw new InvalidArgumentException("RGB cannot be converted to {$this->name}."));
     }
     private function degradeHexColorToAnsi4(int $r, int $g, int $b) : int
     {

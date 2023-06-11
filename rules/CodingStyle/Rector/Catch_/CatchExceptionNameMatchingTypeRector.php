@@ -30,10 +30,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class CatchExceptionNameMatchingTypeRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\AliasNameResolver
      */
     private $aliasNameResolver;

@@ -14,10 +14,12 @@ use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
 final class CachedContainerBuilder
 {
     /**
+     * @readonly
      * @var string
      */
     private $cacheDir;
     /**
+     * @readonly
      * @var string
      */
     private $cacheKey;

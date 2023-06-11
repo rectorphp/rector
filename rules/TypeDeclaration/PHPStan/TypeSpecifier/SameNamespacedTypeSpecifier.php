@@ -12,6 +12,7 @@ use Rector\TypeDeclaration\Contract\PHPStan\TypeWithClassTypeSpecifierInterface;
 final class SameNamespacedTypeSpecifier implements TypeWithClassTypeSpecifierInterface
 {
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

@@ -15,29 +15,32 @@ use RectorPrefix202306\Symfony\Component\Console\Command\Command;
 use RectorPrefix202306\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202306\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202306\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 final class ListRulesCommand extends Command
 {
     /**
+     * @readonly
      * @var \Rector\Core\Console\Output\RectorOutputStyle
      */
     private $rectorOutputStyle;
     /**
+     * @readonly
      * @var \Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver
      */
     private $skippedClassResolver;
     /**
      * @var RectorInterface[]
      */
-    private $rectors;
+    private $rectors = [];
     /**
-     * @param RectorInterface[] $rectors
+     * @param RewindableGenerator<RectorInterface> $rectors
      */
-    public function __construct(RectorOutputStyle $rectorOutputStyle, SkippedClassResolver $skippedClassResolver, array $rectors)
+    public function __construct(RectorOutputStyle $rectorOutputStyle, SkippedClassResolver $skippedClassResolver, RewindableGenerator $rectors)
     {
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->skippedClassResolver = $skippedClassResolver;
-        $this->rectors = $rectors;
         parent::__construct();
+        $this->rectors = \iterator_to_array($rectors);
     }
     protected function configure() : void
     {

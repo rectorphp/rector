@@ -18,10 +18,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamTypeFromRouteRequiredRegexRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\RouteRequiredParamNameToTypesResolver
      */
     private $routeRequiredParamNameToTypesResolver;

@@ -12,6 +12,7 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class FilePathHelper
 {
     /**
+     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;

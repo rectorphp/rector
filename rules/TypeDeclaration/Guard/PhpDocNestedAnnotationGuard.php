@@ -11,6 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class PhpDocNestedAnnotationGuard
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

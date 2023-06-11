@@ -23,6 +23,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassAndInterfaceTypeResolver implements NodeTypeResolverInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

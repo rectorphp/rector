@@ -11,6 +11,7 @@ use RectorPrefix202306\Symfony\Component\Console\Output\OutputInterface;
 final class RectorConsoleOutputStyleFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\Util\Reflection\PrivatesAccessor
      */
     private $privatesAccessor;

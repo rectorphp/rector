@@ -6,14 +6,17 @@ namespace Rector\PHPUnit\ValueObject;
 final class ConstantWithAssertMethods
 {
     /**
+     * @readonly
      * @var string
      */
     private $constant;
     /**
+     * @readonly
      * @var string
      */
     private $assetMethodName;
     /**
+     * @readonly
      * @var string
      */
     private $notAssertMethodName;

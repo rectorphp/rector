@@ -13,6 +13,7 @@ use Rector\NodeNestingScope\ValueObject\ControlStructure;
 final class ContextAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

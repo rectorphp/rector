@@ -12,14 +12,17 @@ use Rector\Symfony\ValueObject\ValidatorAssert\ClassMethodAndAnnotation;
 final class MethodCallAnnotationAssertResolver
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory
      */
     private $doctrineAnnotationFromNewFactory;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher
      */
     private $stmtMethodCallMatcher;

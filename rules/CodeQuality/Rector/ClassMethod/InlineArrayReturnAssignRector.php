@@ -24,6 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class InlineArrayReturnAssignRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\CodeQuality\NodeAnalyzer\VariableDimFetchAssignResolver
      */
     private $variableDimFetchAssignResolver;

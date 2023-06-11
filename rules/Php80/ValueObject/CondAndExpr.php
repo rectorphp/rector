@@ -9,14 +9,17 @@ final class CondAndExpr
 {
     /**
      * @var Expr[]|null
+     * @readonly
      */
     private $condExprs;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $expr;
     /**
      * @var MatchKind::*
+     * @readonly
      */
     private $matchKind;
     /**

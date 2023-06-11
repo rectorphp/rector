@@ -28,6 +28,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class AddDefaultValueForUndefinedVariableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Php56\NodeAnalyzer\UndefinedVariableResolver
      */
     private $undefinedVariableResolver;

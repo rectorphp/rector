@@ -12,6 +12,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ArgumentAddingScope
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

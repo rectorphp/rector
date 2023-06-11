@@ -11,6 +11,7 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\Bridge\Symfony\ContainerServiceProvider
      */
     private $containerServiceProvider;

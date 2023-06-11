@@ -7,6 +7,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 final class RectorsChangelogResolver
 {
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Annotation\AnnotationExtractor
      */
     private $annotationExtractor;

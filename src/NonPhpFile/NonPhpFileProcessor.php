@@ -17,17 +17,21 @@ final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**
      * @var NonPhpRectorInterface[]
+     * @readonly
      */
     private $nonPhpRectors;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory
      */
     private $fileDiffFactory;
     /**
+     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
+     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;
@@ -38,7 +42,7 @@ final class NonPhpFileProcessor implements FileProcessorInterface
     /**
      * @param NonPhpRectorInterface[] $nonPhpRectors
      */
-    public function __construct(array $nonPhpRectors, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, Filesystem $filesystem)
+    public function __construct(iterable $nonPhpRectors, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, Filesystem $filesystem)
     {
         $this->nonPhpRectors = $nonPhpRectors;
         $this->fileDiffFactory = $fileDiffFactory;

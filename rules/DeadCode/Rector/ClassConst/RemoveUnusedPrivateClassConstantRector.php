@@ -19,10 +19,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivateClassConstantRector extends AbstractScopeAwareRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassConstManipulator
      */
     private $classConstManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

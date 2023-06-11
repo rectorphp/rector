@@ -28,22 +28,27 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ParamAnnotationIncorrectNullableRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
      */
     private $typeComparator;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\Helper\PhpDocNullableTypeHelper
      */
     private $phpDocNullableTypeHelper;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\Guard\PhpDocNestedAnnotationGuard
      */
     private $phpDocNestedAnnotationGuard;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\PhpDocParser\ParamPhpDocNodeFactory
      */
     private $paramPhpDocNodeFactory;
     /**
+     * @readonly
      * @var \Rector\TypeDeclaration\NodeAnalyzer\ParamAnalyzer
      */
     private $paramAnalyzer;

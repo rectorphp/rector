@@ -17,18 +17,22 @@ use Rector\ReadWrite\Contract\ReadNodeAnalyzerInterface;
 final class LocalPropertyFetchReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
     /**
+     * @readonly
      * @var \Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer
      */
     private $justReadExprAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
     private $propertyFetchFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

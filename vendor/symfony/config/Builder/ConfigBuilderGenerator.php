@@ -97,22 +97,7 @@ public function NAME(): string
             throw new \LogicException('The node was expected to be an ArrayNode. This Configuration includes an edge case not supported yet.');
         }
         foreach ($node->getChildren() as $child) {
-            switch (\true) {
-                case $child instanceof ScalarNode:
-                    $this->handleScalarNode($child, $class);
-                    break;
-                case $child instanceof PrototypedArrayNode:
-                    $this->handlePrototypedArrayNode($child, $class, $namespace);
-                    break;
-                case $child instanceof VariableNode:
-                    $this->handleVariableNode($child, $class);
-                    break;
-                case $child instanceof ArrayNode:
-                    $this->handleArrayNode($child, $class, $namespace);
-                    break;
-                default:
-                    throw new \RuntimeException(\sprintf('Unknown node "%s".', \get_class($child)));
-            }
+            \true === $child instanceof ScalarNode ? $this->handleScalarNode($child, $class) : (\true === $child instanceof ArrayNode ? $this->handleArrayNode($child, $class, $namespace) : throw new \RuntimeException(\sprintf('Unknown node "%s".', \get_class($child))));
         }
     }
     private function handleArrayNode(ArrayNode $node, ClassBuilder $class, string $namespace) : void

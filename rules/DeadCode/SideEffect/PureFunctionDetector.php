@@ -12,10 +12,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class PureFunctionDetector
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

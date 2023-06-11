@@ -24,10 +24,12 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class IntersectionTypeMapper implements TypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

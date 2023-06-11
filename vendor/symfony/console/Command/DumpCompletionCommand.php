@@ -42,17 +42,7 @@ final class DumpCompletionCommand extends Command
         $commandName = \basename($fullCommand);
         $fullCommand = @\realpath($fullCommand) ?: $fullCommand;
         $shell = $this->guessShell();
-        switch ($shell) {
-            case 'fish':
-                [$rcFile, $completionFile] = ['~/.config/fish/config.fish', "/etc/fish/completions/{$commandName}.fish"];
-                break;
-            case 'zsh':
-                [$rcFile, $completionFile] = ['~/.zshrc', '$fpath[1]/_' . $commandName];
-                break;
-            default:
-                [$rcFile, $completionFile] = ['~/.bashrc', "/etc/bash_completion.d/{$commandName}"];
-                break;
-        }
+        [$rcFile, $completionFile] = $shell === 'fish' ? ['~/.config/fish/config.fish', "/etc/fish/completions/{$commandName}.fish"] : ($shell === 'zsh' ? ['~/.zshrc', '$fpath[1]/_' . $commandName] : ['~/.bashrc', "/etc/bash_completion.d/{$commandName}"]);
         $supportedShells = \implode(', ', $this->getSupportedShells());
         $this->setHelp(<<<EOH
 The <info>%command.name%</> command dumps the shell completion script required

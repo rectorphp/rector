@@ -8,14 +8,17 @@ use Rector\Core\Validation\RectorAssert;
 final class PropertyAssignToMethodCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $oldPropertyName;
     /**
+     * @readonly
      * @var string
      */
     private $newMethodName;

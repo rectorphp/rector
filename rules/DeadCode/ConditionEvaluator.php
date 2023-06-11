@@ -15,6 +15,7 @@ use Rector\DeadCode\ValueObject\VersionCompareCondition;
 final class ConditionEvaluator
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

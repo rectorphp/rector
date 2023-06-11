@@ -7,10 +7,12 @@ final class DowngradeAttributeToAnnotation
 {
     /**
      * @var class-string
+     * @readonly
      */
     private $attributeClass;
     /**
      * @var class-string|string|null
+     * @readonly
      */
     private $tag;
     /**

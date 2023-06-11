@@ -18,6 +18,7 @@ use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 final class AccessoryNonFalsyStringTypeMapper implements TypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

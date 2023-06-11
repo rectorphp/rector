@@ -8,10 +8,12 @@ use PHPStan\Type\Type;
 final class ParamAndArg
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\Variable
      */
     private $variable;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type|null
      */
     private $type;

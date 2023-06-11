@@ -13,6 +13,7 @@ use PHPStan\Parser\Parser;
 final class SmartPhpParser
 {
     /**
+     * @readonly
      * @var \PHPStan\Parser\Parser
      */
     private $parser;

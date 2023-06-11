@@ -6,13 +6,19 @@ namespace Rector\Doctrine\ValueObject;
 final class DefaultAnnotationArgValue
 {
     /**
+     * @readonly
      * @var string
      */
     private $annotationClass;
     /**
+     * @readonly
      * @var string
      */
     private $argName;
+    /**
+     * @readonly
+     * @var string|bool|int
+     */
     private $defaultValue;
     /**
      * @param string|bool|int $defaultValue

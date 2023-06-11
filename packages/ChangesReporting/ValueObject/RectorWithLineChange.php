@@ -9,6 +9,7 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class RectorWithLineChange implements SerializableInterface
 {
     /**
+     * @readonly
      * @var int
      */
     private $line;

@@ -23,10 +23,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class PregReplaceEModifierRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Php72\NodeFactory\AnonymousFunctionFactory
      */
     private $anonymousFunctionFactory;
     /**
+     * @readonly
      * @var \Rector\Php55\RegexMatcher
      */
     private $regexMatcher;

@@ -706,18 +706,7 @@ Downgrade `match()` to `switch()`
 -            400 => 'not found',
 -            default => 'unknown status code',
 -        };
-+        switch ($statusCode) {
-+            case 200:
-+            case 300:
-+                $message = null;
-+                break;
-+            case 400:
-+                $message = 'not found';
-+                break;
-+            default:
-+                $message = 'unknown status code';
-+                break;
-+        }
++        $message = ($statusCode === 200 || $statusCode === 300 ? null : $statusCode === 400 ? 'not found' : 'unknown status code';
      }
  }
 ```
@@ -1105,8 +1094,9 @@ Remove Json constant that available only in php 7.2
 
 ```diff
 -$inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_IGNORE);
--$inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_SUBSTITUTE);
 +$inDecoder = new Decoder($connection, true, 512, 0);
+
+-$inDecoder = new Decoder($connection, true, 512, \JSON_INVALID_UTF8_SUBSTITUTE);
 +$inDecoder = new Decoder($connection, true, 512, 0);
 ```
 
@@ -1392,17 +1382,10 @@ Remove reflection `getAttributes()` class method code
 - class: [`Rector\DowngradePhp80\Rector\MethodCall\DowngradeReflectionGetAttributesRector`](../rules/DowngradePhp80/Rector/MethodCall/DowngradeReflectionGetAttributesRector.php)
 
 ```diff
- class SomeClass
+ function run(ReflectionClass $reflectionClass)
  {
-     public function run(ReflectionClass $reflectionClass)
-     {
--        if ($reflectionClass->getAttributes()) {
-+        if ([]) {
-             return true;
-         }
-
-         return false;
-     }
+-    return $reflectionClass->getAttributes();
++    return method_exists($reflectionClass, 'getAttributes') ? $reflectionClass->getAttributes() ? [];
  }
 ```
 

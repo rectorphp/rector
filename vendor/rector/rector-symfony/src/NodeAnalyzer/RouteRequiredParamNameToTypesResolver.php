@@ -21,10 +21,12 @@ use Rector\Symfony\Enum\SymfonyAnnotation;
 final class RouteRequiredParamNameToTypesResolver
 {
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttrinationFinder
      */
     private $attrinationFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

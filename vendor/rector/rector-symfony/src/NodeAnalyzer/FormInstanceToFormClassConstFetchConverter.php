@@ -16,18 +16,22 @@ use Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
 final class FormInstanceToFormClassConstFetchConverter
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover
      */
     private $createFormTypeOptionsArgMover;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver
      */
     private $formTypeClassResolver;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

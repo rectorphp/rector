@@ -14,10 +14,12 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 final class ConsoleOutputFormatter implements OutputFormatterInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Annotation\RectorsChangelogResolver
      */
     private $rectorsChangelogResolver;

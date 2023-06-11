@@ -10,6 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 final class DocBlockTagReplacer
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\Annotation\AnnotationNaming
      */
     private $annotationNaming;

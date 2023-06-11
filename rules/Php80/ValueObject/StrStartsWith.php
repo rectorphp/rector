@@ -8,18 +8,22 @@ use PhpParser\Node\Expr\FuncCall;
 final class StrStartsWith
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr\FuncCall
      */
     private $funcCall;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $haystackExpr;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $needleExpr;
     /**
+     * @readonly
      * @var bool
      */
     private $isPositive;

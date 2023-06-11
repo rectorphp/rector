@@ -14,10 +14,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class CoalesePropertyAssignMatcher
 {
     /**
+     * @readonly
      * @var \Rector\Php81\NodeAnalyzer\ComplexNewAnalyzer
      */
     private $complexNewAnalyzer;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

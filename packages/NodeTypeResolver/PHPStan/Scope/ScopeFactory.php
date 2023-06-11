@@ -9,6 +9,7 @@ use PHPStan\Analyser\ScopeFactory as PHPStanScopeFactory;
 final class ScopeFactory
 {
     /**
+     * @readonly
      * @var PHPStanScopeFactory
      */
     private $phpStanScopeFactory;

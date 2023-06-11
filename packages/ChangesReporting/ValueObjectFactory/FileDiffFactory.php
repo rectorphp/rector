@@ -12,14 +12,17 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 final class FileDiffFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\Differ\DefaultDiffer
      */
     private $defaultDiffer;
     /**
+     * @readonly
      * @var \Rector\Core\Console\Formatter\ConsoleDiffer
      */
     private $consoleDiffer;
     /**
+     * @readonly
      * @var \Rector\Core\FileSystem\FilePathHelper
      */
     private $filePathHelper;

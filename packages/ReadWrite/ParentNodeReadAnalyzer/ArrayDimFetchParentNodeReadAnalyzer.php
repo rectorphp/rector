@@ -12,6 +12,7 @@ use Rector\ReadWrite\Contract\ParentNodeReadAnalyzerInterface;
 final class ArrayDimFetchParentNodeReadAnalyzer implements ParentNodeReadAnalyzerInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

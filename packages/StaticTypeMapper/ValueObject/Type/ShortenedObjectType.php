@@ -13,6 +13,7 @@ final class ShortenedObjectType extends ObjectType
 {
     /**
      * @var class-string
+     * @readonly
      */
     private $fullyQualifiedName;
     /**

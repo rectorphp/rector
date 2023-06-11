@@ -26,42 +26,52 @@ use RectorPrefix202306\Symfony\Component\Console\Output\OutputInterface;
 final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessCommand
 {
     /**
+     * @readonly
      * @var \Rector\Core\Autoloading\AdditionalAutoloader
      */
     private $additionalAutoloader;
     /**
+     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\ConfigInitializer
      */
     private $configInitializer;
     /**
+     * @readonly
      * @var \Rector\Core\Application\ApplicationFileProcessor
      */
     private $applicationFileProcessor;
     /**
+     * @readonly
      * @var \Rector\Core\ValueObjectFactory\ProcessResultFactory
      */
     private $processResultFactory;
     /**
+     * @readonly
      * @var \Rector\Core\StaticReflection\DynamicSourceLocatorDecorator
      */
     private $dynamicSourceLocatorDecorator;
     /**
+     * @readonly
      * @var \Rector\Core\Validation\EmptyConfigurableRectorChecker
      */
     private $emptyConfigurableRectorChecker;
     /**
+     * @readonly
      * @var \Rector\Core\Console\Output\OutputFormatterCollector
      */
     private $outputFormatterCollector;
     /**
+     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
     /**
+     * @readonly
      * @var \Rector\Core\Util\MemoryLimiter
      */
     private $memoryLimiter;

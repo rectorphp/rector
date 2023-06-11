@@ -10,6 +10,7 @@ use UnitEnum;
 final class CacheInvalidatingContainer implements ContainerInterface
 {
     /**
+     * @readonly
      * @var \Symfony\Component\DependencyInjection\ContainerInterface
      */
     private $container;

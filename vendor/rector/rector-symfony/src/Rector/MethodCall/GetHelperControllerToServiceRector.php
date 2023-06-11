@@ -26,14 +26,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class GetHelperControllerToServiceRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\TypeAnalyzer\ControllerAnalyzer
      */
     private $controllerAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ClassDependencyManipulator
      */
     private $classDependencyManipulator;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\PropertyNaming
      */
     private $propertyNaming;

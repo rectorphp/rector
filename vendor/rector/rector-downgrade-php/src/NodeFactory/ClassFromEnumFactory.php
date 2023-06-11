@@ -15,6 +15,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassFromEnumFactory
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

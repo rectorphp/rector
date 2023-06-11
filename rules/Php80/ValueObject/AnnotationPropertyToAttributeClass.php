@@ -7,11 +7,17 @@ use Rector\Core\Validation\RectorAssert;
 final class AnnotationPropertyToAttributeClass
 {
     /**
+     * @readonly
      * @var string
      */
     private $attributeClass;
+    /**
+     * @readonly
+     * @var string|int|null
+     */
     private $annotationProperty = null;
     /**
+     * @readonly
      * @var bool
      */
     private $doesNeedNewImport = \false;

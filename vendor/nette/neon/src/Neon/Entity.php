@@ -12,6 +12,9 @@ namespace RectorPrefix202306\Nette\Neon;
  */
 final class Entity extends \stdClass
 {
+    /**
+     * @var mixed
+     */
     public $value;
     /**
      * @var mixed[]

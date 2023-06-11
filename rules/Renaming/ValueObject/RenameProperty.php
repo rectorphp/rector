@@ -8,14 +8,17 @@ use Rector\Core\Validation\RectorAssert;
 final class RenameProperty
 {
     /**
+     * @readonly
      * @var string
      */
     private $type;
     /**
+     * @readonly
      * @var string
      */
     private $oldProperty;
     /**
+     * @readonly
      * @var string
      */
     private $newProperty;

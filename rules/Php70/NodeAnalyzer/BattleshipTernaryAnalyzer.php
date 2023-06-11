@@ -14,10 +14,12 @@ use Rector\Php70\ValueObject\ComparedExprs;
 final class BattleshipTernaryAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

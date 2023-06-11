@@ -10,6 +10,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class NullableTypeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

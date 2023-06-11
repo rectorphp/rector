@@ -5,7 +5,6 @@ namespace Rector\Core\Kernel;
 
 use Rector\Core\Config\Loader\ConfigureCallMergingLoaderFactory;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
-use Rector\Core\DependencyInjection\CompilerPass\AutowireArrayParameterCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\AutowireRectorCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MakeRectorsPublicCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
@@ -52,7 +51,6 @@ final class ContainerBuilderBuilder
             new MakeRectorsPublicCompilerPass(),
             // add all merged arguments of Rector services
             new MergeImportedRectorConfigureCallValuesCompilerPass($this->configureCallValuesCollector),
-            new AutowireArrayParameterCompilerPass(),
         ];
     }
 }

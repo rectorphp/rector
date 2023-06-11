@@ -23,6 +23,7 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class PreferThisOrSelfMethodCallRector extends AbstractRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;

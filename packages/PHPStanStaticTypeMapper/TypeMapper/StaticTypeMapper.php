@@ -23,6 +23,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
 final class StaticTypeMapper implements TypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

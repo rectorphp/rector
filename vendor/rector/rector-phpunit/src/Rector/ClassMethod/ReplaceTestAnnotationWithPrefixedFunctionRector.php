@@ -17,10 +17,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ReplaceTestAnnotationWithPrefixedFunctionRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover
      */
     private $phpDocTagRemover;

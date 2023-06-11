@@ -29,6 +29,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class IfToSpaceshipRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Php70\NodeAnalyzer\BattleshipTernaryAnalyzer
      */
     private $battleshipTernaryAnalyzer;

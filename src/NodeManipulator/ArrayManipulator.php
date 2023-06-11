@@ -14,6 +14,7 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class ArrayManipulator
 {
     /**
+     * @readonly
      * @var \Rector\ChangesReporting\Collector\RectorChangeCollector
      */
     private $rectorChangeCollector;

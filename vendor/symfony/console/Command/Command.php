@@ -120,7 +120,7 @@ class Command
     public static function getDefaultDescription() : ?string
     {
         $class = static::class;
-        if ($attribute = (new \ReflectionClass($class))->getAttributes(AsCommand::class)) {
+        if ($attribute = \method_exists(new \ReflectionClass($class), 'getAttributes') ? (new \ReflectionClass($class))->getAttributes(AsCommand::class) : []) {
             return $attribute[0]->newInstance()->description;
         }
         $r = new \ReflectionProperty($class, 'defaultDescription');

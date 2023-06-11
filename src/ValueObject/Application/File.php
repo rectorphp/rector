@@ -15,6 +15,7 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 final class File
 {
     /**
+     * @readonly
      * @var string
      */
     private $filePath;

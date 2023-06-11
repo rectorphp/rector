@@ -12,6 +12,7 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 final class IntermediateSourceLocator implements SourceLocator
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
      */
     private $dynamicSourceLocatorProvider;

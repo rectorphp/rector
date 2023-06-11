@@ -19,6 +19,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 final class VoidTypeMapper implements TypeMapperInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Php\PhpVersionProvider
      */
     private $phpVersionProvider;

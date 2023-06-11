@@ -51,13 +51,6 @@ class ProcessTimedOutException extends RuntimeException
     }
     public function getExceededTimeout() : ?float
     {
-        switch ($this->timeoutType) {
-            case self::TYPE_GENERAL:
-                return $this->process->getTimeout();
-            case self::TYPE_IDLE:
-                return $this->process->getIdleTimeout();
-            default:
-                throw new \LogicException(\sprintf('Unknown timeout type "%d".', $this->timeoutType));
-        }
+        return $this->timeoutType === self::TYPE_GENERAL ? $this->process->getTimeout() : ($this->timeoutType === self::TYPE_IDLE ? $this->process->getIdleTimeout() : throw new \LogicException(\sprintf('Unknown timeout type "%d".', $this->timeoutType)));
     }
 }

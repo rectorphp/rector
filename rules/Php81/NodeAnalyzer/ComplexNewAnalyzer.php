@@ -13,10 +13,12 @@ use Rector\Core\NodeManipulator\ArrayManipulator;
 final class ComplexNewAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\ArrayManipulator
      */
     private $arrayManipulator;
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;

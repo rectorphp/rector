@@ -11,6 +11,7 @@ use Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser;
 final class CommentRemover
 {
     /**
+     * @readonly
      * @var \Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser
      */
     private $commentRemovingNodeTraverser;

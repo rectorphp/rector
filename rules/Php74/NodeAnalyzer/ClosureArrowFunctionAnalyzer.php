@@ -15,14 +15,17 @@ use Rector\Core\Util\ArrayChecker;
 final class ClosureArrowFunctionAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
+     * @readonly
      * @var \Rector\Core\Util\ArrayChecker
      */
     private $arrayChecker;

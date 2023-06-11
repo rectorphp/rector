@@ -19,6 +19,7 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
 final class RemoveParentRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver
      */
     private $parentClassScopeResolver;

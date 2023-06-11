@@ -5,12 +5,12 @@ namespace Rector\DowngradePhp80\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\NodeTraverser;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -20,32 +20,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeReflectionGetAttributesRector extends AbstractRector
 {
+    /**
+     * @var string
+     */
+    private const IS_IF_TERNARY = 'is_if_ternary';
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove reflection getAttributes() class method code', [new CodeSample(<<<'CODE_SAMPLE'
-class SomeClass
+function run(ReflectionClass $reflectionClass)
 {
-    public function run(ReflectionClass $reflectionClass)
-    {
-        if ($reflectionClass->getAttributes()) {
-            return true;
-        }
-
-        return false;
-    }
+    return $reflectionClass->getAttributes();
 }
 CODE_SAMPLE
 , <<<'CODE_SAMPLE'
-class SomeClass
+function run(ReflectionClass $reflectionClass)
 {
-    public function run(ReflectionClass $reflectionClass)
-    {
-        if ([]) {
-            return true;
-        }
-
-        return false;
-    }
+    return method_exists($reflectionClass, 'getAttributes') ? $reflectionClass->getAttributes() ? [];
 }
 CODE_SAMPLE
 )]);
@@ -55,27 +45,31 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, FuncCall::class];
+        return [Ternary::class, MethodCall::class];
     }
     /**
-     * @param MethodCall|Node\Expr\FuncCall $node
+     * @param Ternary|MethodCall $node
      * @return \PhpParser\Node\Expr\Ternary|null|int
      */
     public function refactor(Node $node)
     {
-        if ($node instanceof FuncCall) {
-            if ($this->isName($node, 'method_exists')) {
-                return NodeTraverser::STOP_TRAVERSAL;
+        if ($node instanceof Ternary) {
+            if ($node->if instanceof Expr && $node->cond instanceof FuncCall && $this->isName($node->cond, 'method_exists')) {
+                $node->if->setAttribute(self::IS_IF_TERNARY, \true);
             }
             return null;
         }
         if (!$this->isName($node->name, 'getAttributes')) {
             return null;
         }
+        if ($node->getAttribute(self::IS_IF_TERNARY) === \true) {
+            return null;
+        }
         if (!$this->isObjectType($node->var, new ObjectType('Reflector'))) {
             return null;
         }
         $args = [new Arg($node->var), new Arg(new String_('getAttributes'))];
-        return new Ternary($this->nodeFactory->createFuncCall('method_exists', $args), $node, new Array_([]));
+        $methodExistsFuncCall = $this->nodeFactory->createFuncCall('method_exists', $args);
+        return new Ternary($methodExistsFuncCall, $node, new Array_([]));
     }
 }

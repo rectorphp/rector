@@ -13,6 +13,7 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 final class ParamTagRemover
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer
      */
     private $deadParamTagValueNodeAnalyzer;

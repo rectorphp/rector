@@ -11,10 +11,12 @@ use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
 final class CacheFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;
     /**
+     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $fileSystem;

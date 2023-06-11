@@ -11,18 +11,22 @@ use Rector\Core\Validation\RectorAssert;
 final class StaticCallToMethodCall
 {
     /**
+     * @readonly
      * @var string
      */
     private $staticClass;
     /**
+     * @readonly
      * @var string
      */
     private $staticMethod;
     /**
+     * @readonly
      * @var string
      */
     private $classType;
     /**
+     * @readonly
      * @var string
      */
     private $methodName;

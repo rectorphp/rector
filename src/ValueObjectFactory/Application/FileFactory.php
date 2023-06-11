@@ -15,21 +15,24 @@ use Rector\Core\ValueObject\Configuration;
 final class FileFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\FileSystem\FilesFinder
      */
     private $filesFinder;
     /**
+     * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
      */
     private $changedFilesDetector;
     /**
      * @var FileProcessorInterface[]
+     * @readonly
      */
     private $fileProcessors;
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(FilesFinder $filesFinder, ChangedFilesDetector $changedFilesDetector, array $fileProcessors)
+    public function __construct(FilesFinder $filesFinder, ChangedFilesDetector $changedFilesDetector, iterable $fileProcessors)
     {
         $this->filesFinder = $filesFinder;
         $this->changedFilesDetector = $changedFilesDetector;

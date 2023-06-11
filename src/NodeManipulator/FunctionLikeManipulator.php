@@ -8,6 +8,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class FunctionLikeManipulator
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

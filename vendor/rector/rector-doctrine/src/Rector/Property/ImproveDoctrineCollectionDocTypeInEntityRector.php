@@ -31,38 +31,47 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ImproveDoctrineCollectionDocTypeInEntityRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeFactory
      */
     private $collectionTypeFactory;
     /**
+     * @readonly
      * @var \Rector\Core\NodeManipulator\AssignManipulator
      */
     private $assignManipulator;
     /**
+     * @readonly
      * @var \Rector\Doctrine\TypeAnalyzer\CollectionTypeResolver
      */
     private $collectionTypeResolver;
     /**
+     * @readonly
      * @var \Rector\Doctrine\TypeAnalyzer\CollectionVarTagValueNodeResolver
      */
     private $collectionVarTagValueNodeResolver;
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger
      */
     private $phpDocTypeChanger;
     /**
+     * @readonly
      * @var \Rector\Doctrine\PhpDocParser\DoctrineDocBlockResolver
      */
     private $doctrineDocBlockResolver;
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\TargetEntityResolver
      */
     private $targetEntityResolver;

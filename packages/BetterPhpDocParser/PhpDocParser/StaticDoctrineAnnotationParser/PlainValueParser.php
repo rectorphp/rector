@@ -22,10 +22,12 @@ use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 final class PlainValueParser
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher
      */
     private $classAnnotationMatcher;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\CurrentNodeProvider
      */
     private $currentNodeProvider;

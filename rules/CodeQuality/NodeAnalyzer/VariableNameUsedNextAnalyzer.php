@@ -11,10 +11,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class VariableNameUsedNextAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

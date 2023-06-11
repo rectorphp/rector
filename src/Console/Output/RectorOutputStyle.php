@@ -12,6 +12,7 @@ use Rector\Core\Contract\Console\OutputStyleInterface;
 final class RectorOutputStyle implements OutputStyleInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\Console\Style\RectorConsoleOutputStyle
      */
     private $rectorConsoleOutputStyle;

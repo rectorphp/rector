@@ -12,10 +12,12 @@ use Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory;
 final class ClassAnnotationAssertResolver
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\Annotations\StmtMethodCallMatcher
      */
     private $stmtMethodCallMatcher;
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeFactory\Annotations\DoctrineAnnotationFromNewFactory
      */
     private $doctrineAnnotationFromNewFactory;

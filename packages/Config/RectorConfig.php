@@ -7,9 +7,13 @@ use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\ValueObjectInliner;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\Contract\Rector\NonPhpRectorInterface;
+use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\ValueObject\PhpVersion;
 use RectorPrefix202306\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 use RectorPrefix202306\Webmozart\Assert\Assert;
 /**
  * @api
@@ -18,6 +22,10 @@ use RectorPrefix202306\Webmozart\Assert\Assert;
  */
 final class RectorConfig extends ContainerConfigurator
 {
+    /**
+     * @var \Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator|null
+     */
+    private $servicesConfigurator;
     /**
      * @param string[] $paths
      */
@@ -104,7 +112,6 @@ final class RectorConfig extends ContainerConfigurator
         Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
         Assert::isAOf($rectorClass, ConfigurableRectorInterface::class);
-        $services = $this->services();
         // decorate with value object inliner so Symfony understands, see https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config
         \array_walk_recursive($configuration, static function (&$value) {
             if (\is_object($value)) {
@@ -112,7 +119,9 @@ final class RectorConfig extends ContainerConfigurator
             }
             return $value;
         });
-        $services->set($rectorClass)->call('configure', [$configuration]);
+        $servicesConfigurator = $this->getServices();
+        $rectorService = $servicesConfigurator->set($rectorClass)->call('configure', [$configuration]);
+        $this->tagRectorService($rectorService, $rectorClass);
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
@@ -121,8 +130,9 @@ final class RectorConfig extends ContainerConfigurator
     {
         Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
-        $services = $this->services();
-        $services->set($rectorClass);
+        $servicesConfigurator = $this->getServices();
+        $rectorService = $servicesConfigurator->set($rectorClass);
+        $this->tagRectorService($rectorService, $rectorClass);
     }
     /**
      * @param array<class-string<RectorInterface>> $rectorClasses
@@ -215,5 +225,25 @@ final class RectorConfig extends ContainerConfigurator
         $parameters = $this->parameters();
         $parameters->set(Option::INDENT_CHAR, $character);
         $parameters->set(Option::INDENT_SIZE, $count);
+    }
+    private function getServices() : ServicesConfigurator
+    {
+        if ($this->servicesConfigurator instanceof ServicesConfigurator) {
+            return $this->servicesConfigurator;
+        }
+        $this->servicesConfigurator = $this->services();
+        return $this->servicesConfigurator;
+    }
+    /**
+     * @param class-string<RectorInterface|PhpRectorInterface|NonPhpRectorInterface> $rectorClass
+     */
+    private function tagRectorService(ServiceConfigurator $rectorServiceConfigurator, string $rectorClass) : void
+    {
+        $rectorServiceConfigurator->tag(RectorInterface::class);
+        if (\is_a($rectorClass, PhpRectorInterface::class, \true)) {
+            $rectorServiceConfigurator->tag(PhpRectorInterface::class);
+        } elseif (\is_a($rectorClass, NonPhpRectorInterface::class, \true)) {
+            $rectorServiceConfigurator->tag(NonPhpRectorInterface::class);
+        }
     }
 }

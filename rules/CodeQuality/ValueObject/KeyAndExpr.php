@@ -8,15 +8,18 @@ use PhpParser\Node\Expr;
 final class KeyAndExpr
 {
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr|null
      */
     private $keyExpr;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $expr;
     /**
      * @var Comment[]
+     * @readonly
      */
     private $comments;
     /**

@@ -24,6 +24,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeUnnecessarilyParenthesizedExpressionRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\DowngradePhp70\Tokenizer\WrappedInParenthesesAnalyzer
      */
     private $wrappedInParenthesesAnalyzer;
@@ -88,21 +89,6 @@ CODE_SAMPLE
     }
     private function getLeftSubNode(Node $node) : ?Node
     {
-        switch (\true) {
-            case $node instanceof ArrayDimFetch:
-                return $node->var;
-            case $node instanceof PropertyFetch:
-                return $node->var;
-            case $node instanceof MethodCall:
-                return $node->var;
-            case $node instanceof StaticPropertyFetch:
-                return $node->class;
-            case $node instanceof StaticCall:
-                return $node->class;
-            case $node instanceof FuncCall:
-                return $node->name;
-            default:
-                return null;
-        }
+        return \true === $node instanceof ArrayDimFetch ? $node->var : (\true === $node instanceof FuncCall ? $node->name : null);
     }
 }

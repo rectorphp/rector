@@ -14,6 +14,7 @@ use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
 final class EmptyConfigurableRectorCollector
 {
     /**
+     * @readonly
      * @var \Symfony\Component\DependencyInjection\ContainerBuilder
      */
     private $containerBuilder;

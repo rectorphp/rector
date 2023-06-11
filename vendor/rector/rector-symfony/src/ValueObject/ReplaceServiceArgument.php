@@ -6,8 +6,13 @@ namespace Rector\Symfony\ValueObject;
 use PhpParser\Node\Expr;
 final class ReplaceServiceArgument
 {
+    /**
+     * @readonly
+     * @var mixed
+     */
     private $oldValue;
     /**
+     * @readonly
      * @var \PhpParser\Node\Expr
      */
     private $newValueExpr;

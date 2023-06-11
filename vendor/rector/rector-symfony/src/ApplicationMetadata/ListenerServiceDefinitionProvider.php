@@ -10,6 +10,7 @@ use Rector\Symfony\ValueObject\Tag\EventListenerTag;
 final class ListenerServiceDefinitionProvider
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\DataProvider\ServiceMapProvider
      */
     private $serviceMapProvider;

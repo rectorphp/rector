@@ -11,6 +11,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class RegexFuncAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

@@ -14,14 +14,17 @@ use Rector\ReadWrite\NodeFinder\NodeUsageFinder;
 final class VariableReadNodeAnalyzer implements ReadNodeAnalyzerInterface
 {
     /**
+     * @readonly
      * @var \Rector\NodeNestingScope\ParentScopeFinder
      */
     private $parentScopeFinder;
     /**
+     * @readonly
      * @var \Rector\ReadWrite\NodeFinder\NodeUsageFinder
      */
     private $nodeUsageFinder;
     /**
+     * @readonly
      * @var \Rector\ReadWrite\ReadNodeAnalyzer\JustReadExprAnalyzer
      */
     private $justReadExprAnalyzer;

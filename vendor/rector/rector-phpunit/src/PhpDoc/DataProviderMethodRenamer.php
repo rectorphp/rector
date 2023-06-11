@@ -11,6 +11,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 final class DataProviderMethodRenamer
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

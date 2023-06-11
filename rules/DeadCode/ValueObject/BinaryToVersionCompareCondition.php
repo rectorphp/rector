@@ -7,13 +7,19 @@ use Rector\DeadCode\Contract\ConditionInterface;
 final class BinaryToVersionCompareCondition implements ConditionInterface
 {
     /**
+     * @readonly
      * @var \Rector\DeadCode\ValueObject\VersionCompareCondition
      */
     private $versionCompareCondition;
     /**
+     * @readonly
      * @var string
      */
     private $binaryClass;
+    /**
+     * @readonly
+     * @var mixed
+     */
     private $expectedValue;
     /**
      * @param mixed $expectedValue

@@ -11,6 +11,7 @@ use Rector\Core\Configuration\Parameter\ParameterProvider;
 final class RectorConfigProvider
 {
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;

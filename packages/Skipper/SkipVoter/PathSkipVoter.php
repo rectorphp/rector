@@ -9,10 +9,12 @@ use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
 final class PathSkipVoter implements SkipVoterInterface
 {
     /**
+     * @readonly
      * @var \Rector\Skipper\Matcher\FileInfoMatcher
      */
     private $fileInfoMatcher;
     /**
+     * @readonly
      * @var \Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver
      */
     private $skippedPathsResolver;

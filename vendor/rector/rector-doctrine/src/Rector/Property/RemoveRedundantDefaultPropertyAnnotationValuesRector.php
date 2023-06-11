@@ -24,14 +24,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveRedundantDefaultPropertyAnnotationValuesRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeManipulator\DoctrineItemDefaultValueManipulator
      */
     private $doctrineItemDefaultValueManipulator;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeFinder
      */
     private $attributeFinder;
     /**
+     * @readonly
      * @var \Rector\Doctrine\NodeAnalyzer\AttributeCleaner
      */
     private $attributeCleaner;

@@ -10,10 +10,12 @@ use Rector\Core\PhpParser\ValueObject\StmtsAndTokens;
 final class RectorParser
 {
     /**
+     * @readonly
      * @var \PhpParser\Lexer
      */
     private $lexer;
     /**
+     * @readonly
      * @var \PHPStan\Parser\Parser
      */
     private $parser;

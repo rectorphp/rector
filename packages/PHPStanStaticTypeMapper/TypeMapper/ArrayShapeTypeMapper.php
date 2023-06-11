@@ -17,10 +17,12 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 final class ArrayShapeTypeMapper
 {
     /**
+     * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper
      */
     private $phpStanStaticTypeMapper;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;

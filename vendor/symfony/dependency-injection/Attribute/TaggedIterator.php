@@ -29,6 +29,9 @@ class TaggedIterator
      * @var string|null
      */
     public $defaultPriorityMethod;
+    /**
+     * @var string|mixed[]
+     */
     public $exclude = [];
     /**
      * @param string|mixed[] $exclude

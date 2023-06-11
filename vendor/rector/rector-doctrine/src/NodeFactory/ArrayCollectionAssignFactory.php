@@ -11,6 +11,7 @@ use Rector\Core\PhpParser\Node\NodeFactory;
 final class ArrayCollectionAssignFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\NodeFactory
      */
     private $nodeFactory;

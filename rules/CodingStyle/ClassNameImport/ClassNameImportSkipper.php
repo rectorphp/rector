@@ -17,20 +17,23 @@ final class ClassNameImportSkipper
 {
     /**
      * @var ClassNameImportSkipVoterInterface[]
+     * @readonly
      */
     private $classNameImportSkipVoters;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\RenamedClassesDataCollector
      */
     private $renamedClassesDataCollector;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\UseImportsResolver
      */
     private $useImportsResolver;
     /**
      * @param ClassNameImportSkipVoterInterface[] $classNameImportSkipVoters
      */
-    public function __construct(array $classNameImportSkipVoters, RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsResolver $useImportsResolver)
+    public function __construct(iterable $classNameImportSkipVoters, RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsResolver $useImportsResolver)
     {
         $this->classNameImportSkipVoters = $classNameImportSkipVoters;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;

@@ -10,6 +10,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NamedVariableFactory
 {
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;

@@ -8,10 +8,12 @@ use Rector\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 final class AnnotationToAttribute implements AnnotationToAttributeInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $tag;
     /**
+     * @readonly
      * @var string|null
      */
     private $attributeClass;

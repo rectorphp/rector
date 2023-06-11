@@ -14,6 +14,7 @@ use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
 final class ConfigureCallMergingLoaderFactory
 {
     /**
+     * @readonly
      * @var \Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector
      */
     private $configureCallValuesCollector;

@@ -30,14 +30,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector
      */
     private $symfonyPhpClosureDetector;
     /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
     /**
+     * @readonly
      * @var \Symfony\Component\Filesystem\Filesystem
      */
     private $filesystem;

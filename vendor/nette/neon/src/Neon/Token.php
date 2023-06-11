@@ -14,6 +14,9 @@ final class Token
      * @var string
      */
     public $value;
+    /**
+     * @var int|string
+     */
     public $type;
     public const String = 1;
     public const Literal = 2;

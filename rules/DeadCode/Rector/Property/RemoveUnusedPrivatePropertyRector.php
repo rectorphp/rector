@@ -24,10 +24,12 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class RemoveUnusedPrivatePropertyRector extends AbstractScopeAwareRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder
      */
     private $propertyFetchFinder;
     /**
+     * @readonly
      * @var \Rector\DeadCode\NodeAnalyzer\PropertyWriteonlyAnalyzer
      */
     private $propertyWriteonlyAnalyzer;

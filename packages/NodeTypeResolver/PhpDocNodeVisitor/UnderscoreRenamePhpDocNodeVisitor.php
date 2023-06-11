@@ -13,14 +13,17 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class UnderscoreRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
 {
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\Renaming\ValueObject\PseudoNamespaceToNamespace
      */
     private $pseudoNamespaceToNamespace;
     /**
+     * @readonly
      * @var \PhpParser\Node
      */
     private $phpNode;

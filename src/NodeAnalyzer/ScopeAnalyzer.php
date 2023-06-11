@@ -16,6 +16,7 @@ use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 final class ScopeAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory
      */
     private $scopeFactory;

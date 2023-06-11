@@ -18,10 +18,12 @@ namespace RectorPrefix202306\Symfony\Component\Console\Completion;
 class Suggestion
 {
     /**
+     * @readonly
      * @var string
      */
     private $value;
     /**
+     * @readonly
      * @var string
      */
     private $description = '';

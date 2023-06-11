@@ -11,6 +11,7 @@ use Rector\Core\PhpParser\Node\Value\ValueResolver;
 final class RegexMatcher
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;
@@ -44,23 +45,7 @@ final class RegexMatcher
                 return null;
             }
             $delimiter = $pattern[0];
-            switch ($delimiter) {
-                case '(':
-                    $delimiter = ')';
-                    break;
-                case '{':
-                    $delimiter = '}';
-                    break;
-                case '[':
-                    $delimiter = ']';
-                    break;
-                case '<':
-                    $delimiter = '>';
-                    break;
-                default:
-                    $delimiter = $delimiter;
-                    break;
-            }
+            $delimiter = $delimiter === '(' ? ')' : ($delimiter === '<' ? '>' : $delimiter);
             /** @var string $modifiers */
             $modifiers = $this->resolveModifiers((string) Strings::after($pattern, $delimiter, -1));
             if (\strpos($modifiers, 'e') === \false) {

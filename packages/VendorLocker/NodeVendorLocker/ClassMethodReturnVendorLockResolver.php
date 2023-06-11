@@ -12,10 +12,12 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassMethodReturnVendorLockResolver
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;

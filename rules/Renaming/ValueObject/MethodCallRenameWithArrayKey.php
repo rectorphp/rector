@@ -9,17 +9,24 @@ use Rector\Renaming\Contract\MethodCallRenameInterface;
 final class MethodCallRenameWithArrayKey implements MethodCallRenameInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $oldMethod;
     /**
+     * @readonly
      * @var string
      */
     private $newMethod;
+    /**
+     * @readonly
+     * @var mixed
+     */
     private $arrayKey;
     /**
      * @param mixed $arrayKey

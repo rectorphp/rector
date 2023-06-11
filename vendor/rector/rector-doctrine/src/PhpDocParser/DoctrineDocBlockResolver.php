@@ -10,10 +10,12 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class DoctrineDocBlockResolver
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

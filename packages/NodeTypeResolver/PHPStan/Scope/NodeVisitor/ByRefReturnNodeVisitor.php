@@ -15,6 +15,7 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class ByRefReturnNodeVisitor extends NodeVisitorAbstract implements ScopeResolverNodeVisitorInterface
 {
     /**
+     * @readonly
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;

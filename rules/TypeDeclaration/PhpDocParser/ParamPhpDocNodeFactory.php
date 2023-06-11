@@ -10,6 +10,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class ParamPhpDocNodeFactory
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

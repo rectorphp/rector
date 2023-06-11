@@ -36,10 +36,12 @@ use Throwable;
 final class ParallelFileProcessor
 {
     /**
+     * @readonly
      * @var \Rector\Parallel\Command\WorkerCommandLineFactory
      */
     private $workerCommandLineFactory;
     /**
+     * @readonly
      * @var \Rector\Core\Configuration\Parameter\ParameterProvider
      */
     private $parameterProvider;

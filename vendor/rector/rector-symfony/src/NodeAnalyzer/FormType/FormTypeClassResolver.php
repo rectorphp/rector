@@ -11,10 +11,12 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 final class FormTypeClassResolver
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

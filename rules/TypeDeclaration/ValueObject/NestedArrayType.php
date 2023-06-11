@@ -8,14 +8,17 @@ use PHPStan\Type\Type;
 final class NestedArrayType
 {
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $type;
     /**
+     * @readonly
      * @var int
      */
     private $arrayNestingLevel;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type|null
      */
     private $keyType;

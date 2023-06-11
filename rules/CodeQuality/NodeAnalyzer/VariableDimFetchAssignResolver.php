@@ -16,10 +16,12 @@ use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class VariableDimFetchAssignResolver
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;

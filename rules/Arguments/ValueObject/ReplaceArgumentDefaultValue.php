@@ -9,22 +9,27 @@ use Rector\Core\Validation\RectorAssert;
 final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
      * @var int<0, max>
+     * @readonly
      */
     private $position;
     /**
+     * @readonly
      * @var mixed
      */
     private $valueBefore;
     /**
+     * @readonly
      * @var mixed
      */
     private $valueAfter;

@@ -17,10 +17,12 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 final class PhpDocNullableTypeHelper
 {
     /**
+     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
      */
     private $valueResolver;

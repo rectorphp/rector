@@ -19,6 +19,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 final class AttributeFinder
 {
     /**
+     * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;

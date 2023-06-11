@@ -12,14 +12,17 @@ use Rector\Core\Validation\RectorAssert;
 final class AddReturnTypeDeclaration
 {
     /**
+     * @readonly
      * @var string
      */
     private $class;
     /**
+     * @readonly
      * @var string
      */
     private $method;
     /**
+     * @readonly
      * @var \PHPStan\Type\Type
      */
     private $returnType;

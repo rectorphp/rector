@@ -7,6 +7,7 @@ use PHPStan\PhpDocParser\Ast\Node;
 final class CallablePhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
 {
     /**
+     * @readonly
      * @var string|null
      */
     private $docContent;

@@ -30,18 +30,22 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class DowngradeStreamIsattyRector extends AbstractScopeAwareRector
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Parser\InlineCodeParser
      */
     private $inlineCodeParser;
     /**
+     * @readonly
      * @var \Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer
      */
     private $functionExistsFunCallAnalyzer;
     /**
+     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
     /**
+     * @readonly
      * @var \Rector\NodeAnalyzer\ExprInTopStmtMatcher
      */
     private $exprInTopStmtMatcher;

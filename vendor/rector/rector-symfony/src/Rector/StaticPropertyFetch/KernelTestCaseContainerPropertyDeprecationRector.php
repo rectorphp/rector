@@ -16,6 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 class KernelTestCaseContainerPropertyDeprecationRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\Symfony\NodeAnalyzer\SymfonyTestCaseAnalyzer
      */
     private $symfonyTestCaseAnalyzer;

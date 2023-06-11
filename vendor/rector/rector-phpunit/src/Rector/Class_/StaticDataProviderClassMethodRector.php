@@ -19,14 +19,17 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class StaticDataProviderClassMethodRector extends AbstractRector
 {
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
+     * @readonly
      * @var \Rector\PHPUnit\NodeFinder\DataProviderClassMethodFinder
      */
     private $dataProviderClassMethodFinder;
     /**
+     * @readonly
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;

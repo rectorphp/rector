@@ -48,18 +48,7 @@ final class Dumper
             };
         } else {
             $this->handler = function ($var) : string {
-                switch (\true) {
-                    case null === $var:
-                        return 'null';
-                    case \true === $var:
-                        return 'true';
-                    case \false === $var:
-                        return 'false';
-                    case \is_string($var):
-                        return '"' . $var . '"';
-                    default:
-                        return \rtrim(\print_r($var, \true));
-                }
+                return \true === (null === $var) ? 'null' : (\true === \is_string($var) ? '"' . $var . '"' : \rtrim(\print_r($var, \true)));
             };
         }
     }

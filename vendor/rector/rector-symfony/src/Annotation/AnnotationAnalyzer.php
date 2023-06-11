@@ -12,6 +12,7 @@ use Rector\Symfony\Enum\SymfonyAnnotation;
 final class AnnotationAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;

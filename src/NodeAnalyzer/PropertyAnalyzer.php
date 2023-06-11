@@ -15,6 +15,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 final class PropertyAnalyzer
 {
     /**
+     * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;

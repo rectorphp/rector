@@ -13,6 +13,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 final class UseImportsResolver
 {
     /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
