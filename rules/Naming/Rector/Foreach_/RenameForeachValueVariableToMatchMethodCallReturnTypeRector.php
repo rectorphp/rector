@@ -96,7 +96,7 @@ CODE_SAMPLE
         if (!$variableAndCallForeach instanceof VariableAndCallForeach) {
             return null;
         }
-        $expectedName = $this->expectedNameResolver->resolveForForeach($variableAndCallForeach->getCall());
+        $expectedName = $this->expectedNameResolver->resolveForForeach($variableAndCallForeach);
         if ($expectedName === null) {
             return null;
         }
