@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
@@ -25,8 +24,8 @@ use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
@@ -64,6 +63,11 @@ final class ReturnTypeInferer
     private $betterNodeFinder;
     /**
      * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
+     * @readonly
      * @var \PHPStan\Reflection\ReflectionProvider
      */
     private $reflectionProvider;
@@ -72,21 +76,16 @@ final class ReturnTypeInferer
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
-    public function __construct(TypeNormalizer $typeNormalizer, ReturnedNodesReturnTypeInfererTypeInferer $returnedNodesReturnTypeInfererTypeInferer, GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, PhpVersionProvider $phpVersionProvider, BetterNodeFinder $betterNodeFinder, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver)
+    public function __construct(TypeNormalizer $typeNormalizer, ReturnedNodesReturnTypeInfererTypeInferer $returnedNodesReturnTypeInfererTypeInferer, GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, PhpVersionProvider $phpVersionProvider, BetterNodeFinder $betterNodeFinder, ReflectionResolver $reflectionResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver)
     {
         $this->typeNormalizer = $typeNormalizer;
         $this->returnedNodesReturnTypeInfererTypeInferer = $returnedNodesReturnTypeInfererTypeInferer;
         $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
         $this->phpVersionProvider = $phpVersionProvider;
         $this->betterNodeFinder = $betterNodeFinder;
+        $this->reflectionResolver = $reflectionResolver;
         $this->reflectionProvider = $reflectionProvider;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->nodeNameResolver = $nodeNameResolver;
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
@@ -128,13 +127,13 @@ final class ReturnTypeInferer
         if (!$type instanceof ThisType) {
             return $type;
         }
-        $class = $this->betterNodeFinder->findParentType($functionLike, Class_::class);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($functionLike);
         $objectType = $type->getStaticObjectType();
         $objectTypeClassName = $objectType->getClassName();
-        if (!$class instanceof Class_) {
+        if (!$classReflection instanceof ClassReflection || !$classReflection->isClass()) {
             return $type;
         }
-        if ($this->nodeNameResolver->isName($class, $objectTypeClassName)) {
+        if ($classReflection->getName() === $objectTypeClassName) {
             return $type;
         }
         return new MixedType();
