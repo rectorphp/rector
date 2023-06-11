@@ -36,7 +36,7 @@ class AnsiColorMode
     }
     private function convertFromRGB(int $r, int $g, int $b) : int
     {
-        return $this === self::Ansi4 ? $this->degradeHexColorToAnsi4($r, $g, $b) : ($this === self::Ansi8 ? $this->degradeHexColorToAnsi8($r, $g, $b) : throw new InvalidArgumentException("RGB cannot be converted to {$this->name}."));
+        return $this === self::Ansi4 ? $this->degradeHexColorToAnsi4($r, $g, $b) : ($this === self::Ansi8 ? $this->degradeHexColorToAnsi8($r, $g, $b) : null);
     }
     private function degradeHexColorToAnsi4(int $r, int $g, int $b) : int
     {

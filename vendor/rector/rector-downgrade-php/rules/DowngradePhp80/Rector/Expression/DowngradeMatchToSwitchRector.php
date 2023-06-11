@@ -10,9 +10,12 @@ use PhpParser\Node\Expr\BinaryOp\Identical;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\Ternary;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Name;
 use Rector\Core\Exception\ShouldNotHappenException;
+use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\PhpVersion;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -22,6 +25,15 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class DowngradeMatchToSwitchRector extends AbstractRector
 {
+    /**
+     * @readonly
+     * @var \Rector\Core\Php\PhpVersionProvider
+     */
+    private $phpVersionProvider;
+    public function __construct(PhpVersionProvider $phpVersionProvider)
+    {
+        $this->phpVersionProvider = $phpVersionProvider;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Downgrade match() to switch()', [new CodeSample(<<<'CODE_SAMPLE'
@@ -63,6 +75,11 @@ CODE_SAMPLE
         $reversedMatchArms = \array_reverse($node->arms);
         $defaultExpr = $this->matchDefaultExpr($node);
         $defaultExpr = $defaultExpr ?: new ConstFetch(new Name('null'));
+        // @see https://wiki.php.net/rfc/throw_expression
+        // throws expr is not allowed → replace temporarily
+        if ($defaultExpr instanceof Throw_ && $this->phpVersionProvider->provide() < PhpVersion::PHP_80) {
+            $defaultExpr = new ConstFetch(new Name('null'));
+        }
         $firstTernary = null;
         $currentTernary = null;
         foreach ($reversedMatchArms as $matchArm) {

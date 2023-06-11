@@ -97,7 +97,7 @@ public function NAME(): string
             throw new \LogicException('The node was expected to be an ArrayNode. This Configuration includes an edge case not supported yet.');
         }
         foreach ($node->getChildren() as $child) {
-            \true === $child instanceof ScalarNode ? $this->handleScalarNode($child, $class) : (\true === $child instanceof ArrayNode ? $this->handleArrayNode($child, $class, $namespace) : throw new \RuntimeException(\sprintf('Unknown node "%s".', \get_class($child))));
+            \true === $child instanceof ScalarNode ? $this->handleScalarNode($child, $class) : (\true === $child instanceof ArrayNode ? $this->handleArrayNode($child, $class, $namespace) : null);
         }
     }
     private function handleArrayNode(ArrayNode $node, ClassBuilder $class, string $namespace) : void
