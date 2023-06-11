@@ -89,6 +89,6 @@ CODE_SAMPLE
     }
     private function getLeftSubNode(Node $node) : ?Node
     {
-        return \true === $node instanceof ArrayDimFetch ? $node->var : (\true === $node instanceof FuncCall ? $node->name : null);
+        return \true === $node instanceof ArrayDimFetch ? $node->var : (\true === $node instanceof PropertyFetch ? $node->var : (\true === $node instanceof MethodCall ? $node->var : (\true === $node instanceof StaticPropertyFetch ? $node->class : (\true === $node instanceof StaticCall ? $node->class : (\true === $node instanceof FuncCall ? $node->name : null)))));
     }
 }

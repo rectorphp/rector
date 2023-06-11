@@ -97,7 +97,7 @@ class XmlReferenceDumper
                     if ($prototype->hasDefaultValue()) {
                         $prototypeValue = $prototype->getDefaultValue();
                     } else {
-                        $prototypeValue = \get_class($prototype) === ScalarNode::class ? 'scalar value' : ($prototype::class === EnumNode::class ? $prototype->getPermissibleValues('|') : 'value');
+                        $prototypeValue = \get_class($prototype) === ScalarNode::class ? 'scalar value' : ($prototype::class === FloatNode::class || $prototype::class === IntegerNode::class ? 'numeric value' : ($prototype::class === BooleanNode::class ? 'true|false' : ($prototype::class === EnumNode::class ? $prototype->getPermissibleValues('|') : 'value')));
                     }
                 }
             }

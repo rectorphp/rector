@@ -41,6 +41,6 @@ class Autowire
         if (null !== $value && \strncmp($value, '@', \strlen('@')) === 0) {
             \true === (\strncmp($value, '@@', \strlen('@@')) === 0) ? $value = \substr($value, 1) : (\true === (\strncmp($value, '@=', \strlen('@=')) === 0) ? $expression = \substr($value, 2) : ($service = \substr($value, 1)));
         }
-        $this->value = \true === (null !== $service) ? new Reference($service) : (\true === (null !== $value) ? $value : null);
+        $this->value = \true === (null !== $service) ? new Reference($service) : (\true === (null !== $expression) ? \class_exists(Expression::class) ? new Expression($expression) : throw new LogicException('Unable to use expressions as the Symfony ExpressionLanguage component is not installed. Try running "composer require symfony/expression-language".') : (\true === (null !== $value) ? $value : null));
     }
 }

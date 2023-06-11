@@ -32,7 +32,7 @@ class AnsiColorMode
         $r = $color >> 16 & 255;
         $g = $color >> 8 & 255;
         $b = $color & 255;
-        return $this === self::Ansi4 ? (string) $this->convertFromRGB($r, $g, $b) : ($this === self::Ansi24 ? \sprintf('8;2;%d;%d;%d', $r, $g, $b) : null);
+        return $this === self::Ansi4 ? (string) $this->convertFromRGB($r, $g, $b) : ($this === self::Ansi8 ? '8;5;' . (string) $this->convertFromRGB($r, $g, $b) : ($this === self::Ansi24 ? \sprintf('8;2;%d;%d;%d', $r, $g, $b) : null));
     }
     private function convertFromRGB(int $r, int $g, int $b) : int
     {

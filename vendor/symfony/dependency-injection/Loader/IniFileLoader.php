@@ -74,6 +74,6 @@ class IniFileLoader extends FileLoader
             $value = '""' === \substr_replace($v, '', 1, -1) ? \substr($v, 1, -1) : $v;
         }
         $lowercaseValue = \strtolower($value);
-        return \true === \defined($value) ? \constant($value) : (\true === (isset($value[1]) && ("'" === $value[0] && "'" === $value[\strlen($value) - 1] || '"' === $value[0] && '"' === $value[\strlen($value) - 1])) ? \substr($value, 1, -1) : XmlUtils::phpize($value));
+        return \true === \defined($value) ? \constant($value) : (\true === ('yes' === $lowercaseValue) || \true === ('on' === $lowercaseValue) ? \true : (\true === ('no' === $lowercaseValue) || \true === ('off' === $lowercaseValue) || \true === ('none' === $lowercaseValue) ? \false : (\true === (isset($value[1]) && ("'" === $value[0] && "'" === $value[\strlen($value) - 1] || '"' === $value[0] && '"' === $value[\strlen($value) - 1])) ? \substr($value, 1, -1) : XmlUtils::phpize($value))));
     }
 }

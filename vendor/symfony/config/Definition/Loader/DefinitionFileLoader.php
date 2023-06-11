@@ -82,7 +82,7 @@ class DefinitionFileLoader extends FileLoader
             if (!$reflectionType instanceof \ReflectionNamedType) {
                 throw new \InvalidArgumentException(\sprintf('Could not resolve argument "$%s" for "%s". You must typehint it (for example with "%s").', $parameter->getName(), $path, DefinitionConfigurator::class));
             }
-            $arguments[] = $reflectionType->getName() === DefinitionConfigurator::class ? $configurator : ($reflectionType->getName() === FileLoader::class || $reflectionType->getName() === self::class ? $this : null);
+            $arguments[] = $reflectionType->getName() === DefinitionConfigurator::class ? $configurator : ($reflectionType->getName() === TreeBuilder::class ? $this->treeBuilder : ($reflectionType->getName() === FileLoader::class || $reflectionType->getName() === self::class ? $this : null));
         }
         $callback(...$arguments);
     }

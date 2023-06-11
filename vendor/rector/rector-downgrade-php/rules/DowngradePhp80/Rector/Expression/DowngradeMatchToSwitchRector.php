@@ -80,17 +80,13 @@ CODE_SAMPLE
         if ($defaultExpr instanceof Throw_ && $this->phpVersionProvider->provide() < PhpVersion::PHP_80) {
             $defaultExpr = new ConstFetch(new Name('null'));
         }
-        $firstTernary = null;
         $currentTernary = null;
         foreach ($reversedMatchArms as $matchArm) {
             if ($matchArm->conds === null) {
                 continue;
             }
             $cond = $this->createCond($matchArm->conds, $node);
-            $currentTernary = new Ternary($cond, $matchArm->body, $firstTernary ?: $defaultExpr);
-            if ($firstTernary === null) {
-                $firstTernary = $currentTernary;
-            }
+            $currentTernary = new Ternary($cond, $matchArm->body, $currentTernary ?: $defaultExpr);
         }
         return $currentTernary;
     }

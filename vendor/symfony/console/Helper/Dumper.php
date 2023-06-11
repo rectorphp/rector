@@ -48,7 +48,7 @@ final class Dumper
             };
         } else {
             $this->handler = function ($var) : string {
-                return \true === (null === $var) ? 'null' : (\true === \is_string($var) ? '"' . $var . '"' : \rtrim(\print_r($var, \true)));
+                return \true === (null === $var) ? 'null' : (\true === (\true === $var) ? 'true' : (\true === (\false === $var) ? 'false' : (\true === \is_string($var) ? '"' . $var . '"' : \rtrim(\print_r($var, \true)))));
             };
         }
     }

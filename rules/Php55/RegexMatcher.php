@@ -45,7 +45,7 @@ final class RegexMatcher
                 return null;
             }
             $delimiter = $pattern[0];
-            $delimiter = $delimiter === '(' ? ')' : ($delimiter === '<' ? '>' : $delimiter);
+            $delimiter = $delimiter === '(' ? ')' : ($delimiter === '{' ? '}' : ($delimiter === '[' ? ']' : ($delimiter === '<' ? '>' : $delimiter)));
             /** @var string $modifiers */
             $modifiers = $this->resolveModifiers((string) Strings::after($pattern, $delimiter, -1));
             if (\strpos($modifiers, 'e') === \false) {

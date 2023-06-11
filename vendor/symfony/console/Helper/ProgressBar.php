@@ -511,7 +511,7 @@ final class ProgressBar
     }
     private function determineBestFormat() : string
     {
-        return $this->output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE ? $this->max ? self::FORMAT_VERBOSE : self::FORMAT_VERBOSE_NOMAX : ($this->output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG ? $this->max ? self::FORMAT_DEBUG : self::FORMAT_DEBUG_NOMAX : ($this->max ? self::FORMAT_NORMAL : self::FORMAT_NORMAL_NOMAX));
+        return $this->output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE ? $this->max ? self::FORMAT_VERBOSE : self::FORMAT_VERBOSE_NOMAX : ($this->output->getVerbosity() === OutputInterface::VERBOSITY_VERY_VERBOSE ? $this->max ? self::FORMAT_VERY_VERBOSE : self::FORMAT_VERY_VERBOSE_NOMAX : ($this->output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG ? $this->max ? self::FORMAT_DEBUG : self::FORMAT_DEBUG_NOMAX : ($this->max ? self::FORMAT_NORMAL : self::FORMAT_NORMAL_NOMAX)));
     }
     private static function initPlaceholderFormatters() : array
     {
