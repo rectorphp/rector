@@ -5,13 +5,11 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -35,19 +33,13 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
      */
     private $reflectionProvider;
     /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @required
@@ -75,14 +67,7 @@ final class PropertyFetchTypeResolver implements NodeTypeResolverInterface
         }
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
-            $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-            // fallback to class, since property fetches are not scoped by PHPStan
-            if ($classLike instanceof ClassLike) {
-                $scope = $classLike->getAttribute(AttributeKey::SCOPE);
-            }
-            if (!$scope instanceof Scope) {
-                return new MixedType();
-            }
+            return new MixedType();
         }
         return $scope->getType($node);
     }
