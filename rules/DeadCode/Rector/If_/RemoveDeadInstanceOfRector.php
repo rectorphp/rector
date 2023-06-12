@@ -12,11 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeTraverser;
 use PHPStan\Type\MixedType;
 use Rector\Core\NodeManipulator\IfManipulator;
@@ -62,18 +58,14 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [If_::class, For_::class, Foreach_::class, While_::class, Do_::class];
+        return [If_::class];
     }
     /**
-     * @param If_|For_|Foreach_|While_|Do_ $node
+     * @param If_ $node
      * @return Stmt[]|null|int
      */
     public function refactor(Node $node)
     {
-        // avoid ifs in a loop, as unexpected behavior
-        if (!$node instanceof If_) {
-            return NodeTraverser::STOP_TRAVERSAL;
-        }
         if (!$this->ifManipulator->isIfWithoutElseAndElseIfs($node)) {
             return null;
         }

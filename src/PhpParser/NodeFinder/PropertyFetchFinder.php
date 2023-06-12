@@ -161,7 +161,10 @@ final class PropertyFetchFinder
         if (!$classReflection instanceof ClassReflection || !$classReflection->isClass()) {
             return \false;
         }
-        return $classReflection->getName() !== $this->nodeNameResolver->getName($class) && !$hasTrait;
+        if ($classReflection->getName() === $this->nodeNameResolver->getName($class)) {
+            return \false;
+        }
+        return !$hasTrait;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
