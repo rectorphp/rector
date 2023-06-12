@@ -2184,7 +2184,6 @@ return array(
     'Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\AssertTrueFalseInternalTypeToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/AssertTrueFalseInternalTypeToSpecificMethodRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\AssertTrueFalseToSpecificMethodRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php',
-    'Rector\\PHPUnit\\Rector\\MethodCall\\CreateMockToCreateStubRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/CreateMockToCreateStubRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\DelegateExceptionArgumentsRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/DelegateExceptionArgumentsRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\ExplicitPhpErrorApiRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/ExplicitPhpErrorApiRector.php',
     'Rector\\PHPUnit\\Rector\\MethodCall\\GetMockBuilderGetMockToCreateMockRector' => $vendorDir . '/rector/rector-phpunit/src/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php',

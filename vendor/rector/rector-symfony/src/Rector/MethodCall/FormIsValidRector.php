@@ -9,7 +9,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\NodeManipulator\MethodCallManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -18,15 +17,6 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class FormIsValidRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeManipulator\MethodCallManipulator
-     */
-    private $methodCallManipulator;
-    public function __construct(MethodCallManipulator $methodCallManipulator)
-    {
-        $this->methodCallManipulator = $methodCallManipulator;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony', [new CodeSample(<<<'CODE_SAMPLE'
@@ -58,10 +48,19 @@ CODE_SAMPLE
         if (!$methodCall->var instanceof Variable) {
             return null;
         }
-        if ($this->shouldSkipMethodCall($methodCall)) {
+        // mark child calls with known is submitted
+        if ($this->isName($methodCall->name, 'isSubmitted')) {
+            $this->traverseNodesWithCallable($node->stmts, function (Node $node) {
+                $node->setAttribute('has_is_submitted', \true);
+                return null;
+            });
             return null;
         }
-        if ($this->isIsSubmittedByAlreadyCalledOnVariable($methodCall->var)) {
+        // already checked
+        if ($node->getAttribute('has_is_submitted')) {
+            return null;
+        }
+        if ($this->shouldSkipMethodCall($methodCall)) {
             return null;
         }
         /** @var string $variableName */
@@ -75,11 +74,5 @@ CODE_SAMPLE
             return \true;
         }
         return !$this->isObjectType($methodCall->var, new ObjectType('Symfony\\Component\\Form\\Form'));
-    }
-    private function isIsSubmittedByAlreadyCalledOnVariable(Variable $variable) : bool
-    {
-        $previousMethodCallNamesOnVariable = $this->methodCallManipulator->findMethodCallNamesOnVariable($variable);
-        // already checked by isSubmitted()
-        return \in_array('isSubmitted', $previousMethodCallNamesOnVariable, \true);
     }
 }
