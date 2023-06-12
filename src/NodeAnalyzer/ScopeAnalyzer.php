@@ -46,6 +46,9 @@ final class ScopeAnalyzer
         if (!$parentNode instanceof Node) {
             return $this->scopeFactory->createFromFile($filePath);
         }
+        if (!$this->hasScope($node)) {
+            return $this->scopeFactory->createFromFile($filePath);
+        }
         if (!$this->hasScope($parentNode)) {
             return $this->scopeFactory->createFromFile($filePath);
         }
