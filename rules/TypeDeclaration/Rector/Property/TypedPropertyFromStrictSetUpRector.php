@@ -84,7 +84,7 @@ CODE_SAMPLE
             if (!$property->isPrivate()) {
                 continue;
             }
-            $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($property, $setUpClassMethod);
+            $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($node, $property, $setUpClassMethod);
             $propertyTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($propertyType, TypeKind::PROPERTY);
             if (!$propertyTypeNode instanceof Node) {
                 continue;

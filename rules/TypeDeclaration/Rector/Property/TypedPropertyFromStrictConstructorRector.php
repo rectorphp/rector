@@ -108,7 +108,7 @@ CODE_SAMPLE
             if (!$this->propertyTypeOverrideGuard->isLegal($property)) {
                 continue;
             }
-            $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($property, $constructClassMethod);
+            $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($node, $property, $constructClassMethod);
             if ($this->shouldSkipPropertyType($propertyType)) {
                 continue;
             }
