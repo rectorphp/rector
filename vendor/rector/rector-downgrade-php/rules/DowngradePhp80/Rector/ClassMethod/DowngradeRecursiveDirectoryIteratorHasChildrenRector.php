@@ -5,7 +5,6 @@ namespace Rector\DowngradePhp80\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\Rector\AbstractRector;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -29,7 +28,7 @@ final class DowngradeRecursiveDirectoryIteratorHasChildrenRector extends Abstrac
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -54,28 +53,27 @@ CODE_SAMPLE
 )]);
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->nodeNameResolver->isName($node, 'hasChildren')) {
-            return null;
+        foreach ($node->getMethods() as $classMethod) {
+            if (!$this->nodeNameResolver->isName($classMethod, 'hasChildren')) {
+                continue;
+            }
+            if (!isset($classMethod->params[0])) {
+                continue;
+            }
+            $ancestorClassNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($node);
+            if (!\in_array('RecursiveDirectoryIterator', $ancestorClassNames, \true)) {
+                continue;
+            }
+            if ($classMethod->params[0]->type === null) {
+                continue;
+            }
+            $classMethod->params[0]->type = null;
+            return $node;
         }
-        if (!isset($node->params[0])) {
-            return null;
-        }
-        $classLike = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$classLike instanceof Class_) {
-            return null;
-        }
-        $ancestorClassNames = $this->familyRelationsAnalyzer->getClassLikeAncestorNames($classLike);
-        if (!\in_array('RecursiveDirectoryIterator', $ancestorClassNames, \true)) {
-            return null;
-        }
-        if ($node->params[0]->type === null) {
-            return null;
-        }
-        $node->params[0]->type = null;
-        return $node;
+        return null;
     }
 }
