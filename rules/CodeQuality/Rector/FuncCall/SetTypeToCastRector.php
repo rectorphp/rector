@@ -32,6 +32,10 @@ final class SetTypeToCastRector extends AbstractRector
      * @var array<string, class-string<Cast>>
      */
     private const TYPE_TO_CAST = ['array' => Array_::class, 'bool' => Bool_::class, 'boolean' => Bool_::class, 'double' => Double::class, 'float' => Double::class, 'int' => Int_::class, 'integer' => Int_::class, 'object' => Object_::class, 'string' => String_::class];
+    /**
+     * @var string
+     */
+    private const IS_ARG_VALUE_ITEM_SET_TYPE = 'is_arg_value_item_set_type';
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Changes settype() to (type) where possible', [new CodeSample(<<<'CODE_SAMPLE'
@@ -72,7 +76,7 @@ CODE_SAMPLE
     {
         if ($node instanceof Arg || $node instanceof ArrayItem) {
             if ($this->isSetTypeFuncCall($node->value)) {
-                return NodeTraverser::STOP_TRAVERSAL;
+                $node->value->setAttribute(self::IS_ARG_VALUE_ITEM_SET_TYPE, \true);
             }
             return null;
         }
@@ -99,6 +103,9 @@ CODE_SAMPLE
             return null;
         }
         if ($funcCall->isFirstClassCallable()) {
+            return null;
+        }
+        if ($funcCall->getAttribute(self::IS_ARG_VALUE_ITEM_SET_TYPE) === \true) {
             return null;
         }
         $typeValue = $this->valueResolver->getValue($funcCall->getArgs()[1]->value);
