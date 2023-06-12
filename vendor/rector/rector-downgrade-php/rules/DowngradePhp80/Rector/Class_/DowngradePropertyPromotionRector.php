@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
-use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\MethodName;
@@ -85,7 +84,9 @@ CODE_SAMPLE
         if ($promotedParams === []) {
             return null;
         }
-        $properties = $this->resolvePropertiesFromPromotedParams($promotedParams, $node);
+        /** @var ClassMethod $constructClassMethod */
+        $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
+        $properties = $this->resolvePropertiesFromPromotedParams($constructClassMethod, $promotedParams, $node);
         $this->addPropertyAssignsToConstructorClassMethod($properties, $node, $oldComments);
         foreach ($promotedParams as $promotedParam) {
             $promotedParam->flags = 0;
@@ -144,9 +145,9 @@ CODE_SAMPLE
      * @param Param[] $promotedParams
      * @return Property[]
      */
-    private function resolvePropertiesFromPromotedParams(array $promotedParams, Class_ $class) : array
+    private function resolvePropertiesFromPromotedParams(ClassMethod $classMethod, array $promotedParams, Class_ $class) : array
     {
-        $properties = $this->createPropertiesFromParams($promotedParams);
+        $properties = $this->createPropertiesFromParams($classMethod, $promotedParams);
         $class->stmts = \array_merge($properties, $class->stmts);
         return $properties;
     }
@@ -172,14 +173,14 @@ CODE_SAMPLE
      * @param Param[] $params
      * @return Property[]
      */
-    private function createPropertiesFromParams(array $params) : array
+    private function createPropertiesFromParams(ClassMethod $classMethod, array $params) : array
     {
         $properties = [];
         foreach ($params as $param) {
             /** @var string $name */
             $name = $this->getName($param->var);
             $property = new Property($param->flags, [new PropertyProperty($name)], [], $param->type);
-            $this->decoratePropertyWithParamDocInfo($param, $property);
+            $this->decoratePropertyWithParamDocInfo($classMethod, $param, $property);
             $hasNew = $param->default instanceof Expr && (bool) $this->betterNodeFinder->findFirstInstanceOf($param->default, New_::class);
             if ($param->default instanceof Expr && !$hasNew) {
                 $property->props[0]->default = $param->default;
@@ -188,12 +189,8 @@ CODE_SAMPLE
         }
         return $properties;
     }
-    private function decoratePropertyWithParamDocInfo(Param $param, Property $property) : void
+    private function decoratePropertyWithParamDocInfo(ClassMethod $constructorClassMethod, Param $param, Property $property) : void
     {
-        $constructorClassMethod = $this->betterNodeFinder->findParentType($param, ClassMethod::class);
-        if (!$constructorClassMethod instanceof ClassMethod) {
-            throw new ShouldNotHappenException();
-        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNode($constructorClassMethod);
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return;
