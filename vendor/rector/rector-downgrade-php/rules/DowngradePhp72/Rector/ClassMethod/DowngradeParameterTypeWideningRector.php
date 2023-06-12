@@ -106,23 +106,34 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [ClassLike::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param ClassLike $node
      */
     public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $method) {
+            $ancestorOverridableAnonymousClass = $this->overrideFromAnonymousClassMethodAnalyzer->matchAncestorClassReflectionOverrideable($node, $method);
+            if ($ancestorOverridableAnonymousClass instanceof ClassReflection) {
+                $classMethod = $this->processRemoveParamTypeFromMethod($ancestorOverridableAnonymousClass, $method);
+                if ($classMethod instanceof ClassMethod) {
+                    $hasChanged = \true;
+                    continue;
+                }
+                continue;
+            }
+            $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($node);
+            $classMethod = $this->processRemoveParamTypeFromMethod($classReflection, $method);
+            if ($classMethod instanceof ClassMethod) {
+                $hasChanged = \true;
+            }
         }
-        $ancestorOverridableAnonymousClass = $this->overrideFromAnonymousClassMethodAnalyzer->matchAncestorClassReflectionOverrideable($classLike, $node);
-        if ($ancestorOverridableAnonymousClass instanceof ClassReflection) {
-            return $this->processRemoveParamTypeFromMethod($ancestorOverridableAnonymousClass, $node);
+        if ($hasChanged) {
+            return $node;
         }
-        $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($classLike);
-        return $this->processRemoveParamTypeFromMethod($classReflection, $node);
+        return null;
     }
     /**
      * @param mixed[] $configuration
