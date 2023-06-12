@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitada10db70b3c4f0558502c20ca48a606
+class ComposerStaticInitad21f89ac4119c2c0f1e443e6d4079bc
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2470,7 +2470,6 @@ class ComposerStaticInitada10db70b3c4f0558502c20ca48a606
         'Rector\\Php54\\Rector\\Array_\\LongArrayToShortArrayRector' => __DIR__ . '/../..' . '/rules/Php54/Rector/Array_/LongArrayToShortArrayRector.php',
         'Rector\\Php54\\Rector\\Break_\\RemoveZeroBreakContinueRector' => __DIR__ . '/../..' . '/rules/Php54/Rector/Break_/RemoveZeroBreakContinueRector.php',
         'Rector\\Php54\\Rector\\FuncCall\\RemoveReferenceFromCallRector' => __DIR__ . '/../..' . '/rules/Php54/Rector/FuncCall/RemoveReferenceFromCallRector.php',
-        'Rector\\Php55\\NodeVisitor\\ClassConstStringValueNodeVisitor' => __DIR__ . '/../..' . '/rules/Php55/NodeVisitor/ClassConstStringValueNodeVisitor.php',
         'Rector\\Php55\\Rector\\ClassConstFetch\\StaticToSelfOnFinalClassRector' => __DIR__ . '/../..' . '/rules/Php55/Rector/ClassConstFetch/StaticToSelfOnFinalClassRector.php',
         'Rector\\Php55\\Rector\\Class_\\ClassConstantToSelfClassRector' => __DIR__ . '/../..' . '/rules/Php55/Rector/Class_/ClassConstantToSelfClassRector.php',
         'Rector\\Php55\\Rector\\FuncCall\\GetCalledClassToSelfClassRector' => __DIR__ . '/../..' . '/rules/Php55/Rector/FuncCall/GetCalledClassToSelfClassRector.php',
@@ -3124,9 +3123,9 @@ class ComposerStaticInitada10db70b3c4f0558502c20ca48a606
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitada10db70b3c4f0558502c20ca48a606::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitada10db70b3c4f0558502c20ca48a606::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitada10db70b3c4f0558502c20ca48a606::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitad21f89ac4119c2c0f1e443e6d4079bc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitad21f89ac4119c2c0f1e443e6d4079bc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitad21f89ac4119c2c0f1e443e6d4079bc::$classMap;
 
         }, null, ClassLoader::class);
     }

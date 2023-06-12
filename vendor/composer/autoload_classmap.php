@@ -2219,7 +2219,6 @@ return array(
     'Rector\\Php54\\Rector\\Array_\\LongArrayToShortArrayRector' => $baseDir . '/rules/Php54/Rector/Array_/LongArrayToShortArrayRector.php',
     'Rector\\Php54\\Rector\\Break_\\RemoveZeroBreakContinueRector' => $baseDir . '/rules/Php54/Rector/Break_/RemoveZeroBreakContinueRector.php',
     'Rector\\Php54\\Rector\\FuncCall\\RemoveReferenceFromCallRector' => $baseDir . '/rules/Php54/Rector/FuncCall/RemoveReferenceFromCallRector.php',
-    'Rector\\Php55\\NodeVisitor\\ClassConstStringValueNodeVisitor' => $baseDir . '/rules/Php55/NodeVisitor/ClassConstStringValueNodeVisitor.php',
     'Rector\\Php55\\Rector\\ClassConstFetch\\StaticToSelfOnFinalClassRector' => $baseDir . '/rules/Php55/Rector/ClassConstFetch/StaticToSelfOnFinalClassRector.php',
     'Rector\\Php55\\Rector\\Class_\\ClassConstantToSelfClassRector' => $baseDir . '/rules/Php55/Rector/Class_/ClassConstantToSelfClassRector.php',
     'Rector\\Php55\\Rector\\FuncCall\\GetCalledClassToSelfClassRector' => $baseDir . '/rules/Php55/Rector/FuncCall/GetCalledClassToSelfClassRector.php',
