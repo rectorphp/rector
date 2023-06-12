@@ -94,8 +94,8 @@ class ResolveInstanceofConditionalsPass implements CompilerPassInterface
             $definition = \serialize($definition);
             if (Definition::class === \get_class($abstract)) {
                 // cast Definition to ChildDefinition
-                $definition = \substr_replace($definition, '53', 2, 2);
-                $definition = \substr_replace($definition, 'Child', 44, 0);
+                $definition = \substr_replace($definition, '72', 2, 2);
+                $definition = \substr_replace($definition, 'Child', 63,  0);
             }
             /** @var ChildDefinition $definition */
             $definition = \unserialize($definition);
