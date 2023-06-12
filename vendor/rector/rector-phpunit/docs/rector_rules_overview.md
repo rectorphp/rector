@@ -529,37 +529,6 @@ Change `$this->createMock()` with methods to direct anonymous class
 
 <br>
 
-## CreateMockToCreateStubRector
-
-Replaces `createMock()` with `createStub()` when relevant
-
-- class: [`Rector\PHPUnit\Rector\MethodCall\CreateMockToCreateStubRector`](../src/Rector/MethodCall/CreateMockToCreateStubRector.php)
-
-```diff
- use PHPUnit\Framework\TestCase
-
- class MyTest extends TestCase
- {
-     public function testItBehavesAsExpected(): void
-     {
--        $stub = $this->createMock(\Exception::class);
-+        $stub = $this->createStub(\Exception::class);
-         $stub->method('getMessage')
-             ->willReturn('a message');
-
-         $mock = $this->createMock(\Exception::class);
-         $mock->expects($this->once())
-             ->method('getMessage')
-             ->willReturn('a message');
-
-         self::assertSame('a message', $stub->getMessage());
-         self::assertSame('a message', $mock->getMessage());
-     }
- }
-```
-
-<br>
-
 ## DataProviderAnnotationToAttributeRector
 
 Change dataProvider annotations to attribute
@@ -590,10 +559,18 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 - class: [`Rector\PHPUnit\Rector\MethodCall\DelegateExceptionArgumentsRector`](../src/Rector/MethodCall/DelegateExceptionArgumentsRector.php)
 
 ```diff
--$this->setExpectedException(SomeException::class, "Message", "CODE");
-+$this->setExpectedException(SomeException::class);
-+$this->expectExceptionMessage('Message');
-+$this->expectExceptionCode('CODE');
+ use PHPUnit\Framework\TestCase;
+
+ class SomeTest extends TestCase
+ {
+     public function test()
+     {
+-        $this->setExpectedException(SomeException::class, "Message", "CODE");
++        $this->setExpectedException(SomeException::class);
++        $this->expectExceptionMessage('Message');
++        $this->expectExceptionCode('CODE');
+     }
+ }
 ```
 
 <br>
@@ -715,6 +692,48 @@ Turns getMock*() methods to `createMock()`
 
 <br>
 
+## PreferPHPUnitSelfCallRector
+
+Changes PHPUnit calls from `$this->assert*()` to self::assert*()
+
+- class: [`Rector\PHPUnit\Rector\Class_\PreferPHPUnitSelfCallRector`](../src/Rector/Class_/PreferPHPUnitSelfCallRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeClass extends TestCase
+ {
+     public function run()
+     {
+-        $this->assertEquals('expected', $result);
++        self::assertEquals('expected', $result);
+     }
+ }
+```
+
+<br>
+
+## PreferPHPUnitThisCallRector
+
+Changes PHPUnit calls from self::assert*() to `$this->assert*()`
+
+- class: [`Rector\PHPUnit\Rector\Class_\PreferPHPUnitThisCallRector`](../src/Rector/Class_/PreferPHPUnitThisCallRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeClass extends TestCase
+ {
+     public function run()
+     {
+-        self::assertEquals('expected', $result);
++        $this->assertEquals('expected', $result);
+     }
+ }
+```
+
+<br>
+
 ## ProphecyPHPDocRector
 
 Add correct `@var` to ObjectProphecy instances based on `$this->prophesize()` call.
@@ -830,25 +849,6 @@ Remove `"setMethods()"` method as never used
 -            ->setMethods(['run'])
              ->getMock();
      }
- }
-```
-
-<br>
-
-## RemoveTestSuffixFromAbstractTestClassesRector
-
-Rename abstract test class suffix from "*Test" to "*TestCase"
-
-- class: [`Rector\PHPUnit\Rector\ClassLike\RemoveTestSuffixFromAbstractTestClassesRector`](../src/Rector/ClassLike/RemoveTestSuffixFromAbstractTestClassesRector.php)
-
-```diff
--// tests/AbstractTest.php
-+// tests/AbstractTestCase.php
- use PHPUnit\Framework\TestCase;
-
--abstract class AbstractTest extends TestCase
-+abstract class AbstractTestCase extends TestCase
- {
  }
 ```
 

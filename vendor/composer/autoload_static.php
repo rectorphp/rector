@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitea19f20ef52a4170b96e772b65acb0c1
+class ComposerStaticInit27170809d4d8e5f7ac5c6332e59f86cf
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1699,7 +1699,6 @@ class ComposerStaticInitea19f20ef52a4170b96e772b65acb0c1
         'Rector\\CodingStyle\\ClassNameImport\\UseImportsTraverser' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/UseImportsTraverser.php',
         'Rector\\CodingStyle\\ClassNameImport\\UsedImportsResolver' => __DIR__ . '/../..' . '/rules/CodingStyle/ClassNameImport/UsedImportsResolver.php',
         'Rector\\CodingStyle\\Contract\\ClassNameImport\\ClassNameImportSkipVoterInterface' => __DIR__ . '/../..' . '/rules/CodingStyle/Contract/ClassNameImport/ClassNameImportSkipVoterInterface.php',
-        'Rector\\CodingStyle\\Enum\\PreferenceSelfThis' => __DIR__ . '/../..' . '/rules/CodingStyle/Enum/PreferenceSelfThis.php',
         'Rector\\CodingStyle\\Guard\\StaticGuard' => __DIR__ . '/../..' . '/rules/CodingStyle/Guard/StaticGuard.php',
         'Rector\\CodingStyle\\Naming\\ClassNaming' => __DIR__ . '/../..' . '/rules/CodingStyle/Naming/ClassNaming.php',
         'Rector\\CodingStyle\\NodeAnalyzer\\SpreadVariablesCollector' => __DIR__ . '/../..' . '/rules/CodingStyle/NodeAnalyzer/SpreadVariablesCollector.php',
@@ -1729,7 +1728,6 @@ class ComposerStaticInitea19f20ef52a4170b96e772b65acb0c1
         'Rector\\CodingStyle\\Rector\\FuncCall\\StrictArraySearchRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/StrictArraySearchRector.php',
         'Rector\\CodingStyle\\Rector\\FuncCall\\VersionCompareFuncCallToConstantRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/FuncCall/VersionCompareFuncCallToConstantRector.php',
         'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',
-        'Rector\\CodingStyle\\Rector\\MethodCall\\PreferThisOrSelfMethodCallRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php',
         'Rector\\CodingStyle\\Rector\\Plus\\UseIncrementAssignRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Plus/UseIncrementAssignRector.php',
         'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
         'Rector\\CodingStyle\\Rector\\Property\\NullifyUnionNullableRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Property/NullifyUnionNullableRector.php',
@@ -2391,6 +2389,8 @@ class ComposerStaticInitea19f20ef52a4170b96e772b65acb0c1
         'Rector\\PHPUnit\\Rector\\Class_\\ArrayArgumentToDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ArrayArgumentToDataProviderRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\CoversAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/CoversAnnotationWithValueToAttributeRector.php',
+        'Rector\\PHPUnit\\Rector\\Class_\\PreferPHPUnitSelfCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/PreferPHPUnitSelfCallRector.php',
+        'Rector\\PHPUnit\\Rector\\Class_\\PreferPHPUnitThisCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/PreferPHPUnitThisCallRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ProphecyPHPDocRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ProphecyPHPDocRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\RemoveDataProviderTestPrefixRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/RemoveDataProviderTestPrefixRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\StaticDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/StaticDataProviderClassMethodRector.php',
@@ -3097,9 +3097,9 @@ class ComposerStaticInitea19f20ef52a4170b96e772b65acb0c1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitea19f20ef52a4170b96e772b65acb0c1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitea19f20ef52a4170b96e772b65acb0c1::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitea19f20ef52a4170b96e772b65acb0c1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit27170809d4d8e5f7ac5c6332e59f86cf::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit27170809d4d8e5f7ac5c6332e59f86cf::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit27170809d4d8e5f7ac5c6332e59f86cf::$classMap;
 
         }, null, ClassLoader::class);
     }
