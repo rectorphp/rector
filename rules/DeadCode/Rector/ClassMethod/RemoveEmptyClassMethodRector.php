@@ -121,7 +121,7 @@ CODE_SAMPLE
         if ($this->paramAnalyzer->hasPropertyPromotion($classMethod->params)) {
             return \true;
         }
-        if ($this->controllerClassMethodManipulator->isControllerClassMethodWithBehaviorAnnotation($classMethod)) {
+        if ($this->controllerClassMethodManipulator->isControllerClassMethodWithBehaviorAnnotation($class, $classMethod)) {
             return \true;
         }
         if ($this->nodeNameResolver->isName($classMethod, MethodName::CONSTRUCT)) {

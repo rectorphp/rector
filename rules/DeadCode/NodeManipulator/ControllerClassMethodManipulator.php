@@ -8,7 +8,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ControllerClassMethodManipulator
 {
@@ -22,32 +21,22 @@ final class ControllerClassMethodManipulator
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory, BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, PhpDocInfoFactory $phpDocInfoFactory)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
-    public function isControllerClassMethodWithBehaviorAnnotation(ClassMethod $classMethod) : bool
+    public function isControllerClassMethodWithBehaviorAnnotation(Class_ $class, ClassMethod $classMethod) : bool
     {
-        if (!$this->isControllerClassMethod($classMethod)) {
+        if (!$this->isControllerClassMethod($class, $classMethod)) {
             return \false;
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
         return $phpDocInfo->hasByType(GenericTagValueNode::class);
     }
-    private function isControllerClassMethod(ClassMethod $classMethod) : bool
+    private function isControllerClassMethod(Class_ $class, ClassMethod $classMethod) : bool
     {
         if (!$classMethod->isPublic()) {
-            return \false;
-        }
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$class instanceof Class_) {
             return \false;
         }
         return $this->hasParentClassController($class);

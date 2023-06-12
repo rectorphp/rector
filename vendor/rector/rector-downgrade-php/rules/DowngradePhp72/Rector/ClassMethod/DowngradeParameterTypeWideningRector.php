@@ -8,6 +8,7 @@ use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Core\Contract\Rector\AllowEmptyConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -58,10 +59,15 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
      */
     private $sealedClassAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
+     */
+    private $docBlockUpdater;
+    /**
      * @var array<string, string[]>
      */
     private $unsafeTypesToMethods = [];
-    public function __construct(NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, ReflectionResolver $reflectionResolver, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, BuiltInMethodAnalyzer $builtInMethodAnalyzer, OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer, SealedClassAnalyzer $sealedClassAnalyzer)
+    public function __construct(NativeParamToPhpDocDecorator $nativeParamToPhpDocDecorator, ReflectionResolver $reflectionResolver, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, BuiltInMethodAnalyzer $builtInMethodAnalyzer, OverrideFromAnonymousClassMethodAnalyzer $overrideFromAnonymousClassMethodAnalyzer, SealedClassAnalyzer $sealedClassAnalyzer, DocBlockUpdater $docBlockUpdater)
     {
         $this->nativeParamToPhpDocDecorator = $nativeParamToPhpDocDecorator;
         $this->reflectionResolver = $reflectionResolver;
@@ -69,6 +75,7 @@ final class DowngradeParameterTypeWideningRector extends AbstractRector implemen
         $this->builtInMethodAnalyzer = $builtInMethodAnalyzer;
         $this->overrideFromAnonymousClassMethodAnalyzer = $overrideFromAnonymousClassMethodAnalyzer;
         $this->sealedClassAnalyzer = $sealedClassAnalyzer;
+        $this->docBlockUpdater = $docBlockUpdater;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -120,6 +127,7 @@ CODE_SAMPLE
                 $classMethod = $this->processRemoveParamTypeFromMethod($ancestorOverridableAnonymousClass, $method);
                 if ($classMethod instanceof ClassMethod) {
                     $hasChanged = \true;
+                    $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
                     continue;
                 }
                 continue;
@@ -127,6 +135,7 @@ CODE_SAMPLE
             $classReflection = $this->reflectionResolver->resolveClassAndAnonymousClass($node);
             $classMethod = $this->processRemoveParamTypeFromMethod($classReflection, $method);
             if ($classMethod instanceof ClassMethod) {
+                $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
                 $hasChanged = \true;
             }
         }
