@@ -1,4 +1,4 @@
-# 97 Rules Overview
+# 79 Rules Overview
 
 ## ArrowFunctionToAnonymousFunctionRector
 
@@ -33,35 +33,6 @@ Remove "abstract" from private methods in traits and adds an empty function body
  {
 -    abstract private function someAbstractPrivateFunction();
 +    private function someAbstractPrivateFunction() {}
- }
-```
-
-<br>
-
-## DowngradeAnonymousClassRector
-
-Remove anonymous class
-
-- class: [`Rector\DowngradePhp70\Rector\New_\DowngradeAnonymousClassRector`](../rules/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php)
-
-```diff
-+class Anonymous
-+{
-+    public function execute()
-+    {
-+    }
-+}
- class SomeClass
- {
-     public function run()
-     {
--        return new class {
--            public function execute()
--            {
--            }
--        };
-+        return new Anonymous();
-     }
  }
 ```
 
@@ -269,24 +240,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-## DowngradeCatchThrowableRector
-
-Make catch clauses catching `Throwable` also catch `Exception` to support exception hierarchies in PHP 5.
-
-- class: [`Rector\DowngradePhp70\Rector\TryCatch\DowngradeCatchThrowableRector`](../rules/DowngradePhp70/Rector/TryCatch/DowngradeCatchThrowableRector.php)
-
-```diff
- try {
-     // Some code...
- } catch (\Throwable $exception) {
-     handle();
-+} catch (\Exception $exception) {
-+    handle();
- }
-```
-
-<br>
-
 ## DowngradeClassConstantVisibilityRector
 
 Downgrade class constant visibility
@@ -322,19 +275,6 @@ Change `$object::class` to get_class($object)
 +        return get_class($object);
      }
  }
-```
-
-<br>
-
-## DowngradeClosureCallRector
-
-Replace `Closure::call()` by `Closure::bindTo()`
-
-- class: [`Rector\DowngradePhp70\Rector\MethodCall\DowngradeClosureCallRector`](../rules/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php)
-
-```diff
--$closure->call($newObj, ...$args);
-+call_user_func($closure->bindTo($newObj, $newObj), ...$args);
 ```
 
 <br>
@@ -417,24 +357,6 @@ Make method return same type as parent
 
 <br>
 
-## DowngradeDefineArrayConstantRector
-
-Change array contant definition via define to const
-
-- class: [`Rector\DowngradePhp70\Rector\Expression\DowngradeDefineArrayConstantRector`](../rules/DowngradePhp70/Rector/Expression/DowngradeDefineArrayConstantRector.php)
-
-```diff
--define('ANIMALS', [
-+const ANIMALS = [
-     'dog',
-     'cat',
-     'bird'
--]);
-+];
-```
-
-<br>
-
 ## DowngradeDereferenceableOperationRector
 
 Add parentheses around non-dereferenceable expressions.
@@ -447,19 +369,6 @@ Add parentheses around non-dereferenceable expressions.
 -    return "$str$suffix"[0];
 +    return ("$str$suffix")[0];
  }
-```
-
-<br>
-
-## DowngradeDirnameLevelsRector
-
-Replace the 2nd argument of `dirname()`
-
-- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeDirnameLevelsRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeDirnameLevelsRector.php)
-
-```diff
--return dirname($path, 2);
-+return dirname(dirname($path));
 ```
 
 <br>
@@ -544,19 +453,6 @@ Changes `fread()` or `fwrite()` compare to false to negation check
 -fwrite($fp, '1') === false;
 +!fread($handle, $length);
 +!fwrite($fp, '1');
-```
-
-<br>
-
-## DowngradeInstanceofThrowableRector
-
-Add `instanceof Exception` check as a fallback to `instanceof Throwable` to support exception hierarchies in PHP 5
-
-- class: [`Rector\DowngradePhp70\Rector\Instanceof_\DowngradeInstanceofThrowableRector`](../rules/DowngradePhp70/Rector/Instanceof_/DowngradeInstanceofThrowableRector.php)
-
-```diff
--return $exception instanceof \Throwable;
-+return $exception instanceof \Throwable || $exception instanceof \Exception;
 ```
 
 <br>
@@ -713,20 +609,6 @@ Downgrade `match()` to `switch()`
 
 <br>
 
-## DowngradeMethodCallOnCloneRector
-
-Replace (clone `$obj)->call()` to object assign and call
-
-- class: [`Rector\DowngradePhp70\Rector\MethodCall\DowngradeMethodCallOnCloneRector`](../rules/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php)
-
-```diff
--(clone $this)->execute();
-+$object = (clone $this);
-+$object->execute();
-```
-
-<br>
-
 ## DowngradeMixedTypeDeclarationRector
 
 Remove the "mixed" param and return type, add a `@param` and `@return` tag instead
@@ -864,19 +746,6 @@ Downgrade catch () without variable to one
          }
      }
  }
-```
-
-<br>
-
-## DowngradeNullCoalesceRector
-
-Change null coalesce to isset ternary check
-
-- class: [`Rector\DowngradePhp70\Rector\Coalesce\DowngradeNullCoalesceRector`](../rules/DowngradePhp70/Rector/Coalesce/DowngradeNullCoalesceRector.php)
-
-```diff
--$username = $_GET['user'] ?? 'nobody';
-+$username = isset($_GET['user']) ? $_GET['user'] : 'nobody';
 ```
 
 <br>
@@ -1041,32 +910,6 @@ return static function (RectorConfig $rectorConfig): void {
  {
      public function test($input)
      {
-     }
- }
-```
-
-<br>
-
-## DowngradeParentTypeDeclarationRector
-
-Remove "parent" return type, add a `"@return` parent" tag instead
-
-- class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeParentTypeDeclarationRector`](../rules/DowngradePhp70/Rector/ClassMethod/DowngradeParentTypeDeclarationRector.php)
-
-```diff
- class ParentClass
- {
- }
-
- class SomeClass extends ParentClass
- {
--    public function foo(): parent
-+    /**
-+     * @return parent
-+     */
-+    public function foo()
-     {
-         return $this;
      }
  }
 ```
@@ -1403,7 +1246,7 @@ Downgrade reflection `$reflection->getType()` method call
      public function run(ReflectionProperty $reflectionProperty)
      {
 -        if ($reflectionProperty->getType()) {
-+        if (null) {
++        if (method_exists($reflectionProperty, 'getType') ? $reflectionProperty->getType() ? null) {
              return true;
          }
 
@@ -1429,85 +1272,6 @@ Downgrade `ReflectionProperty->getDefaultValue()`
 +        return $reflectionProperty->getDeclaringClass()->getDefaultProperties()[$reflectionProperty->getName()] ?? null;
      }
  }
-```
-
-<br>
-
-## DowngradeScalarTypeDeclarationRector
-
-Remove the type params and return type, add `@param` and `@return` tags instead
-
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeScalarTypeDeclarationRector`](../rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function run(string $input): string
-+    /**
-+     * @param string $input
-+     * @return string
-+     */
-+    public function run($input)
-     {
-     }
- }
-```
-
-<br>
-
-## DowngradeSelfTypeDeclarationRector
-
-Remove "self" return type, add a `"@return` `$this"` tag instead
-
-- class: [`Rector\DowngradePhp70\Rector\ClassMethod\DowngradeSelfTypeDeclarationRector`](../rules/DowngradePhp70/Rector/ClassMethod/DowngradeSelfTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function foo(): self
-+    /**
-+     * @return $this
-+     */
-+    public function foo()
-     {
-         return $this;
-     }
- }
-```
-
-<br>
-
-## DowngradeSessionStartArrayOptionsRector
-
-Move array option of session_start($options) to before statement's `ini_set()`
-
-- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeSessionStartArrayOptionsRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeSessionStartArrayOptionsRector.php)
-
-```diff
--session_start([
--    'cache_limiter' => 'private',
--]);
-+ini_set('session.cache_limiter', 'private');
-+session_start();
-```
-
-<br>
-
-## DowngradeSpaceshipRector
-
-Change spaceship with check equal, and ternary to result 0, -1, 1
-
-- class: [`Rector\DowngradePhp70\Rector\Spaceship\DowngradeSpaceshipRector`](../rules/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php)
-
-```diff
--return $a <=> $b;
-+$battleShipcompare = function ($left, $right) {
-+    if ($left === $right) {
-+        return 0;
-+    }
-+    return $left < $right ? -1 : 1;
-+};
-+return $battleShipcompare($a, $b);
 ```
 
 <br>
@@ -1617,19 +1381,6 @@ Downgrade `stream_isatty()` function
 
 <br>
 
-## DowngradeStrictTypeDeclarationRector
-
-Remove the declare(strict_types=1)
-
-- class: [`Rector\DowngradePhp70\Rector\Declare_\DowngradeStrictTypeDeclarationRector`](../rules/DowngradePhp70/Rector/Declare_/DowngradeStrictTypeDeclarationRector.php)
-
-```diff
--declare(strict_types=1);
- echo 'something';
-```
-
-<br>
-
 ## DowngradeStringReturnTypeOnToStringRector
 
 Add "string" return on current `__toString()` method when parent method has string return on `__toString()` method
@@ -1695,29 +1446,6 @@ Downgrade throw expression
 +}
 +
 +echo $variable;
-```
-
-<br>
-
-## DowngradeThrowableTypeDeclarationRector
-
-Replace `Throwable` type hints by PHPDoc tags
-
-- class: [`Rector\DowngradePhp70\Rector\FunctionLike\DowngradeThrowableTypeDeclarationRector`](../rules/DowngradePhp70/Rector/FunctionLike/DowngradeThrowableTypeDeclarationRector.php)
-
-```diff
- class SomeClass
- {
--    public function foo(\Throwable $e): ?\Throwable
-+    /**
-+     * @param \Throwable $e
-+     * @return \Throwable|null
-+     */
-+    public function foo($e)
-     {
-         return new \Exception("Troubles");
-     }
- }
 ```
 
 <br>
@@ -1809,33 +1537,6 @@ Changes property type definition from type definitions to `@var` annotations.
 
 <br>
 
-## DowngradeUncallableValueCallToCallUserFuncRector
-
-Downgrade calling a value that is not directly callable in PHP 5 (property, static property, closure, …) to call_user_func.
-
-- class: [`Rector\DowngradePhp70\Rector\FuncCall\DowngradeUncallableValueCallToCallUserFuncRector`](../rules/DowngradePhp70/Rector/FuncCall/DowngradeUncallableValueCallToCallUserFuncRector.php)
-
-```diff
- final class Foo
- {
-     /** @var callable */
-     public $handler;
-     /** @var callable */
-     public static $staticHandler;
- }
-
- $foo = new Foo;
--($foo->handler)(/* args */);
--($foo::$staticHandler)(41);
-+call_user_func($foo->handler, /* args */);
-+call_user_func($foo::$staticHandler, 41);
-
--(function() { /* … */ })();
-+call_user_func(function() { /* … */ });
-```
-
-<br>
-
 ## DowngradeUnionTypeDeclarationRector
 
 Remove the union type params and returns, add `@param/@return` tags instead
@@ -1874,29 +1575,6 @@ Removes union type property type definition, adding `@var` annotations instead.
 +     */
 +    private $property;
  }
-```
-
-<br>
-
-## DowngradeUnnecessarilyParenthesizedExpressionRector
-
-Remove parentheses around expressions allowed by Uniform variable syntax RFC where they are not necessary to prevent parse errors on PHP 5.
-
-- class: [`Rector\DowngradePhp70\Rector\Expr\DowngradeUnnecessarilyParenthesizedExpressionRector`](../rules/DowngradePhp70/Rector/Expr/DowngradeUnnecessarilyParenthesizedExpressionRector.php)
-
-```diff
--($f)['foo'];
--($f)->foo;
--($f)->foo();
--($f)::$foo;
--($f)::foo();
--($f)();
-+$f['foo'];
-+$f->foo;
-+$f->foo();
-+$f::$foo;
-+$f::foo();
-+$f();
 ```
 
 <br>
@@ -1949,23 +1627,6 @@ Convert setcookie option array to arguments
 ```diff
 -setcookie('name', $value, ['expires' => 360]);
 +setcookie('name', $value, 360);
-```
-
-<br>
-
-## SplitGroupedUseImportsRector
-
-Refactor grouped use imports to standalone lines
-
-- class: [`Rector\DowngradePhp70\Rector\GroupUse\SplitGroupedUseImportsRector`](../rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php)
-
-```diff
--use SomeNamespace\{
--    First,
--    Second
--};
-+use SomeNamespace\First;
-+use SomeNamespace\Second;
 ```
 
 <br>

@@ -101,7 +101,7 @@ Change CompositeExpression ->addMultiple($parts) to ->with(...$parts)
 
 ## ChangeSetParametersArrayToArrayCollectionRector
 
-Change array to ArrayCollection in setParameters method of query builder
+Change array to ArrayCollection in `setParameters()` method of query builder
 
 - class: [`Rector\Doctrine\Rector\MethodCall\ChangeSetParametersArrayToArrayCollectionRector`](../src/Rector/MethodCall/ChangeSetParametersArrayToArrayCollectionRector.php)
 
@@ -114,19 +114,15 @@ Change array to ArrayCollection in setParameters method of query builder
  {
      public function getSomething()
      {
-         return $this
-             ->createQueryBuilder('sm')
+         return $this->createQueryBuilder('sm')
              ->select('sm')
              ->where('sm.foo = :bar')
 -            ->setParameters([
 -                'bar' => 'baz'
--            ])
+-            ]);
 +            ->setParameters(new ArrayCollection([
 +                new  Parameter('bar', 'baz'),
-+            ]))
-             ->getQuery()
-             ->getResult()
-         ;
++            ]));
      }
  }
 ```

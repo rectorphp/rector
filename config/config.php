@@ -63,6 +63,8 @@ use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use Rector\Parallel\WorkerRunner;
+use Rector\PhpAttribute\AnnotationToAttributeMapper;
+use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpDocParser\PhpParser\SmartPhpParser;
 use Rector\PhpDocParser\PhpParser\SmartPhpParserFactory;
@@ -202,4 +204,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(ApplicationFileProcessor::class)->arg('$fileProcessors', tagged_iterator(FileProcessorInterface::class));
     $services->set(FileFactory::class)->arg('$fileProcessors', tagged_iterator(FileProcessorInterface::class));
     $services->set(WorkerRunner::class)->arg('$fileProcessors', tagged_iterator(FileProcessorInterface::class));
+    $services->set(AnnotationToAttributeMapper::class)->arg('$annotationToAttributeMappers', tagged_iterator(AnnotationToAttributeMapperInterface::class));
 };

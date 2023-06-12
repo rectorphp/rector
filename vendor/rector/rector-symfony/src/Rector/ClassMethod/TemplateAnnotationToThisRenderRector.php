@@ -169,15 +169,17 @@ CODE_SAMPLE
     }
     private function hasLastReturnResponse(ClassMethod $classMethod) : bool
     {
-        $node = $this->betterNodeFinder->findLastInstanceOf((array) $classMethod->stmts, Return_::class);
-        if (!$node instanceof Return_) {
+        /** @var Return_[] $returns */
+        $returns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Return_::class);
+        if ($returns === []) {
             return \false;
         }
-        if (!$node->expr instanceof Expr) {
+        $lastReturn = \array_pop($returns);
+        if (!$lastReturn->expr instanceof Expr) {
             return \false;
         }
         $responseObjectType = new ObjectType(SymfonyClass::RESPONSE);
-        $returnType = $this->getType($node->expr);
+        $returnType = $this->getType($lastReturn->expr);
         return $responseObjectType->isSuperTypeOf($returnType)->yes();
     }
     private function refactorReturn(Return_ $return, DoctrineAnnotationTagValueNode $templateDoctrineAnnotationTagValueNode, bool $hasThisRenderOrReturnsResponse, ClassMethod $classMethod) : void

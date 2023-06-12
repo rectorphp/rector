@@ -15,6 +15,7 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
+use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
@@ -31,7 +32,7 @@ final class ContainerBuilderFactory
     /**
      * @var array<class-string>
      */
-    private const TYPES_TO_TAG_AUTOCONFIGURE = [BasePhpDocNodeVisitorInterface::class, PhpDocNodeDecoratorInterface::class, NodeTypeResolverInterface::class, ScopeResolverNodeVisitorInterface::class, TypeMapperInterface::class, PhpParserNodeMapperInterface::class, PhpDocTypeMapperInterface::class, ClassNameImportSkipVoterInterface::class, RectorInterface::class, RectorInterface::class, OutputFormatterInterface::class, NonPhpRectorInterface::class, PhpRectorInterface::class, NodeNameResolverInterface::class, FileProcessorInterface::class];
+    private const TYPES_TO_TAG_AUTOCONFIGURE = [BasePhpDocNodeVisitorInterface::class, PhpDocNodeDecoratorInterface::class, NodeTypeResolverInterface::class, ScopeResolverNodeVisitorInterface::class, TypeMapperInterface::class, PhpParserNodeMapperInterface::class, PhpDocTypeMapperInterface::class, ClassNameImportSkipVoterInterface::class, RectorInterface::class, RectorInterface::class, OutputFormatterInterface::class, NonPhpRectorInterface::class, PhpRectorInterface::class, NodeNameResolverInterface::class, FileProcessorInterface::class, AnnotationToAttributeMapperInterface::class];
     public function __construct(ConfigureCallMergingLoaderFactory $configureCallMergingLoaderFactory)
     {
         $this->configureCallMergingLoaderFactory = $configureCallMergingLoaderFactory;

@@ -37,8 +37,4 @@ final class DowngradeLevelSetList implements SetListInterface
      * @var string
      */
     public const DOWN_TO_PHP_70 = __DIR__ . '/../../../config/set/level/down-to-php70.php';
-    /**
-     * @var string
-     */
-    public const DOWN_TO_PHP_56 = __DIR__ . '/../../../config/set/level/down-to-php56.php';
 }

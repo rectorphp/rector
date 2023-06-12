@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit28417dad196a8217aba102ccaeda9de9
+class ComposerStaticInit3fab6f3576c517f4a735d8e59230bb55
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1858,7 +1858,6 @@ class ComposerStaticInit28417dad196a8217aba102ccaeda9de9
         'Rector\\Core\\NodeManipulator\\FuncCallManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/FuncCallManipulator.php',
         'Rector\\Core\\NodeManipulator\\FunctionLikeManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/FunctionLikeManipulator.php',
         'Rector\\Core\\NodeManipulator\\IfManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/IfManipulator.php',
-        'Rector\\Core\\NodeManipulator\\MethodCallManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/MethodCallManipulator.php',
         'Rector\\Core\\NodeManipulator\\PropertyFetchAssignManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/PropertyFetchAssignManipulator.php',
         'Rector\\Core\\NodeManipulator\\PropertyManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/PropertyManipulator.php',
         'Rector\\Core\\NodeManipulator\\StmtsManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/StmtsManipulator.php',
@@ -1996,7 +1995,6 @@ class ComposerStaticInit28417dad196a8217aba102ccaeda9de9
         'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
         'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
         'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => __DIR__ . '/../..' . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
-        'Rector\\Defluent\\NodeAnalyzer\\FluentChainMethodCallNodeAnalyzer' => __DIR__ . '/../..' . '/packages/Defluent/NodeAnalyzer/FluentChainMethodCallNodeAnalyzer.php',
         'Rector\\DependencyInjection\\Rector\\ClassMethod\\AddMethodParentCallRector' => __DIR__ . '/../..' . '/rules/DependencyInjection/Rector/ClassMethod/AddMethodParentCallRector.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AssignPropertyFetchAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AssignPropertyFetchAnalyzer.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttributeCleaner' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeCleaner.php',
@@ -2060,26 +2058,6 @@ class ComposerStaticInit28417dad196a8217aba102ccaeda9de9
         'Rector\\Doctrine\\ValueObject\\ArgName' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/ArgName.php',
         'Rector\\Doctrine\\ValueObject\\AssignToPropertyFetch' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/AssignToPropertyFetch.php',
         'Rector\\Doctrine\\ValueObject\\DefaultAnnotationArgValue' => __DIR__ . '/..' . '/rector/rector-doctrine/src/ValueObject/DefaultAnnotationArgValue.php',
-        'Rector\\DowngradePhp70\\NodeFactory\\ClassFromAnonymousFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/NodeFactory/ClassFromAnonymousFactory.php',
-        'Rector\\DowngradePhp70\\Rector\\ClassMethod\\DowngradeParentTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/ClassMethod/DowngradeParentTypeDeclarationRector.php',
-        'Rector\\DowngradePhp70\\Rector\\ClassMethod\\DowngradeSelfTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/ClassMethod/DowngradeSelfTypeDeclarationRector.php',
-        'Rector\\DowngradePhp70\\Rector\\Coalesce\\DowngradeNullCoalesceRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/Coalesce/DowngradeNullCoalesceRector.php',
-        'Rector\\DowngradePhp70\\Rector\\Declare_\\DowngradeStrictTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/Declare_/DowngradeStrictTypeDeclarationRector.php',
-        'Rector\\DowngradePhp70\\Rector\\Expr\\DowngradeUnnecessarilyParenthesizedExpressionRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/Expr/DowngradeUnnecessarilyParenthesizedExpressionRector.php',
-        'Rector\\DowngradePhp70\\Rector\\Expression\\DowngradeDefineArrayConstantRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/Expression/DowngradeDefineArrayConstantRector.php',
-        'Rector\\DowngradePhp70\\Rector\\FuncCall\\DowngradeDirnameLevelsRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/FuncCall/DowngradeDirnameLevelsRector.php',
-        'Rector\\DowngradePhp70\\Rector\\FuncCall\\DowngradeSessionStartArrayOptionsRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/FuncCall/DowngradeSessionStartArrayOptionsRector.php',
-        'Rector\\DowngradePhp70\\Rector\\FuncCall\\DowngradeUncallableValueCallToCallUserFuncRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/FuncCall/DowngradeUncallableValueCallToCallUserFuncRector.php',
-        'Rector\\DowngradePhp70\\Rector\\FunctionLike\\DowngradeScalarTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/FunctionLike/DowngradeScalarTypeDeclarationRector.php',
-        'Rector\\DowngradePhp70\\Rector\\FunctionLike\\DowngradeThrowableTypeDeclarationRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/FunctionLike/DowngradeThrowableTypeDeclarationRector.php',
-        'Rector\\DowngradePhp70\\Rector\\GroupUse\\SplitGroupedUseImportsRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/GroupUse/SplitGroupedUseImportsRector.php',
-        'Rector\\DowngradePhp70\\Rector\\Instanceof_\\DowngradeInstanceofThrowableRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/Instanceof_/DowngradeInstanceofThrowableRector.php',
-        'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeClosureCallRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/MethodCall/DowngradeClosureCallRector.php',
-        'Rector\\DowngradePhp70\\Rector\\MethodCall\\DowngradeMethodCallOnCloneRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/MethodCall/DowngradeMethodCallOnCloneRector.php',
-        'Rector\\DowngradePhp70\\Rector\\New_\\DowngradeAnonymousClassRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/New_/DowngradeAnonymousClassRector.php',
-        'Rector\\DowngradePhp70\\Rector\\Spaceship\\DowngradeSpaceshipRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/Spaceship/DowngradeSpaceshipRector.php',
-        'Rector\\DowngradePhp70\\Rector\\TryCatch\\DowngradeCatchThrowableRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Rector/TryCatch/DowngradeCatchThrowableRector.php',
-        'Rector\\DowngradePhp70\\Tokenizer\\WrappedInParenthesesAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp70/Tokenizer/WrappedInParenthesesAnalyzer.php',
         'Rector\\DowngradePhp71\\Rector\\Array_\\SymmetricArrayDestructuringToListRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp71/Rector/Array_/SymmetricArrayDestructuringToListRector.php',
         'Rector\\DowngradePhp71\\Rector\\ClassConst\\DowngradeClassConstantVisibilityRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp71/Rector/ClassConst/DowngradeClassConstantVisibilityRector.php',
         'Rector\\DowngradePhp71\\Rector\\ConstFetch\\DowngradePhp71JsonConstRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp71/Rector/ConstFetch/DowngradePhp71JsonConstRector.php',
@@ -2250,7 +2228,6 @@ class ComposerStaticInit28417dad196a8217aba102ccaeda9de9
         'Rector\\NodeAnalyzer\\CoalesceAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/CoalesceAnalyzer.php',
         'Rector\\NodeAnalyzer\\DefineFuncCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/DefineFuncCallAnalyzer.php',
         'Rector\\NodeAnalyzer\\ExprInTopStmtMatcher' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/ExprInTopStmtMatcher.php',
-        'Rector\\NodeAnalyzer\\MethodCallTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeAnalyzer/MethodCallTypeAnalyzer.php',
         'Rector\\NodeCollector\\BinaryOpConditionsCollector' => __DIR__ . '/../..' . '/packages/NodeCollector/BinaryOpConditionsCollector.php',
         'Rector\\NodeCollector\\NodeAnalyzer\\ArrayCallableMethodMatcher' => __DIR__ . '/../..' . '/packages/NodeCollector/NodeAnalyzer/ArrayCallableMethodMatcher.php',
         'Rector\\NodeCollector\\ScopeResolver\\ParentClassScopeResolver' => __DIR__ . '/../..' . '/packages/NodeCollector/ScopeResolver/ParentClassScopeResolver.php',
@@ -2260,7 +2237,6 @@ class ComposerStaticInit28417dad196a8217aba102ccaeda9de9
         'Rector\\NodeFactory\\ClassFromEnumFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/ClassFromEnumFactory.php',
         'Rector\\NodeFactory\\DoctrineAnnotationFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/DoctrineAnnotationFactory.php',
         'Rector\\NodeFactory\\NamedVariableFactory' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeFactory/NamedVariableFactory.php',
-        'Rector\\NodeManipulator\\NamespacedNameDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeManipulator/NamespacedNameDecorator.php',
         'Rector\\NodeManipulator\\PropertyDecorator' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/NodeManipulator/PropertyDecorator.php',
         'Rector\\NodeNameResolver\\Contract\\NodeNameResolverInterface' => __DIR__ . '/../..' . '/packages/NodeNameResolver/Contract/NodeNameResolverInterface.php',
         'Rector\\NodeNameResolver\\NodeNameResolver' => __DIR__ . '/../..' . '/packages/NodeNameResolver/NodeNameResolver.php',
@@ -2553,7 +2529,6 @@ class ComposerStaticInit28417dad196a8217aba102ccaeda9de9
         'Rector\\Php74\\Rector\\Ternary\\ParenthesizeNestedTernaryRector' => __DIR__ . '/../..' . '/rules/Php74/Rector/Ternary/ParenthesizeNestedTernaryRector.php',
         'Rector\\Php74\\Tokenizer\\ParenthesizedNestedTernaryAnalyzer' => __DIR__ . '/../..' . '/rules/Php74/Tokenizer/ParenthesizedNestedTernaryAnalyzer.php',
         'Rector\\Php80\\AttributeDecorator\\SensioParamConverterAttributeDecorator' => __DIR__ . '/../..' . '/rules/Php80/AttributeDecorator/SensioParamConverterAttributeDecorator.php',
-        'Rector\\Php80\\Contract\\AttributeDecoratorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/AttributeDecoratorInterface.php',
         'Rector\\Php80\\Contract\\StrStartWithMatchAndRefactorInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/StrStartWithMatchAndRefactorInterface.php',
         'Rector\\Php80\\Contract\\ValueObject\\AnnotationToAttributeInterface' => __DIR__ . '/../..' . '/rules/Php80/Contract/ValueObject/AnnotationToAttributeInterface.php',
         'Rector\\Php80\\Enum\\MatchKind' => __DIR__ . '/../..' . '/rules/Php80/Enum/MatchKind.php',
@@ -3122,9 +3097,9 @@ class ComposerStaticInit28417dad196a8217aba102ccaeda9de9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit28417dad196a8217aba102ccaeda9de9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit28417dad196a8217aba102ccaeda9de9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit28417dad196a8217aba102ccaeda9de9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3fab6f3576c517f4a735d8e59230bb55::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3fab6f3576c517f4a735d8e59230bb55::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit3fab6f3576c517f4a735d8e59230bb55::$classMap;
 
         }, null, ClassLoader::class);
     }

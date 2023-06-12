@@ -6,16 +6,16 @@ namespace Rector\Php80\NodeManipulator;
 use PhpParser\Node\AttributeGroup;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\AttributeDecorator\SensioParamConverterAttributeDecorator;
-use Rector\Php80\Contract\AttributeDecoratorInterface;
 final class AttributeGroupNamedArgumentManipulator
 {
     /**
-     * @var AttributeDecoratorInterface[]
+     * @readonly
+     * @var \Rector\Php80\AttributeDecorator\SensioParamConverterAttributeDecorator
      */
-    private $attributeDecorators = [];
+    private $sensioParamConverterAttributeDecorator;
     public function __construct(SensioParamConverterAttributeDecorator $sensioParamConverterAttributeDecorator)
     {
-        $this->attributeDecorators[] = $sensioParamConverterAttributeDecorator;
+        $this->sensioParamConverterAttributeDecorator = $sensioParamConverterAttributeDecorator;
     }
     /**
      * @param AttributeGroup[] $attributeGroups
@@ -25,12 +25,10 @@ final class AttributeGroupNamedArgumentManipulator
         foreach ($attributeGroups as $attributeGroup) {
             foreach ($attributeGroup->attrs as $attr) {
                 $phpAttributeName = $attr->name->getAttribute(AttributeKey::PHP_ATTRIBUTE_NAME);
-                foreach ($this->attributeDecorators as $attributeDecorator) {
-                    if ($attributeDecorator->getAttributeName() !== $phpAttributeName) {
-                        continue;
-                    }
-                    $attributeDecorator->decorate($attr);
+                if ($this->sensioParamConverterAttributeDecorator->getAttributeName() !== $phpAttributeName) {
+                    continue;
                 }
+                $this->sensioParamConverterAttributeDecorator->decorate($attr);
             }
         }
     }

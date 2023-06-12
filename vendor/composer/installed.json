@@ -1921,12 +1921,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "ca0179995eceabd2acae03c60665bc73494c36ec"
+                "reference": "9f8970b4078cc5a02daefa963c008463e29e81c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/ca0179995eceabd2acae03c60665bc73494c36ec",
-                "reference": "ca0179995eceabd2acae03c60665bc73494c36ec",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/9f8970b4078cc5a02daefa963c008463e29e81c7",
+                "reference": "9f8970b4078cc5a02daefa963c008463e29e81c7",
                 "shasum": ""
             },
             "require": {
@@ -1951,7 +1951,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-09T10:43:45+00:00",
+            "time": "2023-06-12T10:31:32+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -1986,12 +1986,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "5d564602660473dc188850f1f7e5f84ec601c2c1"
+                "reference": "3a12c7f7b063aef7ff914dc4728f7e0e8920230a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/5d564602660473dc188850f1f7e5f84ec601c2c1",
-                "reference": "5d564602660473dc188850f1f7e5f84ec601c2c1",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/3a12c7f7b063aef7ff914dc4728f7e0e8920230a",
+                "reference": "3a12c7f7b063aef7ff914dc4728f7e0e8920230a",
                 "shasum": ""
             },
             "require": {
@@ -2015,7 +2015,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-11T23:30:01+00:00",
+            "time": "2023-06-12T10:30:38+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2125,12 +2125,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "6379aab278a0879a2eeedb27ea8ee1a99875ae4b"
+                "reference": "9d59fcc509159fdeca278c06df6d56891e71ef70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/6379aab278a0879a2eeedb27ea8ee1a99875ae4b",
-                "reference": "6379aab278a0879a2eeedb27ea8ee1a99875ae4b",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/9d59fcc509159fdeca278c06df6d56891e71ef70",
+                "reference": "9d59fcc509159fdeca278c06df6d56891e71ef70",
                 "shasum": ""
             },
             "require": {
@@ -2160,7 +2160,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-12T10:03:47+00:00",
+            "time": "2023-06-12T10:36:57+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

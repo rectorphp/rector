@@ -10,16 +10,9 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\ArrayAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\ArrayItemNodeAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\ClassConstFetchAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\ConstExprNodeAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\CurlyListNodeAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\DoctrineAnnotationAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\StringAnnotationToAttributeMapper;
-use Rector\PhpAttribute\AnnotationToAttributeMapper\StringNodeAnnotationToAttributeMapper;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 /**
  * @see \Rector\Tests\PhpAttribute\AnnotationToAttributeMapper\AnnotationToAttributeMapperTest
  */
@@ -29,19 +22,12 @@ final class AnnotationToAttributeMapper
      * @var AnnotationToAttributeMapperInterface[]
      */
     private $annotationToAttributeMappers = [];
-    public function __construct(
-        // private readonly array $annotationToAttributeMappers,
-        ArrayAnnotationToAttributeMapper $arrayAnnotationToAttributeMapper,
-        ArrayItemNodeAnnotationToAttributeMapper $arrayItemNodeAnnotationToAttributeMapper,
-        ClassConstFetchAnnotationToAttributeMapper $classConstFetchAnnotationToAttributeMapper,
-        ConstExprNodeAnnotationToAttributeMapper $constExprNodeAnnotationToAttributeMapper,
-        CurlyListNodeAnnotationToAttributeMapper $curlyListNodeAnnotationToAttributeMapper,
-        DoctrineAnnotationAnnotationToAttributeMapper $doctrineAnnotationAnnotationToAttributeMapper,
-        StringAnnotationToAttributeMapper $stringAnnotationToAttributeMapper,
-        StringNodeAnnotationToAttributeMapper $stringNodeAnnotationToAttributeMapper
-    )
+    /**
+     * @param RewindableGenerator<AnnotationToAttributeMapperInterface> $annotationToAttributeMappers
+     */
+    public function __construct(iterable $annotationToAttributeMappers)
     {
-        $this->annotationToAttributeMappers = [$arrayAnnotationToAttributeMapper, $arrayItemNodeAnnotationToAttributeMapper, $classConstFetchAnnotationToAttributeMapper, $constExprNodeAnnotationToAttributeMapper, $curlyListNodeAnnotationToAttributeMapper, $doctrineAnnotationAnnotationToAttributeMapper, $stringAnnotationToAttributeMapper, $stringNodeAnnotationToAttributeMapper];
+        $this->annotationToAttributeMappers = \iterator_to_array($annotationToAttributeMappers->getIterator());
     }
     /**
      * @return Expr|DocTagNodeState::REMOVE_ARRAY
