@@ -108,7 +108,7 @@ CODE_SAMPLE
             if ($expectedName === null) {
                 continue;
             }
-            $paramRename = $this->paramRenameFactory->createFromResolvedExpectedName($param, $expectedName);
+            $paramRename = $this->paramRenameFactory->createFromResolvedExpectedName($node, $param, $expectedName);
             if (!$paramRename instanceof ParamRename) {
                 continue;
             }
