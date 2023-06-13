@@ -4,8 +4,6 @@ declare (strict_types=1);
 namespace Rector\DeadCode\Rector\Node;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
@@ -47,7 +45,7 @@ final class RemoveNonExistingVarAnnotationRector extends AbstractRector
     /**
      * @var array<class-string<Node>>
      */
-    private const NODES_TO_MATCH = [Assign::class, AssignRef::class, Foreach_::class, Static_::class, Echo_::class, Return_::class, Expression::class, Throw_::class, If_::class, While_::class, Switch_::class, Nop::class];
+    private const NODES_TO_MATCH = [Foreach_::class, Static_::class, Echo_::class, Return_::class, Expression::class, Throw_::class, If_::class, While_::class, Switch_::class, Nop::class];
     public function __construct(ExprUsedInNodeAnalyzer $exprUsedInNodeAnalyzer, MultiInstanceofChecker $multiInstanceofChecker)
     {
         $this->exprUsedInNodeAnalyzer = $exprUsedInNodeAnalyzer;
