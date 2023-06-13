@@ -1,29 +1,29 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\CodingStyle\Rector\ClassMethod;
+namespace Rector\PHPUnit\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
-use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\PhpParser\NodeTransformer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
+use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
+use Rector\PHPUnit\NodeFinder\DataProviderClassMethodFinder;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202306\Webmozart\Assert\Assert;
 /**
  * @changelog https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
  * @changelog https://3v4l.org/5PJid
  *
- * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector\ReturnArrayClassMethodToYieldRectorTest
+ * @see \Rector\PHPUnit\Tests\Rector\Class_\YieldDataProviderRector\YieldDataProviderRectorTest
  */
-final class ReturnArrayClassMethodToYieldRector extends AbstractRector implements ConfigurableRectorInterface
+final class YieldDataProviderRector extends AbstractRector
 {
     /**
      * @readonly
@@ -31,16 +31,24 @@ final class ReturnArrayClassMethodToYieldRector extends AbstractRector implement
      */
     private $nodeTransformer;
     /**
-     * @var ReturnArrayClassMethodToyield[]
+     * @readonly
+     * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
-    private $methodsToYields = [];
-    public function __construct(NodeTransformer $nodeTransformer)
+    private $testsNodeAnalyzer;
+    /**
+     * @readonly
+     * @var \Rector\PHPUnit\NodeFinder\DataProviderClassMethodFinder
+     */
+    private $dataProviderClassMethodFinder;
+    public function __construct(NodeTransformer $nodeTransformer, TestsNodeAnalyzer $testsNodeAnalyzer, DataProviderClassMethodFinder $dataProviderClassMethodFinder)
     {
         $this->nodeTransformer = $nodeTransformer;
+        $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->dataProviderClassMethodFinder = $dataProviderClassMethodFinder;
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Turns array return to yield return in specific type and method', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turns array return to yield in data providers', [new CodeSample(<<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest implements TestCase
@@ -64,55 +72,42 @@ final class SomeTest implements TestCase
     }
 }
 CODE_SAMPLE
-, [new ReturnArrayClassMethodToYield('PHPUnit\\Framework\\TestCase', '*provide*')])]);
+)]);
     }
     /**
      * @return array<class-string<Node>>
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node->stmts === null) {
+        if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
         $hasChanged = \false;
-        foreach ($this->methodsToYields as $methodToYield) {
-            if (!$this->isName($node, $methodToYield->getMethod())) {
-                continue;
-            }
-            if (!$this->isObjectType($node, $methodToYield->getObjectType())) {
-                continue;
-            }
-            $arrayNode = $this->collectReturnArrayNodesFromClassMethod($node);
-            if (!$arrayNode instanceof Array_) {
+        $dataProviderClassMethods = $this->dataProviderClassMethodFinder->find($node);
+        foreach ($dataProviderClassMethods as $dataProviderClassMethod) {
+            $array = $this->collectReturnArrayNodesFromClassMethod($dataProviderClassMethod);
+            if (!$array instanceof Array_) {
                 continue;
             }
             // keep comments of 1st array item
             $firstComment = $node->stmts[0]->getAttribute(AttributeKey::COMMENTS);
-            $this->transformArrayToYieldsOnMethodNode($node, $arrayNode);
+            $this->transformArrayToYieldsOnMethodNode($dataProviderClassMethod, $array);
+            $hasChanged = \true;
             if (\is_array($firstComment)) {
                 $node->stmts[0]->setAttribute(AttributeKey::COMMENTS, \array_merge($firstComment, (array) $node->stmts[0]->getAttribute(AttributeKey::COMMENTS)));
             }
-            $hasChanged = \true;
         }
-        if (!$hasChanged) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        return $node;
-    }
-    /**
-     * @param mixed[] $configuration
-     */
-    public function configure(array $configuration) : void
-    {
-        Assert::allIsAOf($configuration, ReturnArrayClassMethodToYield::class);
-        $this->methodsToYields = $configuration;
+        return null;
     }
     private function collectReturnArrayNodesFromClassMethod(ClassMethod $classMethod) : ?Array_
     {
@@ -123,7 +118,7 @@ CODE_SAMPLE
             if ($statement instanceof Return_) {
                 $returnedExpr = $statement->expr;
                 if (!$returnedExpr instanceof Array_) {
-                    continue;
+                    return null;
                 }
                 return $returnedExpr;
             }

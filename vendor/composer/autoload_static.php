@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4d107198729b80233f7764afa811445a
+class ComposerStaticInitcd5f3d0e402afc71925a1564afc7644a
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1715,7 +1715,6 @@ class ComposerStaticInit4d107198729b80233f7764afa811445a
         'Rector\\CodingStyle\\Rector\\ClassMethod\\FuncGetArgsToVariadicParamRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/FuncGetArgsToVariadicParamRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\NewlineBeforeNewAssignSetRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/NewlineBeforeNewAssignSetRector.php',
-        'Rector\\CodingStyle\\Rector\\ClassMethod\\ReturnArrayClassMethodToYieldRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/ReturnArrayClassMethodToYieldRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\UnSpreadOperatorRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/UnSpreadOperatorRector.php',
         'Rector\\CodingStyle\\Rector\\Class_\\AddArrayDefaultToArrayPropertyRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Class_/AddArrayDefaultToArrayPropertyRector.php',
         'Rector\\CodingStyle\\Rector\\Closure\\StaticClosureRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Closure/StaticClosureRector.php',
@@ -1741,7 +1740,6 @@ class ComposerStaticInit4d107198729b80233f7764afa811445a
         'Rector\\CodingStyle\\Reflection\\VendorLocationDetector' => __DIR__ . '/../..' . '/rules/CodingStyle/Reflection/VendorLocationDetector.php',
         'Rector\\CodingStyle\\TypeAnalyzer\\IterableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/CodingStyle/TypeAnalyzer/IterableTypeAnalyzer.php',
         'Rector\\CodingStyle\\ValueObject\\ObjectMagicMethods' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ObjectMagicMethods.php',
-        'Rector\\CodingStyle\\ValueObject\\ReturnArrayClassMethodToYield' => __DIR__ . '/../..' . '/rules/CodingStyle/ValueObject/ReturnArrayClassMethodToYield.php',
         'Rector\\Comments\\CommentRemover' => __DIR__ . '/../..' . '/packages/Comments/CommentRemover.php',
         'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => __DIR__ . '/../..' . '/packages/Comments/NodeDocBlock/DocBlockUpdater.php',
         'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => __DIR__ . '/../..' . '/packages/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
@@ -2353,9 +2351,11 @@ class ComposerStaticInit4d107198729b80233f7764afa811445a
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
         'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
         'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
+        'Rector\\PHPUnit\\NodeAnalyzer\\ArgumentMover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/ArgumentMover.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\AssertCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/AssertCallAnalyzer.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\IdentifierManipulator' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/IdentifierManipulator.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\MockedVariableAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/MockedVariableAnalyzer.php',
+        'Rector\\PHPUnit\\NodeAnalyzer\\ParamAndArgFromArrayResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/ParamAndArgFromArrayResolver.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\SetUpMethodDecorator' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/SetUpMethodDecorator.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\TestsNodeAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/TestsNodeAnalyzer.php',
         'Rector\\PHPUnit\\NodeFactory\\ArgumentShiftingFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ArgumentShiftingFactory.php',
@@ -2367,8 +2367,6 @@ class ComposerStaticInit4d107198729b80233f7764afa811445a
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMessageRegExpFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMessageRegExpFactory.php',
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMethodCallFactory.php',
         'Rector\\PHPUnit\\NodeFinder\\DataProviderClassMethodFinder' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFinder/DataProviderClassMethodFinder.php',
-        'Rector\\PHPUnit\\NodeManipulator\\ArgumentMover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/ArgumentMover.php',
-        'Rector\\PHPUnit\\NodeManipulator\\ParamAndArgFromArrayResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeManipulator/ParamAndArgFromArrayResolver.php',
         'Rector\\PHPUnit\\PhpDoc\\DataProviderMethodRenamer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/DataProviderMethodRenamer.php',
         'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
@@ -2391,6 +2389,7 @@ class ComposerStaticInit4d107198729b80233f7764afa811445a
         'Rector\\PHPUnit\\Rector\\Class_\\RemoveDataProviderTestPrefixRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/RemoveDataProviderTestPrefixRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\StaticDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/StaticDataProviderClassMethodRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\TestListenerToHooksRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/TestListenerToHooksRector.php',
+        'Rector\\PHPUnit\\Rector\\Class_\\YieldDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/YieldDataProviderRector.php',
         'Rector\\PHPUnit\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\AssertCompareToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertCompareToSpecificMethodRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\AssertComparisonToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertComparisonToSpecificMethodRector.php',
@@ -3093,9 +3092,9 @@ class ComposerStaticInit4d107198729b80233f7764afa811445a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4d107198729b80233f7764afa811445a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4d107198729b80233f7764afa811445a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4d107198729b80233f7764afa811445a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitcd5f3d0e402afc71925a1564afc7644a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitcd5f3d0e402afc71925a1564afc7644a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitcd5f3d0e402afc71925a1564afc7644a::$classMap;
 
         }, null, ClassLoader::class);
     }

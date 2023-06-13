@@ -22,9 +22,9 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\PHPUnit\NodeAnalyzer\ParamAndArgFromArrayResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Rector\PHPUnit\NodeFactory\DataProviderClassMethodFactory;
-use Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver;
 use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
 use Rector\PHPUnit\ValueObject\DataProviderClassMethodRecipe;
 use Rector\PHPUnit\ValueObject\ParamAndArg;
@@ -45,7 +45,7 @@ final class ArrayArgumentToDataProviderRector extends AbstractRector implements 
     private $dataProviderClassMethodFactory;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeManipulator\ParamAndArgFromArrayResolver
+     * @var \Rector\PHPUnit\NodeAnalyzer\ParamAndArgFromArrayResolver
      */
     private $paramAndArgFromArrayResolver;
     /**

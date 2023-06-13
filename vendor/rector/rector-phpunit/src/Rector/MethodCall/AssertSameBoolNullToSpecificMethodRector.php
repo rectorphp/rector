@@ -8,9 +8,9 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use Rector\Core\Rector\AbstractRector;
+use Rector\PHPUnit\NodeAnalyzer\ArgumentMover;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
-use Rector\PHPUnit\NodeManipulator\ArgumentMover;
 use Rector\PHPUnit\ValueObject\ConstantWithAssertMethods;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -26,7 +26,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
     private $identifierManipulator;
     /**
      * @readonly
-     * @var \Rector\PHPUnit\NodeManipulator\ArgumentMover
+     * @var \Rector\PHPUnit\NodeAnalyzer\ArgumentMover
      */
     private $argumentMover;
     /**
@@ -76,7 +76,7 @@ final class AssertSameBoolNullToSpecificMethodRector extends AbstractRector
                 continue;
             }
             $this->renameMethod($node, $constantWithAssertMethod);
-            $this->argumentMover->removeFirst($node);
+            $this->argumentMover->removeFirstArg($node);
             return $node;
         }
         return null;

@@ -1,4 +1,4 @@
-# 370 Rules Overview
+# 368 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (71)
 
-- [CodingStyle](#codingstyle) (34)
+- [CodingStyle](#codingstyle) (32)
 
 - [DeadCode](#deadcode) (43)
 
@@ -2004,47 +2004,6 @@ Use ++$value or --$value  instead of `$value++` or `$value--`
 
 <br>
 
-### PreferThisOrSelfMethodCallRector
-
-Changes `$this->...` and static:: to self:: or vise versa for given types
-
-:wrench: **configure it!**
-
-- class: [`Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector`](../rules/CodingStyle/Rector/MethodCall/PreferThisOrSelfMethodCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use PHPUnit\Framework\TestCase;
-use Rector\CodingStyle\Rector\MethodCall\PreferThisOrSelfMethodCallRector;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(PreferThisOrSelfMethodCallRector::class, [
-        TestCase::class => 'prefer_self',
-    ]);
-};
-```
-
-↓
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- final class SomeClass extends TestCase
- {
-     public function run()
-     {
--        $this->assertEquals('a', 'a');
-+        self::assertEquals('a', 'a');
-     }
- }
-```
-
-<br>
-
 ### RemoveFinalFromConstRector
 
 Remove final from constants in classes defined as final
@@ -2056,49 +2015,6 @@ Remove final from constants in classes defined as final
  {
 -    final public const NAME = 'value';
 +    public const NAME = 'value';
- }
-```
-
-<br>
-
-### ReturnArrayClassMethodToYieldRector
-
-Turns array return to yield return in specific type and method
-
-:wrench: **configure it!**
-
-- class: [`Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector`](../rules/CodingStyle/Rector/ClassMethod/ReturnArrayClassMethodToYieldRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\CodingStyle\Rector\ClassMethod\ReturnArrayClassMethodToYieldRector;
-use Rector\CodingStyle\ValueObject\ReturnArrayClassMethodToYield;
-use Rector\Config\RectorConfig;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ReturnArrayClassMethodToYieldRector::class, [
-        new ReturnArrayClassMethodToYield('PHPUnit\Framework\TestCase', '*provide*'),
-    ]);
-};
-```
-
-↓
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- final class SomeTest implements TestCase
- {
-     public static function provideData()
-     {
--        return [
--            ['some text']
--        ];
-+        yield ['some text'];
-     }
  }
 ```
 
