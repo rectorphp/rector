@@ -1814,7 +1814,6 @@ return array(
     'Rector\\DowngradePhp71\\Rector\\String_\\DowngradeNegativeStringOffsetToStrlenRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp71/Rector/String_/DowngradeNegativeStringOffsetToStrlenRector.php',
     'Rector\\DowngradePhp71\\Rector\\TryCatch\\DowngradePipeToMultiCatchExceptionRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp71/Rector/TryCatch/DowngradePipeToMultiCatchExceptionRector.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\BuiltInMethodAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/BuiltInMethodAnalyzer.php',
-    'Rector\\DowngradePhp72\\NodeAnalyzer\\FunctionExistsFunCallAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/FunctionExistsFunCallAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\OverrideFromAnonymousClassMethodAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/OverrideFromAnonymousClassMethodAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\RegexFuncAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/RegexFuncAnalyzer.php',
     'Rector\\DowngradePhp72\\NodeAnalyzer\\SealedClassAnalyzer' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp72/NodeAnalyzer/SealedClassAnalyzer.php',

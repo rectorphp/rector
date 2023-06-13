@@ -17,9 +17,9 @@ use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -36,11 +36,6 @@ final class DowngradeStreamIsattyRector extends AbstractScopeAwareRector
     private $inlineCodeParser;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer
-     */
-    private $functionExistsFunCallAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
@@ -53,10 +48,9 @@ final class DowngradeStreamIsattyRector extends AbstractScopeAwareRector
      * @var \PhpParser\Node\Expr\Closure|null
      */
     private $cachedClosure;
-    public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
+    public function __construct(InlineCodeParser $inlineCodeParser, VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->inlineCodeParser = $inlineCodeParser;
-        $this->functionExistsFunCallAnalyzer = $functionExistsFunCallAnalyzer;
         $this->variableNaming = $variableNaming;
         $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
@@ -121,7 +115,12 @@ CODE_SAMPLE
             if (!$this->isName($subNode, 'stream_isatty')) {
                 return \false;
             }
-            return !$this->functionExistsFunCallAnalyzer->detect($subNode, 'stream_isatty');
+            // need pull Scope from target traversed sub Node
+            $scope = $subNode->getAttribute(AttributeKey::SCOPE);
+            if (!$scope instanceof Scope) {
+                return \false;
+            }
+            return !$scope->isInFunctionExists('stream_isatty');
         });
         if (!$expr instanceof FuncCall) {
             return null;

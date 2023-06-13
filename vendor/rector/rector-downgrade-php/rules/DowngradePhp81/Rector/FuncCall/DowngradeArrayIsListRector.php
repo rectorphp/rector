@@ -18,9 +18,9 @@ use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\PhpParser\Parser\InlineCodeParser;
 use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeAnalyzer\ExprInTopStmtMatcher;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -37,11 +37,6 @@ final class DowngradeArrayIsListRector extends AbstractScopeAwareRector
     private $inlineCodeParser;
     /**
      * @readonly
-     * @var \Rector\DowngradePhp72\NodeAnalyzer\FunctionExistsFunCallAnalyzer
-     */
-    private $functionExistsFunCallAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Naming\Naming\VariableNaming
      */
     private $variableNaming;
@@ -54,10 +49,9 @@ final class DowngradeArrayIsListRector extends AbstractScopeAwareRector
      * @var \PhpParser\Node\Expr\Closure|null
      */
     private $cachedClosure;
-    public function __construct(InlineCodeParser $inlineCodeParser, FunctionExistsFunCallAnalyzer $functionExistsFunCallAnalyzer, VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
+    public function __construct(InlineCodeParser $inlineCodeParser, VariableNaming $variableNaming, ExprInTopStmtMatcher $exprInTopStmtMatcher)
     {
         $this->inlineCodeParser = $inlineCodeParser;
-        $this->functionExistsFunCallAnalyzer = $functionExistsFunCallAnalyzer;
         $this->variableNaming = $variableNaming;
         $this->exprInTopStmtMatcher = $exprInTopStmtMatcher;
     }
@@ -107,7 +101,9 @@ CODE_SAMPLE
             if (!$subNode instanceof FuncCall) {
                 return \false;
             }
-            return !$this->shouldSkip($subNode);
+            // need pull Scope from target traversed sub Node
+            $scope = $subNode->getAttribute(AttributeKey::SCOPE);
+            return !$this->shouldSkip($subNode, $scope);
         });
         if (!$expr instanceof FuncCall) {
             return null;
@@ -133,7 +129,7 @@ CODE_SAMPLE
         $this->cachedClosure = $expr;
         return $expr;
     }
-    private function shouldSkip(CallLike $callLike) : bool
+    private function shouldSkip(CallLike $callLike, ?Scope $scope) : bool
     {
         if (!$callLike instanceof FuncCall) {
             return \false;
@@ -141,7 +137,11 @@ CODE_SAMPLE
         if (!$this->nodeNameResolver->isName($callLike, 'array_is_list')) {
             return \true;
         }
-        if ($this->functionExistsFunCallAnalyzer->detect($callLike, 'array_is_list')) {
+        if (!$scope instanceof Scope) {
+            $args = $callLike->getArgs();
+            return \count($args) !== 1;
+        }
+        if ($scope->isInFunctionExists('array_is_list')) {
             return \true;
         }
         $args = $callLike->getArgs();
