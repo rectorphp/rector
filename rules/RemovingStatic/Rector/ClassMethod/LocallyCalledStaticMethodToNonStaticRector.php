@@ -126,7 +126,7 @@ CODE_SAMPLE
             if (!$this->isName($node->name, $classMethodName)) {
                 return null;
             }
-            return new MethodCall(new Variable('this'), $classMethodName);
+            return new MethodCall(new Variable('this'), $classMethodName, $node->args);
         });
         // change static calls to non-static ones, but only if in non-static method!!!
         $this->visibilityManipulator->makeNonStatic($classMethod);
