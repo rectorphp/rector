@@ -243,7 +243,7 @@ CODE_SAMPLE;
     {
         if ($this->toBeRemovedNodeHash !== null && $this->toBeRemovedNodeHash === \spl_object_hash($node)) {
             $this->toBeRemovedNodeHash = null;
-            return NodeConnectingTraverser::REMOVE_NODE;
+            return NodeTraverser::REMOVE_NODE;
         }
         $objectHash = \spl_object_hash($node);
         // update parents relations!!!
