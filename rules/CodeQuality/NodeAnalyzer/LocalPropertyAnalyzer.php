@@ -15,12 +15,14 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
+use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\CodeQuality\TypeResolver\ArrayDimFetchTypeResolver;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
@@ -170,14 +172,11 @@ final class LocalPropertyAnalyzer
      */
     private function isPartOfClosureBind(PropertyFetch $propertyFetch) : bool
     {
-        $parentStaticCall = $this->betterNodeFinder->findParentType($propertyFetch, StaticCall::class);
-        if (!$parentStaticCall instanceof StaticCall) {
+        $scope = $propertyFetch->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($parentStaticCall->class, 'Closure')) {
-            return \true;
-        }
-        return $this->nodeNameResolver->isName($parentStaticCall->name, 'bind');
+        return $scope->isInClosureBind();
     }
     private function isPartOfClosureBindTo(PropertyFetch $propertyFetch) : bool
     {
