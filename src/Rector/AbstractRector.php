@@ -309,12 +309,6 @@ CODE_SAMPLE;
         return $currentArgs;
     }
     /**
-     * @deprecated Return NodeTraverser::REMOVE_NODE or array of changed nodes instead
-     */
-    protected function removeNode(Node $node) : void
-    {
-    }
-    /**
      * @param \PhpParser\Node|mixed[]|int $refactoredNode
      */
     private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode) : Node
