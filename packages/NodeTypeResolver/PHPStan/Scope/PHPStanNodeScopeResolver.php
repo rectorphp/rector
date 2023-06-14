@@ -165,16 +165,8 @@ final class PHPStanNodeScopeResolver
             if (($node instanceof Expression || $node instanceof Return_ || $node instanceof Assign || $node instanceof EnumCase || $node instanceof AssignOp || $node instanceof Cast) && $node->expr instanceof Expr) {
                 $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
-            $expr = $node;
-            while ($expr instanceof Assign || $expr instanceof AssignOp) {
-                if ($expr->expr instanceof CallLike && !$expr->expr->isFirstClassCallable()) {
-                    foreach ($expr->expr->getArgs() as $arg) {
-                        $arg->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                    }
-                }
-                // decorate value as well
-                $expr->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $expr = $expr->expr;
+            if ($node instanceof Assign || $node instanceof AssignOp) {
+                $this->processAssign($node, $mutatingScope);
             }
             if ($node instanceof Ternary) {
                 $this->processTernary($node, $mutatingScope);
@@ -241,6 +233,23 @@ final class PHPStanNodeScopeResolver
             }
         };
         return $this->processNodesWithDependentFiles($filePath, $stmts, $scope, $nodeCallback);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
+     */
+    private function processAssign($assign, MutatingScope $mutatingScope) : void
+    {
+        $expr = $assign;
+        while ($expr instanceof Assign || $expr instanceof AssignOp) {
+            if ($expr->expr instanceof CallLike && !$expr->expr->isFirstClassCallable()) {
+                foreach ($expr->expr->getArgs() as $arg) {
+                    $arg->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                }
+            }
+            // decorate value as well
+            $expr->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $expr = $expr->expr;
+        }
     }
     private function setChildOfUnreachableStatementNodeAttribute(Stmt $stmt, MutatingScope $mutatingScope) : void
     {
