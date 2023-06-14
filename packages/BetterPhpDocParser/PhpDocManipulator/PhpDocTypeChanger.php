@@ -234,6 +234,8 @@ final class PhpDocTypeChanger
         $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTagValueNode, $property);
         $this->changeParamType($classMethod, $phpDocInfo, $paramType, $param, $paramVarName);
         $this->processKeepComments($property, $param);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($classMethod);
+        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
     }
     /**
      * @api doctrine
@@ -251,7 +253,6 @@ final class PhpDocTypeChanger
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
         $toBeRemoved = !$varTagValueNode instanceof VarTagValueNode;
         $this->commentsMerger->keepComments($param, [$property]);
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($param);
         $varTagValueNode = $phpDocInfo->getVarTagValueNode();
         if (!$toBeRemoved) {
@@ -264,6 +265,5 @@ final class PhpDocTypeChanger
             return;
         }
         $phpDocInfo->removeByType(VarTagValueNode::class);
-        $this->docBlockUpdater->updateRefactoredNodeWithPhpDocInfo($property);
     }
 }
