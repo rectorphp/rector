@@ -121,6 +121,6 @@ CODE_SAMPLE
             $property->type = $typeNode;
             return;
         }
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
+        $this->phpDocTypeChanger->changeVarType($property, $phpDocInfo, $propertyType);
     }
 }

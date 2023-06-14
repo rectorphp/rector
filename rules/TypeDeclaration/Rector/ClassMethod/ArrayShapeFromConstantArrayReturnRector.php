@@ -116,7 +116,7 @@ CODE_SAMPLE
         if ($returnExprTypeNode instanceof SpacingAwareArrayTypeNode) {
             return null;
         }
-        $hasChanged = $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnExprType);
+        $hasChanged = $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $returnExprType);
         if (!$hasChanged) {
             return null;
         }

@@ -59,7 +59,7 @@ final class NativeParamToPhpDocDecorator
         $paramName = $this->nodeNameResolver->getName($param);
         $mappedCurrentParamType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         $correctedNullableParamType = $this->correctNullableType($param, $mappedCurrentParamType);
-        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $correctedNullableParamType, $param, $paramName);
+        $this->phpDocTypeChanger->changeParamType($classMethod, $phpDocInfo, $correctedNullableParamType, $param, $paramName);
     }
     private function isParamNullable(Param $param) : bool
     {

@@ -101,7 +101,7 @@ CODE_SAMPLE
         }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         // always decorate with collection generic type
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
+        $this->phpDocTypeChanger->changeVarType($node, $phpDocInfo, $propertyType);
         if ($this->phpVersionProvider->isAtLeastPhpVersion(PhpVersion::PHP_74)) {
             if ($propertyType instanceof UnionType) {
                 $this->propertyTypeDecorator->decoratePropertyUnionType($propertyType, $typeNode, $node, $phpDocInfo);

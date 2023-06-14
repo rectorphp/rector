@@ -110,7 +110,7 @@ CODE_SAMPLE
         if (!$updatedPhpDocType instanceof Type) {
             return null;
         }
-        $hasReturnTypeChanged = $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $updatedPhpDocType);
+        $hasReturnTypeChanged = $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $updatedPhpDocType);
         if ($hasReturnTypeChanged) {
             return $node;
         }

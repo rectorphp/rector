@@ -131,7 +131,7 @@ final class GetSubscribedEventsClassMethodFactory
         }
         $returnType = new ArrayType(new StringType(), new MixedType(\true));
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $returnType);
+        $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, $returnType);
     }
     /**
      * @param ServiceDefinition[] $methodNamesWithPriorities

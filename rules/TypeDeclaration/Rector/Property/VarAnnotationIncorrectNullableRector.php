@@ -109,7 +109,7 @@ CODE_SAMPLE
         if (!$updatedPhpDocType instanceof Type) {
             return null;
         }
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $updatedPhpDocType);
+        $this->phpDocTypeChanger->changeVarType($node, $phpDocInfo, $updatedPhpDocType);
         if (!$phpDocInfo->hasChanged()) {
             return null;
         }

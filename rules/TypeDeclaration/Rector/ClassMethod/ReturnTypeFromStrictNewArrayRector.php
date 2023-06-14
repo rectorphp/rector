@@ -153,12 +153,15 @@ CODE_SAMPLE
         }
         return $node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope);
     }
-    private function changeReturnType(Node $node, Type $exprType) : void
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function changeReturnType($node, Type $exprType) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $exprType = $this->narrowConstantArrayType($exprType);
         if (!$this->typeComparator->isSubtype($phpDocInfo->getReturnType(), $exprType)) {
-            $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $exprType);
+            $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $exprType);
         }
     }
     /**

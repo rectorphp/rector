@@ -93,7 +93,7 @@ CODE_SAMPLE
         if ($this->typeComparator->isSubtype($constType, $phpDocInfo->getVarType())) {
             return null;
         }
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $constType);
+        $this->phpDocTypeChanger->changeVarType($node, $phpDocInfo, $constType);
         if (!$phpDocInfo->hasChanged()) {
             return null;
         }

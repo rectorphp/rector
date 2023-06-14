@@ -234,7 +234,7 @@ CODE_SAMPLE
             }
             $paramType = $this->staticTypeMapper->mapPHPStanPhpDocTypeToPHPStanType($varTagValueNode, $property);
             $classMethodPhpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-            $this->phpDocTypeChanger->changeParamType($classMethodPhpDocInfo, $paramType, $param, $paramName);
+            $this->phpDocTypeChanger->changeParamType($classMethod, $classMethodPhpDocInfo, $paramType, $param, $paramName);
         } else {
             $paramType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($param->type);
         }

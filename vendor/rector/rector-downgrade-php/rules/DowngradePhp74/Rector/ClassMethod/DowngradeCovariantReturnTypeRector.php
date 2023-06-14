@@ -182,7 +182,7 @@ CODE_SAMPLE
         /** @var Node $returnType */
         $returnType = $classMethod->returnType;
         $type = $this->staticTypeMapper->mapPhpParserNodePHPStanType($returnType);
-        $this->phpDocTypeChanger->changeReturnType($phpDocInfo, $type);
+        $this->phpDocTypeChanger->changeReturnType($classMethod, $phpDocInfo, $type);
         $this->returnTagRemover->removeReturnTagIfUseless($phpDocInfo, $classMethod);
     }
     /**

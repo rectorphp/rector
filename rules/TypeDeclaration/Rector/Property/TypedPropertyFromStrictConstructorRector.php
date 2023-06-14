@@ -115,7 +115,7 @@ CODE_SAMPLE
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             // public property can be anything
             if ($property->isPublic()) {
-                $this->phpDocTypeChanger->changeVarType($phpDocInfo, $propertyType);
+                $this->phpDocTypeChanger->changeVarType($property, $phpDocInfo, $propertyType);
                 $hasChanged = \true;
                 continue;
             }

@@ -135,7 +135,7 @@ CODE_SAMPLE
         $this->usePhpdoc = $usePhpdoc;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node $node
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
     private function changePhpDocToVoidIfNotNever($node) : bool
     {
@@ -143,7 +143,7 @@ CODE_SAMPLE
         if ($phpDocInfo->getReturnType() instanceof NeverType) {
             return \false;
         }
-        return $this->phpDocTypeChanger->changeReturnType($phpDocInfo, new VoidType());
+        return $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, new VoidType());
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike

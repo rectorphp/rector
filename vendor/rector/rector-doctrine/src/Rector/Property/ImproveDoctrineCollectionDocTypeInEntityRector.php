@@ -174,7 +174,7 @@ CODE_SAMPLE
         }
         /** @var string $parameterName */
         $parameterName = $this->getName($param);
-        $this->phpDocTypeChanger->changeParamType($phpDocInfo, $collectionObjectType, $param, $parameterName);
+        $this->phpDocTypeChanger->changeParamType($classMethod, $phpDocInfo, $collectionObjectType, $param, $parameterName);
         return $classMethod;
     }
     private function resolveCollectionSetterAssignType(ClassMethod $classMethod) : ?Type
@@ -211,14 +211,14 @@ CODE_SAMPLE
                 return null;
             }
             $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
-            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newVarType);
+            $this->phpDocTypeChanger->changeVarType($property, $phpDocInfo, $newVarType);
         } else {
             $collectionObjectType = $this->collectionTypeResolver->resolveFromOneToManyProperty($property);
             if (!$collectionObjectType instanceof FullyQualifiedObjectType) {
                 return null;
             }
             $newVarType = $this->collectionTypeFactory->createType($collectionObjectType);
-            $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newVarType);
+            $this->phpDocTypeChanger->changeVarType($property, $phpDocInfo, $newVarType);
         }
         return $property;
     }
@@ -235,7 +235,7 @@ CODE_SAMPLE
         }
         $fullyQualifiedObjectType = new FullyQualifiedObjectType($targetEntityClassName);
         $newVarType = $this->collectionTypeFactory->createType($fullyQualifiedObjectType);
-        $this->phpDocTypeChanger->changeVarType($phpDocInfo, $newVarType);
+        $this->phpDocTypeChanger->changeVarType($property, $phpDocInfo, $newVarType);
         return $property;
     }
 }
