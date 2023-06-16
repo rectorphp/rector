@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Naming;
 
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
@@ -44,7 +45,7 @@ final class VariableRenamer
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    public function renameVariableInFunctionLike(Node\FunctionLike $functionLike, string $oldName, string $expectedName, ?Assign $assign = null) : bool
+    public function renameVariableInFunctionLike(FunctionLike $functionLike, string $oldName, string $expectedName, ?Assign $assign = null) : bool
     {
         $isRenamingActive = \false;
         if (!$assign instanceof Assign) {
