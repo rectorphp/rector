@@ -10,7 +10,6 @@ use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassConstManipulator
 {
@@ -29,22 +28,15 @@ final class ClassConstManipulator
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
-     */
-    private $reflectionResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, AstResolver $astResolver, ReflectionResolver $reflectionResolver)
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, AstResolver $astResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->astResolver = $astResolver;
-        $this->reflectionResolver = $reflectionResolver;
     }
     public function hasClassConstFetch(ClassConst $classConst, ClassReflection $classReflection) : bool
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classConst);
-        if (!$classReflection instanceof ClassReflection || !$classReflection->isClass() && !$classReflection->isEnum()) {
+        if (!$classReflection->isClass() && !$classReflection->isEnum()) {
             return \true;
         }
         $className = $classReflection->getName();
