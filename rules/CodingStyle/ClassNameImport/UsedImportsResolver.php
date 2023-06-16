@@ -10,6 +10,8 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -30,18 +32,46 @@ final class UsedImportsResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, NodeNameResolver $nodeNameResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\Provider\CurrentFileProvider
+     */
+    private $currentFileProvider;
+    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, NodeNameResolver $nodeNameResolver, CurrentFileProvider $currentFileProvider)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsTraverser = $useImportsTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->currentFileProvider = $currentFileProvider;
+    }
+    private function resolveCurrentNamespaceForNode(Node $node) : ?Namespace_
+    {
+        if ($node instanceof Namespace_) {
+            return $node;
+        }
+        $file = $this->currentFileProvider->getFile();
+        if (!$file instanceof File) {
+            return null;
+        }
+        $stmts = $file->getNewStmts();
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof Namespace_) {
+                $foundNode = $this->betterNodeFinder->findFirst($stmt, static function (Node $subNode) use($node) : bool {
+                    return $subNode === $node;
+                });
+                if ($foundNode instanceof Node) {
+                    return $stmt;
+                }
+            }
+        }
+        return null;
     }
     /**
      * @return array<FullyQualifiedObjectType|AliasedObjectType>
      */
     public function resolveForNode(Node $node) : array
     {
-        $namespace = $node instanceof Namespace_ ? $node : $this->betterNodeFinder->findParentType($node, Namespace_::class);
+        $namespace = $this->resolveCurrentNamespaceForNode($node);
         if ($namespace instanceof Namespace_) {
             return $this->resolveForNamespace($namespace);
         }
