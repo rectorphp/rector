@@ -78,7 +78,7 @@ final class ConstructorAssignDetector
                     return null;
                 }
                 $isAssignedInConstructor = \true;
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return NodeTraverser::STOP_TRAVERSAL;
             });
         }
         if (!$isAssignedInConstructor) {
