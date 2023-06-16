@@ -1778,17 +1778,17 @@
         },
         {
             "name": "react\/stream",
-            "version": "v1.2.0",
-            "version_normalized": "1.2.0.0",
+            "version": "v1.3.0",
+            "version_normalized": "1.3.0.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/reactphp\/stream.git",
-                "reference": "7a423506ee1903e89f1e08ec5f0ed430ff784ae9"
+                "reference": "6fbc9672905c7d5a885f2da2fc696f65840f4a66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/reactphp\/stream\/zipball\/7a423506ee1903e89f1e08ec5f0ed430ff784ae9",
-                "reference": "7a423506ee1903e89f1e08ec5f0ed430ff784ae9",
+                "url": "https:\/\/api.github.com\/repos\/reactphp\/stream\/zipball\/6fbc9672905c7d5a885f2da2fc696f65840f4a66",
+                "reference": "6fbc9672905c7d5a885f2da2fc696f65840f4a66",
                 "shasum": ""
             },
             "require": {
@@ -1798,14 +1798,14 @@
             },
             "require-dev": {
                 "clue\/stream-filter": "~1.2",
-                "phpunit\/phpunit": "^9.3 || ^5.7 || ^4.8.35"
+                "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.35"
             },
-            "time": "2021-07-11T12:37:55+00:00",
+            "time": "2023-06-16T10:52:11+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "RectorPrefix202306\\React\\Stream\\": "src"
+                    "RectorPrefix202306\\React\\Stream\\": "src\/"
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
@@ -1847,16 +1847,12 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/reactphp\/stream\/issues",
-                "source": "https:\/\/github.com\/reactphp\/stream\/tree\/v1.2.0"
+                "source": "https:\/\/github.com\/reactphp\/stream\/tree\/v1.3.0"
             },
             "funding": [
                 {
-                    "url": "https:\/\/github.com\/WyriHaximus",
-                    "type": "github"
-                },
-                {
-                    "url": "https:\/\/github.com\/clue",
-                    "type": "github"
+                    "url": "https:\/\/opencollective.com\/reactphp",
+                    "type": "open_collective"
                 }
             ],
             "install-path": "..\/react\/stream"
@@ -2053,12 +2049,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "a27c88d6463e2c82fe38c9f6ae4b0af083904a2c"
+                "reference": "5501d9d757a915a5c4ef39600de73b28c0cacaa6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/a27c88d6463e2c82fe38c9f6ae4b0af083904a2c",
-                "reference": "a27c88d6463e2c82fe38c9f6ae4b0af083904a2c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/5501d9d757a915a5c4ef39600de73b28c0cacaa6",
+                "reference": "5501d9d757a915a5c4ef39600de73b28c0cacaa6",
                 "shasum": ""
             },
             "require": {
@@ -2087,7 +2083,7 @@
                 "tomasvotruba\/type-coverage": "^0.1",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-14T16:00:01+00:00",
+            "time": "2023-06-16T13:27:15+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

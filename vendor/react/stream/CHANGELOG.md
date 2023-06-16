@@ -1,5 +1,19 @@
 # Changelog
 
+## 1.3.0 (2023-06-16)
+
+*   Feature: Full PHP 8.1 and PHP 8.2 compatibility.
+    (#160 by @SimonFrings, #165 by @clue and #169 by @WyriHaximus)
+
+*   Feature: Avoid unneeded syscall when creating non-blocking `DuplexResourceStream`.
+    (#164 by @clue)
+
+*   Minor documentation improvements.
+    (#161 by @mrsimonbennett, #162 by @SimonFrings and #166 by @nhedger)
+
+*   Improve test suite and project setup and report failed assertions.
+    (#168 and #170 by @clue and #163 by @SimonFrings)
+
 ## 1.2.0 (2021-07-11)
 
 A major new feature release, see [**release announcement**](https://clue.engineering/2021/announcing-reactphp-default-loop).

@@ -1,6 +1,7 @@
 # Stream
 
-[![CI status](https://github.com/reactphp/stream/workflows/CI/badge.svg)](https://github.com/reactphp/stream/actions)
+[![CI status](https://github.com/reactphp/stream/actions/workflows/ci.yml/badge.svg)](https://github.com/reactphp/stream/actions)
+[![installs on Packagist](https://img.shields.io/packagist/dt/react/stream?color=blue&label=installs%20on%20Packagist)](https://packagist.org/packages/react/stream)
 
 Event-driven readable and writable streams for non-blocking I/O in [ReactPHP](https://reactphp.org/).
 
@@ -609,7 +610,7 @@ data until the buffer drains.
 The stream SHOULD send a `drain` event once the buffer is ready to accept
 more data.
 
-Similarly, if the the stream is not writable (already in a closed state)
+Similarly, if the stream is not writable (already in a closed state)
 it MUST NOT process the given `$data` and SHOULD return `false`,
 indicating that the caller should stop sending data.
 
@@ -1202,7 +1203,7 @@ This project follows [SemVer](https://semver.org/).
 This will install the latest supported version:
 
 ```bash
-$ composer require react/stream:^1.2
+composer require react/stream:^1.3
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
@@ -1218,13 +1219,13 @@ To run the test suite, you first need to clone this repo and then install all
 dependencies [through Composer](https://getcomposer.org):
 
 ```bash
-$ composer install
+composer install
 ```
 
 To run the test suite, go to the project root and run:
 
 ```bash
-$ php vendor/bin/phpunit
+vendor/bin/phpunit
 ```
 
 The test suite also contains a number of functional integration tests that rely
@@ -1232,7 +1233,7 @@ on a stable internet connection.
 If you do not want to run these, they can simply be skipped like this:
 
 ```bash
-$ php vendor/bin/phpunit --exclude-group internet
+vendor/bin/phpunit --exclude-group internet
 ```
 
 ## License
