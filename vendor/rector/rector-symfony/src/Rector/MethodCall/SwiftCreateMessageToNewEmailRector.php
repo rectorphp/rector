@@ -34,41 +34,44 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class];
+        return [Class_::class];
     }
     /**
-     * @param MethodCall $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($this->shouldSkip($node)) {
-            return null;
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($node->getMethods(), function (Node $subNode) use($node, &$hasChanged) {
+            if (!$subNode instanceof MethodCall) {
+                return null;
+            }
+            if (!$this->isName($subNode->name, 'createMessage')) {
+                return null;
+            }
+            // If there is no property with a SwiftMailer type we should skip this class
+            $swiftMailerProperty = $this->getSwiftMailerProperty($node);
+            if (!$swiftMailerProperty instanceof Property) {
+                return null;
+            }
+            $var = $subNode->var;
+            if (!$var instanceof PropertyFetch) {
+                return null;
+            }
+            $propertyName = $this->getName($swiftMailerProperty);
+            if (!$this->isName($var, $propertyName)) {
+                return null;
+            }
+            $hasChanged = \true;
+            return new New_(new FullyQualified('Symfony\\Component\\Mime\\Email'));
+        });
+        if ($hasChanged) {
+            return $node;
         }
-        return new New_(new FullyQualified('Symfony\\Component\\Mime\\Email'));
+        return null;
     }
-    private function shouldSkip(MethodCall $methodCall) : bool
+    private function getSwiftMailerProperty(Class_ $class) : ?Property
     {
-        if (!$this->isName($methodCall->name, 'createMessage')) {
-            return \true;
-        }
-        // If there is no property with a SwiftMailer type we should skip this class
-        $swiftMailerProperty = $this->getSwiftMailerProperty($methodCall);
-        if (!$swiftMailerProperty instanceof Property) {
-            return \true;
-        }
-        $var = $methodCall->var;
-        if (!$var instanceof PropertyFetch) {
-            return \true;
-        }
-        $propertyName = $this->getName($swiftMailerProperty);
-        return !$this->isName($var, $propertyName);
-    }
-    private function getSwiftMailerProperty(MethodCall $methodCall) : ?Property
-    {
-        $class = $this->betterNodeFinder->findParentType($methodCall, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
         $properties = $class->getProperties();
         foreach ($properties as $property) {
             $propertyType = $this->nodeTypeResolver->getType($property);

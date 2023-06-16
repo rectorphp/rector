@@ -26,7 +26,7 @@ final class ParentStaticTypeMapper implements TypeMapperInterface
     /**
      * @param ParentStaticType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         return new IdentifierTypeNode(ObjectReference::PARENT);
     }

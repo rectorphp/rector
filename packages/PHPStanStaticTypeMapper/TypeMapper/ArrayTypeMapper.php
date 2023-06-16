@@ -22,7 +22,6 @@ use PHPStan\Type\UnionType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
@@ -84,32 +83,31 @@ final class ArrayTypeMapper implements TypeMapperInterface
         return ArrayType::class;
     }
     /**
-     * @param TypeKind::* $typeKind
      * @param ArrayType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         $itemType = $type->getItemType();
         if ($itemType instanceof UnionType && !$type instanceof ConstantArrayType) {
-            return $this->createArrayTypeNodeFromUnionType($itemType, $typeKind);
+            return $this->createArrayTypeNodeFromUnionType($itemType);
         }
-        if ($type instanceof ConstantArrayType && $typeKind === TypeKind::RETURN) {
+        if ($type instanceof ConstantArrayType) {
             $arrayShapeNode = $this->arrayShapeTypeMapper->mapConstantArrayType($type);
             if ($arrayShapeNode instanceof TypeNode) {
                 return $arrayShapeNode;
             }
         }
         if ($itemType instanceof ArrayType && $this->isGenericArrayCandidate($itemType)) {
-            return $this->createGenericArrayType($type, $typeKind, \true);
+            return $this->createGenericArrayType($type, \true);
         }
         if ($this->isGenericArrayCandidate($type)) {
-            return $this->createGenericArrayType($type, $typeKind, \true);
+            return $this->createGenericArrayType($type, \true);
         }
-        $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType, $typeKind);
+        $narrowedTypeNode = $this->narrowConstantArrayTypeOfUnionType($type, $itemType);
         if ($narrowedTypeNode instanceof TypeNode) {
             return $narrowedTypeNode;
         }
-        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType, $typeKind);
+        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
         return new SpacingAwareArrayTypeNode($itemTypeNode);
     }
     /**
@@ -119,14 +117,11 @@ final class ArrayTypeMapper implements TypeMapperInterface
     {
         return new Identifier('array');
     }
-    /**
-     * @param TypeKind::* $typeKind
-     */
-    private function createArrayTypeNodeFromUnionType(UnionType $unionType, string $typeKind) : SpacingAwareArrayTypeNode
+    private function createArrayTypeNodeFromUnionType(UnionType $unionType) : SpacingAwareArrayTypeNode
     {
         $unionedArrayType = [];
         foreach ($unionType->getTypes() as $unionedType) {
-            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType, $typeKind);
+            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
             $unionedArrayType[(string) $typeNode] = $typeNode;
         }
         if (\count($unionedArrayType) > 1) {
@@ -166,22 +161,19 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
         return \false;
     }
-    /**
-     * @param TypeKind::* $typeKind
-     */
-    private function createGenericArrayType(ArrayType $arrayType, string $typeKind, bool $withKey = \false) : GenericTypeNode
+    private function createGenericArrayType(ArrayType $arrayType, bool $withKey = \false) : GenericTypeNode
     {
         $itemType = $arrayType->getItemType();
-        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType, $typeKind);
+        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
         $identifierTypeNode = new IdentifierTypeNode('array');
         // is class-string[] list only
         if ($this->isClassStringArrayType($arrayType)) {
             $withKey = \false;
         }
         if ($withKey) {
-            $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType->getKeyType(), $typeKind);
+            $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType->getKeyType());
             if ($itemTypeNode instanceof BracketsAwareUnionTypeNode && $this->isPairClassTooDetailed($itemType)) {
-                $genericTypes = [$keyTypeNode, $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode(new ClassStringType(), $typeKind)];
+                $genericTypes = [$keyTypeNode, $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode(new ClassStringType())];
             } else {
                 $genericTypes = [$keyTypeNode, $itemTypeNode];
             }
@@ -213,35 +205,31 @@ final class ArrayTypeMapper implements TypeMapperInterface
         }
         return !$arrayType->getItemType() instanceof ArrayType;
     }
-    /**
-     * @param TypeKind::* $typeKind
-     */
-    private function narrowConstantArrayTypeOfUnionType(ArrayType $arrayType, Type $itemType, string $typeKind) : ?TypeNode
+    private function narrowConstantArrayTypeOfUnionType(ArrayType $arrayType, Type $itemType) : ?TypeNode
     {
         if ($arrayType instanceof ConstantArrayType && $itemType instanceof UnionType) {
             $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToSharedObjectType($itemType);
             if ($narrowedItemType instanceof ObjectType) {
-                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType, $typeKind);
+                $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($narrowedItemType);
                 return new SpacingAwareArrayTypeNode($itemTypeNode);
             }
             $narrowedItemType = $this->unionTypeCommonTypeNarrower->narrowToGenericClassStringType($itemType);
             if ($narrowedItemType instanceof GenericClassStringType) {
-                return $this->createTypeNodeFromGenericClassStringType($narrowedItemType, $typeKind);
+                return $this->createTypeNodeFromGenericClassStringType($narrowedItemType);
             }
         }
         return null;
     }
     /**
-     * @param TypeKind::* $typeKind
      * @return \PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode|\PHPStan\PhpDocParser\Ast\Type\GenericTypeNode
      */
-    private function createTypeNodeFromGenericClassStringType(GenericClassStringType $genericClassStringType, string $typeKind)
+    private function createTypeNodeFromGenericClassStringType(GenericClassStringType $genericClassStringType)
     {
         $genericType = $genericClassStringType->getGenericType();
         if ($genericType instanceof ObjectType && !$this->reflectionProvider->hasClass($genericType->getClassName())) {
             return new IdentifierTypeNode($genericType->getClassName());
         }
-        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericClassStringType, $typeKind);
+        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericClassStringType);
         return new GenericTypeNode(new IdentifierTypeNode('array'), [$itemTypeNode]);
     }
     private function isClassStringArrayType(ArrayType $arrayType) : bool

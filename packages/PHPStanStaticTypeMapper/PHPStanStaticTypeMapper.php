@@ -28,16 +28,13 @@ final class PHPStanStaticTypeMapper
     {
         $this->typeMappers = $typeMappers;
     }
-    /**
-     * @param TypeKind::* $typeKind
-     */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         foreach ($this->typeMappers as $typeMapper) {
             if (!\is_a($type, $typeMapper->getNodeClass(), \true)) {
                 continue;
             }
-            return $typeMapper->mapToPHPStanPhpDocTypeNode($type, $typeKind);
+            return $typeMapper->mapToPHPStanPhpDocTypeNode($type);
         }
         if ($type->isString()->yes()) {
             return new IdentifierTypeNode('string');

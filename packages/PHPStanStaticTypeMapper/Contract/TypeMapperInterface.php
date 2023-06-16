@@ -21,9 +21,8 @@ interface TypeMapperInterface
     public function getNodeClass() : string;
     /**
      * @param TType $type
-     * @param TypeKind::* $typeKind
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode;
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode;
     /**
      * @param TType $type
      * @param TypeKind::* $typeKind

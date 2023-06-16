@@ -41,7 +41,7 @@ final class VoidTypeMapper implements TypeMapperInterface
     /**
      * @param VoidType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         return new IdentifierTypeNode(self::VOID);
     }

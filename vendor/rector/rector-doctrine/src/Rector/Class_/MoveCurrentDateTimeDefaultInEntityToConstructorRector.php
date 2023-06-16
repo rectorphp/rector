@@ -5,9 +5,11 @@ namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
@@ -108,10 +110,10 @@ CODE_SAMPLE
         foreach ($node->getProperties() as $property) {
             $this->refactorProperty($property, $node);
         }
-        if (!$this->hasChanged) {
-            return null;
+        if ($this->hasChanged) {
+            return $node;
         }
-        return $node;
+        return null;
     }
     private function refactorProperty(Property $property, Class_ $class) : void
     {
@@ -131,9 +133,14 @@ CODE_SAMPLE
         if ($typeValue !== 'datetime') {
             return;
         }
-        $node = $this->constructorAssignPropertyAnalyzer->resolveConstructorAssign($property);
+        $constructorAssign = $this->constructorAssignPropertyAnalyzer->resolveConstructorAssign($class, $property);
+        // skip nullable
+        $nullableArrayItemNode = $doctrineAnnotationTagValueNode->getValue('nullable');
+        if ($nullableArrayItemNode instanceof ArrayItemNode && $nullableArrayItemNode->value instanceof ConstExprTrueNode) {
+            return;
+        }
         // 0. already has default
-        if ($node instanceof Node) {
+        if ($constructorAssign instanceof Assign) {
             return;
         }
         // 1. remove default options from database level

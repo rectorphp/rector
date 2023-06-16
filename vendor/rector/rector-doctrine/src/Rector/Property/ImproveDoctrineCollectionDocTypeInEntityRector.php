@@ -5,7 +5,7 @@ namespace Rector\Doctrine\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\ClassLike;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
@@ -128,10 +128,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Property::class, ClassMethod::class];
+        return [Property::class, Class_::class];
     }
     /**
-     * @param Property|ClassMethod $node
+     * @param Property|Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -152,32 +152,39 @@ CODE_SAMPLE
         }
         return $this->refactorAttribute($targetEntityExpr, $phpDocInfo, $property);
     }
-    private function refactorClassMethod(ClassMethod $classMethod) : ?ClassMethod
+    private function refactorClassMethod(Class_ $class) : ?Class_
     {
-        if (!$this->doctrineDocBlockResolver->isInDoctrineEntityClass($classMethod)) {
+        if (!$this->doctrineDocBlockResolver->isDoctrineEntityClass($class)) {
             return null;
         }
-        if (!$classMethod->isPublic()) {
-            return null;
+        $hasChanged = \false;
+        foreach ($class->getMethods() as $classMethod) {
+            if (!$classMethod->isPublic()) {
+                continue;
+            }
+            $collectionObjectType = $this->resolveCollectionSetterAssignType($class, $classMethod);
+            if (!$collectionObjectType instanceof Type) {
+                continue;
+            }
+            if (\count($classMethod->params) !== 1) {
+                continue;
+            }
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            $param = $classMethod->params[0];
+            if ($param->type instanceof Node) {
+                continue;
+            }
+            /** @var string $parameterName */
+            $parameterName = $this->getName($param);
+            $this->phpDocTypeChanger->changeParamType($classMethod, $phpDocInfo, $collectionObjectType, $param, $parameterName);
+            $hasChanged = \true;
         }
-        $collectionObjectType = $this->resolveCollectionSetterAssignType($classMethod);
-        if (!$collectionObjectType instanceof Type) {
-            return null;
+        if ($hasChanged) {
+            return $class;
         }
-        if (\count($classMethod->params) !== 1) {
-            return null;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
-        $param = $classMethod->params[0];
-        if ($param->type instanceof Node) {
-            return null;
-        }
-        /** @var string $parameterName */
-        $parameterName = $this->getName($param);
-        $this->phpDocTypeChanger->changeParamType($classMethod, $phpDocInfo, $collectionObjectType, $param, $parameterName);
-        return $classMethod;
+        return null;
     }
-    private function resolveCollectionSetterAssignType(ClassMethod $classMethod) : ?Type
+    private function resolveCollectionSetterAssignType(Class_ $class, ClassMethod $classMethod) : ?Type
     {
         $propertyFetches = $this->assignManipulator->resolveAssignsToLocalPropertyFetches($classMethod);
         if (\count($propertyFetches) !== 1) {
@@ -187,12 +194,8 @@ CODE_SAMPLE
         if (!$phpPropertyReflection instanceof PhpPropertyReflection) {
             return null;
         }
-        $classLike = $this->betterNodeFinder->findParentType($classMethod, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
-            return null;
-        }
         $propertyName = (string) $this->nodeNameResolver->getName($propertyFetches[0]);
-        $property = $classLike->getProperty($propertyName);
+        $property = $class->getProperty($propertyName);
         if (!$property instanceof Property) {
             return null;
         }

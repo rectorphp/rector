@@ -36,7 +36,7 @@ final class IntegerTypeMapper implements TypeMapperInterface
     /**
      * @param IntegerType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         return new IdentifierTypeNode('int');
     }

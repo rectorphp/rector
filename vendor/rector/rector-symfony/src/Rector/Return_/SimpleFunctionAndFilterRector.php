@@ -85,44 +85,54 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [ClassMethod::class];
     }
     /**
-     * @param Return_ $node
+     * @param ClassMethod $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$node->expr instanceof Expr) {
+        if ($node->stmts === null) {
             return null;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-        if (!$classReflection instanceof ClassReflection) {
+        if ($this->shouldSkip($node)) {
             return null;
+        }
+        $hasChanged = \false;
+        foreach ($node->stmts as $stmt) {
+            if (!$stmt instanceof Return_ || !$stmt->expr instanceof Expr) {
+                continue;
+            }
+            $this->traverseNodesWithCallable($stmt->expr, function (Node $node) use(&$hasChanged) : ?Node {
+                if (!$node instanceof ArrayItem) {
+                    return null;
+                }
+                if (!$node->value instanceof New_) {
+                    return null;
+                }
+                $newObjectType = $this->nodeTypeResolver->getType($node->value);
+                $this->processArrayItem($node, $newObjectType, $hasChanged);
+                return $node;
+            });
+            break;
+        }
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
+    }
+    private function shouldSkip(ClassMethod $classMethod) : bool
+    {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        if (!$classReflection instanceof ClassReflection) {
+            return \true;
         }
         if (!$classReflection->isSubclassOf('Twig_Extension')) {
-            return null;
+            return \true;
         }
-        $classMethod = $this->betterNodeFinder->findParentType($node, ClassMethod::class);
-        if (!$classMethod instanceof ClassMethod) {
-            return null;
-        }
-        if (!$this->nodeNameResolver->isNames($classMethod, ['getFunctions', 'getFilters'])) {
-            return null;
-        }
-        $this->traverseNodesWithCallable($node->expr, function (Node $node) : ?Node {
-            if (!$node instanceof ArrayItem) {
-                return null;
-            }
-            if (!$node->value instanceof New_) {
-                return null;
-            }
-            $newObjectType = $this->nodeTypeResolver->getType($node->value);
-            $this->processArrayItem($node, $newObjectType);
-            return $node;
-        });
-        return $node;
+        return !$this->nodeNameResolver->isNames($classMethod, ['getFunctions', 'getFilters']);
     }
-    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType) : void
+    private function processArrayItem(ArrayItem $arrayItem, Type $newNodeType, bool &$hasChanged) : void
     {
         foreach (self::OLD_TO_NEW_CLASSES as $oldClass => $newClass) {
             $oldClassObjectType = new ObjectType($oldClass);
@@ -141,6 +151,7 @@ CODE_SAMPLE
             $arrayItem->value->class = new FullyQualified($newClass);
             $oldArguments = $arrayItem->value->getArgs();
             $this->decorateArrayItem($arrayItem, $oldArguments, $filterName);
+            $hasChanged = \true;
             break;
         }
     }

@@ -112,7 +112,7 @@ final class UnionTypeMapper implements TypeMapperInterface
     /**
      * @param UnionType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         $unionTypesNodes = [];
         $skipIterable = $this->shouldSkipIterable($type);
@@ -120,7 +120,7 @@ final class UnionTypeMapper implements TypeMapperInterface
             if ($unionedType instanceof IterableType && $skipIterable) {
                 continue;
             }
-            $unionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType, $typeKind);
+            $unionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
         }
         $unionTypesNodes = \array_unique($unionTypesNodes);
         return new BracketsAwareUnionTypeNode($unionTypesNodes);

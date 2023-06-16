@@ -36,11 +36,11 @@ final class ClosureTypeMapper implements TypeMapperInterface
     /**
      * @param ClosureType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         $identifierTypeNode = new IdentifierTypeNode($type->getClassName());
-        $returnDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getReturnType(), $typeKind);
-        $callableTypeParameterNodes = $this->createCallableTypeParameterNodes($type, $typeKind);
+        $returnDocTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getReturnType());
+        $callableTypeParameterNodes = $this->createCallableTypeParameterNodes($type);
         // callable parameters must be of specific type
         Assert::allIsInstanceOf($callableTypeParameterNodes, CallableTypeParameterNode::class);
         return new SpacingAwareCallableTypeNode($identifierTypeNode, $callableTypeParameterNodes, $returnDocTypeNode);
@@ -64,15 +64,14 @@ final class ClosureTypeMapper implements TypeMapperInterface
         $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
     }
     /**
-     * @param TypeKind::* $typeKind
      * @return CallableTypeParameterNode[]
      */
-    private function createCallableTypeParameterNodes(ClosureType $closureType, string $typeKind) : array
+    private function createCallableTypeParameterNodes(ClosureType $closureType) : array
     {
         $callableTypeParameterNodes = [];
         foreach ($closureType->getParameters() as $parameterReflection) {
             /** @var ParameterReflection $parameterReflection */
-            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($parameterReflection->getType(), $typeKind);
+            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($parameterReflection->getType());
             $callableTypeParameterNodes[] = new CallableTypeParameterNode($typeNode, $parameterReflection->passedByReference()->yes(), $parameterReflection->isVariadic(), $parameterReflection->getName() !== '' && $parameterReflection->getName() !== '0' ? '$' . $parameterReflection->getName() : '', $parameterReflection->isOptional());
         }
         return $callableTypeParameterNodes;

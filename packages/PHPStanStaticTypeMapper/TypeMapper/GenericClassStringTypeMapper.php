@@ -52,11 +52,11 @@ final class GenericClassStringTypeMapper implements TypeMapperInterface
     /**
      * @param GenericClassStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         $attributeAwareIdentifierTypeNode = new IdentifierTypeNode('class-string');
         $genericType = $this->resolveGenericObjectType($type);
-        $genericTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType, $typeKind);
+        $genericTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($genericType);
         return new GenericTypeNode($attributeAwareIdentifierTypeNode, [$genericTypeNode]);
     }
     /**

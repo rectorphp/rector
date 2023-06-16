@@ -70,12 +70,9 @@ final class StaticTypeMapper
         $this->phpParserNodeMapper = $phpParserNodeMapper;
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    /**
-     * @param TypeKind::* $typeKind
-     */
-    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType, string $typeKind) : TypeNode
+    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType) : TypeNode
     {
-        return $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($phpStanType, $typeKind);
+        return $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($phpStanType);
     }
     /**
      * @param TypeKind::* $typeKind

@@ -29,7 +29,7 @@ final class StrictMixedTypeMapper implements TypeMapperInterface
     /**
      * @param StrictMixedType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         return new IdentifierTypeNode(self::MIXED);
     }

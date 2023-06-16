@@ -6,7 +6,7 @@ namespace Rector\Doctrine\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\NullableType;
-use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
@@ -88,50 +88,62 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
         // is setter in doctrine?
-        if (!$this->doctrineDocBlockResolver->isInDoctrineEntityClass($node)) {
+        if (!$this->doctrineDocBlockResolver->isDoctrineEntityClass($node)) {
             return null;
         }
-        $property = $this->setterClassMethodAnalyzer->matchNullalbeClassMethodProperty($node);
-        if (!$property instanceof Property) {
-            return null;
-        }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\ManyToOne');
-        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return null;
-        }
-        $param = $node->params[0];
-        $paramType = $param->type;
-        if (!$this->isJoinColumnNullable($phpDocInfo)) {
-            // remove nullable if has one
-            if (!$paramType instanceof NullableType) {
-                return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            $propertyName = $this->setterClassMethodAnalyzer->matchNullalbeClassMethodPropertyName($classMethod);
+            if ($propertyName === null) {
+                continue;
             }
-            $param->type = $paramType->type;
+            $property = $node->getProperty($propertyName);
+            if (!$property instanceof Property) {
+                continue;
+            }
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
+            $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass('Doctrine\\ORM\\Mapping\\ManyToOne');
+            if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+                continue;
+            }
+            $param = $classMethod->params[0];
+            $paramType = $param->type;
+            if (!$this->isJoinColumnNullable($phpDocInfo)) {
+                // remove nullable if has one
+                if (!$paramType instanceof NullableType) {
+                    continue;
+                }
+                $param->type = $paramType->type;
+                $hasChanged = \true;
+                continue;
+            }
+            // already nullable, lets skip it
+            if ($paramType instanceof NullableType) {
+                continue;
+            }
+            // we skip complex type as multiple or nullable already
+            if ($paramType instanceof ComplexType) {
+                continue;
+            }
+            // no type at all, there is nothing we can do
+            if (!$paramType instanceof Node) {
+                continue;
+            }
+            $param->type = new NullableType($paramType);
+            $hasChanged = \true;
+        }
+        if ($hasChanged) {
             return $node;
         }
-        // already nullable, lets skip it
-        if ($paramType instanceof NullableType) {
-            return null;
-        }
-        // we skip complex type as multiple or nullable already
-        if ($paramType instanceof ComplexType) {
-            return null;
-        }
-        // no type at all, there is nothing we can do
-        if (!$paramType instanceof Node) {
-            return null;
-        }
-        $param->type = new NullableType($paramType);
-        return $node;
+        return null;
     }
     private function isJoinColumnNullable(PhpDocInfo $phpDocInfo) : bool
     {

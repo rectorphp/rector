@@ -25,7 +25,7 @@ final class ThisTypeMapper implements TypeMapperInterface
     /**
      * @param ThisType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         return new ThisTypeNode();
     }

@@ -46,48 +46,51 @@ final class AddRouteAnnotationRector extends AbstractRector
     }
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        // only public methods can be controller routes
-        if (!$node->isPublic()) {
-            return null;
-        }
-        if ($node->isStatic()) {
-            return null;
-        }
-        $class = $this->betterNodeFinder->findParentType($node, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
         if ($this->symfonyRoutesProvider->provide() === []) {
             return null;
         }
-        $controllerReference = $this->resolveControllerReference($class, $node);
-        if (!$controllerReference) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            // only public methods can be controller routes
+            if (!$classMethod->isPublic()) {
+                continue;
+            }
+            if ($classMethod->isStatic()) {
+                continue;
+            }
+            $controllerReference = $this->resolveControllerReference($node, $classMethod);
+            if (!$controllerReference) {
+                continue;
+            }
+            // is there a route for this annotation?
+            $symfonyRouteMetadatas = $this->matchSymfonyRouteMetadataByControllerReference($controllerReference);
+            if ($symfonyRouteMetadatas === []) {
+                continue;
+            }
+            // skip if already has an annotation
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
+            if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+                continue;
+            }
+            foreach ($symfonyRouteMetadatas as $symfonyRouteMetadata) {
+                $items = $this->createRouteItems($symfonyRouteMetadata);
+                $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($items);
+                $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
+            }
+            $hasChanged = \true;
         }
-        // is there a route for this annotation?
-        $symfonyRouteMetadatas = $this->matchSymfonyRouteMetadataByControllerReference($controllerReference);
-        if ($symfonyRouteMetadatas === []) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        // skip if already has an annotation
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
-        if ($doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return null;
-        }
-        foreach ($symfonyRouteMetadatas as $symfonyRouteMetadata) {
-            $items = $this->createRouteItems($symfonyRouteMetadata);
-            $symfonyRouteTagValueNode = $this->symfonyRouteTagValueNodeFactory->createFromItems($items);
-            $phpDocInfo->addTagValueNode($symfonyRouteTagValueNode);
-        }
-        return $node;
+        return null;
     }
     public function getRuleDefinition() : RuleDefinition
     {

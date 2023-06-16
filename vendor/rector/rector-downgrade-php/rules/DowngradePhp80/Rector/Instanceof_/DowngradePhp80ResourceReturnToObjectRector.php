@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\DowngradePhp80\Rector\Instanceof_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\Instanceof_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\DowngradePhp81\NodeManipulator\ObjectToResourceReturn;
@@ -84,10 +85,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Instanceof_::class];
+        return [BinaryOp::class, Instanceof_::class];
     }
     /**
-     * @param Instanceof_ $node
+     * @param BinaryOp|Instanceof_ $node
      */
     public function refactor(Node $node) : ?Node
     {

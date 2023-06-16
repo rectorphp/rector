@@ -35,12 +35,8 @@ final class ConstructorAssignPropertyAnalyzer
         $this->nodeNameResolver = $nodeNameResolver;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
-    public function resolveConstructorAssign(Property $property) : ?Node
+    public function resolveConstructorAssign(Class_ $class, Property $property) : ?Node
     {
-        $class = $this->betterNodeFinder->findParentType($property, Class_::class);
-        if (!$class instanceof Class_) {
-            return null;
-        }
         $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
         if (!$constructClassMethod instanceof ClassMethod) {
             return null;

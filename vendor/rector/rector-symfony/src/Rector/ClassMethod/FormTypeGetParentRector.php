@@ -81,37 +81,39 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param Class_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if (!$this->isClassAndMethodMatch($node)) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if (!$this->isClassAndMethodMatch($node, $classMethod)) {
+                continue;
+            }
+            $this->traverseNodesWithCallable((array) $classMethod->stmts, function (Node $node) use(&$hasChanged) : ?Node {
+                if (!$node instanceof Return_) {
+                    return null;
+                }
+                if (!$node->expr instanceof Expr) {
+                    return null;
+                }
+                if (!$node->expr instanceof String_) {
+                    return null;
+                }
+                $this->replaceStringWIthFormTypeClassConstIfFound($node->expr->value, $node, $hasChanged);
+                return $node;
+            });
         }
-        $this->traverseNodesWithCallable((array) $node->stmts, function (Node $node) : ?Node {
-            if (!$node instanceof Return_) {
-                return null;
-            }
-            if (!$node->expr instanceof Expr) {
-                return null;
-            }
-            if (!$node->expr instanceof String_) {
-                return null;
-            }
-            $this->replaceStringWIthFormTypeClassConstIfFound($node->expr->value, $node);
+        if ($hasChanged) {
             return $node;
-        });
+        }
         return null;
     }
-    private function isClassAndMethodMatch(ClassMethod $classMethod) : bool
+    private function isClassAndMethodMatch(Class_ $class, ClassMethod $classMethod) : bool
     {
-        $class = $this->betterNodeFinder->findParentType($classMethod, Class_::class);
-        if (!$class instanceof Class_) {
-            return \false;
-        }
         if ($this->isName($classMethod->name, 'getParent')) {
             return $this->isObjectType($class, new ObjectType('Symfony\\Component\\Form\\AbstractType'));
         }
@@ -120,12 +122,13 @@ CODE_SAMPLE
         }
         return \false;
     }
-    private function replaceStringWIthFormTypeClassConstIfFound(string $stringValue, Return_ $return) : void
+    private function replaceStringWIthFormTypeClassConstIfFound(string $stringValue, Return_ $return, bool &$hasChanged) : void
     {
         $formClass = $this->formTypeStringToTypeProvider->matchClassForNameWithPrefix($stringValue);
         if ($formClass === null) {
             return;
         }
         $return->expr = $this->nodeFactory->createClassConstReference($formClass);
+        $hasChanged = \true;
     }
 }

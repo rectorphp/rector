@@ -43,10 +43,10 @@ final class ClassStringTypeMapper implements TypeMapperInterface
     /**
      * @param ClassStringType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type, string $typeKind) : TypeNode
+    public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
         if ($type instanceof GenericClassStringType) {
-            return $this->genericClassStringTypeMapper->mapToPHPStanPhpDocTypeNode($type, $typeKind);
+            return $this->genericClassStringTypeMapper->mapToPHPStanPhpDocTypeNode($type);
         }
         return new IdentifierTypeNode('class-string');
     }

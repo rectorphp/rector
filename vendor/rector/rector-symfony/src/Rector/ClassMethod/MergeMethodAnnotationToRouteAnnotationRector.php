@@ -5,7 +5,6 @@ namespace Rector\Symfony\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
@@ -77,45 +76,48 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [ClassLike::class];
     }
     /**
-     * @param ClassMethod $node
+     * @param ClassLike $node
      */
     public function refactor(Node $node) : ?Node
     {
-        $classLike = $this->betterNodeFinder->findParentType($node, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->getMethods() as $classMethod) {
+            if (!$classMethod->isPublic()) {
+                continue;
+            }
+            $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($classMethod);
+            $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SensioAttribute::METHOD);
+            if (!$sensioDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+                continue;
+            }
+            $symfonyDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
+            if (!$symfonyDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+                continue;
+            }
+            $sensioMethods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
+            if ($sensioMethods === null) {
+                continue;
+            }
+            if (\is_string($sensioMethods) || $sensioMethods instanceof StringNode) {
+                $sensioMethods = new CurlyListNode([new ArrayItemNode($sensioMethods)]);
+            }
+            $symfonyMethodsArrayItemNode = $symfonyDoctrineAnnotationTagValueNode->getValue('methods');
+            // value is already filled, do not enter anything
+            if ($symfonyMethodsArrayItemNode instanceof ArrayItemNode) {
+                continue;
+            }
+            $symfonyDoctrineAnnotationTagValueNode->values[] = new ArrayItemNode($sensioMethods, 'methods');
+            $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
+            $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
+            $hasChanged = \true;
         }
-        if (!$node->isPublic()) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $sensioDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SensioAttribute::METHOD);
-        if (!$sensioDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return null;
-        }
-        $symfonyDoctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClass(SymfonyAnnotation::ROUTE);
-        if (!$symfonyDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
-            return null;
-        }
-        $sensioMethods = $this->resolveMethods($sensioDoctrineAnnotationTagValueNode);
-        if ($sensioMethods === null) {
-            return null;
-        }
-        if (\is_string($sensioMethods) || $sensioMethods instanceof StringNode) {
-            $sensioMethods = new CurlyListNode([new ArrayItemNode($sensioMethods)]);
-        }
-        $symfonyMethodsArrayItemNode = $symfonyDoctrineAnnotationTagValueNode->getValue('methods');
-        // value is already filled, do not enter anything
-        if ($symfonyMethodsArrayItemNode instanceof ArrayItemNode) {
-            return null;
-        }
-        $symfonyDoctrineAnnotationTagValueNode->values[] = new ArrayItemNode($sensioMethods, 'methods');
-        $this->phpDocTagRemover->removeTagValueFromNode($phpDocInfo, $sensioDoctrineAnnotationTagValueNode);
-        $this->phpDocInfoPrinter->printFormatPreserving($phpDocInfo);
-        return $node;
+        return null;
     }
     /**
      * @return string|string[]|null|CurlyListNode|StringNode
