@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7cddc50cf9b5b4c496c72c09a638ee61
+class ComposerStaticInitb05cad95b9370307f3474d410cb5a407
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1621,6 +1621,7 @@ class ComposerStaticInit7cddc50cf9b5b4c496c72c09a638ee61
         'Rector\\CodeQuality\\Rector\\Catch_\\ThrowWithPreviousExceptionRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Catch_/ThrowWithPreviousExceptionRector.php',
         'Rector\\CodeQuality\\Rector\\ClassConstFetch\\ConvertStaticPrivateConstantToSelfRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassConstFetch/ConvertStaticPrivateConstantToSelfRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/InlineArrayReturnAssignRector.php',
+        'Rector\\CodeQuality\\Rector\\ClassMethod\\LocallyCalledStaticMethodToNonStaticRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\ReturnTypeFromStrictScalarReturnExprRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
@@ -2663,7 +2664,6 @@ class ComposerStaticInit7cddc50cf9b5b4c496c72c09a638ee61
         'Rector\\RectorInstaller\\LocalFilesystem' => __DIR__ . '/..' . '/rector/extension-installer/src/LocalFilesystem.php',
         'Rector\\RectorInstaller\\Plugin' => __DIR__ . '/..' . '/rector/extension-installer/src/Plugin.php',
         'Rector\\RectorInstaller\\PluginInstaller' => __DIR__ . '/..' . '/rector/extension-installer/src/PluginInstaller.php',
-        'Rector\\RemovingStatic\\Rector\\ClassMethod\\LocallyCalledStaticMethodToNonStaticRector' => __DIR__ . '/../..' . '/rules/RemovingStatic/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php',
         'Rector\\Removing\\NodeManipulator\\ComplexNodeRemover' => __DIR__ . '/../..' . '/rules/Removing/NodeManipulator/ComplexNodeRemover.php',
         'Rector\\Removing\\Rector\\ClassMethod\\ArgumentRemoverRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/ClassMethod/ArgumentRemoverRector.php',
         'Rector\\Removing\\Rector\\Class_\\RemoveInterfacesRector' => __DIR__ . '/../..' . '/rules/Removing/Rector/Class_/RemoveInterfacesRector.php',
@@ -3092,9 +3092,9 @@ class ComposerStaticInit7cddc50cf9b5b4c496c72c09a638ee61
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7cddc50cf9b5b4c496c72c09a638ee61::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7cddc50cf9b5b4c496c72c09a638ee61::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7cddc50cf9b5b4c496c72c09a638ee61::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb05cad95b9370307f3474d410cb5a407::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb05cad95b9370307f3474d410cb5a407::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb05cad95b9370307f3474d410cb5a407::$classMap;
 
         }, null, ClassLoader::class);
     }

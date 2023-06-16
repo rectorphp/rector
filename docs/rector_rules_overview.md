@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (5)
 
-- [CodeQuality](#codequality) (71)
+- [CodeQuality](#codequality) (72)
 
 - [CodingStyle](#codingstyle) (32)
 
@@ -49,8 +49,6 @@
 - [Privatization](#privatization) (4)
 
 - [Removing](#removing) (6)
-
-- [RemovingStatic](#removingstatic) (1)
 
 - [Renaming](#renaming) (10)
 
@@ -922,6 +920,30 @@ Joins concat of 2 strings, unless the length is too long
      {
 -        $name = 'Hi' . ' Tom';
 +        $name = 'Hi Tom';
+     }
+ }
+```
+
+<br>
+
+### LocallyCalledStaticMethodToNonStaticRector
+
+Change static method and local-only calls to non-static
+
+- class: [`Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector`](../rules/CodeQuality/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php)
+
+```diff
+ class SomeClass
+ {
+     public function run()
+     {
+-        self::someStatic();
++        $this->someStatic();
+     }
+
+-    private static function someStatic()
++    private function someStatic()
+     {
      }
  }
 ```
@@ -6069,32 +6091,6 @@ return static function (RectorConfig $rectorConfig): void {
  class SomeClass
  {
 -    use SomeTrait;
- }
-```
-
-<br>
-
-## RemovingStatic
-
-### LocallyCalledStaticMethodToNonStaticRector
-
-Change static method and local-only calls to non-static
-
-- class: [`Rector\RemovingStatic\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector`](../rules/RemovingStatic/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
--        self::someStatic();
-+        $this->someStatic();
-     }
-
--    private static function someStatic()
-+    private function someStatic()
-     {
-     }
  }
 ```
 
