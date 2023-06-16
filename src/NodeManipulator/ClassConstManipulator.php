@@ -5,13 +5,12 @@ namespace Rector\Core\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\Enum_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 final class ClassConstManipulator
 {
@@ -30,19 +29,25 @@ final class ClassConstManipulator
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
-    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, AstResolver $astResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, AstResolver $astResolver, ReflectionResolver $reflectionResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->astResolver = $astResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function hasClassConstFetch(ClassConst $classConst, ClassReflection $classReflection) : bool
     {
-        $class = $this->betterNodeFinder->findParentByTypes($classConst, [Class_::class, Enum_::class]);
-        if (!$class instanceof ClassLike) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classConst);
+        if (!$classReflection instanceof ClassReflection || !$classReflection->isClass() && !$classReflection->isEnum()) {
             return \true;
         }
-        $className = (string) $this->nodeNameResolver->getName($class);
+        $className = $classReflection->getName();
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             $ancestorClass = $this->astResolver->resolveClassFromClassReflection($ancestorClassReflection);
             if (!$ancestorClass instanceof ClassLike) {
