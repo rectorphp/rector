@@ -1,10 +1,10 @@
-# 368 Rules Overview
+# 369 Rules Overview
 
 <br>
 
 ## Categories
 
-- [Arguments](#arguments) (5)
+- [Arguments](#arguments) (6)
 
 - [CodeQuality](#codequality) (72)
 
@@ -136,6 +136,45 @@ return static function (RectorConfig $rectorConfig): void {
 ```diff
 -version_compare(PHP_VERSION, '5.6', 'gte');
 +version_compare(PHP_VERSION, '5.6', 'ge');
+```
+
+<br>
+
+### RemoveMethodCallParamRector
+
+Remove parameter of method call
+
+:wrench: **configure it!**
+
+- class: [`Rector\Arguments\Rector\MethodCall\RemoveMethodCallParamRector`](../rules/Arguments/Rector/MethodCall/RemoveMethodCallParamRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Arguments\Rector\MethodCall\RemoveMethodCallParamRector;
+use Rector\Arguments\ValueObject\RemoveMethodCallParam;
+use Rector\Config\RectorConfig;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(RemoveMethodCallParamRector::class, [
+        new RemoveMethodCallParam('Caller', 'process', 1),
+    ]);
+};
+```
+
+↓
+
+```diff
+ final class SomeClass
+ {
+     public function run(Caller $caller)
+     {
+-        $caller->process(1, 2);
++        $caller->process(1);
+     }
+ }
 ```
 
 <br>
