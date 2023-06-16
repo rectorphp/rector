@@ -3,16 +3,10 @@
 declare (strict_types=1);
 namespace Rector\Naming\Contract;
 
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 interface RenameParamValueObjectInterface extends \Rector\Naming\Contract\RenameValueObjectInterface
 {
-    /**
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction
-     */
-    public function getFunctionLike();
+    public function getFunctionLike() : FunctionLike;
     public function getParam() : Param;
 }

@@ -3,12 +3,9 @@
 declare (strict_types=1);
 namespace Rector\Naming\ValueObject;
 
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use Rector\Naming\Contract\RenameParamValueObjectInterface;
 final class ParamRename implements RenameParamValueObjectInterface
 {
@@ -34,13 +31,10 @@ final class ParamRename implements RenameParamValueObjectInterface
     private $variable;
     /**
      * @readonly
-     * @var \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction
+     * @var \PhpParser\Node\FunctionLike
      */
     private $functionLike;
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
-     */
-    public function __construct(string $currentName, string $expectedName, Param $param, Variable $variable, $functionLike)
+    public function __construct(string $currentName, string $expectedName, Param $param, Variable $variable, FunctionLike $functionLike)
     {
         $this->currentName = $currentName;
         $this->expectedName = $expectedName;
@@ -56,10 +50,7 @@ final class ParamRename implements RenameParamValueObjectInterface
     {
         return $this->expectedName;
     }
-    /**
-     * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction
-     */
-    public function getFunctionLike()
+    public function getFunctionLike() : FunctionLike
     {
         return $this->functionLike;
     }

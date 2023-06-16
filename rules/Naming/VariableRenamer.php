@@ -4,14 +4,11 @@ declare (strict_types=1);
 namespace Rector\Naming;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
@@ -47,10 +44,7 @@ final class VariableRenamer
         $this->varTagValueNodeRenamer = $varTagValueNodeRenamer;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
     }
-    /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $functionLike
-     */
-    public function renameVariableInFunctionLike($functionLike, string $oldName, string $expectedName, ?Assign $assign = null) : bool
+    public function renameVariableInFunctionLike(Node\FunctionLike $functionLike, string $oldName, string $expectedName, ?Assign $assign = null) : bool
     {
         $isRenamingActive = \false;
         if (!$assign instanceof Assign) {
