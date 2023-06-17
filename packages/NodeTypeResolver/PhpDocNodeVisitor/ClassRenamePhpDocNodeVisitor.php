@@ -6,8 +6,8 @@ namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
 use PhpParser\Node as PhpParserNode;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -17,9 +17,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Core\Configuration\CurrentNodeProvider;
 use Rector\Core\Configuration\RectorConfigProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Naming\Naming\UseImportsResolver;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
@@ -44,16 +42,6 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     private $useImportsResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
-    /**
-     * @readonly
      * @var \Rector\Core\Configuration\RectorConfigProvider
      */
     private $rectorConfigProvider;
@@ -61,13 +49,11 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var OldToNewType[]
      */
     private $oldToNewTypes = [];
-    public function __construct(StaticTypeMapper $staticTypeMapper, CurrentNodeProvider $currentNodeProvider, UseImportsResolver $useImportsResolver, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver, RectorConfigProvider $rectorConfigProvider)
+    public function __construct(StaticTypeMapper $staticTypeMapper, CurrentNodeProvider $currentNodeProvider, UseImportsResolver $useImportsResolver, RectorConfigProvider $rectorConfigProvider)
     {
         $this->staticTypeMapper = $staticTypeMapper;
         $this->currentNodeProvider = $currentNodeProvider;
         $this->useImportsResolver = $useImportsResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->rectorConfigProvider = $rectorConfigProvider;
     }
     public function beforeTraverse(Node $node) : void
@@ -137,14 +123,16 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return $name;
         }
         $uses = $this->useImportsResolver->resolveForNode($phpParserNode);
-        $namespace = $this->betterNodeFinder->findParentType($phpParserNode, Namespace_::class);
-        if (!$namespace instanceof Namespace_) {
-            return $this->resolveNamefromUse($uses, $name);
+        $scope = $phpParserNode->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            if (!$phpParserNode->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
+                return $this->resolveNamefromUse($uses, $name);
+            }
+            return '';
         }
-        $originalNode = $namespace->getAttribute(AttributeKey::ORIGINAL_NODE);
-        $namespaceName = (string) $this->nodeNameResolver->getName($namespace);
-        if ($originalNode instanceof Namespace_ && !$this->nodeNameResolver->isName($originalNode, $namespaceName)) {
-            return $name;
+        $namespaceName = $scope->getNamespace();
+        if ($namespaceName === null) {
+            return $this->resolveNamefromUse($uses, $name);
         }
         if ($uses === []) {
             return $namespaceName . '\\' . $name;
