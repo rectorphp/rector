@@ -8,7 +8,6 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class AliasUsesResolver
 {
     /**
@@ -16,15 +15,9 @@ final class AliasUsesResolver
      * @var \Rector\CodingStyle\ClassNameImport\UseImportsTraverser
      */
     private $useImportsTraverser;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    public function __construct(\Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, BetterNodeFinder $betterNodeFinder)
+    public function __construct(\Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser)
     {
         $this->useImportsTraverser = $useImportsTraverser;
-        $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
      * @param Stmt[] $stmts
@@ -37,20 +30,12 @@ final class AliasUsesResolver
             $namespaces = \array_filter($stmts, static function (Stmt $stmt) : bool {
                 return $stmt instanceof Namespace_;
             });
-            foreach ($namespaces as $namespace) {
-                $isFoundInNamespace = (bool) $this->betterNodeFinder->findFirst($namespace, static function (Node $subNode) use($node) : bool {
-                    return $subNode === $node;
-                });
-                if ($isFoundInNamespace) {
-                    $node = $namespace;
-                    break;
-                }
+            if (\count($namespaces) !== 1) {
+                return [];
             }
+            $node = \current($namespaces);
         }
-        if ($node instanceof Namespace_) {
-            return $this->resolveFromStmts($node->stmts);
-        }
-        return [];
+        return $this->resolveFromStmts($node->stmts);
     }
     /**
      * @param Stmt[] $stmts
