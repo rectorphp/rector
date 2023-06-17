@@ -3,14 +3,15 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\NodeAnalyzer;
 
+use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
+use PHPStan\Parser\ArrayMapArgVisitor;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
@@ -101,11 +102,7 @@ final class IsClassMethodUsedAnalyzer
     }
     private function isInArrayMap(Class_ $class, Array_ $array) : bool
     {
-        $parentFuncCall = $this->betterNodeFinder->findParentType($array, FuncCall::class);
-        if (!$parentFuncCall instanceof FuncCall) {
-            return \false;
-        }
-        if (!$this->nodeNameResolver->isName($parentFuncCall->name, 'array_map')) {
+        if (!$array->getAttribute(ArrayMapArgVisitor::ATTRIBUTE_NAME) instanceof Arg) {
             return \false;
         }
         if (\count($array->items) !== 2) {
