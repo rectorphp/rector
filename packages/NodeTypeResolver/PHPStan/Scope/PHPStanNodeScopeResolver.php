@@ -17,7 +17,9 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
@@ -33,6 +35,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
+use PhpParser\Node\UnionType;
 use PhpParser\NodeTraverser;
 use PHPStan\AnalysedCodeException;
 use PHPStan\Analyser\MutatingScope;
@@ -201,6 +204,14 @@ final class PHPStanNodeScopeResolver
             }
             if ($node instanceof FuncCall && $node->name instanceof Expr) {
                 $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+            if ($node instanceof NullableType) {
+                $node->type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+            if ($node instanceof UnionType || $node instanceof IntersectionType) {
+                foreach ($node->types as $type) {
+                    $type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                }
             }
             if ($node instanceof Trait_) {
                 $traitName = $this->resolveClassName($node);

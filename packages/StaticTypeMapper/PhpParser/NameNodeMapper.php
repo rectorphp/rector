@@ -5,7 +5,6 @@ namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassLike;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ArrayType;
@@ -21,8 +20,7 @@ use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentObjectWithoutClassType;
@@ -45,20 +43,14 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
+    private $reflectionResolver;
+    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
     {
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         $this->reflectionProvider = $reflectionProvider;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getNodeType() : string
     {
@@ -92,12 +84,10 @@ final class NameNodeMapper implements PhpParserNodeMapperInterface
      */
     private function createClassReferenceType(Name $name, string $reference)
     {
-        $classLike = $this->betterNodeFinder->findParentType($name, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($name);
+        if (!$classReflection instanceof ClassReflection) {
             return new MixedType();
         }
-        $className = (string) $this->nodeNameResolver->getName($classLike);
-        $classReflection = $this->reflectionProvider->getClass($className);
         if ($reference === ObjectReference::STATIC) {
             return new StaticType($classReflection);
         }
