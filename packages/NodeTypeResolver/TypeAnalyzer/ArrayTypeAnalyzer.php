@@ -10,6 +10,7 @@ use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Type\Accessory\HasOffsetType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
@@ -20,7 +21,7 @@ use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use Rector\Core\PhpParser\ClassLikeAstResolver;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -38,11 +39,6 @@ final class ArrayTypeAnalyzer
     private $nodeTypeResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
      * @var \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory
      */
     private $phpDocInfoFactory;
@@ -51,13 +47,18 @@ final class ArrayTypeAnalyzer
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, BetterNodeFinder $betterNodeFinder, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver)
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\ClassLikeAstResolver
+     */
+    private $classLikeAstResolver;
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, PhpDocInfoFactory $phpDocInfoFactory, ReflectionResolver $reflectionResolver, ClassLikeAstResolver $classLikeAstResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->reflectionResolver = $reflectionResolver;
+        $this->classLikeAstResolver = $classLikeAstResolver;
     }
     public function isArrayType(Expr $expr) : bool
     {
@@ -108,14 +109,16 @@ final class ArrayTypeAnalyzer
         if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
             return \false;
         }
-        $classLike = $this->betterNodeFinder->findParentType($expr, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($expr);
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
         $propertyName = $this->nodeNameResolver->getName($expr->name);
         if ($propertyName === null) {
             return \false;
         }
+        /** @var ClassLike $classLike */
+        $classLike = $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection);
         $property = $classLike->getProperty($propertyName);
         if (!$property instanceof Property) {
             return \false;
@@ -139,10 +142,12 @@ final class ArrayTypeAnalyzer
         if (!$expr instanceof PropertyFetch && !$expr instanceof StaticPropertyFetch) {
             return \false;
         }
-        $classLike = $this->betterNodeFinder->findParentType($expr, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($expr);
+        if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
+        /** @var ClassLike $classLike */
+        $classLike = $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection);
         $propertyName = $this->nodeNameResolver->getName($expr->name);
         if ($propertyName === null) {
             return \false;
