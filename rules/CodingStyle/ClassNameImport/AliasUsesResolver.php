@@ -27,12 +27,25 @@ final class AliasUsesResolver
         $this->betterNodeFinder = $betterNodeFinder;
     }
     /**
+     * @param Stmt[] $stmts
      * @return string[]
      */
-    public function resolveFromNode(Node $node) : array
+    public function resolveFromNode(Node $node, array $stmts) : array
     {
         if (!$node instanceof Namespace_) {
-            $node = $this->betterNodeFinder->findParentType($node, Namespace_::class);
+            /** @var Namespace_[] $namespaces */
+            $namespaces = \array_filter($stmts, static function (Stmt $stmt) : bool {
+                return $stmt instanceof Namespace_;
+            });
+            foreach ($namespaces as $namespace) {
+                $isFoundInNamespace = (bool) $this->betterNodeFinder->findFirst($namespace, static function (Node $subNode) use($node) : bool {
+                    return $subNode === $node;
+                });
+                if ($isFoundInNamespace) {
+                    $node = $namespace;
+                    break;
+                }
+            }
         }
         if ($node instanceof Namespace_) {
             return $this->resolveFromStmts($node->stmts);

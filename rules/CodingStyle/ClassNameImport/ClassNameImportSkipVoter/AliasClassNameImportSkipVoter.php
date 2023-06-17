@@ -30,7 +30,7 @@ final class AliasClassNameImportSkipVoter implements ClassNameImportSkipVoterInt
     }
     public function shouldSkip(File $file, FullyQualifiedObjectType $fullyQualifiedObjectType, Node $node) : bool
     {
-        $aliasedUses = $this->aliasUsesResolver->resolveFromNode($node);
+        $aliasedUses = $this->aliasUsesResolver->resolveFromNode($node, $file->getNewStmts());
         $shortNameLowered = $fullyQualifiedObjectType->getShortNameLowered();
         foreach ($aliasedUses as $aliasedUse) {
             $aliasedUseLowered = \strtolower($aliasedUse);
