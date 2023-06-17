@@ -13,7 +13,15 @@ use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Cast;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\NullsafeMethodCall;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -213,6 +221,24 @@ final class PHPStanNodeScopeResolver
                     $type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
                 }
             }
+            if ($node instanceof StaticPropertyFetch) {
+                $node->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+            if ($node instanceof PropertyFetch) {
+                $node->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+            if ($node instanceof CallLike) {
+                $this->processCallike($node, $mutatingScope);
+            }
+            if ($node instanceof ConstFetch) {
+                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+            if ($node instanceof ClassConstFetch) {
+                $node->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
             if ($node instanceof Trait_) {
                 $traitName = $this->resolveClassName($node);
                 $traitClassReflection = $this->reflectionProvider->getClass($traitName);
@@ -245,6 +271,39 @@ final class PHPStanNodeScopeResolver
         };
         return $this->processNodesWithDependentFiles($filePath, $stmts, $scope, $nodeCallback);
     }
+    private function processCallike(CallLike $callLike, MutatingScope $mutatingScope) : void
+    {
+        $this->processArgsForCallike($callLike, $mutatingScope);
+        if ($callLike instanceof StaticCall) {
+            $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
+        if ($callLike instanceof MethodCall) {
+            $callLike->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
+        if ($callLike instanceof FuncCall) {
+            $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
+        if ($callLike instanceof New_ && !$callLike->class instanceof Class_) {
+            $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
+        if ($callLike instanceof NullsafeMethodCall) {
+            $callLike->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        }
+    }
+    private function processArgsForCallike(Expr $expr, MutatingScope $mutatingScope) : void
+    {
+        if (!$expr instanceof CallLike) {
+            return;
+        }
+        if (!$expr->isFirstClassCallable()) {
+            foreach ($expr->getArgs() as $arg) {
+                $arg->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            }
+        }
+    }
     /**
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
      */
@@ -256,11 +315,7 @@ final class PHPStanNodeScopeResolver
         }
         $expr = $assign;
         while ($expr instanceof Assign || $expr instanceof AssignOp) {
-            if ($expr->expr instanceof CallLike && !$expr->expr->isFirstClassCallable()) {
-                foreach ($expr->expr->getArgs() as $arg) {
-                    $arg->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                }
-            }
+            $this->processArgsForCallike($expr->expr, $mutatingScope);
             // decorate value as well
             $expr->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $expr = $expr->expr;

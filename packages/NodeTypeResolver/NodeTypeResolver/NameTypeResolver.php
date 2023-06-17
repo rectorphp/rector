@@ -6,18 +6,16 @@ namespace Rector\NodeTypeResolver\NodeTypeResolver;
 use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
+use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
  *
@@ -26,25 +24,15 @@ use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 final class NameTypeResolver implements NodeTypeResolverInterface
 {
     /**
-     * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $reflectionProvider;
+    private $reflectionResolver;
     /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @required
      */
-    private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, BetterNodeFinder $betterNodeFinder, NodeNameResolver $nodeNameResolver)
+    public function autowire(ReflectionResolver $reflectionResolver) : void
     {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflectionResolver = $reflectionResolver;
     }
     /**
      * @return array<class-string<Node>>
@@ -72,18 +60,13 @@ final class NameTypeResolver implements NodeTypeResolverInterface
      */
     private function resolveParent(Name $name)
     {
-        $class = $this->betterNodeFinder->findParentType($name, Class_::class);
-        if (!$class instanceof Class_) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($name);
+        if (!$classReflection instanceof ClassReflection || !$classReflection->isClass()) {
             return new MixedType();
         }
-        $className = $this->nodeNameResolver->getName($class);
-        if (!\is_string($className)) {
+        if ($classReflection->isAnonymous()) {
             return new MixedType();
         }
-        if (!$this->reflectionProvider->hasClass($className)) {
-            return new MixedType();
-        }
-        $classReflection = $this->reflectionProvider->getClass($className);
         $parentClassObjectTypes = [];
         foreach ($classReflection->getParents() as $parentClassReflection) {
             $parentClassObjectTypes[] = new ObjectType($parentClassReflection->getName());
@@ -100,11 +83,11 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     {
         $nameValue = $name->toString();
         if (\in_array($nameValue, [ObjectReference::SELF, ObjectReference::STATIC, 'this'], \true)) {
-            $classLike = $this->betterNodeFinder->findParentType($name, ClassLike::class);
-            if (!$classLike instanceof ClassLike) {
+            $classReflection = $this->reflectionResolver->resolveClassReflection($name);
+            if (!$classReflection instanceof ClassReflection || $classReflection->isAnonymous()) {
                 return $name->toString();
             }
-            return (string) $this->nodeNameResolver->getName($classLike);
+            return $classReflection->getName();
         }
         return $nameValue;
     }
