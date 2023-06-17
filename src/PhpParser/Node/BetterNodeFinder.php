@@ -26,6 +26,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeFinder;
+use PhpParser\NodeTraverser;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\StopSearchException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
@@ -36,6 +37,7 @@ use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix202306\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Core\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
@@ -72,7 +74,12 @@ final class BetterNodeFinder
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, ClassAnalyzer $classAnalyzer, MultiInstanceofChecker $multiInstanceofChecker, CurrentFileProvider $currentFileProvider)
+    /**
+     * @readonly
+     * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
+     */
+    private $simpleCallableNodeTraverser;
+    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, ClassAnalyzer $classAnalyzer, MultiInstanceofChecker $multiInstanceofChecker, CurrentFileProvider $currentFileProvider, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -80,6 +87,7 @@ final class BetterNodeFinder
         $this->classAnalyzer = $classAnalyzer;
         $this->multiInstanceofChecker = $multiInstanceofChecker;
         $this->currentFileProvider = $currentFileProvider;
+        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
      * @deprecated Make use of child nodes instead
@@ -335,23 +343,18 @@ final class BetterNodeFinder
         }
         /** @var T[] $foundNodes */
         $foundNodes = [];
-        foreach ($types as $type) {
-            /** @var T[] $nodes */
-            $nodes = $this->findInstanceOf((array) $functionLike->stmts, $type);
-            if ($nodes === []) {
-                continue;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable((array) $functionLike->stmts, static function (Node $subNode) use($types, &$foundNodes) : ?int {
+            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            foreach ($nodes as $key => $node) {
-                $parentFunctionLike = $this->findParentByTypes($node, [ClassMethod::class, Function_::class, Closure::class]);
-                if ($parentFunctionLike !== $functionLike) {
-                    unset($nodes[$key]);
+            foreach ($types as $type) {
+                if ($subNode instanceof $type) {
+                    $foundNodes[] = $subNode;
+                    return null;
                 }
             }
-            if ($nodes === []) {
-                continue;
-            }
-            $foundNodes = \array_merge($foundNodes, $nodes);
-        }
+            return null;
+        });
         return $foundNodes;
     }
     /**
