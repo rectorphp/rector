@@ -19,7 +19,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
-use Rector\Core\PhpParser\AstResolver;
+use Rector\Core\PhpParser\ClassLikeAstResolver;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
@@ -58,10 +58,10 @@ final class CountableAnalyzer
     private $reflectionResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\AstResolver
+     * @var \Rector\Core\PhpParser\ClassLikeAstResolver
      */
-    private $astResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, PropertyFetchAnalyzer $propertyFetchAnalyzer, ConstructorAssignDetector $constructorAssignDetector, ReflectionResolver $reflectionResolver, AstResolver $astResolver)
+    private $classLikeAstResolver;
+    public function __construct(NodeTypeResolver $nodeTypeResolver, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, PropertyFetchAnalyzer $propertyFetchAnalyzer, ConstructorAssignDetector $constructorAssignDetector, ReflectionResolver $reflectionResolver, ClassLikeAstResolver $classLikeAstResolver)
     {
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->nodeNameResolver = $nodeNameResolver;
@@ -69,7 +69,7 @@ final class CountableAnalyzer
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->reflectionResolver = $reflectionResolver;
-        $this->astResolver = $astResolver;
+        $this->classLikeAstResolver = $classLikeAstResolver;
     }
     public function isCastableArrayType(Expr $expr, ArrayType $arrayType, Scope $scope) : bool
     {
@@ -134,7 +134,7 @@ final class CountableAnalyzer
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        $classLike = $this->astResolver->resolveClassFromName($classReflection->getName());
+        $classLike = $this->classLikeAstResolver->resolveClassFromClassReflection($classReflection);
         if (!$classLike instanceof ClassLike) {
             return \false;
         }
