@@ -155,14 +155,14 @@ final class PropertyManipulator
             return \true;
         }
         $propertyFetches = $this->propertyFetchFinder->findPrivatePropertyFetches($class, $propertyOrParam);
+        $classMethod = $class->getMethod(MethodName::CONSTRUCT);
         foreach ($propertyFetches as $propertyFetch) {
             if ($this->isChangeableContext($propertyFetch, $scope)) {
                 return \true;
             }
             // skip for constructor? it is allowed to set value in constructor method
             $propertyName = (string) $this->nodeNameResolver->getName($propertyFetch);
-            $classMethod = $this->betterNodeFinder->findParentType($propertyFetch, ClassMethod::class);
-            if ($this->isPropertyAssignedOnlyInConstructor($class, $propertyName, $classMethod)) {
+            if ($this->isPropertyAssignedOnlyInConstructor($class, $propertyName, $propertyFetch, $classMethod)) {
                 continue;
             }
             if ($this->assignManipulator->isLeftPartOfAssign($propertyFetch)) {
@@ -209,13 +209,19 @@ final class PropertyManipulator
         }
         return \false;
     }
-    private function isPropertyAssignedOnlyInConstructor(Class_ $class, string $propertyName, ?ClassMethod $classMethod) : bool
+    /**
+     * @param \PhpParser\Node\Expr\StaticPropertyFetch|\PhpParser\Node\Expr\PropertyFetch $propertyFetch
+     */
+    private function isPropertyAssignedOnlyInConstructor(Class_ $class, string $propertyName, $propertyFetch, ?ClassMethod $classMethod) : bool
     {
         if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
+        $node = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, static function (Node $subNode) use($propertyFetch) : bool {
+            return ($subNode instanceof PropertyFetch || $subNode instanceof StaticPropertyFetch) && $subNode === $propertyFetch;
+        });
         // there is property unset in Test class, so only check on __construct
-        if (!$this->nodeNameResolver->isName($classMethod->name, MethodName::CONSTRUCT)) {
+        if (!$node instanceof Node) {
             return \false;
         }
         return $this->constructorAssignDetector->isPropertyAssigned($class, $propertyName);
