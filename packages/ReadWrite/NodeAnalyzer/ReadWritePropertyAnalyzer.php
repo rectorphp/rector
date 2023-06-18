@@ -8,10 +8,8 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\AssignOp;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeManipulator\AssignManipulator;
@@ -107,7 +105,10 @@ final class ReadWritePropertyAnalyzer
     }
     private function isNotInsideIssetUnset(ArrayDimFetch $arrayDimFetch) : bool
     {
-        return !(bool) $this->betterNodeFinder->findParentByTypes($arrayDimFetch, [Isset_::class, Unset_::class]);
+        if ($arrayDimFetch->getAttribute(AttributeKey::IS_ISSET_VAR) === \true) {
+            return \false;
+        }
+        return $arrayDimFetch->getAttribute(AttributeKey::IS_UNSET_VAR) !== \true;
     }
     private function isArrayDimFetchRead(ArrayDimFetch $arrayDimFetch) : bool
     {
