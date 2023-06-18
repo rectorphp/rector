@@ -192,4 +192,8 @@ final class AttributeKey
      * @var string
      */
     public const IS_UNSET_VAR = 'is_unset_var';
+    /**
+     * @var string
+     */
+    public const IS_ARRAY_IN_ATTRIBUTE = 'is_array_in_attribute';
 }
