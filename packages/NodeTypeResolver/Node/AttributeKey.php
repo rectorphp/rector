@@ -188,4 +188,8 @@ final class AttributeKey
      * @var string
      */
     public const IS_IN_LOOP = 'is_in_loop';
+    /**
+     * @var string
+     */
+    public const IS_UNSET_VAR = 'is_unset_var';
 }
