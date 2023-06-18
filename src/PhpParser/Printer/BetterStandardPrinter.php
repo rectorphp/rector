@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\Printer;
 
-use PhpParser\Node\Stmt;
 use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Node;
@@ -20,6 +19,7 @@ use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\EncapsedStringPart;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Declare_;

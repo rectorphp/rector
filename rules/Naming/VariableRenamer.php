@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Naming;
 
-use PhpParser\Node\FunctionLike;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
