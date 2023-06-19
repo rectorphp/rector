@@ -104,6 +104,10 @@ final class ParallelFileProcessor
             ++$systemErrorsCount;
             $reachedSystemErrorsCountLimit = \true;
             $this->processPool->quitAll();
+            // This sleep has to be here, because event though we have called $this->processPool->quitAll(),
+            // it takes some time for the child processes to actually die, during which they can still write to cache
+            // @see https://github.com/rectorphp/rector-src/pull/3834/files#r1231696531
+            \sleep(1);
         };
         $timeoutInSeconds = $this->parameterProvider->provideIntParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS);
         for ($i = 0; $i < $numberOfProcesses; ++$i) {
