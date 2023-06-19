@@ -135,6 +135,9 @@ final class BreakingVariableRenameGuard
         if ($this->isRamseyUuidInterface($param)) {
             return \true;
         }
+        if ($this->isGenerator($param)) {
+            return \true;
+        }
         if ($this->isDateTimeAtNamingConvention($param)) {
             return \true;
         }
@@ -213,16 +216,10 @@ final class BreakingVariableRenameGuard
         }
         return \false;
     }
-    /**
-     * @TODO Remove once ParamRenamer created
-     */
     private function isRamseyUuidInterface(Param $param) : bool
     {
         return $this->nodeTypeResolver->isObjectType($param, new ObjectType('Ramsey\\Uuid\\UuidInterface'));
     }
-    /**
-     * @TODO Remove once ParamRenamer created
-     */
     private function isDateTimeAtNamingConvention(Param $param) : bool
     {
         $type = $this->nodeTypeResolver->getType($param);
@@ -236,5 +233,9 @@ final class BreakingVariableRenameGuard
         /** @var string $currentName */
         $currentName = $this->nodeNameResolver->getName($param);
         return StringUtils::isMatch($currentName, self::AT_NAMING_REGEX . '');
+    }
+    private function isGenerator(Param $param) : bool
+    {
+        return $this->nodeTypeResolver->isObjectType($param, new ObjectType('Symfony\\Component\\DependencyInjection\\Argument\\RewindableGenerator'));
     }
 }

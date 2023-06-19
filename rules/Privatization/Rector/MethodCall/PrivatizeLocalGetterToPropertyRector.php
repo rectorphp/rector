@@ -86,8 +86,12 @@ CODE_SAMPLE
             if (!$classMethod instanceof ClassMethod) {
                 return null;
             }
+            $propertyFetch = $this->matchLocalPropertyFetchInGetterMethod($classMethod);
+            if (!$propertyFetch instanceof PropertyFetch) {
+                return null;
+            }
             $hasChanged = \true;
-            return $this->matchLocalPropertyFetchInGetterMethod($classMethod);
+            return $propertyFetch;
         });
         if ($hasChanged) {
             return $node;
