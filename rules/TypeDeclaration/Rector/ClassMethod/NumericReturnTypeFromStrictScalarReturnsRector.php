@@ -5,9 +5,19 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\BinaryOp;
+use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
+use PhpParser\Node\Expr\BinaryOp\Div;
 use PhpParser\Node\Expr\BinaryOp\Minus;
+use PhpParser\Node\Expr\BinaryOp\Mod;
 use PhpParser\Node\Expr\BinaryOp\Mul;
 use PhpParser\Node\Expr\BinaryOp\Plus;
+use PhpParser\Node\Expr\BinaryOp\ShiftLeft;
+use PhpParser\Node\Expr\BinaryOp\ShiftRight;
+use PhpParser\Node\Expr\PostDec;
+use PhpParser\Node\Expr\PostInc;
+use PhpParser\Node\Expr\PreDec;
+use PhpParser\Node\Expr\PreInc;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
@@ -68,17 +78,17 @@ CODE_SAMPLE
         if (!$return instanceof Return_) {
             return null;
         }
-        if ($return->expr instanceof Minus || $return->expr instanceof Plus || $return->expr instanceof Mul) {
-            $leftType = $this->getType($return->expr->left);
-            $rightType = $this->getType($return->expr->right);
-            if ($leftType instanceof IntegerType && $rightType instanceof IntegerType) {
+        if ($return->expr instanceof PreInc || $return->expr instanceof PostInc || $return->expr instanceof PostDec || $return->expr instanceof PreDec) {
+            $exprType = $this->getType($return->expr);
+            if ($exprType instanceof IntegerType) {
                 $node->returnType = new Identifier('int');
                 return $node;
             }
-            if ($leftType instanceof FloatType && $rightType instanceof FloatType) {
-                $node->returnType = new Identifier('float');
-                return $node;
-            }
+            return null;
+        }
+        // @see https://chat.openai.com/share/a9e4fb74-5366-4c4c-9998-d6caeb8b5acc
+        if ($return->expr instanceof Minus || $return->expr instanceof Plus || $return->expr instanceof Mul || $return->expr instanceof Div || $return->expr instanceof Mod || $return->expr instanceof BitwiseAnd || $return->expr instanceof ShiftRight || $return->expr instanceof ShiftLeft) {
+            return $this->refactorBinaryOp($return->expr, $node);
         }
         return null;
     }
@@ -102,6 +112,24 @@ CODE_SAMPLE
                 return null;
             }
             return $stmt;
+        }
+        return null;
+    }
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @return null|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Stmt\ClassMethod
+     */
+    private function refactorBinaryOp(BinaryOp $binaryOp, $functionLike)
+    {
+        $leftType = $this->getType($binaryOp->left);
+        $rightType = $this->getType($binaryOp->right);
+        if ($leftType instanceof IntegerType && $rightType instanceof IntegerType) {
+            $functionLike->returnType = new Identifier('int');
+            return $functionLike;
+        }
+        if ($leftType instanceof FloatType && $rightType instanceof FloatType) {
+            $functionLike->returnType = new Identifier('float');
+            return $functionLike;
         }
         return null;
     }
