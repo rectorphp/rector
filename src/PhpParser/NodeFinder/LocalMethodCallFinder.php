@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\NodeFinder;
 
+use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -42,23 +43,21 @@ final class LocalMethodCallFinder
         if (!\is_string($className)) {
             return [];
         }
-        /** @var MethodCall[] $methodCalls */
-        $methodCalls = $this->betterNodeFinder->findInstanceOf($class->getMethods(), MethodCall::class);
         $classMethodName = $this->nodeNameResolver->getName($classMethod);
-        $matchingMethodCalls = [];
-        foreach ($methodCalls as $methodCall) {
-            if (!$this->nodeNameResolver->isName($methodCall->name, $classMethodName)) {
-                continue;
+        /** @var MethodCall[] $matchingMethodCalls */
+        $matchingMethodCalls = $this->betterNodeFinder->find($class->getMethods(), function (Node $subNode) use($className, $classMethodName) : bool {
+            if (!$subNode instanceof MethodCall) {
+                return \false;
             }
-            $callerType = $this->nodeTypeResolver->getType($methodCall->var);
+            if (!$this->nodeNameResolver->isName($subNode->name, $classMethodName)) {
+                return \false;
+            }
+            $callerType = $this->nodeTypeResolver->getType($subNode->var);
             if (!$callerType instanceof TypeWithClassName) {
-                continue;
+                return \false;
             }
-            if ($callerType->getClassName() !== $className) {
-                continue;
-            }
-            $matchingMethodCalls[] = $methodCall;
-        }
+            return $callerType->getClassName() === $className;
+        });
         return $matchingMethodCalls;
     }
 }
