@@ -5,8 +5,6 @@ namespace Rector\TypeDeclaration\PHPStan;
 
 use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
@@ -93,7 +91,7 @@ final class ObjectTypeSpecifier
             return null;
         }
         $className = $objectType->getClassName();
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
+        $isObjectCaller = $node->getAttribute(AttributeKey::IS_OBJECT_CALLER) === \true;
         foreach ($uses as $use) {
             $prefix = $this->useImportsResolver->resolvePrefix($use);
             foreach ($use->uses as $useUse) {
@@ -103,7 +101,7 @@ final class ObjectTypeSpecifier
                 $useName = $prefix . $useUse->name->toString();
                 $alias = $useUse->alias->toString();
                 $fullyQualifiedName = $prefix . $useUse->name->toString();
-                $processAliasedObject = $this->processAliasedObject($alias, $className, $useName, $parentNode, $fullyQualifiedName);
+                $processAliasedObject = $this->processAliasedObject($alias, $className, $useName, $fullyQualifiedName, $isObjectCaller);
                 if ($processAliasedObject instanceof AliasedObjectType) {
                     return $processAliasedObject;
                 }
@@ -111,14 +109,14 @@ final class ObjectTypeSpecifier
         }
         return null;
     }
-    private function processAliasedObject(string $alias, string $className, string $useName, ?Node $parentNode, string $fullyQualifiedName) : ?AliasedObjectType
+    private function processAliasedObject(string $alias, string $className, string $useName, string $fullyQualifiedName, bool $isObjectCaller) : ?AliasedObjectType
     {
         // A. is alias in use statement matching this class alias
         if ($alias === $className) {
             return new AliasedObjectType($alias, $fullyQualifiedName);
         }
         // B. is aliased classes matching the class name and parent node is MethodCall/StaticCall
-        if ($useName === $className && ($parentNode instanceof MethodCall || $parentNode instanceof StaticCall)) {
+        if ($useName === $className && $isObjectCaller) {
             return new AliasedObjectType($useName, $fullyQualifiedName);
         }
         // C. is aliased classes matching the class name

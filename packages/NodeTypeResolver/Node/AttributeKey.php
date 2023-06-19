@@ -200,4 +200,8 @@ final class AttributeKey
      * @var string
      */
     public const IS_ARRAY_IN_ATTRIBUTE = 'is_array_in_attribute';
+    /**
+     * @var string
+     */
+    public const IS_OBJECT_CALLER = 'is_object_caller';
 }
