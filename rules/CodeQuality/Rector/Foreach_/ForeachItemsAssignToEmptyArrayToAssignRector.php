@@ -16,7 +16,6 @@ use PHPStan\Analyser\Scope;
 use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\NodeNestingScope\ValueObject\ControlStructure;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -132,15 +131,7 @@ CODE_SAMPLE
         if (!$foreachedExprType->isArray()->yes()) {
             return \true;
         }
-        if ($this->shouldSkipAsPartOfOtherLoop($foreach)) {
-            return \true;
-        }
         return !$this->isNames($assignVariableExpr, $emptyArrayVariables);
-    }
-    private function shouldSkipAsPartOfOtherLoop(Foreach_ $foreach) : bool
-    {
-        $foreachParent = $this->betterNodeFinder->findParentByTypes($foreach, ControlStructure::LOOP_NODES);
-        return $foreachParent instanceof Node;
     }
     private function matchEmptyArrayVariableAssign(Stmt $stmt) : ?string
     {
