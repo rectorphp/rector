@@ -6,8 +6,10 @@ namespace Rector\Naming\Rector\Assign;
 use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\Closure;
+use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
+use PhpParser\Node\Stmt\Function_;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Guard\BreakingVariableRenameGuard;
 use Rector\Naming\Matcher\VariableAndCallAssignMatcher;
@@ -104,10 +106,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [StmtsAwareInterface::class];
+        return [ClassMethod::class, Closure::class, Function_::class];
     }
     /**
-     * @param StmtsAwareInterface $node
+     * @param ClassMethod|Closure|Function_ $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -122,7 +124,7 @@ CODE_SAMPLE
                 continue;
             }
             $assign = $stmt->expr;
-            $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($assign);
+            $variableAndCallAssign = $this->variableAndCallAssignMatcher->match($assign, $node);
             if (!$variableAndCallAssign instanceof VariableAndCallAssign) {
                 return null;
             }
