@@ -138,22 +138,20 @@ final class PropertyFetchFinder
      */
     private function findPropertyFetchesInClassLike($class, array $stmts, string $propertyName, bool $hasTrait) : array
     {
-        /** @var PropertyFetch[] $propertyFetches */
-        $propertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, PropertyFetch::class);
-        /** @var PropertyFetch[] $matchingPropertyFetches */
-        $matchingPropertyFetches = \array_filter($propertyFetches, function (PropertyFetch $propertyFetch) use($propertyName, $class, $hasTrait) : bool {
-            if ($this->isInAnonymous($propertyFetch, $class, $hasTrait)) {
-                return \false;
+        /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
+        $propertyFetches = $this->betterNodeFinder->find($stmts, function (Node $subNode) use($class, $hasTrait, $propertyName) : bool {
+            if ($subNode instanceof PropertyFetch) {
+                if ($this->isInAnonymous($subNode, $class, $hasTrait)) {
+                    return \false;
+                }
+                return $this->isNamePropertyNameEquals($subNode, $propertyName, $class);
             }
-            return $this->isNamePropertyNameEquals($propertyFetch, $propertyName, $class);
+            if ($subNode instanceof StaticPropertyFetch) {
+                return $this->nodeNameResolver->isName($subNode->name, $propertyName);
+            }
+            return \false;
         });
-        /** @var StaticPropertyFetch[] $staticPropertyFetches */
-        $staticPropertyFetches = $this->betterNodeFinder->findInstanceOf($stmts, StaticPropertyFetch::class);
-        /** @var StaticPropertyFetch[] $matchingStaticPropertyFetches */
-        $matchingStaticPropertyFetches = \array_filter($staticPropertyFetches, function (StaticPropertyFetch $staticPropertyFetch) use($propertyName) : bool {
-            return $this->nodeNameResolver->isName($staticPropertyFetch->name, $propertyName);
-        });
-        return \array_merge($matchingPropertyFetches, $matchingStaticPropertyFetches);
+        return $propertyFetches;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
