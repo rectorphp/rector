@@ -1,4 +1,4 @@
-# 369 Rules Overview
+# 370 Rules Overview
 
 <br>
 
@@ -56,7 +56,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (40)
+- [TypeDeclaration](#typedeclaration) (41)
 
 - [Visibility](#visibility) (3)
 
@@ -8016,6 +8016,25 @@ Flip negated ternary of instanceof to direct use of object
 ```diff
 -echo ! $object instanceof Product ? null : $object->getPrice();
 +echo $object instanceof Product ? $object->getPrice() : null;
+```
+
+<br>
+
+### NumericReturnTypeFromStrictScalarReturnsRector
+
+Change numeric return type based on strict returns type operations
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarReturnsRector`](../rules/TypeDeclaration/Rector/ClassMethod/NumericReturnTypeFromStrictScalarReturnsRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function resolve(int $first, int $second)
++    public function resolve(int $first, int $second): int
+     {
+         return $first - $second;
+     }
+ }
 ```
 
 <br>

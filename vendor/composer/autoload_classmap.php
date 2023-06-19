@@ -2762,6 +2762,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\AddVoidReturnTypeWhereNoReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/AddVoidReturnTypeWhereNoReturnRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ArrayShapeFromConstantArrayReturnRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ArrayShapeFromConstantArrayReturnRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\BoolReturnTypeFromStrictScalarReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/BoolReturnTypeFromStrictScalarReturnsRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\NumericReturnTypeFromStrictScalarReturnsRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/NumericReturnTypeFromStrictScalarReturnsRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ParamAnnotationIncorrectNullableRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ParamAnnotationIncorrectNullableRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ParamTypeByMethodCallTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ParamTypeByMethodCallTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ParamTypeByParentCallTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ParamTypeByParentCallTypeRector.php',
