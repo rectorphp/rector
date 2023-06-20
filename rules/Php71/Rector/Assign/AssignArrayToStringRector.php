@@ -10,12 +10,12 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -59,17 +59,38 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Assign::class, Class_::class];
+        return [Namespace_::class, FileWithoutNamespace::class, ClassMethod::class, Function_::class];
     }
     /**
-     * @param Assign|Class_ $node
+     * @param Namespace_|FileWithoutNamespace|ClassMethod|Function_ $node
      */
     public function refactor(Node $node) : ?Node
     {
-        if ($node instanceof Class_) {
-            return $this->refactorClass($node);
+        if ($node->stmts === null) {
+            return null;
         }
-        return $this->refactorAssign($node);
+        $hasChanged = \false;
+        $this->traverseNodesWithCallable($node->stmts, function (Node $subNode) use(&$hasChanged, $node) : ?int {
+            if ($subNode instanceof Assign) {
+                $assign = $this->refactorAssign($subNode, $node);
+                if ($assign instanceof Assign) {
+                    $hasChanged = \true;
+                    return null;
+                }
+            }
+            if ($subNode instanceof Class_) {
+                $class = $this->refactorClass($subNode);
+                if ($class instanceof Class_) {
+                    $hasChanged = \true;
+                }
+                return null;
+            }
+            return null;
+        });
+        if ($hasChanged) {
+            return $node;
+        }
+        return null;
     }
     private function isEmptyString(Expr $expr) : bool
     {
@@ -109,12 +130,11 @@ CODE_SAMPLE
     }
     /**
      * @return ArrayDimFetch[]
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function findSameNamedVariableAssigns(Variable $variable) : array
+    private function findSameNamedVariableAssigns(Variable $variable, $node) : array
     {
-        // assign of empty string to something
-        $scopeStmt = $this->findParentScope($variable);
-        if (!$scopeStmt instanceof Stmt) {
+        if ($node->stmts === null) {
             return [];
         }
         $variableName = $this->nodeNameResolver->getName($variable);
@@ -122,7 +142,7 @@ CODE_SAMPLE
             return [];
         }
         $assignedArrayDimFetches = [];
-        $this->traverseNodesWithCallable($scopeStmt, function (Node $node) use($variableName, &$assignedArrayDimFetches) {
+        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use($variableName, &$assignedArrayDimFetches) {
             if (!$node instanceof Assign) {
                 return null;
             }
@@ -141,13 +161,9 @@ CODE_SAMPLE
         return $assignedArrayDimFetches;
     }
     /**
-     * @return Function_|ClassMethod|Class_|Namespace_|null
+     * @param \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
      */
-    private function findParentScope(Variable $variable)
-    {
-        return $this->betterNodeFinder->findParentByTypes($variable, [Function_::class, ClassMethod::class, Class_::class, Namespace_::class]);
-    }
-    private function refactorAssign(Assign $assign) : ?Assign
+    private function refactorAssign(Assign $assign, $node) : ?Assign
     {
         if (!$this->isEmptyString($assign->expr)) {
             return null;
@@ -155,7 +171,7 @@ CODE_SAMPLE
         if (!$assign->var instanceof Variable) {
             return null;
         }
-        $variableAssignArrayDimFetches = $this->findSameNamedVariableAssigns($assign->var);
+        $variableAssignArrayDimFetches = $this->findSameNamedVariableAssigns($assign->var, $node);
         $shouldRetype = \false;
         // detect if is part of variable assign?
         foreach ($variableAssignArrayDimFetches as $variableAssignArrayDimFetch) {
