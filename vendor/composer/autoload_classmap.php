@@ -2565,6 +2565,7 @@ return array(
     'Rector\\Symfony\\Rector\\ClassMethod\\AddRouteAnnotationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\CommandConstantReturnCodeRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/CommandConstantReturnCodeRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\ConsoleExecuteReturnIntRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/ConsoleExecuteReturnIntRector.php',
+    'Rector\\Symfony\\Rector\\ClassMethod\\EventDispatcherParentConstructRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/EventDispatcherParentConstructRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\FormTypeGetParentRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/FormTypeGetParentRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\GetRequestRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/GetRequestRector.php',
     'Rector\\Symfony\\Rector\\ClassMethod\\MergeMethodAnnotationToRouteAnnotationRector' => $vendorDir . '/rector/rector-symfony/src/Rector/ClassMethod/MergeMethodAnnotationToRouteAnnotationRector.php',

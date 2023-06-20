@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;

@@ -10,7 +10,6 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Name;
-use PhpParser\Node\Param;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormCollectionAnalyzer;
