@@ -4,9 +4,11 @@ declare (strict_types=1);
 namespace Rector\PHPUnit\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\ObjectType;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -68,8 +70,10 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) : ?MethodCall {
-            if (!$node instanceof StaticCall) {
+        $isStatic = \false;
+        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged, &$isStatic) : ?MethodCall {
+            $isStatic = $isStatic || $node instanceof ClassMethod && $node->isStatic() || $node instanceof Closure && $node->static;
+            if (!$node instanceof StaticCall || $isStatic) {
                 return null;
             }
             $methodName = $this->getName($node->name);

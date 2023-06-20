@@ -1,4 +1,4 @@
-# 48 Rules Overview
+# 49 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -1130,6 +1130,29 @@ Changes `->with()` to more specific method
              ->method('trans')
 -            ->with($this->equalTo('old max {{ max }}!'));
 +            ->with('old max {{ max }}!');
+     }
+ }
+```
+
+<br>
+
+## YieldDataProviderRector
+
+Turns array return to yield in data providers
+
+- class: [`Rector\PHPUnit\Rector\Class_\YieldDataProviderRector`](../src/Rector/Class_/YieldDataProviderRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
+
+ final class SomeTest implements TestCase
+ {
+     public static function provideData()
+     {
+-        return [
+-            ['some text']
+-        ];
++        yield ['some text'];
      }
  }
 ```

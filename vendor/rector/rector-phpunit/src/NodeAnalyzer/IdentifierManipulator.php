@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PHPUnit\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
