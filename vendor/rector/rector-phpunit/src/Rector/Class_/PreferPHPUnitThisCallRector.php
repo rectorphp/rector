@@ -9,7 +9,7 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Type\ObjectType;
+use PhpParser\NodeTraverser;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -70,10 +70,12 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
-        $isStatic = \false;
-        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged, &$isStatic) : ?MethodCall {
-            $isStatic = $isStatic || $node instanceof ClassMethod && $node->isStatic() || $node instanceof Closure && $node->static;
-            if (!$node instanceof StaticCall || $isStatic) {
+        $this->traverseNodesWithCallable($node, function (Node $node) use(&$hasChanged) {
+            $isStatic = $node instanceof ClassMethod && $node->isStatic() || $node instanceof Closure && $node->static;
+            if ($isStatic) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if (!$node instanceof StaticCall) {
                 return null;
             }
             $methodName = $this->getName($node->name);
@@ -81,9 +83,6 @@ CODE_SAMPLE
                 return null;
             }
             if (!$this->isNames($node->class, ['static', 'self'])) {
-                return null;
-            }
-            if (!$this->isObjectType($node->class, new ObjectType('PHPUnit\\Framework\\TestCase'))) {
                 return null;
             }
             if (!$this->isName($node->name, 'assert*')) {

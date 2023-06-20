@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BitwiseAnd;
+use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\BinaryOp\Minus;
 use PhpParser\Node\Expr\BinaryOp\Mod;
 use PhpParser\Node\Expr\BinaryOp\Mul;
@@ -86,7 +87,7 @@ CODE_SAMPLE
             return null;
         }
         // @see https://chat.openai.com/share/a9e4fb74-5366-4c4c-9998-d6caeb8b5acc
-        if ($return->expr instanceof Minus || $return->expr instanceof Plus || $return->expr instanceof Mul || $return->expr instanceof Mod || $return->expr instanceof BitwiseAnd || $return->expr instanceof ShiftRight || $return->expr instanceof ShiftLeft) {
+        if ($return->expr instanceof Minus || $return->expr instanceof Plus || $return->expr instanceof Mul || $return->expr instanceof Mod || $return->expr instanceof BitwiseAnd || $return->expr instanceof ShiftRight || $return->expr instanceof ShiftLeft || $return->expr instanceof BitwiseOr) {
             return $this->refactorBinaryOp($return->expr, $node);
         }
         return null;
