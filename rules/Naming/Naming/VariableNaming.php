@@ -13,7 +13,6 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;

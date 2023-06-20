@@ -1,4 +1,4 @@
-# 370 Rules Overview
+# 369 Rules Overview
 
 <br>
 
@@ -11,8 +11,6 @@
 - [CodingStyle](#codingstyle) (32)
 
 - [DeadCode](#deadcode) (43)
-
-- [DependencyInjection](#dependencyinjection) (1)
 
 - [EarlyReturn](#earlyreturn) (10)
 
@@ -3232,47 +3230,6 @@ Remove php version checks if they are passed
 -    return 'is PHP 7.2+';
 -}
 +return 'is PHP 7.2+';
-```
-
-<br>
-
-## DependencyInjection
-
-### AddMethodParentCallRector
-
-Add method parent call, in case new parent method is added
-
-:wrench: **configure it!**
-
-- class: [`Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector`](../rules/DependencyInjection/Rector/ClassMethod/AddMethodParentCallRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\DependencyInjection\Rector\ClassMethod\AddMethodParentCallRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(AddMethodParentCallRector::class, [
-        'ParentClassWithNewConstructor' => '__construct',
-    ]);
-};
-```
-
-↓
-
-```diff
- class SunshineCommand extends ParentClassWithNewConstructor
- {
-     public function __construct()
-     {
-         $value = 5;
-+
-+        parent::__construct();
-     }
- }
 ```
 
 <br>

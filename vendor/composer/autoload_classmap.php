@@ -1740,7 +1740,6 @@ return array(
     'Rector\\DeadCode\\ValueObject\\BinaryToVersionCompareCondition' => $baseDir . '/rules/DeadCode/ValueObject/BinaryToVersionCompareCondition.php',
     'Rector\\DeadCode\\ValueObject\\VariableAndPropertyFetchAssign' => $baseDir . '/rules/DeadCode/ValueObject/VariableAndPropertyFetchAssign.php',
     'Rector\\DeadCode\\ValueObject\\VersionCompareCondition' => $baseDir . '/rules/DeadCode/ValueObject/VersionCompareCondition.php',
-    'Rector\\DependencyInjection\\Rector\\ClassMethod\\AddMethodParentCallRector' => $baseDir . '/rules/DependencyInjection/Rector/ClassMethod/AddMethodParentCallRector.php',
     'Rector\\Doctrine\\NodeAnalyzer\\AssignPropertyFetchAnalyzer' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/AssignPropertyFetchAnalyzer.php',
     'Rector\\Doctrine\\NodeAnalyzer\\AttributeCleaner' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeCleaner.php',
     'Rector\\Doctrine\\NodeAnalyzer\\AttributeFinder' => $vendorDir . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeFinder.php',
