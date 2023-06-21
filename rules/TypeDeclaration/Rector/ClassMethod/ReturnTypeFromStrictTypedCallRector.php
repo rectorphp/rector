@@ -215,7 +215,7 @@ CODE_SAMPLE
         $this->traverseNodesWithCallable($node->stmts, static function (Node $node) use(&$currentScopeReturns) : ?int {
             // skip scope nesting
             if ($node instanceof FunctionLike) {
-                return NodeTraverser::STOP_TRAVERSAL;
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             if (!$node instanceof Return_) {
                 return null;
