@@ -29,6 +29,9 @@ class LoaderLoadException extends \Exception
         if (!\is_string($resource)) {
             try {
                 $resource = \json_encode($resource, 0);
+                if (\json_last_error() !== \JSON_ERROR_NONE) {
+                    throw new \Exception(\json_last_error_msg());
+                }
             } catch (\JsonException $exception) {
                 $resource = \sprintf('resource of type "%s"', \get_debug_type($resource));
             }
