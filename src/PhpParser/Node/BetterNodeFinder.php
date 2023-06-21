@@ -367,15 +367,32 @@ final class BetterNodeFinder
      */
     public function findFirstInFunctionLikeScoped($functionLike, callable $filter) : ?Node
     {
-        $foundNode = $this->findFirst((array) $functionLike->stmts, $filter);
+        if ($functionLike->stmts === null) {
+            return null;
+        }
+        $foundNode = $this->findFirst($functionLike->stmts, $filter);
         if (!$foundNode instanceof Node) {
             return null;
         }
-        $parentFunctionLike = $this->findParentByTypes($foundNode, [ClassMethod::class, Function_::class, Closure::class, Class_::class]);
-        if ($parentFunctionLike !== $functionLike) {
-            return null;
+        if (!$this->hasInstancesOf($functionLike->stmts, [Class_::class, Function_::class, Closure::class])) {
+            return $foundNode;
         }
-        return $foundNode;
+        $scopedNode = null;
+        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($functionLike->stmts, static function (Node $subNode) use(&$scopedNode, $foundNode) : ?int {
+            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
+                if ($foundNode instanceof $subNode && $subNode === $foundNode) {
+                    $scopedNode = $subNode;
+                    return NodeTraverser::STOP_TRAVERSAL;
+                }
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
+            if ($foundNode instanceof $subNode && $subNode === $foundNode) {
+                $scopedNode = $subNode;
+                return NodeTraverser::STOP_TRAVERSAL;
+            }
+            return null;
+        });
+        return $scopedNode;
     }
     public function resolveCurrentStatement(Node $node) : ?Stmt
     {

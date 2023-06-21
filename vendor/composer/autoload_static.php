@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit52002a44aff02a3895d61e0c389cf8d8
+class ComposerStaticInitb182314be48c7453fab0665e5cc0c4bc
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1713,7 +1713,6 @@ class ComposerStaticInit52002a44aff02a3895d61e0c389cf8d8
         'Rector\\CodingStyle\\Rector\\Catch_\\CatchExceptionNameMatchingTypeRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/Catch_/CatchExceptionNameMatchingTypeRector.php',
         'Rector\\CodingStyle\\Rector\\ClassConst\\RemoveFinalFromConstRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/RemoveFinalFromConstRector.php',
         'Rector\\CodingStyle\\Rector\\ClassConst\\SplitGroupedClassConstantsRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/SplitGroupedClassConstantsRector.php',
-        'Rector\\CodingStyle\\Rector\\ClassConst\\VarConstantCommentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassConst/VarConstantCommentRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\DataProviderArrayItemsNewlinedRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/DataProviderArrayItemsNewlinedRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\FuncGetArgsToVariadicParamRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/FuncGetArgsToVariadicParamRector.php',
         'Rector\\CodingStyle\\Rector\\ClassMethod\\MakeInheritedMethodVisibilitySameAsParentRector' => __DIR__ . '/../..' . '/rules/CodingStyle/Rector/ClassMethod/MakeInheritedMethodVisibilitySameAsParentRector.php',
@@ -1859,6 +1858,7 @@ class ComposerStaticInit52002a44aff02a3895d61e0c389cf8d8
         'Rector\\Core\\NodeManipulator\\StmtsManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/StmtsManipulator.php',
         'Rector\\Core\\NonPhpFile\\NonPhpFileProcessor' => __DIR__ . '/../..' . '/src/NonPhpFile/NonPhpFileProcessor.php',
         'Rector\\Core\\NonPhpFile\\Rector\\RenameClassNonPhpRector' => __DIR__ . '/../..' . '/src/NonPhpFile/Rector/RenameClassNonPhpRector.php',
+        'Rector\\Core\\PHPStan\\NodeVisitor\\WrappedNodeRestoringNodeVisitor' => __DIR__ . '/../..' . '/src/PHPStan/NodeVisitor/WrappedNodeRestoringNodeVisitor.php',
         'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ClosureTypeToCallReflectionResolver' => __DIR__ . '/../..' . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ClosureTypeToCallReflectionResolver.php',
         'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ConstantArrayTypeToCallReflectionResolver' => __DIR__ . '/../..' . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ConstantArrayTypeToCallReflectionResolver.php',
         'Rector\\Core\\PHPStan\\Reflection\\TypeToCallReflectionResolver\\ConstantStringTypeToCallReflectionResolver' => __DIR__ . '/../..' . '/src/PHPStan/Reflection/TypeToCallReflectionResolver/ConstantStringTypeToCallReflectionResolver.php',
@@ -3097,9 +3097,9 @@ class ComposerStaticInit52002a44aff02a3895d61e0c389cf8d8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit52002a44aff02a3895d61e0c389cf8d8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit52002a44aff02a3895d61e0c389cf8d8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit52002a44aff02a3895d61e0c389cf8d8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb182314be48c7453fab0665e5cc0c4bc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb182314be48c7453fab0665e5cc0c4bc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb182314be48c7453fab0665e5cc0c4bc::$classMap;
 
         }, null, ClassLoader::class);
     }

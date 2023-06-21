@@ -1,4 +1,4 @@
-# 369 Rules Overview
+# 368 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (72)
 
-- [CodingStyle](#codingstyle) (32)
+- [CodingStyle](#codingstyle) (31)
 
 - [DeadCode](#deadcode) (43)
 
@@ -2294,24 +2294,6 @@ Use ++ increment instead of `$var += 1`
 -        $style += 1;
 +        ++$style;
      }
- }
-```
-
-<br>
-
-### VarConstantCommentRector
-
-Constant should have a `@var` comment with type
-
-- class: [`Rector\CodingStyle\Rector\ClassConst\VarConstantCommentRector`](../rules/CodingStyle/Rector/ClassConst/VarConstantCommentRector.php)
-
-```diff
- class SomeClass
- {
-+    /**
-+     * @var string
-+     */
-     const HI = 'hi';
  }
 ```
 
