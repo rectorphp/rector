@@ -191,6 +191,10 @@ final class AttributeKey
     /**
      * @var string
      */
+    public const IS_IN_IF = 'is_in_if';
+    /**
+     * @var string
+     */
     public const IS_ISSET_VAR = 'is_isset_var';
     /**
      * @var string
