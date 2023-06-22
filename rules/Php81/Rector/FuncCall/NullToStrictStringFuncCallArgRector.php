@@ -6,7 +6,6 @@ namespace Rector\Php81\Rector\FuncCall;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Cast\String_ as CastString_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -172,9 +171,6 @@ CODE_SAMPLE
         if ($this->shouldSkipTrait($argValue, $type, $isTrait)) {
             return null;
         }
-        if ($this->isCastedReassign($argValue)) {
-            return null;
-        }
         $args[$position]->value = new CastString_($argValue);
         $funcCall->args = $args;
         return $funcCall;
@@ -194,18 +190,6 @@ CODE_SAMPLE
             return $this->propertyFetchAnalyzer->isLocalPropertyFetch($expr);
         }
         return \true;
-    }
-    private function isCastedReassign(Expr $expr) : bool
-    {
-        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (Node $subNode) use($expr) : bool {
-            if (!$subNode instanceof Assign) {
-                return \false;
-            }
-            if (!$this->nodeComparator->areNodesEqual($subNode->var, $expr)) {
-                return \false;
-            }
-            return $subNode->expr instanceof CastString_;
-        });
     }
     private function isAnErrorTypeFromParentScope(Expr $expr, Scope $scope) : bool
     {
