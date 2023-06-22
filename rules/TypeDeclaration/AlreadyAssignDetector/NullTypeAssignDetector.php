@@ -8,7 +8,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\NodeTraverser;
-use Rector\NodeNestingScope\ScopeNestingComparator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
@@ -18,11 +17,6 @@ use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
  */
 final class NullTypeAssignDetector
 {
-    /**
-     * @readonly
-     * @var \Rector\NodeNestingScope\ScopeNestingComparator
-     */
-    private $scopeNestingComparator;
     /**
      * @readonly
      * @var \Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer
@@ -43,9 +37,8 @@ final class NullTypeAssignDetector
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(ScopeNestingComparator $scopeNestingComparator, DoctrineTypeAnalyzer $doctrineTypeAnalyzer, NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(DoctrineTypeAnalyzer $doctrineTypeAnalyzer, NodeTypeResolver $nodeTypeResolver, PropertyAssignMatcher $propertyAssignMatcher, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
-        $this->scopeNestingComparator = $scopeNestingComparator;
         $this->doctrineTypeAnalyzer = $doctrineTypeAnalyzer;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->propertyAssignMatcher = $propertyAssignMatcher;
@@ -58,10 +51,6 @@ final class NullTypeAssignDetector
             $expr = $this->matchAssignExprToPropertyName($node, $propertyName);
             if (!$expr instanceof Expr) {
                 return null;
-            }
-            if ($this->scopeNestingComparator->isNodeConditionallyScoped($expr)) {
-                $needsNullType = \true;
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
             // not in doctrine property
             $staticType = $this->nodeTypeResolver->getType($expr);
