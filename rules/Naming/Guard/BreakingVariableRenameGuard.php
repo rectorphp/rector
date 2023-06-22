@@ -5,17 +5,13 @@ namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Error;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\If_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeWithClassName;
@@ -98,13 +94,7 @@ final class BreakingVariableRenameGuard
         if ($this->hasConflictVariable($functionLike, $expectedName)) {
             return \true;
         }
-        if ($this->isUsedInClosureUsesName($expectedName, $functionLike)) {
-            return \true;
-        }
-        if ($this->isUsedInForeachKeyValueVar($variable, $currentName)) {
-            return \true;
-        }
-        return $this->isUsedInIfAndOtherBranches($variable, $currentName);
+        return $this->isUsedInClosureUsesName($expectedName, $functionLike);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure|\PhpParser\Node\Expr\ArrowFunction $classMethod
@@ -176,45 +166,6 @@ final class BreakingVariableRenameGuard
             return \false;
         }
         return $this->betterNodeFinder->hasVariableOfName($functionLike->uses, $expectedName);
-    }
-    private function isUsedInForeachKeyValueVar(Variable $variable, string $currentName) : bool
-    {
-        $previousForeach = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [Foreach_::class]);
-        if ($previousForeach instanceof Foreach_) {
-            if ($previousForeach->keyVar === $variable) {
-                return \false;
-            }
-            if ($previousForeach->valueVar === $variable) {
-                return \false;
-            }
-            if ($this->nodeNameResolver->isName($previousForeach->valueVar, $currentName)) {
-                return \true;
-            }
-            if (!$previousForeach->keyVar instanceof Expr) {
-                return \false;
-            }
-            if ($this->nodeNameResolver->isName($previousForeach->keyVar, $currentName)) {
-                return \true;
-            }
-        }
-        return \false;
-    }
-    private function isUsedInIfAndOtherBranches(Variable $variable, string $currentVariableName) : bool
-    {
-        // is in if branches?
-        $previousIf = $this->betterNodeFinder->findFirstPreviousOfTypes($variable, [If_::class]);
-        if ($previousIf instanceof If_) {
-            $variableUses = [];
-            $variableUses[] = $this->betterNodeFinder->findVariableOfName($previousIf->stmts, $currentVariableName);
-            $previousStmts = $previousIf->else instanceof Else_ ? $previousIf->else->stmts : [];
-            $variableUses[] = $this->betterNodeFinder->findVariableOfName($previousStmts, $currentVariableName);
-            $variableUses[] = $this->betterNodeFinder->findVariableOfName($previousIf->elseifs, $currentVariableName);
-            $variableUses = \array_filter($variableUses);
-            if (\count($variableUses) > 1) {
-                return \true;
-            }
-        }
-        return \false;
     }
     private function isRamseyUuidInterface(Param $param) : bool
     {
