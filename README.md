@@ -36,7 +36,7 @@ There are 2 main ways to use Rector:
 To use them, create a `rector.php` in your root directory:
 
 ```bash
-vendor/bin/rector init
+vendor/bin/rector
 ```
 
 And modify it:
