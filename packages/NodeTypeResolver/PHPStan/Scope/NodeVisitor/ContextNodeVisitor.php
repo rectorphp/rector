@@ -79,15 +79,11 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
      */
     private function processContextInIf($node) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node->stmts, static function (Node $subNode) : ?int {
-            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+        foreach ($node->stmts as $stmt) {
+            if ($stmt instanceof Break_) {
+                $stmt->setAttribute(AttributeKey::IS_IN_IF, \true);
             }
-            if ($subNode instanceof Break_) {
-                $subNode->setAttribute(AttributeKey::IS_IN_IF, \true);
-            }
-            return null;
-        });
+        }
     }
     /**
      * @param \PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\Foreach_|\PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_ $node
