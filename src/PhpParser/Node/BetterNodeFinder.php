@@ -273,19 +273,6 @@ final class BetterNodeFinder
         return null;
     }
     /**
-     * @api
-     * @template T of Node
-     *
-     * @param array<class-string<T>> $types
-     * @return T|null
-     */
-    public function findFirstPreviousOfTypes(Node $mainNode, array $types) : ?Node
-    {
-        return $this->findFirstPrevious($mainNode, function (Node $node) use($types) : bool {
-            return $this->multiInstanceofChecker->isInstanceOf($node, $types);
-        });
-    }
-    /**
      * @param callable(Node $node): bool $filter
      */
     public function findFirstNext(Node $node, callable $filter) : ?Node
