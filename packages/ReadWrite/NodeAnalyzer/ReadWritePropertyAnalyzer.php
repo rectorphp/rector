@@ -112,10 +112,6 @@ final class ReadWritePropertyAnalyzer
     }
     private function isArrayDimFetchRead(ArrayDimFetch $arrayDimFetch) : bool
     {
-        $parentParentNode = $arrayDimFetch->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentParentNode instanceof Node) {
-            throw new ShouldNotHappenException();
-        }
         if (!$this->assignManipulator->isLeftPartOfAssign($arrayDimFetch)) {
             return \false;
         }
