@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc644214e8c6c4d4808faac9044b3b7c4
+class ComposerStaticInitf5ea623160b100c5bc96539fc7eae527
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1792,8 +1792,6 @@ class ComposerStaticInitc644214e8c6c4d4808faac9044b3b7c4
         'Rector\\Core\\Contract\\Rector\\RectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/RectorInterface.php',
         'Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface' => __DIR__ . '/../..' . '/src/Contract/Rector/ScopeAwarePhpRectorInterface.php',
         'Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector' => __DIR__ . '/../..' . '/src/DependencyInjection/Collector/ConfigureCallValuesCollector.php',
-        'Rector\\Core\\DependencyInjection\\CompilerPass\\AutowireRectorCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/AutowireRectorCompilerPass.php',
-        'Rector\\Core\\DependencyInjection\\CompilerPass\\MakeRectorsPublicCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/MakeRectorsPublicCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\MergeImportedRectorConfigureCallValuesCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/MergeImportedRectorConfigureCallValuesCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\RemoveSkippedRectorsCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/RemoveSkippedRectorsCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\Loader\\ConfigurableCallValuesCollectingPhpFileLoader' => __DIR__ . '/../..' . '/src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php',
@@ -3096,9 +3094,9 @@ class ComposerStaticInitc644214e8c6c4d4808faac9044b3b7c4
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc644214e8c6c4d4808faac9044b3b7c4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc644214e8c6c4d4808faac9044b3b7c4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc644214e8c6c4d4808faac9044b3b7c4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf5ea623160b100c5bc96539fc7eae527::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf5ea623160b100c5bc96539fc7eae527::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf5ea623160b100c5bc96539fc7eae527::$classMap;
 
         }, null, ClassLoader::class);
     }

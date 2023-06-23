@@ -120,7 +120,7 @@ final class RectorConfig extends ContainerConfigurator
             return $value;
         });
         $servicesConfigurator = $this->getServices();
-        $rectorService = $servicesConfigurator->set($rectorClass)->call('configure', [$configuration]);
+        $rectorService = $servicesConfigurator->set($rectorClass)->public()->autowire()->call('configure', [$configuration]);
         $this->tagRectorService($rectorService, $rectorClass);
     }
     /**
@@ -131,7 +131,7 @@ final class RectorConfig extends ContainerConfigurator
         Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
         $servicesConfigurator = $this->getServices();
-        $rectorService = $servicesConfigurator->set($rectorClass);
+        $rectorService = $servicesConfigurator->set($rectorClass)->public()->autowire();
         $this->tagRectorService($rectorService, $rectorClass);
     }
     /**

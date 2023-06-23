@@ -1541,8 +1541,6 @@ return array(
     'Rector\\Core\\Contract\\Rector\\RectorInterface' => $baseDir . '/src/Contract/Rector/RectorInterface.php',
     'Rector\\Core\\Contract\\Rector\\ScopeAwarePhpRectorInterface' => $baseDir . '/src/Contract/Rector/ScopeAwarePhpRectorInterface.php',
     'Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector' => $baseDir . '/src/DependencyInjection/Collector/ConfigureCallValuesCollector.php',
-    'Rector\\Core\\DependencyInjection\\CompilerPass\\AutowireRectorCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/AutowireRectorCompilerPass.php',
-    'Rector\\Core\\DependencyInjection\\CompilerPass\\MakeRectorsPublicCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/MakeRectorsPublicCompilerPass.php',
     'Rector\\Core\\DependencyInjection\\CompilerPass\\MergeImportedRectorConfigureCallValuesCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/MergeImportedRectorConfigureCallValuesCompilerPass.php',
     'Rector\\Core\\DependencyInjection\\CompilerPass\\RemoveSkippedRectorsCompilerPass' => $baseDir . '/src/DependencyInjection/CompilerPass/RemoveSkippedRectorsCompilerPass.php',
     'Rector\\Core\\DependencyInjection\\Loader\\ConfigurableCallValuesCollectingPhpFileLoader' => $baseDir . '/src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php',

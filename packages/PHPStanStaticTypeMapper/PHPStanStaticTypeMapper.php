@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\PHPStanStaticTypeMapper;
 
-use PHPStan\Type\ObjectShapeType;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -11,6 +10,7 @@ use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Accessory\HasMethodType;
 use PHPStan\Type\ConditionalType;
+use PHPStan\Type\ObjectShapeType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\ValueObject\Type\FullyQualifiedIdentifierTypeNode;
 use Rector\Core\Exception\NotImplementedYetException;
