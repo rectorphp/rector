@@ -9,13 +9,13 @@ use Rector\Config\RectorConfig;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Symfony\Rector\ClassMethod\EventDispatcherParentConstructRector;
-use Rector\Symfony\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector;
-use Rector\Symfony\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector;
-use Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
-use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
-use Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
-use Rector\Symfony\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
+use Rector\Symfony\Symfony43\Rector\ClassMethod\EventDispatcherParentConstructRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
+use Rector\Symfony\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
 return static function (RectorConfig $rectorConfig) : void {
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions

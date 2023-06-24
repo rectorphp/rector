@@ -9,9 +9,9 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
-use Rector\Symfony\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
-use Rector\Symfony\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
-use Rector\Symfony\Rector\MethodCall\SimplifyFormRenderingRector;
+use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
+use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
+use Rector\Symfony\Symfony62\Rector\MethodCall\SimplifyFormRenderingRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(SimplifyFormRenderingRector::class);
     // https://symfony.com/blog/new-in-symfony-6-2-built-in-cache-security-template-and-doctrine-attributes

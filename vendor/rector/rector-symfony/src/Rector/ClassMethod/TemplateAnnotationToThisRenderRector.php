@@ -36,7 +36,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
  * @changelog https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues/641
  *
- * @see \Rector\Symfony\Tests\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
+ * @see \Rector\Symfony\Tests\Symfony43\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */
 final class TemplateAnnotationToThisRenderRector extends AbstractRector
 {

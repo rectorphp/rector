@@ -8,14 +8,16 @@ use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
-use Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
-use Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;
+use Rector\Symfony\Symfony44\Rector\ClassMethod\ConsoleExecuteReturnIntRector;
+use Rector\Symfony\Symfony44\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector;
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md
 return static function (RectorConfig $rectorConfig) : void {
-    # https://github.com/symfony/symfony/pull/33775
-    $rectorConfig->rule(ConsoleExecuteReturnIntRector::class);
-    # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
-    $rectorConfig->rule(AuthorizationCheckerIsGrantedExtractorRector::class);
+    $rectorConfig->rules([
+        // https://github.com/symfony/symfony/pull/33775
+        ConsoleExecuteReturnIntRector::class,
+        // https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.4.md#security
+        AuthorizationCheckerIsGrantedExtractorRector::class,
+    ]);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, ['Symfony\\Component\\Templating\\EngineInterface' => 'Twig\\Environment']);
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, ['Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\tagged' => 'Symfony\\Component\\DependencyInjection\\Loader\\Configurator\\tagged_iterator']);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [

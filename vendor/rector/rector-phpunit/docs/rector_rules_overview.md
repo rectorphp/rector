@@ -1,4 +1,4 @@
-# 49 Rules Overview
+# 50 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -730,6 +730,21 @@ Changes PHPUnit calls from self::assert*() to `$this->assert*()`
 +        $this->assertEquals('expected', $result);
      }
  }
+```
+
+<br>
+
+## PropertyExistsWithoutAssertRector
+
+Turns PHPUnit TestCase assertObjectHasAttribute into `property_exists` comparisons
+
+- class: [`Rector\PHPUnit\Rector\MethodCall\PropertyExistsWithoutAssertRector`](../src/Rector/MethodCall/PropertyExistsWithoutAssertRector.php)
+
+```diff
+-$this->assertClassHasAttribute("property", "Class");
+-$this->assertClassNotHasAttribute("property", "Class");
++$this->assertFalse(property_exists(new Class, "property"));
++$this->assertTrue(property_exists(new Class, "property"));
 ```
 
 <br>

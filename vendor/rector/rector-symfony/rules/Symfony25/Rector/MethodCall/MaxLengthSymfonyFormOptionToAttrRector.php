@@ -19,7 +19,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/symfony/symfony-docs/pull/3461
  * @changelog https://github.com/symfony/symfony/issues/7148
  *
- * @see \Rector\Symfony\Tests\Rector\Array_\MaxLengthSymfonyFormOptionToAttrRector\MaxLengthSymfonyFormOptionToAttrRectorTest
+ * @see \Rector\Symfony\Tests\Symfony25\Rector\Array_\MaxLengthSymfonyFormOptionToAttrRector\MaxLengthSymfonyFormOptionToAttrRectorTest
  */
 final class MaxLengthSymfonyFormOptionToAttrRector extends AbstractRector
 {
