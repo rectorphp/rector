@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Symfony25\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
