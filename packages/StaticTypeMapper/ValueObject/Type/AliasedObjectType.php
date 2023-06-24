@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * @api
  */
