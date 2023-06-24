@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\Closure;
+namespace Rector\Symfony\Symfony34\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -16,7 +16,7 @@ use Rector\Symfony\NodeAnalyzer\ServiceTypeMethodCallResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Rector\Closure\ContainerGetNameToTypeInTestsRector\ContainerGetNameToTypeInTestsRectorTest
+ * @see \Rector\Symfony\Tests\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector\ContainerGetNameToTypeInTestsRectorTest
  */
 final class ContainerGetNameToTypeInTestsRector extends AbstractRector
 {

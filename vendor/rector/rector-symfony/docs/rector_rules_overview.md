@@ -1,10 +1,10 @@
-# 80 Rules Overview
+# 79 Rules Overview
 
 ## ActionSuffixRemoverRector
 
 Removes Action suffixes from methods in Symfony Controllers
 
-- class: [`Rector\Symfony\Rector\ClassMethod\ActionSuffixRemoverRector`](../src/Rector/ClassMethod/ActionSuffixRemoverRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\ClassMethod\ActionSuffixRemoverRector`](../rules/CodeQuality/Rector/ClassMethod/ActionSuffixRemoverRector.php)
 
 ```diff
  class SomeController
@@ -289,7 +289,7 @@ Turns old default value to parameter in `ContainerBuilder->build()` method in DI
 
 Change `$container->get("some_name")` to bare type, useful since Symfony 3.4
 
-- class: [`Rector\Symfony\Rector\Closure\ContainerGetNameToTypeInTestsRector`](../src/Rector/Closure/ContainerGetNameToTypeInTestsRector.php)
+- class: [`Rector\Symfony\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector`](../src/Symfony34/Rector/Closure/ContainerGetNameToTypeInTestsRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -328,37 +328,6 @@ Turns fetching of dependencies via `$container->get()` in ContainerAware to cons
 -        $this->container->get('some_service');
 +        $this->someService;
 +        $this->someService;
-     }
- }
-```
-
-<br>
-
-## ContainerGetToRequiredDependencyAbstractClassRector
-
-Change `$this->get("some_service");` to `@required` dependency in an abstract class
-
-- class: [`Rector\Symfony\Rector\Class_\ContainerGetToRequiredDependencyAbstractClassRector`](../src/Rector/Class_/ContainerGetToRequiredDependencyAbstractClassRector.php)
-
-```diff
- use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-
- abstract class CustomAbstractController extends AbstractController
- {
-+    private SomeService $someService;
-+
-+    /**
-+     * @required
-+     */
-+    public function autowire(SomeService $someService)
-+    {
-+        $this->someService = $someService;
-+    }
-+
-     public function run()
-     {
--        $this->get('some_service')->apply();
-+        $this->someService->apply();
      }
  }
 ```
@@ -584,7 +553,7 @@ Changes createForm(new FormType), add(new FormType) to ones with "FormType::clas
 
 Move constructor dependency from form type class to an `$options` parameter
 
-- class: [`Rector\Symfony\Rector\Class_\FormTypeWithDependencyToOptionsRector`](../src/Rector/Class_/FormTypeWithDependencyToOptionsRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\Class_\FormTypeWithDependencyToOptionsRector`](../rules/Symfony30/Rector/Class_/FormTypeWithDependencyToOptionsRector.php)
 
 ```diff
  use Symfony\Component\Form\AbstractType;
@@ -751,7 +720,7 @@ Replace "GET" string by Symfony Request object class constants
 
 Move metadata from `loadValidatorMetadata()` to property/getter/method annotations
 
-- class: [`Rector\Symfony\Rector\Class_\LoadValidatorMetadataToAnnotationRector`](../src/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector`](../rules/CodeQuality/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php)
 
 ```diff
  use Symfony\Component\Validator\Constraints as Assert;
@@ -869,7 +838,7 @@ Change logout success handler to an event listener that listens to LogoutEvent
 
 Change TwigExtension function/filter magic closures to inlined and clear callables
 
-- class: [`Rector\Symfony\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector`](../src/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php)
+- class: [`Rector\Symfony\Symfony61\Rector\Class_\MagicClosureTwigExtensionToNativeMethodsRector`](../rules/Symfony61/Rector/Class_/MagicClosureTwigExtensionToNativeMethodsRector.php)
 
 ```diff
  use Twig\Extension\AbstractExtension;
@@ -1045,7 +1014,7 @@ Replace ParamConverter attribute with mappings with the MapEntity attribute
 
 Complete strict param type declaration based on route annotation
 
-- class: [`Rector\Symfony\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector`](../src/Rector/ClassMethod/ParamTypeFromRouteRequiredRegexRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector`](../rules/CodeQuality/Rector/ClassMethod/ParamTypeFromRouteRequiredRegexRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -1230,7 +1199,7 @@ Rename `getBlockPrefix()` if it returns the default value - class to underscore,
 
 Remove service from Sensio `@Route`
 
-- class: [`Rector\Symfony\Rector\ClassMethod\RemoveServiceFromSensioRouteRector`](../src/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php)
+- class: [`Rector\Symfony\Symfony34\Rector\ClassMethod\RemoveServiceFromSensioRouteRector`](../rules/Symfony34/Rector/ClassMethod/RemoveServiceFromSensioRouteRector.php)
 
 ```diff
  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -1275,7 +1244,7 @@ Remove unused `$request` parameter from controller action
 
 Replace Sensio `@Route` annotation with Symfony one
 
-- class: [`Rector\Symfony\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector`](../src/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php)
+- class: [`Rector\Symfony\Symfony34\Rector\ClassMethod\ReplaceSensioRouteAnnotationWithSymfonyRector`](../rules/Symfony34/Rector/ClassMethod/ReplaceSensioRouteAnnotationWithSymfonyRector.php)
 
 ```diff
 -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -1618,7 +1587,7 @@ Changes Process string argument to an array
 
 Changes `createMessage()` into a new Symfony\Component\Mime\Email
 
-- class: [`Rector\Symfony\Rector\MethodCall\SwiftCreateMessageToNewEmailRector`](../src/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php)
+- class: [`Rector\Symfony\Symfony53\Rector\MethodCall\SwiftCreateMessageToNewEmailRector`](../rules/Symfony53/Rector/MethodCall/SwiftCreateMessageToNewEmailRector.php)
 
 ```diff
 -$email = $this->swift->createMessage('message');
@@ -1631,7 +1600,7 @@ Changes `createMessage()` into a new Symfony\Component\Mime\Email
 
 Changes `setBody()` method call on Swift_Message into a `html()` or `plain()` based on second argument
 
-- class: [`Rector\Symfony\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector`](../src/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php)
+- class: [`Rector\Symfony\Symfony53\Rector\MethodCall\SwiftSetBodyToHtmlPlainMethodCallRector`](../rules/Symfony53/Rector/MethodCall/SwiftSetBodyToHtmlPlainMethodCallRector.php)
 
 ```diff
  $message = new Swift_Message();
@@ -1651,7 +1620,7 @@ Changes `setBody()` method call on Swift_Message into a `html()` or `plain()` ba
 
 Turns `@Template` annotation to explicit method call in Controller of FrameworkExtraBundle in Symfony
 
-- class: [`Rector\Symfony\Rector\ClassMethod\TemplateAnnotationToThisRenderRector`](../src/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\ClassMethod\TemplateAnnotationToThisRenderRector`](../rules/CodeQuality/Rector/ClassMethod/TemplateAnnotationToThisRenderRector.php)
 
 ```diff
  use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -1781,7 +1750,7 @@ Simplify use of assertions in WebTestCase
 
 Simplify use of assertions in WebTestCase to `assertSelectorTextContains()`
 
-- class: [`Rector\Symfony\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector`](../src/Rector/MethodCall/WebTestCaseAssertSelectorTextContainsRector.php)
+- class: [`Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector`](../rules/Symfony43/Rector/MethodCall/WebTestCaseAssertSelectorTextContainsRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

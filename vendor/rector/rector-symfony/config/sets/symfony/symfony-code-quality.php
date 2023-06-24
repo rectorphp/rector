@@ -6,6 +6,7 @@ namespace RectorPrefix202306;
 use Rector\Config\RectorConfig;
 use Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector;
+use Rector\Symfony\CodeQuality\Rector\Class_\LoadValidatorMetadataToAnnotationRector;
 use Rector\Symfony\CodeQuality\Rector\Class_\MakeCommandLazyRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ActionSuffixRemoverRector;
 use Rector\Symfony\CodeQuality\Rector\ClassMethod\ParamTypeFromRouteRequiredRegexRector;
@@ -23,5 +24,6 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveUnusedRequestParamRector::class,
         ParamTypeFromRouteRequiredRegexRector::class,
         ActionSuffixRemoverRector::class,
+        LoadValidatorMetadataToAnnotationRector::class,
     ]);
 };

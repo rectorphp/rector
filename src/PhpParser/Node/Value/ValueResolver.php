@@ -6,15 +6,14 @@ namespace Rector\Core\PhpParser\Node\Value;
 use PhpParser\ConstExprEvaluationException;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\MagicConst\Dir;
 use PhpParser\Node\Scalar\MagicConst\File;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\ConstantScalarType;
@@ -22,8 +21,9 @@ use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\NodeAnalyzer\ConstFetchAnalyzer;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 /**
@@ -59,21 +59,27 @@ final class ValueResolver
     private $currentFileProvider;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\Core\Reflection\ReflectionResolver
      */
-    private $betterNodeFinder;
+    private $reflectionResolver;
+    /**
+     * @readonly
+     * @var \Rector\Core\Util\Reflection\PrivatesAccessor
+     */
+    private $privatesAccessor;
     /**
      * @var \PhpParser\ConstExprEvaluator|null
      */
     private $constExprEvaluator;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ConstFetchAnalyzer $constFetchAnalyzer, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ConstFetchAnalyzer $constFetchAnalyzer, ReflectionProvider $reflectionProvider, CurrentFileProvider $currentFileProvider, ReflectionResolver $reflectionResolver, PrivatesAccessor $privatesAccessor)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->constFetchAnalyzer = $constFetchAnalyzer;
         $this->reflectionProvider = $reflectionProvider;
         $this->currentFileProvider = $currentFileProvider;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->reflectionResolver = $reflectionResolver;
+        $this->privatesAccessor = $privatesAccessor;
     }
     /**
      * @param mixed $value
@@ -93,15 +99,17 @@ final class ValueResolver
         if ($expr instanceof ClassConstFetch && $resolvedClassReference) {
             $class = $this->nodeNameResolver->getName($expr->class);
             if (\in_array($class, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
-                // @todo scope is needed
-                $classLike = $this->betterNodeFinder->findParentType($expr, ClassLike::class);
-                if ($classLike instanceof ClassLike) {
-                    return (string) $this->nodeNameResolver->getName($classLike);
+                $classReflection = $this->reflectionResolver->resolveClassReflection($expr);
+                if ($classReflection instanceof ClassReflection) {
+                    return $classReflection->getName();
                 }
             }
             if ($this->nodeNameResolver->isName($expr->name, 'class')) {
                 return $class;
             }
+        }
+        if ($expr instanceof ArrayDimFetch) {
+            return null;
         }
         $value = $this->resolveExprValueForConst($expr);
         if ($value !== null) {
@@ -288,19 +296,23 @@ final class ValueResolver
     }
     private function resolveClassFromSelfStaticParent(ClassConstFetch $classConstFetch, string $class) : string
     {
-        $classLike = $this->betterNodeFinder->findParentType($classConstFetch, ClassLike::class);
-        if (!$classLike instanceof ClassLike) {
+        $classReflection = $this->reflectionResolver->resolveClassReflection($classConstFetch);
+        if (!$classReflection instanceof ClassReflection) {
             throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "self" or "static" references is resolvable to a class name');
         }
-        if ($class === ObjectReference::PARENT) {
-            if (!$classLike instanceof Class_) {
-                throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "parent" references is resolvable to lookup parent class');
-            }
-            if (!$classLike->extends instanceof FullyQualified) {
-                throw new ShouldNotHappenException();
-            }
-            return $classLike->extends->toString();
+        if ($class !== ObjectReference::PARENT) {
+            return $classReflection->getName();
         }
-        return (string) $this->nodeNameResolver->getName($classLike);
+        if (!$classReflection->isClass()) {
+            throw new ShouldNotHappenException('Complete class parent node for to class const fetch, so "parent" references is resolvable to lookup parent class');
+        }
+        // ensure parent class name still resolved even not autoloaded
+        $nativeReflection = $classReflection->getNativeReflection();
+        $betterReflectionClass = $this->privatesAccessor->getPrivateProperty($nativeReflection, 'betterReflectionClass');
+        $parentClassName = $this->privatesAccessor->getPrivateProperty($betterReflectionClass, 'parentClassName');
+        if ($parentClassName === null) {
+            throw new ShouldNotHappenException();
+        }
+        return $parentClassName;
     }
 }

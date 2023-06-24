@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\Class_;
+namespace Rector\Symfony\Symfony30\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://speakerdeck.com/webmozart/symfony-forms-101?slide=24
  *
- * @see \Rector\Symfony\Tests\Rector\Class_\FormTypeWithDependencyToOptionsRector\FormTypeWithDependencyToOptionsRectorTest
+ * @see \Rector\Symfony\Tests\Symfony30\Rector\Class_\FormTypeWithDependencyToOptionsRector\FormTypeWithDependencyToOptionsRectorTest
  */
 final class FormTypeWithDependencyToOptionsRector extends AbstractRector
 {
