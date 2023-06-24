@@ -60,7 +60,7 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
     }
     private function resolveTypesFromScope(Variable $variable, string $variableName) : Type
     {
-        $scope = $this->resolveNodeScope($variable);
+        $scope = $variable->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
             return new MixedType();
         }
@@ -69,21 +69,5 @@ final class VariableTypeResolver implements NodeTypeResolverInterface
         }
         // this → object type is easier to work with and consistent with the rest of the code
         return $scope->getVariableType($variableName);
-    }
-    private function resolveNodeScope(Variable $variable) : ?Scope
-    {
-        $scope = $variable->getAttribute(AttributeKey::SCOPE);
-        if ($scope instanceof Scope) {
-            return $scope;
-        }
-        return $this->resolveFromParentNodes($variable);
-    }
-    private function resolveFromParentNodes(Variable $variable) : ?Scope
-    {
-        $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentNode instanceof Node) {
-            return null;
-        }
-        return $parentNode->getAttribute(AttributeKey::SCOPE);
     }
 }
