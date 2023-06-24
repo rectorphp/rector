@@ -19,6 +19,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+use Rector\Symfony\MinimalSharedStringSolver;
 use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Rector\Symfony\ValueObject\ClassNameAndFilePath;
 use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
@@ -46,7 +47,7 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
     private $filesystem;
     /**
      * @readonly
-     * @var \Rector\Symfony\Rector\Closure\MinimalSharedStringSolver
+     * @var \Rector\Symfony\MinimalSharedStringSolver
      */
     private $minimalSharedStringSolver;
     public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector, ReflectionProvider $reflectionProvider, Filesystem $filesystem)
@@ -54,7 +55,7 @@ final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
         $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
         $this->reflectionProvider = $reflectionProvider;
         $this->filesystem = $filesystem;
-        $this->minimalSharedStringSolver = new \Rector\Symfony\Rector\Closure\MinimalSharedStringSolver();
+        $this->minimalSharedStringSolver = new MinimalSharedStringSolver();
     }
     public function getRuleDefinition() : RuleDefinition
     {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\ClassMethod;
+namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -34,9 +34,8 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/symfony/symfony-docs/pull/12387#discussion_r329551967
  * @changelog https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/annotations/view.html
- * @changelog https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues/641
  *
- * @see \Rector\Symfony\Tests\Symfony43\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
+ * @see \Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
  */
 final class TemplateAnnotationToThisRenderRector extends AbstractRector
 {

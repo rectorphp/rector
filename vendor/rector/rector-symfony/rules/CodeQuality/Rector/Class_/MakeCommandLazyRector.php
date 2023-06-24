@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\Class_;
+namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://symfony.com/doc/current/console/commands_as_services.html
  *
- * @see \Rector\Symfony\Tests\Rector\Class_\MakeCommandLazyRector\MakeCommandLazyRectorTest
+ * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\MakeCommandLazyRector\MakeCommandLazyRectorTest
  */
 final class MakeCommandLazyRector extends AbstractRector
 {

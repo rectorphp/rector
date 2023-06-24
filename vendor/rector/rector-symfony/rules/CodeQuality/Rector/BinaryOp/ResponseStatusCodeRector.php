@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\BinaryOp;
+namespace Rector\Symfony\CodeQuality\Rector\BinaryOp;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp;
@@ -18,7 +18,7 @@ use Rector\Symfony\ValueObject\ConstantMap\SymfonyResponseConstantMap;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Rector\BinaryOp\ResponseStatusCodeRector\ResponseStatusCodeRectorTest
+ * @see \Rector\Symfony\Tests\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector\ResponseStatusCodeRectorTest
  */
 final class ResponseStatusCodeRector extends AbstractRector
 {

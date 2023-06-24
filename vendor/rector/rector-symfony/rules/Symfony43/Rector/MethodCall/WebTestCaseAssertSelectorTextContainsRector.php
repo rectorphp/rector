@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\MethodCall;
+namespace Rector\Symfony\Symfony43\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
  * @changelog https://github.com/symfony/symfony/pull/30813
  *
- * @see \Rector\Symfony\Tests\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\WebTestCaseAssertSelectorTextContainsRectorTest
+ * @see \Rector\Symfony\Tests\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector\WebTestCaseAssertSelectorTextContainsRectorTest
  */
 final class WebTestCaseAssertSelectorTextContainsRector extends AbstractRector
 {

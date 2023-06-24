@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\Closure;
+namespace Rector\Symfony;
 
 /**
  * Class Solver copied from https://github.com/Triun/PHP-Longest-Common-Substring

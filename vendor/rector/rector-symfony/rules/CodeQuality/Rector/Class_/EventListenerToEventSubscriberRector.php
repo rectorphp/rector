@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\Class_;
+namespace Rector\Symfony\CodeQuality\Rector\Class_;
 
 use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
@@ -17,7 +17,7 @@ use Rector\Symfony\ValueObject\ServiceDefinition;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
+ * @see \Rector\Symfony\Tests\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector\EventListenerToEventSubscriberRectorTest
  */
 final class EventListenerToEventSubscriberRector extends AbstractRector
 {

@@ -15,11 +15,12 @@ use Rector\Symfony\Symfony43\Rector\MethodCall\GetCurrencyBundleMethodCallsToInt
 use Rector\Symfony\Symfony43\Rector\MethodCall\MakeDispatchFirstArgumentEventRector;
 use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector;
 use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertResponseCodeRector;
+use Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertSelectorTextContainsRector;
 use Rector\Symfony\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector;
 # https://github.com/symfony/symfony/blob/4.4/UPGRADE-4.3.md
 return static function (RectorConfig $rectorConfig) : void {
     # https://symfony.com/blog/new-in-symfony-4-3-better-test-assertions
-    $rectorConfig->rules([WebTestCaseAssertIsSuccessfulRector::class, WebTestCaseAssertResponseCodeRector::class, TwigBundleFilesystemLoaderToTwigRector::class, MakeDispatchFirstArgumentEventRector::class, GetCurrencyBundleMethodCallsToIntlRector::class, ConvertRenderTemplateShortNotationToBundleSyntaxRector::class, EventDispatcherParentConstructRector::class]);
+    $rectorConfig->rules([WebTestCaseAssertIsSuccessfulRector::class, WebTestCaseAssertResponseCodeRector::class, WebTestCaseAssertSelectorTextContainsRector::class, TwigBundleFilesystemLoaderToTwigRector::class, MakeDispatchFirstArgumentEventRector::class, GetCurrencyBundleMethodCallsToIntlRector::class, ConvertRenderTemplateShortNotationToBundleSyntaxRector::class, EventDispatcherParentConstructRector::class]);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [new MethodCallRename('Symfony\\Component\\BrowserKit\\Response', 'getStatus', 'getStatusCode'), new MethodCallRename('Symfony\\Component\\Security\\Http\\Firewall', 'handleRequest', 'callListeners')]);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         // assets deprecation

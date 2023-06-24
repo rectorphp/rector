@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\ClassMethod;
+namespace Rector\Symfony\CodeQuality\Rector\ClassMethod;
 
 use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
@@ -12,7 +12,7 @@ use Rector\Symfony\Bridge\NodeAnalyzer\ControllerMethodAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Rector\ClassMethod\ActionSuffixRemoverRector\ActionSuffixRemoverRectorTest
+ * @see \Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\ActionSuffixRemoverRector\ActionSuffixRemoverRectorTest
  */
 final class ActionSuffixRemoverRector extends AbstractRector
 {

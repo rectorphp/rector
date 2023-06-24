@@ -1,4 +1,4 @@
-# 81 Rules Overview
+# 80 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -12,31 +12,6 @@ Removes Action suffixes from methods in Symfony Controllers
 -    public function indexAction()
 +    public function index()
      {
-     }
- }
-```
-
-<br>
-
-## AddMessageToEqualsResponseCodeRector
-
-Add response content to response code assert, so it is easier to debug
-
-- class: [`Rector\Symfony\Rector\StaticCall\AddMessageToEqualsResponseCodeRector`](../src/Rector/StaticCall/AddMessageToEqualsResponseCodeRector.php)
-
-```diff
- use PHPUnit\Framework\TestCase;
- use Symfony\Component\HttpFoundation\Response;
-
- final class SomeClassTest extends TestCase
- {
-     public function test(Response $response)
-     {
-         $this->assertEquals(
-             Response::HTTP_NO_CONTENT,
-             $response->getStatusCode()
-+            $response->getContent()
-         );
      }
  }
 ```
@@ -70,7 +45,7 @@ Collect routes from Symfony project router and add Route annotation to controlle
 
 Change `$context->addViolationAt` to `$context->buildViolation` on Validator ExecutionContext
 
-- class: [`Rector\Symfony\Rector\MethodCall\AddViolationToBuildViolationRector`](../src/Rector/MethodCall/AddViolationToBuildViolationRector.php)
+- class: [`Rector\Symfony\Symfony25\Rector\MethodCall\AddViolationToBuildViolationRector`](../rules/Symfony25/Rector/MethodCall/AddViolationToBuildViolationRector.php)
 
 ```diff
 -$context->addViolationAt('property', 'The value {{ value }} is invalid.', array(
@@ -88,7 +63,7 @@ Change `$context->addViolationAt` to `$context->buildViolation` on Validator Exe
 
 Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizationChecker->isGranted($a) || $this->authorizationChecker->isGranted($b)`
 
-- class: [`Rector\Symfony\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector`](../src/Rector/MethodCall/AuthorizationCheckerIsGrantedExtractorRector.php)
+- class: [`Rector\Symfony\Symfony44\Rector\MethodCall\AuthorizationCheckerIsGrantedExtractorRector`](../rules/Symfony44/Rector/MethodCall/AuthorizationCheckerIsGrantedExtractorRector.php)
 
 ```diff
 -if ($this->authorizationChecker->isGranted(['ROLE_USER', 'ROLE_ADMIN'])) {
@@ -102,7 +77,7 @@ Change `$this->authorizationChecker->isGranted([$a, $b])` to `$this->authorizati
 
 Change deprecated `BinaryFileResponse::create()` to use `__construct()` instead
 
-- class: [`Rector\Symfony\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector`](../src/Rector/StaticCall/BinaryFileResponseCreateToNewInstanceRector.php)
+- class: [`Rector\Symfony\Symfony52\Rector\StaticCall\BinaryFileResponseCreateToNewInstanceRector`](../rules/Symfony52/Rector/StaticCall/BinaryFileResponseCreateToNewInstanceRector.php)
 
 ```diff
  use Symfony\Component\HttpFoundation;
@@ -123,7 +98,7 @@ Change deprecated `BinaryFileResponse::create()` to use `__construct()` instead
 
 Rename `type` option to `entry_type` in CollectionType
 
-- class: [`Rector\Symfony\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector`](../src/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector.php)
+- class: [`Rector\Symfony\Symfony27\Rector\MethodCall\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector`](../rules/Symfony27/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector.php)
 
 ```diff
  use Symfony\Component\Form\AbstractType;
@@ -147,60 +122,11 @@ Rename `type` option to `entry_type` in CollectionType
 
 <br>
 
-## ChangeFileLoaderInExtensionAndKernelRector
-
-Change XML loader to YAML in Bundle Extension
-
-:wrench: **configure it!**
-
-- class: [`Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector`](../src/Rector/Class_/ChangeFileLoaderInExtensionAndKernelRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Symfony\Rector\Class_\ChangeFileLoaderInExtensionAndKernelRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ChangeFileLoaderInExtensionAndKernelRector::class, [
-        ChangeFileLoaderInExtensionAndKernelRector::FROM => 'xml',
-        ChangeFileLoaderInExtensionAndKernelRector::TO => 'yaml',
-    ]);
-};
-```
-
-↓
-
-```diff
- use Symfony\Component\Config\FileLocator;
- use Symfony\Component\DependencyInjection\ContainerBuilder;
--use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
- use Symfony\Component\HttpKernel\DependencyInjection\Extension;
-
- final class SomeExtension extends Extension
- {
-     public function load(array $configs, ContainerBuilder $container)
-     {
--        $loader = new XmlFileLoader($container, new FileLocator());
--        $loader->load(__DIR__ . '/../Resources/config/controller.xml');
--        $loader->load(__DIR__ . '/../Resources/config/events.xml');
-+        $loader = new YamlFileLoader($container, new FileLocator());
-+        $loader->load(__DIR__ . '/../Resources/config/controller.yaml');
-+        $loader->load(__DIR__ . '/../Resources/config/events.yaml');
-     }
- }
-```
-
-<br>
-
 ## ChangeStringCollectionOptionToConstantRector
 
 Change type in CollectionType from alias string to class reference
 
-- class: [`Rector\Symfony\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector`](../src/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\MethodCall\ChangeStringCollectionOptionToConstantRector`](../rules/Symfony30/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php)
 
 ```diff
  use Symfony\Component\Form\AbstractType;
@@ -230,7 +156,7 @@ Change type in CollectionType from alias string to class reference
 
 Changes int return from execute to use Symfony Command constants.
 
-- class: [`Rector\Symfony\Rector\ClassMethod\CommandConstantReturnCodeRector`](../src/Rector/ClassMethod/CommandConstantReturnCodeRector.php)
+- class: [`Rector\Symfony\Symfony51\Rector\ClassMethod\CommandConstantReturnCodeRector`](../rules/Symfony51/Rector/ClassMethod/CommandConstantReturnCodeRector.php)
 
 ```diff
  class SomeCommand extends Command
@@ -250,7 +176,7 @@ Changes int return from execute to use Symfony Command constants.
 
 Symfony Command description setters are moved to properties
 
-- class: [`Rector\Symfony\Rector\Class_\CommandDescriptionToPropertyRector`](../src/Rector/Class_/CommandDescriptionToPropertyRector.php)
+- class: [`Rector\Symfony\Symfony53\Rector\Class_\CommandDescriptionToPropertyRector`](../rules/Symfony53/Rector/Class_/CommandDescriptionToPropertyRector.php)
 
 ```diff
  use Symfony\Component\Console\Command\Command
@@ -272,7 +198,7 @@ Symfony Command description setters are moved to properties
 
 Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remove the deprecated properties
 
-- class: [`Rector\Symfony\Rector\Class_\CommandPropertyToAttributeRector`](../src/Rector/Class_/CommandPropertyToAttributeRector.php)
+- class: [`Rector\Symfony\Symfony61\Rector\Class_\CommandPropertyToAttributeRector`](../rules/Symfony61/Rector/Class_/CommandPropertyToAttributeRector.php)
 
 ```diff
 +use Symfony\Component\Console\Attribute\AsCommand;
@@ -292,7 +218,7 @@ Add `Symfony\Component\Console\Attribute\AsCommand` to Symfony Commands and remo
 
 Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 
-- class: [`Rector\Symfony\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector`](../src/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector.php)
+- class: [`Rector\Symfony\Symfony33\Rector\ClassConstFetch\ConsoleExceptionToErrorEventConstantRector`](../rules/Symfony33/Rector/ClassConstFetch/ConsoleExceptionToErrorEventConstantRector.php)
 
 ```diff
 -"console.exception"
@@ -312,7 +238,7 @@ Turns old event name with EXCEPTION to ERROR constant in Console in Symfony
 
 Returns int from `Command::execute()` command
 
-- class: [`Rector\Symfony\Rector\ClassMethod\ConsoleExecuteReturnIntRector`](../src/Rector/ClassMethod/ConsoleExecuteReturnIntRector.php)
+- class: [`Rector\Symfony\Symfony44\Rector\ClassMethod\ConsoleExecuteReturnIntRector`](../rules/Symfony44/Rector/ClassMethod/ConsoleExecuteReturnIntRector.php)
 
 ```diff
  use Symfony\Component\Console\Command\Command;
@@ -334,7 +260,7 @@ Returns int from `Command::execute()` command
 
 Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 
-- class: [`Rector\Symfony\Rector\ConstFetch\ConstraintUrlOptionRector`](../src/Rector/ConstFetch/ConstraintUrlOptionRector.php)
+- class: [`Rector\Symfony\Symfony40\Rector\ConstFetch\ConstraintUrlOptionRector`](../rules/Symfony40/Rector/ConstFetch/ConstraintUrlOptionRector.php)
 
 ```diff
 -$constraint = new Url(["checkDNS" => true]);
@@ -347,7 +273,7 @@ Turns true value to `Url::CHECK_DNS_TYPE_ANY` in Validator in Symfony.
 
 Turns old default value to parameter in `ContainerBuilder->build()` method in DI in Symfony
 
-- class: [`Rector\Symfony\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector`](../src/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector.php)
+- class: [`Rector\Symfony\Symfony40\Rector\MethodCall\ContainerBuilderCompileEnvArgumentRector`](../rules/Symfony40/Rector/MethodCall/ContainerBuilderCompileEnvArgumentRector.php)
 
 ```diff
  use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -385,7 +311,7 @@ Change `$container->get("some_name")` to bare type, useful since Symfony 3.4
 
 Turns fetching of dependencies via `$container->get()` in ContainerAware to constructor injection in Command and Controller in Symfony
 
-- class: [`Rector\Symfony\Rector\MethodCall\ContainerGetToConstructorInjectionRector`](../src/Rector/MethodCall/ContainerGetToConstructorInjectionRector.php)
+- class: [`Rector\Symfony\Symfony42\Rector\MethodCall\ContainerGetToConstructorInjectionRector`](../rules/Symfony42/Rector/MethodCall/ContainerGetToConstructorInjectionRector.php)
 
 ```diff
  final class SomeCommand extends ContainerAwareCommand
@@ -443,7 +369,7 @@ Change `$this->get("some_service");` to `@required` dependency in an abstract cl
 
 Change Twig template short name to bundle syntax in render calls from controllers
 
-- class: [`Rector\Symfony\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector`](../src/Rector/MethodCall/ConvertRenderTemplateShortNotationToBundleSyntaxRector.php)
+- class: [`Rector\Symfony\Symfony43\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector`](../rules/Symfony43/Rector/MethodCall/ConvertRenderTemplateShortNotationToBundleSyntaxRector.php)
 
 ```diff
  class BaseController extends Controller {
@@ -461,7 +387,7 @@ Change Twig template short name to bundle syntax in render calls from controller
 
 Migrates from deprecated `Definition/Alias->setPrivate()` to `Definition/Alias->setPublic()`
 
-- class: [`Rector\Symfony\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector`](../src/Rector/MethodCall/DefinitionAliasSetPrivateToSetPublicRector.php)
+- class: [`Rector\Symfony\Symfony52\Rector\MethodCall\DefinitionAliasSetPrivateToSetPublicRector`](../rules/Symfony52/Rector/MethodCall/DefinitionAliasSetPrivateToSetPublicRector.php)
 
 ```diff
  use Symfony\Component\DependencyInjection\Alias;
@@ -488,7 +414,7 @@ Migrates from deprecated `Definition/Alias->setPrivate()` to `Definition/Alias->
 
 Turns old Constraint::$errorNames properties to use Constraint::ERROR_NAMES instead
 
-- class: [`Rector\Symfony\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector`](../src/Rector/StaticPropertyFetch/ErrorNamesPropertyToConstantRector.php)
+- class: [`Rector\Symfony\Symfony61\Rector\StaticPropertyFetch\ErrorNamesPropertyToConstantRector`](../rules/Symfony61/Rector/StaticPropertyFetch/ErrorNamesPropertyToConstantRector.php)
 
 ```diff
  use Symfony\Component\Validator\Constraints\NotBlank;
@@ -503,11 +429,32 @@ Turns old Constraint::$errorNames properties to use Constraint::ERROR_NAMES inst
 
 <br>
 
+## EventDispatcherParentConstructRector
+
+Removes parent construct method call in EventDispatcher class
+
+- class: [`Rector\Symfony\Symfony43\Rector\ClassMethod\EventDispatcherParentConstructRector`](../rules/Symfony43/Rector/ClassMethod/EventDispatcherParentConstructRector.php)
+
+```diff
+ use Symfony\Component\EventDispatcher\EventDispatcher;
+
+ final class SomeEventDispatcher extends EventDispatcher
+ {
+     public function __construct()
+     {
+         $value = 1000;
++        parent::__construct();
+     }
+ }
+```
+
+<br>
+
 ## EventListenerToEventSubscriberRector
 
 Change Symfony Event listener class to Event Subscriber based on configuration in service.yaml file
 
-- class: [`Rector\Symfony\Rector\Class_\EventListenerToEventSubscriberRector`](../src/Rector/Class_/EventListenerToEventSubscriberRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\Class_\EventListenerToEventSubscriberRector`](../rules/CodeQuality/Rector/Class_/EventListenerToEventSubscriberRector.php)
 
 ```diff
 -class SomeListener
@@ -542,7 +489,7 @@ Change Symfony Event listener class to Event Subscriber based on configuration i
 
 Migrates from deprecated Form Builder->setDataMapper(new `PropertyPathMapper())` to Builder->setDataMapper(new DataMapper(new `PropertyPathAccessor()))`
 
-- class: [`Rector\Symfony\Rector\MethodCall\FormBuilderSetDataMapperRector`](../src/Rector/MethodCall/FormBuilderSetDataMapperRector.php)
+- class: [`Rector\Symfony\Symfony52\Rector\MethodCall\FormBuilderSetDataMapperRector`](../rules/Symfony52/Rector/MethodCall/FormBuilderSetDataMapperRector.php)
 
 ```diff
  use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
@@ -566,7 +513,7 @@ Migrates from deprecated Form Builder->setDataMapper(new `PropertyPathMapper())`
 
 Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form in Symfony
 
-- class: [`Rector\Symfony\Rector\MethodCall\FormIsValidRector`](../src/Rector/MethodCall/FormIsValidRector.php)
+- class: [`Rector\Symfony\Symfony40\Rector\MethodCall\FormIsValidRector`](../rules/Symfony40/Rector/MethodCall/FormIsValidRector.php)
 
 ```diff
 -if ($form->isValid()) {
@@ -580,7 +527,7 @@ Adds `$form->isSubmitted()` validation to all `$form->isValid()` calls in Form i
 
 Turns string Form Type references to their CONSTANT alternatives in `getParent()` and `getExtendedType()` methods in Form in Symfony
 
-- class: [`Rector\Symfony\Rector\ClassMethod\FormTypeGetParentRector`](../src/Rector/ClassMethod/FormTypeGetParentRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\ClassMethod\FormTypeGetParentRector`](../rules/Symfony30/Rector/ClassMethod/FormTypeGetParentRector.php)
 
 ```diff
  use Symfony\Component\Form\AbstractType;
@@ -616,7 +563,7 @@ Turns string Form Type references to their CONSTANT alternatives in `getParent()
 
 Changes createForm(new FormType), add(new FormType) to ones with "FormType::class"
 
-- class: [`Rector\Symfony\Rector\MethodCall\FormTypeInstanceToClassConstRector`](../src/Rector/MethodCall/FormTypeInstanceToClassConstRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\MethodCall\FormTypeInstanceToClassConstRector`](../rules/Symfony30/Rector/MethodCall/FormTypeInstanceToClassConstRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -671,7 +618,7 @@ Move constructor dependency from form type class to an `$options` parameter
 
 Intl static bundle method were changed to direct static calls
 
-- class: [`Rector\Symfony\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector`](../src/Rector/MethodCall/GetCurrencyBundleMethodCallsToIntlRector.php)
+- class: [`Rector\Symfony\Symfony43\Rector\MethodCall\GetCurrencyBundleMethodCallsToIntlRector`](../rules/Symfony43/Rector/MethodCall/GetCurrencyBundleMethodCallsToIntlRector.php)
 
 ```diff
 -$currencyBundle = \Symfony\Component\Intl\Intl::getCurrencyBundle();
@@ -686,7 +633,7 @@ Intl static bundle method were changed to direct static calls
 
 Replace `$this->getDoctrine()` and `$this->dispatchMessage()` calls in AbstractController with direct service use
 
-- class: [`Rector\Symfony\Rector\MethodCall\GetHelperControllerToServiceRector`](../src/Rector/MethodCall/GetHelperControllerToServiceRector.php)
+- class: [`Rector\Symfony\Symfony60\Rector\MethodCall\GetHelperControllerToServiceRector`](../rules/Symfony60/Rector/MethodCall/GetHelperControllerToServiceRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -713,7 +660,7 @@ Replace `$this->getDoctrine()` and `$this->dispatchMessage()` calls in AbstractC
 
 Turns fetching of Request via `$this->getRequest()` to action injection
 
-- class: [`Rector\Symfony\Rector\ClassMethod\GetRequestRector`](../src/Rector/ClassMethod/GetRequestRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\ClassMethod\GetRequestRector`](../rules/Symfony30/Rector/ClassMethod/GetRequestRector.php)
 
 ```diff
 +use Symfony\Component\HttpFoundation\Request;
@@ -762,7 +709,7 @@ Turns fetching of dependencies via `$this->get()` to constructor injection in Co
 
 Simplify use of assertions in WebTestCase
 
-- class: [`Rector\Symfony\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector`](../src/Rector/StaticPropertyFetch/KernelTestCaseContainerPropertyDeprecationRector.php)
+- class: [`Rector\Symfony\Symfony53\Rector\StaticPropertyFetch\KernelTestCaseContainerPropertyDeprecationRector`](../rules/Symfony53/Rector/StaticPropertyFetch/KernelTestCaseContainerPropertyDeprecationRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -783,7 +730,7 @@ Simplify use of assertions in WebTestCase
 
 Replace "GET" string by Symfony Request object class constants
 
-- class: [`Rector\Symfony\Rector\MethodCall\LiteralGetToRequestClassConstantRector`](../src/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\MethodCall\LiteralGetToRequestClassConstantRector`](../rules/CodeQuality/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php)
 
 ```diff
  use Symfony\Component\Form\FormBuilderInterface;
@@ -832,7 +779,7 @@ Move metadata from `loadValidatorMetadata()` to property/getter/method annotatio
 
 Change logout handler to an event listener that listens to LogoutEvent
 
-- class: [`Rector\Symfony\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector`](../src/Rector/Class_/LogoutHandlerToLogoutEventSubscriberRector.php)
+- class: [`Rector\Symfony\Symfony51\Rector\Class_\LogoutHandlerToLogoutEventSubscriberRector`](../rules/Symfony51/Rector/Class_/LogoutHandlerToLogoutEventSubscriberRector.php)
 
 ```diff
 -use Symfony\Component\Security\Http\Logout\LogoutHandlerInterface;
@@ -871,7 +818,7 @@ Change logout handler to an event listener that listens to LogoutEvent
 
 Change logout success handler to an event listener that listens to LogoutEvent
 
-- class: [`Rector\Symfony\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector`](../src/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php)
+- class: [`Rector\Symfony\Symfony51\Rector\Class_\LogoutSuccessHandlerToLogoutEventSubscriberRector`](../rules/Symfony51/Rector/Class_/LogoutSuccessHandlerToLogoutEventSubscriberRector.php)
 
 ```diff
 -use Symfony\Component\Security\Http\Logout\LogoutSuccessHandlerInterface;
@@ -951,7 +898,7 @@ Change TwigExtension function/filter magic closures to inlined and clear callabl
 
 Make Symfony commands lazy
 
-- class: [`Rector\Symfony\Rector\Class_\MakeCommandLazyRector`](../src/Rector/Class_/MakeCommandLazyRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\Class_\MakeCommandLazyRector`](../rules/CodeQuality/Rector/Class_/MakeCommandLazyRector.php)
 
 ```diff
  use Symfony\Component\Console\Command\Command
@@ -972,7 +919,7 @@ Make Symfony commands lazy
 
 Make event object a first argument of `dispatch()` method, event name as second
 
-- class: [`Rector\Symfony\Rector\MethodCall\MakeDispatchFirstArgumentEventRector`](../src/Rector/MethodCall/MakeDispatchFirstArgumentEventRector.php)
+- class: [`Rector\Symfony\Symfony43\Rector\MethodCall\MakeDispatchFirstArgumentEventRector`](../rules/Symfony43/Rector/MethodCall/MakeDispatchFirstArgumentEventRector.php)
 
 ```diff
  use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -993,7 +940,7 @@ Make event object a first argument of `dispatch()` method, event name as second
 
 Change form option "max_length" to a form "attr" > "max_length"
 
-- class: [`Rector\Symfony\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector`](../src/Rector/MethodCall/MaxLengthSymfonyFormOptionToAttrRector.php)
+- class: [`Rector\Symfony\Symfony25\Rector\MethodCall\MaxLengthSymfonyFormOptionToAttrRector`](../rules/Symfony25/Rector/MethodCall/MaxLengthSymfonyFormOptionToAttrRector.php)
 
 ```diff
  $formBuilder = new Symfony\Component\Form\FormBuilder();
@@ -1010,7 +957,7 @@ Change form option "max_length" to a form "attr" > "max_length"
 
 Merge removed `@Method` annotation to `@Route` one
 
-- class: [`Rector\Symfony\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector`](../src/Rector/ClassMethod/MergeMethodAnnotationToRouteAnnotationRector.php)
+- class: [`Rector\Symfony\Symfony34\Rector\ClassMethod\MergeMethodAnnotationToRouteAnnotationRector`](../rules/Symfony34/Rector/ClassMethod/MergeMethodAnnotationToRouteAnnotationRector.php)
 
 ```diff
 -use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -1035,7 +982,7 @@ Merge removed `@Method` annotation to `@Route` one
 
 Replaces MessageHandlerInterface with AsMessageHandler attribute
 
-- class: [`Rector\Symfony\Rector\Class_\MessageHandlerInterfaceToAttributeRector`](../src/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php)
+- class: [`Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector`](../rules/Symfony62/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php)
 
 ```diff
 -use Symfony\Component\Messenger\Handler\MessageHandlerInterface;
@@ -1058,7 +1005,7 @@ Replaces MessageHandlerInterface with AsMessageHandler attribute
 
 Turns old option names to new ones in FormTypes in Form in Symfony
 
-- class: [`Rector\Symfony\Rector\MethodCall\OptionNameRector`](../src/Rector/MethodCall/OptionNameRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\MethodCall\OptionNameRector`](../rules/Symfony30/Rector/MethodCall/OptionNameRector.php)
 
 ```diff
  $builder = new FormBuilder;
@@ -1072,7 +1019,7 @@ Turns old option names to new ones in FormTypes in Form in Symfony
 
 Replace ParamConverter attribute with mappings with the MapEntity attribute
 
-- class: [`Rector\Symfony\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector`](../src/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php)
+- class: [`Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector`](../rules/Symfony62/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php)
 
 ```diff
 +use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -1124,7 +1071,7 @@ Complete strict param type declaration based on route annotation
 
 Replaces deprecated `Yaml::parse()` of file argument with file contents
 
-- class: [`Rector\Symfony\Rector\StaticCall\ParseFileRector`](../src/Rector/StaticCall/ParseFileRector.php)
+- class: [`Rector\Symfony\Symfony28\Rector\StaticCall\ParseFileRector`](../rules/Symfony28/Rector/StaticCall/ParseFileRector.php)
 
 ```diff
  use Symfony\Component\Yaml\Yaml;
@@ -1139,7 +1086,7 @@ Replaces deprecated `Yaml::parse()` of file argument with file contents
 
 Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in Symfony, because ProcessBuilder was removed. This is part of multi-step Rector and has very narrow focus.
 
-- class: [`Rector\Symfony\Rector\MethodCall\ProcessBuilderGetProcessRector`](../src/Rector/MethodCall/ProcessBuilderGetProcessRector.php)
+- class: [`Rector\Symfony\Symfony40\Rector\MethodCall\ProcessBuilderGetProcessRector`](../rules/Symfony40/Rector/MethodCall/ProcessBuilderGetProcessRector.php)
 
 ```diff
  $processBuilder = new Symfony\Component\Process\ProcessBuilder;
@@ -1155,7 +1102,7 @@ Removes `$processBuilder->getProcess()` calls to `$processBuilder` in Process in
 
 Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. Part of multi-step Rector.
 
-- class: [`Rector\Symfony\Rector\StaticCall\ProcessBuilderInstanceRector`](../src/Rector/StaticCall/ProcessBuilderInstanceRector.php)
+- class: [`Rector\Symfony\Symfony40\Rector\StaticCall\ProcessBuilderInstanceRector`](../rules/Symfony40/Rector/StaticCall/ProcessBuilderInstanceRector.php)
 
 ```diff
 -$processBuilder = Symfony\Component\Process\ProcessBuilder::instance($args);
@@ -1168,7 +1115,7 @@ Turns `ProcessBuilder::instance()` to new ProcessBuilder in Process in Symfony. 
 
 Changes first argument of `PropertyAccessor::__construct()` to flags from boolean
 
-- class: [`Rector\Symfony\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector`](../src/Rector/New_/PropertyAccessorCreationBooleanToFlagsRector.php)
+- class: [`Rector\Symfony\Symfony52\Rector\New_\PropertyAccessorCreationBooleanToFlagsRector`](../rules/Symfony52/Rector/New_/PropertyAccessorCreationBooleanToFlagsRector.php)
 
 ```diff
  class SomeClass
@@ -1187,7 +1134,7 @@ Changes first argument of `PropertyAccessor::__construct()` to flags from boolea
 
 Migrate from PropertyPathMapper to DataMapper and PropertyPathAccessor
 
-- class: [`Rector\Symfony\Rector\New_\PropertyPathMapperToDataMapperRector`](../src/Rector/New_/PropertyPathMapperToDataMapperRector.php)
+- class: [`Rector\Symfony\Symfony52\Rector\New_\PropertyPathMapperToDataMapperRector`](../rules/Symfony52/Rector/New_/PropertyPathMapperToDataMapperRector.php)
 
 ```diff
  use Symfony\Component\Form\Extension\Core\DataMapper\PropertyPathMapper;
@@ -1208,7 +1155,7 @@ Migrate from PropertyPathMapper to DataMapper and PropertyPathAccessor
 
 Change "read_only" option in form to attribute
 
-- class: [`Rector\Symfony\Rector\MethodCall\ReadOnlyOptionToAttributeRector`](../src/Rector/MethodCall/ReadOnlyOptionToAttributeRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\MethodCall\ReadOnlyOptionToAttributeRector`](../rules/Symfony30/Rector/MethodCall/ReadOnlyOptionToAttributeRector.php)
 
 ```diff
  use Symfony\Component\Form\FormBuilderInterface;
@@ -1226,7 +1173,7 @@ Change "read_only" option in form to attribute
 
 Turns redirect to route to short helper method in Controller in Symfony
 
-- class: [`Rector\Symfony\Rector\MethodCall\RedirectToRouteRector`](../src/Rector/MethodCall/RedirectToRouteRector.php)
+- class: [`Rector\Symfony\Symfony26\Rector\MethodCall\RedirectToRouteRector`](../rules/Symfony26/Rector/MethodCall/RedirectToRouteRector.php)
 
 ```diff
 -$this->redirect($this->generateUrl("homepage"));
@@ -1239,7 +1186,7 @@ Turns redirect to route to short helper method in Controller in Symfony
 
 Migrates from deprecated enable_magic_call_extraction context option in ReflectionExtractor
 
-- class: [`Rector\Symfony\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector`](../src/Rector/MethodCall/ReflectionExtractorEnableMagicCallExtractorRector.php)
+- class: [`Rector\Symfony\Symfony52\Rector\MethodCall\ReflectionExtractorEnableMagicCallExtractorRector`](../rules/Symfony52/Rector/MethodCall/ReflectionExtractorEnableMagicCallExtractorRector.php)
 
 ```diff
  use Symfony\Component\PropertyInfo\Extractor\ReflectionExtractor;
@@ -1263,7 +1210,7 @@ Migrates from deprecated enable_magic_call_extraction context option in Reflecti
 
 Rename `getBlockPrefix()` if it returns the default value - class to underscore, e.g. UserFormType = user_form
 
-- class: [`Rector\Symfony\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector`](../src/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\ClassMethod\RemoveDefaultGetBlockPrefixRector`](../rules/Symfony30/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php)
 
 ```diff
  use Symfony\Component\Form\AbstractType;
@@ -1306,7 +1253,7 @@ Remove service from Sensio `@Route`
 
 Remove unused `$request` parameter from controller action
 
-- class: [`Rector\Symfony\Rector\ClassMethod\RemoveUnusedRequestParamRector`](../src/Rector/ClassMethod/RemoveUnusedRequestParamRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\ClassMethod\RemoveUnusedRequestParamRector`](../rules/CodeQuality/Rector/ClassMethod/RemoveUnusedRequestParamRector.php)
 
 ```diff
  use Symfony\Component\HttpFoundation\Request;
@@ -1353,7 +1300,7 @@ Replace defined `service()` argument in Symfony PHP config
 
 :wrench: **configure it!**
 
-- class: [`Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector`](../src/Rector/FuncCall/ReplaceServiceArgumentRector.php)
+- class: [`Rector\Symfony\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector`](../rules/Symfony60/Rector/FuncCall/ReplaceServiceArgumentRector.php)
 
 ```php
 <?php
@@ -1362,7 +1309,7 @@ declare(strict_types=1);
 
 use PhpParser\Node\Scalar\String_;
 use Rector\Config\RectorConfig;
-use Rector\Symfony\Rector\FuncCall\ReplaceServiceArgumentRector;
+use Rector\Symfony\Symfony60\Rector\FuncCall\ReplaceServiceArgumentRector;
 use Rector\Symfony\ValueObject\ReplaceServiceArgument;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -1388,7 +1335,7 @@ return static function (RectorConfig $rectorConfig): void {
 
 Add Response object return type to controller actions
 
-- class: [`Rector\Symfony\Rector\ClassMethod\ResponseReturnTypeControllerActionRector`](../src/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\ClassMethod\ResponseReturnTypeControllerActionRector`](../rules/CodeQuality/Rector/ClassMethod/ResponseReturnTypeControllerActionRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -1412,7 +1359,7 @@ Add Response object return type to controller actions
 
 Turns status code numbers to constants
 
-- class: [`Rector\Symfony\Rector\BinaryOp\ResponseStatusCodeRector`](../src/Rector/BinaryOp/ResponseStatusCodeRector.php)
+- class: [`Rector\Symfony\CodeQuality\Rector\BinaryOp\ResponseStatusCodeRector`](../rules/CodeQuality/Rector/BinaryOp/ResponseStatusCodeRector.php)
 
 ```diff
  use Symfony\Component\HttpFoundation\Response;
@@ -1438,7 +1385,7 @@ Turns status code numbers to constants
 
 Changes TreeBuilder with `root()` call to constructor passed root and `getRootNode()` call
 
-- class: [`Rector\Symfony\Rector\New_\RootNodeTreeBuilderRector`](../src/Rector/New_/RootNodeTreeBuilderRector.php)
+- class: [`Rector\Symfony\Symfony42\Rector\New_\RootNodeTreeBuilderRector`](../rules/Symfony42/Rector/New_/RootNodeTreeBuilderRector.php)
 
 ```diff
  use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -1456,7 +1403,7 @@ Changes TreeBuilder with `root()` call to constructor passed root and `getRootNo
 
 Change RouteCollectionBuilder to RoutingConfiguratorRector
 
-- class: [`Rector\Symfony\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector`](../src/Rector/ClassMethod/RouteCollectionBuilderToRoutingConfiguratorRector.php)
+- class: [`Rector\Symfony\Symfony51\Rector\ClassMethod\RouteCollectionBuilderToRoutingConfiguratorRector`](../rules/Symfony51/Rector/ClassMethod/RouteCollectionBuilderToRoutingConfiguratorRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -1620,7 +1567,7 @@ Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
 
 Symplify form rendering by not calling `->createView()` on `render` function
 
-- class: [`Rector\Symfony\Rector\MethodCall\SimplifyFormRenderingRector`](../src/Rector/MethodCall/SimplifyFormRenderingRector.php)
+- class: [`Rector\Symfony\Symfony62\Rector\MethodCall\SimplifyFormRenderingRector`](../rules/Symfony62/Rector/MethodCall/SimplifyFormRenderingRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -1643,7 +1590,7 @@ Symplify form rendering by not calling `->createView()` on `render` function
 
 Turns string Form Type references to their CONSTANT alternatives in FormTypes in Form in Symfony. To enable custom types, add link to your container XML dump in "$rectorConfig->symfonyContainerXml(...)"
 
-- class: [`Rector\Symfony\Rector\MethodCall\StringFormTypeToClassRector`](../src/Rector/MethodCall/StringFormTypeToClassRector.php)
+- class: [`Rector\Symfony\Symfony30\Rector\MethodCall\StringFormTypeToClassRector`](../rules/Symfony30/Rector/MethodCall/StringFormTypeToClassRector.php)
 
 ```diff
  $formBuilder = new Symfony\Component\Form\FormBuilder;
@@ -1657,7 +1604,7 @@ Turns string Form Type references to their CONSTANT alternatives in FormTypes in
 
 Changes Process string argument to an array
 
-- class: [`Rector\Symfony\Rector\New_\StringToArrayArgumentProcessRector`](../src/Rector/New_/StringToArrayArgumentProcessRector.php)
+- class: [`Rector\Symfony\Symfony42\Rector\New_\StringToArrayArgumentProcessRector`](../rules/Symfony42/Rector/New_/StringToArrayArgumentProcessRector.php)
 
 ```diff
  use Symfony\Component\Process\Process;
@@ -1727,7 +1674,7 @@ Turns `@Template` annotation to explicit method call in Controller of FrameworkE
 
 Change TwigBundle FilesystemLoader to native one
 
-- class: [`Rector\Symfony\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector`](../src/Rector/StmtsAwareInterface/TwigBundleFilesystemLoaderToTwigRector.php)
+- class: [`Rector\Symfony\Symfony43\Rector\StmtsAwareInterface\TwigBundleFilesystemLoaderToTwigRector`](../rules/Symfony43/Rector/StmtsAwareInterface/TwigBundleFilesystemLoaderToTwigRector.php)
 
 ```diff
 -use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
@@ -1746,7 +1693,7 @@ Change TwigBundle FilesystemLoader to native one
 
 Migrates from deprecated ValidatorBuilder->enableAnnotationMapping($reader) to ValidatorBuilder->enableAnnotationMapping(true)->setDoctrineAnnotationReader($reader)
 
-- class: [`Rector\Symfony\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector`](../src/Rector/MethodCall/ValidatorBuilderEnableAnnotationMappingRector.php)
+- class: [`Rector\Symfony\Symfony52\Rector\MethodCall\ValidatorBuilderEnableAnnotationMappingRector`](../rules/Symfony52/Rector/MethodCall/ValidatorBuilderEnableAnnotationMappingRector.php)
 
 ```diff
  use Doctrine\Common\Annotations\Reader;
@@ -1768,7 +1715,7 @@ Migrates from deprecated ValidatorBuilder->enableAnnotationMapping($reader) to V
 
 Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `VarDumperTestTrait->assertDumpMatchesFormat()` in Validator in Symfony.
 
-- class: [`Rector\Symfony\Rector\MethodCall\VarDumperTestTraitMethodArgsRector`](../src/Rector/MethodCall/VarDumperTestTraitMethodArgsRector.php)
+- class: [`Rector\Symfony\Symfony40\Rector\MethodCall\VarDumperTestTraitMethodArgsRector`](../rules/Symfony40/Rector/MethodCall/VarDumperTestTraitMethodArgsRector.php)
 
 ```diff
 -$varDumperTestTrait->assertDumpEquals($dump, $data, $message = "");
@@ -1788,7 +1735,7 @@ Adds a new `$filter` argument in `VarDumperTestTrait->assertDumpEquals()` and `V
 
 Simplify use of assertions in WebTestCase
 
-- class: [`Rector\Symfony\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector`](../src/Rector/MethodCall/WebTestCaseAssertIsSuccessfulRector.php)
+- class: [`Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertIsSuccessfulRector`](../rules/Symfony43/Rector/MethodCall/WebTestCaseAssertIsSuccessfulRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -1809,7 +1756,7 @@ Simplify use of assertions in WebTestCase
 
 Simplify use of assertions in WebTestCase
 
-- class: [`Rector\Symfony\Rector\MethodCall\WebTestCaseAssertResponseCodeRector`](../src/Rector/MethodCall/WebTestCaseAssertResponseCodeRector.php)
+- class: [`Rector\Symfony\Symfony43\Rector\MethodCall\WebTestCaseAssertResponseCodeRector`](../rules/Symfony43/Rector/MethodCall/WebTestCaseAssertResponseCodeRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
