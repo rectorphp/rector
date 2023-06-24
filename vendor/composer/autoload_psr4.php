@@ -10,7 +10,7 @@ return array(
     'Symfony\\Polyfill\\Mbstring\\' => array($vendorDir . '/symfony/polyfill-mbstring'),
     'Symfony\\Polyfill\\Intl\\Normalizer\\' => array($vendorDir . '/symfony/polyfill-intl-normalizer'),
     'Rector\\Utils\\' => array($baseDir . '/utils'),
-    'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src'),
+    'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src', $vendorDir . '/rector/rector-symfony/rules'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
     'Rector\\PHPUnit\\' => array($vendorDir . '/rector/rector-phpunit/src'),
     'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src'),

@@ -2121,12 +2121,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "100ca8c0c9f90bd8d2750f3859d0d1219f113da6"
+                "reference": "cdf2d63737d2e2f3f4e12138e40e3a9ba983e0e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/100ca8c0c9f90bd8d2750f3859d0d1219f113da6",
-                "reference": "100ca8c0c9f90bd8d2750f3859d0d1219f113da6",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/cdf2d63737d2e2f3f4e12138e40e3a9ba983e0e5",
+                "reference": "cdf2d63737d2e2f3f4e12138e40e3a9ba983e0e5",
                 "shasum": ""
             },
             "require": {
@@ -2156,7 +2156,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-20T08:24:02+00:00",
+            "time": "2023-06-24T09:17:48+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2170,7 +2170,10 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\Symfony\\": "src"
+                    "Rector\\Symfony\\": [
+                        "src",
+                        "rules"
+                    ]
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",

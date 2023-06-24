@@ -32,12 +32,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\Symfony\\": "src"
+            "Rector\\Symfony\\": [
+                "src",
+                "rules"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Symfony\\Tests\\": "tests",
+            "Rector\\Symfony\\Tests\\": [
+                "tests",
+                "rules-tests"
+            ],
             "Rector\\Symfony\\Utils\\": "utils"
         },
         "classmap": [
