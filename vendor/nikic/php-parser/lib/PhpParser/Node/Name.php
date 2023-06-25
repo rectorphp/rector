@@ -6,7 +6,10 @@ namespace PhpParser\Node;
 use PhpParser\NodeAbstract;
 class Name extends NodeAbstract
 {
-    /** @var string[] Parts of the name */
+    /**
+     * @var string[] Parts of the name
+     * @deprecated Use getParts() instead
+     */
     public $parts;
     private static $specialClassNames = ['self' => \true, 'parent' => \true, 'static' => \true];
     /**
@@ -23,6 +26,15 @@ class Name extends NodeAbstract
     public function getSubNodeNames() : array
     {
         return ['parts'];
+    }
+    /**
+     * Get parts of name (split by the namespace separator).
+     *
+     * @return string[] Parts of name
+     */
+    public function getParts() : array
+    {
+        return $this->parts;
     }
     /**
      * Gets the first part of the name, i.e. everything before the first namespace separator.
