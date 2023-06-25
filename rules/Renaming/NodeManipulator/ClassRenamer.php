@@ -7,14 +7,12 @@ use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -153,7 +151,7 @@ final class ClassRenamer
     }
     private function shouldSkip(string $newName, Name $name, ?Node $parentNode = null) : bool
     {
-        if ($parentNode instanceof StaticCall && $parentNode->class === $name && $this->reflectionProvider->hasClass($newName)) {
+        if ($name->getAttribute(AttributeKey::IS_STATICCALL_CLASS_NAME) === \true && $this->reflectionProvider->hasClass($newName)) {
             $classReflection = $this->reflectionProvider->getClass($newName);
             return $classReflection->isInterface();
         }
@@ -179,8 +177,7 @@ final class ClassRenamer
      */
     private function refactorName(Name $name, array $oldToNewClasses) : ?Name
     {
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Namespace_ && $parentNode->name === $name) {
+        if ($name->getAttribute(AttributeKey::IS_NAMESPACE_NAME) === \true) {
             return null;
         }
         $stringName = $this->nodeNameResolver->getName($name);
@@ -191,13 +188,14 @@ final class ClassRenamer
         if (!$this->isClassToInterfaceValidChange($name, $newName)) {
             return null;
         }
-        if ($this->shouldSkip($newName, $name, $parentNode)) {
-            return null;
-        }
         // no need to preslash "use \SomeNamespace" of imported namespace
-        if ($parentNode instanceof UseUse && ($parentNode->type === Use_::TYPE_NORMAL || $parentNode->type === Use_::TYPE_UNKNOWN)) {
+        if ($name->getAttribute(AttributeKey::IS_USEUSE_NAME) === \true) {
             // no need to rename imports, they will be handled by autoimport and coding standard
             // also they might cause some rename
+            return null;
+        }
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
+        if ($this->shouldSkip($newName, $name, $parentNode)) {
             return null;
         }
         return new FullyQualified($newName);
