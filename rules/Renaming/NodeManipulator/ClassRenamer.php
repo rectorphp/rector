@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Renaming\NodeManipulator;
 
-use RectorPrefix202306\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\New_;
@@ -149,28 +148,13 @@ final class ClassRenamer
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
         $this->phpDocClassRenamer->changeTypeInAnnotationTypes($node, $phpDocInfo, $oldToNewClasses);
     }
-    private function shouldSkip(string $newName, Name $name, ?Node $parentNode = null) : bool
+    private function shouldSkip(string $newName, Name $name) : bool
     {
         if ($name->getAttribute(AttributeKey::IS_STATICCALL_CLASS_NAME) === \true && $this->reflectionProvider->hasClass($newName)) {
             $classReflection = $this->reflectionProvider->getClass($newName);
             return $classReflection->isInterface();
         }
-        // parent is not a Node, possibly removed by other rule
-        // skip change it
-        if (!$parentNode instanceof Node) {
-            return \true;
-        }
-        if (!$parentNode instanceof Namespace_) {
-            return \false;
-        }
-        if ($parentNode->name !== $name) {
-            return \false;
-        }
-        $namespaceNewName = Strings::before($newName, '\\', -1);
-        if ($namespaceNewName === null) {
-            return \false;
-        }
-        return $this->nodeNameResolver->isName($parentNode, $namespaceNewName);
+        return \false;
     }
     /**
      * @param array<string, string> $oldToNewClasses
@@ -194,8 +178,7 @@ final class ClassRenamer
             // also they might cause some rename
             return null;
         }
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($this->shouldSkip($newName, $name, $parentNode)) {
+        if ($this->shouldSkip($newName, $name)) {
             return null;
         }
         return new FullyQualified($newName);
