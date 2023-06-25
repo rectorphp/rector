@@ -4,6 +4,8 @@ declare (strict_types=1);
 namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Namespace_;
@@ -22,6 +24,14 @@ final class NameNodeVisitor extends NodeVisitorAbstract implements ScopeResolver
         }
         if ($node instanceof UseUse && ($node->type === Use_::TYPE_NORMAL || $node->type === Use_::TYPE_UNKNOWN)) {
             $node->name->setAttribute(AttributeKey::IS_USEUSE_NAME, \true);
+            return null;
+        }
+        if ($node instanceof FuncCall && $node->name instanceof Name) {
+            $node->name->setAttribute(AttributeKey::IS_FUNCCALL_NAME, \true);
+            return null;
+        }
+        if ($node instanceof ConstFetch) {
+            $node->name->setAttribute(AttributeKey::IS_CONSTFETCH_NAME, \true);
             return null;
         }
         if (!$node instanceof StaticCall) {

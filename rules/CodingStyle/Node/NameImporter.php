@@ -4,11 +4,8 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Node;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Reflection\ReflectionProvider;
@@ -141,10 +138,10 @@ final class NameImporter
      */
     private function isNamespaceOrUseImportName(Name $name) : bool
     {
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Namespace_) {
+        if ($name->getAttribute(AttributeKey::IS_NAMESPACE_NAME) === \true) {
             return \true;
         }
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         return $parentNode instanceof UseUse;
     }
     private function isFunctionOrConstantImportWithSingleName(Name $name) : bool
@@ -155,10 +152,10 @@ final class NameImporter
         if ($autoImportNames && !$parentNode instanceof Node && \strpos($fullName, '\\') === \false && $this->reflectionProvider->hasFunction(new Name($fullName), null)) {
             return \true;
         }
-        if ($parentNode instanceof ConstFetch) {
+        if ($name->getAttribute(AttributeKey::IS_CONSTFETCH_NAME) === \true) {
             return \count($name->getParts()) === 1;
         }
-        if ($parentNode instanceof FuncCall) {
+        if ($name->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true) {
             return \count($name->getParts()) === 1;
         }
         return \false;
@@ -168,8 +165,7 @@ final class NameImporter
         if ($this->useNodesToAddCollector->hasImport($file, $name, $fullyQualifiedObjectType)) {
             return;
         }
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof FuncCall) {
+        if ($name->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true) {
             $this->useNodesToAddCollector->addFunctionUseImport($fullyQualifiedObjectType);
         } else {
             $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);

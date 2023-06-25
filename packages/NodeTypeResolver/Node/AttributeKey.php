@@ -220,4 +220,12 @@ final class AttributeKey
      * @var string
      */
     public const IS_STATICCALL_CLASS_NAME = 'is_staticcall_class_name';
+    /**
+     * @var string
+     */
+    public const IS_FUNCCALL_NAME = 'is_funccall_name';
+    /**
+     * @var string
+     */
+    public const IS_CONSTFETCH_NAME = 'is_constfetch_name';
 }
