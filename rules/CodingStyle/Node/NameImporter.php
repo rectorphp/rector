@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Node;
 
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
@@ -133,10 +132,7 @@ final class NameImporter
         if ($name->getAttribute(AttributeKey::IS_NAMESPACE_NAME) === \true) {
             return \true;
         }
-        if ($name->getAttribute(AttributeKey::IS_USEUSE_NAME) === \true) {
-            return \true;
-        }
-        return !$name instanceof FullyQualified;
+        return $name->getAttribute(AttributeKey::IS_USEUSE_NAME) === \true;
     }
     private function isFunctionOrConstantImportWithSingleName(Name $name) : bool
     {
