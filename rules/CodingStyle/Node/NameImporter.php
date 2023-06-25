@@ -3,12 +3,10 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\Node;
 
-use PhpParser\Node;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\Stmt\UseUse;
-use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
@@ -46,22 +44,16 @@ final class NameImporter
      */
     private $useNodesToAddCollector;
     /**
-     * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    /**
      * @var string[]
      */
     private $aliasedUses = [];
-    public function __construct(AliasUsesResolver $aliasUsesResolver, ClassNameImportSkipper $classNameImportSkipper, ParameterProvider $parameterProvider, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector, ReflectionProvider $reflectionProvider)
+    public function __construct(AliasUsesResolver $aliasUsesResolver, ClassNameImportSkipper $classNameImportSkipper, ParameterProvider $parameterProvider, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->aliasUsesResolver = $aliasUsesResolver;
         $this->classNameImportSkipper = $classNameImportSkipper;
         $this->parameterProvider = $parameterProvider;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
-        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @param Use_[]|GroupUse[] $uses
@@ -146,12 +138,6 @@ final class NameImporter
     }
     private function isFunctionOrConstantImportWithSingleName(Name $name) : bool
     {
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        $fullName = $name->toString();
-        $autoImportNames = $this->parameterProvider->provideBoolParameter(Option::AUTO_IMPORT_NAMES);
-        if ($autoImportNames && !$parentNode instanceof Node && \strpos($fullName, '\\') === \false && $this->reflectionProvider->hasFunction(new Name($fullName), null)) {
-            return \true;
-        }
         if ($name->getAttribute(AttributeKey::IS_CONSTFETCH_NAME) === \true) {
             return \count($name->getParts()) === 1;
         }
