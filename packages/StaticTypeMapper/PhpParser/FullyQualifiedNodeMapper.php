@@ -67,11 +67,10 @@ final class FullyQualifiedNodeMapper implements PhpParserNodeMapperInterface
         if (!$node instanceof NullableType) {
             return \false;
         }
-        $parentOfParent = $node->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentOfParent instanceof Param) {
-            return \false;
+        if ($node->getAttribute(AttributeKey::IS_PARAM_TYPE) === \true) {
+            return $node->type === $fullyQualified;
         }
-        return $node->type === $fullyQualified;
+        return \false;
     }
     private function resolvePossibleAliasedObjectType(FullyQualified $fullyQualified) : ?AliasedObjectType
     {
