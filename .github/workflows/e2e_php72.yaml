@@ -13,7 +13,7 @@ jobs:
         name: End to end test - PHP 7.2 with load ReflectionUnionType stub
 
         steps:
-            -   uses: actions/checkout@v2
+            -   uses: actions/checkout@v3
 
             -   uses: shivammathur/setup-php@v2
                 with:

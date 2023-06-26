@@ -1,4 +1,4 @@
-# 79 Rules Overview
+# 80 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -289,7 +289,7 @@ Turns old default value to parameter in `ContainerBuilder->build()` method in DI
 
 Change `$container->get("some_name")` to bare type, useful since Symfony 3.4
 
-- class: [`Rector\Symfony\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector`](../src/Symfony34/Rector/Closure/ContainerGetNameToTypeInTestsRector.php)
+- class: [`Rector\Symfony\Symfony34\Rector\Closure\ContainerGetNameToTypeInTestsRector`](../rules/Symfony34/Rector/Closure/ContainerGetNameToTypeInTestsRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -1507,7 +1507,7 @@ Change `$services->set("name_type",` SomeType::class) to bare type, useful since
 
 Changes Twig_Function_Method to Twig_SimpleFunction calls in Twig_Extension.
 
-- class: [`Rector\Symfony\Rector\Return_\SimpleFunctionAndFilterRector`](../src/Rector/Return_/SimpleFunctionAndFilterRector.php)
+- class: [`Rector\Symfony\Twig134\Rector\Return_\SimpleFunctionAndFilterRector`](../rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php)
 
 ```diff
  class SomeExtension extends Twig_Extension
@@ -1551,6 +1551,43 @@ Symplify form rendering by not calling `->createView()` on `render` function
          ]);
      }
  }
+```
+
+<br>
+
+## StringExtensionToConfigBuilderRector
+
+Add config builder classes
+
+- class: [`Rector\Symfony\CodeQuality\Rector\Closure\StringExtensionToConfigBuilderRector`](../rules/CodeQuality/Rector/Closure/StringExtensionToConfigBuilderRector.php)
+
+```diff
+-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
++use Symfony\Config\SecurityConfig;
+
+-return static function (ContainerConfigurator $containerConfigurator): void {
+-    $containerConfigurator->extension('security', [
+-        'providers' => [
+-            'webservice' => [
+-                'id' => LoginServiceUserProvider::class,
+-            ],
+-        ],
+-        'firewalls' => [
+-            'dev' => [
+-                'pattern' => '^/(_(profiler|wdt)|css|images|js)/',
+-                'security' => false,
+-            ],
+-        ],
++return static function (SecurityConfig $securityConfig): void {
++    $securityConfig->provider('webservice', [
++        'id' => LoginServiceUserProvider::class,
++    ]);
++
++    $securityConfig->firewall('dev', [
++        'pattern' => '^/(_(profiler|wdt)|css|images|js)/',
++        'security' => false,
+     ]);
+ };
 ```
 
 <br>

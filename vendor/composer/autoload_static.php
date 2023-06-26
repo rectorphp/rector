@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit63c0cd1f8e04b29f96bbff647001340d
+class ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2769,6 +2769,7 @@ class ComposerStaticInit63c0cd1f8e04b29f96bbff647001340d
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\EventListenerToEventSubscriberRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/EventListenerToEventSubscriberRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\LoadValidatorMetadataToAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/LoadValidatorMetadataToAnnotationRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\Class_\\MakeCommandLazyRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Class_/MakeCommandLazyRector.php',
+        'Rector\\Symfony\\CodeQuality\\Rector\\Closure\\StringExtensionToConfigBuilderRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/Closure/StringExtensionToConfigBuilderRector.php',
         'Rector\\Symfony\\CodeQuality\\Rector\\MethodCall\\LiteralGetToRequestClassConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/CodeQuality/Rector/MethodCall/LiteralGetToRequestClassConstantRector.php',
         'Rector\\Symfony\\Contract\\Bridge\\Symfony\\Routing\\SymfonyRoutesProviderInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/Bridge/Symfony/Routing/SymfonyRoutesProviderInterface.php',
         'Rector\\Symfony\\Contract\\EventReferenceToMethodNameInterface' => __DIR__ . '/..' . '/rector/rector-symfony/src/Contract/EventReferenceToMethodNameInterface.php',
@@ -3091,9 +3092,9 @@ class ComposerStaticInit63c0cd1f8e04b29f96bbff647001340d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit63c0cd1f8e04b29f96bbff647001340d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit63c0cd1f8e04b29f96bbff647001340d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit63c0cd1f8e04b29f96bbff647001340d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e::$classMap;
 
         }, null, ClassLoader::class);
     }
