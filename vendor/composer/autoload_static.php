@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit207444d1cfc1ae91e835bdbfc5c542cb
+class ComposerStaticInit2850f5fba6be0c35b9db1bcbf577cf41
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2596,6 +2596,7 @@ class ComposerStaticInit207444d1cfc1ae91e835bdbfc5c542cb
         'Rector\\Php82\\Rector\\Class_\\ReadOnlyClassRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Class_/ReadOnlyClassRector.php',
         'Rector\\Php82\\Rector\\FuncCall\\Utf8DecodeEncodeToMbConvertEncodingRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/FuncCall/Utf8DecodeEncodeToMbConvertEncodingRector.php',
         'Rector\\Php82\\Rector\\New_\\FilesystemIteratorSkipDotsRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/New_/FilesystemIteratorSkipDotsRector.php',
+        'Rector\\Php82\\Rector\\Param\\AddSensitiveParameterAttributeRector' => __DIR__ . '/../..' . '/rules/Php82/Rector/Param/AddSensitiveParameterAttributeRector.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayAnnotationToAttributeMapper.php',
         'Rector\\PhpAttribute\\AnnotationToAttributeMapper\\ArrayItemNodeAnnotationToAttributeMapper' => __DIR__ . '/../..' . '/packages/PhpAttribute/AnnotationToAttributeMapper/ArrayItemNodeAnnotationToAttributeMapper.php',
@@ -2897,6 +2898,7 @@ class ComposerStaticInit207444d1cfc1ae91e835bdbfc5c542cb
         'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageHandlerInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageSubscriberInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageSubscriberInterfaceToAttributeRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\MethodCall\\SimplifyFormRenderingRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/MethodCall/SimplifyFormRenderingRector.php',
+        'Rector\\Symfony\\Symfony63\\Rector\\Class_\\SignalableCommandInterfaceReturnTypeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony63/Rector/Class_/SignalableCommandInterfaceReturnTypeRector.php',
         'Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php',
         'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
         'Rector\\Symfony\\TypeAnalyzer\\ContainerAwareAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ContainerAwareAnalyzer.php',
@@ -3096,9 +3098,9 @@ class ComposerStaticInit207444d1cfc1ae91e835bdbfc5c542cb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit207444d1cfc1ae91e835bdbfc5c542cb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit207444d1cfc1ae91e835bdbfc5c542cb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit207444d1cfc1ae91e835bdbfc5c542cb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2850f5fba6be0c35b9db1bcbf577cf41::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2850f5fba6be0c35b9db1bcbf577cf41::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2850f5fba6be0c35b9db1bcbf577cf41::$classMap;
 
         }, null, ClassLoader::class);
     }

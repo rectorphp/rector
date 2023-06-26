@@ -2121,12 +2121,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "2e12a85562fa110257f945259bb14836c8a6374c"
+                "reference": "b5c56cbf2217ddc29be4f9016996b826c0dcc03a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/2e12a85562fa110257f945259bb14836c8a6374c",
-                "reference": "2e12a85562fa110257f945259bb14836c8a6374c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/b5c56cbf2217ddc29be4f9016996b826c0dcc03a",
+                "reference": "b5c56cbf2217ddc29be4f9016996b826c0dcc03a",
                 "shasum": ""
             },
             "require": {
@@ -2156,7 +2156,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-26T13:08:43+00:00",
+            "time": "2023-06-26T18:47:41+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

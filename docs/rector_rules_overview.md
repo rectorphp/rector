@@ -1,4 +1,4 @@
-# 368 Rules Overview
+# 369 Rules Overview
 
 <br>
 
@@ -42,7 +42,7 @@
 
 - [Php81](#php81) (11)
 
-- [Php82](#php82) (3)
+- [Php82](#php82) (4)
 
 - [Privatization](#privatization) (4)
 
@@ -5733,6 +5733,45 @@ Refactor Spatie enum method calls
 <br>
 
 ## Php82
+
+### AddSensitiveParameterAttributeRector
+
+Add SensitiveParameter attribute to method and function configured parameters
+
+:wrench: **configure it!**
+
+- class: [`Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector`](../rules/Php82/Rector/Param/AddSensitiveParameterAttributeRector.php)
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Rector\Config\RectorConfig;
+use Rector\Php82\Rector\Param\AddSensitiveParameterAttributeRector;
+
+return static function (RectorConfig $rectorConfig): void {
+    $rectorConfig->ruleWithConfiguration(AddSensitiveParameterAttributeRector::class, [
+        AddSensitiveParameterAttributeRector::SENSITIVE_PARAMETERS => [
+            'password',
+        ],
+    ]);
+};
+```
+
+↓
+
+```diff
+ class SomeClass
+ {
+-    public function run(string $password)
++    public function run(#[\SensitiveParameter] string $password)
+     {
+     }
+ }
+```
+
+<br>
 
 ### FilesystemIteratorSkipDotsRector
 

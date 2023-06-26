@@ -508,4 +508,9 @@ final class PhpVersionFeature
      * @var int
      */
     public const NULL_FALSE_TRUE_STANDALONE_TYPE = \Rector\Core\ValueObject\PhpVersion::PHP_82;
+    /**
+     * @see https://wiki.php.net/rfc/redact_parameters_in_back_traces
+     * @var int
+     */
+    public const SENSITIVE_PARAMETER_ATTRIBUTE = \Rector\Core\ValueObject\PhpVersion::PHP_82;
 }

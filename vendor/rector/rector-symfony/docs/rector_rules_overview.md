@@ -1,4 +1,4 @@
-# 81 Rules Overview
+# 82 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -1542,6 +1542,22 @@ Change `$services->set("name_type",` SomeType::class) to bare type, useful since
 -    $services->set('some_name', App\SomeClass::class);
 +    $services->set(App\SomeClass::class);
  };
+```
+
+<br>
+
+## SignalableCommandInterfaceReturnTypeRector
+
+Return int or false from `SignalableCommandInterface::handleSignal()` instead of void
+
+- class: [`Rector\Symfony\Symfony63\Rector\Class_\SignalableCommandInterfaceReturnTypeRector`](../rules/Symfony63/Rector/Class_/SignalableCommandInterfaceReturnTypeRector.php)
+
+```diff
+-public function handleSignal(int $signal): void
++public function handleSignal(int $signal): int|false
+     {
++        return false;
+     }
 ```
 
 <br>
