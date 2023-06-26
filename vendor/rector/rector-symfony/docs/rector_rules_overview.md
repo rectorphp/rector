@@ -1,4 +1,4 @@
-# 80 Rules Overview
+# 81 Rules Overview
 
 ## ActionSuffixRemoverRector
 
@@ -651,7 +651,7 @@ Turns fetching of Request via `$this->getRequest()` to action injection
 
 Turns fetching of dependencies via `$this->get()` to constructor injection in Command and Controller
 
-- class: [`Rector\Symfony\Rector\MethodCall\GetToConstructorInjectionRector`](../src/Rector/MethodCall/GetToConstructorInjectionRector.php)
+- class: [`Rector\Symfony\Symfony28\Rector\MethodCall\GetToConstructorInjectionRector`](../rules/Symfony28/Rector/MethodCall/GetToConstructorInjectionRector.php)
 
 ```diff
  use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -964,6 +964,49 @@ Replaces MessageHandlerInterface with AsMessageHandler attribute
      public function __invoke(SmsNotification $message)
      {
          // ... do some work - like sending an SMS message!
+     }
+ }
+```
+
+<br>
+
+## MessageSubscriberInterfaceToAttributeRector
+
+Replace MessageSubscriberInterface with AsMessageHandler attribute(s)
+
+- class: [`Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector`](../rules/Symfony62/Rector/Class_/MessageSubscriberInterfaceToAttributeRector.php)
+
+```diff
+-use Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
++use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+
+-class SmsNotificationHandler implements MessageSubscriberInterface
++class SmsNotificationHandler
+ {
+-    public function __invoke(SmsNotification $message)
++    #[AsMessageHandler]
++    public function handleSmsNotification(SmsNotification $message)
+     {
+         // ...
+     }
+
++    #[AsMessageHandler(priority: 0, bus: 'messenger.bus.default']
+     public function handleOtherSmsNotification(OtherSmsNotification $message)
+     {
+         // ...
+-    }
+-
+-    public static function getHandledMessages(): iterable
+-    {
+-        // handle this message on __invoke
+-        yield SmsNotification::class;
+-
+-        // also handle this message on handleOtherSmsNotification
+-        yield OtherSmsNotification::class => [
+-            'method' => 'handleOtherSmsNotification',
+-            'priority' => 0,
+-            'bus' => 'messenger.bus.default',
+-        ];
      }
  }
 ```

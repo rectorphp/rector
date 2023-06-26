@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e
+class ComposerStaticInit240469e81e6b2d22bbe59f601aa2cf11
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2801,6 +2801,7 @@ class ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e
         'Rector\\Symfony\\NodeAnalyzer\\LiteralCallLikeConstFetchReplacer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/LiteralCallLikeConstFetchReplacer.php',
         'Rector\\Symfony\\NodeAnalyzer\\RouteRequiredParamNameToTypesResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/RouteRequiredParamNameToTypesResolver.php',
         'Rector\\Symfony\\NodeAnalyzer\\ServiceTypeMethodCallResolver' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/ServiceTypeMethodCallResolver.php',
+        'Rector\\Symfony\\NodeAnalyzer\\SymfonyClosureExtensionMatcher' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyClosureExtensionMatcher.php',
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyPhpClosureDetector' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyPhpClosureDetector.php',
         'Rector\\Symfony\\NodeAnalyzer\\SymfonyTestCaseAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeAnalyzer/SymfonyTestCaseAnalyzer.php',
         'Rector\\Symfony\\NodeFactory\\Annotations\\DoctrineAnnotationFromNewFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/Annotations/DoctrineAnnotationFromNewFactory.php',
@@ -2825,7 +2826,6 @@ class ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e
         'Rector\\Symfony\\Rector\\Closure\\ServiceSettersToSettersAutodiscoveryRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceSettersToSettersAutodiscoveryRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ServiceTagsToDefaultsAutoconfigureRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceTagsToDefaultsAutoconfigureRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ServicesSetNameToSetTypeRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServicesSetNameToSetTypeRector.php',
-        'Rector\\Symfony\\Rector\\MethodCall\\GetToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/MethodCall/GetToConstructorInjectionRector.php',
         'Rector\\Symfony\\Set\\FOSRestSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/FOSRestSetList.php',
         'Rector\\Symfony\\Set\\JMSSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/JMSSetList.php',
         'Rector\\Symfony\\Set\\SensiolabsSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/SensiolabsSetList.php',
@@ -2837,6 +2837,7 @@ class ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e
         'Rector\\Symfony\\Symfony25\\Rector\\MethodCall\\MaxLengthSymfonyFormOptionToAttrRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony25/Rector/MethodCall/MaxLengthSymfonyFormOptionToAttrRector.php',
         'Rector\\Symfony\\Symfony26\\Rector\\MethodCall\\RedirectToRouteRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony26/Rector/MethodCall/RedirectToRouteRector.php',
         'Rector\\Symfony\\Symfony27\\Rector\\MethodCall\\ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony27/Rector/MethodCall/ChangeCollectionTypeOptionNameFromTypeToEntryTypeRector.php',
+        'Rector\\Symfony\\Symfony28\\Rector\\MethodCall\\GetToConstructorInjectionRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony28/Rector/MethodCall/GetToConstructorInjectionRector.php',
         'Rector\\Symfony\\Symfony28\\Rector\\StaticCall\\ParseFileRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony28/Rector/StaticCall/ParseFileRector.php',
         'Rector\\Symfony\\Symfony30\\Rector\\ClassMethod\\FormTypeGetParentRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/ClassMethod/FormTypeGetParentRector.php',
         'Rector\\Symfony\\Symfony30\\Rector\\ClassMethod\\GetRequestRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/ClassMethod/GetRequestRector.php',
@@ -2893,6 +2894,7 @@ class ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e
         'Rector\\Symfony\\Symfony61\\Rector\\StaticPropertyFetch\\ErrorNamesPropertyToConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony61/Rector/StaticPropertyFetch/ErrorNamesPropertyToConstantRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\ClassMethod\\ParamConverterAttributeToMapEntityAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/ClassMethod/ParamConverterAttributeToMapEntityAttributeRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageHandlerInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageHandlerInterfaceToAttributeRector.php',
+        'Rector\\Symfony\\Symfony62\\Rector\\Class_\\MessageSubscriberInterfaceToAttributeRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/Class_/MessageSubscriberInterfaceToAttributeRector.php',
         'Rector\\Symfony\\Symfony62\\Rector\\MethodCall\\SimplifyFormRenderingRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony62/Rector/MethodCall/SimplifyFormRenderingRector.php',
         'Rector\\Symfony\\Twig134\\Rector\\Return_\\SimpleFunctionAndFilterRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Twig134/Rector/Return_/SimpleFunctionAndFilterRector.php',
         'Rector\\Symfony\\TypeAnalyzer\\ArrayUnionResponseTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-symfony/src/TypeAnalyzer/ArrayUnionResponseTypeAnalyzer.php',
@@ -2907,6 +2909,7 @@ class ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e
         'Rector\\Symfony\\ValueObject\\EventNameToClassAndConstant' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventNameToClassAndConstant.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodName' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodName.php',
         'Rector\\Symfony\\ValueObject\\EventReferenceToMethodNameWithPriority' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/EventReferenceToMethodNameWithPriority.php',
+        'Rector\\Symfony\\ValueObject\\ExtensionKeyAndConfiguration' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ExtensionKeyAndConfiguration.php',
         'Rector\\Symfony\\ValueObject\\IntlBundleClassToNewClass' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/IntlBundleClassToNewClass.php',
         'Rector\\Symfony\\ValueObject\\ReplaceServiceArgument' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ReplaceServiceArgument.php',
         'Rector\\Symfony\\ValueObject\\ServiceDefinition' => __DIR__ . '/..' . '/rector/rector-symfony/src/ValueObject/ServiceDefinition.php',
@@ -3092,9 +3095,9 @@ class ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit1ed4b401ef7dbc14a301a251d50c8c4e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit240469e81e6b2d22bbe59f601aa2cf11::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit240469e81e6b2d22bbe59f601aa2cf11::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit240469e81e6b2d22bbe59f601aa2cf11::$classMap;
 
         }, null, ClassLoader::class);
     }

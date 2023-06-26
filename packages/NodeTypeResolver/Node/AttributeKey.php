@@ -228,4 +228,12 @@ final class AttributeKey
      * @var string
      */
     public const IS_CONSTFETCH_NAME = 'is_constfetch_name';
+    /**
+     * @var string
+     */
+    public const IS_RETURN_EXPR = 'is_return_expr';
+    /**
+     * @var string
+     */
+    public const IS_ARG_VALUE = 'is_arg_value';
 }

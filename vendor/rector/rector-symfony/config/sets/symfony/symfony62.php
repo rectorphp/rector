@@ -10,6 +10,7 @@ use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Symfony\Symfony62\Rector\Class_\MessageHandlerInterfaceToAttributeRector;
+use Rector\Symfony\Symfony62\Rector\Class_\MessageSubscriberInterfaceToAttributeRector;
 use Rector\Symfony\Symfony62\Rector\ClassMethod\ParamConverterAttributeToMapEntityAttributeRector;
 use Rector\Symfony\Symfony62\Rector\MethodCall\SimplifyFormRenderingRector;
 return static function (RectorConfig $rectorConfig) : void {
@@ -50,4 +51,5 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->rule(ParamConverterAttributeToMapEntityAttributeRector::class);
     // @see https://github.com/symfony/symfony/pull/47068
     $rectorConfig->rule(MessageHandlerInterfaceToAttributeRector::class);
+    $rectorConfig->rule(MessageSubscriberInterfaceToAttributeRector::class);
 };
