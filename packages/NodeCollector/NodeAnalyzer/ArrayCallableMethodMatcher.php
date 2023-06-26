@@ -3,12 +3,10 @@
 declare (strict_types=1);
 namespace Rector\NodeCollector\NodeAnalyzer;
 
-use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
@@ -25,16 +23,10 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeCollector\ValueObject\ArrayCallable;
 use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
-use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class ArrayCallableMethodMatcher
 {
-    /**
-     * @readonly
-     * @var \Rector\NodeNameResolver\NodeNameResolver
-     */
-    private $nodeNameResolver;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
@@ -55,9 +47,8 @@ final class ArrayCallableMethodMatcher
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, ValueResolver $valueResolver, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
+    public function __construct(NodeTypeResolver $nodeTypeResolver, ValueResolver $valueResolver, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->valueResolver = $valueResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -137,16 +128,11 @@ final class ArrayCallableMethodMatcher
      */
     private function isCallbackAtFunctionNames(Array_ $array, array $functionNames) : bool
     {
-        if ($array->getAttribute(AttributeKey::IS_ARG_VALUE) !== \true) {
+        $fromFuncCallName = $array->getAttribute(AttributeKey::FROM_FUNC_CALL_NAME);
+        if ($fromFuncCallName === null) {
             return \false;
         }
-        /** @var Arg $parentNode */
-        $parentNode = $array->getAttribute(AttributeKey::PARENT_NODE);
-        $parentParentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        if (!$parentParentNode instanceof FuncCall) {
-            return \false;
-        }
-        return $this->nodeNameResolver->isNames($parentParentNode, $functionNames);
+        return \in_array($fromFuncCallName, $functionNames, \true);
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType
