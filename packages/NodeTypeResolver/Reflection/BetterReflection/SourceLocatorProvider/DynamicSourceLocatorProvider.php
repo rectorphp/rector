@@ -79,4 +79,8 @@ final class DynamicSourceLocatorProvider
         Assert::allString($files);
         $this->filesByDirectory[$directory] = $files;
     }
+    public function isPathsEmpty() : bool
+    {
+        return $this->filePaths === [] && $this->filesByDirectory === [];
+    }
 }
