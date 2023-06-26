@@ -5,7 +5,6 @@ namespace Rector\Renaming\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
@@ -262,10 +261,10 @@ final class ClassRenamer
         }
         $classReflection = $this->reflectionProvider->getClass($newClassName);
         // ensure new is not with interface
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof New_ && $classReflection->isInterface()) {
+        if ($name->getAttribute(AttributeKey::IS_NEW_INSTANCE_NAME) === \true && $classReflection->isInterface()) {
             return \false;
         }
+        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
         if ($parentNode instanceof Class_) {
             return $this->isValidClassNameChange($name, $parentNode, $classReflection);
         }
