@@ -15,7 +15,6 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Core\PhpParser\ClassLikeAstResolver;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -50,7 +49,7 @@ final class NameScopeFactory
     /**
      * @required
      */
-    public function autowire(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, BetterNodeFinder $betterNodeFinder, UseImportsResolver $useImportsResolver, ReflectionResolver $reflectionResolver, ClassLikeAstResolver $classLikeAstResolver) : void
+    public function autowire(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, UseImportsResolver $useImportsResolver, ReflectionResolver $reflectionResolver, ClassLikeAstResolver $classLikeAstResolver) : void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
