@@ -19,7 +19,6 @@ jobs:
                 directory:
                     - 'e2e/define-constant'
                     - 'e2e/dont-execute-code'
-                    - 'e2e/finalize'
                     - 'e2e/parse-php7-code'
                     - 'e2e/parse-php8-code'
 
