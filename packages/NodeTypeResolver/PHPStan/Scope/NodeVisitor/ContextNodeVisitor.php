@@ -8,22 +8,19 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
 use PhpParser\Node\Stmt\ElseIf_;
 use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
-use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
@@ -106,18 +103,26 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         }
     }
     /**
-     * @param \PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\Foreach_|\PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_ $node
+     * @param Stmt[] $node
      */
     private function processContextInLoop($node) : void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($node->stmts, static function (Node $subNode) : ?int {
-            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
-                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+        $stmts = $node instanceof Stmt ? $node->stmts : $node;
+        foreach ($stmts as $stmt) {
+            if ($stmt instanceof Break_) {
+                $stmt->setAttribute(AttributeKey::IS_IN_LOOP, \true);
+                continue;
             }
-            if ($subNode instanceof If_ || $subNode instanceof Break_) {
-                $subNode->setAttribute(AttributeKey::IS_IN_LOOP, \true);
+            if ($stmt instanceof If_) {
+                $stmt->setAttribute(AttributeKey::IS_IN_LOOP, \true);
+                $this->processContextInLoop($stmt->stmts);
+                foreach ($stmt->elseifs as $elseif) {
+                    $this->processContextInLoop($elseif->stmts);
+                }
+                if ($stmt->else instanceof Else_) {
+                    $this->processContextInLoop($stmt->else->stmts);
+                }
             }
-            return null;
-        });
+        }
     }
 }
