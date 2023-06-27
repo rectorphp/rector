@@ -23,6 +23,7 @@ use Rector\Core\Reflection\ReflectionResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class PropertyFetchFinder
 {
     /**
@@ -131,7 +132,10 @@ final class PropertyFetchFinder
         });
         return $propertyArrayDimFetches;
     }
-    public function isLocalPropertyFetchByName(Expr $expr, string $propertyName) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
+     */
+    public function isLocalPropertyFetchByName(Expr $expr, $class, string $propertyName) : bool
     {
         if (!$expr instanceof PropertyFetch) {
             return \false;
@@ -139,7 +143,11 @@ final class PropertyFetchFinder
         if (!$this->nodeNameResolver->isName($expr->name, $propertyName)) {
             return \false;
         }
-        return $this->nodeNameResolver->isName($expr->var, 'this');
+        if ($this->nodeNameResolver->isName($expr->var, 'this')) {
+            return \true;
+        }
+        $type = $this->nodeTypeResolver->getType($expr->var);
+        return $type instanceof FullyQualifiedObjectType && $this->nodeNameResolver->isName($class, $type->getClassName());
     }
     /**
      * @param Stmt[] $stmts
@@ -184,7 +192,7 @@ final class PropertyFetchFinder
     {
         // early check if property fetch name is not equals with property name
         // so next check is check var name and var type only
-        if (!$this->isLocalPropertyFetchByName($propertyFetch, $propertyName)) {
+        if (!$this->isLocalPropertyFetchByName($propertyFetch, $class, $propertyName)) {
             return \false;
         }
         $propertyFetchVarType = $this->nodeTypeResolver->getType($propertyFetch->var);
