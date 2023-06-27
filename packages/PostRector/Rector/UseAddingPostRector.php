@@ -120,7 +120,7 @@ CODE_SAMPLE
         // B. no namespace? add in the top
         $useImportTypes = $this->filterOutNonNamespacedNames($useImportTypes);
         // then add, to prevent adding + removing false positive of same short use
-        return $this->useImportsAdder->addImportsToStmts($nodes, $useImportTypes, $functionUseImportTypes);
+        return $this->useImportsAdder->addImportsToStmts($namespace, $nodes, $useImportTypes, $functionUseImportTypes);
     }
     /**
      * Prevents

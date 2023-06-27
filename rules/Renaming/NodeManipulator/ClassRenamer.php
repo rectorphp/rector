@@ -341,7 +341,7 @@ final class ClassRenamer
     }
     private function isValidUseImportChange(string $newName, UseUse $useUse) : bool
     {
-        $uses = $this->useImportsResolver->resolveForNode($useUse);
+        $uses = $this->useImportsResolver->resolve();
         if ($uses === []) {
             return \true;
         }

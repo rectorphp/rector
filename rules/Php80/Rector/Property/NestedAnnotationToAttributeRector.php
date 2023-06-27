@@ -111,7 +111,7 @@ CODE_SAMPLE
         if (!$phpDocInfo instanceof PhpDocInfo) {
             return null;
         }
-        $uses = $this->useImportsResolver->resolveBareUsesForNode($node);
+        $uses = $this->useImportsResolver->resolveBareUses();
         $attributeGroups = $this->transformDoctrineAnnotationClassesToAttributeGroups($phpDocInfo, $uses);
         if ($attributeGroups === []) {
             return null;

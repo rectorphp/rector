@@ -12,6 +12,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PHPStan\Type\ObjectType;
 use Rector\CodingStyle\ClassNameImport\UsedImportsResolver;
+use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -39,7 +40,7 @@ final class UseImportsAdder
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $functionUseImportTypes
      * @return Stmt[]
      */
-    public function addImportsToStmts(array $stmts, array $useImportTypes, array $functionUseImportTypes) : array
+    public function addImportsToStmts(FileWithoutNamespace $fileWithoutNamespace, array $stmts, array $useImportTypes, array $functionUseImportTypes) : array
     {
         $existingUseImportTypes = $this->usedImportsResolver->resolveForStmts($stmts);
         $existingFunctionUseImports = $this->usedImportsResolver->resolveFunctionImportsForStmts($stmts);
@@ -60,12 +61,16 @@ final class UseImportsAdder
                 }
                 $this->mirrorUseComments($stmts, $newUses, $key + 1);
                 \array_splice($stmts, $key + 1, 0, $nodesToAdd);
-                return $stmts;
+                $fileWithoutNamespace->stmts = $stmts;
+                $fileWithoutNamespace->stmts = \array_values($fileWithoutNamespace->stmts);
+                return $fileWithoutNamespace->stmts;
             }
         }
         $this->mirrorUseComments($stmts, $newUses);
         // make use stmts first
-        return \array_merge($newUses, $stmts);
+        $fileWithoutNamespace->stmts = \array_merge($newUses, $stmts);
+        $fileWithoutNamespace->stmts = \array_values($fileWithoutNamespace->stmts);
+        return $fileWithoutNamespace->stmts;
     }
     /**
      * @param FullyQualifiedObjectType[] $useImportTypes
@@ -85,6 +90,7 @@ final class UseImportsAdder
         }
         $this->mirrorUseComments($namespace->stmts, $newUses);
         $namespace->stmts = \array_merge($newUses, $namespace->stmts);
+        $namespace->stmts = \array_values($namespace->stmts);
     }
     /**
      * @param Stmt[] $stmts

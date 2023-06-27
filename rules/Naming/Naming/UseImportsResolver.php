@@ -8,25 +8,67 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
+use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
+use Rector\Core\Provider\CurrentFileProvider;
+use Rector\Core\ValueObject\Application\File;
 final class UseImportsResolver
 {
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\Core\Provider\CurrentFileProvider
      */
-    private $betterNodeFinder;
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    private $currentFileProvider;
+    /**
+     * @readonly
+     * @var \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
+     */
+    private $fileWithoutNamespaceNodeTraverser;
+    public function __construct(CurrentFileProvider $currentFileProvider, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->currentFileProvider = $currentFileProvider;
+        $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
+    }
+    /**
+     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|null
+     */
+    private function resolveNamespace()
+    {
+        /** @var File|null $file */
+        $file = $this->currentFileProvider->getFile();
+        if (!$file instanceof File) {
+            return null;
+        }
+        $newStmts = $file->getNewStmts();
+        if ($newStmts === []) {
+            return null;
+        }
+        $namespaces = \array_filter($newStmts, static function (Stmt $stmt) : bool {
+            return $stmt instanceof Namespace_;
+        });
+        // multiple namespaces is not supported
+        if (\count($namespaces) > 1) {
+            return null;
+        }
+        $currentNamespace = \current($namespaces);
+        if ($currentNamespace instanceof Namespace_) {
+            return $currentNamespace;
+        }
+        $currentStmt = \current($newStmts);
+        if (!$currentStmt instanceof FileWithoutNamespace) {
+            $newStmts = $this->fileWithoutNamespaceNodeTraverser->traverse($newStmts);
+            /** @var FileWithoutNamespace $currentStmt  */
+            $currentStmt = \current($newStmts);
+            return $currentStmt;
+        }
+        return $currentStmt;
     }
     /**
      * @return Use_[]|GroupUse[]
      */
-    public function resolveForNode(Node $node) : array
+    public function resolve() : array
     {
-        $namespace = $this->betterNodeFinder->findParentByTypes($node, [Namespace_::class, FileWithoutNamespace::class]);
+        $namespace = $this->resolveNamespace();
         if (!$namespace instanceof Node) {
             return [];
         }
@@ -38,9 +80,9 @@ final class UseImportsResolver
      * @api
      * @return Use_[]
      */
-    public function resolveBareUsesForNode(Node $node) : array
+    public function resolveBareUses() : array
     {
-        $namespace = $this->betterNodeFinder->findParentByTypes($node, [Namespace_::class, FileWithoutNamespace::class]);
+        $namespace = $this->resolveNamespace();
         if (!$namespace instanceof Node) {
             return [];
         }

@@ -61,7 +61,7 @@ final class NameScopeFactory
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         $namespace = $scope instanceof Scope ? $scope->getNamespace() : null;
-        $uses = $this->useImportsResolver->resolveForNode($node);
+        $uses = $this->useImportsResolver->resolve();
         $usesAliasesToNames = $this->resolveUseNamesByAlias($uses);
         if ($scope instanceof Scope && $scope->getClassReflection() instanceof ClassReflection) {
             $classReflection = $scope->getClassReflection();

@@ -60,7 +60,7 @@ final class ObjectTypeSpecifier
                 }
             }
         }
-        $uses = $this->useImportsResolver->resolveForNode($node);
+        $uses = $this->useImportsResolver->resolve();
         if ($uses === []) {
             if (!$this->reflectionProvider->hasClass($objectType->getClassName())) {
                 return new NonExistingObjectType($objectType->getClassName());

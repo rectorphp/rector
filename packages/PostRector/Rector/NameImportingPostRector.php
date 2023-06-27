@@ -142,7 +142,7 @@ CODE_SAMPLE
             return null;
         }
         /** @var Use_[]|GroupUse[] $currentUses */
-        $currentUses = $this->useImportsResolver->resolveForNode($name);
+        $currentUses = $this->useImportsResolver->resolve();
         if ($this->shouldImportName($name, $currentUses)) {
             $nameInUse = $this->resolveNameInUse($name, $currentUses);
             if ($nameInUse instanceof FullyQualified) {
