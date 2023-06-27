@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\Application;
 
-use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\ValueObject\Application\File;
@@ -25,17 +24,11 @@ final class FileProcessor
      * @var \Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser
      */
     private $rectorNodeTraverser;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
-     */
-    private $fileWithoutNamespaceNodeTraverser;
-    public function __construct(NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, RectorParser $rectorParser, RectorNodeTraverser $rectorNodeTraverser, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
+    public function __construct(NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, RectorParser $rectorParser, RectorNodeTraverser $rectorNodeTraverser)
     {
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->rectorParser = $rectorParser;
         $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
     }
     public function parseFileInfoToLocalCache(File $file) : void
     {
@@ -48,8 +41,7 @@ final class FileProcessor
     }
     public function refactor(File $file) : void
     {
-        $newStmts = $this->fileWithoutNamespaceNodeTraverser->traverse($file->getNewStmts());
-        $newStmts = $this->rectorNodeTraverser->traverse($newStmts);
+        $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
         $file->changeNewStmts($newStmts);
     }
 }

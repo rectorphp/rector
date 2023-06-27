@@ -9,7 +9,6 @@ use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 final class UseImportsResolver
@@ -19,15 +18,9 @@ final class UseImportsResolver
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
-     */
-    private $fileWithoutNamespaceNodeTraverser;
-    public function __construct(CurrentFileProvider $currentFileProvider, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
+    public function __construct(CurrentFileProvider $currentFileProvider)
     {
         $this->currentFileProvider = $currentFileProvider;
-        $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
     }
     /**
      * @return \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|null
@@ -56,10 +49,7 @@ final class UseImportsResolver
         }
         $currentStmt = \current($newStmts);
         if (!$currentStmt instanceof FileWithoutNamespace) {
-            $newStmts = $this->fileWithoutNamespaceNodeTraverser->traverse($newStmts);
-            /** @var FileWithoutNamespace $currentStmt  */
-            $currentStmt = \current($newStmts);
-            return $currentStmt;
+            return null;
         }
         return $currentStmt;
     }

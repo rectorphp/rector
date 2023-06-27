@@ -5,7 +5,6 @@ namespace Rector\FileSystemRector\Parser;
 
 use RectorPrefix202306\Nette\Utils\FileSystem;
 use PhpParser\Node\Stmt;
-use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -22,11 +21,6 @@ final class FileInfoParser
     private $nodeScopeAndMetadataDecorator;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser
-     */
-    private $fileWithoutNamespaceNodeTraverser;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Parser\RectorParser
      */
     private $rectorParser;
@@ -35,10 +29,9 @@ final class FileInfoParser
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser, RectorParser $rectorParser, CurrentFileProvider $currentFileProvider)
+    public function __construct(NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, RectorParser $rectorParser, CurrentFileProvider $currentFileProvider)
     {
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
         $this->rectorParser = $rectorParser;
         $this->currentFileProvider = $currentFileProvider;
     }
@@ -49,7 +42,6 @@ final class FileInfoParser
     public function parseFileInfoToNodesAndDecorate(string $filePath) : array
     {
         $stmts = $this->rectorParser->parseFile($filePath);
-        $stmts = $this->fileWithoutNamespaceNodeTraverser->traverse($stmts);
         $file = new File($filePath, FileSystem::read($filePath));
         $stmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $stmts);
         $file->hydrateStmtsAndTokens($stmts, $stmts, []);

@@ -231,11 +231,19 @@ CODE_SAMPLE
         }
         // Check if default value is the same
         $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
-        if ($classMethod instanceof ClassMethod && isset($classMethod->params[$position]) && !$this->changedArgumentsDetector->isDefaultValueChanged($classMethod->params[$position], $argumentAdder->getArgumentDefaultValue())) {
-            return \true;
+        if (!$classMethod instanceof ClassMethod) {
+            // is correct scope?
+            return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
         }
-        // is correct scope?
-        return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
+        if (!isset($classMethod->params[$position])) {
+            // is correct scope?
+            return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
+        }
+        if ($this->changedArgumentsDetector->isDefaultValueChanged($classMethod->params[$position], $argumentAdder->getArgumentDefaultValue())) {
+            // is correct scope?
+            return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
+        }
+        return \true;
     }
     /**
      * @param mixed $defaultValue
