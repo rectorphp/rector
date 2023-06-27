@@ -113,7 +113,7 @@ final class ProcessCommand extends \Rector\Core\Console\Command\AbstractProcessC
         // 1. add files and directories to static locator
         $this->dynamicSourceLocatorDecorator->addPaths($paths);
         if ($this->dynamicSourceLocatorDecorator->isPathsEmpty()) {
-            $this->rectorOutputStyle->error("The given paths do not match any files");
+            $this->rectorOutputStyle->error('The given paths do not match any files');
             return ExitCode::FAILURE;
         }
         // 2. inform user about registering configurable rule without configuration

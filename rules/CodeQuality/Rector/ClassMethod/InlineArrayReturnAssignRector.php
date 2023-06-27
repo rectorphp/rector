@@ -5,6 +5,7 @@ namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Variable;
@@ -76,6 +77,9 @@ CODE_SAMPLE
         if (!$variable instanceof Variable) {
             return null;
         }
+        if (!$this->areAssignExclusiveToDimFetch($stmts)) {
+            return null;
+        }
         $lastStmt = \array_pop($stmts);
         if (!$lastStmt instanceof Stmt) {
             return null;
@@ -130,5 +134,33 @@ CODE_SAMPLE
             $arrayItems[] = $arrayItem;
         }
         return new Array_($arrayItems);
+    }
+    /**
+     * Only:
+     * $items['...'] = $result;
+     *
+     * @param Stmt[] $stmts
+     */
+    private function areAssignExclusiveToDimFetch(array $stmts) : bool
+    {
+        \end($stmts);
+        $lastKey = \key($stmts);
+        foreach ($stmts as $key => $stmt) {
+            if ($key === $lastKey) {
+                // skip last item
+                continue;
+            }
+            if (!$stmt instanceof Expression) {
+                return \false;
+            }
+            if (!$stmt->expr instanceof Assign) {
+                return \false;
+            }
+            $assign = $stmt->expr;
+            if (!$assign->var instanceof ArrayDimFetch) {
+                return \false;
+            }
+        }
+        return \true;
     }
 }
