@@ -229,6 +229,11 @@ CODE_SAMPLE
         if (isset($node->args[$position])) {
             return \true;
         }
+        // Check if default value is the same
+        $classMethod = $this->astResolver->resolveClassMethodFromCall($node);
+        if ($classMethod instanceof ClassMethod && isset($classMethod->params[$position]) && !$this->changedArgumentsDetector->isDefaultValueChanged($classMethod->params[$position], $argumentAdder->getArgumentDefaultValue())) {
+            return \true;
+        }
         // is correct scope?
         return !$this->argumentAddingScope->isInCorrectScope($node, $argumentAdder);
     }
