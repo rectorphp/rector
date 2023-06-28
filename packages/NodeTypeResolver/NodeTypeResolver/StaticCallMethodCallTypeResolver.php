@@ -7,8 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\Php\PhpMethodReflection;
-use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -28,18 +28,12 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
      */
     private $nodeNameResolver;
     /**
-     * @readonly
-     * @var \PHPStan\Reflection\ReflectionProvider
-     */
-    private $reflectionProvider;
-    /**
      * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
     private $nodeTypeResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
+    public function __construct(NodeNameResolver $nodeNameResolver)
     {
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
     }
     /**
      * @required
@@ -78,8 +72,8 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
         } else {
             $callerType = $this->nodeTypeResolver->getType($node->class);
         }
-        foreach ($callerType->getReferencedClasses() as $referencedClass) {
-            $classMethodReturnType = $this->resolveClassMethodReturnType($referencedClass, $node, $methodName, $scope);
+        foreach ($callerType->getObjectClassReflections() as $classReflection) {
+            $classMethodReturnType = $this->resolveClassMethodReturnType($classReflection, $node, $methodName, $scope);
             if (!$classMethodReturnType instanceof MixedType) {
                 return $classMethodReturnType;
             }
@@ -89,12 +83,8 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function resolveClassMethodReturnType(string $referencedClass, $node, string $methodName, Scope $scope) : Type
+    private function resolveClassMethodReturnType(ClassReflection $classReflection, $node, string $methodName, Scope $scope) : Type
     {
-        if (!$this->reflectionProvider->hasClass($referencedClass)) {
-            return new MixedType();
-        }
-        $classReflection = $this->reflectionProvider->getClass($referencedClass);
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             if (!$ancestorClassReflection->hasMethod($methodName)) {
                 continue;
