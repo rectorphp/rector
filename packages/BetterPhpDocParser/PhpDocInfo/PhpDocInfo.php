@@ -158,7 +158,6 @@ final class PhpDocInfo
         $tags = \array_filter($tags, static function (PhpDocTagNode $phpDocTagNode) use($name) : bool {
             return $phpDocTagNode->name === $name;
         });
-        $tags = \array_values($tags);
         return \array_values($tags);
     }
     public function getParamType(string $name) : Type
