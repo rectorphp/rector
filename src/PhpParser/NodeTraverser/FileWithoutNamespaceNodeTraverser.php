@@ -28,9 +28,6 @@ final class FileWithoutNamespaceNodeTraverser extends NodeTraverser
      */
     public function traverse(array $nodes) : array
     {
-        if (\current($nodes) instanceof FileWithoutNamespace) {
-            return $nodes;
-        }
         $hasNamespace = (bool) $this->nodeFinder->findFirstInstanceOf($nodes, Namespace_::class);
         if (!$hasNamespace && $nodes !== []) {
             $fileWithoutNamespace = new FileWithoutNamespace($nodes);
