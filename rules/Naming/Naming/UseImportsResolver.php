@@ -23,37 +23,6 @@ final class UseImportsResolver
         $this->currentFileProvider = $currentFileProvider;
     }
     /**
-     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|null
-     */
-    private function resolveNamespace()
-    {
-        /** @var File|null $file */
-        $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof File) {
-            return null;
-        }
-        $newStmts = $file->getNewStmts();
-        if ($newStmts === []) {
-            return null;
-        }
-        $namespaces = \array_filter($newStmts, static function (Stmt $stmt) : bool {
-            return $stmt instanceof Namespace_;
-        });
-        // multiple namespaces is not supported
-        if (\count($namespaces) > 1) {
-            return null;
-        }
-        $currentNamespace = \current($namespaces);
-        if ($currentNamespace instanceof Namespace_) {
-            return $currentNamespace;
-        }
-        $currentStmt = \current($newStmts);
-        if (!$currentStmt instanceof FileWithoutNamespace) {
-            return null;
-        }
-        return $currentStmt;
-    }
-    /**
      * @return Use_[]|GroupUse[]
      */
     public function resolve() : array
@@ -86,5 +55,36 @@ final class UseImportsResolver
     public function resolvePrefix($use) : string
     {
         return $use instanceof GroupUse ? $use->prefix . '\\' : '';
+    }
+    /**
+     * @return \PhpParser\Node\Stmt\Namespace_|\Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|null
+     */
+    private function resolveNamespace()
+    {
+        /** @var File|null $file */
+        $file = $this->currentFileProvider->getFile();
+        if (!$file instanceof File) {
+            return null;
+        }
+        $newStmts = $file->getNewStmts();
+        if ($newStmts === []) {
+            return null;
+        }
+        $namespaces = \array_filter($newStmts, static function (Stmt $stmt) : bool {
+            return $stmt instanceof Namespace_;
+        });
+        // multiple namespaces is not supported
+        if (\count($namespaces) > 1) {
+            return null;
+        }
+        $currentNamespace = \current($namespaces);
+        if ($currentNamespace instanceof Namespace_) {
+            return $currentNamespace;
+        }
+        $currentStmt = \current($newStmts);
+        if (!$currentStmt instanceof FileWithoutNamespace) {
+            return null;
+        }
+        return $currentStmt;
     }
 }
