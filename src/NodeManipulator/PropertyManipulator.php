@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\Stmt\Unset_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
@@ -231,15 +230,15 @@ final class PropertyManipulator
      */
     private function isChangeableContext($propertyFetch, Scope $scope) : bool
     {
+        if ($propertyFetch->getAttribute(AttributeKey::IS_UNSET_VAR) === \true) {
+            return \true;
+        }
         $parentNode = $propertyFetch->getAttribute(AttributeKey::PARENT_NODE);
         if (!$parentNode instanceof Node) {
             return \false;
         }
         if ($this->multiInstanceofChecker->isInstanceOf($parentNode, [PreInc::class, PreDec::class, PostInc::class, PostDec::class])) {
             $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-        if (!$parentNode instanceof Node) {
-            return \false;
         }
         if ($parentNode instanceof Arg) {
             $readArg = $this->variableToConstantGuard->isReadArg($parentNode);
@@ -254,7 +253,7 @@ final class PropertyManipulator
         if ($parentNode instanceof ArrayDimFetch) {
             return !$this->readWritePropertyAnalyzer->isRead($propertyFetch, $scope);
         }
-        return $parentNode instanceof Unset_;
+        return \false;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
