@@ -268,6 +268,9 @@ final class BetterNodeFinder
             return null;
         }
         if ($parentNode instanceof Node) {
+            if ($parentNode instanceof FileWithoutNamespace || $parentNode instanceof Namespace_) {
+                return null;
+            }
             return $this->findFirstPrevious($parentNode, $filter);
         }
         return null;
@@ -292,6 +295,9 @@ final class BetterNodeFinder
             return null;
         }
         if ($parentNode instanceof Node) {
+            if ($parentNode instanceof FileWithoutNamespace || $parentNode instanceof Namespace_) {
+                return null;
+            }
             return $this->findFirstNext($parentNode, $filter);
         }
         return null;
