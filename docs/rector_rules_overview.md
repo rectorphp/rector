@@ -1,4 +1,4 @@
-# 369 Rules Overview
+# 370 Rules Overview
 
 <br>
 
@@ -54,7 +54,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (41)
+- [TypeDeclaration](#typedeclaration) (42)
 
 - [Visibility](#visibility) (3)
 
@@ -8362,6 +8362,25 @@ Add return method return type based on strict typed property
 +    public function getAge(): int
      {
          return $this->age;
+     }
+ }
+```
+
+<br>
+
+### StrictArrayParamDimFetchRector
+
+Add array type based on array dim fetch use
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector`](../rules/TypeDeclaration/Rector/ClassMethod/StrictArrayParamDimFetchRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function resolve($item)
++    public function resolve(array $item)
+     {
+         return $item['name'];
      }
  }
 ```

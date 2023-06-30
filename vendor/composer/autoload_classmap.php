@@ -2776,6 +2776,7 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictNewArrayRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNewArrayRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php',
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
+    'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictArrayParamDimFetchRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StrictArrayParamDimFetchRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\PropertyTypeFromStrictSetterGetterRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/PropertyTypeFromStrictSetterGetterRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\ReturnTypeFromStrictTernaryRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/ReturnTypeFromStrictTernaryRector.php',
     'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php',
