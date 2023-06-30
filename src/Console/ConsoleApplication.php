@@ -7,25 +7,30 @@ use RectorPrefix202306\Composer\XdebugHandler\XdebugHandler;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Console\Command\ListRulesCommand;
-use Rector\Core\Console\Command\ProcessCommand;
-use Rector\Core\Console\Command\SetupCICommand;
-use Rector\Core\Console\Command\WorkerCommand;
 use RectorPrefix202306\Symfony\Component\Console\Application;
+use RectorPrefix202306\Symfony\Component\Console\Command\Command;
 use RectorPrefix202306\Symfony\Component\Console\Input\InputDefinition;
 use RectorPrefix202306\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202306\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202306\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
+use RectorPrefix202306\Webmozart\Assert\Assert;
 final class ConsoleApplication extends Application
 {
     /**
      * @var string
      */
     private const NAME = 'Rector';
-    public function __construct(ProcessCommand $processCommand, WorkerCommand $workerCommand, SetupCICommand $setupCICommand, ListRulesCommand $listRulesCommand)
+    /**
+     * @param RewindableGenerator<int, Command> $commands
+     */
+    public function __construct(iterable $commands)
     {
         parent::__construct(self::NAME, VersionResolver::PACKAGE_VERSION);
-        $this->addCommands([$processCommand, $workerCommand, $setupCICommand, $listRulesCommand]);
+        $commands = \iterator_to_array($commands->getIterator());
+        Assert::allIsInstanceOf($commands, Command::class);
+        $this->addCommands($commands);
+        // run this command, if no command name is provided
         $this->setDefaultCommand('process');
     }
     public function doRun(InputInterface $input, OutputInterface $output) : int

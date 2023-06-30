@@ -19,6 +19,7 @@ use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+use RectorPrefix202306\Symfony\Component\Console\Command\Command;
 use RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
 use RectorPrefix202306\Webmozart\Assert\Assert;
@@ -32,7 +33,7 @@ final class ContainerBuilderFactory
     /**
      * @var array<class-string>
      */
-    private const TYPES_TO_TAG_AUTOCONFIGURE = [BasePhpDocNodeVisitorInterface::class, PhpDocNodeDecoratorInterface::class, NodeTypeResolverInterface::class, ScopeResolverNodeVisitorInterface::class, TypeMapperInterface::class, PhpParserNodeMapperInterface::class, PhpDocTypeMapperInterface::class, ClassNameImportSkipVoterInterface::class, RectorInterface::class, RectorInterface::class, OutputFormatterInterface::class, NonPhpRectorInterface::class, PhpRectorInterface::class, NodeNameResolverInterface::class, FileProcessorInterface::class, AnnotationToAttributeMapperInterface::class];
+    private const TYPES_TO_TAG_AUTOCONFIGURE = [BasePhpDocNodeVisitorInterface::class, PhpDocNodeDecoratorInterface::class, NodeTypeResolverInterface::class, ScopeResolverNodeVisitorInterface::class, TypeMapperInterface::class, PhpParserNodeMapperInterface::class, PhpDocTypeMapperInterface::class, ClassNameImportSkipVoterInterface::class, RectorInterface::class, Command::class, RectorInterface::class, OutputFormatterInterface::class, NonPhpRectorInterface::class, PhpRectorInterface::class, NodeNameResolverInterface::class, FileProcessorInterface::class, AnnotationToAttributeMapperInterface::class];
     public function __construct(ConfigureCallMergingLoaderFactory $configureCallMergingLoaderFactory)
     {
         $this->configureCallMergingLoaderFactory = $configureCallMergingLoaderFactory;
