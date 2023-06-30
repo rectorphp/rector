@@ -43,7 +43,14 @@ class ServiceLocator extends BaseServiceLocator
      */
     public function get(string $id)
     {
-        return \count($this->serviceMap[$id] ?? []) === 0 ? parent::get($id) : (\count($this->serviceMap[$id] ?? []) === 1 ? $this->serviceMap[$id][0] : ($this->factory)(...$this->serviceMap[$id]));
+        switch (\count($this->serviceMap[$id] ?? [])) {
+            case 0:
+                return parent::get($id);
+            case 1:
+                return $this->serviceMap[$id][0];
+            default:
+                return ($this->factory)(...$this->serviceMap[$id]);
+        }
     }
     /**
      * {@inheritdoc}

@@ -181,7 +181,15 @@ class ProgressIndicator
     }
     private function determineBestFormat() : string
     {
-        return $this->output->getVerbosity() === OutputInterface::VERBOSITY_VERBOSE ? $this->output->isDecorated() ? 'verbose' : 'verbose_no_ansi' : ($this->output->getVerbosity() === OutputInterface::VERBOSITY_VERY_VERBOSE || $this->output->getVerbosity() === OutputInterface::VERBOSITY_DEBUG ? $this->output->isDecorated() ? 'very_verbose' : 'very_verbose_no_ansi' : ($this->output->isDecorated() ? 'normal' : 'normal_no_ansi'));
+        switch ($this->output->getVerbosity()) {
+            case OutputInterface::VERBOSITY_VERBOSE:
+                return $this->output->isDecorated() ? 'verbose' : 'verbose_no_ansi';
+            case OutputInterface::VERBOSITY_VERY_VERBOSE:
+            case OutputInterface::VERBOSITY_DEBUG:
+                return $this->output->isDecorated() ? 'very_verbose' : 'very_verbose_no_ansi';
+            default:
+                return $this->output->isDecorated() ? 'normal' : 'normal_no_ansi';
+        }
     }
     /**
      * Overwrites a previous message to the output.

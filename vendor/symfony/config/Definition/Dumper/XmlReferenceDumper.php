@@ -97,7 +97,24 @@ class XmlReferenceDumper
                     if ($prototype->hasDefaultValue()) {
                         $prototypeValue = $prototype->getDefaultValue();
                     } else {
-                        $prototypeValue = \get_class($prototype) === ScalarNode::class ? 'scalar value' : ($prototype::class === FloatNode::class || $prototype::class === IntegerNode::class ? 'numeric value' : ($prototype::class === BooleanNode::class ? 'true|false' : ($prototype::class === EnumNode::class ? $prototype->getPermissibleValues('|') : 'value')));
+                        switch (\get_class($prototype)) {
+                            case ScalarNode::class:
+                                $prototypeValue = 'scalar value';
+                                break;
+                            case FloatNode::class:
+                            case IntegerNode::class:
+                                $prototypeValue = 'numeric value';
+                                break;
+                            case BooleanNode::class:
+                                $prototypeValue = 'true|false';
+                                break;
+                            case EnumNode::class:
+                                $prototypeValue = $prototype->getPermissibleValues('|');
+                                break;
+                            default:
+                                $prototypeValue = 'value';
+                                break;
+                        }
                     }
                 }
             }

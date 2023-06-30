@@ -602,7 +602,18 @@ Downgrade `match()` to `switch()`
 -            400 => 'not found',
 -            default => 'unknown status code',
 -        };
-+        $message = ($statusCode === 200 || $statusCode === 300 ? null : $statusCode === 400 ? 'not found' : 'unknown status code';
++        switch ($statusCode) {
++            case 200:
++            case 300:
++                $message = null;
++                break;
++            case 400:
++                $message = 'not found';
++                break;
++            default:
++                $message = 'unknown status code';
++                break;
++        }
      }
  }
 ```
@@ -954,6 +965,19 @@ Remove Json constant that available only in php 7.3
 ```diff
 -json_encode($content, JSON_THROW_ON_ERROR);
 +json_encode($content, 0);
++if (json_last_error() !== JSON_ERROR_NONE) {
++    throw new \Exception(json_last_error_msg());
++}
+```
+
+<br>
+
+```diff
+-$content = json_decode($json, null, 512, JSON_THROW_ON_ERROR);
++$content = json_decode($json, null, 512, 0);
++if (json_last_error() !== JSON_ERROR_NONE) {
++    throw new \Exception(json_last_error_msg());
++}
 ```
 
 <br>

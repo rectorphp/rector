@@ -51,6 +51,19 @@ class Comparator
      */
     public function test($test) : bool
     {
-        return $this->operator === '>' ? $test > $this->target : ($this->operator === '>=' ? $test >= $this->target : ($this->operator === '<' ? $test < $this->target : ($this->operator === '<=' ? $test <= $this->target : ($this->operator === '!=' ? $test != $this->target : $test == $this->target))));
+        switch ($this->operator) {
+            case '>':
+                return $test > $this->target;
+            case '>=':
+                return $test >= $this->target;
+            case '<':
+                return $test < $this->target;
+            case '<=':
+                return $test <= $this->target;
+            case '!=':
+                return $test != $this->target;
+            default:
+                return $test == $this->target;
+        }
     }
 }

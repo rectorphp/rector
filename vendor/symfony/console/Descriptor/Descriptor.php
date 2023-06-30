@@ -31,7 +31,25 @@ abstract class Descriptor implements DescriptorInterface
     public function describe(OutputInterface $output, object $object, array $options = []) : void
     {
         $this->output = $output;
-        \true === $object instanceof InputArgument ? $this->describeInputArgument($object, $options) : (\true === $object instanceof InputOption ? $this->describeInputOption($object, $options) : (\true === $object instanceof InputDefinition ? $this->describeInputDefinition($object, $options) : (\true === $object instanceof Command ? $this->describeCommand($object, $options) : (\true === $object instanceof Application ? $this->describeApplication($object, $options) : null))));
+        switch (\true) {
+            case $object instanceof InputArgument:
+                $this->describeInputArgument($object, $options);
+                break;
+            case $object instanceof InputOption:
+                $this->describeInputOption($object, $options);
+                break;
+            case $object instanceof InputDefinition:
+                $this->describeInputDefinition($object, $options);
+                break;
+            case $object instanceof Command:
+                $this->describeCommand($object, $options);
+                break;
+            case $object instanceof Application:
+                $this->describeApplication($object, $options);
+                break;
+            default:
+                throw new InvalidArgumentException(\sprintf('Object of type "%s" is not describable.', \get_debug_type($object)));
+        }
     }
     protected function write(string $content, bool $decorated = \false) : void
     {

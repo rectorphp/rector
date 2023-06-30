@@ -438,7 +438,14 @@ class XmlFileLoader extends FileLoader
                     } else {
                         $arg = $this->getArgumentsAsPhp($arg, $name, $file);
                     }
-                    $arguments[$key] = $type === 'service_closure' ? new ServiceClosureArgument($arg) : ($type === 'closure' ? (new Definition('Closure'))->setFactory(['Closure', 'fromCallable'])->addArgument($arg) : null);
+                    switch ($type) {
+                        case 'service_closure':
+                            $arguments[$key] = new ServiceClosureArgument($arg);
+                            break;
+                        case 'closure':
+                            $arguments[$key] = (new Definition('Closure'))->setFactory(['Closure', 'fromCallable'])->addArgument($arg);
+                            break;
+                    }
                     break;
                 case 'service_locator':
                     $arg = $this->getArgumentsAsPhp($arg, $name, $file);

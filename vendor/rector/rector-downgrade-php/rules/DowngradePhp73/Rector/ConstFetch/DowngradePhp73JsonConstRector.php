@@ -215,7 +215,17 @@ CODE_SAMPLE
             if (!$subNode instanceof Node) {
                 continue;
             }
-            $found = \true === $subNode instanceof BitwiseOr ? $this->hasConstFetchInBitwiseOr($subNode, $constName) : (\true === $subNode instanceof ConstFetch ? $this->getName($subNode) === $constName : \false);
+            switch (\true) {
+                case $subNode instanceof BitwiseOr:
+                    $found = $this->hasConstFetchInBitwiseOr($subNode, $constName);
+                    break;
+                case $subNode instanceof ConstFetch:
+                    $found = $this->getName($subNode) === $constName;
+                    break;
+                default:
+                    $found = \false;
+                    break;
+            }
             if ($found) {
                 break;
             }
