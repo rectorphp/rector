@@ -247,5 +247,5 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const FROM_FUNC_CALL_NAME = 'FROM_FUNC_CALL_NAME';
+    public const FROM_FUNC_CALL_NAME = 'from_func_call_name';
 }
