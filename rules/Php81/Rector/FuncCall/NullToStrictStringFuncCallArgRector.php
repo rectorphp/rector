@@ -20,6 +20,7 @@ use PHPStan\Type\ErrorType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
+use PHPStan\Type\UnionType;
 use Rector\Core\NodeAnalyzer\ArgsAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractScopeAwareRector;
@@ -159,9 +160,23 @@ CODE_SAMPLE
         if ($type->isString()->yes()) {
             return null;
         }
-        if (!$type instanceof MixedType && !$type instanceof NullType) {
+
+        $isNullable = false;
+        if ($type instanceof NullType) {
+            $isNullable = true;
+        } elseif ($type instanceof UnionType) {
+            foreach ($type->getTypes() as $unionType) {
+                if (is_a($unionType, NullType::class)) {
+                    $isNullable = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$type instanceof MixedType && !$isNullable) {
             return null;
         }
+
         if ($argValue instanceof Encapsed) {
             return null;
         }
