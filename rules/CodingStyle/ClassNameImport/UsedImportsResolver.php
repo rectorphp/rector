@@ -3,15 +3,11 @@
 declare (strict_types=1);
 namespace Rector\CodingStyle\ClassNameImport;
 
-use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\UseUse;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Provider\CurrentFileProvider;
-use Rector\Core\ValueObject\Application\File;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
@@ -32,28 +28,11 @@ final class UsedImportsResolver
      * @var \Rector\NodeNameResolver\NodeNameResolver
      */
     private $nodeNameResolver;
-    /**
-     * @readonly
-     * @var \Rector\Core\Provider\CurrentFileProvider
-     */
-    private $currentFileProvider;
-    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, NodeNameResolver $nodeNameResolver, CurrentFileProvider $currentFileProvider)
+    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\CodingStyle\ClassNameImport\UseImportsTraverser $useImportsTraverser, NodeNameResolver $nodeNameResolver)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->useImportsTraverser = $useImportsTraverser;
         $this->nodeNameResolver = $nodeNameResolver;
-        $this->currentFileProvider = $currentFileProvider;
-    }
-    /**
-     * @return array<FullyQualifiedObjectType|AliasedObjectType>
-     */
-    public function resolveForNode(Node $node) : array
-    {
-        $namespace = $this->resolveCurrentNamespaceForNode($node);
-        if ($namespace instanceof Namespace_) {
-            return $this->resolveForNamespace($namespace);
-        }
-        return [];
     }
     /**
      * @param Stmt[] $stmts
@@ -90,30 +69,5 @@ final class UsedImportsResolver
             $usedFunctionImports[] = new FullyQualifiedObjectType($name);
         });
         return $usedFunctionImports;
-    }
-    private function resolveCurrentNamespaceForNode(Node $node) : ?Namespace_
-    {
-        if ($node instanceof Namespace_) {
-            return $node;
-        }
-        $file = $this->currentFileProvider->getFile();
-        if (!$file instanceof File) {
-            return null;
-        }
-        $stmts = $file->getNewStmts();
-        $namespaces = \array_filter($stmts, static function (Stmt $stmt) : bool {
-            return $stmt instanceof Namespace_;
-        });
-        if (\count($namespaces) !== 1) {
-            return null;
-        }
-        return \current($namespaces);
-    }
-    /**
-     * @return array<FullyQualifiedObjectType|AliasedObjectType>
-     */
-    private function resolveForNamespace(Namespace_ $namespace) : array
-    {
-        return $this->resolveForStmts($namespace->stmts);
     }
 }
