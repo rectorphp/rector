@@ -243,9 +243,5 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_PARAM_TYPE = 'is_param_type';
-    /**
-     * @var string
-     */
     public const FROM_FUNC_CALL_NAME = 'from_func_call_name';
 }
