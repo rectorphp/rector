@@ -1,9 +1,9 @@
 <?php
 
-namespace RectorPrefix202306\React\Socket;
+namespace RectorPrefix202307\React\Socket;
 
-use RectorPrefix202306\Evenement\EventEmitter;
-use RectorPrefix202306\React\EventLoop\LoopInterface;
+use RectorPrefix202307\Evenement\EventEmitter;
+use RectorPrefix202307\React\EventLoop\LoopInterface;
 final class SocketServer extends EventEmitter implements ServerInterface
 {
     private $server;
@@ -133,7 +133,7 @@ final class SocketServer extends EventEmitter implements ServerInterface
             }
             // if we reach this, no matching errno constant could be found (unlikely when `ext-sockets` is available)
             // go through list of all possible errno values from 1 to `MAX_ERRNO` and see if they match the given `$errstr`
-            for ($errno = 1, $max = \defined('RectorPrefix202306\\MAX_ERRNO') ? \RectorPrefix202306\MAX_ERRNO : 4095; $errno <= $max; ++$errno) {
+            for ($errno = 1, $max = \defined('RectorPrefix202307\\MAX_ERRNO') ? \RectorPrefix202307\MAX_ERRNO : 4095; $errno <= $max; ++$errno) {
                 if ($strerror($errno) === $errstr) {
                     return $errno;
                 }

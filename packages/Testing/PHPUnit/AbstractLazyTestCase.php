@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
-use RectorPrefix202306\Illuminate\Container\Container;
+use RectorPrefix202307\Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
 abstract class AbstractLazyTestCase extends TestCase
 {

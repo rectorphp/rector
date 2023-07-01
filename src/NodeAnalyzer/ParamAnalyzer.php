@@ -7,7 +7,6 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Error;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\New_;
@@ -21,7 +20,6 @@ use PhpParser\NodeTraverser;
 use Rector\Core\NodeManipulator\FuncCallManipulator;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\PhpParser\Node\Value\ValueResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class ParamAnalyzer
@@ -31,11 +29,6 @@ final class ParamAnalyzer
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\Value\ValueResolver
-     */
-    private $valueResolver;
     /**
      * @readonly
      * @var \Rector\NodeNameResolver\NodeNameResolver
@@ -56,10 +49,9 @@ final class ParamAnalyzer
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    public function __construct(NodeComparator $nodeComparator, ValueResolver $valueResolver, NodeNameResolver $nodeNameResolver, FuncCallManipulator $funcCallManipulator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder)
+    public function __construct(NodeComparator $nodeComparator, NodeNameResolver $nodeNameResolver, FuncCallManipulator $funcCallManipulator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder)
     {
         $this->nodeComparator = $nodeComparator;
-        $this->valueResolver = $valueResolver;
         $this->nodeNameResolver = $nodeNameResolver;
         $this->funcCallManipulator = $funcCallManipulator;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -116,10 +108,6 @@ final class ParamAnalyzer
             return \false;
         }
         return $param->type instanceof NullableType;
-    }
-    public function hasDefaultNull(Param $param) : bool
-    {
-        return $param->default instanceof ConstFetch && $this->valueResolver->isNull($param->default);
     }
     public function isParamReassign(ClassMethod $classMethod, Param $param) : bool
     {

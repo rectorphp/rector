@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\Config;
+namespace RectorPrefix202307\Symfony\Component\Config;
 
-use RectorPrefix202306\Symfony\Component\Config\Resource\ResourceInterface;
-use RectorPrefix202306\Symfony\Component\Filesystem\Exception\IOException;
-use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202307\Symfony\Component\Config\Resource\ResourceInterface;
+use RectorPrefix202307\Symfony\Component\Filesystem\Exception\IOException;
+use RectorPrefix202307\Symfony\Component\Filesystem\Filesystem;
 /**
  * ResourceCheckerConfigCache uses instances of ResourceCheckerInterface
  * to check whether cached data is still fresh.

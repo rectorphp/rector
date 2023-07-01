@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Php74\Rector\LNumber;
 
-use RectorPrefix202306\Nette\Utils\Strings;
+use RectorPrefix202307\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node\Scalar\LNumber;
@@ -15,7 +15,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202306\Webmozart\Assert\Assert;
+use RectorPrefix202307\Webmozart\Assert\Assert;
 /**
  * @changelog https://wiki.php.net/rfc/numeric_literal_separator
  * @changelog https://github.com/nikic/PHP-Parser/pull/615

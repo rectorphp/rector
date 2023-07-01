@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\Kernel;
 
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerInterface;
 final class RectorKernel
 {
     /**

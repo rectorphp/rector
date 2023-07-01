@@ -5,7 +5,7 @@ namespace Rector\Core\DependencyInjection\Collector;
 
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Util\ArrayParametersMerger;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Definition;
 final class ConfigureCallValuesCollector
 {
     /**

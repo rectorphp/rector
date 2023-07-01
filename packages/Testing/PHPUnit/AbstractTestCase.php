@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
-use RectorPrefix202306\Psr\Container\ContainerInterface;
+use RectorPrefix202307\Psr\Container\ContainerInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Kernel\RectorKernel;
 use Rector\Core\Util\FileHasher;

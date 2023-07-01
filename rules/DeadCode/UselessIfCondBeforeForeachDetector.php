@@ -3,21 +3,16 @@
 declare (strict_types=1);
 namespace Rector\DeadCode;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
-use Rector\Core\NodeAnalyzer\ParamAnalyzer;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 final class UselessIfCondBeforeForeachDetector
 {
     /**
@@ -25,21 +20,9 @@ final class UselessIfCondBeforeForeachDetector
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
-     */
-    private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ParamAnalyzer
-     */
-    private $paramAnalyzer;
-    public function __construct(NodeComparator $nodeComparator, BetterNodeFinder $betterNodeFinder, ParamAnalyzer $paramAnalyzer)
+    public function __construct(NodeComparator $nodeComparator)
     {
         $this->nodeComparator = $nodeComparator;
-        $this->betterNodeFinder = $betterNodeFinder;
-        $this->paramAnalyzer = $paramAnalyzer;
     }
     /**
      * Matches:
@@ -97,18 +80,6 @@ final class UselessIfCondBeforeForeachDetector
         $notIdentical = $if->cond;
         return $this->isMatchingNotBinaryOp($notIdentical, $foreachExpr);
     }
-    private function fromPreviousParam(Expr $expr) : ?Param
-    {
-        return $this->betterNodeFinder->findFirstPrevious($expr, function (Node $node) use($expr) : bool {
-            if (!$node instanceof Param) {
-                return \false;
-            }
-            if (!$node->var instanceof Variable) {
-                return \false;
-            }
-            return $this->nodeComparator->areNodesEqual($node->var, $expr);
-        });
-    }
     /**
      * @param \PhpParser\Node\Expr\BinaryOp\NotIdentical|\PhpParser\Node\Expr\BinaryOp\NotEqual $binaryOp
      */
@@ -140,16 +111,6 @@ final class UselessIfCondBeforeForeachDetector
         }
         // is array though?
         $arrayType = $scope->getType($empty->expr);
-        if (!$arrayType->isArray()->yes()) {
-            return \false;
-        }
-        $previousParam = $this->fromPreviousParam($foreachExpr);
-        if (!$previousParam instanceof Param) {
-            return \true;
-        }
-        if ($this->paramAnalyzer->isNullable($previousParam)) {
-            return \false;
-        }
-        return !$this->paramAnalyzer->hasDefaultNull($previousParam);
+        return $arrayType->isArray()->yes();
     }
 }

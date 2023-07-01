@@ -38,9 +38,9 @@ use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\BoolUnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeAnalyzer;
 use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\ValueObject\UnionTypeAnalysis;
-use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
-use RectorPrefix202306\Webmozart\Assert\Assert;
-use RectorPrefix202306\Webmozart\Assert\InvalidArgumentException;
+use RectorPrefix202307\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202307\Webmozart\Assert\Assert;
+use RectorPrefix202307\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements TypeMapperInterface<UnionType>
  */

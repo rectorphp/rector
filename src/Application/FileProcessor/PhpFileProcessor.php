@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Application\FileProcessor;
 
-use RectorPrefix202306\Nette\Utils\Strings;
+use RectorPrefix202307\Nette\Utils\Strings;
 use PHPStan\AnalysedCodeException;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
@@ -22,7 +22,7 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix202306\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202307\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class PhpFileProcessor implements FileProcessorInterface
 {

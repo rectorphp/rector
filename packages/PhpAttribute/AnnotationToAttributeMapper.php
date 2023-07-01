@@ -12,7 +12,7 @@ use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 /**
  * @see \Rector\Tests\PhpAttribute\AnnotationToAttributeMapper\AnnotationToAttributeMapperTest
  */

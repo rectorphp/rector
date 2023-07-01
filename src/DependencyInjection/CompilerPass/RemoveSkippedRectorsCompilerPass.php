@@ -5,8 +5,8 @@ namespace Rector\Core\DependencyInjection\CompilerPass;
 
 use Rector\Core\Configuration\Option;
 use Rector\Core\Contract\Rector\RectorInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * This compiler pass removed Rectors skipped in `SKIP` parameters.
  * It uses Skipper from Symplify - https://github.com/symplify/skipper

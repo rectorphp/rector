@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\Console\Formatter;
+namespace RectorPrefix202307\Symfony\Component\Console\Formatter;
 
-use RectorPrefix202306\Symfony\Component\Console\Exception\InvalidArgumentException;
-use RectorPrefix202306\Symfony\Contracts\Service\ResetInterface;
+use RectorPrefix202307\Symfony\Component\Console\Exception\InvalidArgumentException;
+use RectorPrefix202307\Symfony\Contracts\Service\ResetInterface;
 /**
  * @author Jean-François Simon <contact@jfsimon.fr>
  */

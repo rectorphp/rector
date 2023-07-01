@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NonPhpFile\Rector;
 
-use RectorPrefix202306\Nette\Utils\Strings;
+use RectorPrefix202307\Nette\Utils\Strings;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
@@ -11,7 +11,7 @@ use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Symplify\RuleDocGenerator\Contract\ConfigurableRuleInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202306\Webmozart\Assert\Assert;
+use RectorPrefix202307\Webmozart\Assert\Assert;
 final class RenameClassNonPhpRector implements NonPhpRectorInterface, ConfigurableRuleInterface, ConfigurableRectorInterface, ComplementaryRectorInterface
 {
     /**

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Util;
 
-use RectorPrefix202306\Nette\Utils\Strings;
+use RectorPrefix202307\Nette\Utils\Strings;
 final class StringUtils
 {
     public static function isMatch(string $value, string $regex) : bool

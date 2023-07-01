@@ -1,14 +1,14 @@
 <?php
 
-namespace RectorPrefix202306;
+namespace RectorPrefix202307;
 
 // parses diff with expected missing types to Rector Return upgrade rule configuration
 // https://github.com/symfony/symfony/blob/6.1/.github/expected-missing-return-types.diff
-use RectorPrefix202306\Nette\Utils\FileSystem;
-use RectorPrefix202306\Nette\Utils\Strings;
+use RectorPrefix202307\Nette\Utils\FileSystem;
+use RectorPrefix202307\Nette\Utils\Strings;
 use Rector\Symfony\Utils\ValueObject\ReturnTypeChange;
-use RectorPrefix202306\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202306\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
+use RectorPrefix202307\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202307\Symplify\PackageBuilder\Console\Style\SymfonyStyleFactory;
 require __DIR__ . '/../vendor/autoload.php';
 final class MissingReturnTypeParser
 {

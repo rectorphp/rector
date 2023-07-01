@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\Finder\Iterator;
+namespace RectorPrefix202307\Symfony\Component\Finder\Iterator;
 
-use RectorPrefix202306\Symfony\Component\Finder\SplFileInfo;
+use RectorPrefix202307\Symfony\Component\Finder\SplFileInfo;
 /**
  * FilecontentFilterIterator filters files by their contents using patterns (regexps or strings).
  *

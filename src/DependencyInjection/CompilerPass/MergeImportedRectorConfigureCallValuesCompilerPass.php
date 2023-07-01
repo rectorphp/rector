@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Core\DependencyInjection\CompilerPass;
 
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Definition;
 final class MergeImportedRectorConfigureCallValuesCompilerPass implements CompilerPassInterface
 {
     /**

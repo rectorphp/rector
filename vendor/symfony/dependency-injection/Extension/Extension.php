@@ -8,15 +8,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Extension;
+namespace RectorPrefix202307\Symfony\Component\DependencyInjection\Extension;
 
-use RectorPrefix202306\Symfony\Component\Config\Definition\ConfigurationInterface;
-use RectorPrefix202306\Symfony\Component\Config\Definition\Processor;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix202307\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix202307\Symfony\Component\Config\Definition\Processor;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\LogicException;
 /**
  * Provides useful features shared by many extensions.
  *

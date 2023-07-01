@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202306\Symfony\Component\Config\Definition\BaseNode;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Extension\Extension;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use RectorPrefix202307\Symfony\Component\Config\Definition\BaseNode;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Extension\ConfigurationExtensionInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Extension\Extension;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 /**
  * Merges extension configs into the container builder.
  *

@@ -10,7 +10,7 @@ use PHPStan\Reflection\BetterReflection\SourceLocator\FileNodesFetcher;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocator;
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocator;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix202306\Webmozart\Assert\Assert;
+use RectorPrefix202307\Webmozart\Assert\Assert;
 /**
  * @api phpstan external
  */

@@ -5,10 +5,10 @@ namespace Rector\Parallel\Command;
 
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
 use Rector\Core\Configuration\Option;
-use RectorPrefix202306\Symfony\Component\Console\Command\Command;
-use RectorPrefix202306\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202306\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
-use RectorPrefix202306\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
+use RectorPrefix202307\Symfony\Component\Console\Command\Command;
+use RectorPrefix202307\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202307\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
+use RectorPrefix202307\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
 /**
  * @see \Rector\Tests\Parallel\Command\WorkerCommandLineFactoryTest
  * @todo possibly extract to symplify/easy-parallel

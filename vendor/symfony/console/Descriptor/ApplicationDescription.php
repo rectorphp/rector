@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\Console\Descriptor;
+namespace RectorPrefix202307\Symfony\Component\Console\Descriptor;
 
-use RectorPrefix202306\Symfony\Component\Console\Application;
-use RectorPrefix202306\Symfony\Component\Console\Command\Command;
-use RectorPrefix202306\Symfony\Component\Console\Exception\CommandNotFoundException;
+use RectorPrefix202307\Symfony\Component\Console\Application;
+use RectorPrefix202307\Symfony\Component\Console\Command\Command;
+use RectorPrefix202307\Symfony\Component\Console\Exception\CommandNotFoundException;
 /**
  * @author Jean-François Simon <jeanfrancois.simon@sensiolabs.com>
  *

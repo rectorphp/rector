@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Formatter;
 
-use RectorPrefix202306\Nette\Utils\Strings;
-use RectorPrefix202306\Symfony\Component\Console\Formatter\OutputFormatter;
+use RectorPrefix202307\Nette\Utils\Strings;
+use RectorPrefix202307\Symfony\Component\Console\Formatter\OutputFormatter;
 /**
  * Inspired by @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/src/Differ/DiffConsoleFormatter.php to be
  * used as standalone class, without need to require whole package by Dariusz Rumiński <dariusz.ruminski@gmail.com>

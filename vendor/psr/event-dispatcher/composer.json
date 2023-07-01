@@ -19,7 +19,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202306\\Psr\\EventDispatcher\\": "src\/"
+            "RectorPrefix202307\\Psr\\EventDispatcher\\": "src\/"
         }
     },
     "extra": {

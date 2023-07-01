@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\DeadCode\SideEffect;
 
-use RectorPrefix202306\Nette\Utils\Strings;
+use RectorPrefix202307\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;

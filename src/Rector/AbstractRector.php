@@ -40,7 +40,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
-use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202307\Symfony\Contracts\Service\Attribute\Required;
 abstract class AbstractRector extends NodeVisitorAbstract implements PhpRectorInterface
 {
     /**

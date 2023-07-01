@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202306;
+namespace RectorPrefix202307;
 
 use PhpParser\Node;
 use PhpParser\PrettyPrinter\Standard;
-use RectorPrefix202306\Tracy\Dumper;
+use RectorPrefix202307\Tracy\Dumper;
 if (!\function_exists('dump_with_depth')) {
     /**
      * @param mixed $value
@@ -18,7 +18,7 @@ if (!\function_exists('dump_with_depth')) {
 if (!\function_exists('dn')) {
     function dn(Node $node, int $depth = 2) : void
     {
-        \RectorPrefix202306\dump_node($node, $depth);
+        \RectorPrefix202307\dump_node($node, $depth);
     }
 }
 if (!\function_exists('dump_node')) {

@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix202307\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix202306\Symfony\Component\Config\Loader\Loader;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\Config\Loader\Loader;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * ClosureLoader loads service definitions from a PHP closure.
  *

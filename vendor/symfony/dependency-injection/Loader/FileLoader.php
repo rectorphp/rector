@@ -8,20 +8,20 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Loader;
+namespace RectorPrefix202307\Symfony\Component\DependencyInjection\Loader;
 
-use RectorPrefix202306\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
-use RectorPrefix202306\Symfony\Component\Config\Exception\LoaderLoadException;
-use RectorPrefix202306\Symfony\Component\Config\FileLocatorInterface;
-use RectorPrefix202306\Symfony\Component\Config\Loader\FileLoader as BaseFileLoader;
-use RectorPrefix202306\Symfony\Component\Config\Loader\Loader;
-use RectorPrefix202306\Symfony\Component\Config\Resource\GlobResource;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Attribute\When;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ChildDefinition;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler\RegisterAutoconfigureAttributesPass;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202307\Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
+use RectorPrefix202307\Symfony\Component\Config\Exception\LoaderLoadException;
+use RectorPrefix202307\Symfony\Component\Config\FileLocatorInterface;
+use RectorPrefix202307\Symfony\Component\Config\Loader\FileLoader as BaseFileLoader;
+use RectorPrefix202307\Symfony\Component\Config\Loader\Loader;
+use RectorPrefix202307\Symfony\Component\Config\Resource\GlobResource;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Attribute\When;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ChildDefinition;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler\RegisterAutoconfigureAttributesPass;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 /**
  * FileLoader is the abstract class used by all built-in loaders that are file based.
  *

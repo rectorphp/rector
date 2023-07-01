@@ -9,9 +9,9 @@ declare (strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Evenement\Tests;
+namespace RectorPrefix202307\Evenement\Tests;
 
-use RectorPrefix202306\Evenement\EventEmitter;
+use RectorPrefix202307\Evenement\EventEmitter;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 class EventEmitterTest extends TestCase
@@ -33,7 +33,7 @@ class EventEmitterTest extends TestCase
     }
     public function testAddListenerWithStaticMethod()
     {
-        $this->emitter->on('bar', ['RectorPrefix202306\\Evenement\\Tests\\Listener', 'onBar']);
+        $this->emitter->on('bar', ['RectorPrefix202307\\Evenement\\Tests\\Listener', 'onBar']);
     }
     public function testAddListenerWithInvalidListener()
     {
@@ -211,7 +211,7 @@ class EventEmitterTest extends TestCase
     }
     public function testCallablesFunction()
     {
-        $this->emitter->on('foo', 'RectorPrefix202306\\Evenement\\Tests\\setGlobalTestData');
+        $this->emitter->on('foo', 'RectorPrefix202307\\Evenement\\Tests\\setGlobalTestData');
         $this->emitter->emit('foo', ['bar']);
         self::assertSame('bar', $GLOBALS['evenement-evenement-test-data']);
         unset($GLOBALS['evenement-evenement-test-data']);

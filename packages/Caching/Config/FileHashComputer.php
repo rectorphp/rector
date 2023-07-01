@@ -4,12 +4,12 @@ declare (strict_types=1);
 namespace Rector\Caching\Config;
 
 use Rector\Core\Exception\ShouldNotHappenException;
-use RectorPrefix202306\Symfony\Component\Config\FileLocator;
-use RectorPrefix202306\Symfony\Component\Config\Loader\LoaderInterface;
-use RectorPrefix202306\Symfony\Component\Config\Loader\LoaderResolver;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use RectorPrefix202307\Symfony\Component\Config\FileLocator;
+use RectorPrefix202307\Symfony\Component\Config\Loader\LoaderInterface;
+use RectorPrefix202307\Symfony\Component\Config\Loader\LoaderResolver;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\GlobFileLoader;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 /**
  * Inspired by https://github.com/symplify/easy-coding-standard/blob/e598ab54686e416788f28fcfe007fd08e0f371d9/packages/changed-files-detector/src/FileHashComputer.php
  */

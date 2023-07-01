@@ -8,10 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202307\Symfony\Contracts\Service\Attribute\Required;
 /**
  * Looks for definitions with autowiring enabled and registers their corresponding "@required" methods as setters.
  *

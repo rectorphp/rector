@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202306\React\Promise;
+namespace RectorPrefix202307\React\Promise;
 
 class Promise implements ExtendedPromiseInterface, CancellablePromiseInterface
 {

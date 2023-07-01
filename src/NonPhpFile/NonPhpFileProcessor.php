@@ -12,7 +12,7 @@ use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202306\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202307\Symfony\Component\Filesystem\Filesystem;
 final class NonPhpFileProcessor implements FileProcessorInterface
 {
     /**

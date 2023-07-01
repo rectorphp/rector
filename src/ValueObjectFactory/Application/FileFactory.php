@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\ValueObjectFactory\Application;
 
-use RectorPrefix202306\Nette\Utils\FileSystem;
+use RectorPrefix202307\Nette\Utils\FileSystem;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\FileSystem\FilesFinder;

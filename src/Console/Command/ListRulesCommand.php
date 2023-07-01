@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Console\Command;
 
-use RectorPrefix202306\Nette\Utils\Json;
+use RectorPrefix202307\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Console\Output\RectorOutputStyle;
@@ -11,11 +11,11 @@ use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
-use RectorPrefix202306\Symfony\Component\Console\Command\Command;
-use RectorPrefix202306\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202306\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202306\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
+use RectorPrefix202307\Symfony\Component\Console\Command\Command;
+use RectorPrefix202307\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202307\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202307\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 final class ListRulesCommand extends Command
 {
     /**

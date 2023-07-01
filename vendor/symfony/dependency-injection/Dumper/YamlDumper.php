@@ -8,26 +8,26 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Dumper;
+namespace RectorPrefix202307\Symfony\Component\DependencyInjection\Dumper;
 
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Alias;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\LogicException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Parameter;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202306\Symfony\Component\ExpressionLanguage\Expression;
-use RectorPrefix202306\Symfony\Component\Yaml\Dumper as YmlDumper;
-use RectorPrefix202306\Symfony\Component\Yaml\Parser;
-use RectorPrefix202306\Symfony\Component\Yaml\Tag\TaggedValue;
-use RectorPrefix202306\Symfony\Component\Yaml\Yaml;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Alias;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\AbstractArgument;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\ArgumentInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\IteratorArgument;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\LogicException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Parameter;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202307\Symfony\Component\ExpressionLanguage\Expression;
+use RectorPrefix202307\Symfony\Component\Yaml\Dumper as YmlDumper;
+use RectorPrefix202307\Symfony\Component\Yaml\Parser;
+use RectorPrefix202307\Symfony\Component\Yaml\Tag\TaggedValue;
+use RectorPrefix202307\Symfony\Component\Yaml\Yaml;
 /**
  * YamlDumper dumps a service container as a YAML string.
  *

@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202306\Illuminate\Container;
+namespace RectorPrefix202307\Illuminate\Container;
 
 use Closure;
 use ReflectionNamedType;

@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "RectorPrefix202306\\Evenement\\": "src\/Evenement\/"
+            "RectorPrefix202307\\Evenement\\": "src\/Evenement\/"
         }
     },
     "autoload-dev": {
@@ -28,7 +28,7 @@
             "tests\/Evenement\/Tests\/functions.php"
         ],
         "psr-4": {
-            "RectorPrefix202306\\Evenement\\": "tests\/Evenement\/"
+            "RectorPrefix202307\\Evenement\\": "tests\/Evenement\/"
         }
     }
 }

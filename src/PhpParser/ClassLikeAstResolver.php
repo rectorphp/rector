@@ -12,7 +12,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeNameResolver\NodeNameResolver;
-use RectorPrefix202306\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202307\Symfony\Contracts\Service\Attribute\Required;
 final class ClassLikeAstResolver
 {
     /**

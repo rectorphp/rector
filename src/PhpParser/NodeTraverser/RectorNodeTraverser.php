@@ -7,7 +7,7 @@ use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\VersionBonding\PhpVersionedFilter;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 final class RectorNodeTraverser extends NodeTraverser
 {
     /**

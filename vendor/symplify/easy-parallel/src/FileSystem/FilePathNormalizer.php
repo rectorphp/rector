@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202306\Symplify\EasyParallel\FileSystem;
+namespace RectorPrefix202307\Symplify\EasyParallel\FileSystem;
 
-use RectorPrefix202306\Symplify\SmartFileSystem\SmartFileInfo;
+use RectorPrefix202307\Symplify\SmartFileSystem\SmartFileInfo;
 /**
  * @api
  */

@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\StaticTypeMapper\PhpDocParser;
 
-use RectorPrefix202306\Nette\Utils\Strings;
+use RectorPrefix202307\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;

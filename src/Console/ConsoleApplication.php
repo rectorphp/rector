@@ -3,18 +3,18 @@
 declare (strict_types=1);
 namespace Rector\Core\Console;
 
-use RectorPrefix202306\Composer\XdebugHandler\XdebugHandler;
+use RectorPrefix202307\Composer\XdebugHandler\XdebugHandler;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Application\VersionResolver;
 use Rector\Core\Configuration\Option;
-use RectorPrefix202306\Symfony\Component\Console\Application;
-use RectorPrefix202306\Symfony\Component\Console\Command\Command;
-use RectorPrefix202306\Symfony\Component\Console\Input\InputDefinition;
-use RectorPrefix202306\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202306\Symfony\Component\Console\Input\InputOption;
-use RectorPrefix202306\Symfony\Component\Console\Output\OutputInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
-use RectorPrefix202306\Webmozart\Assert\Assert;
+use RectorPrefix202307\Symfony\Component\Console\Application;
+use RectorPrefix202307\Symfony\Component\Console\Command\Command;
+use RectorPrefix202307\Symfony\Component\Console\Input\InputDefinition;
+use RectorPrefix202307\Symfony\Component\Console\Input\InputInterface;
+use RectorPrefix202307\Symfony\Component\Console\Input\InputOption;
+use RectorPrefix202307\Symfony\Component\Console\Output\OutputInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
+use RectorPrefix202307\Webmozart\Assert\Assert;
 final class ConsoleApplication extends Application
 {
     /**

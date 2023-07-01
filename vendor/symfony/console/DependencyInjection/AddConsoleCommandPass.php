@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\Console\DependencyInjection;
+namespace RectorPrefix202307\Symfony\Component\Console\DependencyInjection;
 
-use RectorPrefix202306\Symfony\Component\Console\Command\Command;
-use RectorPrefix202306\Symfony\Component\Console\Command\LazyCommand;
-use RectorPrefix202306\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix202307\Symfony\Component\Console\Command\Command;
+use RectorPrefix202307\Symfony\Component\Console\Command\LazyCommand;
+use RectorPrefix202307\Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Registers console commands.
  *

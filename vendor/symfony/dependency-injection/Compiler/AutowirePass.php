@@ -8,24 +8,24 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202306\Symfony\Component\DependencyInjection\Compiler;
+namespace RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler;
 
-use RectorPrefix202306\Symfony\Component\Config\Resource\ClassExistenceResource;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Attribute\Autowire;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Attribute\MapDecorated;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Attribute\Target;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\ContainerInterface;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Definition;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\AutowiringFailedException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Exception\RuntimeException;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\Reference;
-use RectorPrefix202306\Symfony\Component\DependencyInjection\TypedReference;
+use RectorPrefix202307\Symfony\Component\Config\Resource\ClassExistenceResource;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\ServiceLocatorArgument;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Attribute\Autowire;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Attribute\MapDecorated;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Attribute\TaggedLocator;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Attribute\Target;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerInterface;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Definition;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\AutowiringFailedException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\RuntimeException;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\LazyProxy\ProxyHelper;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Reference;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\TypedReference;
 /**
  * Inspects existing service definitions and wires the autowired ones using the type hints of their classes.
  *
