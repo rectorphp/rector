@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
+use PHPStan\Type\UnionType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
@@ -39,7 +40,14 @@ final class ExprAnalyzer
             return \true;
         }
         $nativeType = $scope->getNativeType($expr);
-        return $nativeType instanceof MixedType && !$nativeType->isExplicitMixed();
+        if ($nativeType instanceof MixedType && !$nativeType->isExplicitMixed()) {
+            return \true;
+        }
+        $type = $scope->getType($expr);
+        if ($nativeType instanceof UnionType) {
+            return !$nativeType->equals($type);
+        }
+        return !$nativeType->isSuperTypeOf($type)->yes();
     }
     public function isDynamicExpr(Expr $expr) : bool
     {
