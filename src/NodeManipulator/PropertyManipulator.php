@@ -237,7 +237,7 @@ final class PropertyManipulator
             }
         }
         if ($parentNode instanceof ArrayDimFetch) {
-            return !$this->readWritePropertyAnalyzer->isRead($propertyFetch, $scope);
+            return !$this->readWritePropertyAnalyzer->isRead($propertyFetch, $parentNode, $scope);
         }
         return \false;
     }
