@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace RectorPrefix202307;
 
-use RectorPrefix202307\Symfony\Component\Console\Command\Command;
 use RectorPrefix202307\Composer\Semver\VersionParser;
 use RectorPrefix202307\Doctrine\Inflector\Inflector;
 use RectorPrefix202307\Doctrine\Inflector\Rules\English\InflectorFactory;
@@ -80,6 +79,7 @@ use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 use Rector\Utils\Command\MissingInSetCommand;
 use Rector\Utils\Command\OutsideAnySetCommand;
 use RectorPrefix202307\Symfony\Component\Console\Application;
+use RectorPrefix202307\Symfony\Component\Console\Command\Command;
 use RectorPrefix202307\Symfony\Component\Console\Style\SymfonyStyle;
 use function RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\service;
 use function RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
