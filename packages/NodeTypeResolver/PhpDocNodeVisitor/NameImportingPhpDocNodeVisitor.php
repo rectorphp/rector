@@ -15,7 +15,7 @@ use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -30,11 +30,6 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
-    /**
-     * @readonly
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
     /**
      * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
@@ -59,10 +54,9 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
      * @var PhpParserNode|null
      */
     private $currentPhpParserNode;
-    public function __construct(StaticTypeMapper $staticTypeMapper, ParameterProvider $parameterProvider, ClassNameImportSkipper $classNameImportSkipper, UseNodesToAddCollector $useNodesToAddCollector, CurrentFileProvider $currentFileProvider, ReflectionProvider $reflectionProvider)
+    public function __construct(StaticTypeMapper $staticTypeMapper, ClassNameImportSkipper $classNameImportSkipper, UseNodesToAddCollector $useNodesToAddCollector, CurrentFileProvider $currentFileProvider, ReflectionProvider $reflectionProvider)
     {
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->parameterProvider = $parameterProvider;
         $this->classNameImportSkipper = $classNameImportSkipper;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
         $this->currentFileProvider = $currentFileProvider;
@@ -162,7 +156,7 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     }
     private function shouldSkipShortClassName(FullyQualifiedObjectType $fullyQualifiedObjectType) : bool
     {
-        $importShortClasses = $this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
+        $importShortClasses = SimpleParameterProvider::provideBoolParameter(Option::IMPORT_SHORT_CLASSES);
         if ($importShortClasses) {
             return \false;
         }

@@ -10,7 +10,7 @@ use RectorPrefix202307\React\EventLoop\StreamSelectLoop;
 use RectorPrefix202307\React\Socket\ConnectionInterface;
 use RectorPrefix202307\React\Socket\TcpServer;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Console\Command\ProcessCommand;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Core\ValueObject\Reporting\FileDiff;
@@ -41,11 +41,6 @@ final class ParallelFileProcessor
      */
     private $workerCommandLineFactory;
     /**
-     * @readonly
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
-    /**
      * @var int
      */
     private const SYSTEM_ERROR_LIMIT = 50;
@@ -53,10 +48,9 @@ final class ParallelFileProcessor
      * @var \Symplify\EasyParallel\ValueObject\ProcessPool|null
      */
     private $processPool = null;
-    public function __construct(WorkerCommandLineFactory $workerCommandLineFactory, ParameterProvider $parameterProvider)
+    public function __construct(WorkerCommandLineFactory $workerCommandLineFactory)
     {
         $this->workerCommandLineFactory = $workerCommandLineFactory;
-        $this->parameterProvider = $parameterProvider;
     }
     /**
      * @param callable(int $stepCount): void $postFileCallback Used for progress bar jump
@@ -109,7 +103,7 @@ final class ParallelFileProcessor
             // @see https://github.com/rectorphp/rector-src/pull/3834/files#r1231696531
             \sleep(1);
         };
-        $timeoutInSeconds = $this->parameterProvider->provideIntParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS);
+        $timeoutInSeconds = SimpleParameterProvider::provideIntParameter(Option::PARALLEL_JOB_TIMEOUT_IN_SECONDS);
         for ($i = 0; $i < $numberOfProcesses; ++$i) {
             // nothing else to process, stop now
             if ($jobs === []) {

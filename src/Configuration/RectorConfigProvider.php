@@ -22,7 +22,7 @@ final class RectorConfigProvider
     }
     public function shouldImportNames() : bool
     {
-        return $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
+        return SimpleParameterProvider::provideBoolParameter(\Rector\Core\Configuration\Option::AUTO_IMPORT_NAMES);
     }
     public function shouldRemoveUnusedImports() : bool
     {

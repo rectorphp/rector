@@ -47,7 +47,7 @@ final class ConfigurationFactory
         $showDiffs = $this->shouldShowDiffs($input);
         $paths = $this->resolvePaths($input);
         $fileExtensions = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
-        $isParallel = $this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::PARALLEL);
+        $isParallel = SimpleParameterProvider::provideBoolParameter(\Rector\Core\Configuration\Option::PARALLEL);
         $parallelPort = (string) $input->getOption(\Rector\Core\Configuration\Option::PARALLEL_PORT);
         $parallelIdentifier = (string) $input->getOption(\Rector\Core\Configuration\Option::PARALLEL_IDENTIFIER);
         $memoryLimit = $this->resolveMemoryLimit($input);
@@ -71,7 +71,7 @@ final class ConfigurationFactory
             return \false;
         }
         // fallback to parameter
-        return !$this->parameterProvider->provideBoolParameter(\Rector\Core\Configuration\Option::NO_DIFFS);
+        return !SimpleParameterProvider::provideBoolParameter(\Rector\Core\Configuration\Option::NO_DIFFS, \false);
     }
     /**
      * @param string[] $commandLinePaths

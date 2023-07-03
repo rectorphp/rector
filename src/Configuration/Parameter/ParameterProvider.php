@@ -81,14 +81,6 @@ final class ParameterProvider
     /**
      * @api
      */
-    public function provideIntParameter(string $name) : int
-    {
-        $this->ensureParameterIsSet($name);
-        return (int) $this->parameters[$name];
-    }
-    /**
-     * @api
-     */
     public function ensureParameterIsSet(string $name) : void
     {
         if (\array_key_exists($name, $this->parameters)) {

@@ -9,7 +9,7 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
@@ -29,11 +29,6 @@ final class NameImporter
     private $classNameImportSkipper;
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
-    /**
-     * @readonly
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -46,11 +41,10 @@ final class NameImporter
      * @var string[]
      */
     private $aliasedUses = [];
-    public function __construct(AliasUsesResolver $aliasUsesResolver, ClassNameImportSkipper $classNameImportSkipper, ParameterProvider $parameterProvider, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector)
+    public function __construct(AliasUsesResolver $aliasUsesResolver, ClassNameImportSkipper $classNameImportSkipper, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector)
     {
         $this->aliasUsesResolver = $aliasUsesResolver;
         $this->classNameImportSkipper = $classNameImportSkipper;
-        $this->parameterProvider = $parameterProvider;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
@@ -90,7 +84,7 @@ final class NameImporter
             return \true;
         }
         // Importing root namespace classes (like \DateTime) is optional
-        if (!$this->parameterProvider->provideBoolParameter(Option::IMPORT_SHORT_CLASSES)) {
+        if (!SimpleParameterProvider::provideBoolParameter(Option::IMPORT_SHORT_CLASSES)) {
             $stringName = $name->toString();
             if (\substr_count($stringName, '\\') === 0) {
                 return \true;
