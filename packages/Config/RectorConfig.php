@@ -89,8 +89,6 @@ final class RectorConfig extends ContainerConfigurator
     }
     public function removeUnusedImports(bool $removeUnusedImports = \true) : void
     {
-        $parameters = $this->parameters();
-        $parameters->set(Option::REMOVE_UNUSED_IMPORTS, $removeUnusedImports);
         SimpleParameterProvider::setParameter(Option::REMOVE_UNUSED_IMPORTS, $removeUnusedImports);
     }
     public function importNames(bool $importNames = \true, bool $importDocBlockNames = \true) : void
@@ -250,7 +248,9 @@ final class RectorConfig extends ContainerConfigurator
     {
         $parameters = $this->parameters();
         $parameters->set(Option::INDENT_CHAR, $character);
+        SimpleParameterProvider::setParameter(Option::INDENT_CHAR, $character);
         $parameters->set(Option::INDENT_SIZE, $count);
+        SimpleParameterProvider::setParameter(Option::INDENT_SIZE, $count);
     }
     private function getServices() : ServicesConfigurator
     {

@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\Symfony\DataProvider;
 
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Symfony\ValueObject\ServiceMap\ServiceMap;
 use Rector\Symfony\ValueObjectFactory\ServiceMapFactory;
 /**
@@ -14,11 +14,6 @@ final class ServiceMapProvider
 {
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
-    /**
-     * @readonly
      * @var \Rector\Symfony\ValueObjectFactory\ServiceMapFactory
      */
     private $serviceMapFactory;
@@ -26,9 +21,8 @@ final class ServiceMapProvider
      * @var \Rector\Symfony\ValueObject\ServiceMap\ServiceMap|null
      */
     private $serviceMap;
-    public function __construct(ParameterProvider $parameterProvider, ServiceMapFactory $serviceMapFactory, ?ServiceMap $serviceMap = null)
+    public function __construct(ServiceMapFactory $serviceMapFactory, ?ServiceMap $serviceMap = null)
     {
-        $this->parameterProvider = $parameterProvider;
         $this->serviceMapFactory = $serviceMapFactory;
         $this->serviceMap = $serviceMap;
     }
@@ -37,11 +31,11 @@ final class ServiceMapProvider
         if ($this->serviceMap instanceof ServiceMap) {
             return $this->serviceMap;
         }
-        $symfonyContainerXmlPath = (string) $this->parameterProvider->provideParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
-        if ($symfonyContainerXmlPath === '') {
-            $this->serviceMap = $this->serviceMapFactory->createEmpty();
-        } else {
+        if (SimpleParameterProvider::hasParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER)) {
+            $symfonyContainerXmlPath = SimpleParameterProvider::provideStringParameter(Option::SYMFONY_CONTAINER_XML_PATH_PARAMETER);
             $this->serviceMap = $this->serviceMapFactory->createFromFileContent($symfonyContainerXmlPath);
+        } else {
+            $this->serviceMap = $this->serviceMapFactory->createEmpty();
         }
         return $this->serviceMap;
     }

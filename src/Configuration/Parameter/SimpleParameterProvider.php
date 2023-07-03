@@ -3,6 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration\Parameter;
 
+use Rector\Core\Configuration\Option;
+use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 use RectorPrefix202307\Webmozart\Assert\Assert;
 /**
  * @api
@@ -14,30 +16,33 @@ final class SimpleParameterProvider
      */
     private static $parameters = [];
     /**
+     * @param Option::* $name
      * @param mixed $value
      */
-    public static function addParameter(string $key, $value) : void
+    public static function addParameter(string $name, $value) : void
     {
         if (\is_array($value)) {
-            $mergedParameters = \array_merge(self::$parameters[$key] ?? [], $value);
-            self::$parameters[$key] = $mergedParameters;
+            $mergedParameters = \array_merge(self::$parameters[$name] ?? [], $value);
+            self::$parameters[$name] = $mergedParameters;
         } else {
-            self::$parameters[$key][] = $value;
+            self::$parameters[$name][] = $value;
         }
     }
     /**
+     * @param Option::* $name
      * @param mixed $value
      */
-    public static function setParameter(string $key, $value) : void
+    public static function setParameter(string $name, $value) : void
     {
-        self::$parameters[$key] = $value;
+        self::$parameters[$name] = $value;
     }
     /**
+     * @param Option::* $name
      * @return mixed[]
      */
-    public static function provideArrayParameter(string $key) : array
+    public static function provideArrayParameter(string $name) : array
     {
-        $parameter = self::$parameters[$key] ?? [];
+        $parameter = self::$parameters[$name] ?? [];
         Assert::isArray($parameter);
         $arrayIsList = function (array $array) : bool {
             if (\function_exists('array_is_list')) {
@@ -62,20 +67,42 @@ final class SimpleParameterProvider
         }
         return $parameter;
     }
+    /**
+     * @param Option::* $name
+     */
     public static function hasParameter(string $name) : bool
     {
         return \array_key_exists($name, self::$parameters);
     }
-    public static function provideStringParameter(string $key) : string
+    /**
+     * @param Option::* $name
+     */
+    public static function provideStringParameter(string $name, ?string $default = null) : string
     {
-        return self::$parameters[$key];
+        if ($default === null) {
+            self::ensureParameterIsSet($name);
+        }
+        return self::$parameters[$name] ?? $default;
     }
     public static function provideIntParameter(string $key) : int
     {
         return self::$parameters[$key];
     }
-    public static function provideBoolParameter(string $key) : bool
+    /**
+     * @param Option::* $name
+     */
+    public static function provideBoolParameter(string $name) : bool
     {
-        return self::$parameters[$key];
+        return self::$parameters[$name];
+    }
+    /**
+     * @param Option::* $name
+     */
+    private static function ensureParameterIsSet(string $name) : void
+    {
+        if (\array_key_exists($name, self::$parameters)) {
+            return;
+        }
+        throw new ParameterNotFoundException($name);
     }
 }
