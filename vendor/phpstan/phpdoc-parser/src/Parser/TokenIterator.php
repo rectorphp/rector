@@ -10,6 +10,7 @@ use function assert;
 use function count;
 use function in_array;
 use function strlen;
+use function substr;
 class TokenIterator
 {
     /** @var list<array{string, int, int}> */
@@ -20,6 +21,8 @@ class TokenIterator
     private $savePoints = [];
     /** @var list<int> */
     private $skippedTokenTypes = [Lexer::TOKEN_HORIZONTAL_WS];
+    /** @var string|null */
+    private $newline = null;
     /**
      * @param list<array{string, int, int}> $tokens
      */
@@ -107,6 +110,11 @@ class TokenIterator
         if ($this->tokens[$this->index][Lexer::TYPE_OFFSET] !== $tokenType) {
             $this->throwError($tokenType);
         }
+        if ($tokenType === Lexer::TOKEN_PHPDOC_EOL) {
+            if ($this->newline === null) {
+                $this->detectNewline();
+            }
+        }
         $this->index++;
         $this->skipIrrelevantTokens();
     }
@@ -137,9 +145,23 @@ class TokenIterator
         if ($this->tokens[$this->index][Lexer::TYPE_OFFSET] !== $tokenType) {
             return \false;
         }
+        if ($tokenType === Lexer::TOKEN_PHPDOC_EOL) {
+            if ($this->newline === null) {
+                $this->detectNewline();
+            }
+        }
         $this->index++;
         $this->skipIrrelevantTokens();
         return \true;
+    }
+    private function detectNewline() : void
+    {
+        $value = $this->currentTokenValue();
+        if (substr($value, 0, 2) === "\r\n") {
+            $this->newline = "\r\n";
+        } elseif (substr($value, 0, 1) === "\n") {
+            $this->newline = "\n";
+        }
     }
     public function getSkippedHorizontalWhiteSpaceIfAny() : string
     {
@@ -250,6 +272,10 @@ class TokenIterator
             }
         }
         return \false;
+    }
+    public function getDetectedNewline() : ?string
+    {
+        return $this->newline;
     }
     /**
      * Whether the given position is immediately surrounded by parenthesis.

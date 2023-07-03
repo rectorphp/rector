@@ -24,6 +24,7 @@ use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Type\FloatType;
 use PHPStan\Type\IntegerType;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -34,6 +35,14 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  */
 final class NumericReturnTypeFromStrictScalarReturnsRector extends AbstractRector implements MinPhpVersionInterface
 {
+    /**
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
+    public function __construct(ExprAnalyzer $exprAnalyzer)
+    {
+        $this->exprAnalyzer = $exprAnalyzer;
+    }
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change numeric return type based on strict returns type operations', [new CodeSample(<<<'CODE_SAMPLE'
@@ -88,6 +97,9 @@ CODE_SAMPLE
         }
         // @see https://chat.openai.com/share/a9e4fb74-5366-4c4c-9998-d6caeb8b5acc
         if ($return->expr instanceof Minus || $return->expr instanceof Plus || $return->expr instanceof Mul || $return->expr instanceof Mod || $return->expr instanceof BitwiseAnd || $return->expr instanceof ShiftRight || $return->expr instanceof ShiftLeft || $return->expr instanceof BitwiseOr) {
+            if ($this->isBinaryOpContainingNonTypedParam($return->expr)) {
+                return null;
+            }
             return $this->refactorBinaryOp($return->expr, $node);
         }
         return null;
@@ -142,5 +154,15 @@ CODE_SAMPLE
             }
         }
         return null;
+    }
+    private function isBinaryOpContainingNonTypedParam(BinaryOp $binaryOp) : bool
+    {
+        if ($this->exprAnalyzer->isNonTypedFromParam($binaryOp->left)) {
+            return \true;
+        }
+        if ($this->exprAnalyzer->isNonTypedFromParam($binaryOp->right)) {
+            return \true;
+        }
+        return \false;
     }
 }
