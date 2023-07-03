@@ -36,6 +36,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 final class NumericReturnTypeFromStrictScalarReturnsRector extends AbstractRector implements MinPhpVersionInterface
 {
     /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
      */
     private $exprAnalyzer;
@@ -160,9 +161,6 @@ CODE_SAMPLE
         if ($this->exprAnalyzer->isNonTypedFromParam($binaryOp->left)) {
             return \true;
         }
-        if ($this->exprAnalyzer->isNonTypedFromParam($binaryOp->right)) {
-            return \true;
-        }
-        return \false;
+        return $this->exprAnalyzer->isNonTypedFromParam($binaryOp->right);
     }
 }

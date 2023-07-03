@@ -1512,6 +1512,7 @@ return array(
     'Rector\\Core\\Configuration\\CurrentNodeProvider' => $baseDir . '/src/Configuration/CurrentNodeProvider.php',
     'Rector\\Core\\Configuration\\Option' => $baseDir . '/src/Configuration/Option.php',
     'Rector\\Core\\Configuration\\Parameter\\ParameterProvider' => $baseDir . '/src/Configuration/Parameter/ParameterProvider.php',
+    'Rector\\Core\\Configuration\\Parameter\\SimpleParameterProvider' => $baseDir . '/src/Configuration/Parameter/SimpleParameterProvider.php',
     'Rector\\Core\\Configuration\\RectorConfigProvider' => $baseDir . '/src/Configuration/RectorConfigProvider.php',
     'Rector\\Core\\Configuration\\RenamedClassesDataCollector' => $baseDir . '/src/Configuration/RenamedClassesDataCollector.php',
     'Rector\\Core\\Configuration\\ValueObjectInliner' => $baseDir . '/src/Configuration/ValueObjectInliner.php',

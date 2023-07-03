@@ -15,6 +15,7 @@ use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
@@ -122,6 +123,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath) : void
     {
         $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFilePath]);
+        SimpleParameterProvider::setParameter(Option::SOURCE, [$originalFilePath]);
         $changedContent = $this->processFilePath($originalFilePath, $inputFileContents);
         $fixtureFilename = \basename($fixtureFilePath);
         $failureMessage = \sprintf('Failed on fixture file "%s"', $fixtureFilename);

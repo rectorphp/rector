@@ -5,6 +5,7 @@ namespace Rector\Core\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Configuration;
 use RectorPrefix202307\Symfony\Component\Console\Input\InputInterface;
@@ -105,9 +106,9 @@ final class ConfigurationFactory
         if ($memoryLimit !== null) {
             return (string) $memoryLimit;
         }
-        if (!$this->parameterProvider->hasParameter(\Rector\Core\Configuration\Option::MEMORY_LIMIT)) {
+        if (!SimpleParameterProvider::hasParameter(\Rector\Core\Configuration\Option::MEMORY_LIMIT)) {
             return null;
         }
-        return $this->parameterProvider->provideStringParameter(\Rector\Core\Configuration\Option::MEMORY_LIMIT);
+        return SimpleParameterProvider::provideStringParameter(\Rector\Core\Configuration\Option::MEMORY_LIMIT);
     }
 }

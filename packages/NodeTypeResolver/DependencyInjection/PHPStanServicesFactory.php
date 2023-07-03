@@ -15,6 +15,7 @@ use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use RectorPrefix202307\Symfony\Component\Filesystem\Filesystem;
 /**
@@ -24,11 +25,6 @@ use RectorPrefix202307\Symfony\Component\Filesystem\Filesystem;
  */
 final class PHPStanServicesFactory
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
     /**
      * @readonly
      * @var \Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver
@@ -41,7 +37,6 @@ final class PHPStanServicesFactory
     private $container;
     public function __construct(ParameterProvider $parameterProvider, \Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver $phpStanExtensionsConfigResolver, \Rector\NodeTypeResolver\DependencyInjection\BleedingEdgeIncludePurifier $bleedingEdgeIncludePurifier)
     {
-        $this->parameterProvider = $parameterProvider;
         $this->phpStanExtensionsConfigResolver = $phpStanExtensionsConfigResolver;
         $additionalConfigFiles = $this->resolveAdditionalConfigFiles();
         $purifiedConfigFiles = [];
@@ -133,8 +128,8 @@ final class PHPStanServicesFactory
     private function resolveAdditionalConfigFiles() : array
     {
         $additionalConfigFiles = [];
-        if ($this->parameterProvider->hasParameter(Option::PHPSTAN_FOR_RECTOR_PATH)) {
-            $additionalConfigFiles[] = $this->parameterProvider->provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
+        if (SimpleParameterProvider::hasParameter(Option::PHPSTAN_FOR_RECTOR_PATH)) {
+            $additionalConfigFiles[] = SimpleParameterProvider::provideStringParameter(Option::PHPSTAN_FOR_RECTOR_PATH);
         }
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
         $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
