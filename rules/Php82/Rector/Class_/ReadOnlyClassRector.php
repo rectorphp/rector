@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Php82\Rector\Class_;
 
 use PhpParser\Node;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -239,7 +240,10 @@ CODE_SAMPLE
         if ($this->classAnalyzer->isAnonymousClass($class)) {
             return \true;
         }
-        return $this->phpAttributeAnalyzer->hasPhpAttribute($class, AttributeName::ALLOW_DYNAMIC_PROPERTIES);
+        if ($this->phpAttributeAnalyzer->hasPhpAttribute($class, AttributeName::ALLOW_DYNAMIC_PROPERTIES)) {
+            return \true;
+        }
+        return $class->extends instanceof FullyQualified && !$this->reflectionProvider->hasClass($class->extends->toString());
     }
     /**
      * @param Param[] $params
