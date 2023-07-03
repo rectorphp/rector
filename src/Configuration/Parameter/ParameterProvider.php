@@ -43,17 +43,6 @@ final class ParameterProvider
     }
     /**
      * @param Option::* $name
-     * @api
-     */
-    public function provideStringParameter(string $name, ?string $default = null) : string
-    {
-        if ($default === null) {
-            $this->ensureParameterIsSet($name);
-        }
-        return (string) ($this->parameters[$name] ?? $default);
-    }
-    /**
-     * @param Option::* $name
      * @return mixed[]
      */
     public function provideArrayParameter(string $name) : array

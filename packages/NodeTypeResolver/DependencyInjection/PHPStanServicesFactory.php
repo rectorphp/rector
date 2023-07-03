@@ -14,7 +14,6 @@ use PHPStan\Parser\Parser;
 use PHPStan\PhpDoc\TypeNodeResolver;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
 use RectorPrefix202307\Symfony\Component\Filesystem\Filesystem;
@@ -35,7 +34,7 @@ final class PHPStanServicesFactory
      * @var \PHPStan\DependencyInjection\Container
      */
     private $container;
-    public function __construct(ParameterProvider $parameterProvider, \Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver $phpStanExtensionsConfigResolver, \Rector\NodeTypeResolver\DependencyInjection\BleedingEdgeIncludePurifier $bleedingEdgeIncludePurifier)
+    public function __construct(\Rector\NodeTypeResolver\DependencyInjection\PHPStanExtensionsConfigResolver $phpStanExtensionsConfigResolver, \Rector\NodeTypeResolver\DependencyInjection\BleedingEdgeIncludePurifier $bleedingEdgeIncludePurifier)
     {
         $this->phpStanExtensionsConfigResolver = $phpStanExtensionsConfigResolver;
         $additionalConfigFiles = $this->resolveAdditionalConfigFiles();
@@ -50,7 +49,7 @@ final class PHPStanServicesFactory
             $purifiedConfigFiles[] = $purifiedConfigFile;
         }
         $containerFactory = new ContainerFactory(\getcwd());
-        $this->container = $containerFactory->create($parameterProvider->provideStringParameter(Option::CONTAINER_CACHE_DIRECTORY), $additionalConfigFiles, []);
+        $this->container = $containerFactory->create(SimpleParameterProvider::provideStringParameter(Option::CONTAINER_CACHE_DIRECTORY), $additionalConfigFiles, []);
         // clear temporary files, after container is created
         $filesystem = new Filesystem();
         $filesystem->remove($purifiedConfigFiles);
