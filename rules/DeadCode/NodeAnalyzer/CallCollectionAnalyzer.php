@@ -6,7 +6,9 @@ namespace Rector\DeadCode\NodeAnalyzer;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Name;
 use PHPStan\Type\TypeWithClassName;
+use Rector\Core\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 final class CallCollectionAnalyzer
@@ -37,17 +39,34 @@ final class CallCollectionAnalyzer
             if (!$callerType instanceof TypeWithClassName) {
                 continue;
             }
+            if ($this->isSelfStatic($call) && $this->shouldSkip($call, $classMethodName)) {
+                return \true;
+            }
             if ($callerType->getClassName() !== $className) {
                 continue;
             }
-            if (!$call->name instanceof Identifier) {
-                return \true;
-            }
-            // the method is used
-            if ($this->nodeNameResolver->isName($call->name, $classMethodName)) {
+            if ($this->shouldSkip($call, $classMethodName)) {
                 return \true;
             }
         }
         return \false;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $call
+     */
+    private function isSelfStatic($call) : bool
+    {
+        return $call instanceof StaticCall && $call->class instanceof Name && \in_array($call->class->toString(), [ObjectReference::SELF, ObjectReference::STATIC], \true);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
+     */
+    private function shouldSkip($call, string $classMethodName) : bool
+    {
+        if (!$call->name instanceof Identifier) {
+            return \true;
+        }
+        // the method is used
+        return $this->nodeNameResolver->isName($call->name, $classMethodName);
     }
 }
