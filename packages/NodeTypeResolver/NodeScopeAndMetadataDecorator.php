@@ -8,6 +8,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
+use Rector\Core\PHPStan\NodeVisitor\UnreachableStatementNodeVisitor;
 use Rector\Core\ValueObject\Application\File;
 use Rector\NodeTypeResolver\NodeVisitor\FunctionLikeParamArgPositionNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
@@ -28,7 +29,7 @@ final class NodeScopeAndMetadataDecorator
      * @var \PhpParser\NodeTraverser
      */
     private $nodeTraverser;
-    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ParentConnectingVisitor $parentConnectingVisitor, FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
+    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ParentConnectingVisitor $parentConnectingVisitor, FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor, UnreachableStatementNodeVisitor $unreachableStatementNodeVisitor, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
@@ -38,6 +39,7 @@ final class NodeScopeAndMetadataDecorator
         // this one has to be run again to re-connect parent nodes with new attributes
         $this->nodeTraverser->addVisitor($parentConnectingVisitor);
         $this->nodeTraverser->addVisitor($functionLikeParamArgPositionNodeVisitor);
+        $this->nodeTraverser->addVisitor($unreachableStatementNodeVisitor);
     }
     /**
      * @param Stmt[] $stmts

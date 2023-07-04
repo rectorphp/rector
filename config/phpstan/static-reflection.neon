@@ -3,15 +3,10 @@ parameters:
     featureToggles:
         disableRuntimeReflectionProvider: false
 
-conditionalTags:
-    PhpParser\NodeVisitor\ParentConnectingVisitor:
-        phpstan.parser.richParserNodeVisitor: true
-
 services:
     - Rector\NodeTypeResolver\Reflection\BetterReflection\RectorBetterReflectionSourceLocatorFactory
     - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator
     - Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
-    - PhpParser\NodeVisitor\ParentConnectingVisitor
 
     # basically decorates native PHPStan source locator with a dynamic source locator that is also available in Rector DI
     betterReflectionSourceLocator:
