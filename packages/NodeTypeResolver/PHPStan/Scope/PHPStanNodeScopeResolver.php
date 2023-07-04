@@ -155,7 +155,6 @@ final class PHPStanNodeScopeResolver
     public function processNodes(array $stmts, string $filePath, ?MutatingScope $formerMutatingScope = null) : array
     {
         $isScopeRefreshing = $formerMutatingScope instanceof MutatingScope;
-        $this->hasUnreachableStatementNode = \false;
         /**
          * The stmts must be array of Stmt, or it will be silently skipped by PHPStan
          * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
@@ -429,6 +428,10 @@ final class PHPStanNodeScopeResolver
     public function hasUnreachableStatementNode() : bool
     {
         return $this->hasUnreachableStatementNode;
+    }
+    public function resetHasUnreachableStatementNode() : void
+    {
+        $this->hasUnreachableStatementNode = \false;
     }
     private function processProperty(Property $property, MutatingScope $mutatingScope) : void
     {
