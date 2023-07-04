@@ -127,6 +127,10 @@ final class PHPStanNodeScopeResolver
      */
     private $nodeTraverser;
     /**
+     * @var bool
+     */
+    private $hasUnreachableStatementNode = \false;
+    /**
      * @param ScopeResolverNodeVisitorInterface[] $nodeVisitors
      */
     public function __construct(ChangedFilesDetector $changedFilesDetector, DependencyResolver $dependencyResolver, NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $nodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
@@ -151,6 +155,7 @@ final class PHPStanNodeScopeResolver
     public function processNodes(array $stmts, string $filePath, ?MutatingScope $formerMutatingScope = null) : array
     {
         $isScopeRefreshing = $formerMutatingScope instanceof MutatingScope;
+        $this->hasUnreachableStatementNode = \false;
         /**
          * The stmts must be array of Stmt, or it will be silently skipped by PHPStan
          * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
@@ -419,6 +424,11 @@ final class PHPStanNodeScopeResolver
         $originalStmt->setAttribute(AttributeKey::IS_UNREACHABLE, \true);
         $originalStmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         $this->processNodes([$originalStmt], $filePath, $mutatingScope);
+        $this->hasUnreachableStatementNode = \true;
+    }
+    public function hasUnreachableStatementNode() : bool
+    {
+        return $this->hasUnreachableStatementNode;
     }
     private function processProperty(Property $property, MutatingScope $mutatingScope) : void
     {
