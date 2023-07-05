@@ -255,6 +255,14 @@ final class PHPStanNodeScopeResolver
         };
         return $this->processNodesWithDependentFiles($filePath, $stmts, $scope, $nodeCallback);
     }
+    public function hasUnreachableStatementNode() : bool
+    {
+        return $this->hasUnreachableStatementNode;
+    }
+    public function resetHasUnreachableStatementNode() : void
+    {
+        $this->hasUnreachableStatementNode = \false;
+    }
     private function processCallike(CallLike $callLike, MutatingScope $mutatingScope) : void
     {
         if ($callLike instanceof StaticCall) {
@@ -337,14 +345,6 @@ final class PHPStanNodeScopeResolver
         $originalStmt->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         $this->processNodes([$originalStmt], $filePath, $mutatingScope);
         $this->hasUnreachableStatementNode = \true;
-    }
-    public function hasUnreachableStatementNode() : bool
-    {
-        return $this->hasUnreachableStatementNode;
-    }
-    public function resetHasUnreachableStatementNode() : void
-    {
-        $this->hasUnreachableStatementNode = \false;
     }
     private function processProperty(Property $property, MutatingScope $mutatingScope) : void
     {
