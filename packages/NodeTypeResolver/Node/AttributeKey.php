@@ -207,10 +207,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_OBJECT_CALLER = 'is_object_caller';
-    /**
-     * @var string
-     */
     public const IS_NAMESPACE_NAME = 'is_namespace_name';
     /**
      * @var string
