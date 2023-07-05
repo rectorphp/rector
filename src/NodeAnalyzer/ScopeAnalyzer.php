@@ -5,9 +5,11 @@ namespace Rector\Core\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt;
 use PHPStan\Analyser\MutatingScope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
@@ -40,10 +42,12 @@ final class ScopeAnalyzer
         if ($mutatingScope instanceof MutatingScope) {
             return $mutatingScope;
         }
-        if ($node->getAttribute(AttributeKey::STATEMENT_DEPTH) === 0) {
+        // on File level
+        if ($node instanceof Stmt && $node->getAttribute(AttributeKey::STATEMENT_DEPTH) === 0) {
             return $this->scopeFactory->createFromFile($filePath);
         }
-        if ($node->getAttribute(AttributeKey::EXPRESSION_DEPTH) >= 2) {
+        // too deep Expr, eg: $$param = $$bar = self::decodeValue($result->getItem()->getTextContent());
+        if ($node instanceof Expr && $node->getAttribute(AttributeKey::EXPRESSION_DEPTH) >= 2) {
             return $this->scopeFactory->createFromFile($filePath);
         }
         /**
