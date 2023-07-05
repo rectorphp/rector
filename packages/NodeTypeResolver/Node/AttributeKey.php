@@ -187,6 +187,10 @@ final class AttributeKey
     /**
      * @var string
      */
+    public const EXPRESSION_DEPTH = 'expressionDepth';
+    /**
+     * @var string
+     */
     public const IS_IN_LOOP = 'is_in_loop';
     /**
      * @var string

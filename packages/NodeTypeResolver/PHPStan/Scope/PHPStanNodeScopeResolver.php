@@ -5,7 +5,6 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
@@ -17,7 +16,6 @@ use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
@@ -29,7 +27,6 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -38,17 +35,12 @@ use PhpParser\Node\Stmt\EnumCase;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\Stmt\TraitUse;
-use PhpParser\Node\Stmt\TraitUseAdaptation\Precedence;
 use PhpParser\Node\Stmt\TryCatch;
-use PhpParser\Node\Stmt\UseUse;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeTraverser;
 use PHPStan\AnalysedCodeException;
@@ -168,40 +160,6 @@ final class PHPStanNodeScopeResolver
                 $this->nodeScopeResolver->processNodes($node->stmts, $mutatingScope, $nodeCallback);
                 return;
             }
-            if ($node instanceof Namespace_ && $node->name instanceof Name) {
-                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof Instanceof_) {
-                $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $node->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof UseUse) {
-                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            if ($node instanceof GroupUse) {
-                $node->prefix->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                foreach ($node->uses as $use) {
-                    $use->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                }
-            }
-            if ($node instanceof TraitUse) {
-                foreach ($node->traits as $traitName) {
-                    $traitName->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                }
-                foreach ($node->adaptations as $precedence) {
-                    if ($precedence instanceof Precedence) {
-                        foreach ($precedence->insteadof as $insteadof) {
-                            $insteadof->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                        }
-                        if ($precedence->trait instanceof Name) {
-                            $precedence->trait->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                        }
-                    }
-                }
-            }
-            if ($node instanceof Attribute) {
-                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
             if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast) && $node->expr instanceof Expr) {
                 $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
@@ -287,19 +245,6 @@ final class PHPStanNodeScopeResolver
             if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Enum_) {
                 /** @var MutatingScope $mutatingScope */
                 $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope, $isScopeRefreshing);
-                if ($node instanceof Class_ && $node->extends instanceof FullyQualified) {
-                    $node->extends->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                }
-                if ($node instanceof Interface_) {
-                    foreach ($node->extends as $extend) {
-                        $extend->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                    }
-                }
-                if ($node instanceof Class_ || $node instanceof Enum_) {
-                    foreach ($node->implements as $implement) {
-                        $implement->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                    }
-                }
             }
             // special case for unreachable nodes
             if ($node instanceof UnreachableStatementNode) {
@@ -312,7 +257,6 @@ final class PHPStanNodeScopeResolver
     }
     private function processCallike(CallLike $callLike, MutatingScope $mutatingScope) : void
     {
-        $this->processArgsForCallike($callLike, $mutatingScope);
         if ($callLike instanceof StaticCall) {
             $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
@@ -332,40 +276,13 @@ final class PHPStanNodeScopeResolver
             $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
         }
     }
-    private function processArgsForCallike(Expr $expr, MutatingScope $mutatingScope) : void
-    {
-        if (!$expr instanceof CallLike) {
-            return;
-        }
-        if (!$expr->isFirstClassCallable()) {
-            foreach ($expr->getArgs() as $arg) {
-                $arg->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                if ($arg->value instanceof PropertyFetch) {
-                    $arg->value->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                }
-            }
-        }
-    }
     /**
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp $assign
      */
     private function processAssign($assign, MutatingScope $mutatingScope) : void
     {
         $assign->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        if ($assign->var instanceof Variable && $assign->var->name instanceof Expr) {
-            $assign->var->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        }
         $assign->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        $expr = $assign;
-        while ($expr instanceof Assign || $expr instanceof AssignOp) {
-            $this->processArgsForCallike($expr->expr, $mutatingScope);
-            $expr->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            if ($expr->var instanceof Variable && $expr->var->name instanceof Expr) {
-                $expr->var->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
-            $expr->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            $expr = $expr->expr;
-        }
     }
     private function processArray(Array_ $array, MutatingScope $mutatingScope) : void
     {
