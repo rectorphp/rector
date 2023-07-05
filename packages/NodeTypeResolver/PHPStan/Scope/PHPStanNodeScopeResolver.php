@@ -289,7 +289,6 @@ final class PHPStanNodeScopeResolver
         foreach ($array->items as $arrayItem) {
             if ($arrayItem instanceof ArrayItem) {
                 $arrayItem->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $this->processArrayItem($arrayItem, $mutatingScope);
             }
         }
     }
@@ -325,9 +324,6 @@ final class PHPStanNodeScopeResolver
                 return new ObjectType((string) $name);
             }, $catch->types));
             $catchMutatingScope = $mutatingScope->enterCatchType($type, $varName);
-            foreach ($catch->types as $type) {
-                $type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
             $this->processNodes($catch->stmts, $filePath, $catchMutatingScope);
         }
         if ($tryCatch->finally instanceof Finally_) {
