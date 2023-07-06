@@ -29,10 +29,6 @@ final class PropertyTypeManipulator
     }
     public function changePropertyType(Property $property, string $oldClass, string $newClass) : void
     {
-        if ($property->type !== null) {
-            // fix later
-            throw new NotImplementedYetException();
-        }
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
         $oldToNewTypes = [new OldToNewType(new FullyQualifiedObjectType($oldClass), new FullyQualifiedObjectType($newClass))];
         $this->docBlockClassRenamer->renamePhpDocType($phpDocInfo, $oldToNewTypes);
