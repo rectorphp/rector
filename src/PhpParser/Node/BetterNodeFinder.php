@@ -366,23 +366,6 @@ final class BetterNodeFinder
         });
         return $scopedNode;
     }
-    public function resolveCurrentStatement(Node $node) : ?Stmt
-    {
-        if ($node instanceof Stmt) {
-            return $node;
-        }
-        $currentStmt = $node;
-        while (($currentStmt = $currentStmt->getAttribute(AttributeKey::PARENT_NODE)) instanceof Node) {
-            if ($currentStmt instanceof Stmt) {
-                return $currentStmt;
-            }
-            /** @var Node|null $currentStmt */
-            if (!$currentStmt instanceof Node) {
-                return null;
-            }
-        }
-        return null;
-    }
     /**
      * @api
      *
@@ -408,6 +391,23 @@ final class BetterNodeFinder
             return $parentNode->stmts[$currentStmtKey + 1] ?? null;
         }
         return $nextNode;
+    }
+    private function resolveCurrentStatement(Node $node) : ?Stmt
+    {
+        if ($node instanceof Stmt) {
+            return $node;
+        }
+        $currentStmt = $node;
+        while (($currentStmt = $currentStmt->getAttribute(AttributeKey::PARENT_NODE)) instanceof Node) {
+            if ($currentStmt instanceof Stmt) {
+                return $currentStmt;
+            }
+            /** @var Node|null $currentStmt */
+            if (!$currentStmt instanceof Node) {
+                return null;
+            }
+        }
+        return null;
     }
     /**
      * @api
