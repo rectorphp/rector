@@ -197,9 +197,6 @@ final class PHPStanNodeScopeResolver
             if ($node instanceof ArrayItem) {
                 $this->processArrayItem($node, $mutatingScope);
             }
-            if ($node instanceof FuncCall && $node->name instanceof Expr) {
-                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            }
             if ($node instanceof NullableType) {
                 $node->type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
             }
