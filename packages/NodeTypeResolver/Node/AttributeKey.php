@@ -244,4 +244,8 @@ final class AttributeKey
      * @var string
      */
     public const FROM_FUNC_CALL_NAME = 'from_func_call_name';
+    /**
+     * @var string
+     */
+    public const INSIDE_ARRAY_DIM_FETCH = 'inside_array_dim_fetch';
 }
