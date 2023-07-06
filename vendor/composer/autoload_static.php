@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit68dc9a71c71d913b72bc01518a87a1ab
+class ComposerStaticInita8d21e99d7187362404e17256fd9714c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2811,15 +2811,12 @@ class ComposerStaticInit68dc9a71c71d913b72bc01518a87a1ab
         'Rector\\Symfony\\NodeFactory\\ArrayFromCompactFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ArrayFromCompactFactory.php',
         'Rector\\Symfony\\NodeFactory\\BareLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/BareLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\EventReferenceFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/EventReferenceFactory.php',
-        'Rector\\Symfony\\NodeFactory\\FormType\\BuildFormOptionAssignsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/FormType/BuildFormOptionAssignsFactory.php',
-        'Rector\\Symfony\\NodeFactory\\FormType\\ConfigureDefaultsFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/FormType/ConfigureDefaultsFactory.php',
         'Rector\\Symfony\\NodeFactory\\GetSubscribedEventsClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/GetSubscribedEventsClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\OnLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnSuccessLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\ThisRenderFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ThisRenderFactory.php',
         'Rector\\Symfony\\NodeFinder\\EmptyReturnNodeFinder' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFinder/EmptyReturnNodeFinder.php',
         'Rector\\Symfony\\NodeManipulator\\ClassManipulator' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeManipulator/ClassManipulator.php',
-        'Rector\\Symfony\\NodeRemover\\ConstructorDependencyRemover' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeRemover/ConstructorDependencyRemover.php',
         'Rector\\Symfony\\PhpDocNode\\SymfonyRouteTagValueNodeFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/PhpDocNode/SymfonyRouteTagValueNodeFactory.php',
         'Rector\\Symfony\\Rector\\ClassMethod\\AddRouteAnnotationRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/ClassMethod/AddRouteAnnotationRector.php',
         'Rector\\Symfony\\Rector\\Closure\\ServiceArgsToServiceNamedArgRector' => __DIR__ . '/..' . '/rector/rector-symfony/src/Rector/Closure/ServiceArgsToServiceNamedArgRector.php',
@@ -2843,7 +2840,6 @@ class ComposerStaticInit68dc9a71c71d913b72bc01518a87a1ab
         'Rector\\Symfony\\Symfony30\\Rector\\ClassMethod\\FormTypeGetParentRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/ClassMethod/FormTypeGetParentRector.php',
         'Rector\\Symfony\\Symfony30\\Rector\\ClassMethod\\GetRequestRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/ClassMethod/GetRequestRector.php',
         'Rector\\Symfony\\Symfony30\\Rector\\ClassMethod\\RemoveDefaultGetBlockPrefixRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/ClassMethod/RemoveDefaultGetBlockPrefixRector.php',
-        'Rector\\Symfony\\Symfony30\\Rector\\Class_\\FormTypeWithDependencyToOptionsRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/Class_/FormTypeWithDependencyToOptionsRector.php',
         'Rector\\Symfony\\Symfony30\\Rector\\MethodCall\\ChangeStringCollectionOptionToConstantRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/MethodCall/ChangeStringCollectionOptionToConstantRector.php',
         'Rector\\Symfony\\Symfony30\\Rector\\MethodCall\\FormTypeInstanceToClassConstRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/MethodCall/FormTypeInstanceToClassConstRector.php',
         'Rector\\Symfony\\Symfony30\\Rector\\MethodCall\\OptionNameRector' => __DIR__ . '/..' . '/rector/rector-symfony/rules/Symfony30/Rector/MethodCall/OptionNameRector.php',
@@ -3098,9 +3094,9 @@ class ComposerStaticInit68dc9a71c71d913b72bc01518a87a1ab
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit68dc9a71c71d913b72bc01518a87a1ab::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit68dc9a71c71d913b72bc01518a87a1ab::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit68dc9a71c71d913b72bc01518a87a1ab::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita8d21e99d7187362404e17256fd9714c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita8d21e99d7187362404e17256fd9714c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita8d21e99d7187362404e17256fd9714c::$classMap;
 
         }, null, ClassLoader::class);
     }
