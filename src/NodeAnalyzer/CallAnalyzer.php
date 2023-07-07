@@ -3,9 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\NodeAnalyzer;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Clone_;
@@ -14,34 +12,26 @@ use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\If_;
-use Rector\Core\PhpParser\Comparing\NodeComparator;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
+use PHPStan\Reflection\ReflectionProvider;
+use PHPStan\Type\ObjectType;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix202307\Symfony\Contracts\Service\Attribute\Required;
 final class CallAnalyzer
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
-     */
-    private $nodeComparator;
     /**
      * @var array<class-string<Expr>>
      */
     private const OBJECT_CALL_TYPES = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
     /**
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $betterNodeFinder;
-    public function __construct(NodeComparator $nodeComparator)
-    {
-        $this->nodeComparator = $nodeComparator;
-    }
+    private $nodeTypeResolver;
     /**
      * @required
      */
-    public function autowire(BetterNodeFinder $betterNodeFinder) : void
+    public function autowire(NodeTypeResolver $nodeTypeResolver) : void
     {
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     public function isObjectCall(Expr $expr) : bool
     {
@@ -72,19 +62,20 @@ final class CallAnalyzer
         }
         return \false;
     }
-    public function isNewInstance(Expr $expr) : bool
+    public function isNewInstance(Expr $expr, ReflectionProvider $reflectionProvider) : bool
     {
         if ($expr instanceof Clone_ || $expr instanceof New_) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirstPrevious($expr, function (Node $node) use($expr) : bool {
-            if (!$node instanceof Assign) {
-                return \false;
-            }
-            if (!$this->nodeComparator->areNodesEqual($node->var, $expr)) {
-                return \false;
-            }
-            return $node->expr instanceof Clone_ || $node->expr instanceof New_;
-        });
+        $type = $this->nodeTypeResolver->getType($expr);
+        if (!$type instanceof ObjectType) {
+            return \false;
+        }
+        $className = $type->getClassName();
+        if (!$reflectionProvider->hasClass($className)) {
+            return \false;
+        }
+        $classReflection = $reflectionProvider->getClass($className);
+        return $classReflection->getNativeReflection()->isInstantiable();
     }
 }
