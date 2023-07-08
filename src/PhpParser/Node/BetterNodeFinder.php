@@ -5,6 +5,7 @@ namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
@@ -29,6 +30,7 @@ use PhpParser\NodeTraverser;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\Exception\StopSearchException;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\Util\MultiInstanceofChecker;
@@ -54,6 +56,11 @@ final class BetterNodeFinder
     private $nodeNameResolver;
     /**
      * @readonly
+     * @var \Rector\Core\PhpParser\Comparing\NodeComparator
+     */
+    private $nodeComparator;
+    /**
+     * @readonly
      * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
      */
     private $classAnalyzer;
@@ -72,10 +79,11 @@ final class BetterNodeFinder
      * @var \Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser
      */
     private $simpleCallableNodeTraverser;
-    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer, MultiInstanceofChecker $multiInstanceofChecker, CurrentFileProvider $currentFileProvider, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    public function __construct(NodeFinder $nodeFinder, NodeNameResolver $nodeNameResolver, NodeComparator $nodeComparator, ClassAnalyzer $classAnalyzer, MultiInstanceofChecker $multiInstanceofChecker, CurrentFileProvider $currentFileProvider, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
     {
         $this->nodeFinder = $nodeFinder;
         $this->nodeNameResolver = $nodeNameResolver;
+        $this->nodeComparator = $nodeComparator;
         $this->classAnalyzer = $classAnalyzer;
         $this->multiInstanceofChecker = $multiInstanceofChecker;
         $this->currentFileProvider = $currentFileProvider;
@@ -187,6 +195,19 @@ final class BetterNodeFinder
     public function findFirst($nodes, callable $filter) : ?Node
     {
         return $this->nodeFinder->findFirst($nodes, $filter);
+    }
+    /**
+     * @api symfony
+     * @return Assign|null
+     */
+    public function findPreviousAssignToExpr(Expr $expr) : ?Node
+    {
+        return $this->findFirstPrevious($expr, function (Node $node) use($expr) : bool {
+            if (!$node instanceof Assign) {
+                return \false;
+            }
+            return $this->nodeComparator->areNodesEqual($node->var, $expr);
+        });
     }
     /**
      * @deprecated Use nodes directly
