@@ -1982,12 +1982,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "57ad03c027f04921edea6e081c7346f21d23d104"
+                "reference": "790ebf25df1b94e814e75dafe3b05338f828a15e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/57ad03c027f04921edea6e081c7346f21d23d104",
-                "reference": "57ad03c027f04921edea6e081c7346f21d23d104",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/790ebf25df1b94e814e75dafe3b05338f828a15e",
+                "reference": "790ebf25df1b94e814e75dafe3b05338f828a15e",
                 "shasum": ""
             },
             "require": {
@@ -2011,7 +2011,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-06-30T11:54:35+00:00",
+            "time": "2023-07-08T20:59:02+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2121,12 +2121,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "23da46cac1eeeb675a07ee10f74a7c4513db1802"
+                "reference": "2e0c69345877efe2748c2181681a594cb2325e72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/23da46cac1eeeb675a07ee10f74a7c4513db1802",
-                "reference": "23da46cac1eeeb675a07ee10f74a7c4513db1802",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/2e0c69345877efe2748c2181681a594cb2325e72",
+                "reference": "2e0c69345877efe2748c2181681a594cb2325e72",
                 "shasum": ""
             },
             "require": {
@@ -2156,7 +2156,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-07-06T18:46:27+00:00",
+            "time": "2023-07-08T21:38:13+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

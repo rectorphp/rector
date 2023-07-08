@@ -3,16 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Symfony\NodeAnalyzer;
 
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\Variable;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
+use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Symfony\NodeAnalyzer\FormType\CreateFormTypeOptionsArgMover;
 use Rector\Symfony\NodeAnalyzer\FormType\FormTypeClassResolver;
+use ReflectionMethod;
 final class FormInstanceToFormClassConstFetchConverter
 {
     /**
@@ -32,15 +33,15 @@ final class FormInstanceToFormClassConstFetchConverter
     private $formTypeClassResolver;
     /**
      * @readonly
-     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     * @var \Rector\NodeTypeResolver\NodeTypeResolver
      */
-    private $betterNodeFinder;
-    public function __construct(CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, NodeFactory $nodeFactory, FormTypeClassResolver $formTypeClassResolver, BetterNodeFinder $betterNodeFinder)
+    private $nodeTypeResolver;
+    public function __construct(CreateFormTypeOptionsArgMover $createFormTypeOptionsArgMover, NodeFactory $nodeFactory, FormTypeClassResolver $formTypeClassResolver, NodeTypeResolver $nodeTypeResolver)
     {
         $this->createFormTypeOptionsArgMover = $createFormTypeOptionsArgMover;
         $this->nodeFactory = $nodeFactory;
         $this->formTypeClassResolver = $formTypeClassResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->nodeTypeResolver = $nodeTypeResolver;
     }
     public function processNewInstance(MethodCall $methodCall, int $position, int $optionsPosition) : ?MethodCall
     {
@@ -53,9 +54,12 @@ final class FormInstanceToFormClassConstFetchConverter
         if ($formClassName === null) {
             return null;
         }
-        $formNew = $this->resolveFormNew($argValue);
-        if ($formNew instanceof New_ && $formNew->getArgs() !== []) {
-            $methodCall = $this->createFormTypeOptionsArgMover->moveArgumentsToOptions($methodCall, $position, $optionsPosition, $formClassName, $formNew->getArgs());
+        // better skip and ahndle manualyl
+        if ($argValue instanceof Variable && $this->isVariableOfTypeWithRequiredConstructorParmaeters($argValue)) {
+            return null;
+        }
+        if ($argValue instanceof New_ && $argValue->getArgs() !== []) {
+            $methodCall = $this->createFormTypeOptionsArgMover->moveArgumentsToOptions($methodCall, $position, $optionsPosition, $formClassName, $argValue->getArgs());
             if (!$methodCall instanceof MethodCall) {
                 throw new ShouldNotHappenException();
             }
@@ -65,20 +69,25 @@ final class FormInstanceToFormClassConstFetchConverter
         $currentArg->value = $classConstFetch;
         return $methodCall;
     }
-    private function resolveFormNew(Expr $expr) : ?New_
+    private function isVariableOfTypeWithRequiredConstructorParmaeters(Variable $variable) : bool
     {
-        if ($expr instanceof New_) {
-            return $expr;
+        // if form type is object with constructor args, handle manually
+        $variableType = $this->nodeTypeResolver->getType($variable);
+        if (!$variableType instanceof TypeWithClassName) {
+            return \false;
         }
-        if ($expr instanceof Variable) {
-            $previousAssign = $this->betterNodeFinder->findPreviousAssignToExpr($expr);
-            if (!$previousAssign instanceof Assign) {
-                return null;
-            }
-            if ($previousAssign->expr instanceof New_) {
-                return $previousAssign->expr;
-            }
+        $classReflection = $variableType->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
         }
-        return null;
+        if (!$classReflection->hasConstructor()) {
+            return \false;
+        }
+        $nativeReflection = $classReflection->getNativeReflection();
+        $reflectionMethod = $nativeReflection->getConstructor();
+        if (!$reflectionMethod instanceof ReflectionMethod) {
+            return \false;
+        }
+        return $reflectionMethod->getNumberOfRequiredParameters() > 0;
     }
 }

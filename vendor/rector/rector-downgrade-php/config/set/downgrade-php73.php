@@ -15,12 +15,5 @@ use Rector\DowngradePhp73\Rector\String_\DowngradeFlexibleHeredocSyntaxRector;
 use Rector\DowngradePhp73\Rector\Unset_\DowngradeTrailingCommasInUnsetRector;
 return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->phpVersion(PhpVersion::PHP_72);
-    $rectorConfig->rule(DowngradeFlexibleHeredocSyntaxRector::class);
-    $rectorConfig->rule(DowngradeListReferenceAssignmentRector::class);
-    $rectorConfig->rule(DowngradeTrailingCommasInFunctionCallsRector::class);
-    $rectorConfig->rule(DowngradeArrayKeyFirstLastRector::class);
-    $rectorConfig->rule(SetCookieOptionsArrayToArgumentsRector::class);
-    $rectorConfig->rule(DowngradeIsCountableRector::class);
-    $rectorConfig->rule(DowngradePhp73JsonConstRector::class);
-    $rectorConfig->rule(DowngradeTrailingCommasInUnsetRector::class);
+    $rectorConfig->rules([DowngradeFlexibleHeredocSyntaxRector::class, DowngradeListReferenceAssignmentRector::class, DowngradeTrailingCommasInFunctionCallsRector::class, DowngradeArrayKeyFirstLastRector::class, SetCookieOptionsArrayToArgumentsRector::class, DowngradeIsCountableRector::class, DowngradePhp73JsonConstRector::class, DowngradeTrailingCommasInUnsetRector::class]);
 };
