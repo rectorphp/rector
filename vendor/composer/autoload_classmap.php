@@ -2238,7 +2238,6 @@ return array(
     'Rector\\Php71\\Rector\\TryCatch\\MultiExceptionCatchRector' => $baseDir . '/rules/Php71/Rector/TryCatch/MultiExceptionCatchRector.php',
     'Rector\\Php71\\ValueObject\\TwoNodeMatch' => $baseDir . '/rules/Php71/ValueObject/TwoNodeMatch.php',
     'Rector\\Php72\\NodeFactory\\AnonymousFunctionFactory' => $baseDir . '/rules/Php72/NodeFactory/AnonymousFunctionFactory.php',
-    'Rector\\Php72\\NodeManipulator\\ClosureNestedUsesDecorator' => $baseDir . '/rules/Php72/NodeManipulator/ClosureNestedUsesDecorator.php',
     'Rector\\Php72\\Rector\\Assign\\ListEachRector' => $baseDir . '/rules/Php72/Rector/Assign/ListEachRector.php',
     'Rector\\Php72\\Rector\\Assign\\ReplaceEachAssignmentWithKeyCurrentRector' => $baseDir . '/rules/Php72/Rector/Assign/ReplaceEachAssignmentWithKeyCurrentRector.php',
     'Rector\\Php72\\Rector\\FuncCall\\CreateFunctionToAnonymousFunctionRector' => $baseDir . '/rules/Php72/Rector/FuncCall/CreateFunctionToAnonymousFunctionRector.php',

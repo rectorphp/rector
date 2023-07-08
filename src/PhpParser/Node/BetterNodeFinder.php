@@ -90,24 +90,6 @@ final class BetterNodeFinder
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
     /**
-     * @deprecated Make use of child nodes instead
-     * @param class-string<T> $type
-     * @template T of Node
-     * @return T|null
-     */
-    public function findParentType(Node $node, string $type) : ?Node
-    {
-        Assert::isAOf($type, Node::class);
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
-        while ($parentNode instanceof Node) {
-            if ($parentNode instanceof $type) {
-                return $parentNode;
-            }
-            $parentNode = $parentNode->getAttribute(AttributeKey::PARENT_NODE);
-        }
-        return null;
-    }
-    /**
      * @template T of Node
      * @param array<class-string<T>> $types
      * @param \PhpParser\Node|mixed[] $nodes

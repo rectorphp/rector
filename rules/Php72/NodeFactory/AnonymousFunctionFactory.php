@@ -43,7 +43,6 @@ use Rector\Core\PhpParser\Parser\SimplePhpParser;
 use Rector\Core\Util\Reflection\PrivatesAccessor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\Php72\NodeManipulator\ClosureNestedUsesDecorator;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
@@ -82,11 +81,6 @@ final class AnonymousFunctionFactory
     private $simplePhpParser;
     /**
      * @readonly
-     * @var \Rector\Php72\NodeManipulator\ClosureNestedUsesDecorator
-     */
-    private $closureNestedUsesDecorator;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\AstResolver
      */
     private $astResolver;
@@ -105,7 +99,7 @@ final class AnonymousFunctionFactory
      * @see https://regex101.com/r/jkLLlM/2
      */
     private const DIM_FETCH_REGEX = '#(\\$|\\\\|\\x0)(?<number>\\d+)#';
-    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, ClosureNestedUsesDecorator $closureNestedUsesDecorator, AstResolver $astResolver, PrivatesAccessor $privatesAccessor, InlineCodeParser $inlineCodeParser)
+    public function __construct(NodeNameResolver $nodeNameResolver, BetterNodeFinder $betterNodeFinder, NodeFactory $nodeFactory, StaticTypeMapper $staticTypeMapper, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, SimplePhpParser $simplePhpParser, AstResolver $astResolver, PrivatesAccessor $privatesAccessor, InlineCodeParser $inlineCodeParser)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->betterNodeFinder = $betterNodeFinder;
@@ -113,7 +107,6 @@ final class AnonymousFunctionFactory
         $this->staticTypeMapper = $staticTypeMapper;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
         $this->simplePhpParser = $simplePhpParser;
-        $this->closureNestedUsesDecorator = $closureNestedUsesDecorator;
         $this->astResolver = $astResolver;
         $this->privatesAccessor = $privatesAccessor;
         $this->inlineCodeParser = $inlineCodeParser;
@@ -127,20 +120,19 @@ final class AnonymousFunctionFactory
     public function create(array $params, array $stmts, $returnTypeNode, bool $static = \false) : Closure
     {
         $useVariables = $this->createUseVariablesFromParams($stmts, $params);
-        $anonymousFunctionNode = new Closure();
-        $anonymousFunctionNode->params = $params;
+        $anonymousFunctionClosure = new Closure();
+        $anonymousFunctionClosure->params = $params;
         if ($static) {
-            $anonymousFunctionNode->static = $static;
+            $anonymousFunctionClosure->static = $static;
         }
         foreach ($useVariables as $useVariable) {
-            $anonymousFunctionNode = $this->closureNestedUsesDecorator->applyNestedUses($anonymousFunctionNode, $useVariable);
-            $anonymousFunctionNode->uses[] = new ClosureUse($useVariable);
+            $anonymousFunctionClosure->uses[] = new ClosureUse($useVariable);
         }
         if ($returnTypeNode instanceof Node) {
-            $anonymousFunctionNode->returnType = $returnTypeNode;
+            $anonymousFunctionClosure->returnType = $returnTypeNode;
         }
-        $anonymousFunctionNode->stmts = $stmts;
-        return $anonymousFunctionNode;
+        $anonymousFunctionClosure->stmts = $stmts;
+        return $anonymousFunctionClosure;
     }
     public function createFromPhpMethodReflection(PhpMethodReflection $phpMethodReflection, Expr $expr) : ?Closure
     {
