@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdc7ab4b2735424de468bdf5bc4cfe531
+class ComposerStaticInitd545642e01ffb8fcf674994e867c4119
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2544,7 +2544,6 @@ class ComposerStaticInitdc7ab4b2735424de468bdf5bc4cfe531
         'Rector\\Php80\\NodeFactory\\NestedAttrGroupsFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/NestedAttrGroupsFactory.php',
         'Rector\\Php80\\NodeFactory\\StrStartsWithFuncCallFactory' => __DIR__ . '/../..' . '/rules/Php80/NodeFactory/StrStartsWithFuncCallFactory.php',
         'Rector\\Php80\\NodeManipulator\\AttributeGroupNamedArgumentManipulator' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/AttributeGroupNamedArgumentManipulator.php',
-        'Rector\\Php80\\NodeManipulator\\ResourceReturnToObject' => __DIR__ . '/../..' . '/rules/Php80/NodeManipulator/ResourceReturnToObject.php',
         'Rector\\Php80\\NodeResolver\\ArgumentSorter' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/ArgumentSorter.php',
         'Rector\\Php80\\NodeResolver\\RequireOptionalParamResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/RequireOptionalParamResolver.php',
         'Rector\\Php80\\NodeResolver\\SwitchExprsResolver' => __DIR__ . '/../..' . '/rules/Php80/NodeResolver/SwitchExprsResolver.php',
@@ -2557,7 +2556,6 @@ class ComposerStaticInitdc7ab4b2735424de468bdf5bc4cfe531
         'Rector\\Php80\\Rector\\Class_\\ClassPropertyAssignToConstructorPromotionRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/ClassPropertyAssignToConstructorPromotionRector.php',
         'Rector\\Php80\\Rector\\Class_\\StringableForToStringRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Class_/StringableForToStringRector.php',
         'Rector\\Php80\\Rector\\FuncCall\\ClassOnObjectRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/ClassOnObjectRector.php',
-        'Rector\\Php80\\Rector\\FuncCall\\Php8ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FuncCall/Php8ResourceReturnToObjectRector.php',
         'Rector\\Php80\\Rector\\FunctionLike\\MixedTypeRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/FunctionLike/MixedTypeRector.php',
         'Rector\\Php80\\Rector\\Identical\\StrEndsWithRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Identical/StrEndsWithRector.php',
         'Rector\\Php80\\Rector\\Identical\\StrStartsWithRector' => __DIR__ . '/../..' . '/rules/Php80/Rector/Identical/StrStartsWithRector.php',
@@ -2585,7 +2583,6 @@ class ComposerStaticInitdc7ab4b2735424de468bdf5bc4cfe531
         'Rector\\Php81\\Rector\\Class_\\MyCLabsClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/MyCLabsClassToEnumRector.php',
         'Rector\\Php81\\Rector\\Class_\\SpatieEnumClassToEnumRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/Class_/SpatieEnumClassToEnumRector.php',
         'Rector\\Php81\\Rector\\FuncCall\\NullToStrictStringFuncCallArgRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/NullToStrictStringFuncCallArgRector.php',
-        'Rector\\Php81\\Rector\\FuncCall\\Php81ResourceReturnToObjectRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php',
         'Rector\\Php81\\Rector\\FunctionLike\\IntersectionTypesRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/FunctionLike/IntersectionTypesRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\MyCLabsMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/MyCLabsMethodCallToEnumConstRector.php',
         'Rector\\Php81\\Rector\\MethodCall\\SpatieEnumMethodCallToEnumConstRector' => __DIR__ . '/../..' . '/rules/Php81/Rector/MethodCall/SpatieEnumMethodCallToEnumConstRector.php',
@@ -3080,9 +3077,9 @@ class ComposerStaticInitdc7ab4b2735424de468bdf5bc4cfe531
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdc7ab4b2735424de468bdf5bc4cfe531::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdc7ab4b2735424de468bdf5bc4cfe531::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdc7ab4b2735424de468bdf5bc4cfe531::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd545642e01ffb8fcf674994e867c4119::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd545642e01ffb8fcf674994e867c4119::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd545642e01ffb8fcf674994e867c4119::$classMap;
 
         }, null, ClassLoader::class);
     }
