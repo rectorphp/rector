@@ -6,7 +6,6 @@ namespace Rector\Naming\Rector\Foreach_;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Foreach_;
-use Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\ExpectedNameResolver\InflectorSingularResolver;
@@ -24,18 +23,12 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
     private $inflectorSingularResolver;
     /**
      * @readonly
-     * @var \Rector\CodeQuality\NodeAnalyzer\ForeachAnalyzer
-     */
-    private $foreachAnalyzer;
-    /**
-     * @readonly
      * @var \Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer
      */
     private $propertyFetchAnalyzer;
-    public function __construct(InflectorSingularResolver $inflectorSingularResolver, ForeachAnalyzer $foreachAnalyzer, PropertyFetchAnalyzer $propertyFetchAnalyzer)
+    public function __construct(InflectorSingularResolver $inflectorSingularResolver, PropertyFetchAnalyzer $propertyFetchAnalyzer)
     {
         $this->inflectorSingularResolver = $inflectorSingularResolver;
-        $this->foreachAnalyzer = $foreachAnalyzer;
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -100,7 +93,8 @@ CODE_SAMPLE
         if ($singularValueVarName === $valueVarName) {
             return null;
         }
-        if ($this->foreachAnalyzer->isValueVarUsed($node, $singularValueVarName)) {
+        $alreadyUsedVariable = $this->betterNodeFinder->findVariableOfName($node->stmts, $singularValueVarName);
+        if ($alreadyUsedVariable instanceof Variable) {
             return null;
         }
         return $this->processRename($node, $valueVarName, $singularValueVarName);
