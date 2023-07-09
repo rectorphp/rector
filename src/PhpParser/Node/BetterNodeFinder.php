@@ -175,6 +175,8 @@ final class BetterNodeFinder
         return $this->nodeFinder->findFirst($nodes, $filter);
     }
     /**
+     * @deprecated Use node traversing instead
+     *
      * @param callable(Node $node): bool $filter
      */
     public function findFirstNext(Node $node, callable $filter) : ?Node
