@@ -27,7 +27,8 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
-use Rector\Core\Configuration\RectorConfigProvider;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -43,11 +44,6 @@ final class BetterStandardPrinter extends Standard
      * @var \Rector\Comments\NodeDocBlock\DocBlockUpdater
      */
     private $docBlockUpdater;
-    /**
-     * @readonly
-     * @var \Rector\Core\Configuration\RectorConfigProvider
-     */
-    private $rectorConfigProvider;
     /**
      * @var string
      * @see https://regex101.com/r/jUFizd/1
@@ -82,10 +78,9 @@ final class BetterStandardPrinter extends Standard
     /**
      * @param mixed[] $options
      */
-    public function __construct(DocBlockUpdater $docBlockUpdater, RectorConfigProvider $rectorConfigProvider, array $options = [])
+    public function __construct(DocBlockUpdater $docBlockUpdater, array $options = [])
     {
         $this->docBlockUpdater = $docBlockUpdater;
-        $this->rectorConfigProvider = $rectorConfigProvider;
         parent::__construct($options);
         // print return type double colon right after the bracket "function(): string"
         $this->initializeInsertionMap();
@@ -93,7 +88,7 @@ final class BetterStandardPrinter extends Standard
         $this->insertionMap['Stmt_Function->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Expr_Closure->returnType'] = [')', \false, ': ', null];
         $this->insertionMap['Expr_ArrowFunction->returnType'] = [')', \false, ': ', null];
-        $this->tabOrSpaceIndentCharacter = $this->rectorConfigProvider->getIndentChar();
+        $this->tabOrSpaceIndentCharacter = SimpleParameterProvider::provideStringParameter(Option::INDENT_CHAR, ' ');
     }
     /**
      * @param Node[] $stmts
@@ -156,7 +151,8 @@ final class BetterStandardPrinter extends Standard
         if ($comments === []) {
             return parent::pExpr_ArrowFunction($arrowFunction);
         }
-        $indent = \str_repeat($this->tabOrSpaceIndentCharacter, $this->indentLevel) . \str_repeat($this->tabOrSpaceIndentCharacter, $this->rectorConfigProvider->getIndentSize());
+        $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
+        $indent = \str_repeat($this->tabOrSpaceIndentCharacter, $this->indentLevel) . \str_repeat($this->tabOrSpaceIndentCharacter, $indentSize);
         $text = "\n" . $indent;
         foreach ($comments as $key => $comment) {
             $commentText = $key > 0 ? $indent . $comment->getText() : $comment->getText();
@@ -178,7 +174,7 @@ final class BetterStandardPrinter extends Standard
      */
     protected function indent() : void
     {
-        $indentSize = $this->rectorConfigProvider->getIndentSize();
+        $indentSize = SimpleParameterProvider::provideIntParameter(Option::INDENT_SIZE);
         $this->indentLevel += $indentSize;
         $this->nl .= \str_repeat($this->tabOrSpaceIndentCharacter, $indentSize);
     }

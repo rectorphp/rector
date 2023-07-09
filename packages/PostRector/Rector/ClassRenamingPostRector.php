@@ -8,7 +8,8 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
 use PHPStan\Analyser\Scope;
 use Rector\CodingStyle\Application\UseImportsRemover;
-use Rector\Core\Configuration\RectorConfigProvider;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NonPhpFile\Rector\RenameClassNonPhpRector;
@@ -33,11 +34,6 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
     private $renamedClassesDataCollector;
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\RectorConfigProvider
-     */
-    private $rectorConfigProvider;
-    /**
-     * @readonly
      * @var \Rector\CodingStyle\Application\UseImportsRemover
      */
     private $useImportsRemover;
@@ -45,11 +41,10 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
      * @var \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_|null
      */
     private $rootNode = null;
-    public function __construct(ClassRenamer $classRenamer, RenamedClassesDataCollector $renamedClassesDataCollector, RectorConfigProvider $rectorConfigProvider, UseImportsRemover $useImportsRemover)
+    public function __construct(ClassRenamer $classRenamer, RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsRemover $useImportsRemover)
     {
         $this->classRenamer = $classRenamer;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->rectorConfigProvider = $rectorConfigProvider;
         $this->useImportsRemover = $useImportsRemover;
     }
     /**
@@ -86,7 +81,7 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
         /** @var Scope|null $scope */
         $scope = $originalNode->getAttribute(AttributeKey::SCOPE);
         $result = $this->classRenamer->renameNode($node, $oldToNewClasses, $scope);
-        if (!$this->rectorConfigProvider->shouldImportNames()) {
+        if (!SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_NAMES)) {
             return $result;
         }
         if (!$this->rootNode instanceof FileWithoutNamespace && !$this->rootNode instanceof Namespace_) {
