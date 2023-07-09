@@ -4,21 +4,17 @@ declare (strict_types=1);
 namespace Rector\Core\PhpParser\Node;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Declare_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeFinder;
 use PhpParser\NodeTraverser;
-use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix202307\Webmozart\Assert\Assert;
 /**
@@ -244,54 +240,6 @@ final class BetterNodeFinder
             return null;
         });
         return $scopedNode;
-    }
-    /**
-     * @api
-     * @deprecated Hook into the previous node instead, to work only with current context
-     *
-     * Resolve next node from any Node, eg: Expr, Identifier, Name, etc
-     */
-    public function resolveNextNode(Node $node) : ?Node
-    {
-        $currentStmt = $this->resolveCurrentStatement($node);
-        if (!$currentStmt instanceof Stmt) {
-            return null;
-        }
-        $endTokenPos = $node->getEndTokenPos();
-        $nextNode = $endTokenPos < 0 || $currentStmt->getEndTokenPos() === $endTokenPos ? null : $this->findFirst($currentStmt, static function (Node $subNode) use($endTokenPos) : bool {
-            return $subNode->getStartTokenPos() > $endTokenPos;
-        });
-        if (!$nextNode instanceof Node) {
-            $parentNode = $currentStmt->getAttribute(AttributeKey::PARENT_NODE);
-            if (!$this->isAllowedParentNode($parentNode)) {
-                return null;
-            }
-            $currentStmtKey = $currentStmt->getAttribute(AttributeKey::STMT_KEY);
-            /** @var StmtsAwareInterface|ClassLike|Declare_ $parentNode */
-            return $parentNode->stmts[$currentStmtKey + 1] ?? null;
-        }
-        return $nextNode;
-    }
-    private function resolveCurrentStatement(Node $node) : ?Stmt
-    {
-        if ($node instanceof Stmt) {
-            return $node;
-        }
-        $currentStmt = $node;
-        while (($currentStmt = $currentStmt->getAttribute(AttributeKey::PARENT_NODE)) instanceof Node) {
-            if ($currentStmt instanceof Stmt) {
-                return $currentStmt;
-            }
-            /** @var Node|null $currentStmt */
-            if (!$currentStmt instanceof Node) {
-                return null;
-            }
-        }
-        return null;
-    }
-    private function isAllowedParentNode(?Node $node) : bool
-    {
-        return $node instanceof StmtsAwareInterface || $node instanceof ClassLike || $node instanceof Declare_;
     }
     /**
      * @template T of Node
