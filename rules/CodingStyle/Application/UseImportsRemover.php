@@ -32,10 +32,9 @@ final class UseImportsRemover
     private function removeUseFromUse(array $removedUses, Use_ $use) : Use_
     {
         foreach ($use->uses as $usesKey => $useUse) {
-            foreach ($removedUses as $removedUse) {
-                if ($useUse->name->toString() === $removedUse) {
-                    unset($use->uses[$usesKey]);
-                }
+            $useName = $useUse->name->toString();
+            if (\in_array($useName, $removedUses, \true)) {
+                unset($use->uses[$usesKey]);
             }
         }
         return $use;
