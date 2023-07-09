@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver;
 use PhpParser\Node\Stmt;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\CloningVisitor;
-use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use Rector\Core\PhpParser\NodeTraverser\FileWithoutNamespaceNodeTraverser;
 use Rector\Core\PHPStan\NodeVisitor\UnreachableStatementNodeVisitor;
 use Rector\Core\ValueObject\Application\File;
@@ -35,16 +34,14 @@ final class NodeScopeAndMetadataDecorator
      * @var \PhpParser\NodeTraverser
      */
     private $nodeTraverser;
-    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ParentConnectingVisitor $parentConnectingVisitor, FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor, ScopeFactory $scopeFactory, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
+    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver, FunctionLikeParamArgPositionNodeVisitor $functionLikeParamArgPositionNodeVisitor, ScopeFactory $scopeFactory, FileWithoutNamespaceNodeTraverser $fileWithoutNamespaceNodeTraverser)
     {
         $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
         $this->scopeFactory = $scopeFactory;
         $this->fileWithoutNamespaceNodeTraverser = $fileWithoutNamespaceNodeTraverser;
         $this->nodeTraverser = new NodeTraverser();
-        // needed also for format preserving printing
+        // needed for format preserving printing
         $this->nodeTraverser->addVisitor($cloningVisitor);
-        // this one has to be run again to re-connect parent nodes with new attributes
-        $this->nodeTraverser->addVisitor($parentConnectingVisitor);
         $this->nodeTraverser->addVisitor($functionLikeParamArgPositionNodeVisitor);
     }
     /**

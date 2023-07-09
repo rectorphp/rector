@@ -4,8 +4,11 @@ declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
+use PhpParser\Node\Arg;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Namespace_;
+use PhpParser\Node\Stmt\PropertyProperty;
 use PHPStan\Analyser\Scope;
 use Rector\CodingStyle\Application\UseImportsRemover;
 use Rector\Core\Configuration\Option;
@@ -72,6 +75,10 @@ final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPo
     }
     public function enterNode(Node $node) : ?Node
     {
+        // cannot be renamed
+        if ($node instanceof Expr || $node instanceof Arg || $node instanceof PropertyProperty) {
+            return null;
+        }
         $oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
         if ($oldToNewClasses === []) {
             return null;

@@ -10,7 +10,7 @@ use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 /**
@@ -32,10 +32,10 @@ final class RemoveDeepChainMethodCallNodeVisitor extends NodeVisitorAbstract imp
      * @var \PhpParser\Node\Stmt\Expression|null
      */
     private $removingExpression;
-    public function __construct(BetterNodeFinder $betterNodeFinder, ParameterProvider $parameterProvider)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->nestedChainMethodCallLimit = (int) $parameterProvider->provideParameter(Option::NESTED_CHAIN_METHOD_CALL_LIMIT);
+        $this->nestedChainMethodCallLimit = SimpleParameterProvider::provideIntParameter(Option::NESTED_CHAIN_METHOD_CALL_LIMIT);
     }
     public function enterNode(Node $node) : ?int
     {

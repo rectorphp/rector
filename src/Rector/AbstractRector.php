@@ -224,7 +224,7 @@ CODE_SAMPLE;
             $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
-        return $this->postRefactorProcess($originalNode, $node, $refactoredNode);
+        return $this->postRefactorProcess($originalNode, $refactoredNode);
     }
     /**
      * Replacing nodes in leaveNode() method avoids infinite recursion
@@ -302,13 +302,12 @@ CODE_SAMPLE;
     /**
      * @param \PhpParser\Node|mixed[]|int $refactoredNode
      */
-    private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode) : Node
+    private function postRefactorProcess(Node $originalNode, $refactoredNode) : Node
     {
         /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
         $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
         $this->file->addRectorClassWithLine($rectorWithLineChange);
-        $parentNode = $node->getAttribute(AttributeKey::PARENT_NODE);
         /** @var MutatingScope|null $currentScope */
         $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
         $filePath = $this->file->getFilePath();
@@ -317,13 +316,11 @@ CODE_SAMPLE;
         if (\is_array($refactoredNode)) {
             $firstNode = \current($refactoredNode);
             $this->mirrorComments($firstNode, $originalNode);
-            $this->updateParentNodes($refactoredNode, $parentNode);
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
             $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
             // will be replaced in leaveNode() the original node must be passed
             return $originalNode;
         }
-        $this->updateParentNodes($refactoredNode, $parentNode);
         $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
         $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
         return $refactoredNode;
@@ -357,20 +354,6 @@ CODE_SAMPLE;
             return \true;
         }
         return $this->rectifiedAnalyzer->hasRectified(static::class, $node);
-    }
-    /**
-     * @param mixed[]|\PhpParser\Node $node
-     */
-    private function updateParentNodes($node, ?Node $parentNode) : void
-    {
-        if (!$parentNode instanceof Node) {
-            return;
-        }
-        $nodes = $node instanceof Node ? [$node] : $node;
-        foreach ($nodes as $node) {
-            // update parents relations
-            $node->setAttribute(AttributeKey::PARENT_NODE, $parentNode);
-        }
     }
     private function printCurrentFileAndRule() : void
     {

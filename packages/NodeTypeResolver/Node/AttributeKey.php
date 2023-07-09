@@ -61,6 +61,11 @@ final class AttributeKey
      * @internal of php-parser, do not change
      * @see https://github.com/nikic/PHP-Parser/pull/681/files
      * @var string
+     *
+     * @api for BC layer
+     *
+     * The parent node can be still enabled by using custom PHPStan configuration,
+     * @see https://github.com/rectorphp/rector-src/pull/4458#discussion_r1257478146
      */
     public const PARENT_NODE = 'parent';
     /**
