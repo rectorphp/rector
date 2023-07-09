@@ -90,7 +90,11 @@ CODE_SAMPLE
             if (!$node->expr instanceof FuncCall) {
                 return null;
             }
-            return $this->refactorFuncCall($node->expr, \true);
+            $assignOrCast = $this->refactorFuncCall($node->expr, \true);
+            if (!$assignOrCast instanceof Expr) {
+                return null;
+            }
+            return new Expression($assignOrCast);
         }
         return $this->refactorFuncCall($node, \false);
     }

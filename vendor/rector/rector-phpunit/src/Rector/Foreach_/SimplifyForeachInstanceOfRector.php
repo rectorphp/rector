@@ -67,8 +67,10 @@ CODE_SAMPLE
         }
         $newArgs = [$expr->getArgs()[0], new Arg($node->expr)];
         if ($expr instanceof StaticCall) {
-            return new StaticCall($expr->class, 'assertContainsOnlyInstancesOf', $newArgs);
+            $staticCall = new StaticCall($expr->class, 'assertContainsOnlyInstancesOf', $newArgs);
+            return new Expression($staticCall);
         }
-        return new MethodCall($expr->var, 'assertContainsOnlyInstancesOf', $newArgs);
+        $methodCall = new MethodCall($expr->var, 'assertContainsOnlyInstancesOf', $newArgs);
+        return new Expression($methodCall);
     }
 }

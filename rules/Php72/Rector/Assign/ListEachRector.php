@@ -74,7 +74,8 @@ CODE_SAMPLE
         // only key: list($key, ) = each($values);
         if ($listNode->items[0] instanceof ArrayItem && !$listNode->items[1] instanceof ArrayItem) {
             $keyFuncCall = $this->nodeFactory->createFuncCall('key', $eachFuncCall->args);
-            return new Assign($listNode->items[0]->value, $keyFuncCall);
+            $keyFuncCallAssign = new Assign($listNode->items[0]->value, $keyFuncCall);
+            return new Expression($keyFuncCallAssign);
         }
         // only value: list(, $value) = each($values);
         if ($listNode->items[1] instanceof ArrayItem && !$listNode->items[0] instanceof ArrayItem) {
