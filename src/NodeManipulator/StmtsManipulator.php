@@ -7,7 +7,9 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
+use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 final class StmtsManipulator
 {
@@ -18,12 +20,18 @@ final class StmtsManipulator
     private $simpleCallableNodeTraverser;
     /**
      * @readonly
+     * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
+     */
+    private $betterNodeFinder;
+    /**
+     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeComparator $nodeComparator)
+    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator)
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->betterNodeFinder = $betterNodeFinder;
         $this->nodeComparator = $nodeComparator;
     }
     /**
@@ -55,5 +63,23 @@ final class StmtsManipulator
             return null;
         });
         return $stmts;
+    }
+    public function isVariableUsedInNextStmt(StmtsAwareInterface $stmtsAware, int $jumpToKey, string $variableName) : bool
+    {
+        if ($stmtsAware->stmts === null) {
+            return \false;
+        }
+        \end($stmtsAware->stmts);
+        $totalKeys = \key($stmtsAware->stmts);
+        for ($key = $jumpToKey; $key <= $totalKeys; ++$key) {
+            if (!isset($stmtsAware->stmts[$key])) {
+                continue;
+            }
+            $isVariableUsed = (bool) $this->betterNodeFinder->findVariableOfName($stmtsAware->stmts[$key], $variableName);
+            if ($isVariableUsed) {
+                return \true;
+            }
+        }
+        return \false;
     }
 }
