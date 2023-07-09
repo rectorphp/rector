@@ -11,7 +11,6 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\Node\Stmt\UseUse;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
@@ -22,7 +21,6 @@ use Rector\BetterPhpDocParser\ValueObject\NodeTypes;
 use Rector\CodingStyle\Naming\ClassNaming;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Util\FileHasher;
-use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockClassRenamer;
@@ -74,11 +72,6 @@ final class ClassRenamer
     private $reflectionProvider;
     /**
      * @readonly
-     * @var \Rector\Naming\Naming\UseImportsResolver
-     */
-    private $useImportsResolver;
-    /**
-     * @readonly
      * @var \Rector\Renaming\Helper\RenameClassCallbackHandler
      */
     private $renameClassCallbackHandler;
@@ -95,7 +88,7 @@ final class ClassRenamer
      * @var array<string, OldToNewType[]>
      */
     private $oldToNewTypesByCacheKey = [];
-    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, UseImportsResolver $useImportsResolver, RenameClassCallbackHandler $renameClassCallbackHandler, FileHasher $fileHasher)
+    public function __construct(BetterNodeFinder $betterNodeFinder, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, ClassNaming $classNaming, NodeNameResolver $nodeNameResolver, PhpDocClassRenamer $phpDocClassRenamer, PhpDocInfoFactory $phpDocInfoFactory, DocBlockClassRenamer $docBlockClassRenamer, ReflectionProvider $reflectionProvider, RenameClassCallbackHandler $renameClassCallbackHandler, FileHasher $fileHasher)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
@@ -105,7 +98,6 @@ final class ClassRenamer
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->docBlockClassRenamer = $docBlockClassRenamer;
         $this->reflectionProvider = $reflectionProvider;
-        $this->useImportsResolver = $useImportsResolver;
         $this->renameClassCallbackHandler = $renameClassCallbackHandler;
         $this->fileHasher = $fileHasher;
     }
@@ -268,10 +260,6 @@ final class ClassRenamer
         if ($parentNode instanceof Class_) {
             return $this->isValidClassNameChange($name, $parentNode, $classReflection);
         }
-        // prevent to change to import, that already exists
-        if ($parentNode instanceof UseUse) {
-            return $this->isValidUseImportChange($newClassName, $parentNode);
-        }
         return \true;
     }
     /**
@@ -338,23 +326,6 @@ final class ClassRenamer
         }
         // is interface to class?
         return !(\in_array($name, $class->implements, \true) && $classReflection->isClass());
-    }
-    private function isValidUseImportChange(string $newName, UseUse $useUse) : bool
-    {
-        $uses = $this->useImportsResolver->resolve();
-        if ($uses === []) {
-            return \true;
-        }
-        foreach ($uses as $use) {
-            $prefix = $this->useImportsResolver->resolvePrefix($use);
-            foreach ($use->uses as $useUse) {
-                if ($prefix . $useUse->name->toString() === $newName) {
-                    // name already exists
-                    return \false;
-                }
-            }
-        }
-        return \true;
     }
     /**
      * @param array<string, string> $oldToNewClasses
