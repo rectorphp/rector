@@ -1,4 +1,4 @@
-# 370 Rules Overview
+# 367 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (72)
+- [CodeQuality](#codequality) (71)
 
 - [CodingStyle](#codingstyle) (31)
 
@@ -38,9 +38,9 @@
 
 - [Php74](#php74) (13)
 
-- [Php80](#php80) (17)
+- [Php80](#php80) (16)
 
-- [Php81](#php81) (11)
+- [Php81](#php81) (10)
 
 - [Php82](#php82) (4)
 
@@ -1237,26 +1237,6 @@ Simplify `empty()` functions calls on empty arrays
 -if (empty($values)) {
 +if ([] === $values) {
  }
-```
-
-<br>
-
-### SimplifyForeachToArrayFilterRector
-
-Simplify foreach with function filtering to array filter
-
-- class: [`Rector\CodeQuality\Rector\Foreach_\SimplifyForeachToArrayFilterRector`](../rules/CodeQuality/Rector/Foreach_/SimplifyForeachToArrayFilterRector.php)
-
-```diff
--$directories = [];
--
- $possibleDirectories = [];
--foreach ($possibleDirectories as $possibleDirectory) {
--    if (file_exists($possibleDirectory)) {
--        $directories[] = $possibleDirectory;
--    }
--}
-+$directories = array_filter($possibleDirectories, 'file_exists');
 ```
 
 <br>
@@ -5349,26 +5329,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-### Php8ResourceReturnToObjectRector
-
-Change `is_resource()` to instanceof Object
-
-- class: [`Rector\Php80\Rector\FuncCall\Php8ResourceReturnToObjectRector`](../rules/Php80/Rector/FuncCall/Php8ResourceReturnToObjectRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $ch = curl_init();
--        is_resource($ch);
-+        $ch instanceof \CurlHandle;
-     }
- }
-```
-
-<br>
-
 ### RemoveUnusedVariableInCatchRector
 
 Remove unused variable in `catch()`
@@ -5638,26 +5598,6 @@ Change null to strict string defined function call args
      {
 -        preg_split("#a#", null);
 +        preg_split("#a#", '');
-     }
- }
-```
-
-<br>
-
-### Php81ResourceReturnToObjectRector
-
-Change `is_resource()` to instanceof Object
-
-- class: [`Rector\Php81\Rector\FuncCall\Php81ResourceReturnToObjectRector`](../rules/Php81/Rector/FuncCall/Php81ResourceReturnToObjectRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $f = finfo_open();
--        is_resource($f);
-+        $f instanceof \finfo;
      }
  }
 ```
