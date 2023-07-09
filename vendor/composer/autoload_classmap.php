@@ -1616,7 +1616,6 @@ return array(
     'Rector\\Core\\PhpParser\\NodeFinder\\PropertyFetchFinder' => $baseDir . '/src/PhpParser/NodeFinder/PropertyFetchFinder.php',
     'Rector\\Core\\PhpParser\\NodeTransformer' => $baseDir . '/src/PhpParser/NodeTransformer.php',
     'Rector\\Core\\PhpParser\\NodeTraverser\\FileWithoutNamespaceNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/FileWithoutNamespaceNodeTraverser.php',
-    'Rector\\Core\\PhpParser\\NodeTraverser\\NodeConnectingTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/NodeConnectingTraverser.php',
     'Rector\\Core\\PhpParser\\NodeTraverser\\RectorNodeTraverser' => $baseDir . '/src/PhpParser/NodeTraverser/RectorNodeTraverser.php',
     'Rector\\Core\\PhpParser\\Node\\AssignAndBinaryMap' => $baseDir . '/src/PhpParser/Node/AssignAndBinaryMap.php',
     'Rector\\Core\\PhpParser\\Node\\BetterNodeFinder' => $baseDir . '/src/PhpParser/Node/BetterNodeFinder.php',
