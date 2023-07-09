@@ -30,7 +30,6 @@ use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\NodeFactory;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\Core\PhpParser\NodeTraverser\NodeConnectingTraverser;
 use Rector\Core\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -138,17 +137,13 @@ CODE_SAMPLE;
      */
     private $filePathHelper;
     /**
-     * @var \Rector\Core\PhpParser\NodeTraverser\NodeConnectingTraverser
-     */
-    private $nodeConnectingTraverser;
-    /**
      * @var string|null
      */
     private $toBeRemovedNodeHash;
     /**
      * @required
      */
-    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, RectorOutputStyle $rectorOutputStyle, FilePathHelper $filePathHelper, NodeConnectingTraverser $nodeConnectingTraverser) : void
+    public function autowire(NodeNameResolver $nodeNameResolver, NodeTypeResolver $nodeTypeResolver, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, NodeFactory $nodeFactory, PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, CurrentRectorProvider $currentRectorProvider, CurrentNodeProvider $currentNodeProvider, Skipper $skipper, ValueResolver $valueResolver, BetterNodeFinder $betterNodeFinder, NodeComparator $nodeComparator, CurrentFileProvider $currentFileProvider, RectifiedAnalyzer $rectifiedAnalyzer, CreatedByRuleDecorator $createdByRuleDecorator, ChangedNodeScopeRefresher $changedNodeScopeRefresher, RectorOutputStyle $rectorOutputStyle, FilePathHelper $filePathHelper) : void
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
@@ -168,7 +163,6 @@ CODE_SAMPLE;
         $this->changedNodeScopeRefresher = $changedNodeScopeRefresher;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->filePathHelper = $filePathHelper;
-        $this->nodeConnectingTraverser = $nodeConnectingTraverser;
     }
     /**
      * @return Node[]|null
@@ -327,7 +321,6 @@ CODE_SAMPLE;
             $firstNode = \current($refactoredNode);
             $this->mirrorComments($firstNode, $originalNode);
             $this->updateParentNodes($refactoredNode, $parentNode);
-            $this->nodeConnectingTraverser->traverse($refactoredNode);
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
             $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
             // will be replaced in leaveNode() the original node must be passed
@@ -335,7 +328,6 @@ CODE_SAMPLE;
         }
         $refactoredNode = $originalNode instanceof Stmt && $refactoredNode instanceof Expr ? new Expression($refactoredNode) : $refactoredNode;
         $this->updateParentNodes($refactoredNode, $parentNode);
-        $this->nodeConnectingTraverser->traverse([$refactoredNode]);
         $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
         $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
         return $refactoredNode;
