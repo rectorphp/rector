@@ -66,6 +66,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?String_
     {
+        $this->hasChanged = \false;
         if (StringUtils::isMatch($node->value, self::HAS_NON_PRINTABLE_CHARS)) {
             return null;
         }

@@ -90,6 +90,7 @@ CODE_SAMPLE
         if ($node instanceof ClassMethod && $this->shouldSkipClassMethod($node)) {
             return null;
         }
+        $this->hasChanged = \false;
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
         $this->refactorParamTypes($node, $phpDocInfo);
         $hasChanged = $this->paramTagRemover->removeParamTagsIfUseless($phpDocInfo, $node);

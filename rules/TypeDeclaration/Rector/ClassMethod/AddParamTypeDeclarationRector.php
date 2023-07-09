@@ -81,6 +81,7 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        $this->hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($this->shouldSkip($node, $classMethod)) {
                 continue;
