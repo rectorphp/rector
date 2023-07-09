@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit662f3875e42b24e53f1f3f3091f0575e
+class ComposerStaticInitf8e9ccc0f12c774a04430ed940bbf147
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1896,7 +1896,6 @@ class ComposerStaticInit662f3875e42b24e53f1f3f3091f0575e
         'Rector\\Core\\Util\\ArrayParametersMerger' => __DIR__ . '/../..' . '/src/Util/ArrayParametersMerger.php',
         'Rector\\Core\\Util\\FileHasher' => __DIR__ . '/../..' . '/src/Util/FileHasher.php',
         'Rector\\Core\\Util\\MemoryLimiter' => __DIR__ . '/../..' . '/src/Util/MemoryLimiter.php',
-        'Rector\\Core\\Util\\MultiInstanceofChecker' => __DIR__ . '/../..' . '/src/Util/MultiInstanceofChecker.php',
         'Rector\\Core\\Util\\PhpVersionFactory' => __DIR__ . '/../..' . '/src/Util/PhpVersionFactory.php',
         'Rector\\Core\\Util\\Reflection\\PrivatesAccessor' => __DIR__ . '/../..' . '/src/Util/Reflection/PrivatesAccessor.php',
         'Rector\\Core\\Util\\StringUtils' => __DIR__ . '/../..' . '/src/Util/StringUtils.php',
@@ -2168,10 +2167,6 @@ class ComposerStaticInit662f3875e42b24e53f1f3f3091f0575e
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
-        'Rector\\MysqlToMysqli\\Rector\\Assign\\MysqlAssignToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/Assign/MysqlAssignToMysqliRector.php',
-        'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlFuncCallToMysqliRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlFuncCallToMysqliRector.php',
-        'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlPConnectToMysqliConnectRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php',
-        'Rector\\MysqlToMysqli\\Rector\\FuncCall\\MysqlQueryMysqlErrorWithLinkRector' => __DIR__ . '/../..' . '/rules/MysqlToMysqli/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector.php',
         'Rector\\Naming\\AssignVariableNameResolver\\NewAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/NewAssignVariableNameResolver.php',
         'Rector\\Naming\\AssignVariableNameResolver\\PropertyFetchAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/PropertyFetchAssignVariableNameResolver.php',
         'Rector\\Naming\\Contract\\AssignVariableNameResolverInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/AssignVariableNameResolverInterface.php',
@@ -3077,9 +3072,9 @@ class ComposerStaticInit662f3875e42b24e53f1f3f3091f0575e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit662f3875e42b24e53f1f3f3091f0575e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit662f3875e42b24e53f1f3f3091f0575e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit662f3875e42b24e53f1f3f3091f0575e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf8e9ccc0f12c774a04430ed940bbf147::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf8e9ccc0f12c774a04430ed940bbf147::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf8e9ccc0f12c774a04430ed940bbf147::$classMap;
 
         }, null, ClassLoader::class);
     }

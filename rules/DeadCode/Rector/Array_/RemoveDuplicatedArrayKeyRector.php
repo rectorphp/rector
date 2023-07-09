@@ -11,7 +11,6 @@ use PhpParser\Node\Expr\PreDec;
 use PhpParser\Node\Expr\PreInc;
 use Rector\Core\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Util\MultiInstanceofChecker;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -25,19 +24,9 @@ final class RemoveDuplicatedArrayKeyRector extends AbstractRector
      * @var \Rector\Core\PhpParser\Printer\BetterStandardPrinter
      */
     private $betterStandardPrinter;
-    /**
-     * @readonly
-     * @var \Rector\Core\Util\MultiInstanceofChecker
-     */
-    private $multiInstanceofChecker;
-    /**
-     * @var array<class-string<Expr>>
-     */
-    private const ALLOWED_KEY_DUPLICATES = [PreInc::class, PreDec::class];
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, MultiInstanceofChecker $multiInstanceofChecker)
+    public function __construct(BetterStandardPrinter $betterStandardPrinter)
     {
         $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->multiInstanceofChecker = $multiInstanceofChecker;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -113,7 +102,10 @@ CODE_SAMPLE
             $currentArrayItem = \current($arrayItems);
             /** @var Expr $currentArrayItemKey */
             $currentArrayItemKey = $currentArrayItem->key;
-            if ($this->multiInstanceofChecker->isInstanceOf($currentArrayItemKey, self::ALLOWED_KEY_DUPLICATES)) {
+            if ($currentArrayItemKey instanceof PreInc) {
+                continue;
+            }
+            if ($currentArrayItemKey instanceof PreDec) {
                 continue;
             }
             // keep last one

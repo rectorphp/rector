@@ -126,7 +126,6 @@ CODE_SAMPLE
             $parts = $this->splitProcessCommandToItems($firstArgumentExpr->value);
             $args[$argumentPosition]->value = $this->nodeFactory->createArray($parts);
         }
-        $this->processPreviousAssign($expr, $firstArgumentExpr);
     }
     /**
      * @return string[]
@@ -135,34 +134,5 @@ CODE_SAMPLE
     {
         $privatesAccessor = new PrivatesAccessor();
         return $privatesAccessor->callPrivateMethod(new StringInput(''), 'tokenize', [$process]);
-    }
-    private function processPreviousAssign(Node $node, Expr $firstArgumentExpr) : void
-    {
-        $assign = $this->findPreviousNodeAssign($node, $firstArgumentExpr);
-        if (!$assign instanceof Assign) {
-            return;
-        }
-        if (!$assign->expr instanceof FuncCall) {
-            return;
-        }
-        $funcCall = $assign->expr;
-        if (!$this->nodeNameResolver->isName($funcCall, 'sprintf')) {
-            return;
-        }
-        $arrayNode = $this->nodeTransformer->transformSprintfToArray($funcCall);
-        if ($arrayNode instanceof Array_ && \count($arrayNode->items) > 1) {
-            $assign->expr = $arrayNode;
-        }
-    }
-    private function findPreviousNodeAssign(Node $node, Expr $firstArgumentExpr) : ?Assign
-    {
-        /** @var Assign|null $assign */
-        $assign = $this->betterNodeFinder->findFirstPrevious($node, function (Node $checkedNode) use($firstArgumentExpr) : bool {
-            if (!$checkedNode instanceof Assign) {
-                return \false;
-            }
-            return $this->nodeComparator->areNodesEqual($checkedNode->var, $firstArgumentExpr);
-        });
-        return $assign;
     }
 }

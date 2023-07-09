@@ -207,7 +207,8 @@ CODE_SAMPLE
     private function createSwitchCasesFromMatchArms($node, Match_ $match) : array
     {
         $switchCases = [];
-        $parentNode = $match->getAttribute(AttributeKey::PARENT_NODE);
+        $isInsideArrayItem = (bool) $match->getAttribute(AttributeKey::INSIDE_ARRAY_ITEM);
+        // $parentNode = $match->getAttribute(AttributeKey::PARENT_NODE);
         foreach ($match->arms as $matchArm) {
             if (\count((array) $matchArm->conds) > 1) {
                 $lastCase = null;
@@ -216,9 +217,9 @@ CODE_SAMPLE
                     $switchCases[] = $lastCase;
                 }
                 /** @var Case_ $lastCase */
-                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
+                $lastCase->stmts = $this->createSwitchStmts($node, $matchArm, $isInsideArrayItem);
             } else {
-                $stmts = $this->createSwitchStmts($node, $matchArm, $parentNode);
+                $stmts = $this->createSwitchStmts($node, $matchArm, $isInsideArrayItem);
                 $switchCases[] = new Case_($matchArm->conds[0] ?? null, $stmts);
             }
         }
@@ -228,10 +229,10 @@ CODE_SAMPLE
      * @return Stmt[]
      * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
-    private function createSwitchStmts($node, MatchArm $matchArm, ?Node $parentNode) : array
+    private function createSwitchStmts($node, MatchArm $matchArm, bool $isInsideArrayItem) : array
     {
         $stmts = [];
-        if ($parentNode instanceof ArrayItem) {
+        if ($isInsideArrayItem) {
             $stmts[] = new Return_($matchArm->body);
         } elseif ($matchArm->body instanceof Throw_) {
             $stmts[] = new Expression($matchArm->body);

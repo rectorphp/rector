@@ -19,7 +19,6 @@ use PhpParser\Node\Stmt\While_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
-use Rector\Core\Util\MultiInstanceofChecker;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 /**
  * To resolve Expr in top Stmt from early Expr attribute
@@ -32,15 +31,9 @@ final class ExprInTopStmtMatcher
      * @var \Rector\Core\PhpParser\Node\BetterNodeFinder
      */
     private $betterNodeFinder;
-    /**
-     * @readonly
-     * @var \Rector\Core\Util\MultiInstanceofChecker
-     */
-    private $multiInstanceofChecker;
-    public function __construct(BetterNodeFinder $betterNodeFinder, MultiInstanceofChecker $multiInstanceofChecker)
+    public function __construct(BetterNodeFinder $betterNodeFinder)
     {
         $this->betterNodeFinder = $betterNodeFinder;
-        $this->multiInstanceofChecker = $multiInstanceofChecker;
     }
     /**
      * @param callable(Node $node): bool $filter
@@ -61,8 +54,7 @@ final class ExprInTopStmtMatcher
             $nodes = \array_merge($nodes, $stmt->cond);
             $nodes = \array_merge($nodes, $stmt->loop);
         }
-        if ($this->multiInstanceofChecker->isInstanceOf($stmt, [If_::class, While_::class, Do_::class, Switch_::class])) {
-            /** @var If_|While_|Do_|Switch_ $stmt */
+        if ($stmt instanceof If_ || $stmt instanceof While_ || $stmt instanceof Do_ || $stmt instanceof Switch_) {
             $nodes = [$stmt->cond];
         }
         if ($stmt instanceof Echo_) {
