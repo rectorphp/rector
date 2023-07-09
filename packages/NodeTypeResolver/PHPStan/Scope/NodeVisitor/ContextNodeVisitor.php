@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Class_;
@@ -71,7 +72,19 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         if ($node instanceof Param) {
             $node->var->setAttribute(AttributeKey::IS_PARAM_VAR, \true);
         }
+        $this->processContextInClass($node);
         return null;
+    }
+    private function processContextInClass(Node $node) : void
+    {
+        if ($node instanceof Class_) {
+            if ($node->extends instanceof FullyQualified) {
+                $node->extends->setAttribute(AttributeKey::IS_CLASS_EXTENDS, \true);
+            }
+            foreach ($node->implements as $implement) {
+                $implement->setAttribute(AttributeKey::IS_CLASS_IMPLEMENT, \true);
+            }
+        }
     }
     private function processContextInAttribute(Attribute $attribute) : void
     {

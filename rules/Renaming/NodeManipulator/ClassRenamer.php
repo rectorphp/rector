@@ -253,14 +253,13 @@ final class ClassRenamer
         }
         $classReflection = $this->reflectionProvider->getClass($newClassName);
         // ensure new is not with interface
-        if ($name->getAttribute(AttributeKey::IS_NEW_INSTANCE_NAME) === \true && $classReflection->isInterface()) {
-            return \false;
+        if ($name->getAttribute(AttributeKey::IS_NEW_INSTANCE_NAME) !== \true) {
+            return $this->isValidClassNameChange($name, $classReflection);
         }
-        $parentNode = $name->getAttribute(AttributeKey::PARENT_NODE);
-        if ($parentNode instanceof Class_) {
-            return $this->isValidClassNameChange($name, $parentNode, $classReflection);
+        if (!$classReflection->isInterface()) {
+            return $this->isValidClassNameChange($name, $classReflection);
         }
-        return \true;
+        return \false;
     }
     /**
      * @param array<string, string> $oldToNewClasses
@@ -313,9 +312,9 @@ final class ClassRenamer
             $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         });
     }
-    private function isValidClassNameChange(Name $name, Class_ $class, ClassReflection $classReflection) : bool
+    private function isValidClassNameChange(Name $name, ClassReflection $classReflection) : bool
     {
-        if ($class->extends === $name) {
+        if ($name->getAttribute(AttributeKey::IS_CLASS_EXTENDS) === \true) {
             // is class to interface?
             if ($classReflection->isInterface()) {
                 return \false;
@@ -324,8 +323,11 @@ final class ClassRenamer
                 return \false;
             }
         }
-        // is interface to class?
-        return !(\in_array($name, $class->implements, \true) && $classReflection->isClass());
+        if ($name->getAttribute(AttributeKey::IS_CLASS_IMPLEMENT) === \true) {
+            // is interface to class?
+            return !$classReflection->isClass();
+        }
+        return \true;
     }
     /**
      * @param array<string, string> $oldToNewClasses
