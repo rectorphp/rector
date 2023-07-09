@@ -222,8 +222,7 @@ final class AnonymousFunctionFactory
             if (\in_array($variableName, $paramNames, \true)) {
                 continue;
             }
-            $parentNode = $variable->getAttribute(AttributeKey::PARENT_NODE);
-            if ($parentNode instanceof Node && \in_array(\get_class($parentNode), [Assign::class, Foreach_::class, Param::class], \true)) {
+            if ($variable->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true || $variable->getAttribute(AttributeKey::IS_PARAM_VAR) === \true || $variable->getAttribute(AttributeKey::IS_VARIABLE_LOOP) === \true) {
                 $alreadyAssignedVariables[] = $variableName;
             }
             if (!$this->nodeNameResolver->isNames($variable, $alreadyAssignedVariables)) {

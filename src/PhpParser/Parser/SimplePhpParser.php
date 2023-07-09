@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Rector\Core\PhpParser\NodeTraverser\NodeConnectingTraverser;
+use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\AssignedToNodeVisitor;
 final class SimplePhpParser
 {
     /**
@@ -25,6 +26,7 @@ final class SimplePhpParser
         $this->nodeConnectingTraverser = $nodeConnectingTraverser;
         $parserFactory = new ParserFactory();
         $this->phpParser = $parserFactory->create(ParserFactory::PREFER_PHP7);
+        $this->nodeConnectingTraverser->addVisitor(new AssignedToNodeVisitor());
     }
     /**
      * @api tests
