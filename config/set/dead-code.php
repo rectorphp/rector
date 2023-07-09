@@ -42,7 +42,6 @@ use Rector\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\DeadCode\Rector\StmtsAwareInterface\RemoveJustPropertyFetchForAssignRector;
-use Rector\DeadCode\Rector\StmtsAwareInterface\RemoveJustVariableAssignRector;
 use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 use Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
 use Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;
@@ -89,7 +88,6 @@ return static function (RectorConfig $rectorConfig) : void {
         RemoveUselessVarTagRector::class,
         RemoveUnusedPromotedPropertyRector::class,
         RemoveJustPropertyFetchForAssignRector::class,
-        RemoveJustVariableAssignRector::class,
         RemoveAlwaysTrueIfConditionRector::class,
         RemoveDeadZeroAndOneOperationRector::class,
         RemovePhpVersionIdCheckRector::class,

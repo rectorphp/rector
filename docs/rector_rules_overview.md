@@ -1,4 +1,4 @@
-# 367 Rules Overview
+# 362 Rules Overview
 
 <br>
 
@@ -10,11 +10,9 @@
 
 - [CodingStyle](#codingstyle) (31)
 
-- [DeadCode](#deadcode) (43)
+- [DeadCode](#deadcode) (42)
 
 - [EarlyReturn](#earlyreturn) (10)
-
-- [MysqlToMysqli](#mysqltomysqli) (4)
 
 - [Naming](#naming) (6)
 
@@ -2730,27 +2728,6 @@ Inline property fetch assign to a variable, that has no added value
 
 <br>
 
-### RemoveJustVariableAssignRector
-
-Remove variable just to assign value or return value
-
-- class: [`Rector\DeadCode\Rector\StmtsAwareInterface\RemoveJustVariableAssignRector`](../rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustVariableAssignRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run()
-     {
--        $result = 100;
--
--        $this->temporaryValue = $result;
-+        $this->temporaryValue = 100;
-     }
- }
-```
-
-<br>
-
 ### RemoveNonExistingVarAnnotationRector
 
 Removes non-existing `@var` annotations above the code
@@ -3462,80 +3439,6 @@ Replace if conditioned variable override with direct return
          }
 
          return $value;
-     }
- }
-```
-
-<br>
-
-## MysqlToMysqli
-
-### MysqlAssignToMysqliRector
-
-Converts more complex mysql functions to mysqli
-
-- class: [`Rector\MysqlToMysqli\Rector\Assign\MysqlAssignToMysqliRector`](../rules/MysqlToMysqli/Rector/Assign/MysqlAssignToMysqliRector.php)
-
-```diff
--$data = mysql_db_name($result, $row);
-+mysqli_data_seek($result, $row);
-+$fetch = mysql_fetch_row($result);
-+$data = $fetch[0];
-```
-
-<br>
-
-### MysqlFuncCallToMysqliRector
-
-Converts more complex mysql functions to mysqli
-
-- class: [`Rector\MysqlToMysqli\Rector\FuncCall\MysqlFuncCallToMysqliRector`](../rules/MysqlToMysqli/Rector/FuncCall/MysqlFuncCallToMysqliRector.php)
-
-```diff
--mysql_drop_db($database);
-+mysqli_query('DROP DATABASE ' . $database);
-```
-
-<br>
-
-### MysqlPConnectToMysqliConnectRector
-
-Replace `mysql_pconnect()` with `mysqli_connect()` with host p: prefix
-
-- class: [`Rector\MysqlToMysqli\Rector\FuncCall\MysqlPConnectToMysqliConnectRector`](../rules/MysqlToMysqli/Rector/FuncCall/MysqlPConnectToMysqliConnectRector.php)
-
-```diff
- final class SomeClass
- {
-     public function run($host, $username, $password)
-     {
--        return mysql_pconnect($host, $username, $password);
-+        return mysqli_connect('p:' . $host, $username, $password);
-     }
- }
-```
-
-<br>
-
-### MysqlQueryMysqlErrorWithLinkRector
-
-Add mysql_query and mysql_error with connection
-
-- class: [`Rector\MysqlToMysqli\Rector\FuncCall\MysqlQueryMysqlErrorWithLinkRector`](../rules/MysqlToMysqli/Rector/FuncCall/MysqlQueryMysqlErrorWithLinkRector.php)
-
-```diff
- class SomeClass
- {
-     public function run()
-     {
-         $conn = mysqli_connect('host', 'user', 'pass');
-
--        mysql_error();
-+        mysqli_error($conn);
-         $sql = 'SELECT';
-
--        return mysql_query($sql);
-+        return mysqli_query($conn, $sql);
      }
  }
 ```

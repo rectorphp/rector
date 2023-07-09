@@ -208,7 +208,6 @@ CODE_SAMPLE
     {
         $switchCases = [];
         $isInsideArrayItem = (bool) $match->getAttribute(AttributeKey::INSIDE_ARRAY_ITEM);
-        // $parentNode = $match->getAttribute(AttributeKey::PARENT_NODE);
         foreach ($match->arms as $matchArm) {
             if (\count((array) $matchArm->conds) > 1) {
                 $lastCase = null;
