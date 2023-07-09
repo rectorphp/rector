@@ -11,6 +11,7 @@ use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\PhpVersion;
 use RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
@@ -150,7 +151,10 @@ final class RectorConfig extends ContainerConfigurator
     public function rules(array $rectorClasses) : void
     {
         Assert::allString($rectorClasses);
-        Assert::uniqueValues($rectorClasses);
+        $duplicatedRectorClasses = $this->resolveDuplicatedValues($rectorClasses);
+        if ($duplicatedRectorClasses !== []) {
+            throw new ShouldNotHappenException('Following rules are registered twice: ' . \implode(', ', $duplicatedRectorClasses));
+        }
         foreach ($rectorClasses as $rectorClass) {
             $this->rule($rectorClass);
         }
@@ -248,6 +252,21 @@ final class RectorConfig extends ContainerConfigurator
         SimpleParameterProvider::setParameter(Option::INDENT_CHAR, $character);
         $parameters->set(Option::INDENT_SIZE, $count);
         SimpleParameterProvider::setParameter(Option::INDENT_SIZE, $count);
+    }
+    /**
+     * @param string[] $values
+     * @return string[]
+     */
+    private function resolveDuplicatedValues(array $values) : array
+    {
+        $counted = \array_count_values($values);
+        $duplicates = [];
+        foreach ($counted as $value => $count) {
+            if ($count > 1) {
+                $duplicates[] = $value;
+            }
+        }
+        return \array_unique($duplicates);
     }
     private function getServices() : ServicesConfigurator
     {
