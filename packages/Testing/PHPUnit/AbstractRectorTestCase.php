@@ -69,9 +69,8 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
         if (\is_string($this->inputFilePath)) {
             FileSystem::delete($this->inputFilePath);
         }
-        // free memory and trigger gc to reduce memory peak consumption on windows
+        // free memory to reduce memory peak consumption on windows
         unset($this->applicationFileProcessor, $this->parameterProvider, $this->dynamicSourceLocatorProvider);
-        \gc_collect_cycles();
     }
     /**
      * @return Iterator<<string>>
