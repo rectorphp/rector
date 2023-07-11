@@ -16,7 +16,6 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Core\PhpParser\Comparing\NodeComparator;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\PhpParser\Node\Value\ValueResolver;
-use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 final class IfManipulator
 {
     /**
@@ -36,20 +35,14 @@ final class IfManipulator
     private $valueResolver;
     /**
      * @readonly
-     * @var \Rector\EarlyReturn\NodeTransformer\ConditionInverter
-     */
-    private $conditionInverter;
-    /**
-     * @readonly
      * @var \Rector\Core\PhpParser\Comparing\NodeComparator
      */
     private $nodeComparator;
-    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\StmtsManipulator $stmtsManipulator, ValueResolver $valueResolver, ConditionInverter $conditionInverter, NodeComparator $nodeComparator)
+    public function __construct(BetterNodeFinder $betterNodeFinder, \Rector\Core\NodeManipulator\StmtsManipulator $stmtsManipulator, ValueResolver $valueResolver, NodeComparator $nodeComparator)
     {
         $this->betterNodeFinder = $betterNodeFinder;
         $this->stmtsManipulator = $stmtsManipulator;
         $this->valueResolver = $valueResolver;
-        $this->conditionInverter = $conditionInverter;
         $this->nodeComparator = $nodeComparator;
     }
     /**
@@ -174,11 +167,6 @@ final class IfManipulator
             return \false;
         }
         return $if->elseifs === [];
-    }
-    public function createIfNegation(Expr $expr, Return_ $return) : If_
-    {
-        $expr = $this->conditionInverter->createInvertedCondition($expr);
-        return new If_($expr, ['stmts' => [$return]]);
     }
     /**
      * @deprecated Create If_ directly, this is simple new with no added value

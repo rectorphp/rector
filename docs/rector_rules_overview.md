@@ -1,4 +1,4 @@
-# 362 Rules Overview
+# 361 Rules Overview
 
 <br>
 
@@ -12,7 +12,7 @@
 
 - [DeadCode](#deadcode) (42)
 
-- [EarlyReturn](#earlyreturn) (10)
+- [EarlyReturn](#earlyreturn) (9)
 
 - [Naming](#naming) (6)
 
@@ -3371,29 +3371,6 @@ Split if statement, when if condition always break execution flow
          }
 +
 +        return 10;
-     }
- }
-```
-
-<br>
-
-### ReturnBinaryAndToEarlyReturnRector
-
-Changes Single return of && to early returns
-
-- class: [`Rector\EarlyReturn\Rector\Return_\ReturnBinaryAndToEarlyReturnRector`](../rules/EarlyReturn/Rector/Return_/ReturnBinaryAndToEarlyReturnRector.php)
-
-```diff
- class SomeClass
- {
-     public function accept()
-     {
--        return $this->something() && $this->somethingelse();
-+        if (! $this->something()) {
-+            return false;
-+        }
-+
-+        return (bool) $this->somethingelse();
      }
  }
 ```

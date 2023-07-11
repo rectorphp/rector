@@ -1902,7 +1902,6 @@ return array(
     'Rector\\EarlyReturn\\Rector\\If_\\ChangeOrIfContinueToMultiContinueRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/ChangeOrIfContinueToMultiContinueRector.php',
     'Rector\\EarlyReturn\\Rector\\If_\\RemoveAlwaysElseRector' => $baseDir . '/rules/EarlyReturn/Rector/If_/RemoveAlwaysElseRector.php',
     'Rector\\EarlyReturn\\Rector\\Return_\\PreparedValueToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/Return_/PreparedValueToEarlyReturnRector.php',
-    'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryAndToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryAndToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\Return_\\ReturnBinaryOrToEarlyReturnRector' => $baseDir . '/rules/EarlyReturn/Rector/Return_/ReturnBinaryOrToEarlyReturnRector.php',
     'Rector\\EarlyReturn\\Rector\\StmtsAwareInterface\\ReturnEarlyIfVariableRector' => $baseDir . '/rules/EarlyReturn/Rector/StmtsAwareInterface/ReturnEarlyIfVariableRector.php',
     'Rector\\EarlyReturn\\ValueObject\\BareSingleAssignIf' => $baseDir . '/rules/EarlyReturn/ValueObject/BareSingleAssignIf.php',
