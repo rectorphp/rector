@@ -45,6 +45,10 @@ final class OptionalParametersAfterRequiredRector extends AbstractScopeAwareRect
      * @var \Rector\CodingStyle\Reflection\VendorLocationDetector
      */
     private $vendorLocationDetector;
+    /**
+     * @var string
+     */
+    private const HAS_SWAPPED_PARAMS = 'has_swapped_params';
     public function __construct(RequireOptionalParamResolver $requireOptionalParamResolver, ArgumentSorter $argumentSorter, ReflectionResolver $reflectionResolver, VendorLocationDetector $vendorLocationDetector)
     {
         $this->requireOptionalParamResolver = $requireOptionalParamResolver;
@@ -98,6 +102,9 @@ CODE_SAMPLE
         if ($classMethod->params === []) {
             return null;
         }
+        if ($classMethod->getAttribute(self::HAS_SWAPPED_PARAMS, \false) === \true) {
+            return null;
+        }
         $classMethodReflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($classMethod);
         if (!$classMethodReflection instanceof MethodReflection) {
             return null;
@@ -107,6 +114,7 @@ CODE_SAMPLE
             return null;
         }
         $classMethod->params = $this->argumentSorter->sortArgsByExpectedParamOrder($classMethod->params, $expectedArgOrParamOrder);
+        $classMethod->setAttribute(self::HAS_SWAPPED_PARAMS, \true);
         return $classMethod;
     }
     private function refactorNew(New_ $new, Scope $scope) : ?New_
