@@ -237,7 +237,6 @@ CODE_SAMPLE;
             return NodeTraverser::REMOVE_NODE;
         }
         $objectHash = \spl_object_hash($node);
-        // update parents relations!!!
         return $this->nodesToReturn[$objectHash] ?? $node;
     }
     protected function isName(Node $node, string $name) : bool
@@ -317,8 +316,8 @@ CODE_SAMPLE;
             $firstNode = \current($refactoredNode);
             $this->mirrorComments($firstNode, $originalNode);
             $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);
-            $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
             // will be replaced in leaveNode() the original node must be passed
+            $this->nodesToReturn[$originalNodeHash] = $refactoredNode;
             return $originalNode;
         }
         $this->refreshScopeNodes($refactoredNode, $filePath, $currentScope);

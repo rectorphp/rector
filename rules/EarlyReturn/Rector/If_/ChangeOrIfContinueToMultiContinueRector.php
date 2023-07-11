@@ -109,21 +109,24 @@ CODE_SAMPLE
     private function createMultipleIfs(Expr $expr, Continue_ $continue, array $ifs) : array
     {
         while ($expr instanceof BooleanOr) {
-            $ifs = \array_merge($ifs, $this->collectLeftbooleanOrToIfs($expr, $continue, $ifs));
-            $ifs[] = $this->ifManipulator->createIfStmt($expr->right, $continue);
+            $ifs = \array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $continue, $ifs));
+            $ifs[] = new If_($expr->right, ['stmts' => [$continue]]);
             $expr = $expr->right;
         }
-        return $ifs + [$this->ifManipulator->createIfStmt($expr, $continue)];
+        $lastContinueIf = new If_($expr, ['stmts' => [$continue]]);
+        // the + is on purpose here, to keep only single continue as last
+        return $ifs + [$lastContinueIf];
     }
     /**
      * @param If_[] $ifs
      * @return If_[]
      */
-    private function collectLeftbooleanOrToIfs(BooleanOr $booleanOr, Continue_ $continue, array $ifs) : array
+    private function collectLeftBooleanOrToIfs(BooleanOr $booleanOr, Continue_ $continue, array $ifs) : array
     {
         $left = $booleanOr->left;
         if (!$left instanceof BooleanOr) {
-            return [$this->ifManipulator->createIfStmt($left, $continue)];
+            $if = new If_($left, ['stmts' => [$continue]]);
+            return [$if];
         }
         return $this->createMultipleIfs($left, $continue, $ifs);
     }

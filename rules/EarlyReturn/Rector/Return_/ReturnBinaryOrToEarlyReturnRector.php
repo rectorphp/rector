@@ -9,23 +9,17 @@ use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
-use PHPStan\Analyser\Scope;
+use Rector\Core\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\Core\NodeAnalyzer\CallAnalyzer;
-use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\PhpParser\Node\AssignAndBinaryMap;
-use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector\ReturnBinaryOrToEarlyReturnRectorTest
  */
-final class ReturnBinaryOrToEarlyReturnRector extends AbstractScopeAwareRector
+final class ReturnBinaryOrToEarlyReturnRector extends AbstractRector
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeManipulator\IfManipulator
-     */
-    private $ifManipulator;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Node\AssignAndBinaryMap
@@ -36,9 +30,8 @@ final class ReturnBinaryOrToEarlyReturnRector extends AbstractScopeAwareRector
      * @var \Rector\Core\NodeAnalyzer\CallAnalyzer
      */
     private $callAnalyzer;
-    public function __construct(IfManipulator $ifManipulator, AssignAndBinaryMap $assignAndBinaryMap, CallAnalyzer $callAnalyzer)
+    public function __construct(AssignAndBinaryMap $assignAndBinaryMap, CallAnalyzer $callAnalyzer)
     {
-        $this->ifManipulator = $ifManipulator;
         $this->assignAndBinaryMap = $assignAndBinaryMap;
         $this->callAnalyzer = $callAnalyzer;
     }
@@ -72,31 +65,45 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Return_::class];
+        return [StmtsAwareInterface::class];
     }
     /**
-     * @param Return_ $node
-     * @return null|Node[]
+     * @param StmtsAwareInterface $node
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?array
+    public function refactor(Node $node) : ?Node
     {
-        if (!$node->expr instanceof BooleanOr) {
+        if ($node->stmts === null) {
             return null;
         }
-        /** @var BooleanOr $booleanOr */
-        $booleanOr = $node->expr;
-        $left = $booleanOr->left;
-        $ifs = $this->createMultipleIfs($left, $node, []);
-        // ensure ifs not removed by other rules
-        if ($ifs === []) {
-            return null;
+        $hasChanged = \false;
+        foreach ($node->stmts as $key => $stmt) {
+            if (!$stmt instanceof Return_) {
+                continue;
+            }
+            if (!$stmt->expr instanceof BooleanOr) {
+                continue;
+            }
+            /** @var BooleanOr $booleanOr */
+            $booleanOr = $stmt->expr;
+            $left = $booleanOr->left;
+            $ifs = $this->createMultipleIfs($left, $stmt, []);
+            // ensure ifs not removed by other rules
+            if ($ifs === []) {
+                continue;
+            }
+            if (!$this->callAnalyzer->doesIfHasObjectCall($ifs)) {
+                continue;
+            }
+            $this->mirrorComments($ifs[0], $stmt);
+            $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanOr->right);
+            $ifsWithLastIf = \array_merge($ifs, [new Return_($lastReturnExpr)]);
+            \array_splice($node->stmts, $key, 1, $ifsWithLastIf);
+            $hasChanged = \true;
         }
-        if (!$this->callAnalyzer->doesIfHasObjectCall($ifs)) {
-            return null;
+        if ($hasChanged) {
+            return $node;
         }
-        $this->mirrorComments($ifs[0], $node);
-        $lastReturnExpr = $this->assignAndBinaryMap->getTruthyExpr($booleanOr->right, $scope);
-        return \array_merge($ifs, [new Return_($lastReturnExpr)]);
+        return null;
     }
     /**
      * @param If_[] $ifs
@@ -106,7 +113,7 @@ CODE_SAMPLE
     {
         while ($expr instanceof BooleanOr) {
             $ifs = \array_merge($ifs, $this->collectLeftBooleanOrToIfs($expr, $return, $ifs));
-            $ifs[] = $this->ifManipulator->createIfStmt($expr->right, new Return_($this->nodeFactory->createTrue()));
+            $ifs[] = new If_($expr->right, ['stmts' => [new Return_($this->nodeFactory->createTrue())]]);
             $expr = $expr->right;
             if ($expr instanceof BooleanAnd) {
                 return [];
@@ -116,7 +123,12 @@ CODE_SAMPLE
             }
             return [];
         }
-        return $ifs + [$this->ifManipulator->createIfStmt($expr, new Return_($this->nodeFactory->createTrue()))];
+        $lastIf = new If_($expr, ['stmts' => [new Return_($this->nodeFactory->createTrue())]]);
+        // if empty, fallback to last if
+        if ($ifs === []) {
+            return [$lastIf];
+        }
+        return $ifs;
     }
     /**
      * @param If_[] $ifs
@@ -126,7 +138,8 @@ CODE_SAMPLE
     {
         $left = $booleanOr->left;
         if (!$left instanceof BooleanOr) {
-            return [$this->ifManipulator->createIfStmt($left, new Return_($this->nodeFactory->createTrue()))];
+            $returnTrueIf = new If_($left, ['stmts' => [new Return_($this->nodeFactory->createTrue())]]);
+            return [$returnTrueIf];
         }
         return $this->createMultipleIfs($left, $return, $ifs);
     }

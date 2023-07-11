@@ -178,8 +178,11 @@ final class IfManipulator
     public function createIfNegation(Expr $expr, Return_ $return) : If_
     {
         $expr = $this->conditionInverter->createInvertedCondition($expr);
-        return $this->createIfStmt($expr, $return);
+        return new If_($expr, ['stmts' => [$return]]);
     }
+    /**
+     * @deprecated Create If_ directly, this is simple new with no added value
+     */
     public function createIfStmt(Expr $condExpr, Stmt $stmt) : If_
     {
         return new If_($condExpr, ['stmts' => [$stmt]]);

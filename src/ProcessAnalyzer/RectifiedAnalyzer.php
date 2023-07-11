@@ -46,6 +46,10 @@ final class RectifiedAnalyzer
         if ($node->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
             return \false;
         }
+        //        if (! $node instanceof Stmt) {
+        //            $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
+        //            return $createdByRule === [];
+        //        }
         /**
          * Start token pos must be < 0 to continue, as the node and parent node just re-printed
          *
