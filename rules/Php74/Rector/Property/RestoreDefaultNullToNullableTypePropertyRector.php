@@ -55,6 +55,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : ?Node
     {
+        if ($node->isReadonly()) {
+            return null;
+        }
         $hasChanged = \false;
         foreach ($node->getProperties() as $property) {
             if ($this->shouldSkip($property, $node)) {
