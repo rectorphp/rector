@@ -4,7 +4,7 @@ Promise
 A lightweight implementation of
 [CommonJS Promises/A](http://wiki.commonjs.org/wiki/Promises/A) for PHP.
 
-[![CI status](https://github.com/reactphp/promise/actions/workflows/ci.yml/badge.svg?branch=2.x)](https://github.com/reactphp/promise/actions)
+[![CI status](https://github.com/reactphp/promise/workflows/CI/badge.svg)](https://github.com/reactphp/promise/actions)
 [![installs on Packagist](https://img.shields.io/packagist/dt/react/promise?color=blue&label=installs%20on%20Packagist)](https://packagist.org/packages/react/promise)
 
 Table of Contents
@@ -19,41 +19,31 @@ Table of Contents
      * [Deferred::promise()](#deferredpromise)
      * [Deferred::resolve()](#deferredresolve)
      * [Deferred::reject()](#deferredreject)
-     * [Deferred::notify()](#deferrednotify)
    * [PromiseInterface](#promiseinterface)
      * [PromiseInterface::then()](#promiseinterfacethen)
-   * [ExtendedPromiseInterface](#extendedpromiseinterface)
-        * [ExtendedPromiseInterface::done()](#extendedpromiseinterfacedone)
-        * [ExtendedPromiseInterface::otherwise()](#extendedpromiseinterfaceotherwise)
-        * [ExtendedPromiseInterface::always()](#extendedpromiseinterfacealways)
-        * [ExtendedPromiseInterface::progress()](#extendedpromiseinterfaceprogress)
-   * [CancellablePromiseInterface](#cancellablepromiseinterface)
-        * [CancellablePromiseInterface::cancel()](#cancellablepromiseinterfacecancel)
+     * [PromiseInterface::catch()](#promiseinterfacecatch)
+     * [PromiseInterface::finally()](#promiseinterfacefinally)
+     * [PromiseInterface::cancel()](#promiseinterfacecancel)
+     * [~~PromiseInterface::otherwise()~~](#promiseinterfaceotherwise)
+     * [~~PromiseInterface::always()~~](#promiseinterfacealways)
    * [Promise](#promise-2)
-   * [FulfilledPromise](#fulfilledpromise)
-   * [RejectedPromise](#rejectedpromise)
-   * [LazyPromise](#lazypromise)
    * [Functions](#functions)
      * [resolve()](#resolve)
      * [reject()](#reject)
      * [all()](#all)
      * [race()](#race)
      * [any()](#any)
-     * [some()](#some)
-     * [map()](#map)
-     * [reduce()](#reduce)
-   * [PromisorInterface](#promisorinterface)
+     * [set_rejection_handler()](#set_rejection_handler)
 4. [Examples](#examples)
    * [How to use Deferred](#how-to-use-deferred)
    * [How promise forwarding works](#how-promise-forwarding-works)
      * [Resolution forwarding](#resolution-forwarding)
      * [Rejection forwarding](#rejection-forwarding)
      * [Mixed resolution and rejection forwarding](#mixed-resolution-and-rejection-forwarding)
-     * [Progress event forwarding](#progress-event-forwarding)
-   * [done() vs. then()](#done-vs-then)
 5. [Install](#install)
-6. [Credits](#credits)
-7. [License](#license)
+6. [Tests](#tests)
+7. [Credits](#credits)
+8. [License](#license)
 
 Introduction
 ------------
@@ -95,16 +85,13 @@ $deferred = new React\Promise\Deferred();
 
 $promise = $deferred->promise();
 
-$deferred->resolve(mixed $value = null);
-$deferred->reject(mixed $reason = null);
-$deferred->notify(mixed $update = null);
+$deferred->resolve(mixed $value);
+$deferred->reject(\Throwable $reason);
 ```
 
 The `promise` method returns the promise of the deferred.
 
 The `resolve` and `reject` methods control the state of the deferred.
-
-The deprecated `notify` method is for progress notification.
 
 The constructor of the `Deferred` accepts an optional `$canceller` argument.
 See [Promise](#promise-2) for more information.
@@ -121,7 +108,7 @@ keeping the authority to modify its state to yourself.
 #### Deferred::resolve()
 
 ```php
-$deferred->resolve(mixed $value = null);
+$deferred->resolve(mixed $value);
 ```
 
 Resolves the promise returned by `promise()`. All consumers are notified by
@@ -131,10 +118,12 @@ having `$onFulfilled` (which they registered via `$promise->then()`) called with
 If `$value` itself is a promise, the promise will transition to the state of
 this promise once it is resolved.
 
+See also the [`resolve()` function](#resolve).
+
 #### Deferred::reject()
 
 ```php
-$deferred->reject(mixed $reason = null);
+$deferred->reject(\Throwable $reason);
 ```
 
 Rejects the promise returned by `promise()`, signalling that the deferred's
@@ -142,27 +131,14 @@ computation failed.
 All consumers are notified by having `$onRejected` (which they registered via
 `$promise->then()`) called with `$reason`.
 
-If `$reason` itself is a promise, the promise will be rejected with the outcome
-of this promise regardless whether it fulfills or rejects.
-
-#### Deferred::notify()
-
-> Deprecated in v2.6.0: Progress support is deprecated and should not be used anymore.
-
-```php
-$deferred->notify(mixed $update = null);
-```
-
-Triggers progress notifications, to indicate to consumers that the computation
-is making progress toward its result.
-
-All consumers are notified by having `$onProgress` (which they registered via
-`$promise->then()`) called with `$update`.
+See also the [`reject()` function](#reject).
 
 ### PromiseInterface
 
 The promise interface provides the common interface for all promise
 implementations.
+See [Promise](#promise-2) for the only public implementation exposed by this
+package.
 
 A promise represents an eventual outcome, which is either fulfillment (success)
 and an associated value, or rejection (failure) and an associated reason.
@@ -170,32 +146,22 @@ and an associated value, or rejection (failure) and an associated reason.
 Once in the fulfilled or rejected state, a promise becomes immutable.
 Neither its state nor its result (or error) can be modified.
 
-#### Implementations
-
-* [Promise](#promise-2)
-* [FulfilledPromise](#fulfilledpromise) (deprecated)
-* [RejectedPromise](#rejectedpromise) (deprecated)
-* [LazyPromise](#lazypromise) (deprecated)
-
 #### PromiseInterface::then()
 
 ```php
-$transformedPromise = $promise->then(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null);
+$transformedPromise = $promise->then(callable $onFulfilled = null, callable $onRejected = null);
 ```
 
 Transforms a promise's value by applying a function to the promise's fulfillment
 or rejection value. Returns a new promise for the transformed result.
 
-The `then()` method registers new fulfilled, rejection and progress handlers
-with a promise (all parameters are optional):
+The `then()` method registers new fulfilled and rejection handlers with a promise
+(all parameters are optional):
 
   * `$onFulfilled` will be invoked once the promise is fulfilled and passed
     the result as the first argument.
   * `$onRejected` will be invoked once the promise is rejected and passed the
     reason as the first argument.
-  * `$onProgress` (deprecated) will be invoked whenever the producer of the promise
-    triggers progress notifications and passed a single argument (whatever it
-    wants) to indicate progress.
 
 It returns a new promise that will fulfill with the return value of either
 `$onFulfilled` or `$onRejected`, whichever is called, or will reject with
@@ -208,51 +174,16 @@ the same call to `then()`:
      never both.
   2. `$onFulfilled` and `$onRejected` will never be called more
      than once.
-  3. `$onProgress` (deprecated) may be called multiple times.
 
 #### See also
 
 * [resolve()](#resolve) - Creating a resolved promise
 * [reject()](#reject) - Creating a rejected promise
-* [ExtendedPromiseInterface::done()](#extendedpromiseinterfacedone)
-* [done() vs. then()](#done-vs-then)
 
-### ExtendedPromiseInterface
-
-The ExtendedPromiseInterface extends the PromiseInterface with useful shortcut
-and utility methods which are not part of the Promises/A specification.
-
-#### Implementations
-
-* [Promise](#promise-1)
-* [FulfilledPromise](#fulfilledpromise) (deprecated)
-* [RejectedPromise](#rejectedpromise) (deprecated)
-* [LazyPromise](#lazypromise) (deprecated)
-
-#### ExtendedPromiseInterface::done()
+#### PromiseInterface::catch()
 
 ```php
-$promise->done(callable $onFulfilled = null, callable $onRejected = null, callable $onProgress = null);
-```
-
-Consumes the promise's ultimate value if the promise fulfills, or handles the
-ultimate error.
-
-It will cause a fatal error if either `$onFulfilled` or `$onRejected` throw or
-return a rejected promise.
-
-Since the purpose of `done()` is consumption rather than transformation,
-`done()` always returns `null`.
-
-#### See also
-
-* [PromiseInterface::then()](#promiseinterfacethen)
-* [done() vs. then()](#done-vs-then)
-
-#### ExtendedPromiseInterface::otherwise()
-
-```php
-$promise->otherwise(callable $onRejected);
+$promise->catch(callable $onRejected);
 ```
 
 Registers a rejection handler for promise. It is a shortcut for:
@@ -266,19 +197,19 @@ only specific errors.
 
 ```php
 $promise
-    ->otherwise(function (\RuntimeException $reason) {
+    ->catch(function (\RuntimeException $reason) {
         // Only catch \RuntimeException instances
         // All other types of errors will propagate automatically
     })
-    ->otherwise(function ($reason) {
+    ->catch(function (\Throwable $reason) {
         // Catch other errors
-    )};
+    });
 ```
 
-#### ExtendedPromiseInterface::always()
+#### PromiseInterface::finally()
 
 ```php
-$newPromise = $promise->always(callable $onFulfilledOrRejected);
+$newPromise = $promise->finally(callable $onFulfilledOrRejected);
 ```
 
 Allows you to execute "cleanup" type tasks in a promise chain.
@@ -297,16 +228,16 @@ when the promise is either fulfilled or rejected.
   rejected promise, `$newPromise` will reject with the thrown exception or
   rejected promise's reason.
 
-`always()` behaves similarly to the synchronous finally statement. When combined
-with `otherwise()`, `always()` allows you to write code that is similar to the familiar
+`finally()` behaves similarly to the synchronous finally statement. When combined
+with `catch()`, `finally()` allows you to write code that is similar to the familiar
 synchronous catch/finally pair.
 
 Consider the following synchronous code:
 
 ```php
 try {
-  return doSomething();
-} catch(\Exception $e) {
+    return doSomething();
+} catch (\Throwable $e) {
     return handleError($e);
 } finally {
     cleanup();
@@ -318,31 +249,11 @@ written:
 
 ```php
 return doSomething()
-    ->otherwise('handleError')
-    ->always('cleanup');
+    ->catch('handleError')
+    ->finally('cleanup');
 ```
 
-#### ExtendedPromiseInterface::progress()
-
-> Deprecated in v2.6.0: Progress support is deprecated and should not be used anymore.
-
-```php
-$promise->progress(callable $onProgress);
-```
-
-Registers a handler for progress updates from promise. It is a shortcut for:
-
-```php
-$promise->then(null, null, $onProgress);
-```
-
-### CancellablePromiseInterface
-
-A cancellable promise provides a mechanism for consumers to notify the creator
-of the promise that they are not longer interested in the result of an
-operation.
-
-#### CancellablePromiseInterface::cancel()
+#### PromiseInterface::cancel()
 
 ``` php
 $promise->cancel();
@@ -354,12 +265,31 @@ further interest in the results of the operation.
 Once a promise is settled (either fulfilled or rejected), calling `cancel()` on
 a promise has no effect.
 
-#### Implementations
+#### ~~PromiseInterface::otherwise()~~
 
-* [Promise](#promise-1)
-* [FulfilledPromise](#fulfilledpromise) (deprecated)
-* [RejectedPromise](#rejectedpromise) (deprecated)
-* [LazyPromise](#lazypromise) (deprecated)
+> Deprecated since v3.0.0, see [`catch()`](#promiseinterfacecatch) instead.
+
+The `otherwise()` method registers a rejection handler for a promise.
+
+This method continues to exist only for BC reasons and to ease upgrading
+between versions. It is an alias for:
+
+```php
+$promise->catch($onRejected);
+```
+
+#### ~~PromiseInterface::always()~~
+
+> Deprecated since v3.0.0, see [`finally()`](#promiseinterfacefinally) instead.
+
+The `always()` method allows you to execute "cleanup" type tasks in a promise chain.
+
+This method continues to exist only for BC reasons and to ease upgrading
+between versions. It is an alias for:
+
+```php
+$promise->finally($onFulfilledOrRejected);
+```
 
 ### Promise
 
@@ -367,16 +297,14 @@ Creates a promise whose state is controlled by the functions passed to
 `$resolver`.
 
 ```php
-$resolver = function (callable $resolve, callable $reject, callable $notify) {
+$resolver = function (callable $resolve, callable $reject) {
     // Do some work, possibly asynchronously, and then
-    // resolve or reject. You can notify of progress events (deprecated)
-    // along the way if you want/need.
+    // resolve or reject.
 
     $resolve($awesomeResult);
     // or throw new Exception('Promise rejected');
     // or $resolve($anotherPromise);
     // or $reject($nastyError);
-    // or $notify($progressNotification);
 };
 
 $canceller = function () {
@@ -399,7 +327,6 @@ function which both will be called with 3 arguments:
     fate will be equivalent to that of `$otherPromise`.
   * `$reject($reason)` - Function that rejects the promise. It is recommended to
     just throw an exception instead of using `$reject()`.
-  * `$notify($update)` - Deprecated function that issues progress events for the promise.
 
 If the resolver or canceller throw an exception, the promise will be rejected
 with that thrown exception as the rejection reason.
@@ -407,64 +334,13 @@ with that thrown exception as the rejection reason.
 The resolver function will be called immediately, the canceller function only
 once all consumers called the `cancel()` method of the promise.
 
-### FulfilledPromise
-
-> Deprecated in v2.8.0: External usage of `FulfilledPromise` is deprecated, use `resolve()` instead.
-
-Creates a already fulfilled promise.
-
-```php
-$promise = React\Promise\FulfilledPromise($value);
-```
-
-Note, that `$value` **cannot** be a promise. It's recommended to use
-[resolve()](#resolve) for creating resolved promises.
-
-### RejectedPromise
-
-> Deprecated in v2.8.0: External usage of `RejectedPromise` is deprecated, use `reject()` instead.
-
-Creates a already rejected promise.
-
-```php
-$promise = React\Promise\RejectedPromise($reason);
-```
-
-Note, that `$reason` **cannot** be a promise. It's recommended to use
-[reject()](#reject) for creating rejected promises.
-
-### LazyPromise
-
-> Deprecated in v2.8.0: LazyPromise is deprecated and should not be used anymore.
-
-Creates a promise which will be lazily initialized by `$factory` once a consumer
-calls the `then()` method.
-
-```php
-$factory = function () {
-    $deferred = new React\Promise\Deferred();
-
-    // Do some heavy stuff here and resolve the deferred once completed
-
-    return $deferred->promise();
-};
-
-$promise = new React\Promise\LazyPromise($factory);
-
-// $factory will only be executed once we call then()
-$promise->then(function ($value) {
-});
-```
-
 ### Functions
 
-Useful functions for creating, joining, mapping and reducing collections of
-promises.
+Useful functions for creating and joining collections of promises.
 
-All functions working on promise collections (like `all()`, `race()`, `some()`
+All functions working on promise collections (like `all()`, `race()`,
 etc.) support cancellation. This means, if you call `cancel()` on the returned
-promise, all promises in the collection are cancelled. If the collection itself
-is a promise which resolves to an array, this promise is also cancelled.
+promise, all promises in the collection are cancelled.
 
 #### resolve()
 
@@ -482,33 +358,84 @@ a trusted promise that follows the state of the thenable is returned.
 
 If `$promiseOrValue` is a promise, it will be returned as is.
 
-Note: The promise returned is always a promise implementing
-[ExtendedPromiseInterface](#extendedpromiseinterface). If you pass in a custom
-promise which only implements [PromiseInterface](#promiseinterface), this
-promise will be assimilated to a extended promise following `$promiseOrValue`.
+The resulting `$promise` implements the [`PromiseInterface`](#promiseinterface)
+and can be consumed like any other promise:
+
+```php
+$promise = React\Promise\resolve(42);
+
+$promise->then(function (int $result): void {
+    var_dump($result);
+}, function (\Throwable $e): void {
+    echo 'Error: ' . $e->getMessage() . PHP_EOL;
+});
+```
 
 #### reject()
 
 ```php
-$promise = React\Promise\reject(mixed $promiseOrValue);
+$promise = React\Promise\reject(\Throwable $reason);
 ```
 
-Creates a rejected promise for the supplied `$promiseOrValue`.
+Creates a rejected promise for the supplied `$reason`.
 
-If `$promiseOrValue` is a value, it will be the rejection value of the
-returned promise.
+Note that the [`\Throwable`](https://www.php.net/manual/en/class.throwable.php) interface introduced in PHP 7 covers 
+both user land [`\Exception`](https://www.php.net/manual/en/class.exception.php)'s and 
+[`\Error`](https://www.php.net/manual/en/class.error.php) internal PHP errors. By enforcing `\Throwable` as reason to 
+reject a promise, any language error or user land exception can be used to reject a promise.
 
-If `$promiseOrValue` is a promise, its completion value will be the rejected
-value of the returned promise.
+The resulting `$promise` implements the [`PromiseInterface`](#promiseinterface)
+and can be consumed like any other promise:
 
-This can be useful in situations where you need to reject a promise without
-throwing an exception. For example, it allows you to propagate a rejection with
-the value of another promise.
+```php
+$promise = React\Promise\reject(new RuntimeException('Request failed'));
+
+$promise->then(function (int $result): void {
+    var_dump($result);
+}, function (\Throwable $e): void {
+    echo 'Error: ' . $e->getMessage() . PHP_EOL;
+});
+```
+
+Note that rejected promises should always be handled similar to how any
+exceptions should always be caught in a `try` + `catch` block. If you remove the
+last reference to a rejected promise that has not been handled, it will
+report an unhandled promise rejection:
+
+```php
+function incorrect(): int
+{
+     $promise = React\Promise\reject(new RuntimeException('Request failed'));
+
+     // Commented out: No rejection handler registered here.
+     // $promise->then(null, function (\Throwable $e): void { /* ignore */ });
+
+     // Returning from a function will remove all local variable references, hence why
+     // this will report an unhandled promise rejection here.
+     return 42;
+}
+
+// Calling this function will log an error message plus its stack trace:
+// Unhandled promise rejection with RuntimeException: Request failed in example.php:10
+incorrect();
+```
+
+A rejected promise will be considered "handled" if you catch the rejection
+reason with either the [`then()` method](#promiseinterfacethen), the
+[`catch()` method](#promiseinterfacecatch), or the
+[`finally()` method](#promiseinterfacefinally). Note that each of these methods
+return a new promise that may again be rejected if you re-throw an exception.
+
+A rejected promise will also be considered "handled" if you abort the operation
+with the [`cancel()` method](#promiseinterfacecancel) (which in turn would
+usually reject the promise if it is still pending).
+
+See also the [`set_rejection_handler()` function](#set_rejection_handler).
 
 #### all()
 
 ```php
-$promise = React\Promise\all(array|React\Promise\PromiseInterface $promisesOrValues);
+$promise = React\Promise\all(iterable $promisesOrValues);
 ```
 
 Returns a promise that will resolve only once all the items in
@@ -519,16 +446,19 @@ will be an array containing the resolution values of each of the items in
 #### race()
 
 ```php
-$promise = React\Promise\race(array|React\Promise\PromiseInterface $promisesOrValues);
+$promise = React\Promise\race(iterable $promisesOrValues);
 ```
 
 Initiates a competitive race that allows one winner. Returns a promise which is
 resolved in the same way the first settled promise resolves.
 
+The returned promise will become **infinitely pending** if  `$promisesOrValues`
+contains 0 items.
+
 #### any()
 
 ```php
-$promise = React\Promise\any(array|React\Promise\PromiseInterface $promisesOrValues);
+$promise = React\Promise\any(iterable $promisesOrValues);
 ```
 
 Returns a promise that will resolve when any one of the items in
@@ -536,58 +466,52 @@ Returns a promise that will resolve when any one of the items in
 will be the resolution value of the triggering item.
 
 The returned promise will only reject if *all* items in `$promisesOrValues` are
-rejected. The rejection value will be an array of all rejection reasons.
+rejected. The rejection value will be a `React\Promise\Exception\CompositeException`
+which holds all rejection reasons. The rejection reasons can be obtained with
+`CompositeException::getThrowables()`.
 
 The returned promise will also reject with a `React\Promise\Exception\LengthException`
 if `$promisesOrValues` contains 0 items.
 
-#### some()
+#### set_rejection_handler()
 
 ```php
-$promise = React\Promise\some(array|React\Promise\PromiseInterface $promisesOrValues, integer $howMany);
+React\Promise\set_rejection_handler(?callable $callback): ?callable;
 ```
 
-Returns a promise that will resolve when `$howMany` of the supplied items in
-`$promisesOrValues` resolve. The resolution value of the returned promise
-will be an array of length `$howMany` containing the resolution values of the
-triggering items.
+Sets the global rejection handler for unhandled promise rejections.
 
-The returned promise will reject if it becomes impossible for `$howMany` items
-to resolve (that is, when `(count($promisesOrValues) - $howMany) + 1` items
-reject). The rejection value will be an array of
-`(count($promisesOrValues) - $howMany) + 1` rejection reasons.
+Note that rejected promises should always be handled similar to how any
+exceptions should always be caught in a `try` + `catch` block. If you remove
+the last reference to a rejected promise that has not been handled, it will
+report an unhandled promise rejection. See also the [`reject()` function](#reject)
+for more details.
 
-The returned promise will also reject with a `React\Promise\Exception\LengthException`
-if `$promisesOrValues` contains less items than `$howMany`.
+The `?callable $callback` argument MUST be a valid callback function that
+accepts a single `Throwable` argument or a `null` value to restore the
+default promise rejection handler. The return value of the callback function
+will be ignored and has no effect, so you SHOULD return a `void` value. The
+callback function MUST NOT throw or the program will be terminated with a
+fatal error.
 
-#### map()
+The function returns the previous rejection handler or `null` if using the
+default promise rejection handler.
+
+The default promise rejection handler will log an error message plus its stack
+trace:
 
 ```php
-$promise = React\Promise\map(array|React\Promise\PromiseInterface $promisesOrValues, callable $mapFunc);
+// Unhandled promise rejection with RuntimeException: Unhandled in example.php:2
+React\Promise\reject(new RuntimeException('Unhandled'));
 ```
 
-Traditional map function, similar to `array_map()`, but allows input to contain
-promises and/or values, and `$mapFunc` may return either a value or a promise.
-
-The map function receives each item as argument, where item is a fully resolved
-value of a promise or value in `$promisesOrValues`.
-
-#### reduce()
-
-```php
-$promise = React\Promise\reduce(array|React\Promise\PromiseInterface $promisesOrValues, callable $reduceFunc , $initialValue = null);
-```
-
-Traditional reduce function, similar to `array_reduce()`, but input may contain
-promises and/or values, and `$reduceFunc` may return either a value or a
-promise, *and* `$initialValue` may be a promise or a value for the starting
-value.
-
-### PromisorInterface
-
-The `React\Promise\PromisorInterface` provides a common interface for objects
-that provide a promise. `React\Promise\Deferred` implements it, but since it
-is part of the public API anyone can implement it.
+The promise rejection handler may be used to use customize the log message or
+write to custom log targets. As a rule of thumb, this function should only be
+used as a last resort and promise rejections are best handled with either the
+[`then()` method](#promiseinterfacethen), the
+[`catch()` method](#promiseinterfacecatch), or the
+[`finally()` method](#promiseinterfacefinally).
+See also the [`reject()` function](#reject) for more details.
 
 Examples
 --------
@@ -600,7 +524,7 @@ function getAwesomeResultPromise()
     $deferred = new React\Promise\Deferred();
 
     // Execute a Node.js-style function using the callback pattern
-    computeAwesomeResultAsynchronously(function ($error, $result) use ($deferred) {
+    computeAwesomeResultAsynchronously(function (\Throwable $error, $result) use ($deferred) {
         if ($error) {
             $deferred->reject($error);
         } else {
@@ -617,11 +541,8 @@ getAwesomeResultPromise()
         function ($value) {
             // Deferred resolved, do something with $value
         },
-        function ($reason) {
+        function (\Throwable $reason) {
             // Deferred rejected, do something with $reason
-        },
-        function ($update) {
-            // Progress notification triggered, do something with $update
         }
     );
 ```
@@ -689,17 +610,17 @@ $deferred->promise()
     ->then(function ($x) {
         throw new \Exception($x + 1);
     })
-    ->otherwise(function (\Exception $x) {
+    ->catch(function (\Exception $x) {
         // Propagate the rejection
         throw $x;
     })
-    ->otherwise(function (\Exception $x) {
+    ->catch(function (\Exception $x) {
         // Can also propagate by returning another rejection
         return React\Promise\reject(
             new \Exception($x->getMessage() + 1)
         );
     })
-    ->otherwise(function ($x) {
+    ->catch(function ($x) {
         echo 'Reject ' . $x->getMessage(); // 3
     });
 
@@ -721,7 +642,7 @@ $deferred->promise()
     ->then(function ($x) {
         throw new \Exception($x + 1);
     })
-    ->otherwise(function (\Exception $x) {
+    ->catch(function (\Exception $x) {
         // Handle the rejection, and don't propagate.
         // This is like catch without a rethrow
         return $x->getMessage() + 1;
@@ -733,131 +654,57 @@ $deferred->promise()
 $deferred->resolve(1);  // Prints "Mixed 4"
 ```
 
-#### Progress event forwarding
-
-> Deprecated in v2.6.0: Progress support is deprecated and should not be used anymore.
-
-In the same way as resolution and rejection handlers, your progress handler
-**MUST** return a progress event to be propagated to the next link in the chain.
-If you return nothing, `null` will be propagated.
-
-Also in the same way as resolutions and rejections, if you don't register a
-progress handler, the update will be propagated through.
-
-If your progress handler throws an exception, the exception will be propagated
-to the next link in the chain. The best thing to do is to ensure your progress
-handlers do not throw exceptions.
-
-This gives you the opportunity to transform progress events at each step in the
-chain so that they are meaningful to the next step. It also allows you to choose
-not to transform them, and simply let them propagate untransformed, by not
-registering a progress handler.
-
-```php
-$deferred = new React\Promise\Deferred();
-
-$deferred->promise()
-    ->progress(function ($update) {
-        return $update + 1;
-    })
-    ->progress(function ($update) {
-        echo 'Progress ' . $update; // 2
-    });
-
-$deferred->notify(1);  // Prints "Progress 2"
-```
-
-### done() vs. then()
-
-The golden rule is:
-
-    Either return your promise, or call done() on it.
-
-At a first glance, `then()` and `done()` seem very similar. However, there are
-important distinctions.
-
-The intent of `then()` is to transform a promise's value and to pass or return
-a new promise for the transformed value along to other parts of your code.
-
-The intent of `done()` is to consume a promise's value, transferring
-responsibility for the value to your code.
-
-In addition to transforming a value, `then()` allows you to recover from, or
-propagate intermediate errors. Any errors that are not handled will be caught
-by the promise machinery and used to reject the promise returned by `then()`.
-
-Calling `done()` transfers all responsibility for errors to your code. If an
-error (either a thrown exception or returned rejection) escapes the
-`$onFulfilled` or `$onRejected` callbacks you provide to done, it will be
-rethrown in an uncatchable way causing a fatal error.
-
-```php
-function getJsonResult()
-{
-    return queryApi()
-        ->then(
-            // Transform API results to an object
-            function ($jsonResultString) {
-                return json_decode($jsonResultString);
-            },
-            // Transform API errors to an exception
-            function ($jsonErrorString) {
-                $object = json_decode($jsonErrorString);
-                throw new ApiErrorException($object->errorMessage);
-            }
-        );
-}
-
-// Here we provide no rejection handler. If the promise returned has been
-// rejected, the ApiErrorException will be thrown
-getJsonResult()
-    ->done(
-        // Consume transformed object
-        function ($jsonResultObject) {
-            // Do something with $jsonResultObject
-        }
-    );
-
-// Here we provide a rejection handler which will either throw while debugging
-// or log the exception
-getJsonResult()
-    ->done(
-        function ($jsonResultObject) {
-            // Do something with $jsonResultObject
-        },
-        function (ApiErrorException $exception) {
-            if (isDebug()) {
-                throw $exception;
-            } else {
-                logException($exception);
-            }
-        }
-    );
-```
-
-Note that if a rejection value is not an instance of `\Exception`, it will be
-wrapped in an exception of the type `React\Promise\UnhandledRejectionException`.
-
-You can get the original rejection reason by calling `$exception->getReason()`.
-
 Install
 -------
 
-The recommended way to install this library is [through Composer](https://getcomposer.org).
+The recommended way to install this library is [through Composer](https://getcomposer.org/).
 [New to Composer?](https://getcomposer.org/doc/00-intro.md)
 
 This project follows [SemVer](https://semver.org/).
-This will install the latest supported version:
+This will install the latest supported version from this branch:
 
 ```bash
-composer require react/promise:^2.10
+composer require react/promise:^3
 ```
 
 See also the [CHANGELOG](CHANGELOG.md) for details about version upgrades.
 
 This project aims to run on any platform and thus does not require any PHP
-extensions and supports running on legacy PHP 5.4 through current PHP 8+ and HHVM.
+extensions and supports running on PHP 7.1 through current PHP 8+.
 It's *highly recommended to use the latest supported PHP version* for this project.
+
+We're committed to providing long-term support (LTS) options and to provide a
+smooth upgrade path. If you're using an older PHP version, you may use the
+[`2.x` branch](https://github.com/reactphp/promise/tree/2.x) (PHP 5.4+) or
+[`1.x` branch](https://github.com/reactphp/promise/tree/1.x) (PHP 5.3+) which both
+provide a compatible API but do not take advantage of newer language features.
+You may target multiple versions at the same time to support a wider range of
+PHP versions like this:
+
+```bash
+composer require "react/promise:^3 || ^2 || ^1"
+```
+
+## Tests
+
+To run the test suite, you first need to clone this repo and then install all
+dependencies [through Composer](https://getcomposer.org/):
+
+```bash
+composer install
+```
+
+To run the test suite, go to the project root and run:
+
+```bash
+vendor/bin/phpunit
+```
+
+On top of this, we use PHPStan on max level to ensure type safety across the project:
+
+```bash
+vendor/bin/phpstan
+```
 
 Credits
 -------

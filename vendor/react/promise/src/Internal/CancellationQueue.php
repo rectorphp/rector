@@ -1,12 +1,17 @@
 <?php
 
-namespace RectorPrefix202307\React\Promise;
+namespace RectorPrefix202307\React\Promise\Internal;
 
-class CancellationQueue
+/**
+ * @internal
+ */
+final class CancellationQueue
 {
+    /** @var bool */
     private $started = \false;
+    /** @var object[] */
     private $queue = [];
-    public function __invoke()
+    public function __invoke() : void
     {
         if ($this->started) {
             return;
@@ -14,7 +19,10 @@ class CancellationQueue
         $this->started = \true;
         $this->drain();
     }
-    public function enqueue($cancellable)
+    /**
+     * @param mixed $cancellable
+     */
+    public function enqueue($cancellable) : void
     {
         if (!\is_object($cancellable) || !\method_exists($cancellable, 'then') || !\method_exists($cancellable, 'cancel')) {
             return;
@@ -24,15 +32,15 @@ class CancellationQueue
             $this->drain();
         }
     }
-    private function drain()
+    private function drain() : void
     {
         for ($i = \key($this->queue); isset($this->queue[$i]); $i++) {
             $cancellable = $this->queue[$i];
+            \assert(\method_exists($cancellable, 'cancel'));
             $exception = null;
             try {
                 $cancellable->cancel();
             } catch (\Throwable $exception) {
-            } catch (\Exception $exception) {
             }
             unset($this->queue[$i]);
             if ($exception) {
