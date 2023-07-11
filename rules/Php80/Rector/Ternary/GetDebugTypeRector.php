@@ -122,8 +122,10 @@ CODE_SAMPLE
             return \false;
         }
         $secondExpr = $getClassFuncCallOrClassConstFetchClass instanceof FuncCall ? $getClassFuncCallOrClassConstFetchClass->getArgs()[0]->value : $getClassFuncCallOrClassConstFetchClass->class;
-        /** @var FuncCall $gettypeFuncCall */
         $gettypeFuncCall = $ternary->else;
+        if (!$gettypeFuncCall instanceof FuncCall) {
+            return \false;
+        }
         if (!$gettypeFuncCall->args[0] instanceof Arg) {
             return \false;
         }
