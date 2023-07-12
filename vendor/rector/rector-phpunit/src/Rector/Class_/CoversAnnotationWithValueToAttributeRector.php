@@ -101,7 +101,7 @@ CODE_SAMPLE
         if ($coversAttributeGroups === []) {
             return null;
         }
-        $node->attrGroups = $coversAttributeGroups;
+        $node->attrGroups = \array_merge($node->attrGroups, $coversAttributeGroups);
         return $node;
     }
     private function createAttributeGroup(string $annotationValue) : AttributeGroup

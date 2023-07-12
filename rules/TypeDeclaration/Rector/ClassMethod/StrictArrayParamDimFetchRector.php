@@ -90,7 +90,7 @@ CODE_SAMPLE
         $paramName = $this->getName($param);
         $isParamAccessedArrayDimFetch = \false;
         $this->traverseNodesWithCallable($functionLike, function (Node $node) use($paramName, &$isParamAccessedArrayDimFetch) : ?int {
-            if ($node instanceof FuncCall && $this->isName($node, 'is_array')) {
+            if ($node instanceof FuncCall && $this->isNames($node, ['is_array', 'is_string', 'is_int', 'is_bool', 'is_float'])) {
                 $firstArg = $node->getArgs()[0];
                 if ($this->isName($firstArg->value, $paramName)) {
                     return NodeTraverser::STOP_TRAVERSAL;
