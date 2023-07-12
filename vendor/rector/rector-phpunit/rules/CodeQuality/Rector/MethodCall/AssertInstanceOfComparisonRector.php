@@ -1,22 +1,23 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\MethodCall;
+namespace Rector\PHPUnit\CodeQuality\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\BooleanNot;
+use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\IdentifierManipulator;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\AssertNotOperatorRector\AssertNotOperatorRectorTest
+ * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\MethodCall\AssertInstanceOfComparisonRector\AssertInstanceOfComparisonRectorTest
  */
-final class AssertNotOperatorRector extends AbstractRector
+final class AssertInstanceOfComparisonRector extends AbstractRector
 {
     /**
      * @readonly
@@ -31,7 +32,7 @@ final class AssertNotOperatorRector extends AbstractRector
     /**
      * @var array<string, string>
      */
-    private const RENAME_METHODS_MAP = ['assertTrue' => 'assertFalse', 'assertFalse' => 'assertTrue'];
+    private const RENAME_METHODS_MAP = ['assertTrue' => 'assertInstanceOf', 'assertFalse' => 'assertNotInstanceOf'];
     public function __construct(IdentifierManipulator $identifierManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->identifierManipulator = $identifierManipulator;
@@ -39,7 +40,7 @@ final class AssertNotOperatorRector extends AbstractRector
     }
     public function getRuleDefinition() : RuleDefinition
     {
-        return new RuleDefinition('Turns not-operator comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertTrue(!$foo, "message");', '$this->assertFalse($foo, "message");'), new CodeSample('$this->assertFalse(!$foo, "message");', '$this->assertTrue($foo, "message");')]);
+        return new RuleDefinition('Turns instanceof comparisons to their method name alternatives in PHPUnit TestCase', [new CodeSample('$this->assertTrue($foo instanceof Foo, "message");', '$this->assertInstanceOf("Foo", $foo, "message");'), new CodeSample('$this->assertFalse($foo instanceof Foo, "message");', '$this->assertNotInstanceOf("Foo", $foo, "message");')]);
     }
     /**
      * @return array<class-string<Node>>
@@ -61,16 +62,27 @@ final class AssertNotOperatorRector extends AbstractRector
             return null;
         }
         $firstArgumentValue = $node->getArgs()[0]->value;
-        if (!$firstArgumentValue instanceof BooleanNot) {
+        if (!$firstArgumentValue instanceof Instanceof_) {
             return null;
         }
         $this->identifierManipulator->renameNodeWithMap($node, self::RENAME_METHODS_MAP);
-        $oldArguments = $node->getArgs();
-        /** @var BooleanNot $negation */
-        $negation = $oldArguments[0]->value;
-        $expression = $negation->expr;
-        unset($oldArguments[0]);
-        $node->args = \array_merge([new Arg($expression)], $oldArguments);
+        $this->changeArgumentsOrder($node);
         return $node;
+    }
+    /**
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     */
+    private function changeArgumentsOrder($node) : void
+    {
+        $oldArguments = $node->getArgs();
+        /** @var Instanceof_ $comparison */
+        $comparison = $oldArguments[0]->value;
+        $argument = $comparison->expr;
+        unset($oldArguments[0]);
+        $className = $this->getName($comparison->class);
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
+        $node->args = \array_merge([new Arg($this->nodeFactory->createClassConstReference($className)), new Arg($argument)], $oldArguments);
     }
 }

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\Class_;
+namespace Rector\PHPUnit\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Array_;
@@ -21,7 +21,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://medium.com/tech-tajawal/use-memory-gently-with-yield-in-php-7e62e2480b8d
  * @changelog https://3v4l.org/5PJid
  *
- * @see \Rector\PHPUnit\Tests\Rector\Class_\YieldDataProviderRector\YieldDataProviderRectorTest
+ * @see \Rector\PHPUnit\Tests\CodeQuality\Rector\Class_\YieldDataProviderRector\YieldDataProviderRectorTest
  */
 final class YieldDataProviderRector extends AbstractRector
 {

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite0633763a17a5a1f5a58aa3f55938512
+class ComposerStaticInit95caa279cb10bbb508ebaac49f60c1ff
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2345,6 +2345,27 @@ class ComposerStaticInite0633763a17a5a1f5a58aa3f55938512
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\DataProviderAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\TestWithAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/TestWithAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\CoversAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/CoversAnnotationWithValueToAttributeRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\PreferPHPUnitThisCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/PreferPHPUnitThisCallRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\YieldDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/YieldDataProviderRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/CodeQuality/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertCompareToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertCompareToSpecificMethodRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertComparisonToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertComparisonToSpecificMethodRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertEqualsToSameRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertEqualsToSameRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertFalseStrposToContainsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertFalseStrposToContainsRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertInstanceOfComparisonRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertInstanceOfComparisonRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertIssetToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertIssetToSpecificMethodRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertNotOperatorRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertNotOperatorRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertPropertyExistsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertPropertyExistsRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertRegExpRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertRegExpRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\AssertTrueFalseToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWillMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php',
+        'Rector\\PHPUnit\\CodeQuality\\Rector\\MethodCall\\UseSpecificWithMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/MethodCall/UseSpecificWithMethodRector.php',
         'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\ArgumentMover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/ArgumentMover.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\AssertCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/AssertCallAnalyzer.php',
@@ -2384,32 +2405,11 @@ class ComposerStaticInite0633763a17a5a1f5a58aa3f55938512
         'Rector\\PHPUnit\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\TryCatchToExpectExceptionRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php',
-        'Rector\\PHPUnit\\Rector\\Class_\\AddSeeTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/AddSeeTestAnnotationRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\AnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/AnnotationWithValueToAttributeRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ArrayArgumentToDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ArrayArgumentToDataProviderRector.php',
-        'Rector\\PHPUnit\\Rector\\Class_\\ConstructClassMethodToSetUpTestCaseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\PreferPHPUnitSelfCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/PreferPHPUnitSelfCallRector.php',
-        'Rector\\PHPUnit\\Rector\\Class_\\PreferPHPUnitThisCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/PreferPHPUnitThisCallRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ProphecyPHPDocRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ProphecyPHPDocRector.php',
-        'Rector\\PHPUnit\\Rector\\Class_\\YieldDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/YieldDataProviderRector.php',
-        'Rector\\PHPUnit\\Rector\\Foreach_\\SimplifyForeachInstanceOfRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Foreach_/SimplifyForeachInstanceOfRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertCompareToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertCompareToSpecificMethodRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertComparisonToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertComparisonToSpecificMethodRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertEqualsToSameRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertEqualsToSameRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertFalseStrposToContainsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertFalseStrposToContainsRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertInstanceOfComparisonRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertInstanceOfComparisonRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertIssetToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertIssetToSpecificMethodRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertNotOperatorRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertNotOperatorRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertPropertyExistsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertPropertyExistsRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertRegExpRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertRegExpRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\AssertResourceToClosedResourceRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertResourceToClosedResourceRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameBoolNullToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\AssertTrueFalseToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\UseSpecificWillMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/UseSpecificWillMethodRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\UseSpecificWithMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/UseSpecificWithMethodRector.php',
         'Rector\\PHPUnit\\Set\\PHPUnitLevelSetList' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Set/PHPUnitLevelSetList.php',
         'Rector\\PHPUnit\\Set\\PHPUnitSetList' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Set/PHPUnitSetList.php',
         'Rector\\PHPUnit\\ValueObject\\AnnotationWithValueToAttribute' => __DIR__ . '/..' . '/rector/rector-phpunit/src/ValueObject/AnnotationWithValueToAttribute.php',
@@ -3066,9 +3066,9 @@ class ComposerStaticInite0633763a17a5a1f5a58aa3f55938512
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite0633763a17a5a1f5a58aa3f55938512::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite0633763a17a5a1f5a58aa3f55938512::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite0633763a17a5a1f5a58aa3f55938512::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit95caa279cb10bbb508ebaac49f60c1ff::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit95caa279cb10bbb508ebaac49f60c1ff::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit95caa279cb10bbb508ebaac49f60c1ff::$classMap;
 
         }, null, ClassLoader::class);
     }

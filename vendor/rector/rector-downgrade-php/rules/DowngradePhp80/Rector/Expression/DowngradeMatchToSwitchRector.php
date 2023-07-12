@@ -101,7 +101,7 @@ CODE_SAMPLE
         $hasChanged = \false;
         $this->traverseNodesWithCallable($node, function (Node $subNode) use($node, &$match, &$hasChanged, $scope) {
             if ($subNode instanceof ArrayItem && $subNode->value instanceof Match_ && $this->isEqualScope($subNode->value, $scope)) {
-                $switchCases = $this->createSwitchCasesFromMatchArms($node, $subNode->value);
+                $switchCases = $this->createSwitchCasesFromMatchArms($node, $subNode->value, \true);
                 $switch = new Switch_($subNode->value->cond, $switchCases);
                 $subNode->value = new FuncCall($this->anonymousFunctionFactory->create([], [$switch], null));
                 $hasChanged = \true;
@@ -204,10 +204,9 @@ CODE_SAMPLE
      * @return Case_[]
      * @param \PhpParser\Node\Stmt\Echo_|\PhpParser\Node\Stmt\Expression|\PhpParser\Node\Stmt\Return_ $node
      */
-    private function createSwitchCasesFromMatchArms($node, Match_ $match) : array
+    private function createSwitchCasesFromMatchArms($node, Match_ $match, bool $isInsideArrayItem = \false) : array
     {
         $switchCases = [];
-        $isInsideArrayItem = (bool) $match->getAttribute(AttributeKey::INSIDE_ARRAY_ITEM);
         foreach ($match->arms as $matchArm) {
             if (\count((array) $matchArm->conds) > 1) {
                 $lastCase = null;

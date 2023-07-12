@@ -9,10 +9,8 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\Match_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -52,12 +50,6 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             $arrayDimFetch->var->setAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \true);
         }
     }
-    private function processInsideArrayItem(ArrayItem $arrayItem) : void
-    {
-        if ($arrayItem->value instanceof Match_) {
-            $arrayItem->value->setAttribute(AttributeKey::INSIDE_ARRAY_ITEM, \true);
-        }
-    }
     public function enterNode(Node $node) : ?Node
     {
         if ($node instanceof For_ || $node instanceof Foreach_ || $node instanceof While_ || $node instanceof Do_) {
@@ -66,10 +58,6 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         }
         if ($node instanceof ArrayDimFetch) {
             $this->processInsideArrayDimFetch($node);
-            return null;
-        }
-        if ($node instanceof ArrayItem && $node->value instanceof Match_) {
-            $this->processInsideArrayItem($node);
             return null;
         }
         if ($node instanceof Isset_ || $node instanceof Unset_) {
