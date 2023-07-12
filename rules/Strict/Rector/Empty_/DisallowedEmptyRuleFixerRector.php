@@ -6,8 +6,10 @@ namespace Rector\Strict\Rector\Empty_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
+use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Empty_;
+use PhpParser\Node\Expr\Isset_;
 use PHPStan\Analyser\Scope;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
@@ -76,6 +78,9 @@ CODE_SAMPLE
             return null;
         }
         $empty = $booleanNot->expr;
+        if ($empty->expr instanceof ArrayDimFetch) {
+            return $this->createDimFetchBooleanAnd($empty);
+        }
         $emptyExprType = $scope->getType($empty->expr);
         return $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr, $this->treatAsNonEmpty);
     }
@@ -83,5 +88,15 @@ CODE_SAMPLE
     {
         $exprType = $scope->getType($empty->expr);
         return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);
+    }
+    private function createDimFetchBooleanAnd(Empty_ $empty) : ?BooleanAnd
+    {
+        $exprType = $this->getType($empty->expr);
+        $isset = new Isset_([$empty->expr]);
+        $compareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $empty->expr, \false);
+        if (!$compareExpr instanceof Expr) {
+            return null;
+        }
+        return new BooleanAnd($isset, $compareExpr);
     }
 }
