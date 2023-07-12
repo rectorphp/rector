@@ -18,7 +18,7 @@ final class GetMockBuilderGetMockToCreateMockRector extends AbstractRector
     /**
      * @var string[]
      */
-    private const USELESS_METHOD_NAMES = ['disableOriginalConstructor', 'onlyMethods', 'setMethods', 'setMethodsExcept'];
+    private const USELESS_METHOD_NAMES = ['disableOriginalConstructor', 'disableOriginalClone', 'disableArgumentCloning', 'disallowMockingUnknownTypes'];
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Remove getMockBuilder() to createMock()', [new CodeSample(<<<'CODE_SAMPLE'

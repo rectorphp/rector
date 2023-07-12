@@ -27,13 +27,12 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
      */
     private $testsNodeAnalyzer;
     /**
-     * @var FunctionNameWithAssertMethods[]
+     * @var array<string,array<array-key,string>>
      */
-    private $functionNameWithAssertMethods = [];
+    private const FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES = ['is_readable' => ['is_readable', 'assertIsReadable', 'assertNotIsReadable'], 'array_key_exists' => ['array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'], 'array_search' => ['array_search', 'assertContains', 'assertNotContains'], 'in_array' => ['in_array', 'assertContains', 'assertNotContains'], 'empty' => ['empty', 'assertEmpty', 'assertNotEmpty'], 'file_exists' => ['file_exists', 'assertFileExists', 'assertFileNotExists'], 'is_dir' => ['is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'], 'is_infinite' => ['is_infinite', 'assertInfinite', 'assertFinite'], 'is_null' => ['is_null', 'assertNull', 'assertNotNull'], 'is_writable' => ['is_writable', 'assertIsWritable', 'assertNotIsWritable'], 'is_nan' => ['is_nan', 'assertNan', ''], 'is_a' => ['is_a', 'assertInstanceOf', 'assertNotInstanceOf']];
     public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer)
     {
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
-        $this->functionNameWithAssertMethods = ['is_readable' => new FunctionNameWithAssertMethods('is_readable', 'assertIsReadable', 'assertNotIsReadable'), 'array_key_exists' => new FunctionNameWithAssertMethods('array_key_exists', 'assertArrayHasKey', 'assertArrayNotHasKey'), 'array_search' => new FunctionNameWithAssertMethods('array_search', 'assertContains', 'assertNotContains'), 'in_array' => new FunctionNameWithAssertMethods('in_array', 'assertContains', 'assertNotContains'), 'empty' => new FunctionNameWithAssertMethods('empty', 'assertEmpty', 'assertNotEmpty'), 'file_exists' => new FunctionNameWithAssertMethods('file_exists', 'assertFileExists', 'assertFileNotExists'), 'is_dir' => new FunctionNameWithAssertMethods('is_dir', 'assertDirectoryExists', 'assertDirectoryNotExists'), 'is_infinite' => new FunctionNameWithAssertMethods('is_infinite', 'assertInfinite', 'assertFinite'), 'is_null' => new FunctionNameWithAssertMethods('is_null', 'assertNull', 'assertNotNull'), 'is_writable' => new FunctionNameWithAssertMethods('is_writable', 'assertIsWritable', 'assertNotIsWritable'), 'is_nan' => new FunctionNameWithAssertMethods('is_nan', 'assertNan', ''), 'is_a' => new FunctionNameWithAssertMethods('is_a', 'assertInstanceOf', 'assertNotInstanceOf')];
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -66,10 +65,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
             return null;
         }
         $firstArgumentName = $this->getName($firstArgumentValue);
-        if ($firstArgumentName === null || !\array_key_exists($firstArgumentName, $this->functionNameWithAssertMethods)) {
+        if ($firstArgumentName === null || !\array_key_exists($firstArgumentName, self::FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES)) {
             return null;
         }
-        $functionNameWithAssertMethod = $this->functionNameWithAssertMethods[$firstArgumentName];
         if ($firstArgumentName === 'is_a') {
             /**
              * @var FuncCall $firstArgumentValue
@@ -84,7 +82,9 @@ final class AssertTrueFalseToSpecificMethodRector extends AbstractRector
                 return null;
             }
         }
-        $this->renameMethod($node, $functionNameWithAssertMethod);
+        [$functionName, $assetMethodName, $notAssertMethodName] = self::FUNCTION_NAME_WITH_ASSERT_METHOD_NAMES[$firstArgumentName];
+        $functionNameWithAssertMethods = new FunctionNameWithAssertMethods($functionName, $assetMethodName, $notAssertMethodName);
+        $this->renameMethod($node, $functionNameWithAssertMethods);
         $this->moveFunctionArgumentsUp($node);
         return $node;
     }
