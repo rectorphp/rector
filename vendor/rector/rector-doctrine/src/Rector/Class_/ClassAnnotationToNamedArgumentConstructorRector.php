@@ -5,7 +5,6 @@ namespace Rector\Doctrine\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;

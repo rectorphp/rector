@@ -1,10 +1,11 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\ClassMethod;
+namespace Rector\PHPUnit\PHPUnit60\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
+use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Core\Rector\AbstractRector;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
@@ -15,7 +16,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://thephp.cc/news/2016/02/questioning-phpunit-best-practices
  * @changelog https://github.com/sebastianbergmann/phpunit/commit/17c09b33ac5d9cad1459ace0ae7b1f942d1e9afd
  *
- * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\ExceptionAnnotationRector\ExceptionAnnotationRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit60\Rector\ClassMethod\ExceptionAnnotationRector\ExceptionAnnotationRectorTest
  */
 final class ExceptionAnnotationRector extends AbstractRector
 {
@@ -83,7 +84,10 @@ CODE_SAMPLE
         if (!$this->testsNodeAnalyzer->isInTestClass($node)) {
             return null;
         }
-        $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
+        $phpDocInfo = $this->phpDocInfoFactory->createFromNode($node);
+        if (!$phpDocInfo instanceof PhpDocInfo) {
+            return null;
+        }
         $hasChanged = \false;
         foreach (self::ANNOTATION_TO_METHOD as $annotationName => $methodName) {
             if (!$phpDocInfo->hasByName($annotationName)) {

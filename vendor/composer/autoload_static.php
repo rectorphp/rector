@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit403e9b3e175b446d3efee98eeb37d45c
+class ComposerStaticInite107dc494ece1872275e224229f3a009
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2361,13 +2361,16 @@ class ComposerStaticInit403e9b3e175b446d3efee98eeb37d45c
         'Rector\\PHPUnit\\NodeFactory\\ExpectExceptionMethodCallFactory' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFactory/ExpectExceptionMethodCallFactory.php',
         'Rector\\PHPUnit\\NodeFinder\\DataProviderClassMethodFinder' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeFinder/DataProviderClassMethodFinder.php',
         'Rector\\PHPUnit\\PHPUnit50\\Rector\\StaticCall\\GetMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit50/Rector/StaticCall/GetMockRector.php',
+        'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
+        'Rector\\PHPUnit\\PHPUnit60\\Rector\\ClassMethod\\ExceptionAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/ClassMethod/ExceptionAnnotationRector.php',
+        'Rector\\PHPUnit\\PHPUnit60\\Rector\\MethodCall\\DelegateExceptionArgumentsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/MethodCall/DelegateExceptionArgumentsRector.php',
+        'Rector\\PHPUnit\\PHPUnit60\\Rector\\MethodCall\\GetMockBuilderGetMockToCreateMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit60/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php',
+        'Rector\\PHPUnit\\PHPUnit70\\Rector\\Class_\\RemoveDataProviderTestPrefixRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/PHPUnit70/Rector/Class_/RemoveDataProviderTestPrefixRector.php',
         'Rector\\PHPUnit\\PhpDoc\\DataProviderMethodRenamer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/DataProviderMethodRenamer.php',
         'Rector\\PHPUnit\\PhpDoc\\PhpDocValueToNodeMapper' => __DIR__ . '/..' . '/rector/rector-phpunit/src/PhpDoc/PhpDocValueToNodeMapper.php',
-        'Rector\\PHPUnit\\Rector\\ClassMethod\\AddDoesNotPerformAssertionToNonAssertingTestRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\CreateMockToAnonymousClassRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/CreateMockToAnonymousClassRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\DataProviderAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\DependsAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/DependsAnnotationWithValueToAttributeRector.php',
-        'Rector\\PHPUnit\\Rector\\ClassMethod\\ExceptionAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/ExceptionAnnotationRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
         'Rector\\PHPUnit\\Rector\\ClassMethod\\TryCatchToExpectExceptionRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php',
@@ -2380,7 +2383,6 @@ class ComposerStaticInit403e9b3e175b446d3efee98eeb37d45c
         'Rector\\PHPUnit\\Rector\\Class_\\PreferPHPUnitSelfCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/PreferPHPUnitSelfCallRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\PreferPHPUnitThisCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/PreferPHPUnitThisCallRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\ProphecyPHPDocRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/ProphecyPHPDocRector.php',
-        'Rector\\PHPUnit\\Rector\\Class_\\RemoveDataProviderTestPrefixRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/RemoveDataProviderTestPrefixRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\StaticDataProviderClassMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/StaticDataProviderClassMethodRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\TestListenerToHooksRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/TestListenerToHooksRector.php',
         'Rector\\PHPUnit\\Rector\\Class_\\YieldDataProviderRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/Class_/YieldDataProviderRector.php',
@@ -2400,9 +2402,7 @@ class ComposerStaticInit403e9b3e175b446d3efee98eeb37d45c
         'Rector\\PHPUnit\\Rector\\MethodCall\\AssertSameTrueFalseToAssertTrueFalseRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\AssertTrueFalseInternalTypeToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertTrueFalseInternalTypeToSpecificMethodRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\AssertTrueFalseToSpecificMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\DelegateExceptionArgumentsRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/DelegateExceptionArgumentsRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\ExplicitPhpErrorApiRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/ExplicitPhpErrorApiRector.php',
-        'Rector\\PHPUnit\\Rector\\MethodCall\\GetMockBuilderGetMockToCreateMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\PropertyExistsWithoutAssertRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/PropertyExistsWithoutAssertRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\RemoveExpectAnyFromMockRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/RemoveExpectAnyFromMockRector.php',
         'Rector\\PHPUnit\\Rector\\MethodCall\\RemoveSetMethodsMethodCallRector' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php',
@@ -3068,9 +3068,9 @@ class ComposerStaticInit403e9b3e175b446d3efee98eeb37d45c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit403e9b3e175b446d3efee98eeb37d45c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit403e9b3e175b446d3efee98eeb37d45c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit403e9b3e175b446d3efee98eeb37d45c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite107dc494ece1872275e224229f3a009::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite107dc494ece1872275e224229f3a009::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite107dc494ece1872275e224229f3a009::$classMap;
 
         }, null, ClassLoader::class);
     }

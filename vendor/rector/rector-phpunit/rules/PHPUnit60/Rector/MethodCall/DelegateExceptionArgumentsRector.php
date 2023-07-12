@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\MethodCall;
+namespace Rector\PHPUnit\PHPUnit60\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -15,7 +15,7 @@ use Rector\PHPUnit\NodeFactory\AssertCallFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\DelegateExceptionArgumentsRector\DelegateExceptionArgumentsRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit60\Rector\MethodCall\DelegateExceptionArgumentsRector\DelegateExceptionArgumentsRectorTest
  */
 final class DelegateExceptionArgumentsRector extends AbstractRector
 {

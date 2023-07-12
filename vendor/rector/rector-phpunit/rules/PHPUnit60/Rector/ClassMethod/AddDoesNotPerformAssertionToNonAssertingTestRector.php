@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\ClassMethod;
+namespace Rector\PHPUnit\PHPUnit60\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://phpunit.readthedocs.io/en/9.5/annotations.html#doesnotperformassertions
  * @changelog https://github.com/sebastianbergmann/phpunit/issues/2484
  *
- * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\AddDoesNotPerformAssertionToNonAssertingTestRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit60\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector\AddDoesNotPerformAssertionToNonAssertingTestRectorTest
  */
 final class AddDoesNotPerformAssertionToNonAssertingTestRector extends AbstractRector
 {

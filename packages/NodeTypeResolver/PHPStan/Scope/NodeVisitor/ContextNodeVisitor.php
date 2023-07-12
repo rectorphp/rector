@@ -12,6 +12,9 @@ use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Isset_;
+use PhpParser\Node\Expr\Match_;
+use PhpParser\Node\Expr\PropertyFetch;
+use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
@@ -43,6 +46,18 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
+    private function processInsideArrayDimFetch(ArrayDimFetch $arrayDimFetch) : void
+    {
+        if ($arrayDimFetch->var instanceof PropertyFetch || $arrayDimFetch->var instanceof StaticPropertyFetch) {
+            $arrayDimFetch->var->setAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \true);
+        }
+    }
+    private function processInsideArrayItem(ArrayItem $arrayItem) : void
+    {
+        if ($arrayItem->value instanceof Match_) {
+            $arrayItem->value->setAttribute(AttributeKey::INSIDE_ARRAY_ITEM, \true);
+        }
+    }
     public function enterNode(Node $node) : ?Node
     {
         if ($node instanceof For_ || $node instanceof Foreach_ || $node instanceof While_ || $node instanceof Do_) {
@@ -50,10 +65,12 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             return null;
         }
         if ($node instanceof ArrayDimFetch) {
-            $node->var->setAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \true);
+            $this->processInsideArrayDimFetch($node);
+            return null;
         }
-        if ($node instanceof ArrayItem) {
-            $node->value->setAttribute(AttributeKey::INSIDE_ARRAY_ITEM, \true);
+        if ($node instanceof ArrayItem && $node->value instanceof Match_) {
+            $this->processInsideArrayItem($node);
+            return null;
         }
         if ($node instanceof Isset_ || $node instanceof Unset_) {
             $this->processContextInIssetOrUnset($node);
@@ -69,12 +86,15 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         }
         if ($node instanceof Return_ && $node->expr instanceof Expr) {
             $node->expr->setAttribute(AttributeKey::IS_RETURN_EXPR, \true);
+            return null;
         }
         if ($node instanceof Arg) {
             $node->value->setAttribute(AttributeKey::IS_ARG_VALUE, \true);
+            return null;
         }
         if ($node instanceof Param) {
             $node->var->setAttribute(AttributeKey::IS_PARAM_VAR, \true);
+            return null;
         }
         $this->processContextInClass($node);
         return null;

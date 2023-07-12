@@ -16,7 +16,6 @@ use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationRector;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Rector\TypeDeclaration\ValueObject\AddReturnTypeDeclaration;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->import(__DIR__ . '/phpunit-exception.php');
     $rectorConfig->rules([SpecificAssertInternalTypeRector::class, AssertEqualsParameterToSpecificMethodsTypeRector::class, SpecificAssertContainsRector::class]);
     $rectorConfig->ruleWithConfiguration(RenameClassRector::class, [
         # https://github.com/sebastianbergmann/phpunit/issues/3123

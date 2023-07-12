@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\MethodCall;
+namespace Rector\PHPUnit\PHPUnit60\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
@@ -11,7 +11,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://github.com/lmc-eu/steward/pull/187/files#diff-c7e8c65e59b8b4ff8b54325814d4ba55L80
  *
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector\GetMockBuilderGetMockToCreateMockRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector\GetMockBuilderGetMockToCreateMockRectorTest
  */
 final class GetMockBuilderGetMockToCreateMockRector extends AbstractRector
 {
