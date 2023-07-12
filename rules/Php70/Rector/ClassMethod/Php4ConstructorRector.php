@@ -9,9 +9,9 @@ use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Enum\ObjectReference;
@@ -19,6 +19,7 @@ use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\NodeCollector\ScopeResolver\ParentClassScopeResolver;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php70\NodeAnalyzer\Php4ConstructorClassMethodAnalyzer;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -73,42 +74,47 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class];
+        return [Class_::class];
     }
     /**
-     * @param ClassMethod $node
-     * @return \PhpParser\Node\Stmt\ClassMethod|int|null
+     * @param Class_ $node
+     * @return \PhpParser\Node\Stmt\Class_|int|null
      */
     public function refactorWithScope(Node $node, Scope $scope)
     {
+        $className = $this->getName($node);
+        if (!\is_string($className)) {
+            return null;
+        }
         if (!$scope->isInClass()) {
             return null;
         }
-        if (!$this->php4ConstructorClassMethodAnalyzer->detect($node, $scope)) {
+        $psr4ConstructorMethod = $node->getMethod(\lcfirst($className)) ?? $node->getMethod($className);
+        if (!$psr4ConstructorMethod instanceof ClassMethod) {
+            return null;
+        }
+        if (!$this->php4ConstructorClassMethodAnalyzer->detect($psr4ConstructorMethod, $scope)) {
             return null;
         }
         $classReflection = $scope->getClassReflection();
         // process parent call references first
-        $this->processClassMethodStatementsForParentConstructorCalls($node, $scope);
-        // not PSR-4 constructor
-        if (!$this->nodeNameResolver->isName($node, $classReflection->getName())) {
-            return null;
-        }
+        $this->processClassMethodStatementsForParentConstructorCalls($psr4ConstructorMethod, $scope);
         // does it already have a __construct method?
         if (!$classReflection->hasConstructor()) {
-            $node->name = new Identifier(MethodName::CONSTRUCT);
+            $psr4ConstructorMethod->name = new Identifier(MethodName::CONSTRUCT);
         }
-        $classMethodStmts = $node->stmts;
+        $classMethodStmts = $psr4ConstructorMethod->stmts;
         if ($classMethodStmts === null) {
             return null;
         }
         if (\count($classMethodStmts) === 1) {
-            $stmt = $node->stmts[0];
+            $stmt = $psr4ConstructorMethod->stmts[0];
             if (!$stmt instanceof Expression) {
                 return null;
             }
             if ($this->isLocalMethodCallNamed($stmt->expr, MethodName::CONSTRUCT)) {
-                return NodeTraverser::REMOVE_NODE;
+                $stmtKey = $psr4ConstructorMethod->getAttribute(AttributeKey::STMT_KEY);
+                unset($node->stmts[$stmtKey]);
             }
         }
         return $node;
