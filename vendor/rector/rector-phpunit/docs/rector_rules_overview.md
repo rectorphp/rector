@@ -1,4 +1,4 @@
-# 50 Rules Overview
+# 51 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -675,7 +675,7 @@ Remove `getMockBuilder()` to `createMock()`
 
 Turns getMock*() methods to `createMock()`
 
-- class: [`Rector\PHPUnit\Rector\StaticCall\GetMockRector`](../src/Rector/StaticCall/GetMockRector.php)
+- class: [`Rector\PHPUnit\PHPUnit50\Rector\StaticCall\GetMockRector`](../rules/PHPUnit50/Rector/StaticCall/GetMockRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -1080,6 +1080,32 @@ Refactor "*TestListener.php" to particular "*Hook.php" files
 +    public function executeAfterTest(Test $test, float $time): void
      {
          echo $time;
+     }
+ }
+```
+
+<br>
+
+## TestWithAnnotationToAttributeRector
+
+Change `@testWith()` annotation to #[TestWith] attribute
+
+- class: [`Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\TestWithAnnotationToAttributeRector`](../rules/AnnotationsToAttributes/Rector/ClassMethod/TestWithAnnotationToAttributeRector.php)
+
+```diff
+ use PHPUnit\Framework\TestCase;
++use PHPUnit\Framework\Attributes\TestWith;
+
+ final class SomeFixture extends TestCase
+ {
+-    /**
+-     * @testWith ["foo"]
+-     *           ["bar"]
+-     */
++    #[TestWith(['foo'])]
++    #[TestWith(['bar'])]
+     public function test(): void
+     {
      }
  }
 ```
