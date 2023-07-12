@@ -38,6 +38,7 @@ final class PHPUnitSetList implements SetListInterface
      */
     public const PHPUNIT_90 = __DIR__ . '/../../config/sets/phpunit90.php';
     /**
+     * @deprecated Use PHPUnitSetList::PHPUNIT_10 directly
      * @var string
      */
     public const PHPUNIT_91 = __DIR__ . '/../../config/sets/phpunit91.php';

@@ -31,6 +31,7 @@ final class PHPUnitLevelSetList implements SetListInterface
     public const UP_TO_PHPUNIT_90 = __DIR__ . '/../../config/sets/level/up-to-phpunit-90.php';
     /**
      * @var string
+     * @deprecated Use PHPUnitSetList::PHPUNIT_10 directly
      */
     public const UP_TO_PHPUNIT_91 = __DIR__ . '/../../config/sets/level/up-to-phpunit-91.php';
     /**

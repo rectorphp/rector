@@ -6,6 +6,7 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -97,6 +98,9 @@ CODE_SAMPLE
                 }
             }
             if (!$node instanceof ArrayDimFetch) {
+                return null;
+            }
+            if (!$node->var instanceof Variable) {
                 return null;
             }
             if (!$this->isName($node->var, $paramName)) {
