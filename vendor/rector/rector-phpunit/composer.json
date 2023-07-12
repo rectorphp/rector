@@ -8,32 +8,37 @@
     },
     "require-dev": {
         "rector\/rector-src": "dev-main",
-        "phpunit\/phpunit": "^10.1",
-        "phpstan\/phpstan": "^1.10.15",
-        "symplify\/phpstan-rules": "^11.3",
+        "phpunit\/phpunit": "^10.2",
+        "phpstan\/phpstan": "^1.10.25",
+        "symplify\/phpstan-rules": "^11.4",
         "symplify\/phpstan-extensions": "^11.2",
-        "symplify\/easy-coding-standard": "^11.3",
+        "symplify\/easy-coding-standard": "^11.5",
         "symplify\/rule-doc-generator": "^11.2",
         "rector\/phpstan-rules": "^0.6",
-        "phpstan\/extension-installer": "^1.2",
-        "phpstan\/phpstan-strict-rules": "^1.4.5",
+        "phpstan\/extension-installer": "^1.3",
+        "phpstan\/phpstan-strict-rules": "^1.5",
         "phpstan\/phpstan-webmozart-assert": "^1.2.2",
         "symplify\/vendor-patches": "^11.2.0",
         "symplify\/easy-ci": "^11.2.0",
-        "rector\/rector-generator": "^0.6.14",
-        "rector\/rector-debugging": "dev-main",
+        "rector\/rector-generator": "^0.6.15",
         "tomasvotruba\/type-coverage": "^0.1",
         "tomasvotruba\/unused-public": "^0.1",
         "tomasvotruba\/cognitive-complexity": "^0.1"
     },
     "autoload": {
         "psr-4": {
-            "Rector\\PHPUnit\\": "src"
+            "Rector\\PHPUnit\\": [
+                "src",
+                "rules"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\PHPUnit\\Tests\\": "tests"
+            "Rector\\PHPUnit\\Tests\\": [
+                "tests",
+                "rules-tests"
+            ]
         },
         "classmap": [
             "stubs"
@@ -43,7 +48,7 @@
         "phpstan": "vendor\/bin\/phpstan analyse --ansi --error-format symplify",
         "check-cs": "vendor\/bin\/ecs check --ansi",
         "fix-cs": "vendor\/bin\/ecs check --fix --ansi",
-        "docs": "vendor\/bin\/rule-doc-generator generate src --output-file docs\/rector_rules_overview.md --ansi"
+        "docs": "vendor\/bin\/rule-doc-generator generate src rules --output-file docs\/rector_rules_overview.md --ansi"
     },
     "extra": {
         "enable-patching": true,

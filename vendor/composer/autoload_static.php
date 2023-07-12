@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitde667f4000a4c705a35c8b80d1646126
+class ComposerStaticInit2162c205e5fd52f68b4a7096dc342d5e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -103,6 +103,7 @@ class ComposerStaticInitde667f4000a4c705a35c8b80d1646126
         'Rector\\PHPUnit\\' => 
         array (
             0 => __DIR__ . '/..' . '/rector/rector-phpunit/src',
+            1 => __DIR__ . '/..' . '/rector/rector-phpunit/rules',
         ),
         'Rector\\Doctrine\\' => 
         array (
@@ -2341,6 +2342,7 @@ class ComposerStaticInitde667f4000a4c705a35c8b80d1646126
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\VoidTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/VoidTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
         'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
+        'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\TestWithAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/TestWithAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => __DIR__ . '/..' . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\ArgumentMover' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/ArgumentMover.php',
         'Rector\\PHPUnit\\NodeAnalyzer\\AssertCallAnalyzer' => __DIR__ . '/..' . '/rector/rector-phpunit/src/NodeAnalyzer/AssertCallAnalyzer.php',
@@ -3066,9 +3068,9 @@ class ComposerStaticInitde667f4000a4c705a35c8b80d1646126
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitde667f4000a4c705a35c8b80d1646126::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitde667f4000a4c705a35c8b80d1646126::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitde667f4000a4c705a35c8b80d1646126::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2162c205e5fd52f68b4a7096dc342d5e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2162c205e5fd52f68b4a7096dc342d5e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2162c205e5fd52f68b4a7096dc342d5e::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -2089,6 +2089,7 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\VoidTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/VoidTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\Utils\\TypeUnwrapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/Utils/TypeUnwrapper.php',
     'Rector\\PHPStanStaticTypeMapper\\ValueObject\\UnionTypeAnalysis' => $baseDir . '/packages/PHPStanStaticTypeMapper/ValueObject/UnionTypeAnalysis.php',
+    'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\TestWithAnnotationToAttributeRector' => $vendorDir . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/TestWithAnnotationToAttributeRector.php',
     'Rector\\PHPUnit\\Naming\\TestClassNameResolver' => $vendorDir . '/rector/rector-phpunit/src/Naming/TestClassNameResolver.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\ArgumentMover' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/ArgumentMover.php',
     'Rector\\PHPUnit\\NodeAnalyzer\\AssertCallAnalyzer' => $vendorDir . '/rector/rector-phpunit/src/NodeAnalyzer/AssertCallAnalyzer.php',

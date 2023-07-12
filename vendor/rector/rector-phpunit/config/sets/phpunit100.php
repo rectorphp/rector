@@ -7,10 +7,11 @@ use Rector\Config\RectorConfig;
 use Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector;
 use Rector\PHPUnit\Rector\Class_\StaticDataProviderClassMethodRector;
 use Rector\PHPUnit\Rector\MethodCall\PropertyExistsWithoutAssertRector;
+use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 return static function (RectorConfig $rectorConfig) : void {
-    $rectorConfig->import(__DIR__ . '/annotations-to-attributes.php');
+    $rectorConfig->sets([PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES]);
     $rectorConfig->rules([StaticDataProviderClassMethodRector::class, PropertyExistsWithoutAssertRector::class]);
     $rectorConfig->rule(AddProphecyTraitRector::class);
     $rectorConfig->ruleWithConfiguration(RenameMethodRector::class, [

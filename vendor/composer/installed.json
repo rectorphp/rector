@@ -2049,12 +2049,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "53c42897b892a97a63f3a19cd26fa32d0e44c8a8"
+                "reference": "7d2eab265f90d1b470b56f89e6680b3155c3204c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/53c42897b892a97a63f3a19cd26fa32d0e44c8a8",
-                "reference": "53c42897b892a97a63f3a19cd26fa32d0e44c8a8",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/7d2eab265f90d1b470b56f89e6680b3155c3204c",
+                "reference": "7d2eab265f90d1b470b56f89e6680b3155c3204c",
                 "shasum": ""
             },
             "require": {
@@ -2064,26 +2064,25 @@
                 "rector\/rector": "<0.11"
             },
             "require-dev": {
-                "phpstan\/extension-installer": "^1.2",
-                "phpstan\/phpstan": "^1.10.15",
-                "phpstan\/phpstan-strict-rules": "^1.4.5",
+                "phpstan\/extension-installer": "^1.3",
+                "phpstan\/phpstan": "^1.10.25",
+                "phpstan\/phpstan-strict-rules": "^1.5",
                 "phpstan\/phpstan-webmozart-assert": "^1.2.2",
-                "phpunit\/phpunit": "^10.1",
+                "phpunit\/phpunit": "^10.2",
                 "rector\/phpstan-rules": "^0.6",
-                "rector\/rector-debugging": "dev-main",
-                "rector\/rector-generator": "^0.6.14",
+                "rector\/rector-generator": "^0.6.15",
                 "rector\/rector-src": "dev-main",
                 "symplify\/easy-ci": "^11.2.0",
-                "symplify\/easy-coding-standard": "^11.3",
+                "symplify\/easy-coding-standard": "^11.5",
                 "symplify\/phpstan-extensions": "^11.2",
-                "symplify\/phpstan-rules": "^11.3",
+                "symplify\/phpstan-rules": "^11.4",
                 "symplify\/rule-doc-generator": "^11.2",
                 "symplify\/vendor-patches": "^11.2.0",
                 "tomasvotruba\/cognitive-complexity": "^0.1",
                 "tomasvotruba\/type-coverage": "^0.1",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-07-12T10:05:14+00:00",
+            "time": "2023-07-12T12:35:37+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
@@ -2100,7 +2099,10 @@
             "installation-source": "dist",
             "autoload": {
                 "psr-4": {
-                    "Rector\\PHPUnit\\": "src"
+                    "Rector\\PHPUnit\\": [
+                        "src",
+                        "rules"
+                    ]
                 }
             },
             "notification-url": "https:\/\/packagist.org\/downloads\/",
