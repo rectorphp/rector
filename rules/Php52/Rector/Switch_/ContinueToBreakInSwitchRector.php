@@ -76,7 +76,7 @@ CODE_SAMPLE
                     continue;
                 }
                 $newStmt = $this->processContinueStatement($caseStmt);
-                if ($newStmt === $caseStmt) {
+                if ($newStmt instanceof Continue_) {
                     continue;
                 }
                 $case->stmts[$key] = $newStmt;
