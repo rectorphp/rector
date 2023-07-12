@@ -25,11 +25,10 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0"
+        "php": ">=5.4.0"
     },
     "require-dev": {
-        "phpstan\/phpstan": "1.10.20 || 1.4.10",
-        "phpunit\/phpunit": "^9.5 || ^7.5"
+        "phpunit\/phpunit": "^9.5 || ^5.7 || ^4.8.36"
     },
     "autoload": {
         "psr-4": {
@@ -42,13 +41,10 @@
     "autoload-dev": {
         "psr-4": {
             "RectorPrefix202307\\React\\Promise\\": [
-                "tests\/fixtures\/",
-                "tests\/"
+                "tests",
+                "tests\/fixtures"
             ]
-        },
-        "files": [
-            "tests\/Fiber.php"
-        ]
+        }
     },
     "keywords": [
         "promise",
