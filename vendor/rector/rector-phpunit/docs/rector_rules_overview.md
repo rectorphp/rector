@@ -1,10 +1,10 @@
-# 51 Rules Overview
+# 50 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
 Tests without assertion will have `@doesNotPerformAssertion`
 
-- class: [`Rector\PHPUnit\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector`](../src/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php)
+- class: [`Rector\PHPUnit\PHPUnit60\Rector\ClassMethod\AddDoesNotPerformAssertionToNonAssertingTestRector`](../rules/PHPUnit60/Rector/ClassMethod/AddDoesNotPerformAssertionToNonAssertingTestRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -211,7 +211,7 @@ Turns comparison operations to their method name alternatives in PHPUnit TestCas
 
 Change `assertEquals()/assertNotEquals()` method parameters to new specific alternatives
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector`](../src/Rector/MethodCall/AssertEqualsParameterToSpecificMethodsTypeRector.php)
+- class: [`Rector\PHPUnit\PHPUnit80\Rector\MethodCall\AssertEqualsParameterToSpecificMethodsTypeRector`](../rules/PHPUnit80/Rector/MethodCall/AssertEqualsParameterToSpecificMethodsTypeRector.php)
 
 ```diff
  final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -412,26 +412,6 @@ Change `$this->assertSame(true,` ...) to `assertTrue()`
 
 <br>
 
-## AssertTrueFalseInternalTypeToSpecificMethodRector
-
-Turns true/false with internal type comparisons to their method name alternatives in PHPUnit TestCase
-
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertTrueFalseInternalTypeToSpecificMethodRector`](../src/Rector/MethodCall/AssertTrueFalseInternalTypeToSpecificMethodRector.php)
-
-```diff
--$this->assertTrue(is_{internal_type}($anything), "message");
-+$this->assertInternalType({internal_type}, $anything, "message");
-```
-
-<br>
-
-```diff
--$this->assertFalse(is_{internal_type}($anything), "message");
-+$this->assertNotInternalType({internal_type}, $anything, "message");
-```
-
-<br>
-
 ## AssertTrueFalseToSpecificMethodRector
 
 Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible
@@ -556,7 +536,7 @@ Change dataProvider annotations to attribute
 
 Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\DelegateExceptionArgumentsRector`](../src/Rector/MethodCall/DelegateExceptionArgumentsRector.php)
+- class: [`Rector\PHPUnit\PHPUnit60\Rector\MethodCall\DelegateExceptionArgumentsRector`](../rules/PHPUnit60/Rector/MethodCall/DelegateExceptionArgumentsRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -606,7 +586,7 @@ Change depends annotations with value to attribute
 
 Changes ``@expectedException` annotations to `expectException*()` methods
 
-- class: [`Rector\PHPUnit\Rector\ClassMethod\ExceptionAnnotationRector`](../src/Rector/ClassMethod/ExceptionAnnotationRector.php)
+- class: [`Rector\PHPUnit\PHPUnit60\Rector\ClassMethod\ExceptionAnnotationRector`](../rules/PHPUnit60/Rector/ClassMethod/ExceptionAnnotationRector.php)
 
 ```diff
 -/**
@@ -652,7 +632,7 @@ Use explicit API for expecting PHP errors, warnings, and notices
 
 Remove `getMockBuilder()` to `createMock()`
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector`](../src/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php)
+- class: [`Rector\PHPUnit\PHPUnit60\Rector\MethodCall\GetMockBuilderGetMockToCreateMockRector`](../rules/PHPUnit60/Rector/MethodCall/GetMockBuilderGetMockToCreateMockRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -777,7 +757,7 @@ Add correct `@var` to ObjectProphecy instances based on `$this->prophesize()` ca
 
 Data provider methods cannot start with "test" prefix
 
-- class: [`Rector\PHPUnit\Rector\Class_\RemoveDataProviderTestPrefixRector`](../src/Rector/Class_/RemoveDataProviderTestPrefixRector.php)
+- class: [`Rector\PHPUnit\PHPUnit70\Rector\Class_\RemoveDataProviderTestPrefixRector`](../rules/PHPUnit70/Rector/Class_/RemoveDataProviderTestPrefixRector.php)
 
 ```diff
  class SomeClass extends PHPUnit\Framework\TestCase
@@ -934,7 +914,7 @@ Simplify unnecessary foreach check of instances
 
 Change `assertContains()/assertNotContains()` method to new string and iterable alternatives
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsRector`](../src/Rector/MethodCall/SpecificAssertContainsRector.php)
+- class: [`Rector\PHPUnit\PHPUnit80\Rector\MethodCall\SpecificAssertContainsRector`](../rules/PHPUnit80/Rector/MethodCall/SpecificAssertContainsRector.php)
 
 ```diff
  final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -978,7 +958,7 @@ Change `assertContains()/assertNotContains()` with non-strict comparison to new 
 
 Change `assertInternalType()/assertNotInternalType()` method to new specific alternatives
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\SpecificAssertInternalTypeRector`](../src/Rector/MethodCall/SpecificAssertInternalTypeRector.php)
+- class: [`Rector\PHPUnit\PHPUnit80\Rector\MethodCall\SpecificAssertInternalTypeRector`](../src/PHPUnit80/Rector/MethodCall/SpecificAssertInternalTypeRector.php)
 
 ```diff
  final class SomeTest extends \PHPUnit\Framework\TestCase
