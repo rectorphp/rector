@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\ClassMethod;
+namespace Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\AttributeGroup;
@@ -20,7 +20,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\Rector\ClassMethod\DataProviderAnnotationToAttributeRector\DataProviderAnnotationToAttributeRectorTest
+ * @see \Rector\PHPUnit\Tests\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector\DataProviderAnnotationToAttributeRectorTest
  */
 final class DataProviderAnnotationToAttributeRector extends AbstractRector implements MinPhpVersionInterface
 {
