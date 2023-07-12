@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\MethodCall;
+namespace Rector\PHPUnit\PHPUnit90\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/sebastianbergmann/phpunit/blob/master/ChangeLog-9.0.md
  * @changelog https://github.com/sebastianbergmann/phpunit/commit/1ba2e3e1bb091acda3139f8a9259fa8161f3242d
  *
- * @see \Rector\PHPUnit\Tests\Rector\MethodCall\ExplicitPhpErrorApiRector\ExplicitPhpErrorApiRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit90\Rector\MethodCall\ExplicitPhpErrorApiRector\ExplicitPhpErrorApiRectorTest
  */
 final class ExplicitPhpErrorApiRector extends AbstractRector
 {

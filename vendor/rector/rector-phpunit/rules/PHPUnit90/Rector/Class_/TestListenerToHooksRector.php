@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\Class_;
+namespace Rector\PHPUnit\PHPUnit90\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/sebastianbergmann/phpunit/commit/34a0abd8b56a4a9de83c9e56384f462541a0f939
  *
  * @changelog https://github.com/sebastianbergmann/phpunit/tree/master/src/Runner/Hook
- * @see \Rector\PHPUnit\Tests\Rector\Class_\TestListenerToHooksRector\TestListenerToHooksRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit90\Rector\Class_\TestListenerToHooksRector\TestListenerToHooksRectorTest
  */
 final class TestListenerToHooksRector extends AbstractRector
 {

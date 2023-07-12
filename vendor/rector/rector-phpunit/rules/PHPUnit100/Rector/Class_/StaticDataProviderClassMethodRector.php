@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\Class_;
+namespace Rector\PHPUnit\PHPUnit100\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Variable;
@@ -14,7 +14,7 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\PHPUnit\Tests\Rector\Class_\StaticDataProviderClassMethodRector\StaticDataProviderClassMethodRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit100\Rector\Class_\StaticDataProviderClassMethodRector\StaticDataProviderClassMethodRectorTest
  */
 final class StaticDataProviderClassMethodRector extends AbstractRector
 {

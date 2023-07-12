@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\Class_;
+namespace Rector\PHPUnit\PHPUnit100\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
@@ -17,7 +17,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/sebastianbergmann/phpunit/issues/4141
  * @changelog https://github.com/sebastianbergmann/phpunit/issues/4149
  *
- * @see \Rector\PHPUnit\Tests\Rector\Class_\AddProphecyTraitRector\AddProphecyTraitRectorTest
+ * @see \Rector\PHPUnit\Tests\PHPUnit100\Rector\Class_\AddProphecyTraitRector\AddProphecyTraitRectorTest
  */
 final class AddProphecyTraitRector extends AbstractRector
 {

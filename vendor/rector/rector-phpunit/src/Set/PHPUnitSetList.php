@@ -10,6 +10,7 @@ use Rector\Set\Contract\SetListInterface;
 final class PHPUnitSetList implements SetListInterface
 {
     /**
+     * @deprecated as better outside PHPUnit scope, handle by find and replace when needed
      * @var string
      */
     public const PHPUNIT80_DMS = __DIR__ . '/../../config/sets/phpunit80-dms.php';
