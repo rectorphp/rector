@@ -6,6 +6,7 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\AssignOp;
+use PhpParser\Node\Expr\AssignOp\Coalesce;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
@@ -18,6 +19,9 @@ final class AssignedToNodeVisitor extends NodeVisitorAbstract implements ScopeRe
     {
         if (!$node instanceof Assign && !$node instanceof AssignOp) {
             return null;
+        }
+        if ($node instanceof Coalesce) {
+            $node->var->setAttribute(AttributeKey::IS_ASSIGNED_TO, \true);
         }
         $node->var->setAttribute(AttributeKey::IS_BEING_ASSIGNED, \true);
         $node->expr->setAttribute(AttributeKey::IS_ASSIGNED_TO, \true);

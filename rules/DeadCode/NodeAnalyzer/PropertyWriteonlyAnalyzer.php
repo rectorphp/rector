@@ -42,6 +42,9 @@ final class PropertyWriteonlyAnalyzer
             if ((bool) $propertyFetch->getAttribute(AttributeKey::IS_MULTI_ASSIGN, \false)) {
                 return \false;
             }
+            if ((bool) $propertyFetch->getAttribute(AttributeKey::IS_ASSIGNED_TO, \false)) {
+                return \false;
+            }
             if ((bool) $propertyFetch->getAttribute(AttributeKey::IS_BEING_ASSIGNED, \false)) {
                 continue;
             }
