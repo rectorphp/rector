@@ -1,4 +1,4 @@
-# 48 Rules Overview
+# 45 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -75,7 +75,7 @@ Change annotations with value to attribute
 
 :wrench: **configure it!**
 
-- class: [`Rector\PHPUnit\Rector\Class_\AnnotationWithValueToAttributeRector`](../src/Rector/Class_/AnnotationWithValueToAttributeRector.php)
+- class: [`Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector`](../rules/AnnotationsToAttributes/Rector/Class_/AnnotationWithValueToAttributeRector.php)
 
 ```php
 <?php
@@ -83,7 +83,7 @@ Change annotations with value to attribute
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\PHPUnit\Rector\Class_\AnnotationWithValueToAttributeRector;
+use Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector;
 use Rector\PHPUnit\ValueObject\AnnotationWithValueToAttribute;
 
 return static function (RectorConfig $rectorConfig): void {
@@ -108,60 +108,6 @@ return static function (RectorConfig $rectorConfig): void {
 +#[BackupGlobals(true)]
  final class SomeTest extends TestCase
  {
- }
-```
-
-<br>
-
-## ArrayArgumentToDataProviderRector
-
-Move array argument from tests into data provider [configurable]
-
-:wrench: **configure it!**
-
-- class: [`Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector`](../src/Rector/Class_/ArrayArgumentToDataProviderRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\PHPUnit\Rector\Class_\ArrayArgumentToDataProviderRector;
-use Rector\PHPUnit\ValueObject\ArrayArgumentToDataProvider;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(ArrayArgumentToDataProviderRector::class, [
-        ArrayArgumentToDataProviderRector::ARRAY_ARGUMENTS_TO_DATA_PROVIDERS => [
-            new ArrayArgumentToDataProvider('PHPUnit\Framework\TestCase', 'doTestMultiple', 'doTestSingle', 'number'),
-        ],
-    ]);
-};
-```
-
-↓
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- class SomeServiceTest extends TestCase
- {
--    public function test()
-+    /**
-+     * @dataProvider provideData()
-+     */
-+    public function test(int $number)
-     {
--        $this->doTestMultiple([1, 2, 3]);
-+        $this->doTestSingle($number);
-+    }
-+
-+    public function provideData(): \Iterator
-+    {
-+        yield [1];
-+        yield [2];
-+        yield [3];
-     }
  }
 ```
 
@@ -357,19 +303,6 @@ Turns `preg_match` comparisons to their method name alternatives in PHPUnit Test
 
 <br>
 
-## AssertResourceToClosedResourceRector
-
-Turns `assertIsNotResource()` into stricter `assertIsClosedResource()` for resource values in PHPUnit TestCase
-
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertResourceToClosedResourceRector`](../src/Rector/MethodCall/AssertResourceToClosedResourceRector.php)
-
-```diff
--$this->assertIsNotResource($aResource, "message");
-+$this->assertIsClosedResource($aResource, "message");
-```
-
-<br>
-
 ## AssertSameBoolNullToSpecificMethodRector
 
 Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase
@@ -559,7 +492,7 @@ Takes `setExpectedException()` 2nd and next arguments to own methods in PHPUnit.
 
 Change depends annotations with value to attribute
 
-- class: [`Rector\PHPUnit\Rector\ClassMethod\DependsAnnotationWithValueToAttributeRector`](../src/Rector/ClassMethod/DependsAnnotationWithValueToAttributeRector.php)
+- class: [`Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DependsAnnotationWithValueToAttributeRector`](../rules/AnnotationsToAttributes/Rector/ClassMethod/DependsAnnotationWithValueToAttributeRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -729,30 +662,6 @@ Turns PHPUnit TestCase assertObjectHasAttribute into `property_exists` compariso
 
 <br>
 
-## ProphecyPHPDocRector
-
-Add correct `@var` to ObjectProphecy instances based on `$this->prophesize()` call.
-
-- class: [`Rector\PHPUnit\Rector\Class_\ProphecyPHPDocRector`](../src/Rector/Class_/ProphecyPHPDocRector.php)
-
-```diff
- class HelloTest extends TestCase
- {
-     /**
--     * @var SomeClass
-+     * @var ObjectProphecy<SomeClass>
-      */
-     private $propesizedObject;
-
-     protected function setUp(): void
-     {
-         $this->propesizedObject = $this->prophesize(SomeClass::class);
-     }
- }
-```
-
-<br>
-
 ## RemoveDataProviderTestPrefixRector
 
 Data provider methods cannot start with "test" prefix
@@ -785,7 +694,7 @@ Data provider methods cannot start with "test" prefix
 
 Remove empty test methods
 
-- class: [`Rector\PHPUnit\Rector\ClassMethod\RemoveEmptyTestMethodRector`](../src/Rector/ClassMethod/RemoveEmptyTestMethodRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\ClassMethod\RemoveEmptyTestMethodRector`](../rules/CodeQuality/Rector/ClassMethod/RemoveEmptyTestMethodRector.php)
 
 ```diff
  class SomeTest extends \PHPUnit\Framework\TestCase
@@ -853,7 +762,7 @@ Remove `"setMethods()"` method as never used
 
 Replace `@test` with prefixed function
 
-- class: [`Rector\PHPUnit\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector`](../src/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\ClassMethod\ReplaceTestAnnotationWithPrefixedFunctionRector`](../rules/CodeQuality/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php)
 
 ```diff
  class SomeTest extends \PHPUnit\Framework\TestCase
@@ -875,7 +784,7 @@ Replace `@test` with prefixed function
 
 Simplify unnecessary foreach check of instances
 
-- class: [`Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector`](../src/CodeQuality/Rector/Foreach_/SimplifyForeachInstanceOfRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector`](../rules/CodeQuality/Rector/Foreach_/SimplifyForeachInstanceOfRector.php)
 
 ```diff
 -foreach ($foos as $foo) {
