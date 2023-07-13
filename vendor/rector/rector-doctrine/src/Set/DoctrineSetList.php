@@ -35,6 +35,7 @@ final class DoctrineSetList implements SetListInterface
      */
     public const DOCTRINE_DBAL_40 = __DIR__ . '/../../config/sets/doctrine-dbal-40.php';
     /**
+     * @deprecated Removed as not supporting the framework native approach and rather experimental
      * @var string
      */
     public const DOCTRINE_REPOSITORY_AS_SERVICE = __DIR__ . '/../../config/sets/doctrine-repository-as-service.php';

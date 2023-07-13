@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\Rector\Param;
+namespace Rector\Doctrine\Orm214\Rector\Param;
 
 use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
@@ -12,7 +12,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/doctrine/orm/pull/10086
- * @see \Rector\Doctrine\Tests\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEventArgsRector\ReplaceLifecycleEventArgsByDedicatedEventArgsRectorTest
+ * @see \Rector\Doctrine\Tests\Orm214\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEventArgsRector\ReplaceLifecycleEventArgsByDedicatedEventArgsRectorTest
  */
 final class ReplaceLifecycleEventArgsByDedicatedEventArgsRector extends AbstractRector
 {

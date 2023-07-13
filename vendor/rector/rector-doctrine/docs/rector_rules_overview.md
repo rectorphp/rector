@@ -1,4 +1,4 @@
-# 20 Rules Overview
+# 15 Rules Overview
 
 ## ChangeBigIntEntityPropertyToIntTypeRector
 
@@ -91,41 +91,6 @@ Convert targetEntities defined as String to <class>::class Constants in Doctrine
 +    #[ORM\ManyToOne(targetEntity: \MyNamespace\Source\AnotherClass::class)]
      private readonly ?Collection $items2;
  }
-```
-
-<br>
-
-## EntityAliasToClassConstantReferenceRector
-
-Replaces doctrine alias with class.
-
-:wrench: **configure it!**
-
-- class: [`Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector`](../src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Doctrine\Rector\MethodCall\EntityAliasToClassConstantReferenceRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(EntityAliasToClassConstantReferenceRector::class, [
-        EntityAliasToClassConstantReferenceRector::ALIASES_TO_NAMESPACES => [
-            'App' => 'App\Entity',
-        ],
-    ]);
-};
-```
-
-↓
-
-```diff
- $entityManager = new Doctrine\ORM\EntityManager();
--$entityManager->getRepository("AppBundle:Post");
-+$entityManager->getRepository(\App\Entity\Post::class);
 ```
 
 <br>
@@ -275,36 +240,6 @@ Move default value for entity property to constructor, the safest place
 
 <br>
 
-## MoveRepositoryFromParentToConstructorRector
-
-Turns parent EntityRepository class to constructor dependency
-
-- class: [`Rector\Doctrine\Rector\Class_\MoveRepositoryFromParentToConstructorRector`](../src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php)
-
-```diff
- namespace App\Repository;
-
-+use App\Entity\Post;
- use Doctrine\ORM\EntityRepository;
-+use Doctrine\ORM\EntityManagerInterface;
-
--final class PostRepository extends EntityRepository
-+final class PostRepository
- {
-+    /**
-+     * @var \Doctrine\ORM\EntityRepository<Post>
-+     */
-+    private EntityRepository $repository;
-+
-+    public function __construct(EntityManagerInterface $entityManager)
-+    {
-+        $this->repository = $entityManager->getRepository(Post::class);
-+    }
- }
-```
-
-<br>
-
 ## RemoveEmptyTableAttributeRector
 
 Remove empty Table attribute on entities because it's useless
@@ -325,31 +260,11 @@ Remove empty Table attribute on entities because it's useless
 
 <br>
 
-## RemoveRepositoryFromEntityAnnotationRector
-
-Removes repository class from `@Entity` annotation
-
-- class: [`Rector\Doctrine\Rector\Class_\RemoveRepositoryFromEntityAnnotationRector`](../src/Rector/Class_/RemoveRepositoryFromEntityAnnotationRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-- * @ORM\Entity(repositoryClass="ProductRepository")
-+ * @ORM\Entity
-  */
- class Product
- {
- }
-```
-
-<br>
-
 ## ReplaceLifecycleEventArgsByDedicatedEventArgsRector
 
 Replace `Doctrine\ORM\Event\LifecycleEventArgs` with specific event classes based on the function call
 
-- class: [`Rector\Doctrine\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEventArgsRector`](../src/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php)
+- class: [`Rector\Doctrine\Orm214\Rector\Param\ReplaceLifecycleEventArgsByDedicatedEventArgsRector`](../rules/Orm214/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php)
 
 ```diff
 -use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -361,58 +276,6 @@ Replace `Doctrine\ORM\Event\LifecycleEventArgs` with specific event classes base
 +    public function prePersist(PrePersistEventArgs $args)
      {
          // ...
-     }
- }
-```
-
-<br>
-
-## ReplaceParentRepositoryCallsByRepositoryPropertyRector
-
-Handles method calls in child of Doctrine EntityRepository and moves them to `$this->repository` property.
-
-- class: [`Rector\Doctrine\Rector\MethodCall\ReplaceParentRepositoryCallsByRepositoryPropertyRector`](../src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php)
-
-```diff
- use Doctrine\ORM\EntityRepository;
-
- class SomeRepository extends EntityRepository
- {
-     public function someMethod()
-     {
--        return $this->findAll();
-+        return $this->repository->findAll();
-     }
- }
-```
-
-<br>
-
-## ServiceEntityRepositoryParentCallToDIRector
-
-Change ServiceEntityRepository to dependency injection, with repository property
-
-- class: [`Rector\Doctrine\Rector\ClassMethod\ServiceEntityRepositoryParentCallToDIRector`](../src/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector.php)
-
-```diff
- use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
- use Doctrine\Persistence\ManagerRegistry;
-
- final class ProjectRepository extends ServiceEntityRepository
- {
--    public function __construct(ManagerRegistry $registry)
-+    private \Doctrine\ORM\EntityManagerInterface $entityManager;
-+
-+    /**
-+     * @var \Doctrine\ORM\EntityRepository<Project>
-+     */
-+    private \Doctrine\ORM\EntityRepository $repository;
-+
-+    public function __construct(\Doctrine\ORM\EntityManagerInterface $entityManager)
-     {
--        parent::__construct($registry, Project::class);
-+        $this->repository = $entityManager->getRepository(Project::class);
-+        $this->entityManager = $entityManager;
      }
  }
 ```

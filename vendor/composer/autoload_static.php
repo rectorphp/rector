@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4ec4b37318586aea9b7cf86e1eaf6d40
+class ComposerStaticInitdeffc6913765d186a4f1f1f5dc9ffae4
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2004,12 +2004,9 @@ class ComposerStaticInit4ec4b37318586aea9b7cf86e1eaf6d40
         'Rector\\Doctrine\\NodeAnalyzer\\AttributeFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeFinder.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',
         'Rector\\Doctrine\\NodeAnalyzer\\ConstructorAssignPropertyAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/ConstructorAssignPropertyAnalyzer.php',
-        'Rector\\Doctrine\\NodeAnalyzer\\EntityObjectTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/EntityObjectTypeResolver.php',
         'Rector\\Doctrine\\NodeAnalyzer\\SetterClassMethodAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/SetterClassMethodAnalyzer.php',
         'Rector\\Doctrine\\NodeAnalyzer\\TargetEntityResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/TargetEntityResolver.php',
         'Rector\\Doctrine\\NodeFactory\\ArrayCollectionAssignFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/ArrayCollectionAssignFactory.php',
-        'Rector\\Doctrine\\NodeFactory\\RepositoryAssignFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/RepositoryAssignFactory.php',
-        'Rector\\Doctrine\\NodeFactory\\RepositoryNodeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/RepositoryNodeFactory.php',
         'Rector\\Doctrine\\NodeFactory\\ValueAssignFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeFactory/ValueAssignFactory.php',
         'Rector\\Doctrine\\NodeManipulator\\ColumnPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ColumnPropertyTypeResolver.php',
         'Rector\\Doctrine\\NodeManipulator\\ConstructorManipulator' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ConstructorManipulator.php',
@@ -2017,22 +2014,15 @@ class ComposerStaticInit4ec4b37318586aea9b7cf86e1eaf6d40
         'Rector\\Doctrine\\NodeManipulator\\PropertyTypeManipulator' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/PropertyTypeManipulator.php',
         'Rector\\Doctrine\\NodeManipulator\\ToManyRelationPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ToManyRelationPropertyTypeResolver.php',
         'Rector\\Doctrine\\NodeManipulator\\ToOneRelationPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ToOneRelationPropertyTypeResolver.php',
+        'Rector\\Doctrine\\Orm214\\Rector\\Param\\ReplaceLifecycleEventArgsByDedicatedEventArgsRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm214/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php',
         'Rector\\Doctrine\\PhpDocParser\\DoctrineClassAnnotationMatcher' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDocParser/DoctrineClassAnnotationMatcher.php',
         'Rector\\Doctrine\\PhpDocParser\\DoctrineDocBlockResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDocParser/DoctrineDocBlockResolver.php',
         'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
-        'Rector\\Doctrine\\Rector\\ClassMethod\\ServiceEntityRepositoryParentCallToDIRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector.php',
-        'Rector\\Doctrine\\Rector\\Class_\\MoveRepositoryFromParentToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php',
-        'Rector\\Doctrine\\Rector\\Class_\\RemoveRepositoryFromEntityAnnotationRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/RemoveRepositoryFromEntityAnnotationRector.php',
-        'Rector\\Doctrine\\Rector\\MethodCall\\EntityAliasToClassConstantReferenceRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php',
-        'Rector\\Doctrine\\Rector\\MethodCall\\ReplaceParentRepositoryCallsByRepositoryPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php',
-        'Rector\\Doctrine\\Rector\\Param\\ReplaceLifecycleEventArgsByDedicatedEventArgsRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php',
         'Rector\\Doctrine\\Set\\DoctrineSetList' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeFactory.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionTypeResolver.php',
         'Rector\\Doctrine\\TypeAnalyzer\\CollectionVarTagValueNodeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/CollectionVarTagValueNodeResolver.php',
         'Rector\\Doctrine\\TypeAnalyzer\\DoctrineCollectionTypeAnalyzer' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/DoctrineCollectionTypeAnalyzer.php',
-        'Rector\\Doctrine\\TypeAnalyzer\\TypeFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/TypeAnalyzer/TypeFinder.php',
-        'Rector\\Doctrine\\Type\\RepositoryTypeFactory' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Type/RepositoryTypeFactory.php',
         'Rector\\DowngradePhp71\\Rector\\Array_\\SymmetricArrayDestructuringToListRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp71/Rector/Array_/SymmetricArrayDestructuringToListRector.php',
         'Rector\\DowngradePhp71\\Rector\\ClassConst\\DowngradeClassConstantVisibilityRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp71/Rector/ClassConst/DowngradeClassConstantVisibilityRector.php',
         'Rector\\DowngradePhp71\\Rector\\ConstFetch\\DowngradePhp71JsonConstRector' => __DIR__ . '/..' . '/rector/rector-downgrade-php/rules/DowngradePhp71/Rector/ConstFetch/DowngradePhp71JsonConstRector.php',
@@ -3037,9 +3027,9 @@ class ComposerStaticInit4ec4b37318586aea9b7cf86e1eaf6d40
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4ec4b37318586aea9b7cf86e1eaf6d40::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4ec4b37318586aea9b7cf86e1eaf6d40::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4ec4b37318586aea9b7cf86e1eaf6d40::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdeffc6913765d186a4f1f1f5dc9ffae4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdeffc6913765d186a4f1f1f5dc9ffae4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdeffc6913765d186a4f1f1f5dc9ffae4::$classMap;
 
         }, null, ClassLoader::class);
     }
