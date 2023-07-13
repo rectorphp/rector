@@ -12,14 +12,6 @@ final class DoctrineSetList implements SetListInterface
     /**
      * @var string
      */
-    public const DOCTRINE_25 = __DIR__ . '/../../config/sets/doctrine25.php';
-    /**
-     * @var string
-     */
-    public const DOCTRINE_BEHAVIORS_20 = __DIR__ . '/../../config/sets/doctrine-behaviors-20.php';
-    /**
-     * @var string
-     */
     public const DOCTRINE_CODE_QUALITY = __DIR__ . '/../../config/sets/doctrine-code-quality.php';
     /**
      * @var string
@@ -47,6 +39,15 @@ final class DoctrineSetList implements SetListInterface
      */
     public const DOCTRINE_REPOSITORY_AS_SERVICE = __DIR__ . '/../../config/sets/doctrine-repository-as-service.php';
     /**
+     * @deprecated Use self::DOCTIRNE_ORM_25 instead
+     * @var string
+     */
+    public const DOCTRINE_25 = self::DOCTRINE_ORM_25;
+    /**
+     * @var string
+     */
+    public const DOCTRINE_ORM_25 = __DIR__ . '/../../config/sets/doctrine25.php';
+    /**
      * @var string
      */
     public const DOCTRINE_ORM_29 = __DIR__ . '/../../config/sets/doctrine-orm-29.php';
@@ -66,8 +67,4 @@ final class DoctrineSetList implements SetListInterface
      * @var string
      */
     public const GEDMO_ANNOTATIONS_TO_ATTRIBUTES = __DIR__ . '/../../config/sets/doctrine-gedmo-annotations-to-attributes.php';
-    /**
-     * @var string
-     */
-    public const DOCTRINE_ODM_23 = __DIR__ . '/../../config/sets/doctrine-odm-23.php';
 }
