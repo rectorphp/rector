@@ -44,12 +44,6 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
     {
         $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
     }
-    private function processInsideArrayDimFetch(ArrayDimFetch $arrayDimFetch) : void
-    {
-        if ($arrayDimFetch->var instanceof PropertyFetch || $arrayDimFetch->var instanceof StaticPropertyFetch) {
-            $arrayDimFetch->var->setAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \true);
-        }
-    }
     public function enterNode(Node $node) : ?Node
     {
         if ($node instanceof For_ || $node instanceof Foreach_ || $node instanceof While_ || $node instanceof Do_) {
@@ -86,6 +80,12 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         }
         $this->processContextInClass($node);
         return null;
+    }
+    private function processInsideArrayDimFetch(ArrayDimFetch $arrayDimFetch) : void
+    {
+        if ($arrayDimFetch->var instanceof PropertyFetch || $arrayDimFetch->var instanceof StaticPropertyFetch) {
+            $arrayDimFetch->var->setAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \true);
+        }
     }
     private function processContextInClass(Node $node) : void
     {
