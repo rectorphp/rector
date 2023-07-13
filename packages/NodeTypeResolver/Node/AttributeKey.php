@@ -208,10 +208,6 @@ final class AttributeKey
     /**
      * @var string
      */
-    public const IS_ISSET_VAR = 'is_isset_var';
-    /**
-     * @var string
-     */
     public const IS_UNSET_VAR = 'is_unset_var';
     /**
      * @var string

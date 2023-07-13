@@ -9,7 +9,6 @@ use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Isset_;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Expr\Variable;
@@ -52,8 +51,8 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             $this->processInsideArrayDimFetch($node);
             return null;
         }
-        if ($node instanceof Isset_ || $node instanceof Unset_) {
-            $this->processContextInIssetOrUnset($node);
+        if ($node instanceof Unset_) {
+            $this->processContextInUnset($node);
             return null;
         }
         if ($node instanceof Attribute) {
@@ -101,17 +100,8 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             return null;
         });
     }
-    /**
-     * @param \PhpParser\Node\Expr\Isset_|\PhpParser\Node\Stmt\Unset_ $node
-     */
-    private function processContextInIssetOrUnset($node) : void
+    private function processContextInUnset(Unset_ $node) : void
     {
-        if ($node instanceof Isset_) {
-            foreach ($node->vars as $var) {
-                $var->setAttribute(AttributeKey::IS_ISSET_VAR, \true);
-            }
-            return;
-        }
         foreach ($node->vars as $var) {
             $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
         }
