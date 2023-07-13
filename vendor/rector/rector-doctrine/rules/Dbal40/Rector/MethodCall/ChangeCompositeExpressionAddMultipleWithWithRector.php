@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Doctrine\Rector\MethodCall;
+namespace Rector\Doctrine\Dbal40\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayItem;
@@ -13,7 +13,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see https://github.com/doctrine/dbal/blob/4.0.x/UPGRADE.md#bc-break-removed-compositeexpression-methods
- * @see \Rector\Doctrine\Tests\Rector\MethodCall\ChangeCompositeExpressionAddMultipleWithWithRector\ChangeCompositeExpressionAddMultipleWithWithRectorTest
+ * @see \Rector\Doctrine\Tests\Dbal40\Rector\MethodCall\ChangeCompositeExpressionAddMultipleWithWithRector\ChangeCompositeExpressionAddMultipleWithWithRectorTest
  */
 final class ChangeCompositeExpressionAddMultipleWithWithRector extends AbstractRector
 {

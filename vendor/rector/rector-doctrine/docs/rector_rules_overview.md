@@ -1,4 +1,4 @@
-# 21 Rules Overview
+# 20 Rules Overview
 
 ## ChangeBigIntEntityPropertyToIntTypeRector
 
@@ -29,7 +29,7 @@ Change database type "bigint" for @var/type declaration to string
 
 Change CompositeExpression ->addMultiple($parts) to ->with(...$parts)
 
-- class: [`Rector\Doctrine\Rector\MethodCall\ChangeCompositeExpressionAddMultipleWithWithRector`](../src/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php)
+- class: [`Rector\Doctrine\Dbal40\Rector\MethodCall\ChangeCompositeExpressionAddMultipleWithWithRector`](../rules/Dbal40/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php)
 
 ```diff
  use Doctrine\ORM\EntityRepository;
@@ -42,36 +42,6 @@ Change CompositeExpression ->addMultiple($parts) to ->with(...$parts)
          $compositeExpression = CompositeExpression::and('', ...$parts);
 -        $compositeExpression->addMultiple($parts);
 +        $compositeExpression->with(...$parts);
-     }
- }
-```
-
-<br>
-
-## ChangeSetParametersArrayToArrayCollectionRector
-
-Change array to ArrayCollection in `setParameters()` method of query builder
-
-- class: [`Rector\Doctrine\Rector\MethodCall\ChangeSetParametersArrayToArrayCollectionRector`](../src/Rector/MethodCall/ChangeSetParametersArrayToArrayCollectionRector.php)
-
-```diff
-+use Doctrine\Common\Collections\ArrayCollection;
- use Doctrine\ORM\EntityRepository;
-+use Doctrine\ORM\Query\Parameter;
-
- class SomeRepository extends EntityRepository
- {
-     public function getSomething()
-     {
-         return $this->createQueryBuilder('sm')
-             ->select('sm')
-             ->where('sm.foo = :bar')
--            ->setParameters([
--                'bar' => 'baz'
--            ]);
-+            ->setParameters(new ArrayCollection([
-+                new  Parameter('bar', 'baz'),
-+            ]));
      }
  }
 ```

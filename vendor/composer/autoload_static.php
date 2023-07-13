@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite631aee4475fe67fec461a471360a246
+class ComposerStaticInit507b4ac236cd2f9f74226dd15857168d
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1999,6 +1999,7 @@ class ComposerStaticInite631aee4475fe67fec461a471360a246
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromDoctrineCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromDoctrineCollectionRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromToManyRelationTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromToManyRelationTypeRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromToOneRelationTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromToOneRelationTypeRector.php',
+        'Rector\\Doctrine\\Dbal40\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Dbal40/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttributeCleaner' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeCleaner.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttributeFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttributeFinder.php',
         'Rector\\Doctrine\\NodeAnalyzer\\AttrinationFinder' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeAnalyzer/AttrinationFinder.php',
@@ -2022,8 +2023,6 @@ class ComposerStaticInite631aee4475fe67fec461a471360a246
         'Rector\\Doctrine\\Rector\\ClassMethod\\ServiceEntityRepositoryParentCallToDIRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/ClassMethod/ServiceEntityRepositoryParentCallToDIRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\MoveRepositoryFromParentToConstructorRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/MoveRepositoryFromParentToConstructorRector.php',
         'Rector\\Doctrine\\Rector\\Class_\\RemoveRepositoryFromEntityAnnotationRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Class_/RemoveRepositoryFromEntityAnnotationRector.php',
-        'Rector\\Doctrine\\Rector\\MethodCall\\ChangeCompositeExpressionAddMultipleWithWithRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeCompositeExpressionAddMultipleWithWithRector.php',
-        'Rector\\Doctrine\\Rector\\MethodCall\\ChangeSetParametersArrayToArrayCollectionRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ChangeSetParametersArrayToArrayCollectionRector.php',
         'Rector\\Doctrine\\Rector\\MethodCall\\EntityAliasToClassConstantReferenceRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/EntityAliasToClassConstantReferenceRector.php',
         'Rector\\Doctrine\\Rector\\MethodCall\\ReplaceParentRepositoryCallsByRepositoryPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/MethodCall/ReplaceParentRepositoryCallsByRepositoryPropertyRector.php',
         'Rector\\Doctrine\\Rector\\Param\\ReplaceLifecycleEventArgsByDedicatedEventArgsRector' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php',
@@ -3038,9 +3037,9 @@ class ComposerStaticInite631aee4475fe67fec461a471360a246
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite631aee4475fe67fec461a471360a246::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite631aee4475fe67fec461a471360a246::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite631aee4475fe67fec461a471360a246::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit507b4ac236cd2f9f74226dd15857168d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit507b4ac236cd2f9f74226dd15857168d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit507b4ac236cd2f9f74226dd15857168d::$classMap;
 
         }, null, ClassLoader::class);
     }
