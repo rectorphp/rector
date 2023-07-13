@@ -26,6 +26,7 @@ final class DoctrineSetList implements SetListInterface
      */
     public const DOCTRINE_COMMON_20 = __DIR__ . '/../../config/sets/doctrine-common-20.php';
     /**
+     * @deprecated Use dbal set 2.11 instead
      * @var string
      */
     public const DOCTRINE_DBAL_210 = __DIR__ . '/../../config/sets/doctrine-dbal-210.php';

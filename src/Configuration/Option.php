@@ -96,11 +96,6 @@ final class Option
      */
     public const FILE_EXTENSIONS = 'file_extensions';
     /**
-     * @internal Use RectorConfig::nestedChainMethodCallLimit() instead
-     * @var string
-     */
-    public const NESTED_CHAIN_METHOD_CALL_LIMIT = 'nested_chain_method_call_limit';
-    /**
      * @internal Use RectorConfig::cacheDirectory() instead
      * @var string
      */

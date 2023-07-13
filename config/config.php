@@ -98,7 +98,6 @@ return static function (RectorConfig $rectorConfig) : void {
     $rectorConfig->importShortClasses();
     $rectorConfig->indent(' ', 4);
     $rectorConfig->fileExtensions(['php']);
-    $rectorConfig->nestedChainMethodCallLimit(120);
     $rectorConfig->cacheDirectory(\sys_get_temp_dir() . '/rector_cached_files');
     $rectorConfig->containerCacheDirectory(\sys_get_temp_dir());
     $services = $rectorConfig->services();

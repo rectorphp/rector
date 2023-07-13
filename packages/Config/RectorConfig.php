@@ -210,12 +210,6 @@ final class RectorConfig extends ContainerConfigurator
         $parameters->set(Option::FILE_EXTENSIONS, $extensions);
         SimpleParameterProvider::setParameter(Option::FILE_EXTENSIONS, $extensions);
     }
-    public function nestedChainMethodCallLimit(int $limit) : void
-    {
-        $parameters = $this->parameters();
-        $parameters->set(Option::NESTED_CHAIN_METHOD_CALL_LIMIT, $limit);
-        SimpleParameterProvider::setParameter(Option::NESTED_CHAIN_METHOD_CALL_LIMIT, $limit);
-    }
     public function cacheDirectory(string $directoryPath) : void
     {
         // cache directory path is created via mkdir in CacheFactory

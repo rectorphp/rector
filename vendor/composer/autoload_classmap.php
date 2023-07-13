@@ -2018,7 +2018,6 @@ return array(
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\ContextNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/ContextNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\GlobalVariableNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/GlobalVariableNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\NameNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/NameNodeVisitor.php',
-    'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\RemoveDeepChainMethodCallNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/RemoveDeepChainMethodCallNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StaticVariableNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StaticVariableNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\NodeVisitor\\StmtKeyNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/NodeVisitor/StmtKeyNodeVisitor.php',
     'Rector\\NodeTypeResolver\\PHPStan\\Scope\\PHPStanNodeScopeResolver' => $baseDir . '/packages/NodeTypeResolver/PHPStan/Scope/PHPStanNodeScopeResolver.php',
