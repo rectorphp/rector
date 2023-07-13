@@ -6,7 +6,6 @@ namespace Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Attribute;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Closure;
@@ -25,7 +24,6 @@ use PhpParser\Node\Stmt\For_;
 use PhpParser\Node\Stmt\Foreach_;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Unset_;
 use PhpParser\Node\Stmt\While_;
 use PhpParser\NodeTraverser;
@@ -64,10 +62,6 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
         }
         if ($node instanceof If_ || $node instanceof Else_ || $node instanceof ElseIf_) {
             $this->processContextInIf($node);
-            return null;
-        }
-        if ($node instanceof Return_ && $node->expr instanceof Expr) {
-            $node->expr->setAttribute(AttributeKey::IS_RETURN_EXPR, \true);
             return null;
         }
         if ($node instanceof Arg) {
