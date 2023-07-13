@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser;
 
-use RectorPrefix202307\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
@@ -28,7 +27,6 @@ use PHPStan\Reflection\Php\PhpPropertyReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Reflection\ReflectionResolver;
-use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\MethodName;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -302,8 +300,7 @@ final class AstResolver
         if ($stmts === []) {
             return $this->parsedFileNodes[$fileName] = [];
         }
-        $file = new File($fileName, FileSystem::read($fileName));
-        return $this->parsedFileNodes[$fileName] = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $stmts);
+        return $this->parsedFileNodes[$fileName] = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($fileName, $stmts);
     }
     private function locateClassMethodInTrait(string $methodName, MethodReflection $methodReflection) : ?ClassMethod
     {

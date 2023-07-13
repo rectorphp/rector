@@ -47,13 +47,15 @@ final class NodeScopeAndMetadataDecorator
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
+     * @param \Rector\Core\ValueObject\Application\File|string $file
      */
-    public function decorateNodesFromFile(File $file, array $stmts) : array
+    public function decorateNodesFromFile($file, array $stmts) : array
     {
+        $filePath = $file instanceof File ? $file->getFilePath() : $file;
         $stmts = $this->fileWithoutNamespaceNodeTraverser->traverse($stmts);
-        $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $file->getFilePath());
+        $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath);
         if ($this->phpStanNodeScopeResolver->hasUnreachableStatementNode()) {
-            $unreachableStatementNodeVisitor = new UnreachableStatementNodeVisitor($this->phpStanNodeScopeResolver, $file->getFilePath(), $this->scopeFactory);
+            $unreachableStatementNodeVisitor = new UnreachableStatementNodeVisitor($this->phpStanNodeScopeResolver, $filePath, $this->scopeFactory);
             $this->nodeTraverser->addVisitor($unreachableStatementNodeVisitor);
             $stmts = $this->nodeTraverser->traverse($stmts);
             /**
