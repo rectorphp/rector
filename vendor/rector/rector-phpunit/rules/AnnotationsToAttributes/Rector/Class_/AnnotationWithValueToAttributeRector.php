@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\PHPUnit\Rector\Class_;
+namespace Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -20,7 +20,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202307\Webmozart\Assert\Assert;
 /**
- * @see \Rector\PHPUnit\Tests\Rector\Class_\AnnotationWithValueToAttributeRector\AnnotationWithValueToAttributeRectorTest
+ * @see \Rector\PHPUnit\Tests\AnnotationsToAttributes\Rector\Class_\AnnotationWithValueToAttributeRector\AnnotationWithValueToAttributeRectorTest
  */
 final class AnnotationWithValueToAttributeRector extends AbstractRector implements ConfigurableRectorInterface, MinPhpVersionInterface
 {

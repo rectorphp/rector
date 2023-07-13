@@ -1,4 +1,4 @@
-# 50 Rules Overview
+# 48 Rules Overview
 
 ## AddDoesNotPerformAssertionToNonAssertingTestRector
 
@@ -27,7 +27,7 @@ Tests without assertion will have `@doesNotPerformAssertion`
 
 Add Prophecy trait for method using `$this->prophesize()`
 
-- class: [`Rector\PHPUnit\Rector\Class_\AddProphecyTraitRector`](../src/Rector/Class_/AddProphecyTraitRector.php)
+- class: [`Rector\PHPUnit\PHPUnit100\Rector\Class_\AddProphecyTraitRector`](../rules/PHPUnit100/Rector/Class_/AddProphecyTraitRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -50,7 +50,7 @@ Add Prophecy trait for method using `$this->prophesize()`
 
 Add `@see` annotation test of the class for faster jump to test. Make it FQN, so it stays in the annotation, not in the PHP source code.
 
-- class: [`Rector\PHPUnit\Rector\Class_\AddSeeTestAnnotationRector`](../src/Rector/Class_/AddSeeTestAnnotationRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Class_\AddSeeTestAnnotationRector`](../rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php)
 
 ```diff
 +/**
@@ -171,7 +171,7 @@ return static function (RectorConfig $rectorConfig): void {
 
 Turns vague php-only method in PHPUnit TestCase to more specific
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertCompareToSpecificMethodRector`](../src/Rector/MethodCall/AssertCompareToSpecificMethodRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertCompareToSpecificMethodRector`](../rules/CodeQuality/Rector/MethodCall/AssertCompareToSpecificMethodRector.php)
 
 ```diff
 -$this->assertSame(10, count($anything), "message");
@@ -191,7 +191,7 @@ Turns vague php-only method in PHPUnit TestCase to more specific
 
 Turns comparison operations to their method name alternatives in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertComparisonToSpecificMethodRector`](../src/Rector/MethodCall/AssertComparisonToSpecificMethodRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertComparisonToSpecificMethodRector`](../rules/CodeQuality/Rector/MethodCall/AssertComparisonToSpecificMethodRector.php)
 
 ```diff
 -$this->assertTrue($foo === $bar, "message");
@@ -240,7 +240,7 @@ Change `assertEquals()/assertNotEquals()` method parameters to new specific alte
 
 Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertEqualsToSameRector`](../src/Rector/MethodCall/AssertEqualsToSameRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertEqualsToSameRector`](../rules/CodeQuality/Rector/MethodCall/AssertEqualsToSameRector.php)
 
 ```diff
 -$this->assertEquals(2, $result);
@@ -253,7 +253,7 @@ Turns `assertEquals()` into stricter `assertSame()` for scalar values in PHPUnit
 
 Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertFalseStrposToContainsRector`](../src/Rector/MethodCall/AssertFalseStrposToContainsRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertFalseStrposToContainsRector`](../rules/CodeQuality/Rector/MethodCall/AssertFalseStrposToContainsRector.php)
 
 ```diff
 -$this->assertFalse(strpos($anything, "foo"), "message");
@@ -266,7 +266,7 @@ Turns `strpos`/`stripos` comparisons to their method name alternatives in PHPUni
 
 Turns instanceof comparisons to their method name alternatives in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertInstanceOfComparisonRector`](../src/Rector/MethodCall/AssertInstanceOfComparisonRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertInstanceOfComparisonRector`](../rules/CodeQuality/Rector/MethodCall/AssertInstanceOfComparisonRector.php)
 
 ```diff
 -$this->assertTrue($foo instanceof Foo, "message");
@@ -286,7 +286,7 @@ Turns instanceof comparisons to their method name alternatives in PHPUnit TestCa
 
 Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertIssetToSpecificMethodRector`](../src/Rector/MethodCall/AssertIssetToSpecificMethodRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertIssetToSpecificMethodRector`](../rules/CodeQuality/Rector/MethodCall/AssertIssetToSpecificMethodRector.php)
 
 ```diff
 -$this->assertTrue(isset($anything->foo));
@@ -306,7 +306,7 @@ Turns isset comparisons to their method name alternatives in PHPUnit TestCase
 
 Turns not-operator comparisons to their method name alternatives in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertNotOperatorRector`](../src/Rector/MethodCall/AssertNotOperatorRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertNotOperatorRector`](../rules/CodeQuality/Rector/MethodCall/AssertNotOperatorRector.php)
 
 ```diff
 -$this->assertTrue(!$foo, "message");
@@ -326,7 +326,7 @@ Turns not-operator comparisons to their method name alternatives in PHPUnit Test
 
 Turns `property_exists` comparisons to their method name alternatives in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertPropertyExistsRector`](../src/Rector/MethodCall/AssertPropertyExistsRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertPropertyExistsRector`](../rules/CodeQuality/Rector/MethodCall/AssertPropertyExistsRector.php)
 
 ```diff
 -$this->assertFalse(property_exists(new Class, "property"));
@@ -341,7 +341,7 @@ Turns `property_exists` comparisons to their method name alternatives in PHPUnit
 
 Turns `preg_match` comparisons to their method name alternatives in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertRegExpRector`](../src/Rector/MethodCall/AssertRegExpRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertRegExpRector`](../rules/CodeQuality/Rector/MethodCall/AssertRegExpRector.php)
 
 ```diff
 -$this->assertSame(1, preg_match("/^Message for ".*"\.$/", $string), $message);
@@ -374,7 +374,7 @@ Turns `assertIsNotResource()` into stricter `assertIsClosedResource()` for resou
 
 Turns same bool and null comparisons to their method name alternatives in PHPUnit TestCase
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector`](../src/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameBoolNullToSpecificMethodRector`](../rules/CodeQuality/Rector/MethodCall/AssertSameBoolNullToSpecificMethodRector.php)
 
 ```diff
 -$this->assertSame(null, $anything);
@@ -394,7 +394,7 @@ Turns same bool and null comparisons to their method name alternatives in PHPUni
 
 Change `$this->assertSame(true,` ...) to `assertTrue()`
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector`](../src/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertSameTrueFalseToAssertTrueFalseRector`](../rules/CodeQuality/Rector/MethodCall/AssertSameTrueFalseToAssertTrueFalseRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -416,7 +416,7 @@ Change `$this->assertSame(true,` ...) to `assertTrue()`
 
 Turns true/false comparisons to their method name alternatives in PHPUnit TestCase when possible
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector`](../src/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\AssertTrueFalseToSpecificMethodRector`](../rules/CodeQuality/Rector/MethodCall/AssertTrueFalseToSpecificMethodRector.php)
 
 ```diff
 -$this->assertTrue(is_readable($readmeFile), "message");
@@ -429,7 +429,7 @@ Turns true/false comparisons to their method name alternatives in PHPUnit TestCa
 
 Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to `setUp()`, to prevent dangerous override
 
-- class: [`Rector\PHPUnit\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector`](../src/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Class_\ConstructClassMethodToSetUpTestCaseRector`](../rules/CodeQuality/Rector/Class_/ConstructClassMethodToSetUpTestCaseRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -455,7 +455,7 @@ Change `__construct()` method in tests of `PHPUnit\Framework\TestCase` to `setUp
 
 Change covers annotations with value to attribute
 
-- class: [`Rector\PHPUnit\Rector\Class_\CoversAnnotationWithValueToAttributeRector`](../src/Rector/Class_/CoversAnnotationWithValueToAttributeRector.php)
+- class: [`Rector\PHPUnit\AnnotationsToAttributes\Rector\Class_\CoversAnnotationWithValueToAttributeRector`](../rules/AnnotationsToAttributes/Rector/Class_/CoversAnnotationWithValueToAttributeRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -513,7 +513,7 @@ Change `$this->createMock()` with methods to direct anonymous class
 
 Change dataProvider annotations to attribute
 
-- class: [`Rector\PHPUnit\Rector\ClassMethod\DataProviderAnnotationToAttributeRector`](../src/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php)
+- class: [`Rector\PHPUnit\AnnotationsToAttributes\Rector\ClassMethod\DataProviderAnnotationToAttributeRector`](../rules/AnnotationsToAttributes/Rector/ClassMethod/DataProviderAnnotationToAttributeRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -607,7 +607,7 @@ Changes ``@expectedException` annotations to `expectException*()` methods
 
 Use explicit API for expecting PHP errors, warnings, and notices
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\ExplicitPhpErrorApiRector`](../src/Rector/MethodCall/ExplicitPhpErrorApiRector.php)
+- class: [`Rector\PHPUnit\PHPUnit90\Rector\MethodCall\ExplicitPhpErrorApiRector`](../rules/PHPUnit90/Rector/MethodCall/ExplicitPhpErrorApiRector.php)
 
 ```diff
  final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -697,7 +697,7 @@ Changes PHPUnit calls from `$this->assert*()` to self::assert*()
 
 Changes PHPUnit calls from self::assert*() to `$this->assert*()`
 
-- class: [`Rector\PHPUnit\Rector\Class_\PreferPHPUnitThisCallRector`](../src/Rector/Class_/PreferPHPUnitThisCallRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector`](../rules/CodeQuality/Rector/Class_/PreferPHPUnitThisCallRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -718,7 +718,7 @@ Changes PHPUnit calls from self::assert*() to `$this->assert*()`
 
 Turns PHPUnit TestCase assertObjectHasAttribute into `property_exists` comparisons
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\PropertyExistsWithoutAssertRector`](../src/Rector/MethodCall/PropertyExistsWithoutAssertRector.php)
+- class: [`Rector\PHPUnit\PHPUnit100\Rector\MethodCall\PropertyExistsWithoutAssertRector`](../rules/PHPUnit100/Rector/MethodCall/PropertyExistsWithoutAssertRector.php)
 
 ```diff
 -$this->assertClassHasAttribute("property", "Class");
@@ -807,7 +807,7 @@ Remove empty test methods
 
 Remove `expect($this->any())` from mocks as it has no added value
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\RemoveExpectAnyFromMockRector`](../src/Rector/MethodCall/RemoveExpectAnyFromMockRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveExpectAnyFromMockRector`](../rules/CodeQuality/Rector/MethodCall/RemoveExpectAnyFromMockRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -831,7 +831,7 @@ Remove `expect($this->any())` from mocks as it has no added value
 
 Remove `"setMethods()"` method as never used
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\RemoveSetMethodsMethodCallRector`](../src/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\RemoveSetMethodsMethodCallRector`](../rules/CodeQuality/Rector/MethodCall/RemoveSetMethodsMethodCallRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -843,30 +843,6 @@ Remove `"setMethods()"` method as never used
          $someMock = $this->getMockBuilder(SomeClass::class)
 -            ->setMethods(['run'])
              ->getMock();
-     }
- }
-```
-
-<br>
-
-## ReplaceAssertArraySubsetWithDmsPolyfillRector
-
-Change `assertArraySubset()` to static call of DMS\PHPUnitExtensions\ArraySubset\Assert
-
-- class: [`Rector\PHPUnit\Rector\MethodCall\ReplaceAssertArraySubsetWithDmsPolyfillRector`](../src/Rector/MethodCall/ReplaceAssertArraySubsetWithDmsPolyfillRector.php)
-
-```diff
- use PHPUnit\Framework\TestCase;
-
- class SomeClass extends TestCase
- {
-     public function test()
-     {
--        self::assertArraySubset(['bar' => 0], ['bar' => '0'], true);
-+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset(['bar' => 0], ['bar' => '0'], true);
-
--        $this->assertArraySubset(['bar' => 0], ['bar' => '0'], true);
-+        \DMS\PHPUnitExtensions\ArraySubset\Assert::assertArraySubset(['bar' => 0], ['bar' => '0'], true);
      }
  }
 ```
@@ -899,7 +875,7 @@ Replace `@test` with prefixed function
 
 Simplify unnecessary foreach check of instances
 
-- class: [`Rector\PHPUnit\Rector\Foreach_\SimplifyForeachInstanceOfRector`](../src/Rector/Foreach_/SimplifyForeachInstanceOfRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Foreach_\SimplifyForeachInstanceOfRector`](../src/CodeQuality/Rector/Foreach_/SimplifyForeachInstanceOfRector.php)
 
 ```diff
 -foreach ($foos as $foo) {
@@ -935,7 +911,7 @@ Change `assertContains()/assertNotContains()` method to new string and iterable 
 
 Change `assertContains()/assertNotContains()` with non-strict comparison to new specific alternatives
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector`](../src/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php)
+- class: [`Rector\PHPUnit\PHPUnit90\Rector\MethodCall\SpecificAssertContainsWithoutIdentityRector`](../rules/PHPUnit90/Rector/MethodCall/SpecificAssertContainsWithoutIdentityRector.php)
 
 ```diff
 -final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -958,7 +934,7 @@ Change `assertContains()/assertNotContains()` with non-strict comparison to new 
 
 Change `assertInternalType()/assertNotInternalType()` method to new specific alternatives
 
-- class: [`Rector\PHPUnit\PHPUnit80\Rector\MethodCall\SpecificAssertInternalTypeRector`](../src/PHPUnit80/Rector/MethodCall/SpecificAssertInternalTypeRector.php)
+- class: [`Rector\PHPUnit\PHPUnit80\Rector\MethodCall\SpecificAssertInternalTypeRector`](../rules/PHPUnit80/Rector/MethodCall/SpecificAssertInternalTypeRector.php)
 
 ```diff
  final class SomeTest extends \PHPUnit\Framework\TestCase
@@ -980,7 +956,7 @@ Change `assertInternalType()/assertNotInternalType()` method to new specific alt
 
 Change data provider methods to static
 
-- class: [`Rector\PHPUnit\Rector\Class_\StaticDataProviderClassMethodRector`](../src/Rector/Class_/StaticDataProviderClassMethodRector.php)
+- class: [`Rector\PHPUnit\PHPUnit100\Rector\Class_\StaticDataProviderClassMethodRector`](../rules/PHPUnit100/Rector/Class_/StaticDataProviderClassMethodRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;
@@ -1008,7 +984,7 @@ Change data provider methods to static
 
 Refactor "*TestListener.php" to particular "*Hook.php" files
 
-- class: [`Rector\PHPUnit\Rector\Class_\TestListenerToHooksRector`](../src/Rector/Class_/TestListenerToHooksRector.php)
+- class: [`Rector\PHPUnit\PHPUnit90\Rector\Class_\TestListenerToHooksRector`](../rules/PHPUnit90/Rector/Class_/TestListenerToHooksRector.php)
 
 ```diff
  namespace App\Tests;
@@ -1092,31 +1068,11 @@ Change `@testWith()` annotation to #[TestWith] attribute
 
 <br>
 
-## TryCatchToExpectExceptionRector
-
-Turns try/catch to `expectException()` call
-
-- class: [`Rector\PHPUnit\Rector\ClassMethod\TryCatchToExpectExceptionRector`](../src/Rector/ClassMethod/TryCatchToExpectExceptionRector.php)
-
-```diff
--try {
--    $someService->run();
--} catch (Throwable $exception) {
--    $this->assertInstanceOf(RuntimeException::class, $e);
--    $this->assertContains('There was an error executing the following script', $e->getMessage());
--}
-+$this->expectException(RuntimeException::class);
-+$this->expectExceptionMessage('There was an error executing the following script');
-+$someService->run();
-```
-
-<br>
-
 ## UseSpecificWillMethodRector
 
 Changes `$mock->will()` call to more specific method
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\UseSpecificWillMethodRector`](../src/Rector/MethodCall/UseSpecificWillMethodRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWillMethodRector`](../rules/CodeQuality/Rector/MethodCall/UseSpecificWillMethodRector.php)
 
 ```diff
  class SomeClass extends PHPUnit\Framework\TestCase
@@ -1138,7 +1094,7 @@ Changes `$mock->will()` call to more specific method
 
 Changes `->with()` to more specific method
 
-- class: [`Rector\PHPUnit\Rector\MethodCall\UseSpecificWithMethodRector`](../src/Rector/MethodCall/UseSpecificWithMethodRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\MethodCall\UseSpecificWithMethodRector`](../rules/CodeQuality/Rector/MethodCall/UseSpecificWithMethodRector.php)
 
 ```diff
  class SomeClass extends PHPUnit\Framework\TestCase
@@ -1161,7 +1117,7 @@ Changes `->with()` to more specific method
 
 Turns array return to yield in data providers
 
-- class: [`Rector\PHPUnit\Rector\Class_\YieldDataProviderRector`](../src/Rector/Class_/YieldDataProviderRector.php)
+- class: [`Rector\PHPUnit\CodeQuality\Rector\Class_\YieldDataProviderRector`](../rules/CodeQuality/Rector/Class_/YieldDataProviderRector.php)
 
 ```diff
  use PHPUnit\Framework\TestCase;

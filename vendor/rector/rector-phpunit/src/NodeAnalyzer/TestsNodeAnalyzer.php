@@ -86,14 +86,6 @@ final class TestsNodeAnalyzer
         /** @var StaticCall|MethodCall $node */
         return $this->nodeNameResolver->isName($node->name, $name);
     }
-    public function isInPHPUnitMethodCallName(Node $node, string $name) : bool
-    {
-        if (!$this->isPHPUnitTestCaseCall($node)) {
-            return \false;
-        }
-        /** @var StaticCall|MethodCall $node */
-        return $this->nodeNameResolver->isName($node->name, $name);
-    }
     /**
      * @param string[] $names
      */
