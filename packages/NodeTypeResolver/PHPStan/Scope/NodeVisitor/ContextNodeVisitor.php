@@ -100,9 +100,9 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements ScopeResol
             return null;
         });
     }
-    private function processContextInUnset(Unset_ $node) : void
+    private function processContextInUnset(Unset_ $unset) : void
     {
-        foreach ($node->vars as $var) {
+        foreach ($unset->vars as $var) {
             $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
         }
     }

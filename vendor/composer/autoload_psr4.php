@@ -13,7 +13,7 @@ return array(
     'Rector\\Symfony\\' => array($vendorDir . '/rector/rector-symfony/src', $vendorDir . '/rector/rector-symfony/rules'),
     'Rector\\RectorInstaller\\' => array($vendorDir . '/rector/extension-installer/src'),
     'Rector\\PHPUnit\\' => array($vendorDir . '/rector/rector-phpunit/src', $vendorDir . '/rector/rector-phpunit/rules'),
-    'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src'),
+    'Rector\\Doctrine\\' => array($vendorDir . '/rector/rector-doctrine/src', $vendorDir . '/rector/rector-doctrine/rules'),
     'Rector\\Core\\' => array($baseDir . '/src'),
     'Rector\\' => array($baseDir . '/packages', $baseDir . '/rules', $vendorDir . '/rector/rector-downgrade-php/src', $vendorDir . '/rector/rector-downgrade-php/rules'),
     'RectorPrefix202307\\Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),

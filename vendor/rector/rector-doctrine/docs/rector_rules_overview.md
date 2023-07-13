@@ -1,4 +1,4 @@
-# 25 Rules Overview
+# 23 Rules Overview
 
 ## AddEntityIdByConditionRector
 
@@ -432,51 +432,6 @@ Remove empty Table attribute on entities because it's useless
  #[ORM\Entity]
  class Product
  {
- }
-```
-
-<br>
-
-## RemoveRedundantDefaultClassAnnotationValuesRector
-
-Removes redundant default values from Doctrine ORM annotations on class level
-
-- class: [`Rector\Doctrine\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector`](../src/Rector/Class_/RemoveRedundantDefaultClassAnnotationValuesRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-- * @ORM\Entity(readOnly=false)
-+ * @ORM\Entity()
-  */
- class SomeClass
- {
- }
-```
-
-<br>
-
-## RemoveRedundantDefaultPropertyAnnotationValuesRector
-
-Removes redundant default values from Doctrine ORM annotations/attributes properties
-
-- class: [`Rector\Doctrine\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector`](../src/Rector/Property/RemoveRedundantDefaultPropertyAnnotationValuesRector.php)
-
-```diff
- use Doctrine\ORM\Mapping as ORM;
-
- /**
-  * @ORM\Entity
-  */
- class SomeClass
- {
-     /**
-      * @ORM\ManyToOne(targetEntity=Training::class)
--     * @ORM\JoinColumn(name="training", unique=false)
-+     * @ORM\JoinColumn(name="training")
-      */
-     private $training;
  }
 ```
 

@@ -27,12 +27,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Rector\\Doctrine\\": "src"
+            "Rector\\Doctrine\\": [
+                "src",
+                "rules"
+            ]
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Rector\\Doctrine\\Tests\\": "tests"
+            "Rector\\Doctrine\\Tests\\": [
+                "tests",
+                "rules-tests"
+            ]
         },
         "classmap": [
             "stubs"

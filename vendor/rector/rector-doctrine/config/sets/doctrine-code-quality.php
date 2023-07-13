@@ -4,20 +4,18 @@ declare (strict_types=1);
 namespace RectorPrefix202307;
 
 use Rector\Config\RectorConfig;
-use Rector\Doctrine\Rector\Class_\InitializeDefaultEntityCollectionRector;
-use Rector\Doctrine\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
-use Rector\Doctrine\Rector\Class_\RemoveEmptyTableAttributeRector;
-use Rector\Doctrine\Rector\Class_\RemoveRedundantDefaultClassAnnotationValuesRector;
-use Rector\Doctrine\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector;
-use Rector\Doctrine\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector;
-use Rector\Doctrine\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector;
-use Rector\Doctrine\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector;
-use Rector\Doctrine\Rector\Property\MakeEntityDateTimePropertyDateTimeInterfaceRector;
-use Rector\Doctrine\Rector\Property\RemoveRedundantDefaultPropertyAnnotationValuesRector;
-use Rector\Doctrine\Rector\Property\TypedPropertyFromColumnTypeRector;
-use Rector\Doctrine\Rector\Property\TypedPropertyFromDoctrineCollectionRector;
-use Rector\Doctrine\Rector\Property\TypedPropertyFromToManyRelationTypeRector;
-use Rector\Doctrine\Rector\Property\TypedPropertyFromToOneRelationTypeRector;
+use Rector\Doctrine\CodeQuality\Rector\Class_\InitializeDefaultEntityCollectionRector;
+use Rector\Doctrine\CodeQuality\Rector\Class_\MoveCurrentDateTimeDefaultInEntityToConstructorRector;
+use Rector\Doctrine\CodeQuality\Rector\Class_\RemoveEmptyTableAttributeRector;
+use Rector\Doctrine\CodeQuality\Rector\ClassMethod\MakeEntitySetterNullabilityInSyncWithPropertyRector;
+use Rector\Doctrine\CodeQuality\Rector\Property\ChangeBigIntEntityPropertyToIntTypeRector;
+use Rector\Doctrine\CodeQuality\Rector\Property\CorrectDefaultTypesOnEntityPropertyRector;
+use Rector\Doctrine\CodeQuality\Rector\Property\ImproveDoctrineCollectionDocTypeInEntityRector;
+use Rector\Doctrine\CodeQuality\Rector\Property\MakeEntityDateTimePropertyDateTimeInterfaceRector;
+use Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromColumnTypeRector;
+use Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromDoctrineCollectionRector;
+use Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromToManyRelationTypeRector;
+use Rector\Doctrine\CodeQuality\Rector\Property\TypedPropertyFromToOneRelationTypeRector;
 use Rector\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 return static function (RectorConfig $rectorConfig) : void {
@@ -29,8 +27,6 @@ return static function (RectorConfig $rectorConfig) : void {
         CorrectDefaultTypesOnEntityPropertyRector::class,
         ChangeBigIntEntityPropertyToIntTypeRector::class,
         ImproveDoctrineCollectionDocTypeInEntityRector::class,
-        RemoveRedundantDefaultPropertyAnnotationValuesRector::class,
-        RemoveRedundantDefaultClassAnnotationValuesRector::class,
         RemoveEmptyTableAttributeRector::class,
         // typed properties in entities from annotations/attributes
         TypedPropertyFromColumnTypeRector::class,

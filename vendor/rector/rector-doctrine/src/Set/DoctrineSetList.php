@@ -46,7 +46,7 @@ final class DoctrineSetList implements SetListInterface
     /**
      * @var string
      */
-    public const DOCTRINE_ORM_25 = __DIR__ . '/../../config/sets/doctrine25.php';
+    public const DOCTRINE_ORM_25 = __DIR__ . '/../../config/sets/doctrine-orm-25.php';
     /**
      * @var string
      */
