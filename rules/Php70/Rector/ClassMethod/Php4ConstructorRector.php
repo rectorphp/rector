@@ -86,9 +86,6 @@ CODE_SAMPLE
         if (!\is_string($className)) {
             return null;
         }
-        if (!$scope->isInClass()) {
-            return null;
-        }
         $psr4ConstructorMethod = $node->getMethod(\lcfirst($className)) ?? $node->getMethod($className);
         if (!$psr4ConstructorMethod instanceof ClassMethod) {
             return null;
@@ -97,6 +94,9 @@ CODE_SAMPLE
             return null;
         }
         $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return null;
+        }
         // process parent call references first
         $this->processClassMethodStatementsForParentConstructorCalls($psr4ConstructorMethod, $scope);
         // does it already have a __construct method?
