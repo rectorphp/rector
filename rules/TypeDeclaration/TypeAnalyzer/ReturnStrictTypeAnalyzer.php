@@ -3,6 +3,10 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
+use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Scalar\String_;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
@@ -59,7 +63,7 @@ final class ReturnStrictTypeAnalyzer
             if ($returnedExpr instanceof MethodCall || $returnedExpr instanceof StaticCall || $returnedExpr instanceof FuncCall) {
                 $containsStrictCall = \true;
                 $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
-            } elseif ($returnedExpr instanceof Expr\Array_ || $returnedExpr instanceof Node\Scalar\String_ || $returnedExpr instanceof Node\Scalar\LNumber || $returnedExpr instanceof Node\Scalar\DNumber) {
+            } elseif ($returnedExpr instanceof Array_ || $returnedExpr instanceof String_ || $returnedExpr instanceof LNumber || $returnedExpr instanceof DNumber) {
                 $returnNode = $this->resolveLiteralReturnNode($returnedExpr, $scope);
             } else {
                 return [];

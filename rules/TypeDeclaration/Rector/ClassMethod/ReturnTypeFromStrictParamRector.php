@@ -5,25 +5,20 @@ namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
+use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\AssignRef;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
-use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
@@ -89,19 +84,23 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
+        if ($node->stmts === null) {
+            return null;
+        }
         if ($this->shouldSkipNode($node)) {
             return null;
         }
-        $return = $this->findCurrentScopeReturn($node);
-        if ($return === null || $return->expr === null) {
+        $return = $this->findCurrentScopeReturn($node->stmts);
+        if (!$return instanceof Return_ || !$return->expr instanceof Expr) {
             return null;
         }
         $returnName = $this->getName($return->expr);
+        $stmts = $node->stmts;
         foreach ($node->getParams() as $param) {
             if (!$param->type instanceof Node) {
                 continue;
             }
-            if ($this->shouldSkipParam($param, $node)) {
+            if ($this->shouldSkipParam($param, $stmts)) {
                 continue;
             }
             $paramName = $this->getName($param);
@@ -114,15 +113,12 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $node
+     * @param Stmt[] $stmts
      */
-    private function findCurrentScopeReturn($node) : ?Return_
+    private function findCurrentScopeReturn(array $stmts) : ?Return_
     {
         $return = null;
-        if ($node->stmts === null) {
-            return null;
-        }
-        $this->traverseNodesWithCallable($node->stmts, function (Node $node) use(&$return) : ?int {
+        $this->traverseNodesWithCallable($stmts, static function (Node $node) use(&$return) : ?int {
             if (!$node instanceof Return_) {
                 return null;
             }
@@ -141,23 +137,18 @@ CODE_SAMPLE
         return $return;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param Stmt[] $stmts
      */
-    private function shouldSkipParam(Param $param, $functionLike) : bool
+    private function shouldSkipParam(Param $param, array $stmts) : bool
     {
         $paramName = $this->getName($param);
         $isParamModified = \false;
-        if ($functionLike->stmts === null) {
-            return \true;
-        }
-        $this->traverseNodesWithCallable($functionLike->stmts, function (Node $node) use($paramName, &$isParamModified) : ?int {
-            if ($node instanceof Expr\AssignRef) {
-                if ($this->isName($node->expr, $paramName)) {
-                    $isParamModified = \true;
-                    return NodeTraverser::STOP_TRAVERSAL;
-                }
+        $this->traverseNodesWithCallable($stmts, function (Node $node) use($paramName, &$isParamModified) : ?int {
+            if ($node instanceof AssignRef && $this->isName($node->expr, $paramName)) {
+                $isParamModified = \true;
+                return NodeTraverser::STOP_TRAVERSAL;
             }
-            if (!$node instanceof Expr\Assign) {
+            if (!$node instanceof Assign) {
                 return null;
             }
             if (!$node->var instanceof Variable) {
@@ -192,9 +183,6 @@ CODE_SAMPLE
             return \true;
         }
         $returnType = TypeCombinator::removeNull($returnType);
-        if ($returnType instanceof UnionType) {
-            return \true;
-        }
-        return \false;
+        return $returnType instanceof UnionType;
     }
 }
