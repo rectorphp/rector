@@ -21,4 +21,5 @@ interface OutputStyleInterface
     public function setVerbosity(int $level) : void;
     public function progressStart(int $fileCount) : void;
     public function progressAdvance(int $step = 1) : void;
+    public function progressFinish() : void;
 }

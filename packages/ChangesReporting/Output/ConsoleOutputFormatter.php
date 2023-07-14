@@ -39,11 +39,17 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
     }
     public function report(ProcessResult $processResult, Configuration $configuration) : void
     {
+        $errors = $processResult->getErrors();
+        // only show 100% when no errors
+        if ($errors === [] && $configuration->shouldShowProgressBar()) {
+            $this->rectorOutputStyle->progressFinish();
+        }
+        // show diff after progress bar
         if ($configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs());
         }
         $this->reportErrors($processResult->getErrors());
-        if ($processResult->getErrors() !== []) {
+        if ($errors !== []) {
             return;
         }
         // to keep space between progress bar and success message
