@@ -108,6 +108,9 @@ final class ClassMethodReturnTypeOverrideGuard
         if (!$this->isReturnTypeChangeAllowed($classMethod, $scope)) {
             return \true;
         }
+        if ($classMethod->isFinal()) {
+            return \false;
+        }
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         if ($childrenClassReflections === []) {
             return \false;
