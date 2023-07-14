@@ -11,7 +11,9 @@ use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
+use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Return_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
 use PHPStan\Type\MixedType;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -45,8 +47,9 @@ final class ReturnStrictTypeAnalyzer
      * @param Return_[] $returns
      * @return array<Identifier|Name|NullableType>
      */
-    public function collectStrictReturnTypes(array $returns) : array
+    public function collectStrictReturnTypes(array $returns, Scope $scope) : array
     {
+        $containsStrictCall = \false;
         $returnedStrictTypeNodes = [];
         foreach ($returns as $return) {
             if (!$return->expr instanceof Expr) {
@@ -54,7 +57,10 @@ final class ReturnStrictTypeAnalyzer
             }
             $returnedExpr = $return->expr;
             if ($returnedExpr instanceof MethodCall || $returnedExpr instanceof StaticCall || $returnedExpr instanceof FuncCall) {
+                $containsStrictCall = \true;
                 $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
+            } elseif ($returnedExpr instanceof Expr\Array_ || $returnedExpr instanceof Node\Scalar\String_ || $returnedExpr instanceof Node\Scalar\LNumber || $returnedExpr instanceof Node\Scalar\DNumber) {
+                $returnNode = $this->resolveLiteralReturnNode($returnedExpr, $scope);
             } else {
                 return [];
             }
@@ -62,6 +68,9 @@ final class ReturnStrictTypeAnalyzer
                 return [];
             }
             $returnedStrictTypeNodes[] = $returnNode;
+        }
+        if (!$containsStrictCall) {
+            return [];
         }
         return $this->typeNodeUnwrapper->uniquateNodes($returnedStrictTypeNodes);
     }
@@ -84,6 +93,14 @@ final class ReturnStrictTypeAnalyzer
         if ($returnType instanceof MixedType) {
             return null;
         }
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
+    }
+    /**
+     * @param \PhpParser\Node\Expr\Array_|\PhpParser\Node\Scalar $returnedExpr
+     */
+    private function resolveLiteralReturnNode($returnedExpr, Scope $scope) : ?Node
+    {
+        $returnType = $scope->getType($returnedExpr);
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
     }
 }
