@@ -89,10 +89,10 @@ CODE_SAMPLE
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         $returnType = $node->getReturnType();
-        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
+        if ($returnType === null) {
             return null;
         }
-        if ($returnType === null) {
+        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
             return null;
         }
         if (!$this->phpDocNestedAnnotationGuard->isPhpDocCommentCorrectlyParsed($node)) {
