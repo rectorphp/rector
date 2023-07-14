@@ -119,10 +119,10 @@ final class ApplicationFileProcessor
         if ($configuration->isParallel()) {
             $systemErrorsAndFileDiffs = $this->runParallel($filePaths, $configuration, $input);
         } else {
-            // 1. collect all files from files+dirs provided paths
-            $files = $this->fileFactory->createFromPaths($filePaths);
             // 2. PHPStan has to know about all files too
-            $this->configurePHPStanNodeScopeResolver($filePaths, $configuration);
+            $filePaths = $this->configurePHPStanNodeScopeResolver($filePaths, $configuration);
+            // 2. collect all files from files+dirs provided filtered paths
+            $files = $this->fileFactory->createFromPaths($filePaths);
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
             if ($configuration->shouldShowDiffs()) {
                 $this->fileDiffFileDecorator->decorate($files);
@@ -170,8 +170,9 @@ final class ApplicationFileProcessor
     }
     /**
      * @param string[] $filePaths
+     * @return string[]
      */
-    public function configurePHPStanNodeScopeResolver(array $filePaths, Configuration $configuration) : void
+    public function configurePHPStanNodeScopeResolver(array $filePaths, Configuration $configuration) : array
     {
         $fileExtensions = $configuration->getFileExtensions();
         $fileWithExtensionsFilter = static function (string $filePath) use($fileExtensions) : bool {
@@ -180,6 +181,7 @@ final class ApplicationFileProcessor
         };
         $filePaths = \array_filter($filePaths, $fileWithExtensionsFilter);
         $this->nodeScopeResolver->setAnalysedFiles($filePaths);
+        return $filePaths;
     }
     /**
      * @param File[] $files
