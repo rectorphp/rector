@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\Closure;
+namespace Rector\Symfony\Configs\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -26,7 +26,7 @@ use RectorPrefix202307\Symfony\Component\Filesystem\Filesystem;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector\ServiceSettersToSettersAutodiscoveryRectorTest
+ * @see \Rector\Symfony\Tests\Configs\Rector\Closure\ServiceSettersToSettersAutodiscoveryRector\ServiceSettersToSettersAutodiscoveryRectorTest
  */
 final class ServiceSettersToSettersAutodiscoveryRector extends AbstractRector
 {

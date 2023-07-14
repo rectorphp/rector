@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\Closure;
+namespace Rector\Symfony\Configs\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
@@ -15,7 +15,7 @@ use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Rector\Closure\ServiceTagsToDefaultsAutoconfigureRector\ServiceTagsToDefaultsAutoconfigureRectorTest
+ * @see \Rector\Symfony\Tests\Configs\Rector\Closure\ServiceTagsToDefaultsAutoconfigureRector\ServiceTagsToDefaultsAutoconfigureRectorTest
  */
 final class ServiceTagsToDefaultsAutoconfigureRector extends AbstractRector
 {

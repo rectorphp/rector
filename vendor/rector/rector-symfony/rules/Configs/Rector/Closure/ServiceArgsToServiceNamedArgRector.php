@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\Closure;
+namespace Rector\Symfony\Configs\Rector\Closure;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
@@ -21,7 +21,7 @@ use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Rector\Closure\ServiceArgsToServiceNamedArgRector\ServiceArgsToServiceNamedArgRectorTest
+ * @see \Rector\Symfony\Tests\Configs\Rector\Closure\ServiceArgsToServiceNamedArgRector\ServiceArgsToServiceNamedArgRectorTest
  */
 final class ServiceArgsToServiceNamedArgRector extends AbstractRector
 {

@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace Rector\Symfony\Rector\ClassMethod;
+namespace Rector\Symfony\Configs\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
@@ -19,7 +19,7 @@ use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
- * @see \Rector\Symfony\Tests\Rector\ClassMethod\AddRouteAnnotationRector\AddRouteAnnotationRectorTest
+ * @see \Rector\Symfony\Tests\Configs\Rector\ClassMethod\AddRouteAnnotationRector\AddRouteAnnotationRectorTest
  */
 final class AddRouteAnnotationRector extends AbstractRector
 {
@@ -173,9 +173,9 @@ CODE_SAMPLE
     private function matchSymfonyRouteMetadataByControllerReference(string $controllerReference) : array
     {
         $matches = [];
-        foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadata) {
-            if ($symfonyRouteMetadata->getControllerReference() === $controllerReference) {
-                $matches[] = $symfonyRouteMetadata;
+        foreach ($this->symfonyRoutesProvider->provide() as $symfonyRouteMetadatum) {
+            if ($symfonyRouteMetadatum->getControllerReference() === $controllerReference) {
+                $matches[] = $symfonyRouteMetadatum;
             }
         }
         return $matches;

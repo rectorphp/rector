@@ -18,7 +18,7 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
  * @changelog https://github.com/symfony/symfony/blob/4.4/src/Symfony/Bundle/FrameworkBundle/Templating/TemplateNameParser.php
  * @changelog https://symfony.com/doc/4.4/templates.html#bundle-templates
  *
- * @see \Rector\Symfony\Tests\CodeQuality\Rector\ClassMethod\TemplateAnnotationToThisRenderRector\TemplateAnnotationToThisRenderRectorTest
+ * @see \Rector\Symfony\Tests\Symfony43\Rector\MethodCall\ConvertRenderTemplateShortNotationToBundleSyntaxRector\ConvertRenderTemplateShortNotationToBundleSyntaxRectorTest
  */
 final class ConvertRenderTemplateShortNotationToBundleSyntaxRector extends AbstractRector
 {
