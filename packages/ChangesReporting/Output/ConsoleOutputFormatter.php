@@ -48,7 +48,7 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
         if ($configuration->shouldShowDiffs()) {
             $this->reportFileDiffs($processResult->getFileDiffs());
         }
-        $this->reportErrors($processResult->getErrors());
+        $this->reportErrors($errors);
         if ($errors !== []) {
             return;
         }
