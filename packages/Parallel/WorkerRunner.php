@@ -6,8 +6,8 @@ namespace Rector\Parallel;
 use RectorPrefix202307\Clue\React\NDJson\Decoder;
 use RectorPrefix202307\Clue\React\NDJson\Encoder;
 use RectorPrefix202307\Nette\Utils\FileSystem;
+use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Provider\CurrentFileProvider;
@@ -46,9 +46,9 @@ final class WorkerRunner
     private $rectorConsoleOutputStyle;
     /**
      * @readonly
-     * @var \Rector\Core\Application\ApplicationFileProcessor
+     * @var \PHPStan\Analyser\NodeScopeResolver
      */
-    private $applicationFileProcessor;
+    private $nodeScopeResolver;
     /**
      * @readonly
      * @var \Rector\Caching\Detector\ChangedFilesDetector
@@ -66,13 +66,13 @@ final class WorkerRunner
     /**
      * @param FileProcessorInterface[] $fileProcessors
      */
-    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle, ApplicationFileProcessor $applicationFileProcessor, ChangedFilesDetector $changedFilesDetector, iterable $fileProcessors = [])
+    public function __construct(ArrayParametersMerger $arrayParametersMerger, CurrentFileProvider $currentFileProvider, DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator, RectorConsoleOutputStyle $rectorConsoleOutputStyle, NodeScopeResolver $nodeScopeResolver, ChangedFilesDetector $changedFilesDetector, iterable $fileProcessors = [])
     {
         $this->arrayParametersMerger = $arrayParametersMerger;
         $this->currentFileProvider = $currentFileProvider;
         $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
         $this->rectorConsoleOutputStyle = $rectorConsoleOutputStyle;
-        $this->applicationFileProcessor = $applicationFileProcessor;
+        $this->nodeScopeResolver = $nodeScopeResolver;
         $this->changedFilesDetector = $changedFilesDetector;
         $this->fileProcessors = $fileProcessors;
     }
@@ -98,7 +98,7 @@ final class WorkerRunner
             $errorAndFileDiffs = [];
             $systemErrors = [];
             // 1. allow PHPStan to work with static reflection on provided files
-            $filePaths = $this->applicationFileProcessor->configurePHPStanNodeScopeResolver($filePaths, $configuration);
+            $this->nodeScopeResolver->setAnalysedFiles($filePaths);
             foreach ($filePaths as $filePath) {
                 $file = null;
                 try {

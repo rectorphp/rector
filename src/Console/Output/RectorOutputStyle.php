@@ -28,10 +28,6 @@ final class RectorOutputStyle implements OutputStyleInterface
     {
         $this->rectorConsoleOutputStyle->progressAdvance($step);
     }
-    public function progressFinish() : void
-    {
-        $this->rectorConsoleOutputStyle->progressFinish();
-    }
     public function error(string $message) : void
     {
         $this->rectorConsoleOutputStyle->error($message);

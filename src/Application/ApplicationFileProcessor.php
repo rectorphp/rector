@@ -116,11 +116,12 @@ final class ApplicationFileProcessor
             return [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
         }
         $this->configureCustomErrorHandler();
+        $filePaths = $this->resolveFilePathsByConfigurationFileExtensions($filePaths, $configuration);
         if ($configuration->isParallel()) {
             $systemErrorsAndFileDiffs = $this->runParallel($filePaths, $configuration, $input);
         } else {
-            // 1. PHPStan has to know about all files too
-            $filePaths = $this->configurePHPStanNodeScopeResolver($filePaths, $configuration);
+            // 1. allow PHPStan to work with static reflection on provided files
+            $this->nodeScopeResolver->setAnalysedFiles($filePaths);
             // 2. collect all files from files+dirs provided filtered paths
             $files = $this->fileFactory->createFromPaths($filePaths);
             $systemErrorsAndFileDiffs = $this->processFiles($files, $configuration);
@@ -172,16 +173,14 @@ final class ApplicationFileProcessor
      * @param string[] $filePaths
      * @return string[]
      */
-    public function configurePHPStanNodeScopeResolver(array $filePaths, Configuration $configuration) : array
+    public function resolveFilePathsByConfigurationFileExtensions(array $filePaths, Configuration $configuration) : array
     {
         $fileExtensions = $configuration->getFileExtensions();
         $fileWithExtensionsFilter = static function (string $filePath) use($fileExtensions) : bool {
             $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);
             return \in_array($filePathExtension, $fileExtensions, \true);
         };
-        $filePaths = \array_filter($filePaths, $fileWithExtensionsFilter);
-        $this->nodeScopeResolver->setAnalysedFiles($filePaths);
-        return $filePaths;
+        return \array_filter($filePaths, $fileWithExtensionsFilter);
     }
     /**
      * @param File[] $files
