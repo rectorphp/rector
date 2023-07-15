@@ -111,7 +111,6 @@ final class ApplicationFileProcessor
     public function run(Configuration $configuration, InputInterface $input) : array
     {
         $filePaths = $this->fileFactory->findFilesInPaths($configuration->getPaths(), $configuration);
-        $filePaths = $this->resolveFilePathsByConfigurationFileExtensions($filePaths, $configuration);
         // no files found
         if ($filePaths === []) {
             return [Bridge::SYSTEM_ERRORS => [], Bridge::FILE_DIFFS => []];
@@ -168,19 +167,6 @@ final class ApplicationFileProcessor
             }
         }
         return $systemErrorsAndFileDiffs;
-    }
-    /**
-     * @param string[] $filePaths
-     * @return string[]
-     */
-    public function resolveFilePathsByConfigurationFileExtensions(array $filePaths, Configuration $configuration) : array
-    {
-        $fileExtensions = $configuration->getFileExtensions();
-        $fileWithExtensionsFilter = static function (string $filePath) use($fileExtensions) : bool {
-            $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);
-            return \in_array($filePathExtension, $fileExtensions, \true);
-        };
-        return \array_filter($filePaths, $fileWithExtensionsFilter);
     }
     /**
      * @param File[] $files

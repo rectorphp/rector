@@ -48,7 +48,13 @@ final class FileFactory
             $this->changedFilesDetector->clear();
         }
         $supportedFileExtensions = $this->resolveSupportedFileExtensions($configuration);
-        return $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
+        $filePaths = $this->filesFinder->findInDirectoriesAndFiles($paths, $supportedFileExtensions);
+        $fileExtensions = $configuration->getFileExtensions();
+        $fileWithExtensionsFilter = static function (string $filePath) use($fileExtensions) : bool {
+            $filePathExtension = \pathinfo($filePath, \PATHINFO_EXTENSION);
+            return \in_array($filePathExtension, $fileExtensions, \true);
+        };
+        return \array_filter($filePaths, $fileWithExtensionsFilter);
     }
     /**
      * @param string[] $filePaths
