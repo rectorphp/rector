@@ -106,13 +106,21 @@ CODE_SAMPLE
         return $statements;
     }
     /**
-     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_ $node
+     * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\ElseIf_|\PhpParser\Node\Stmt\Else_ $node
      */
     private function doesLastStatementBreakFlow($node) : bool
     {
         $lastStmt = \end($node->stmts);
         if ($lastStmt instanceof If_ && $lastStmt->else instanceof Else_) {
-            return $this->doesLastStatementBreakFlow($lastStmt);
+            if ($this->doesLastStatementBreakFlow($lastStmt) || $this->doesLastStatementBreakFlow($lastStmt->else)) {
+                return \true;
+            }
+            foreach ($lastStmt->elseifs as $elseIf) {
+                if ($this->doesLastStatementBreakFlow($elseIf)) {
+                    return \true;
+                }
+            }
+            return \false;
         }
         return !($lastStmt instanceof Return_ || $lastStmt instanceof Throw_ || $lastStmt instanceof Continue_ || $lastStmt instanceof Expression && $lastStmt->expr instanceof Exit_);
     }
