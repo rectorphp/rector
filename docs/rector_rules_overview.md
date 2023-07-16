@@ -1,4 +1,4 @@
-# 361 Rules Overview
+# 362 Rules Overview
 
 <br>
 
@@ -52,7 +52,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (42)
+- [TypeDeclaration](#typedeclaration) (43)
 
 - [Visibility](#visibility) (3)
 
@@ -8118,6 +8118,25 @@ Add strict return array type based on created empty array and returned
          $values = [];
 
          return $values;
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictParamRector
+
+Add return type based on strict parameter type
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictParamRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictParamRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function resolve(ParamType $item)
++    public function resolve(ParamType $item): ParamType
+     {
+         return $item;
      }
  }
 ```
