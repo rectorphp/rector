@@ -63,6 +63,8 @@ final class ReturnStrictTypeAnalyzer
             if ($returnedExpr instanceof MethodCall || $returnedExpr instanceof StaticCall || $returnedExpr instanceof FuncCall) {
                 $containsStrictCall = \true;
                 $returnNode = $this->resolveMethodCallReturnNode($returnedExpr);
+            } elseif ($returnedExpr instanceof Expr\ClassConstFetch) {
+                $returnNode = $this->resolveConstFetchReturnNode($returnedExpr, $scope);
             } elseif ($returnedExpr instanceof Array_ || $returnedExpr instanceof String_ || $returnedExpr instanceof LNumber || $returnedExpr instanceof DNumber) {
                 $returnNode = $this->resolveLiteralReturnNode($returnedExpr, $scope);
             } else {
@@ -106,5 +108,13 @@ final class ReturnStrictTypeAnalyzer
     {
         $returnType = $scope->getType($returnedExpr);
         return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($returnType, TypeKind::RETURN);
+    }
+    private function resolveConstFetchReturnNode(Expr\ClassConstFetch $returnedExpr, Scope $scope) : ?Node
+    {
+        $constType = $scope->getType($returnedExpr);
+        if ($constType instanceof MixedType) {
+            return null;
+        }
+        return $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($constType, TypeKind::RETURN);
     }
 }
