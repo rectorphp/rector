@@ -3,12 +3,9 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Scalar\LNumber;
-use PhpParser\Node\Scalar\DNumber;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
+use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -16,6 +13,9 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Scalar;
+use PhpParser\Node\Scalar\DNumber;
+use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\FunctionVariantWithPhpDocs;
