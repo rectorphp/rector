@@ -83,12 +83,15 @@ CODE_SAMPLE
      */
     public function refactor(Node $node)
     {
+        if ($node->stmts === null) {
+            return null;
+        }
         /** @var BareSingleAssignIf[] $bareSingleAssignIfs */
         $bareSingleAssignIfs = [];
         $initialAssign = null;
         $initialAssignPosition = null;
-        foreach ((array) $node->stmts as $key => $stmt) {
-            $bareSingleAssignIf = $this->matchBareSingleAssignIf($stmt);
+        foreach ($node->stmts as $key => $stmt) {
+            $bareSingleAssignIf = $this->matchBareSingleAssignIf($stmt, $key, $node);
             if ($bareSingleAssignIf instanceof BareSingleAssignIf) {
                 $bareSingleAssignIfs[] = $bareSingleAssignIf;
                 continue;
@@ -143,7 +146,7 @@ CODE_SAMPLE
         }
         return \true;
     }
-    private function matchBareSingleAssignIf(Stmt $stmt) : ?BareSingleAssignIf
+    private function matchBareSingleAssignIf(Stmt $stmt, int $key, StmtsAwareInterface $stmtsAware) : ?BareSingleAssignIf
     {
         if (!$stmt instanceof If_) {
             return null;
@@ -163,7 +166,16 @@ CODE_SAMPLE
         if (!$this->ifManipulator->isIfWithoutElseAndElseIfs($stmt)) {
             return null;
         }
-        return new BareSingleAssignIf($stmt, $expression->expr);
+        if (!isset($stmtsAware->stmts[$key + 1])) {
+            return null;
+        }
+        if ($stmtsAware->stmts[$key + 1] instanceof If_) {
+            return new BareSingleAssignIf($stmt, $expression->expr);
+        }
+        if ($stmtsAware->stmts[$key + 1] instanceof Return_) {
+            return new BareSingleAssignIf($stmt, $expression->expr);
+        }
+        return null;
     }
     /**
      * @param BareSingleAssignIf[] $bareSingleAssignIfs
