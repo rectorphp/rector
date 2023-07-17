@@ -10,7 +10,9 @@ use RectorPrefix202307\Doctrine\ORM\Mapping\OneToMany;
 use RectorPrefix202307\Doctrine\ORM\Mapping\OneToOne;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -120,6 +122,9 @@ CODE_SAMPLE
                 continue;
             }
             if (!$this->isName($argName, $attributeName)) {
+                continue;
+            }
+            if (!$arg->value instanceof String_) {
                 continue;
             }
             /** @var string $value - Should always be string at this point */
