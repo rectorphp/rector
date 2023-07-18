@@ -6,18 +6,25 @@ namespace Rector\TypeDeclaration\Rector\Class_;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar;
 use PhpParser\Node\Stmt\Class_;
+use PhpParser\Node\Stmt\ClassMethod;
+use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ConstantType;
 use PHPStan\Type\GeneralizePrecision;
+use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+use PHPStan\Type\TypeCombinator;
+use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\TypeDeclaration\ValueObject\TernaryIfElseTypes;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
@@ -33,9 +40,15 @@ final class ReturnTypeFromStrictTernaryRector extends AbstractScopeAwareRector i
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
-    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
+     */
+    private $returnTypeInferer;
+    public function __construct(ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer)
     {
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
+        $this->returnTypeInferer = $returnTypeInferer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -64,93 +77,62 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [Class_::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
-     * @param Class_ $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
-        $hasChanged = \false;
-        foreach ($node->getMethods() as $classMethod) {
-            if ($classMethod->returnType instanceof Node) {
-                continue;
-            }
-            $onlyStmt = $classMethod->stmts[0] ?? null;
-            if (!$onlyStmt instanceof Return_) {
-                continue;
-            }
-            if (!$onlyStmt->expr instanceof Ternary) {
-                continue;
-            }
-            $ternary = $onlyStmt->expr;
-            // has scalar in if/else of ternary
-            $ternaryIfElseTypes = $this->matchScalarTernaryIfElseTypes($ternary);
-            if (!$ternaryIfElseTypes instanceof TernaryIfElseTypes) {
-                continue;
-            }
-            $ifType = $ternaryIfElseTypes->getFirstType();
-            $elseType = $ternaryIfElseTypes->getSecondType();
-            if (!$this->areTypesEqual($ifType, $elseType)) {
-                continue;
-            }
-            if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($classMethod, $scope)) {
-                continue;
-            }
-            $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($ifType, TypeKind::RETURN);
-            if (!$returnTypeNode instanceof Node) {
-                continue;
-            }
-            $classMethod->returnType = $returnTypeNode;
-            $hasChanged = \true;
+        if ($this->shouldSkip($node, $scope)) {
+            return null;
         }
-        if ($hasChanged) {
-            return $node;
+        if ($node->stmts === null) {
+            return null;
         }
-        return null;
+        $returns = $this->betterNodeFinder->findInstanceOf($node->stmts, Return_::class);
+        if (\count($returns) !== 1) {
+            return null;
+        }
+        $return = $returns[0];
+        if (!$return->expr instanceof Ternary) {
+            return null;
+        }
+        $ternary = $return->expr;
+        $nativeTernaryType = $scope->getNativeType($ternary);
+        if ($nativeTernaryType instanceof MixedType) {
+            return null;
+        }
+        $ternaryType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($ternary);
+        $returnTypeNode = $this->staticTypeMapper->mapPHPStanTypeToPhpParserNode($ternaryType, TypeKind::RETURN);
+        if (!$returnTypeNode instanceof Node) {
+            return null;
+        }
+        $node->returnType = $returnTypeNode;
+        return $node;
     }
     public function provideMinPhpVersion() : int
     {
         return PhpVersionFeature::SCALAR_TYPES;
     }
-    private function isAlwaysScalarExpr(?Expr $expr) : bool
+    /**
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
+     */
+    private function shouldSkip($node, Scope $scope) : bool
     {
-        // check if Scalar node
-        if ($expr instanceof Scalar) {
+        if ($node->returnType !== null) {
             return \true;
         }
-        // check if constant
-        if ($expr instanceof ConstFetch) {
+        $returnType = $this->returnTypeInferer->inferFunctionLike($node);
+        $returnType = TypeCombinator::removeNull($returnType);
+        if ($returnType instanceof UnionType) {
             return \true;
         }
-        // check if class constant
-        return $expr instanceof ClassConstFetch;
-    }
-    private function areTypesEqual(Type $firstType, Type $secondType) : bool
-    {
-        // this is needed to make comparison tolerant to constant values, e.g. 5 and 10 are same only then
-        if ($firstType instanceof ConstantType) {
-            $firstType = $firstType->generalize(GeneralizePrecision::lessSpecific());
+        if ($node instanceof ClassMethod) {
+            if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
+                return \true;
+            }
         }
-        if ($secondType instanceof ConstantType) {
-            $secondType = $secondType->generalize(GeneralizePrecision::lessSpecific());
-        }
-        return $firstType->equals($secondType);
-    }
-    private function matchScalarTernaryIfElseTypes(Ternary $ternary) : ?TernaryIfElseTypes
-    {
-        if (!$this->isAlwaysScalarExpr($ternary->if)) {
-            return null;
-        }
-        if (!$this->isAlwaysScalarExpr($ternary->else)) {
-            return null;
-        }
-        /** @var Node\Expr $if */
-        $if = $ternary->if;
-        /** @var Node\Expr $else */
-        $else = $ternary->else;
-        $ifType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($if);
-        $elseType = $this->staticTypeMapper->mapPhpParserNodePHPStanType($else);
-        return new TernaryIfElseTypes($ifType, $elseType);
+        return \false;
     }
 }

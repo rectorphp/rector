@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7c2d1664db3c0cb93d0f0538a851f407
+class ComposerStaticInitfb6357a522451a3a2edd8b2727b42b45
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2995,7 +2995,6 @@ class ComposerStaticInit7c2d1664db3c0cb93d0f0538a851f407
         'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
         'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
         'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
-        'Rector\\TypeDeclaration\\ValueObject\\TernaryIfElseTypes' => __DIR__ . '/../..' . '/rules/TypeDeclaration/ValueObject/TernaryIfElseTypes.php',
         'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => __DIR__ . '/..' . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
         'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => __DIR__ . '/../..' . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',
@@ -3028,9 +3027,9 @@ class ComposerStaticInit7c2d1664db3c0cb93d0f0538a851f407
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7c2d1664db3c0cb93d0f0538a851f407::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7c2d1664db3c0cb93d0f0538a851f407::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7c2d1664db3c0cb93d0f0538a851f407::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfb6357a522451a3a2edd8b2727b42b45::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfb6357a522451a3a2edd8b2727b42b45::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfb6357a522451a3a2edd8b2727b42b45::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -2741,7 +2741,6 @@ return array(
     'Rector\\TypeDeclaration\\ValueObject\\AddReturnTypeDeclaration' => $baseDir . '/rules/TypeDeclaration/ValueObject/AddReturnTypeDeclaration.php',
     'Rector\\TypeDeclaration\\ValueObject\\AssignToVariable' => $baseDir . '/rules/TypeDeclaration/ValueObject/AssignToVariable.php',
     'Rector\\TypeDeclaration\\ValueObject\\NestedArrayType' => $baseDir . '/rules/TypeDeclaration/ValueObject/NestedArrayType.php',
-    'Rector\\TypeDeclaration\\ValueObject\\TernaryIfElseTypes' => $baseDir . '/rules/TypeDeclaration/ValueObject/TernaryIfElseTypes.php',
     'Rector\\ValueObject\\ClassMethodWillChangeReturnType' => $vendorDir . '/rector/rector-downgrade-php/src/ValueObject/ClassMethodWillChangeReturnType.php',
     'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodParamVendorLockResolver' => $baseDir . '/packages/VendorLocker/NodeVendorLocker/ClassMethodParamVendorLockResolver.php',
     'Rector\\VendorLocker\\NodeVendorLocker\\ClassMethodReturnTypeOverrideGuard' => $baseDir . '/packages/VendorLocker/NodeVendorLocker/ClassMethodReturnTypeOverrideGuard.php',
