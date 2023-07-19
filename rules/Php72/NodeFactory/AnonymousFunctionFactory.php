@@ -291,7 +291,7 @@ final class AnonymousFunctionFactory
     {
         if ($phpMethodReflection->isStatic()) {
             $expr = $this->normalizeClassConstFetchForStatic($expr);
-            if ($expr === null) {
+            if (!$expr instanceof Node) {
                 return null;
             }
             $innerMethodCall = new StaticCall($expr, $phpMethodReflection->getName());
