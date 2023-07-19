@@ -8,11 +8,13 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\PropertyProperty;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\MethodName;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
@@ -53,13 +55,19 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector impl
      * @var \Rector\TypeDeclaration\Guard\PropertyTypeOverrideGuard
      */
     private $propertyTypeOverrideGuard;
-    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer, VarTagRemover $varTagRemover, PhpDocTypeChanger $phpDocTypeChanger, ConstructorAssignDetector $constructorAssignDetector, PropertyTypeOverrideGuard $propertyTypeOverrideGuard)
+    /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    public function __construct(TrustedClassMethodPropertyTypeInferer $trustedClassMethodPropertyTypeInferer, VarTagRemover $varTagRemover, PhpDocTypeChanger $phpDocTypeChanger, ConstructorAssignDetector $constructorAssignDetector, PropertyTypeOverrideGuard $propertyTypeOverrideGuard, ReflectionResolver $reflectionResolver)
     {
         $this->trustedClassMethodPropertyTypeInferer = $trustedClassMethodPropertyTypeInferer;
         $this->varTagRemover = $varTagRemover;
         $this->phpDocTypeChanger = $phpDocTypeChanger;
         $this->constructorAssignDetector = $constructorAssignDetector;
         $this->propertyTypeOverrideGuard = $propertyTypeOverrideGuard;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -104,8 +112,15 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
+        $classReflection = null;
         foreach ($node->getProperties() as $property) {
-            if (!$this->propertyTypeOverrideGuard->isLegal($property)) {
+            if (!$classReflection instanceof ClassReflection) {
+                $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+            }
+            if (!$classReflection instanceof ClassReflection) {
+                return null;
+            }
+            if (!$this->propertyTypeOverrideGuard->isLegal($property, $classReflection)) {
                 continue;
             }
             $propertyType = $this->trustedClassMethodPropertyTypeInferer->inferProperty($node, $property, $constructClassMethod);
