@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\CodeQuality\Rector\Class_;
 
+use PhpParser\Node\Expr;
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -95,23 +96,9 @@ CODE_SAMPLE
             if ($this->exprAnalyzer->isDynamicExpr($defaultExpr)) {
                 continue;
             }
-            foreach ($node->stmts as $classStmt) {
-                if (!$classStmt instanceof Property) {
-                    continue;
-                }
-                // readonly property cannot have default value
-                if ($classStmt->isReadonly()) {
-                    continue;
-                }
-                foreach ($classStmt->props as $propertyProperty) {
-                    if (!$this->isName($propertyProperty, $propertyName)) {
-                        continue;
-                    }
-                    $propertyProperty->default = $defaultExpr;
-                    // remove assign
-                    unset($constructClassMethod->stmts[$key]);
-                    $hasChanged = \true;
-                }
+            $hasPropertyChanged = $this->refactorProperty($node, $propertyName, $defaultExpr, $constructClassMethod, $key);
+            if ($hasPropertyChanged) {
+                $hasChanged = \true;
             }
         }
         if (!$hasChanged) {
@@ -133,5 +120,27 @@ CODE_SAMPLE
             return null;
         }
         return $propertyName;
+    }
+    private function refactorProperty(Class_ $class, string $propertyName, Expr $defaultExpr, ClassMethod $constructClassMethod, int $key) : bool
+    {
+        foreach ($class->stmts as $classStmt) {
+            if (!$classStmt instanceof Property) {
+                continue;
+            }
+            // readonly property cannot have default value
+            if ($classStmt->isReadonly()) {
+                continue;
+            }
+            foreach ($classStmt->props as $propertyProperty) {
+                if (!$this->isName($propertyProperty, $propertyName)) {
+                    continue;
+                }
+                $propertyProperty->default = $defaultExpr;
+                // remove assign
+                unset($constructClassMethod->stmts[$key]);
+                return \true;
+            }
+        }
+        return \false;
     }
 }
