@@ -3,10 +3,10 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
+use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
