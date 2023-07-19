@@ -11,7 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt;
-use PHPStan\Analyser\MutatingScope;
+use PHPStan\Analyser\Scope;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory;
 final class ScopeAnalyzer
@@ -38,18 +38,16 @@ final class ScopeAnalyzer
         }
         return \true;
     }
-    public function resolveScope(Node $node, string $filePath, ?MutatingScope $mutatingScope = null) : ?MutatingScope
+    public function resolveScope(Node $node, string $filePath, ?Stmt $currentStmt = null) : ?Scope
     {
-        if ($mutatingScope instanceof MutatingScope) {
-            return $mutatingScope;
-        }
         // on File level
         if ($node instanceof Stmt && $node->getAttribute(AttributeKey::STATEMENT_DEPTH) === 0) {
             return $this->scopeFactory->createFromFile($filePath);
         }
         // too deep Expr, eg: $$param = $$bar = self::decodeValue($result->getItem()->getTextContent());
         if ($node instanceof Expr && $node->getAttribute(AttributeKey::EXPRESSION_DEPTH) >= 2) {
-            return $this->scopeFactory->createFromFile($filePath);
+            $scope = $currentStmt instanceof Stmt ? $currentStmt->getAttribute(AttributeKey::SCOPE) : $this->scopeFactory->createFromFile($filePath);
+            return $scope instanceof Scope ? $scope : $this->scopeFactory->createFromFile($filePath);
         }
         /**
          * Node and parent Node doesn't has Scope, and Node Start token pos is < 0,

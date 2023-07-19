@@ -50,7 +50,6 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\NonPhpFile\NonPhpFileProcessor;
 use Rector\Core\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\Core\Validation\Collector\EmptyConfigurableRectorCollector;
 use Rector\Core\ValueObjectFactory\Application\FileFactory;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -135,7 +134,6 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->load('Rector\\Core\\', __DIR__ . '/../src')->exclude([__DIR__ . '/../src/Rector', __DIR__ . '/../src/Console/Style/RectorConsoleOutputStyle.php', __DIR__ . '/../src/Exception', __DIR__ . '/../src/DependencyInjection/CompilerPass', __DIR__ . '/../src/DependencyInjection/Loader', __DIR__ . '/../src/Kernel', __DIR__ . '/../src/ValueObject', __DIR__ . '/../src/Bootstrap', __DIR__ . '/../src/Enum', __DIR__ . '/../src/functions', __DIR__ . '/../src/PhpParser/Node/CustomNode', __DIR__ . '/../src/PhpParser/ValueObject', __DIR__ . '/../src/PHPStan/NodeVisitor', __DIR__ . '/../src/constants.php']);
     $services->set(ConsoleApplication::class)->arg('$commands', tagged_iterator(Command::class));
     $services->alias(Application::class, ConsoleApplication::class);
-    $services->set(EmptyConfigurableRectorCollector::class)->arg('$containerBuilder', service('service_container'));
     $services->set(SimpleCallableNodeTraverser::class);
     $services->set(BuilderFactory::class);
     $services->set(CloningVisitor::class);

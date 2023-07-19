@@ -34,7 +34,7 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
         /** @var MutatingScope|null $currentScope */
         $currentScope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$currentScope instanceof MutatingScope) {
-            $currentScope = $this->scopeAnalyzer->resolveScope($node, $this->file->getFilePath());
+            $currentScope = $this->scopeAnalyzer->resolveScope($node, $this->file->getFilePath(), $this->currentStmt);
         }
         if (!$currentScope instanceof Scope) {
             $errorMessage = \sprintf('Scope not available on "%s" node, but is required by a refactorWithScope() method of "%s" rule. Fix scope refresh on changed nodes first', \get_class($node), static::class);

@@ -90,6 +90,10 @@ CODE_SAMPLE;
      */
     protected $file;
     /**
+     * @var \Rector\Core\Rector\Stmt|null
+     */
+    protected $currentStmt;
+    /**
      * @var \Rector\Core\Application\ChangedNodeScopeRefresher
      */
     private $changedNodeScopeRefresher;
@@ -176,8 +180,7 @@ CODE_SAMPLE;
     }
     public final function enterNode(Node $node)
     {
-        $nodeClass = \get_class($node);
-        if (!$this->isMatchingNodeType($nodeClass)) {
+        if (!$this->isMatchingNodeType($node)) {
             return null;
         }
         if ($this->shouldSkipCurrentNode($node)) {
@@ -331,18 +334,20 @@ CODE_SAMPLE;
     {
         $nodes = $node instanceof Node ? [$node] : $node;
         foreach ($nodes as $node) {
-            $this->changedNodeScopeRefresher->refresh($node, $mutatingScope, $filePath);
+            $this->changedNodeScopeRefresher->refresh($node, $mutatingScope, $filePath, $this->currentStmt);
         }
     }
-    /**
-     * @param class-string<Node> $nodeClass
-     */
-    private function isMatchingNodeType(string $nodeClass) : bool
+    private function isMatchingNodeType(Node $node) : bool
     {
+        $nodeClass = \get_class($node);
         foreach ($this->getNodeTypes() as $nodeType) {
-            if (\is_a($nodeClass, $nodeType, \true)) {
-                return \true;
+            if (!\is_a($nodeClass, $nodeType, \true)) {
+                if ($node instanceof \Rector\Core\Rector\Stmt) {
+                    $this->currentStmt = $node;
+                }
+                continue;
             }
+            return \true;
         }
         return \false;
     }
