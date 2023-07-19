@@ -31,10 +31,8 @@ abstract class AbstractScopeAwareRector extends \Rector\Core\Rector\AbstractRect
      */
     public function refactor(Node $node)
     {
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
-        $originalNode = $originalNode ?? $node;
         /** @var MutatingScope|null $currentScope */
-        $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
+        $currentScope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$currentScope instanceof MutatingScope) {
             $currentScope = $this->scopeAnalyzer->resolveScope($node, $this->file->getFilePath());
         }

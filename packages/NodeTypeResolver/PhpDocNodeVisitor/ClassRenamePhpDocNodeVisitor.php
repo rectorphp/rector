@@ -118,7 +118,8 @@ final class ClassRenamePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             return $name;
         }
         $uses = $this->useImportsResolver->resolve();
-        $scope = $phpParserNode->getAttribute(AttributeKey::SCOPE);
+        $originalNode = $phpParserNode->getAttribute(AttributeKey::ORIGINAL_NODE) ?? $phpParserNode;
+        $scope = $originalNode->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
             if (!$phpParserNode->hasAttribute(AttributeKey::ORIGINAL_NODE)) {
                 return $this->resolveNamefromUse($uses, $name);

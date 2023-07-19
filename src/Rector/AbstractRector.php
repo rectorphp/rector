@@ -224,7 +224,7 @@ CODE_SAMPLE;
             $errorMessage = \sprintf(self::EMPTY_NODE_ARRAY_MESSAGE, static::class);
             throw new ShouldNotHappenException($errorMessage);
         }
-        return $this->postRefactorProcess($originalNode, $refactoredNode);
+        return $this->postRefactorProcess($originalNode, $node, $refactoredNode);
     }
     /**
      * Replacing nodes in leaveNode() method avoids infinite recursion
@@ -301,14 +301,14 @@ CODE_SAMPLE;
     /**
      * @param \PhpParser\Node|mixed[]|int $refactoredNode
      */
-    private function postRefactorProcess(Node $originalNode, $refactoredNode) : Node
+    private function postRefactorProcess(Node $originalNode, Node $node, $refactoredNode) : Node
     {
         /** @var non-empty-array<Node>|Node $refactoredNode */
         $this->createdByRuleDecorator->decorate($refactoredNode, $originalNode, static::class);
         $rectorWithLineChange = new RectorWithLineChange(static::class, $originalNode->getLine());
         $this->file->addRectorClassWithLine($rectorWithLineChange);
         /** @var MutatingScope|null $currentScope */
-        $currentScope = $originalNode->getAttribute(AttributeKey::SCOPE);
+        $currentScope = $node->getAttribute(AttributeKey::SCOPE);
         $filePath = $this->file->getFilePath();
         // search "infinite recursion" in https://github.com/nikic/PHP-Parser/blob/master/doc/component/Walking_the_AST.markdown
         $originalNodeHash = \spl_object_hash($originalNode);
