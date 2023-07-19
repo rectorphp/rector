@@ -1985,12 +1985,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "734960f3d1ce23f235a3bd1b206551845dbf7aeb"
+                "reference": "e10ce1addb5f523aa30749cd8dcf77796d46fd09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/734960f3d1ce23f235a3bd1b206551845dbf7aeb",
-                "reference": "734960f3d1ce23f235a3bd1b206551845dbf7aeb",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/e10ce1addb5f523aa30749cd8dcf77796d46fd09",
+                "reference": "e10ce1addb5f523aa30749cd8dcf77796d46fd09",
                 "shasum": ""
             },
             "require": {
@@ -2014,7 +2014,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-07-12T21:59:50+00:00",
+            "time": "2023-07-19T10:46:18+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

@@ -14,7 +14,6 @@ use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\PhpParser\Printer\FormatPerservingPrinter;
-use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
@@ -53,11 +52,6 @@ final class PhpFileProcessor implements FileProcessorInterface
     private $changedFilesDetector;
     /**
      * @readonly
-     * @var \Rector\Core\Provider\CurrentFileProvider
-     */
-    private $currentFileProvider;
-    /**
-     * @readonly
      * @var \Rector\PostRector\Application\PostFileProcessor
      */
     private $postFileProcessor;
@@ -81,14 +75,13 @@ final class PhpFileProcessor implements FileProcessorInterface
      * @see https://regex101.com/r/xP2MGa/1
      */
     private const OPEN_TAG_SPACED_REGEX = '#^(?<open_tag_spaced>[^\\S\\r\\n]+\\<\\?php)#m';
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, CurrentFileProvider $currentFileProvider, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, SymfonyStyle $symfonyStyle)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, SymfonyStyle $symfonyStyle)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->fileDiffFactory = $fileDiffFactory;
         $this->changedFilesDetector = $changedFilesDetector;
-        $this->currentFileProvider = $currentFileProvider;
         $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
         $this->filePathHelper = $filePathHelper;
@@ -163,7 +156,6 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     private function parseFileAndDecorateNodes(File $file) : array
     {
-        $this->currentFileProvider->setFile($file);
         $this->notifyFile($file);
         try {
             $this->fileProcessor->parseFileInfoToLocalCache($file);

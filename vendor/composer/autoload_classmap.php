@@ -1495,7 +1495,6 @@ return array(
     'Rector\\Config\\RectorConfig' => $baseDir . '/packages/Config/RectorConfig.php',
     'Rector\\Core\\Application\\ApplicationFileProcessor' => $baseDir . '/src/Application/ApplicationFileProcessor.php',
     'Rector\\Core\\Application\\ChangedNodeScopeRefresher' => $baseDir . '/src/Application/ChangedNodeScopeRefresher.php',
-    'Rector\\Core\\Application\\FileDecorator\\FileDiffFileDecorator' => $baseDir . '/src/Application/FileDecorator/FileDiffFileDecorator.php',
     'Rector\\Core\\Application\\FileProcessor' => $baseDir . '/src/Application/FileProcessor.php',
     'Rector\\Core\\Application\\FileProcessor\\PhpFileProcessor' => $baseDir . '/src/Application/FileProcessor/PhpFileProcessor.php',
     'Rector\\Core\\Application\\VersionResolver' => $baseDir . '/src/Application/VersionResolver.php',
