@@ -334,12 +334,10 @@ final class NodeFactory
             $arrayItem = new ArrayItem($itemValue);
         } elseif (\is_array($item)) {
             $arrayItem = new ArrayItem($this->createArray($item));
-        }
-        if ($item === null || $item instanceof ClassConstFetch) {
+        } elseif ($item === null || $item instanceof ClassConstFetch) {
             $itemValue = BuilderHelpers::normalizeValue($item);
             $arrayItem = new ArrayItem($itemValue);
-        }
-        if ($item instanceof Arg) {
+        } elseif ($item instanceof Arg) {
             $arrayItem = new ArrayItem($item->value);
         }
         if ($arrayItem instanceof ArrayItem) {
