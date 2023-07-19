@@ -5,6 +5,7 @@ namespace Rector\Core\Rector;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
+use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Nop;
 use PhpParser\NodeTraverser;
@@ -90,7 +91,7 @@ CODE_SAMPLE;
      */
     protected $file;
     /**
-     * @var \Rector\Core\Rector\Stmt|null
+     * @var \PhpParser\Node\Stmt|null
      */
     protected $currentStmt;
     /**
@@ -342,7 +343,7 @@ CODE_SAMPLE;
         $nodeClass = \get_class($node);
         foreach ($this->getNodeTypes() as $nodeType) {
             if (!\is_a($nodeClass, $nodeType, \true)) {
-                if ($node instanceof \Rector\Core\Rector\Stmt) {
+                if ($node instanceof Stmt) {
                     $this->currentStmt = $node;
                 }
                 continue;
