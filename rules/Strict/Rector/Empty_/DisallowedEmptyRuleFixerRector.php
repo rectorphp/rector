@@ -12,6 +12,7 @@ use PhpParser\Node\Expr\Empty_;
 use PhpParser\Node\Expr\Isset_;
 use PHPStan\Analyser\Scope;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
+use Rector\Core\NodeAnalyzer\ExprAnalyzer;
 use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -26,9 +27,15 @@ final class DisallowedEmptyRuleFixerRector extends AbstractFalsyScalarRuleFixerR
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
     private $exactCompareFactory;
-    public function __construct(ExactCompareFactory $exactCompareFactory)
+    /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\ExprAnalyzer
+     */
+    private $exprAnalyzer;
+    public function __construct(ExactCompareFactory $exactCompareFactory, ExprAnalyzer $exprAnalyzer)
     {
         $this->exactCompareFactory = $exactCompareFactory;
+        $this->exprAnalyzer = $exprAnalyzer;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -82,11 +89,17 @@ CODE_SAMPLE
         if ($empty->expr instanceof ArrayDimFetch) {
             return $this->createDimFetchBooleanAnd($empty);
         }
+        if ($this->exprAnalyzer->isNonTypedFromParam($empty->expr)) {
+            return null;
+        }
         $emptyExprType = $scope->getType($empty->expr);
         return $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr, $this->treatAsNonEmpty);
     }
     private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty) : ?\PhpParser\Node\Expr
     {
+        if ($this->exprAnalyzer->isNonTypedFromParam($empty->expr)) {
+            return null;
+        }
         $exprType = $scope->getType($empty->expr);
         return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);
     }

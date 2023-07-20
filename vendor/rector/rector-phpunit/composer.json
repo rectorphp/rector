@@ -23,7 +23,8 @@
         "rector\/rector-generator": "^0.6.15",
         "tomasvotruba\/type-coverage": "^0.1",
         "tomasvotruba\/unused-public": "^0.1",
-        "tomasvotruba\/cognitive-complexity": "^0.1"
+        "tomasvotruba\/cognitive-complexity": "^0.1",
+        "tomasvotruba\/class-leak": "0.0.22.72"
     },
     "autoload": {
         "psr-4": {

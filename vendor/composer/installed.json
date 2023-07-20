@@ -2052,12 +2052,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-phpunit.git",
-                "reference": "3918e6fa1790daede2ca6c028a004d74021ce65c"
+                "reference": "37461d0069b2a3172a17efd8827008006c237e19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/3918e6fa1790daede2ca6c028a004d74021ce65c",
-                "reference": "3918e6fa1790daede2ca6c028a004d74021ce65c",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-phpunit\/zipball\/37461d0069b2a3172a17efd8827008006c237e19",
+                "reference": "37461d0069b2a3172a17efd8827008006c237e19",
                 "shasum": ""
             },
             "require": {
@@ -2081,11 +2081,12 @@
                 "symplify\/phpstan-rules": "^11.4",
                 "symplify\/rule-doc-generator": "^11.2",
                 "symplify\/vendor-patches": "^11.2.0",
+                "tomasvotruba\/class-leak": "0.0.22.72",
                 "tomasvotruba\/cognitive-complexity": "^0.1",
                 "tomasvotruba\/type-coverage": "^0.1",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-07-18T15:13:05+00:00",
+            "time": "2023-07-20T11:17:28+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
