@@ -7,8 +7,10 @@ use PhpParser\Node;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\TraitUse;
+use PHPStan\Reflection\ClassReflection;
 use Rector\Core\NodeManipulator\ClassManipulator;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -23,22 +25,22 @@ final class AddProphecyTraitRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ClassManipulator
-     */
-    private $classManipulator;
-    /**
-     * @readonly
      * @var \Rector\PHPUnit\NodeAnalyzer\TestsNodeAnalyzer
      */
     private $testsNodeAnalyzer;
     /**
+     * @readonly
+     * @var \Rector\Core\Reflection\ReflectionResolver
+     */
+    private $reflectionResolver;
+    /**
      * @var string
      */
     private const PROPHECY_TRAIT = 'Prophecy\\PhpUnit\\ProphecyTrait';
-    public function __construct(ClassManipulator $classManipulator, TestsNodeAnalyzer $testsNodeAnalyzer)
+    public function __construct(TestsNodeAnalyzer $testsNodeAnalyzer, ReflectionResolver $reflectionResolver)
     {
-        $this->classManipulator = $classManipulator;
         $this->testsNodeAnalyzer = $testsNodeAnalyzer;
+        $this->reflectionResolver = $reflectionResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -96,6 +98,10 @@ CODE_SAMPLE
         if (!$hasProphesizeMethodCall) {
             return \true;
         }
-        return $this->classManipulator->hasTrait($class, self::PROPHECY_TRAIT);
+        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        return $classReflection->hasTraitUse(self::PROPHECY_TRAIT);
     }
 }
