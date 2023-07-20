@@ -397,13 +397,12 @@ final class PHPStanNodeScopeResolver
         } else {
             $classReflection = $this->reflectionProvider->getClass($className);
         }
-        $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
         try {
-            $this->privatesAccessor->setPrivateProperty($context, 'classReflection', $classReflection);
             return $mutatingScope->enterClass($classReflection);
         } catch (\PHPStan\ShouldNotHappenException $exception) {
-            $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
         }
+        $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
+        $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
         return $mutatingScope->enterClass($classReflection);
     }
     /**
