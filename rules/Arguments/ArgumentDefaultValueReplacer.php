@@ -10,6 +10,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
@@ -34,7 +35,7 @@ final class ArgumentDefaultValueReplacer
         $this->valueResolver = $valueResolver;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\FuncCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\New_ $node
      */
     public function processReplaces($node, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?Node
     {
@@ -77,15 +78,16 @@ final class ArgumentDefaultValueReplacer
         return $classMethod;
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $expr
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\New_ $expr
      */
     private function processArgs($expr, ReplaceArgumentDefaultValueInterface $replaceArgumentDefaultValue) : ?Expr
     {
         $position = $replaceArgumentDefaultValue->getPosition();
-        if (!$expr->args[$position] instanceof Arg) {
+        $particularArg = $expr->getArgs()[$position] ?? null;
+        if (!$particularArg instanceof Arg) {
             return null;
         }
-        $argValue = $this->valueResolver->getValue($expr->getArgs()[$position]->value);
+        $argValue = $this->valueResolver->getValue($particularArg->value);
         if (\is_scalar($replaceArgumentDefaultValue->getValueBefore()) && $argValue === $replaceArgumentDefaultValue->getValueBefore()) {
             $expr->args[$position] = $this->normalizeValueToArgument($replaceArgumentDefaultValue->getValueAfter());
         } elseif (\is_array($replaceArgumentDefaultValue->getValueBefore())) {

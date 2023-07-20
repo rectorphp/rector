@@ -5,12 +5,14 @@ namespace Rector\Arguments\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Arguments\ArgumentDefaultValueReplacer;
 use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use RectorPrefix202307\Webmozart\Assert\Assert;
@@ -28,7 +30,7 @@ final class ReplaceArgumentDefaultValueRector extends AbstractRector implements 
     /**
      * @var ReplaceArgumentDefaultValue[]
      */
-    private $replacedArguments = [];
+    private $replaceArgumentDefaultValues = [];
     public function __construct(ArgumentDefaultValueReplacer $argumentDefaultValueReplacer)
     {
         $this->argumentDefaultValueReplacer = $argumentDefaultValueReplacer;
@@ -50,23 +52,26 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [MethodCall::class, StaticCall::class, ClassMethod::class];
+        return [MethodCall::class, StaticCall::class, ClassMethod::class, New_::class];
     }
     /**
-     * @param MethodCall|StaticCall|ClassMethod $node
-     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|null
+     * @param MethodCall|StaticCall|ClassMethod|New_ $node
+     * @return \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Expr\New_|null
      */
     public function refactor(Node $node)
     {
         $hasChanged = \false;
-        foreach ($this->replacedArguments as $replacedArgument) {
-            if (!$this->isName($node->name, $replacedArgument->getMethod())) {
+        if ($node instanceof New_) {
+            return $this->refactorNew($node);
+        }
+        foreach ($this->replaceArgumentDefaultValues as $replaceArgumentDefaultValue) {
+            if (!$this->isName($node->name, $replaceArgumentDefaultValue->getMethod())) {
                 continue;
             }
-            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $replacedArgument->getObjectType())) {
+            if (!$this->nodeTypeResolver->isMethodStaticCallOrClassMethodObjectType($node, $replaceArgumentDefaultValue->getObjectType())) {
                 continue;
             }
-            $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replacedArgument);
+            $replacedNode = $this->argumentDefaultValueReplacer->processReplaces($node, $replaceArgumentDefaultValue);
             if ($replacedNode instanceof Node) {
                 $hasChanged = \true;
             }
@@ -82,6 +87,19 @@ CODE_SAMPLE
     public function configure(array $configuration) : void
     {
         Assert::allIsAOf($configuration, ReplaceArgumentDefaultValue::class);
-        $this->replacedArguments = $configuration;
+        $this->replaceArgumentDefaultValues = $configuration;
+    }
+    private function refactorNew(New_ $new) : ?New_
+    {
+        foreach ($this->replaceArgumentDefaultValues as $replaceArgumentDefaultValue) {
+            if ($replaceArgumentDefaultValue->getMethod() !== MethodName::CONSTRUCT) {
+                continue;
+            }
+            if (!$this->isObjectType($new, $replaceArgumentDefaultValue->getObjectType())) {
+                continue;
+            }
+            return $this->argumentDefaultValueReplacer->processReplaces($new, $replaceArgumentDefaultValue);
+        }
+        return null;
     }
 }
