@@ -109,7 +109,7 @@ interface HttpClientInterface
     public function stream($responses, float $timeout = null) : ResponseStreamInterface;
     /**
      * Returns a new instance of the client with new default options.
-     * @return $this
+     * @return static
      */
     public function withOptions(array $options);
 }

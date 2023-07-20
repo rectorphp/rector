@@ -72,7 +72,7 @@ final class LazyCommand extends Command
         $this->getCommand()->complete($input, $suggestions);
     }
     /**
-     * @return $this
+     * @return static
      */
     public function setCode(callable $code)
     {
@@ -88,7 +88,7 @@ final class LazyCommand extends Command
     }
     /**
      * @param mixed[]|\Symfony\Component\Console\Input\InputDefinition $definition
-     * @return $this
+     * @return static
      */
     public function setDefinition($definition)
     {
@@ -106,7 +106,7 @@ final class LazyCommand extends Command
     /**
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      * @param mixed $default
-     * @return $this
+     * @return static
      */
     public function addArgument(string $name, int $mode = null, string $description = '', $default = null)
     {
@@ -118,7 +118,7 @@ final class LazyCommand extends Command
      * @param array|\Closure(CompletionInput,CompletionSuggestions):list<string|Suggestion> $suggestedValues The values used for input completion
      * @param string|mixed[] $shortcut
      * @param mixed $default
-     * @return $this
+     * @return static
      */
     public function addOption(string $name, $shortcut = null, int $mode = null, string $description = '', $default = null)
     {
@@ -127,7 +127,7 @@ final class LazyCommand extends Command
         return $this;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function setProcessTitle(string $title)
     {
@@ -135,7 +135,7 @@ final class LazyCommand extends Command
         return $this;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function setHelp(string $help)
     {
@@ -155,7 +155,7 @@ final class LazyCommand extends Command
         return $this->getCommand()->getSynopsis($short);
     }
     /**
-     * @return $this
+     * @return static
      */
     public function addUsage(string $usage)
     {

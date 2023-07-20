@@ -42,7 +42,7 @@ abstract class AbstractUnicodeString extends AbstractString
     private static $tableZero;
     private static $tableWide;
     /**
-     * @return $this
+     * @return static
      */
     public static function fromCodePoints(int ...$codes)
     {
@@ -133,7 +133,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function camel()
     {
@@ -160,7 +160,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $codePoints;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function folded(bool $compat = \true)
     {
@@ -174,7 +174,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function join(array $strings, string $lastGlue = null)
     {
@@ -187,7 +187,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function lower()
     {
@@ -214,7 +214,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $matches;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function normalize(int $form = self::NFC)
     {
@@ -226,7 +226,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function padBoth(int $length, string $padStr = ' ')
     {
@@ -238,7 +238,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $this->pad($length, $pad, \STR_PAD_BOTH);
     }
     /**
-     * @return $this
+     * @return static
      */
     public function padEnd(int $length, string $padStr = ' ')
     {
@@ -250,7 +250,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $this->pad($length, $pad, \STR_PAD_RIGHT);
     }
     /**
-     * @return $this
+     * @return static
      */
     public function padStart(int $length, string $padStr = ' ')
     {
@@ -263,7 +263,7 @@ abstract class AbstractUnicodeString extends AbstractString
     }
     /**
      * @param string|callable $to
-     * @return $this
+     * @return static
      */
     public function replaceMatches(string $fromRegexp, $to)
     {
@@ -305,7 +305,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function reverse()
     {
@@ -314,7 +314,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function snake()
     {
@@ -323,7 +323,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function title(bool $allWords = \false)
     {
@@ -335,7 +335,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function trim(string $chars = " \t\n\r\x00\v\f ﻿")
     {
@@ -348,7 +348,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function trimEnd(string $chars = " \t\n\r\x00\v\f ﻿")
     {
@@ -361,7 +361,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function trimPrefix($prefix)
     {
@@ -379,7 +379,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function trimStart(string $chars = " \t\n\r\x00\v\f ﻿")
     {
@@ -392,7 +392,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function trimSuffix($suffix)
     {
@@ -410,7 +410,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function upper()
     {
@@ -444,7 +444,7 @@ abstract class AbstractUnicodeString extends AbstractString
         return $width;
     }
     /**
-     * @return $this
+     * @return static
      */
     private function pad(int $len, self $pad, int $type)
     {

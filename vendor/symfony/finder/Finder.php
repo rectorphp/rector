@@ -128,7 +128,7 @@ class Finder implements \IteratorAggregate, \Countable
     }
     /**
      * Creates a new Finder.
-     * @return $this
+     * @return static
      */
     public static function create()
     {

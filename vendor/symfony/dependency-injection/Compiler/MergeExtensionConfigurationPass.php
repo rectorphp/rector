@@ -146,7 +146,7 @@ class MergeExtensionConfigurationContainerBuilder extends ContainerBuilder
     }
     /**
      * {@inheritdoc}
-     * @return $this
+     * @return static
      */
     public function addCompilerPass(CompilerPassInterface $pass, string $type = PassConfig::TYPE_BEFORE_OPTIMIZATION, int $priority = 0)
     {

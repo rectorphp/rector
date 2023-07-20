@@ -48,7 +48,7 @@ class PhpProcess extends Process
     }
     /**
      * @param mixed $input
-     * @return $this
+     * @return static
      */
     public static function fromShellCommandline(string $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
     {

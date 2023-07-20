@@ -33,7 +33,7 @@ class BooleanNodeDefinition extends ScalarNodeDefinition
     }
     /**
      * @throws InvalidDefinitionException
-     * @return $this
+     * @return static
      */
     public function cannotBeEmpty()
     {

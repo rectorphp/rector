@@ -81,7 +81,7 @@ class ByteString extends AbstractString
         return '' === $str ? [] : [\ord($str)];
     }
     /**
-     * @return $this
+     * @return static
      */
     public function append(string ...$suffix)
     {
@@ -90,7 +90,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function camel()
     {
@@ -144,7 +144,7 @@ class ByteString extends AbstractString
         return $string === $this->string;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function folded()
     {
@@ -189,7 +189,7 @@ class ByteString extends AbstractString
         return '' === $this->string || \preg_match('//u', $this->string);
     }
     /**
-     * @return $this
+     * @return static
      */
     public function join(array $strings, string $lastGlue = null)
     {
@@ -203,7 +203,7 @@ class ByteString extends AbstractString
         return \strlen($this->string);
     }
     /**
-     * @return $this
+     * @return static
      */
     public function lower()
     {
@@ -230,7 +230,7 @@ class ByteString extends AbstractString
         return $matches;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function padBoth(int $length, string $padStr = ' ')
     {
@@ -239,7 +239,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function padEnd(int $length, string $padStr = ' ')
     {
@@ -248,7 +248,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function padStart(int $length, string $padStr = ' ')
     {
@@ -257,7 +257,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function prepend(string ...$prefix)
     {
@@ -266,7 +266,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function replace(string $from, string $to)
     {
@@ -278,7 +278,7 @@ class ByteString extends AbstractString
     }
     /**
      * @param string|callable $to
-     * @return $this
+     * @return static
      */
     public function replaceMatches(string $fromRegexp, $to)
     {
@@ -307,7 +307,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function reverse()
     {
@@ -316,7 +316,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function slice(int $start = 0, int $length = null)
     {
@@ -325,7 +325,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function snake()
     {
@@ -334,7 +334,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function splice(string $replacement, int $start = 0, int $length = null)
     {
@@ -374,7 +374,7 @@ class ByteString extends AbstractString
         return '' !== $prefix && 0 === ($this->ignoreCase ? \strncasecmp($this->string, $prefix, \strlen($prefix)) : \strncmp($this->string, $prefix, \strlen($prefix)));
     }
     /**
-     * @return $this
+     * @return static
      */
     public function title(bool $allWords = \false)
     {
@@ -416,7 +416,7 @@ class ByteString extends AbstractString
         return $u;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function trim(string $chars = " \t\n\r\x00\v\f")
     {
@@ -425,7 +425,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function trimEnd(string $chars = " \t\n\r\x00\v\f")
     {
@@ -434,7 +434,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function trimStart(string $chars = " \t\n\r\x00\v\f")
     {
@@ -443,7 +443,7 @@ class ByteString extends AbstractString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function upper()
     {

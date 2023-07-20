@@ -89,7 +89,7 @@ class BlueScreen
     }
     /**
      * @param \Fiber|\Generator $fiber
-     * @return $this
+     * @return static
      */
     public function addFiber($fiber)
     {

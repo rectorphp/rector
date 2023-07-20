@@ -270,7 +270,7 @@ class ArrayNodeDefinition extends NodeDefinition implements ParentNodeDefinition
         return $this;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function append(NodeDefinition $node)
     {

@@ -172,7 +172,7 @@ class Process implements \IteratorAggregate
      * @param int|float|null $timeout The timeout in seconds or null to disable
      *
      * @throws LogicException When proc_open is not installed
-     * @return $this
+     * @return static
      */
     public static function fromShellCommandline(string $command, string $cwd = null, array $env = null, $input = null, ?float $timeout = 60)
     {
@@ -340,7 +340,7 @@ class Process implements \IteratorAggregate
      * @see start()
      *
      * @final
-     * @return $this
+     * @return static
      */
     public function restart(callable $callback = null, array $env = [])
     {

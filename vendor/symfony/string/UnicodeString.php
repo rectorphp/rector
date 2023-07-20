@@ -38,7 +38,7 @@ class UnicodeString extends AbstractUnicodeString
         }
     }
     /**
-     * @return $this
+     * @return static
      */
     public function append(string ...$suffix)
     {
@@ -158,7 +158,7 @@ class UnicodeString extends AbstractUnicodeString
         return \false === $i ? null : $i;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function join(array $strings, string $lastGlue = null)
     {
@@ -171,7 +171,7 @@ class UnicodeString extends AbstractUnicodeString
         return \grapheme_strlen($this->string);
     }
     /**
-     * @return $this
+     * @return static
      */
     public function normalize(int $form = self::NFC)
     {
@@ -187,7 +187,7 @@ class UnicodeString extends AbstractUnicodeString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function prepend(string ...$prefix)
     {
@@ -200,7 +200,7 @@ class UnicodeString extends AbstractUnicodeString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function replace(string $from, string $to)
     {
@@ -225,7 +225,7 @@ class UnicodeString extends AbstractUnicodeString
     }
     /**
      * @param string|callable $to
-     * @return $this
+     * @return static
      */
     public function replaceMatches(string $fromRegexp, $to)
     {
@@ -234,7 +234,7 @@ class UnicodeString extends AbstractUnicodeString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function slice(int $start = 0, int $length = null)
     {
@@ -243,7 +243,7 @@ class UnicodeString extends AbstractUnicodeString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function splice(string $replacement, int $start = 0, int $length = null)
     {

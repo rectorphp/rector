@@ -54,7 +54,7 @@ abstract class NumericNodeDefinition extends ScalarNodeDefinition
     }
     /**
      * @throws InvalidDefinitionException
-     * @return $this
+     * @return static
      */
     public function cannotBeEmpty()
     {

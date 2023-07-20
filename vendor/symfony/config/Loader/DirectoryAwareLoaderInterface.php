@@ -18,7 +18,7 @@ namespace RectorPrefix202307\Symfony\Component\Config\Loader;
 interface DirectoryAwareLoaderInterface
 {
     /**
-     * @return $this
+     * @return static
      */
     public function forDirectory(string $currentDirectory);
 }

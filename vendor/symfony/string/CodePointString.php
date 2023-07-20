@@ -30,7 +30,7 @@ class CodePointString extends AbstractUnicodeString
         $this->string = $string;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function append(string ...$suffix)
     {
@@ -138,7 +138,7 @@ class CodePointString extends AbstractUnicodeString
         return \mb_strlen($this->string, 'UTF-8');
     }
     /**
-     * @return $this
+     * @return static
      */
     public function prepend(string ...$prefix)
     {
@@ -150,7 +150,7 @@ class CodePointString extends AbstractUnicodeString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function replace(string $from, string $to)
     {
@@ -169,7 +169,7 @@ class CodePointString extends AbstractUnicodeString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function slice(int $start = 0, int $length = null)
     {
@@ -178,7 +178,7 @@ class CodePointString extends AbstractUnicodeString
         return $str;
     }
     /**
-     * @return $this
+     * @return static
      */
     public function splice(string $replacement, int $start = 0, int $length = null)
     {

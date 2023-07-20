@@ -98,7 +98,7 @@ class ContainerConfigurator extends AbstractConfigurator
         return $this->env;
     }
     /**
-     * @return $this
+     * @return static
      */
     public final function withPath(string $path)
     {

@@ -63,7 +63,7 @@ class ServiceLocator implements ServiceProviderInterface, \Countable
     }
     /**
      * @internal
-     * @return $this
+     * @return static
      */
     public function withContext(string $externalId, Container $container)
     {
