@@ -146,7 +146,6 @@ final class PHPStanNodeScopeResolver
      */
     public function processNodes(array $stmts, string $filePath, ?MutatingScope $formerMutatingScope = null) : array
     {
-        $isScopeRefreshing = $formerMutatingScope instanceof MutatingScope;
         /**
          * The stmts must be array of Stmt, or it will be silently skipped by PHPStan
          * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
@@ -155,7 +154,7 @@ final class PHPStanNodeScopeResolver
         $this->nodeTraverser->traverse($stmts);
         $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
         // skip chain method calls, performance issue: https://github.com/phpstan/phpstan/issues/254
-        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use(&$nodeCallback, $isScopeRefreshing, $filePath) : void {
+        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use(&$nodeCallback, $filePath) : void {
             if ($node instanceof FileWithoutNamespace) {
                 $this->nodeScopeResolver->processNodes($node->stmts, $mutatingScope, $nodeCallback);
                 return;
@@ -241,7 +240,7 @@ final class PHPStanNodeScopeResolver
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Enum_) {
                 /** @var MutatingScope $mutatingScope */
-                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope, $isScopeRefreshing);
+                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
             }
             // special case for unreachable nodes
             if ($node instanceof UnreachableStatementNode) {
@@ -386,7 +385,7 @@ final class PHPStanNodeScopeResolver
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
      */
-    private function resolveClassOrInterfaceScope($classLike, MutatingScope $mutatingScope, bool $isScopeRefreshing) : MutatingScope
+    private function resolveClassOrInterfaceScope($classLike, MutatingScope $mutatingScope) : MutatingScope
     {
         $className = $this->resolveClassName($classLike);
         $isAnonymous = $this->classAnalyzer->isAnonymousClass($classLike);
@@ -398,9 +397,11 @@ final class PHPStanNodeScopeResolver
         } else {
             $classReflection = $this->reflectionProvider->getClass($className);
         }
-        // on refresh, remove entered class avoid entering the class again
-        if ($isScopeRefreshing && $mutatingScope->isInClass() && !$isAnonymous) {
-            $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
+        $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
+        try {
+            $this->privatesAccessor->setPrivateProperty($context, 'classReflection', $classReflection);
+            return $mutatingScope->enterClass($classReflection);
+        } catch (\PHPStan\ShouldNotHappenException $exception) {
             $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
         }
         return $mutatingScope->enterClass($classReflection);
