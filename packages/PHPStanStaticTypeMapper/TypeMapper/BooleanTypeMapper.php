@@ -5,7 +5,6 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\BooleanType;
 use PHPStan\Type\Constant\ConstantBooleanType;
@@ -39,10 +38,7 @@ final class BooleanTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
-        if ($type instanceof ConstantBooleanType) {
-            return new IdentifierTypeNode($type->getValue() ? 'true' : 'false');
-        }
-        return new IdentifierTypeNode('bool');
+        return $type->toPhpDocNode();
     }
     /**
      * @param BooleanType $type

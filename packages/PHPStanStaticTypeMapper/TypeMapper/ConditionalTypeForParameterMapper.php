@@ -40,8 +40,7 @@ final class ConditionalTypeForParameterMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
-        $type = TypeCombinator::union($type->getIf(), $type->getElse());
-        return $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type);
+        return $type->toPhpDocNode();
     }
     /**
      * @param ConditionalTypeForParameter $type
