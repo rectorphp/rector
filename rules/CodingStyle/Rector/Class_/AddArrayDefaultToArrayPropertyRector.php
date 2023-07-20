@@ -19,6 +19,7 @@ use Rector\CodingStyle\TypeAnalyzer\IterableTypeAnalyzer;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
+use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -42,11 +43,17 @@ final class AddArrayDefaultToArrayPropertyRector extends AbstractRector
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, IterableTypeAnalyzer $iterableTypeAnalyzer, VisibilityManipulator $visibilityManipulator)
+    /**
+     * @readonly
+     * @var \Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector
+     */
+    private $constructorAssignDetector;
+    public function __construct(PropertyFetchAnalyzer $propertyFetchAnalyzer, IterableTypeAnalyzer $iterableTypeAnalyzer, VisibilityManipulator $visibilityManipulator, ConstructorAssignDetector $constructorAssignDetector)
     {
         $this->propertyFetchAnalyzer = $propertyFetchAnalyzer;
         $this->iterableTypeAnalyzer = $iterableTypeAnalyzer;
         $this->visibilityManipulator = $visibilityManipulator;
+        $this->constructorAssignDetector = $constructorAssignDetector;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -112,7 +119,7 @@ CODE_SAMPLE
     private function collectPropertyNamesWithMissingDefaultArray(Class_ $class) : array
     {
         $propertyNames = [];
-        $this->traverseNodesWithCallable($class, function (Node $node) use(&$propertyNames) {
+        $this->traverseNodesWithCallable($class, function (Node $node) use($class, &$propertyNames) {
             if (!$node instanceof Property) {
                 return null;
             }
@@ -127,7 +134,11 @@ CODE_SAMPLE
                 if ($this->visibilityManipulator->isReadonly($node)) {
                     return null;
                 }
-                $propertyNames[] = $this->getName($propertyProperty);
+                $propertyName = $this->getName($propertyProperty);
+                if ($this->constructorAssignDetector->isPropertyAssigned($class, $propertyName)) {
+                    return null;
+                }
+                $propertyNames[] = $propertyName;
             }
             return null;
         });
