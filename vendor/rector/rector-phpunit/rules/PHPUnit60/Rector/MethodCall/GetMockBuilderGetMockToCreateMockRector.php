@@ -5,6 +5,8 @@ namespace Rector\PHPUnit\PHPUnit60\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
+use PHPStan\Type\ObjectType;
+use PHPStan\Type\TypeWithClassName;
 use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -71,6 +73,10 @@ CODE_SAMPLE
             $currentMethodCall = $currentMethodCall->var;
         }
         if (!$currentMethodCall instanceof MethodCall) {
+            return null;
+        }
+        // must be be test case class
+        if (!$this->isObjectType($currentMethodCall->var, new ObjectType('PHPUnit\\Framework\\TestCase'))) {
             return null;
         }
         if (!$this->isName($currentMethodCall->name, 'getMockBuilder')) {
