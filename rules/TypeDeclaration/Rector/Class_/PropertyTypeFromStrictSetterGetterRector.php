@@ -9,6 +9,7 @@ use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
@@ -118,10 +119,10 @@ CODE_SAMPLE
             if (!$this->isDefaultExprTypeCompatible($property, $getterSetterPropertyType)) {
                 continue;
             }
-            if ($classReflection === null) {
+            if (!$classReflection instanceof ClassReflection) {
                 $classReflection = $this->reflectionResolver->resolveClassReflection($node);
             }
-            if ($classReflection === null) {
+            if (!$classReflection instanceof ClassReflection) {
                 return null;
             }
             if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection, \false)) {
