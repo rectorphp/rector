@@ -18,6 +18,7 @@ use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\NodeTraverser;
 use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
@@ -95,6 +96,9 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope)
     {
+        if ($this->isInsideTrait($scope)) {
+            return null;
+        }
         if ($node instanceof Ternary) {
             if ($this->shouldSkipTernaryIfElseCountFuncCall($node)) {
                 return NodeTraverser::DONT_TRAVERSE_CHILDREN;
@@ -196,5 +200,13 @@ CODE_SAMPLE
             return null;
         }
         return $this->castToArray($countedExpr, $funcCall);
+    }
+    private function isInsideTrait(Scope $scope) : bool
+    {
+        $classReflection = $scope->getClassReflection();
+        if (!$classReflection instanceof ClassReflection) {
+            return \false;
+        }
+        return $classReflection->isTrait();
     }
 }
