@@ -105,7 +105,7 @@ CODE_SAMPLE
         if ($classMethod->getAttribute(self::HAS_SWAPPED_PARAMS, \false) === \true) {
             return null;
         }
-        $classMethodReflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($classMethod);
+        $classMethodReflection = $this->reflectionResolver->resolveMethodReflectionFromClassMethod($classMethod, $scope);
         if (!$classMethodReflection instanceof MethodReflection) {
             return null;
         }

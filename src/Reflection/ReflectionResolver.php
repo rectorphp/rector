@@ -192,15 +192,14 @@ final class ReflectionResolver
         }
         return $this->resolveFunctionReflectionFromFuncCall($call);
     }
-    public function resolveMethodReflectionFromClassMethod(ClassMethod $classMethod) : ?MethodReflection
+    public function resolveMethodReflectionFromClassMethod(ClassMethod $classMethod, Scope $scope) : ?MethodReflection
     {
-        $classReflection = $this->resolveClassReflection($classMethod);
+        $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         $className = $classReflection->getName();
         $methodName = $this->nodeNameResolver->getName($classMethod);
-        $scope = $classMethod->getAttribute(AttributeKey::SCOPE);
         return $this->resolveMethodReflection($className, $methodName, $scope);
     }
     public function resolveMethodReflectionFromNew(New_ $new) : ?MethodReflection

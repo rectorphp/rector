@@ -125,7 +125,7 @@ CODE_SAMPLE
         if ($this->shouldSkip($methodName, $className, $node, $scope)) {
             return null;
         }
-        if ($this->isInstantiable($className)) {
+        if ($this->isInstantiable($className, $scope)) {
             $new = new New_($node->class);
             return new MethodCall($new, $node->name, $node->args);
         }
@@ -175,12 +175,12 @@ CODE_SAMPLE
         $parentClassName = $this->parentClassScopeResolver->resolveParentClassName($scope);
         return $className === $parentClassName;
     }
-    private function isInstantiable(string $className) : bool
+    private function isInstantiable(string $className, Scope $scope) : bool
     {
         if (!$this->reflectionProvider->hasClass($className)) {
             return \false;
         }
-        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, '__callStatic', null);
+        $methodReflection = $this->reflectionResolver->resolveMethodReflection($className, '__callStatic', $scope);
         if ($methodReflection instanceof MethodReflection) {
             return \false;
         }
