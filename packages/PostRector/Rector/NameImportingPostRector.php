@@ -3,6 +3,7 @@
 declare (strict_types=1);
 namespace Rector\PostRector\Rector;
 
+use PhpParser\Node\Param;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
@@ -96,11 +97,12 @@ final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPo
         if ($node instanceof Name) {
             return $this->processNodeName($node, $file);
         }
-        if (SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES)) {
+        if (($node instanceof Stmt || $node instanceof Param) && SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES)) {
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
             $this->docBlockNameImporter->importNames($phpDocInfo->getPhpDocNode(), $node);
+            return $node;
         }
-        return $node;
+        return null;
     }
     public function getRuleDefinition() : RuleDefinition
     {
