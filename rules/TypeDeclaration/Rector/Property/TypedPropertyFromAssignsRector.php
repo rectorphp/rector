@@ -126,9 +126,6 @@ CODE_SAMPLE
         $hasChanged = \false;
         $classReflection = null;
         foreach ($node->getProperties() as $property) {
-            if (!$this->makePropertyTypedGuard->isLegal($property, $this->inlinePublic)) {
-                continue;
-            }
             // non-private property can be anything with not inline public configured
             if (!$property->isPrivate() && !$this->inlinePublic) {
                 continue;
@@ -138,6 +135,9 @@ CODE_SAMPLE
             }
             if (!$classReflection instanceof ClassReflection) {
                 return null;
+            }
+            if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection, $this->inlinePublic)) {
+                continue;
             }
             $inferredType = $this->allAssignNodePropertyTypeInferer->inferProperty($property, $classReflection);
             if (!$inferredType instanceof Type) {

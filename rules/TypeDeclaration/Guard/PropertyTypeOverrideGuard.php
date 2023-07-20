@@ -26,10 +26,10 @@ final class PropertyTypeOverrideGuard
     }
     public function isLegal(Property $property, ClassReflection $classReflection) : bool
     {
-        $propertyName = $this->nodeNameResolver->getName($property);
-        if (!$this->makePropertyTypedGuard->isLegal($property)) {
+        if (!$this->makePropertyTypedGuard->isLegal($property, $classReflection)) {
             return \false;
         }
+        $propertyName = $this->nodeNameResolver->getName($property);
         foreach ($classReflection->getParents() as $parentClassReflection) {
             $nativeReflectionClass = $parentClassReflection->getNativeReflection();
             if (!$nativeReflectionClass->hasProperty($propertyName)) {
