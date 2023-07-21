@@ -2023,7 +2023,6 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonEmptyStringTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonEmptyStringTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonFalsyStringTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonFalsyStringTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNumericStringTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNumericStringTypeMapper.php',
-    'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayShapeTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ArrayShapeTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ArrayTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\BooleanTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/BooleanTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\CallableTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/CallableTypeMapper.php',

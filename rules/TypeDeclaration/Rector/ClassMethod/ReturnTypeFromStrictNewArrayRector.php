@@ -157,7 +157,8 @@ CODE_SAMPLE
         if ($arrayType instanceof ConstantArrayType && \count($arrayType->getValueTypes()) !== 1) {
             return;
         }
-        $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $arrayType);
+        $narrowArrayType = new ArrayType(new MixedType(), $arrayType->getItemType());
+        $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $narrowArrayType);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike

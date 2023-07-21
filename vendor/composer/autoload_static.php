@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0bd702157337d6816a8a4f640272d70d
+class ComposerStaticInitb63a1b8738a0a6a381527028c21db5be
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2277,7 +2277,6 @@ class ComposerStaticInit0bd702157337d6816a8a4f640272d70d
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonEmptyStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonEmptyStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNonFalsyStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNonFalsyStringTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\AccessoryNumericStringTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/AccessoryNumericStringTypeMapper.php',
-        'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayShapeTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ArrayShapeTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ArrayTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/ArrayTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\BooleanTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/BooleanTypeMapper.php',
         'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\CallableTypeMapper' => __DIR__ . '/../..' . '/packages/PHPStanStaticTypeMapper/TypeMapper/CallableTypeMapper.php',
@@ -3021,9 +3020,9 @@ class ComposerStaticInit0bd702157337d6816a8a4f640272d70d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0bd702157337d6816a8a4f640272d70d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0bd702157337d6816a8a4f640272d70d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0bd702157337d6816a8a4f640272d70d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb63a1b8738a0a6a381527028c21db5be::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb63a1b8738a0a6a381527028c21db5be::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb63a1b8738a0a6a381527028c21db5be::$classMap;
 
         }, null, ClassLoader::class);
     }
