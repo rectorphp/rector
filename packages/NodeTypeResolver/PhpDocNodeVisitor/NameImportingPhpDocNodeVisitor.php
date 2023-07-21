@@ -103,15 +103,15 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
     }
     private function processFqnNameImport(PhpParserNode $phpParserNode, IdentifierTypeNode $identifierTypeNode, FullyQualifiedObjectType $fullyQualifiedObjectType, File $file) : ?IdentifierTypeNode
     {
+        $parentNode = $identifierTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
+        if ($parentNode instanceof TemplateTagValueNode) {
+            // might break
+            return null;
+        }
         if (\strncmp($fullyQualifiedObjectType->getClassName(), '@', \strlen('@')) === 0) {
             $fullyQualifiedObjectType = new FullyQualifiedObjectType(\ltrim($fullyQualifiedObjectType->getClassName(), '@'));
         }
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $phpParserNode, $fullyQualifiedObjectType)) {
-            return null;
-        }
-        $parentNode = $identifierTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
-        if ($parentNode instanceof TemplateTagValueNode) {
-            // might break
             return null;
         }
         $newNode = new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
@@ -120,11 +120,6 @@ final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
             if (!$this->useNodesToAddCollector->isImportShortable($file, $fullyQualifiedObjectType)) {
                 return null;
             }
-            if ($this->shouldImport($newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
-                $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
-                return $newNode;
-            }
-            return null;
         }
         if ($this->shouldImport($newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
             $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
