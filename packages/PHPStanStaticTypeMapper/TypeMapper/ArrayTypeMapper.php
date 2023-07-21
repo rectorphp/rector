@@ -88,9 +88,6 @@ final class ArrayTypeMapper implements TypeMapperInterface
         if ($itemType instanceof UnionType && !$type instanceof ConstantArrayType) {
             return $this->createArrayTypeNodeFromUnionType($itemType);
         }
-        if ($type instanceof ConstantArrayType) {
-            return $type->toPhpDocNode();
-        }
         if ($itemType instanceof ArrayType && $this->isGenericArrayCandidate($itemType)) {
             return $this->createGenericArrayType($type, \true);
         }
