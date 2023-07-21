@@ -2315,7 +2315,6 @@ return array(
     'Rector\\PhpDocParser\\PhpDocParser\\ValueObject\\PhpDocAttributeKey' => $baseDir . '/packages/PhpDocParser/PhpDocParser/ValueObject/PhpDocAttributeKey.php',
     'Rector\\PhpDocParser\\PhpParser\\SmartPhpParser' => $baseDir . '/packages/PhpDocParser/PhpParser/SmartPhpParser.php',
     'Rector\\PhpDocParser\\PhpParser\\SmartPhpParserFactory' => $baseDir . '/packages/PhpDocParser/PhpParser/SmartPhpParserFactory.php',
-    'Rector\\PhpDocParser\\TypeAnalyzer\\ClassMethodReturnTypeResolver' => $baseDir . '/packages/PhpDocParser/TypeAnalyzer/ClassMethodReturnTypeResolver.php',
     'Rector\\PhpDocParser\\ValueObject\\AttributeKey' => $baseDir . '/packages/PhpDocParser/ValueObject/AttributeKey.php',
     'Rector\\PostRector\\Application\\PostFileProcessor' => $baseDir . '/packages/PostRector/Application/PostFileProcessor.php',
     'Rector\\PostRector\\Collector\\UseNodesToAddCollector' => $baseDir . '/packages/PostRector/Collector/UseNodesToAddCollector.php',
