@@ -18,15 +18,12 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
+use PHPStan\Type\IntegerType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\NeverType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\VerbosityLevel;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersion;
-use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -43,18 +40,12 @@ final class ReturnTypeFromStrictNewArrayRector extends AbstractScopeAwareRector 
     private $phpDocTypeChanger;
     /**
      * @readonly
-     * @var \Rector\NodeTypeResolver\TypeComparator\TypeComparator
-     */
-    private $typeComparator;
-    /**
-     * @readonly
      * @var \Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard
      */
     private $classMethodReturnTypeOverrideGuard;
-    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, TypeComparator $typeComparator, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
+    public function __construct(PhpDocTypeChanger $phpDocTypeChanger, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard)
     {
         $this->phpDocTypeChanger = $phpDocTypeChanger;
-        $this->typeComparator = $typeComparator;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
     }
     public function getRuleDefinition() : RuleDefinition
@@ -124,7 +115,7 @@ CODE_SAMPLE
             return null;
         }
         $returnType = $this->nodeTypeResolver->getType($onlyReturn->expr);
-        if (!$returnType->isArray()->yes()) {
+        if (!$returnType instanceof ArrayType) {
             return null;
         }
         if (!$this->nodeNameResolver->areNamesEqual($onlyReturn->expr, $variable)) {
@@ -132,10 +123,9 @@ CODE_SAMPLE
         }
         // 3. always returns array
         $node->returnType = new Identifier('array');
-        // 4. add more precise type if suitable
-        $exprType = $this->getType($onlyReturn->expr);
-        if ($this->shouldAddReturnArrayDocType($exprType)) {
-            $this->changeReturnType($node, $exprType);
+        // 4. add more precise array type if suitable
+        if ($this->shouldAddReturnArrayDocType($returnType)) {
+            $this->changeReturnType($node, $returnType);
         }
         return $node;
     }
@@ -156,13 +146,18 @@ CODE_SAMPLE
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $node
      */
-    private function changeReturnType($node, Type $exprType) : void
+    private function changeReturnType($node, ArrayType $arrayType) : void
     {
         $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($node);
-        $exprType = $this->narrowConstantArrayType($exprType);
-        if (!$this->typeComparator->isSubtype($phpDocInfo->getReturnType(), $exprType)) {
-            $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $exprType);
+        // skip already filled type, on purpose
+        if (!$phpDocInfo->getReturnType() instanceof MixedType) {
+            return;
         }
+        // can handle only exactly 1-type array
+        if ($arrayType instanceof ConstantArrayType && \count($arrayType->getValueTypes()) !== 1) {
+            return;
+        }
+        $this->phpDocTypeChanger->changeReturnType($node, $phpDocInfo, $arrayType);
     }
     /**
      * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
@@ -208,29 +203,17 @@ CODE_SAMPLE
         }
         return null;
     }
-    private function shouldAddReturnArrayDocType(Type $exprType) : bool
+    private function shouldAddReturnArrayDocType(ArrayType $arrayType) : bool
     {
-        if ($exprType instanceof ConstantArrayType) {
-            // sign of empty array, keep empty
-            return !$exprType->getItemType() instanceof NeverType;
-        }
-        return $exprType->isArray()->yes();
-    }
-    private function narrowConstantArrayType(Type $type) : Type
-    {
-        if (!$type instanceof ConstantArrayType) {
-            return $type;
-        }
-        if (\count($type->getValueTypes()) === 1) {
-            $singleValueType = $type->getValueTypes()[0];
-            if ($singleValueType instanceof ObjectType) {
-                return $type;
+        if ($arrayType instanceof ConstantArrayType) {
+            if ($arrayType->getItemType() instanceof NeverType) {
+                return \false;
+            }
+            // handle only simple arrays
+            if (!$arrayType->getKeyType() instanceof IntegerType) {
+                return \false;
             }
         }
-        $printedDescription = $type->describe(VerbosityLevel::precise());
-        if (\strlen($printedDescription) > 50) {
-            return new ArrayType(new MixedType(), new MixedType());
-        }
-        return $type;
+        return \true;
     }
 }
