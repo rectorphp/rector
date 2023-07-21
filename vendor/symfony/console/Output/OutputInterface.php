@@ -34,7 +34,7 @@ interface OutputInterface
      *                      0 is considered the same as self::OUTPUT_NORMAL | self::VERBOSITY_NORMAL
      *
      * @return void
-     * @param string|mixed[] $messages
+     * @param string|iterable $messages
      */
     public function write($messages, bool $newline = \false, int $options = 0);
     /**
@@ -44,7 +44,7 @@ interface OutputInterface
      *                     0 is considered the same as self::OUTPUT_NORMAL | self::VERBOSITY_NORMAL
      *
      * @return void
-     * @param string|mixed[] $messages
+     * @param string|iterable $messages
      */
     public function writeln($messages, int $options = 0);
     /**

@@ -78,7 +78,7 @@ class NullOutput implements OutputInterface
     }
     /**
      * @return void
-     * @param string|mixed[] $messages
+     * @param string|iterable $messages
      */
     public function writeln($messages, int $options = self::OUTPUT_NORMAL)
     {
@@ -86,7 +86,7 @@ class NullOutput implements OutputInterface
     }
     /**
      * @return void
-     * @param string|mixed[] $messages
+     * @param string|iterable $messages
      */
     public function write($messages, bool $newline = \false, int $options = self::OUTPUT_NORMAL)
     {

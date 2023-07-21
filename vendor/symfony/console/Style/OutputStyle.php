@@ -42,7 +42,7 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
     }
     /**
      * @return void
-     * @param string|mixed[] $messages
+     * @param string|iterable $messages
      */
     public function write($messages, bool $newline = \false, int $type = self::OUTPUT_NORMAL)
     {
@@ -50,7 +50,7 @@ abstract class OutputStyle implements OutputInterface, StyleInterface
     }
     /**
      * @return void
-     * @param string|mixed[] $messages
+     * @param string|iterable $messages
      */
     public function writeln($messages, int $type = self::OUTPUT_NORMAL)
     {

@@ -12,7 +12,6 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\ValueObject\PhpVersionFeature;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
@@ -61,15 +60,7 @@ final class IntersectionTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
-        $intersectionTypesNodes = [];
-        foreach ($type->getTypes() as $intersectionedType) {
-            $intersectionTypesNodes[] = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($intersectionedType);
-        }
-        $intersectionTypesNodes = \array_unique($intersectionTypesNodes);
-        if (\count($intersectionTypesNodes) === 1) {
-            return $intersectionTypesNodes[0];
-        }
-        return new BracketsAwareIntersectionTypeNode($intersectionTypesNodes);
+        return $type->toPhpDocNode();
     }
     /**
      * @param IntersectionType $type

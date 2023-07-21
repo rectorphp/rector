@@ -75,7 +75,7 @@ class Filesystem
      * @return void
      *
      * @throws IOException On any directory creation failure
-     * @param string|mixed[] $dirs
+     * @param string|iterable $dirs
      */
     public function mkdir($dirs, int $mode = 0777)
     {
@@ -90,7 +90,7 @@ class Filesystem
     }
     /**
      * Checks the existence of files or directories.
-     * @param string|mixed[] $files
+     * @param string|iterable $files
      */
     public function exists($files) : bool
     {
@@ -114,7 +114,7 @@ class Filesystem
      * @return void
      *
      * @throws IOException When touch fails
-     * @param string|mixed[] $files
+     * @param string|iterable $files
      */
     public function touch($files, int $time = null, int $atime = null)
     {
@@ -130,7 +130,7 @@ class Filesystem
      * @return void
      *
      * @throws IOException When removal fails
-     * @param string|mixed[] $files
+     * @param string|iterable $files
      */
     public function remove($files)
     {
@@ -190,7 +190,7 @@ class Filesystem
      * @return void
      *
      * @throws IOException When the change fails
-     * @param string|mixed[] $files
+     * @param string|iterable $files
      */
     public function chmod($files, int $mode, int $umask = 00, bool $recursive = \false)
     {
@@ -212,7 +212,7 @@ class Filesystem
      * @return void
      *
      * @throws IOException When the change fails
-     * @param string|mixed[] $files
+     * @param string|iterable $files
      */
     public function chown($files, $user, bool $recursive = \false)
     {
@@ -240,7 +240,7 @@ class Filesystem
      * @return void
      *
      * @throws IOException When the change fails
-     * @param string|mixed[] $files
+     * @param string|iterable $files
      */
     public function chgrp($files, $group, bool $recursive = \false)
     {
@@ -622,7 +622,7 @@ class Filesystem
         }
     }
     /**
-     * @param string|mixed[] $files
+     * @param string|iterable $files
      */
     private function toIterable($files) : iterable
     {

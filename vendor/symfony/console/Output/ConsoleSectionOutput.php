@@ -89,7 +89,7 @@ class ConsoleSectionOutput extends StreamOutput
      * Overwrites the previous output with a new message.
      *
      * @return void
-     * @param string|mixed[] $message
+     * @param string|iterable $message
      */
     public function overwrite($message)
     {

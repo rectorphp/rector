@@ -73,7 +73,7 @@ class UnicodeString extends AbstractUnicodeString
         return $chunks;
     }
     /**
-     * @param string|mixed[]|\Symfony\Component\String\AbstractString $suffix
+     * @param string|iterable|\Symfony\Component\String\AbstractString $suffix
      */
     public function endsWith($suffix) : bool
     {
@@ -93,7 +93,7 @@ class UnicodeString extends AbstractUnicodeString
         return $suffix === \grapheme_extract($this->string, \strlen($suffix), \GRAPHEME_EXTR_MAXBYTES, \strlen($this->string) - \strlen($suffix));
     }
     /**
-     * @param string|mixed[]|\Symfony\Component\String\AbstractString $string
+     * @param string|iterable|\Symfony\Component\String\AbstractString $string
      */
     public function equalsTo($string) : bool
     {
@@ -110,7 +110,7 @@ class UnicodeString extends AbstractUnicodeString
         return $string === $this->string;
     }
     /**
-     * @param string|mixed[]|\Symfony\Component\String\AbstractString $needle
+     * @param string|iterable|\Symfony\Component\String\AbstractString $needle
      */
     public function indexOf($needle, int $offset = 0) : ?int
     {
@@ -132,7 +132,7 @@ class UnicodeString extends AbstractUnicodeString
         return \false === $i ? null : $i;
     }
     /**
-     * @param string|mixed[]|\Symfony\Component\String\AbstractString $needle
+     * @param string|iterable|\Symfony\Component\String\AbstractString $needle
      */
     public function indexOfLast($needle, int $offset = 0) : ?int
     {
@@ -287,7 +287,7 @@ class UnicodeString extends AbstractUnicodeString
         return $chunks;
     }
     /**
-     * @param string|mixed[]|\Symfony\Component\String\AbstractString $prefix
+     * @param string|iterable|\Symfony\Component\String\AbstractString $prefix
      */
     public function startsWith($prefix) : bool
     {

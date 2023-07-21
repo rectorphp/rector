@@ -19,7 +19,7 @@ namespace RectorPrefix202307\Symfony\Component\Config;
 class ResourceCheckerConfigCacheFactory implements ConfigCacheFactoryInterface
 {
     /**
-     * @var mixed[]
+     * @var iterable
      */
     private $resourceCheckers = [];
     /**

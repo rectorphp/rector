@@ -341,7 +341,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|mixed[] $messages
+     * @param string|iterable $messages
      */
     public function writeln($messages, int $type = self::OUTPUT_NORMAL)
     {
@@ -355,7 +355,7 @@ class SymfonyStyle extends OutputStyle
     }
     /**
      * @return void
-     * @param string|mixed[] $messages
+     * @param string|iterable $messages
      */
     public function write($messages, bool $newline = \false, int $type = self::OUTPUT_NORMAL)
     {
