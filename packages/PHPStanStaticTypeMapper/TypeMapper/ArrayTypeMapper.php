@@ -87,6 +87,8 @@ final class ArrayTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
+        // this cannot be handled by PHPStan $type->toPhpDocNode() as requires space removal around "|" in union type
+        // then e.g. "int" instead of explicit number, and nice arrays
         $itemType = $type->getItemType();
         if ($itemType instanceof UnionType && !$type instanceof ConstantArrayType) {
             return $this->createArrayTypeNodeFromUnionType($itemType);
