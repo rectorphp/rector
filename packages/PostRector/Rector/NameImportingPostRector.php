@@ -147,7 +147,7 @@ CODE_SAMPLE
             if ($nameInUse instanceof Name) {
                 return $nameInUse;
             }
-            return $this->nameImporter->importName($name, $file, $currentUses);
+            return $this->nameImporter->importName($name, $file);
         }
         return null;
     }

@@ -4,9 +4,6 @@ declare (strict_types=1);
 namespace Rector\CodingStyle\Node;
 
 use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Use_;
-use Rector\CodingStyle\ClassNameImport\AliasUsesResolver;
 use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
@@ -17,11 +14,6 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 final class NameImporter
 {
-    /**
-     * @readonly
-     * @var \Rector\CodingStyle\ClassNameImport\AliasUsesResolver
-     */
-    private $aliasUsesResolver;
     /**
      * @readonly
      * @var \Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper
@@ -37,21 +29,13 @@ final class NameImporter
      * @var \Rector\PostRector\Collector\UseNodesToAddCollector
      */
     private $useNodesToAddCollector;
-    /**
-     * @var string[]
-     */
-    private $aliasedUses = [];
-    public function __construct(AliasUsesResolver $aliasUsesResolver, ClassNameImportSkipper $classNameImportSkipper, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector)
+    public function __construct(ClassNameImportSkipper $classNameImportSkipper, StaticTypeMapper $staticTypeMapper, UseNodesToAddCollector $useNodesToAddCollector)
     {
-        $this->aliasUsesResolver = $aliasUsesResolver;
         $this->classNameImportSkipper = $classNameImportSkipper;
         $this->staticTypeMapper = $staticTypeMapper;
         $this->useNodesToAddCollector = $useNodesToAddCollector;
     }
-    /**
-     * @param Use_[]|GroupUse[] $uses
-     */
-    public function importName(Name $name, File $file, array $uses) : ?Name
+    public function importName(Name $name, File $file) : ?Name
     {
         if ($this->shouldSkipName($name)) {
             return null;
@@ -60,10 +44,7 @@ final class NameImporter
         if (!$staticType instanceof FullyQualifiedObjectType) {
             return null;
         }
-        $className = $staticType->getClassName();
-        // class has \, no need to search in aliases, mark aliasedUses as empty
-        $this->aliasedUses = \strpos($className, '\\') !== \false ? [] : $this->aliasUsesResolver->resolveFromStmts($uses);
-        return $this->importNameAndCollectNewUseStatement($file, $name, $staticType, $className);
+        return $this->importNameAndCollectNewUseStatement($file, $name, $staticType);
     }
     private function shouldSkipName(Name $name) : bool
     {
@@ -92,7 +73,7 @@ final class NameImporter
         }
         return \false;
     }
-    private function importNameAndCollectNewUseStatement(File $file, Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType, string $className) : ?Name
+    private function importNameAndCollectNewUseStatement(File $file, Name $name, FullyQualifiedObjectType $fullyQualifiedObjectType) : ?Name
     {
         // the same end is already imported → skip
         if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $name, $fullyQualifiedObjectType)) {
@@ -105,15 +86,6 @@ final class NameImporter
             return null;
         }
         $this->addUseImport($file, $name, $fullyQualifiedObjectType);
-        if ($this->aliasedUses === []) {
-            return $fullyQualifiedObjectType->getShortNameNode();
-        }
-        // possibly aliased
-        foreach ($this->aliasedUses as $aliasedUse) {
-            if ($className === $aliasedUse) {
-                return null;
-            }
-        }
         return $fullyQualifiedObjectType->getShortNameNode();
     }
     /**
