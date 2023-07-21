@@ -103,10 +103,10 @@ final class StaticTypeMapper
     {
         if ($phpDocTagValueNode instanceof TemplateTagValueNode) {
             // special case
-            $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
             if (!$phpDocTagValueNode->bound instanceof TypeNode) {
                 return new MixedType();
             }
+            $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
             return $this->phpDocTypeMapper->mapToPHPStanType($phpDocTagValueNode->bound, $node, $nameScope);
         }
         if ($phpDocTagValueNode instanceof ReturnTagValueNode || $phpDocTagValueNode instanceof ParamTagValueNode || $phpDocTagValueNode instanceof VarTagValueNode || $phpDocTagValueNode instanceof ThrowsTagValueNode) {
