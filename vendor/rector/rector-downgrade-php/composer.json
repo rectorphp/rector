@@ -20,6 +20,7 @@
         "symplify\/phpstan-rules": "^11.4",
         "symplify\/rule-doc-generator": "^11.2",
         "symplify\/vendor-patches": "^11.2",
+        "tomasvotruba\/class-leak": "0.0.22.72",
         "tomasvotruba\/cognitive-complexity": "^0.1",
         "tomasvotruba\/type-coverage": "^0.2",
         "tomasvotruba\/unused-public": "^0.1"

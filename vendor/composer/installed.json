@@ -1985,12 +1985,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "04d257db9280e12ca66dc7747134acc43bd81d2d"
+                "reference": "26e8bb4921fa8685dee87f5bdb8be481961236f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/04d257db9280e12ca66dc7747134acc43bd81d2d",
-                "reference": "04d257db9280e12ca66dc7747134acc43bd81d2d",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/26e8bb4921fa8685dee87f5bdb8be481961236f3",
+                "reference": "26e8bb4921fa8685dee87f5bdb8be481961236f3",
                 "shasum": ""
             },
             "require": {
@@ -2010,11 +2010,12 @@
                 "symplify\/phpstan-rules": "^11.4",
                 "symplify\/rule-doc-generator": "^11.2",
                 "symplify\/vendor-patches": "^11.2",
+                "tomasvotruba\/class-leak": "0.0.22.72",
                 "tomasvotruba\/cognitive-complexity": "^0.1",
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-07-20T22:18:50+00:00",
+            "time": "2023-07-21T10:25:40+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
