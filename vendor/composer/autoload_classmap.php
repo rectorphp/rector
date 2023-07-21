@@ -1328,7 +1328,6 @@ return array(
     'Rector\\BetterPhpDocParser\\ValueObject\\StartAndEnd' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/StartAndEnd.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\BracketsAwareIntersectionTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/BracketsAwareIntersectionTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\BracketsAwareUnionTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/BracketsAwareUnionTypeNode.php',
-    'Rector\\BetterPhpDocParser\\ValueObject\\Type\\EmptyGenericTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/EmptyGenericTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\FullyQualifiedIdentifierTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/FullyQualifiedIdentifierTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\ShortenedIdentifierTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/ShortenedIdentifierTypeNode.php',
     'Rector\\BetterPhpDocParser\\ValueObject\\Type\\SpacingAwareArrayTypeNode' => $baseDir . '/packages/BetterPhpDocParser/ValueObject/Type/SpacingAwareArrayTypeNode.php',

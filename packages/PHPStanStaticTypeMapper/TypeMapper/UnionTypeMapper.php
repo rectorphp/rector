@@ -114,6 +114,7 @@ final class UnionTypeMapper implements TypeMapperInterface
      */
     public function mapToPHPStanPhpDocTypeNode(Type $type) : TypeNode
     {
+        // note: cannot be handled by PHPStan as uses no-space around |
         $unionTypesNodes = [];
         $skipIterable = $this->shouldSkipIterable($type);
         foreach ($type->getTypes() as $unionedType) {
