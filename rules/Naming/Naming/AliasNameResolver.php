@@ -5,6 +5,8 @@ namespace Rector\Naming\Naming;
 
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+use PhpParser\Node\Stmt\GroupUse;
+use PhpParser\Node\Stmt\Use_;
 final class AliasNameResolver
 {
     /**
@@ -16,9 +18,11 @@ final class AliasNameResolver
     {
         $this->useImportsResolver = $useImportsResolver;
     }
-    public function resolveByName(Name $name) : ?string
+    /**
+     * @param Use_[]|GroupUse[] $uses
+     */
+    public function resolveByName(Name $name, array $uses) : ?string
     {
-        $uses = $this->useImportsResolver->resolve();
         $nameString = $name->toString();
         foreach ($uses as $use) {
             $prefix = $this->useImportsResolver->resolvePrefix($use);

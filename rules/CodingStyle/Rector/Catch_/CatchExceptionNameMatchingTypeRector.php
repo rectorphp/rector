@@ -21,6 +21,7 @@ use Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\AliasNameResolver;
 use Rector\Naming\Naming\PropertyNaming;
+use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -40,14 +41,20 @@ final class CatchExceptionNameMatchingTypeRector extends AbstractRector
      */
     private $aliasNameResolver;
     /**
+     * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    /**
      * @var string
      * @see https://regex101.com/r/xmfMAX/1
      */
     private const STARTS_WITH_ABBREVIATION_REGEX = '#^([A-Za-z]+?)([A-Z]{1}[a-z]{1})([A-Za-z]*)#';
-    public function __construct(PropertyNaming $propertyNaming, AliasNameResolver $aliasNameResolver)
+    public function __construct(PropertyNaming $propertyNaming, AliasNameResolver $aliasNameResolver, UseImportsResolver $useImportsResolver)
     {
         $this->propertyNaming = $propertyNaming;
         $this->aliasNameResolver = $aliasNameResolver;
+        $this->useImportsResolver = $useImportsResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -95,6 +102,7 @@ CODE_SAMPLE
             return null;
         }
         $hasChanged = \false;
+        $uses = null;
         foreach ($node->stmts as $key => $stmt) {
             if ($this->shouldSkip($stmt)) {
                 continue;
@@ -110,9 +118,12 @@ CODE_SAMPLE
             $catchVar = $catch->var;
             /** @var string $oldVariableName */
             $oldVariableName = (string) $this->getName($catchVar);
+            if ($uses === null) {
+                $uses = $this->useImportsResolver->resolve();
+            }
             $type = $catch->types[0];
             $typeShortName = $this->nodeNameResolver->getShortName($type);
-            $aliasName = $this->aliasNameResolver->resolveByName($type);
+            $aliasName = $this->aliasNameResolver->resolveByName($type, $uses);
             if (\is_string($aliasName)) {
                 $typeShortName = $aliasName;
             }
