@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node as PhpNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;

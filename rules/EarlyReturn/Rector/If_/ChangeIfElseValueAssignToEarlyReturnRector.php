@@ -115,6 +115,9 @@ CODE_SAMPLE
             $this->mirrorComments($stmt, $assign);
             $if->else = null;
             $stmt->expr = $assign->expr;
+            $lastStmt = \array_pop($node->stmts);
+            $elseStmtsExceptLast = \array_slice($elseStmts, 0, -1);
+            $node->stmts = \array_merge($node->stmts, $elseStmtsExceptLast, [$lastStmt]);
             return $node;
         }
         return null;
