@@ -36,23 +36,17 @@ final class ConstExprClassNameDecorator implements PhpDocNodeDecoratorInterface
     public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode) : void
     {
         $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use($phpNode) : ?\PHPStan\PhpDocParser\Ast\Node {
-            if (!$node instanceof ConstExprNode) {
+            if (!$node instanceof ConstFetchNode) {
                 return null;
             }
             $className = $this->resolveFullyQualifiedClass($node, $phpNode);
-            if ($className === null) {
-                return null;
-            }
             $node->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $className);
             return $node;
         });
     }
-    private function resolveFullyQualifiedClass(ConstExprNode $constExprNode, PhpNode $phpNode) : ?string
+    private function resolveFullyQualifiedClass(ConstFetchNode $constFetchNode, PhpNode $phpNode) : string
     {
-        if (!$constExprNode instanceof ConstFetchNode) {
-            return null;
-        }
         $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($phpNode);
-        return $nameScope->resolveStringName($constExprNode->className);
+        return $nameScope->resolveStringName($constFetchNode->className);
     }
 }
