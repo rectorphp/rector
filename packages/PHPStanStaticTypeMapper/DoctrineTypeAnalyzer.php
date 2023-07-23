@@ -30,18 +30,18 @@ final class DoctrineTypeAnalyzer
         }
         return $arrayType instanceof ArrayType;
     }
-    private function isCollectionObjectType(Type $type) : bool
-    {
-        if (!$type instanceof TypeWithClassName) {
-            return \false;
-        }
-        return $type->getClassName() === 'Doctrine\\Common\\Collections\\Collection';
-    }
     public function isInstanceOfCollectionType(Type $type) : bool
     {
         if (!$type instanceof ObjectType) {
             return \false;
         }
         return $type->isInstanceOf('Doctrine\\Common\\Collections\\Collection')->yes();
+    }
+    private function isCollectionObjectType(Type $type) : bool
+    {
+        if (!$type instanceof TypeWithClassName) {
+            return \false;
+        }
+        return $type->getClassName() === 'Doctrine\\Common\\Collections\\Collection';
     }
 }
