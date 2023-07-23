@@ -108,18 +108,15 @@ CODE_SAMPLE
     public function refactor(Node $node) : ?Node
     {
         $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
+        if (!$constructClassMethod instanceof ClassMethod || $node->getProperties() === []) {
+            return null;
+        }
+        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        if (!$classReflection instanceof ClassReflection) {
             return null;
         }
         $hasChanged = \false;
-        $classReflection = null;
         foreach ($node->getProperties() as $property) {
-            if (!$classReflection instanceof ClassReflection) {
-                $classReflection = $this->reflectionResolver->resolveClassReflection($node);
-            }
-            if (!$classReflection instanceof ClassReflection) {
-                return null;
-            }
             if (!$this->propertyTypeOverrideGuard->isLegal($property, $classReflection)) {
                 continue;
             }
