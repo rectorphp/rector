@@ -7,6 +7,8 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\ConstFetch;
+use PhpParser\Node\Expr\UnaryMinus;
+use PhpParser\Node\Expr\UnaryPlus;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt\Property;
@@ -131,6 +133,9 @@ CODE_SAMPLE
             return null;
         }
         if ($defaultExpr instanceof ClassConstFetch || $defaultExpr instanceof ConstFetch) {
+            return null;
+        }
+        if ($defaultExpr instanceof UnaryMinus || $defaultExpr instanceof UnaryPlus) {
             return null;
         }
         throw new NotImplementedYetException();
