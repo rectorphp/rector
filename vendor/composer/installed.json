@@ -1917,12 +1917,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "2d14418731b6d1256ed7620f323f9e81953fdf31"
+                "reference": "281257f6dc923073cb9a7952da519fbec5943845"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/2d14418731b6d1256ed7620f323f9e81953fdf31",
-                "reference": "2d14418731b6d1256ed7620f323f9e81953fdf31",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/281257f6dc923073cb9a7952da519fbec5943845",
+                "reference": "281257f6dc923073cb9a7952da519fbec5943845",
                 "shasum": ""
             },
             "require": {
@@ -1944,10 +1944,11 @@
                 "symplify\/phpstan-rules": "^11.1",
                 "symplify\/rule-doc-generator": "^11.1",
                 "symplify\/vendor-patches": "^11.1",
+                "tomasvotruba\/class-leak": "0.0.22.72",
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-07-18T15:16:38+00:00",
+            "time": "2023-07-23T20:25:43+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

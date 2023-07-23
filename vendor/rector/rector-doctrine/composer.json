@@ -23,7 +23,8 @@
         "rector\/rector-generator": "^0.6",
         "symplify\/easy-ci": "^11.2",
         "tomasvotruba\/unused-public": "^0.1",
-        "tomasvotruba\/type-coverage": "^0.2"
+        "tomasvotruba\/type-coverage": "^0.2",
+        "tomasvotruba\/class-leak": "0.0.22.72"
     },
     "autoload": {
         "psr-4": {
