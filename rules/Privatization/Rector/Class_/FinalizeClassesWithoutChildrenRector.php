@@ -11,6 +11,7 @@ use Rector\Core\NodeAnalyzer\DoctrineEntityAnalyzer;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\FamilyTree\Reflection\FamilyRelationsAnalyzer;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
@@ -110,6 +111,10 @@ CODE_SAMPLE
         $childrenClassReflections = $this->familyRelationsAnalyzer->getChildrenOfClassReflection($classReflection);
         if ($childrenClassReflections !== []) {
             return null;
+        }
+        if ($node->attrGroups !== []) {
+            // improve reprint with correct newline
+            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
         }
         $this->visibilityManipulator->makeFinal($node);
         return $node;
