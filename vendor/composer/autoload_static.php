@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc57a4a84ff14fb5da81d649a75cccd6c
+class ComposerStaticInit2a6c2d46859027bd63fed619863b9268
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2960,6 +2960,7 @@ class ComposerStaticInitc57a4a84ff14fb5da81d649a75cccd6c
         'Rector\\TypeDeclaration\\Rector\\Param\\ParamTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Param/ParamTypeFromStrictTypedPropertyRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\AddPropertyTypeDeclarationRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/AddPropertyTypeDeclarationRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromAssignsRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromAssignsRector.php',
+        'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorReadonlyClassRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorReadonlyClassRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictConstructorRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictGetterMethodReturnTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictGetterMethodReturnTypeRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
@@ -2971,6 +2972,7 @@ class ComposerStaticInitc57a4a84ff14fb5da81d649a75cccd6c
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\GenericClassStringTypeNormalizer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/GenericClassStringTypeNormalizer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\NullableTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/NullableTypeAnalyzer.php',
+        'Rector\\TypeDeclaration\\TypeAnalyzer\\PropertyTypeDefaultValueAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/PropertyTypeDefaultValueAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\ReturnStrictTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/ReturnStrictTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\StrictReturnClassConstReturnTypeAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/StrictReturnClassConstReturnTypeAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeInferer\\AssignToPropertyTypeInferer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeInferer/AssignToPropertyTypeInferer.php',
@@ -3020,9 +3022,9 @@ class ComposerStaticInitc57a4a84ff14fb5da81d649a75cccd6c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc57a4a84ff14fb5da81d649a75cccd6c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc57a4a84ff14fb5da81d649a75cccd6c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc57a4a84ff14fb5da81d649a75cccd6c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2a6c2d46859027bd63fed619863b9268::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2a6c2d46859027bd63fed619863b9268::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2a6c2d46859027bd63fed619863b9268::$classMap;
 
         }, null, ClassLoader::class);
     }
