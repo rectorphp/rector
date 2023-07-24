@@ -15,6 +15,7 @@ use PHPStan\ShouldNotHappenException;
 use function array_key_exists;
 use function array_values;
 use function count;
+use function rtrim;
 use function str_replace;
 use function trim;
 /**
@@ -37,10 +38,12 @@ class PhpDocParser
     private $useLinesAttributes;
     /** @var bool */
     private $useIndexAttributes;
+    /** @var bool */
+    private $textBetweenTagsBelongsToDescription;
     /**
      * @param array{lines?: bool, indexes?: bool} $usedAttributes
      */
-    public function __construct(\PHPStan\PhpDocParser\Parser\TypeParser $typeParser, \PHPStan\PhpDocParser\Parser\ConstExprParser $constantExprParser, bool $requireWhitespaceBeforeDescription = \false, bool $preserveTypeAliasesWithInvalidTypes = \false, array $usedAttributes = [], bool $parseDoctrineAnnotations = \false)
+    public function __construct(\PHPStan\PhpDocParser\Parser\TypeParser $typeParser, \PHPStan\PhpDocParser\Parser\ConstExprParser $constantExprParser, bool $requireWhitespaceBeforeDescription = \false, bool $preserveTypeAliasesWithInvalidTypes = \false, array $usedAttributes = [], bool $parseDoctrineAnnotations = \false, bool $textBetweenTagsBelongsToDescription = \false)
     {
         $this->typeParser = $typeParser;
         $this->constantExprParser = $constantExprParser;
@@ -49,6 +52,7 @@ class PhpDocParser
         $this->parseDoctrineAnnotations = $parseDoctrineAnnotations;
         $this->useLinesAttributes = $usedAttributes['lines'] ?? \false;
         $this->useIndexAttributes = $usedAttributes['indexes'] ?? \false;
+        $this->textBetweenTagsBelongsToDescription = $textBetweenTagsBelongsToDescription;
     }
     public function parse(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\PhpDocNode
     {
@@ -149,27 +153,59 @@ class PhpDocParser
     private function parseText(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : Ast\PhpDoc\PhpDocTextNode
     {
         $text = '';
-        while (!$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
-            $text .= $tokens->getSkippedHorizontalWhiteSpaceIfAny() . $tokens->joinUntil(Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END);
+        $endTokens = [Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END];
+        if ($this->textBetweenTagsBelongsToDescription) {
+            $endTokens = [Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END];
+        }
+        $savepoint = \false;
+        // if the next token is EOL, everything below is skipped and empty string is returned
+        while ($this->textBetweenTagsBelongsToDescription || !$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
+            $tmpText = $tokens->getSkippedHorizontalWhiteSpaceIfAny() . $tokens->joinUntil(Lexer::TOKEN_PHPDOC_EOL, ...$endTokens);
+            $text .= $tmpText;
+            // stop if we're not at EOL - meaning it's the end of PHPDoc
             if (!$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
                 break;
             }
+            if ($this->textBetweenTagsBelongsToDescription) {
+                if (!$savepoint) {
+                    $tokens->pushSavePoint();
+                    $savepoint = \true;
+                } elseif ($tmpText !== '') {
+                    $tokens->dropSavePoint();
+                    $tokens->pushSavePoint();
+                }
+            }
             $tokens->pushSavePoint();
             $tokens->next();
-            if ($tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_TAG, Lexer::TOKEN_DOCTRINE_TAG, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END)) {
+            // if we're at EOL, check what's next
+            // if next is a PHPDoc tag, EOL, or end of PHPDoc, stop
+            if ($tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_TAG, Lexer::TOKEN_DOCTRINE_TAG, ...$endTokens)) {
                 $tokens->rollback();
                 break;
             }
+            // otherwise if the next is text, continue building the description string
             $tokens->dropSavePoint();
             $text .= $tokens->getDetectedNewline() ?? "\n";
+        }
+        if ($savepoint) {
+            $tokens->rollback();
+            $text = rtrim($text, $tokens->getDetectedNewline() ?? "\n");
         }
         return new Ast\PhpDoc\PhpDocTextNode(trim($text, " \t"));
     }
     private function parseOptionalDescriptionAfterDoctrineTag(\PHPStan\PhpDocParser\Parser\TokenIterator $tokens) : string
     {
         $text = '';
-        while (!$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
-            $text .= $tokens->getSkippedHorizontalWhiteSpaceIfAny() . $tokens->joinUntil(Lexer::TOKEN_PHPDOC_TAG, Lexer::TOKEN_DOCTRINE_TAG, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END);
+        $endTokens = [Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END];
+        if ($this->textBetweenTagsBelongsToDescription) {
+            $endTokens = [Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END];
+        }
+        $savepoint = \false;
+        // if the next token is EOL, everything below is skipped and empty string is returned
+        while ($this->textBetweenTagsBelongsToDescription || !$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
+            $tmpText = $tokens->getSkippedHorizontalWhiteSpaceIfAny() . $tokens->joinUntil(Lexer::TOKEN_PHPDOC_TAG, Lexer::TOKEN_DOCTRINE_TAG, Lexer::TOKEN_PHPDOC_EOL, ...$endTokens);
+            $text .= $tmpText;
+            // stop if we're not at EOL - meaning it's the end of PHPDoc
             if (!$tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
                 if (!$tokens->isPrecededByHorizontalWhitespace()) {
                     return trim($text . $this->parseText($tokens)->text, " \t");
@@ -199,14 +235,30 @@ class PhpDocParser
                 }
                 break;
             }
+            if ($this->textBetweenTagsBelongsToDescription) {
+                if (!$savepoint) {
+                    $tokens->pushSavePoint();
+                    $savepoint = \true;
+                } elseif ($tmpText !== '') {
+                    $tokens->dropSavePoint();
+                    $tokens->pushSavePoint();
+                }
+            }
             $tokens->pushSavePoint();
             $tokens->next();
-            if ($tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_TAG, Lexer::TOKEN_DOCTRINE_TAG, Lexer::TOKEN_PHPDOC_EOL, Lexer::TOKEN_CLOSE_PHPDOC, Lexer::TOKEN_END)) {
+            // if we're at EOL, check what's next
+            // if next is a PHPDoc tag, EOL, or end of PHPDoc, stop
+            if ($tokens->isCurrentTokenType(Lexer::TOKEN_PHPDOC_TAG, Lexer::TOKEN_DOCTRINE_TAG, ...$endTokens)) {
                 $tokens->rollback();
                 break;
             }
+            // otherwise if the next is text, continue building the description string
             $tokens->dropSavePoint();
             $text .= $tokens->getDetectedNewline() ?? "\n";
+        }
+        if ($savepoint) {
+            $tokens->rollback();
+            $text = rtrim($text, $tokens->getDetectedNewline() ?? "\n");
         }
         return trim($text, " \t");
     }
