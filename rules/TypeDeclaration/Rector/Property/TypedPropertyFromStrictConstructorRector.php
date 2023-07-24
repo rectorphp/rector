@@ -138,6 +138,9 @@ CODE_SAMPLE
             $phpDocInfo = $this->phpDocInfoFactory->createFromNodeOrEmpty($property);
             // public property can be anything
             if ($property->isPublic()) {
+                if (!$phpDocInfo->getVarType() instanceof MixedType) {
+                    continue;
+                }
                 $this->phpDocTypeChanger->changeVarType($property, $phpDocInfo, $propertyType);
                 $hasChanged = \true;
                 continue;
