@@ -13,7 +13,7 @@
         "phpunit\/phpunit": "^10.1",
         "rector\/phpstan-rules": "^0.6",
         "rector\/rector-generator": "^0.6",
-        "rector\/rector-src": "dev-main",
+        "rector\/rector-src": "dev-main#84b3ea107c6d5b5d369358cdfd7fc6e69d390e9d",
         "symplify\/easy-ci": "^11.2",
         "symplify\/easy-coding-standard": "^11.2",
         "symplify\/phpstan-extensions": "^11.2",
