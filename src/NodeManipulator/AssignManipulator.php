@@ -53,7 +53,10 @@ final class AssignManipulator
     }
     public function isLeftPartOfAssign(Node $node) : bool
     {
-        return $node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true;
+        if ($node->getAttribute(AttributeKey::IS_BEING_ASSIGNED) === \true) {
+            return \true;
+        }
+        return $node->getAttribute(AttributeKey::IS_ASSIGNED_TO) === \true;
     }
     /**
      * @api doctrine

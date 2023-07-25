@@ -1986,12 +1986,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-downgrade-php.git",
-                "reference": "f342945fa3854b84a140c4a39a7fb3cb51aaf8f4"
+                "reference": "89173a280c66cba1d58a6a720cbaf933f8d56e71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/f342945fa3854b84a140c4a39a7fb3cb51aaf8f4",
-                "reference": "f342945fa3854b84a140c4a39a7fb3cb51aaf8f4",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-downgrade-php\/zipball\/89173a280c66cba1d58a6a720cbaf933f8d56e71",
+                "reference": "89173a280c66cba1d58a6a720cbaf933f8d56e71",
                 "shasum": ""
             },
             "require": {
@@ -2004,7 +2004,7 @@
                 "phpunit\/phpunit": "^10.1",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-generator": "^0.6",
-                "rector\/rector-src": "dev-main#84b3ea107c6d5b5d369358cdfd7fc6e69d390e9d",
+                "rector\/rector-src": "dev-main",
                 "symplify\/easy-ci": "^11.2",
                 "symplify\/easy-coding-standard": "^11.2",
                 "symplify\/phpstan-extensions": "^11.2",
@@ -2016,7 +2016,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-07-25T09:38:17+00:00",
+            "time": "2023-07-25T09:43:20+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {
