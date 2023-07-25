@@ -114,13 +114,20 @@ CODE_SAMPLE
     }
     private function shouldStop(Node $node, string $paramName) : bool
     {
+        $nodeToCheck = null;
         if ($node instanceof FuncCall && !$node->isFirstClassCallable() && $this->isNames($node, ['is_array', 'is_string', 'is_int', 'is_bool', 'is_float'])) {
             $firstArg = $node->getArgs()[0];
-            return $firstArg->value instanceof Variable && $this->isName($firstArg->value, $paramName);
+            $nodeToCheck = $firstArg->value;
         }
-        if ($node instanceof Coalesce && $node->left instanceof Variable && $this->isName($node->left, $paramName)) {
-            return \true;
+        if ($node instanceof Coalesce) {
+            $nodeToCheck = $node->left;
         }
-        return $node instanceof AssignOpCoalesce && $node->var instanceof Variable && $this->isName($node->var, $paramName);
+        if ($node instanceof AssignOpCoalesce) {
+            $nodeToCheck = $node->var;
+        }
+        if ($nodeToCheck instanceof ArrayDimFetch) {
+            return $nodeToCheck->var instanceof Variable && $this->isName($nodeToCheck->var, $paramName);
+        }
+        return $nodeToCheck instanceof Variable && $this->isName($nodeToCheck, $paramName);
     }
 }
