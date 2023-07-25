@@ -78,10 +78,10 @@ use Rector\Utils\Command\OutsideAnySetCommand;
 use RectorPrefix202307\Symfony\Component\Console\Application;
 use RectorPrefix202307\Symfony\Component\Console\Command\Command;
 use RectorPrefix202307\Symfony\Component\Console\Style\SymfonyStyle;
-use function RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use function RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 use RectorPrefix202307\Symfony\Component\Filesystem\Filesystem;
 use RectorPrefix202307\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
+use function RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);
