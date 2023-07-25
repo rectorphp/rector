@@ -21,7 +21,6 @@ use Rector\Core\ValueObject\Reporting\FileDiff;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\PostRector\Application\PostFileProcessor;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use RectorPrefix202307\Symfony\Component\Console\Style\SymfonyStyle;
 use Throwable;
 final class PhpFileProcessor implements FileProcessorInterface
 {
@@ -66,16 +65,11 @@ final class PhpFileProcessor implements FileProcessorInterface
      */
     private $filePathHelper;
     /**
-     * @readonly
-     * @var \Symfony\Component\Console\Style\SymfonyStyle
-     */
-    private $symfonyStyle;
-    /**
      * @var string
      * @see https://regex101.com/r/xP2MGa/1
      */
     private const OPEN_TAG_SPACED_REGEX = '#^(?<open_tag_spaced>[^\\S\\r\\n]+\\<\\?php)#m';
-    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, SymfonyStyle $symfonyStyle)
+    public function __construct(FormatPerservingPrinter $formatPerservingPrinter, FileProcessor $fileProcessor, OutputStyleInterface $rectorOutputStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, PostFileProcessor $postFileProcessor, ErrorFactory $errorFactory, FilePathHelper $filePathHelper)
     {
         $this->formatPerservingPrinter = $formatPerservingPrinter;
         $this->fileProcessor = $fileProcessor;
@@ -85,7 +79,6 @@ final class PhpFileProcessor implements FileProcessorInterface
         $this->postFileProcessor = $postFileProcessor;
         $this->errorFactory = $errorFactory;
         $this->filePathHelper = $filePathHelper;
-        $this->symfonyStyle = $symfonyStyle;
     }
     /**
      * @return array{system_errors: SystemError[], file_diffs: FileDiff[]}
@@ -120,10 +113,6 @@ final class PhpFileProcessor implements FileProcessorInterface
                 $fileHasChanged = \true;
             }
         } while ($fileHasChangedInCurrentPass);
-        // show warning on has InlineHTML node if file has changed
-        if ($fileHasChanged && $file->hasInlineHTMLNode()) {
-            $this->symfonyStyle->warning(\sprintf('File %s has InlineHTML node, this may cause unexpected output, you may need to manually verify the changed file', $this->filePathHelper->relativePath($file->getFilePath())));
-        }
         // 5. add as cacheable if not changed at all
         if (!$fileHasChanged) {
             $this->changedFilesDetector->addCachableFile($file->getFilePath());
