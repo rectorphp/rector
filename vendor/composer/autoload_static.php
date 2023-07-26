@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite0b3f28bb44c98e5afb2da9d4deed44a
+class ComposerStaticInit8f22c058fe3b976c909bb1a233c9c18e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2316,6 +2316,7 @@ class ComposerStaticInite0b3f28bb44c98e5afb2da9d4deed44a
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\ClassMethod\\TestWithAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/ClassMethod/TestWithAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\AnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/AnnotationWithValueToAttributeRector.php',
         'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\CoversAnnotationWithValueToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/CoversAnnotationWithValueToAttributeRector.php',
+        'Rector\\PHPUnit\\AnnotationsToAttributes\\Rector\\Class_\\TicketAnnotationToAttributeRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/AnnotationsToAttributes/Rector/Class_/TicketAnnotationToAttributeRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\RemoveEmptyTestMethodRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/RemoveEmptyTestMethodRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\ClassMethod\\ReplaceTestAnnotationWithPrefixedFunctionRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/ClassMethod/ReplaceTestAnnotationWithPrefixedFunctionRector.php',
         'Rector\\PHPUnit\\CodeQuality\\Rector\\Class_\\AddSeeTestAnnotationRector' => __DIR__ . '/..' . '/rector/rector-phpunit/rules/CodeQuality/Rector/Class_/AddSeeTestAnnotationRector.php',
@@ -3022,9 +3023,9 @@ class ComposerStaticInite0b3f28bb44c98e5afb2da9d4deed44a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite0b3f28bb44c98e5afb2da9d4deed44a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite0b3f28bb44c98e5afb2da9d4deed44a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite0b3f28bb44c98e5afb2da9d4deed44a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8f22c058fe3b976c909bb1a233c9c18e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8f22c058fe3b976c909bb1a233c9c18e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8f22c058fe3b976c909bb1a233c9c18e::$classMap;
 
         }, null, ClassLoader::class);
     }
