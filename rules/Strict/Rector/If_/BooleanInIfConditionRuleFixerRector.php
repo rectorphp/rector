@@ -74,7 +74,7 @@ CODE_SAMPLE
     {
         $hasChanged = \false;
         // 1. if
-        $ifCondExprType = $scope->getType($node->cond);
+        $ifCondExprType = $scope->getNativeType($node->cond);
         $notIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($ifCondExprType, $node->cond, $this->treatAsNonEmpty);
         if ($notIdentical !== null) {
             $node->cond = $notIdentical;
@@ -82,7 +82,7 @@ CODE_SAMPLE
         }
         // 2. elseifs
         foreach ($node->elseifs as $elseif) {
-            $elseifCondExprType = $scope->getType($elseif->cond);
+            $elseifCondExprType = $scope->getNativeType($elseif->cond);
             $notIdentical = $this->exactCompareFactory->createNotIdenticalFalsyCompare($elseifCondExprType, $elseif->cond, $this->treatAsNonEmpty);
             if (!$notIdentical instanceof Expr) {
                 continue;
