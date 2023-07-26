@@ -15,6 +15,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
@@ -90,7 +91,11 @@ CODE_SAMPLE
             return null;
         }
         $ternary = $return->expr;
-        $nativeTernaryType = $scope->getNativeType($ternary);
+        $returnScope = $return->expr->getAttribute(AttributeKey::SCOPE);
+        if ($returnScope === null) {
+            return null;
+        }
+        $nativeTernaryType = $returnScope->getNativeType($ternary);
         if ($nativeTernaryType instanceof MixedType) {
             return null;
         }
