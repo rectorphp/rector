@@ -92,7 +92,7 @@ CODE_SAMPLE
         if ($this->exprAnalyzer->isNonTypedFromParam($empty->expr)) {
             return null;
         }
-        $emptyExprType = $scope->getType($empty->expr);
+        $emptyExprType = $scope->getNativeType($empty->expr);
         return $this->exactCompareFactory->createNotIdenticalFalsyCompare($emptyExprType, $empty->expr, $this->treatAsNonEmpty);
     }
     private function refactorEmpty(Empty_ $empty, Scope $scope, bool $treatAsNonEmpty) : ?\PhpParser\Node\Expr
@@ -100,7 +100,7 @@ CODE_SAMPLE
         if ($this->exprAnalyzer->isNonTypedFromParam($empty->expr)) {
             return null;
         }
-        $exprType = $scope->getType($empty->expr);
+        $exprType = $scope->getNativeType($empty->expr);
         return $this->exactCompareFactory->createIdenticalFalsyCompare($exprType, $empty->expr, $treatAsNonEmpty);
     }
     private function createDimFetchBooleanAnd(Empty_ $empty) : ?BooleanAnd
