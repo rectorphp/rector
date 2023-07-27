@@ -261,4 +261,8 @@ final class AttributeKey
      * @var string
      */
     public const INSIDE_ARRAY_DIM_FETCH = 'inside_array_dim_fetch';
+    /**
+     * @var string
+     */
+    public const IS_USED_AS_ARG_BY_REF_VALUE = 'is_used_as_arg_by_ref_value';
 }

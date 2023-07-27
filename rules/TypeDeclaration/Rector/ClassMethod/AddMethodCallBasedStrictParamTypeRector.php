@@ -3,12 +3,12 @@
 declare (strict_types=1);
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
+use PhpParser\Node\Name;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -92,7 +92,7 @@ CODE_SAMPLE
             if ($method->params === []) {
                 continue;
             }
-            $isPrivate = $node->isFinal() && $node->extends === null && $node->implements === [] && $method->isProtected() || $method->isFinal() && $node->extends === null && $node->implements === [] || $method->isPrivate();
+            $isPrivate = $node->isFinal() && !$node->extends instanceof Name && $node->implements === [] && $method->isProtected() || $method->isFinal() && !$node->extends instanceof Name && $node->implements === [] || $method->isPrivate();
             if (!$isPrivate) {
                 continue;
             }
