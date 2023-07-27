@@ -8,6 +8,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\Core\PhpParser\NodeFinder\LocalMethodCallFinder;
 use Rector\Core\Rector\AbstractRector;
+use Rector\Core\Reflection\ReflectionResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\CallTypesResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodParamTypeCompleter;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -91,7 +92,8 @@ CODE_SAMPLE
             if ($method->params === []) {
                 continue;
             }
-            if (!$method->isPrivate()) {
+            $isPrivate = $node->isFinal() && $node->extends === null && $node->implements === [] && $method->isProtected() || $method->isFinal() && $node->extends === null && $node->implements === [] || $method->isPrivate();
+            if (!$isPrivate) {
                 continue;
             }
             $methodCalls = $this->localMethodCallFinder->match($node, $method);
