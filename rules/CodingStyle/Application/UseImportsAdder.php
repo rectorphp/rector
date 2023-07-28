@@ -37,16 +37,19 @@ final class UseImportsAdder
     /**
      * @param Stmt[] $stmts
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $useImportTypes
+     * @param array<FullyQualifiedObjectType|AliasedObjectType> $constantUseImportTypes
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $functionUseImportTypes
      * @return Stmt[]
      */
-    public function addImportsToStmts(FileWithoutNamespace $fileWithoutNamespace, array $stmts, array $useImportTypes, array $functionUseImportTypes) : array
+    public function addImportsToStmts(FileWithoutNamespace $fileWithoutNamespace, array $stmts, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes) : array
     {
         $existingUseImportTypes = $this->usedImportsResolver->resolveForStmts($stmts);
+        $existingConstantUseImports = $this->usedImportsResolver->resolveConstantImportsForStmts($stmts);
         $existingFunctionUseImports = $this->usedImportsResolver->resolveFunctionImportsForStmts($stmts);
         $useImportTypes = $this->diffFullyQualifiedObjectTypes($useImportTypes, $existingUseImportTypes);
+        $constantUseImportTypes = $this->diffFullyQualifiedObjectTypes($constantUseImportTypes, $existingConstantUseImports);
         $functionUseImportTypes = $this->diffFullyQualifiedObjectTypes($functionUseImportTypes, $existingFunctionUseImports);
-        $newUses = $this->createUses($useImportTypes, $functionUseImportTypes, null);
+        $newUses = $this->createUses($useImportTypes, $constantUseImportTypes, $functionUseImportTypes, null);
         if ($newUses === []) {
             return $stmts;
         }
@@ -74,17 +77,20 @@ final class UseImportsAdder
     }
     /**
      * @param FullyQualifiedObjectType[] $useImportTypes
+     * @param FullyQualifiedObjectType[] $constantUseImportTypes
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
      */
-    public function addImportsToNamespace(Namespace_ $namespace, array $useImportTypes, array $functionUseImportTypes) : void
+    public function addImportsToNamespace(Namespace_ $namespace, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes) : void
     {
         $namespaceName = $this->getNamespaceName($namespace);
         $existingUseImportTypes = $this->usedImportsResolver->resolveForStmts($namespace->stmts);
+        $existingConstantUseImportTypes = $this->usedImportsResolver->resolveConstantImportsForStmts($namespace->stmts);
         $existingFunctionUseImportTypes = $this->usedImportsResolver->resolveFunctionImportsForStmts($namespace->stmts);
         $existingUseImportTypes = $this->typeFactory->uniquateTypes($existingUseImportTypes);
         $useImportTypes = $this->diffFullyQualifiedObjectTypes($useImportTypes, $existingUseImportTypes);
+        $constantUseImportTypes = $this->diffFullyQualifiedObjectTypes($constantUseImportTypes, $existingConstantUseImportTypes);
         $functionUseImportTypes = $this->diffFullyQualifiedObjectTypes($functionUseImportTypes, $existingFunctionUseImportTypes);
-        $newUses = $this->createUses($useImportTypes, $functionUseImportTypes, $namespaceName);
+        $newUses = $this->createUses($useImportTypes, $constantUseImportTypes, $functionUseImportTypes, $namespaceName);
         if ($newUses === []) {
             return;
         }
@@ -127,25 +133,22 @@ final class UseImportsAdder
     }
     /**
      * @param array<AliasedObjectType|FullyQualifiedObjectType> $useImportTypes
+     * @param array<FullyQualifiedObjectType|AliasedObjectType> $constantUseImportTypes
      * @param array<FullyQualifiedObjectType|AliasedObjectType> $functionUseImportTypes
      * @return Use_[]
      */
-    private function createUses(array $useImportTypes, array $functionUseImportTypes, ?string $namespaceName) : array
+    private function createUses(array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, ?string $namespaceName) : array
     {
         $newUses = [];
-        foreach ($useImportTypes as $useImportType) {
-            if ($namespaceName !== null && $this->isCurrentNamespace($namespaceName, $useImportType)) {
-                continue;
+        $importsMapping = [Use_::TYPE_NORMAL => $useImportTypes, Use_::TYPE_CONSTANT => $constantUseImportTypes, Use_::TYPE_FUNCTION => $functionUseImportTypes];
+        foreach ($importsMapping as $type => $importTypes) {
+            foreach ($importTypes as $importType) {
+                if ($namespaceName !== null && $this->isCurrentNamespace($namespaceName, $importType)) {
+                    continue;
+                }
+                // already imported in previous cycle
+                $newUses[] = $importType->getUseNode($type);
             }
-            // already imported in previous cycle
-            $newUses[] = $useImportType->getUseNode();
-        }
-        foreach ($functionUseImportTypes as $functionUseImportType) {
-            if ($namespaceName !== null && $this->isCurrentNamespace($namespaceName, $functionUseImportType)) {
-                continue;
-            }
-            // already imported in previous cycle
-            $newUses[] = $functionUseImportType->getFunctionUseNode();
         }
         return $newUses;
     }

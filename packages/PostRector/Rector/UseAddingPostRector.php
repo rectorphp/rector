@@ -66,8 +66,9 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
             throw new ShouldNotHappenException();
         }
         $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFilePath($file->getFilePath());
+        $constantUseImportTypes = $this->useNodesToAddCollector->getConstantImportsByFilePath($file->getFilePath());
         $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFilePath($file->getFilePath());
-        if ($useImportTypes === [] && $functionUseImportTypes === []) {
+        if ($useImportTypes === [] && $constantUseImportTypes === [] && $functionUseImportTypes === []) {
             return $nodes;
         }
         /** @var FullyQualifiedObjectType[] $useImportTypes */
@@ -78,7 +79,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
         if (!$rootNode instanceof FileWithoutNamespace && !$rootNode instanceof Namespace_) {
             return $nodes;
         }
-        return $this->resolveNodesWithImportedUses($nodes, $useImportTypes, $functionUseImportTypes, $rootNode);
+        return $this->resolveNodesWithImportedUses($nodes, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes, $rootNode);
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -105,22 +106,23 @@ CODE_SAMPLE
     /**
      * @param Stmt[] $nodes
      * @param FullyQualifiedObjectType[] $useImportTypes
+     * @param FullyQualifiedObjectType[] $constantUseImportTypes
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
      * @return Stmt[]
      * @param \Rector\Core\PhpParser\Node\CustomNode\FileWithoutNamespace|\PhpParser\Node\Stmt\Namespace_ $namespace
      */
-    private function resolveNodesWithImportedUses(array $nodes, array $useImportTypes, array $functionUseImportTypes, $namespace) : array
+    private function resolveNodesWithImportedUses(array $nodes, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, $namespace) : array
     {
         // A. has namespace? add under it
         if ($namespace instanceof Namespace_) {
             // then add, to prevent adding + removing false positive of same short use
-            $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $functionUseImportTypes);
+            $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes);
             return $nodes;
         }
         // B. no namespace? add in the top
         $useImportTypes = $this->filterOutNonNamespacedNames($useImportTypes);
         // then add, to prevent adding + removing false positive of same short use
-        return $this->useImportsAdder->addImportsToStmts($namespace, $nodes, $useImportTypes, $functionUseImportTypes);
+        return $this->useImportsAdder->addImportsToStmts($namespace, $nodes, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes);
     }
     /**
      * Prevents

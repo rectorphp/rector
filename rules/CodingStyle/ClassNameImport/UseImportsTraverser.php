@@ -39,6 +39,14 @@ final class UseImportsTraverser
      * @param Stmt[] $stmts
      * @param callable(UseUse $useUse, string $name): void $callable
      */
+    public function traverserStmtsForConstants(array $stmts, callable $callable) : void
+    {
+        $this->traverseForType($stmts, $callable, Use_::TYPE_CONSTANT);
+    }
+    /**
+     * @param Stmt[] $stmts
+     * @param callable(UseUse $useUse, string $name): void $callable
+     */
     public function traverserStmtsForFunctions(array $stmts, callable $callable) : void
     {
         $this->traverseForType($stmts, $callable, Use_::TYPE_FUNCTION);

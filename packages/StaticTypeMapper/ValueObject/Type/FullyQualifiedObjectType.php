@@ -42,20 +42,15 @@ final class FullyQualifiedObjectType extends ObjectType
         $name->setAttribute(AttributeKey::NAMESPACED_NAME, $this->getClassName());
         return $name;
     }
-    public function getUseNode() : Use_
+    public function getUseNode(?int $useType = null) : Use_
     {
         $name = new Name($this->getClassName());
         $name->setAttribute(AttributeKey::IS_USEUSE_NAME, \true);
         $useUse = new UseUse($name);
-        return new Use_([$useUse]);
-    }
-    public function getFunctionUseNode() : Use_
-    {
-        $name = new Name($this->getClassName());
-        $name->setAttribute(AttributeKey::IS_USEUSE_NAME, \true);
-        $useUse = new UseUse($name, null);
         $use = new Use_([$useUse]);
-        $use->type = Use_::TYPE_FUNCTION;
+        if ($useType !== null) {
+            $use->type = $useType;
+        }
         return $use;
     }
     public function getShortNameLowered() : string

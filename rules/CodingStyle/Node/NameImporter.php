@@ -117,6 +117,8 @@ final class NameImporter
         }
         if ($name->getAttribute(AttributeKey::IS_FUNCCALL_NAME) === \true) {
             $this->useNodesToAddCollector->addFunctionUseImport($fullyQualifiedObjectType);
+        } elseif ($name->getAttribute(AttributeKey::IS_CONSTFETCH_NAME) === \true) {
+            $this->useNodesToAddCollector->addConstantUseImport($fullyQualifiedObjectType);
         } else {
             $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
         }
