@@ -1,4 +1,4 @@
-# 362 Rules Overview
+# 363 Rules Overview
 
 <br>
 
@@ -52,7 +52,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (43)
+- [TypeDeclaration](#typedeclaration) (44)
 
 - [Visibility](#visibility) (3)
 
@@ -8260,6 +8260,30 @@ return static function (RectorConfig $rectorConfig): void {
      public function run()
      {
          $this->name = 'string';
+     }
+ }
+```
+
+<br>
+
+### TypedPropertyFromStrictConstructorReadonlyClassRector
+
+Add typed public properties based only on strict constructor types in readonly classes
+
+- class: [`Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorReadonlyClassRector`](../rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictConstructorReadonlyClassRector.php)
+
+```diff
+ /**
+  * @immutable
+  */
+ class SomeObject
+ {
+-    public $name;
++    public string $name;
+
+     public function __construct(string $name)
+     {
+         $this->name = $name;
      }
  }
 ```
