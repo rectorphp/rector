@@ -11,6 +11,7 @@ use RectorPrefix202307\Nette;
 use RectorPrefix202307\Nette\MemberAccessException;
 /**
  * Nette\SmartObject helpers.
+ * @internal
  */
 final class ObjectHelpers
 {

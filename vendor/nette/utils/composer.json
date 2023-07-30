@@ -34,7 +34,7 @@
         }
     ],
     "require": {
-        "php": ">=7.2 <8.3"
+        "php": ">=7.2 <8.4"
     },
     "require-dev": {
         "nette\/tester": "~2.0",

@@ -218,6 +218,7 @@ class Validators
      * Checks if a variable is a zero-based integer indexed array.
      * @param  mixed  $value
      * @deprecated  use Nette\Utils\Arrays::isList
+     * @return ($value is list ? true : false)
      */
     public static function isList($value) : bool
     {

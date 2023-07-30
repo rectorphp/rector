@@ -169,7 +169,7 @@ final class Exposer
     }
     public static function exposeDsCollection(Ds\Collection $obj, Value $value, Describer $describer) : void
     {
-        foreach ($obj as $k => $v) {
+        foreach (clone $obj as $k => $v) {
             $describer->addPropertyTo($value, (string) $k, $v);
         }
     }

@@ -69,6 +69,8 @@ final class EnglishInflector implements InflectorInterface
         ['sei', 3, \false, \true, 'y'],
         // accesses (access), addresses (address), kisses (kiss)
         ['sess', 4, \true, \false, 'ss'],
+        // statuses (status)
+        ['sesutats', 8, \true, \true, 'status'],
         // analyses (analysis), ellipses (ellipsis), fungi (fungus),
         // neuroses (neurosis), theses (thesis), emphases (emphasis),
         // oases (oasis), crises (crisis), houses (house), bases (base),
@@ -100,6 +102,8 @@ final class EnglishInflector implements InflectorInterface
         // waltzes (waltz), heroes (hero), bushes (bush), arches (arch),
         // shoes (shoe)
         ['se', 2, \true, \true, ['', 'e']],
+        // status (status)
+        ['sutats', 6, \true, \true, 'status'],
         // tags (tag)
         ['s', 1, \true, \true, ''],
         // chateaux (chateau)
@@ -198,6 +202,8 @@ final class EnglishInflector implements InflectorInterface
         ['sub', 3, \true, \true, 'buses'],
         // circuses (circus)
         ['suc', 3, \true, \true, 'cuses'],
+        // status (status)
+        ['sutats', 6, \true, \true, ['status', 'statuses']],
         // conspectuses (conspectus), prospectuses (prospectus)
         ['sutcep', 6, \true, \true, 'pectuses'],
         // fungi (fungus), alumni (alumnus), syllabi (syllabus), radii (radius)

@@ -680,21 +680,21 @@
         },
         {
             "name": "nette\/utils",
-            "version": "v3.2.9",
-            "version_normalized": "3.2.9.0",
+            "version": "v3.2.10",
+            "version_normalized": "3.2.10.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/utils.git",
-                "reference": "c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c"
+                "reference": "a4175c62652f2300c8017fb7e640f9ccb11648d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c",
-                "reference": "c91bac3470c34b2ecd5400f6e6fdf0b64a836a5c",
+                "url": "https:\/\/api.github.com\/repos\/nette\/utils\/zipball\/a4175c62652f2300c8017fb7e640f9ccb11648d2",
+                "reference": "a4175c62652f2300c8017fb7e640f9ccb11648d2",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.2 <8.3"
+                "php": ">=7.2 <8.4"
             },
             "conflict": {
                 "nette\/di": "<3.0.6"
@@ -714,7 +714,7 @@
                 "ext-tokenizer": "to use Nette\\Utils\\Reflection::getUseStatements()",
                 "ext-xml": "to use Strings::length() etc. when mbstring is not available"
             },
-            "time": "2023-01-18T03:26:20+00:00",
+            "time": "2023-07-30T15:38:18+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -763,7 +763,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/utils\/issues",
-                "source": "https:\/\/github.com\/nette\/utils\/tree\/v3.2.9"
+                "source": "https:\/\/github.com\/nette\/utils\/tree\/v3.2.10"
             },
             "install-path": "..\/nette\/utils"
         },
@@ -2267,17 +2267,17 @@
         },
         {
             "name": "symfony\/config",
-            "version": "v6.3.0",
-            "version_normalized": "6.3.0.0",
+            "version": "v6.3.2",
+            "version_normalized": "6.3.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/config.git",
-                "reference": "a5e00dec161b08c946a2c16eed02adbeedf827ae"
+                "reference": "b47ca238b03e7b0d7880ffd1cf06e8d637ca1467"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/config\/zipball\/a5e00dec161b08c946a2c16eed02adbeedf827ae",
-                "reference": "a5e00dec161b08c946a2c16eed02adbeedf827ae",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/config\/zipball\/b47ca238b03e7b0d7880ffd1cf06e8d637ca1467",
+                "reference": "b47ca238b03e7b0d7880ffd1cf06e8d637ca1467",
                 "shasum": ""
             },
             "require": {
@@ -2297,7 +2297,7 @@
                 "symfony\/service-contracts": "^2.5|^3",
                 "symfony\/yaml": "^5.4|^6.0"
             },
-            "time": "2023-04-25T10:46:17+00:00",
+            "time": "2023-07-19T20:22:16+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2325,7 +2325,7 @@
             "description": "Helps you find, load, combine, autofill and validate configuration values of any kind",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/config\/tree\/v6.3.0"
+                "source": "https:\/\/github.com\/symfony\/config\/tree\/v6.3.2"
             },
             "funding": [
                 {
@@ -2345,17 +2345,17 @@
         },
         {
             "name": "symfony\/console",
-            "version": "v6.3.0",
-            "version_normalized": "6.3.0.0",
+            "version": "v6.3.2",
+            "version_normalized": "6.3.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/console.git",
-                "reference": "8788808b07cf0bdd6e4b7fdd23d8ddb1470c83b7"
+                "reference": "aa5d64ad3f63f2e48964fc81ee45cb318a723898"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/8788808b07cf0bdd6e4b7fdd23d8ddb1470c83b7",
-                "reference": "8788808b07cf0bdd6e4b7fdd23d8ddb1470c83b7",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/console\/zipball\/aa5d64ad3f63f2e48964fc81ee45cb318a723898",
+                "reference": "aa5d64ad3f63f2e48964fc81ee45cb318a723898",
                 "shasum": ""
             },
             "require": {
@@ -2384,7 +2384,7 @@
                 "symfony\/process": "^5.4|^6.0",
                 "symfony\/var-dumper": "^5.4|^6.0"
             },
-            "time": "2023-05-29T12:49:39+00:00",
+            "time": "2023-07-19T20:17:28+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2418,7 +2418,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.3.0"
+                "source": "https:\/\/github.com\/symfony\/console\/tree\/v6.3.2"
             },
             "funding": [
                 {
@@ -2696,17 +2696,17 @@
         },
         {
             "name": "symfony\/finder",
-            "version": "v6.3.0",
-            "version_normalized": "6.3.0.0",
+            "version": "v6.3.2",
+            "version_normalized": "6.3.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/finder.git",
-                "reference": "d9b01ba073c44cef617c7907ce2419f8d00d75e2"
+                "reference": "78ce4c29757d657d2b41a91c328923b9a0d6b43d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/d9b01ba073c44cef617c7907ce2419f8d00d75e2",
-                "reference": "d9b01ba073c44cef617c7907ce2419f8d00d75e2",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/finder\/zipball\/78ce4c29757d657d2b41a91c328923b9a0d6b43d",
+                "reference": "78ce4c29757d657d2b41a91c328923b9a0d6b43d",
                 "shasum": ""
             },
             "require": {
@@ -2715,7 +2715,7 @@
             "require-dev": {
                 "symfony\/filesystem": "^6.0"
             },
-            "time": "2023-04-02T01:25:41+00:00",
+            "time": "2023-07-13T14:29:38+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2743,7 +2743,7 @@
             "description": "Finds files and directories via an intuitive fluent interface",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.3.0"
+                "source": "https:\/\/github.com\/symfony\/finder\/tree\/v6.3.2"
             },
             "funding": [
                 {
@@ -2936,23 +2936,23 @@
         },
         {
             "name": "symfony\/process",
-            "version": "v6.3.0",
-            "version_normalized": "6.3.0.0",
+            "version": "v6.3.2",
+            "version_normalized": "6.3.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/process.git",
-                "reference": "8741e3ed7fe2e91ec099e02446fb86667a0f1628"
+                "reference": "c5ce962db0d9b6e80247ca5eb9af6472bd4d7b5d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/8741e3ed7fe2e91ec099e02446fb86667a0f1628",
-                "reference": "8741e3ed7fe2e91ec099e02446fb86667a0f1628",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/process\/zipball\/c5ce962db0d9b6e80247ca5eb9af6472bd4d7b5d",
+                "reference": "c5ce962db0d9b6e80247ca5eb9af6472bd4d7b5d",
                 "shasum": ""
             },
             "require": {
                 "php": ">=8.1"
             },
-            "time": "2023-05-19T08:06:44+00:00",
+            "time": "2023-07-12T16:00:22+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -2980,7 +2980,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https:\/\/symfony.com",
             "support": {
-                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.3.0"
+                "source": "https:\/\/github.com\/symfony\/process\/tree\/v6.3.2"
             },
             "funding": [
                 {
@@ -3000,17 +3000,17 @@
         },
         {
             "name": "symfony\/string",
-            "version": "v6.3.0",
-            "version_normalized": "6.3.0.0",
+            "version": "v6.3.2",
+            "version_normalized": "6.3.2.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/symfony\/string.git",
-                "reference": "f2e190ee75ff0f5eced645ec0be5c66fac81f51f"
+                "reference": "53d1a83225002635bca3482fcbf963001313fb68"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/f2e190ee75ff0f5eced645ec0be5c66fac81f51f",
-                "reference": "f2e190ee75ff0f5eced645ec0be5c66fac81f51f",
+                "url": "https:\/\/api.github.com\/repos\/symfony\/string\/zipball\/53d1a83225002635bca3482fcbf963001313fb68",
+                "reference": "53d1a83225002635bca3482fcbf963001313fb68",
                 "shasum": ""
             },
             "require": {
@@ -3030,7 +3030,7 @@
                 "symfony\/translation-contracts": "^2.5|^3.0",
                 "symfony\/var-exporter": "^5.4|^6.0"
             },
-            "time": "2023-03-21T21:06:29+00:00",
+            "time": "2023-07-05T08:41:27+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -3069,7 +3069,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.3.0"
+                "source": "https:\/\/github.com\/symfony\/string\/tree\/v6.3.2"
             },
             "funding": [
                 {
@@ -3222,23 +3222,23 @@
         },
         {
             "name": "tracy\/tracy",
-            "version": "v2.10.2",
-            "version_normalized": "2.10.2.0",
+            "version": "v2.10.3",
+            "version_normalized": "2.10.3.0",
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/nette\/tracy.git",
-                "reference": "882fee7cf4258a602ad4a37461e837ed2ca1406b"
+                "reference": "ec6637866d6836ef6f8de2bab63ae7708b23bcd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/882fee7cf4258a602ad4a37461e837ed2ca1406b",
-                "reference": "882fee7cf4258a602ad4a37461e837ed2ca1406b",
+                "url": "https:\/\/api.github.com\/repos\/nette\/tracy\/zipball\/ec6637866d6836ef6f8de2bab63ae7708b23bcd7",
+                "reference": "ec6637866d6836ef6f8de2bab63ae7708b23bcd7",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
                 "ext-session": "*",
-                "php": ">=8.0 <8.3"
+                "php": ">=8.0 <8.4"
             },
             "conflict": {
                 "nette\/di": "<3.0"
@@ -3246,13 +3246,14 @@
             "require-dev": {
                 "latte\/latte": "^2.5",
                 "nette\/di": "^3.0",
+                "nette\/http": "^3.0",
                 "nette\/mail": "^3.0",
                 "nette\/tester": "^2.2",
                 "nette\/utils": "^3.0",
                 "phpstan\/phpstan": "^1.0",
                 "psr\/log": "^1.0 || ^2.0 || ^3.0"
             },
-            "time": "2023-03-29T12:34:53+00:00",
+            "time": "2023-07-30T13:56:20+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -3293,7 +3294,7 @@
             ],
             "support": {
                 "issues": "https:\/\/github.com\/nette\/tracy\/issues",
-                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.10.2"
+                "source": "https:\/\/github.com\/nette\/tracy\/tree\/v2.10.3"
             },
             "install-path": "..\/tracy\/tracy"
         },

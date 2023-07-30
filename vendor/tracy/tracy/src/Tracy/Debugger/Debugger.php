@@ -13,7 +13,7 @@ use ErrorException;
  */
 class Debugger
 {
-    public const VERSION = '2.10.2';
+    public const VERSION = '2.10.3';
     /** server modes for Debugger::enable() */
     public const Development = \false, Production = \true, Detect = null;
     public const DEVELOPMENT = self::Development, PRODUCTION = self::Production, DETECT = self::Detect;
@@ -399,7 +399,7 @@ class Debugger
             if (!$panel) {
                 self::getBar()->addPanel($panel = new DefaultBarPanel('dumps'), 'Tracy:dumps');
             }
-            $panel->data[] = ['title' => $title, 'dump' => Dumper::toHtml($var, $options + [Dumper::DEPTH => self::$maxDepth, Dumper::TRUNCATE => self::$maxLength, Dumper::LOCATION => self::$showLocation ?: Dumper::LOCATION_CLASS | Dumper::LOCATION_SOURCE, Dumper::LAZY => \true])];
+            $panel->data[] = ['title' => $title, 'dump' => Dumper::toHtml($var, $options + [Dumper::DEPTH => self::$maxDepth, Dumper::ITEMS => self::$maxItems, Dumper::TRUNCATE => self::$maxLength, Dumper::LOCATION => self::$showLocation ?: Dumper::LOCATION_CLASS | Dumper::LOCATION_SOURCE, Dumper::LAZY => \true])];
         }
         return $var;
     }

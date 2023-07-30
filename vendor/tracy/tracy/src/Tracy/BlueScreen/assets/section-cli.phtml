@@ -18,15 +18,19 @@ if (!Helpers::isCli()) {
 
 	<div class="tracy-section-panel tracy-collapsed">
 		<h3>Process ID <?= Helpers::escapeHtml(getmypid()) ?></h3>
-		<pre>php<?= Helpers::escapeHtml(explode('):', $source, 2)[1]) ?></pre>
+<?php if (count($tmp = explode('):', $source, 2)) === 2): ?>
+		<pre>php<?= Helpers::escapeHtml($tmp[1]) ?></pre>
+<?php endif; ?>
 
+<?php if (isset($_SERVER['argv'])): ?>
 		<h3>Arguments</h3>
 		<div class="tracy-pane">
 			<table>
-<?php foreach ($_SERVER['argv'] as $k => $v): ?>
+<?php	foreach ($_SERVER['argv'] as $k => $v): ?>
 				<tr><th><?= Helpers::escapeHtml($k) ?></th><td><?= $dump($v, $k) ?></td></tr>
-<?php endforeach ?>
+<?php	endforeach ?>
 			</table>
 		</div>
+<?php endif; ?>
 	</div>
 </section>

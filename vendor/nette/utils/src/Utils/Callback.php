@@ -137,11 +137,12 @@ final class Callback
     public static function unwrap(\Closure $closure)
     {
         $r = new \ReflectionFunction($closure);
+        $class = $r->getClosureScopeClass();
         if (\substr($r->name, -1) === '}') {
             return $closure;
-        } elseif ($obj = $r->getClosureThis()) {
+        } elseif (($obj = $r->getClosureThis()) && $class && \get_class($obj) === $class->name) {
             return [$obj, $r->name];
-        } elseif ($class = $r->getClosureScopeClass()) {
+        } elseif ($class) {
             return [$class->name, $r->name];
         } else {
             return $r->name;

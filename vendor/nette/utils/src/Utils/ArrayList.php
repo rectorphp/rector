@@ -11,6 +11,8 @@ use RectorPrefix202307\Nette;
 /**
  * Provides the base class for a generic list (items can be accessed by index).
  * @template T
+ * @implements \IteratorAggregate<int, T>
+ * @implements \ArrayAccess<int, T>
  */
 class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
 {
@@ -19,7 +21,7 @@ class ArrayList implements \ArrayAccess, \Countable, \IteratorAggregate
     private $list = [];
     /**
      * Transforms array to ArrayList.
-     * @param  array<T>  $array
+     * @param  list<T>  $array
      * @return static
      */
     public static function from(array $array)

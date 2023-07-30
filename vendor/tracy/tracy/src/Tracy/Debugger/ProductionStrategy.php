@@ -34,9 +34,8 @@ final class ProductionStrategy
             (function ($logged) {
                 return require Debugger::$errorTemplate ?: __DIR__ . '/assets/error.500.phtml';
             })(empty($e));
-        } elseif (Helpers::isCli()) {
-            // @ triggers E_NOTICE when strerr is closed since PHP 7.4
-            @\fwrite(\STDERR, "ERROR: {$exception->getMessage()}\n" . (isset($e) ? 'Unable to log error. You may try enable debug mode to inspect the problem.' : 'Check log to see more info.') . "\n");
+        } elseif (Helpers::isCli() && \is_resource(\STDERR)) {
+            \fwrite(\STDERR, "ERROR: {$exception->getMessage()}\n" . (isset($e) ? 'Unable to log error. You may try enable debug mode to inspect the problem.' : 'Check log to see more info.') . "\n");
         }
     }
     public function handleError(int $severity, string $message, string $file, int $line) : void
