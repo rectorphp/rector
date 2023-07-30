@@ -3,7 +3,6 @@
 declare (strict_types=1);
 namespace Rector\Core\PhpParser\NodeFinder;
 
-use PHPStan\Type\StaticType;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -19,6 +18,7 @@ use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Type\StaticType;
 use PHPStan\Type\TypeWithClassName;
 use Rector\Core\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
