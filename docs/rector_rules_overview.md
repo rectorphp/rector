@@ -1,4 +1,4 @@
-# 363 Rules Overview
+# 364 Rules Overview
 
 <br>
 
@@ -52,7 +52,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (44)
+- [TypeDeclaration](#typedeclaration) (45)
 
 - [Visibility](#visibility) (3)
 
@@ -8220,6 +8220,25 @@ Add array type based on array dim fetch use
 +    public function resolve(array $item)
      {
          return $item['name'];
+     }
+ }
+```
+
+<br>
+
+### StrictStringParamConcatRector
+
+Add string type based on concat use
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector`](../rules/TypeDeclaration/Rector/ClassMethod/StrictStringParamConcatRector.php)
+
+```diff
+ class SomeClass
+ {
+-    public function resolve($item)
++    public function resolve(string $item)
+     {
+         return $item . ' world';
      }
  }
 ```
