@@ -2029,6 +2029,7 @@ return array(
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClassStringTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ClassStringTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ClosureTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ClosureTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ConditionalTypeForParameterMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ConditionalTypeForParameterMapper.php',
+    'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\ConditionalTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/ConditionalTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\FloatTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/FloatTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\GenericClassStringTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/GenericClassStringTypeMapper.php',
     'Rector\\PHPStanStaticTypeMapper\\TypeMapper\\HasMethodTypeMapper' => $baseDir . '/packages/PHPStanStaticTypeMapper/TypeMapper/HasMethodTypeMapper.php',
