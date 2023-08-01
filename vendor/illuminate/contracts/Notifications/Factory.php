@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202307\Illuminate\Contracts\Notifications;
+namespace RectorPrefix202308\Illuminate\Contracts\Notifications;
 
 interface Factory
 {

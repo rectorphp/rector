@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202307\Illuminate\Contracts\Routing;
+namespace RectorPrefix202308\Illuminate\Contracts\Routing;
 
 interface UrlGenerator
 {

@@ -3,15 +3,15 @@
 declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
-use RectorPrefix202307\Nette\Utils\FileSystem;
-use RectorPrefix202307\Nette\Utils\Strings;
+use RectorPrefix202308\Nette\Utils\FileSystem;
+use RectorPrefix202308\Nette\Utils\Strings;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\FileSystem\InitFilePathsResolver;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\PostRector\Contract\Rector\ComplementaryRectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix202307\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
+use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 final class ConfigInitializer
 {
     /**

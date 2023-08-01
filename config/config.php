@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202307;
+namespace RectorPrefix202308;
 
-use RectorPrefix202307\Composer\Semver\VersionParser;
-use RectorPrefix202307\Doctrine\Inflector\Inflector;
-use RectorPrefix202307\Doctrine\Inflector\Rules\English\InflectorFactory;
-use RectorPrefix202307\OndraM\CiDetector\CiDetector;
+use RectorPrefix202308\Composer\Semver\VersionParser;
+use RectorPrefix202308\Doctrine\Inflector\Inflector;
+use RectorPrefix202308\Doctrine\Inflector\Rules\English\InflectorFactory;
+use RectorPrefix202308\OndraM\CiDetector\CiDetector;
 use PhpParser\BuilderFactory;
 use PhpParser\ConstExprEvaluator;
 use PhpParser\Lexer;
@@ -75,13 +75,13 @@ use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
 use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
 use Rector\Utils\Command\MissingInSetCommand;
 use Rector\Utils\Command\OutsideAnySetCommand;
-use RectorPrefix202307\Symfony\Component\Console\Application;
-use RectorPrefix202307\Symfony\Component\Console\Command\Command;
-use RectorPrefix202307\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202307\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202307\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
-use function RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\service;
-use function RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
+use RectorPrefix202308\Symfony\Component\Console\Application;
+use RectorPrefix202308\Symfony\Component\Console\Command\Command;
+use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
+use RectorPrefix202308\Symfony\Component\Filesystem\Filesystem;
+use RectorPrefix202308\Symplify\EasyParallel\ValueObject\EasyParallelConfig;
+use function RectorPrefix202308\Symfony\Component\DependencyInjection\Loader\Configurator\service;
+use function RectorPrefix202308\Symfony\Component\DependencyInjection\Loader\Configurator\tagged_iterator;
 return static function (RectorConfig $rectorConfig) : void {
     // make use of https://github.com/symplify/easy-parallel
     $rectorConfig->import(EasyParallelConfig::FILE_PATH);

@@ -7,7 +7,7 @@ use Rector\Core\Config\Loader\ConfigureCallMergingLoaderFactory;
 use Rector\Core\DependencyInjection\Collector\ConfigureCallValuesCollector;
 use Rector\Core\DependencyInjection\CompilerPass\MergeImportedRectorConfigureCallValuesCompilerPass;
 use Rector\Core\DependencyInjection\CompilerPass\RemoveSkippedRectorsCompilerPass;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\ContainerBuilder;
 final class ContainerBuilderBuilder
 {
     /**

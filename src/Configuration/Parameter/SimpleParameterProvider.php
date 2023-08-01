@@ -4,8 +4,8 @@ declare (strict_types=1);
 namespace Rector\Core\Configuration\Parameter;
 
 use Rector\Core\Configuration\Option;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use RectorPrefix202307\Webmozart\Assert\Assert;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix202308\Webmozart\Assert\Assert;
 /**
  * @api
  */

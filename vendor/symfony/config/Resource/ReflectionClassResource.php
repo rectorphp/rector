@@ -8,11 +8,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202307\Symfony\Component\Config\Resource;
+namespace RectorPrefix202308\Symfony\Component\Config\Resource;
 
-use RectorPrefix202307\Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use RectorPrefix202307\Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
-use RectorPrefix202307\Symfony\Contracts\Service\ServiceSubscriberInterface;
+use RectorPrefix202308\Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use RectorPrefix202308\Symfony\Component\Messenger\Handler\MessageSubscriberInterface;
+use RectorPrefix202308\Symfony\Contracts\Service\ServiceSubscriberInterface;
 /**
  * @author Nicolas Grekas <p@tchwork.com>
  *

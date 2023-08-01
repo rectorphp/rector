@@ -3,7 +3,7 @@
 declare (strict_types=1);
 namespace Rector\Core\Autoloading;
 
-use RectorPrefix202307\Nette\Neon\Neon;
+use RectorPrefix202308\Nette\Neon\Neon;
 use PHPStan\DependencyInjection\Container;
 use Rector\Core\Configuration\Option;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
@@ -13,7 +13,7 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use Throwable;
-use RectorPrefix202307\Webmozart\Assert\Assert;
+use RectorPrefix202308\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Core\Tests\Autoloading\BootstrapFilesIncluderTest
  */

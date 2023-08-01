@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202307\Illuminate\Contracts\Broadcasting;
+namespace RectorPrefix202308\Illuminate\Contracts\Broadcasting;
 
 interface Broadcaster
 {

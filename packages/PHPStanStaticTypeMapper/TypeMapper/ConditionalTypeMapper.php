@@ -5,7 +5,7 @@ namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PHPStan\Type\ObjectType;
 use PHPStan\Reflection\ClassReflection;
-use RectorPrefix202307\Nette\Utils\Strings;
+use RectorPrefix202308\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\ConditionalType;
@@ -14,7 +14,7 @@ use PHPStan\Type\TypeCombinator;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use RectorPrefix202307\Symfony\Contracts\Service\Attribute\Required;
+use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 use PHPStan\Type\TypeTraverser;
 /**
  * @implements TypeMapperInterface<ConditionalType>

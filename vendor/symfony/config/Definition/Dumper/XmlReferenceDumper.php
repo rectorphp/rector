@@ -8,18 +8,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202307\Symfony\Component\Config\Definition\Dumper;
+namespace RectorPrefix202308\Symfony\Component\Config\Definition\Dumper;
 
-use RectorPrefix202307\Symfony\Component\Config\Definition\ArrayNode;
-use RectorPrefix202307\Symfony\Component\Config\Definition\BaseNode;
-use RectorPrefix202307\Symfony\Component\Config\Definition\BooleanNode;
-use RectorPrefix202307\Symfony\Component\Config\Definition\ConfigurationInterface;
-use RectorPrefix202307\Symfony\Component\Config\Definition\EnumNode;
-use RectorPrefix202307\Symfony\Component\Config\Definition\FloatNode;
-use RectorPrefix202307\Symfony\Component\Config\Definition\IntegerNode;
-use RectorPrefix202307\Symfony\Component\Config\Definition\NodeInterface;
-use RectorPrefix202307\Symfony\Component\Config\Definition\PrototypedArrayNode;
-use RectorPrefix202307\Symfony\Component\Config\Definition\ScalarNode;
+use RectorPrefix202308\Symfony\Component\Config\Definition\ArrayNode;
+use RectorPrefix202308\Symfony\Component\Config\Definition\BaseNode;
+use RectorPrefix202308\Symfony\Component\Config\Definition\BooleanNode;
+use RectorPrefix202308\Symfony\Component\Config\Definition\ConfigurationInterface;
+use RectorPrefix202308\Symfony\Component\Config\Definition\EnumNode;
+use RectorPrefix202308\Symfony\Component\Config\Definition\FloatNode;
+use RectorPrefix202308\Symfony\Component\Config\Definition\IntegerNode;
+use RectorPrefix202308\Symfony\Component\Config\Definition\NodeInterface;
+use RectorPrefix202308\Symfony\Component\Config\Definition\PrototypedArrayNode;
+use RectorPrefix202308\Symfony\Component\Config\Definition\ScalarNode;
 /**
  * Dumps an XML reference configuration for the given configuration/node instance.
  *

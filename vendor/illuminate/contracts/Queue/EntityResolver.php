@@ -1,6 +1,6 @@
 <?php
 
-namespace RectorPrefix202307\Illuminate\Contracts\Queue;
+namespace RectorPrefix202308\Illuminate\Contracts\Queue;
 
 interface EntityResolver
 {

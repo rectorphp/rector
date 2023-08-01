@@ -8,27 +8,27 @@ $loader = require_once __DIR__.'/autoload.php';
 // https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-functions
 if (!function_exists('dump_with_depth')) {
     function dump_with_depth() {
-        return \RectorPrefix202307\dump_with_depth(...func_get_args());
+        return \RectorPrefix202308\dump_with_depth(...func_get_args());
     }
 }
 if (!function_exists('dn')) {
     function dn() {
-        return \RectorPrefix202307\dn(...func_get_args());
+        return \RectorPrefix202308\dn(...func_get_args());
     }
 }
 if (!function_exists('dump_node')) {
     function dump_node() {
-        return \RectorPrefix202307\dump_node(...func_get_args());
+        return \RectorPrefix202308\dump_node(...func_get_args());
     }
 }
 if (!function_exists('print_node')) {
     function print_node() {
-        return \RectorPrefix202307\print_node(...func_get_args());
+        return \RectorPrefix202308\print_node(...func_get_args());
     }
 }
 if (!function_exists('trigger_deprecation')) {
     function trigger_deprecation() {
-        return \RectorPrefix202307\trigger_deprecation(...func_get_args());
+        return \RectorPrefix202308\trigger_deprecation(...func_get_args());
     }
 }
 

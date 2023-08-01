@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-namespace RectorPrefix202307\Doctrine\Inflector;
+namespace RectorPrefix202308\Doctrine\Inflector;
 
 class NoopWordInflector implements WordInflector
 {

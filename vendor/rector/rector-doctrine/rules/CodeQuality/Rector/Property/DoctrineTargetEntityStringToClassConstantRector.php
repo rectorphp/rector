@@ -3,11 +3,11 @@
 declare (strict_types=1);
 namespace Rector\Doctrine\CodeQuality\Rector\Property;
 
-use RectorPrefix202307\Doctrine\ORM\Mapping\Embedded;
-use RectorPrefix202307\Doctrine\ORM\Mapping\ManyToMany;
-use RectorPrefix202307\Doctrine\ORM\Mapping\ManyToOne;
-use RectorPrefix202307\Doctrine\ORM\Mapping\OneToMany;
-use RectorPrefix202307\Doctrine\ORM\Mapping\OneToOne;
+use RectorPrefix202308\Doctrine\ORM\Mapping\Embedded;
+use RectorPrefix202308\Doctrine\ORM\Mapping\ManyToMany;
+use RectorPrefix202308\Doctrine\ORM\Mapping\ManyToOne;
+use RectorPrefix202308\Doctrine\ORM\Mapping\OneToMany;
+use RectorPrefix202308\Doctrine\ORM\Mapping\OneToOne;
 use PhpParser\Node;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\Expr\ClassConstFetch;

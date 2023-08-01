@@ -3,17 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Parallel;
 
-use RectorPrefix202307\Clue\React\NDJson\Decoder;
-use RectorPrefix202307\Clue\React\NDJson\Encoder;
+use RectorPrefix202308\Clue\React\NDJson\Decoder;
+use RectorPrefix202308\Clue\React\NDJson\Encoder;
 use PHPStan\Analyser\NodeScopeResolver;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\StaticReflection\DynamicSourceLocatorDecorator;
 use Rector\Core\ValueObject\Configuration;
 use Rector\Core\ValueObject\Error\SystemError;
 use Rector\Parallel\ValueObject\Bridge;
-use RectorPrefix202307\Symplify\EasyParallel\Enum\Action;
-use RectorPrefix202307\Symplify\EasyParallel\Enum\ReactCommand;
-use RectorPrefix202307\Symplify\EasyParallel\Enum\ReactEvent;
+use RectorPrefix202308\Symplify\EasyParallel\Enum\Action;
+use RectorPrefix202308\Symplify\EasyParallel\Enum\ReactCommand;
+use RectorPrefix202308\Symplify\EasyParallel\Enum\ReactEvent;
 use Throwable;
 final class WorkerRunner
 {

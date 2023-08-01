@@ -19,10 +19,10 @@ use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-use RectorPrefix202307\Symfony\Component\Console\Command\Command;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\ContainerBuilder;
-use RectorPrefix202307\Webmozart\Assert\Assert;
+use RectorPrefix202308\Symfony\Component\Console\Command\Command;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\ContainerBuilder;
+use RectorPrefix202308\Webmozart\Assert\Assert;
 final class ContainerBuilderFactory
 {
     /**

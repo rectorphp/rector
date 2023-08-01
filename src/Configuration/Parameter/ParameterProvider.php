@@ -4,9 +4,9 @@ declare (strict_types=1);
 namespace Rector\Core\Configuration\Parameter;
 
 use Rector\Core\Configuration\Option;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Container;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Container;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 /**
  * @deprecated Use SimpleParameterProvider to avoid coupling with Symfony container.
  * This class will be removed in next major release

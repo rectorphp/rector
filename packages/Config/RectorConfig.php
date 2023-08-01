@@ -13,10 +13,10 @@ use Rector\Core\Contract\Rector\PhpRectorInterface;
 use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\PhpVersion;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
-use RectorPrefix202307\Webmozart\Assert\Assert;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Loader\Configurator\ServiceConfigurator;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
+use RectorPrefix202308\Webmozart\Assert\Assert;
 /**
  * @api
  * Same as Symfony container configurator, with patched return type for "set()" method for easier DX.

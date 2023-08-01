@@ -8,12 +8,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace RectorPrefix202307\Symfony\Component\DependencyInjection;
+namespace RectorPrefix202308\Symfony\Component\DependencyInjection;
 
-use RectorPrefix202307\Psr\Container\ContainerInterface as PsrContainerInterface;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
-use RectorPrefix202307\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use RectorPrefix202308\Psr\Container\ContainerInterface as PsrContainerInterface;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Exception\ServiceCircularReferenceException;
+use RectorPrefix202308\Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 /**
  * ContainerInterface is the interface implemented by service container classes.
  *
