@@ -71,7 +71,7 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Expr
     {
-        $exprType = $scope->getType($node->expr);
+        $exprType = $scope->getNativeType($node->expr);
         if ($exprType->isBoolean()->yes()) {
             return null;
         }
