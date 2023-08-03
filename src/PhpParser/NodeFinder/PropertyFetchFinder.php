@@ -7,6 +7,7 @@ use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
+use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -167,7 +168,7 @@ final class PropertyFetchFinder
     {
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->find($stmts, function (Node $subNode) use($class, $hasTrait, $propertyName, $scope) : bool {
-            if ($subNode instanceof MethodCall || $subNode instanceof StaticCall) {
+            if ($subNode instanceof MethodCall || $subNode instanceof StaticCall || $subNode instanceof FuncCall) {
                 $this->decoratePropertyFetch($subNode, $scope);
                 return \false;
             }
@@ -186,7 +187,7 @@ final class PropertyFetchFinder
     }
     private function decoratePropertyFetch(Node $node, Scope $scope) : void
     {
-        if (!$node instanceof MethodCall && !$node instanceof StaticCall) {
+        if (!$node instanceof MethodCall && !$node instanceof StaticCall && !$node instanceof FuncCall) {
             return;
         }
         if ($node->isFirstClassCallable()) {
@@ -203,7 +204,7 @@ final class PropertyFetchFinder
         }
     }
     /**
-     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall $node
+     * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\FuncCall $node
      */
     private function isFoundByRefParam($node, int $key, Scope $scope) : bool
     {
