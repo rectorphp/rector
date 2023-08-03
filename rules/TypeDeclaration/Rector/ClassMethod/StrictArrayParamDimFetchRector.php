@@ -7,10 +7,13 @@ use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\AssignOp\Coalesce as AssignOpCoalesce;
 use PhpParser\Node\Expr\BinaryOp\Coalesce;
+use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
+use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Param;
+use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Function_;
 use PhpParser\NodeTraverser;
@@ -59,10 +62,10 @@ CODE_SAMPLE
      */
     public function getNodeTypes() : array
     {
-        return [ClassMethod::class, Function_::class];
+        return [ClassMethod::class, Function_::class, Closure::class];
     }
     /**
-     * @param ClassMethod|Function_ $node
+     * @param ClassMethod|Function_|Closure $node
      */
     public function refactor(Node $node) : ?Node
     {
@@ -86,13 +89,19 @@ CODE_SAMPLE
         return null;
     }
     /**
-     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_ $functionLike
+     * @param \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|\PhpParser\Node\Expr\Closure $functionLike
      */
     private function isParamAccessedArrayDimFetch(Param $param, $functionLike) : bool
     {
+        if ($functionLike->stmts === null) {
+            return \false;
+        }
         $paramName = $this->getName($param);
         $isParamAccessedArrayDimFetch = \false;
-        $this->traverseNodesWithCallable($functionLike, function (Node $node) use($paramName, &$isParamAccessedArrayDimFetch) : ?int {
+        $this->traverseNodesWithCallable($functionLike->stmts, function (Node $node) use($paramName, &$isParamAccessedArrayDimFetch) : ?int {
+            if ($node instanceof Class_ || $node instanceof FunctionLike) {
+                return NodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            }
             if ($this->shouldStop($node, $paramName)) {
                 // force set to false to avoid too early replaced
                 $isParamAccessedArrayDimFetch = \false;
