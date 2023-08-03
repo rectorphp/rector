@@ -31,6 +31,7 @@ use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @changelog https://www.php.net/manual/en/function.array-filter.php#refsect1-function.array-filter-changelog
+ * @see https://3v4l.org/lqHFA
  *
  * @see \Rector\Tests\DowngradePhp80\Rector\FuncCall\DowngradeArrayFilterNullableCallbackRector\DowngradeArrayFilterNullableCallbackRectorTest
  */
@@ -93,20 +94,24 @@ CODE_SAMPLE
             return null;
         }
         // direct null check ConstFetch
-        if ($args[1]->value instanceof ConstFetch && $this->valueResolver->isNull($args[1]->value)) {
+        $secondArg = $args[1];
+        if ($secondArg->value instanceof ConstFetch && $this->valueResolver->isNull($secondArg->value)) {
             $args = [$args[0]];
             $node->args = $args;
             return $node;
         }
-        if ($this->shouldSkipSecondArg($args[1]->value)) {
+        if ($this->shouldSkip($secondArg->value)) {
             return null;
         }
         $node->args[1] = new Arg($this->createNewArgFirstTernary($args));
         $node->args[2] = new Arg($this->createNewArgSecondTernary($args));
         return $node;
     }
-    private function shouldSkipSecondArg(Expr $expr) : bool
+    private function shouldSkip(Expr $expr) : bool
     {
+        if ($this->isAlreadyConditionedToNull($expr)) {
+            return \true;
+        }
         if (\in_array(\get_class($expr), [String_::class, Closure::class, ArrowFunction::class, Array_::class], \true)) {
             return \true;
         }
@@ -119,10 +124,9 @@ CODE_SAMPLE
     private function createNewArgFirstTernary(array $args) : Ternary
     {
         $identical = new Identical($args[1]->value, $this->nodeFactory->createNull());
-        $vVariable = new Variable('v');
-        $arrowFunction = new ArrowFunction(['expr' => new BooleanNot(new Empty_($vVariable))]);
-        $arrowFunction->params = [new Param($vVariable), new Param(new Variable('k'))];
-        $arrowFunction->returnType = new Identifier('bool');
+        $dummyVariable = new Variable('value');
+        $booleanNot = new BooleanNot(new Empty_($dummyVariable));
+        $arrowFunction = $this->createArrowFunction($booleanNot, $dummyVariable);
         return new Ternary($identical, $arrowFunction, $args[1]->value);
     }
     /**
@@ -133,5 +137,23 @@ CODE_SAMPLE
         $identical = new Identical($args[1]->value, $this->nodeFactory->createNull());
         $constFetch = new ConstFetch(new Name('ARRAY_FILTER_USE_BOTH'));
         return new Ternary($identical, $constFetch, isset($args[2]) ? $args[2]->value : new LNumber(0));
+    }
+    private function isAlreadyConditionedToNull(Expr $expr) : bool
+    {
+        if (!$expr instanceof Ternary) {
+            return \false;
+        }
+        if (!$expr->cond instanceof Identical) {
+            return \false;
+        }
+        $identical = $expr->cond;
+        return $this->valueResolver->isNull($identical->right);
+    }
+    private function createArrowFunction(BooleanNot $booleanNot, Variable $dummyVariable) : ArrowFunction
+    {
+        $arrowFunction = new ArrowFunction(['expr' => $booleanNot]);
+        $arrowFunction->params = [new Param($dummyVariable), new Param(new Variable('key'))];
+        $arrowFunction->returnType = new Identifier('bool');
+        return $arrowFunction;
     }
 }
