@@ -94,6 +94,9 @@ CODE_SAMPLE
         if ($functionLike->stmts === null) {
             return \false;
         }
+        if ($param->default instanceof Expr && !$this->getType($param->default)->isString()->yes()) {
+            return \false;
+        }
         $paramName = $this->getName($param);
         $isParamConcatted = \false;
         $this->traverseNodesWithCallable($functionLike->stmts, function (Node $node) use($paramName, &$isParamConcatted) : ?int {
