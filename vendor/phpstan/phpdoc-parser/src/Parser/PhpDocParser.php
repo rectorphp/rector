@@ -28,6 +28,8 @@ class PhpDocParser
     private $typeParser;
     /** @var ConstExprParser */
     private $constantExprParser;
+    /** @var ConstExprParser */
+    private $doctrineConstantExprParser;
     /** @var bool */
     private $requireWhitespaceBeforeDescription;
     /** @var bool */
@@ -47,6 +49,7 @@ class PhpDocParser
     {
         $this->typeParser = $typeParser;
         $this->constantExprParser = $constantExprParser;
+        $this->doctrineConstantExprParser = $constantExprParser->toDoctrine();
         $this->requireWhitespaceBeforeDescription = $requireWhitespaceBeforeDescription;
         $this->preserveTypeAliasesWithInvalidTypes = $preserveTypeAliasesWithInvalidTypes;
         $this->parseDoctrineAnnotations = $parseDoctrineAnnotations;
@@ -486,7 +489,7 @@ class PhpDocParser
         }
         $exception = new \PHPStan\PhpDocParser\Parser\ParserException($tokens->currentTokenValue(), $tokens->currentTokenType(), $tokens->currentTokenOffset(), Lexer::TOKEN_IDENTIFIER, null, $tokens->currentTokenLine());
         try {
-            $constExpr = $this->constantExprParser->parse($tokens, \true);
+            $constExpr = $this->doctrineConstantExprParser->parse($tokens, \true);
             if ($constExpr instanceof Ast\ConstExpr\ConstExprArrayNode) {
                 throw $exception;
             }
@@ -526,12 +529,13 @@ class PhpDocParser
         if ($tokens->isCurrentTokenType(Lexer::TOKEN_INTEGER)) {
             $key = new Ast\ConstExpr\ConstExprIntegerNode(str_replace('_', '', $tokens->currentTokenValue()));
             $tokens->next();
-        } elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_SINGLE_QUOTED_STRING)) {
-            $key = new Ast\ConstExpr\QuoteAwareConstExprStringNode(\PHPStan\PhpDocParser\Parser\StringUnescaper::unescapeString($tokens->currentTokenValue()), Ast\ConstExpr\QuoteAwareConstExprStringNode::SINGLE_QUOTED);
+        } elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_DOCTRINE_ANNOTATION_STRING)) {
+            $key = new Ast\ConstExpr\DoctrineConstExprStringNode(Ast\ConstExpr\DoctrineConstExprStringNode::unescape($tokens->currentTokenValue()));
             $tokens->next();
         } elseif ($tokens->isCurrentTokenType(Lexer::TOKEN_DOUBLE_QUOTED_STRING)) {
-            $key = new Ast\ConstExpr\QuoteAwareConstExprStringNode(\PHPStan\PhpDocParser\Parser\StringUnescaper::unescapeString($tokens->currentTokenValue()), Ast\ConstExpr\QuoteAwareConstExprStringNode::DOUBLE_QUOTED);
+            $value = $tokens->currentTokenValue();
             $tokens->next();
+            $key = $this->doctrineConstantExprParser->parseDoctrineString($value, $tokens);
         } else {
             $currentTokenValue = $tokens->currentTokenValue();
             $tokens->pushSavePoint();
@@ -545,7 +549,7 @@ class PhpDocParser
                 return $this->enrichWithAttributes($tokens, new IdentifierTypeNode($currentTokenValue), $startLine, $startIndex);
             }
             $tokens->rollback();
-            $constExpr = $this->constantExprParser->parse($tokens, \true);
+            $constExpr = $this->doctrineConstantExprParser->parse($tokens, \true);
             if (!$constExpr instanceof Ast\ConstExpr\ConstFetchNode) {
                 throw new \PHPStan\PhpDocParser\Parser\ParserException($tokens->currentTokenValue(), $tokens->currentTokenType(), $tokens->currentTokenOffset(), Lexer::TOKEN_IDENTIFIER, null, $tokens->currentTokenLine());
             }

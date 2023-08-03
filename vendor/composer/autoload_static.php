@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2579c0e8511025426b43a2f8aa754ad6
+class ComposerStaticInitfc6ab4c5bef69bf42aa1c48df22fadef
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -274,6 +274,7 @@ class ComposerStaticInit2579c0e8511025426b43a2f8aa754ad6
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprStringNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprTrueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprTrueNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstFetchNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstFetchNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\DoctrineConstExprStringNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/DoctrineConstExprStringNode.php',
         'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\QuoteAwareConstExprStringNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/QuoteAwareConstExprStringNode.php',
         'PHPStan\\PhpDocParser\\Ast\\Node' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Node.php',
         'PHPStan\\PhpDocParser\\Ast\\NodeAttributes' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php',
@@ -3024,9 +3025,9 @@ class ComposerStaticInit2579c0e8511025426b43a2f8aa754ad6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2579c0e8511025426b43a2f8aa754ad6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2579c0e8511025426b43a2f8aa754ad6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2579c0e8511025426b43a2f8aa754ad6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfc6ab4c5bef69bf42aa1c48df22fadef::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfc6ab4c5bef69bf42aa1c48df22fadef::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfc6ab4c5bef69bf42aa1c48df22fadef::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -67,7 +67,7 @@ CODE_SAMPLE
         if (!$node->if instanceof Expr) {
             return null;
         }
-        $exprType = $scope->getType($node->cond);
+        $exprType = $scope->getNativeType($node->cond);
         $expr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond, $this->treatAsNonEmpty);
         if (!$expr instanceof Expr) {
             return null;

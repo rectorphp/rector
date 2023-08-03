@@ -20,6 +20,7 @@ return array(
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprStringNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprTrueNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprTrueNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstFetchNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstFetchNode.php',
+    'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\DoctrineConstExprStringNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/DoctrineConstExprStringNode.php',
     'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\QuoteAwareConstExprStringNode' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/QuoteAwareConstExprStringNode.php',
     'PHPStan\\PhpDocParser\\Ast\\Node' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/Node.php',
     'PHPStan\\PhpDocParser\\Ast\\NodeAttributes' => $vendorDir . '/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php',

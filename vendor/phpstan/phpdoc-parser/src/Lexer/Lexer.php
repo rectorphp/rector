@@ -34,20 +34,21 @@ class Lexer
     public const TOKEN_INTEGER = 20;
     public const TOKEN_SINGLE_QUOTED_STRING = 21;
     public const TOKEN_DOUBLE_QUOTED_STRING = 22;
-    public const TOKEN_IDENTIFIER = 23;
-    public const TOKEN_THIS_VARIABLE = 24;
-    public const TOKEN_VARIABLE = 25;
-    public const TOKEN_HORIZONTAL_WS = 26;
-    public const TOKEN_PHPDOC_EOL = 27;
-    public const TOKEN_OTHER = 28;
-    public const TOKEN_END = 29;
-    public const TOKEN_COLON = 30;
-    public const TOKEN_WILDCARD = 31;
-    public const TOKEN_OPEN_CURLY_BRACKET = 32;
-    public const TOKEN_CLOSE_CURLY_BRACKET = 33;
-    public const TOKEN_NEGATED = 34;
-    public const TOKEN_ARROW = 35;
-    public const TOKEN_LABELS = [self::TOKEN_REFERENCE => '\'&\'', self::TOKEN_UNION => '\'|\'', self::TOKEN_INTERSECTION => '\'&\'', self::TOKEN_NULLABLE => '\'?\'', self::TOKEN_NEGATED => '\'!\'', self::TOKEN_OPEN_PARENTHESES => '\'(\'', self::TOKEN_CLOSE_PARENTHESES => '\')\'', self::TOKEN_OPEN_ANGLE_BRACKET => '\'<\'', self::TOKEN_CLOSE_ANGLE_BRACKET => '\'>\'', self::TOKEN_OPEN_SQUARE_BRACKET => '\'[\'', self::TOKEN_CLOSE_SQUARE_BRACKET => '\']\'', self::TOKEN_OPEN_CURLY_BRACKET => '\'{\'', self::TOKEN_CLOSE_CURLY_BRACKET => '\'}\'', self::TOKEN_COMMA => '\',\'', self::TOKEN_COLON => '\':\'', self::TOKEN_VARIADIC => '\'...\'', self::TOKEN_DOUBLE_COLON => '\'::\'', self::TOKEN_DOUBLE_ARROW => '\'=>\'', self::TOKEN_ARROW => '\'->\'', self::TOKEN_EQUAL => '\'=\'', self::TOKEN_OPEN_PHPDOC => '\'/**\'', self::TOKEN_CLOSE_PHPDOC => '\'*/\'', self::TOKEN_PHPDOC_TAG => 'TOKEN_PHPDOC_TAG', self::TOKEN_DOCTRINE_TAG => 'TOKEN_DOCTRINE_TAG', self::TOKEN_PHPDOC_EOL => 'TOKEN_PHPDOC_EOL', self::TOKEN_FLOAT => 'TOKEN_FLOAT', self::TOKEN_INTEGER => 'TOKEN_INTEGER', self::TOKEN_SINGLE_QUOTED_STRING => 'TOKEN_SINGLE_QUOTED_STRING', self::TOKEN_DOUBLE_QUOTED_STRING => 'TOKEN_DOUBLE_QUOTED_STRING', self::TOKEN_IDENTIFIER => 'type', self::TOKEN_THIS_VARIABLE => '\'$this\'', self::TOKEN_VARIABLE => 'variable', self::TOKEN_HORIZONTAL_WS => 'TOKEN_HORIZONTAL_WS', self::TOKEN_OTHER => 'TOKEN_OTHER', self::TOKEN_END => 'TOKEN_END', self::TOKEN_WILDCARD => '*'];
+    public const TOKEN_DOCTRINE_ANNOTATION_STRING = 23;
+    public const TOKEN_IDENTIFIER = 24;
+    public const TOKEN_THIS_VARIABLE = 25;
+    public const TOKEN_VARIABLE = 26;
+    public const TOKEN_HORIZONTAL_WS = 27;
+    public const TOKEN_PHPDOC_EOL = 28;
+    public const TOKEN_OTHER = 29;
+    public const TOKEN_END = 30;
+    public const TOKEN_COLON = 31;
+    public const TOKEN_WILDCARD = 32;
+    public const TOKEN_OPEN_CURLY_BRACKET = 33;
+    public const TOKEN_CLOSE_CURLY_BRACKET = 34;
+    public const TOKEN_NEGATED = 35;
+    public const TOKEN_ARROW = 36;
+    public const TOKEN_LABELS = [self::TOKEN_REFERENCE => '\'&\'', self::TOKEN_UNION => '\'|\'', self::TOKEN_INTERSECTION => '\'&\'', self::TOKEN_NULLABLE => '\'?\'', self::TOKEN_NEGATED => '\'!\'', self::TOKEN_OPEN_PARENTHESES => '\'(\'', self::TOKEN_CLOSE_PARENTHESES => '\')\'', self::TOKEN_OPEN_ANGLE_BRACKET => '\'<\'', self::TOKEN_CLOSE_ANGLE_BRACKET => '\'>\'', self::TOKEN_OPEN_SQUARE_BRACKET => '\'[\'', self::TOKEN_CLOSE_SQUARE_BRACKET => '\']\'', self::TOKEN_OPEN_CURLY_BRACKET => '\'{\'', self::TOKEN_CLOSE_CURLY_BRACKET => '\'}\'', self::TOKEN_COMMA => '\',\'', self::TOKEN_COLON => '\':\'', self::TOKEN_VARIADIC => '\'...\'', self::TOKEN_DOUBLE_COLON => '\'::\'', self::TOKEN_DOUBLE_ARROW => '\'=>\'', self::TOKEN_ARROW => '\'->\'', self::TOKEN_EQUAL => '\'=\'', self::TOKEN_OPEN_PHPDOC => '\'/**\'', self::TOKEN_CLOSE_PHPDOC => '\'*/\'', self::TOKEN_PHPDOC_TAG => 'TOKEN_PHPDOC_TAG', self::TOKEN_DOCTRINE_TAG => 'TOKEN_DOCTRINE_TAG', self::TOKEN_PHPDOC_EOL => 'TOKEN_PHPDOC_EOL', self::TOKEN_FLOAT => 'TOKEN_FLOAT', self::TOKEN_INTEGER => 'TOKEN_INTEGER', self::TOKEN_SINGLE_QUOTED_STRING => 'TOKEN_SINGLE_QUOTED_STRING', self::TOKEN_DOUBLE_QUOTED_STRING => 'TOKEN_DOUBLE_QUOTED_STRING', self::TOKEN_DOCTRINE_ANNOTATION_STRING => 'TOKEN_DOCTRINE_ANNOTATION_STRING', self::TOKEN_IDENTIFIER => 'type', self::TOKEN_THIS_VARIABLE => '\'$this\'', self::TOKEN_VARIABLE => 'variable', self::TOKEN_HORIZONTAL_WS => 'TOKEN_HORIZONTAL_WS', self::TOKEN_OTHER => 'TOKEN_OTHER', self::TOKEN_END => 'TOKEN_END', self::TOKEN_WILDCARD => '*'];
     public const VALUE_OFFSET = 0;
     public const TYPE_OFFSET = 1;
     public const LINE_OFFSET = 2;
@@ -121,6 +122,7 @@ class Lexer
         ];
         if ($this->parseDoctrineAnnotations) {
             $patterns[self::TOKEN_DOCTRINE_TAG] = '@[a-z_\\\\][a-z0-9_\\:\\\\]*[a-z_][a-z0-9_]*';
+            $patterns[self::TOKEN_DOCTRINE_ANNOTATION_STRING] = '"(?:""|[^"])*+"';
         }
         // anything but TOKEN_CLOSE_PHPDOC or TOKEN_HORIZONTAL_WS or TOKEN_EOL
         $patterns[self::TOKEN_OTHER] = '(?:(?!\\*/)[^\\s])++';
