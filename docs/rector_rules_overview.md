@@ -1,4 +1,4 @@
-# 364 Rules Overview
+# 363 Rules Overview
 
 <br>
 
@@ -52,7 +52,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (45)
+- [TypeDeclaration](#typedeclaration) (44)
 
 - [Visibility](#visibility) (3)
 
@@ -7381,27 +7381,6 @@ Add known return type to arrow function
 ```diff
 -fn () => [];
 +fn (): array => [];
-```
-
-<br>
-
-### AddClosureReturnTypeRector
-
-Add known return type to functions
-
-- class: [`Rector\TypeDeclaration\Rector\Closure\AddClosureReturnTypeRector`](../rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php)
-
-```diff
- class SomeClass
- {
-     public function run($meetups)
-     {
--        return array_filter($meetups, function (Meetup $meetup) {
-+        return array_filter($meetups, function (Meetup $meetup): bool {
-             return is_object($meetup);
-         });
-     }
- }
 ```
 
 <br>

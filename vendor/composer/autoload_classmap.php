@@ -2702,7 +2702,6 @@ return array(
     'Rector\\TypeDeclaration\\Rector\\ClassMethod\\StrictStringParamConcatRector' => $baseDir . '/rules/TypeDeclaration/Rector/ClassMethod/StrictStringParamConcatRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\PropertyTypeFromStrictSetterGetterRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/PropertyTypeFromStrictSetterGetterRector.php',
     'Rector\\TypeDeclaration\\Rector\\Class_\\ReturnTypeFromStrictTernaryRector' => $baseDir . '/rules/TypeDeclaration/Rector/Class_/ReturnTypeFromStrictTernaryRector.php',
-    'Rector\\TypeDeclaration\\Rector\\Closure\\AddClosureReturnTypeRector' => $baseDir . '/rules/TypeDeclaration/Rector/Closure/AddClosureReturnTypeRector.php',
     'Rector\\TypeDeclaration\\Rector\\Empty_\\EmptyOnNullableObjectToInstanceOfRector' => $baseDir . '/rules/TypeDeclaration/Rector/Empty_/EmptyOnNullableObjectToInstanceOfRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddParamTypeSplFixedArrayRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddParamTypeSplFixedArrayRector.php',
     'Rector\\TypeDeclaration\\Rector\\FunctionLike\\AddReturnTypeDeclarationFromYieldsRector' => $baseDir . '/rules/TypeDeclaration/Rector/FunctionLike/AddReturnTypeDeclarationFromYieldsRector.php',
