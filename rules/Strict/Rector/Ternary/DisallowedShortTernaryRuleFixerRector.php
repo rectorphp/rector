@@ -25,6 +25,10 @@ final class DisallowedShortTernaryRuleFixerRector extends AbstractFalsyScalarRul
      * @var \Rector\Strict\NodeFactory\ExactCompareFactory
      */
     private $exactCompareFactory;
+    /**
+     * @var bool
+     */
+    private $hasChanged = \false;
     public function __construct(ExactCompareFactory $exactCompareFactory)
     {
         $this->exactCompareFactory = $exactCompareFactory;
@@ -64,6 +68,7 @@ CODE_SAMPLE
      */
     public function refactorWithScope(Node $node, Scope $scope) : ?Ternary
     {
+        $this->hasChanged = \false;
         // skip non-short ternary
         if ($node->if instanceof Expr) {
             return null;
@@ -71,9 +76,12 @@ CODE_SAMPLE
         // special case for reset() function
         if ($node->cond instanceof FuncCall && $this->isName($node->cond, 'reset')) {
             $this->refactorResetFuncCall($node, $node->cond, $scope);
+            if (!$this->hasChanged) {
+                return null;
+            }
             return $node;
         }
-        $exprType = $scope->getType($node->cond);
+        $exprType = $scope->getNativeType($node->cond);
         $compareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($exprType, $node->cond, $this->treatAsNonEmpty);
         if (!$compareExpr instanceof Expr) {
             return null;
@@ -89,11 +97,12 @@ CODE_SAMPLE
             return;
         }
         $firstArgValue = $resetFuncCall->getArgs()[0]->value;
-        $firstArgType = $scope->getType($firstArgValue);
+        $firstArgType = $scope->getNativeType($firstArgValue);
         $falsyCompareExpr = $this->exactCompareFactory->createNotIdenticalFalsyCompare($firstArgType, $firstArgValue, $this->treatAsNonEmpty);
         if (!$falsyCompareExpr instanceof Expr) {
             return;
         }
         $ternary->cond = $falsyCompareExpr;
+        $this->hasChanged = \true;
     }
 }
