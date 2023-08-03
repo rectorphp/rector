@@ -71,18 +71,17 @@ CODE_SAMPLE
             return null;
         }
         $args = $node->getArgs();
-        if ($args !== []) {
-            \end($args);
-            $lastArgumentPosition = \key($args);
-            $last = $args[$lastArgumentPosition];
-            if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $last)) {
-                return null;
-            }
-            // remove comma
-            $last->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, \false);
-            $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
-            return $node;
+        if ($args === []) {
+            return null;
         }
-        return null;
+        $lastArgKey = \count($args) - 1;
+        $lastArg = $args[$lastArgKey];
+        if (!$this->followedByCommaAnalyzer->isFollowed($this->file, $lastArg)) {
+            return null;
+        }
+        // remove comma
+        $lastArg->setAttribute(AttributeKey::FUNC_ARGS_TRAILING_COMMA, \false);
+        $node->setAttribute(AttributeKey::ORIGINAL_NODE, null);
+        return $node;
     }
 }
