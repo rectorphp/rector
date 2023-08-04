@@ -49,7 +49,7 @@ final class AddReturnTypeDeclarationBasedOnParentClassMethodRector extends Abstr
     }
     public function provideMinPhpVersion() : int
     {
-        return PhpVersionFeature::FATAL_ERROR_ON_INCOMPATIBLE_METHOD_SIGNATURE;
+        return PhpVersionFeature::SCALAR_TYPES;
     }
     public function getRuleDefinition() : RuleDefinition
     {
