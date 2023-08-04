@@ -4,15 +4,15 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit15f3e70791108ba750c465057c7145d0
+class ComposerStaticInit7f8939978aa6ea55b7218d369d827372
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
         '9b38cf48e83f5d8f60375221cd213eee' => __DIR__ . '/..' . '/phpstan/phpstan/bootstrap.php',
-        '2324d0e5cadd603331d27de142371f0b' => __DIR__ . '/..' . '/symfony/contracts/Deprecation/function.php',
         'd507e002f7fce7f0c6dbf1f22edcb902' => __DIR__ . '/..' . '/tracy/tracy/src/Tracy/functions.php',
         '4508688f3cab21375725e8d11ca194a2' => __DIR__ . '/../..' . '/src/constants.php',
         '30bca7fff093e8069bed7c55247e2bf8' => __DIR__ . '/../..' . '/src/functions/node_helper.php',
@@ -36,7 +36,7 @@ class ComposerStaticInit15f3e70791108ba750c465057c7145d0
             'Rector\\' => 7,
             'RectorPrefix202308\\Webmozart\\Assert\\' => 36,
             'RectorPrefix202308\\Symplify\\EasyParallel\\' => 41,
-            'RectorPrefix202308\\Symfony\\Contracts\\' => 37,
+            'RectorPrefix202308\\Symfony\\Contracts\\Service\\' => 45,
             'RectorPrefix202308\\Symfony\\Component\\String\\' => 44,
             'RectorPrefix202308\\Symfony\\Component\\Process\\' => 45,
             'RectorPrefix202308\\Symfony\\Component\\Finder\\' => 44,
@@ -53,9 +53,7 @@ class ComposerStaticInit15f3e70791108ba750c465057c7145d0
             'RectorPrefix202308\\React\\Cache\\' => 31,
             'RectorPrefix202308\\Psr\\SimpleCache\\' => 35,
             'RectorPrefix202308\\Psr\\Log\\' => 27,
-            'RectorPrefix202308\\Psr\\EventDispatcher\\' => 39,
             'RectorPrefix202308\\Psr\\Container\\' => 33,
-            'RectorPrefix202308\\Psr\\Cache\\' => 29,
             'RectorPrefix202308\\OndraM\\CiDetector\\' => 37,
             'RectorPrefix202308\\Illuminate\\Contracts\\' => 40,
             'RectorPrefix202308\\Illuminate\\Container\\' => 40,
@@ -129,9 +127,9 @@ class ComposerStaticInit15f3e70791108ba750c465057c7145d0
         array (
             0 => __DIR__ . '/..' . '/symplify/easy-parallel/src',
         ),
-        'RectorPrefix202308\\Symfony\\Contracts\\' => 
+        'RectorPrefix202308\\Symfony\\Contracts\\Service\\' => 
         array (
-            0 => __DIR__ . '/..' . '/symfony/contracts',
+            0 => __DIR__ . '/..' . '/symfony/service-contracts',
         ),
         'RectorPrefix202308\\Symfony\\Component\\String\\' => 
         array (
@@ -197,17 +195,9 @@ class ComposerStaticInit15f3e70791108ba750c465057c7145d0
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
         ),
-        'RectorPrefix202308\\Psr\\EventDispatcher\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/event-dispatcher/src',
-        ),
         'RectorPrefix202308\\Psr\\Container\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
-        ),
-        'RectorPrefix202308\\Psr\\Cache\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
         'RectorPrefix202308\\OndraM\\CiDetector\\' => 
         array (
@@ -915,16 +905,9 @@ class ComposerStaticInit15f3e70791108ba750c465057c7145d0
         'RectorPrefix202308\\OndraM\\CiDetector\\Env' => __DIR__ . '/..' . '/ondram/ci-detector/src/Env.php',
         'RectorPrefix202308\\OndraM\\CiDetector\\Exception\\CiNotDetectedException' => __DIR__ . '/..' . '/ondram/ci-detector/src/Exception/CiNotDetectedException.php',
         'RectorPrefix202308\\OndraM\\CiDetector\\TrinaryLogic' => __DIR__ . '/..' . '/ondram/ci-detector/src/TrinaryLogic.php',
-        'RectorPrefix202308\\Psr\\Cache\\CacheException' => __DIR__ . '/..' . '/psr/cache/src/CacheException.php',
-        'RectorPrefix202308\\Psr\\Cache\\CacheItemInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemInterface.php',
-        'RectorPrefix202308\\Psr\\Cache\\CacheItemPoolInterface' => __DIR__ . '/..' . '/psr/cache/src/CacheItemPoolInterface.php',
-        'RectorPrefix202308\\Psr\\Cache\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/cache/src/InvalidArgumentException.php',
         'RectorPrefix202308\\Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerExceptionInterface.php',
         'RectorPrefix202308\\Psr\\Container\\ContainerInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerInterface.php',
         'RectorPrefix202308\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/NotFoundExceptionInterface.php',
-        'RectorPrefix202308\\Psr\\EventDispatcher\\EventDispatcherInterface' => __DIR__ . '/..' . '/psr/event-dispatcher/src/EventDispatcherInterface.php',
-        'RectorPrefix202308\\Psr\\EventDispatcher\\ListenerProviderInterface' => __DIR__ . '/..' . '/psr/event-dispatcher/src/ListenerProviderInterface.php',
-        'RectorPrefix202308\\Psr\\EventDispatcher\\StoppableEventInterface' => __DIR__ . '/..' . '/psr/event-dispatcher/src/StoppableEventInterface.php',
         'RectorPrefix202308\\Psr\\Log\\AbstractLogger' => __DIR__ . '/..' . '/psr/log/src/AbstractLogger.php',
         'RectorPrefix202308\\Psr\\Log\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/log/src/InvalidArgumentException.php',
         'RectorPrefix202308\\Psr\\Log\\LogLevel' => __DIR__ . '/..' . '/psr/log/src/LogLevel.php',
@@ -1453,40 +1436,13 @@ class ComposerStaticInit15f3e70791108ba750c465057c7145d0
         'RectorPrefix202308\\Symfony\\Component\\String\\Slugger\\AsciiSlugger' => __DIR__ . '/..' . '/symfony/string/Slugger/AsciiSlugger.php',
         'RectorPrefix202308\\Symfony\\Component\\String\\Slugger\\SluggerInterface' => __DIR__ . '/..' . '/symfony/string/Slugger/SluggerInterface.php',
         'RectorPrefix202308\\Symfony\\Component\\String\\UnicodeString' => __DIR__ . '/..' . '/symfony/string/UnicodeString.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Cache\\CacheInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/CacheInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Cache\\CacheTrait' => __DIR__ . '/..' . '/symfony/contracts/Cache/CacheTrait.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Cache\\CallbackInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/CallbackInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Cache\\TagAwareCacheInterface' => __DIR__ . '/..' . '/symfony/contracts/Cache/TagAwareCacheInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\EventDispatcher\\Event' => __DIR__ . '/..' . '/symfony/contracts/EventDispatcher/Event.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\EventDispatcher\\EventDispatcherInterface' => __DIR__ . '/..' . '/symfony/contracts/EventDispatcher/EventDispatcherInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\ChunkInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/ChunkInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Exception\\ClientExceptionInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Exception/ClientExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Exception\\DecodingExceptionInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Exception/DecodingExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Exception/ExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Exception\\HttpExceptionInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Exception/HttpExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Exception\\RedirectionExceptionInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Exception/RedirectionExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Exception\\ServerExceptionInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Exception/ServerExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Exception\\TimeoutExceptionInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Exception/TimeoutExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Exception\\TransportExceptionInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Exception/TransportExceptionInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\HttpClientInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/HttpClientInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\ResponseInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/ResponseInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\ResponseStreamInterface' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/ResponseStreamInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Test\\HttpClientTestCase' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Test/HttpClientTestCase.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\HttpClient\\Test\\TestHttpServer' => __DIR__ . '/..' . '/symfony/contracts/HttpClient/Test/TestHttpServer.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\Attribute\\Required' => __DIR__ . '/..' . '/symfony/contracts/Service/Attribute/Required.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\Attribute\\SubscribedService' => __DIR__ . '/..' . '/symfony/contracts/Service/Attribute/SubscribedService.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ResetInterface' => __DIR__ . '/..' . '/symfony/contracts/Service/ResetInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ServiceLocatorTrait' => __DIR__ . '/..' . '/symfony/contracts/Service/ServiceLocatorTrait.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ServiceProviderInterface' => __DIR__ . '/..' . '/symfony/contracts/Service/ServiceProviderInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ServiceSubscriberInterface' => __DIR__ . '/..' . '/symfony/contracts/Service/ServiceSubscriberInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ServiceSubscriberTrait' => __DIR__ . '/..' . '/symfony/contracts/Service/ServiceSubscriberTrait.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\Test\\ServiceLocatorTest' => __DIR__ . '/..' . '/symfony/contracts/Service/Test/ServiceLocatorTest.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Service\\Test\\ServiceLocatorTestCase' => __DIR__ . '/..' . '/symfony/contracts/Service/Test/ServiceLocatorTestCase.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Translation\\LocaleAwareInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/LocaleAwareInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Translation\\Test\\TranslatorTest' => __DIR__ . '/..' . '/symfony/contracts/Translation/Test/TranslatorTest.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Translation\\TranslatableInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatableInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Translation\\TranslatorInterface' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorInterface.php',
-        'RectorPrefix202308\\Symfony\\Contracts\\Translation\\TranslatorTrait' => __DIR__ . '/..' . '/symfony/contracts/Translation/TranslatorTrait.php',
+        'RectorPrefix202308\\Symfony\\Contracts\\Service\\Attribute\\Required' => __DIR__ . '/..' . '/symfony/service-contracts/Attribute/Required.php',
+        'RectorPrefix202308\\Symfony\\Contracts\\Service\\Attribute\\SubscribedService' => __DIR__ . '/..' . '/symfony/service-contracts/Attribute/SubscribedService.php',
+        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ResetInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ResetInterface.php',
+        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ServiceLocatorTrait' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceLocatorTrait.php',
+        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ServiceProviderInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceProviderInterface.php',
+        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ServiceSubscriberInterface' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberInterface.php',
+        'RectorPrefix202308\\Symfony\\Contracts\\Service\\ServiceSubscriberTrait' => __DIR__ . '/..' . '/symfony/service-contracts/ServiceSubscriberTrait.php',
         'RectorPrefix202308\\Symplify\\EasyParallel\\CommandLine\\WorkerCommandLineFactory' => __DIR__ . '/..' . '/symplify/easy-parallel/src/CommandLine/WorkerCommandLineFactory.php',
         'RectorPrefix202308\\Symplify\\EasyParallel\\Contract\\SerializableInterface' => __DIR__ . '/..' . '/symplify/easy-parallel/src/Contract/SerializableInterface.php',
         'RectorPrefix202308\\Symplify\\EasyParallel\\CpuCoreCountProvider' => __DIR__ . '/..' . '/symplify/easy-parallel/src/CpuCoreCountProvider.php',
@@ -3015,9 +2971,9 @@ class ComposerStaticInit15f3e70791108ba750c465057c7145d0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit15f3e70791108ba750c465057c7145d0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit15f3e70791108ba750c465057c7145d0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit15f3e70791108ba750c465057c7145d0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit7f8939978aa6ea55b7218d369d827372::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit7f8939978aa6ea55b7218d369d827372::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit7f8939978aa6ea55b7218d369d827372::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -115,9 +115,9 @@ class AnalyzeServiceReferencesPass extends AbstractRecursivePass
         if ($value instanceof Reference) {
             $targetId = $this->getDefinitionId((string) $value);
             $targetDefinition = null !== $targetId ? $this->container->getDefinition($targetId) : null;
-            $this->graph->connect($this->currentId, $this->currentDefinition, $targetId, $targetDefinition, $value, $this->lazy || $this->hasProxyDumper && (($nullsafeVariable3 = $targetDefinition) ? $nullsafeVariable3->isLazy() : null), ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE === $value->getInvalidBehavior(), $this->byConstructor);
+            $this->graph->connect($this->currentId, $this->currentDefinition, $targetId, $targetDefinition, $value, $this->lazy || $this->hasProxyDumper && (($nullsafeVariable1 = $targetDefinition) ? $nullsafeVariable1->isLazy() : null), ContainerInterface::IGNORE_ON_UNINITIALIZED_REFERENCE === $value->getInvalidBehavior(), $this->byConstructor);
             if ($inExpression) {
-                $this->graph->connect('.internal.reference_in_expression', null, $targetId, $targetDefinition, $value, $this->lazy || (($nullsafeVariable4 = $targetDefinition) ? $nullsafeVariable4->isLazy() : null), \true);
+                $this->graph->connect('.internal.reference_in_expression', null, $targetId, $targetDefinition, $value, $this->lazy || (($nullsafeVariable2 = $targetDefinition) ? $nullsafeVariable2->isLazy() : null), \true);
             }
             return $value;
         }

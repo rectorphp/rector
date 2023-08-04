@@ -20,7 +20,6 @@ use Rector\Naming\AssignVariableNameResolver\PropertyFetchAssignVariableNameReso
 use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix202308\Symfony\Component\String\UnicodeString;
 /**
  * @api used in downgrade
  */
@@ -76,12 +75,9 @@ final class VariableNaming
         // adjust static to specific class
         if ($variableName === 'this' && $type instanceof ThisType) {
             $shortClassName = $this->nodeNameResolver->getShortName($type->getClassName());
-            $variableName = \lcfirst($shortClassName);
-        } else {
-            $variableName = $this->nodeNameResolver->getShortName($variableName);
+            return \lcfirst($shortClassName);
         }
-        $variableNameUnicodeString = new UnicodeString($variableName);
-        return $variableNameUnicodeString->camel()->toString();
+        return $this->nodeNameResolver->getShortName($variableName);
     }
     private function resolveFromNode(Node $node) : ?string
     {
