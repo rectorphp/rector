@@ -4,7 +4,7 @@ declare (strict_types=1);
 namespace Rector\NodeFactory;
 
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
+use PhpParser\Node\Stmt\Expression;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class NamedVariableFactory
@@ -18,9 +18,9 @@ final class NamedVariableFactory
     {
         $this->variableNaming = $variableNaming;
     }
-    public function createVariable(string $variableName, Stmt $currentStmt) : Variable
+    public function createVariable(string $variableName, Expression $expression) : Variable
     {
-        $scope = $currentStmt->getAttribute(AttributeKey::SCOPE);
+        $scope = $expression->getAttribute(AttributeKey::SCOPE);
         $variableName = $this->variableNaming->createCountedValueName($variableName, $scope);
         return new Variable($variableName);
     }

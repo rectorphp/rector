@@ -8,10 +8,6 @@ final class JsonConstant
     /**
      * @var string
      */
-    public const UNESCAPED_LINE_TERMINATORS = 'JSON_UNESCAPED_LINE_TERMINATORS';
-    /**
-     * @var string
-     */
     public const INVALID_UTF8_IGNORE = 'JSON_INVALID_UTF8_IGNORE';
     /**
      * @var string
