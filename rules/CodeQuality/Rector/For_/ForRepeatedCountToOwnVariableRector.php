@@ -13,25 +13,18 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\For_;
-use PHPStan\Analyser\Scope;
-use Rector\Core\Rector\AbstractScopeAwareRector;
-use Rector\Naming\Naming\VariableNaming;
+use Rector\Core\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
  * @see \Rector\Tests\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector\ForRepeatedCountToOwnVariableRectorTest
  */
-final class ForRepeatedCountToOwnVariableRector extends AbstractScopeAwareRector
+final class ForRepeatedCountToOwnVariableRector extends AbstractRector
 {
     /**
-     * @readonly
-     * @var \Rector\Naming\Naming\VariableNaming
+     * @var string
      */
-    private $variableNaming;
-    public function __construct(VariableNaming $variableNaming)
-    {
-        $this->variableNaming = $variableNaming;
-    }
+    private const COUNTER_NAME = 'counter';
     public function getRuleDefinition() : RuleDefinition
     {
         return new RuleDefinition('Change count() in for function to own variable', [new CodeSample(<<<'CODE_SAMPLE'
@@ -70,10 +63,10 @@ CODE_SAMPLE
      * @param For_ $node
      * @return Stmt[]|null
      */
-    public function refactorWithScope(Node $node, Scope $scope) : ?array
+    public function refactor(Node $node) : ?array
     {
-        $variableName = null;
         $countInCond = null;
+        $counterVariable = new Variable(self::COUNTER_NAME);
         foreach ($node->cond as $condExpr) {
             if (!$condExpr instanceof Smaller && !$condExpr instanceof SmallerOrEqual) {
                 continue;
@@ -85,14 +78,13 @@ CODE_SAMPLE
             if (!$this->isName($funcCall, 'count')) {
                 continue;
             }
-            $variableName = $this->variableNaming->resolveFromFuncCallFirstArgumentWithSuffix($funcCall, 'Count', 'itemsCount', $scope);
             $countInCond = $condExpr->right;
-            $condExpr->right = new Variable($variableName);
+            $condExpr->right = $counterVariable;
         }
-        if (!\is_string($variableName) || !$countInCond instanceof Expr) {
+        if (!$countInCond instanceof Expr) {
             return null;
         }
-        $countAssign = new Assign(new Variable($variableName), $countInCond);
+        $countAssign = new Assign($counterVariable, $countInCond);
         return [new Expression($countAssign), $node];
     }
 }

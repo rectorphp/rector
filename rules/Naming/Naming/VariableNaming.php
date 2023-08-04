@@ -79,11 +79,6 @@ final class VariableNaming
         }
         return $valueName;
     }
-    public function resolveFromFuncCallFirstArgumentWithSuffix(FuncCall $funcCall, string $suffix, string $fallbackName, ?Scope $scope) : string
-    {
-        $bareName = $this->resolveBareFuncCallArgumentName($funcCall, $fallbackName, $suffix);
-        return $this->createCountedValueName($bareName, $scope);
-    }
     private function resolveFromNodeAndType(Node $node, Type $type) : ?string
     {
         $variableName = $this->resolveBareFromNode($node);
@@ -157,24 +152,5 @@ final class VariableNaming
             return $node->if;
         }
         return $node;
-    }
-    private function resolveBareFuncCallArgumentName(FuncCall $funcCall, string $fallbackName, string $suffix) : string
-    {
-        if ($funcCall->isFirstClassCallable()) {
-            return '';
-        }
-        if (!isset($funcCall->getArgs()[0])) {
-            return '';
-        }
-        $argumentValue = $funcCall->getArgs()[0]->value;
-        if ($argumentValue instanceof MethodCall || $argumentValue instanceof StaticCall) {
-            $name = $this->nodeNameResolver->getName($argumentValue->name);
-        } else {
-            $name = $this->nodeNameResolver->getName($argumentValue);
-        }
-        if ($name === null) {
-            return $fallbackName;
-        }
-        return $name . $suffix;
     }
 }
