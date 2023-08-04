@@ -5,12 +5,12 @@ namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Property;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\StringType;
 use Rector\Core\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\Rector\AbstractRector;
-use Rector\Core\Reflection\ReflectionResolver;
+use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\TypeDeclaration\ValueObject\AddPropertyTypeDeclaration;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
@@ -19,21 +19,12 @@ use RectorPrefix202308\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector\AddPropertyTypeDeclarationRectorTest
  */
-final class AddPropertyTypeDeclarationRector extends AbstractRector implements ConfigurableRectorInterface
+final class AddPropertyTypeDeclarationRector extends AbstractScopeAwareRector implements ConfigurableRectorInterface
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\Reflection\ReflectionResolver
-     */
-    private $reflectionResolver;
     /**
      * @var AddPropertyTypeDeclaration[]
      */
     private $addPropertyTypeDeclarations = [];
-    public function __construct(ReflectionResolver $reflectionResolver)
-    {
-        $this->reflectionResolver = $reflectionResolver;
-    }
     public function getRuleDefinition() : RuleDefinition
     {
         $configuration = [new AddPropertyTypeDeclaration('ParentClass', 'name', new StringType())];
@@ -61,13 +52,13 @@ CODE_SAMPLE
     /**
      * @param Property $node
      */
-    public function refactor(Node $node) : ?Node
+    public function refactorWithScope(Node $node, Scope $scope)
     {
         // type is already known
         if ($node->type !== null) {
             return null;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($node);
+        $classReflection = $scope->getClassReflection();
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
