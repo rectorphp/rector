@@ -20,7 +20,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PHPStan\Type\ObjectType;
-use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Naming\Naming\VariableNaming;
 use Rector\NodeCollector\BinaryOpConditionsCollector;
@@ -39,11 +38,6 @@ final class DowngradeReflectionClassGetConstantsFilterRector extends AbstractRec
     private $variableNaming;
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\IfManipulator
-     */
-    private $ifManipulator;
-    /**
-     * @readonly
      * @var \Rector\NodeCollector\BinaryOpConditionsCollector
      */
     private $binaryOpConditionsCollector;
@@ -51,10 +45,9 @@ final class DowngradeReflectionClassGetConstantsFilterRector extends AbstractRec
      * @var array<string, string>
      */
     private const MAP_CONSTANT_TO_METHOD = ['IS_PUBLIC' => 'isPublic', 'IS_PROTECTED' => 'isProtected', 'IS_PRIVATE' => 'isPrivate'];
-    public function __construct(VariableNaming $variableNaming, IfManipulator $ifManipulator, BinaryOpConditionsCollector $binaryOpConditionsCollector)
+    public function __construct(VariableNaming $variableNaming, BinaryOpConditionsCollector $binaryOpConditionsCollector)
     {
         $this->variableNaming = $variableNaming;
-        $this->ifManipulator = $ifManipulator;
         $this->binaryOpConditionsCollector = $binaryOpConditionsCollector;
     }
     /**
@@ -225,7 +218,8 @@ CODE_SAMPLE
         $ifs = [];
         foreach ($classConstFetchNames as $classConstFetchName) {
             $methodCallName = self::MAP_CONSTANT_TO_METHOD[$classConstFetchName];
-            $ifs[] = $this->ifManipulator->createIfStmt(new MethodCall($valueVariable, $methodCallName), new Expression(new Assign($arrayDimFetch, $methodCall)));
+            $if = new If_(new MethodCall($valueVariable, $methodCallName), ['stmts' => [new Expression(new Assign($arrayDimFetch, $methodCall))]]);
+            $ifs[] = $if;
         }
         return $ifs;
     }

@@ -23,7 +23,6 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\Core\NodeManipulator\BinaryOpManipulator;
-use Rector\Core\NodeManipulator\IfManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\NodeAnalyzer\CoalesceAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -37,11 +36,6 @@ final class DowngradeThrowExprRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\IfManipulator
-     */
-    private $ifManipulator;
-    /**
-     * @readonly
      * @var \Rector\NodeAnalyzer\CoalesceAnalyzer
      */
     private $coalesceAnalyzer;
@@ -50,9 +44,8 @@ final class DowngradeThrowExprRector extends AbstractRector
      * @var \Rector\Core\NodeManipulator\BinaryOpManipulator
      */
     private $binaryOpManipulator;
-    public function __construct(IfManipulator $ifManipulator, CoalesceAnalyzer $coalesceAnalyzer, BinaryOpManipulator $binaryOpManipulator)
+    public function __construct(CoalesceAnalyzer $coalesceAnalyzer, BinaryOpManipulator $binaryOpManipulator)
     {
-        $this->ifManipulator = $ifManipulator;
         $this->coalesceAnalyzer = $coalesceAnalyzer;
         $this->binaryOpManipulator = $binaryOpManipulator;
     }
@@ -131,7 +124,7 @@ CODE_SAMPLE
             return null;
         }
         $inversedTernaryExpr = $this->binaryOpManipulator->inverseNode($ternary->cond);
-        $if = $this->ifManipulator->createIfStmt($inversedTernaryExpr, new Expression($ternary->else));
+        $if = new If_($inversedTernaryExpr, ['stmts' => [new Expression($ternary->else)]]);
         if (!$assign instanceof Assign) {
             return $if;
         }
@@ -150,7 +143,7 @@ CODE_SAMPLE
             return null;
         }
         $condExpr = $this->createCondExpr($coalesce);
-        $if = $this->ifManipulator->createIfStmt($condExpr, new Expression($coalesce->right));
+        $if = new If_($condExpr, ['stmts' => [new Expression($coalesce->right)]]);
         if (!$assign instanceof Assign) {
             return $if;
         }

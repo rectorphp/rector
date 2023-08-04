@@ -197,7 +197,7 @@ final class ReturnTypeInferer
         foreach ($returnsWithExpr as $returnWithExpr) {
             /** @var Expr $expr */
             $expr = $returnWithExpr->expr;
-            $type = $this->nodeTypeResolver->getType($expr);
+            $type = $this->nodeTypeResolver->getNativeType($expr);
             if (!$type instanceof BenevolentUnionType) {
                 return $unionType;
             }

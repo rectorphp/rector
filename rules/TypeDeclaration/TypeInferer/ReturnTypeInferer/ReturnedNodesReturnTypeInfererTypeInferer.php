@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 
 use PhpParser\Node;
+use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\FunctionLike;
@@ -95,7 +96,7 @@ final class ReturnedNodesReturnTypeInfererTypeInferer
             return $this->resolveNoLocalReturnNodes($classReflection, $functionLike);
         }
         foreach ($localReturnNodes as $localReturnNode) {
-            $returnedExprType = $this->nodeTypeResolver->getType($localReturnNode);
+            $returnedExprType = $localReturnNode->expr instanceof Expr ? $this->nodeTypeResolver->getNativeType($localReturnNode->expr) : $this->nodeTypeResolver->getType($localReturnNode);
             $returnedExprType = $this->correctWithNestedType($returnedExprType, $localReturnNode, $functionLike);
             $types[] = $this->splArrayFixedTypeNarrower->narrow($returnedExprType);
         }
