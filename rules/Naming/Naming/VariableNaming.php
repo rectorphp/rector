@@ -21,6 +21,9 @@ use Rector\Naming\Contract\AssignVariableNameResolverInterface;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use RectorPrefix202308\Symfony\Component\String\UnicodeString;
+/**
+ * @api used in downgrade
+ */
 final class VariableNaming
 {
     /**
@@ -43,6 +46,9 @@ final class VariableNaming
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->assignVariableNameResolvers = [$propertyFetchAssignVariableNameResolver, $newAssignVariableNameResolver];
     }
+    /**
+     * @api used in downgrade
+     */
     public function createCountedValueName(string $valueName, ?Scope $scope) : string
     {
         if (!$scope instanceof Scope) {

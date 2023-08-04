@@ -45,9 +45,9 @@ CODE_SAMPLE
      */
     public function refactor(Node $node) : Ternary
     {
-        $nullsafeVariableName = $this->createNullsafeVariable();
-        $methodCallOrPropertyFetch = $node instanceof NullsafeMethodCall ? new MethodCall($nullsafeVariableName, $node->name, $node->getArgs()) : new PropertyFetch($nullsafeVariableName, $node->name);
-        $assign = new Assign($nullsafeVariableName, $node->var);
+        $nullsafeVariable = $this->createNullsafeVariable();
+        $methodCallOrPropertyFetch = $node instanceof NullsafeMethodCall ? new MethodCall($nullsafeVariable, $node->name, $node->getArgs()) : new PropertyFetch($nullsafeVariable, $node->name);
+        $assign = new Assign($nullsafeVariable, $node->var);
         return new Ternary($assign, $methodCallOrPropertyFetch, $this->nodeFactory->createNull());
     }
     private function createNullsafeVariable() : Variable
