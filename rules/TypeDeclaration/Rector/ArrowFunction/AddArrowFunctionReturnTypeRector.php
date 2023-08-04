@@ -41,7 +41,7 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return null;
         }
-        $type = $this->getType($node->expr);
+        $type = $this->nodeTypeResolver->getNativeType($node->expr);
         if ($type->isVoid()->yes()) {
             return null;
         }
