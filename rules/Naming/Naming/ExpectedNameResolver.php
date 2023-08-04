@@ -163,14 +163,14 @@ final class ExpectedNameResolver
         }
         $expectedNameFromType = $this->propertyNaming->getExpectedNameFromType($innerReturnedType ?? $returnedType);
         if ($this->isReturnedTypeAnArrayAndExpectedNameFromTypeNotNull($returnedType, $expectedNameFromType)) {
-            return ($expectedNameFromType2 = $expectedNameFromType) ? $expectedNameFromType2->getSingularized() : null;
+            return ($nullsafeVariable1 = $expectedNameFromType) ? $nullsafeVariable1->getSingularized() : null;
         }
         $expectedNameFromMethodName = $this->propertyNaming->getExpectedNameFromMethodName($name);
         if (!$expectedNameFromMethodName instanceof ExpectedName) {
-            return ($expectedNameFromType2 = $expectedNameFromType) ? $expectedNameFromType2->getSingularized() : null;
+            return ($nullsafeVariable2 = $expectedNameFromType) ? $nullsafeVariable2->getSingularized() : null;
         }
         if ($expectedNameFromMethodName->isSingular()) {
-            return ($expectedNameFromType2 = $expectedNameFromType) ? $expectedNameFromType2->getSingularized() : null;
+            return ($nullsafeVariable3 = $expectedNameFromType) ? $nullsafeVariable3->getSingularized() : null;
         }
         return $expectedNameFromMethodName->getSingularized();
     }

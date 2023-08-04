@@ -3,10 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Naming\Naming;
 
-use RectorPrefix202308\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
@@ -14,7 +12,6 @@ use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Ternary;
 use PhpParser\Node\Scalar\String_;
-use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ThisType;
 use PHPStan\Type\Type;
@@ -45,21 +42,6 @@ final class VariableNaming
         $this->nodeNameResolver = $nodeNameResolver;
         $this->nodeTypeResolver = $nodeTypeResolver;
         $this->assignVariableNameResolvers = [$propertyFetchAssignVariableNameResolver, $newAssignVariableNameResolver];
-    }
-    /**
-     * @api
-     */
-    public function resolveFromNodeWithScopeCountAndFallbackName(Expr $expr, MutatingScope $mutatingScope, string $fallbackName) : string
-    {
-        $name = $this->resolveFromNode($expr);
-        if ($name === null) {
-            $name = $fallbackName;
-        }
-        if (\strpos($name, '\\') !== \false) {
-            $name = (string) Strings::after($name, '\\', -1);
-        }
-        $countedValueName = $this->createCountedValueName($name, $mutatingScope);
-        return \lcfirst($countedValueName);
     }
     public function createCountedValueName(string $valueName, ?Scope $scope) : string
     {
