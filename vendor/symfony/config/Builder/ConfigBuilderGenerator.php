@@ -492,6 +492,7 @@ public function NAME(string $key, mixed $value): static
     {
         try {
             $r = new \ReflectionProperty($node, 'normalizationClosures');
+            $r->setAccessible(\true);
         } catch (\ReflectionException $exception) {
             return \false;
         }

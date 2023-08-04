@@ -53,6 +53,7 @@ class ServiceLocator implements ServiceProviderInterface, \Countable
                 $message = \sprintf('Cannot resolve %s: %s', $what, $message);
             }
             $r = new \ReflectionProperty($e, 'message');
+            $r->setAccessible(\true);
             $r->setValue($e, $message);
             throw $e;
         }

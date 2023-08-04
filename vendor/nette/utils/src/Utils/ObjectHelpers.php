@@ -163,6 +163,7 @@ final class ObjectHelpers
             $prop = \false;
             try {
                 $rp = new \ReflectionProperty($class, $name);
+                $rp->setAccessible(\true);
                 if ($rp->isPublic() && !$rp->isStatic()) {
                     $prop = $name >= 'onA' && $name < 'on_' ? 'event' : \true;
                 }

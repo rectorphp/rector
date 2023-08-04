@@ -111,6 +111,7 @@ class Command
             return $attribute[0]->newInstance()->name;
         }
         $r = new \ReflectionProperty($class, 'defaultName');
+        $r->setAccessible(\true);
         if ($class !== $r->class || null === static::$defaultName) {
             return null;
         }
@@ -124,6 +125,7 @@ class Command
             return $attribute[0]->newInstance()->description;
         }
         $r = new \ReflectionProperty($class, 'defaultDescription');
+        $r->setAccessible(\true);
         if ($class !== $r->class || null === static::$defaultDescription) {
             return null;
         }

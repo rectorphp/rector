@@ -1850,6 +1850,7 @@ return array(
     'Rector\\DowngradePhp81\\Rector\\FunctionLike\\DowngradePureIntersectionTypeRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/FunctionLike/DowngradePureIntersectionTypeRector.php',
     'Rector\\DowngradePhp81\\Rector\\Instanceof_\\DowngradePhp81ResourceReturnToObjectRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Instanceof_/DowngradePhp81ResourceReturnToObjectRector.php',
     'Rector\\DowngradePhp81\\Rector\\Property\\DowngradeReadonlyPropertyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/Property/DowngradeReadonlyPropertyRector.php',
+    'Rector\\DowngradePhp81\\Rector\\StmtsAwareInterface\\DowngradeSetAccessibleReflectionPropertyRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp81/Rector/StmtsAwareInterface/DowngradeSetAccessibleReflectionPropertyRector.php',
     'Rector\\DowngradePhp82\\Rector\\Class_\\DowngradeReadonlyClassRector' => $vendorDir . '/rector/rector-downgrade-php/rules/DowngradePhp82/Rector/Class_/DowngradeReadonlyClassRector.php',
     'Rector\\EarlyReturn\\NodeAnalyzer\\IfAndAnalyzer' => $baseDir . '/rules/EarlyReturn/NodeAnalyzer/IfAndAnalyzer.php',
     'Rector\\EarlyReturn\\NodeAnalyzer\\SimpleScalarAnalyzer' => $baseDir . '/rules/EarlyReturn/NodeAnalyzer/SimpleScalarAnalyzer.php',
