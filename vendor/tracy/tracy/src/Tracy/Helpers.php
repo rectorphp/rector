@@ -421,7 +421,7 @@ XX
                 $skip[$refId] = \true;
             }
             foreach ($val as $k => $v) {
-                $refId = ($nullsafeVariable13 = \ReflectionReference::fromArrayElement($val, $k)) ? $nullsafeVariable13->getId() : null;
+                $refId = ($nullsafeVariable5 = \ReflectionReference::fromArrayElement($val, $k)) ? $nullsafeVariable5->getId() : null;
                 self::traverseValue($v, $callback, $skip, $refId);
             }
         }
