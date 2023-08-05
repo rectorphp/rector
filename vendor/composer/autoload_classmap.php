@@ -1477,7 +1477,6 @@ return array(
     'Rector\\CodingStyle\\Rector\\If_\\NullableCompareToNullRector' => $baseDir . '/rules/CodingStyle/Rector/If_/NullableCompareToNullRector.php',
     'Rector\\CodingStyle\\Rector\\Plus\\UseIncrementAssignRector' => $baseDir . '/rules/CodingStyle/Rector/Plus/UseIncrementAssignRector.php',
     'Rector\\CodingStyle\\Rector\\PostInc\\PostIncDecToPreIncDecRector' => $baseDir . '/rules/CodingStyle/Rector/PostInc/PostIncDecToPreIncDecRector.php',
-    'Rector\\CodingStyle\\Rector\\Property\\NullifyUnionNullableRector' => $baseDir . '/rules/CodingStyle/Rector/Property/NullifyUnionNullableRector.php',
     'Rector\\CodingStyle\\Rector\\Property\\SplitGroupedPropertiesRector' => $baseDir . '/rules/CodingStyle/Rector/Property/SplitGroupedPropertiesRector.php',
     'Rector\\CodingStyle\\Rector\\Stmt\\NewlineAfterStatementRector' => $baseDir . '/rules/CodingStyle/Rector/Stmt/NewlineAfterStatementRector.php',
     'Rector\\CodingStyle\\Rector\\String_\\SymplifyQuoteEscapeRector' => $baseDir . '/rules/CodingStyle/Rector/String_/SymplifyQuoteEscapeRector.php',

@@ -1,4 +1,4 @@
-# 364 Rules Overview
+# 363 Rules Overview
 
 <br>
 
@@ -8,7 +8,7 @@
 
 - [CodeQuality](#codequality) (71)
 
-- [CodingStyle](#codingstyle) (31)
+- [CodingStyle](#codingstyle) (30)
 
 - [DeadCode](#deadcode) (42)
 
@@ -1998,23 +1998,6 @@ Changes negate of empty comparison of nullable value to explicit === or !== comp
 
 -if (!$value) {
 +if ($value === null) {
- }
-```
-
-<br>
-
-### NullifyUnionNullableRector
-
-Changes already typed Type|null to ?Type
-
-- class: [`Rector\CodingStyle\Rector\Property\NullifyUnionNullableRector`](../rules/CodingStyle/Rector/Property/NullifyUnionNullableRector.php)
-
-```diff
- final class SomeClass
- {
-
--    private null|stdClass $property;
-+    private ?stdClass $property;
  }
 ```
 
