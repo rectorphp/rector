@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5e1d8c0044421cc4d5b61845878befd6
+class ComposerStaticInit87194b208428791023c9e858f135526e
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2121,6 +2121,7 @@ class ComposerStaticInit5e1d8c0044421cc4d5b61845878befd6
         'Rector\\FamilyTree\\NodeAnalyzer\\ClassChildAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/NodeAnalyzer/ClassChildAnalyzer.php',
         'Rector\\FamilyTree\\Reflection\\FamilyRelationsAnalyzer' => __DIR__ . '/../..' . '/packages/FamilyTree/Reflection/FamilyRelationsAnalyzer.php',
         'Rector\\FileSystemRector\\Parser\\FileInfoParser' => __DIR__ . '/../..' . '/packages/FileSystemRector/Parser/FileInfoParser.php',
+        'Rector\\Instanceof_\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => __DIR__ . '/../..' . '/rules/Instanceof_/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
         'Rector\\Naming\\AssignVariableNameResolver\\NewAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/NewAssignVariableNameResolver.php',
         'Rector\\Naming\\AssignVariableNameResolver\\PropertyFetchAssignVariableNameResolver' => __DIR__ . '/../..' . '/rules/Naming/AssignVariableNameResolver/PropertyFetchAssignVariableNameResolver.php',
         'Rector\\Naming\\Contract\\AssignVariableNameResolverInterface' => __DIR__ . '/../..' . '/rules/Naming/Contract/AssignVariableNameResolverInterface.php',
@@ -2957,7 +2958,6 @@ class ComposerStaticInit5e1d8c0044421cc4d5b61845878befd6
         'Rector\\TypeDeclaration\\Rector\\Property\\TypedPropertyFromStrictSetUpRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/TypedPropertyFromStrictSetUpRector.php',
         'Rector\\TypeDeclaration\\Rector\\Property\\VarAnnotationIncorrectNullableRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Property/VarAnnotationIncorrectNullableRector.php',
         'Rector\\TypeDeclaration\\Rector\\StmtsAwareInterface\\DeclareStrictTypesRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/StmtsAwareInterface/DeclareStrictTypesRector.php',
-        'Rector\\TypeDeclaration\\Rector\\Ternary\\FlipNegatedTernaryInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php',
         'Rector\\TypeDeclaration\\Rector\\While_\\WhileNullableToInstanceofRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/While_/WhileNullableToInstanceofRector.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictBoolExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictBoolExprAnalyzer.php',
         'Rector\\TypeDeclaration\\TypeAnalyzer\\AlwaysStrictScalarExprAnalyzer' => __DIR__ . '/../..' . '/rules/TypeDeclaration/TypeAnalyzer/AlwaysStrictScalarExprAnalyzer.php',
@@ -3013,9 +3013,9 @@ class ComposerStaticInit5e1d8c0044421cc4d5b61845878befd6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5e1d8c0044421cc4d5b61845878befd6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5e1d8c0044421cc4d5b61845878befd6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5e1d8c0044421cc4d5b61845878befd6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit87194b208428791023c9e858f135526e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit87194b208428791023c9e858f135526e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit87194b208428791023c9e858f135526e::$classMap;
 
         }, null, ClassLoader::class);
     }
