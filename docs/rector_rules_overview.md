@@ -52,7 +52,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (45)
+- [TypeDeclaration](#typedeclaration) (44)
 
 - [Visibility](#visibility) (3)
 
@@ -7634,27 +7634,6 @@ return static function (RectorConfig $rectorConfig): void {
      {
          $value = 1000;
          return;
-     }
- }
-```
-
-<br>
-
-### ArrayShapeFromConstantArrayReturnRector
-
-Add array shape exact types based on constant keys of array
-
-- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ArrayShapeFromConstantArrayReturnRector`](../rules/TypeDeclaration/Rector/ClassMethod/ArrayShapeFromConstantArrayReturnRector.php)
-
-```diff
- final class SomeClass
- {
-+    /**
-+     * @return array{name: string}
-+     */
-     public function run(string $name)
-     {
-         return ['name' => $name];
      }
  }
 ```
