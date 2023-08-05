@@ -1635,7 +1635,7 @@ EOF;
             if ($value->hasErrors() && ($e = $value->getErrors())) {
                 return \sprintf('throw new RuntimeException(%s)', $this->export(\reset($e)));
             }
-            if (($nullsafeVariable6 = $this->definitionVariables) ? $nullsafeVariable6->contains($value) : null) {
+            if (($nullsafeVariable1 = $this->definitionVariables) ? $nullsafeVariable1->contains($value) : null) {
                 return $this->dumpValue($this->definitionVariables[$value], $interpolate);
             }
             if ($value->getMethodCalls()) {

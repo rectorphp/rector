@@ -559,7 +559,7 @@ class Application implements ResetInterface
     public function has(string $name) : bool
     {
         $this->init();
-        return isset($this->commands[$name]) || (($nullsafeVariable5 = $this->commandLoader) ? $nullsafeVariable5->has($name) : null) && $this->add($this->commandLoader->get($name));
+        return isset($this->commands[$name]) || (($nullsafeVariable1 = $this->commandLoader) ? $nullsafeVariable1->has($name) : null) && $this->add($this->commandLoader->get($name));
     }
     /**
      * Returns an array of all unique namespaces used by currently registered commands.

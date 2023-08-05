@@ -459,7 +459,7 @@ class Command
             throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \\Closure, "%s" given.', __METHOD__, \get_debug_type($suggestedValues)));
         }
         $this->definition->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues));
-        ($nullsafeVariable6 = $this->fullDefinition) ? $nullsafeVariable6->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues)) : null;
+        ($nullsafeVariable1 = $this->fullDefinition) ? $nullsafeVariable1->addArgument(new InputArgument($name, $mode, $description, $default, $suggestedValues)) : null;
         return $this;
     }
     /**
@@ -483,7 +483,7 @@ class Command
             throw new \TypeError(\sprintf('Argument 5 passed to "%s()" must be array or \\Closure, "%s" given.', __METHOD__, \get_debug_type($suggestedValues)));
         }
         $this->definition->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues));
-        ($nullsafeVariable7 = $this->fullDefinition) ? $nullsafeVariable7->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues)) : null;
+        ($nullsafeVariable2 = $this->fullDefinition) ? $nullsafeVariable2->addOption(new InputOption($name, $shortcut, $mode, $description, $default, $suggestedValues)) : null;
         return $this;
     }
     /**
@@ -582,7 +582,7 @@ class Command
     public function getProcessedHelp() : string
     {
         $name = $this->name;
-        $isSingleCommand = ($nullsafeVariable8 = $this->application) ? $nullsafeVariable8->isSingleCommand() : null;
+        $isSingleCommand = ($nullsafeVariable3 = $this->application) ? $nullsafeVariable3->isSingleCommand() : null;
         $placeholders = ['%command.name%', '%command.full_name%'];
         $replacements = [$name, $isSingleCommand ? $_SERVER['PHP_SELF'] : $_SERVER['PHP_SELF'] . ' ' . $name];
         return \str_replace($placeholders, $replacements, $this->getHelp() ?: $this->getDescription());

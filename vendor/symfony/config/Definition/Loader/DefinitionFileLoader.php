@@ -48,7 +48,7 @@ class DefinitionFileLoader extends FileLoader
         $loader = $this;
         $path = $this->locator->locate($resource);
         $this->setCurrentDir(\dirname($path));
-        ($nullsafeVariable4 = $this->container) ? $nullsafeVariable4->fileExists($path) : null;
+        ($nullsafeVariable1 = $this->container) ? $nullsafeVariable1->fileExists($path) : null;
         // the closure forbids access to the private scope in the included file
         $load = \Closure::bind(static function ($file) use($loader) {
             return include $file;
