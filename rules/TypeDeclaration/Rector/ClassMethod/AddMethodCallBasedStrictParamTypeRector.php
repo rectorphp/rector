@@ -96,6 +96,9 @@ CODE_SAMPLE
             if (!$isPrivate) {
                 continue;
             }
+            if ($method->isPublic()) {
+                continue;
+            }
             $methodCalls = $this->localMethodCallFinder->match($node, $method);
             $classMethodParameterTypes = $this->callTypesResolver->resolveStrictTypesFromCalls($methodCalls);
             $classMethod = $this->classMethodParamTypeCompleter->complete($method, $classMethodParameterTypes, self::MAX_UNION_TYPES);

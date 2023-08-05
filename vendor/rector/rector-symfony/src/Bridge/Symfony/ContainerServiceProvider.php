@@ -3,25 +3,17 @@
 declare (strict_types=1);
 namespace Rector\Symfony\Bridge\Symfony;
 
-use Rector\Core\Configuration\RectorConfigProvider;
+use Rector\Core\Configuration\Option;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use RectorPrefix202308\Symfony\Component\DependencyInjection\Container;
 use RectorPrefix202308\Webmozart\Assert\Assert;
 final class ContainerServiceProvider
 {
     /**
-     * @readonly
-     * @var \Rector\Core\Configuration\RectorConfigProvider
-     */
-    private $rectorConfigProvider;
-    /**
      * @var object|null
      */
     private $container;
-    public function __construct(RectorConfigProvider $rectorConfigProvider)
-    {
-        $this->rectorConfigProvider = $rectorConfigProvider;
-    }
     public function provideByName(string $serviceName) : object
     {
         /** @var Container $symfonyContainer */
@@ -35,7 +27,7 @@ final class ContainerServiceProvider
     private function getSymfonyContainer() : object
     {
         if ($this->container === null) {
-            $symfonyContainerPhp = $this->rectorConfigProvider->getSymfonyContainerPhp();
+            $symfonyContainerPhp = SimpleParameterProvider::provideStringParameter(Option::SYMFONY_CONTAINER_PHP_PATH_PARAMETER);
             Assert::fileExists($symfonyContainerPhp);
             $container = (require $symfonyContainerPhp);
             // this allows older Symfony versions, e.g. 2.8 did not have the PSR yet
