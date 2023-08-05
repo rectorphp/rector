@@ -1714,7 +1714,6 @@ return array(
     'Rector\\DeadCode\\Rector\\StaticCall\\RemoveParentCallWithoutParentRector' => $baseDir . '/rules/DeadCode/Rector/StaticCall/RemoveParentCallWithoutParentRector.php',
     'Rector\\DeadCode\\Rector\\Stmt\\RemoveUnreachableStatementRector' => $baseDir . '/rules/DeadCode/Rector/Stmt/RemoveUnreachableStatementRector.php',
     'Rector\\DeadCode\\Rector\\StmtsAwareInterface\\RemoveJustPropertyFetchForAssignRector' => $baseDir . '/rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchForAssignRector.php',
-    'Rector\\DeadCode\\Rector\\StmtsAwareInterface\\RemoveJustPropertyFetchRector' => $baseDir . '/rules/DeadCode/Rector/StmtsAwareInterface/RemoveJustPropertyFetchRector.php',
     'Rector\\DeadCode\\Rector\\Switch_\\RemoveDuplicatedCaseInSwitchRector' => $baseDir . '/rules/DeadCode/Rector/Switch_/RemoveDuplicatedCaseInSwitchRector.php',
     'Rector\\DeadCode\\Rector\\Ternary\\TernaryToBooleanOrFalseToBooleanAndRector' => $baseDir . '/rules/DeadCode/Rector/Ternary/TernaryToBooleanOrFalseToBooleanAndRector.php',
     'Rector\\DeadCode\\Rector\\TryCatch\\RemoveDeadTryCatchRector' => $baseDir . '/rules/DeadCode/Rector/TryCatch/RemoveDeadTryCatchRector.php',
