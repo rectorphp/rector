@@ -2130,24 +2130,24 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-symfony.git",
-                "reference": "a0af12a8d67d0edefe6cffd22cdced62729a1dd9"
+                "reference": "73e258ca281de9a9db99d3f33df8afa1efcf31d3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/a0af12a8d67d0edefe6cffd22cdced62729a1dd9",
-                "reference": "a0af12a8d67d0edefe6cffd22cdced62729a1dd9",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-symfony\/zipball\/73e258ca281de9a9db99d3f33df8afa1efcf31d3",
+                "reference": "73e258ca281de9a9db99d3f33df8afa1efcf31d3",
                 "shasum": ""
             },
             "require": {
                 "ext-xml": "*",
                 "php": ">=8.1",
-                "symfony\/string": "^6.1"
+                "symfony\/string": "^6.3"
             },
             "require-dev": {
-                "phpstan\/extension-installer": "^1.2",
+                "phpstan\/extension-installer": "^1.3",
                 "phpstan\/phpstan": "^1.9.2",
                 "phpstan\/phpstan-webmozart-assert": "^1.2",
-                "phpunit\/phpunit": "^10.0",
+                "phpunit\/phpunit": "^10.3",
                 "rector\/phpstan-rules": "^0.6",
                 "rector\/rector-generator": "^0.6",
                 "rector\/rector-src": "dev-main",
@@ -2156,16 +2156,17 @@
                 "symfony\/security-http": "^6.1",
                 "symfony\/validator": "^6.2",
                 "symplify\/easy-ci": "^11.2",
-                "symplify\/easy-coding-standard": "^11.2",
+                "symplify\/easy-coding-standard": "^12.0",
                 "symplify\/phpstan-extensions": "^11.1",
                 "symplify\/phpstan-rules": "^11.2",
                 "symplify\/rule-doc-generator": "^11.2",
                 "symplify\/vendor-patches": "^11.2",
+                "tomasvotruba\/class-leak": "0.1.1.72",
                 "tomasvotruba\/cognitive-complexity": "^0.1",
                 "tomasvotruba\/type-coverage": "^0.2",
-                "tomasvotruba\/unused-public": "^0.1"
+                "tomasvotruba\/unused-public": "^0.2"
             },
-            "time": "2023-07-14T10:30:55+00:00",
+            "time": "2023-08-05T11:57:58+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

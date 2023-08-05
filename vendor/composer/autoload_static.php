@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitcf6a7b224b07ea957577e7892385954b
+class ComposerStaticInit19495756deacfcbb37b409ae48e3c3f5
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1835,7 +1835,6 @@ class ComposerStaticInitcf6a7b224b07ea957577e7892385954b
         'Rector\\Core\\NodeAnalyzer\\VariadicAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/VariadicAnalyzer.php',
         'Rector\\Core\\NodeDecorator\\CreatedByRuleDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/CreatedByRuleDecorator.php',
         'Rector\\Core\\NodeDecorator\\PropertyTypeDecorator' => __DIR__ . '/../..' . '/src/NodeDecorator/PropertyTypeDecorator.php',
-        'Rector\\Core\\NodeManipulator\\ArrayManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ArrayManipulator.php',
         'Rector\\Core\\NodeManipulator\\AssignManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/AssignManipulator.php',
         'Rector\\Core\\NodeManipulator\\BinaryOpManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/BinaryOpManipulator.php',
         'Rector\\Core\\NodeManipulator\\ClassConstManipulator' => __DIR__ . '/../..' . '/src/NodeManipulator/ClassConstManipulator.php',
@@ -2741,6 +2740,7 @@ class ComposerStaticInitcf6a7b224b07ea957577e7892385954b
         'Rector\\Symfony\\NodeFactory\\OnSuccessLogoutClassMethodFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/OnSuccessLogoutClassMethodFactory.php',
         'Rector\\Symfony\\NodeFactory\\ThisRenderFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFactory/ThisRenderFactory.php',
         'Rector\\Symfony\\NodeFinder\\EmptyReturnNodeFinder' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeFinder/EmptyReturnNodeFinder.php',
+        'Rector\\Symfony\\NodeManipulator\\ArrayManipulator' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeManipulator/ArrayManipulator.php',
         'Rector\\Symfony\\NodeManipulator\\ClassManipulator' => __DIR__ . '/..' . '/rector/rector-symfony/src/NodeManipulator/ClassManipulator.php',
         'Rector\\Symfony\\PhpDocNode\\SymfonyRouteTagValueNodeFactory' => __DIR__ . '/..' . '/rector/rector-symfony/src/PhpDocNode/SymfonyRouteTagValueNodeFactory.php',
         'Rector\\Symfony\\Set\\FOSRestSetList' => __DIR__ . '/..' . '/rector/rector-symfony/src/Set/FOSRestSetList.php',
@@ -3016,9 +3016,9 @@ class ComposerStaticInitcf6a7b224b07ea957577e7892385954b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitcf6a7b224b07ea957577e7892385954b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitcf6a7b224b07ea957577e7892385954b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitcf6a7b224b07ea957577e7892385954b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit19495756deacfcbb37b409ae48e3c3f5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit19495756deacfcbb37b409ae48e3c3f5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit19495756deacfcbb37b409ae48e3c3f5::$classMap;
 
         }, null, ClassLoader::class);
     }

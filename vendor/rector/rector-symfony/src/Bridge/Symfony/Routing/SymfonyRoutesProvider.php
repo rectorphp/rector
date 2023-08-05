@@ -8,6 +8,9 @@ use Rector\Symfony\Contract\Bridge\Symfony\Routing\SymfonyRoutesProviderInterfac
 use Rector\Symfony\ValueObject\SymfonyRouteMetadata;
 use RectorPrefix202308\Symfony\Component\Routing\RouterInterface;
 use RectorPrefix202308\Webmozart\Assert\Assert;
+/**
+ * @api part of AddRouteAnnotationRector
+ */
 final class SymfonyRoutesProvider implements SymfonyRoutesProviderInterface
 {
     /**

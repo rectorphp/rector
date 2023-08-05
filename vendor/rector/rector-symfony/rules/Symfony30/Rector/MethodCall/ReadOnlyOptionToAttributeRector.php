@@ -8,10 +8,10 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Scalar\String_;
-use Rector\Core\NodeManipulator\ArrayManipulator;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Symfony\NodeAnalyzer\FormAddMethodCallAnalyzer;
 use Rector\Symfony\NodeAnalyzer\FormOptionsArrayMatcher;
+use Rector\Symfony\NodeManipulator\ArrayManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 /**
@@ -21,7 +21,7 @@ final class ReadOnlyOptionToAttributeRector extends AbstractRector
 {
     /**
      * @readonly
-     * @var \Rector\Core\NodeManipulator\ArrayManipulator
+     * @var \Rector\Symfony\NodeManipulator\ArrayManipulator
      */
     private $arrayManipulator;
     /**
