@@ -52,7 +52,7 @@ CODE_SAMPLE
     /**
      * @param Property $node
      */
-    public function refactorWithScope(Node $node, Scope $scope)
+    public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         // type is already known
         if ($node->type !== null) {

@@ -1,4 +1,4 @@
-# 363 Rules Overview
+# 364 Rules Overview
 
 <br>
 
@@ -52,7 +52,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (44)
+- [TypeDeclaration](#typedeclaration) (45)
 
 - [Visibility](#visibility) (3)
 
@@ -4855,8 +4855,7 @@ Change `money_format()` to equivalent `number_format()`
 
 ```diff
 -$value = money_format('%i', $value);
-+$roundedValue = round($value, 2, PHP_ROUND_HALF_ODD);
-+$value = number_format($roundedValue, 2, '.', '');
++$value = number_format(round($value, 2, PHP_ROUND_HALF_ODD), 2, '.', '');
 ```
 
 <br>
@@ -8180,6 +8179,33 @@ Add return method return type based on strict typed property
 +    public function getAge(): int
      {
          return $this->age;
+     }
+ }
+```
+
+<br>
+
+### ReturnUnionTypeRector
+
+Add union return type
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnUnionTypeRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function getData()
++    public function getData(): null|\DateTime|\stdClass
+     {
+         if (rand(0, 1)) {
+             return null;
+         }
+
+         if (rand(0, 1)) {
+             return new DateTime('now');
+         }
+
+         return new stdClass;
      }
  }
 ```

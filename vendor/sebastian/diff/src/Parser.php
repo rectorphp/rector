@@ -76,7 +76,7 @@ final class Parser
                     $type = Line::REMOVED;
                 }
                 $diffLines[] = new Line($type, $match['line']);
-                ($nullsafeVariable4 = $chunk) ? $nullsafeVariable4->setLines($diffLines) : null;
+                ($nullsafeVariable1 = $chunk) ? $nullsafeVariable1->setLines($diffLines) : null;
             }
         }
         $diff->setChunks($chunks);
