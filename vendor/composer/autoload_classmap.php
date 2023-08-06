@@ -2331,7 +2331,6 @@ return array(
     'Rector\\Removing\\NodeManipulator\\ComplexNodeRemover' => $baseDir . '/rules/Removing/NodeManipulator/ComplexNodeRemover.php',
     'Rector\\Removing\\Rector\\ClassMethod\\ArgumentRemoverRector' => $baseDir . '/rules/Removing/Rector/ClassMethod/ArgumentRemoverRector.php',
     'Rector\\Removing\\Rector\\Class_\\RemoveInterfacesRector' => $baseDir . '/rules/Removing/Rector/Class_/RemoveInterfacesRector.php',
-    'Rector\\Removing\\Rector\\Class_\\RemoveParentRector' => $baseDir . '/rules/Removing/Rector/Class_/RemoveParentRector.php',
     'Rector\\Removing\\Rector\\Class_\\RemoveTraitUseRector' => $baseDir . '/rules/Removing/Rector/Class_/RemoveTraitUseRector.php',
     'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallArgRector' => $baseDir . '/rules/Removing/Rector/FuncCall/RemoveFuncCallArgRector.php',
     'Rector\\Removing\\Rector\\FuncCall\\RemoveFuncCallRector' => $baseDir . '/rules/Removing/Rector/FuncCall/RemoveFuncCallRector.php',

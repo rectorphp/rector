@@ -1,4 +1,4 @@
-# 361 Rules Overview
+# 360 Rules Overview
 
 <br>
 
@@ -6,7 +6,7 @@
 
 - [Arguments](#arguments) (6)
 
-- [CodeQuality](#codequality) (71)
+- [CodeQuality](#codequality) (70)
 
 - [CodingStyle](#codingstyle) (30)
 
@@ -46,7 +46,7 @@
 
 - [Privatization](#privatization) (4)
 
-- [Removing](#removing) (6)
+- [Removing](#removing) (5)
 
 - [Renaming](#renaming) (10)
 
@@ -54,7 +54,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (43)
+- [TypeDeclaration](#typedeclaration) (44)
 
 - [Visibility](#visibility) (3)
 
@@ -1068,29 +1068,6 @@ Replace the Double not operator (!!) by type-casting to boolean
 ```diff
 -$bool = !!$var;
 +$bool = (bool) $var;
-```
-
-<br>
-
-### ReturnTypeFromStrictScalarReturnExprRector
-
-Change return type based on strict scalar returns - string, int, float or bool
-
-- class: [`Rector\CodeQuality\Rector\ClassMethod\ReturnTypeFromStrictScalarReturnExprRector`](../rules/CodeQuality/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php)
-
-```diff
- final class SomeClass
- {
--    public function run($value)
-+    public function run($value): string
-     {
-         if ($value) {
-             return 'yes';
-         }
-
-         return 'no';
-     }
- }
 ```
 
 <br>
@@ -5841,40 +5818,6 @@ return static function (RectorConfig $rectorConfig): void {
 
 <br>
 
-### RemoveParentRector
-
-Removes extends class by name
-
-:wrench: **configure it!**
-
-- class: [`Rector\Removing\Rector\Class_\RemoveParentRector`](../rules/Removing/Rector/Class_/RemoveParentRector.php)
-
-```php
-<?php
-
-declare(strict_types=1);
-
-use Rector\Config\RectorConfig;
-use Rector\Removing\Rector\Class_\RemoveParentRector;
-
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->ruleWithConfiguration(RemoveParentRector::class, [
-        'SomeParentClass',
-    ]);
-};
-```
-
-↓
-
-```diff
--final class SomeClass extends SomeParentClass
-+final class SomeClass
- {
- }
-```
-
-<br>
-
 ### RemoveTraitUseRector
 
 Remove specific traits from code
@@ -8058,6 +8001,29 @@ Add return type based on strict parameter type
 +    public function resolve(ParamType $item): ParamType
      {
          return $item;
+     }
+ }
+```
+
+<br>
+
+### ReturnTypeFromStrictScalarReturnExprRector
+
+Change return type based on strict scalar returns - string, int, float or bool
+
+- class: [`Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictScalarReturnExprRector`](../rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php)
+
+```diff
+ final class SomeClass
+ {
+-    public function run($value)
++    public function run($value): string
+     {
+         if ($value) {
+             return 'yes';
+         }
+
+         return 'no';
      }
  }
 ```
