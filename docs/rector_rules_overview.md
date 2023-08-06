@@ -1,4 +1,4 @@
-# 362 Rules Overview
+# 361 Rules Overview
 
 <br>
 
@@ -13,6 +13,8 @@
 - [DeadCode](#deadcode) (41)
 
 - [EarlyReturn](#earlyreturn) (9)
+
+- [Instanceof_](#instanceof) (1)
 
 - [Naming](#naming) (6)
 
@@ -52,7 +54,7 @@
 
 - [Transform](#transform) (22)
 
-- [TypeDeclaration](#typedeclaration) (44)
+- [TypeDeclaration](#typedeclaration) (43)
 
 - [Visibility](#visibility) (3)
 
@@ -3378,6 +3380,21 @@ Replace if conditioned variable override with direct return
          return $value;
      }
  }
+```
+
+<br>
+
+## Instanceof_
+
+### FlipNegatedTernaryInstanceofRector
+
+Flip negated ternary of instanceof to direct use of object
+
+- class: [`Rector\Instanceof_\Rector\Ternary\FlipNegatedTernaryInstanceofRector`](../rules/Instanceof_/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php)
+
+```diff
+-echo ! $object instanceof Product ? null : $object->getPrice();
++echo $object instanceof Product ? $object->getPrice() : null;
 ```
 
 <br>
@@ -7718,19 +7735,6 @@ Change `empty()` on nullable object to instanceof check
          return true;
      }
  }
-```
-
-<br>
-
-### FlipNegatedTernaryInstanceofRector
-
-Flip negated ternary of instanceof to direct use of object
-
-- class: [`Rector\TypeDeclaration\Rector\Ternary\FlipNegatedTernaryInstanceofRector`](../rules/TypeDeclaration/Rector/Ternary/FlipNegatedTernaryInstanceofRector.php)
-
-```diff
--echo ! $object instanceof Product ? null : $object->getPrice();
-+echo $object instanceof Product ? $object->getPrice() : null;
 ```
 
 <br>
