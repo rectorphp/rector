@@ -1939,6 +1939,7 @@ return array(
     'Rector\\NodeNameResolver\\Regex\\RegexPatternDetector' => $baseDir . '/packages/NodeNameResolver/Regex/RegexPatternDetector.php',
     'Rector\\NodeNestingScope\\ContextAnalyzer' => $baseDir . '/packages/NodeNestingScope/ContextAnalyzer.php',
     'Rector\\NodeNestingScope\\ValueObject\\ControlStructure' => $baseDir . '/packages/NodeNestingScope/ValueObject/ControlStructure.php',
+    'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverAwareInterface' => $baseDir . '/packages/NodeTypeResolver/Contract/NodeTypeResolverAwareInterface.php',
     'Rector\\NodeTypeResolver\\Contract\\NodeTypeResolverInterface' => $baseDir . '/packages/NodeTypeResolver/Contract/NodeTypeResolverInterface.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\BleedingEdgeIncludePurifier' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/BleedingEdgeIncludePurifier.php',
     'Rector\\NodeTypeResolver\\DependencyInjection\\PHPStanExtensionsConfigResolver' => $baseDir . '/packages/NodeTypeResolver/DependencyInjection/PHPStanExtensionsConfigResolver.php',

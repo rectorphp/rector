@@ -12,15 +12,15 @@ use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
-use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 /**
  * @implements NodeTypeResolverInterface<StaticCall|MethodCall>
  */
-final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterface
+final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterface, NodeTypeResolverAwareInterface
 {
     /**
      * @readonly
@@ -35,9 +35,6 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
     {
         $this->nodeNameResolver = $nodeNameResolver;
     }
-    /**
-     * @required
-     */
     public function autowire(NodeTypeResolver $nodeTypeResolver) : void
     {
         $this->nodeTypeResolver = $nodeTypeResolver;

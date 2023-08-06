@@ -33,6 +33,7 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use Rector\Core\Configuration\RenamedClassesDataCollector;
 use Rector\Core\NodeAnalyzer\ClassAnalyzer;
+use Rector\NodeTypeResolver\Contract\NodeTypeResolverAwareInterface;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
@@ -88,6 +89,9 @@ final class NodeTypeResolver
         $this->accessoryNonEmptyStringTypeCorrector = $accessoryNonEmptyStringTypeCorrector;
         $this->renamedClassesDataCollector = $renamedClassesDataCollector;
         foreach ($nodeTypeResolvers as $nodeTypeResolver) {
+            if ($nodeTypeResolver instanceof NodeTypeResolverAwareInterface) {
+                $nodeTypeResolver->autowire($this);
+            }
             foreach ($nodeTypeResolver->getNodeClasses() as $nodeClass) {
                 $this->nodeTypeResolvers[$nodeClass] = $nodeTypeResolver;
             }

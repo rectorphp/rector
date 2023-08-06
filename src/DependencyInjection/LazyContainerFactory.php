@@ -43,6 +43,20 @@ use Rector\NodeNameResolver\NodeNameResolver\VariableNameResolver;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\CastTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\ClassAndInterfaceTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\ClassMethodOrClassConstTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\IdentifierTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\NameTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\NewTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\ParamTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\PropertyFetchTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\PropertyTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\ReturnTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\ScalarTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\StaticCallMethodCallTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\TraitTypeResolver;
+use Rector\NodeTypeResolver\NodeTypeResolver\VariableTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\ArgNodeVisitor;
 use Rector\NodeTypeResolver\PHPStan\Scope\NodeVisitor\AssignedToNodeVisitor;
@@ -135,6 +149,10 @@ final class LazyContainerFactory
      */
     private const TYPE_MAPPER_CLASSES = [AccessoryLiteralStringTypeMapper::class, AccessoryNonEmptyStringTypeMapper::class, AccessoryNonFalsyStringTypeMapper::class, AccessoryNumericStringTypeMapper::class, ArrayTypeMapper::class, BooleanTypeMapper::class, CallableTypeMapper::class, ClassStringTypeMapper::class, ClosureTypeMapper::class, ConditionalTypeForParameterMapper::class, ConditionalTypeMapper::class, FloatTypeMapper::class, GenericClassStringTypeMapper::class, HasMethodTypeMapper::class, HasOffsetTypeMapper::class, HasOffsetValueTypeTypeMapper::class, HasPropertyTypeMapper::class, IntegerTypeMapper::class, \Rector\PHPStanStaticTypeMapper\TypeMapper\IntersectionTypeMapper::class, IterableTypeMapper::class, MixedTypeMapper::class, NeverTypeMapper::class, NonEmptyArrayTypeMapper::class, NullTypeMapper::class, ObjectTypeMapper::class, ObjectWithoutClassTypeMapper::class, OversizedArrayTypeMapper::class, ParentStaticTypeMapper::class, ResourceTypeMapper::class, SelfObjectTypeMapper::class, \Rector\PHPStanStaticTypeMapper\TypeMapper\StaticTypeMapper::class, StrictMixedTypeMapper::class, StringTypeMapper::class, ThisTypeMapper::class, TypeWithClassNameTypeMapper::class, \Rector\PHPStanStaticTypeMapper\TypeMapper\UnionTypeMapper::class, VoidTypeMapper::class];
     /**
+     * @var array<class-string<NodeTypeResolverInterface>>
+     */
+    private const NODE_TYPE_RESOLVER_CLASSES = [CastTypeResolver::class, ClassAndInterfaceTypeResolver::class, ClassMethodOrClassConstTypeResolver::class, IdentifierTypeResolver::class, NameTypeResolver::class, NewTypeResolver::class, ParamTypeResolver::class, PropertyFetchTypeResolver::class, PropertyTypeResolver::class, ReturnTypeResolver::class, ScalarTypeResolver::class, StaticCallMethodCallTypeResolver::class, TraitTypeResolver::class, VariableTypeResolver::class];
+    /**
      * @api used as next container factory
      */
     public function create() : Container
@@ -173,11 +191,12 @@ final class LazyContainerFactory
         $container->when(NodeTypeResolver::class)->needs('$nodeTypeResolvers')->giveTagged(NodeTypeResolverInterface::class);
         // node name resolvers
         $container->when(NodeNameResolver::class)->needs('$nodeNameResolvers')->giveTagged(NodeNameResolverInterface::class);
-        $this->registerTagged($container, self::NODE_NAME_RESOLVER_CLASSES, NodeNameResolverInterface::class);
-        $this->registerTagged($container, self::PHPDOC_TYPE_MAPPER_CLASSES, PhpDocTypeMapperInterface::class);
         $this->registerTagged($container, self::TYPE_MAPPER_CLASSES, TypeMapperInterface::class);
-        $container->when(AnnotationToAttributeMapper::class)->needs('$annotationToAttributeMappers')->giveTagged(AnnotationToAttributeMapperInterface::class);
+        $this->registerTagged($container, self::PHPDOC_TYPE_MAPPER_CLASSES, PhpDocTypeMapperInterface::class);
+        $this->registerTagged($container, self::NODE_NAME_RESOLVER_CLASSES, NodeNameResolverInterface::class);
+        $this->registerTagged($container, self::NODE_TYPE_RESOLVER_CLASSES, NodeTypeResolverInterface::class);
         $this->registerTagged($container, self::ANNOTATION_TO_ATTRIBUTE_MAPPER_CLASSES, AnnotationToAttributeMapperInterface::class);
+        $container->when(AnnotationToAttributeMapper::class)->needs('$annotationToAttributeMappers')->giveTagged(AnnotationToAttributeMapperInterface::class);
         // #[Required]-like setter
         $container->afterResolving(ArrayAnnotationToAttributeMapper::class, static function (ArrayAnnotationToAttributeMapper $arrayAnnotationToAttributeMapper, Container $container) : void {
             $annotationToAttributesMapper = $container->make(AnnotationToAttributeMapper::class);
@@ -201,7 +220,7 @@ final class LazyContainerFactory
         $container->when(PHPStanNodeScopeResolver::class)->needs('$nodeVisitors')->giveTagged(ScopeResolverNodeVisitorInterface::class);
         $this->registerTagged($container, self::SCOPE_RESOLVER_NODE_VISITOR_CLASSES, ScopeResolverNodeVisitorInterface::class);
         // phpstan factory
-        $this->createPhpstanServices($container);
+        $this->createPHPStanServices($container);
         // @todo add base node visitors
         $container->when(PhpDocNodeMapper::class)->needs('$phpDocNodeVisitors')->giveTagged(BasePhpDocNodeVisitorInterface::class);
         return $container;
@@ -218,7 +237,7 @@ final class LazyContainerFactory
             $container->tag($class, $tagInterface);
         }
     }
-    private function createPhpstanServices(Container $container) : void
+    private function createPHPStanServices(Container $container) : void
     {
         $container->singleton(ReflectionProvider::class, static function (Container $container) : ReflectionProvider {
             $phpstanServiceFactory = $container->make(PHPStanServicesFactory::class);
@@ -248,9 +267,10 @@ final class LazyContainerFactory
             $phpstanServiceFactory = $container->make(PHPStanServicesFactory::class);
             return $phpstanServiceFactory->createDependencyResolver();
         });
-        $container->singleton(ScopeFactory::class, static function (Container $container) {
+        // @todo make generic
+        $container->singleton(ScopeFactory::class, static function (Container $container) : ScopeFactory {
             $phpstanServiceFactory = $container->make(PHPStanServicesFactory::class);
-            return $phpstanServiceFactory->createScopeFactory();
+            return $phpstanServiceFactory->getByType(ScopeFactory::class);
         });
     }
 }

@@ -94,6 +94,16 @@ final class PHPStanServicesFactory
         return $this->container->getByType(ScopeFactory::class);
     }
     /**
+     * @template TObject as Object
+     *
+     * @param class-string<TObject> $type
+     * @return TObject
+     */
+    public function getByType(string $type) : object
+    {
+        return $this->container->getByType($type);
+    }
+    /**
      * @api
      */
     public function createDependencyResolver() : DependencyResolver
