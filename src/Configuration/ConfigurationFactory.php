@@ -4,7 +4,6 @@ declare (strict_types=1);
 namespace Rector\Core\Configuration;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\ValueObject\Configuration;
@@ -13,17 +12,11 @@ final class ConfigurationFactory
 {
     /**
      * @readonly
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
-    /**
-     * @readonly
      * @var \Rector\Core\Contract\Console\OutputStyleInterface
      */
     private $rectorOutputStyle;
-    public function __construct(ParameterProvider $parameterProvider, OutputStyleInterface $rectorOutputStyle)
+    public function __construct(OutputStyleInterface $rectorOutputStyle)
     {
-        $this->parameterProvider = $parameterProvider;
         $this->rectorOutputStyle = $rectorOutputStyle;
     }
     /**
@@ -32,7 +25,7 @@ final class ConfigurationFactory
      */
     public function createForTests(array $paths) : Configuration
     {
-        $fileExtensions = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
+        $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
         return new Configuration(\true, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths);
     }
     /**
@@ -46,7 +39,7 @@ final class ConfigurationFactory
         $showProgressBar = $this->shouldShowProgressBar($input, $outputFormat);
         $showDiffs = $this->shouldShowDiffs($input);
         $paths = $this->resolvePaths($input);
-        $fileExtensions = $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
+        $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Core\Configuration\Option::FILE_EXTENSIONS);
         $isParallel = SimpleParameterProvider::provideBoolParameter(\Rector\Core\Configuration\Option::PARALLEL);
         $parallelPort = (string) $input->getOption(\Rector\Core\Configuration\Option::PARALLEL_PORT);
         $parallelIdentifier = (string) $input->getOption(\Rector\Core\Configuration\Option::PARALLEL_IDENTIFIER);
@@ -84,7 +77,7 @@ final class ConfigurationFactory
             return $commandLinePaths;
         }
         // fallback to parameter
-        return $this->parameterProvider->provideArrayParameter(\Rector\Core\Configuration\Option::PATHS);
+        return SimpleParameterProvider::provideArrayParameter(\Rector\Core\Configuration\Option::PATHS);
     }
     private function resolveMemoryLimit(InputInterface $input) : ?string
     {

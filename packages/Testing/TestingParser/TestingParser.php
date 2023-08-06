@@ -6,7 +6,7 @@ namespace Rector\Testing\TestingParser;
 use RectorPrefix202308\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
+use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\PhpParser\Parser\RectorParser;
 use Rector\Core\Provider\CurrentFileProvider;
 use Rector\Core\ValueObject\Application\File;
@@ -16,11 +16,6 @@ use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
  */
 final class TestingParser
 {
-    /**
-     * @readonly
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
     /**
      * @readonly
      * @var \Rector\Core\PhpParser\Parser\RectorParser
@@ -36,9 +31,8 @@ final class TestingParser
      * @var \Rector\Core\Provider\CurrentFileProvider
      */
     private $currentFileProvider;
-    public function __construct(ParameterProvider $parameterProvider, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, CurrentFileProvider $currentFileProvider)
+    public function __construct(RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, CurrentFileProvider $currentFileProvider)
     {
-        $this->parameterProvider = $parameterProvider;
         $this->rectorParser = $rectorParser;
         $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
         $this->currentFileProvider = $currentFileProvider;
@@ -57,7 +51,7 @@ final class TestingParser
      */
     public function parseFileToDecoratedNodes(string $filePath) : array
     {
-        $this->parameterProvider->changeParameter(Option::SOURCE, [$filePath]);
+        SimpleParameterProvider::setParameter(Option::SOURCE, [$filePath]);
         $stmts = $this->rectorParser->parseFile($filePath);
         $file = new File($filePath, FileSystem::read($filePath));
         $stmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file, $stmts);

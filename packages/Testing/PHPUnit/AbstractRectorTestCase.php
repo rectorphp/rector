@@ -14,7 +14,6 @@ use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
 use Rector\Core\Configuration\ConfigurationFactory;
 use Rector\Core\Configuration\Option;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Core\Exception\ShouldNotHappenException;
 use Rector\Core\ValueObject\Application\File;
@@ -30,10 +29,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
      */
     protected static $allRectorContainer;
     /**
-     * @var \Rector\Core\Configuration\Parameter\ParameterProvider
-     */
-    private $parameterProvider;
-    /**
      * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
      */
     private $dynamicSourceLocatorProvider;
@@ -47,13 +42,11 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     private $inputFilePath;
     protected function setUp() : void
     {
-        // speed up
         @\ini_set('memory_limit', '-1');
         $this->includePreloadFilesAndScoperAutoload();
         $configFile = $this->provideConfigFilePath();
         $this->bootFromConfigFiles([$configFile]);
         $this->applicationFileProcessor = $this->getService(ApplicationFileProcessor::class);
-        $this->parameterProvider = $this->getService(ParameterProvider::class);
         $this->dynamicSourceLocatorProvider = $this->getService(DynamicSourceLocatorProvider::class);
         /** @var AdditionalAutoloader $additionalAutoloader */
         $additionalAutoloader = $this->getService(AdditionalAutoloader::class);
@@ -70,7 +63,7 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
             FileSystem::delete($this->inputFilePath);
         }
         // free memory to reduce memory peak consumption on windows
-        unset($this->applicationFileProcessor, $this->parameterProvider, $this->dynamicSourceLocatorProvider);
+        unset($this->applicationFileProcessor, $this->dynamicSourceLocatorProvider);
     }
     /**
      * @return Iterator<<string>>
@@ -121,7 +114,6 @@ abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTe
     }
     private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath) : void
     {
-        $this->parameterProvider->changeParameter(Option::SOURCE, [$originalFilePath]);
         SimpleParameterProvider::setParameter(Option::SOURCE, [$originalFilePath]);
         $changedContent = $this->processFilePath($originalFilePath, $inputFileContents);
         $fixtureFilename = \basename($fixtureFilePath);

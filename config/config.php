@@ -37,7 +37,6 @@ use Rector\Config\RectorConfig;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Bootstrap\ExtensionConfigResolver;
 use Rector\Core\Configuration\ConfigInitializer;
-use Rector\Core\Configuration\Parameter\ParameterProvider;
 use Rector\Core\Console\Command\ListRulesCommand;
 use Rector\Core\Console\ConsoleApplication;
 use Rector\Core\Console\Output\OutputFormatterCollector;
@@ -141,7 +140,6 @@ return static function (RectorConfig $rectorConfig) : void {
     $services->set(RectorConsoleOutputStyle::class)->factory([service(RectorConsoleOutputStyleFactory::class), 'create']);
     $services->set(Parser::class)->factory([service(PHPStanServicesFactory::class), 'createPHPStanParser']);
     $services->set(Lexer::class)->factory([service(PHPStanServicesFactory::class), 'createEmulativeLexer']);
-    $services->set(ParameterProvider::class)->arg('$container', service('service_container'));
     $services->set(InflectorFactory::class);
     $services->set(Inflector::class)->factory([service(InflectorFactory::class), 'build']);
     $services->set(VersionParser::class);
