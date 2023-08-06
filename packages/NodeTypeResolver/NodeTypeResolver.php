@@ -211,17 +211,30 @@ final class NodeTypeResolver
         if (!$scope instanceof Scope) {
             return new MixedType();
         }
-        // cover anonymous class
-        if ($expr instanceof New_ && $this->classAnalyzer->isAnonymousClass($expr->class)) {
+        // cover direct New_ class
+        if ($this->classAnalyzer->isAnonymousClass($expr)) {
             $type = $this->nodeTypeResolvers[New_::class]->resolve($expr);
             if ($type instanceof ObjectWithoutClassType) {
                 return $type;
             }
         }
         $type = $scope->getNativeType($expr);
-        // ObjectType anonymous may be assigned first, fallback to ObjectWithoutClassType
-        if ($type instanceof ObjectType && $this->classAnalyzer->isAnonymousClassName($type->getClassName())) {
-            return new ObjectWithoutClassType();
+        if (!$type instanceof UnionType) {
+            if ($this->isAnonymousObjectType($type)) {
+                return new ObjectWithoutClassType();
+            }
+            return $this->accessoryNonEmptyStringTypeCorrector->correct($type);
+        }
+        $hasChanged = \false;
+        $types = $type->getTypes();
+        foreach ($types as $key => $childType) {
+            if ($this->isAnonymousObjectType($childType)) {
+                $types[$key] = new ObjectWithoutClassType();
+                $hasChanged = \true;
+            }
+        }
+        if ($hasChanged) {
+            return $this->accessoryNonEmptyStringTypeCorrector->correct(new UnionType($types));
         }
         return $this->accessoryNonEmptyStringTypeCorrector->correct($type);
     }
@@ -280,6 +293,10 @@ final class NodeTypeResolver
             return \true;
         }
         return $classReflection->isSubclassOf($objectType->getClassName());
+    }
+    private function isAnonymousObjectType(Type $type) : bool
+    {
+        return $type instanceof ObjectType && $this->classAnalyzer->isAnonymousClassName($type->getClassName());
     }
     private function isUnionTypeable(Type $first, Type $second) : bool
     {
