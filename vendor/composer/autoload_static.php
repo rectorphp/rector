@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit812464ae346fa19f41bf6dc1bef72ab9
+class ComposerStaticInit56a64150bb9752b8cddb5d5be65538a6
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1626,7 +1626,6 @@ class ComposerStaticInit812464ae346fa19f41bf6dc1bef72ab9
         'Rector\\CodeQuality\\Rector\\ClassMethod\\InlineArrayReturnAssignRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/InlineArrayReturnAssignRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\LocallyCalledStaticMethodToNonStaticRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/LocallyCalledStaticMethodToNonStaticRector.php',
         'Rector\\CodeQuality\\Rector\\ClassMethod\\OptionalParametersAfterRequiredRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/OptionalParametersAfterRequiredRector.php',
-        'Rector\\CodeQuality\\Rector\\ClassMethod\\ReturnTypeFromStrictScalarReturnExprRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\CompleteDynamicPropertiesRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/CompleteDynamicPropertiesRector.php',
         'Rector\\CodeQuality\\Rector\\Class_\\InlineConstructorDefaultToPropertyRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Class_/InlineConstructorDefaultToPropertyRector.php',
         'Rector\\CodeQuality\\Rector\\Concat\\JoinStringConcatRector' => __DIR__ . '/../..' . '/rules/CodeQuality/Rector/Concat/JoinStringConcatRector.php',
@@ -1821,6 +1820,7 @@ class ComposerStaticInit812464ae346fa19f41bf6dc1bef72ab9
         'Rector\\Core\\NodeAnalyzer\\ConstFetchAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ConstFetchAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\DoctrineEntityAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/DoctrineEntityAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ExprAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ExprAnalyzer.php',
+        'Rector\\Core\\NodeAnalyzer\\MagicClassMethodAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/MagicClassMethodAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\ParamAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/ParamAnalyzer.php',
         'Rector\\Core\\NodeAnalyzer\\PromotedPropertyParamCleaner' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PromotedPropertyParamCleaner.php',
         'Rector\\Core\\NodeAnalyzer\\PropertyAnalyzer' => __DIR__ . '/../..' . '/src/NodeAnalyzer/PropertyAnalyzer.php',
@@ -2938,6 +2938,7 @@ class ComposerStaticInit812464ae346fa19f41bf6dc1bef72ab9
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictNativeCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNativeCallRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictNewArrayRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictNewArrayRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictParamRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictParamRector.php',
+        'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictScalarReturnExprRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictScalarReturnExprRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedCallRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedCallRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnTypeFromStrictTypedPropertyRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnTypeFromStrictTypedPropertyRector.php',
         'Rector\\TypeDeclaration\\Rector\\ClassMethod\\ReturnUnionTypeRector' => __DIR__ . '/../..' . '/rules/TypeDeclaration/Rector/ClassMethod/ReturnUnionTypeRector.php',
@@ -3012,9 +3013,9 @@ class ComposerStaticInit812464ae346fa19f41bf6dc1bef72ab9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit812464ae346fa19f41bf6dc1bef72ab9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit812464ae346fa19f41bf6dc1bef72ab9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit812464ae346fa19f41bf6dc1bef72ab9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit56a64150bb9752b8cddb5d5be65538a6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit56a64150bb9752b8cddb5d5be65538a6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit56a64150bb9752b8cddb5d5be65538a6::$classMap;
 
         }, null, ClassLoader::class);
     }

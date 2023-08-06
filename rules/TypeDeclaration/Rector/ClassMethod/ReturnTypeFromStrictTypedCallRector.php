@@ -173,13 +173,8 @@ CODE_SAMPLE
         if ($node->returnType !== null) {
             return \true;
         }
-        if ($node instanceof ClassMethod) {
-            if ($this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
-                return \true;
-            }
-            if ($node->isMagic()) {
-                return \true;
-            }
+        if ($node instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($node, $scope)) {
+            return \true;
         }
         return $this->isUnionPossibleReturnsVoid($node);
     }

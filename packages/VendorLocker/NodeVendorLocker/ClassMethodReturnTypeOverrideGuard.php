@@ -14,6 +14,7 @@ use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\MixedType;
 use Rector\Core\FileSystem\FilePathHelper;
+use Rector\Core\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\Core\PhpParser\AstResolver;
 use Rector\Core\PhpParser\Node\BetterNodeFinder;
 use Rector\Core\Reflection\ReflectionResolver;
@@ -70,10 +71,15 @@ final class ClassMethodReturnTypeOverrideGuard
      */
     private $filePathHelper;
     /**
+     * @readonly
+     * @var \Rector\Core\NodeAnalyzer\MagicClassMethodAnalyzer
+     */
+    private $magicClassMethodAnalyzer;
+    /**
      * @var array<class-string, array<string>>
      */
     private const CHAOTIC_CLASS_METHOD_NAMES = ['PhpParser\\NodeVisitor' => ['enterNode', 'leaveNode', 'beforeTraverse', 'afterTraverse']];
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper)
+    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, FamilyRelationsAnalyzer $familyRelationsAnalyzer, BetterNodeFinder $betterNodeFinder, AstResolver $astResolver, ReflectionResolver $reflectionResolver, ReturnTypeInferer $returnTypeInferer, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
     {
         $this->nodeNameResolver = $nodeNameResolver;
         $this->reflectionProvider = $reflectionProvider;
@@ -84,11 +90,12 @@ final class ClassMethodReturnTypeOverrideGuard
         $this->returnTypeInferer = $returnTypeInferer;
         $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
         $this->filePathHelper = $filePathHelper;
+        $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
     }
     public function shouldSkipClassMethod(ClassMethod $classMethod, Scope $scope) : bool
     {
         // 1. skip magic methods
-        if ($classMethod->isMagic()) {
+        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
             return \true;
         }
         // 2. skip chaotic contract class methods
