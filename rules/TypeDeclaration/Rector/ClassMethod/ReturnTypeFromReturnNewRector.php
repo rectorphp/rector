@@ -16,17 +16,14 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\StaticType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Exception\ShouldNotHappenException;
-use Rector\Core\NodeAnalyzer\ClassAnalyzer;
 use Rector\Core\Rector\AbstractScopeAwareRector;
 use Rector\Core\Reflection\ReflectionResolver;
 use Rector\Core\ValueObject\PhpVersionFeature;
-use Rector\NodeTypeResolver\NodeTypeResolver\NewTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
@@ -71,17 +68,7 @@ final class ReturnTypeFromReturnNewRector extends AbstractScopeAwareRector imple
      * @var \Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer
      */
     private $returnTypeInferer;
-    /**
-     * @readonly
-     * @var \Rector\Core\NodeAnalyzer\ClassAnalyzer
-     */
-    private $classAnalyzer;
-    /**
-     * @readonly
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver\NewTypeResolver
-     */
-    private $newTypeResolver;
-    public function __construct(TypeFactory $typeFactory, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, StrictReturnNewAnalyzer $strictReturnNewAnalyzer, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer, ClassAnalyzer $classAnalyzer, NewTypeResolver $newTypeResolver)
+    public function __construct(TypeFactory $typeFactory, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver, StrictReturnNewAnalyzer $strictReturnNewAnalyzer, ClassMethodReturnTypeOverrideGuard $classMethodReturnTypeOverrideGuard, ReturnTypeInferer $returnTypeInferer)
     {
         $this->typeFactory = $typeFactory;
         $this->reflectionProvider = $reflectionProvider;
@@ -89,8 +76,6 @@ final class ReturnTypeFromReturnNewRector extends AbstractScopeAwareRector imple
         $this->strictReturnNewAnalyzer = $strictReturnNewAnalyzer;
         $this->classMethodReturnTypeOverrideGuard = $classMethodReturnTypeOverrideGuard;
         $this->returnTypeInferer = $returnTypeInferer;
-        $this->classAnalyzer = $classAnalyzer;
-        $this->newTypeResolver = $newTypeResolver;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -146,21 +131,14 @@ CODE_SAMPLE
         return PhpVersionFeature::SCALAR_TYPES;
     }
     /**
-     * @return \PHPStan\Type\ObjectType|\PHPStan\Type\ObjectWithoutClassType|\PHPStan\Type\StaticType|null
+     * @return \PHPStan\Type\ObjectType|\PHPStan\Type\StaticType
      */
     private function createObjectTypeFromNew(New_ $new)
     {
-        if ($this->classAnalyzer->isAnonymousClass($new->class)) {
-            $newType = $this->newTypeResolver->resolve($new);
-            if (!$newType instanceof ObjectWithoutClassType) {
-                return null;
-            }
-            return $newType;
-        }
-        if (!$new->class instanceof Name) {
-            return null;
-        }
         $className = $this->getName($new->class);
+        if ($className === null) {
+            throw new ShouldNotHappenException();
+        }
         if ($className === ObjectReference::STATIC || $className === ObjectReference::SELF) {
             $classReflection = $this->reflectionResolver->resolveClassReflection($new);
             if (!$classReflection instanceof ClassReflection) {
@@ -217,11 +195,10 @@ CODE_SAMPLE
                 return null;
             }
             $new = $return->expr;
-            $newType = $this->createObjectTypeFromNew($new);
-            if ($newType === null) {
+            if (!$new->class instanceof Name) {
                 return null;
             }
-            $newTypes[] = $newType;
+            $newTypes[] = $this->createObjectTypeFromNew($new);
         }
         return $newTypes;
     }
