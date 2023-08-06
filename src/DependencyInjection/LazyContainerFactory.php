@@ -127,6 +127,14 @@ use Rector\StaticTypeMapper\PhpDocParser\IdentifierTypeMapper;
 use Rector\StaticTypeMapper\PhpDocParser\IntersectionTypeMapper;
 use Rector\StaticTypeMapper\PhpDocParser\NullableTypeMapper;
 use Rector\StaticTypeMapper\PhpDocParser\UnionTypeMapper;
+use Rector\StaticTypeMapper\PhpParser\ExprNodeMapper;
+use Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper;
+use Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper;
+use Rector\StaticTypeMapper\PhpParser\IntersectionTypeNodeMapper;
+use Rector\StaticTypeMapper\PhpParser\NameNodeMapper;
+use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
+use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
+use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix202308\Symfony\Component\Console\Application;
 use RectorPrefix202308\Webmozart\Assert\Assert;
@@ -160,6 +168,10 @@ final class LazyContainerFactory
      * @var array<class-string<NodeTypeResolverInterface>>
      */
     private const NODE_TYPE_RESOLVER_CLASSES = [CastTypeResolver::class, ClassAndInterfaceTypeResolver::class, ClassMethodOrClassConstTypeResolver::class, IdentifierTypeResolver::class, NameTypeResolver::class, NewTypeResolver::class, ParamTypeResolver::class, PropertyFetchTypeResolver::class, PropertyTypeResolver::class, ReturnTypeResolver::class, ScalarTypeResolver::class, StaticCallMethodCallTypeResolver::class, TraitTypeResolver::class];
+    /**
+     * @var array<class-string<PhpParserNodeMapperInterface>>
+     */
+    private const PHP_PARSER_NODE_MAPPER_CLASSES = [ExprNodeMapper::class, FullyQualifiedNodeMapper::class, IdentifierNodeMapper::class, IntersectionTypeNodeMapper::class, NameNodeMapper::class, NullableTypeNodeMapper::class, StringNodeMapper::class, UnionTypeNodeMapper::class];
     /**
      * @api used as next container factory
      */
@@ -199,6 +211,7 @@ final class LazyContainerFactory
         $container->when(NodeTypeResolver::class)->needs('$nodeTypeResolvers')->giveTagged(NodeTypeResolverInterface::class);
         // node name resolvers
         $container->when(NodeNameResolver::class)->needs('$nodeNameResolvers')->giveTagged(NodeNameResolverInterface::class);
+        $this->registerTagged($container, self::PHP_PARSER_NODE_MAPPER_CLASSES, PhpParserNodeMapperInterface::class);
         $this->registerTagged($container, self::PHP_DOC_NODE_DECORATOR_CLASSES, PhpDocNodeDecoratorInterface::class);
         $this->registerTagged($container, self::TYPE_MAPPER_CLASSES, TypeMapperInterface::class);
         $this->registerTagged($container, self::PHPDOC_TYPE_MAPPER_CLASSES, PhpDocTypeMapperInterface::class);
