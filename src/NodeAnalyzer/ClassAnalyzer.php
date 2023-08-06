@@ -7,9 +7,19 @@ use PhpParser\Node;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
+use Rector\Core\Util\StringUtils;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 final class ClassAnalyzer
 {
+    /**
+     * @var string
+     * @see https://regex101.com/r/FQH6RT/2
+     */
+    private const ANONYMOUS_CLASS_REGEX = '#^AnonymousClass\\w+$#';
+    public function isAnonymousClassName(string $className) : bool
+    {
+        return StringUtils::isMatch($className, self::ANONYMOUS_CLASS_REGEX);
+    }
     public function isAnonymousClass(Node $node) : bool
     {
         if (!$node instanceof Class_) {

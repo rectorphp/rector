@@ -152,6 +152,8 @@ final class NodeNameResolver
         return $this->isName($firstNode, $secondResolvedName);
     }
     /**
+     * @api
+     *
      * @param Name[]|Node[] $nodes
      * @return string[]
      */

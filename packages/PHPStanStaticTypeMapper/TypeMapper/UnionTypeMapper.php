@@ -24,7 +24,6 @@ use PHPStan\Type\TypeWithClassName;
 use PHPStan\Type\UnionType;
 use PHPStan\Type\VoidType;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
-use Rector\Core\Enum\ObjectReference;
 use Rector\Core\Php\PhpVersionProvider;
 use Rector\Core\Rector\AbstractRector;
 use Rector\Core\ValueObject\PhpVersionFeature;
@@ -284,9 +283,19 @@ final class UnionTypeMapper implements TypeMapperInterface
     }
     private function hasObjectAndStaticType(PhpParserUnionType $phpParserUnionType) : bool
     {
-        $typeNames = $this->nodeNameResolver->getNames($phpParserUnionType->types);
-        $diff = \array_diff(['object', ObjectReference::STATIC], $typeNames);
-        return $diff === [];
+        $hasAnonymousObjectType = \false;
+        $hasObjectType = \false;
+        foreach ($phpParserUnionType->types as $type) {
+            if ($type instanceof Identifier && $type->toString() === 'object') {
+                $hasAnonymousObjectType = \true;
+                continue;
+            }
+            if ($type instanceof FullyQualified || $type instanceof Name && $type->isSpecialClassName()) {
+                $hasObjectType = \true;
+                continue;
+            }
+        }
+        return $hasObjectType && $hasAnonymousObjectType;
     }
     /**
      * @param TypeKind::* $typeKind

@@ -185,10 +185,6 @@ final class NodeTypeResolver
         if (!$node instanceof Expr) {
             return new MixedType();
         }
-        // skip anonymous classes, ref https://github.com/rectorphp/rector/issues/1574
-        if ($node instanceof New_ && $this->classAnalyzer->isAnonymousClass($node->class)) {
-            return new ObjectWithoutClassType();
-        }
         $type = $scope->getType($node);
         $type = $this->accessoryNonEmptyStringTypeCorrector->correct($type);
         $type = $this->genericClassStringTypeCorrector->correct($type);
@@ -215,7 +211,18 @@ final class NodeTypeResolver
         if (!$scope instanceof Scope) {
             return new MixedType();
         }
+        // cover anonymous class
+        if ($expr instanceof New_) {
+            $type = $this->resolveByNodeTypeResolvers($expr);
+            if ($type instanceof ObjectWithoutClassType) {
+                return $type;
+            }
+        }
         $type = $scope->getNativeType($expr);
+        // ObjectType anonymous may be assigned first, fallback to ObjectWithoutClassType
+        if ($type instanceof ObjectType && $this->classAnalyzer->isAnonymousClassName($type->getClassName())) {
+            return new ObjectWithoutClassType();
+        }
         return $this->accessoryNonEmptyStringTypeCorrector->correct($type);
     }
     public function isNumberType(Expr $expr) : bool
