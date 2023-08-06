@@ -271,6 +271,7 @@ require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExp
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprStringNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprTrueNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstFetchNode.php';
+require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/DoctrineConstExprStringNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/ConstExpr/QuoteAwareConstExprStringNode.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/NodeTraverser.php';
 require_once __DIR__ . '/vendor/phpstan/phpdoc-parser/src/Ast/NodeVisitor/CloningVisitor.php';
