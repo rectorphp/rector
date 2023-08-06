@@ -84,6 +84,7 @@ use Rector\PhpAttribute\AnnotationToAttributeMapper\StringNodeAnnotationToAttrib
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
+use Rector\PHPStanStaticTypeMapper\TypeAnalyzer\UnionTypeCommonTypeNarrower;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\AccessoryLiteralStringTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\AccessoryNonEmptyStringTypeMapper;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\AccessoryNonFalsyStringTypeMapper;
@@ -136,6 +137,8 @@ use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
+use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
 use RectorPrefix202308\Symfony\Component\Console\Application;
 use RectorPrefix202308\Webmozart\Assert\Assert;
 final class LazyContainerFactory
@@ -234,6 +237,9 @@ final class LazyContainerFactory
         });
         $container->afterResolving(NameScopeFactory::class, static function (NameScopeFactory $nameScopeFactory, Container $container) : void {
             $nameScopeFactory->autowire($container->make(PhpDocInfoFactory::class), $container->make(StaticTypeMapper::class), $container->make(ReflectionResolver::class), $container->make(ClassLikeAstResolver::class));
+        });
+        $container->afterResolving(ArrayTypeMapper::class, static function (ArrayTypeMapper $arrayTypeMapper, Container $container) : void {
+            $arrayTypeMapper->autowire($container->make(PHPStanStaticTypeMapper::class), $container->make(UnionTypeCommonTypeNarrower::class), $container->make(ReflectionProvider::class), $container->make(GenericClassStringTypeNormalizer::class), $container->make(DetailedTypeAnalyzer::class));
         });
         $container->afterResolving(PlainValueParser::class, static function (PlainValueParser $plainValueParser, Container $container) : void {
             $plainValueParser->autowire($container->make(StaticDoctrineAnnotationParser::class), $container->make(ArrayParser::class));
