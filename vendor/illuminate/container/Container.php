@@ -694,7 +694,7 @@ class Container implements ArrayAccess, ContainerContract
         // If the requested type is registered as a singleton we'll want to cache off
         // the instances in "memory" so we can return it later without creating an
         // entirely new instance of an object on each subsequent request for it.
-        if ($this->isShared($abstract) && !$needsContextualBuild) {
+        if (!$needsContextualBuild) {
             $this->instances[$abstract] = $object;
         }
         if ($raiseEvents) {

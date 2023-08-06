@@ -530,7 +530,10 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "10.x-dev"
-                }
+                },
+                "patches_applied": [
+                    "patches\/illuminate-container-container-php.patch"
+                ]
             },
             "installation-source": "dist",
             "autoload": {
@@ -1917,12 +1920,12 @@
             "source": {
                 "type": "git",
                 "url": "https:\/\/github.com\/rectorphp\/rector-doctrine.git",
-                "reference": "25c2946d440af0d8be800d6aba4c3a8326fde000"
+                "reference": "e49883509c494a7508f07fb1d4fdedcdda717db4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/25c2946d440af0d8be800d6aba4c3a8326fde000",
-                "reference": "25c2946d440af0d8be800d6aba4c3a8326fde000",
+                "url": "https:\/\/api.github.com\/repos\/rectorphp\/rector-doctrine\/zipball\/e49883509c494a7508f07fb1d4fdedcdda717db4",
+                "reference": "e49883509c494a7508f07fb1d4fdedcdda717db4",
                 "shasum": ""
             },
             "require": {
@@ -1948,7 +1951,7 @@
                 "tomasvotruba\/type-coverage": "^0.2",
                 "tomasvotruba\/unused-public": "^0.1"
             },
-            "time": "2023-08-06T14:42:34+00:00",
+            "time": "2023-08-06T15:03:12+00:00",
             "default-branch": true,
             "type": "rector-extension",
             "extra": {

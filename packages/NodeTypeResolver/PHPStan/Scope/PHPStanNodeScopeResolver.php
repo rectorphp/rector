@@ -48,7 +48,6 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeContext;
 use PHPStan\Node\UnreachableStatementNode;
-use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
@@ -226,11 +225,12 @@ final class PHPStanNodeScopeResolver
                 $traitName = $this->resolveClassName($node);
                 $traitClassReflection = $this->reflectionProvider->getClass($traitName);
                 $traitScope = clone $mutatingScope;
-                $scopeContext = $this->privatesAccessor->getPrivatePropertyOfClass($traitScope, self::CONTEXT, ScopeContext::class);
+                /** @var ScopeContext $scopeContext */
+                $scopeContext = $this->privatesAccessor->getPrivateProperty($traitScope, self::CONTEXT);
                 $traitContext = clone $scopeContext;
                 // before entering the class/trait again, we have to tell scope no class was set, otherwise it crashes
-                $this->privatesAccessor->setPrivatePropertyOfClass($traitContext, 'classReflection', $traitClassReflection, ClassReflection::class);
-                $this->privatesAccessor->setPrivatePropertyOfClass($traitScope, self::CONTEXT, $traitContext, ScopeContext::class);
+                $this->privatesAccessor->setPrivateProperty($traitContext, 'classReflection', $traitClassReflection);
+                $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
                 $node->setAttribute(AttributeKey::SCOPE, $traitScope);
                 $this->nodeScopeResolver->processNodes($node->stmts, $traitScope, $nodeCallback);
                 $this->decorateTraitAttrGroups($node, $traitScope);

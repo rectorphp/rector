@@ -3,8 +3,8 @@
 declare (strict_types=1);
 namespace Rector\Testing\PHPUnit;
 
-use RectorPrefix202308\Illuminate\Container\Container;
 use PHPUnit\Framework\TestCase;
+use Rector\Core\DependencyInjection\LazyContainerFactory;
 abstract class AbstractLazyTestCase extends TestCase
 {
     /**
@@ -14,7 +14,9 @@ abstract class AbstractLazyTestCase extends TestCase
      */
     protected function make(string $class) : object
     {
-        $container = new Container();
+        // @todo cache container
+        $lazyContainerFactory = new LazyContainerFactory();
+        $container = $lazyContainerFactory->create();
         return $container->make($class);
     }
 }

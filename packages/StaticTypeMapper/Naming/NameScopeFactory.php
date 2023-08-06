@@ -26,6 +26,11 @@ use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
 final class NameScopeFactory
 {
     /**
+     * @readonly
+     * @var \Rector\Naming\Naming\UseImportsResolver
+     */
+    private $useImportsResolver;
+    /**
      * @var \Rector\StaticTypeMapper\StaticTypeMapper
      */
     private $staticTypeMapper;
@@ -34,10 +39,6 @@ final class NameScopeFactory
      */
     private $phpDocInfoFactory;
     /**
-     * @var \Rector\Naming\Naming\UseImportsResolver
-     */
-    private $useImportsResolver;
-    /**
      * @var \Rector\Core\Reflection\ReflectionResolver
      */
     private $reflectionResolver;
@@ -45,15 +46,18 @@ final class NameScopeFactory
      * @var \Rector\Core\PhpParser\ClassLikeAstResolver
      */
     private $classLikeAstResolver;
+    public function __construct(UseImportsResolver $useImportsResolver)
+    {
+        $this->useImportsResolver = $useImportsResolver;
+    }
     // This is needed to avoid circular references
     /**
      * @required
      */
-    public function autowire(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, UseImportsResolver $useImportsResolver, ReflectionResolver $reflectionResolver, ClassLikeAstResolver $classLikeAstResolver) : void
+    public function autowire(PhpDocInfoFactory $phpDocInfoFactory, StaticTypeMapper $staticTypeMapper, ReflectionResolver $reflectionResolver, ClassLikeAstResolver $classLikeAstResolver) : void
     {
         $this->phpDocInfoFactory = $phpDocInfoFactory;
         $this->staticTypeMapper = $staticTypeMapper;
-        $this->useImportsResolver = $useImportsResolver;
         $this->reflectionResolver = $reflectionResolver;
         $this->classLikeAstResolver = $classLikeAstResolver;
     }

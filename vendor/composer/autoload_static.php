@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit183f3281a4de228a5fb2a420c5c87348
+class ComposerStaticInit960639b9b816f607e946e8b0525ee335
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1789,6 +1789,7 @@ class ComposerStaticInit183f3281a4de228a5fb2a420c5c87348
         'Rector\\Core\\DependencyInjection\\Collector\\ConfigureCallValuesCollector' => __DIR__ . '/../..' . '/src/DependencyInjection/Collector/ConfigureCallValuesCollector.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\MergeImportedRectorConfigureCallValuesCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/MergeImportedRectorConfigureCallValuesCompilerPass.php',
         'Rector\\Core\\DependencyInjection\\CompilerPass\\RemoveSkippedRectorsCompilerPass' => __DIR__ . '/../..' . '/src/DependencyInjection/CompilerPass/RemoveSkippedRectorsCompilerPass.php',
+        'Rector\\Core\\DependencyInjection\\LazyContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/LazyContainerFactory.php',
         'Rector\\Core\\DependencyInjection\\Loader\\ConfigurableCallValuesCollectingPhpFileLoader' => __DIR__ . '/../..' . '/src/DependencyInjection/Loader/ConfigurableCallValuesCollectingPhpFileLoader.php',
         'Rector\\Core\\DependencyInjection\\RectorContainerFactory' => __DIR__ . '/../..' . '/src/DependencyInjection/RectorContainerFactory.php',
         'Rector\\Core\\Differ\\DefaultDiffer' => __DIR__ . '/../..' . '/src/Differ/DefaultDiffer.php',
@@ -1798,7 +1799,6 @@ class ComposerStaticInit183f3281a4de228a5fb2a420c5c87348
         'Rector\\Core\\Exception\\Configuration\\InvalidConfigurationException' => __DIR__ . '/../..' . '/src/Exception/Configuration/InvalidConfigurationException.php',
         'Rector\\Core\\Exception\\DeprecatedException' => __DIR__ . '/../..' . '/src/Exception/DeprecatedException.php',
         'Rector\\Core\\Exception\\NotImplementedYetException' => __DIR__ . '/../..' . '/src/Exception/NotImplementedYetException.php',
-        'Rector\\Core\\Exception\\Reflection\\InvalidPrivatePropertyTypeException' => __DIR__ . '/../..' . '/src/Exception/Reflection/InvalidPrivatePropertyTypeException.php',
         'Rector\\Core\\Exception\\Reflection\\MissingPrivatePropertyException' => __DIR__ . '/../..' . '/src/Exception/Reflection/MissingPrivatePropertyException.php',
         'Rector\\Core\\Exception\\ShouldNotHappenException' => __DIR__ . '/../..' . '/src/Exception/ShouldNotHappenException.php',
         'Rector\\Core\\Exception\\VersionException' => __DIR__ . '/../..' . '/src/Exception/VersionException.php',
@@ -3011,9 +3011,9 @@ class ComposerStaticInit183f3281a4de228a5fb2a420c5c87348
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit183f3281a4de228a5fb2a420c5c87348::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit183f3281a4de228a5fb2a420c5c87348::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit183f3281a4de228a5fb2a420c5c87348::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit960639b9b816f607e946e8b0525ee335::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit960639b9b816f607e946e8b0525ee335::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit960639b9b816f607e946e8b0525ee335::$classMap;
 
         }, null, ClassLoader::class);
     }
