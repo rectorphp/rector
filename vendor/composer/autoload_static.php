@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit015438cf3f7fb5f2ad4416769166bab2
+class ComposerStaticInit73130307052b9daea50083ff2e7297d6
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -1983,7 +1983,6 @@ class ComposerStaticInit015438cf3f7fb5f2ad4416769166bab2
         'Rector\\Doctrine\\CodeQuality\\Rector\\Class_\\RemoveEmptyTableAttributeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Class_/RemoveEmptyTableAttributeRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\ChangeBigIntEntityPropertyToIntTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/ChangeBigIntEntityPropertyToIntTypeRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\CorrectDefaultTypesOnEntityPropertyRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/CorrectDefaultTypesOnEntityPropertyRector.php',
-        'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\DoctrineTargetEntityStringToClassConstantRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/DoctrineTargetEntityStringToClassConstantRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\ImproveDoctrineCollectionDocTypeInEntityRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/ImproveDoctrineCollectionDocTypeInEntityRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\MakeEntityDateTimePropertyDateTimeInterfaceRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/MakeEntityDateTimePropertyDateTimeInterfaceRector.php',
         'Rector\\Doctrine\\CodeQuality\\Rector\\Property\\TypedPropertyFromColumnTypeRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/CodeQuality/Rector/Property/TypedPropertyFromColumnTypeRector.php',
@@ -2006,7 +2005,6 @@ class ComposerStaticInit015438cf3f7fb5f2ad4416769166bab2
         'Rector\\Doctrine\\NodeManipulator\\ToManyRelationPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ToManyRelationPropertyTypeResolver.php',
         'Rector\\Doctrine\\NodeManipulator\\ToOneRelationPropertyTypeResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/NodeManipulator/ToOneRelationPropertyTypeResolver.php',
         'Rector\\Doctrine\\Orm214\\Rector\\Param\\ReplaceLifecycleEventArgsByDedicatedEventArgsRector' => __DIR__ . '/..' . '/rector/rector-doctrine/rules/Orm214/Rector/Param/ReplaceLifecycleEventArgsByDedicatedEventArgsRector.php',
-        'Rector\\Doctrine\\PhpDocParser\\DoctrineClassAnnotationMatcher' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDocParser/DoctrineClassAnnotationMatcher.php',
         'Rector\\Doctrine\\PhpDocParser\\DoctrineDocBlockResolver' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDocParser/DoctrineDocBlockResolver.php',
         'Rector\\Doctrine\\PhpDoc\\ShortClassExpander' => __DIR__ . '/..' . '/rector/rector-doctrine/src/PhpDoc/ShortClassExpander.php',
         'Rector\\Doctrine\\Set\\DoctrineSetList' => __DIR__ . '/..' . '/rector/rector-doctrine/src/Set/DoctrineSetList.php',
@@ -3013,9 +3011,9 @@ class ComposerStaticInit015438cf3f7fb5f2ad4416769166bab2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit015438cf3f7fb5f2ad4416769166bab2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit015438cf3f7fb5f2ad4416769166bab2::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit015438cf3f7fb5f2ad4416769166bab2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit73130307052b9daea50083ff2e7297d6::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit73130307052b9daea50083ff2e7297d6::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit73130307052b9daea50083ff2e7297d6::$classMap;
 
         }, null, ClassLoader::class);
     }

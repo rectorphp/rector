@@ -212,8 +212,8 @@ final class NodeTypeResolver
             return new MixedType();
         }
         // cover anonymous class
-        if ($expr instanceof New_) {
-            $type = $this->resolveByNodeTypeResolvers($expr);
+        if ($expr instanceof New_ && $this->classAnalyzer->isAnonymousClass($expr->class)) {
+            $type = $this->nodeTypeResolvers[New_::class]->resolve($expr);
             if ($type instanceof ObjectWithoutClassType) {
                 return $type;
             }
