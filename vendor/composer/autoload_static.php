@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb9b33c3ba49d49362eabb6d91c22f79d
+class ComposerStaticInit011026bb5f861ca634fae446ca89548c
 {
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
@@ -2570,6 +2570,7 @@ class ComposerStaticInitb9b33c3ba49d49362eabb6d91c22f79d
         'Rector\\PostRector\\Rector\\UnusedImportRemovingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UnusedImportRemovingPostRector.php',
         'Rector\\PostRector\\Rector\\UseAddingPostRector' => __DIR__ . '/../..' . '/packages/PostRector/Rector/UseAddingPostRector.php',
         'Rector\\PostRector\\ValueObject\\PropertyMetadata' => __DIR__ . '/../..' . '/packages/PostRector/ValueObject/PropertyMetadata.php',
+        'Rector\\Privatization\\Guard\\OverrideByParentClassGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/OverrideByParentClassGuard.php',
         'Rector\\Privatization\\Guard\\ParentPropertyLookupGuard' => __DIR__ . '/../..' . '/rules/Privatization/Guard/ParentPropertyLookupGuard.php',
         'Rector\\Privatization\\NodeManipulator\\VisibilityManipulator' => __DIR__ . '/../..' . '/rules/Privatization/NodeManipulator/VisibilityManipulator.php',
         'Rector\\Privatization\\Rector\\ClassMethod\\PrivatizeFinalClassMethodRector' => __DIR__ . '/../..' . '/rules/Privatization/Rector/ClassMethod/PrivatizeFinalClassMethodRector.php',
@@ -3011,9 +3012,9 @@ class ComposerStaticInitb9b33c3ba49d49362eabb6d91c22f79d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb9b33c3ba49d49362eabb6d91c22f79d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb9b33c3ba49d49362eabb6d91c22f79d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb9b33c3ba49d49362eabb6d91c22f79d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit011026bb5f861ca634fae446ca89548c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit011026bb5f861ca634fae446ca89548c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit011026bb5f861ca634fae446ca89548c::$classMap;
 
         }, null, ClassLoader::class);
     }

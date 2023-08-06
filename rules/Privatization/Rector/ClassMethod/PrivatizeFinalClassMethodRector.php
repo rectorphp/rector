@@ -9,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Core\Rector\AbstractScopeAwareRector;
+use Rector\Privatization\Guard\OverrideByParentClassGuard;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
@@ -28,10 +29,16 @@ final class PrivatizeFinalClassMethodRector extends AbstractScopeAwareRector
      * @var \Rector\Privatization\NodeManipulator\VisibilityManipulator
      */
     private $visibilityManipulator;
-    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator)
+    /**
+     * @readonly
+     * @var \Rector\Privatization\Guard\OverrideByParentClassGuard
+     */
+    private $overrideByParentClassGuard;
+    public function __construct(ClassMethodVisibilityGuard $classMethodVisibilityGuard, VisibilityManipulator $visibilityManipulator, OverrideByParentClassGuard $overrideByParentClassGuard)
     {
         $this->classMethodVisibilityGuard = $classMethodVisibilityGuard;
         $this->visibilityManipulator = $visibilityManipulator;
+        $this->overrideByParentClassGuard = $overrideByParentClassGuard;
     }
     public function getRuleDefinition() : RuleDefinition
     {
@@ -66,6 +73,9 @@ CODE_SAMPLE
     public function refactorWithScope(Node $node, Scope $scope) : ?Node
     {
         if (!$node->isFinal()) {
+            return null;
+        }
+        if (!$this->overrideByParentClassGuard->isLegal($node)) {
             return null;
         }
         $classReflection = $scope->getClassReflection();
