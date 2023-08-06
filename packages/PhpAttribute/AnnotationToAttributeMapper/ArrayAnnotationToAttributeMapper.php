@@ -34,7 +34,6 @@ final class ArrayAnnotationToAttributeMapper implements AnnotationToAttributeMap
         $this->valueResolver = $valueResolver;
     }
     /**
-     * Avoid circular reference
      * @required
      */
     public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper) : void

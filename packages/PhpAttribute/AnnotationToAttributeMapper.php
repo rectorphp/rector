@@ -23,11 +23,15 @@ final class AnnotationToAttributeMapper
      */
     private $annotationToAttributeMappers = [];
     /**
-     * @param RewindableGenerator<AnnotationToAttributeMapperInterface> $annotationToAttributeMappers
+     * @param RewindableGenerator<AnnotationToAttributeMapperInterface>|AnnotationToAttributeMapperInterface[] $annotationToAttributeMappers
      */
     public function __construct(iterable $annotationToAttributeMappers)
     {
-        $this->annotationToAttributeMappers = \iterator_to_array($annotationToAttributeMappers->getIterator());
+        if ($annotationToAttributeMappers instanceof RewindableGenerator) {
+            $this->annotationToAttributeMappers = \iterator_to_array($annotationToAttributeMappers->getIterator());
+        } else {
+            $this->annotationToAttributeMappers = $annotationToAttributeMappers;
+        }
     }
     /**
      * @return Expr|DocTagNodeState::REMOVE_ARRAY
