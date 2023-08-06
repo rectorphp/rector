@@ -104,7 +104,7 @@ final class RectorConfig extends ContainerConfigurator
         Assert::classExists($rectorClass);
         Assert::isAOf($rectorClass, RectorInterface::class);
         Assert::isAOf($rectorClass, ConfigurableRectorInterface::class);
-        // decorate with value object inliner so Symfony understands, see https://getrector.org/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config
+        // decorate with value object inliner so Symfony understands, see https://getrector.com/blog/2020/09/07/how-to-inline-value-object-in-symfony-php-config
         \array_walk_recursive($configuration, static function (&$value) {
             if (\is_object($value)) {
                 $value = ValueObjectInliner::inline($value);

@@ -16,7 +16,7 @@ about: Report errors and problems
 
 ## Minimal PHP Code Causing Issue
 
-<!-- Reproduce the issue using https://getrector.org/demo/ and post the URL here. -->
+<!-- Reproduce the issue using https://getrector.com/demo/ and post the URL here. -->
 
 ## Expected Behaviour
 

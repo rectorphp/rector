@@ -72,7 +72,7 @@ vendor/bin/rector process src
 
 ## Documentation
 
-* Find [full documentation here](https://getrector.org/documentation/).
+* Find [full documentation here](https://getrector.com/documentation/).
 * [Explore Rector Rules](/docs/rector_rules_overview.md)
 
 <br>
@@ -106,9 +106,9 @@ Among there projects belong:
 
 ## Hire us to get Job Done :muscle:
 
-Rector is a tool that [we develop](https://getrector.org/) and share for free, so anyone can automate their refactoring. But not everyone has dozens of hours to understand complexity of abstract-syntax-tree in their own time. **That's why we provide commercial support - to save your time**.
+Rector is a tool that [we develop](https://getrector.com/) and share for free, so anyone can automate their refactoring. But not everyone has dozens of hours to understand complexity of abstract-syntax-tree in their own time. **That's why we provide commercial support - to save your time**.
 
-Would you like to apply Rector on your code base but don't have time for the struggle with your project? [Hire us](https://getrector.org/contact) to get there faster.
+Would you like to apply Rector on your code base but don't have time for the struggle with your project? [Hire us](https://getrector.com/contact) to get there faster.
 
 <br>
 
