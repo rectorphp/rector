@@ -1961,7 +1961,6 @@ return array(
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\ScalarTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/ScalarTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\StaticCallMethodCallTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/StaticCallMethodCallTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeTypeResolver\\TraitTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/TraitTypeResolver.php',
-    'Rector\\NodeTypeResolver\\NodeTypeResolver\\VariableTypeResolver' => $baseDir . '/packages/NodeTypeResolver/NodeTypeResolver/VariableTypeResolver.php',
     'Rector\\NodeTypeResolver\\NodeVisitor\\FunctionLikeParamArgPositionNodeVisitor' => $baseDir . '/packages/NodeTypeResolver/NodeVisitor/FunctionLikeParamArgPositionNodeVisitor.php',
     'Rector\\NodeTypeResolver\\Node\\AttributeKey' => $baseDir . '/packages/NodeTypeResolver/Node/AttributeKey.php',
     'Rector\\NodeTypeResolver\\PHPStan\\ObjectWithoutClassTypeWithParentTypes' => $baseDir . '/packages/NodeTypeResolver/PHPStan/ObjectWithoutClassTypeWithParentTypes.php',
