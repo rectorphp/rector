@@ -34,14 +34,18 @@ final class ConfigInitializer
      */
     private $rectors = [];
     /**
-     * @param RewindableGenerator<RectorInterface> $rectors
+     * @param RewindableGenerator<RectorInterface>|RectorInterface[] $rectors
      */
-    public function __construct(RewindableGenerator $rectors, InitFilePathsResolver $initFilePathsResolver, SymfonyStyle $symfonyStyle, PhpVersionProvider $phpVersionProvider)
+    public function __construct(iterable $rectors, InitFilePathsResolver $initFilePathsResolver, SymfonyStyle $symfonyStyle, PhpVersionProvider $phpVersionProvider)
     {
         $this->initFilePathsResolver = $initFilePathsResolver;
         $this->symfonyStyle = $symfonyStyle;
         $this->phpVersionProvider = $phpVersionProvider;
-        $this->rectors = \iterator_to_array($rectors);
+        if ($rectors instanceof RewindableGenerator) {
+            $this->rectors = \iterator_to_array($rectors->getIterator());
+        } else {
+            $this->rectors = $rectors;
+        }
     }
     public function createConfig(string $projectDirectory) : void
     {

@@ -39,14 +39,18 @@ use Rector\Config\LazyRectorConfig;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Application\ChangedNodeScopeRefresher;
 use Rector\Core\Application\FileProcessor\PhpFileProcessor;
+use Rector\Core\Configuration\ConfigInitializer;
 use Rector\Core\Configuration\CurrentNodeProvider;
+use Rector\Core\Console\Output\OutputFormatterCollector;
 use Rector\Core\Console\Output\RectorOutputStyle;
 use Rector\Core\Console\Style\RectorConsoleOutputStyle;
 use Rector\Core\Console\Style\RectorConsoleOutputStyleFactory;
+use Rector\Core\Console\Style\SymfonyStyleFactory;
 use Rector\Core\Contract\Console\OutputStyleInterface;
 use Rector\Core\Contract\Processor\FileProcessorInterface;
 use Rector\Core\Contract\Rector\NonPhpRectorInterface;
 use Rector\Core\Contract\Rector\PhpRectorInterface;
+use Rector\Core\Contract\Rector\RectorInterface;
 use Rector\Core\FileSystem\FilePathHelper;
 use Rector\Core\Logging\CurrentRectorProvider;
 use Rector\Core\NodeDecorator\CreatedByRuleDecorator;
@@ -169,6 +173,7 @@ use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use RectorPrefix202308\Symfony\Component\Console\Application;
+use RectorPrefix202308\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202308\Webmozart\Assert\Assert;
 final class LazyContainerFactory
 {
@@ -258,6 +263,7 @@ final class LazyContainerFactory
         $lazyRectorConfig->when(ApplicationFileProcessor::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
         $lazyRectorConfig->when(FileFactory::class)->needs('$fileProcessors')->giveTagged(FileProcessorInterface::class);
         $lazyRectorConfig->when(RectorNodeTraverser::class)->needs('$phpRectors')->giveTagged(PhpRectorInterface::class);
+        $lazyRectorConfig->when(ConfigInitializer::class)->needs('$rectors')->giveTagged(RectorInterface::class);
         $lazyRectorConfig->singleton(RectorConsoleOutputStyle::class, static function (Container $container) : RectorConsoleOutputStyle {
             $rectorConsoleOutputStyleFactory = $container->make(RectorConsoleOutputStyleFactory::class);
             return $rectorConsoleOutputStyleFactory->create();
@@ -292,8 +298,13 @@ final class LazyContainerFactory
         $this->registerTagged($lazyRectorConfig, self::NODE_TYPE_RESOLVER_CLASSES, NodeTypeResolverInterface::class);
         $this->registerTagged($lazyRectorConfig, self::OUTPUT_FORMATTER_CLASSES, OutputFormatterInterface::class);
         $this->registerTagged($lazyRectorConfig, self::CLASS_NAME_IMPORT_SKIPPER_CLASSES, ClassNameImportSkipVoterInterface::class);
+        $lazyRectorConfig->singleton(SymfonyStyle::class, static function (Container $container) : SymfonyStyle {
+            $symfonyStyleFactory = $container->make(SymfonyStyleFactory::class);
+            return $symfonyStyleFactory->create();
+        });
         $this->registerTagged($lazyRectorConfig, self::ANNOTATION_TO_ATTRIBUTE_MAPPER_CLASSES, AnnotationToAttributeMapperInterface::class);
         $lazyRectorConfig->when(AnnotationToAttributeMapper::class)->needs('$annotationToAttributeMappers')->giveTagged(AnnotationToAttributeMapperInterface::class);
+        $lazyRectorConfig->when(OutputFormatterCollector::class)->needs('$outputFormatters')->giveTagged(OutputFormatterInterface::class);
         // #[Required]-like setter
         $lazyRectorConfig->afterResolving(ArrayAnnotationToAttributeMapper::class, static function (ArrayAnnotationToAttributeMapper $arrayAnnotationToAttributeMapper, Container $container) : void {
             $annotationToAttributesMapper = $container->make(AnnotationToAttributeMapper::class);

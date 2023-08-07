@@ -35,7 +35,7 @@ final class ListRulesCommand extends Command
     /**
      * @param RewindableGenerator<RectorInterface> $rectors
      */
-    public function __construct(RectorOutputStyle $rectorOutputStyle, SkippedClassResolver $skippedClassResolver, RewindableGenerator $rectors)
+    public function __construct(RectorOutputStyle $rectorOutputStyle, SkippedClassResolver $skippedClassResolver, iterable $rectors)
     {
         $this->rectorOutputStyle = $rectorOutputStyle;
         $this->skippedClassResolver = $skippedClassResolver;

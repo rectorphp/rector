@@ -24,12 +24,12 @@ final class RectorNodeTraverser extends NodeTraverser
      */
     private $phpRectors = [];
     /**
-     * @param RewindableGenerator<PhpRectorInterface> $phpRectors
+     * @param RewindableGenerator<PhpRectorInterface>|PhpRectorInterface[] $phpRectors
      */
-    public function __construct(RewindableGenerator $phpRectors, PhpVersionedFilter $phpVersionedFilter)
+    public function __construct(iterable $phpRectors, PhpVersionedFilter $phpVersionedFilter)
     {
         $this->phpVersionedFilter = $phpVersionedFilter;
-        $this->phpRectors = \iterator_to_array($phpRectors);
+        $this->phpRectors = \is_array($phpRectors) ? $phpRectors : \iterator_to_array($phpRectors);
         parent::__construct();
     }
     /**
