@@ -1490,6 +1490,7 @@ return array(
     'Rector\\Comments\\NodeDocBlock\\DocBlockUpdater' => $baseDir . '/packages/Comments/NodeDocBlock/DocBlockUpdater.php',
     'Rector\\Comments\\NodeTraverser\\CommentRemovingNodeTraverser' => $baseDir . '/packages/Comments/NodeTraverser/CommentRemovingNodeTraverser.php',
     'Rector\\Comments\\NodeVisitor\\CommentRemovingNodeVisitor' => $baseDir . '/packages/Comments/NodeVisitor/CommentRemovingNodeVisitor.php',
+    'Rector\\Config\\LazyRectorConfig' => $baseDir . '/packages/Config/LazyRectorConfig.php',
     'Rector\\Config\\RectorConfig' => $baseDir . '/packages/Config/RectorConfig.php',
     'Rector\\Core\\Application\\ApplicationFileProcessor' => $baseDir . '/src/Application/ApplicationFileProcessor.php',
     'Rector\\Core\\Application\\ChangedNodeScopeRefresher' => $baseDir . '/src/Application/ChangedNodeScopeRefresher.php',

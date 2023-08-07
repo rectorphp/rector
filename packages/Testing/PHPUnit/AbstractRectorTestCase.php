@@ -8,7 +8,6 @@ use RectorPrefix202308\Nette\Utils\FileSystem;
 use RectorPrefix202308\Nette\Utils\Strings;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPUnit\Framework\ExpectationFailedException;
-use RectorPrefix202308\Psr\Container\ContainerInterface;
 use Rector\Core\Application\ApplicationFileProcessor;
 use Rector\Core\Autoloading\AdditionalAutoloader;
 use Rector\Core\Autoloading\BootstrapFilesIncluder;
@@ -24,10 +23,6 @@ use Rector\Testing\Fixture\FixtureFileUpdater;
 use Rector\Testing\Fixture\FixtureSplitter;
 abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractTestCase implements RectorTestInterface
 {
-    /**
-     * @var \Psr\Container\ContainerInterface|null
-     */
-    protected static $allRectorContainer;
     /**
      * @var \Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider
      */

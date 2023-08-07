@@ -4,6 +4,7 @@ declare (strict_types=1);
 namespace Rector\Core\ValueObject;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use RectorPrefix202308\Webmozart\Assert\Assert;
 final class Configuration
 {
     /**
@@ -96,6 +97,7 @@ final class Configuration
      */
     public function getFileExtensions() : array
     {
+        Assert::notEmpty($this->fileExtensions);
         return $this->fileExtensions;
     }
     /**
