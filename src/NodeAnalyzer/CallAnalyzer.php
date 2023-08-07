@@ -6,33 +6,21 @@ namespace Rector\Core\NodeAnalyzer;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\Clone_;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\NullsafeMethodCall;
 use PhpParser\Node\Expr\StaticCall;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\If_;
+use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use RectorPrefix202308\Symfony\Contracts\Service\Attribute\Required;
+use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CallAnalyzer
 {
     /**
      * @var array<class-string<Expr>>
      */
     private const OBJECT_CALL_TYPES = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
-    /**
-     * @var \Rector\NodeTypeResolver\NodeTypeResolver
-     */
-    private $nodeTypeResolver;
-    /**
-     * @required
-     */
-    public function autowire(NodeTypeResolver $nodeTypeResolver) : void
-    {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-    }
     public function isObjectCall(Expr $expr) : bool
     {
         if ($expr instanceof BooleanNot) {
@@ -62,12 +50,13 @@ final class CallAnalyzer
         }
         return \false;
     }
-    public function isNewInstance(Expr $expr, ReflectionProvider $reflectionProvider) : bool
+    public function isNewInstance(Variable $variable, ReflectionProvider $reflectionProvider) : bool
     {
-        if ($expr instanceof Clone_ || $expr instanceof New_) {
-            return \true;
+        $scope = $variable->getAttribute(AttributeKey::SCOPE);
+        if (!$scope instanceof Scope) {
+            return \false;
         }
-        $type = $this->nodeTypeResolver->getType($expr);
+        $type = $scope->getNativeType($variable);
         if (!$type instanceof ObjectType) {
             return \false;
         }
