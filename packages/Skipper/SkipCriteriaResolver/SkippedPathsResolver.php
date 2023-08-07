@@ -29,7 +29,8 @@ final class SkippedPathsResolver
      */
     public function resolve() : array
     {
-        if ($this->skippedPaths !== []) {
+        // disable cache in tests
+        if ($this->skippedPaths !== [] && !\defined('PHPUNIT_COMPOSER_INSTALL')) {
             return $this->skippedPaths;
         }
         $skip = SimpleParameterProvider::provideArrayParameter(Option::SKIP);
