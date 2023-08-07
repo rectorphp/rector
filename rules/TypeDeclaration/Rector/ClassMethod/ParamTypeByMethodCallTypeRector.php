@@ -135,7 +135,7 @@ CODE_SAMPLE
         if ($classMethod->params === []) {
             return \true;
         }
-        return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod) !== \false;
+        return $this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
     }
     /**
      * @param \PhpParser\Node\Identifier|\PhpParser\Node\Name|\PhpParser\Node\NullableType|\PhpParser\Node\UnionType|\PhpParser\Node\ComplexType $paramType
