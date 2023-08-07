@@ -18,9 +18,18 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 final class CallAnalyzer
 {
     /**
+     * @readonly
+     * @var \PHPStan\Reflection\ReflectionProvider
+     */
+    private $reflectionProvider;
+    /**
      * @var array<class-string<Expr>>
      */
     private const OBJECT_CALL_TYPES = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
+    public function __construct(ReflectionProvider $reflectionProvider)
+    {
+        $this->reflectionProvider = $reflectionProvider;
+    }
     public function isObjectCall(Expr $expr) : bool
     {
         if ($expr instanceof BooleanNot) {
@@ -50,7 +59,7 @@ final class CallAnalyzer
         }
         return \false;
     }
-    public function isNewInstance(Variable $variable, ReflectionProvider $reflectionProvider) : bool
+    public function isNewInstance(Variable $variable) : bool
     {
         $scope = $variable->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {
@@ -61,10 +70,10 @@ final class CallAnalyzer
             return \false;
         }
         $className = $type->getClassName();
-        if (!$reflectionProvider->hasClass($className)) {
+        if (!$this->reflectionProvider->hasClass($className)) {
             return \false;
         }
-        $classReflection = $reflectionProvider->getClass($className);
+        $classReflection = $this->reflectionProvider->getClass($className);
         return $classReflection->getNativeReflection()->isInstantiable();
     }
 }
